@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE article PUBLIC "-//OASIS//DTD Simplified DocBook XML V1.0//EN"
+"http://www.oasis-open.org/docbook/xml/simple/1.0/sdocbook.dtd">
+<article>
+	<title>Gameplay</title>
+	<articleinfo>
+		<author>
+			<firstname>Florian</firstname>
+			<surname>Mai</surname>
+		</author>
+		<author>
+			<firstname>Jannis</firstname>
+			<surname>Mell</surname>
+		</author>
+	</articleinfo>
+	<section>
+		<title>What this is about</title>
+			<para>
+				This document serves as a mingle-mangle of thoughts about
+				the game we're developing including goals, brainstorming, protocols of
+				progress, architectural designs and anything that should be kept in
+				mind. Feel free to add anything that in your opinion should be
+				mentioned here. After consultation with other developers involved in
+				the project, change parts of the documentation to fit to new ideas, but
+				please <emphasis>DO NOT SIMPLY ERASE DOCUMENTATION THAT IS OUT OF DATE!
+				</emphasis> Instead you should mark obsolete documentation by scratching
+				out the text. 
+			</para>
+	</section>
+</article>
