@@ -39,7 +39,7 @@
 	        </listitem>
 	        <listitem>
 	            <para>
-	                <emphasis>interactive actionbar:</emphasis> An useful feature would be an interactive actionbar that is displayed context-dependent.
+	                <emphasis>Interactive actionbar:</emphasis> An useful feature would be an interactive actionbar that is displayed context-dependent.
 	                For example while controlling a neutral unit or fighting in your base you can display location-specific actions.  
 	            </para>
 	        </listitem>
@@ -74,5 +74,13 @@
 	            </para>
 	        </listitem>
 	    </itemizedlist>
+	    <section>
+	        <title>What about us?</title>
+	        <para>
+	            Developers are really lacking in benefits from interface-design, so it should provide some features to improve development and bug-fixing.
+	            Thus we need a bug-report tool that reports bugs automatically on the one hand, and let the user report bugs and problems ingame.
+	            After being reported, bugs are autmatically put into our <ulink url="http://illonis.dyndns.org/pstatus/Eduras">bug-database</ulink>.
+	        </para>
+	    </section>
 	</section>
 </article>
