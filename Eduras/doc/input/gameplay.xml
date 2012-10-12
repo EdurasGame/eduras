@@ -21,13 +21,13 @@
 	    <para>
 	        The first team that destroys enemy base wins.
 	    </para>
-	    </section>
+	</section>
 	<section>
 		<title>General game cycle</title>
-			<para>
-			    Both teams start randomly at either top-left or bottom-right corner of map (yes, this is contrary to common multiplayer maps like LOL. That's intended.).
-			    Teams spread into the map trying to conquer neutral bases that are spread all over the map. Then they will move forward to enemy base.
-			</para>
+		<para>
+			Both teams start randomly at either top-left or bottom-right corner of map (yes, this is contrary to common multiplayer maps like LOL. That's intended.).
+			Teams spread into the map trying to conquer neutral bases that are spread all over the map. Then they will move forward to enemy base.
+		</para>
 	</section>
 	<section>
 	    <title>Neutral bases</title>
@@ -39,7 +39,6 @@
 	        Neutral bases consist of a tower surrounded by some buildings. The tower provides some basic vision (see advantages) and is the central key of the base.
 	        A player can conquer a base by right-clicking its tower and channeling until control switched to his team. An already conquered base must be "neutralized" first.
 	        Buildings of a base can protect players because they block vision.
-	        
 	    </para>
 	    <section>
 	        <title>Advantages</title>

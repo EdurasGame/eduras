@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE article PUBLIC "-//OASIS//DTD Simplified DocBook XML V1.0//EN"
+"http://www.oasis-open.org/docbook/xml/simple/1.0/sdocbook.dtd">
+<article>
+	<articleinfo>
+	    <title>Interface-Design</title>
+		<author>
+			<firstname>Florian</firstname>
+			<surname>Mai</surname>
+		</author>
+		<author>
+			<firstname>Jannis</firstname>
+			<surname>Mell</surname>
+		</author>
+	</articleinfo>
+	<section>
+	    <title>Why is interface design so important?</title>
+	    <para>
+			The interface of a game is more important than you think! Providing control over the whole game and presenting information to the player
+			it is one of the most important parts considering game design. It requires hard work to find a compromise between much control and a good overview.
+			Overloading an interface is as useless as making it small and hard to read.
+	    </para>
+	</section>
+	<section>
+	    <title>Functional requirements</title>
+	    <para>
+	         There are many requirements that an interface has to meet.
+	    </para>
+	    <itemizedlist>
+	        <listitem>
+	            <para>
+	                <emphasis>Minimap:</emphasis> Important to keep track of game actions, a minimap is indispensable for a successful gameplay.
+	            </para>
+	        </listitem>
+	        <listitem>
+	            <para>
+	                <emphasis>Player information:</emphasis> Keep track of your health, munition and abilities helps to survival. 
+	            </para>
+	        </listitem>
+	        <listitem>
+	            <para>
+	                <emphasis>interactive actionbar:</emphasis> An useful feature would be an interactive actionbar that is displayed context-dependent.
+	                For example while controlling a neutral unit or fighting in your base you can display location-specific actions.  
+	            </para>
+	        </listitem>
+	    </itemizedlist>
+	</section>
+	<section>
+	    <title>Graphical targets</title>
+	    <para>
+			The Interface should be clean but not too abstract. It's style should match the game's style.
+			Graphics should not be too complicated to distract the user from game itself. Too small interface will keep off players with bad seeing capabilities.
+	    </para>
+	</section>
+	<section>
+	    <title>Usability</title>
+	    <para>
+	        The interface doesn't only consists of the visual part of user interaction, there are also hidden things like keybindings, mouse interaction and so on.
+	        This leads to an important point of gamer-friendlyness: individuality. A game with static possibilities to use is a silly game. A user wants to change
+	        the way of interaction to his personal favourites. Some important features must not miss:
+	    </para>
+	    <itemizedlist>
+	        <listitem>
+	            <para>
+	                <emphasis>Custom keybindings:</emphasis> Since games became faster and faster, custom keybindings became more popular, for example in World of Warcraft.
+	                Allowing players to individualize their keybindings does integrate physically disabled people, too.
+	            </para>
+	        </listitem>
+	        <listitem>
+	            <para>
+	                <emphasis>Shut up, please:</emphasis> Sound is very important but also a very critical point of a game. At this point, we should distinguish between sound and music.
+	                While music creates athmosphere and game feeling, sounds point out specific actions or notifications. A player should be able to set the balance between sound and music
+	                to his own preference or even turn it off (there might come up situations where you don't want to wake up roommates...).
+	            </para>
+	        </listitem>
+	    </itemizedlist>
+	</section>
+</article>
