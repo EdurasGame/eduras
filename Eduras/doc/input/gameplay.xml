@@ -36,8 +36,9 @@
 	        If defence fails, enemy team can conquer the neutral base to optain its benefits.
 	    </para>
 	    <para>
-	        Neutral bases consist of a tower surrounded by some buildings. The tower provides some basic vision (see advantages) and is the central point of the base.
-	        
+	        Neutral bases consist of a tower surrounded by some buildings. The tower provides some basic vision (see advantages) and is the central key of the base.
+	        A player can conquer a base by right-clicking its tower and channeling until control switched to his team. An already conquered base must be "neutralized" first.
+	        Buildings of a base  
 	        
 	    </para>
 	    <section>

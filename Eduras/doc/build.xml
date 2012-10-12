@@ -50,8 +50,7 @@
       -->
   <target name="build-html" depends="depends" description="Generates HTML files from DocBook XML">
     <xslt style="${html.stylesheet}" extension=".html" basedir="${input.dir}" destdir="${output.dir}">
-      <include name="**/*Documentation.xml" />
-      <include name="**/*article.xml" />
+      <include name="**/*.xml" />
       <param name="html.stylesheet" expression="style.css" />
       <classpath refid="saxon.class.path" />
     </xslt>
