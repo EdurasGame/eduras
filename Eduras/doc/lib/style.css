@@ -1,0 +1,63 @@
+@CHARSET "ISO-8859-1";
+
+body
+{
+	background:#FFFFEE;
+}
+
+h3.author
+{
+	
+	font-weight:normal;
+	font-size:small;
+	margin:0;
+	font-style:italic;
+}
+
+hr
+{
+	display:none;
+}
+
+.toc
+{
+	background:#FFFFCC;
+	padding:7px;
+	border:1px solid silver;
+	border-radius:5px;
+	width:30%;
+	max-width:50%;
+	margin-top:10px;
+}
+
+.toc p
+{
+	margin:0px;
+}
+
+.toc dl
+{
+	margin:5px;
+}
+
+.titlepage>div, .titlepage>div>div, .titlepage>div>div>div, h3.author
+{
+	margin-left:10px;
+	display:inline;
+}
+
+.section
+{
+	margin-left:15px;
+}
+
+.section p
+{
+	margin-top:0;
+	margin-bottom:6px;
+}
+
+h3.title
+{
+	margin-top:0;
+}

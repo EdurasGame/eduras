@@ -2,8 +2,8 @@
 <!DOCTYPE article PUBLIC "-//OASIS//DTD Simplified DocBook XML V1.0//EN"
 "http://www.oasis-open.org/docbook/xml/simple/1.0/sdocbook.dtd">
 <article>
-	<title>Gameplay</title>
 	<articleinfo>
+	    <title>Gameplay</title>
 		<author>
 			<firstname>Florian</firstname>
 			<surname>Mai</surname>
@@ -38,7 +38,7 @@
 	    <para>
 	        Neutral bases consist of a tower surrounded by some buildings. The tower provides some basic vision (see advantages) and is the central key of the base.
 	        A player can conquer a base by right-clicking its tower and channeling until control switched to his team. An already conquered base must be "neutralized" first.
-	        Buildings of a base  
+	        Buildings of a base can protect players because they block vision.
 	        
 	    </para>
 	    <section>
@@ -49,17 +49,17 @@
 	    	<itemizedlist>
 		        <listitem>
 		            <para>
-		                The base provides slight vision around the base.
+		                <emphasis>Vision:</emphasis> The base provides slight vision around the base.
 		            </para>
 		        </listitem>
 		        <listitem>
 		            <para>
-		                Team mates will regenerate some portion of their health while staying in base without fighting.
+		                <emphasis>Regeneration:</emphasis> Team mates will regenerate some portion of their health while staying in base without fighting.
 		            </para>
 		        </listitem>
 		        <listitem>
 		            <para>
-		                Players can control siege machines and/or footmen that can be produced in that base.
+		                <emphasis>More units:</emphasis> Players can control siege machines and/or footmen that can be produced in that base.
 		            </para>
 		        </listitem>
 		    </itemizedlist>
@@ -67,22 +67,22 @@
 		<section>
 		    <title>Disadvantages</title>
 		    <para>
-		        To provide some team balance, holding neutral bases should have some negative aspects.
+		        To provide some team balance, holding neutral bases should have some negative aspects:
 		    </para>
 		    <itemizedlist>
 		        <listitem>
 		            <para>
-		                Each base has at least two or three entrances.
+		                <emphasis>Backdooring:</emphasis> Each base has at least two or three entrances.
 		            </para>
 		        </listitem>
 		        <listitem>
 		            <para>
-		                Bases have no defence towers or something like this. You must defend them with your team.
+		                <emphasis>Vulnerability:</emphasis> Bases have no defence towers or something like this. You must defend them with your team.
 		            </para>
 		        </listitem>
 		        <listitem>
 		            <para>
-		                Units spawned in that base cannot be moved or kept inside its centrum.
+		                <emphasis>No defence:</emphasis> Units spawned in that base cannot be moved or kept inside its centrum.
 		            </para>
 		        </listitem>
 		    </itemizedlist>
