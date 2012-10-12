@@ -14,17 +14,83 @@
 		</author>
 	</articleinfo>
 	<section>
-		<title>What this is about</title>
+	    <title>Game setting and goal</title>
+	    <para>
+			Two teams fight against on a large map. Each team consists of a maximum of 5 players.
+	    </para>
+	    <para>
+	        The first team that destroys enemy base wins.
+	    </para>
+	    </section>
+	<section>
+		<title>General game cycle</title>
 			<para>
-				This document serves as a mingle-mangle of thoughts about
-				the game we're developing including goals, brainstorming, protocols of
-				progress, architectural designs and anything that should be kept in
-				mind. Feel free to add anything that in your opinion should be
-				mentioned here. After consultation with other developers involved in
-				the project, change parts of the documentation to fit to new ideas, but
-				please <emphasis>DO NOT SIMPLY ERASE DOCUMENTATION THAT IS OUT OF DATE!
-				</emphasis> Instead you should mark obsolete documentation by scratching
-				out the text. 
+			    Both teams start randomly at either top-left or bottom-right corner of map (yes, this is contrary to common multiplayer maps like LOL. That's intended.).
+			    Teams spread into the map trying to conquer neutral bases that are spread all over the map. Then they will move forward to enemy base.
 			</para>
+	</section>
+	<section>
+	    <title>Neutral bases</title>
+	    <para>
+	        Neutral bases can be conquered by a team. Once a base is conquered it should be defended against enemy team.
+	        If defence fails, enemy team can conquer the neutral base to optain its benefits.
+	    </para>
+	    <para>
+	        Neutral bases consist of a tower surrounded by some buildings. The tower provides some basic vision (see advantages) and is the central point of the base.
+	        
+	        
+	    </para>
+	    <section>
+	        <title>Advantages</title>
+	    	<para>
+	       		A neutral base provides several benefits to current controlling team:
+	    	</para>
+	    	<itemizedlist>
+		        <listitem>
+		            <para>
+		                The base provides slight vision around the base.
+		            </para>
+		        </listitem>
+		        <listitem>
+		            <para>
+		                Team mates will regenerate some portion of their health while staying in base without fighting.
+		            </para>
+		        </listitem>
+		        <listitem>
+		            <para>
+		                Players can control siege machines and/or footmen that can be produced in that base.
+		            </para>
+		        </listitem>
+		    </itemizedlist>
+		</section>
+		<section>
+		    <title>Disadvantages</title>
+		    <para>
+		        To provide some team balance, holding neutral bases should have some negative aspects.
+		    </para>
+		    <itemizedlist>
+		        <listitem>
+		            <para>
+		                Each base has at least two or three entrances.
+		            </para>
+		        </listitem>
+		        <listitem>
+		            <para>
+		                Bases have no defence towers or something like this. You must defend them with your team.
+		            </para>
+		        </listitem>
+		        <listitem>
+		            <para>
+		                Units spawned in that base cannot be moved or kept inside its centrum.
+		            </para>
+		        </listitem>
+		    </itemizedlist>
+		</section>
+	</section>
+	<section>
+	    <title>Player abilities</title>
+	    <para>
+	         Players can launch missiles to shoot enemies like in Counter Strike.
+	    </para>
 	</section>
 </article>
