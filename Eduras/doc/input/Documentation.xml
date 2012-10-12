@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE article PUBLIC "-//OASIS//DTD Simplified DocBook XML V1.0//EN"
 "http://www.oasis-open.org/docbook/xml/simple/1.0/sdocbook.dtd">
@@ -174,85 +173,5 @@
 		</section>
 	
 	</section>
-=======
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE article PUBLIC "-//OASIS//DTD Simplified DocBook XML V1.0//EN"
-"http://www.oasis-open.org/docbook/xml/simple/1.0/sdocbook.dtd">
-<article>
-	<title>Documentation</title>
-	<articleinfo>
-		<author>
-			<firstname>Florian</firstname>
-			<surname>Mai</surname>
-		</author>
-		<author>
-			<firstname>Jannis</firstname>
-			<surname>Mell</surname>
-		</author>
-	</articleinfo>
-	<section>
-		<title>What this is about</title>
-			<para>
-				This document serves as a mingle-mangle of thoughts about
-				the game we're developing including goals, brainstorming, protocols of
-				progress, architectural designs and anything that should be kept in
-				mind. Feel free to add anything that in your opinion should be
-				mentioned here. After consultation with other developers involved in
-				the project, change parts of the documentation to fit to new ideas, but
-				please <emphasis>DO NOT SIMPLY ERASE DOCUMENTATION THAT IS OUT OF DATE!
-				</emphasis> Instead you should mark obsolete documentation by scratching
-				out the text. 
-			</para>
-	</section>
 	
-	
-	<section>
-		<title>What we aim for</title>
-			<para>
-				This project is about developing a multiplayer game appropiate to be
-				played competitively as an eSport title. For us, a successful eSport title
-				is characterized by:
-			</para>
-			<itemizedlist>
-				<listitem>
-					<para>
-						<emphasis>Many players:</emphasis> A successful eSports game needs
-						to have a lot of players. For example Counter-Strike had been the #1
-						(competitive) multiplayer game for years and thus was found on many
-						LANs and tournaments although it did not serve a spectator-friendly
-						environment. But because of that it was not able to bring eSports to
-						such a high level of acceptance and interest as it is nowadays. This
-						leads to the following point.
-					</para>
-				</listitem>
-				<listitem>
-					<para>
-						<emphasis>Many spectators:</emphasis> 
-					</para>
-				</listitem>
-				<listitem>
-					<para>
-						A deep sportive characteristic
-					</para>
-				</listitem>
-			</itemizedlist>
-
-		<section>
-			<title>Many players</title>
-				<para>
-					To achieve a huge amount of players the game must fulfill the following
-					properties:
-				</para>
-				
-				<itemizedlist>
-					<listitem>
-						<para>
-							<emphasis>Easy to learn:</emphasis>
-						</para>
-					</listitem>
-				</itemizedlist>
-		</section>
-	
-	</section>
->>>>>>> refs/remotes/origin/master
 </article>
