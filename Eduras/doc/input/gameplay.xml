@@ -114,5 +114,18 @@
 		<para>
 			Players can launch missiles to shoot enemies like in Counter Strike.
 		</para>
+		<section>
+		    <title>Controlling units</title>
+		    <para>
+		        Once in a base, a player can choose to stay there for a while and control units <emphasis>instead of</emphasis> running around the map.
+		        If he does so, he gains control over most units that spawn in that base. That might behave similar to Warcraft 3.
+		        Players can use these units to ambush enemy team or fight forward towards their base. There are also some defensive units that can heal or chop trees down.
+		    </para>
+		    <para>
+		        Players controlling units are not safe from attacks by enemies. Staying in a neutral base controlled by you can be dangerous due to vulnerability of these bases.
+		        A player is not able to move or interact with his game-figure while controlling units. That makes unit-controlling risky.
+		        To ensure survival, a team has to stick together and protect an ally that controls units.
+		    </para>
+		</section>
 	</section>
 </article>
