@@ -11,6 +11,7 @@ public class Eduras {
 	 */
 	public static void main(String[] args) {
 		System.out.println("Hello git!");
-		System.out.println("hi mailer!");
+		System.out.println("buh");
+
 	}
 }
