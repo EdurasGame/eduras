@@ -16,7 +16,7 @@
 	<section>
 	    <title>Why is interface design so important?</title>
 	    <para>
-			The interface of a game is more important than you think! Providing control over the whole game and presenting information to the player
+			The interface of a game is more important than you think! Providing control over the whole game and presenting information to the player,
 			it is one of the most important parts considering game design. It requires hard work to find a compromise between much control and a good overview.
 			Overloading an interface is as useless as making it small and hard to read.
 	    </para>
@@ -41,6 +41,12 @@
 	            <para>
 	                <emphasis>Interactive actionbar:</emphasis> An useful feature would be an interactive actionbar that is displayed context-dependent.
 	                For example while controlling a neutral unit or fighting in your base you can display location-specific actions.  
+	            </para>
+	        </listitem>
+	        <listitem>
+	            <para>
+	                <emphasis>Game configuration:</emphasis> The player must have the ability to change some client settings to match his behaviour (see Usability).
+	                In a multiplayer game, one cannot simply pause the game, so settings changes must apply on-the-fly.
 	            </para>
 	        </listitem>
 	    </itemizedlist>
@@ -82,5 +88,27 @@
 	            After being reported, bugs are autmatically put into our <ulink url="http://illonis.dyndns.org/pstatus/Eduras">bug-database</ulink>.
 	        </para>
 	    </section>
+	</section>
+	<section>
+	    <title>Spectator mode</title>
+	    <para>
+	        Spectator mode is a two-sided sword: One the one hand it allows other players to join in and learn from other player's gameplay. They can view significant matches
+	        and discuss about teamplay. On the other hand it provides a way to get information about your opponent. If there's communication between spectators and players, this
+	        can lead to a big advantage in favour of a team.
+	    </para>
+	    <para>
+	        A solution could be a similar behaviour to League of Legends where spectator view is delayed 3 minutes. In some exceptions, e.g. on tournaments, there could be an exception.
+	    </para>
+	</section>
+	<section>
+	    <title>Game recording</title>
+	    <para>
+	        A very exciting feature is game recording. It allows a team to review their recent games, discuss failures and review group behaviour.
+	        Due to recording mechanics, a recorded game requires only a small amount of memory as the game is not recorded as video file. Because of this players need to use their
+	        game client to replay matches.
+	    </para>
+	    <para>
+	        Replays bring a lot help for beginner players, too. They can watch replays that show advanced players to learn from their playstyle and moving behaviour.
+	    </para>
 	</section>
 </article>

@@ -5,6 +5,11 @@ body
 	background:#FFFFEE;
 }
 
+.section
+{
+	width:900px;
+}
+
 h3.author
 {
 	
@@ -28,6 +33,7 @@ hr
 	width:30%;
 	max-width:50%;
 	margin-top:10px;
+	margin-bottom:10px;
 }
 
 .toc p
