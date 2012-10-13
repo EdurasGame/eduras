@@ -123,4 +123,179 @@
 	        Replays bring a lot help for beginner players, too. They can watch replays that show advanced players to learn from their playstyle and moving behaviour.
 	    </para>
 	</section>
+	<section>
+	    <title>GUI-Elements</title>
+	    <para>
+	        In this section we collect all elements that are shown in the main GUI and their description.
+	    </para>
+	    <section>
+	        <title>Overview</title>
+		    <table>
+		        <title>GUI-Elements and their properties that are shown when player has control over his hero.</title>
+		        <tgroup cols="5">
+		            <thead>
+		                <row>
+		                    <entry>
+		                        Element
+		                    </entry>
+		                    <entry>
+		                        Short description
+		                    </entry>
+		                    <entry>
+		                        Display type
+		                    </entry>
+		                    <entry>
+		                        Displayed values
+		                    </entry>
+		                    <entry>
+		                        Possible positions
+		                    </entry>
+		                </row>
+		            </thead>
+		            <tbody>
+		                <row>
+		                    <entry>
+		                        Minimap
+		                    </entry>
+		                    <entry>
+		                        Shows visible portion of map and ally positions.
+		                    </entry>
+		                    <entry>
+		                        generated image
+		                    </entry>
+		                    <entry>
+		                        Map background, visible players, fog of war, pings, bases
+		                    </entry>
+		                    <entry>
+		                        top-right or bottom-right or center-bottom
+		                    </entry>
+		                </row>
+		                <row>
+		                    <entry>
+		                        Player stats
+		                    </entry>
+		                    <entry>
+		                        Shows information about player status
+		                    </entry>
+		                    <entry>
+		                        health bar, int values, small icons
+		                    </entry>
+		                    <entry>
+		                        health, munitions, items
+		                    </entry>
+		                    <entry>
+		                        top-left, bottom-left, top-center
+		                    </entry>
+		                </row>
+		                <row>
+		                    <entry>
+		                        Party
+		                    </entry>
+		                    <entry>
+		                        Shows information about your party
+		                    </entry>
+		                    <entry>
+		                        icon, health bar 
+		                    </entry>
+		                    <entry>
+		                        profile picture, health 
+		                    </entry>
+		                    <entry>
+		                        left-center, vertical
+		                    </entry>
+		                </row>
+		                <row>
+		                    <entry>
+		                        Chat
+		                    </entry>
+		                    <entry>
+		                        Chatting with team mates or all-channel.
+		                    </entry>
+		                    <entry>
+		                        Textbox
+		                    </entry>
+		                    <entry>
+		                        chat messages, important game events 
+		                    </entry>
+		                    <entry>
+		                        bottom-left
+		                    </entry>
+		                </row>
+		                <row>
+		                    <entry>
+		                        Game stats
+		                    </entry>
+		                    <entry>
+		                        Displays game time, holded bases.
+		                    </entry>
+		                    <entry>
+		                        scoreboard
+		                    </entry>
+		                    <entry>
+		                        game time, count of holded bases
+		                    </entry>
+		                    <entry>
+		                        top center, bottom center
+		                    </entry>
+		                </row>
+		            </tbody>
+		        </tgroup>
+		    </table>
+	    </section>
+	    <section>
+	        <title>Minimap</title>
+	        <para>
+	            The minimap is a small illustration of current map.
+	            It shows several details that help orientating and locating other players and gaining overview about game situation:
+	        </para>
+	        <itemizedlist>
+	            <listitem>
+	                <para>
+	                    <emphasis>Your own base:</emphasis> Your own base at starting position is always visible. Enemy players inside it will be displayed on minimap.
+	                    You will be noticed by alarm and ping when an enemy enters your base.
+	                </para>
+	            </listitem>
+	            <listitem>
+	                <para>
+	                    <emphasis>Your camera position:</emphasis> Your current camera-position is surrounded by a clearly visible rectangle.
+	                </para>
+	            </listitem>
+	            <listitem>
+	                <para>
+	                    <emphasis>Neutral bases:</emphasis> Neutral bases are indicated by small icons or dots even when they are not visible.
+	                    Icons differ in color based on current holding team. 
+	                </para>
+	            </listitem>
+	            <listitem>
+	                <para>
+	                    <emphasis>Team mates:</emphasis> Your team mates are displayed so you can identify who is where.
+	                    Their vision is shared with you.
+	                </para>
+	            </listitem>
+	        </itemizedlist>
+	        <para>
+	            Clicking on minimap will move your camera to clicked position. Using modifies you can ping different notifications:
+	        </para>
+	        <itemizedlist>
+	            <listitem>
+	                <para>
+	                    <emphasis>Ctrl-Click:</emphasis> Ping to mark an attack position ("Attack here!").
+	                </para>
+	            </listitem>
+	            <listitem>
+	                <para>
+	                    <emphasis>Alt-Click:</emphasis> Ping to mark a dangerous position ("Be careful over there!" or "Keep off there!").
+	                </para>
+	            </listitem>
+	            <listitem>
+	                <para>
+	                    <emphasis>Shift-Click:</emphasis> Ping to mark a where to gather ("Come here and wait!").
+	                </para>
+	            </listitem>
+	        </itemizedlist>
+	        <para>
+	            Right-clicking on map will start a player move to clicked position.
+	        </para>
+	    </section>
+	</section>
 </article>
