@@ -21,10 +21,8 @@
 		<title>Game setting and goal</title>
 		<para>
 			Two teams fight against on a large map. Each team consists of a
-			maximum of 5 players.
-		</para>
-		<para>
-			The first team that destroys enemy base wins.
+			maximum of 5 players. The first team that destroys enemy base wins.
+			A single player mode is not planned.
 		</para>
 	</section>
 	<section>
@@ -107,7 +105,7 @@
 					<para>
 						<emphasis>No defence:</emphasis>
 						Units spawned in that base cannot be moved or kept inside its
-						centrum.
+						centrum, so they have to defend with their team itself.
 					</para>
 				</listitem>
 			</itemizedlist>
@@ -115,9 +113,12 @@
 	</section>
 	<section>
 		<title>Player abilities</title>
-		<para>
-			Players can launch missiles to shoot enemies like in Counter Strike.
-		</para>
+		<section>
+		    <title>Shooting</title>
+		    <para>
+		        Players can launch missiles to shoot enemies like in Counter Strike.
+		    </para>
+		</section>
 		<section>
 		    <title>Controlling units</title>
 		    <para>

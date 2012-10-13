@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE article PUBLIC "-//OASIS//DTD Simplified DocBook XML V1.0//EN"
+"http://www.oasis-open.org/docbook/xml/simple/1.0/sdocbook.dtd">
+<article>
+	<articleinfo>
+		<title>Game launcher, menu and matchmaking</title>
+		<author>
+			<firstname>Florian</firstname>
+			<surname>Mai</surname>
+		</author>
+		<author>
+			<firstname>Jannis</firstname>
+			<surname>Mell</surname>
+		</author>
+	</articleinfo>
+	<section>
+	    <title>General structure</title>
+	    <para>
+	        Users play the game with a game client. When client starts, it checkes for updates and then prompts user for login.
+	        The User can use the client to configure their preferences and profile, start matches with friends and spectate or review other matches.  
+	    </para>
+	</section>
+	<section>
+	    <title>Authentication</title>
+	    <para>
+	        Players need to authenticate to play the game. To login they need a unique username (account name) and a password.
+	        An authentication can be successful only when game client version matches server version.
+	    </para>
+        <para>
+	        To authenticate, players need to have an account. Account registration is done either in game client directly or on our website.
+	        To register, a valid e-mail address is required to verify your account.
+        </para>
+    </section>
+    <section>
+        <title>Profiles</title>
+        <para>
+            Each user has a user profile where he can select a profile picture and a displayname for custom games (in tournaments your account name is used always).
+            In your profile you can see your results of recent matches and replay most recent matches.
+        </para>
+    </section>
+    <section>
+        <title>Chatting</title>
+        <para>
+            Chatting between users is also available while not playing. In order to find partners and group up this is a very useful feature.
+            Chat partners are addressed by their account name.
+        </para>
+    </section>
+    <section>
+        <title>Friendlist</title>
+        <para>
+            
+        </para>
+    </section>
+    <section>
+	    <title>Settings</title>
+	    <table>
+            <title>Profile settings</title>
+            <tgroup cols="3">
+                <thead>
+                    <row>
+                        <entry>Setting name</entry>
+                        <entry>description</entry>
+                        <entry>possible values</entry>
+                    </row>
+                </thead>
+                <tbody>
+                    <row>
+                        <entry>
+                            Profile picture
+                        </entry>
+                        <entry>
+                            Allows the player to select a profile picture that is displayed next to its name (ingame and in matchmaking).
+                        </entry>
+                        <entry>
+                            list of profile-pictures 
+                        </entry>
+                    </row>
+                    <row>
+                        <entry>
+                            Display name
+                        </entry>
+                        <entry>
+                            Player can choose a unique displayname. If a game is marked as private, users can choose any name before game starts.
+                        </entry>
+                        <entry>
+                            (textbox)
+                        </entry>
+                    </row>
+                </tbody>
+            </tgroup>
+        </table>
+        <table>
+            <title>Privacy settings</title>
+            <tgroup cols="3">
+                <thead>
+                    <row>
+                        <entry>Setting name</entry>
+                        <entry>description</entry>
+                        <entry>possible values</entry>
+                    </row>
+                </thead>
+                <tbody>
+                    <row>
+                        <entry>
+                            Online status
+                        </entry>
+                        <entry>
+                            If set to hidden, user is displayed as offline to other users.
+                        </entry>
+                        <entry>
+                            Online, Want to play, Away, Busy, Do not disturb, Hidden 
+                        </entry>
+                    </row>
+                </tbody>
+            </tgroup>
+        </table>
+        <table>
+            <title>Game settings</title>
+            <tgroup cols="3">
+                <thead>
+                    <row>
+                        <entry>Setting name</entry>
+                        <entry>description</entry>
+                        <entry>possible values</entry>
+                    </row>
+                </thead>
+                <tbody>
+                   
+                </tbody>
+            </tgroup>
+        </table>
+	</section>
+</article>
