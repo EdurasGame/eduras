@@ -46,7 +46,7 @@
 	        <listitem>
 	            <para>
 	                <emphasis>Game configuration:</emphasis> The player must have the ability to change some client settings to match his behaviour (see Usability).
-	                In a multiplayer game, one cannot simply pause the game, so settings changes must apply on-the-fly.
+	                In a multiplayer game, <ulink url="http://cdn.memegenerator.net/instances/400x/21402242.jpg">one cannot simply pause the game</ulink>, so settings changes must apply on-the-fly.
 	            </para>
 	        </listitem>
 	    </itemizedlist>
@@ -55,13 +55,19 @@
 	    <title>Graphical targets</title>
 	    <para>
 			The Interface should be clean but not too abstract. It's style should match the game's style.
-			Graphics should not be too complicated to distract the user from game itself. Too small interface will keep off players with bad seeing capabilities.
+			Graphics should not be too complicated to distract the user from game itself but epic artwork style is epic.
+			Too small interface will keep off players with bad seeing capabilities.
+			But it is very important that players can recognize important facts like health and map position very fast.
+	    </para>
+	    <para>
+	        It is a lot easier for players to learn the game if its interface is similar to common games. Considering popularity and first-play-enthusiasm the interface
+	        should not matter. 
 	    </para>
 	</section>
 	<section>
 	    <title>Usability</title>
 	    <para>
-	        The interface doesn't only consists of the visual part of user interaction, there are also hidden things like keybindings, mouse interaction and so on.
+	        The interface doesn't only consist of the visual part of user interaction, there are also hidden things like keybindings, mouse interaction and so on.
 	        This leads to an important point of gamer-friendlyness: individuality. A game with static possibilities to use is a silly game. A user wants to change
 	        the way of interaction to his personal favourites. Some important features must not miss:
 	    </para>
@@ -79,11 +85,17 @@
 	                to his own preference or even turn it off (there might come up situations where you don't want to wake up roommates...).
 	            </para>
 	        </listitem>
+	        <listitem>
+	            <para>
+	                <emphasis>Visual aids:</emphasis> Players with visual impairment may want to have a colorblind-mode with more contrast (like League of Legends). The ability
+	                of changing the UI size may help users with higher resolutions to detect something on their map.
+	            </para>
+	        </listitem>
 	    </itemizedlist>
 	    <section>
 	        <title>What about us?</title>
 	        <para>
-	            Developers are really lacking in benefits from interface-design, so it should provide some features to improve development and bug-fixing.
+	            Developers are really lacking in benefits from interface-design, so it needs to provide features to improve development and bug-fixing.
 	            Thus we need a bug-report tool that reports bugs automatically on the one hand, and let the user report bugs and problems ingame.
 	            After being reported, bugs are autmatically put into our <ulink url="http://illonis.dyndns.org/pstatus/Eduras">bug-database</ulink>.
 	        </para>

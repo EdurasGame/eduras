@@ -5,6 +5,11 @@ body
 	background:#FFFFEE;
 }
 
+a
+{
+	color:blue;
+}
+
 .section
 {
 	width:900px;
