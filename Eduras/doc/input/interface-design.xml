@@ -167,7 +167,7 @@
 		                        Map background, visible players, fog of war, pings, bases
 		                    </entry>
 		                    <entry>
-		                        top-right or bottom-right or center-bottom
+		                        top-right, bottom-right, center-bottom or bottom-left
 		                    </entry>
 		                </row>
 		                <row>
@@ -272,6 +272,11 @@
 	                    Their vision is shared with you.
 	                </para>
 	            </listitem>
+	            <listitem>
+	                <para>
+	                    <emphasis>Controlled units:</emphasis> Controlled units will be shown as simple dots. Their vision is shared with you.
+	                </para>
+	            </listitem>
 	        </itemizedlist>
 	        <para>
 	            Clicking on minimap will move your camera to clicked position. Using modifies you can ping different notifications:
@@ -296,6 +301,38 @@
 	        <para>
 	            Right-clicking on map will start a player move to clicked position.
 	        </para>
+	    </section>
+	    <section>
+	        <title>Chat</title>
+	        <para>
+	            Game chat allows players to communicate with each other. Chat messages are marked with posting-time (either game time or real time) and posting player in following scheme:
+	            <computeroutput>[14:38] Playername: Message</computeroutput>.
+	            There is also possibility to chat with enemy team using All-chat. These message have a different color and are preponed with <computeroutput>[All]</computeroutput>.
+	            Older chat messages will fade out (not completely) to provide a better view of the game world.
+	            Game hoster can disable All-Chat before game starts (this cannot be changed ingame). Spectators are not able to view chat (optional) at all. 
+	        </para>
+	        <para>
+	            <emphasis>Improved messaging using short-codes:</emphasis> Players can use keystrokes (Ctrl+1 to Ctrl+7) to send predefined chat messages to group chat.
+	            These messages can be defined in client settings and are sent immediately without confirmation.
+	        </para>
+	        <para>
+	            Some non-player messages are displayed in chat aswell. But it's important to keep amount of these messages low so communication is not disturbed.
+	        </para>
+	        <itemizedlist>
+	            <listitem>
+	                <para>
+	                    A player disconnected/reconnected/quit.
+	                </para>
+	            </listitem>
+	            <listitem>
+	                <para>
+	                    A team surrenders.
+	                </para>
+	            </listitem>
+	            <para>
+	                More events are displayed by other gui-elements.
+	            </para>
+	        </itemizedlist>
 	    </section>
 	</section>
 </article>
