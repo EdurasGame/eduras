@@ -279,7 +279,7 @@
 	            </listitem>
 	        </itemizedlist>
 	        <para>
-	            Clicking on minimap will move your camera to clicked position. Using modifies you can ping different notifications:
+	            Clicking on minimap will move your camera to clicked position. Using modifies you can ping different notifications to your team mates:
 	        </para>
 	        <itemizedlist>
 	            <listitem>
@@ -329,10 +329,10 @@
 	                    A team surrenders.
 	                </para>
 	            </listitem>
-	            <para>
-	                More events are displayed by other gui-elements.
-	            </para>
 	        </itemizedlist>
+	        <para>
+                More events are displayed by other gui-elements.
+            </para>
 	    </section>
 	</section>
 </article>

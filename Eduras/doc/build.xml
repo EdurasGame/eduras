@@ -60,6 +60,11 @@
         <include name="style.css" />
       </fileset>
     </copy>
+    <copy todir="${output.dir}/images">
+      <fileset dir="images">
+        <include name="*" />
+      </fileset>
+    </copy>
   </target>
 
 </project> 
