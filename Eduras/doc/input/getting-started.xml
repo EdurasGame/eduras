@@ -57,6 +57,39 @@
 			popular distributed version control tool, that has already got well working
 			plugins for common IDEs and so will be easy to work with.
 		</para>
+		
+		<section>
+			<title>Commits</title>
+			<para>
+				Every commit you make should have a tag as prefix to mark what your commit
+				will be about. If your tag touches a very wide field, you should think about
+				a subtag to bring into more detail. So people who view new changes can easily
+				detect whether a specific commit is of interest for the person or not.
+			</para>
+			
+			<para>
+				Your commits should be short and meaningful. You shall not detailedly describe
+				what you did but at some meta-level. Of course, this lies in some way much in
+				the estimation of the commiter, so you can't really tell what a good commit is
+				and what is not. To give a hint, think of a bugfix in some calculation where
+				there was an accidentally inserted '<=' replaced by a '<'. In the commit it would
+				be far enough to only tell that you fixed a minor bug and you don't need to tell
+				why, where, what or when. On the other hand, think of a function, where you do some
+				calculation on a list. You find out that the number of elements in the list is a
+				disctinct value and you want to replace the list by an array due to performance
+				reasons. Then your commit message should contain information about why it's possible
+				and useful to replace the list by an array. A third example: You created a new class
+				that sets up a network connection. Simply tell this in your commit message. All
+				additional information a reader might want to get should be found in the source code
+				documentation.
+			</para>
+			
+			<para>For example, the commit for adding the description of how to make a commit
+			may look like this: [DOCUMENTATION][COMMITS] Added a description of how commits should look
+			like.
+			</para>
+			
+		</section>
 	
 	</section>
 	
