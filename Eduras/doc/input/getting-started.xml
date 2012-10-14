@@ -72,7 +72,7 @@
 				what you did but at some meta-level. Of course, this lies in some way much in
 				the estimation of the commiter, so you can't really tell what a good commit is
 				and what is not. To give a hint, think of a bugfix in some calculation where
-				there was an accidentally inserted '<=' replaced by a '<'. In the commit it would
+				there was an accidentally inserted '&lt;=' replaced by a '&lt;'. In the commit it would
 				be far enough to only tell that you fixed a minor bug and you don't need to tell
 				why, where, what or when. On the other hand, think of a function, where you do some
 				calculation on a list. You find out that the number of elements in the list is a
