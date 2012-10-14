@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE article PUBLIC "-//OASIS//DTD Simplified DocBook XML V1.0//EN"
+"http://www.oasis-open.org/docbook/xml/simple/1.0/sdocbook.dtd">
+<article>
+	<articleinfo>
+	    <title>Getting started</title>
+		<author>
+			<firstname>Florian</firstname>
+			<surname>Mai</surname>
+		</author>
+		<author>
+			<firstname id="jannis">Jannis</firstname>
+			<surname>Mell</surname>
+		</author>
+	</articleinfo>
+	
+	<section>
+	
+		<title>Intended audience</title>
+		
+		<para>
+			This getting-started guide should be read by any developer, project-
+			manager or any other person who is connected to this project. It
+			will contain information that is needed to get started working on this
+			project or with the outcomes of this project.
+		</para>
+	</section>
+	
+	<section>
+		<title>Programming language</title>
+		
+		<para>
+			As it is very natural for games, we were sure about using an
+			object-orientated programming language very early and so it was about
+			to decide between the big ones, Java and C++, each of them having
+			significant advantages and disadvantages. C++ of course is more difficult
+			to work with since there is no automated memory management and not such a
+			huge amount of free libraries as it's known from Java. Actually C++ is more
+			often the programming language of choice in a gaming context since most
+			(professional) games come along with big calculations and therefore Java
+			with its virtual machine delay may not be fast enough. Especially for an
+			eSports game played via network speed is a critical factor. But nevertheless
+			we are confident that our game - having in mind to keep things simple in it -
+			will not include such big calculations, so Java will work. Java also provides
+			the simplest way of being platform independent. Not at last, we are
+			much more familiar with Java than we are with C++. Due to these reasons we
+			prefer Java to C++.
+		</para>
+	</section>
+	
+	<section>
+	
+		<title>Version Control Management System</title>
+		
+		<para>
+			For this project we will use GIT for version control. GIT is a very
+			popular distributed version control tool, that has already got well working
+			plugins for common IDEs and so will be easy to work with.
+		</para>
+	
+	</section>
+	
+	
+	<section>
+	
+		<title>Continuous Integration</title>
+		
+		<para>
+			We should really think about introducing a continuous integration platform such
+			as <ulink url="http://jenkins-ci.org/">Jenkins</ulink>. These tools offer a lot
+			of automating-mechanisms which we can use to automate various jobs such as building
+			the project or documentation, running unit tests and so on. It also is able to
+			provide an overview of TODOs in	the source code and much more. We could also integrate
+			these features into our own web-platform being developed by Jannis. (TODO: Reference to
+			Jannis). But I think that would be much too costly. Using Jenkins (or another CI tool)
+			as an extension to our platform should work well.
+		</para>
+	</section>
+</article>
