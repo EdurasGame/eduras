@@ -125,6 +125,17 @@
                     </row>
                 </thead>
                 <tbody>
+                    <row>
+                        <entry>
+                            Interface scale
+                        </entry>
+                        <entry>
+                            Scales interface to given value.
+                        </entry>
+                        <entry>
+                            float value 0.5 to 2
+                        </entry>
+                    </row>
                    
                 </tbody>
             </tgroup>
