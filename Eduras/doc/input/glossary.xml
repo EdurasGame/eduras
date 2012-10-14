@@ -4,23 +4,15 @@
 <article>
 	<articleinfo>
 		<title>Glossary</title>
-		<author>
-			<firstname>Florian</firstname>
-			<surname>Mai</surname>
-		</author>
-		<author>
-			<firstname>Jannis</firstname>
-			<surname>Mell</surname>
-		</author>
 	</articleinfo>
 	<section>
-	    <title>What's this?</title>
+	    <title>(jme) What's this?</title>
 	    <para>
 	        In this document important terms and acronyms are declared and described.
     	</para>
     </section>
     <section>
-        <title>Glossary</title>
+        <title>(jme) Glossary</title>
 	    <table>
 	        <title>Important terms and acronyms</title>
 	        <tgroup cols="2">

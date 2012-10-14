@@ -4,24 +4,16 @@
 <article>
 	<articleinfo>
 		<title>Game launcher, menu and matchmaking</title>
-		<author>
-			<firstname>Florian</firstname>
-			<surname>Mai</surname>
-		</author>
-		<author>
-			<firstname>Jannis</firstname>
-			<surname>Mell</surname>
-		</author>
 	</articleinfo>
 	<section>
-	    <title>General structure</title>
+	    <title>(jme) General structure</title>
 	    <para>
 	        Users play the game with a game client. When client starts, it checkes for updates and then prompts user for login.
 	        The User can use the client to configure their preferences and profile, start matches with friends and spectate or review other matches.  
 	    </para>
 	</section>
 	<section>
-	    <title>Authentication</title>
+	    <title>(jme) Authentication</title>
 	    <para>
 	        Players need to authenticate to play the game. To login they need a unique username (account name) and a password.
 	        An authentication can be successful only when game client version matches server version.
@@ -32,27 +24,27 @@
         </para>
     </section>
     <section>
-        <title>Profiles</title>
+        <title>(jme) Profiles</title>
         <para>
             Each user has a user profile where he can select a profile picture and a displayname for custom games (in tournaments your account name is used always).
             In your profile you can see your results of recent matches and replay most recent matches.
         </para>
     </section>
     <section>
-        <title>Chatting</title>
+        <title>(jme) Chatting</title>
         <para>
             Chatting between users is also available while not playing. In order to find partners and group up this is a very useful feature.
             Chat partners are addressed by their account name.
         </para>
     </section>
     <section>
-        <title>Friendlist</title>
+        <title>(jme) Friendlist</title>
         <para>
             
         </para>
     </section>
     <section>
-	    <title>Settings</title>
+	    <title>(jme) Settings</title>
 	    <table>
             <title>Profile settings</title>
             <tgroup cols="3">

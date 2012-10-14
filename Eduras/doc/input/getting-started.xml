@@ -4,19 +4,11 @@
 <article>
 	<articleinfo>
 	    <title>Getting started</title>
-		<author>
-			<firstname>Florian</firstname>
-			<surname>Mai</surname>
-		</author>
-		<author>
-			<firstname id="jannis">Jannis</firstname>
-			<surname>Mell</surname>
-		</author>
 	</articleinfo>
 	
 	<section>
 	
-		<title>Intended audience</title>
+		<title>(fma) Intended audience</title>
 		
 		<para>
 			This getting-started guide should be read by any developer, project-
@@ -27,7 +19,7 @@
 	</section>
 	
 	<section>
-		<title>Programming language</title>
+		<title>(fma) Programming language</title>
 		
 		<para>
 			As it is very natural for games, we were sure about using an
@@ -49,8 +41,18 @@
 	</section>
 	
 	<section>
+		<title>(fma) Build tool</title>
+		
+		<para>
+			We will use <ulink url="http://ant.apache.org/">Ant</ulink> to automated our
+			builds. Ant is very popular in a Java context and thus has good support for
+			plugins in your favorite IDE.
+		</para>
+	</section>
 	
-		<title>Version Control Management System</title>
+	<section>
+	
+		<title>(fma) Version Control Management System</title>
 		
 		<para>
 			For this project we will use GIT for version control. GIT is a very
@@ -96,17 +98,51 @@
 	
 	<section>
 	
-		<title>Continuous Integration</title>
+		<title>(fma) Continuous Integration</title>
 		
 		<para>
 			We should really think about introducing a continuous integration platform such
 			as <ulink url="http://jenkins-ci.org/">Jenkins</ulink>. These tools offer a lot
 			of automating-mechanisms which we can use to automate various jobs such as building
 			the project or documentation, running unit tests and so on. It also is able to
-			provide an overview of TODOs in	the source code and much more. We could also integrate
-			these features into our own web-platform being developed by Jannis. (TODO: Reference to
-			Jannis). But I think that would be much too costly. Using Jenkins (or another CI tool)
+			provide an overview of TODOs in	the source code and much more. We c.ould also integrate
+			these features into our own web-platform being developed by Jannis
+			But I think that would be much too costly. Using Jenkins (or another CI tool)
 			as an extension to our platform should work well.
 		</para>
+	</section>
+	
+	<section>
+		<title>(fma) Documentation</title>
+		
+		<para>
+			We use <ulink url="http://docbook.org/">DocBook</ulink> to write our documentation.
+			DocBook is written in an XML format and thus is very easy to convert to various
+			types of documents. Primarily we will concentrate on optimizing our documentation for
+			a good HTML output.
+		</para>
+		
+		<section>
+			
+			<title>How to write documentation</title>
+			
+			<para>
+				There are only small limitations on how to write documentation in this project.
+				Feel free to add anything that in your opinion should be
+				mentioned in the documentation. After consultation with other developers involved in
+				the project, change parts of the documentation to fit to new ideas, but
+				please <emphasis>DO NOT SIMPLY ERASE DOCUMENTATION THAT IS OUT OF DATE!
+				</emphasis> Instead you should mark obsolete documentation by scratching
+				out the text.
+			</para>
+			
+			<para>
+				If you write a new section of documentation, please insert your acronym as a prefix
+				to the section's title, so people are able to easily ask questions if there are any.
+				You should also do so if you add some sentences or do some changes.
+			</para>
+			
+		</section>
+	
 	</section>
 </article>

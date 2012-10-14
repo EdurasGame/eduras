@@ -2,35 +2,10 @@
 <!DOCTYPE article PUBLIC "-//OASIS//DTD Simplified DocBook XML V1.0//EN"
 "http://www.oasis-open.org/docbook/xml/simple/1.0/sdocbook.dtd">
 <article>
-	<title>Introduction</title>
-	<articleinfo>
-		<author>
-			<firstname>Florian</firstname>
-			<surname>Mai</surname>
-		</author>
-		<author>
-			<firstname>Jannis</firstname>
-			<surname>Mell</surname>
-		</author>
-	</articleinfo>
-	<section>
-		<title>What this is about</title>
-			<para>
-				This document serves as a mingle-mangle of thoughts about
-				the game we're developing including goals, brainstorming, protocols of
-				progress, architectural designs and anything that should be kept in
-				mind. Feel free to add anything that in your opinion should be
-				mentioned here. After consultation with other developers involved in
-				the project, change parts of the documentation to fit to new ideas, but
-				please <emphasis>DO NOT SIMPLY ERASE DOCUMENTATION THAT IS OUT OF DATE!
-				</emphasis> Instead you should mark obsolete documentation by scratching
-				out the text. 
-			</para>
-	</section>
-	
+	<title>Introduction</title>	
 	
 	<section>
-		<title>What we aim for</title>
+		<title>(fma) What we aim for</title>
 			<para>
 				This project is about developing a multiplayer game appropiate to be
 				played competitively as an eSport title. For us, a successful eSport title
@@ -73,7 +48,7 @@
 			</itemizedlist>
 
 		<section>
-			<title>Many players</title>
+			<title>(fma) Many players</title>
 				<para>
 					To achieve a huge amount of players the game must fulfill the following
 					properties:
@@ -118,7 +93,7 @@
 		</section>
 		
 		<section>
-			<title>Many spectators</title>
+			<title>(fma) Many spectators</title>
 				<para>
 					To achieve a huge amount of spectators the game must fulfill the following
 					properties:
@@ -142,7 +117,7 @@
 		</section>
 		
 		<section>
-			<title>Deep sportive characteristic</title>
+			<title>(fma) Deep sportive characteristic</title>
 				<para>
 					To achieve a deep sportive characteristic the game must fulfill the following
 					properties:
