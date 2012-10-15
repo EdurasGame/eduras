@@ -41,6 +41,7 @@ public class Server {
 	 * Handles a new connection and assigns a new ServerReceiver to it.
 	 * 
 	 * @param client
+	 *            Socket to handle.
 	 * @throws IOException
 	 */
 	private void handleConnection(Socket client) throws IOException {
@@ -89,6 +90,12 @@ public class Server {
 		}
 	}
 
+	/**
+	 * Removes client from serversender.
+	 * 
+	 * @param client
+	 *            Client to remove.
+	 */
 	public void removeClient(Socket client) {
 		serverSender.remove(client);
 	}

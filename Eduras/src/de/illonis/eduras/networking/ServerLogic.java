@@ -37,15 +37,14 @@ public class ServerLogic extends Thread {
 		}
 	}
 
+	/**
+	 * Fetches next String from Buffer.
+	 * 
+	 * @return next String
+	 * @throws NoSuchElementException
+	 *             Returned when buffer is empty.
+	 */
 	private String fetchFromBuffer() throws NoSuchElementException {
 		return inpBuffer.getNext();
-	}
-
-	private void doWait() {
-		try {
-			wait();
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
 	}
 }
