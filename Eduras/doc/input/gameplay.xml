@@ -70,6 +70,13 @@
 						Players can control siege machines and/or footmen that can be
 						produced in that base.
 					</para>
+					
+					<para>
+						(fma) <emphasis>Some kind of 'money':</emphasis> 
+						Controlling a base should generate some kind of resource which
+						can be used to buy units or do some other actions. The more bases
+						you control, the more money you get.
+					</para>
 				</listitem>
 			</itemizedlist>
 		</section>
@@ -109,6 +116,11 @@
 		    <title>Shooting</title>
 		    <para>
 		        Players can launch missiles to shoot enemies like in Counter Strike.
+		        (fma) The variety of available weapons may look like in Quake, where
+		        each weapon feels very distinct to the others and serves another purpose.
+		        The weapon balancing is much greater than in 'realistic' shooters like
+		        Counter-Strike or Call Of Duty, in which all weapons feel more or less
+		        the same. (/fma)
 		    </para>
 		</section>
 		<section>
