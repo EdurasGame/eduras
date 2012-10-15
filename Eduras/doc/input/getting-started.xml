@@ -164,4 +164,37 @@
 		</para>
 	
 	</section>
+	
+	<section>
+		
+		<title>(fma) Process model</title>
+		
+		<para>
+			This is a hobby project that nevertheless is intended to grow to a relativly big one. So
+			I guess progress will be slow and over a long period of time since we can't work fulltime
+			on it - knowledge may get lost over time. Earlier or later there will be much code written 
+			by a lot of	different people assumed that developer fluctuation will be high. Due to these
+			reasons we need a detailed documentation to keep know-how about the project. Nevertheless
+			an incremental and agile approach fits best to developing a game whose requirements often
+			change. I propose to proceed in small increments in sprints over a (for a hobby project) 
+			short period of time of about one month (or something). An incrementation should be devided
+			into relativly big meta tasks, so there is one or at most 2 per developer (per sprint). 
+			The developer may decide autonomously if he or she wants to devide his/her task into subtasks.
+			A meta task should include writing adequate documentation including somehow architecture.
+		</para>
+		<para>
+			For example, a first sprint may concern itself with setting up a basis for a client-server
+			structure. In the very beginning the team has to discuss about interfaces, general
+			architecture and about how the transmitted data should look like. Having specified these
+			things, one part of the team can concentrate on implementing the client side and the other
+			part can concentrate on the server side. Maybe a third part of the team can concern itself
+			with data structures.
+		</para>
+		
+		<para>
+			TODO: Describe the process model in more detail!
+		</para>
+		
+	</section>
+	
 </article>
