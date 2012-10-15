@@ -29,19 +29,22 @@ public abstract class GameEvent {
 	 * @author Florian Mai <florian.ren.mai@googlemail.com>
 	 */
 	public enum GameEventNumber {
-		MOVE_LEFT(10), MOVE_RIGHT(11), MOVE_UP(12), MOVE_DOWN(13), MOVE_POS(19), NO_EVENT(99);
-		
+		MOVE_LEFT(10), MOVE_RIGHT(11), MOVE_UP(12), MOVE_DOWN(13), MOVE_POS(19), NO_EVENT(
+				99);
+
 		private int number;
-		
+
 		GameEventNumber(int num) {
 			number = num;
 		}
-		
+
 	}
 
 	/**
 	 * Creates a new GameEvent of the given type.
-	 * @param type The type of the new GameEvent instance.
+	 * 
+	 * @param type
+	 *            The type of the new GameEvent instance.
 	 */
 	public GameEvent(GameEventNumber type) {
 		this.type = type;
@@ -49,15 +52,18 @@ public abstract class GameEvent {
 
 	/**
 	 * Returns the type of the GameEvent.
+	 * 
 	 * @return The type of the GameEvent.
 	 */
 	public GameEventNumber getType() {
 		return type;
 	}
 
-	/** 
+	/**
 	 * Sets the type of the GameEvent.
-	 * @param type The new value.
+	 * 
+	 * @param type
+	 *            The new value.
 	 */
 	public void setType(GameEventNumber type) {
 		this.type = type;
@@ -96,18 +102,25 @@ public abstract class GameEvent {
 	}
 
 	/**
-	 * Maps a number to its GameEventNumber representation. Returns NO_EVENT
-	 * if the number cannot be mapped to a GameEventNumber.
-	 * @param typeInt The number to be mapped to a GameEventNumber.
+	 * Maps a number to its GameEventNumber representation. Returns NO_EVENT if
+	 * the number cannot be mapped to a GameEventNumber.
+	 * 
+	 * @param typeInt
+	 *            The number to be mapped to a GameEventNumber.
 	 * @return The GameEventNumber.
 	 */
 	public static GameEventNumber toGameEventNumber(int typeInt) {
-		switch(typeInt) {
-		case 10: return GameEventNumber.MOVE_LEFT;
-		case 11: return GameEventNumber.MOVE_RIGHT;
-		case 12: return GameEventNumber.MOVE_UP;
-		case 13: return GameEventNumber.MOVE_DOWN;
-		case 19: return GameEventNumber.MOVE_POS;
+		switch (typeInt) {
+		case 10:
+			return GameEventNumber.MOVE_LEFT;
+		case 11:
+			return GameEventNumber.MOVE_RIGHT;
+		case 12:
+			return GameEventNumber.MOVE_UP;
+		case 13:
+			return GameEventNumber.MOVE_DOWN;
+		case 19:
+			return GameEventNumber.MOVE_POS;
 		default:
 		}
 		return GameEventNumber.NO_EVENT;

@@ -23,47 +23,53 @@ public class MovementEvent extends ObjectEvent {
 	 *            The id of the object.
 	 * @param direction
 	 *            The direction to which the movement shall take place.
-	 * @throws GivenParametersDoNotFitToEventException Exception takes place if
-	 * the given GameEventNumber is not a MovementEvent.
+	 * @throws GivenParametersDoNotFitToEventException
+	 *             Exception takes place if the given GameEventNumber is not a
+	 *             MovementEvent.
 	 */
-	public MovementEvent(GameEventNumber type, int id) throws GivenParametersDoNotFitToEventException {
+	public MovementEvent(GameEventNumber type, int id)
+			throws GivenParametersDoNotFitToEventException {
 
-		super(type,id);
-		
+		super(type, id);
+
 	}
 
 	/**
 	 * Returns the x position that shall be newly set by this event.
+	 * 
 	 * @return The new x position.
 	 */
 	public int getNewXPos() {
 		return newXPos;
 	}
 
-	/** 
+	/**
 	 * Returns the y position that shall be newly set by this event.
+	 * 
 	 * @return The new y position.
 	 */
 	public int getNewYPos() {
 		return newYPos;
 	}
-	
+
 	/**
 	 * Sets the x position that is to be set with this event to the given value.
-	 * @param val The new value.
+	 * 
+	 * @param val
+	 *            The new value.
 	 */
 	public void setNewXPos(int val) {
 		newXPos = val;
 	}
-	
+
 	/**
 	 * Sets the y position that is to be set with this event to the given value.
-	 * @param val The new value.
+	 * 
+	 * @param val
+	 *            The new value.
 	 */
 	public void setNewYPos(int val) {
 		newYPos = val;
 	}
-	
-	
 
 }
