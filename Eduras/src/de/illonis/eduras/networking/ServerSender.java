@@ -60,9 +60,10 @@ public class ServerSender extends Thread {
 	@Override
 	public void run() {
 		while (true) {
-			outputBuffer.getAll();
-			// TODO: serialize them
-			// TODO: send them
+			String message = NetworkMessageSerializer.concatenate(outputBuffer
+					.getAll());
+
+			outputBuffer.append(message);
 			try {
 				Thread.sleep(SEND_INTERVAL);
 			} catch (InterruptedException e) {

@@ -7,6 +7,12 @@ import java.net.Socket;
 import de.illonis.eduras.Game;
 import de.illonis.eduras.Logic;
 
+/**
+ * A server that handles a game and its clients.
+ * 
+ * @author illonis
+ * 
+ */
 public class Server {
 
 	/**
@@ -35,6 +41,13 @@ public class Server {
 			e.printStackTrace();
 			System.exit(0);
 		}
+	}
+
+	/**
+	 * Notifies ServerLogik that there are new messages to parse.
+	 */
+	public void wakeLogic() {
+		serverLogic.notify();
 	}
 
 	/**
