@@ -40,8 +40,81 @@
     <section>
         <title>(jme) Friendlist</title>
         <para>
-            
+            The friendlist allows users to see if their friends are online. You can add or remove friends. Opponent must accept an friend invitation to be your friend.
         </para>
+    </section>
+    <section>
+        <title>(jme) Creating a game</title>
+        <para>
+            To create a game, the user can use a game creation screen. There he can invite other people and configure some game-specific settings.
+        </para>
+        <figure>
+            <title>Game creating panel where players can be added and game is configured</title>
+            <mediaobject>
+                <imageobject>
+                    <imagedata fileref="images/newgame.png" format="PNG" />
+                </imageobject>
+            </mediaobject>
+        </figure>
+        <table>
+            <title>Game specific settings</title>
+            <tgroup cols="3">
+                <thead>
+                    <row>
+                        <entry>Setting</entry>
+                        <entry>Description</entry>
+                        <entry>Possible values (default is <emphasis>highlighted</emphasis>)</entry>
+                    </row>
+                </thead>
+                <tbody>
+                    <row>
+                        <entry>
+                            Allow spectators
+                        </entry>
+                        <entry>
+                            If true, other players can join the game and spectate
+                        </entry>
+                        <entry>
+                            <emphasis>true</emphasis>, false
+                        </entry>
+                    </row>
+                    <row>
+                        <entry>
+                            Disable all-chat
+                        </entry>
+                        <entry>
+                            Disables all-chat function. Team members can chat among each other but not with opponents.
+                        </entry>
+                        <entry>
+                            true, <emphasis>false</emphasis>
+                        </entry>
+                    </row>
+                    <row>
+                        <entry>
+                            Forbid surrender
+                        </entry>
+                        <entry>
+                            Disallows teams to surrender in general. This should be used with care (may be do not implement?). Overrides next setting.
+                        </entry>
+                        <entry>
+                            true, <emphasis>false</emphasis>
+                        </entry>
+                    </row>
+                    <row>
+                        <entry>
+                            Limit surrender at start
+                        </entry>
+                        <entry>
+                            Prevents teams from surrender before given game time.
+                        </entry>
+                        <entry>
+                            <emphasis>true</emphasis> (slider 1 to 50 (<emphasis>15</emphasis>)), false
+                        </entry>
+                    </row>
+                    
+                </tbody>
+            </tgroup>
+        </table>
     </section>
     <section>
 	    <title>(jme) Settings</title>
@@ -117,6 +190,17 @@
                     </row>
                 </thead>
                 <tbody>
+                    <row>
+                        <entry>
+                            Interface scale
+                        </entry>
+                        <entry>
+                            Scales interface to given value.
+                        </entry>
+                        <entry>
+                            float value 0.5 to 2
+                        </entry>
+                    </row>
                    
                 </tbody>
             </tgroup>
