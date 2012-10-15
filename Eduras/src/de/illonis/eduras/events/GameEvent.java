@@ -14,17 +14,19 @@ public abstract class GameEvent {
 
 	/**
 	 * Contains any event that can occur. The number behind is passed via
-	 * network.
+	 * network.<br>
 	 * 
-	 * MOVE_LEFT: An id associated with a GameObject will be passed with this
-	 * event. The object behind wants to move left. MOVE_UP: An id associated
-	 * with a GameObject will be passed with this event. The object behind wants
-	 * to move up. MOVE_RIGHT: An id associated with a GameObject will be passed
-	 * with this event. The object behind wants to move right. MOVE_DOWN: An id
-	 * associated with a GameObject will be passed with this event. The object
-	 * behind wants to move down. MOVE_POS: An id associated with a GameObject
-	 * will be passed with this event. The object behind is moved to the x and y
-	 * position that come along with the event.
+	 * <b>MOVE_LEFT</b>: An id associated with a GameObject will be passed with
+	 * this event. The object behind wants to move left.<br>
+	 * <b>MOVE_UP</b>: An id associated with a GameObject will be passed with
+	 * this event. The object behind wants to move up.<br>
+	 * <b>MOVE_RIGHT</b>: An id associated with a GameObject will be passed with
+	 * this event. The object behind wants to move right.<br>
+	 * <b>MOVE_DOWN</b>: An id associated with a GameObject will be passed with
+	 * this event. The object behind wants to move down.<br>
+	 * <b>MOVE_POS</b>: An id associated with a GameObject will be passed with
+	 * this event. The object behind is moved to the x and y position that come
+	 * along with the event.
 	 * 
 	 * @author Florian Mai <florian.ren.mai@googlemail.com>
 	 */
