@@ -145,4 +145,23 @@
 		</section>
 	
 	</section>
+	
+	<section>
+	
+		<title>(fma) Project management platform</title>
+		
+		<para>
+			If the project is going to grow in number of members, I think there is a need for a project
+			management platform which serves task management and gives a central entry point to continuous
+			integration and version control. We will need that because we have to work distributed in terms
+			of place and time. We could either develop an own platform serving these purposes or use an
+			existing tool. <ulink url="http://www.tinypm.com/">tinyPM</ulink> provides task management and
+			a git plugin giving an entry point to our git repository. Unfortunately, tinyPM is limited to
+			at most 5 members on one project. We should discuss what aspects of project management we need
+			and what the costs for integrating it into an own platform would be, what alternatives to
+			tinyPM exist and, at last, what would be most adequate for us. Especially Jannis should tell
+			his opinion.
+		</para>
+	
+	</section>
 </article>
