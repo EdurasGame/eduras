@@ -80,7 +80,7 @@ public class Server {
 		}
 
 		/**
-		 * Start the whole thing with listening...
+		 * Listens for new clients and passes them to client handler.
 		 */
 		private void startServing() {
 

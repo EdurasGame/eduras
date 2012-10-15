@@ -1,15 +1,23 @@
 package de.illonis.eduras;
 
+import de.illonis.eduras.networking.Client;
+import de.illonis.eduras.networking.Server;
+
 public class Eduras {
-
-	public Eduras() {
-
-	}
 
 	/**
 	 * @param args
+	 *            If first argument equals "server", server will be started,
+	 *            client otherwise.
+	 * 
 	 */
 	public static void main(String[] args) {
-		System.out.println("Hello gist!");
+		if (args.length > 0 && args[0].equals("server")) {
+			System.out.println("Starting Eduras? server...");
+			new Server();
+		} else {
+			System.out.println("Starting Eduras? client...");
+			new Client();
+		}
 	}
 }

@@ -4,18 +4,36 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.NoSuchElementException;
 
+/**
+ * A class that sends collected messages every {@value #SEND_INTERVAL} ms.
+ * 
+ * @author illonis
+ * 
+ */
 public class ServerSender extends Thread {
 
+	/**
+	 * Message send interval
+	 */
 	private final static int SEND_INTERVAL = 33;
+
 	private ArrayList<PrintWriter> clients;
 	private Buffer outputBuffer;
+	private Server server;
 
+	/**
+	 * Creates a new ServerSender that sends messages from given Buffer.
+	 * 
+	 * @param server
+	 *            Server to assign this sender to.
+	 * @param outputBuffer
+	 *            Buffer to fetch messages from.
+	 */
 	public ServerSender(Server server, Buffer outputBuffer) {
-
 		this.outputBuffer = outputBuffer;
 		clients = new ArrayList<PrintWriter>();
-
 	}
 
 	/**
@@ -43,6 +61,7 @@ public class ServerSender extends Thread {
 			pw = new PrintWriter(client.getOutputStream());
 			clients.add(pw);
 		} catch (IOException e) {
+			server.removeClient(client);
 			e.printStackTrace();
 		}
 	}
@@ -60,15 +79,25 @@ public class ServerSender extends Thread {
 	@Override
 	public void run() {
 		while (true) {
-			String message = NetworkMessageSerializer.concatenate(outputBuffer
-					.getAll());
-
-			outputBuffer.append(message);
+			sendAllMessages();
 			try {
 				Thread.sleep(SEND_INTERVAL);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
+		}
+	}
+
+	/**
+	 * Retrieves all messages from outputBuffer and sends them to all clients.
+	 */
+	private void sendAllMessages() {
+		try {
+			String message = NetworkMessageSerializer.concatenate(outputBuffer
+					.getAll());
+			sendMessage(message);
+		} catch (NoSuchElementException e) {
+			// do nothing if there is no message.
 		}
 	}
 }

@@ -59,13 +59,12 @@ public class ServerReceiver extends Thread {
 	 * passed for interpretation.
 	 */
 	private void waitForMessages() {
-		String line;
 
 		try {
 			InputStream in = client.getInputStream();
 			BufferedReader br = new BufferedReader(new InputStreamReader(in));
 			while (true) {
-				line = br.readLine();
+				String line = br.readLine();
 				if (line != null)
 					pushToInputBuffer(line);
 			}
@@ -74,7 +73,5 @@ public class ServerReceiver extends Thread {
 			System.err.println("Connection to client closed.");
 			e.printStackTrace();
 		}
-
 	}
-
 }

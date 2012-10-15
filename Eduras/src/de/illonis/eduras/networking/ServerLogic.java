@@ -52,9 +52,9 @@ public class ServerLogic extends Thread {
 		try {
 			while (true) {
 				String s = inputBuffer.getNext();
-				LinkedList<GameEvent> ll = NetworkMessageDeserializer
+				LinkedList<GameEvent> deserializedMessages = NetworkMessageDeserializer
 						.deserialize(s);
-				for (GameEvent event : ll)
+				for (GameEvent event : deserializedMessages)
 					logic.onGameEventAppeared(event);
 			}
 		} catch (NoSuchElementException e) {

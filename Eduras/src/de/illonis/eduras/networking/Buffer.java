@@ -10,6 +10,9 @@ import java.util.NoSuchElementException;
  * 
  */
 public class Buffer extends LinkedList<String> {
+	/**
+	 * Use this object to synchronize access.
+	 */
 	public final static Object SYNCER = new Object();
 
 	private static final long serialVersionUID = 1L;
@@ -36,7 +39,14 @@ public class Buffer extends LinkedList<String> {
 		add(string);
 	}
 
-	public String[] getAll() {
+	/**
+	 * Returns all strings that are in this buffer.
+	 * 
+	 * @return A string array containing all strings.
+	 */
+	public String[] getAll() throws NoSuchElementException {
+		if (size() == 0)
+			throw new NoSuchElementException();
 		return (String[]) toArray();
 	}
 
