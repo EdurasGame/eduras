@@ -139,8 +139,11 @@
 			<para>
 				If you write a new section of documentation, please insert your acronym as a prefix
 				to the section's title, so people are able to easily ask questions if there are any.
-				You should also do so if you add some sentences or do some changes.
+				You should also do so if you add some sentences or do some changes. To mark the end
+				of your changes or additional sentences, insert your prefix with a slash ('/').
 			</para>
+			
+			<para>Example: My penis is very large. (jme) Mine is even larger. (/jme).</para>
 			
 		</section>
 	
