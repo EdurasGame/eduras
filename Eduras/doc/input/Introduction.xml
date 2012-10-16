@@ -2,8 +2,10 @@
 <!DOCTYPE article PUBLIC "-//OASIS//DTD Simplified DocBook XML V1.0//EN"
 "http://www.oasis-open.org/docbook/xml/simple/1.0/sdocbook.dtd">
 <article>
+     <informalfigure>
+       <graphic fileref="images/logo_small.png"></graphic>
+	</informalfigure>
 	<title>Introduction</title>	
-	
 	<section>
 		<title>(fma) What we aim for</title>
 			<para>
