@@ -34,24 +34,31 @@ public class Logic implements GameLogicInterface {
 			
 			MovementEvent moveEvent = (MovementEvent) event;
 			
+			GameObject player = currentGame.getPlayer1();
+			
 			switch(moveEvent.getType()) {
 			
 			case MOVE_DOWN:
-				yPos = currentGame.getPlayer1().getYPosition();
-				currentGame.getPlayer1().setYPosition(--yPos);
+				yPos = player.getYPosition();
+				player.setYPosition(--yPos);
 				break;
 			case MOVE_LEFT:
-				xPos = currentGame.getPlayer1().getXPosition();
-				currentGame.getPlayer1().setXPosition(--xPos);
+				xPos = player.getXPosition();
+				player.setXPosition(--xPos);
 				break;
 			case MOVE_RIGHT:
-				xPos = currentGame.getPlayer1().getXPosition();
-				currentGame.getPlayer1().setXPosition(++xPos);
+				xPos = player.getXPosition();
+				player.setXPosition(++xPos);
 				break;
 			case MOVE_UP:
-				yPos = currentGame.getPlayer1().getYPosition();
-				currentGame.getPlayer1().setYPosition(++yPos);
+				yPos = player.getYPosition();
+				player.setYPosition(++yPos);
 				break;
+			case MOVE_POS:
+				int newXPos = moveEvent.getNewXPos();
+				int newYPos = moveEvent.getNewYPos();
+				player.setYPosition(newYPos);
+				player.setXPosition(newXPos);
 			default:
 				break;
 			}
