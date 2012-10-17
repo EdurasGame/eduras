@@ -6,38 +6,41 @@ import de.illonis.eduras.events.MovementEvent;
 
 /**
  * A first (dummy) implementation of game logic.
+ * 
  * @author Florian Mai <florian.ren.mai@googlemail.com>
- *
+ * 
  */
 public class Logic implements GameLogicInterface {
-	
+
 	Game currentGame;
 
 	public Logic(Game g) {
-		
+
 		this.currentGame = g;
-		
 	}
-	
+
 	/**
-	 * Handles an incoming event. See {@link GameEventNumber} for detailed description.
-	 * @param event 
+	 * Handles an incoming event. See {@link GameEventNumber} for detailed
+	 * description.
+	 * 
+	 * @param event
 	 */
 	@Override
 	public synchronized void onGameEventAppeared(GameEvent event) {
-		
-		
-		if(event instanceof MovementEvent) {
-			
+		System.out.println("[LOGIC] A game event appeared.");
+
+		if (event instanceof MovementEvent) {
+			System.out.println("[LOGIC] Game event is a MovementEvent.");
+
 			int yPos;
 			int xPos;
-			
+
 			MovementEvent moveEvent = (MovementEvent) event;
-			
+
 			GameObject player = currentGame.getPlayer1();
-			
-			switch(moveEvent.getType()) {
-			
+
+			switch (moveEvent.getType()) {
+
 			case MOVE_DOWN:
 				yPos = player.getYPosition();
 				player.setYPosition(--yPos);

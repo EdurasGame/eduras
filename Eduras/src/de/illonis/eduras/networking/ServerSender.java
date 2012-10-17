@@ -61,6 +61,7 @@ public class ServerSender extends Thread {
 			pw = new PrintWriter(client.getOutputStream());
 			clients.add(pw);
 		} catch (IOException e) {
+			System.out.println("[SERVER][SENDER] couldnt create printwriter.");
 			server.removeClient(client);
 			e.printStackTrace();
 		}

@@ -32,8 +32,12 @@ public class NetworkMessageDeserializer {
 		LinkedList<GameEvent> gameEvents = new LinkedList<GameEvent>();
 
 		String restString = eventString;
+		int i = 0;
 		while (restString != "") {
-
+			System.out.println("DESERIALIZING " + restString);
+			i++;
+			if (i > 30)
+				break;
 			// find next message start
 			if (restString.startsWith("##")) {
 

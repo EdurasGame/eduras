@@ -43,9 +43,11 @@ public class ServerReceiver extends Thread {
 	 *            Message that should be pushed.
 	 */
 	private void pushToInputBuffer(String message) {
+		System.out.println("[SERVER] Pushed to input Buffer: " + message);
 		synchronized (Buffer.SYNCER) {
 			inputBuffer.append(message);
 		}
+		System.out.println("[SERVER] Pushing ok");
 		server.wakeLogic();
 	}
 
@@ -59,18 +61,21 @@ public class ServerReceiver extends Thread {
 	 * passed for interpretation.
 	 */
 	private void waitForMessages() {
-
+		System.out.println("[SERVER] Waiting for messages...");
 		try {
 			InputStream in = client.getInputStream();
 			BufferedReader br = new BufferedReader(new InputStreamReader(in));
 			while (true) {
 				String line = br.readLine();
-				if (line != null)
+				if (line != null) {
+					System.out.println("[SERVER] Received message: " + line);
 					pushToInputBuffer(line);
+				}
+
 			}
 		} catch (IOException e) {
 			server.removeClient(client);
-			System.err.println("Connection to client closed.");
+			System.err.println("[SERVER] Connection to client closed.");
 			e.printStackTrace();
 		}
 	}

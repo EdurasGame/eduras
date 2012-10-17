@@ -34,10 +34,11 @@ public class ServerLogic extends Thread {
 
 	@Override
 	public void run() {
+		System.out.println("[SERVERLOGIC] Started serverlogic.");
 		while (true) {
 			decodeMessages();
 			try {
-				Thread.sleep(10);
+				Thread.sleep(15);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
@@ -50,18 +51,21 @@ public class ServerLogic extends Thread {
 	 */
 	private void decodeMessages() {
 		try {
-			while (true) {
-				String s = inputBuffer.getNext();
-				LinkedList<GameEvent> deserializedMessages = NetworkMessageDeserializer
-						.deserialize(s);
-				for (GameEvent event : deserializedMessages)
-					logic.onGameEventAppeared(event);
-			}
+			String s = inputBuffer.getNext();
+			LinkedList<GameEvent> deserializedMessages = NetworkMessageDeserializer
+					.deserialize(s);
+			System.out.println("[SERVERLOGIC] Decoded "
+					+ deserializedMessages.size() + " messages from: " + s);
+			for (GameEvent event : deserializedMessages)
+				logic.onGameEventAppeared(event);
+
 		} catch (NoSuchElementException e) {
-			try {
-				wait();
-			} catch (InterruptedException e1) {
-				e1.printStackTrace();
+			synchronized (this) {
+				try {
+					wait();
+				} catch (InterruptedException e1) {
+					e1.printStackTrace();
+				}
 			}
 		}
 	}

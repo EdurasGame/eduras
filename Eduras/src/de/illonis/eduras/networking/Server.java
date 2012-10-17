@@ -5,7 +5,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 
 import de.illonis.eduras.Game;
-import de.illonis.eduras.GameLogicInterface;
+import de.illonis.eduras.GameObject;
 import de.illonis.eduras.Logic;
 
 /**
@@ -19,7 +19,7 @@ public class Server {
 	/**
 	 * Port where server listens for new clients.
 	 */
-	public final static int PORT = 4387;
+	public final static int DEFAULT_PORT = 4387;
 
 	private final Buffer inputBuffer, outputBuffer;
 	private final ServerSender serverSender;
@@ -27,18 +27,20 @@ public class Server {
 
 	public Server() {
 		Game g = new Game();
-		GameLogicInterface logic = new Logic(g);
+		GameObject obj = new GameObject();
+		g.setPlayer1(obj);
+		Logic logic = new Logic(g);
 		inputBuffer = new Buffer();
 		outputBuffer = new Buffer();
 		serverLogic = new ServerLogic(inputBuffer, logic);
-
+		serverLogic.start();
 		serverSender = new ServerSender(this, outputBuffer);
 
 		try {
 			ConnectionListener cl = new ConnectionListener();
 			cl.start();
 		} catch (IOException e) {
-			System.err.println("Could not start server. Quitting.");
+			System.err.println("[SERVER] Could not start server. Quitting.");
 			e.printStackTrace();
 			System.exit(0);
 		}
@@ -48,7 +50,9 @@ public class Server {
 	 * Notifies ServerLogik that there are new messages to parse.
 	 */
 	public void wakeLogic() {
-		serverLogic.notify();
+		synchronized (serverLogic) {
+			serverLogic.notify();
+		}
 	}
 
 	/**
@@ -76,7 +80,7 @@ public class Server {
 		private final ServerSocket server;
 
 		public ConnectionListener() throws IOException {
-			server = new ServerSocket(PORT);
+			server = new ServerSocket(DEFAULT_PORT);
 			startServing();
 		}
 
@@ -84,21 +88,15 @@ public class Server {
 		 * Listens for new clients and passes them to client handler.
 		 */
 		private void startServing() {
-
+			System.out.println("[SERVER] Listening on " + DEFAULT_PORT);
 			while (true) {
 				Socket client = null;
 				try {
 					client = server.accept();
+					System.out.println("[SERVER] New client...");
 					handleConnection(client);
 				} catch (IOException e) {
 					e.printStackTrace();
-				} finally {
-					if (client != null)
-						try {
-							client.close();
-						} catch (IOException e) {
-							e.printStackTrace();
-						}
 				}
 			}
 		}

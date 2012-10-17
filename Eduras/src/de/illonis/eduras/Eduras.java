@@ -17,7 +17,8 @@ public class Eduras {
 			new Server();
 		} else {
 			System.out.println("Starting Eduras? client...");
-			new Client();
+			Client client = new Client();
+
 		}
 	}
 }
