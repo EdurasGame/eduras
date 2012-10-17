@@ -20,8 +20,8 @@ public class ServerSender extends Thread {
 	 */
 	private final static int SEND_INTERVAL = 33;
 
-	private ArrayList<PrintWriter> clients;
-	private Buffer outputBuffer;
+	private final ArrayList<PrintWriter> clients;
+	private final Buffer outputBuffer;
 	private Server server;
 
 	/**
@@ -59,7 +59,7 @@ public class ServerSender extends Thread {
 	public void add(Socket client) {
 		PrintWriter pw;
 		try {
-			pw = new PrintWriter(client.getOutputStream());
+			pw = new PrintWriter(client.getOutputStream(),true);
 			clients.add(pw);
 		} catch (IOException e) {
 			System.out.println("[SERVER][SENDER] couldnt create printwriter.");
