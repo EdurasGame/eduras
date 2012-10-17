@@ -9,7 +9,7 @@ package de.illonis.eduras.events;
  */
 public abstract class ObjectEvent extends GameEvent {
 	
-	private final int objectId;
+	private int objectId;
 	
 	/**
 	 * Creates a new ObjectEvent belonging to the object
@@ -27,6 +27,10 @@ public abstract class ObjectEvent extends GameEvent {
 	 */
 	public int getObjectId() {
 		return objectId;
+	}
+	
+	public void setId(int id) {
+		this.objectId = id;
 	}
 
 }

@@ -32,12 +32,8 @@ public class NetworkMessageDeserializer {
 		LinkedList<GameEvent> gameEvents = new LinkedList<GameEvent>();
 
 		String restString = eventString;
-		int i = 0;
 		while (!restString.isEmpty()) {
-			System.out.println("DESERIALIZING " + restString);
-			i++;
-			if (i > 30)
-				break;
+
 			// find next message start
 			if (restString.startsWith("##")) {
 
@@ -74,27 +70,36 @@ public class NetworkMessageDeserializer {
 						&& typeNumber == GameEventNumber.MOVE_POS) {
 					restString = restString.substring(1);
 					nextHash = restString.indexOf("#");
+					
+					int id = Integer.parseInt(restString.substring(0,
+							nextHash));
+					
+					restString = restString.substring(nextHash + 1);
+					nextHash = restString.indexOf("#");
 
 					int newXPos = Integer.parseInt(restString.substring(0,
 							nextHash));
 
 					restString = restString.substring(nextHash + 1);
 					nextHash = restString.indexOf("#");
+					
+					if(nextHash < 0) {
+						nextHash = restString.length();
+					}
 
 					int newYPos = Integer.parseInt(restString.substring(0,
-							nextHash));
+							restString.length()));
 
 					MovementEvent moveEvent = (MovementEvent) event;
 					moveEvent.setNewXPos(newXPos);
 					moveEvent.setNewYPos(newYPos);
+					moveEvent.setId(id);
 				}
 
 			} else {
 				restString = restString.substring(1);
 			}
-
 		}
-
 		return gameEvents;
 	}
 }
