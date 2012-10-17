@@ -1,6 +1,7 @@
 package de.illonis.eduras.networking;
 
 import java.util.LinkedList;
+import java.util.NoSuchElementException;
 
 import de.illonis.eduras.exceptions.BufferIsEmptyException;
 
@@ -37,7 +38,11 @@ public class Buffer {
 	 *             Thrown if list is empty.
 	 */
 	public String getNext() throws BufferIsEmptyException {
-		return list.pop();
+		try {
+			return list.pop();
+		} catch (NoSuchElementException e) {
+			throw new BufferIsEmptyException();
+		}
 	}
 
 	/**

@@ -7,6 +7,10 @@ import java.net.Socket;
 import de.illonis.eduras.Game;
 import de.illonis.eduras.GameObject;
 import de.illonis.eduras.Logic;
+import de.illonis.eduras.events.GameEvent.GameEventNumber;
+import de.illonis.eduras.events.MovementEvent;
+import de.illonis.eduras.exceptions.GivenParametersDoNotFitToEventException;
+import de.illonis.eduras.interfaces.GameEventListener;
 
 /**
  * A server that handles a game and its clients.
@@ -14,7 +18,7 @@ import de.illonis.eduras.Logic;
  * @author illonis
  * 
  */
-public class Server {
+public class Server implements GameEventListener {
 
 	/**
 	 * Default port where server listens for new clients.
@@ -24,12 +28,14 @@ public class Server {
 	private final Buffer inputBuffer, outputBuffer;
 	private final ServerSender serverSender;
 	private final ServerLogic serverLogic;
+	private final Game game;
 
 	public Server() {
-		Game g = new Game();
+		game = new Game();
 		GameObject obj = new GameObject();
-		g.setPlayer1(obj);
-		Logic logic = new Logic(g);
+		game.setPlayer1(obj);
+		Logic logic = new Logic(game);
+		logic.addGameEventListener(this);
 		inputBuffer = new Buffer();
 		outputBuffer = new Buffer();
 		serverLogic = new ServerLogic(inputBuffer, logic);
@@ -110,6 +116,22 @@ public class Server {
 	 */
 	public void removeClient(Socket client) {
 		serverSender.remove(client);
+	}
+
+	@Override
+	public void onWorldChanged() {
+		MovementEvent me;
+		try {
+			me = new MovementEvent(GameEventNumber.MOVE_POS, game.getPlayer1()
+					.getId());
+			me.setNewXPos(game.getPlayer1().getXPosition() + 20);
+			me.setNewYPos(game.getPlayer1().getYPosition() + 20);
+			String msg = NetworkMessageSerializer.serialize(me);
+			outputBuffer.append(msg);
+		} catch (GivenParametersDoNotFitToEventException e) {
+			e.printStackTrace();
+		}
+
 	}
 
 }

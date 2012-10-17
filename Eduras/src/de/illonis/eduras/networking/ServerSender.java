@@ -97,6 +97,7 @@ public class ServerSender extends Thread {
 		try {
 			String message = NetworkMessageSerializer.concatenate(outputBuffer
 					.getAll());
+			System.out.println("[SERVER] Sent all messages.");
 			sendMessage(message);
 		} catch (BufferIsEmptyException e) {
 			// do nothing if there is no message.

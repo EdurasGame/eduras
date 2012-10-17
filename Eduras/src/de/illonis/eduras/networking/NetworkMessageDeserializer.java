@@ -33,6 +33,7 @@ public class NetworkMessageDeserializer {
 
 		String restString = eventString;
 		while (!restString.isEmpty()) {
+			System.out.println("[DESERIALIZING] " + restString);
 
 			// find next message start
 			if (restString.startsWith("##")) {
@@ -70,10 +71,10 @@ public class NetworkMessageDeserializer {
 						&& typeNumber == GameEventNumber.MOVE_POS) {
 					restString = restString.substring(1);
 					nextHash = restString.indexOf("#");
-					
-					int id = Integer.parseInt(restString.substring(0,
-							nextHash));
-					
+
+					int id = Integer
+							.parseInt(restString.substring(0, nextHash));
+
 					restString = restString.substring(nextHash + 1);
 					nextHash = restString.indexOf("#");
 
@@ -82,8 +83,8 @@ public class NetworkMessageDeserializer {
 
 					restString = restString.substring(nextHash + 1);
 					nextHash = restString.indexOf("#");
-					
-					if(nextHash < 0) {
+
+					if (nextHash < 0) {
 						nextHash = restString.length();
 					}
 

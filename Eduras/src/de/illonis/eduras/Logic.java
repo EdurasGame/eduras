@@ -98,7 +98,7 @@ public class Logic implements GameLogicInterface {
 	 * Unregisters given listener for world-change events.
 	 * 
 	 * @param listener
-	 *            listener to unregister.
+	 *            Listener to unregister.
 	 */
 	public void removeGameEventListener(GameEventListener listener) {
 		listenerList.remove(listener);
