@@ -24,7 +24,7 @@ public class NetworkMessageSerializer {
 
 		String serializedEvent = "";
 
-		serializedEvent += event.getType() + "#";
+		serializedEvent +=  event.getType().getNumber() + "#";
 
 		if (event instanceof MovementEvent) {
 
