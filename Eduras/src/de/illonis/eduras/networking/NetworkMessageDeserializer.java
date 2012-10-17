@@ -33,7 +33,7 @@ public class NetworkMessageDeserializer {
 
 		String restString = eventString;
 		int i = 0;
-		while (restString != "") {
+		while (!restString.isEmpty()) {
 			System.out.println("DESERIALIZING " + restString);
 			i++;
 			if (i > 30)
@@ -89,7 +89,10 @@ public class NetworkMessageDeserializer {
 					moveEvent.setNewYPos(newYPos);
 				}
 
+			} else {
+				restString = restString.substring(1);
 			}
+
 		}
 
 		return gameEvents;

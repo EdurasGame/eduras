@@ -1,8 +1,11 @@
 package de.illonis.eduras;
 
+import java.util.ArrayList;
+
 import de.illonis.eduras.events.GameEvent;
 import de.illonis.eduras.events.GameEvent.GameEventNumber;
 import de.illonis.eduras.events.MovementEvent;
+import de.illonis.eduras.interfaces.GameEventListener;
 
 /**
  * A first (dummy) implementation of game logic.
@@ -13,10 +16,12 @@ import de.illonis.eduras.events.MovementEvent;
 public class Logic implements GameLogicInterface {
 
 	Game currentGame;
+	private ArrayList<GameEventListener> listenerList;
 
 	public Logic(Game g) {
 
 		this.currentGame = g;
+		listenerList = new ArrayList<GameEventListener>();
 	}
 
 	/**
@@ -65,7 +70,25 @@ public class Logic implements GameLogicInterface {
 			default:
 				break;
 			}
+
 		}
+		fireMyEvent();
+	}
+
+	private void fireMyEvent() {
+
+		for (GameEventListener evl : listenerList)
+			evl.onWorldChanged();
+	}
+
+	// This methods allows classes to register for MyEvents
+	public void addGameEventListener(GameEventListener listener) {
+		listenerList.add(listener);
+	}
+
+	// This methods allows classes to unregister for MyEvents
+	public void removeGameEventListener(GameEventListener listener) {
+		listenerList.remove(listener);
 	}
 
 }
