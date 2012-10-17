@@ -39,6 +39,10 @@ public abstract class GameEvent {
 		GameEventNumber(int num) {
 			number = num;
 		}
+		
+		public int getNumber() {
+			return number;
+		}
 
 	}
 
