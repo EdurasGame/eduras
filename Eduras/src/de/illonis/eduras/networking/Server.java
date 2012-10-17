@@ -46,6 +46,7 @@ public class Server implements GameEventListener {
 		try {
 			ConnectionListener cl = new ConnectionListener();
 			cl.start();
+			System.out.println("Konstruktor vorbei");
 		} catch (IOException e) {
 			System.err.println("[SERVER] Could not start server. Quitting.");
 			e.printStackTrace();
@@ -88,13 +89,13 @@ public class Server implements GameEventListener {
 
 		public ConnectionListener() throws IOException {
 			server = new ServerSocket(DEFAULT_PORT);
-			startServing();
 		}
 
 		/**
 		 * Listens for new clients and passes them to client handler.
 		 */
-		private void startServing() {
+		@Override
+		public void run() {
 			System.out.println("[SERVER] Listening on " + DEFAULT_PORT);
 			while (true) {
 				Socket client = null;
