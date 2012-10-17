@@ -5,6 +5,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 
 import de.illonis.eduras.Game;
+import de.illonis.eduras.GameLogicInterface;
 import de.illonis.eduras.Logic;
 
 /**
@@ -20,13 +21,13 @@ public class Server {
 	 */
 	public final static int PORT = 4387;
 
-	private Buffer inputBuffer, outputBuffer;
-	private ServerSender serverSender;
-	private ServerLogic serverLogic;
+	private final Buffer inputBuffer, outputBuffer;
+	private final ServerSender serverSender;
+	private final ServerLogic serverLogic;
 
 	public Server() {
 		Game g = new Game();
-		Logic logic = new Logic(g);
+		GameLogicInterface logic = new Logic(g);
 		inputBuffer = new Buffer();
 		outputBuffer = new Buffer();
 		serverLogic = new ServerLogic(inputBuffer, logic);

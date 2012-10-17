@@ -3,7 +3,7 @@ package de.illonis.eduras.networking;
 import java.util.LinkedList;
 import java.util.NoSuchElementException;
 
-import de.illonis.eduras.Logic;
+import de.illonis.eduras.GameLogicInterface;
 import de.illonis.eduras.events.GameEvent;
 
 /**
@@ -15,8 +15,8 @@ import de.illonis.eduras.events.GameEvent;
  */
 public class ServerLogic extends Thread {
 
-	private Buffer inputBuffer;
-	private Logic logic;
+	private final Buffer inputBuffer;
+	private final GameLogicInterface logic;
 
 	/**
 	 * Creates a new ServerLogic that pulls messages from given inputbuffer and
@@ -27,7 +27,7 @@ public class ServerLogic extends Thread {
 	 * @param logic
 	 *            Logic to push gameevents into.
 	 */
-	public ServerLogic(Buffer inputBuffer, Logic logic) {
+	public ServerLogic(Buffer inputBuffer, GameLogicInterface logic) {
 		this.logic = logic;
 		this.inputBuffer = inputBuffer;
 	}
