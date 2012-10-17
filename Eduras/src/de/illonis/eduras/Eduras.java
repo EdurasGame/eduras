@@ -18,6 +18,7 @@ public class Eduras {
 		} else {
 			System.out.println("Starting Eduras? client...");
 			new Client();
+
 		}
 	}
 }

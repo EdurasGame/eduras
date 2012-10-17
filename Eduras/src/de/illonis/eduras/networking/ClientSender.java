@@ -6,32 +6,28 @@ import java.net.Socket;
 
 public class ClientSender extends Thread {
 
-	Socket socket = null;
-	PrintWriter messageWriter = null;
-	
-	String message;
-	
-	
-	public ClientSender(Socket socket, String message) {
-		
-		this.socket = socket;
+	private Socket socket = null;
+	private PrintWriter messageWriter = null;
 
-		
-		this.message = message;
-		
-	}
-	
-	
-	@Override
-	public void run() {
-		
+	public ClientSender(Socket socket) {
+
+		this.socket = socket;
 		try {
-			this.messageWriter = new PrintWriter(socket.getOutputStream(), true);
+			this.messageWriter = new PrintWriter(this.socket.getOutputStream(),
+					true);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
-		messageWriter.write(message);
-		
+		start();
 	}
+
+	public void sendMessage(String message) {
+		System.out.println("[CLIENT] Sending message: " + message);
+		messageWriter.println(message);
+	}
+
+	public void close() {
+		messageWriter.close();
+	}
+
 }

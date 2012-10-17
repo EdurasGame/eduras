@@ -17,10 +17,11 @@ public class NetworkMessageSerializer {
 	 * @param event
 	 *            The event to be serialized.
 	 * @return The string.
-	 * @throws Exception
+	 * @throws UnsupportedOperationException
 	 *             Occurs if there is no serialization for the given event.
 	 */
-	public static String serialize(GameEvent event) throws Exception {
+	public static String serialize(GameEvent event)
+			throws UnsupportedOperationException {
 
 		String serializedEvent = "";
 
