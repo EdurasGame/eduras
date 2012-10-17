@@ -64,7 +64,11 @@ public class Buffer {
 	 */
 	public String[] getAll() throws BufferIsEmptyException {
 		if (list.size() == 0)
+
 			throw new BufferIsEmptyException();
-		return (String[]) list.toArray();
+		String[] msgs = new String[list.size()];
+		list.toArray(msgs);
+		list.clear();
+		return msgs;
 	}
 }

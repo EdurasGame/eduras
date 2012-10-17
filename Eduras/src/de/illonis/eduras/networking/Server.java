@@ -41,6 +41,7 @@ public class Server implements GameEventListener {
 		serverLogic = new ServerLogic(inputBuffer, logic);
 		serverLogic.start();
 		serverSender = new ServerSender(this, outputBuffer);
+		serverSender.start();
 
 		try {
 			ConnectionListener cl = new ConnectionListener();
