@@ -10,16 +10,26 @@ import de.illonis.eduras.GameObject;
 import de.illonis.eduras.Logic;
 import de.illonis.eduras.interfaces.GameEventListener;
 
+/**
+ * A client that connects to the game server and starts receiving and sending
+ * events.
+ * 
+ * @author Florian Mai <florian.ren.mai@googlemail.com>
+ * 
+ */
 public class Client implements GameEventListener {
 
 	Socket socket;
-	private Logic logic;
+	private final Logic logic;
 
 	ClientReceiver receiver;
 	ClientSender sender;
-	private Game game;
-	private ClientFrame clientFrame;
+	private final Game game;
+	private final ClientFrame clientFrame;
 
+	/**
+	 * Creates a new Client.
+	 */
 	public Client() {
 		game = new Game();
 		GameObject obj = new GameObject();
@@ -51,6 +61,11 @@ public class Client implements GameEventListener {
 		connect(addr, Server.DEFAULT_PORT);
 	}
 
+	/**
+	 * Connects to a server on the given address and port.
+	 * @param addr The server's address.
+	 * @param port The server's port.
+	 */
 	public void connect(InetAddress addr, int port) {
 		try {
 			System.out.println("[CLIENT] Connecting...");

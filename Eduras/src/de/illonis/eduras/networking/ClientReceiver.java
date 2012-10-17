@@ -7,18 +7,27 @@ import java.net.Socket;
 
 import de.illonis.eduras.GameLogicInterface;
 
+/**
+ * Receives incoming messages for the client.
+ * 
+ * @author Florian Mai <florian.ren.mai@googlemail.com>
+ * 
+ */
 public class ClientReceiver extends Thread {
+	
+	private BufferedReader messageReader = null;
 
-	Socket socket = null;
-	BufferedReader messageReader = null;
+	private final GameLogicInterface logic;
 
-	GameLogicInterface logic;
+	private final boolean connectionAvailable = true;
 
-	boolean connectionAvailable = true;
-
+	/**
+	 * Retrieves
+	 * @param logic
+	 * @param socket
+	 */
 	public ClientReceiver(GameLogicInterface logic, Socket socket) {
 
-		this.socket = socket;
 		this.logic = logic;
 
 		try {
@@ -51,7 +60,9 @@ public class ClientReceiver extends Thread {
 	}
 
 	/**
-	 * @param messages
+	 * Forwards messages to the ClientLogic, where they are deserialized and forwarded
+	 * to the GameLogic.
+	 * @param messages The message(s)-string to be forwarded.
 	 */
 	private void processMessages(String messages) {
 
