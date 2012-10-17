@@ -1,10 +1,10 @@
 package de.illonis.eduras.networking;
 
 import java.util.LinkedList;
-import java.util.NoSuchElementException;
 
 import de.illonis.eduras.GameLogicInterface;
 import de.illonis.eduras.events.GameEvent;
+import de.illonis.eduras.exceptions.BufferIsEmptyException;
 
 /**
  * ServerLogic is used to receive messages from clients and translate them into
@@ -59,7 +59,7 @@ public class ServerLogic extends Thread {
 			for (GameEvent event : deserializedMessages)
 				logic.onGameEventAppeared(event);
 
-		} catch (NoSuchElementException e) {
+		} catch (BufferIsEmptyException e) {
 			synchronized (this) {
 				try {
 					wait();

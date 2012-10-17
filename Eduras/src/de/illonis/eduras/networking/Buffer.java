@@ -3,6 +3,8 @@ package de.illonis.eduras.networking;
 import java.util.LinkedList;
 import java.util.NoSuchElementException;
 
+import de.illonis.eduras.exceptions.BufferIsEmptyException;
+
 /**
  * A Buffer is a linked list of Strings. Oldest elements will be popped first.
  * 
@@ -25,7 +27,7 @@ public class Buffer extends LinkedList<String> {
 	 * @throws NoSuchElementException
 	 *             Thrown when list is empty.
 	 */
-	public String getNext() throws NoSuchElementException {
+	public String getNext() throws BufferIsEmptyException {
 		return pop();
 	}
 
@@ -44,9 +46,9 @@ public class Buffer extends LinkedList<String> {
 	 * 
 	 * @return A string array containing all strings.
 	 */
-	public String[] getAll() throws NoSuchElementException {
+	public String[] getAll() throws BufferIsEmptyException {
 		if (size() == 0)
-			throw new NoSuchElementException();
+			throw new BufferIsEmptyException();
 		return (String[]) toArray();
 	}
 

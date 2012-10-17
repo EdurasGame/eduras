@@ -17,7 +17,7 @@ import de.illonis.eduras.Logic;
 public class Server {
 
 	/**
-	 * Port where server listens for new clients.
+	 * Default port where server listens for new clients.
 	 */
 	public final static int DEFAULT_PORT = 4387;
 

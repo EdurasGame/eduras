@@ -4,7 +4,8 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.ArrayList;
-import java.util.NoSuchElementException;
+
+import de.illonis.eduras.exceptions.BufferIsEmptyException;
 
 /**
  * A class that sends collected messages every {@value #SEND_INTERVAL} ms.
@@ -97,7 +98,7 @@ public class ServerSender extends Thread {
 			String message = NetworkMessageSerializer.concatenate(outputBuffer
 					.getAll());
 			sendMessage(message);
-		} catch (NoSuchElementException e) {
+		} catch (BufferIsEmptyException e) {
 			// do nothing if there is no message.
 		}
 	}
