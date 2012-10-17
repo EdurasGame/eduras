@@ -75,18 +75,31 @@ public class Logic implements GameLogicInterface {
 		fireMyEvent();
 	}
 
+	/**
+	 * Fires a world-change event to all listeners
+	 */
 	private void fireMyEvent() {
 
 		for (GameEventListener evl : listenerList)
 			evl.onWorldChanged();
 	}
 
-	// This methods allows classes to register for MyEvents
+	/**
+	 * Registers given listener for world-change events.
+	 * 
+	 * @param listener
+	 *            Listener to register.
+	 */
 	public void addGameEventListener(GameEventListener listener) {
 		listenerList.add(listener);
 	}
 
-	// This methods allows classes to unregister for MyEvents
+	/**
+	 * Unregisters given listener for world-change events.
+	 * 
+	 * @param listener
+	 *            listener to unregister.
+	 */
 	public void removeGameEventListener(GameEventListener listener) {
 		listenerList.remove(listener);
 	}

@@ -14,6 +14,13 @@ import de.illonis.eduras.exceptions.GivenParametersDoNotFitToEventException;
 import de.illonis.eduras.networking.Client;
 import de.illonis.eduras.networking.NetworkMessageSerializer;
 
+/**
+ * A client frame that connects to "localhost" and has a {@link CircleDrawPanel}
+ * .
+ * 
+ * @author illonis
+ * 
+ */
 public class ClientFrame extends JFrame {
 
 	private static final long serialVersionUID = 1L;
@@ -22,6 +29,12 @@ public class ClientFrame extends JFrame {
 
 	private CircleDrawPanel cdp;
 
+	/**
+	 * Creates a new clientframe assigned to given client.
+	 * 
+	 * @param client
+	 *            client to assign to.
+	 */
 	public ClientFrame(Client client) {
 		super("Eduras? Client");
 		this.client = client;
@@ -76,6 +89,14 @@ public class ClientFrame extends JFrame {
 		}
 	}
 
+	/**
+	 * Adds a new servercircle to drawpanel at given position.
+	 * 
+	 * @param x
+	 *            x-position of new circle.
+	 * @param y
+	 *            x-position of new circle.
+	 */
 	public void newCircle(int x, int y) {
 		cdp.addServerCircle(x, y);
 	}

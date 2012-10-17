@@ -10,6 +10,12 @@ import java.util.ArrayList;
 
 import javax.swing.JPanel;
 
+/**
+ * A panel where circles are drawn by click and send to server.
+ * 
+ * @author illonis
+ * 
+ */
 public class CircleDrawPanel extends JPanel implements MouseListener {
 
 	private static final long serialVersionUID = 1L;
@@ -18,6 +24,12 @@ public class CircleDrawPanel extends JPanel implements MouseListener {
 
 	private ArrayList<Ellipse2D.Double> circles, receivedCircles;
 
+	/**
+	 * Creates a circlepanel that notifies given clientFrame on click.
+	 * 
+	 * @param clientFrame
+	 *            ClientFrame to notify.
+	 */
 	public CircleDrawPanel(ClientFrame clientFrame) {
 		super();
 		this.clientFrame = clientFrame;
