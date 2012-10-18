@@ -8,8 +8,8 @@ public class Eduras {
 	/**
 	 * @param args
 	 * 
-	 *            If <b>first argument</b> equals "server", server will be
-	 *            started, client otherwise.
+	 *            If first argument equals "server", server will be started,
+	 *            client otherwise.
 	 * 
 	 */
 	public static void main(String[] args) {
