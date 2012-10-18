@@ -22,6 +22,10 @@ public class GameWorker implements Runnable {
 	 * to other running threads.
 	 */
 	private static final int NO_DELAYS_PER_YIELD = 16;
+	/**
+	 * Number of frames that can be skipped in any one animation loop.
+	 */
+	private static final int MAX_FRAME_SKIPS = 5;
 
 	private boolean running = false;
 	private Game game;
@@ -44,6 +48,10 @@ public class GameWorker implements Runnable {
 		return game;
 	}
 
+	/**
+	 * Repeatedly update, render and sleep so loop takes close to period nsecs.
+	 * Sleep inaccuracies are handled.
+	 */
 	@Override
 	public void run() {
 		running = true;
@@ -51,6 +59,7 @@ public class GameWorker implements Runnable {
 		long beforeTime, afterTime, timeDiff, sleepTime;
 		long overSleepTime = 0L;
 		int noDelays = 0;
+		long excess = 0L;
 
 		beforeTime = System.nanoTime();
 
@@ -70,16 +79,23 @@ public class GameWorker implements Runnable {
 				}
 				overSleepTime = (System.nanoTime() - afterTime) - sleepTime;
 			} else {
+				excess -= sleepTime;
 				overSleepTime = 0L;
-
 				if (++noDelays >= NO_DELAYS_PER_YIELD) {
-					System.out.println("skip");
-					Thread.yield();
+					Thread.yield(); // let other threads do something
 					noDelays = 0;
 				}
 			}
 
 			beforeTime = System.nanoTime();
+
+			// skip frames (update game without rendering it)
+			int skips = 0;
+			while ((excess > period) && (skips < MAX_FRAME_SKIPS)) {
+				excess -= period;
+				gameUpdate();
+				skips++;
+			}
 		}
 		// exit
 	}
