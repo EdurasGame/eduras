@@ -119,7 +119,7 @@ public class GameWorker implements Runnable {
 	}
 
 	// moves yellow ball into mouse's direction
-	private void gameUpdate() {
+	private synchronized void gameUpdate() {
 		PointerInfo info = MouseInfo.getPointerInfo();
 		Point location = info.getLocation();
 		Point p = gameWorldPanel.getLocationOnScreen();

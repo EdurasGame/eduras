@@ -31,7 +31,6 @@ public class GameRenderer {
 	public GameRenderer(Game game, GameWorldPanel gameWorldPanel) {
 		this.game = game;
 		this.gameWorldPanel = gameWorldPanel;
-		gameWorldPanel.setImage(dbImage);
 	}
 
 	/**
@@ -48,7 +47,7 @@ public class GameRenderer {
 		if (dbImage == null || dbg == null
 				|| width != dbImage.getWidth(gameWorldPanel)) {
 			dbImage = gameWorldPanel.createImage(width, height);
-			gameWorldPanel.setImage(dbImage);
+
 			dbg = (Graphics2D) dbImage.getGraphics();
 			dbg.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
 					RenderingHints.VALUE_ANTIALIAS_ON);
