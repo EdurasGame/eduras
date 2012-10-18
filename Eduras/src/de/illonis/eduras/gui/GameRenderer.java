@@ -1,6 +1,7 @@
 package de.illonis.eduras.gui;
 
 import java.awt.Color;
+import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.RenderingHints;
@@ -57,6 +58,22 @@ public class GameRenderer {
 		dbg.fillRect(0, 0, width, height);
 
 		drawObjects();
+	}
+
+	/**
+	 * actively renders the buffer images to screen.
+	 */
+	public void paintGame() {
+		Graphics g;
+		try {
+			g = gameWorldPanel.getGraphics();
+			if ((g != null) && (dbImage != null))
+				g.drawImage(dbImage, 0, 0, null);
+			g.dispose();
+		} catch (Exception e) {
+			System.out.println("Graphics context error: " + e.getMessage());
+			e.printStackTrace();
+		}
 	}
 
 	/**

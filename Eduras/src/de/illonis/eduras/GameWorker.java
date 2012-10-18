@@ -40,10 +40,12 @@ public class GameWorker implements Runnable {
 	@Override
 	public void run() {
 		running = true;
+
 		while (running) {
 			gameUpdate();
 			gameRender();
-			gameWorldPanel.repaint();
+			paintGame();
+
 			try {
 				Thread.sleep(20);
 			} catch (InterruptedException e) {
@@ -51,6 +53,10 @@ public class GameWorker implements Runnable {
 			}
 		}
 		// exit
+	}
+
+	private void paintGame() {
+		renderer.paintGame();
 	}
 
 	/**
