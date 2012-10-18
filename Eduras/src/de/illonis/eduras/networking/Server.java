@@ -11,6 +11,7 @@ import de.illonis.eduras.events.GameEvent.GameEventNumber;
 import de.illonis.eduras.events.MovementEvent;
 import de.illonis.eduras.exceptions.GivenParametersDoNotFitToEventException;
 import de.illonis.eduras.interfaces.GameEventListener;
+import de.illonis.eduras.locale.Localization;
 
 /**
  * A server that handles a game and its clients.
@@ -47,7 +48,7 @@ public class Server implements GameEventListener {
 			ConnectionListener cl = new ConnectionListener();
 			cl.start();
 		} catch (IOException e) {
-			System.err.println("[SERVER] Could not start server. Quitting.");
+			System.err.println(Localization.getString("Server.startuperror")); //$NON-NLS-1$
 			e.printStackTrace();
 			System.exit(0);
 		}
@@ -99,12 +100,15 @@ public class Server implements GameEventListener {
 		 */
 		@Override
 		public void run() {
-			System.out.println("[SERVER] Listening on " + DEFAULT_PORT);
+			System.out.println(String.format(
+					Localization.getString("Server.startedlistening"),
+					DEFAULT_PORT));
 			while (true) {
 				Socket client = null;
 				try {
 					client = server.accept();
-					System.out.println("[SERVER] New client...");
+					System.out.println(Localization
+							.getString("Server.newclient")); //$NON-NLS-1$
 					handleConnection(client);
 				} catch (IOException e) {
 					e.printStackTrace();
