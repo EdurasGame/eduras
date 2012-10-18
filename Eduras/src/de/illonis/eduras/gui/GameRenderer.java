@@ -44,7 +44,8 @@ public class GameRenderer {
 	public void render(int width, int height) {
 
 		// recreate image if it does not exist
-		if (dbImage == null || dbg == null) {
+		if (dbImage == null || dbg == null
+				|| width != dbImage.getWidth(gameWorldPanel)) {
 			dbImage = gameWorldPanel.createImage(width, height);
 			gameWorldPanel.setImage(dbImage);
 			dbg = (Graphics2D) dbImage.getGraphics();
