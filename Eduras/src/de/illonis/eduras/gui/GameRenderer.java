@@ -66,8 +66,8 @@ public class GameRenderer {
 
 		dbg.setColor(Color.yellow);
 		for (int i = 0; i < objs.size(); i++) {
-			GameObject o = objs.get(i);
-			dbg.fillOval(o.getXPosition() - 10, o.getYPosition() - 10, 20, 20);
+			GameObject d = objs.get(i);
+			d.draw(dbg);
 		}
 	}
 }

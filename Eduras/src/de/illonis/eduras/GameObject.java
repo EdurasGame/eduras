@@ -1,20 +1,22 @@
 package de.illonis.eduras;
 
+import java.awt.Graphics2D;
+
+import de.illonis.eduras.interfaces.Drawable;
+
 /**
  * Meta class for all objects that can be on the game's map.
  * 
  * @author Florian Mai <florian.ren.mai@googlemail.com>
  * 
  */
-public class GameObject {
+public class GameObject implements Drawable {
 
 	public static int lastId = 0;
 
 	private int id;
 
-	private int xPosition;
-
-	private int yPosition;
+	int xPosition, yPosition;
 
 	public GameObject() {
 		this.id = lastId++;
@@ -75,5 +77,9 @@ public class GameObject {
 	 */
 	public void setYPosition(int yPosition) {
 		this.yPosition = yPosition;
+	}
+
+	@Override
+	public void draw(Graphics2D g) {
 	}
 }

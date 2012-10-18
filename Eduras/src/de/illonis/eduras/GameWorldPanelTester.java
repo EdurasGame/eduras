@@ -18,7 +18,7 @@ public class GameWorldPanelTester {
 
 	public GameWorldPanelTester() {
 		Game g = new Game();
-		GameObject go = new GameObject();
+		YellowCircle go = new YellowCircle();
 		go.setXPosition(60);
 		go.setYPosition(70);
 		g.getObjects().add(go);
