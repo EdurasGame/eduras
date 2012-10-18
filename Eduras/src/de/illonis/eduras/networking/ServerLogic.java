@@ -4,7 +4,6 @@ import java.util.LinkedList;
 
 import de.illonis.eduras.GameLogicInterface;
 import de.illonis.eduras.events.GameEvent;
-import de.illonis.eduras.exceptions.BufferIsEmptyException;
 
 /**
  * ServerLogic is used to receive messages from clients and translate them into
@@ -35,10 +34,19 @@ public class ServerLogic extends Thread {
 	@Override
 	public void run() {
 		System.out.println("[SERVERLOGIC] Started serverlogic.");
+		readFromInputBuffer();
+	}
+
+	/**
+	 * Reads repeatedly from input buffer and decodes those messages.<br>
+	 * This does not need a wait implementation because reading from input
+	 * buffer is blocking.
+	 */
+	private void readFromInputBuffer() {
 		while (true) {
-			decodeMessages();
 			try {
-				Thread.sleep(15);
+				String s = inputBuffer.getNext();
+				decodeMessage(s);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
@@ -46,27 +54,17 @@ public class ServerLogic extends Thread {
 	}
 
 	/**
-	 * Decodes all messages that are in inputBuffer. Once there is no message
-	 * available anymore, thread goes to bed.
+	 * Decodes given messages into one or more events and notices logic.
+	 * 
+	 * @param message
+	 *            message to decode.
 	 */
-	private void decodeMessages() {
-		try {
-			String s = inputBuffer.getNext();
-			LinkedList<GameEvent> deserializedMessages = NetworkMessageDeserializer
-					.deserialize(s);
-			System.out.println("[SERVERLOGIC] Decoded "
-					+ deserializedMessages.size() + " messages from: " + s);
-			for (GameEvent event : deserializedMessages)
-				logic.onGameEventAppeared(event);
-
-		} catch (BufferIsEmptyException e) {
-			synchronized (this) {
-				try {
-					wait();
-				} catch (InterruptedException e1) {
-					e1.printStackTrace();
-				}
-			}
-		}
+	private void decodeMessage(String message) {
+		LinkedList<GameEvent> deserializedMessages = NetworkMessageDeserializer
+				.deserialize(message);
+		System.out.println("[SERVERLOGIC] Decoded "
+				+ deserializedMessages.size() + " messages from: " + message);
+		for (GameEvent event : deserializedMessages)
+			logic.onGameEventAppeared(event);
 	}
 }

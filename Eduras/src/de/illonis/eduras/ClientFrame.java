@@ -99,5 +99,6 @@ public class ClientFrame extends JFrame {
 	 */
 	public void newCircle(int x, int y) {
 		cdp.addServerCircle(x, y);
+		repaint();
 	}
 }

@@ -46,7 +46,6 @@ public class Server implements GameEventListener {
 		try {
 			ConnectionListener cl = new ConnectionListener();
 			cl.start();
-			System.out.println("Konstruktor vorbei");
 		} catch (IOException e) {
 			System.err.println("[SERVER] Could not start server. Quitting.");
 			e.printStackTrace();
@@ -55,8 +54,12 @@ public class Server implements GameEventListener {
 	}
 
 	/**
-	 * Notifies ServerLogik that there are new messages to parse.
+	 * <b>Depeciated:</b> It is no longer neccessary to wake serverlogic as it
+	 * waits until a element becomes available of its own.<br>
+	 * <br>
+	 * <s>Notifies ServerLogik that there are new messages to parse.</s>
 	 */
+	@Deprecated
 	public void wakeLogic() {
 		synchronized (serverLogic) {
 			serverLogic.notify();

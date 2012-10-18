@@ -44,11 +44,11 @@ public class ServerReceiver extends Thread {
 	 */
 	private void pushToInputBuffer(String message) {
 		System.out.println("[SERVER] Pushed to input Buffer: " + message);
-		synchronized (Buffer.SYNCER) {
-			inputBuffer.append(message);
-		}
+
+		inputBuffer.append(message);
+
 		System.out.println("[SERVER] Pushing ok");
-		server.wakeLogic();
+		// server.wakeLogic();
 	}
 
 	@Override
