@@ -17,10 +17,17 @@ import de.illonis.eduras.gui.GameWorldPanel;
  */
 public class GameWorker implements Runnable {
 
+	/**
+	 * Number of frames with a delay of 0ms before the animation thread yields
+	 * to other running threads.
+	 */
+	private static final int NO_DELAYS_PER_YIELD = 16;
+
 	private boolean running = false;
 	private Game game;
 	private GameWorldPanel gameWorldPanel;
 	private GameRenderer renderer;
+	private int period = 15;
 
 	public GameWorker(Game game, GameWorldPanel gameWorldPanel) {
 		this.game = game;
@@ -41,21 +48,43 @@ public class GameWorker implements Runnable {
 	public void run() {
 		running = true;
 
+		long beforeTime, afterTime, timeDiff, sleepTime;
+		long overSleepTime = 0L;
+		int noDelays = 0;
+
+		beforeTime = System.nanoTime();
+
 		while (running) {
 			gameUpdate();
 			gameRender();
-			paintGame();
+			paintScreen();
+			afterTime = System.nanoTime();
+			timeDiff = afterTime - beforeTime;
 
-			try {
-				Thread.sleep(20);
-			} catch (InterruptedException e) {
+			sleepTime = (period - timeDiff) - overSleepTime;
 
+			if (sleepTime > 0) {
+				try {
+					Thread.sleep(sleepTime / 1000000L);
+				} catch (InterruptedException e) {
+				}
+				overSleepTime = (System.nanoTime() - afterTime) - sleepTime;
+			} else {
+				overSleepTime = 0L;
+
+				if (++noDelays >= NO_DELAYS_PER_YIELD) {
+					System.out.println("skip");
+					Thread.yield();
+					noDelays = 0;
+				}
 			}
+
+			beforeTime = System.nanoTime();
 		}
 		// exit
 	}
 
-	private void paintGame() {
+	private void paintScreen() {
 		renderer.paintGame();
 	}
 
