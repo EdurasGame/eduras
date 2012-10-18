@@ -1,24 +1,39 @@
 package de.illonis.eduras;
 
+import java.awt.MouseInfo;
+import java.awt.Point;
+import java.awt.PointerInfo;
+
 import de.illonis.eduras.gui.GameRenderer;
 import de.illonis.eduras.gui.GameWorldPanel;
-import de.illonis.eduras.networking.Client;
 
+/**
+ * A Gameworker represents game's main loop. It updates game, renders screen and
+ * calls repaint.
+ * 
+ * @author illonis
+ * 
+ */
 public class GameWorker implements Runnable {
 
 	private boolean running = false;
-	private Client client;
+	private Game game;
 	private GameWorldPanel gameWorldPanel;
 	private GameRenderer renderer;
 
-	public GameWorker(Client client, GameWorldPanel gameWorldPanel) {
-		this.client = client;
-		this.renderer = new GameRenderer(this, gameWorldPanel);
+	public GameWorker(Game game, GameWorldPanel gameWorldPanel) {
+		this.game = game;
+		this.renderer = new GameRenderer(game, gameWorldPanel);
 		this.gameWorldPanel = gameWorldPanel;
 	}
 
-	public Client getClient() {
-		return client;
+	/**
+	 * Returns game this gameworker is assigned to.
+	 * 
+	 * @return assigned game.
+	 */
+	public Game getGame() {
+		return game;
 	}
 
 	@Override
@@ -37,15 +52,39 @@ public class GameWorker implements Runnable {
 		// exit
 	}
 
+	/**
+	 * Stops gameworker.
+	 */
 	public void stop() {
 		running = false;
 	}
 
+	/**
+	 * Render game.
+	 */
 	private void gameRender() {
 		renderer.render(gameWorldPanel.getWidth(), gameWorldPanel.getHeight());
 	}
 
+	// moves yellow ball into mouse's direction
 	private void gameUpdate() {
-	}
+		PointerInfo info = MouseInfo.getPointerInfo();
+		Point location = info.getLocation();
+		Point p = gameWorldPanel.getLocationOnScreen();
+		int x = location.x - p.x;
+		int y = location.y - p.y;
 
+		GameObject o = game.getObjects().get(0);
+		int ox = o.getXPosition();
+		int oy = o.getYPosition();
+		if (x > ox)
+			o.setXPosition(ox + 1);
+		else if (x < ox)
+			o.setXPosition(ox - 1);
+		if (y > oy)
+			o.setYPosition(oy + 1);
+		else if (y < oy)
+			o.setYPosition(oy - 1);
+
+	}
 }

@@ -6,6 +6,10 @@ public class Game {
 	private GameObject player1;
 	private ArrayList<GameObject> objects;
 
+	public Game() {
+		objects = new ArrayList<GameObject>();
+	}
+
 	public ArrayList<GameObject> getObjects() {
 		return objects;
 	}
