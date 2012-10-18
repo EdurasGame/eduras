@@ -2,6 +2,8 @@ package de.illonis.eduras;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 
 import javax.swing.JFrame;
 
@@ -14,16 +16,24 @@ import de.illonis.eduras.gui.GameWorldPanel;
  * @author illonis
  * 
  */
-public class GameWorldPanelTester {
+public class GameWorldPanelTester implements MouseListener {
+
+	private YellowCircle yc;
 
 	public GameWorldPanelTester() {
 		Game g = new Game();
-		YellowCircle go = new YellowCircle();
-		go.setXPosition(60);
-		go.setYPosition(70);
-		g.getObjects().add(go);
+		yc = new YellowCircle();
+		yc.setXPosition(60);
+		yc.setYPosition(70);
+		g.getObjects().add(yc);
 		GameWorldPanel gwp = new GameWorldPanel();
 		GameWorker gameWorker = new GameWorker(g, gwp);
+		InfoText it = new InfoText(yc);
+		it.setXPosition(10);
+		it.setYPosition(30);
+		g.getObjects().add(it);
+
+		gwp.addMouseListener(this);
 
 		JFrame testFrame = new JFrame("graphic-tester");
 		testFrame.getContentPane().setLayout(new BorderLayout());
@@ -44,5 +54,29 @@ public class GameWorldPanelTester {
 	public static void main(String[] args) {
 		new GameWorldPanelTester();
 
+	}
+
+	@Override
+	public void mouseClicked(MouseEvent e) {
+		if (e.getButton() == MouseEvent.BUTTON1) {
+			yc.setSpeed(yc.getSpeed() + 1);
+		} else
+			yc.setSpeed(yc.getSpeed() - 1);
+	}
+
+	@Override
+	public void mousePressed(MouseEvent e) {
+	}
+
+	@Override
+	public void mouseReleased(MouseEvent e) {
+	}
+
+	@Override
+	public void mouseEntered(MouseEvent e) {
+	}
+
+	@Override
+	public void mouseExited(MouseEvent e) {
 	}
 }

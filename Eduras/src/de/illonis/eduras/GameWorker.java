@@ -4,6 +4,7 @@ import java.awt.MouseInfo;
 import java.awt.Point;
 import java.awt.PointerInfo;
 
+import de.illonis.eduras.MoveableGameObject.Direction;
 import de.illonis.eduras.gui.GameRenderer;
 import de.illonis.eduras.gui.GameWorldPanel;
 
@@ -77,14 +78,15 @@ public class GameWorker implements Runnable {
 		GameObject o = game.getObjects().get(0);
 		int ox = o.getXPosition();
 		int oy = o.getYPosition();
-		if (x > ox)
-			o.setXPosition(ox + 1);
-		else if (x < ox)
-			o.setXPosition(ox - 1);
-		if (y > oy)
-			o.setYPosition(oy + 1);
-		else if (y < oy)
-			o.setYPosition(oy - 1);
 
+		if (x > ox)
+			((YellowCircle) o).onMove(Direction.RIGHT);
+		else if (x < ox)
+			((YellowCircle) o).onMove(Direction.LEFT);
+		if (y > oy)
+			((YellowCircle) o).onMove(Direction.DOWN);
+		else if (y < oy)
+			((YellowCircle) o).onMove(Direction.UP);
 	}
+
 }
