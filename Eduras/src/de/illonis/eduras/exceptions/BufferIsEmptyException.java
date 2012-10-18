@@ -3,7 +3,7 @@ package de.illonis.eduras.exceptions;
 import java.util.NoSuchElementException;
 
 /**
- * This exception is thrown when you tried to read an element of a buffer that
+ * This exception is thrown when you tried to read an element from a buffer that
  * is empty.
  * 
  * @author illonis

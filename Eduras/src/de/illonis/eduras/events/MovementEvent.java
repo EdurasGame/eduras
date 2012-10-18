@@ -19,10 +19,10 @@ public class MovementEvent extends ObjectEvent {
 	/**
 	 * Creates a new MovementEvent belonging to the object of the given id.
 	 * 
+	 * @param type
+	 *            Type of event.
 	 * @param id
 	 *            The id of the object.
-	 * @param direction
-	 *            The direction to which the movement shall take place.
 	 * @throws GivenParametersDoNotFitToEventException
 	 *             Exception takes place if the given GameEventNumber is not a
 	 *             MovementEvent.
@@ -71,6 +71,5 @@ public class MovementEvent extends ObjectEvent {
 	public void setNewYPos(int val) {
 		newYPos = val;
 	}
-
 
 }

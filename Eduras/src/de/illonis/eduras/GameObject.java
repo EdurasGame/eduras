@@ -42,7 +42,7 @@ public class GameObject {
 	/**
 	 * Returns the x-position of the object.
 	 * 
-	 * @return
+	 * @return The x-position.
 	 */
 	public int getXPosition() {
 		return xPosition;

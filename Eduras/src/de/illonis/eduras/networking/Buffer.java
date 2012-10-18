@@ -50,8 +50,9 @@ public class Buffer {
 	}
 
 	/**
-	 * Returns and removes the first element of buffer. The first element is
-	 * that element that was added before all other elements.<br>
+	 * Waits until an element is available and returns and removes first element
+	 * from buffer. The first element is that element that was added before all
+	 * other elements.<br>
 	 * Elements are returned in same order they where added.<br>
 	 * <b>Note:</b> This method blocks and waits until an element is available.
 	 * If you do not want to wait for an element available, use

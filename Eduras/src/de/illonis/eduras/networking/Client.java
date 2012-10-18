@@ -52,7 +52,7 @@ public class Client implements GameEventListener {
 
 	/**
 	 * Connect to a server at given address using default port (
-	 * {@value Server#DEFAULT_PORT}).
+	 * {@link Server#DEFAULT_PORT}).
 	 * 
 	 * @param addr
 	 *            server-address
@@ -63,8 +63,11 @@ public class Client implements GameEventListener {
 
 	/**
 	 * Connects to a server on the given address and port.
-	 * @param addr The server's address.
-	 * @param port The server's port.
+	 * 
+	 * @param addr
+	 *            The server's address.
+	 * @param port
+	 *            The server's port.
 	 */
 	public void connect(InetAddress addr, int port) {
 		try {
