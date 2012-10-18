@@ -100,9 +100,8 @@ public class Server implements GameEventListener {
 		 */
 		@Override
 		public void run() {
-			System.out.println(String.format(
-					Localization.getString("Server.startedlistening"),
-					DEFAULT_PORT));
+			System.out.println(Localization.getStringF(
+					"Server.startedlistening", DEFAULT_PORT));
 			while (true) {
 				Socket client = null;
 				try {

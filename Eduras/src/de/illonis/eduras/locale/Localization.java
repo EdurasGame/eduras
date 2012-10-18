@@ -10,7 +10,9 @@ import de.illonis.eduras.exceptions.LocaleNotFoundException;
  * A localization class that provides features to use internationalized strings.
  * Supported languages are defined in {@link #SUPPORTED_LOCALES}. Their values
  * are stored in their appropriate properties-files (e.g.
- * <code>lang_de.properties</code>).
+ * <code>lang_de.properties</code>).<br>
+ * Localization also supports <a href="../util/Formatter.html#syntax">format
+ * strings</a>.
  * 
  * @author illonis
  * 
@@ -123,8 +125,6 @@ public final class Localization {
 	private static final int findIndexOf(Locale locale)
 			throws LocaleNotFoundException {
 		String toFind = locale.getLanguage();
-		System.out.println(toFind);
-
 		int pos = getIndexOf(toFind, SUPPORTED_LOCALES);
 		if (pos == -1)
 			throw new LocaleNotFoundException(locale);
@@ -132,15 +132,51 @@ public final class Localization {
 	}
 
 	/**
-	 * Returns localized string of given key.
+	 * Returns localized string identified by given key.<br>
+	 * If string does not exist, its key is returned.<br>
+	 * <br>
+	 * <b>Note:</b> If you want to use localized formatted strings, use
+	 * {@link #getStringF(String, Object...)}.
+	 * 
+	 * @see #getStringF(String, Object...)
 	 * 
 	 * @param key
-	 *            key of string.
+	 *            key of string.<br>
+	 *            String must exist in localization database.
 	 * @return localized string.
 	 */
 	public static final String getString(String key) {
 		try {
 			return RESOURCES[currentLocaleNumber].getString(key);
+		} catch (MissingResourceException e) {
+			return '!' + key + '!';
+		}
+	}
+
+	/**
+	 * Returns a localized string identified by given key formatted by
+	 * {@link String#format(String, Object...)}.
+	 * 
+	 * @see #getString(String)
+	 * 
+	 * @param key
+	 *            key of string. Dereferenced string must be a <a
+	 *            href="../util/Formatter.html#syntax">format string</a>.
+	 * @param args
+	 *            Arguments referenced by the format specifiers in the format
+	 *            string. If there are more arguments than format specifiers,
+	 *            the extra arguments are ignored. The number of arguments is
+	 *            variable and may be zero. The maximum number of arguments is
+	 *            limited by the maximum dimension of a Java array as defined by
+	 *            <cite>The Java&trade; Virtual Machine Specification</cite>.
+	 *            The behaviour on a <tt>null</tt> argument depends on the <a
+	 *            href="../util/Formatter.html#syntax">conversion</a>.
+	 * @return localized and formatted string.
+	 */
+	public static final String getStringF(String key, Object... args) {
+		try {
+			String s = RESOURCES[currentLocaleNumber].getString(key);
+			return String.format(s, args);
 		} catch (MissingResourceException e) {
 			return '!' + key + '!';
 		}
