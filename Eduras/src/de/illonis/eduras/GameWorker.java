@@ -25,7 +25,7 @@ public class GameWorker implements Runnable {
 	/**
 	 * Number of frames that can be skipped in any one animation loop.
 	 */
-	private static final int MAX_FRAME_SKIPS = 5;
+	private static final int MAX_FRAME_SKIPS = 20;
 
 	private boolean running = false;
 	private Game game;
@@ -96,6 +96,7 @@ public class GameWorker implements Runnable {
 				gameUpdate();
 				skips++;
 			}
+			System.out.println(skips);
 		}
 		// exit
 	}

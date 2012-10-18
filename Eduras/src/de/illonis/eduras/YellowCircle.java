@@ -44,6 +44,7 @@ public class YellowCircle extends MoveableGameObject {
 
 	@Override
 	public void onMove(Direction direction) {
+		super.onMove(direction);
 		switch (direction) {
 		case DOWN:
 			yPosition += speed;
@@ -56,6 +57,9 @@ public class YellowCircle extends MoveableGameObject {
 			break;
 		case RIGHT:
 			xPosition += speed;
+			break;
+		default:
+			break;
 		}
 	}
 }

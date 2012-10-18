@@ -18,8 +18,10 @@ public abstract class MoveableGameObject extends GameObject implements Moveable 
 	 * 
 	 */
 	public static enum Direction {
-		LEFT, RIGHT, UP, DOWN
+		LEFT, RIGHT, UP, DOWN, TOPLEFT, TOPRIGHT, BOTTOMLEFT, BOTTOMRIGHT
 	}
+
+	private Direction currentDirection;
 
 	int speed = 0;
 
@@ -32,6 +34,10 @@ public abstract class MoveableGameObject extends GameObject implements Moveable 
 	 */
 	public final static boolean isHorizontal(Direction direction) {
 		return (direction == Direction.LEFT || direction == Direction.RIGHT);
+	}
+
+	public Direction getCurrentDirection() {
+		return currentDirection;
 	}
 
 	/**
@@ -51,6 +57,11 @@ public abstract class MoveableGameObject extends GameObject implements Moveable 
 	 */
 	public int getSpeed() {
 		return speed;
+	}
+
+	@Override
+	public void onMove(Direction direction) {
+		currentDirection = direction;
 	}
 
 }
