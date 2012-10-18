@@ -3,6 +3,12 @@ package de.illonis.eduras;
 import java.awt.Color;
 import java.awt.Graphics2D;
 
+/**
+ * Class to display info on {@link GameWorldPanelTester}.
+ * 
+ * @author illonis
+ * 
+ */
 public class InfoText extends GameObject {
 
 	private MoveableGameObject obj;

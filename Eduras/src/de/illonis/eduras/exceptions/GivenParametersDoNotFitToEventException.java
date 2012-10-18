@@ -29,6 +29,7 @@ public class GivenParametersDoNotFitToEventException extends Exception {
 	 */
 	public GivenParametersDoNotFitToEventException(GameEventNumber eventNumber,
 			String... parameters) {
+		super();
 		this.event = eventNumber;
 		this.givenParameters = parameters;
 	}

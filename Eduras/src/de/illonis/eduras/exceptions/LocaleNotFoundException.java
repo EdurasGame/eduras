@@ -21,6 +21,7 @@ public class LocaleNotFoundException extends Exception {
 	 *            locale that failed to load.
 	 */
 	public LocaleNotFoundException(Locale locale) {
+		super();
 		this.locale = locale;
 	}
 
