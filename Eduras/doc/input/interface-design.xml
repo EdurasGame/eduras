@@ -93,6 +93,14 @@
 	        </listitem>
 	    </itemizedlist>
 	    <section>
+	        <title>Localization</title>
+	        <para>
+	            To make as many players as possible play this game, it is necessary to translate it into different languages. To achieve this big goal, we will use powerful
+	            Java built-in capabilities (see <ulink url="http://docs.oracle.com/javase/tutorial/i18n/index.html">Java Trail: Internationalization</ulink>). It will be difficult
+	            to provide several languages but at least we want to start with english (default language) and german. Community might help us later on to introduce more languages.
+	        </para>
+	    </section>
+	    <section>
 	        <title>What about us?</title>
 	        <para>
 	            Developers are really lacking in benefits from interface-design, so it needs to provide features to improve development and bug-fixing.
@@ -243,7 +251,7 @@
 		    </table>
 	    </section>
 	    <section>
-	        <title>(jme) Minimap</title>
+	        <title>Minimap</title>
 	        <para>
 	            The minimap is a small illustration of current map.
 	            It shows several details that help orientating and locating other players and gaining overview about game situation:
@@ -303,7 +311,7 @@
 	        </para>
 	    </section>
 	    <section>
-	        <title>(jme) Chat</title>
+	        <title>Chat</title>
 	        <para>
 	            Game chat allows players to communicate with each other. Chat messages are marked with posting-time (either game time or real time) and posting player in following scheme:
 	            <computeroutput>[14:38] Playername: Message</computeroutput>.
