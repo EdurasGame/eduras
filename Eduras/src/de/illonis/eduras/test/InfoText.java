@@ -1,7 +1,10 @@
-package de.illonis.eduras;
+package de.illonis.eduras.test;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
+
+import de.illonis.eduras.GameObject;
+import de.illonis.eduras.MoveableGameObject;
 
 /**
  * Class to display info on {@link GameWorldPanelTester}.

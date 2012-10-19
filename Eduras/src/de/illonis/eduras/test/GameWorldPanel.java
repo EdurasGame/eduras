@@ -1,4 +1,4 @@
-package de.illonis.eduras.gui;
+package de.illonis.eduras.test;
 
 import java.awt.Color;
 

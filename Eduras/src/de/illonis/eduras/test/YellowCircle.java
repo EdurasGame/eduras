@@ -1,7 +1,10 @@
-package de.illonis.eduras;
+package de.illonis.eduras.test;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
+
+import de.illonis.eduras.MoveableGameObject;
+import de.illonis.eduras.MoveableGameObject.Direction;
 
 /**
  * A yellow circle is drawn around its position with specified diameter.

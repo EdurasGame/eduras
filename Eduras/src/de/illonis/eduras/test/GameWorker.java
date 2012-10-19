@@ -1,12 +1,12 @@
-package de.illonis.eduras;
+package de.illonis.eduras.test;
 
 import java.awt.MouseInfo;
 import java.awt.Point;
 import java.awt.PointerInfo;
 
+import de.illonis.eduras.Game;
+import de.illonis.eduras.GameObject;
 import de.illonis.eduras.MoveableGameObject.Direction;
-import de.illonis.eduras.gui.GameRenderer;
-import de.illonis.eduras.gui.GameWorldPanel;
 
 /**
  * A Gameworker represents game's main loop. It updates game, renders screen and
@@ -96,7 +96,6 @@ public class GameWorker implements Runnable {
 				gameUpdate();
 				skips++;
 			}
-			System.out.println(skips);
 		}
 		// exit
 	}

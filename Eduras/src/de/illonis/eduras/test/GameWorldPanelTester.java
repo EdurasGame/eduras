@@ -1,4 +1,4 @@
-package de.illonis.eduras;
+package de.illonis.eduras.test;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -7,7 +7,7 @@ import java.awt.event.MouseListener;
 
 import javax.swing.JFrame;
 
-import de.illonis.eduras.gui.GameWorldPanel;
+import de.illonis.eduras.Game;
 
 /**
  * A Gameworld panel tester. It creates a black frame with a yellow circle that
