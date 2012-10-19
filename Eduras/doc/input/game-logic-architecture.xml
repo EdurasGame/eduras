@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE article PUBLIC "-//OASIS//DTD Simplified DocBook XML V1.0//EN"
+"http://www.oasis-open.org/docbook/xml/simple/1.0/sdocbook.dtd">
+<article>
+	<articleinfo>
+		<title>Architecture of game logic</title>
+	</articleinfo>
+
+	<section>
+
+		<title>(fma) What's this?</title>
+
+		<para>
+			This chapter concerns the composition of the game logic. We try
+			to document
+			any part of that in here as long as it is not self
+			explanatory or easily understood reading
+			the javadoc documentation of
+			the corresponding classes.
+		</para>
+
+	</section>
+
+	<section>
+		<title>(fma) The architecture</title>
+
+		<para>
+			The following figure shows most of the classes you will find in the
+			game logic. Note that some operations
+			or attributes might be left out
+			in the figure since they are not that important or unnecessary to
+			mention,
+			e.g. getter and setter methods.
+			<informalfigure>
+				<graphic fileref="images/gamelogicclasses.jpg"></graphic>
+			</informalfigure>
+		</para>
+
+		<para>
+			As main entry point to the game logic there is a class that
+			implements 'GameLogicInterface'.
+			The interface shall provide any
+			services the IEP (see high-level-architecture) needs.
+			Especially it
+			shall give access to a so called 'GameInfo' class, which provides
+			information about
+			the currently ongoing match. For a first increment,
+			GameInfo cointains a list of all the objects in the
+			game and about the
+			map. A map itself contains of a number of fields (as a
+			two-dimensional array, indicating
+			x- and y-positions).
+		</para>
+
+		<para>
+			A GameObject represents an object that is physically on the map.
+			So it's characterized by a current x- and y-position
+			on the map.
+		</para>
+
+	</section>
+
+</article>
