@@ -4,7 +4,6 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 
 import de.illonis.eduras.MoveableGameObject;
-import de.illonis.eduras.MoveableGameObject.Direction;
 
 /**
  * A yellow circle is drawn around its position with specified diameter.
@@ -36,13 +35,14 @@ public class YellowCircle extends MoveableGameObject {
 		if (size <= 0)
 			size = 20;
 		this.size = size;
-		speed = 1;
+		setSpeed(1);
 	}
 
 	@Override
 	public void draw(Graphics2D g) {
 		g.setColor(Color.YELLOW);
-		g.fillOval(xPosition - size / 2, yPosition - size / 2, size, size);
+		g.fillOval(getXPosition() - size / 2, getYPosition() - size / 2, size,
+				size);
 	}
 
 	@Override
@@ -50,16 +50,16 @@ public class YellowCircle extends MoveableGameObject {
 		super.onMove(direction);
 		switch (direction) {
 		case DOWN:
-			yPosition += speed;
+			modifyYPosition(getSpeed());
 			break;
 		case UP:
-			yPosition -= speed;
+			modifyYPosition(-getSpeed());
 			break;
 		case LEFT:
-			xPosition -= speed;
+			modifyXPosition(-getSpeed());
 			break;
 		case RIGHT:
-			xPosition += speed;
+			modifyXPosition(getSpeed());
 			break;
 		default:
 			break;

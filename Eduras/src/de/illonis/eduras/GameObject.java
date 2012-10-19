@@ -16,7 +16,7 @@ public class GameObject implements Drawable {
 
 	private int id;
 
-	int xPosition, yPosition;
+	private int xPosition, yPosition;
 
 	public GameObject() {
 		this.id = lastId++;
@@ -42,6 +42,21 @@ public class GameObject implements Drawable {
 	}
 
 	/**
+	 * Sets the position of the object.<br>
+	 * This is equal to calling <code>setXPosition(x)</code> and
+	 * <code>setYPosition(y)</code>.
+	 * 
+	 * @param x
+	 *            The new value of the x-position.
+	 * @param y
+	 *            The new value of the y-position.
+	 */
+	public void setPosition(int x, int y) {
+		setXPosition(x);
+		setYPosition(y);
+	}
+
+	/**
 	 * Returns the x-position of the object.
 	 * 
 	 * @return The x-position.
@@ -61,7 +76,21 @@ public class GameObject implements Drawable {
 	}
 
 	/**
-	 * Returns the y-position of the
+	 * Modifies current x-position of the object.<br>
+	 * This modifies current position by adding given value. This is equal to
+	 * <code>setXPosition(getXPosition() + xDiff)</code>.
+	 * 
+	 * @see #setXPosition(int)
+	 * 
+	 * @param xDiff
+	 *            value to be added to x-position.
+	 */
+	public void modifyXPosition(int xDiff) {
+		setXPosition(xPosition + xDiff);
+	}
+
+	/**
+	 * Returns the y-position of the object.
 	 * 
 	 * @return The y-position.
 	 */
@@ -77,6 +106,20 @@ public class GameObject implements Drawable {
 	 */
 	public void setYPosition(int yPosition) {
 		this.yPosition = yPosition;
+	}
+
+	/**
+	 * Modifies current y-position of the object.<br>
+	 * This modifies current position by adding given value. This is equal to
+	 * <code>setYPosition(getYPosition() + yDiff)</code>.
+	 * 
+	 * @see #setYPosition(int)
+	 * 
+	 * @param yDiff
+	 *            value to be added to y-position.
+	 */
+	public void modifyYPosition(int yDiff) {
+		setYPosition(yPosition + yDiff);
 	}
 
 	@Override

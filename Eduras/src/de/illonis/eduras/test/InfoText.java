@@ -28,6 +28,6 @@ public class InfoText extends GameObject {
 				"Speed: "
 						+ obj.getSpeed()
 						+ " ~ Left-Click: increase speed ~ Right-Click: decrease speed",
-				xPosition, yPosition);
+				getXPosition(), getYPosition());
 	}
 }

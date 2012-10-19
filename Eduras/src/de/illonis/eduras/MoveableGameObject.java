@@ -23,7 +23,7 @@ public abstract class MoveableGameObject extends GameObject implements Moveable 
 
 	private Direction currentDirection;
 
-	int speed = 0;
+	private int speed = 0;
 
 	/**
 	 * Returns true if movement direction is horizontal.
