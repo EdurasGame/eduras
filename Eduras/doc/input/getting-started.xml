@@ -146,6 +146,20 @@
 			<para>Example: My penis is very large. (jme) Mine is even larger. (/jme).</para>
 			
 		</section>
+		
+		<section>
+		
+			<title>Diagrams</title>
+			
+			<para>
+				Diagrams are made with <ulink url="www.visual-paradigm.com">Visual Paradigm (VP)</ulink>.
+				This is an intuitive "get what you see"-tool for creating UML-diagrams. There are plugins
+				for Eclipse and NetBeans, so it will be comfortable for you to use VP. I think, we should
+				not have any rules or restrictions for how to make diagrams. Simply take care for keeping things simple
+				but meaningful.
+			</para>
+		
+		</section>
 	
 	</section>
 	
