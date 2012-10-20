@@ -7,10 +7,11 @@ public class Eduras {
 
 	/**
 	 * @param args
-	 * 
-	 *            If first argument equals "server", server will be started,
-	 *            client otherwise.
-	 * 
+	 *            Arguments passed from console.
+	 *            <ul>
+	 *            <li><b>arg0:</b> if equals "server", server will be started,
+	 *            client otherwise.</li>
+	 *            </ul>
 	 */
 	public static void main(String[] args) {
 		if (args.length > 0 && args[0].equals("server")) {
