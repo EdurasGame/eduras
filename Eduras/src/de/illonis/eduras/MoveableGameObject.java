@@ -1,6 +1,7 @@
 package de.illonis.eduras;
 
 import de.illonis.eduras.interfaces.Moveable;
+import de.illonis.eduras.math.Vector2D;
 
 /**
  * A moveable gameobject. It differs from {@link GameObject} because it has a
@@ -23,7 +24,8 @@ public abstract class MoveableGameObject extends GameObject implements Moveable 
 
 	private Direction currentDirection;
 
-	private int speed = 0;
+	private double speed = 0;
+	private Vector2D speedVector = new Vector2D();
 
 	/**
 	 * Returns true if movement direction is horizontal.
@@ -52,7 +54,7 @@ public abstract class MoveableGameObject extends GameObject implements Moveable 
 	 * @param speed
 	 *            new speed.
 	 */
-	public void setSpeed(int speed) {
+	public void setSpeed(double speed) {
 		this.speed = speed;
 	}
 
@@ -61,7 +63,7 @@ public abstract class MoveableGameObject extends GameObject implements Moveable 
 	 * 
 	 * @return speed of gameobject.
 	 */
-	public int getSpeed() {
+	public double getSpeed() {
 		return speed;
 	}
 
