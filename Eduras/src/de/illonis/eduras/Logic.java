@@ -62,7 +62,7 @@ public class Logic implements GameLogicInterface {
 				yPos = player.getYPosition();
 				player.setYPosition(--yPos);
 				break;
-			case MOVE_POS:
+			case SET_POS:
 				int newXPos = moveEvent.getNewXPos();
 				int newYPos = moveEvent.getNewYPos();
 				player.setYPosition(newYPos);

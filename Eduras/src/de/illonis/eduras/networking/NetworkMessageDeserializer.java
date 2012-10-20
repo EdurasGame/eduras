@@ -92,7 +92,7 @@ public class NetworkMessageDeserializer {
 		GameEvent event = GameEvent.gameEventNumberToGameEvent(typeNumber);
 
 		switch (typeNumber) {
-		case MOVE_POS:
+		case SET_POS:
 			handleMovementPositionEvent(msg, args, typeNumber, event);
 			break;
 		default:

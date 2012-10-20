@@ -31,15 +31,18 @@ public abstract class GameEvent {
 	 * @author Florian Mai <florian.ren.mai@googlemail.com>
 	 */
 	public enum GameEventNumber {
-		MOVE_LEFT(10), MOVE_RIGHT(11), MOVE_UP(12), MOVE_DOWN(13), MOVE_POS(19), NO_EVENT(
-				99);
+		MOVE_LEFT_PRESSED(10), MOVE_RIGHT_PRESSED(11), MOVE_UP_PRESSED(12), MOVE_DOWN_PRESSED(
+				13), MOVE_LEFT_RELEASED(14), MOVE_RIGHT_RELEASED(15), MOVE_UP_RELEASED(
+				16), MOVE_DOWN_RELEASED(17), SETSPEEDVECTOR(18), SETSPEED(19), SET_POS(
+				101), OBJECT_CREATE(120), OBJECT_REMOVE(121), SHOOT_PRESSED(30), SHOOT_RELEASED(
+				31), DEATH(131), SETHEALTH(132), NO_EVENT(99);
 
 		private int number;
 
 		GameEventNumber(int num) {
 			number = num;
 		}
-		
+
 		public int getNumber() {
 			return number;
 		}
@@ -94,8 +97,8 @@ public abstract class GameEvent {
 			return new MovementEvent(GameEventNumber.MOVE_DOWN, -1);
 		case MOVE_LEFT:
 			return new MovementEvent(GameEventNumber.MOVE_LEFT, -1);
-		case MOVE_POS:
-			return new MovementEvent(GameEventNumber.MOVE_POS, -1);
+		case SET_POS:
+			return new MovementEvent(GameEventNumber.SET_POS, -1);
 		case MOVE_RIGHT:
 			return new MovementEvent(GameEventNumber.MOVE_RIGHT, -1);
 		case MOVE_UP:
@@ -126,7 +129,7 @@ public abstract class GameEvent {
 		case 13:
 			return GameEventNumber.MOVE_DOWN;
 		case 19:
-			return GameEventNumber.MOVE_POS;
+			return GameEventNumber.SET_POS;
 		default:
 		}
 		return GameEventNumber.NO_EVENT;

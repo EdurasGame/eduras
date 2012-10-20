@@ -130,7 +130,7 @@ public class Server implements GameEventListener {
 	public void onWorldChanged() {
 		MovementEvent me;
 		try {
-			me = new MovementEvent(GameEventNumber.MOVE_POS, game.getPlayer1()
+			me = new MovementEvent(GameEventNumber.SET_POS, game.getPlayer1()
 					.getId());
 			me.setNewXPos(game.getPlayer1().getXPosition() + 20);
 			me.setNewYPos(game.getPlayer1().getYPosition() + 20);

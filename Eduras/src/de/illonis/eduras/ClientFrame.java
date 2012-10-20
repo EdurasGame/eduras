@@ -76,7 +76,7 @@ public class ClientFrame extends JFrame {
 	 */
 	public void sendMouseClick(int x, int y) {
 		try {
-			MovementEvent me = new MovementEvent(GameEventNumber.MOVE_POS,
+			MovementEvent me = new MovementEvent(GameEventNumber.SET_POS,
 					client.getGame().getPlayer1().getId());
 			me.setNewXPos(x);
 			me.setNewYPos(y);
