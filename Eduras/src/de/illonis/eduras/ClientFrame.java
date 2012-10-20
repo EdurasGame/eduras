@@ -92,13 +92,13 @@ public class ClientFrame extends JFrame {
 	/**
 	 * Adds a new servercircle to drawpanel at given position.
 	 * 
-	 * @param x
+	 * @param d
 	 *            x-position of new circle.
-	 * @param y
+	 * @param e
 	 *            x-position of new circle.
 	 */
-	public void newCircle(int x, int y) {
-		cdp.addServerCircle(x, y);
+	public void newCircle(double d, double e) {
+		cdp.addServerCircle(d, e);
 		repaint();
 	}
 }

@@ -41,13 +41,13 @@ public class CircleDrawPanel extends JPanel implements MouseListener {
 	/**
 	 * Adds a circle to server-received circle-list
 	 * 
-	 * @param x
+	 * @param d
 	 *            x-Position of circle
-	 * @param y
+	 * @param e
 	 *            y-Position of circle
 	 */
-	public void addServerCircle(int x, int y) {
-		receivedCircles.add(new Ellipse2D.Double(x - 5, y - 5, 10, 10));
+	public void addServerCircle(double d, double e) {
+		receivedCircles.add(new Ellipse2D.Double(d - 5, e - 5, 10, 10));
 	}
 
 	@Override

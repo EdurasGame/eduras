@@ -4,7 +4,7 @@ import java.awt.geom.Point2D;
 import java.util.ArrayList;
 
 public class Game {
-	private GameObject player1;
+	private Player player1;
 	private final ArrayList<GameObject> objects;
 
 	public Game() {
@@ -15,11 +15,11 @@ public class Game {
 		return objects;
 	}
 
-	public GameObject getPlayer1() {
+	public Player getPlayer1() {
 		return player1;
 	}
 
-	public void setPlayer1(GameObject player1) {
+	public void setPlayer1(Player player1) {
 		this.player1 = player1;
 	}
 

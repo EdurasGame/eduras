@@ -57,9 +57,9 @@ public class GameWorldPanelTester implements MouseListener {
 	@Override
 	public void mouseClicked(MouseEvent e) {
 		if (e.getButton() == MouseEvent.BUTTON1) {
-			yc.setSpeed(yc.getSpeed() + 1);
+			yc.setSpeed(yc.getSpeed() + 10);
 		} else
-			yc.setSpeed(yc.getSpeed() - 1);
+			yc.setSpeed(yc.getSpeed() - 10);
 	}
 
 	@Override

@@ -6,8 +6,8 @@ import java.net.Socket;
 
 import de.illonis.eduras.ClientFrame;
 import de.illonis.eduras.Game;
-import de.illonis.eduras.GameObject;
 import de.illonis.eduras.Logic;
+import de.illonis.eduras.Player;
 import de.illonis.eduras.interfaces.GameEventListener;
 
 /**
@@ -32,7 +32,7 @@ public class Client implements GameEventListener {
 	 */
 	public Client() {
 		game = new Game();
-		GameObject obj = new GameObject();
+		Player obj = new Player(game);
 		game.setPlayer1(obj);
 		this.logic = new Logic(game);
 		logic.addGameEventListener(this);

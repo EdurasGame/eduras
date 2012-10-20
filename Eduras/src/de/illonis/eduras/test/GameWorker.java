@@ -62,10 +62,10 @@ public class GameWorker implements Runnable {
 		int noDelays = 0;
 		long excess = 0L;
 
-		beforeTime = afterTime = System.nanoTime();
+		beforeTime = System.nanoTime();
 
 		while (running) {
-			gameUpdate((System.nanoTime() - beforeTime) / 1000000000L);
+			gameUpdate();
 			gameRender();
 			paintScreen();
 			afterTime = System.nanoTime();
@@ -87,14 +87,13 @@ public class GameWorker implements Runnable {
 					noDelays = 0;
 				}
 			}
-
 			beforeTime = System.nanoTime();
 
 			// skip frames (update game without rendering it)
 			int skips = 0;
 			while ((excess > period) && (skips < MAX_FRAME_SKIPS)) {
 				excess -= period;
-				gameUpdate((System.nanoTime() - timeDiff) / 1000000000L);
+				gameUpdate();
 				skips++;
 			}
 		}
@@ -122,11 +121,11 @@ public class GameWorker implements Runnable {
 	private long lastUpdate;
 
 	// moves yellow ball into mouse's direction
-	private synchronized void gameUpdate(long delta) {
+	private synchronized void gameUpdate() {
 		if (lastUpdate <= 0)
 			lastUpdate = System.nanoTime();
 		// delta in seconds
-		delta = (System.nanoTime() - lastUpdate) / 1000000L;
+		long delta = (System.nanoTime() - lastUpdate) / 1000000L;
 		if (delta == 0)
 			return;
 		lastUpdate = System.nanoTime();

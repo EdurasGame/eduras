@@ -98,8 +98,6 @@ public abstract class MoveableGameObject extends GameObject implements Moveable 
 		if (speedVector.isNull())
 			return;
 		double distance = speed * (delta / (double) 1000L);
-		System.out.println(delta + " - " + distance);
-		// System.out.println(speedVector.getX() + " - " + speedVector.getY());
 		Vector2D unitSpeed = speedVector.getUnitVector();
 		unitSpeed.mult(distance);
 		double targetX = unitSpeed.getX() + getXPosition();

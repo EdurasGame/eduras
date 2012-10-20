@@ -16,6 +16,7 @@ public class GameObject implements Drawable {
 	private Game game;
 
 	private int id;
+	private int owner = 0;
 
 	private double xPosition, yPosition;
 
@@ -29,6 +30,16 @@ public class GameObject implements Drawable {
 	public GameObject(Game game) {
 		this.game = game;
 		this.id = lastId++;
+	}
+
+	/**
+	 * Sets owner to given owner.
+	 * 
+	 * @param owner
+	 *            new owner.
+	 */
+	public void setOwner(int owner) {
+		this.owner = owner;
 	}
 
 	/**

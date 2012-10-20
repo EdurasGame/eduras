@@ -112,26 +112,17 @@ public abstract class GameEvent {
 
 	/**
 	 * Maps a number to its GameEventNumber representation. Returns NO_EVENT if
-	 * the number cannot be mapped to a GameEventNumber.
+	 * the number cannot be mapped to a GameEventNumber.<br>
+	 * (jme): simplified
 	 * 
 	 * @param typeInt
 	 *            The number to be mapped to a GameEventNumber.
 	 * @return The GameEventNumber.
 	 */
 	public static GameEventNumber toGameEventNumber(int typeInt) {
-		switch (typeInt) {
-		case 10:
-			return GameEventNumber.MOVE_LEFT;
-		case 11:
-			return GameEventNumber.MOVE_RIGHT;
-		case 12:
-			return GameEventNumber.MOVE_UP;
-		case 13:
-			return GameEventNumber.MOVE_DOWN;
-		case 19:
-			return GameEventNumber.SET_POS;
-		default:
-		}
+		for (GameEventNumber evn : GameEventNumber.values())
+			if (evn.getNumber() == typeInt)
+				return evn;
 		return GameEventNumber.NO_EVENT;
 	}
 
