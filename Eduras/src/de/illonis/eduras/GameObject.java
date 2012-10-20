@@ -43,6 +43,15 @@ public class GameObject implements Drawable {
 	}
 
 	/**
+	 * Returns owner of this object.
+	 * 
+	 * @return owner.
+	 */
+	public int getOwner() {
+		return owner;
+	}
+
+	/**
 	 * Returns game that this object belongs to.
 	 * 
 	 * @return game that this object belongs to.

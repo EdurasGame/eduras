@@ -39,7 +39,7 @@ public class YellowCircle extends MoveableGameObject implements Controllable {
 		if (size <= 0)
 			size = 20;
 		this.size = size;
-		setSpeed(80);
+		setSpeed(150);
 	}
 
 	@Override
@@ -66,6 +66,7 @@ public class YellowCircle extends MoveableGameObject implements Controllable {
 		default:
 			break;
 		}
+		getSpeedVector().setLength(getSpeed());
 	}
 
 	@Override

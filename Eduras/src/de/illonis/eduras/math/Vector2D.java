@@ -144,6 +144,10 @@ public class Vector2D {
 	 * @return length of vector
 	 */
 	public double getLength() {
+		if (x == 0)
+			return getY();
+		if (y == 0)
+			return getX();
 		return Geometry.getHypotenuseLength(x, y);
 	}
 
@@ -162,11 +166,28 @@ public class Vector2D {
 	 * @return unitvector of vector
 	 */
 	public Vector2D getUnitVector() {
-		return new Vector2D(x / getLength(), y / getLength());
+		final double len = getLength();
+		return new Vector2D(x / len, y / len);
 	}
 
-	public void setLength(double length) {
-
+	/**
+	 * Recalculates vector by scaling it to match given length keeping aspect
+	 * ratio.
+	 * 
+	 * @param newLength
+	 *            new length.
+	 */
+	public void setLength(double newLength) {
+		if (x == 0) {
+			setY(newLength);
+		} else if (y == 0) {
+			setX(newLength);
+		} else {
+			final double length = getLength();
+			double factor = newLength / length;
+			mult(factor);
+			System.out.println(length + " " + getLength() + " " + newLength);
+		}
 	}
 
 	/**
