@@ -36,6 +36,12 @@ public abstract class MoveableGameObject extends GameObject implements Moveable 
 		return (direction == Direction.LEFT || direction == Direction.RIGHT);
 	}
 
+	/**
+	 * Returns current facing of gameobject. This is the last direction this
+	 * object moved to.
+	 * 
+	 * @return current facing of gameobject.
+	 */
 	public Direction getCurrentDirection() {
 		return currentDirection;
 	}
@@ -63,5 +69,4 @@ public abstract class MoveableGameObject extends GameObject implements Moveable 
 	public void onMove(Direction direction) {
 		currentDirection = direction;
 	}
-
 }
