@@ -22,10 +22,11 @@ public class Game {
 	public void setPlayer1(GameObject player1) {
 		this.player1 = player1;
 	}
-	
-	public Point2D.Double checkCollision(GameObject gameObject, Point2D.Double target) {
-		//TODO: Implement!
-		return null;
+
+	public Point2D.Double checkCollision(GameObject gameObject,
+			Point2D.Double target) {
+		// TODO: Implement!
+		return target;
 	}
 
 }

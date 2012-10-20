@@ -22,13 +22,13 @@ public class GameWorldPanelTester implements MouseListener {
 
 	public GameWorldPanelTester() {
 		Game g = new Game();
-		yc = new YellowCircle();
+		yc = new YellowCircle(g);
 		yc.setXPosition(60);
 		yc.setYPosition(70);
 		g.getObjects().add(yc);
 		GameWorldPanel gwp = new GameWorldPanel();
 		GameWorker gameWorker = new GameWorker(g, gwp);
-		InfoText it = new InfoText(yc);
+		InfoText it = new InfoText(g, yc);
 		it.setXPosition(10);
 		it.setYPosition(30);
 		g.getObjects().add(it);
@@ -45,7 +45,6 @@ public class GameWorldPanelTester implements MouseListener {
 		Thread t = new Thread(gameWorker);
 		testFrame.setVisible(true);
 		t.start();
-
 	}
 
 	/**
@@ -53,7 +52,6 @@ public class GameWorldPanelTester implements MouseListener {
 	 */
 	public static void main(String[] args) {
 		new GameWorldPanelTester();
-
 	}
 
 	@Override

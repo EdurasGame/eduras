@@ -168,4 +168,13 @@ public class Vector2D {
 	public void setLength(double length) {
 
 	}
+
+	/**
+	 * Checks whether vector is a nullvector.
+	 * 
+	 * @return true if both, x and y, are 0.
+	 */
+	public boolean isNull() {
+		return (x == 0 && y == 0);
+	}
 }

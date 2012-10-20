@@ -3,7 +3,10 @@ package de.illonis.eduras.test;
 import java.awt.Color;
 import java.awt.Graphics2D;
 
+import de.illonis.eduras.Game;
 import de.illonis.eduras.MoveableGameObject;
+import de.illonis.eduras.interfaces.Controllable;
+import de.illonis.eduras.math.Vector2D;
 
 /**
  * A yellow circle is drawn around its position with specified diameter.
@@ -11,7 +14,7 @@ import de.illonis.eduras.MoveableGameObject;
  * @author illonis
  * 
  */
-public class YellowCircle extends MoveableGameObject {
+public class YellowCircle extends MoveableGameObject implements Controllable {
 	private int size;
 
 	/**
@@ -19,8 +22,8 @@ public class YellowCircle extends MoveableGameObject {
 	 * 
 	 * @see #YellowCircle(int)
 	 */
-	public YellowCircle() {
-		this(20);
+	public YellowCircle(Game game) {
+		this(game, 20);
 	}
 
 	/**
@@ -31,38 +34,51 @@ public class YellowCircle extends MoveableGameObject {
 	 * @param size
 	 *            diameter of circle.
 	 */
-	public YellowCircle(int size) {
+	public YellowCircle(Game game, int size) {
+		super(game);
 		if (size <= 0)
 			size = 20;
 		this.size = size;
-		setSpeed(1);
+		setSpeed(80);
 	}
 
 	@Override
 	public void draw(Graphics2D g) {
 		g.setColor(Color.YELLOW);
-		g.fillOval(getXPosition() - size / 2, getYPosition() - size / 2, size,
-				size);
+		g.fillOval(getDrawX() - size / 2, getDrawY() - size / 2, size, size);
 	}
 
 	@Override
-	public void onMove(Direction direction) {
-		super.onMove(direction);
+	public void startMoving(Direction direction) {
 		switch (direction) {
-		case DOWN:
-			modifyYPosition(getSpeed());
-			break;
 		case UP:
-			modifyYPosition(-getSpeed());
+			getSpeedVector().setY(-getSpeed());
+			break;
+		case DOWN:
+			getSpeedVector().setY(getSpeed());
 			break;
 		case LEFT:
-			modifyXPosition(-getSpeed());
+			getSpeedVector().setX(-getSpeed());
 			break;
 		case RIGHT:
-			modifyXPosition(getSpeed());
+			getSpeedVector().setX(getSpeed());
 			break;
 		default:
 			break;
 		}
+	}
+
+	@Override
+	public void stopMoving(Direction direction) {
+		if (isHorizontal(direction)) {
+			getSpeedVector().setX(0);
+		} else {
+			getSpeedVector().setY(0);
+		}
+	}
+
+	@Override
+	public void stopMoving() {
+		setSpeedVector(new Vector2D());
 	}
 }
