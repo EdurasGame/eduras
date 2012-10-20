@@ -1,9 +1,18 @@
 package de.illonis.eduras.math;
 
+/**
+ * A math class that provides useful functions that are used in two-dimensional
+ * space.
+ * 
+ * @author illonis
+ * 
+ */
 public class Geometry {
 
 	/**
-	 * Returns square of given number
+	 * Returns square of given double number.
+	 * 
+	 * @see #square(int)
 	 * 
 	 * @param x
 	 *            number
@@ -14,7 +23,9 @@ public class Geometry {
 	}
 
 	/**
-	 * Returns square of given number
+	 * Returns square of given integer number.
+	 * 
+	 * @see #square(double)
 	 * 
 	 * @param x
 	 *            number
@@ -25,7 +36,7 @@ public class Geometry {
 	}
 
 	/**
-	 * Return length of a hypotenuse in a right-angled triangle
+	 * Return length of a hypotenuse in a right-angled triangle.
 	 * 
 	 * @param a
 	 *            leg a

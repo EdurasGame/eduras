@@ -1,27 +1,27 @@
 package de.illonis.eduras.math;
 
-
 /**
  * Provides a basic class for two-dimensional-vectors
  * 
  * @author illonis
  * 
  */
-
 public class Vector2D {
 
 	private double x;
 	private double y;
 
 	/**
-	 * Creates an empty vector (0,0)
+	 * Creates an empty vector (0,0).
+	 * 
+	 * @see #Vector2D(double, double)
 	 */
 	public Vector2D() {
 		this(0, 0);
 	}
 
 	/**
-	 * Creates a new vector that is a copy of given vector
+	 * Creates a new vector that is a copy of given vector.
 	 * 
 	 * @param vector
 	 *            vector to copy
@@ -31,7 +31,9 @@ public class Vector2D {
 	}
 
 	/**
-	 * Creates a new vector with given size
+	 * Creates a new vector with given size.
+	 * 
+	 * @see #Vector2D()
 	 * 
 	 * @param x
 	 *            x-dimension
@@ -43,9 +45,9 @@ public class Vector2D {
 	}
 
 	/**
-	 * Returns X-component of vector
+	 * Returns X-component of vector.
 	 * 
-	 * @return X-component of vector
+	 * @return X-component of vector.
 	 */
 	public double getX() {
 		return x;
@@ -62,9 +64,9 @@ public class Vector2D {
 	}
 
 	/**
-	 * Returns Y-component of vector
+	 * Returns Y-component of vector.
 	 * 
-	 * @return Y-component of vector
+	 * @return Y-component of vector.
 	 */
 	public double getY() {
 		return y;
@@ -82,7 +84,7 @@ public class Vector2D {
 
 	/**
 	 * Sets X- and Y-components to a new value. This will have the same result
-	 * as if X and Y are set individually
+	 * as if X and Y were set individually.
 	 * 
 	 * @param x
 	 *            new X-value
@@ -95,7 +97,7 @@ public class Vector2D {
 	}
 
 	/**
-	 * Multiples vector with given integer factor
+	 * Multiples vector with given integer factor.
 	 * 
 	 * @param multipler
 	 *            factor
@@ -129,12 +131,29 @@ public class Vector2D {
 	}
 
 	/**
-	 * Returns length of vector
+	 * Inverts this vector bi multiplying all values with -1.
+	 */
+	public void invert() {
+		setX(-x);
+		setY(-y);
+	}
+
+	/**
+	 * Returns length of vector.
 	 * 
 	 * @return length of vector
 	 */
 	public double getLength() {
 		return Geometry.getHypotenuseLength(x, y);
+	}
+
+	/**
+	 * Returns a copy of this vector with no references.
+	 * 
+	 * @return copy of this vector.
+	 */
+	public Vector2D copy() {
+		return new Vector2D(x, y);
 	}
 
 	/**
@@ -144,5 +163,9 @@ public class Vector2D {
 	 */
 	public Vector2D getUnitVector() {
 		return new Vector2D(x / getLength(), y / getLength());
+	}
+
+	public void setLength(double length) {
+
 	}
 }

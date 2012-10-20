@@ -1,5 +1,7 @@
 package de.illonis.eduras;
 
+import java.awt.geom.Point2D;
+
 import de.illonis.eduras.interfaces.Moveable;
 import de.illonis.eduras.math.Vector2D;
 
@@ -39,6 +41,16 @@ public abstract class MoveableGameObject extends GameObject implements Moveable 
 	}
 
 	/**
+	 * Creates a new moveable gameobject that is associated with given game.
+	 * 
+	 * @param game
+	 *            game that contains this object.
+	 */
+	public MoveableGameObject(Game game) {
+		super(game);
+	}
+
+	/**
 	 * Returns current facing of gameobject. This is the last direction this
 	 * object moved to.
 	 * 
@@ -67,8 +79,31 @@ public abstract class MoveableGameObject extends GameObject implements Moveable 
 		return speed;
 	}
 
+	/**
+	 * Sets speed vector to given vector.
+	 * 
+	 * @param speedVector
+	 *            new speed vector
+	 */
+	public void setSpeedVector(Vector2D speedVector) {
+		this.speedVector = speedVector;
+	}
+
+	public Vector2D getSpeedVector() {
+		return speedVector;
+	}
+
 	@Override
-	public void onMove(Direction direction) {
-		currentDirection = direction;
+	public void onMove(long delta) {
+		double distance = speed * (delta / (double) 1000);
+		Vector2D unitSpeed = speedVector.getUnitVector();
+		unitSpeed.mult(distance);
+		double targetX = unitSpeed.getX() + getXPosition();
+		double targetY = unitSpeed.getY() + getYPosition();
+
+		Point2D.Double targetPos = getGame().checkCollision(this,
+				new Point2D.Double(targetX, targetY));
+
+		setPosition(targetPos.getX(), targetPos.getY());
 	}
 }

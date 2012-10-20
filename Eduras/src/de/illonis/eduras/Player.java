@@ -2,11 +2,8 @@ package de.illonis.eduras;
 
 public class Player extends MoveableGameObject {
 
-	public Player() {
-
+	public Player(Game game) {
+		super(game);
 	}
 
-	@Override
-	public void onMove(Direction direction) {
-	}
 }
