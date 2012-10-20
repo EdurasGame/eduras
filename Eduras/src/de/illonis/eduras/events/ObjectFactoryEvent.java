@@ -1,5 +1,7 @@
 package de.illonis.eduras.events;
 
+import de.illonis.eduras.ObjectFactory.ObjectType;
+
 /**
  * A <code>ObjectFactoryEvent</code> indicates an event on an object. This can
  * be object creation or deletion. If sent from server, this event has an id,
@@ -10,62 +12,43 @@ package de.illonis.eduras.events;
  */
 public class ObjectFactoryEvent extends GameEvent {
 
-	public enum ObjectType {
-		PLAYER(1), YELLOWCIRCLE(2);
-
-		private int number;
-
-		ObjectType(int num) {
-			number = num;
-		}
-
-		public int getNumber() {
-			return number;
-		}
-	}
-
-	public enum ObjectAction {
-		DELETE(1), CREATE(2), DO_NOTHING(3);
-
-		private int number;
-
-		ObjectAction(int num) {
-			number = num;
-		}
-
-		public int getNumber() {
-			return number;
-		}
-	}
-
 	private ObjectType objectType;
-	private ObjectAction objectAction;
 	private int id;
 
-	public ObjectFactoryEvent(GameEventNumber eventType, ObjectType objectType,
-			ObjectAction objectAction) {
+	/**
+	 * Creates a new ObjectFactoryEvent with given parameters.
+	 * 
+	 * @param eventType
+	 *            typenumber of event.
+	 * @param objectType
+	 *            type of object (see {@link ObjectType}). Irrelevant if event
+	 *            is {@link GameEventNumber#OBJECT_REMOVE}.
+	 */
+	public ObjectFactoryEvent(GameEventNumber eventType, ObjectType objectType) {
 		super(eventType);
-		this.objectAction = objectAction;
 		this.objectType = objectType;
 		id = -1;
 	}
 
-	public ObjectFactoryEvent(GameEventNumber eventType, ObjectType objectType) {
-		this(eventType, objectType, ObjectAction.DO_NOTHING);
-	}
-
+	/**
+	 * Returns {@link ObjectType} of event.
+	 * 
+	 * @return object type of event.
+	 */
 	public ObjectType getObjectType() {
 		return objectType;
 	}
 
-	public ObjectAction getObjectAction() {
-		return objectAction;
-	}
-
-	public void setObjectAction(ObjectAction objectAction) {
-		this.objectAction = objectAction;
-	}
-
+	/**
+	 * Sets object type of this event. An object of this type will be created or
+	 * deleted with this event.<br>
+	 * <b>Note:</b> Object type is neglected if type of event is
+	 * {@link GameEventNumber#OBJECT_REMOVE}.
+	 * 
+	 * @see #getType()
+	 * 
+	 * @param objectType
+	 */
 	public void setObjectType(ObjectType objectType) {
 		this.objectType = objectType;
 	}
@@ -74,10 +57,25 @@ public class ObjectFactoryEvent extends GameEvent {
 		this.id = id;
 	}
 
+	/**
+	 * Returns id of object that is affected by this event. If this is sent from
+	 * client, there is no object id yet (<code>-1</code>).
+	 * 
+	 * @see #hasId()
+	 * 
+	 * @return id of affected object.
+	 */
 	public int getId() {
 		return id;
 	}
 
+	/**
+	 * Checks whether event has an object-id attached or not.
+	 * 
+	 * @see #getId()
+	 * 
+	 * @return true if event has an object-id attached, false otherwise.
+	 */
 	public boolean hasId() {
 		return id >= 0;
 	}

@@ -39,4 +39,37 @@ public class Game {
 		return target;
 	}
 
+	/**
+	 * Returns gameobject with given id. If no object is found, null is
+	 * returned.
+	 * 
+	 * @param id
+	 *            id to search for.
+	 * @return object with given id.
+	 */
+	public GameObject findObjectById(int id) {
+		for (GameObject o : objects)
+			if (o.getId() == id)
+				return o;
+		return null;
+	}
+
+	/**
+	 * Removes the first occurrence of the specified game object from gameobject
+	 * list, if it is present. If the list does not contain the element, it is
+	 * unchanged. More formally, removes the element with the lowest index
+	 * <tt>i</tt> such that
+	 * <tt>(o==null&nbsp;?&nbsp;get(i)==null&nbsp;:&nbsp;o.equals(get(i)))</tt>
+	 * (if such an element exists). Returns <tt>true</tt> if this list contained
+	 * the specified element (or equivalently, if this list changed as a result
+	 * of the call).
+	 * 
+	 * @param go
+	 *            element to be removed from this list, if present
+	 * @return <tt>true</tt> if this list contained the specified element
+	 */
+	public boolean removeObject(GameObject go) {
+		return objects.remove(go);
+	}
+
 }
