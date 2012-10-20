@@ -1,13 +1,7 @@
 package de.illonis.eduras.test;
 
-import java.awt.MouseInfo;
-import java.awt.Point;
-import java.awt.PointerInfo;
-
 import de.illonis.eduras.Game;
 import de.illonis.eduras.GameObject;
-import de.illonis.eduras.MoveableGameObject;
-import de.illonis.eduras.MoveableGameObject.Direction;
 
 /**
  * A Gameworker represents game's main loop. It updates game, renders screen and
@@ -129,28 +123,25 @@ public class GameWorker implements Runnable {
 		if (delta == 0)
 			return;
 		lastUpdate = System.nanoTime();
-		PointerInfo info = MouseInfo.getPointerInfo();
-		Point location = info.getLocation();
-		Point p = gameWorldPanel.getLocationOnScreen();
-		int x = location.x - p.x;
-		int y = location.y - p.y;
+		/*
+		 * PointerInfo info = MouseInfo.getPointerInfo(); Point location =
+		 * info.getLocation(); Point p = gameWorldPanel.getLocationOnScreen();
+		 * int x = location.x - p.x; int y = location.y - p.y;
+		 * 
+		 * GameObject o = game.getObjects().get(0); double ox =
+		 * o.getXPosition(); double oy = o.getYPosition();
+		 * 
+		 * if (x > ox) ((YellowCircle) o).startMoving(Direction.RIGHT); else if
+		 * (x < ox) ((YellowCircle) o).startMoving(Direction.LEFT); if (y > oy)
+		 * ((YellowCircle) o).startMoving(Direction.BOTTOM); else if (y < oy)
+		 * ((YellowCircle) o).startMoving(Direction.TOP); else ((YellowCircle)
+		 * o).stopMoving();
+		 */
+		for (GameObject o : game.getObjects()) {
 
-		GameObject o = game.getObjects().get(0);
-		double ox = o.getXPosition();
-		double oy = o.getYPosition();
-
-		if (x > ox)
-			((YellowCircle) o).startMoving(Direction.RIGHT);
-		else if (x < ox)
-			((YellowCircle) o).startMoving(Direction.LEFT);
-		if (y > oy)
-			((YellowCircle) o).startMoving(Direction.DOWN);
-		else if (y < oy)
-			((YellowCircle) o).startMoving(Direction.UP);
-		else
-			((YellowCircle) o).stopMoving();
-
-		((MoveableGameObject) o).onMove(delta);
+			if (o instanceof YellowCircle)
+				((YellowCircle) o).onMove(delta);
+		}
 
 	}
 

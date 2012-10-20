@@ -145,9 +145,9 @@ public class Vector2D {
 	 */
 	public double getLength() {
 		if (x == 0)
-			return getY();
+			return Math.abs(getY());
 		if (y == 0)
-			return getX();
+			return Math.abs(getX());
 		return Geometry.getHypotenuseLength(x, y);
 	}
 
@@ -179,14 +179,13 @@ public class Vector2D {
 	 */
 	public void setLength(double newLength) {
 		if (x == 0) {
-			setY(newLength);
+			setY((y > 0) ? newLength : -newLength);
 		} else if (y == 0) {
-			setX(newLength);
+			setX((x > 0) ? newLength : -newLength);
 		} else {
 			final double length = getLength();
 			double factor = newLength / length;
 			mult(factor);
-			System.out.println(length + " " + getLength() + " " + newLength);
 		}
 	}
 
@@ -197,5 +196,10 @@ public class Vector2D {
 	 */
 	public boolean isNull() {
 		return (x == 0 && y == 0);
+	}
+
+	@Override
+	public String toString() {
+		return "Vector2D(" + x + ", " + y + ")";
 	}
 }

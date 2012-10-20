@@ -51,10 +51,10 @@ public class YellowCircle extends MoveableGameObject implements Controllable {
 	@Override
 	public void startMoving(Direction direction) {
 		switch (direction) {
-		case UP:
+		case TOP:
 			getSpeedVector().setY(-getSpeed());
 			break;
-		case DOWN:
+		case BOTTOM:
 			getSpeedVector().setY(getSpeed());
 			break;
 		case LEFT:

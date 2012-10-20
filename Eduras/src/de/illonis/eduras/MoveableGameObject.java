@@ -21,7 +21,7 @@ public abstract class MoveableGameObject extends GameObject implements Moveable 
 	 * 
 	 */
 	public static enum Direction {
-		LEFT, RIGHT, UP, DOWN, TOPLEFT, TOPRIGHT, BOTTOMLEFT, BOTTOMRIGHT
+		LEFT, RIGHT, TOP, BOTTOM, TOPLEFT, TOPRIGHT, BOTTOMLEFT, BOTTOMRIGHT
 	}
 
 	private Direction currentDirection;

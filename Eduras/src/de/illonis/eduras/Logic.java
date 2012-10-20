@@ -47,16 +47,16 @@ public class Logic implements GameLogicInterface {
 
 			switch (moveEvent.getType()) {
 			case MOVE_DOWN_PRESSED:
-				player.startMoving(Direction.DOWN);
+				player.startMoving(Direction.BOTTOM);
 				break;
 			case MOVE_DOWN_RELEASED:
-				player.stopMoving(Direction.DOWN);
+				player.stopMoving(Direction.BOTTOM);
 				break;
 			case MOVE_UP_PRESSED:
-				player.startMoving(Direction.UP);
+				player.startMoving(Direction.TOP);
 				break;
 			case MOVE_UP_RELEASED:
-				player.stopMoving(Direction.UP);
+				player.stopMoving(Direction.TOP);
 				break;
 			case MOVE_LEFT_PRESSED:
 				player.startMoving(Direction.LEFT);
