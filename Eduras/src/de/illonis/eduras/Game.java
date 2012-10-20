@@ -5,10 +5,20 @@ import java.util.ArrayList;
 
 public class Game {
 	private Player player1;
+	private ObjectFactory factory;
 	private final ArrayList<GameObject> objects;
 
+	public ObjectFactory getFactory() {
+		return factory;
+	}
+
 	public Game() {
+		factory = new ObjectFactory(this);
 		objects = new ArrayList<GameObject>();
+	}
+
+	public void addObject(GameObject object) {
+		objects.add(object);
 	}
 
 	public ArrayList<GameObject> getObjects() {

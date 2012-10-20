@@ -6,6 +6,7 @@ import de.illonis.eduras.MoveableGameObject.Direction;
 import de.illonis.eduras.events.GameEvent;
 import de.illonis.eduras.events.GameEvent.GameEventNumber;
 import de.illonis.eduras.events.MovementEvent;
+import de.illonis.eduras.events.ObjectFactoryEvent;
 import de.illonis.eduras.interfaces.GameEventListener;
 
 /**
@@ -17,12 +18,14 @@ import de.illonis.eduras.interfaces.GameEventListener;
 public class Logic implements GameLogicInterface {
 
 	Game currentGame;
+	ObjectFactory objectFactory;
 	private ArrayList<GameEventListener> listenerList;
 
 	public Logic(Game g) {
 
 		this.currentGame = g;
 		listenerList = new ArrayList<GameEventListener>();
+		objectFactory = new ObjectFactory(currentGame);
 	}
 
 	/**
@@ -43,29 +46,29 @@ public class Logic implements GameLogicInterface {
 			Player player = currentGame.getPlayer1();
 
 			switch (moveEvent.getType()) {
-			case MOVE_DOWN_RELEASED:
-				player.stopMoving(Direction.DOWN);
-				break;
-			case MOVE_UP_RELEASED:
-				player.stopMoving(Direction.UP);
-				break;
-			case MOVE_LEFT_RELEASED:
-				player.stopMoving(Direction.LEFT);
-				break;
-			case MOVE_RIGHT_RELEASED:
-				player.stopMoving(Direction.RIGHT);
-				break;
 			case MOVE_DOWN_PRESSED:
 				player.startMoving(Direction.DOWN);
 				break;
-			case MOVE_LEFT_PRESSED:
-				player.startMoving(Direction.LEFT);
+			case MOVE_DOWN_RELEASED:
+				player.stopMoving(Direction.DOWN);
 				break;
 			case MOVE_UP_PRESSED:
 				player.startMoving(Direction.UP);
 				break;
+			case MOVE_UP_RELEASED:
+				player.stopMoving(Direction.UP);
+				break;
+			case MOVE_LEFT_PRESSED:
+				player.startMoving(Direction.LEFT);
+				break;
+			case MOVE_LEFT_RELEASED:
+				player.stopMoving(Direction.LEFT);
+				break;
 			case MOVE_RIGHT_PRESSED:
 				player.startMoving(Direction.RIGHT);
+				break;
+			case MOVE_RIGHT_RELEASED:
+				player.stopMoving(Direction.RIGHT);
 				break;
 			case SET_POS:
 				int newXPos = moveEvent.getNewXPos();
@@ -76,6 +79,8 @@ public class Logic implements GameLogicInterface {
 				break;
 			}
 
+		} else if (event instanceof ObjectFactoryEvent) {
+			objectFactory.onGameEventAppeared(event);
 		}
 		fireMyEvent();
 	}
