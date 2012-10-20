@@ -18,6 +18,7 @@ public class Eduras {
 			System.out.println("Starting Eduras? server...");
 			new Server();
 		} else {
+			// TODO: allow specifying a custom server url
 			System.out.println("Starting Eduras? client...");
 			new Client();
 
