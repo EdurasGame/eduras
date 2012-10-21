@@ -7,6 +7,7 @@ import de.illonis.eduras.events.GameEvent;
 import de.illonis.eduras.events.GameEvent.GameEventNumber;
 import de.illonis.eduras.events.MovementEvent;
 import de.illonis.eduras.events.ObjectFactoryEvent;
+import de.illonis.eduras.events.UserMovementEvent;
 import de.illonis.eduras.interfaces.GameEventListener;
 
 /**
@@ -38,51 +39,78 @@ public class Logic implements GameLogicInterface {
 	public synchronized void onGameEventAppeared(GameEvent event) {
 		System.out.println("[LOGIC] A game event appeared.");
 
-		if (event instanceof MovementEvent) {
-			System.out.println("[LOGIC] Game event is a MovementEvent.");
-
-			MovementEvent moveEvent = (MovementEvent) event;
+		if (event instanceof ObjectFactoryEvent) {
+			objectFactory.onGameEventAppeared(event);
+		} else {
 
 			Player player = currentGame.getPlayer1();
 
-			switch (moveEvent.getType()) {
+			switch (event.getType()) {
 			case MOVE_DOWN_PRESSED:
-				player.startMoving(Direction.BOTTOM);
-				break;
 			case MOVE_DOWN_RELEASED:
-				player.stopMoving(Direction.BOTTOM);
-				break;
 			case MOVE_UP_PRESSED:
-				player.startMoving(Direction.TOP);
-				break;
 			case MOVE_UP_RELEASED:
-				player.stopMoving(Direction.TOP);
-				break;
 			case MOVE_LEFT_PRESSED:
-				player.startMoving(Direction.LEFT);
-				break;
 			case MOVE_LEFT_RELEASED:
-				player.stopMoving(Direction.LEFT);
-				break;
 			case MOVE_RIGHT_PRESSED:
-				player.startMoving(Direction.RIGHT);
-				break;
 			case MOVE_RIGHT_RELEASED:
-				player.stopMoving(Direction.RIGHT);
+				handlePlayerMove((UserMovementEvent) event);
 				break;
 			case SET_POS:
+				MovementEvent moveEvent = (MovementEvent) event;
 				int newXPos = moveEvent.getNewXPos();
 				int newYPos = moveEvent.getNewYPos();
-				player.setYPosition(newYPos);
-				player.setXPosition(newXPos);
+				GameObject o = currentGame.findObjectById(moveEvent
+						.getObjectId());
+				o.setYPosition(newYPos);
+				o.setXPosition(newXPos);
 			default:
 				break;
 			}
-
-		} else if (event instanceof ObjectFactoryEvent) {
-			objectFactory.onGameEventAppeared(event);
 		}
 		fireMyEvent();
+	}
+
+	/**
+	 * Handles a player move. These events are only received on serverside.
+	 * 
+	 * @author illonis
+	 * @param event
+	 *            event.
+	 */
+	private void handlePlayerMove(UserMovementEvent event) {
+
+		// TODO: find player
+		Player player = null;
+
+		switch (event.getType()) {
+		case MOVE_DOWN_PRESSED:
+			player.startMoving(Direction.BOTTOM);
+			break;
+		case MOVE_DOWN_RELEASED:
+			player.stopMoving(Direction.BOTTOM);
+			break;
+		case MOVE_UP_PRESSED:
+			player.startMoving(Direction.TOP);
+			break;
+		case MOVE_UP_RELEASED:
+			player.stopMoving(Direction.TOP);
+			break;
+		case MOVE_LEFT_PRESSED:
+			player.startMoving(Direction.LEFT);
+			break;
+		case MOVE_LEFT_RELEASED:
+			player.stopMoving(Direction.LEFT);
+			break;
+		case MOVE_RIGHT_PRESSED:
+			player.startMoving(Direction.RIGHT);
+			break;
+		case MOVE_RIGHT_RELEASED:
+			player.stopMoving(Direction.RIGHT);
+			break;
+		default:
+			break;
+		}
 	}
 
 	/**

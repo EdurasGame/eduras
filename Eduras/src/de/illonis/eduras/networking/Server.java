@@ -10,6 +10,7 @@ import de.illonis.eduras.Player;
 import de.illonis.eduras.events.GameEvent.GameEventNumber;
 import de.illonis.eduras.events.MovementEvent;
 import de.illonis.eduras.exceptions.GivenParametersDoNotFitToEventException;
+import de.illonis.eduras.exceptions.MessageNotSupportedException;
 import de.illonis.eduras.interfaces.GameEventListener;
 import de.illonis.eduras.locale.Localization;
 
@@ -137,6 +138,8 @@ public class Server implements GameEventListener {
 			String msg = NetworkMessageSerializer.serialize(me);
 			outputBuffer.append(msg);
 		} catch (GivenParametersDoNotFitToEventException e) {
+			e.printStackTrace();
+		} catch (MessageNotSupportedException e) {
 			e.printStackTrace();
 		}
 

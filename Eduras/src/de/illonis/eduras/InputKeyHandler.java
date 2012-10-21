@@ -8,6 +8,7 @@ import java.util.concurrent.CopyOnWriteArraySet;
 import de.illonis.eduras.events.GameEvent;
 import de.illonis.eduras.events.GameEvent.GameEventNumber;
 import de.illonis.eduras.events.UserMovementEvent;
+import de.illonis.eduras.exceptions.MessageNotSupportedException;
 import de.illonis.eduras.networking.Client;
 import de.illonis.eduras.networking.NetworkMessageSerializer;
 
@@ -66,8 +67,14 @@ public class InputKeyHandler implements KeyListener {
 	 *            event to handle.
 	 */
 	private void serializeAndSend(GameEvent event) {
-		String msg = NetworkMessageSerializer.serialize(event);
-		client.sendMessage(msg);
+		String msg;
+		try {
+			msg = NetworkMessageSerializer.serialize(event);
+			client.sendMessage(msg);
+		} catch (MessageNotSupportedException e) {
+			e.printStackTrace();
+		}
+
 	}
 
 	@Override

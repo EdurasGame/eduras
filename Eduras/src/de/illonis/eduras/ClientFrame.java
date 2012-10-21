@@ -11,6 +11,7 @@ import javax.swing.JPanel;
 import de.illonis.eduras.events.GameEvent.GameEventNumber;
 import de.illonis.eduras.events.MovementEvent;
 import de.illonis.eduras.exceptions.GivenParametersDoNotFitToEventException;
+import de.illonis.eduras.exceptions.MessageNotSupportedException;
 import de.illonis.eduras.networking.Client;
 import de.illonis.eduras.networking.NetworkMessageSerializer;
 
@@ -84,7 +85,7 @@ public class ClientFrame extends JFrame {
 			client.sendMessage(msg);
 		} catch (GivenParametersDoNotFitToEventException e) {
 			e.printStackTrace();
-		} catch (UnsupportedOperationException e) {
+		} catch (MessageNotSupportedException e) {
 			e.printStackTrace();
 		}
 	}

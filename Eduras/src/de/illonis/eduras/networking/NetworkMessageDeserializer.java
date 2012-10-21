@@ -5,6 +5,7 @@ import java.util.LinkedList;
 import de.illonis.eduras.events.GameEvent;
 import de.illonis.eduras.events.GameEvent.GameEventNumber;
 import de.illonis.eduras.events.MovementEvent;
+import de.illonis.eduras.events.UserMovementEvent;
 import de.illonis.eduras.exceptions.GivenParametersDoNotFitToEventException;
 import de.illonis.eduras.exceptions.InvalidMessageFormatException;
 import de.illonis.eduras.exceptions.MessageNotSupportedException;
@@ -93,13 +94,13 @@ public class NetworkMessageDeserializer {
 
 		switch (typeNumber) {
 		case SET_POS:
-			handleMovementPositionEvent(msg, args, typeNumber, event);
+			event = handleMovementPositionEvent(msg, args, typeNumber);
 			break;
 		case MOVE_DOWN_PRESSED:
 		case MOVE_RIGHT_PRESSED:
 		case MOVE_LEFT_PRESSED:
 		case MOVE_UP_PRESSED:
-			handleStartMovementEvent(msg, args, typeNumber, event);
+			event = handleStartMovementEvent(msg, args, typeNumber);
 			break;
 		default:
 			throw new MessageNotSupportedException(typeNumber, msg);
@@ -108,24 +109,17 @@ public class NetworkMessageDeserializer {
 		return event;
 	}
 
-	private static void handleStartMovementEvent(String msg, String[] args,
-			GameEventNumber typeNumber, GameEvent event)
+	private static GameEvent handleStartMovementEvent(String msg,
+			String[] args, GameEventNumber typeNumber)
 			throws GivenParametersDoNotFitToEventException {
 
-		int unitID = Integer.parseInt(args[1]);
-		if (unitID < 0)
+		int owner = Integer.parseInt(args[1]);
+		if (owner < 0)
 			throw new GivenParametersDoNotFitToEventException(typeNumber, args);
-		switch (typeNumber) {
-		case MOVE_RIGHT_PRESSED:
-
-			break;
-
-		default:
-			break;
-		}
-
+		return new UserMovementEvent(typeNumber, owner);
 	}
 
+	// TODO: fix and enhance javadoc
 	/**
 	 * (jme) Handles a position event.
 	 * 
@@ -135,17 +129,15 @@ public class NetworkMessageDeserializer {
 	 *            Message split at #.
 	 * @param typeNumber
 	 *            typenumber of gameevent.
-	 * @param event
-	 *            event to manipulate.
 	 * @throws InvalidMessageFormatException
 	 *             Thrown if message has an invalid format. Especially when it
 	 *             has no or too less arguments.
 	 * @throws GivenParametersDoNotFitToEventException
 	 *             Thrown if generation of gameevent failed.
 	 */
-	private static void handleMovementPositionEvent(String fullMessage,
-			String[] splittedMessage, GameEventNumber typeNumber,
-			GameEvent event) throws InvalidMessageFormatException,
+	private static GameEvent handleMovementPositionEvent(String fullMessage,
+			String[] splittedMessage, GameEventNumber typeNumber)
+			throws InvalidMessageFormatException,
 			GivenParametersDoNotFitToEventException {
 		if (splittedMessage.length != 4)
 			throw new InvalidMessageFormatException(
@@ -156,10 +148,10 @@ public class NetworkMessageDeserializer {
 			int id = Integer.parseInt(splittedMessage[1]);
 			int newXPos = Integer.parseInt(splittedMessage[2]);
 			int newYPos = Integer.parseInt(splittedMessage[3]);
-			MovementEvent moveEvent = (MovementEvent) event;
+			MovementEvent moveEvent = new MovementEvent(typeNumber, id);
 			moveEvent.setNewXPos(newXPos);
 			moveEvent.setNewYPos(newYPos);
-			moveEvent.setId(id);
+			return moveEvent;
 		} catch (NumberFormatException e) {
 			throw new GivenParametersDoNotFitToEventException(typeNumber,
 					splittedMessage[1], splittedMessage[2], splittedMessage[3]);

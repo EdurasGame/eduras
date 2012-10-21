@@ -3,6 +3,7 @@ package de.illonis.eduras.networking;
 import de.illonis.eduras.events.GameEvent;
 import de.illonis.eduras.events.MovementEvent;
 import de.illonis.eduras.events.UserMovementEvent;
+import de.illonis.eduras.exceptions.MessageNotSupportedException;
 
 /**
  * Serializes different NetworkMessages.
@@ -22,7 +23,7 @@ public class NetworkMessageSerializer {
 	 *             Occurs if there is no serialization for the given event.
 	 */
 	public static String serialize(GameEvent event)
-			throws UnsupportedOperationException {
+			throws MessageNotSupportedException {
 
 		String serializedEvent = "";
 
@@ -67,7 +68,7 @@ public class NetworkMessageSerializer {
 			break;
 		}
 		if (serializedEvent.endsWith("#"))
-			throw new UnsupportedOperationException(
+			throw new MessageNotSupportedException(event.getType(),
 					"There does not exist a serialization for the given event yet!");
 		return "##" + serializedEvent;
 
