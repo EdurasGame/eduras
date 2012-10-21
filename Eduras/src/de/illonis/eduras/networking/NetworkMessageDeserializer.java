@@ -95,11 +95,35 @@ public class NetworkMessageDeserializer {
 		case SET_POS:
 			handleMovementPositionEvent(msg, args, typeNumber, event);
 			break;
+		case MOVE_DOWN_PRESSED:
+		case MOVE_RIGHT_PRESSED:
+		case MOVE_LEFT_PRESSED:
+		case MOVE_UP_PRESSED:
+			handleStartMovementEvent(msg, args, typeNumber, event);
+			break;
 		default:
 			throw new MessageNotSupportedException(typeNumber, msg);
 		}
 
 		return event;
+	}
+
+	private static void handleStartMovementEvent(String msg, String[] args,
+			GameEventNumber typeNumber, GameEvent event)
+			throws GivenParametersDoNotFitToEventException {
+
+		int unitID = Integer.parseInt(args[1]);
+		if (unitID < 0)
+			throw new GivenParametersDoNotFitToEventException(typeNumber, args);
+		switch (typeNumber) {
+		case MOVE_RIGHT_PRESSED:
+
+			break;
+
+		default:
+			break;
+		}
+
 	}
 
 	/**

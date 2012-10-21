@@ -2,6 +2,7 @@ package de.illonis.eduras.networking;
 
 import de.illonis.eduras.events.GameEvent;
 import de.illonis.eduras.events.MovementEvent;
+import de.illonis.eduras.events.UserMovementEvent;
 
 /**
  * Serializes different NetworkMessages.
@@ -25,19 +26,50 @@ public class NetworkMessageSerializer {
 
 		String serializedEvent = "";
 
-		serializedEvent +=  event.getType().getNumber() + "#";
+		serializedEvent += event.getType().getNumber() + "#";
 
-		if (event instanceof MovementEvent) {
-
+		switch (event.getType()) {
+		case DEATH:
+			break;
+		case MOVE_DOWN_PRESSED:
+		case MOVE_DOWN_RELEASED:
+		case MOVE_LEFT_PRESSED:
+		case MOVE_LEFT_RELEASED:
+		case MOVE_RIGHT_PRESSED:
+		case MOVE_RIGHT_RELEASED:
+		case MOVE_UP_PRESSED:
+		case MOVE_UP_RELEASED:
+			serializedEvent += ((UserMovementEvent) event).getOwner() + "";
+			break;
+		case NO_EVENT:
+			break;
+		case OBJECT_CREATE:
+			break;
+		case OBJECT_REMOVE:
+			break;
+		case SETHEALTH:
+			break;
+		case SETSPEED:
+			break;
+		case SETSPEEDVECTOR:
+			break;
+		case SET_POS:
 			MovementEvent moveEvent = (MovementEvent) event;
 			serializedEvent += moveEvent.getObjectId();
 			serializedEvent += "#" + moveEvent.getNewXPos() + "#"
 					+ moveEvent.getNewYPos();
-			return "##" + serializedEvent;
+			break;
+		case SHOOT_PRESSED:
+			break;
+		case SHOOT_RELEASED:
+			break;
+		default:
+			break;
 		}
-
-		throw new UnsupportedOperationException(
-				"There does not exist a serialization for the given event yet!");
+		if (serializedEvent.endsWith("#"))
+			throw new UnsupportedOperationException(
+					"There does not exist a serialization for the given event yet!");
+		return "##" + serializedEvent;
 
 	}
 

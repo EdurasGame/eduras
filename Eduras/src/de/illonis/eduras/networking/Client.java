@@ -26,6 +26,7 @@ public class Client implements GameEventListener {
 	ClientSender sender;
 	private final Game game;
 	private final ClientFrame clientFrame;
+	private int userId;
 
 	/**
 	 * Creates a new Client.
@@ -95,5 +96,13 @@ public class Client implements GameEventListener {
 	public void onWorldChanged() {
 		clientFrame.newCircle(game.getPlayer1().getXPosition(), game
 				.getPlayer1().getYPosition());
+	}
+
+	public void setUserId(int userId) {
+		this.userId = userId;
+	}
+
+	public int getUserId() {
+		return userId;
 	}
 }
