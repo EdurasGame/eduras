@@ -3,6 +3,7 @@ package de.illonis.eduras;
 import java.awt.Graphics2D;
 
 import de.illonis.eduras.interfaces.Drawable;
+import de.illonis.eduras.math.Vector2D;
 
 /**
  * Meta class for all objects that can be on the game's map.
@@ -200,5 +201,13 @@ public class GameObject implements Drawable {
 	 */
 	@Override
 	public void draw(Graphics2D g) {
+	}
+	
+	/**
+	 * Returns a vector that points from origin to the position of the GameObject.
+	 * @return The position vector.
+	 */
+	public Vector2D toPositionVector() {
+		return new Vector2D(xPosition, yPosition);
 	}
 }
