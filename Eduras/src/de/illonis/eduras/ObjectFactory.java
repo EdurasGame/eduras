@@ -12,9 +12,9 @@ import de.illonis.eduras.test.YellowCircle;
  * @author illonis
  * 
  */
-public class ObjectFactory implements GameLogicInterface {
+public class ObjectFactory {
 
-	private Game game;
+	private final Game game;
 
 	/**
 	 * Collection of object types that can be created by {@link ObjectFactory}.
@@ -46,7 +46,7 @@ public class ObjectFactory implements GameLogicInterface {
 		this.game = game;
 	}
 
-	@Override
+	
 	public void onGameEventAppeared(GameEvent event) {
 		// do not handle other events in case they are received.
 		if (!(event instanceof ObjectFactoryEvent))

@@ -9,6 +9,7 @@ import de.illonis.eduras.Game;
 import de.illonis.eduras.Logic;
 import de.illonis.eduras.Player;
 import de.illonis.eduras.interfaces.GameEventListener;
+import de.illonis.eduras.interfaces.GameLogicInterface;
 
 /**
  * A client that connects to the game server and starts receiving and sending
@@ -20,7 +21,7 @@ import de.illonis.eduras.interfaces.GameEventListener;
 public class Client implements GameEventListener {
 
 	Socket socket;
-	private final Logic logic;
+	private final GameLogicInterface logic;
 
 	ClientReceiver receiver;
 	ClientSender sender;
