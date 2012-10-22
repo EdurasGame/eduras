@@ -1,6 +1,7 @@
 package de.illonis.eduras;
 
 import de.illonis.eduras.networking.Server;
+import de.illonis.eduras.test.ClientFrame;
 
 
 public class Eduras {

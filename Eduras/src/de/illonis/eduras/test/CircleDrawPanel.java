@@ -1,4 +1,4 @@
-package de.illonis.eduras;
+package de.illonis.eduras.test;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -9,6 +9,8 @@ import java.awt.geom.Ellipse2D;
 import java.util.ArrayList;
 
 import javax.swing.JPanel;
+
+import de.illonis.eduras.GameObject;
 
 /**
  * A panel where circles are drawn by click and send to server.
