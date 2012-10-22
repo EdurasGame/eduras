@@ -3,7 +3,7 @@
  */
 package de.illonis.eduras;
 
-import java.awt.geom.Point2D;
+import de.illonis.eduras.math.Vector2D;
 
 /**
  * Super class of any shape a object in the game can have.
@@ -25,7 +25,7 @@ public abstract class ObjectShape {
 	 *            The target position
 	 * @return Returns the position of the object after the move.
 	 */
-	public abstract Point2D.Double checkCollision(Game game,
-			GameObject thisObject, Point2D.Double target);
+	public abstract Vector2D checkCollision(Game game,
+			GameObject thisObject, Vector2D target);
 
 }

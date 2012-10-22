@@ -1,7 +1,8 @@
 package de.illonis.eduras;
 
-import java.awt.geom.Point2D;
 import java.util.ArrayList;
+
+import de.illonis.eduras.math.Vector2D;
 
 public class Game {
 	private Player player1;
@@ -39,10 +40,10 @@ public class Game {
 	 * @param target The target position.
 	 * @return Returns the objects position after the move. Note that the objects new position won't be set.
 	 */
-	public Point2D.Double checkCollision(GameObject gameObject,
-			Point2D.Double target) {
+	public Vector2D checkCollision(GameObject gameObject,
+			Vector2D target) {
 		ObjectShape shape = gameObject.getShape();
-		Point2D.Double result = shape.checkCollision(this, gameObject, target);
+		Vector2D result = shape.checkCollision(this, gameObject, target);
 		return result;
 	}
 

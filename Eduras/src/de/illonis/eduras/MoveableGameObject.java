@@ -1,7 +1,5 @@
 package de.illonis.eduras;
 
-import java.awt.geom.Point2D;
-
 import de.illonis.eduras.interfaces.Moveable;
 import de.illonis.eduras.math.Vector2D;
 
@@ -103,8 +101,8 @@ public abstract class MoveableGameObject extends GameObject implements Moveable 
 		double targetX = unitSpeed.getX() + getXPosition();
 		double targetY = unitSpeed.getY() + getYPosition();
 
-		Point2D.Double targetPos = getGame().checkCollision(this,
-				new Point2D.Double(targetX, targetY));
+		Vector2D targetPos = getGame().checkCollision(this,
+				new Vector2D(targetX, targetY));
 
 		setPosition(targetPos.getX(), targetPos.getY());
 	}
