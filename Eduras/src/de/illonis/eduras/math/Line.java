@@ -20,6 +20,10 @@ public class Line {
 	private final double a;
 	private final double b;
 	private final double c;
+	
+	private final Vector2D u;
+	private final Vector2D v;
+	
 
 	/**
 	 * Creates a line that goes through u and v.
@@ -28,6 +32,10 @@ public class Line {
 	 * @param v
 	 */
 	public Line(Vector2D u, Vector2D v) {
+		
+		this.u = u;
+		this.v = v;
+		
 		double dx = u.getX() - v.getX();
 		double dy = u.getY() - v.getY();
 
@@ -79,5 +87,23 @@ public class Line {
 
 		return lines;
 	}
+
+	/**
+	 * Returns a position vector to the first point the line was deduced from.
+	 * @return A position vector to the first point.
+	 */
+	public Vector2D getU() {
+		return u;
+	}
+
+	/**
+	 * Returns a position vector to the first point the line was deduced from.
+	 * @return A position vector to the second point.
+	 */
+	public Vector2D getV() {
+		return v;
+	}
+	
+	
 
 }
