@@ -5,7 +5,7 @@ import java.util.ArrayList;
 
 public class Game {
 	private Player player1;
-	private ObjectFactory factory;
+	private final ObjectFactory factory;
 	private final ArrayList<GameObject> objects;
 
 	public ObjectFactory getFactory() {
@@ -33,10 +33,17 @@ public class Game {
 		this.player1 = player1;
 	}
 
+	/**
+	 * Checks if there will be a collision of the given object trying to move to the target position.
+	 * @param gameObject The object which wants to move.
+	 * @param target The target position.
+	 * @return Returns the objects position after the move. Note that the objects new position won't be set.
+	 */
 	public Point2D.Double checkCollision(GameObject gameObject,
 			Point2D.Double target) {
-		// TODO: Implement!
-		return target;
+		ObjectShape shape = gameObject.getShape();
+		Point2D.Double result = shape.checkCollision(this, gameObject, target);
+		return result;
 	}
 
 	/**
