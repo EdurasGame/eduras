@@ -2,8 +2,8 @@ package de.illonis.eduras.networking;
 
 import java.util.LinkedList;
 
-import de.illonis.eduras.GameLogicInterface;
 import de.illonis.eduras.events.GameEvent;
+import de.illonis.eduras.interfaces.GameLogicInterface;
 
 /**
  * ServerLogic is used to receive messages from clients and translate them into

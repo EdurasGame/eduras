@@ -44,8 +44,6 @@ public class Logic implements GameLogicInterface {
 			objectFactory.onGameEventAppeared(event);
 		} else {
 
-			Player player = currentGame.getPlayer1();
-
 			switch (event.getType()) {
 			case MOVE_DOWN_PRESSED:
 			case MOVE_DOWN_RELEASED:
@@ -129,6 +127,7 @@ public class Logic implements GameLogicInterface {
 	 * @param listener
 	 *            Listener to register.
 	 */
+	@Override
 	public void addGameEventListener(GameEventListener listener) {
 		listenerList.add(listener);
 	}
@@ -141,6 +140,11 @@ public class Logic implements GameLogicInterface {
 	 */
 	public void removeGameEventListener(GameEventListener listener) {
 		listenerList.remove(listener);
+	}
+	
+	@Override
+	public Game getGame() {
+		return currentGame;
 	}
 
 }
