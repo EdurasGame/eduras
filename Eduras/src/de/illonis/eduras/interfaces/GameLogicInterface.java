@@ -3,6 +3,7 @@
  */
 package de.illonis.eduras.interfaces;
 
+import de.illonis.eduras.Game;
 import de.illonis.eduras.events.GameEvent;
 
 /**
@@ -15,9 +16,8 @@ public interface GameLogicInterface {
 	
 	public void onGameEventAppeared(GameEvent event);
 
-	/**
-	 * @param client
-	 */
+	public Game getGame();
+	
 	public void addGameEventListener(GameEventListener listener);
 
 }

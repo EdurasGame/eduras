@@ -4,16 +4,19 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import de.illonis.eduras.events.GameEvent.GameEventNumber;
-import de.illonis.eduras.events.MovementEvent;
-import de.illonis.eduras.exceptions.GivenParametersDoNotFitToEventException;
+import de.illonis.eduras.events.UserMovementEvent;
 import de.illonis.eduras.exceptions.MessageNotSupportedException;
-import de.illonis.eduras.networking.Client;
-import de.illonis.eduras.networking.NetworkMessageSerializer;
+import de.illonis.eduras.exceptions.WrongEventTypeException;
+import de.illonis.eduras.logicabstraction.EdurasInitializer;
+import de.illonis.eduras.logicabstraction.EventSender;
+import de.illonis.eduras.logicabstraction.InformationProvider;
+import de.illonis.eduras.logicabstraction.NetworkManager;
 
 /**
  * A client frame that connects to "localhost" and has a {@link CircleDrawPanel}
@@ -23,10 +26,14 @@ import de.illonis.eduras.networking.NetworkMessageSerializer;
  * 
  */
 public class ClientFrame extends JFrame {
-
+	
+	private final EdurasInitializer edurasInitializer;
+	
+	private final EventSender eventSender;
+	private final InformationProvider informationProvider;
+	private final NetworkManager networkManager;
+	
 	private static final long serialVersionUID = 1L;
-
-	private Client client;
 
 	private CircleDrawPanel cdp;
 
@@ -36,9 +43,14 @@ public class ClientFrame extends JFrame {
 	 * @param client
 	 *            client to assign to.
 	 */
-	public ClientFrame(Client client) {
+	public ClientFrame() {
+		
 		super("Eduras? Client");
-		this.client = client;
+		
+		edurasInitializer = EdurasInitializer.getInstance();
+		eventSender = edurasInitializer.getEventSender();
+		informationProvider = edurasInitializer.getInformationProvider();
+		networkManager = edurasInitializer.getNetworkManager();
 
 		Dimension size = new Dimension(500, 400);
 		setSize(size);
@@ -51,10 +63,11 @@ public class ClientFrame extends JFrame {
 		setLocationRelativeTo(null);
 
 		try {
-			client.connect(InetAddress.getByName("localhost"));
+			networkManager.connectToDefault(InetAddress.getByName("localhost"));
 		} catch (UnknownHostException e) {
 			e.printStackTrace();
 		}
+		this.setVisible(true);
 	}
 
 	/**
@@ -77,17 +90,18 @@ public class ClientFrame extends JFrame {
 	 */
 	public void sendMouseClick(int x, int y) {
 		try {
-			MovementEvent me = new MovementEvent(GameEventNumber.SET_POS,
-					client.getGame().getPlayer1().getId());
-			me.setNewXPos(x);
-			me.setNewYPos(y);
-			String msg = NetworkMessageSerializer.serialize(me);
-			client.sendMessage(msg);
-		} catch (GivenParametersDoNotFitToEventException e) {
-			e.printStackTrace();
+			
+			Game game = informationProvider.getGame();
+			
+			UserMovementEvent me = new UserMovementEvent(GameEventNumber.MOVE_LEFT_PRESSED,
+					game.getPlayer1().getId());
+			eventSender.sendEvent(me);
 		} catch (MessageNotSupportedException e) {
 			e.printStackTrace();
+		} catch (WrongEventTypeException e) {
+			e.printStackTrace();
 		}
+		
 	}
 
 	/**
@@ -101,5 +115,9 @@ public class ClientFrame extends JFrame {
 	public void newCircle(double d, double e) {
 		cdp.addServerCircle(d, e);
 		repaint();
+	}
+	
+	public ArrayList<GameObject> getObjects() {
+		return informationProvider.getGame().getObjects();
 	}
 }

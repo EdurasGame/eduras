@@ -20,9 +20,9 @@ public class CircleDrawPanel extends JPanel implements MouseListener {
 
 	private static final long serialVersionUID = 1L;
 
-	private ClientFrame clientFrame;
+	private final ClientFrame clientFrame;
 
-	private ArrayList<Ellipse2D.Double> circles, receivedCircles;
+	private final ArrayList<Ellipse2D.Double> circles, receivedCircles;
 
 	/**
 	 * Creates a circlepanel that notifies given clientFrame on click.
@@ -86,13 +86,13 @@ public class CircleDrawPanel extends JPanel implements MouseListener {
 		g2d.setColor(Color.RED);
 		g2d.drawString("Red circles are received from server.", 5, 40);
 		g2d.setColor(Color.BLUE);
-		for (Ellipse2D.Double e : circles) {
-			g2d.fill(e);
+		
+		
+		for (GameObject obj: clientFrame.getObjects()) {
+			Ellipse2D.Double ellipse = new Ellipse2D.Double(obj.getXPosition(), obj.getYPosition(), 10, 10);
+			g2d.fill(ellipse);
 		}
 		g2d.setColor(Color.RED);
-		for (Ellipse2D.Double e : receivedCircles) {
-			g2d.fill(e);
-		}
 		g2d.dispose();
 	}
 }
