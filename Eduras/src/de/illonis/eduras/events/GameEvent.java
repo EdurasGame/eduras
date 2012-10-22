@@ -1,6 +1,5 @@
 package de.illonis.eduras.events;
 
-import de.illonis.eduras.exceptions.GivenParametersDoNotFitToEventException;
 
 /**
  * Super class for all events. Contains an enum for every existing event.
@@ -87,7 +86,9 @@ public abstract class GameEvent {
 	 * @return The GameEvent instance
 	 * @throws GivenParametersDoNotFitToEventException
 	 */
-	public static GameEvent gameEventNumberToGameEvent(GameEventNumber num)
+	
+	
+	/*public static GameEvent gameEventNumberToGameEvent(GameEventNumber num)
 			throws GivenParametersDoNotFitToEventException {
 
 		GameEvent result = null;
@@ -108,7 +109,7 @@ public abstract class GameEvent {
 		}
 
 		return result;
-	}
+	} */
 
 	/**
 	 * Maps a number to its GameEventNumber representation. Returns NO_EVENT if
