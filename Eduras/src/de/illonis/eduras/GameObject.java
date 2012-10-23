@@ -3,6 +3,8 @@ package de.illonis.eduras;
 import java.awt.Graphics2D;
 
 import de.illonis.eduras.interfaces.Drawable;
+import de.illonis.eduras.math.Vector2D;
+import de.illonis.eduras.shapes.ObjectShape;
 
 /**
  * Meta class for all objects that can be on the game's map.
@@ -13,7 +15,9 @@ import de.illonis.eduras.interfaces.Drawable;
 public class GameObject implements Drawable {
 
 	public static int lastId = 0;
-	private Game game;
+	private final Game game;
+
+	private ObjectShape shape;
 
 	private int id;
 	private int owner = 0;
@@ -84,14 +88,14 @@ public class GameObject implements Drawable {
 	 * This is equal to calling <code>setXPosition(x)</code> and
 	 * <code>setYPosition(y)</code>.
 	 * 
-	 * @param d
+	 * @param x
 	 *            The new value of the x-position.
-	 * @param e
+	 * @param y
 	 *            The new value of the y-position.
 	 */
-	public void setPosition(double d, double e) {
-		setXPosition(d);
-		setYPosition(e);
+	public void setPosition(double x, double y) {
+		setXPosition(x);
+		setYPosition(y);
 	}
 
 	/**
@@ -184,7 +188,27 @@ public class GameObject implements Drawable {
 		return (int) Math.round(yPosition);
 	}
 
+	/**
+	 * Returns the shape of the object.
+	 * 
+	 * @return The shape of the object.
+	 */
+	public ObjectShape getShape() {
+		return shape;
+	}
+
+	/* (non-Javadoc)
+	 * @see de.illonis.eduras.interfaces.Drawable#draw(java.awt.Graphics2D)
+	 */
 	@Override
 	public void draw(Graphics2D g) {
+	}
+	
+	/**
+	 * Returns a vector that points from origin to the position of the GameObject.
+	 * @return The position vector.
+	 */
+	public Vector2D toPositionVector() {
+		return new Vector2D(xPosition, yPosition);
 	}
 }

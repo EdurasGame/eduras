@@ -4,11 +4,7 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.net.Socket;
 
-import de.illonis.eduras.ClientFrame;
-import de.illonis.eduras.Game;
-import de.illonis.eduras.Logic;
-import de.illonis.eduras.Player;
-import de.illonis.eduras.interfaces.GameEventListener;
+import de.illonis.eduras.interfaces.GameLogicInterface;
 
 /**
  * A client that connects to the game server and starts receiving and sending
@@ -17,38 +13,21 @@ import de.illonis.eduras.interfaces.GameEventListener;
  * @author Florian Mai <florian.ren.mai@googlemail.com>
  * 
  */
-public class Client implements GameEventListener {
+public class Client{
 
-	Socket socket;
-	private final Logic logic;
+	private Socket socket;
+	
+	private final GameLogicInterface logic;
 
-	ClientReceiver receiver;
-	ClientSender sender;
-	private final Game game;
-	private final ClientFrame clientFrame;
+	private ClientSender sender;
+	
 	private int userId;
 
 	/**
 	 * Creates a new Client.
 	 */
-	public Client() {
-		game = new Game();
-		Player obj = new Player(game);
-		game.setPlayer1(obj);
-		this.logic = new Logic(game);
-		logic.addGameEventListener(this);
-		clientFrame = new ClientFrame(this);
-		sender = new ClientSender(socket);
-		clientFrame.setVisible(true);
-	}
-
-	/**
-	 * Returns current game
-	 * 
-	 * @return current game
-	 */
-	public Game getGame() {
-		return game;
+	public Client(GameLogicInterface logic) {
+		this.logic = logic;
 	}
 
 	/**
@@ -74,7 +53,8 @@ public class Client implements GameEventListener {
 		try {
 			System.out.println("[CLIENT] Connecting...");
 			socket = new Socket(addr, port);
-			receiver = new ClientReceiver(logic, socket);
+			new ClientReceiver(logic, socket);
+			sender = new ClientSender(socket);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -92,17 +72,15 @@ public class Client implements GameEventListener {
 
 	}
 
-	@Override
-	public void onWorldChanged() {
-		clientFrame.newCircle(game.getPlayer1().getXPosition(), game
-				.getPlayer1().getYPosition());
-	}
-
 	public void setUserId(int userId) {
 		this.userId = userId;
 	}
 
 	public int getUserId() {
 		return userId;
+	}
+	
+	public GameLogicInterface getLogic() {
+		return logic;
 	}
 }

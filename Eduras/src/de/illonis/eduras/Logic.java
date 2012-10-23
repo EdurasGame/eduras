@@ -9,6 +9,7 @@ import de.illonis.eduras.events.MovementEvent;
 import de.illonis.eduras.events.ObjectFactoryEvent;
 import de.illonis.eduras.events.UserMovementEvent;
 import de.illonis.eduras.interfaces.GameEventListener;
+import de.illonis.eduras.interfaces.GameLogicInterface;
 
 /**
  * A first (dummy) implementation of game logic.
@@ -17,10 +18,10 @@ import de.illonis.eduras.interfaces.GameEventListener;
  * 
  */
 public class Logic implements GameLogicInterface {
-
+	
 	Game currentGame;
 	ObjectFactory objectFactory;
-	private ArrayList<GameEventListener> listenerList;
+	private final ArrayList<GameEventListener> listenerList;
 
 	public Logic(Game g) {
 
@@ -126,6 +127,7 @@ public class Logic implements GameLogicInterface {
 	 * @param listener
 	 *            Listener to register.
 	 */
+	@Override
 	public void addGameEventListener(GameEventListener listener) {
 		listenerList.add(listener);
 	}
@@ -138,6 +140,11 @@ public class Logic implements GameLogicInterface {
 	 */
 	public void removeGameEventListener(GameEventListener listener) {
 		listenerList.remove(listener);
+	}
+	
+	@Override
+	public Game getGame() {
+		return currentGame;
 	}
 
 }

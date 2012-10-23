@@ -90,7 +90,7 @@ public class NetworkMessageDeserializer {
 		}
 
 		GameEventNumber typeNumber = GameEvent.toGameEventNumber(typeInt);
-		GameEvent event = GameEvent.gameEventNumberToGameEvent(typeNumber);
+		GameEvent event = null;
 
 		switch (typeNumber) {
 		case SET_POS:

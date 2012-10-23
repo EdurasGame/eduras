@@ -1,11 +1,13 @@
 package de.illonis.eduras;
 
-import java.awt.geom.Point2D;
 import java.util.ArrayList;
+
+import de.illonis.eduras.math.Vector2D;
+import de.illonis.eduras.shapes.ObjectShape;
 
 public class Game {
 	private Player player1;
-	private ObjectFactory factory;
+	private final ObjectFactory factory;
 	private final ArrayList<GameObject> objects;
 
 	public ObjectFactory getFactory() {
@@ -33,10 +35,17 @@ public class Game {
 		this.player1 = player1;
 	}
 
-	public Point2D.Double checkCollision(GameObject gameObject,
-			Point2D.Double target) {
-		// TODO: Implement!
-		return target;
+	/**
+	 * Checks if there will be a collision of the given object trying to move to the target position.
+	 * @param gameObject The object which wants to move.
+	 * @param target The target position.
+	 * @return Returns the objects position after the move. Note that the objects new position won't be set.
+	 */
+	public Vector2D checkCollision(GameObject gameObject,
+			Vector2D target) {
+		ObjectShape shape = gameObject.getShape();
+		Vector2D result = shape.checkCollision(this, gameObject, target);
+		return result;
 	}
 
 	/**

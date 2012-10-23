@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.Socket;
 
-import de.illonis.eduras.GameLogicInterface;
+import de.illonis.eduras.interfaces.GameLogicInterface;
 
 /**
  * Receives incoming messages for the client.

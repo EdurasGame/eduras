@@ -29,7 +29,7 @@ public class Server implements GameEventListener {
 
 	private final Buffer inputBuffer, outputBuffer;
 	private final ServerSender serverSender;
-	private final ServerLogic serverLogic;
+	private final ServerDecoder serverLogic;
 	private final Game game;
 
 	public Server() {
@@ -40,7 +40,7 @@ public class Server implements GameEventListener {
 		logic.addGameEventListener(this);
 		inputBuffer = new Buffer();
 		outputBuffer = new Buffer();
-		serverLogic = new ServerLogic(inputBuffer, logic);
+		serverLogic = new ServerDecoder(inputBuffer, logic);
 		serverLogic.start();
 		serverSender = new ServerSender(this, outputBuffer);
 		serverSender.start();
