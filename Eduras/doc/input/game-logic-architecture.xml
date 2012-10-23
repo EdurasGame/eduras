@@ -12,11 +12,9 @@
 
 		<para>
 			This chapter concerns the composition of the game logic. We try
-			to document
-			any part of that in here as long as it is not self
+			to document	any part of that in here as long as it is not self
 			explanatory or easily understood reading
-			the javadoc documentation of
-			the corresponding classes.
+			the javadoc documentation of the corresponding classes.
 		</para>
 
 	</section>
@@ -26,11 +24,9 @@
 
 		<para>
 			The following figure shows most of the classes you will find in the
-			game logic. Note that some operations
-			or attributes might be left out
+			game logic. Note that some operations or attributes might be left out
 			in the figure since they are not that important or unnecessary to
-			mention,
-			e.g. getter and setter methods.
+			mention, e.g. getter and setter methods.
 			<informalfigure>
 				<graphic fileref="images/gamelogicclasses.jpg"></graphic>
 			</informalfigure>
@@ -48,8 +44,7 @@
 			GameInfo cointains a list of all the objects in the
 			game and about the
 			map. A map itself contains of a number of fields (as a
-			two-dimensional array, indicating
-			x- and y-positions).
+			two-dimensional array, indicating x- and y-positions).
 		</para>
 
 		<para>
@@ -60,7 +55,7 @@
 
 	</section>
 	<section>
-		<title>Networking</title>
+		<title>(jme) Networking</title>
 		<para>
 			Server-client communication is an important part of the game. This is not the only reason why
 			we should take a closer look at this topic.
@@ -68,11 +63,11 @@
 		<section>
 			<title>Messages</title>
 			<para>
-				Message are used as subclasses of GameMessage. When sent over network, they are serialized in
+				Subclasses of GameEvent are used to create events. When sent over network, they are serialized in
 				to a special form. Messages will be formatted like following pattern: <code>##id#arg0#arg1#arg2#arg3...</code>
 			</para>
 			<table>
-        	    <title>network messages and their arguments when serialized, ordered by message-number</title>
+        	    <title>Network messages and their arguments when serialized, ordered by message-number</title>
             	<tgroup cols="3">
                 	<thead>
                     	<row>
