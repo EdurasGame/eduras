@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 
 import de.illonis.eduras.exceptions.ShapeVerticesNotApplicableException;
+import de.illonis.eduras.math.Geometry;
 import de.illonis.eduras.math.Line;
 import de.illonis.eduras.math.Vector2D;
 
@@ -69,37 +70,29 @@ public class Triangle extends ObjectShape {
 		ArrayList<GameObject> gameObjects = game.getObjects();
 
 		Vector2D positionVector = thisObject.toPositionVector();
-		LinkedList<Line> lines = Line.getLinesBetweenShapePositions(vertices,
+		LinkedList<Line> lines = Geometry.getLinesBetweenShapePositions(vertices,
 				positionVector, target);
 
 		LinkedList<Vector2D> collisions = new LinkedList<Vector2D>();
-		
+
 		// Check for collides with objects
 		for (GameObject singleObject : gameObjects) {
-			Vector2D res = checkSingleCollision(lines, singleObject);
+			ObjectShape otherObjectShape = singleObject.getShape();
+			Vector2D res = otherObjectShape.isIntersected(lines, singleObject);
 
+			// TODO: Replace null as 'error-code' since the null vector can be a
+			// valid result.
 			if (!res.isNull()) {
 				collisions.add(res);
 			}
 		}
-		
-		// Figure out which collision is the nearest
-		if(collisions.size() > 1) {
-			result = Vector2D.findShortestDistance(collisions,positionVector);
-		}
-		
-		return result;
-	}
 
-	/**
-	 * @param thisObject
-	 * @param target
-	 * @param singleObject
-	 */
-	private Vector2D checkSingleCollision(LinkedList<Line> lines,
-			GameObject singleObject) {
-		// TODO: Implement!
-		return null;
+		// Figure out which collision is the nearest
+		if (collisions.size() > 1) {
+			result = Vector2D.findShortestDistance(collisions, positionVector);
+		}
+
+		return result;
 	}
 
 	/**
@@ -109,6 +102,22 @@ public class Triangle extends ObjectShape {
 	 */
 	public Vector2D[] getVertices() {
 		return vertices;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see de.illonis.eduras.ObjectShape#isIntersected(java.util.LinkedList,
+	 * de.illonis.eduras.GameObject)
+	 */
+	@Override
+	public Vector2D isIntersected(LinkedList<Line> lines, GameObject thisObject) {
+
+		for(int i = 0; i < vertices.length - 1; i++) {
+			
+		}
+		
+		return null;
 	}
 
 }
