@@ -4,6 +4,7 @@ import java.awt.Graphics2D;
 
 import de.illonis.eduras.interfaces.Drawable;
 import de.illonis.eduras.math.Vector2D;
+import de.illonis.eduras.shapes.ObjectShape;
 
 /**
  * Meta class for all objects that can be on the game's map.

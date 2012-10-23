@@ -1,11 +1,13 @@
 /**
  * 
  */
-package de.illonis.eduras;
+package de.illonis.eduras.shapes;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
 
+import de.illonis.eduras.Game;
+import de.illonis.eduras.GameObject;
 import de.illonis.eduras.exceptions.ShapeVerticesNotApplicableException;
 import de.illonis.eduras.math.Line;
 import de.illonis.eduras.math.Vector2D;

@@ -1,8 +1,10 @@
 /**
  * 
  */
-package de.illonis.eduras;
+package de.illonis.eduras.shapes;
 
+import de.illonis.eduras.Game;
+import de.illonis.eduras.GameObject;
 import de.illonis.eduras.math.Vector2D;
 
 /**
