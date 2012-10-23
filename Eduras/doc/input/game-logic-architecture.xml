@@ -59,5 +59,268 @@
 		</para>
 
 	</section>
-
+	<section>
+		<title>Networking</title>
+		<para>
+			Server-client communication is an important part of the game. This is not the only reason why
+			we should take a closer look at this topic.
+		</para>
+		<section>
+			<title>Messages</title>
+			<para>
+				Message are used as subclasses of GameMessage. When sent over network, they are serialized in
+				to a special form. Messages will be formatted like following pattern: <code>##id#arg0#arg1#arg2#arg3...</code>
+			</para>
+			<table>
+        	    <title>network messages and their arguments when serialized, ordered by message-number</title>
+            	<tgroup cols="3">
+                	<thead>
+                    	<row>
+                        	<entry>#</entry>
+	                        <entry>Name</entry>
+    	                    <entry>Short description</entry>
+        	                <entry>arg0</entry>
+            	            <entry>arg1</entry>
+                	        <entry>arg2</entry>
+                    	    <entry>arg3</entry>
+                        	<entry>arg4</entry>
+	                     </row>
+    	            </thead>
+        	        <tbody>
+            	        <row>
+                	        <entry>
+                    	      	10
+                        	</entry>
+	                        <entry>
+    	                        MOVE_LEFT_PRESSED
+        	                </entry>
+            	            <entry>
+                	            
+                    	    </entry>
+                        	<entry>
+	                        	owner that pressed key
+    	                    </entry>
+        	            </row>
+            	        <row>
+                	        <entry>
+                    	      	11
+                        	</entry>
+	                        <entry>
+    	                        MOVE_RIGHT_PRESSED
+        	                </entry>
+            	            <entry>
+                	            
+                    	    </entry>
+                        	<entry>
+	                        	owner that pressed key
+    	                    </entry>
+        	            </row>
+            	        <row>
+                	        <entry>
+                    	      	12
+                        	</entry>
+                        	<entry>
+	                            MOVE_UP_PRESSED
+    	                    </entry>
+        	                <entry>
+            	                
+                	        </entry>
+                    	    <entry>
+	                        	owner that pressed key
+	                        </entry>
+    	                </row>
+        	            <row>
+            	            <entry>
+                	          	13
+                    	    </entry>
+                        	<entry>
+                            	MOVE_DOWN_PRESSED
+	                        </entry>
+    	                    <entry>
+        	                    
+            	            </entry>
+                	        <entry>
+                    	    	owner that pressed key
+                        	</entry>
+	                    </row>
+    	                <row>
+        	                <entry>
+            	              	14
+                	        </entry>
+                    	    <entry>
+                        	    MOVE_LEFT_RELEASED
+	                        </entry>
+    	                    <entry>
+        	                    
+            	            </entry>
+                	        <entry>
+                    	    	owner that pressed key
+                        	</entry>
+	                    </row>
+    	                <row>
+        	                <entry>
+            	              	15
+                	        </entry>
+                    	    <entry>
+                        	    MOVE_RIGHT_RELEASED
+	                        </entry>
+    	                    <entry>
+        	                    
+            	            </entry>
+                	        <entry>
+                    	    	owner that pressed key
+                        	</entry>
+	                    </row>
+    	                <row>
+        	                <entry>
+            	              	16
+                	        </entry>
+                    	    <entry>
+                        	    MOVE_UP_RELEASED
+	                        </entry>
+    	                    <entry>
+                            
+        	                </entry>
+            	            <entry>
+                	        	owner that pressed key
+                    	    </entry>
+	                    </row>
+    	                <row>
+        	                <entry>
+	                          	17
+    	                    </entry>
+        	                <entry>
+            	                MOVE_DOWN_RELEASED
+                	        </entry>
+                    	    <entry>
+                        	    
+	                        </entry>
+    	                    <entry>
+        	                	owner that pressed key
+            	            </entry>
+                	    </row>
+                    	<row>
+	                        <entry>
+    	                      	18
+        	                </entry>
+            	            <entry>
+                	            SETSPEEDVECTOR
+                    	    </entry>
+                        	<entry>
+                            	
+	                        </entry>
+    	                    <entry>
+        	                	unit id
+            	            </entry>
+                	        <entry>
+                    	    	new x-value
+                        	</entry>
+	                        <entry>
+    	                    	new y-value
+        	                </entry>
+            	        </row>
+                	    <row>
+	                        <entry>
+    	                      	19
+        	                </entry>
+            	            <entry>
+                	            SETSPEED
+                    	    </entry>
+                        	<entry>
+                            
+	                        </entry>
+    	                    <entry>
+        	                	unit id
+            	            </entry>
+                	        <entry>
+                    	    	new value
+                        	</entry>
+	                    </row>
+	                    <row>
+	                        <entry>
+	                          	30
+	                        </entry>
+	                        <entry>
+	                            SHOOT_PRESSED
+	                        </entry>
+	                        <entry>
+	                            
+	                        </entry>
+	                        <entry>
+	                        	unit id
+		                        </entry>
+	                    </row>
+	                    <row>
+	                        <entry>
+	                          	31
+	                        </entry>
+	                        <entry>
+	                            SHOOT_RELEASED
+	                        </entry>
+    	                    <entry>
+        	                    
+            	            </entry>
+                	        <entry>
+                    	    	unit id
+                        	</entry>
+	                    </row>
+    	                <row>
+        	                <entry>
+            	              	101
+                	        </entry>
+                    	    <entry>
+                        	    SET_POS
+	                        </entry>
+    	                    <entry>
+        	                    
+            	            </entry>
+                	        <entry>
+                    	    	unit id
+                        	</entry>
+	                        <entry>
+    	                    	new x-value
+        	                </entry>
+            	            <entry>
+                	        	new y-value
+                    	    </entry>
+	                    </row>
+    	                <row>
+        	                <entry>
+            	              	120
+                	        </entry>
+                    	    <entry>
+                        	    OBJECT_CREATE
+	                        </entry>
+    	                    <entry>
+        	                    
+            	            </entry>
+                	        <entry>
+                    	    	unit id
+                        	</entry>
+	                        <entry>
+    	                    	object type
+        	                </entry>
+            	            <entry>
+                	        	owner
+                    	    </entry>
+	                    </row>
+    	                <row>
+        	                <entry>
+            	              	121
+                	        </entry>
+                    	    <entry>
+                        	    OBJECT_REMOVE
+	                        </entry>
+    	                    <entry>
+        	                    
+            	            </entry>
+                	        <entry>
+                    	    	unit id
+                        	</entry>
+	                    </row>
+	                </tbody>
+    	        </tgroup>
+        	</table>
+        </section>
+	</section>
 </article>

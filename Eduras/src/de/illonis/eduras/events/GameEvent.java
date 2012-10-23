@@ -35,7 +35,7 @@ public abstract class GameEvent {
 				16), MOVE_DOWN_RELEASED(17), SETSPEEDVECTOR(18), SETSPEED(19), SET_POS(
 				101), OBJECT_CREATE(120), OBJECT_REMOVE(121), SHOOT_PRESSED(30), SHOOT_RELEASED(
 				31), DEATH(131), SETHEALTH(132), NO_EVENT(99);
-
+		
 		private int number;
 
 		GameEventNumber(int num) {
