@@ -41,17 +41,19 @@ public class InputKeyHandler implements KeyListener {
 			pressedButtons.put(k, false);
 	}
 
+	@Deprecated
 	public InputKeyHandler(Game g) {
-		this.game = g;
-		pressedButtons = new HashMap<Integer, Boolean>();
-		handledButtons = new CopyOnWriteArraySet<Integer>();
-		handledButtons.add(KeyEvent.VK_UP);
-		handledButtons.add(KeyEvent.VK_LEFT);
-		handledButtons.add(KeyEvent.VK_DOWN);
-		handledButtons.add(KeyEvent.VK_RIGHT);
-
-		for (int k : handledButtons)
-			pressedButtons.put(k, false);
+		this(g, new Client());
+		/**
+		 * this.game = g; pressedButtons = new HashMap<Integer, Boolean>();
+		 * handledButtons = new CopyOnWriteArraySet<Integer>();
+		 * handledButtons.add(KeyEvent.VK_UP);
+		 * handledButtons.add(KeyEvent.VK_LEFT);
+		 * handledButtons.add(KeyEvent.VK_DOWN);
+		 * handledButtons.add(KeyEvent.VK_RIGHT);
+		 * 
+		 * for (int k : handledButtons) pressedButtons.put(k, false);
+		 */
 	}
 
 	@Override
@@ -67,6 +69,7 @@ public class InputKeyHandler implements KeyListener {
 	 *            event to handle.
 	 */
 	private void serializeAndSend(GameEvent event) {
+
 		String msg;
 		try {
 			msg = NetworkMessageSerializer.serialize(event);

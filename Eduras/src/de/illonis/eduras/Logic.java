@@ -43,8 +43,6 @@ public class Logic implements GameLogicInterface {
 			objectFactory.onGameEventAppeared(event);
 		} else {
 
-			Player player = currentGame.getPlayer1();
-
 			switch (event.getType()) {
 			case MOVE_DOWN_PRESSED:
 			case MOVE_DOWN_RELEASED:
