@@ -1,7 +1,5 @@
 package de.illonis.eduras.interfaces;
 
-import de.illonis.eduras.MoveableGameObject.Direction;
-
 /**
  * A moveable object.
  * 
@@ -11,12 +9,12 @@ import de.illonis.eduras.MoveableGameObject.Direction;
 public interface Moveable {
 
 	/**
-	 * indicates a movement event on watched object.
+	 * Indicates an object move.<br>
+	 * To calculate distance we need the elapsed time.
 	 * 
-	 * @param direction
-	 *            direction of movement.
-	 * @see Direction
+	 * @param delta
+	 *            elapsed time in milliseconds.
 	 */
-	void onMove(Direction direction);
+	void onMove(long delta);
 
 }

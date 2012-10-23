@@ -3,8 +3,8 @@ package de.illonis.eduras.test;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.Image;
 import java.awt.RenderingHints;
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 import de.illonis.eduras.Game;
@@ -19,7 +19,7 @@ import de.illonis.eduras.GameObject;
 public class GameRenderer {
 	private Game game;
 	private GameWorldPanel gameWorldPanel;
-	private Image dbImage = null;
+	private BufferedImage dbImage = null;
 	private Graphics2D dbg = null;
 
 	/**
@@ -46,7 +46,8 @@ public class GameRenderer {
 		// recreate image if it does not exist
 		if (dbImage == null || dbg == null
 				|| width != dbImage.getWidth(gameWorldPanel)) {
-			dbImage = gameWorldPanel.createImage(width, height);
+			dbImage = new BufferedImage(width, height,
+					BufferedImage.TYPE_INT_RGB);
 
 			dbg = (Graphics2D) dbImage.getGraphics();
 			dbg.setRenderingHint(RenderingHints.KEY_ANTIALIASING,

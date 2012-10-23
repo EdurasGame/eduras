@@ -1,12 +1,7 @@
 package de.illonis.eduras.test;
 
-import java.awt.MouseInfo;
-import java.awt.Point;
-import java.awt.PointerInfo;
-
 import de.illonis.eduras.Game;
 import de.illonis.eduras.GameObject;
-import de.illonis.eduras.MoveableGameObject.Direction;
 
 /**
  * A Gameworker represents game's main loop. It updates game, renders screen and
@@ -86,7 +81,6 @@ public class GameWorker implements Runnable {
 					noDelays = 0;
 				}
 			}
-
 			beforeTime = System.nanoTime();
 
 			// skip frames (update game without rendering it)
@@ -118,26 +112,37 @@ public class GameWorker implements Runnable {
 		renderer.render(gameWorldPanel.getWidth(), gameWorldPanel.getHeight());
 	}
 
+	private long lastUpdate;
+
 	// moves yellow ball into mouse's direction
 	private synchronized void gameUpdate() {
-		PointerInfo info = MouseInfo.getPointerInfo();
-		Point location = info.getLocation();
-		Point p = gameWorldPanel.getLocationOnScreen();
-		int x = location.x - p.x;
-		int y = location.y - p.y;
+		if (lastUpdate <= 0)
+			lastUpdate = System.nanoTime();
+		// delta in seconds
+		long delta = (System.nanoTime() - lastUpdate) / 1000000L;
+		if (delta == 0)
+			return;
+		lastUpdate = System.nanoTime();
+		/*
+		 * PointerInfo info = MouseInfo.getPointerInfo(); Point location =
+		 * info.getLocation(); Point p = gameWorldPanel.getLocationOnScreen();
+		 * int x = location.x - p.x; int y = location.y - p.y;
+		 * 
+		 * GameObject o = game.getObjects().get(0); double ox =
+		 * o.getXPosition(); double oy = o.getYPosition();
+		 * 
+		 * if (x > ox) ((YellowCircle) o).startMoving(Direction.RIGHT); else if
+		 * (x < ox) ((YellowCircle) o).startMoving(Direction.LEFT); if (y > oy)
+		 * ((YellowCircle) o).startMoving(Direction.BOTTOM); else if (y < oy)
+		 * ((YellowCircle) o).startMoving(Direction.TOP); else ((YellowCircle)
+		 * o).stopMoving();
+		 */
+		for (GameObject o : game.getObjects()) {
 
-		GameObject o = game.getObjects().get(0);
-		int ox = o.getXPosition();
-		int oy = o.getYPosition();
+			if (o instanceof YellowCircle)
+				((YellowCircle) o).onMove(delta);
+		}
 
-		if (x > ox)
-			((YellowCircle) o).onMove(Direction.RIGHT);
-		else if (x < ox)
-			((YellowCircle) o).onMove(Direction.LEFT);
-		if (y > oy)
-			((YellowCircle) o).onMove(Direction.DOWN);
-		else if (y < oy)
-			((YellowCircle) o).onMove(Direction.UP);
 	}
 
 }

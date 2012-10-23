@@ -19,6 +19,7 @@ public class GameWorldPanel extends JPanel {
 	 */
 	public GameWorldPanel() {
 		setBackground(Color.black);
+		
 	}
 
 }

@@ -1,12 +1,23 @@
 package de.illonis.eduras;
 
-public class Player extends MoveableGameObject {
+import de.illonis.eduras.interfaces.Controllable;
 
-	public Player() {
+public class Player extends MoveableGameObject implements Controllable {
 
+	public Player(Game game) {
+		super(game);
 	}
 
 	@Override
-	public void onMove(Direction direction) {
+	public void startMoving(Direction direction) {
 	}
+
+	@Override
+	public void stopMoving(Direction direction) {
+	}
+
+	@Override
+	public void stopMoving() {
+	}
+
 }

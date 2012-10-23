@@ -1,6 +1,7 @@
 package de.illonis.eduras;
 
 import de.illonis.eduras.interfaces.Moveable;
+import de.illonis.eduras.math.Vector2D;
 
 /**
  * A moveable gameobject. It differs from {@link GameObject} because it has a
@@ -18,12 +19,13 @@ public abstract class MoveableGameObject extends GameObject implements Moveable 
 	 * 
 	 */
 	public static enum Direction {
-		LEFT, RIGHT, UP, DOWN, TOPLEFT, TOPRIGHT, BOTTOMLEFT, BOTTOMRIGHT
+		LEFT, RIGHT, TOP, BOTTOM, TOPLEFT, TOPRIGHT, BOTTOMLEFT, BOTTOMRIGHT
 	}
 
 	private Direction currentDirection;
 
-	private int speed = 0;
+	private double speed = 0;
+	private Vector2D speedVector = new Vector2D();
 
 	/**
 	 * Returns true if movement direction is horizontal.
@@ -34,6 +36,16 @@ public abstract class MoveableGameObject extends GameObject implements Moveable 
 	 */
 	public final static boolean isHorizontal(Direction direction) {
 		return (direction == Direction.LEFT || direction == Direction.RIGHT);
+	}
+
+	/**
+	 * Creates a new moveable gameobject that is associated with given game.
+	 * 
+	 * @param game
+	 *            game that contains this object.
+	 */
+	public MoveableGameObject(Game game) {
+		super(game);
 	}
 
 	/**
@@ -52,7 +64,7 @@ public abstract class MoveableGameObject extends GameObject implements Moveable 
 	 * @param speed
 	 *            new speed.
 	 */
-	public void setSpeed(int speed) {
+	public void setSpeed(double speed) {
 		this.speed = speed;
 	}
 
@@ -61,12 +73,37 @@ public abstract class MoveableGameObject extends GameObject implements Moveable 
 	 * 
 	 * @return speed of gameobject.
 	 */
-	public int getSpeed() {
+	public double getSpeed() {
 		return speed;
 	}
 
+	/**
+	 * Sets speed vector to given vector.
+	 * 
+	 * @param speedVector
+	 *            new speed vector
+	 */
+	public void setSpeedVector(Vector2D speedVector) {
+		this.speedVector = speedVector;
+	}
+
+	public Vector2D getSpeedVector() {
+		return speedVector;
+	}
+
 	@Override
-	public void onMove(Direction direction) {
-		currentDirection = direction;
+	public void onMove(long delta) {
+		if (speedVector.isNull())
+			return;
+		double distance = speed * (delta / (double) 1000L);
+		Vector2D unitSpeed = speedVector.getUnitVector();
+		unitSpeed.mult(distance);
+		double targetX = unitSpeed.getX() + getXPosition();
+		double targetY = unitSpeed.getY() + getYPosition();
+
+		Vector2D targetPos = getGame().checkCollision(this,
+				new Vector2D(targetX, targetY));
+
+		setPosition(targetPos.getX(), targetPos.getY());
 	}
 }

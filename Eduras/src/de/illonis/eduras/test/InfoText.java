@@ -3,6 +3,7 @@ package de.illonis.eduras.test;
 import java.awt.Color;
 import java.awt.Graphics2D;
 
+import de.illonis.eduras.Game;
 import de.illonis.eduras.GameObject;
 import de.illonis.eduras.MoveableGameObject;
 
@@ -16,8 +17,8 @@ public class InfoText extends GameObject {
 
 	private MoveableGameObject obj;
 
-	public InfoText(MoveableGameObject yc) {
-		super();
+	public InfoText(Game game, MoveableGameObject yc) {
+		super(game);
 		this.obj = yc;
 	}
 
@@ -28,6 +29,6 @@ public class InfoText extends GameObject {
 				"Speed: "
 						+ obj.getSpeed()
 						+ " ~ Left-Click: increase speed ~ Right-Click: decrease speed",
-				getXPosition(), getYPosition());
+				getDrawX(), getDrawY());
 	}
 }

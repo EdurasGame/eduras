@@ -5,11 +5,12 @@ import java.net.ServerSocket;
 import java.net.Socket;
 
 import de.illonis.eduras.Game;
-import de.illonis.eduras.GameObject;
 import de.illonis.eduras.Logic;
+import de.illonis.eduras.Player;
 import de.illonis.eduras.events.GameEvent.GameEventNumber;
 import de.illonis.eduras.events.MovementEvent;
 import de.illonis.eduras.exceptions.GivenParametersDoNotFitToEventException;
+import de.illonis.eduras.exceptions.MessageNotSupportedException;
 import de.illonis.eduras.interfaces.GameEventListener;
 import de.illonis.eduras.locale.Localization;
 
@@ -33,7 +34,7 @@ public class Server implements GameEventListener {
 
 	public Server() {
 		game = new Game();
-		GameObject obj = new GameObject();
+		Player obj = new Player(game);
 		game.setPlayer1(obj);
 		Logic logic = new Logic(game);
 		logic.addGameEventListener(this);
@@ -132,11 +133,13 @@ public class Server implements GameEventListener {
 		try {
 			me = new MovementEvent(GameEventNumber.SET_POS, game.getPlayer1()
 					.getId());
-			me.setNewXPos(game.getPlayer1().getXPosition() + 20);
-			me.setNewYPos(game.getPlayer1().getYPosition() + 20);
+			me.setNewXPos((int) (game.getPlayer1().getXPosition() + 20));
+			me.setNewYPos((int) (game.getPlayer1().getYPosition() + 20));
 			String msg = NetworkMessageSerializer.serialize(me);
 			outputBuffer.append(msg);
 		} catch (GivenParametersDoNotFitToEventException e) {
+			e.printStackTrace();
+		} catch (MessageNotSupportedException e) {
 			e.printStackTrace();
 		}
 

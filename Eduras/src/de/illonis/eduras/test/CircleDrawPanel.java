@@ -1,4 +1,4 @@
-package de.illonis.eduras;
+package de.illonis.eduras.test;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -10,6 +10,8 @@ import java.util.ArrayList;
 
 import javax.swing.JPanel;
 
+import de.illonis.eduras.GameObject;
+
 /**
  * A panel where circles are drawn by click and send to server.
  * 
@@ -20,9 +22,9 @@ public class CircleDrawPanel extends JPanel implements MouseListener {
 
 	private static final long serialVersionUID = 1L;
 
-	private ClientFrame clientFrame;
+	private final ClientFrame clientFrame;
 
-	private ArrayList<Ellipse2D.Double> circles, receivedCircles;
+	private final ArrayList<Ellipse2D.Double> circles, receivedCircles;
 
 	/**
 	 * Creates a circlepanel that notifies given clientFrame on click.
@@ -41,13 +43,13 @@ public class CircleDrawPanel extends JPanel implements MouseListener {
 	/**
 	 * Adds a circle to server-received circle-list
 	 * 
-	 * @param x
+	 * @param d
 	 *            x-Position of circle
-	 * @param y
+	 * @param e
 	 *            y-Position of circle
 	 */
-	public void addServerCircle(int x, int y) {
-		receivedCircles.add(new Ellipse2D.Double(x - 5, y - 5, 10, 10));
+	public void addServerCircle(double d, double e) {
+		receivedCircles.add(new Ellipse2D.Double(d - 5, e - 5, 10, 10));
 	}
 
 	@Override
@@ -86,13 +88,13 @@ public class CircleDrawPanel extends JPanel implements MouseListener {
 		g2d.setColor(Color.RED);
 		g2d.drawString("Red circles are received from server.", 5, 40);
 		g2d.setColor(Color.BLUE);
-		for (Ellipse2D.Double e : circles) {
-			g2d.fill(e);
+		
+		
+		for (GameObject obj: clientFrame.getObjects()) {
+			Ellipse2D.Double ellipse = new Ellipse2D.Double(obj.getXPosition(), obj.getYPosition(), 10, 10);
+			g2d.fill(ellipse);
 		}
 		g2d.setColor(Color.RED);
-		for (Ellipse2D.Double e : receivedCircles) {
-			g2d.fill(e);
-		}
 		g2d.dispose();
 	}
 }

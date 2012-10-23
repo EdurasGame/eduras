@@ -8,6 +8,7 @@ import java.awt.event.MouseListener;
 import javax.swing.JFrame;
 
 import de.illonis.eduras.Game;
+import de.illonis.eduras.InputKeyHandler;
 
 /**
  * A Gameworld panel tester. It creates a black frame with a yellow circle that
@@ -22,13 +23,17 @@ public class GameWorldPanelTester implements MouseListener {
 
 	public GameWorldPanelTester() {
 		Game g = new Game();
-		yc = new YellowCircle();
+		yc = new YellowCircle(g);
 		yc.setXPosition(60);
 		yc.setYPosition(70);
 		g.getObjects().add(yc);
 		GameWorldPanel gwp = new GameWorldPanel();
+		InputKeyHandler ikh = new InputKeyHandler(g);
+		gwp.setFocusable(true);
+		gwp.addKeyListener(ikh);
+
 		GameWorker gameWorker = new GameWorker(g, gwp);
-		InfoText it = new InfoText(yc);
+		InfoText it = new InfoText(g, yc);
 		it.setXPosition(10);
 		it.setYPosition(30);
 		g.getObjects().add(it);
@@ -45,7 +50,6 @@ public class GameWorldPanelTester implements MouseListener {
 		Thread t = new Thread(gameWorker);
 		testFrame.setVisible(true);
 		t.start();
-
 	}
 
 	/**
@@ -53,15 +57,14 @@ public class GameWorldPanelTester implements MouseListener {
 	 */
 	public static void main(String[] args) {
 		new GameWorldPanelTester();
-
 	}
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
 		if (e.getButton() == MouseEvent.BUTTON1) {
-			yc.setSpeed(yc.getSpeed() + 1);
+			yc.setSpeed(yc.getSpeed() + 10);
 		} else
-			yc.setSpeed(yc.getSpeed() - 1);
+			yc.setSpeed(yc.getSpeed() - 10);
 	}
 
 	@Override
