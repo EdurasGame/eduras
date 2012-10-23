@@ -3,8 +3,6 @@
  */
 package de.illonis.eduras.math;
 
-import java.util.LinkedList;
-
 /**
  * Represents a two-dimensional line. See {@link http
  * ://www.java-forum.org/spiele
@@ -20,10 +18,9 @@ public class Line {
 	private final double a;
 	private final double b;
 	private final double c;
-	
+
 	private final Vector2D u;
 	private final Vector2D v;
-	
 
 	/**
 	 * Creates a line that goes through u and v.
@@ -32,10 +29,10 @@ public class Line {
 	 * @param v
 	 */
 	public Line(Vector2D u, Vector2D v) {
-		
+
 		this.u = u;
 		this.v = v;
-		
+
 		double dx = u.getX() - v.getX();
 		double dy = u.getY() - v.getY();
 
@@ -58,38 +55,8 @@ public class Line {
 	}
 
 	/**
-	 * Returns all the lines between a shape's corner points and its counterpart
-	 * of a second shape, that is a shifted copy of the first shape.
-	 * 
-	 * @param vertices
-	 *            The relative vertices of the shape.
-	 * @param source
-	 *            The middle point of the shape.
-	 * @param destination
-	 *            The middle point of the shapes copy.
-	 * @return Returns a list containing the resulting lines.
-	 */
-	public static LinkedList<Line> getLinesBetweenShapePositions(
-			Vector2D[] vertices, Vector2D source, Vector2D destination) {
-
-		LinkedList<Line> lines = new LinkedList<Line>();
-
-		for (int i = 0; i < vertices.length; i++) {
-
-			Vector2D sourcePoint = new Vector2D(source);
-			sourcePoint.add(vertices[i]);
-
-			Vector2D destPoint = new Vector2D(destination);
-			destPoint.add(vertices[i]);
-
-			lines.add(new Line(sourcePoint, destPoint));
-		}
-
-		return lines;
-	}
-
-	/**
 	 * Returns a position vector to the first point the line was deduced from.
+	 * 
 	 * @return A position vector to the first point.
 	 */
 	public Vector2D getU() {
@@ -98,12 +65,75 @@ public class Line {
 
 	/**
 	 * Returns a position vector to the first point the line was deduced from.
+	 * 
 	 * @return A position vector to the second point.
 	 */
 	public Vector2D getV() {
 		return v;
 	}
-	
-	
+
+	/**
+	 * Returns a directional vector of the line.
+	 * 
+	 * @return The directional vector.
+	 * 
+	 *         In detail, it returns the difference vector between the two
+	 *         vectors of which this line was made up. So if you call getU() on
+	 *         this line and add the directional vector to u, you will gain v.
+	 */
+	public Vector2D getDirectionalVector() {
+		Vector2D vec = new Vector2D(v);
+		vec.subtract(u);
+		return vec;
+	}
+
+	/**
+	 * Returns the support vector of this line.
+	 * 
+	 * @return You will get a copy of the vector you gain calling getU().
+	 */
+	public Vector2D getSupportVector() {
+		Vector2D vec = new Vector2D(u);
+		return vec;
+	}
+
+	/**
+	 * Checks whether the given point is inside of the shape that is given by
+	 * the lines. Note that in this context, a line is assumed to be a only a
+	 * line segment but not an infinite line. The line segment is given from the
+	 * u to v point, out of which the line was created
+	 * 
+	 * @return
+	 */
+	/*
+	 * public static boolean checkInsideLines(LinkedList<Line> lines, Vector2D
+	 * point) {
+	 * 
+	 * boolean result = false;
+	 * 
+	 * 
+	 * 
+	 * return result; }
+	 */
+
+	/**
+	 * This function returns the point you will get by multiplying the given
+	 * lambda with the directional vector 'uv' (see {@link getDirectionalVector()})
+	 * and add it to the support vector 'u'.
+	 * 
+	 * @param lambda The multiplier.
+	 * @return Returns u + uv * lambda
+	 */
+	public Vector2D getPointAt(double lambda) {
+		
+		Vector2D resultPoint = new Vector2D(getU());
+		
+		Vector2D temp = new Vector2D(getDirectionalVector());
+		temp.mult(lambda);
+		
+		resultPoint.add(temp);
+		
+		return resultPoint;
+	}
 
 }
