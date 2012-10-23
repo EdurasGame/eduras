@@ -92,7 +92,7 @@ public class GameObject implements Drawable {
 	 * @param y
 	 *            The new value of the y-position.
 	 */
-	public void setPosition(int x, int y) {
+	public void setPosition(double x, double y) {
 		setXPosition(x);
 		setYPosition(y);
 	}
