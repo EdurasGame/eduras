@@ -42,10 +42,11 @@
 	<section>
 		<title>(jme) Development tools (Java)</title>
 		<para>
-			We use <ulink url="http://www.eclipse.org">eclipse</ulink> to edit and work on our Java-source.
+			We use <ulink url="http://www.eclipse.org">Eclipse</ulink> ("Eclipse IDE for Java Developers") to edit and work on our Java-source.
 			You may use other development tools like NetBeans but we really encourage you to use eclipse as
 			it makes a lot of things easier using the same tool: There will be less line-break changes or indention
 			changes on each commit. This will result in easier merge processes.
+			<emphasis>Note:</emphasis> we are not working with Java Enterprise (Java EE).
 		</para>
 	</section>	
 	<section>
@@ -63,7 +64,7 @@
 		<title>(fma) Version Control Management System</title>
 		
 		<para>
-			For this project we will use GIT for version control. GIT is a very
+			For this project we will use <ulink url="http://git-scm.com/">Git</ulink> for version control. Git is a very
 			popular distributed version control tool, that has already got well working
 			plugins for common IDEs and so will be easy to work with.
 		</para>
@@ -96,8 +97,8 @@
 			
 			<para>
 				For example, the commit for adding the description of how to make a commit
-				may look like this: [DOCUMENTATION][COMMITS] Added a description of how commits should look
-				like.
+				may look like this: <code>[DOCUMENTATION][COMMITS] Added a description of how commits should look
+				like.</code>
 			</para>
 			<para>
 				(jme) In general, using more commits is better than using less. Feel free to commit every time you
@@ -116,17 +117,17 @@
 			<itemizedlist>
 				<listitem>
 					<para>
-						[DOCUMENTATION][ERRORHANDLING] Described behaviour on network-disconnects.
+						<code>[DOCUMENTATION][ERRORHANDLING] Described behaviour on network-disconnects.</code>
 					</para>
 				</listitem>
 				<listitem>
 					<para>
-						[NETWORKING][ERRORS] Implemented handling of disconnects.
+						<code>[NETWORKING][ERRORS] Implemented handling of disconnects.</code>
 					</para>
 				</listitem>
 				<listitem>
 					<para>
-						<emphasis>Wrong:</emphasis> [ERRORHANDLING] Implemented and documentated handling of disconnects.
+						<emphasis>Wrong:</emphasis> <code>[ERRORHANDLING] Implemented and documentated handling of disconnects.</code>
 					</para>
 				</listitem>
 			</itemizedlist>
@@ -184,8 +185,8 @@
 				mentioned in the documentation. After consultation with other developers involved in
 				the project, change parts of the documentation to fit to new ideas, but
 				please <emphasis>DO NOT SIMPLY ERASE DOCUMENTATION THAT IS OUT OF DATE!
-				</emphasis> Instead you should mark obsolete documentation by scratching
-				out the text.
+				</emphasis> Instead you should mark obsolete documentation by <emphasis role="strike">scratching
+				out</emphasis> the text. Therefore, use <code>&lt;emphasis role="strike"&gt;text&lt;/emphasis&gt;</code>.
 			</para>
 			
 			<para>

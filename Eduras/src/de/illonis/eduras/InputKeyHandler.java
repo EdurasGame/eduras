@@ -43,7 +43,7 @@ public class InputKeyHandler implements KeyListener {
 
 	@Deprecated
 	public InputKeyHandler(Game g) {
-		this(g, new Client());
+		this(g, null);
 		/**
 		 * this.game = g; pressedButtons = new HashMap<Integer, Boolean>();
 		 * handledButtons = new CopyOnWriteArraySet<Integer>();
