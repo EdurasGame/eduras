@@ -103,7 +103,7 @@
 			<para>
 				(jme) In general, using more commits is better than using less. Feel free to commit every time you
 				worked on a specific topic or made a big change. Sometimes it is not easy to stop workflow to
-				make a commit, but keeping overview is an important thing. Take a look at the examples below to get
+				make a commit, but keeping overview is an important thing. Take a look at two examples below to get
 				a better feeling about when to commit. (/jme)
 			</para>
 			<para>
@@ -136,16 +136,21 @@
 				A big section on teamplay and a list of different game weapons. Both additions belong to documentation,
 				so you may commit them at once using the following note: <code>[DOCUMENTATION][GAMEPLAY] Added sections about
 				teamplay and weapons.</code> You may also make two commits (as described in example 1). If you are undecided
-				rather commit more often than less.
+				rather commit more often than less. (/jme)
 			</para>
-			<para>
+		</section>
+		<section>
+		    <title>(jme) Pushing</title>
+		    <para>
 				Don't forget to push your commits when you think you have completed a big step or your
 				team needs your changes. Do not push after every commit. This will take too much ressources as
 				there are taken several steps on every push on serverside. These include building JavaDoc and
-				documentation ("DocBook") as well as e-mail notification to other developers. (/jme)
+				documentation ("DocBook") as well as e-mail notification to other developers.
+				Note that your progressbar in push-dialog may seem freezed at 100% while server is building JavaDoc and
+				Documentation. This is a totally normal behaviour. Please be patient!
 			</para> 
 		</section>
-	
+
 	</section>
 	
 	
