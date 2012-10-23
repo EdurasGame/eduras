@@ -3,6 +3,7 @@ package de.illonis.eduras;
 import java.util.ArrayList;
 
 import de.illonis.eduras.math.Vector2D;
+import de.illonis.eduras.shapes.ObjectShape;
 
 public class Game {
 	private Player player1;

@@ -6,34 +6,34 @@ import de.illonis.eduras.events.GameEvent;
 import de.illonis.eduras.interfaces.GameLogicInterface;
 
 /**
- * ServerLogic is used to receive messages from clients and translate them into
- * GameEvents to hand them on to logic.
+ * ServerDecoder is used to handle received messages from clients that wait in a
+ * input buffer and translate them into GameEvents to hand them on to logic.
  * 
  * @author illonis
  * 
  */
-public class ServerLogic extends Thread {
+public class ServerDecoder extends Thread {
 
 	private final Buffer inputBuffer;
 	private final GameLogicInterface logic;
 
 	/**
-	 * Creates a new ServerLogic that pulls messages from given inputbuffer and
-	 * parses them to logic.
+	 * Creates a new ServerDecoder that pulls messages from given inputbuffer
+	 * and parses them to logic.
 	 * 
 	 * @param inputBuffer
 	 *            Buffer to read messages from at specific interval.
 	 * @param logic
 	 *            Logic to push gameevents into.
 	 */
-	public ServerLogic(Buffer inputBuffer, GameLogicInterface logic) {
+	public ServerDecoder(Buffer inputBuffer, GameLogicInterface logic) {
 		this.logic = logic;
 		this.inputBuffer = inputBuffer;
 	}
 
 	@Override
 	public void run() {
-		System.out.println("[SERVERLOGIC] Started serverlogic.");
+		System.out.println("[ServerDecoder] Started serverlogic.");
 		readFromInputBuffer();
 	}
 
@@ -60,10 +60,8 @@ public class ServerLogic extends Thread {
 	 *            message to decode.
 	 */
 	private void decodeMessage(String message) {
-		LinkedList<GameEvent> deserializedMessages = NetworkMessageDeserializer
-				.deserialize(message);
-		System.out.println("[SERVERLOGIC] Decoded "
-				+ deserializedMessages.size() + " messages from: " + message);
+		LinkedList<GameEvent> deserializedMessages = NetworkMessageDeserializer.deserialize(message);
+		System.out.println("[SERVERLOGIC] Decoded " + deserializedMessages.size() + " messages from: " + message);
 		for (GameEvent event : deserializedMessages)
 			logic.onGameEventAppeared(event);
 	}
