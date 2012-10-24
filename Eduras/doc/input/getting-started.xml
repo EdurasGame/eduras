@@ -39,7 +39,6 @@
 			prefer Java to C++.
 		</para>
 	</section>
-<<<<<<< HEAD
 	<section>
 		<title>(jme) Development tools (Java)</title>
 		<para>
@@ -49,10 +48,7 @@
 			changes on each commit. This will result in easier merge processes.
 			<emphasis>Note:</emphasis> we are not working with Java Enterprise (Java EE).
 		</para>
-	</section>	
-=======
-	
->>>>>>> branch 'master' of ssh://eduras@192.168.0.2:321/home/eduras/eduras.git
+	</section>
 	<section>
 		<title>(fma) Build tool</title>
 		
@@ -98,19 +94,11 @@
 				additional information a reader might want to get should be found in the source code
 				documentation.
 			</para>
-			
-<<<<<<< HEAD
 			<para>
 				For example, the commit for adding the description of how to make a commit
 				may look like this: <code>[DOCUMENTATION][COMMITS] Added a description of how commits should look
 				like.</code>
-=======
-			<para>For example, the commit for adding the description of how to make a commit
-			may look like this: [DOCUMENTATION][COMMITS] Added a description of how commits should look
-			like.
->>>>>>> branch 'master' of ssh://eduras@192.168.0.2:321/home/eduras/eduras.git
 			</para>
-<<<<<<< HEAD
 			<para>
 				(jme) In general, using more commits is better than using less. Feel free to commit every time you
 				worked on a specific topic or made a big change. Sometimes it is not easy to stop workflow to
@@ -160,9 +148,6 @@
 				Note that your progressbar in push-dialog may seem freezed at 100% while server is building JavaDoc and
 				Documentation. This is a totally normal behaviour. Please be patient!
 			</para> 
-=======
-			
->>>>>>> branch 'master' of ssh://eduras@192.168.0.2:321/home/eduras/eduras.git
 		</section>
 
 	</section>
