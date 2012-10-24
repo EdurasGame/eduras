@@ -14,7 +14,6 @@ public class ObjectFactoryEvent extends GameEvent {
 
 	private ObjectType objectType;
 	private int id;
-	private int owner;
 
 	/**
 	 * Creates a new ObjectFactoryEvent with given parameters.
@@ -24,12 +23,9 @@ public class ObjectFactoryEvent extends GameEvent {
 	 * @param objectType
 	 *            type of object (see {@link ObjectType}). Irrelevant if event
 	 *            is {@link GameEventNumber#OBJECT_REMOVE}.
-	 * @param owner
-	 *            owner of created object
 	 */
-	public ObjectFactoryEvent(GameEventNumber eventType, ObjectType objectType, int owner) {
+	public ObjectFactoryEvent(GameEventNumber eventType, ObjectType objectType) {
 		super(eventType);
-		this.owner = owner;
 		this.objectType = objectType;
 		id = -1;
 	}

@@ -13,8 +13,8 @@
 		<para>In this chapter we want to explain how the project's
 			architecture is going to look like, not in detail, but from an
 			abstract point of view. The components you may encounter in this
-			chapter might not have been implemented yet, might be named elsewise
-			or split up into several smaller components.
+			chapter, might not have been implemented yet,might be named elsewhise
+			or might be split up into several smaller components.
 		</para>
 
 	</section>
@@ -31,8 +31,10 @@
 		</para>
 		<para>
 			The game logic is completely encapsulated from the GUI. The GUI
-			can only gain information via the so called 'Information- and event
-			provider' (IEP), which serves as a special API to the game logic,
+			can only gain information
+			via the so called 'Information- and event
+			provider' (IEP), which serves as a special API to the
+			game logic,
 			providing only the information the GUI needs. This has a few advantages:
 		</para>
 		
@@ -50,6 +52,9 @@
 					allowed to be told.
 				</para>
 				
+				<para>
+					
+				</para>
 			</listitem>
 			
 		</itemizedlist>
@@ -57,11 +62,14 @@
 		
 		<para>
 			The IEP serves a second purpose: The GUI can use it to trigger
-			events on the game logic. A triggered event is then passed to the game
+			events on the game logic. A triggered event
+			is then passed to the game
 			logic of the client and to the network, which passes it to the game
-			logic of the server. Having received the events, client game logic or
+			logic of the
+			server. Having received the events, client game logic or
 			server game logic respectivly calculate some new game data.
-			The	server's new game data are then passed to the client and overwrite
+			The
+			server's new game data are then passed to the client and overwrite
 			existing game data on the client's game logic.
 		</para>
 		
@@ -70,7 +78,7 @@
 			once on the client's game logic and once on the server's game logic.
 			This is because we must ensure that the user experiences a fluent
 			game, thus we cannot wait for information to be passed via network
-			twice. This takes too much time.
+			twice. This takes too much time. 
 		</para>
 
 	</section>
@@ -85,7 +93,7 @@
 		</para>
 		
 		<para>
-			Think of a GUI where a player can move its character by pressing the Right-Arrow-Button on
+			Think of a GUI where a player can move it's character by pressing the Right-Arrow-Button on
 			his keyboard. The following diagram shows what steps are to be taken when the Right-Arrow-Button
 			is pressed.
 		</para>

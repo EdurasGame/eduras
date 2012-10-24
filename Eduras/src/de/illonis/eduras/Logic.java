@@ -18,7 +18,7 @@ import de.illonis.eduras.interfaces.GameLogicInterface;
  * 
  */
 public class Logic implements GameLogicInterface {
-	
+
 	Game currentGame;
 	ObjectFactory objectFactory;
 	private final ArrayList<GameEventListener> listenerList;

@@ -39,6 +39,7 @@
 			prefer Java to C++.
 		</para>
 	</section>
+<<<<<<< HEAD
 	<section>
 		<title>(jme) Development tools (Java)</title>
 		<para>
@@ -49,6 +50,9 @@
 			<emphasis>Note:</emphasis> we are not working with Java Enterprise (Java EE).
 		</para>
 	</section>	
+=======
+	
+>>>>>>> branch 'master' of ssh://eduras@192.168.0.2:321/home/eduras/eduras.git
 	<section>
 		<title>(fma) Build tool</title>
 		
@@ -95,11 +99,18 @@
 				documentation.
 			</para>
 			
+<<<<<<< HEAD
 			<para>
 				For example, the commit for adding the description of how to make a commit
 				may look like this: <code>[DOCUMENTATION][COMMITS] Added a description of how commits should look
 				like.</code>
+=======
+			<para>For example, the commit for adding the description of how to make a commit
+			may look like this: [DOCUMENTATION][COMMITS] Added a description of how commits should look
+			like.
+>>>>>>> branch 'master' of ssh://eduras@192.168.0.2:321/home/eduras/eduras.git
 			</para>
+<<<<<<< HEAD
 			<para>
 				(jme) In general, using more commits is better than using less. Feel free to commit every time you
 				worked on a specific topic or made a big change. Sometimes it is not easy to stop workflow to
@@ -149,6 +160,9 @@
 				Note that your progressbar in push-dialog may seem freezed at 100% while server is building JavaDoc and
 				Documentation. This is a totally normal behaviour. Please be patient!
 			</para> 
+=======
+			
+>>>>>>> branch 'master' of ssh://eduras@192.168.0.2:321/home/eduras/eduras.git
 		</section>
 
 	</section>
@@ -196,12 +210,12 @@
 			
 			<para>
 				If you write a new section of documentation, please insert your acronym as a prefix
-				to the section's title, so people are able to ask questions easily if there are any.
+				to the section's title, so people are able to easily ask questions if there are any.
 				You should also do so if you add some sentences or do some changes. To mark the end
-				of your changes or additional sentences, insert your prefix with a slash ('/') similar to html-tags.
+				of your changes or additional sentences, insert your prefix with a slash ('/').
 			</para>
 			
-			<para><emphasis>Example:</emphasis> My penis is very large. (jme) Mine is even larger. (/jme).</para>
+			<para>Example: My penis is very large. (jme) Mine is even larger. (/jme).</para>
 			
 		</section>
 		
@@ -210,7 +224,7 @@
 			<title>Diagrams</title>
 			
 			<para>
-				Diagrams are made with <ulink url="http://www.visual-paradigm.com">Visual Paradigm (VP)</ulink>.
+				Diagrams are made with <ulink url="www.visual-paradigm.com">Visual Paradigm (VP)</ulink>.
 				This is an intuitive "get what you see"-tool for creating UML-diagrams. There are plugins
 				for Eclipse and NetBeans, so it will be comfortable for you to use VP. I think, we should
 				not have any rules or restrictions for how to make diagrams. Simply take care for keeping things simple

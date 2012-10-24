@@ -3,8 +3,11 @@
  */
 package de.illonis.eduras.shapes;
 
+import java.util.LinkedList;
+
 import de.illonis.eduras.Game;
 import de.illonis.eduras.GameObject;
+import de.illonis.eduras.math.Line;
 import de.illonis.eduras.math.Vector2D;
 
 /**
@@ -27,7 +30,17 @@ public abstract class ObjectShape {
 	 *            The target position
 	 * @return Returns the position of the object after the move.
 	 */
-	public abstract Vector2D checkCollision(Game game,
-			GameObject thisObject, Vector2D target);
+	public abstract Vector2D checkCollision(Game game, GameObject thisObject,
+			Vector2D target);
+
+	/**
+	 * Checks if the shape related to a specific object is intersected by
+	 * another moving object, which is represented by lines.
+	 * @param lines The lines representing the moving object.
+	 * @param thisObject The object to which the shape belongs.
+	 * @return Returns a position vector to the point of collision.
+	 */
+	public abstract Vector2D isIntersected(LinkedList<Line> lines,
+			GameObject thisObject);
 
 }
