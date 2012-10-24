@@ -6,8 +6,9 @@ import de.illonis.eduras.events.GameEvent;
 import de.illonis.eduras.interfaces.GameLogicInterface;
 
 /**
- * ServerDecoder is used to handle received messages from clients that wait in a
- * input buffer and translate them into GameEvents to hand them on to logic.
+ * {@link ServerDecoder} is used to handle received messages from clients that
+ * wait in a input buffer and translate them into GameEvents to hand them on to
+ * logic.
  * 
  * @author illonis
  * 
@@ -18,8 +19,8 @@ public class ServerDecoder extends Thread {
 	private final GameLogicInterface logic;
 
 	/**
-	 * Creates a new ServerDecoder that pulls messages from given inputbuffer
-	 * and parses them to logic.
+	 * Creates a new {@link ServerDecoder} that pulls messages from given
+	 * inputbuffer and parses them to logic.
 	 * 
 	 * @param inputBuffer
 	 *            Buffer to read messages from at specific interval.
@@ -60,8 +61,10 @@ public class ServerDecoder extends Thread {
 	 *            message to decode.
 	 */
 	private void decodeMessage(String message) {
-		LinkedList<GameEvent> deserializedMessages = NetworkMessageDeserializer.deserialize(message);
-		System.out.println("[SERVERLOGIC] Decoded " + deserializedMessages.size() + " messages from: " + message);
+		LinkedList<GameEvent> deserializedMessages = NetworkMessageDeserializer
+				.deserialize(message);
+		System.out.println("[ServerDecoder] Decoded "
+				+ deserializedMessages.size() + " messages from: " + message);
 		for (GameEvent event : deserializedMessages)
 			logic.onGameEventAppeared(event);
 	}
