@@ -105,5 +105,16 @@
 		</para>
 	
 	</section>
+	<section>
+	    <title>(jme) Connection establishing</title>
+	    <figure>
+            <title>Rough illustration on how a first connection between client and server could go on</title>
+            <mediaobject>
+                <imageobject>
+                    <imagedata fileref="images/first-contact.png" format="PNG" />
+                </imageobject>
+            </mediaobject>
+        </figure>
+	</section>
 
 </article>
