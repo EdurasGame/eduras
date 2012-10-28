@@ -79,3 +79,11 @@ span.strike
 {
 	text-decoration: line-through;
 }
+
+.figure, .informalfigure
+{
+ margin-left:10px;
+ border-left:3px solid gray;
+ padding-left:9px;
+ border-radius:7px;
+}
