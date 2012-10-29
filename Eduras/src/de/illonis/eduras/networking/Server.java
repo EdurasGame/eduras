@@ -5,13 +5,8 @@ import java.net.ServerSocket;
 import java.net.Socket;
 
 import de.illonis.eduras.Game;
-import de.illonis.eduras.Logic;
-import de.illonis.eduras.Player;
-import de.illonis.eduras.events.GameEvent.GameEventNumber;
-import de.illonis.eduras.events.MovementEvent;
-import de.illonis.eduras.exceptions.GivenParametersDoNotFitToEventException;
-import de.illonis.eduras.exceptions.MessageNotSupportedException;
-import de.illonis.eduras.interfaces.GameEventListener;
+import de.illonis.eduras.exceptions.ServerNotReadyForStartException;
+import de.illonis.eduras.interfaces.GameLogicInterface;
 import de.illonis.eduras.locale.Localization;
 
 /**
@@ -19,8 +14,15 @@ import de.illonis.eduras.locale.Localization;
  * 
  * @author illonis
  * 
+ *         (fma)The common workflow for the server is as follows:<br>
+ *         First you use the default constructor to create a new server. <br>
+ *         Then you set the initial game and the logic (must implement
+ *         GameLogicInterface). <br>
+ *         At last use start() to make your server listen to clients and start
+ *         working.(/fma)
+ * 
  */
-public class Server implements GameEventListener {
+public class Server {
 
 	/**
 	 * Default port where server listens for new clients.
@@ -29,20 +31,33 @@ public class Server implements GameEventListener {
 
 	private final Buffer inputBuffer, outputBuffer;
 	private final ServerSender serverSender;
-	private final ServerDecoder serverLogic;
-	private final Game game;
+	private ServerDecoder serverLogic;
+	private Game game;
 
+	/**
+	 * Creates a new server, that is not started yet.
+	 */
 	public Server() {
-		game = new Game();
-		Player obj = new Player(game);
-		game.setPlayer1(obj);
-		Logic logic = new Logic(game);
-		logic.addGameEventListener(this);
 		inputBuffer = new Buffer();
 		outputBuffer = new Buffer();
-		serverLogic = new ServerDecoder(inputBuffer, logic);
-		serverLogic.start();
 		serverSender = new ServerSender(this, outputBuffer);
+
+	}
+
+	/**
+	 * (fma)Starts the server.
+	 * 
+	 * @throws ServerNotReadyForStartException
+	 *             Thrown if the game or the serverlogic has not been set
+	 *             before.
+	 */
+	public void start() throws ServerNotReadyForStartException {
+
+		if (game == null || serverLogic == null) {
+			throw new ServerNotReadyForStartException();
+		}
+
+		serverLogic.start();
 		serverSender.start();
 
 		try {
@@ -53,6 +68,27 @@ public class Server implements GameEventListener {
 			e.printStackTrace();
 			System.exit(0);
 		}
+
+	}
+
+	/**
+	 * (fma)Set the game info.
+	 * 
+	 * @param game
+	 *            The game.
+	 */
+	public void setGame(Game game) {
+		this.game = game;
+	}
+
+	/**
+	 * (fma)Set the logic the server uses.
+	 * 
+	 * @param logic
+	 *            The logic.
+	 */
+	public void setLogic(GameLogicInterface logic) {
+		serverLogic = new ServerDecoder(inputBuffer, logic);
 	}
 
 	/**
@@ -125,24 +161,6 @@ public class Server implements GameEventListener {
 	 */
 	public void removeClient(Socket client) {
 		serverSender.remove(client);
-	}
-
-	@Override
-	public void onWorldChanged() {
-		MovementEvent me;
-		try {
-			me = new MovementEvent(GameEventNumber.SET_POS, game.getPlayer1()
-					.getId());
-			me.setNewXPos((int) (game.getPlayer1().getXPosition() + 20));
-			me.setNewYPos((int) (game.getPlayer1().getYPosition() + 20));
-			String msg = NetworkMessageSerializer.serialize(me);
-			outputBuffer.append(msg);
-		} catch (GivenParametersDoNotFitToEventException e) {
-			e.printStackTrace();
-		} catch (MessageNotSupportedException e) {
-			e.printStackTrace();
-		}
-
 	}
 
 }
