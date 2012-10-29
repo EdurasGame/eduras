@@ -63,11 +63,14 @@ public class Logic implements GameLogicInterface {
 						.getObjectId());
 				o.setYPosition(newYPos);
 				o.setXPosition(newXPos);
+				
+				for(GameEventListener gameEventListener: listenerList) {
+					gameEventListener.onNewObjectPosition(o);
+				}
 			default:
 				break;
 			}
 		}
-		fireMyEvent();
 	}
 
 	/**
@@ -110,15 +113,10 @@ public class Logic implements GameLogicInterface {
 		default:
 			break;
 		}
-	}
-
-	/**
-	 * Fires a world-change event to all listeners
-	 */
-	private void fireMyEvent() {
-
-		for (GameEventListener evl : listenerList)
-			evl.onWorldChanged();
+		
+		for(GameEventListener listener: listenerList) {
+			listener.onNewObjectPosition(player);
+		}
 	}
 
 	/**
