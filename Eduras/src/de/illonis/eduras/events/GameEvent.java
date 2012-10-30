@@ -1,6 +1,5 @@
 package de.illonis.eduras.events;
 
-
 /**
  * Super class for all events. Contains an enum for every existing event.
  * 
@@ -14,18 +13,6 @@ public abstract class GameEvent {
 	/**
 	 * Contains any event that can occur. The number behind is passed via
 	 * network.<br>
-	 * 
-	 * <b>MOVE_LEFT</b>: An id associated with a GameObject will be passed with
-	 * this event. The object behind wants to move left.<br>
-	 * <b>MOVE_UP</b>: An id associated with a GameObject will be passed with
-	 * this event. The object behind wants to move up.<br>
-	 * <b>MOVE_RIGHT</b>: An id associated with a GameObject will be passed with
-	 * this event. The object behind wants to move right.<br>
-	 * <b>MOVE_DOWN</b>: An id associated with a GameObject will be passed with
-	 * this event. The object behind wants to move down.<br>
-	 * <b>MOVE_POS</b>: An id associated with a GameObject will be passed with
-	 * this event. The object behind is moved to the x and y position that come
-	 * along with the event.
 	 * 
 	 * @author Florian Mai <florian.ren.mai@googlemail.com>
 	 */
@@ -86,30 +73,22 @@ public abstract class GameEvent {
 	 * @return The GameEvent instance
 	 * @throws GivenParametersDoNotFitToEventException
 	 */
-	
-	
-	/*public static GameEvent gameEventNumberToGameEvent(GameEventNumber num)
-			throws GivenParametersDoNotFitToEventException {
 
-		GameEvent result = null;
-
-		switch (num) {
-		case MOVE_DOWN:
-			return new MovementEvent(GameEventNumber.MOVE_DOWN, -1);
-		case MOVE_LEFT:
-			return new MovementEvent(GameEventNumber.MOVE_LEFT, -1);
-		case SET_POS:
-			return new MovementEvent(GameEventNumber.SET_POS, -1);
-		case MOVE_RIGHT:
-			return new MovementEvent(GameEventNumber.MOVE_RIGHT, -1);
-		case MOVE_UP:
-			return new MovementEvent(GameEventNumber.MOVE_UP, -1);
-		default:
-			break;
-		}
-
-		return result;
-	} */
+	/*
+	 * public static GameEvent gameEventNumberToGameEvent(GameEventNumber num)
+	 * throws GivenParametersDoNotFitToEventException {
+	 * 
+	 * GameEvent result = null;
+	 * 
+	 * switch (num) { case MOVE_DOWN: return new
+	 * MovementEvent(GameEventNumber.MOVE_DOWN, -1); case MOVE_LEFT: return new
+	 * MovementEvent(GameEventNumber.MOVE_LEFT, -1); case SET_POS: return new
+	 * MovementEvent(GameEventNumber.SET_POS, -1); case MOVE_RIGHT: return new
+	 * MovementEvent(GameEventNumber.MOVE_RIGHT, -1); case MOVE_UP: return new
+	 * MovementEvent(GameEventNumber.MOVE_UP, -1); default: break; }
+	 * 
+	 * return result; }
+	 */
 
 	/**
 	 * Maps a number to its GameEventNumber representation. Returns NO_EVENT if

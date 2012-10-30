@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE article PUBLIC "-//OASIS//DTD Simplified DocBook XML V1.0//EN"
+"http://www.oasis-open.org/docbook/xml/simple/1.0/sdocbook.dtd">
+<article>
+	<articleinfo>
+		<title>Events</title>
+	</articleinfo>
+
+	<section>
+		<title>What's this about.</title>
+
+		<para>
+			This document describes the eventing mechanisms and lists the
+			available events.
+		</para>
+
+	</section>
+
+	<section>
+		<title>Eventing mechanism</title>
+
+		<para>
+			For any network communication that passes information of what is
+			going on at game logic level, we use so called 'events'. The game
+			logic's only input
+			are events, but it also generates events to be
+			passed via network (the server sided logic) or to the gui (the client
+			sided logic). Since the server calculates the effective state of the
+			game,
+			it must be able to throw events telling the client the state of
+			the game or its
+			changes. Thus we need to distinguish between events
+			that are triggered
+			by the server and events triggered by the client.
+		</para>
+		<para>
+			Furthermore, every event has got a unique id. The id must be
+			unique
+			looking at all events and not only for the same event type. The
+			convention is
+			that server events shall have ids from 101 to 199,
+			client events from 1 to 99.
+		</para>
+		<para>
+			To send the events via network, they must be serialized in some way.
+			We decided to
+			serialize them into a string starting with a '##'. What
+			follows
+			<emphasis>always</emphasis>
+			is the id of the event. If there is additional info,
+			see the table
+			below to recognize how it is serialized. The components of the
+			additional information
+			are seperated by '#'.
+		</para>
+	</section>
+
+
+	<section>
+		<title>Events</title>
+
+		<table frame="all">
+			<title>Server- Events</title>
+			<tgroup cols="4">
+				<thead>
+					<row>
+						<entry>Event</entry>
+						<entry>Id</entry>
+						<entry>Description</entry>
+						<entry>Serialization</entry>
+					</row>
+				</thead>
+
+				<tbody>
+					<row>
+						<entry>SET_POS</entry>
+						<entry>101</entry>
+						<entry>Sets the position of an object to the given new values of
+							x- and y-position.
+						</entry>
+						<entry>#objectId#newX#newY</entry>
+					</row>
+				</tbody>
+			</tgroup>
+		</table>
+
+		<table>
+			<title>Client-Events</title>
+
+			<tgroup cols="4">
+				<thead>
+					<row>
+						<entry>Event</entry>
+						<entry>Id</entry>
+						<entry>Description</entry>
+						<entry>Serialization</entry>
+					</row>
+				</thead>
+
+
+				<tbody>
+					<row>
+						<entry>MOVE_DOWN_PRESSED</entry>
+						<entry>13</entry>
+						<entry>The user triggered to move its character downwards.</entry>
+						<entry>#ownerId</entry>
+					</row>
+					<row>
+						<entry>MOVE_UP_PRESSED</entry>
+						<entry>12</entry>
+						<entry>The user triggered to move its character upwards.</entry>
+						<entry>#ownerId</entry>
+					</row>
+					<row>
+						<entry>MOVE_LEFT_PRESSED</entry>
+						<entry>10</entry>
+						<entry>The user triggered to move its character to the left.
+						</entry>
+						<entry>#ownerId</entry>
+					</row>
+					<row>
+						<entry>MOVE_RIGHT_PRESSED</entry>
+						<entry>11</entry>
+						<entry>The user triggered to move its character to the right.
+						</entry>
+						<entry>#ownerId</entry>
+					</row>
+					<row>
+						<entry>MOVE_DOWN_RELEASED</entry>
+						<entry>18</entry>
+						<entry>The user triggered to stop moving its character downwards.
+						</entry>
+						<entry>#ownerId</entry>
+					</row>
+					<row>
+						<entry>MOVE_UP_RELEASED</entry>
+						<entry>17</entry>
+						<entry>The user triggered to stop moving its character upwards.
+						</entry>
+						<entry>#ownerId</entry>
+					</row>
+					<row>
+						<entry>MOVE_LEFT_RELEASED</entry>
+						<entry>14</entry>
+						<entry>The user triggered to stop moving its character to the
+							left.
+						</entry>
+						<entry>#ownerId</entry>
+					</row>
+					<row>
+						<entry>MOVE_RIGHT_RELEASED</entry>
+						<entry>16</entry>
+						<entry>The user triggered to stop moving its character to the
+							right.
+						</entry>
+						<entry>#ownerId</entry>
+					</row>
+				</tbody>
+
+			</tgroup>
+
+		</table>
+	</section>
+
+</article>
