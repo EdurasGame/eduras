@@ -80,6 +80,14 @@
 			game, thus we cannot wait for information to be passed via network
 			twice. This takes too much time. 
 		</para>
+		
+		<para>
+			You, as a GUI developer, may be notified if something interesting to
+			you happend. For example, if a game object got a new position, you are
+			told. You then can gain its new position by using the IEP. By this you
+			avoid unnecessary regaining of same information. You must therefore implement
+			the GameEventListener interface and then add it via the IEP.
+		</para>
 
 	</section>
 	

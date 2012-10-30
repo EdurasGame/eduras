@@ -4,6 +4,7 @@
 package de.illonis.eduras.logicabstraction;
 
 import de.illonis.eduras.Game;
+import de.illonis.eduras.interfaces.GameEventListener;
 import de.illonis.eduras.interfaces.GameLogicInterface;
 import de.illonis.eduras.interfaces.InfoInterface;
 
@@ -41,6 +42,14 @@ public class InformationProvider implements InfoInterface {
 	 */
 	public Game getGame() {
 		return logic.getGame();
+	}
+	
+	/**
+	 * Adds an eventlistener.
+	 * @param listener The listener.
+	 */
+	public void addEventListener(GameEventListener listener) {
+		logic.addGameEventListener(listener);
 	}
 
 }
