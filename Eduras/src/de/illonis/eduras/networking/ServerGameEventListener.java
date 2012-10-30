@@ -9,19 +9,26 @@ import de.illonis.eduras.events.MovementEvent;
 import de.illonis.eduras.interfaces.GameEventListener;
 
 /**
+ * This class implements {@link GameEventListener}. Basically it generates
+ * events to be send to the clients.
+ * 
  * @author Florian Mai <florian.ren.mai@googlemail.com>
- *
+ * 
  */
 public class ServerGameEventListener implements GameEventListener {
-	
+
 	private Buffer outputBuffer;
 
-	/* (non-Javadoc)
-	 * @see de.illonis.eduras.interfaces.GameEventListener#onNewObjectPosition(de.illonis.eduras.GameObject)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * de.illonis.eduras.interfaces.GameEventListener#onNewObjectPosition(de
+	 * .illonis.eduras.GameObject)
 	 */
 	@Override
 	public void onNewObjectPosition(GameObject o) {
-		
+
 		MovementEvent moveEvent;
 		String msg = null;
 		try {
@@ -30,9 +37,7 @@ public class ServerGameEventListener implements GameEventListener {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
-		
-		
+
 		outputBuffer.append(msg);
 
 	}
