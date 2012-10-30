@@ -7,7 +7,7 @@ import java.awt.event.MouseListener;
 
 import javax.swing.JFrame;
 
-import de.illonis.eduras.Game;
+import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.InputKeyHandler;
 
 /**
@@ -22,7 +22,7 @@ public class GameWorldPanelTester implements MouseListener {
 	private YellowCircle yc;
 
 	public GameWorldPanelTester() {
-		Game g = new Game();
+		GameInformation g = new GameInformation();
 		yc = new YellowCircle(g);
 		yc.setXPosition(60);
 		yc.setYPosition(70);

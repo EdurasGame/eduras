@@ -21,7 +21,7 @@ public class Client{
 
 	private ClientSender sender;
 	
-	private int userId;
+	private int ownerId;
 
 	/**
 	 * Creates a new Client.
@@ -72,12 +72,12 @@ public class Client{
 
 	}
 
-	public void setUserId(int userId) {
-		this.userId = userId;
+	public void setOwnerId(int userId) {
+		this.ownerId = userId;
 	}
 
-	public int getUserId() {
-		return userId;
+	public int getOwnerId() {
+		return ownerId;
 	}
 	
 	public GameLogicInterface getLogic() {

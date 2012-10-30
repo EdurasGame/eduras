@@ -1,6 +1,6 @@
 package de.illonis.eduras.test;
 
-import de.illonis.eduras.Game;
+import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.GameObject;
 
 /**
@@ -23,12 +23,12 @@ public class GameWorker implements Runnable {
 	private static final int MAX_FRAME_SKIPS = 20;
 
 	private boolean running = false;
-	private Game game;
+	private GameInformation game;
 	private GameWorldPanel gameWorldPanel;
 	private GameRenderer renderer;
 	private int period = 15;
 
-	public GameWorker(Game game, GameWorldPanel gameWorldPanel) {
+	public GameWorker(GameInformation game, GameWorldPanel gameWorldPanel) {
 		this.game = game;
 		this.renderer = new GameRenderer(game, gameWorldPanel);
 		this.gameWorldPanel = gameWorldPanel;
@@ -39,7 +39,7 @@ public class GameWorker implements Runnable {
 	 * 
 	 * @return assigned game.
 	 */
-	public Game getGame() {
+	public GameInformation getGame() {
 		return game;
 	}
 

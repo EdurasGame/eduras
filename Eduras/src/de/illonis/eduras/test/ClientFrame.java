@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-import de.illonis.eduras.Game;
 import de.illonis.eduras.GameObject;
 import de.illonis.eduras.events.GameEvent.GameEventNumber;
 import de.illonis.eduras.events.UserMovementEvent;
@@ -93,10 +92,8 @@ public class ClientFrame extends JFrame {
 	public void sendMouseClick(int x, int y) {
 		try {
 			
-			Game game = informationProvider.getGame();
-			
 			UserMovementEvent me = new UserMovementEvent(GameEventNumber.MOVE_LEFT_PRESSED,
-					game.getPlayer1().getId());
+					informationProvider.getPlayer().getId());
 			eventSender.sendEvent(me);
 		} catch (MessageNotSupportedException e) {
 			e.printStackTrace();
@@ -120,6 +117,6 @@ public class ClientFrame extends JFrame {
 	}
 	
 	public ArrayList<GameObject> getObjects() {
-		return informationProvider.getGame().getObjects();
+		return informationProvider.getGameObjects();
 	}
 }

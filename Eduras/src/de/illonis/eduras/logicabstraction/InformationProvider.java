@@ -3,7 +3,10 @@
  */
 package de.illonis.eduras.logicabstraction;
 
-import de.illonis.eduras.Game;
+import java.util.ArrayList;
+
+import de.illonis.eduras.GameObject;
+import de.illonis.eduras.Player;
 import de.illonis.eduras.interfaces.GameEventListener;
 import de.illonis.eduras.interfaces.GameLogicInterface;
 import de.illonis.eduras.interfaces.InfoInterface;
@@ -19,16 +22,23 @@ import de.illonis.eduras.interfaces.InfoInterface;
 public class InformationProvider implements InfoInterface {
 
 	private final GameLogicInterface logic;
-	
+	private final int ownerID;
+
 	/**
-	 * Creates a new InformationProvider that gains information with the given logic.
-	 * @param logic The logic to gain information from.
+	 * Creates a new InformationProvider that gains information with the given
+	 * logic.
+	 * 
+	 * @param logic
+	 *            The logic to gain information from.
 	 */
-	InformationProvider(GameLogicInterface logic){
+	InformationProvider(GameLogicInterface logic, int ownerID) {
 		this.logic = logic;
+		this.ownerID = ownerID;
 	}
-	
-	/* (non-Javadoc)
+
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see de.illonis.eduras.interfaces.InfoInterface#getMapBounds()
 	 */
 	@Override
@@ -37,16 +47,19 @@ public class InformationProvider implements InfoInterface {
 		return null;
 	}
 
-	/**
-	 * @return
-	 */
-	public Game getGame() {
-		return logic.getGame();
+	public Player getPlayer() {
+		return logic.getGame().getPlayerByOwnerId(ownerID);
 	}
 	
+	public ArrayList<GameObject> getGameObjects() {
+		return logic.getGame().getObjects();
+	}
+
 	/**
 	 * Adds an eventlistener.
-	 * @param listener The listener.
+	 * 
+	 * @param listener
+	 *            The listener.
 	 */
 	public void addEventListener(GameEventListener listener) {
 		logic.addGameEventListener(listener);

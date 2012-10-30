@@ -5,7 +5,7 @@ package de.illonis.eduras.shapes;
 
 import java.util.LinkedList;
 
-import de.illonis.eduras.Game;
+import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.GameObject;
 import de.illonis.eduras.math.Line;
 import de.illonis.eduras.math.Vector2D;
@@ -30,7 +30,7 @@ public abstract class ObjectShape {
 	 *            The target position
 	 * @return Returns the position of the object after the move.
 	 */
-	public abstract Vector2D checkCollision(Game game, GameObject thisObject,
+	public abstract Vector2D checkCollision(GameInformation game, GameObject thisObject,
 			Vector2D target);
 
 	/**

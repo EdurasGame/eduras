@@ -6,7 +6,7 @@ package de.illonis.eduras.shapes;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
-import de.illonis.eduras.Game;
+import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.GameObject;
 import de.illonis.eduras.exceptions.ShapeVerticesNotApplicableException;
 import de.illonis.eduras.math.Geometry;
@@ -64,7 +64,7 @@ public class Triangle extends ObjectShape {
 	 * de.illonis.eduras.GameObject, java.awt.geom.Point2D.Double)
 	 */
 	@Override
-	public Vector2D checkCollision(Game game, GameObject thisObject,
+	public Vector2D checkCollision(GameInformation game, GameObject thisObject,
 			Vector2D target) {
 
 		Vector2D result = target;

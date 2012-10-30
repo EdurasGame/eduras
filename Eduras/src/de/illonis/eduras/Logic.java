@@ -19,11 +19,11 @@ import de.illonis.eduras.interfaces.GameLogicInterface;
  */
 public class Logic implements GameLogicInterface {
 
-	Game currentGame;
+	GameInformation currentGame;
 	ObjectFactory objectFactory;
 	private final ArrayList<GameEventListener> listenerList;
 
-	public Logic(Game g) {
+	public Logic(GameInformation g) {
 
 		this.currentGame = g;
 		listenerList = new ArrayList<GameEventListener>();
@@ -83,7 +83,7 @@ public class Logic implements GameLogicInterface {
 	private void handlePlayerMove(UserMovementEvent event) {
 
 		// TODO: find player
-		Player player = null;
+		Player player = currentGame.getPlayerByOwnerId(event.getOwner());
 
 		switch (event.getType()) {
 		case MOVE_DOWN_PRESSED:
@@ -141,7 +141,7 @@ public class Logic implements GameLogicInterface {
 	}
 	
 	@Override
-	public Game getGame() {
+	public GameInformation getGame() {
 		return currentGame;
 	}
 

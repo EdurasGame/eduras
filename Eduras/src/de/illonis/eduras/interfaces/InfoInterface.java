@@ -3,6 +3,10 @@
  */
 package de.illonis.eduras.interfaces;
 
+import java.util.ArrayList;
+
+import de.illonis.eduras.GameObject;
+import de.illonis.eduras.Player;
 
 /**
  * This interface determines what information must be provided to the GUI.
@@ -20,5 +24,19 @@ public interface InfoInterface {
 	 *         y-position at array position [1].
 	 */
 	public int[] getMapBounds();
+
+	/**
+	 * Returns the player which belongs to the client.
+	 * 
+	 * @return The player.
+	 */
+	public Player getPlayer();
+
+	/**
+	 * Returns the game objects currently in the game.
+	 * 
+	 * @return The game objects as an arraylist.
+	 */
+	public ArrayList<GameObject> getGameObjects();
 
 }

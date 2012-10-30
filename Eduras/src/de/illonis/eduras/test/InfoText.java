@@ -3,7 +3,7 @@ package de.illonis.eduras.test;
 import java.awt.Color;
 import java.awt.Graphics2D;
 
-import de.illonis.eduras.Game;
+import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.GameObject;
 import de.illonis.eduras.MoveableGameObject;
 
@@ -17,7 +17,7 @@ public class InfoText extends GameObject {
 
 	private MoveableGameObject obj;
 
-	public InfoText(Game game, MoveableGameObject yc) {
+	public InfoText(GameInformation game, MoveableGameObject yc) {
 		super(game);
 		this.obj = yc;
 	}

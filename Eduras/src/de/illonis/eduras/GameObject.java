@@ -15,7 +15,7 @@ import de.illonis.eduras.shapes.ObjectShape;
 public class GameObject implements Drawable {
 
 	public static int lastId = 0;
-	private final Game game;
+	private final GameInformation game;
 
 	private ObjectShape shape;
 
@@ -31,7 +31,7 @@ public class GameObject implements Drawable {
 	 * @param game
 	 *            game that contains this object.
 	 */
-	public GameObject(Game game) {
+	public GameObject(GameInformation game) {
 		this.game = game;
 		this.id = lastId++;
 	}
@@ -60,7 +60,7 @@ public class GameObject implements Drawable {
 	 * 
 	 * @return game that this object belongs to.
 	 */
-	public Game getGame() {
+	public GameInformation getGame() {
 		return game;
 	}
 

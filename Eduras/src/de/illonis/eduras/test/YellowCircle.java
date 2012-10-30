@@ -3,7 +3,7 @@ package de.illonis.eduras.test;
 import java.awt.Color;
 import java.awt.Graphics2D;
 
-import de.illonis.eduras.Game;
+import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.MoveableGameObject;
 import de.illonis.eduras.interfaces.Controllable;
 import de.illonis.eduras.math.Vector2D;
@@ -22,7 +22,7 @@ public class YellowCircle extends MoveableGameObject implements Controllable {
 	 * 
 	 * @see #YellowCircle(int)
 	 */
-	public YellowCircle(Game game) {
+	public YellowCircle(GameInformation game) {
 		this(game, 20);
 	}
 
@@ -34,7 +34,7 @@ public class YellowCircle extends MoveableGameObject implements Controllable {
 	 * @param size
 	 *            diameter of circle.
 	 */
-	public YellowCircle(Game game, int size) {
+	public YellowCircle(GameInformation game, int size) {
 		super(game);
 		if (size <= 0)
 			size = 20;

@@ -7,7 +7,7 @@ import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
-import de.illonis.eduras.Game;
+import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.GameObject;
 
 /**
@@ -17,7 +17,7 @@ import de.illonis.eduras.GameObject;
  * 
  */
 public class GameRenderer {
-	private Game game;
+	private GameInformation game;
 	private GameWorldPanel gameWorldPanel;
 	private BufferedImage dbImage = null;
 	private Graphics2D dbg = null;
@@ -28,7 +28,7 @@ public class GameRenderer {
 	 * @param game
 	 * @param gameWorldPanel
 	 */
-	public GameRenderer(Game game, GameWorldPanel gameWorldPanel) {
+	public GameRenderer(GameInformation game, GameWorldPanel gameWorldPanel) {
 		this.game = game;
 		this.gameWorldPanel = gameWorldPanel;
 	}

@@ -20,13 +20,13 @@ import de.illonis.eduras.networking.NetworkMessageSerializer;
  */
 public class InputKeyHandler implements KeyListener {
 
-	private Game game;
+	private GameInformation game;
 	private Client client;
 
 	private HashMap<Integer, Boolean> pressedButtons;
 	private CopyOnWriteArraySet<Integer> handledButtons;
 
-	public InputKeyHandler(Game g, Client client) {
+	public InputKeyHandler(GameInformation g, Client client) {
 		this.game = g;
 		this.client = client;
 		pressedButtons = new HashMap<Integer, Boolean>();
@@ -42,7 +42,7 @@ public class InputKeyHandler implements KeyListener {
 	}
 
 	@Deprecated
-	public InputKeyHandler(Game g) {
+	public InputKeyHandler(GameInformation g) {
 		this(g, null);
 		/**
 		 * this.game = g; pressedButtons = new HashMap<Integer, Boolean>();
@@ -93,19 +93,19 @@ public class InputKeyHandler implements KeyListener {
 		switch (e.getKeyCode()) {
 		case KeyEvent.VK_W:
 			serializeAndSend(new UserMovementEvent(
-					GameEventNumber.MOVE_UP_PRESSED, client.getUserId()));
+					GameEventNumber.MOVE_UP_PRESSED, client.getOwnerId()));
 			break;
 		case KeyEvent.VK_A:
 			serializeAndSend(new UserMovementEvent(
-					GameEventNumber.MOVE_LEFT_PRESSED, client.getUserId()));
+					GameEventNumber.MOVE_LEFT_PRESSED, client.getOwnerId()));
 			break;
 		case KeyEvent.VK_S:
 			serializeAndSend(new UserMovementEvent(
-					GameEventNumber.MOVE_DOWN_PRESSED, client.getUserId()));
+					GameEventNumber.MOVE_DOWN_PRESSED, client.getOwnerId()));
 			break;
 		case KeyEvent.VK_D:
 			serializeAndSend(new UserMovementEvent(
-					GameEventNumber.MOVE_RIGHT_PRESSED, client.getUserId()));
+					GameEventNumber.MOVE_RIGHT_PRESSED, client.getOwnerId()));
 			break;
 		default:
 			break;
@@ -129,19 +129,19 @@ public class InputKeyHandler implements KeyListener {
 		switch (e.getKeyCode()) {
 		case KeyEvent.VK_W:
 			serializeAndSend(new UserMovementEvent(
-					GameEventNumber.MOVE_UP_RELEASED, client.getUserId()));
+					GameEventNumber.MOVE_UP_RELEASED, client.getOwnerId()));
 			break;
 		case KeyEvent.VK_A:
 			serializeAndSend(new UserMovementEvent(
-					GameEventNumber.MOVE_LEFT_RELEASED, client.getUserId()));
+					GameEventNumber.MOVE_LEFT_RELEASED, client.getOwnerId()));
 			break;
 		case KeyEvent.VK_S:
 			serializeAndSend(new UserMovementEvent(
-					GameEventNumber.MOVE_DOWN_RELEASED, client.getUserId()));
+					GameEventNumber.MOVE_DOWN_RELEASED, client.getOwnerId()));
 			break;
 		case KeyEvent.VK_D:
 			serializeAndSend(new UserMovementEvent(
-					GameEventNumber.MOVE_RIGHT_RELEASED, client.getUserId()));
+					GameEventNumber.MOVE_RIGHT_RELEASED, client.getOwnerId()));
 			break;
 		default:
 			break;

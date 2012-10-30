@@ -4,7 +4,7 @@ import de.illonis.eduras.interfaces.Controllable;
 
 public class Player extends MoveableGameObject implements Controllable {
 
-	public Player(Game game) {
+	public Player(GameInformation game) {
 		super(game);
 	}
 

@@ -1,22 +1,24 @@
 package de.illonis.eduras;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import de.illonis.eduras.math.Vector2D;
 import de.illonis.eduras.shapes.ObjectShape;
 
-public class Game {
-	private Player player1;
+public class GameInformation {
 	private final ObjectFactory factory;
 	private final ArrayList<GameObject> objects;
-
+	private final HashMap<Integer,Player> players;
+	
 	public ObjectFactory getFactory() {
 		return factory;
 	}
 
-	public Game() {
+	public GameInformation() {
 		factory = new ObjectFactory(this);
 		objects = new ArrayList<GameObject>();
+		players = new HashMap<Integer,Player>();
 	}
 
 	public void addObject(GameObject object) {
@@ -25,14 +27,6 @@ public class Game {
 
 	public ArrayList<GameObject> getObjects() {
 		return objects;
-	}
-
-	public Player getPlayer1() {
-		return player1;
-	}
-
-	public void setPlayer1(Player player1) {
-		this.player1 = player1;
 	}
 
 	/**
@@ -79,6 +73,14 @@ public class Game {
 	 */
 	public boolean removeObject(GameObject go) {
 		return objects.remove(go);
+	}
+	
+	public void addPlayer(Player player) {
+		players.put(player.getOwner(), player);
+	}
+	
+	public Player getPlayerByOwnerId(int ownerId) {
+		return players.get(ownerId);
 	}
 
 }

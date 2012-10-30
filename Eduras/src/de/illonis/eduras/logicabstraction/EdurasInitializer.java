@@ -3,9 +3,8 @@
  */
 package de.illonis.eduras.logicabstraction;
 
-import de.illonis.eduras.Game;
+import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.Logic;
-import de.illonis.eduras.Player;
 import de.illonis.eduras.interfaces.GameLogicInterface;
 import de.illonis.eduras.networking.Client;
 
@@ -25,9 +24,7 @@ public class EdurasInitializer {
 	
 	private EdurasInitializer() {
 		
-		Game game = new Game();
-		Player obj = new Player(game);
-		game.setPlayer1(obj);
+		GameInformation game = new GameInformation();
 		
 		GameLogicInterface logic = new Logic(game);
 		
@@ -37,7 +34,7 @@ public class EdurasInitializer {
 		
 		eventSender = new EventSender(client);
 		
-		informationProvider = new InformationProvider(logic);
+		informationProvider = new InformationProvider(logic,client.getOwnerId());
 		
 	}
 	

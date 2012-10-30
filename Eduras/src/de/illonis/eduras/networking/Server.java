@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-import de.illonis.eduras.Game;
+import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.exceptions.ServerNotReadyForStartException;
 import de.illonis.eduras.interfaces.GameLogicInterface;
 import de.illonis.eduras.locale.Localization;
@@ -32,7 +32,7 @@ public class Server {
 	private final Buffer inputBuffer, outputBuffer;
 	private final ServerSender serverSender;
 	private ServerDecoder serverLogic;
-	private Game game;
+	private GameInformation game;
 
 	/**
 	 * Creates a new server, that is not started yet.
@@ -77,7 +77,7 @@ public class Server {
 	 * @param game
 	 *            The game.
 	 */
-	public void setGame(Game game) {
+	public void setGame(GameInformation game) {
 		this.game = game;
 	}
 

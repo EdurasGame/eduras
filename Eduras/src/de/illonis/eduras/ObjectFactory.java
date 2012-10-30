@@ -14,7 +14,7 @@ import de.illonis.eduras.test.YellowCircle;
  */
 public class ObjectFactory {
 
-	private final Game game;
+	private final GameInformation game;
 
 	/**
 	 * Collection of object types that can be created by {@link ObjectFactory}.
@@ -42,7 +42,7 @@ public class ObjectFactory {
 	 * @param game
 	 *            game object factory is assigned to.
 	 */
-	public ObjectFactory(Game game) {
+	public ObjectFactory(GameInformation game) {
 		this.game = game;
 	}
 
