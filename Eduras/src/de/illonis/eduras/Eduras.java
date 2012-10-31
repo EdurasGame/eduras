@@ -1,6 +1,5 @@
 package de.illonis.eduras;
 
-import de.illonis.eduras.networking.Client;
 import de.illonis.eduras.networking.Server;
 
 public class Eduras {
@@ -20,8 +19,6 @@ public class Eduras {
 		} else {
 			// TODO: allow specifying a custom server url
 			System.out.println("Starting Eduras? client...");
-			new Client();
-
 		}
 	}
 }

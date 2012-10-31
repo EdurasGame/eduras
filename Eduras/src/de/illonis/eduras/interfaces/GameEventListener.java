@@ -1,6 +1,12 @@
 package de.illonis.eduras.interfaces;
 
-public interface GameEventListener {
+import de.illonis.eduras.GameObject;
 
-	public void onWorldChanged();
+public interface GameEventListener {
+	
+	/**
+	 * This method is called if a gameobject got a new position.
+	 * @param object The object.
+	 */
+	public void onNewObjectPosition(GameObject player);
 }
