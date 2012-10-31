@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE article PUBLIC "-//OASIS//DTD Simplified DocBook XML V1.0//EN"
+"http://www.oasis-open.org/docbook/xml/simple/1.0/sdocbook.dtd">
+<article>
+	<articleinfo>
+		<title>Game graphics</title>
+	</articleinfo>
+	<section>
+		<title>(jme) Sprites</title>
+		<para>
+			A sprite (or sprite-sheet) is an image that is tiled into many equal parts where each part contains an independend graphic.
+			Sprites are commonly used in computer games with two-dimensional graphic resources. It's often used to create animations
+			where each frame of animation is in one tile. It uses a specified background color that will be interpreted as transparency by game.
+			There is a <ulink url="http://www.youtube.com/watch?v=o7pfq0W3e4I">good video</ulink> that describes creation and usage of tiles.
+			Note that we will not use exact the same method to parse sprites, so please stick to our guideline further below.
+		</para>
+		<figure>
+            <title>A very simple sprite containing four different states of a unit</title>
+            <mediaobject>
+                <imageobject>
+                    <imagedata fileref="images/demo-sprite.png" format="PNG" />
+                </imageobject>
+            </mediaobject>
+        </figure>
+        <section>
+            <title>Sprite creation</title>
+            <para>
+                To create a sprite you can use a simple image editing tool. We provide several <ulink url="http://illonis.dyndns.org/eduras/docbook/gimppatterns.html">gimp patterns</ulink> that you can use to align your images.
+                We will take a look at some sprite-generator tools to make your life easier but we didn't found any that convinced us, yet.
+            </para>
+        </section>
+        <section>
+            <title>Using sprites</title>
+            <para>
+                To provide an easy use of sprite-sheets, you can use the <computeroutput>SpriteSheet</computeroutput> class.
+                For usage information, please consider its JavaDoc.
+                The following paragraph describes functionality of <computeroutput>SpriteSheet</computeroutput> class in detail.
+            </para>
+            <para>
+                Tiles are addressed using their internal tile-number (blue numbers). Tiles are numerated ascending from left to right
+                line by line. Consider illustration below to get a clear overview about the stucture of a sprite. Note that a final sprite
+                does not contain borders separating tiles.
+                Computing the coordinates of an image-part that represents a specific tile is quite easy if you know width and height of
+                a single tile.
+            </para>
+            <figure>
+            <title>Structure of a sprite. Blue numbers representate internal numeration, red numbers image pixels.</title>
+            <mediaobject>
+                <imageobject>
+                    <imagedata fileref="images/sprite-usage.png" format="PNG" />
+                </imageobject>
+            </mediaobject>
+        </figure>
+        </section>
+
+	</section>
+	
+</article>
