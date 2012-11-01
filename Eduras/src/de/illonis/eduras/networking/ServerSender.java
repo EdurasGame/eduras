@@ -3,7 +3,7 @@ package de.illonis.eduras.networking;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
-import java.util.ArrayList;
+import java.util.HashMap;
 
 import de.illonis.eduras.exceptions.BufferIsEmptyException;
 
@@ -20,7 +20,7 @@ public class ServerSender extends Thread {
 	 */
 	private final static int SEND_INTERVAL = 33;
 
-	private final ArrayList<PrintWriter> clients;
+	private final HashMap<Integer, PrintWriter> clients;
 	private final Buffer outputBuffer;
 	private Server server;
 
@@ -34,7 +34,7 @@ public class ServerSender extends Thread {
 	 */
 	public ServerSender(Server server, Buffer outputBuffer) {
 		this.outputBuffer = outputBuffer;
-		clients = new ArrayList<PrintWriter>();
+		clients = new HashMap<Integer, PrintWriter>();
 	}
 
 	/**
@@ -44,9 +44,20 @@ public class ServerSender extends Thread {
 	 *            Message to send.
 	 */
 	private void sendMessage(String message) {
-		for (PrintWriter pw : clients) {
+		for (PrintWriter pw : clients.values()) {
 			pw.println(message);
 		}
+	}
+
+	/**
+	 * Sends a message to a single client identified by its id.
+	 * 
+	 * @param clientId
+	 *            The id of the client.
+	 */
+	public void sendMessageToClient(int clientId, String message) {
+		PrintWriter pw = clients.get(clientId);
+		pw.println(message);
 	}
 
 	/**
@@ -55,17 +66,40 @@ public class ServerSender extends Thread {
 	 * 
 	 * @param client
 	 *            Client to add.
+	 * @return Returns the id that was assigned to the new client.
 	 */
-	public void add(Socket client) {
+	public int add(Socket client) {
+		int clientId = getFreeClientId();
 		PrintWriter pw;
 		try {
-			pw = new PrintWriter(client.getOutputStream(),true);
-			clients.add(pw);
+			pw = new PrintWriter(client.getOutputStream(), true);
+			clients.put(clientId, pw);
+			return clientId;
 		} catch (IOException e) {
 			System.out.println("[SERVER][SENDER] couldnt create printwriter.");
 			server.removeClient(client);
 			e.printStackTrace();
+			return -1;
 		}
+	}
+
+	/**
+	 * Returns a number that has not been assigned to any client currently
+	 * connected.
+	 * 
+	 * @return The free number.
+	 * 
+	 *         Returns -1 if there cannot be found a number within INT_MAX. I
+	 *         guess this will never ever happen.
+	 */
+	private int getFreeClientId() {
+		for (int i = 0; i > 0; i++) {
+			if (!clients.containsKey(i)) {
+				return i;
+			}
+		}
+
+		return -1;
 	}
 
 	/**

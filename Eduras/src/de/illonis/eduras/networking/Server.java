@@ -5,6 +5,8 @@ import java.net.ServerSocket;
 import java.net.Socket;
 
 import de.illonis.eduras.GameInformation;
+import de.illonis.eduras.events.ConnectionEstablishedEvent;
+import de.illonis.eduras.exceptions.MessageNotSupportedException;
 import de.illonis.eduras.exceptions.ServerNotReadyForStartException;
 import de.illonis.eduras.interfaces.GameLogicInterface;
 import de.illonis.eduras.locale.Localization;
@@ -112,10 +114,19 @@ public class Server {
 	 * @throws IOException
 	 */
 	private void handleConnection(Socket client) throws IOException {
-		serverSender.add(client);
+		int clientId = serverSender.add(client);
 
 		ServerReceiver sr = new ServerReceiver(this, inputBuffer, client);
 		sr.start();
+		
+		ConnectionEstablishedEvent connectionEstablished = new ConnectionEstablishedEvent(clientId);
+		try {
+			serverSender.sendMessageToClient(clientId, NetworkMessageSerializer.serialize(connectionEstablished));
+		} catch (MessageNotSupportedException e) {
+			System.out.println(e.getEventMessage());
+			System.out.println("For type: " + e.getGameEventNumber().toString());
+			e.printStackTrace();
+		}
 	}
 
 	/**
