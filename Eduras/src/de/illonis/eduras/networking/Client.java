@@ -5,6 +5,7 @@ import java.net.InetAddress;
 import java.net.Socket;
 
 import de.illonis.eduras.interfaces.GameLogicInterface;
+import de.illonis.eduras.interfaces.NetworkEventListener;
 
 /**
  * A client that connects to the game server and starts receiving and sending
@@ -13,14 +14,16 @@ import de.illonis.eduras.interfaces.GameLogicInterface;
  * @author Florian Mai <florian.ren.mai@googlemail.com>
  * 
  */
-public class Client{
+public class Client {
 
 	private Socket socket;
-	
+
 	private final GameLogicInterface logic;
 
+	private NetworkEventListener networkEventListener;
+
 	private ClientSender sender;
-	
+
 	private int ownerId;
 
 	/**
@@ -53,7 +56,7 @@ public class Client{
 		try {
 			System.out.println("[CLIENT] Connecting...");
 			socket = new Socket(addr, port);
-			new ClientReceiver(logic, socket);
+			new ClientReceiver(logic, socket).setNetworkEventListener(networkEventListener);
 			sender = new ClientSender(socket);
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -79,8 +82,12 @@ public class Client{
 	public int getOwnerId() {
 		return ownerId;
 	}
-	
+
 	public GameLogicInterface getLogic() {
 		return logic;
+	}
+
+	public void setNetworkEventListener(NetworkEventListener listener) {
+		this.networkEventListener = listener;
 	}
 }

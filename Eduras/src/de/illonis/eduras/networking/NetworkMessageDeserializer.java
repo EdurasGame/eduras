@@ -2,9 +2,13 @@ package de.illonis.eduras.networking;
 
 import java.util.LinkedList;
 
+import de.illonis.eduras.events.ConnectionEstablishedEvent;
+import de.illonis.eduras.events.Event;
 import de.illonis.eduras.events.GameEvent;
 import de.illonis.eduras.events.GameEvent.GameEventNumber;
 import de.illonis.eduras.events.MovementEvent;
+import de.illonis.eduras.events.NetworkEvent;
+import de.illonis.eduras.events.NetworkEvent.NetworkEventNumber;
 import de.illonis.eduras.events.UserMovementEvent;
 import de.illonis.eduras.exceptions.GivenParametersDoNotFitToEventException;
 import de.illonis.eduras.exceptions.InvalidMessageFormatException;
@@ -29,15 +33,15 @@ public class NetworkMessageDeserializer {
 	 *         proceeds deserializing from the next hashtag and omits all
 	 *         characters up to the hash.
 	 */
-	public static LinkedList<GameEvent> deserialize(String eventString) {
-		LinkedList<GameEvent> gameEvents = new LinkedList<GameEvent>();
+	public static LinkedList<Event> deserialize(String eventString) {
+		LinkedList<Event> events = new LinkedList<Event>();
 		System.out.println("[DESERIALIZE] orig: " + eventString);
 		String[] messages = eventString.substring(2).split("##");
 
 		for (String msg : messages) {
 			try {
-				GameEvent ge = deserializeMessage(msg);
-				gameEvents.add(ge);
+				Event ge = deserializeMessage(msg);
+				events.add(ge);
 			} catch (InvalidMessageFormatException e) {
 				e.printStackTrace();
 			} catch (GivenParametersDoNotFitToEventException e) {
@@ -47,17 +51,17 @@ public class NetworkMessageDeserializer {
 			}
 		}
 
-		return gameEvents;
+		return events;
 	}
 
 	/**
-	 * (jme) Deserializes given single message and returns a {@link GameEvent}
+	 * (jme) Deserializes given single message and returns a {@link Event}
 	 * representing it.<br>
 	 * See {@link #deserialize(String)}.
 	 * 
 	 * @param msg
 	 *            Message to deserialized.
-	 * @return A GameEvent describing serialized message.
+	 * @return An Event describing serialized message.
 	 * @throws InvalidMessageFormatException
 	 *             Thrown if message has an invalid format. Especially when it
 	 *             has no or too less arguments.
@@ -67,7 +71,7 @@ public class NetworkMessageDeserializer {
 	 *             Thrown if retrieved message is not supported.
 	 * 
 	 */
-	private static GameEvent deserializeMessage(String msg)
+	private static Event deserializeMessage(String msg)
 			throws InvalidMessageFormatException,
 			GivenParametersDoNotFitToEventException,
 			MessageNotSupportedException {
@@ -89,24 +93,109 @@ public class NetworkMessageDeserializer {
 					msg);
 		}
 
+		Event result = null;
+
+		// is it a game event or a network event?
+		if (isGameEvent(typeInt)) {
+			result = handleGameEvent(msg, args, typeInt);
+		} else {
+			result = handleNetworkEvent(msg, args, typeInt);
+		}
+		return result;
+	}
+
+	/**
+	 * Deserializes a NetworkEvent message.
+	 * 
+	 * @param msg
+	 *            The full message.
+	 * @param args
+	 *            The arguments of the message.
+	 * @param typeInt
+	 *            The number representing the type of the message.
+	 * @return Returns the deserialized event.
+	 */
+	private static Event handleNetworkEvent(String msg, String[] args,
+			int typeInt) {
+
+		NetworkEventNumber typeNumber = NetworkEvent
+				.toNetworkEventNumber(typeInt);
+		NetworkEvent networkEvent = null;
+
+		switch (typeNumber) {
+		case CONNECTION_ABORTED:
+			break;
+		case CONNECTION_ESTABLISHED:
+			int clientId = Integer.parseInt(args[0]);
+			networkEvent = new ConnectionEstablishedEvent(clientId);
+			break;
+		case NO_EVENT:
+			break;
+		default:
+			// TODO: Maybe we should generalize NetworkEventNumber and
+			// GameEventNumber by a super-enum to be able to throw an exception
+			// here easily.
+			break;
+
+		}
+		return networkEvent;
+	}
+
+	/**
+	 * Returns if the given number represents a GameEvent or not.
+	 * 
+	 * @param typeInt
+	 *            The number to check.
+	 * @return Returns true if the number represents a GameEvent and false
+	 *         otherwise.
+	 */
+	private static boolean isGameEvent(int typeInt) {
+
+		return typeInt < 200;
+	}
+
+	/**
+	 * Deserializes a GameEvent
+	 * 
+	 * @param msg
+	 *            The full message.
+	 * @param args
+	 *            The arguments of the message.
+	 * @return Returns the deserialized event.
+	 * @throws GivenParametersDoNotFitToEventException
+	 *             Thrown if generation of gameevent failed.
+	 * @throws InvalidMessageFormatException
+	 *             Thrown if message has an invalid format. Especially when it
+	 *             has no or too less arguments.
+	 * @throws MessageNotSupportedException
+	 *             Thrown if the given message is not yet supported by
+	 *             deserialization.
+	 */
+	private static Event handleGameEvent(String msg, String[] args, int typeInt)
+			throws InvalidMessageFormatException,
+			GivenParametersDoNotFitToEventException,
+			MessageNotSupportedException {
 		GameEventNumber typeNumber = GameEvent.toGameEventNumber(typeInt);
-		GameEvent event = null;
+		GameEvent gameEvent = null;
 
 		switch (typeNumber) {
 		case SET_POS:
-			event = handleMovementPositionEvent(msg, args, typeNumber);
+			gameEvent = handleMovementPositionEvent(msg, args, typeNumber);
 			break;
 		case MOVE_DOWN_PRESSED:
 		case MOVE_RIGHT_PRESSED:
 		case MOVE_LEFT_PRESSED:
 		case MOVE_UP_PRESSED:
-			event = handleStartMovementEvent(msg, args, typeNumber);
+			gameEvent = handleStartMovementEvent(msg, args, typeNumber);
 			break;
+		case OBJECT_CREATE:
+		case OBJECT_REMOVE:
+
 		default:
 			throw new MessageNotSupportedException(typeNumber, msg);
 		}
 
-		return event;
+		return gameEvent;
 	}
 
 	private static GameEvent handleStartMovementEvent(String msg,

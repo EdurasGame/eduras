@@ -6,6 +6,7 @@ import java.io.InputStreamReader;
 import java.net.Socket;
 
 import de.illonis.eduras.interfaces.GameLogicInterface;
+import de.illonis.eduras.interfaces.NetworkEventListener;
 
 /**
  * Receives incoming messages for the client.
@@ -18,6 +19,8 @@ public class ClientReceiver extends Thread {
 	private BufferedReader messageReader = null;
 
 	private final GameLogicInterface logic;
+	
+	private NetworkEventListener networkEventListener;
 
 	private final boolean connectionAvailable = true;
 
@@ -66,8 +69,12 @@ public class ClientReceiver extends Thread {
 	 */
 	private void processMessages(String messages) {
 
-		ClientLogic clientLogic = new ClientLogic(this.logic, messages);
+		ClientLogic clientLogic = new ClientLogic(this.logic, messages, networkEventListener);
 		clientLogic.start();
 
+	}
+	
+	public void setNetworkEventListener(NetworkEventListener listener) {
+		this.networkEventListener = listener;
 	}
 }

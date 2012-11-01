@@ -12,6 +12,7 @@ import de.illonis.eduras.events.ObjectFactoryEvent;
 import de.illonis.eduras.exceptions.MessageNotSupportedException;
 import de.illonis.eduras.exceptions.ServerNotReadyForStartException;
 import de.illonis.eduras.interfaces.GameLogicInterface;
+import de.illonis.eduras.interfaces.NetworkEventListener;
 import de.illonis.eduras.locale.Localization;
 
 /**
@@ -88,14 +89,17 @@ public class Server {
 	}
 
 	/**
-	 * (fma)Set the logic the server uses.
+	 * (fma)Set the logic and networkEventListener the server uses.
 	 * 
 	 * @param logic
 	 *            The logic.
+	 * @param listener
+	 *            The listener
 	 */
-	public void setLogic(GameLogicInterface logic) {
+	public void setLogic(GameLogicInterface logic,
+			NetworkEventListener eventListener) {
 		this.logic = logic;
-		serverLogic = new ServerDecoder(inputBuffer, logic);
+		serverLogic = new ServerDecoder(inputBuffer, logic, eventListener);
 	}
 
 	/**
@@ -120,21 +124,24 @@ public class Server {
 	 */
 	private void handleConnection(Socket client) throws IOException {
 		int clientId = serverSender.add(client);
-		
-		
-		ObjectFactoryEvent newPlayerEvent = new ObjectFactoryEvent(GameEventNumber.OBJECT_CREATE,ObjectType.PLAYER);
+
+		ObjectFactoryEvent newPlayerEvent = new ObjectFactoryEvent(
+				GameEventNumber.OBJECT_CREATE, ObjectType.PLAYER);
 		newPlayerEvent.setId(clientId);
 		logic.onGameEventAppeared(newPlayerEvent);
 
 		ServerReceiver sr = new ServerReceiver(this, inputBuffer, client);
 		sr.start();
-		
-		ConnectionEstablishedEvent connectionEstablished = new ConnectionEstablishedEvent(clientId);
+
+		ConnectionEstablishedEvent connectionEstablished = new ConnectionEstablishedEvent(
+				clientId);
 		try {
-			serverSender.sendMessageToClient(clientId, NetworkMessageSerializer.serialize(connectionEstablished));
+			serverSender.sendMessageToClient(clientId,
+					NetworkMessageSerializer.serialize(connectionEstablished));
 		} catch (MessageNotSupportedException e) {
 			System.out.println(e.getEventMessage());
-			System.out.println("For type: " + e.getGameEventNumber().toString());
+			System.out
+					.println("For type: " + e.getGameEventNumber().toString());
 			e.printStackTrace();
 		}
 	}

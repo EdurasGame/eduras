@@ -3,6 +3,7 @@
  */
 package de.illonis.eduras.events;
 
+
 /**
  * This serves as a super class for all events occuring on the network.
  * 
@@ -55,6 +56,21 @@ public abstract class NetworkEvent extends Event {
 	 */
 	public NetworkEventNumber getType() {
 		return this.type;
+	}
+	
+	/**
+	 * Maps a number to its NetworkEventNumber representation. Returns NO_EVENT if
+	 * the number cannot be mapped to a NetworkEventNumber.<br>
+	 * 
+	 * @param typeInt
+	 *            The number to be mapped to a NetworkEventNumber.
+	 * @return The NetworkEventNumber.
+	 */
+	public static NetworkEventNumber toNetworkEventNumber(int typeInt) {
+		for (NetworkEventNumber evn : NetworkEventNumber.values())
+			if (evn.getNumber() == typeInt)
+				return evn;
+		return NetworkEventNumber.NO_EVENT;
 	}
 
 }

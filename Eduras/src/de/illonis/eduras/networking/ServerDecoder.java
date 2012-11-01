@@ -2,8 +2,11 @@ package de.illonis.eduras.networking;
 
 import java.util.LinkedList;
 
+import de.illonis.eduras.events.Event;
 import de.illonis.eduras.events.GameEvent;
+import de.illonis.eduras.events.NetworkEvent;
 import de.illonis.eduras.interfaces.GameLogicInterface;
+import de.illonis.eduras.interfaces.NetworkEventListener;
 
 /**
  * {@link ServerDecoder} is used to handle received messages from clients that
@@ -17,19 +20,24 @@ public class ServerDecoder extends Thread {
 
 	private final Buffer inputBuffer;
 	private final GameLogicInterface logic;
+	private final NetworkEventListener networkEventListener;
 
 	/**
 	 * Creates a new {@link ServerDecoder} that pulls messages from given
-	 * inputbuffer and parses them to logic.
+	 * inputbuffer and parses them to logic or networkEventListener respectivly.
 	 * 
 	 * @param inputBuffer
 	 *            Buffer to read messages from at specific interval.
 	 * @param logic
 	 *            Logic to push gameevents into.
+	 * @param networkEventListener
+	 *            The listener to forward networkEvents to.
 	 */
-	public ServerDecoder(Buffer inputBuffer, GameLogicInterface logic) {
+	public ServerDecoder(Buffer inputBuffer, GameLogicInterface logic,
+			NetworkEventListener networkEventListener) {
 		this.logic = logic;
 		this.inputBuffer = inputBuffer;
+		this.networkEventListener = networkEventListener;
 	}
 
 	@Override
@@ -61,11 +69,16 @@ public class ServerDecoder extends Thread {
 	 *            message to decode.
 	 */
 	private void decodeMessage(String message) {
-		LinkedList<GameEvent> deserializedMessages = NetworkMessageDeserializer
+		LinkedList<Event> deserializedMessages = NetworkMessageDeserializer
 				.deserialize(message);
 		System.out.println("[ServerDecoder] Decoded "
 				+ deserializedMessages.size() + " messages from: " + message);
-		for (GameEvent event : deserializedMessages)
-			logic.onGameEventAppeared(event);
+		for (Event event : deserializedMessages)
+			if (event instanceof GameEvent) {
+				logic.onGameEventAppeared((GameEvent) event);
+			} else {
+				networkEventListener
+						.onNetworkEventAppeared((NetworkEvent) event);
+			}
 	}
 }
