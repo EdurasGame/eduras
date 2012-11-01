@@ -57,7 +57,7 @@ public class ObjectFactory {
 		if (ofe.getType() == GameEventNumber.OBJECT_CREATE) {
 			switch (ofe.getObjectType()) {
 			case PLAYER:
-				go = new Player(game);
+				go = new Player(game,ofe.getId());
 				break;
 			case YELLOWCIRCLE:
 				go = new YellowCircle(game);

@@ -67,7 +67,7 @@ public class Logic implements GameLogicInterface {
 				for (GameEventListener gameEventListener : listenerList) {
 					gameEventListener.onNewObjectPosition(o);
 				}
-			default:
+				default:
 				break;
 			}
 		}

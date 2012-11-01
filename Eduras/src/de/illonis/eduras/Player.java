@@ -11,13 +11,17 @@ import de.illonis.eduras.interfaces.Controllable;
 public class Player extends MoveableGameObject implements Controllable {
 
 	/**
-	 * Create a new player that belongs to the given game.
+	 * Create a new player that belongs to the given game and has the given
+	 * owner.
 	 * 
 	 * @param game
 	 *            The game the player belongs to.
+	 * @param ownerId
+	 *            The id of the owner.
 	 */
-	public Player(GameInformation game) {
+	public Player(GameInformation game, int ownerId) {
 		super(game);
+		setOwner(ownerId);
 	}
 
 	@Override

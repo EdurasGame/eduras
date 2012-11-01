@@ -5,7 +5,10 @@ import java.net.ServerSocket;
 import java.net.Socket;
 
 import de.illonis.eduras.GameInformation;
+import de.illonis.eduras.ObjectFactory.ObjectType;
 import de.illonis.eduras.events.ConnectionEstablishedEvent;
+import de.illonis.eduras.events.GameEvent.GameEventNumber;
+import de.illonis.eduras.events.ObjectFactoryEvent;
 import de.illonis.eduras.exceptions.MessageNotSupportedException;
 import de.illonis.eduras.exceptions.ServerNotReadyForStartException;
 import de.illonis.eduras.interfaces.GameLogicInterface;
@@ -35,6 +38,7 @@ public class Server {
 	private final ServerSender serverSender;
 	private ServerDecoder serverLogic;
 	private GameInformation game;
+	private GameLogicInterface logic;
 
 	/**
 	 * Creates a new server, that is not started yet.
@@ -90,6 +94,7 @@ public class Server {
 	 *            The logic.
 	 */
 	public void setLogic(GameLogicInterface logic) {
+		this.logic = logic;
 		serverLogic = new ServerDecoder(inputBuffer, logic);
 	}
 
@@ -115,6 +120,11 @@ public class Server {
 	 */
 	private void handleConnection(Socket client) throws IOException {
 		int clientId = serverSender.add(client);
+		
+		
+		ObjectFactoryEvent newPlayerEvent = new ObjectFactoryEvent(GameEventNumber.OBJECT_CREATE,ObjectType.PLAYER);
+		newPlayerEvent.setId(clientId);
+		logic.onGameEventAppeared(newPlayerEvent);
 
 		ServerReceiver sr = new ServerReceiver(this, inputBuffer, client);
 		sr.start();
