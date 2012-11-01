@@ -63,8 +63,8 @@ public class Logic implements GameLogicInterface {
 						.getObjectId());
 				o.setYPosition(newYPos);
 				o.setXPosition(newXPos);
-				
-				for(GameEventListener gameEventListener: listenerList) {
+
+				for (GameEventListener gameEventListener : listenerList) {
 					gameEventListener.onNewObjectPosition(o);
 				}
 			default:
@@ -113,8 +113,8 @@ public class Logic implements GameLogicInterface {
 		default:
 			break;
 		}
-		
-		for(GameEventListener listener: listenerList) {
+
+		for (GameEventListener listener : listenerList) {
 			listener.onNewObjectPosition(player);
 		}
 	}
@@ -139,7 +139,7 @@ public class Logic implements GameLogicInterface {
 	public void removeGameEventListener(GameEventListener listener) {
 		listenerList.remove(listener);
 	}
-	
+
 	@Override
 	public GameInformation getGame() {
 		return currentGame;
