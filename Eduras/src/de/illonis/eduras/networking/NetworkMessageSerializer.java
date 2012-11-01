@@ -3,6 +3,7 @@ package de.illonis.eduras.networking;
 import de.illonis.eduras.events.ConnectionEstablishedEvent;
 import de.illonis.eduras.events.Event;
 import de.illonis.eduras.events.GameEvent;
+import de.illonis.eduras.events.GameInfoRequest;
 import de.illonis.eduras.events.MovementEvent;
 import de.illonis.eduras.events.NetworkEvent;
 import de.illonis.eduras.events.UserMovementEvent;
@@ -116,6 +117,9 @@ public class NetworkMessageSerializer {
 		case SHOOT_PRESSED:
 			break;
 		case SHOOT_RELEASED:
+			break;
+		case INFORMATION_REQUEST:
+			serializedEvent += ((GameInfoRequest) gameEvent).getRequester();
 			break;
 		default:
 			break;

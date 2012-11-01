@@ -6,6 +6,7 @@ import de.illonis.eduras.events.ConnectionEstablishedEvent;
 import de.illonis.eduras.events.Event;
 import de.illonis.eduras.events.GameEvent;
 import de.illonis.eduras.events.GameEvent.GameEventNumber;
+import de.illonis.eduras.events.GameInfoRequest;
 import de.illonis.eduras.events.MovementEvent;
 import de.illonis.eduras.events.NetworkEvent;
 import de.illonis.eduras.events.NetworkEvent.NetworkEventNumber;
@@ -188,9 +189,12 @@ public class NetworkMessageDeserializer {
 		case MOVE_UP_PRESSED:
 			gameEvent = handleStartMovementEvent(msg, args, typeNumber);
 			break;
+		case INFORMATION_REQUEST:
+			gameEvent = new GameInfoRequest(Integer.parseInt(args[0]));
+			break;
 		case OBJECT_CREATE:
 		case OBJECT_REMOVE:
-
+			
 		default:
 			throw new MessageNotSupportedException(typeNumber, msg);
 		}
