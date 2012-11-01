@@ -6,7 +6,7 @@ package de.illonis.eduras.events;
  * @author Florian Mai <florian.ren.mai@googlemail.com>
  * 
  */
-public abstract class GameEvent {
+public abstract class GameEvent extends Event {
 
 	private GameEventNumber type;
 
