@@ -2,6 +2,7 @@ package de.illonis.eduras.networking;
 
 import java.io.IOException;
 import java.net.InetAddress;
+import java.net.InetSocketAddress;
 import java.net.Socket;
 
 import de.illonis.eduras.interfaces.GameLogicInterface;
@@ -45,7 +46,10 @@ public class Client {
 	 */
 	public void connect(InetAddress addr, int port) throws IOException {
 		System.out.println("[CLIENT] Connecting...");
-		socket = new Socket(addr, port);
+		socket = new Socket();
+		InetSocketAddress iaddr = new InetSocketAddress(addr, port);
+		socket.connect(iaddr, 10000);
+	
 		new ClientReceiver(logic, socket, this).setNetworkEventListener(networkEventListener);
 		sender = new ClientSender(socket);
 	}
@@ -73,6 +77,7 @@ public class Client {
 
 	/**
 	 * Returns current owner id.
+	 * 
 	 * @return current owner id.
 	 */
 	public int getOwnerId() {

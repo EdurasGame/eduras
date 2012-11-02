@@ -73,7 +73,7 @@ public class ConnectDialog extends JDialog implements ActionListener {
 		buttonPanel.add(okButton, BorderLayout.EAST);
 		contentPane.add(buttonPanel, BorderLayout.SOUTH);
 		pack();
-		setLocationRelativeTo(null);
+		setLocationRelativeTo(getParent());
 	}
 
 	@Override

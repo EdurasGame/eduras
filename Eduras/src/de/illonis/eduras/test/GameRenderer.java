@@ -85,7 +85,7 @@ public class GameRenderer {
 		dbg.setColor(Color.yellow);
 		for (int i = 0; i < objs.size(); i++) {
 			GameObject d = objs.get(i);
-			d.draw(dbg);
+	//		d.draw(dbg);
 		}
 	}
 }

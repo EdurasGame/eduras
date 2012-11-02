@@ -28,7 +28,7 @@ public class Eduras {
 				public void onNetworkEventAppeared(NetworkEvent event) {
 					// do nothin
 				}
-				
+
 			});
 			try {
 				server.start();

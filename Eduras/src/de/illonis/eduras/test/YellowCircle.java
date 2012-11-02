@@ -6,6 +6,7 @@ import java.awt.Graphics2D;
 import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.MoveableGameObject;
 import de.illonis.eduras.interfaces.Controllable;
+import de.illonis.eduras.interfaces.Drawable;
 import de.illonis.eduras.math.Vector2D;
 
 /**
@@ -14,7 +15,7 @@ import de.illonis.eduras.math.Vector2D;
  * @author illonis
  * 
  */
-public class YellowCircle extends MoveableGameObject implements Controllable {
+public class YellowCircle extends MoveableGameObject implements Controllable, Drawable {
 	private int size;
 
 	/**
