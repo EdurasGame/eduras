@@ -1,6 +1,7 @@
 package de.illonis.eduras;
 
 import de.illonis.eduras.interfaces.Controllable;
+import de.illonis.eduras.math.Vector2D;
 import de.illonis.eduras.shapes.NoCollisionShape;
 
 /**
@@ -28,14 +29,37 @@ public class Player extends MoveableGameObject implements Controllable {
 
 	@Override
 	public void startMoving(Direction direction) {
+		switch (direction) {
+		case TOP:
+			getSpeedVector().setY(-getSpeed());
+			break;
+		case BOTTOM:
+			getSpeedVector().setY(getSpeed());
+			break;
+		case LEFT:
+			getSpeedVector().setX(-getSpeed());
+			break;
+		case RIGHT:
+			getSpeedVector().setX(getSpeed());
+			break;
+		default:
+			break;
+		}
+		getSpeedVector().setLength(getSpeed());
 	}
 
 	@Override
 	public void stopMoving(Direction direction) {
+		if (isHorizontal(direction)) {
+			getSpeedVector().setX(0);
+		} else {
+			getSpeedVector().setY(0);
+		}
 	}
 
 	@Override
 	public void stopMoving() {
+		setSpeedVector(new Vector2D());
 	}
 
 }
