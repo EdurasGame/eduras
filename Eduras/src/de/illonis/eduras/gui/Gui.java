@@ -1,6 +1,5 @@
 package de.illonis.eduras.gui;
 
-import java.io.IOException;
 import java.net.InetAddress;
 
 import javax.swing.JFrame;
@@ -11,10 +10,12 @@ import de.illonis.eduras.logicabstraction.EdurasInitializer;
 import de.illonis.eduras.logicabstraction.EventSender;
 import de.illonis.eduras.logicabstraction.InformationProvider;
 import de.illonis.eduras.logicabstraction.NetworkManager;
+
 /**
  * Graphical user interface for enduser.
+ * 
  * @author illonis
- *
+ * 
  */
 public class Gui extends JFrame {
 
@@ -74,11 +75,11 @@ public class Gui extends JFrame {
 			System.out.println("empty");
 			return;
 		}
-		try {
-			nwm.connect(address, port);
-		} catch (IOException e) {
-			cd.setErrorMessage(e.getMessage());
-			e.printStackTrace();
+		ConnectProgressDialog cpd = new ConnectProgressDialog(this, nwm);
+		cpd.start(address, port);
+		System.out.println("closed");
+		if (!cpd.isOK()) {
+			System.out.println("err");
 			showConnectDialog();
 		}
 	}
@@ -89,6 +90,7 @@ public class Gui extends JFrame {
 	void onConnected() {
 		Thread t = new Thread(rt);
 		t.start();
+		System.out.println(infoPro.getOwnerID());
 		keyHandler = new InputKeyHandler(infoPro.getOwnerID(), eventSender);
 		gamePanel.addKeyListener(keyHandler);
 	}
