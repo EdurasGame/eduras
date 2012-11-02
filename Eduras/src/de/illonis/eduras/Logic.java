@@ -28,6 +28,9 @@ public class Logic implements GameLogicInterface {
 		this.currentGame = g;
 		listenerList = new ArrayList<GameEventListener>();
 		objectFactory = new ObjectFactory(currentGame);
+
+		Thread gameWorker = new Thread(new LogicGameWorker(currentGame));
+		gameWorker.start();
 	}
 
 	/**
@@ -67,7 +70,7 @@ public class Logic implements GameLogicInterface {
 				for (GameEventListener gameEventListener : listenerList) {
 					gameEventListener.onNewObjectPosition(o);
 				}
-				default:
+			default:
 				break;
 			}
 		}
