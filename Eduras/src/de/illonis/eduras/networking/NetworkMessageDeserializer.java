@@ -179,6 +179,10 @@ public class NetworkMessageDeserializer {
 		case SET_POS:
 			gameEvent = handleMovementPositionEvent(msg, args, typeNumber);
 			break;
+		case MOVE_DOWN_RELEASED:
+		case MOVE_LEFT_RELEASED:
+		case MOVE_RIGHT_RELEASED:
+		case MOVE_UP_RELEASED:	
 		case MOVE_DOWN_PRESSED:
 		case MOVE_RIGHT_PRESSED:
 		case MOVE_LEFT_PRESSED:
