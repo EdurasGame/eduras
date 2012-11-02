@@ -70,9 +70,39 @@ public class Logic implements GameLogicInterface {
 				for (GameEventListener gameEventListener : listenerList) {
 					gameEventListener.onNewObjectPosition(o);
 				}
+				break;
+			case INFORMATION_REQUEST:
+				ArrayList<GameEvent> infos = currentGame.getAllInfosAsEvent();
+				for(GameEventListener listener: listenerList) {
+					listener.onInformationRequested(infos);
+				}
+				break;
+			case OBJECT_CREATE:
+				handleObjectFactoryEvent((ObjectFactoryEvent) event);
 			default:
 				break;
 			}
+		}
+	}
+
+	/**
+	 * Handles an object
+	 * @param event
+	 */
+	private void handleObjectFactoryEvent(ObjectFactoryEvent event) {
+		
+		switch(event.getType()) {
+		case OBJECT_CREATE:
+			switch(event.getObjectType()) {
+			case PLAYER:
+				Player newPlayer = new Player(currentGame, event.getOwnerId());
+				currentGame.addPlayer(newPlayer);
+				currentGame.addObject(newPlayer);
+				break;
+			default:
+			}
+			break;
+		default:
 		}
 	}
 
@@ -120,6 +150,7 @@ public class Logic implements GameLogicInterface {
 		for (GameEventListener listener : listenerList) {
 			listener.onNewObjectPosition(player);
 		}
+		
 	}
 
 	/**

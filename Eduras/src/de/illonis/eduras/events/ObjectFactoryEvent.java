@@ -14,6 +14,7 @@ public class ObjectFactoryEvent extends GameEvent {
 
 	private ObjectType objectType;
 	private int id;
+	private int ownerId;
 
 	/**
 	 * Creates a new ObjectFactoryEvent with given parameters.
@@ -53,6 +54,12 @@ public class ObjectFactoryEvent extends GameEvent {
 		this.objectType = objectType;
 	}
 
+	/**
+	 * Sets the id of the related object.
+	 * 
+	 * @param id
+	 *            The new id of the related object.
+	 */
 	public void setId(int id) {
 		this.id = id;
 	}
@@ -67,6 +74,25 @@ public class ObjectFactoryEvent extends GameEvent {
 	 */
 	public int getId() {
 		return id;
+	}
+
+	/**
+	 * Returns the ownerId of the related object.
+	 * 
+	 * @return the ownerId
+	 */
+	public int getOwnerId() {
+		return ownerId;
+	}
+
+	/**
+	 * Sets the ownerId of the related object.
+	 * 
+	 * @param ownerId
+	 *            the ownerId to set.
+	 */
+	public void setOwnerId(int ownerId) {
+		this.ownerId = ownerId;
 	}
 
 	/**

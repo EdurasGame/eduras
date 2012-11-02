@@ -23,7 +23,7 @@ public class ObjectFactory {
 	 * 
 	 */
 	public enum ObjectType {
-		PLAYER(1), YELLOWCIRCLE(2);
+		PLAYER(1), YELLOWCIRCLE(2), NO_OBJECT(0);
 
 		private int number;
 
@@ -33,6 +33,16 @@ public class ObjectFactory {
 
 		public int getNumber() {
 			return number;
+		}
+		
+		public static ObjectType getObjectTypeByNumber(int num) {
+			for(ObjectType objectType: ObjectType.values()) {
+				if(num == objectType.getNumber()) {
+					return objectType;
+				}
+			}
+			
+			return ObjectType.NO_OBJECT;
 		}
 	}
 

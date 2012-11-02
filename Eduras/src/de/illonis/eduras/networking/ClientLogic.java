@@ -2,6 +2,7 @@ package de.illonis.eduras.networking;
 
 import java.util.LinkedList;
 
+import de.illonis.eduras.events.ConnectionEstablishedEvent;
 import de.illonis.eduras.events.Event;
 import de.illonis.eduras.events.GameEvent;
 import de.illonis.eduras.events.NetworkEvent;
@@ -18,6 +19,7 @@ import de.illonis.eduras.interfaces.NetworkEventListener;
  */
 public class ClientLogic extends Thread {
 
+	Client client;
 	NetworkEventListener networkEventListener;
 	GameLogicInterface logic;
 	String messages;
@@ -33,9 +35,12 @@ public class ClientLogic extends Thread {
 	 *            The message that is deserialized into an event.
 	 * @param networkEventListener
 	 *            The network event listener to forward NetworkEvents to.
+	 * @param client
+	 *            The client which belongs to the clientLogic.
 	 */
 	public ClientLogic(GameLogicInterface logic, String messages,
-			NetworkEventListener networkEventListener) {
+			NetworkEventListener networkEventListener, Client client) {
+		this.client = client;
 		this.logic = logic;
 		this.messages = messages;
 		this.networkEventListener = networkEventListener;
@@ -51,6 +56,10 @@ public class ClientLogic extends Thread {
 			if (event instanceof GameEvent) {
 				logic.onGameEventAppeared((GameEvent) event);
 			} else {
+				if (event instanceof ConnectionEstablishedEvent) {
+					ConnectionEstablishedEvent connectionEvent = (ConnectionEstablishedEvent) event;
+					client.setOwnerId(connectionEvent.getClientId());
+				}
 				networkEventListener
 						.onNetworkEventAppeared((NetworkEvent) event);
 			}

@@ -3,9 +3,13 @@
  */
 package de.illonis.eduras.networking;
 
+import java.util.ArrayList;
+
 import de.illonis.eduras.GameObject;
+import de.illonis.eduras.events.GameEvent;
 import de.illonis.eduras.events.GameEvent.GameEventNumber;
 import de.illonis.eduras.events.MovementEvent;
+import de.illonis.eduras.exceptions.MessageNotSupportedException;
 import de.illonis.eduras.interfaces.GameEventListener;
 
 /**
@@ -17,7 +21,17 @@ import de.illonis.eduras.interfaces.GameEventListener;
  */
 public class ServerGameEventListener implements GameEventListener {
 
-	private Buffer outputBuffer;
+	private final Buffer outputBuffer;
+
+	/**
+	 * Creates a new ServerGameEventListener with the given outputBuffer.
+	 * 
+	 * @param outputBuffer
+	 *            The outputBuffer to pass events to.
+	 */
+	public ServerGameEventListener(Buffer outputBuffer) {
+		this.outputBuffer = outputBuffer;
+	}
 
 	/*
 	 * (non-Javadoc)
@@ -40,6 +54,27 @@ public class ServerGameEventListener implements GameEventListener {
 
 		outputBuffer.append(msg);
 
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * de.illonis.eduras.interfaces.GameEventListener#onInformationRequested
+	 * (java.util.ArrayList)
+	 */
+	@Override
+	public void onInformationRequested(ArrayList<GameEvent> infos) {
+
+		for (GameEvent event : infos) {
+			String msg = null;
+			try {
+				msg = NetworkMessageSerializer.serialize(event);
+			} catch (MessageNotSupportedException e) {
+				continue;
+			}
+			outputBuffer.append(msg);
+		}
 	}
 
 }

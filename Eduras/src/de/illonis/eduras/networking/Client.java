@@ -49,7 +49,8 @@ public class Client {
 		socket = new Socket();
 		InetSocketAddress iaddr = new InetSocketAddress(addr, port);
 		socket.connect(iaddr, 10000);
-		new ClientReceiver(logic, socket).setNetworkEventListener(networkEventListener);
+	
+		new ClientReceiver(logic, socket, this).setNetworkEventListener(networkEventListener);
 		sender = new ClientSender(socket);
 	}
 

@@ -80,6 +80,12 @@
 						</entry>
 						<entry>#objectId#newX#newY</entry>
 					</row>
+					<row>
+						<entry>OBJECT_CREATE</entry>
+						<entry>120</entry>
+						<entry>Tells that an object has been created.</entry>
+						<entry>#objectId#ownerId#typeId</entry>
+					</row>
 				</tbody>
 			</tgroup>
 		</table>

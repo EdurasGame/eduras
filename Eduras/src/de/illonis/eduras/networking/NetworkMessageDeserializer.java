@@ -2,6 +2,7 @@ package de.illonis.eduras.networking;
 
 import java.util.LinkedList;
 
+import de.illonis.eduras.ObjectFactory.ObjectType;
 import de.illonis.eduras.events.ConnectionEstablishedEvent;
 import de.illonis.eduras.events.Event;
 import de.illonis.eduras.events.GameEvent;
@@ -10,6 +11,7 @@ import de.illonis.eduras.events.GameInfoRequest;
 import de.illonis.eduras.events.MovementEvent;
 import de.illonis.eduras.events.NetworkEvent;
 import de.illonis.eduras.events.NetworkEvent.NetworkEventNumber;
+import de.illonis.eduras.events.ObjectFactoryEvent;
 import de.illonis.eduras.events.UserMovementEvent;
 import de.illonis.eduras.exceptions.GivenParametersDoNotFitToEventException;
 import de.illonis.eduras.exceptions.InvalidMessageFormatException;
@@ -190,11 +192,20 @@ public class NetworkMessageDeserializer {
 			gameEvent = handleStartMovementEvent(msg, args, typeNumber);
 			break;
 		case INFORMATION_REQUEST:
-			gameEvent = new GameInfoRequest(Integer.parseInt(args[0]));
+			gameEvent = new GameInfoRequest(parseInt(args[0]));
 			break;
 		case OBJECT_CREATE:
+			int objectTypeNum = parseInt(args[2]);
+			ObjectType objectType = ObjectType
+					.getObjectTypeByNumber(objectTypeNum);
+			ObjectFactoryEvent objectFactoryEvent = new ObjectFactoryEvent(
+					GameEventNumber.OBJECT_CREATE, objectType);
+			objectFactoryEvent.setId(parseInt(args[0]));
+			objectFactoryEvent.setOwnerId(parseInt(args[1]));
+			gameEvent = objectFactoryEvent;
+			break;
 		case OBJECT_REMOVE:
-			
+
 		default:
 			throw new MessageNotSupportedException(typeNumber, msg);
 		}
@@ -206,7 +217,7 @@ public class NetworkMessageDeserializer {
 			String[] args, GameEventNumber typeNumber)
 			throws GivenParametersDoNotFitToEventException {
 
-		int owner = Integer.parseInt(args[1]);
+		int owner = parseInt(args[1]);
 		if (owner < 0)
 			throw new GivenParametersDoNotFitToEventException(typeNumber, args);
 		return new UserMovementEvent(typeNumber, owner);
@@ -249,5 +260,16 @@ public class NetworkMessageDeserializer {
 			throw new GivenParametersDoNotFitToEventException(typeNumber,
 					splittedMessage[1], splittedMessage[2], splittedMessage[3]);
 		}
+	}
+
+	/**
+	 * Uses Integer.parseInt to parse a string into an integer.
+	 * 
+	 * @param str
+	 *            The string to parse.
+	 * @return The parsed integer.
+	 */
+	private static int parseInt(String str) {
+		return Integer.parseInt(str);
 	}
 }

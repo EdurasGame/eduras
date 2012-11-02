@@ -99,6 +99,7 @@ public class Server {
 	public void setLogic(GameLogicInterface logic,
 			NetworkEventListener eventListener) {
 		this.logic = logic;
+		logic.addGameEventListener(new ServerGameEventListener(outputBuffer));
 		serverLogic = new ServerDecoder(inputBuffer, logic, eventListener);
 	}
 
