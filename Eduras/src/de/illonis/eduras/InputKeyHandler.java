@@ -29,10 +29,10 @@ public class InputKeyHandler implements KeyListener {
 		pressedButtons = new HashMap<Integer, Boolean>();
 
 		handledButtons = new CopyOnWriteArraySet<Integer>();
-		handledButtons.add(KeyEvent.VK_UP);
-		handledButtons.add(KeyEvent.VK_LEFT);
-		handledButtons.add(KeyEvent.VK_DOWN);
-		handledButtons.add(KeyEvent.VK_RIGHT);
+		handledButtons.add(KeyEvent.VK_W);
+		handledButtons.add(KeyEvent.VK_A);
+		handledButtons.add(KeyEvent.VK_S);
+		handledButtons.add(KeyEvent.VK_D);
 		this.eventSender = sender;
 
 		for (int k : handledButtons)
@@ -57,7 +57,7 @@ public class InputKeyHandler implements KeyListener {
 			return;
 
 		UserMovementEvent moveEvent = null;
-		System.out.println("Pressed " + e.getKeyChar());
+		System.out.println("Pressed " + e.getKeyCode());
 
 		switch (e.getKeyCode()) {
 		case KeyEvent.VK_W:

@@ -5,7 +5,10 @@ import java.net.InetAddress;
 import javax.swing.JFrame;
 
 import de.illonis.eduras.InputKeyHandler;
+import de.illonis.eduras.events.GameInfoRequest;
+import de.illonis.eduras.exceptions.MessageNotSupportedException;
 import de.illonis.eduras.exceptions.NoValueEnteredException;
+import de.illonis.eduras.exceptions.WrongEventTypeException;
 import de.illonis.eduras.logicabstraction.EdurasInitializer;
 import de.illonis.eduras.logicabstraction.EventSender;
 import de.illonis.eduras.logicabstraction.InformationProvider;
@@ -35,8 +38,7 @@ public class Gui extends JFrame {
 		loadTools();
 		buildGui();
 		cd = new ConnectDialog(this);
-		eventHandler = new NetworkEventHandler(this);
-		nwm.setNetworkEventListener(eventHandler);
+
 	}
 
 	private void buildGui() {
@@ -55,7 +57,10 @@ public class Gui extends JFrame {
 		EdurasInitializer ei = EdurasInitializer.getInstance();
 		eventSender = ei.getEventSender();
 		infoPro = ei.getInformationProvider();
+		eventHandler = new NetworkEventHandler(this);
+
 		nwm = ei.getNetworkManager();
+		nwm.setNetworkEventListener(eventHandler);
 	}
 
 	public static void main(String[] args) {
@@ -90,8 +95,17 @@ public class Gui extends JFrame {
 	void onConnected() {
 		Thread t = new Thread(rt);
 		t.start();
-		System.out.println(infoPro.getOwnerID());
+		System.out.println("ownerid: " + infoPro.getOwnerID());
 		keyHandler = new InputKeyHandler(infoPro.getOwnerID(), eventSender);
 		gamePanel.addKeyListener(keyHandler);
+		try {
+			eventSender.sendEvent(new GameInfoRequest(infoPro.getOwnerID()));
+		} catch (WrongEventTypeException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (MessageNotSupportedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 }

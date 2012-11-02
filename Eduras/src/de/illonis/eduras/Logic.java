@@ -41,9 +41,10 @@ public class Logic implements GameLogicInterface {
 	 */
 	@Override
 	public synchronized void onGameEventAppeared(GameEvent event) {
-		System.out.println("[LOGIC] A game event appeared.");
+		System.out.println("[LOGIC] A game event appeared: " + event.getType());
 
 		if (event instanceof ObjectFactoryEvent) {
+			System.out.println("is of");
 			objectFactory.onGameEventAppeared(event);
 		} else {
 
@@ -77,8 +78,6 @@ public class Logic implements GameLogicInterface {
 					listener.onInformationRequested(infos);
 				}
 				break;
-			case OBJECT_CREATE:
-				handleObjectFactoryEvent((ObjectFactoryEvent) event);
 			default:
 				break;
 			}
@@ -89,15 +88,14 @@ public class Logic implements GameLogicInterface {
 	 * Handles an object
 	 * @param event
 	 */
+	@Deprecated
 	private void handleObjectFactoryEvent(ObjectFactoryEvent event) {
 		
 		switch(event.getType()) {
 		case OBJECT_CREATE:
 			switch(event.getObjectType()) {
 			case PLAYER:
-				Player newPlayer = new Player(currentGame, event.getOwnerId());
-				currentGame.addPlayer(newPlayer);
-				currentGame.addObject(newPlayer);
+				
 				break;
 			default:
 			}
@@ -117,7 +115,9 @@ public class Logic implements GameLogicInterface {
 
 		// TODO: find player
 		Player player = currentGame.getPlayerByOwnerId(event.getOwner());
-
+		System.out.println("player: " + player);
+		System.out.println("eo: "  + event.getOwner());
+		
 		switch (event.getType()) {
 		case MOVE_DOWN_PRESSED:
 			player.startMoving(Direction.BOTTOM);
@@ -146,11 +146,12 @@ public class Logic implements GameLogicInterface {
 		default:
 			break;
 		}
-
-		for (GameEventListener listener : listenerList) {
-			listener.onNewObjectPosition(player);
-		}
-		
+//		
+//
+//		for (GameEventListener listener : listenerList) {
+//			listener.onNewObjectPosition(player);
+//		}
+//		
 	}
 
 	/**

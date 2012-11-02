@@ -72,8 +72,8 @@ public class GameRenderer {
 		Graphics g;
 		try {
 			g = gamePanel.getGraphics();
-			if ((g != null) && (dbImage != null))
-				g.drawImage(dbImage, 0, 0, null);
+			if ((g != null) && (dbImage != null)) {
+				g.drawImage(dbImage, 0, 0, null); }
 			g.dispose();
 		} catch (Exception e) {
 			System.out.println("Graphics context error: " + e.getMessage());

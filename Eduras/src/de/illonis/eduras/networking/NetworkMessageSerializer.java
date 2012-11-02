@@ -68,7 +68,7 @@ public class NetworkMessageSerializer {
 		default:
 			break;
 		}
-		return serializedEvent;
+		return "##" + serializedEvent;
 	}
 
 	/**
@@ -103,7 +103,7 @@ public class NetworkMessageSerializer {
 		case OBJECT_CREATE:
 			ObjectFactoryEvent event = (ObjectFactoryEvent) gameEvent;
 			serializedEvent += event.getId() + "#" + event.getOwnerId() + "#"
-					+ event.getType().getNumber();
+					+ event.getObjectType().getNumber();
 			break;
 		case OBJECT_REMOVE:
 			break;
@@ -116,7 +116,7 @@ public class NetworkMessageSerializer {
 		case SET_POS:
 			MovementEvent moveEvent = (MovementEvent) gameEvent;
 			serializedEvent += moveEvent.getObjectId();
-			serializedEvent += "#" + moveEvent.getNewXPos() + "#"
+			serializedEvent += "#" + moveEvent.getNewXPos() + "#" 
 					+ moveEvent.getNewYPos();
 			break;
 		case SHOOT_PRESSED:

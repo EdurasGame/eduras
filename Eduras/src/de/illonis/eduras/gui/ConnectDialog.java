@@ -50,8 +50,9 @@ public class ConnectDialog extends JDialog implements ActionListener {
 		contentPane.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 		contentPane.setLayout(new BorderLayout());
 		JPanel inputPanel = new JPanel(new GridLayout(2, 2, 5, 10));
-		inputAddress = new JTextField();
+		inputAddress = new JTextField("localhost");
 		inputPort = new NumericTextField(5);
+		inputPort.setText(4387 + "");
 		JLabel addressLabel = new JLabel("Adresse:");
 		addressLabel.setLabelFor(inputAddress);
 		JLabel portLabel = new JLabel("Port:");

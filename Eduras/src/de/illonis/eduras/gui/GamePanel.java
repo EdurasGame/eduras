@@ -19,6 +19,7 @@ public class GamePanel extends JPanel {
 	 * Creates a new gamePanel with black background.
 	 */
 	public GamePanel() {
+		setFocusable(true);
 		setBackground(Color.black);
 
 	}

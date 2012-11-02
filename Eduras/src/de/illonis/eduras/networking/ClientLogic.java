@@ -48,7 +48,7 @@ public class ClientLogic extends Thread {
 
 	@Override
 	public void run() {
-
+		System.out.println("run");
 		LinkedList<Event> eventList = NetworkMessageDeserializer
 				.deserialize(messages);
 
@@ -58,6 +58,7 @@ public class ClientLogic extends Thread {
 			} else {
 				if (event instanceof ConnectionEstablishedEvent) {
 					ConnectionEstablishedEvent connectionEvent = (ConnectionEstablishedEvent) event;
+					System.out.println("established event");
 					client.setOwnerId(connectionEvent.getClientId());
 				}
 				networkEventListener

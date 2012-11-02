@@ -128,7 +128,7 @@ public class Server {
 
 		ObjectFactoryEvent newPlayerEvent = new ObjectFactoryEvent(
 				GameEventNumber.OBJECT_CREATE, ObjectType.PLAYER);
-		newPlayerEvent.setId(clientId);
+		newPlayerEvent.setOwnerId(clientId);
 		logic.onGameEventAppeared(newPlayerEvent);
 
 		ServerReceiver sr = new ServerReceiver(this, inputBuffer, client);

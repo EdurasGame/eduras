@@ -14,6 +14,7 @@ public class RenderThread implements Runnable {
 		running = true;
 		while (running) {
 			renderer.render();
+			renderer.paintGame();
 			try {
 				Thread.sleep(20);
 			} catch (InterruptedException e) {

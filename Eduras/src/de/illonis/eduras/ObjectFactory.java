@@ -34,14 +34,14 @@ public class ObjectFactory {
 		public int getNumber() {
 			return number;
 		}
-		
+
 		public static ObjectType getObjectTypeByNumber(int num) {
-			for(ObjectType objectType: ObjectType.values()) {
-				if(num == objectType.getNumber()) {
+			for (ObjectType objectType : ObjectType.values()) {
+				if (num == objectType.getNumber()) {
 					return objectType;
 				}
 			}
-			
+
 			return ObjectType.NO_OBJECT;
 		}
 	}
@@ -56,7 +56,6 @@ public class ObjectFactory {
 		this.game = game;
 	}
 
-	
 	public void onGameEventAppeared(GameEvent event) {
 		// do not handle other events in case they are received.
 		if (!(event instanceof ObjectFactoryEvent))
@@ -67,7 +66,10 @@ public class ObjectFactory {
 		if (ofe.getType() == GameEventNumber.OBJECT_CREATE) {
 			switch (ofe.getObjectType()) {
 			case PLAYER:
-				go = new Player(game,ofe.getId());
+				System.out.println("create player: " + ofe.getOwnerId());
+				go = new Player(game, ofe.getOwnerId());
+				game.addPlayer((Player)go);
+				game.addObject(go);
 				break;
 			case YELLOWCIRCLE:
 				go = new YellowCircle(game);
@@ -78,9 +80,8 @@ public class ObjectFactory {
 			// set id if id is set in event
 			if (go != null && ofe.hasId()) {
 				go.setId(ofe.getId());
-				// TODO: send answer to clients
 			}
-			game.addObject(go);
+		//	game.addObject(go);
 		}
 
 		else if (ofe.getType() == GameEventNumber.OBJECT_REMOVE) {
