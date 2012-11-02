@@ -1,6 +1,7 @@
 package de.illonis.eduras;
 
 import de.illonis.eduras.interfaces.Controllable;
+import de.illonis.eduras.shapes.NoCollisionShape;
 
 /**
  * This class represents a player.
@@ -22,6 +23,7 @@ public class Player extends MoveableGameObject implements Controllable {
 	public Player(GameInformation game, int ownerId) {
 		super(game);
 		setOwner(ownerId);
+		setShape(new NoCollisionShape());
 	}
 
 	@Override

@@ -197,15 +197,29 @@ public class GameObject implements Drawable {
 		return shape;
 	}
 
-	/* (non-Javadoc)
+	/**
+	 * Sets shape of object to given shape.
+	 * 
+	 * @param shape
+	 *            new shape.
+	 */
+	protected void setShape(ObjectShape shape) {
+		this.shape = shape;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see de.illonis.eduras.interfaces.Drawable#draw(java.awt.Graphics2D)
 	 */
 	@Override
 	public void draw(Graphics2D g) {
 	}
-	
+
 	/**
-	 * Returns a vector that points from origin to the position of the GameObject.
+	 * Returns a vector that points from origin to the position of the
+	 * GameObject.
+	 * 
 	 * @return The position vector.
 	 */
 	public Vector2D toPositionVector() {
