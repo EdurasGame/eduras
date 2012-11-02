@@ -23,14 +23,17 @@ public class ClientReceiver extends Thread {
 	private NetworkEventListener networkEventListener;
 
 	private final boolean connectionAvailable = true;
+	
+	private final Client client;
 
 	/**
 	 * Retrieves
 	 * @param logic
 	 * @param socket
 	 */
-	public ClientReceiver(GameLogicInterface logic, Socket socket) {
+	public ClientReceiver(GameLogicInterface logic, Socket socket, Client client) {
 
+		this.client = client;
 		this.logic = logic;
 
 		try {
@@ -69,7 +72,7 @@ public class ClientReceiver extends Thread {
 	 */
 	private void processMessages(String messages) {
 
-		ClientLogic clientLogic = new ClientLogic(this.logic, messages, networkEventListener);
+		ClientLogic clientLogic = new ClientLogic(this.logic, messages, networkEventListener, client);
 		clientLogic.start();
 
 	}

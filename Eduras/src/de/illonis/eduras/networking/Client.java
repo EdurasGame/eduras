@@ -46,7 +46,7 @@ public class Client {
 	public void connect(InetAddress addr, int port) throws IOException {
 		System.out.println("[CLIENT] Connecting...");
 		socket = new Socket(addr, port);
-		new ClientReceiver(logic, socket).setNetworkEventListener(networkEventListener);
+		new ClientReceiver(logic, socket, this).setNetworkEventListener(networkEventListener);
 		sender = new ClientSender(socket);
 	}
 
