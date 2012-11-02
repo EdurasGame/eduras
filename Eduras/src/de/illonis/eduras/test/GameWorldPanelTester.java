@@ -8,7 +8,6 @@ import java.awt.event.MouseListener;
 import javax.swing.JFrame;
 
 import de.illonis.eduras.GameInformation;
-import de.illonis.eduras.InputKeyHandler;
 
 /**
  * A Gameworld panel tester. It creates a black frame with a yellow circle that
@@ -19,7 +18,7 @@ import de.illonis.eduras.InputKeyHandler;
  */
 public class GameWorldPanelTester implements MouseListener {
 
-	private YellowCircle yc;
+	private final YellowCircle yc;
 
 	public GameWorldPanelTester() {
 		GameInformation g = new GameInformation();
@@ -28,9 +27,9 @@ public class GameWorldPanelTester implements MouseListener {
 		yc.setYPosition(70);
 		g.getObjects().add(yc);
 		GameWorldPanel gwp = new GameWorldPanel();
-		InputKeyHandler ikh = new InputKeyHandler(g);
+		//InputKeyHandler ikh = new InputKeyHandler(g);
 		gwp.setFocusable(true);
-		gwp.addKeyListener(ikh);
+		//gwp.addKeyListener(ikh);
 
 		GameWorker gameWorker = new GameWorker(g, gwp);
 		InfoText it = new InfoText(g, yc);
