@@ -2,6 +2,7 @@ package de.illonis.eduras.test;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
@@ -18,6 +19,7 @@ import de.illonis.eduras.logicabstraction.EdurasInitializer;
 import de.illonis.eduras.logicabstraction.EventSender;
 import de.illonis.eduras.logicabstraction.InformationProvider;
 import de.illonis.eduras.logicabstraction.NetworkManager;
+import de.illonis.eduras.networking.Server;
 
 /**
  * A client frame that connects to "localhost" and has a {@link CircleDrawPanel}
@@ -64,8 +66,11 @@ public class ClientFrame extends JFrame {
 		setLocationRelativeTo(null);
 
 		try {
-			networkManager.connectToDefault(InetAddress.getByName("localhost"));
+			networkManager.connect(InetAddress.getByName("localhost"), Server.DEFAULT_PORT);
 		} catch (UnknownHostException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		this.setVisible(true);

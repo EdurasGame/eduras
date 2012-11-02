@@ -47,10 +47,19 @@ public class InformationProvider implements InfoInterface {
 		return null;
 	}
 
+	/**
+	 * Returns owner id.
+	 * 
+	 * @return owner id.
+	 */
+	public int getOwnerID() {
+		return ownerID;
+	}
+
 	public Player getPlayer() {
 		return logic.getGame().getPlayerByOwnerId(ownerID);
 	}
-	
+
 	public ArrayList<GameObject> getGameObjects() {
 		return logic.getGame().getObjects();
 	}
