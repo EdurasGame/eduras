@@ -1,19 +1,21 @@
 package de.illonis.eduras.gui;
 
+import java.awt.BorderLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.net.MalformedURLException;
-import java.net.URL;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+
+import de.illonis.eduras.exceptions.NoValueEnteredException;
 
 public class ConnectDialog extends JDialog implements ActionListener {
 
@@ -21,7 +23,9 @@ public class ConnectDialog extends JDialog implements ActionListener {
 	private JTextField inputAddress;
 	private NumericTextField inputPort;
 	private JButton okButton, abortButton;
-	private URL address;
+	private InetAddress address;
+	private int port;
+	private JLabel errorLabel;
 
 	/**
 	 * Creates a new connect dialog.
@@ -31,6 +35,7 @@ public class ConnectDialog extends JDialog implements ActionListener {
 	 */
 	public ConnectDialog(JFrame gui) {
 		super(gui, "Connect to server");
+
 		buildGui();
 	}
 
@@ -38,50 +43,90 @@ public class ConnectDialog extends JDialog implements ActionListener {
 		setModal(true);
 		JPanel contentPane = (JPanel) getContentPane();
 		contentPane.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-		contentPane.setLayout(new GridLayout(3, 2, 5, 10));
+		contentPane.setLayout(new BorderLayout());
+		JPanel inputPanel = new JPanel(new GridLayout(2, 2, 5, 10));
 		inputAddress = new JTextField();
 		inputPort = new NumericTextField(5);
 		JLabel addressLabel = new JLabel("Adresse:");
 		addressLabel.setLabelFor(inputAddress);
 		JLabel portLabel = new JLabel("Port:");
 		portLabel.setLabelFor(inputPort);
-		contentPane.add(addressLabel);
-		contentPane.add(inputAddress);
-		contentPane.add(portLabel);
-		contentPane.add(inputPort);
+		errorLabel = new JLabel("");
+		contentPane.add(errorLabel, BorderLayout.NORTH);
+		inputPanel.add(addressLabel);
+		inputPanel.add(inputAddress);
+		inputPanel.add(portLabel);
+		inputPanel.add(inputPort);
+		contentPane.add(inputPanel, BorderLayout.CENTER);
+		JPanel buttonPanel = new JPanel(new BorderLayout());
 		okButton = new JButton("Verbinden");
 		okButton.addActionListener(this);
 		abortButton = new JButton("Abbrechen");
 		abortButton.addActionListener(this);
-		contentPane.add(abortButton);
-		contentPane.add(okButton);
+
+		buttonPanel.add(abortButton, BorderLayout.WEST);
+		buttonPanel.add(okButton, BorderLayout.EAST);
+		contentPane.add(buttonPanel, BorderLayout.SOUTH);
 		pack();
 		setLocationRelativeTo(null);
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
+
 		JButton source = (JButton) e.getSource();
 		if (source == okButton) {
-			try {
-				address = new URL(inputAddress.getText() + ":" + inputPort.getValue());
-			} catch (MalformedURLException e1) {
-				JOptionPane.showMessageDialog(this, "URL invalid.", "Error", JOptionPane.ERROR_MESSAGE);
+			if (inputPort.getValue() > 0 && inputAddress.getText().length() > 0) {
+				setVisible(false);
+				try {
+					address = InetAddress.getByName(inputAddress.getText());
+				} catch (UnknownHostException e1) {
+					setErrorMessage("URL invalid.");
+					setVisible(true);
+					return;
+				}
+				port = inputPort.getValue();
+			} else
 				return;
-			}
 		} else if (source == abortButton) {
+			port = 0;
+			address = null;
+			setVisible(false);
 		}
-		setVisible(false);
+
+		errorLabel.setText("");
 	}
 
 	/**
-	 * Returns address that was accepted by this dialog. Contains full address
-	 * including port.
+	 * Returns address that was accepted by this dialog.
 	 * 
-	 * @return address to connect to.
+	 * @returnaddress to connect to.
+	 * @throws NoValueEnteredException
+	 *             thrown when no address was entered (that is when abort is
+	 *             pressed).
 	 */
-	public URL getAddress() {
+	public InetAddress getAddress() throws NoValueEnteredException {
+		if (address == null)
+			throw new NoValueEnteredException();
 		return address;
 	}
 
+	/**
+	 * Returns port that was accepted by this dialog.
+	 * 
+	 * @returnaddress to connect to.
+	 * @throws NoValueEnteredException
+	 *             thrown when no port was entered (that is when abort is
+	 *             pressed or port is 0).
+	 */
+	public int getPort() throws NoValueEnteredException {
+		if (port <= 0)
+			throw new NoValueEnteredException();
+		return port;
+	}
+
+	public void setErrorMessage(String message) {
+		errorLabel.setText(message);
+		pack();
+	}
 }

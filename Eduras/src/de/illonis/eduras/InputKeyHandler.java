@@ -10,7 +10,6 @@ import de.illonis.eduras.events.UserMovementEvent;
 import de.illonis.eduras.exceptions.MessageNotSupportedException;
 import de.illonis.eduras.exceptions.WrongEventTypeException;
 import de.illonis.eduras.logicabstraction.EventSender;
-import de.illonis.eduras.networking.Client;
 
 /**
  * This class handles user input and passes them to logic.
@@ -20,13 +19,13 @@ import de.illonis.eduras.networking.Client;
  */
 public class InputKeyHandler implements KeyListener {
 
-	private EventSender eventSender = null;
+	private EventSender eventSender;
 
 	private final HashMap<Integer, Boolean> pressedButtons;
 	private final CopyOnWriteArraySet<Integer> handledButtons;
 	private final int ownerId;
 
-	public InputKeyHandler(GameInformation g, Client client, int ownerId) {
+	public InputKeyHandler(int ownerId, EventSender sender) {
 		pressedButtons = new HashMap<Integer, Boolean>();
 
 		handledButtons = new CopyOnWriteArraySet<Integer>();
@@ -34,6 +33,7 @@ public class InputKeyHandler implements KeyListener {
 		handledButtons.add(KeyEvent.VK_LEFT);
 		handledButtons.add(KeyEvent.VK_DOWN);
 		handledButtons.add(KeyEvent.VK_RIGHT);
+		this.eventSender = sender;
 
 		for (int k : handledButtons)
 			pressedButtons.put(k, false);
@@ -43,8 +43,7 @@ public class InputKeyHandler implements KeyListener {
 
 	@Override
 	public void keyTyped(KeyEvent e) {
-		System.out.println("Key typed: " + e.getKeyCode() + " (\""
-				+ e.getKeyChar() + "\")");
+		System.out.println("Key typed: " + e.getKeyCode() + " (\"" + e.getKeyChar() + "\")");
 	}
 
 	@Override
@@ -61,20 +60,16 @@ public class InputKeyHandler implements KeyListener {
 
 		switch (e.getKeyCode()) {
 		case KeyEvent.VK_W:
-			moveEvent = new UserMovementEvent(GameEventNumber.MOVE_UP_PRESSED,
-					ownerId);
+			moveEvent = new UserMovementEvent(GameEventNumber.MOVE_UP_PRESSED, ownerId);
 			break;
 		case KeyEvent.VK_A:
-			moveEvent = new UserMovementEvent(
-					GameEventNumber.MOVE_LEFT_PRESSED, ownerId);
+			moveEvent = new UserMovementEvent(GameEventNumber.MOVE_LEFT_PRESSED, ownerId);
 			break;
 		case KeyEvent.VK_S:
-			moveEvent = new UserMovementEvent(
-					GameEventNumber.MOVE_DOWN_PRESSED, ownerId);
+			moveEvent = new UserMovementEvent(GameEventNumber.MOVE_DOWN_PRESSED, ownerId);
 			break;
 		case KeyEvent.VK_D:
-			moveEvent = new UserMovementEvent(
-					GameEventNumber.MOVE_RIGHT_PRESSED, ownerId);
+			moveEvent = new UserMovementEvent(GameEventNumber.MOVE_RIGHT_PRESSED, ownerId);
 			break;
 		default:
 			break;
@@ -91,8 +86,7 @@ public class InputKeyHandler implements KeyListener {
 		// ((YellowCircle) game.getObjects().get(0))
 		// .startMoving(Direction.TOP);
 
-		System.out.println("Key pressed: " + e.getKeyCode() + " (\""
-				+ e.getKeyChar() + "\")");
+		System.out.println("Key pressed: " + e.getKeyCode() + " (\"" + e.getKeyChar() + "\")");
 	}
 
 	@Override
@@ -107,20 +101,16 @@ public class InputKeyHandler implements KeyListener {
 
 		switch (e.getKeyCode()) {
 		case KeyEvent.VK_W:
-			moveEvent = new UserMovementEvent(GameEventNumber.MOVE_UP_RELEASED,
-					ownerId);
+			moveEvent = new UserMovementEvent(GameEventNumber.MOVE_UP_RELEASED, ownerId);
 			break;
 		case KeyEvent.VK_A:
-			moveEvent = new UserMovementEvent(
-					GameEventNumber.MOVE_LEFT_RELEASED, ownerId);
+			moveEvent = new UserMovementEvent(GameEventNumber.MOVE_LEFT_RELEASED, ownerId);
 			break;
 		case KeyEvent.VK_S:
-			moveEvent = new UserMovementEvent(
-					GameEventNumber.MOVE_DOWN_RELEASED, ownerId);
+			moveEvent = new UserMovementEvent(GameEventNumber.MOVE_DOWN_RELEASED, ownerId);
 			break;
 		case KeyEvent.VK_D:
-			moveEvent = new UserMovementEvent(
-					GameEventNumber.MOVE_RIGHT_RELEASED, ownerId);
+			moveEvent = new UserMovementEvent(GameEventNumber.MOVE_RIGHT_RELEASED, ownerId);
 			break;
 		default:
 			break;

@@ -1,7 +1,12 @@
 package de.illonis.eduras.gui;
 
+import java.io.IOException;
+import java.net.InetAddress;
+
 import javax.swing.JFrame;
 
+import de.illonis.eduras.InputKeyHandler;
+import de.illonis.eduras.exceptions.NoValueEnteredException;
 import de.illonis.eduras.logicabstraction.EdurasInitializer;
 import de.illonis.eduras.logicabstraction.EventSender;
 import de.illonis.eduras.logicabstraction.InformationProvider;
@@ -15,13 +20,18 @@ public class Gui extends JFrame {
 	private GamePanel gamePanel;
 	private GameRenderer renderer;
 	private RenderThread rt;
+	private ConnectDialog cd;
+	private InputKeyHandler keyHandler;
+	private NetworkEventHandler eventHandler;
 
 	private static final long serialVersionUID = 1L;
 
 	public Gui() {
 		loadTools();
 		buildGui();
-
+		cd = new ConnectDialog(this);
+		eventHandler = new NetworkEventHandler(this);
+		nwm.setNetworkEventListener(eventHandler);
 	}
 
 	private void buildGui() {
@@ -46,8 +56,27 @@ public class Gui extends JFrame {
 	public static void main(String[] args) {
 		Gui gui = new Gui();
 		gui.setVisible(true);
-		ConnectDialog cd = new ConnectDialog(gui);
+		gui.showConnectDialog();
+	}
+
+	void showConnectDialog() {
 		cd.setVisible(true);
+		InetAddress address;
+		int port;
+		try {
+			address = cd.getAddress();
+			port = cd.getPort();
+		} catch (NoValueEnteredException e) {
+			System.out.println("empty");
+			return;
+		}
+		try {
+			nwm.connect(address, port);
+		} catch (IOException e) {
+			cd.setErrorMessage(e.getMessage());
+			e.printStackTrace();
+			showConnectDialog();
+		}
 	}
 
 	/**
@@ -56,5 +85,6 @@ public class Gui extends JFrame {
 	void onConnected() {
 		Thread t = new Thread(rt);
 		t.start();
+		keyHandler = new InputKeyHandler(infoPro.getOwnerID(), eventSender);
 	}
 }

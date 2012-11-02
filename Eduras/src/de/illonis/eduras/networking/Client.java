@@ -61,10 +61,20 @@ public class Client {
 
 	}
 
+	/**
+	 * Sets owner id to given id.
+	 * 
+	 * @param userId
+	 *            new owner id.
+	 */
 	public void setOwnerId(int userId) {
 		this.ownerId = userId;
 	}
 
+	/**
+	 * Returns current owner id.
+	 * @return current owner id.
+	 */
 	public int getOwnerId() {
 		return ownerId;
 	}
