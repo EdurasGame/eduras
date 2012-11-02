@@ -3,6 +3,7 @@
  */
 package de.illonis.eduras.logicabstraction;
 
+import java.io.IOException;
 import java.net.InetAddress;
 
 import de.illonis.eduras.interfaces.GameLogicInterface;
@@ -30,12 +31,18 @@ public class NetworkManager {
 		client = new Client(logic);
 	}
 
-	public void connect(InetAddress addr, int port) {
+	/**
+	 * Connects to given server.
+	 * 
+	 * @param addr
+	 *            server address.
+	 * @param port
+	 *            server port.
+	 * @throws IOException
+	 *             when connection establishing or initialization failed.
+	 */
+	public void connect(InetAddress addr, int port) throws IOException {
 		client.connect(addr, port);
-	}
-
-	public void connectToDefault(InetAddress addr) {
-		client.connect(addr);
 	}
 
 	Client getClient() {

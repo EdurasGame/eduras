@@ -34,34 +34,20 @@ public class Client {
 	}
 
 	/**
-	 * Connect to a server at given address using default port (
-	 * {@link Server#DEFAULT_PORT}).
-	 * 
-	 * @param addr
-	 *            server-address
-	 */
-	public void connect(InetAddress addr) {
-		connect(addr, Server.DEFAULT_PORT);
-	}
-
-	/**
 	 * Connects to a server on the given address and port.
 	 * 
 	 * @param addr
 	 *            The server's address.
 	 * @param port
 	 *            The server's port.
+	 * @throws IOException
+	 *             when connection establishing failed.
 	 */
-	public void connect(InetAddress addr, int port) {
-		try {
-			System.out.println("[CLIENT] Connecting...");
-			socket = new Socket(addr, port);
-			new ClientReceiver(logic, socket).setNetworkEventListener(networkEventListener);
-			sender = new ClientSender(socket);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
+	public void connect(InetAddress addr, int port) throws IOException {
+		System.out.println("[CLIENT] Connecting...");
+		socket = new Socket(addr, port);
+		new ClientReceiver(logic, socket).setNetworkEventListener(networkEventListener);
+		sender = new ClientSender(socket);
 	}
 
 	/**
