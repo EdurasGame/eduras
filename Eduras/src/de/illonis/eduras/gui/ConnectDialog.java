@@ -17,6 +17,11 @@ import javax.swing.JTextField;
 
 import de.illonis.eduras.exceptions.NoValueEnteredException;
 
+/**
+ * Asks for user input to connect to server. 
+ * @author illonis
+ *
+ */
 public class ConnectDialog extends JDialog implements ActionListener {
 
 	private static final long serialVersionUID = 1L;

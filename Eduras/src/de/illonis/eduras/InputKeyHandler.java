@@ -57,6 +57,7 @@ public class InputKeyHandler implements KeyListener {
 			return;
 
 		UserMovementEvent moveEvent = null;
+		System.out.println("Pressed " + e.getKeyChar());
 
 		switch (e.getKeyCode()) {
 		case KeyEvent.VK_W:

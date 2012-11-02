@@ -11,7 +11,11 @@ import de.illonis.eduras.logicabstraction.EdurasInitializer;
 import de.illonis.eduras.logicabstraction.EventSender;
 import de.illonis.eduras.logicabstraction.InformationProvider;
 import de.illonis.eduras.logicabstraction.NetworkManager;
-
+/**
+ * Graphical user interface for enduser.
+ * @author illonis
+ *
+ */
 public class Gui extends JFrame {
 
 	private InformationProvider infoPro;
@@ -86,5 +90,6 @@ public class Gui extends JFrame {
 		Thread t = new Thread(rt);
 		t.start();
 		keyHandler = new InputKeyHandler(infoPro.getOwnerID(), eventSender);
+		gamePanel.addKeyListener(keyHandler);
 	}
 }
