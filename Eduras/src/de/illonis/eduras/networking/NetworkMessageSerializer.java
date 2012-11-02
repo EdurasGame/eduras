@@ -6,6 +6,7 @@ import de.illonis.eduras.events.GameEvent;
 import de.illonis.eduras.events.GameInfoRequest;
 import de.illonis.eduras.events.MovementEvent;
 import de.illonis.eduras.events.NetworkEvent;
+import de.illonis.eduras.events.ObjectFactoryEvent;
 import de.illonis.eduras.events.UserMovementEvent;
 import de.illonis.eduras.exceptions.MessageNotSupportedException;
 
@@ -51,15 +52,16 @@ public class NetworkMessageSerializer {
 	 */
 	private static String serializeNetworkEvent(NetworkEvent networkEvent) {
 		String serializedEvent = "";
-		
+
 		serializedEvent += networkEvent.getType().getNumber() + "#";
-		
-		switch(networkEvent.getType()) {
+
+		switch (networkEvent.getType()) {
 		case CONNECTION_ESTABLISHED:
-			serializedEvent += ((ConnectionEstablishedEvent) networkEvent).getClientId();
+			serializedEvent += ((ConnectionEstablishedEvent) networkEvent)
+					.getClientId();
 			break;
 		case CONNECTION_ABORTED:
-			//TODO: Implement this!
+			// TODO: Implement this!
 			break;
 		case NO_EVENT:
 			break;
@@ -99,6 +101,9 @@ public class NetworkMessageSerializer {
 		case NO_EVENT:
 			break;
 		case OBJECT_CREATE:
+			ObjectFactoryEvent event = (ObjectFactoryEvent) gameEvent;
+			serializedEvent += event.getId() + "#" + event.getOwnerId() + "#"
+					+ event.getType().getNumber();
 			break;
 		case OBJECT_REMOVE:
 			break;
