@@ -8,6 +8,7 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 import de.illonis.eduras.GameObject;
+import de.illonis.eduras.Player;
 import de.illonis.eduras.logicabstraction.InformationProvider;
 
 /**
@@ -89,7 +90,10 @@ public class GameRenderer {
 		dbg.setColor(Color.yellow);
 		for (int i = 0; i < objs.size(); i++) {
 			GameObject d = objs.get(i);
-			d.draw(dbg);
+			if (d instanceof Player) {
+				dbg.fillRect(d.getDrawX(), d.getDrawY(), 30, 30);
+			}
+
 		}
 	}
 }

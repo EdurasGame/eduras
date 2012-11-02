@@ -1,8 +1,5 @@
 package de.illonis.eduras;
 
-import java.awt.Graphics2D;
-
-import de.illonis.eduras.interfaces.Drawable;
 import de.illonis.eduras.math.Vector2D;
 import de.illonis.eduras.shapes.ObjectShape;
 
@@ -12,7 +9,7 @@ import de.illonis.eduras.shapes.ObjectShape;
  * @author Florian Mai <florian.ren.mai@googlemail.com>
  * 
  */
-public class GameObject implements Drawable {
+public class GameObject {
 
 	public static int lastId = 0;
 	private final GameInformation game;
@@ -205,15 +202,6 @@ public class GameObject implements Drawable {
 	 */
 	protected void setShape(ObjectShape shape) {
 		this.shape = shape;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see de.illonis.eduras.interfaces.Drawable#draw(java.awt.Graphics2D)
-	 */
-	@Override
-	public void draw(Graphics2D g) {
 	}
 
 	/**
