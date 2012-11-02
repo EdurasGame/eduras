@@ -5,12 +5,12 @@ import java.awt.event.KeyListener;
 import java.util.HashMap;
 import java.util.concurrent.CopyOnWriteArraySet;
 
-import de.illonis.eduras.events.GameEvent;
 import de.illonis.eduras.events.GameEvent.GameEventNumber;
 import de.illonis.eduras.events.UserMovementEvent;
 import de.illonis.eduras.exceptions.MessageNotSupportedException;
+import de.illonis.eduras.exceptions.WrongEventTypeException;
+import de.illonis.eduras.logicabstraction.EventSender;
 import de.illonis.eduras.networking.Client;
-import de.illonis.eduras.networking.NetworkMessageSerializer;
 
 /**
  * This class handles user input and passes them to logic.
@@ -20,15 +20,13 @@ import de.illonis.eduras.networking.NetworkMessageSerializer;
  */
 public class InputKeyHandler implements KeyListener {
 
-	private GameInformation game;
-	private Client client;
+	private EventSender eventSender = null;
 
-	private HashMap<Integer, Boolean> pressedButtons;
-	private CopyOnWriteArraySet<Integer> handledButtons;
+	private final HashMap<Integer, Boolean> pressedButtons;
+	private final CopyOnWriteArraySet<Integer> handledButtons;
+	private final int ownerId;
 
-	public InputKeyHandler(GameInformation g, Client client) {
-		this.game = g;
-		this.client = client;
+	public InputKeyHandler(GameInformation g, Client client, int ownerId) {
 		pressedButtons = new HashMap<Integer, Boolean>();
 
 		handledButtons = new CopyOnWriteArraySet<Integer>();
@@ -39,45 +37,14 @@ public class InputKeyHandler implements KeyListener {
 
 		for (int k : handledButtons)
 			pressedButtons.put(k, false);
-	}
 
-	@Deprecated
-	public InputKeyHandler(GameInformation g) {
-		this(g, null);
-		/**
-		 * this.game = g; pressedButtons = new HashMap<Integer, Boolean>();
-		 * handledButtons = new CopyOnWriteArraySet<Integer>();
-		 * handledButtons.add(KeyEvent.VK_UP);
-		 * handledButtons.add(KeyEvent.VK_LEFT);
-		 * handledButtons.add(KeyEvent.VK_DOWN);
-		 * handledButtons.add(KeyEvent.VK_RIGHT);
-		 * 
-		 * for (int k : handledButtons) pressedButtons.put(k, false);
-		 */
+		this.ownerId = ownerId;
 	}
 
 	@Override
 	public void keyTyped(KeyEvent e) {
 		System.out.println("Key typed: " + e.getKeyCode() + " (\""
 				+ e.getKeyChar() + "\")");
-	}
-
-	/**
-	 * Serializes given event and sends it to server.
-	 * 
-	 * @param event
-	 *            event to handle.
-	 */
-	private void serializeAndSend(GameEvent event) {
-
-		String msg;
-		try {
-			msg = NetworkMessageSerializer.serialize(event);
-			client.sendMessage(msg);
-		} catch (MessageNotSupportedException e) {
-			e.printStackTrace();
-		}
-
 	}
 
 	@Override
@@ -90,25 +57,35 @@ public class InputKeyHandler implements KeyListener {
 		if (pressedButtons.get(e.getKeyCode()))
 			return;
 
+		UserMovementEvent moveEvent = null;
+
 		switch (e.getKeyCode()) {
 		case KeyEvent.VK_W:
-			serializeAndSend(new UserMovementEvent(
-					GameEventNumber.MOVE_UP_PRESSED, client.getOwnerId()));
+			moveEvent = new UserMovementEvent(GameEventNumber.MOVE_UP_PRESSED,
+					ownerId);
 			break;
 		case KeyEvent.VK_A:
-			serializeAndSend(new UserMovementEvent(
-					GameEventNumber.MOVE_LEFT_PRESSED, client.getOwnerId()));
+			moveEvent = new UserMovementEvent(
+					GameEventNumber.MOVE_LEFT_PRESSED, ownerId);
 			break;
 		case KeyEvent.VK_S:
-			serializeAndSend(new UserMovementEvent(
-					GameEventNumber.MOVE_DOWN_PRESSED, client.getOwnerId()));
+			moveEvent = new UserMovementEvent(
+					GameEventNumber.MOVE_DOWN_PRESSED, ownerId);
 			break;
 		case KeyEvent.VK_D:
-			serializeAndSend(new UserMovementEvent(
-					GameEventNumber.MOVE_RIGHT_PRESSED, client.getOwnerId()));
+			moveEvent = new UserMovementEvent(
+					GameEventNumber.MOVE_RIGHT_PRESSED, ownerId);
 			break;
 		default:
 			break;
+		}
+
+		try {
+			eventSender.sendEvent(moveEvent);
+		} catch (WrongEventTypeException e1) {
+			e1.printStackTrace();
+		} catch (MessageNotSupportedException e1) {
+			e1.printStackTrace();
 		}
 
 		// ((YellowCircle) game.getObjects().get(0))
@@ -124,27 +101,58 @@ public class InputKeyHandler implements KeyListener {
 		if (!handledButtons.contains(e.getKeyCode()))
 			return;
 
+		UserMovementEvent moveEvent = null;
+
 		pressedButtons.put(e.getKeyCode(), false);
 
 		switch (e.getKeyCode()) {
 		case KeyEvent.VK_W:
-			serializeAndSend(new UserMovementEvent(
-					GameEventNumber.MOVE_UP_RELEASED, client.getOwnerId()));
+			moveEvent = new UserMovementEvent(GameEventNumber.MOVE_UP_RELEASED,
+					ownerId);
 			break;
 		case KeyEvent.VK_A:
-			serializeAndSend(new UserMovementEvent(
-					GameEventNumber.MOVE_LEFT_RELEASED, client.getOwnerId()));
+			moveEvent = new UserMovementEvent(
+					GameEventNumber.MOVE_LEFT_RELEASED, ownerId);
 			break;
 		case KeyEvent.VK_S:
-			serializeAndSend(new UserMovementEvent(
-					GameEventNumber.MOVE_DOWN_RELEASED, client.getOwnerId()));
+			moveEvent = new UserMovementEvent(
+					GameEventNumber.MOVE_DOWN_RELEASED, ownerId);
 			break;
 		case KeyEvent.VK_D:
-			serializeAndSend(new UserMovementEvent(
-					GameEventNumber.MOVE_RIGHT_RELEASED, client.getOwnerId()));
+			moveEvent = new UserMovementEvent(
+					GameEventNumber.MOVE_RIGHT_RELEASED, ownerId);
 			break;
 		default:
 			break;
 		}
+
+		try {
+			eventSender.sendEvent(moveEvent);
+		} catch (WrongEventTypeException e1) {
+			e1.printStackTrace();
+		} catch (MessageNotSupportedException e1) {
+			e1.printStackTrace();
+		}
+	}
+
+	/**
+	 * Returns the eventSender who is responsible for sending events triggered
+	 * by key pressings.
+	 * 
+	 * @return the eventSender
+	 */
+	public EventSender getEventSender() {
+		return eventSender;
+	}
+
+	/**
+	 * Sets the EventSender who is responsible for sending events triggered by
+	 * key pressings.
+	 * 
+	 * @param eventSender
+	 *            the eventSender to set
+	 */
+	public void setEventSender(EventSender eventSender) {
+		this.eventSender = eventSender;
 	}
 }
