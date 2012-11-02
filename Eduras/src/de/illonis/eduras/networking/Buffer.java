@@ -90,7 +90,6 @@ public class Buffer {
 	 */
 	public synchronized String[] getAll() throws BufferIsEmptyException {
 		if (list.size() == 0)
-
 			throw new BufferIsEmptyException();
 		String[] msgs = new String[list.size()];
 		list.toArray(msgs);

@@ -3,6 +3,10 @@
  */
 package de.illonis.eduras;
 
+import java.util.ArrayList;
+
+import de.illonis.eduras.interfaces.GameEventListener;
+
 /**
  * This class is responsible for updating the current game information triggered
  * by a timer.
@@ -22,11 +26,13 @@ public class LogicGameWorker implements Runnable {
 	private boolean running = false;
 
 	private final GameInformation gameInformation;
+	private ArrayList<GameEventListener> listenerList;
 
 	private long lastUpdate;
 
-	public LogicGameWorker(GameInformation gameInfo) {
+	public LogicGameWorker(GameInformation gameInfo, ArrayList<GameEventListener> listenerList) {
 		this.gameInformation = gameInfo;
+		this.listenerList = listenerList;
 	}
 
 	/*
@@ -66,7 +72,6 @@ public class LogicGameWorker implements Runnable {
 			}
 			beforeTime = System.nanoTime();
 		}
-
 	}
 
 	/**
@@ -84,10 +89,14 @@ public class LogicGameWorker implements Runnable {
 
 		for (GameObject o : gameInformation.getObjects()) {
 
-			if (o instanceof MoveableGameObject)
-				((MoveableGameObject) o).onMove(delta);
+			if (o instanceof MoveableGameObject) {
+				if (!((MoveableGameObject) o).getSpeedVector().isNull()) {
+					((MoveableGameObject) o).onMove(delta);
+					for (GameEventListener listener : listenerList) {
+						listener.onNewObjectPosition(o);
+					}
+				}
+			}
 		}
-
 	}
-
 }

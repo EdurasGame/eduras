@@ -21,6 +21,7 @@ public class Eduras {
 			GameInformation gameInfo = new GameInformation();
 			Logic logic = new Logic(gameInfo);
 			Server server = new Server();
+			
 			server.setGame(logic.getGame());
 			server.setLogic(logic, new NetworkEventListener() {
 

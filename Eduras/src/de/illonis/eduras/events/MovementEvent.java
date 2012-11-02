@@ -13,8 +13,8 @@ import de.illonis.eduras.exceptions.GivenParametersDoNotFitToEventException;
  */
 public class MovementEvent extends ObjectEvent {
 
-	private int newXPos = -1;
-	private int newYPos = -1;
+	private double newXPos = -1;
+	private double newYPos = -1;
 
 	/**
 	 * Creates a new MovementEvent belonging to the object of the given id.
@@ -39,7 +39,7 @@ public class MovementEvent extends ObjectEvent {
 	 * 
 	 * @return The new x position.
 	 */
-	public int getNewXPos() {
+	public double getNewXPos() {
 		return newXPos;
 	}
 
@@ -48,7 +48,7 @@ public class MovementEvent extends ObjectEvent {
 	 * 
 	 * @return The new y position.
 	 */
-	public int getNewYPos() {
+	public double getNewYPos() {
 		return newYPos;
 	}
 
@@ -58,7 +58,7 @@ public class MovementEvent extends ObjectEvent {
 	 * @param val
 	 *            The new value.
 	 */
-	public void setNewXPos(int val) {
+	public void setNewXPos(double val) {
 		newXPos = val;
 	}
 
@@ -68,7 +68,7 @@ public class MovementEvent extends ObjectEvent {
 	 * @param val
 	 *            The new value.
 	 */
-	public void setNewYPos(int val) {
+	public void setNewYPos(double val) {
 		newYPos = val;
 	}
 

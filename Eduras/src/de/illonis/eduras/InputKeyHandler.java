@@ -19,11 +19,14 @@ import de.illonis.eduras.logicabstraction.EventSender;
  */
 public class InputKeyHandler implements KeyListener {
 
+	private static final long KEY_INTERVAL = 20;
+
 	private EventSender eventSender;
 
 	private final HashMap<Integer, Boolean> pressedButtons;
 	private final CopyOnWriteArraySet<Integer> handledButtons;
 	private final int ownerId;
+	private long lastTimePressed;
 
 	public InputKeyHandler(int ownerId, EventSender sender) {
 		pressedButtons = new HashMap<Integer, Boolean>();
@@ -34,6 +37,7 @@ public class InputKeyHandler implements KeyListener {
 		handledButtons.add(KeyEvent.VK_S);
 		handledButtons.add(KeyEvent.VK_D);
 		this.eventSender = sender;
+		lastTimePressed = System.currentTimeMillis();
 
 		for (int k : handledButtons)
 			pressedButtons.put(k, false);
@@ -43,7 +47,7 @@ public class InputKeyHandler implements KeyListener {
 
 	@Override
 	public void keyTyped(KeyEvent e) {
-		System.out.println("Key typed: " + e.getKeyCode() + " (\"" + e.getKeyChar() + "\")");
+		// System.out.println("Key typed: " + e.getKeyCode() + " (\"" + e.getKeyChar() + "\")");
 	}
 
 	@Override
@@ -54,6 +58,9 @@ public class InputKeyHandler implements KeyListener {
 
 		// if already pressed, do not send a new event
 		if (pressedButtons.get(e.getKeyCode()))
+			return;
+
+		if (lastTimePressed < KEY_INTERVAL)
 			return;
 
 		UserMovementEvent moveEvent = null;
@@ -86,7 +93,7 @@ public class InputKeyHandler implements KeyListener {
 
 		// ((YellowCircle) game.getObjects().get(0))
 		// .startMoving(Direction.TOP);
-
+		lastTimePressed = System.currentTimeMillis();
 		System.out.println("Key pressed: " + e.getKeyCode() + " (\"" + e.getKeyChar() + "\")");
 	}
 
@@ -96,6 +103,8 @@ public class InputKeyHandler implements KeyListener {
 		if (!handledButtons.contains(e.getKeyCode()))
 			return;
 
+		if (lastTimePressed < KEY_INTERVAL)
+			return;
 		UserMovementEvent moveEvent = null;
 
 		pressedButtons.put(e.getKeyCode(), false);

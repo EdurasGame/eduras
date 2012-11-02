@@ -86,7 +86,7 @@ public class NetworkMessageDeserializer {
 		// try to extract event type
 		int typeInt;
 		try {
-			typeInt = Integer.parseInt(args[0]);
+			typeInt = parseInt(args[0]);
 		} catch (NumberFormatException e) {
 			throw new InvalidMessageFormatException("Event id of message is no valid integer value: " + args[0], msg);
 		}
@@ -122,7 +122,7 @@ public class NetworkMessageDeserializer {
 		case CONNECTION_ABORTED:
 			break;
 		case CONNECTION_ESTABLISHED:
-			int clientId = Integer.parseInt(args[0]);
+			int clientId = parseInt(args[0]);
 			System.out.println("deser:");
 			System.out.println(args);
 			networkEvent = new ConnectionEstablishedEvent(clientId);
@@ -240,9 +240,9 @@ public class NetworkMessageDeserializer {
 			throw new InvalidMessageFormatException("Invalid number of arguments: " + splittedMessage.length + " instead of 4.", fullMessage);
 
 		try {
-			int id = Integer.parseInt(splittedMessage[1]);
-			int newXPos = Integer.parseInt(splittedMessage[2]);
-			int newYPos = Integer.parseInt(splittedMessage[3]);
+			int id = parseInt(splittedMessage[1]);
+			double newXPos = Double.parseDouble(splittedMessage[2]);
+			double newYPos = Double.parseDouble(splittedMessage[3]);
 			MovementEvent moveEvent = new MovementEvent(typeNumber, id);
 			moveEvent.setNewXPos(newXPos);
 			moveEvent.setNewYPos(newYPos);

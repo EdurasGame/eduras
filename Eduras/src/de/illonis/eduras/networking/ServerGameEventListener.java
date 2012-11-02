@@ -47,7 +47,9 @@ public class ServerGameEventListener implements GameEventListener {
 		String msg = null;
 		try {
 			moveEvent = new MovementEvent(GameEventNumber.SET_POS, o.getId());
-			NetworkMessageSerializer.serialize(moveEvent);
+			moveEvent.setNewXPos(o.getXPosition());
+			moveEvent.setNewYPos(o.getYPosition());
+			msg = NetworkMessageSerializer.serialize(moveEvent);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -67,7 +69,7 @@ public class ServerGameEventListener implements GameEventListener {
 	public void onInformationRequested(ArrayList<GameEvent> infos) {
 
 		for (GameEvent event : infos) {
-			String msg = null;
+			String msg;
 			try {
 				msg = NetworkMessageSerializer.serialize(event);
 			} catch (MessageNotSupportedException e) {

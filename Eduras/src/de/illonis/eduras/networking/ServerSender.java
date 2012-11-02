@@ -129,8 +129,8 @@ public class ServerSender extends Thread {
 	 */
 	private void sendAllMessages() {
 		try {
-			String message = NetworkMessageSerializer.concatenate(outputBuffer
-					.getAll());
+			String[] s = outputBuffer.getAll();
+			String message = NetworkMessageSerializer.concatenate(s);
 			System.out.println("[SERVER] Sent all messages.");
 			sendMessage(message);
 		} catch (BufferIsEmptyException e) {

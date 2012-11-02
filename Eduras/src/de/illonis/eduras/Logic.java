@@ -29,7 +29,7 @@ public class Logic implements GameLogicInterface {
 		listenerList = new ArrayList<GameEventListener>();
 		objectFactory = new ObjectFactory(currentGame);
 
-		Thread gameWorker = new Thread(new LogicGameWorker(currentGame));
+		Thread gameWorker = new Thread(new LogicGameWorker(currentGame, listenerList));
 		gameWorker.start();
 	}
 
@@ -61,10 +61,11 @@ public class Logic implements GameLogicInterface {
 				break;
 			case SET_POS:
 				MovementEvent moveEvent = (MovementEvent) event;
-				int newXPos = moveEvent.getNewXPos();
-				int newYPos = moveEvent.getNewYPos();
+				double newXPos = moveEvent.getNewXPos();
+				double newYPos = moveEvent.getNewYPos();
 				GameObject o = currentGame.findObjectById(moveEvent
 						.getObjectId());
+				if (o == null) break;
 				o.setYPosition(newYPos);
 				o.setXPosition(newXPos);
 
@@ -145,13 +146,7 @@ public class Logic implements GameLogicInterface {
 			break;
 		default:
 			break;
-		}
-//		
-//
-//		for (GameEventListener listener : listenerList) {
-//			listener.onNewObjectPosition(player);
-//		}
-//		
+		}		
 	}
 
 	/**
