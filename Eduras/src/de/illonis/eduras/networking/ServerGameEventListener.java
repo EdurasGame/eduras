@@ -21,7 +21,17 @@ import de.illonis.eduras.interfaces.GameEventListener;
  */
 public class ServerGameEventListener implements GameEventListener {
 
-	private Buffer outputBuffer;
+	private final Buffer outputBuffer;
+
+	/**
+	 * Creates a new ServerGameEventListener with the given outputBuffer.
+	 * 
+	 * @param outputBuffer
+	 *            The outputBuffer to pass events to.
+	 */
+	public ServerGameEventListener(Buffer outputBuffer) {
+		this.outputBuffer = outputBuffer;
+	}
 
 	/*
 	 * (non-Javadoc)
