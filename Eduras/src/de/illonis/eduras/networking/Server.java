@@ -40,11 +40,17 @@ public class Server {
 	private ServerDecoder serverLogic;
 	private GameInformation game;
 	private GameLogicInterface logic;
+	private int port;
+
+	public Server() {
+		this(DEFAULT_PORT);
+	}
 
 	/**
 	 * Creates a new server, that is not started yet.
 	 */
-	public Server() {
+	public Server(int port) {
+		this.port = port;
 		inputBuffer = new Buffer();
 		outputBuffer = new Buffer();
 		serverSender = new ServerSender(this, outputBuffer);
@@ -96,8 +102,7 @@ public class Server {
 	 * @param listener
 	 *            The listener
 	 */
-	public void setLogic(GameLogicInterface logic,
-			NetworkEventListener eventListener) {
+	public void setLogic(GameLogicInterface logic, NetworkEventListener eventListener) {
 		this.logic = logic;
 		logic.addGameEventListener(new ServerGameEventListener(outputBuffer, serverSender));
 		serverLogic = new ServerDecoder(inputBuffer, logic, eventListener);
@@ -126,23 +131,19 @@ public class Server {
 	private void handleConnection(Socket client) throws IOException {
 		int clientId = serverSender.add(client);
 
-		ObjectFactoryEvent newPlayerEvent = new ObjectFactoryEvent(
-				GameEventNumber.OBJECT_CREATE, ObjectType.PLAYER);
+		ObjectFactoryEvent newPlayerEvent = new ObjectFactoryEvent(GameEventNumber.OBJECT_CREATE, ObjectType.PLAYER);
 		newPlayerEvent.setOwnerId(clientId);
 		logic.onGameEventAppeared(newPlayerEvent);
 
 		ServerReceiver sr = new ServerReceiver(this, inputBuffer, client);
 		sr.start();
 
-		ConnectionEstablishedEvent connectionEstablished = new ConnectionEstablishedEvent(
-				clientId);
+		ConnectionEstablishedEvent connectionEstablished = new ConnectionEstablishedEvent(clientId);
 		try {
-			serverSender.sendMessageToClient(clientId,
-					NetworkMessageSerializer.serialize(connectionEstablished));
+			serverSender.sendMessageToClient(clientId, NetworkMessageSerializer.serialize(connectionEstablished));
 		} catch (MessageNotSupportedException e) {
 			System.out.println(e.getEventMessage());
-			System.out
-					.println("For type: " + e.getGameEventNumber().toString());
+			System.out.println("For type: " + e.getGameEventNumber().toString());
 			e.printStackTrace();
 		}
 	}
@@ -158,7 +159,7 @@ public class Server {
 		private final ServerSocket server;
 
 		public ConnectionListener() throws IOException {
-			server = new ServerSocket(DEFAULT_PORT);
+			server = new ServerSocket(port);
 		}
 
 		/**
@@ -166,14 +167,12 @@ public class Server {
 		 */
 		@Override
 		public void run() {
-			System.out.println(Localization.getStringF(
-					"Server.startedlistening", DEFAULT_PORT));
+			System.out.println(Localization.getStringF("Server.startedlistening", port));
 			while (true) {
 				Socket client = null;
 				try {
 					client = server.accept();
-					System.out.println(Localization
-							.getString("Server.newclient")); //$NON-NLS-1$
+					System.out.println(Localization.getString("Server.newclient")); //$NON-NLS-1$
 					handleConnection(client);
 				} catch (IOException e) {
 					e.printStackTrace();

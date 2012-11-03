@@ -44,8 +44,8 @@ public class Gui extends JFrame {
 	private void buildGui() {
 
 		gamePanel = new GamePanel();
-		renderer = new GameRenderer(infoPro, gamePanel);
-		rendererThread = new RenderThread(renderer);
+		renderer = new GameRenderer(infoPro);
+		rendererThread = new RenderThread(renderer, gamePanel);
 		setContentPane(gamePanel);
 		setSize(500, 500);
 
@@ -93,7 +93,7 @@ public class Gui extends JFrame {
 	 * Called when connection to server is established.
 	 */
 	void onConnected() {
-		
+
 		Thread t = new Thread(rendererThread);
 		t.start();
 		System.out.println("ownerid: " + infoPro.getOwnerID());

@@ -20,8 +20,13 @@ public class Eduras {
 			System.out.println("Starting Eduras? server...");
 			GameInformation gameInfo = new GameInformation();
 			Logic logic = new Logic(gameInfo);
-			Server server = new Server();
-			
+			Server server;
+			if (args.length > 1) {
+				int port = Integer.parseInt(args[1]);
+				server = new Server(port);
+			} else
+				server = new Server();
+
 			server.setGame(logic.getGame());
 			server.setLogic(logic, new NetworkEventListener() {
 

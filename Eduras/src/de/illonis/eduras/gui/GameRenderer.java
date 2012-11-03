@@ -1,7 +1,6 @@
 package de.illonis.eduras.gui;
 
 import java.awt.Color;
-import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
@@ -18,27 +17,18 @@ import de.illonis.eduras.logicabstraction.InformationProvider;
  * 
  */
 public class GameRenderer {
-	private GamePanel gamePanel;
 	private BufferedImage dbImage = null;
 	private Graphics2D dbg = null;
 	private HashMap<Integer, GameObject> objs;
 
 	/**
-	 * Creates a new gamerenderer.
+	 * Creates a new renderer.
 	 * 
 	 * @param game
-	 * @param gameWorldPanel
+	 *            game-information that contains objects to render.
 	 */
-	public GameRenderer(InformationProvider informationProvider, GamePanel gameWorldPanel) {
-		this.gamePanel = gameWorldPanel;
+	public GameRenderer(InformationProvider informationProvider) {
 		objs = informationProvider.getGameObjects();
-	}
-
-	/**
-	 * Renders buffered image with panel size.
-	 */
-	public void render() {
-		render(gamePanel.getWidth(), gamePanel.getHeight());
 	}
 
 	/**
@@ -52,7 +42,7 @@ public class GameRenderer {
 	public void render(int width, int height) {
 
 		// recreate image if it does not exist
-		if (dbImage == null || dbg == null || width != dbImage.getWidth(gamePanel)) {
+		if (dbImage == null || dbg == null || width != dbImage.getWidth()) {
 			dbImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
 
 			dbg = (Graphics2D) dbImage.getGraphics();
@@ -66,19 +56,14 @@ public class GameRenderer {
 	}
 
 	/**
-	 * actively renders the buffer images to screen.
+	 * Actively renders the buffer images to given graphics.
+	 * 
+	 * @param graphics
+	 *            images are painted here.
 	 */
-	public void paintGame() {
-		Graphics g;
-		try {
-			g = gamePanel.getGraphics();
-			if ((g != null) && (dbImage != null)) {
-				g.drawImage(dbImage, 0, 0, null);
-			}
-			g.dispose();
-		} catch (Exception e) {
-			System.out.println("Graphics context error: " + e.getMessage());
-			e.printStackTrace();
+	public void paintGame(Graphics2D graphics) {
+		if ((graphics != null) && (dbImage != null)) {
+			graphics.drawImage(dbImage, 0, 0, null);
 		}
 	}
 
@@ -93,7 +78,6 @@ public class GameRenderer {
 			if (d instanceof Player) {
 				dbg.fillRect(d.getDrawX(), d.getDrawY(), 30, 30);
 			}
-
 		}
 	}
 }
