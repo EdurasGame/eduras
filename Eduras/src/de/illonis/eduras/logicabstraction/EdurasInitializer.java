@@ -21,34 +21,34 @@ public class EdurasInitializer {
 	EventSender eventSender;
 	InformationProvider informationProvider;
 	static EdurasInitializer instance;
-	
+
 	private EdurasInitializer() {
-		
+
 		GameInformation game = new GameInformation();
-		
+
 		GameLogicInterface logic = new Logic(game);
-		
+
 		networkManager = new NetworkManager(logic);
-		
+
 		Client client = networkManager.getClient();
-		
+
 		eventSender = new EventSender(client);
-		
-		informationProvider = new InformationProvider(logic,client.getOwnerId());
-		
+
+		informationProvider = new InformationProvider(logic, networkManager);
+
 	}
-	
+
 	public NetworkManager getNetworkManager() {
 		return networkManager;
 	}
-	
+
 	public static EdurasInitializer getInstance() {
-		if(instance == null) {
+		if (instance == null) {
 			return new EdurasInitializer();
 		}
 		return instance;
 	}
-	
+
 	public EventSender getEventSender() {
 		return eventSender;
 	}
@@ -56,5 +56,5 @@ public class EdurasInitializer {
 	public InformationProvider getInformationProvider() {
 		return informationProvider;
 	}
-	
+
 }

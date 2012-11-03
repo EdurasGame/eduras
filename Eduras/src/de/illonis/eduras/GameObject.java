@@ -17,7 +17,7 @@ public class GameObject {
 	private ObjectShape shape;
 
 	private int id;
-	private int owner = 0;
+	private int owner = -1;
 
 	private double xPosition, yPosition;
 

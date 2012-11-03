@@ -114,7 +114,6 @@ public class Logic implements GameLogicInterface {
 	 */
 	private void handlePlayerMove(UserMovementEvent event) {
 
-		// TODO: find player
 		Player player = currentGame.getPlayerByOwnerId(event.getOwner());
 		System.out.println("player: " + player);
 		System.out.println("eo: "  + event.getOwner());

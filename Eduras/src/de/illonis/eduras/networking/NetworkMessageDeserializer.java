@@ -122,7 +122,7 @@ public class NetworkMessageDeserializer {
 		case CONNECTION_ABORTED:
 			break;
 		case CONNECTION_ESTABLISHED:
-			int clientId = parseInt(args[0]);
+			int clientId = parseInt(args[1]);
 			System.out.println("deser:");
 			System.out.println(args);
 			networkEvent = new ConnectionEstablishedEvent(clientId);

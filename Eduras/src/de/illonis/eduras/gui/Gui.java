@@ -27,8 +27,8 @@ public class Gui extends JFrame {
 	private NetworkManager nwm;
 	private GamePanel gamePanel;
 	private GameRenderer renderer;
-	private RenderThread rt;
-	private ConnectDialog cd;
+	private RenderThread rendererThread;
+	private ConnectDialog connectDialog;
 	private InputKeyHandler keyHandler;
 	private NetworkEventHandler eventHandler;
 
@@ -37,7 +37,7 @@ public class Gui extends JFrame {
 	public Gui() {
 		loadTools();
 		buildGui();
-		cd = new ConnectDialog(this);
+		connectDialog = new ConnectDialog(this);
 
 	}
 
@@ -45,7 +45,7 @@ public class Gui extends JFrame {
 
 		gamePanel = new GamePanel();
 		renderer = new GameRenderer(infoPro, gamePanel);
-		rt = new RenderThread(renderer);
+		rendererThread = new RenderThread(renderer);
 		setContentPane(gamePanel);
 		setSize(500, 500);
 
@@ -70,12 +70,12 @@ public class Gui extends JFrame {
 	}
 
 	void showConnectDialog() {
-		cd.setVisible(true);
+		connectDialog.setVisible(true);
 		InetAddress address;
 		int port;
 		try {
-			address = cd.getAddress();
-			port = cd.getPort();
+			address = connectDialog.getAddress();
+			port = connectDialog.getPort();
 		} catch (NoValueEnteredException e) {
 			System.out.println("empty");
 			return;
@@ -93,7 +93,8 @@ public class Gui extends JFrame {
 	 * Called when connection to server is established.
 	 */
 	void onConnected() {
-		Thread t = new Thread(rt);
+		
+		Thread t = new Thread(rendererThread);
 		t.start();
 		System.out.println("ownerid: " + infoPro.getOwnerID());
 		keyHandler = new InputKeyHandler(infoPro.getOwnerID(), eventSender);

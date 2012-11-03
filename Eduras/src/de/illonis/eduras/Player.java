@@ -23,7 +23,7 @@ public class Player extends MoveableGameObject implements Controllable {
 	 */
 	public Player(GameInformation game, int ownerId) {
 		super(game);
-		setSpeed(20);
+		setSpeed(50);
 		setOwner(ownerId);
 		setShape(new NoCollisionShape());
 	}

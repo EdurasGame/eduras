@@ -93,8 +93,9 @@ public class ServerSender extends Thread {
 	 *         guess this will never ever happen.
 	 */
 	private int getFreeClientId() {
+
 		for (int i = 0; i >= 0; i++) {
-			if (!clients.containsKey(i)) {
+			if (!clients.containsKey(new Integer(i))) {
 				return i;
 			}
 		}

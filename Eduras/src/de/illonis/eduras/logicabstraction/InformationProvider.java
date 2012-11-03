@@ -22,7 +22,7 @@ import de.illonis.eduras.interfaces.InfoInterface;
 public class InformationProvider implements InfoInterface {
 
 	private final GameLogicInterface logic;
-	private final int ownerID;
+	private final NetworkManager networkManager;
 
 	/**
 	 * Creates a new InformationProvider that gains information with the given
@@ -31,9 +31,9 @@ public class InformationProvider implements InfoInterface {
 	 * @param logic
 	 *            The logic to gain information from.
 	 */
-	InformationProvider(GameLogicInterface logic, int ownerID) {
+	InformationProvider(GameLogicInterface logic, NetworkManager networkManager) {
 		this.logic = logic;
-		this.ownerID = ownerID;
+		this.networkManager = networkManager;
 	}
 
 	/*
@@ -53,11 +53,11 @@ public class InformationProvider implements InfoInterface {
 	 * @return owner id.
 	 */
 	public int getOwnerID() {
-		return ownerID;
+		return networkManager.getClient().getOwnerId();
 	}
 
 	public Player getPlayer() {
-		return logic.getGame().getPlayerByOwnerId(ownerID);
+		return logic.getGame().getPlayerByOwnerId(getOwnerID());
 	}
 
 	public ArrayList<GameObject> getGameObjects() {

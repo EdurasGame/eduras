@@ -102,6 +102,7 @@ public class GameInformation {
 		for (GameObject object : objects) {
 			ObjectFactoryEvent objectEvent = new ObjectFactoryEvent(
 					GameEventNumber.OBJECT_CREATE, ObjectType.PLAYER);
+			objectEvent.setOwnerId(object.getOwner());
 			objectEvent.setId(object.getId());
 			infos.add(objectEvent);
 		}

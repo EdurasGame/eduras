@@ -19,7 +19,7 @@ public class LogicGameWorker implements Runnable {
 	/**
 	 * Tells how much time shall be between two updates.
 	 */
-	private static final long TICKRATE = 100000;
+	private static final long TICKRATE = 15000000L;
 
 	private static final int NO_DELAYS_PER_YIELD = 16;
 
