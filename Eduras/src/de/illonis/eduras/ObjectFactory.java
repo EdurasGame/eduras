@@ -72,7 +72,8 @@ public class ObjectFactory {
 				System.out.println("create player: " + ofe.getOwnerId());
 				go = new Player(logic.getGame(), ofe.getOwnerId());
 				logic.getGame().addPlayer((Player) go);
-				go.setId(ofe.getId());
+				if (ofe.hasId())
+					go.setId(ofe.getId());
 				logic.getGame().addObject(go);
 				break;
 			case YELLOWCIRCLE:
