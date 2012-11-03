@@ -6,30 +6,25 @@ import java.util.HashMap;
 import de.illonis.eduras.ObjectFactory.ObjectType;
 import de.illonis.eduras.events.GameEvent;
 import de.illonis.eduras.events.GameEvent.GameEventNumber;
+import de.illonis.eduras.events.MovementEvent;
 import de.illonis.eduras.events.ObjectFactoryEvent;
 import de.illonis.eduras.math.Vector2D;
 import de.illonis.eduras.shapes.ObjectShape;
 
 public class GameInformation {
-	private final ObjectFactory factory;
-	private final ArrayList<GameObject> objects;
+	private final HashMap<Integer, GameObject> objects;
 	private final HashMap<Integer, Player> players;
 
-	public ObjectFactory getFactory() {
-		return factory;
-	}
-
 	public GameInformation() {
-		factory = new ObjectFactory(this);
-		objects = new ArrayList<GameObject>();
+		objects = new HashMap<Integer, GameObject>();
 		players = new HashMap<Integer, Player>();
 	}
 
 	public void addObject(GameObject object) {
-		objects.add(object);
+		objects.put(object.getId(), object);
 	}
 
-	public ArrayList<GameObject> getObjects() {
+	public HashMap<Integer, GameObject> getObjects() {
 		return objects;
 	}
 
@@ -59,10 +54,7 @@ public class GameInformation {
 	 * @return object with given id.
 	 */
 	public GameObject findObjectById(int id) {
-		for (GameObject o : objects)
-			if (o.getId() == id)
-				return o;
-		return null;
+		return objects.get(id);
 	}
 
 	/**
@@ -80,7 +72,7 @@ public class GameInformation {
 	 * @return <tt>true</tt> if this list contained the specified element
 	 */
 	public boolean removeObject(GameObject go) {
-		return objects.remove(go);
+		return (objects.remove(go.getId()) != null);
 	}
 
 	public void addPlayer(Player player) {
@@ -99,12 +91,17 @@ public class GameInformation {
 
 		ArrayList<GameEvent> infos = new ArrayList<>();
 
-		for (GameObject object : objects) {
-			ObjectFactoryEvent objectEvent = new ObjectFactoryEvent(
-					GameEventNumber.OBJECT_CREATE, ObjectType.PLAYER);
+		for (GameObject object : objects.values()) {
+			ObjectFactoryEvent objectEvent = new ObjectFactoryEvent(GameEventNumber.OBJECT_CREATE, ObjectType.PLAYER);
 			objectEvent.setOwnerId(object.getOwner());
 			objectEvent.setId(object.getId());
 			infos.add(objectEvent);
+
+			// send position immediately
+			MovementEvent me = new MovementEvent(GameEventNumber.SET_POS, object.getId());
+			me.setNewXPos(object.getXPosition());
+			me.setNewYPos(object.getYPosition());
+			infos.add(me);
 		}
 
 		return infos;

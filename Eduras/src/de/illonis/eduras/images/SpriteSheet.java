@@ -74,4 +74,8 @@ public class SpriteSheet {
 	public int getTileCount() {
 		return tileCount;
 	}
+	
+	public int[] getPixels() {
+		return pixels;
+	}
 }

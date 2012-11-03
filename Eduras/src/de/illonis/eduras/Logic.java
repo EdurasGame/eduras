@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import de.illonis.eduras.MoveableGameObject.Direction;
 import de.illonis.eduras.events.GameEvent;
 import de.illonis.eduras.events.GameEvent.GameEventNumber;
+import de.illonis.eduras.events.GameInfoRequest;
 import de.illonis.eduras.events.MovementEvent;
 import de.illonis.eduras.events.ObjectFactoryEvent;
 import de.illonis.eduras.events.UserMovementEvent;
@@ -27,7 +28,7 @@ public class Logic implements GameLogicInterface {
 
 		this.currentGame = g;
 		listenerList = new ArrayList<GameEventListener>();
-		objectFactory = new ObjectFactory(currentGame);
+		objectFactory = new ObjectFactory(this);
 
 		Thread gameWorker = new Thread(new LogicGameWorker(currentGame, listenerList));
 		gameWorker.start();
@@ -63,9 +64,9 @@ public class Logic implements GameLogicInterface {
 				MovementEvent moveEvent = (MovementEvent) event;
 				double newXPos = moveEvent.getNewXPos();
 				double newYPos = moveEvent.getNewYPos();
-				GameObject o = currentGame.findObjectById(moveEvent
-						.getObjectId());
-				if (o == null) break;
+				GameObject o = currentGame.findObjectById(moveEvent.getObjectId());
+				if (o == null)
+					break;
 				o.setYPosition(newYPos);
 				o.setXPosition(newXPos);
 
@@ -75,33 +76,13 @@ public class Logic implements GameLogicInterface {
 				break;
 			case INFORMATION_REQUEST:
 				ArrayList<GameEvent> infos = currentGame.getAllInfosAsEvent();
-				for(GameEventListener listener: listenerList) {
-					listener.onInformationRequested(infos);
+				for (GameEventListener listener : listenerList) {
+					listener.onInformationRequested(infos, ((GameInfoRequest) event).getRequester());
 				}
 				break;
 			default:
 				break;
 			}
-		}
-	}
-
-	/**
-	 * Handles an object
-	 * @param event
-	 */
-	@Deprecated
-	private void handleObjectFactoryEvent(ObjectFactoryEvent event) {
-		
-		switch(event.getType()) {
-		case OBJECT_CREATE:
-			switch(event.getObjectType()) {
-			case PLAYER:
-				
-				break;
-			default:
-			}
-			break;
-		default:
 		}
 	}
 
@@ -116,8 +97,8 @@ public class Logic implements GameLogicInterface {
 
 		Player player = currentGame.getPlayerByOwnerId(event.getOwner());
 		System.out.println("player: " + player);
-		System.out.println("eo: "  + event.getOwner());
-		
+		System.out.println("eo: " + event.getOwner());
+
 		switch (event.getType()) {
 		case MOVE_DOWN_PRESSED:
 			player.startMoving(Direction.BOTTOM);
@@ -145,7 +126,7 @@ public class Logic implements GameLogicInterface {
 			break;
 		default:
 			break;
-		}		
+		}
 	}
 
 	/**
@@ -174,4 +155,8 @@ public class Logic implements GameLogicInterface {
 		return currentGame;
 	}
 
+	@Override
+	public ArrayList<GameEventListener> getListenerList() {
+		return listenerList;
+	}
 }

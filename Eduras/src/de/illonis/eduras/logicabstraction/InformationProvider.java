@@ -3,7 +3,7 @@
  */
 package de.illonis.eduras.logicabstraction;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 
 import de.illonis.eduras.GameObject;
 import de.illonis.eduras.Player;
@@ -60,7 +60,7 @@ public class InformationProvider implements InfoInterface {
 		return logic.getGame().getPlayerByOwnerId(getOwnerID());
 	}
 
-	public ArrayList<GameObject> getGameObjects() {
+	public HashMap<Integer, GameObject> getGameObjects() {
 		return logic.getGame().getObjects();
 	}
 

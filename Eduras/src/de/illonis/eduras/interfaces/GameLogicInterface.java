@@ -3,6 +3,8 @@
  */
 package de.illonis.eduras.interfaces;
 
+import java.util.ArrayList;
+
 import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.events.GameEvent;
 
@@ -19,5 +21,7 @@ public interface GameLogicInterface {
 	public GameInformation getGame();
 	
 	public void addGameEventListener(GameEventListener listener);
+	
+	public ArrayList<GameEventListener> getListenerList();
 
 }

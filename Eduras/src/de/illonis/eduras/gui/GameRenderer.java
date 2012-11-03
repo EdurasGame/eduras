@@ -5,7 +5,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
-import java.util.ArrayList;
+import java.util.HashMap;
 
 import de.illonis.eduras.GameObject;
 import de.illonis.eduras.Player;
@@ -18,10 +18,10 @@ import de.illonis.eduras.logicabstraction.InformationProvider;
  * 
  */
 public class GameRenderer {
-	private InformationProvider informationProvider;
 	private GamePanel gamePanel;
 	private BufferedImage dbImage = null;
 	private Graphics2D dbg = null;
+	private HashMap<Integer, GameObject> objs;
 
 	/**
 	 * Creates a new gamerenderer.
@@ -30,8 +30,8 @@ public class GameRenderer {
 	 * @param gameWorldPanel
 	 */
 	public GameRenderer(InformationProvider informationProvider, GamePanel gameWorldPanel) {
-		this.informationProvider = informationProvider;
 		this.gamePanel = gameWorldPanel;
+		objs = informationProvider.getGameObjects();
 	}
 
 	/**
@@ -73,7 +73,8 @@ public class GameRenderer {
 		try {
 			g = gamePanel.getGraphics();
 			if ((g != null) && (dbImage != null)) {
-				g.drawImage(dbImage, 0, 0, null); }
+				g.drawImage(dbImage, 0, 0, null);
+			}
 			g.dispose();
 		} catch (Exception e) {
 			System.out.println("Graphics context error: " + e.getMessage());
@@ -84,8 +85,7 @@ public class GameRenderer {
 	/**
 	 * Draw every object of game-object list.
 	 */
-	private void drawObjects() {
-		ArrayList<GameObject> objs = informationProvider.getGameObjects();
+	private synchronized void drawObjects() {
 
 		dbg.setColor(Color.yellow);
 		for (int i = 0; i < objs.size(); i++) {

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import de.illonis.eduras.GameObject;
 import de.illonis.eduras.events.GameEvent;
+import de.illonis.eduras.events.ObjectFactoryEvent;
 
 public interface GameEventListener {
 
@@ -20,7 +21,17 @@ public interface GameEventListener {
 	 * available. The information is given as a list of events providing all
 	 * needed details.
 	 * 
-	 * @param infos The list of events representing the information.
+	 * @param infos
+	 *            The list of events representing the information.
+	 * @param targetOwner
+	 *            owner that requested information.
 	 */
-	public void onInformationRequested(ArrayList<GameEvent> infos);
+	public void onInformationRequested(ArrayList<GameEvent> infos, int targetOwner);
+
+	/**
+	 * bla
+	 * @param event
+	 */
+	public void onObjectCreation(ObjectFactoryEvent event);
+
 }

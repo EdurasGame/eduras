@@ -9,7 +9,7 @@ import de.illonis.eduras.shapes.ObjectShape;
  * @author Florian Mai <florian.ren.mai@googlemail.com>
  * 
  */
-public class GameObject {
+public class GameObject implements Comparable<GameObject> {
 
 	public static int lastId = 0;
 	private final GameInformation game;
@@ -212,5 +212,15 @@ public class GameObject {
 	 */
 	public Vector2D toPositionVector() {
 		return new Vector2D(xPosition, yPosition);
+	}
+
+	@Override
+	public int compareTo(GameObject o) {
+		if (getId() == o.getId())
+			return 0;
+		else if (getId() > o.getId())
+			return 1;
+		else
+			return -1;
 	}
 }

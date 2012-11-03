@@ -3,7 +3,6 @@
  */
 package de.illonis.eduras.events;
 
-import de.illonis.eduras.exceptions.GivenParametersDoNotFitToEventException;
 
 /**
  * Event for any movement to any direction.
@@ -23,15 +22,9 @@ public class MovementEvent extends ObjectEvent {
 	 *            Type of event.
 	 * @param id
 	 *            The id of the object.
-	 * @throws GivenParametersDoNotFitToEventException
-	 *             Exception takes place if the given GameEventNumber is not a
-	 *             MovementEvent.
 	 */
-	public MovementEvent(GameEventNumber type, int id)
-			throws GivenParametersDoNotFitToEventException {
-
+	public MovementEvent(GameEventNumber type, int id) {
 		super(type, id);
-
 	}
 
 	/**

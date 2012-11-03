@@ -3,6 +3,8 @@ package de.illonis.eduras;
 import de.illonis.eduras.events.GameEvent;
 import de.illonis.eduras.events.GameEvent.GameEventNumber;
 import de.illonis.eduras.events.ObjectFactoryEvent;
+import de.illonis.eduras.interfaces.GameEventListener;
+import de.illonis.eduras.interfaces.GameLogicInterface;
 import de.illonis.eduras.test.YellowCircle;
 
 /**
@@ -14,7 +16,7 @@ import de.illonis.eduras.test.YellowCircle;
  */
 public class ObjectFactory {
 
-	private final GameInformation game;
+	private final GameLogicInterface logic;
 
 	/**
 	 * Collection of object types that can be created by {@link ObjectFactory}.
@@ -41,7 +43,6 @@ public class ObjectFactory {
 					return objectType;
 				}
 			}
-
 			return ObjectType.NO_OBJECT;
 		}
 	}
@@ -49,11 +50,11 @@ public class ObjectFactory {
 	/**
 	 * Creates a new objectfactory for given game.
 	 * 
-	 * @param game
+	 * @param logic
 	 *            game object factory is assigned to.
 	 */
-	public ObjectFactory(GameInformation game) {
-		this.game = game;
+	public ObjectFactory(GameLogicInterface logic) {
+		this.logic = logic;
 	}
 
 	public void onGameEventAppeared(GameEvent event) {
@@ -62,17 +63,19 @@ public class ObjectFactory {
 			return;
 
 		ObjectFactoryEvent ofe = (ObjectFactoryEvent) event;
+		if (logic.getGame().getObjects().containsKey(ofe.getId()))
+			return;
 		GameObject go = null;
 		if (ofe.getType() == GameEventNumber.OBJECT_CREATE) {
 			switch (ofe.getObjectType()) {
 			case PLAYER:
 				System.out.println("create player: " + ofe.getOwnerId());
-				go = new Player(game, ofe.getOwnerId());
-				game.addPlayer((Player)go);
-				game.addObject(go);
+				go = new Player(logic.getGame(), ofe.getOwnerId());
+				logic.getGame().addPlayer((Player) go);
+				logic.getGame().addObject(go);
 				break;
 			case YELLOWCIRCLE:
-				go = new YellowCircle(game);
+				go = new YellowCircle(logic.getGame());
 				break;
 			default:
 				return;
@@ -81,13 +84,16 @@ public class ObjectFactory {
 			if (go != null && ofe.hasId()) {
 				go.setId(ofe.getId());
 			}
-		//	game.addObject(go);
+
+			for (GameEventListener gel : logic.getListenerList()) {
+				gel.onObjectCreation(ofe);
+			}
+			// game.addObject(go);
 		}
 
 		else if (ofe.getType() == GameEventNumber.OBJECT_REMOVE) {
 			int id = ofe.getId();
-			go = game.findObjectById(id);
-			game.removeObject(go);
+			logic.getGame().getObjects().remove(id);
 		}
 
 	}

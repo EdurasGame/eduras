@@ -3,7 +3,7 @@
  */
 package de.illonis.eduras.shapes;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedList;
 
 import de.illonis.eduras.GameInformation;
@@ -35,17 +35,12 @@ public class Triangle extends ObjectShape {
 	 *             Is thrown if the given vertices do not enclose the objects
 	 *             centre point.
 	 */
-	public Triangle(Vector2D first, Vector2D second, Vector2D third)
-			throws ShapeVerticesNotApplicableException {
+	public Triangle(Vector2D first, Vector2D second, Vector2D third) throws ShapeVerticesNotApplicableException {
 
-		boolean isPositiveX = first.getX() > 0 || second.getX() > 0
-				|| third.getX() > 0;
-		boolean isNegativeX = first.getX() < 0 || second.getX() < 0
-				|| third.getX() < 0;
-		boolean isPositiveY = first.getY() > 0 || second.getY() > 0
-				|| third.getY() > 0;
-		boolean isNegativeY = first.getY() < 0 || second.getY() < 0
-				|| third.getY() < 0;
+		boolean isPositiveX = first.getX() > 0 || second.getX() > 0 || third.getX() > 0;
+		boolean isNegativeX = first.getX() < 0 || second.getX() < 0 || third.getX() < 0;
+		boolean isPositiveY = first.getY() > 0 || second.getY() > 0 || third.getY() > 0;
+		boolean isNegativeY = first.getY() < 0 || second.getY() < 0 || third.getY() < 0;
 
 		if (isPositiveX && isNegativeX && isPositiveY && isNegativeY) {
 			vertices = new Vector2D[3];
@@ -64,21 +59,19 @@ public class Triangle extends ObjectShape {
 	 * de.illonis.eduras.GameObject, java.awt.geom.Point2D.Double)
 	 */
 	@Override
-	public Vector2D checkCollision(GameInformation game, GameObject thisObject,
-			Vector2D target) {
+	public Vector2D checkCollision(GameInformation game, GameObject thisObject, Vector2D target) {
 
 		Vector2D result = target;
 
-		ArrayList<GameObject> gameObjects = game.getObjects();
+		HashMap<Integer, GameObject> gameObjects = game.getObjects();
 
 		Vector2D positionVector = thisObject.toPositionVector();
-		LinkedList<Line> lines = Geometry.getLinesBetweenShapePositions(vertices,
-				positionVector, target);
+		LinkedList<Line> lines = Geometry.getLinesBetweenShapePositions(vertices, positionVector, target);
 
 		LinkedList<Vector2D> collisions = new LinkedList<Vector2D>();
 
 		// Check for collides with objects
-		for (GameObject singleObject : gameObjects) {
+		for (GameObject singleObject : gameObjects.values()) {
 			ObjectShape otherObjectShape = singleObject.getShape();
 			Vector2D res = otherObjectShape.isIntersected(lines, singleObject);
 
@@ -115,10 +108,10 @@ public class Triangle extends ObjectShape {
 	@Override
 	public Vector2D isIntersected(LinkedList<Line> lines, GameObject thisObject) {
 
-		for(int i = 0; i < vertices.length - 1; i++) {
-			
+		for (int i = 0; i < vertices.length - 1; i++) {
+
 		}
-		
+
 		return null;
 	}
 

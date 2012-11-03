@@ -87,7 +87,7 @@ public class LogicGameWorker implements Runnable {
 			return;
 		lastUpdate = System.nanoTime();
 
-		for (GameObject o : gameInformation.getObjects()) {
+		for (GameObject o : gameInformation.getObjects().values()) {
 
 			if (o instanceof MoveableGameObject) {
 				if (!((MoveableGameObject) o).getSpeedVector().isNull()) {

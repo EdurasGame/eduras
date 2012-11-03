@@ -3,7 +3,7 @@
  */
 package de.illonis.eduras.interfaces;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 
 import de.illonis.eduras.GameObject;
 import de.illonis.eduras.Player;
@@ -35,8 +35,8 @@ public interface InfoInterface {
 	/**
 	 * Returns the game objects currently in the game.
 	 * 
-	 * @return The game objects as an arraylist.
+	 * @return The game objects as a hashmap.
 	 */
-	public ArrayList<GameObject> getGameObjects();
+	public HashMap<Integer, GameObject> getGameObjects();
 
 }
