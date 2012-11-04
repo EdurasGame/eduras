@@ -137,7 +137,7 @@ public class GameWorker implements Runnable {
 		 * ((YellowCircle) o).startMoving(Direction.TOP); else ((YellowCircle)
 		 * o).stopMoving();
 		 */
-		for (GameObject o : game.getObjects()) {
+		for (GameObject o : game.getObjects().values()) {
 
 			if (o instanceof YellowCircle)
 				((YellowCircle) o).onMove(delta);

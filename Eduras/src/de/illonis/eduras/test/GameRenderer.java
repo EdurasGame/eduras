@@ -5,10 +5,8 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
-import java.util.ArrayList;
 
 import de.illonis.eduras.GameInformation;
-import de.illonis.eduras.GameObject;
 
 /**
  * GameRenderer renders the buffered image for gameworldpanel.
@@ -17,7 +15,6 @@ import de.illonis.eduras.GameObject;
  * 
  */
 public class GameRenderer {
-	private GameInformation game;
 	private GameWorldPanel gameWorldPanel;
 	private BufferedImage dbImage = null;
 	private Graphics2D dbg = null;
@@ -29,7 +26,6 @@ public class GameRenderer {
 	 * @param gameWorldPanel
 	 */
 	public GameRenderer(GameInformation game, GameWorldPanel gameWorldPanel) {
-		this.game = game;
 		this.gameWorldPanel = gameWorldPanel;
 	}
 
@@ -44,14 +40,11 @@ public class GameRenderer {
 	public void render(int width, int height) {
 
 		// recreate image if it does not exist
-		if (dbImage == null || dbg == null
-				|| width != dbImage.getWidth(gameWorldPanel)) {
-			dbImage = new BufferedImage(width, height,
-					BufferedImage.TYPE_INT_RGB);
+		if (dbImage == null || dbg == null || width != dbImage.getWidth(gameWorldPanel)) {
+			dbImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
 
 			dbg = (Graphics2D) dbImage.getGraphics();
-			dbg.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-					RenderingHints.VALUE_ANTIALIAS_ON);
+			dbg.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 		}
 		// clear image
 		dbg.setColor(Color.black);
@@ -80,12 +73,8 @@ public class GameRenderer {
 	 * Draw every object of game-object list.
 	 */
 	private void drawObjects() {
-		ArrayList<GameObject> objs = game.getObjects();
 
 		dbg.setColor(Color.yellow);
-		for (int i = 0; i < objs.size(); i++) {
-//			GameObject d = objs.get(i);
-//			d.draw(dbg);
-		}
+
 	}
 }

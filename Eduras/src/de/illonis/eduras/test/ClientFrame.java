@@ -5,7 +5,7 @@ import java.awt.Dimension;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
-import java.util.ArrayList;
+import java.util.HashMap;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -29,13 +29,13 @@ import de.illonis.eduras.networking.Server;
  * 
  */
 public class ClientFrame extends JFrame {
-	
+
 	private final EdurasInitializer edurasInitializer;
-	
+
 	private final EventSender eventSender;
 	private final InformationProvider informationProvider;
 	private final NetworkManager networkManager;
-	
+
 	private static final long serialVersionUID = 1L;
 
 	private CircleDrawPanel cdp;
@@ -47,9 +47,9 @@ public class ClientFrame extends JFrame {
 	 *            client to assign to.
 	 */
 	public ClientFrame() {
-		
+
 		super("Eduras? Client");
-		
+
 		edurasInitializer = EdurasInitializer.getInstance();
 		eventSender = edurasInitializer.getEventSender();
 		informationProvider = edurasInitializer.getInformationProvider();
@@ -96,16 +96,15 @@ public class ClientFrame extends JFrame {
 	 */
 	public void sendMouseClick(int x, int y) {
 		try {
-			
-			UserMovementEvent me = new UserMovementEvent(GameEventNumber.MOVE_LEFT_PRESSED,
-					informationProvider.getPlayer().getId());
+
+			UserMovementEvent me = new UserMovementEvent(GameEventNumber.MOVE_LEFT_PRESSED, informationProvider.getPlayer().getId());
 			eventSender.sendEvent(me);
 		} catch (MessageNotSupportedException e) {
 			e.printStackTrace();
 		} catch (WrongEventTypeException e) {
 			e.printStackTrace();
 		}
-		
+
 	}
 
 	/**
@@ -120,8 +119,8 @@ public class ClientFrame extends JFrame {
 		cdp.addServerCircle(d, e);
 		repaint();
 	}
-	
-	public ArrayList<GameObject> getObjects() {
+
+	public HashMap<Integer, GameObject> getObjects() {
 		return informationProvider.getGameObjects();
 	}
 }

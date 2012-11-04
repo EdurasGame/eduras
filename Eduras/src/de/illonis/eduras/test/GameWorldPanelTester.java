@@ -25,17 +25,17 @@ public class GameWorldPanelTester implements MouseListener {
 		yc = new YellowCircle(g);
 		yc.setXPosition(60);
 		yc.setYPosition(70);
-		g.getObjects().add(yc);
+		g.getObjects().put(yc.getId(), yc);
 		GameWorldPanel gwp = new GameWorldPanel();
-		//InputKeyHandler ikh = new InputKeyHandler(g);
+		// InputKeyHandler ikh = new InputKeyHandler(g);
 		gwp.setFocusable(true);
-		//gwp.addKeyListener(ikh);
+		// gwp.addKeyListener(ikh);
 
 		GameWorker gameWorker = new GameWorker(g, gwp);
 		InfoText it = new InfoText(g, yc);
 		it.setXPosition(10);
 		it.setYPosition(30);
-		g.getObjects().add(it);
+		g.getObjects().put(it.getId(), it);
 
 		gwp.addMouseListener(this);
 

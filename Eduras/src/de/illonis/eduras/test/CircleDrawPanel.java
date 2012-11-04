@@ -88,9 +88,8 @@ public class CircleDrawPanel extends JPanel implements MouseListener {
 		g2d.setColor(Color.RED);
 		g2d.drawString("Red circles are received from server.", 5, 40);
 		g2d.setColor(Color.BLUE);
-		
-		
-		for (GameObject obj: clientFrame.getObjects()) {
+
+		for (GameObject obj : clientFrame.getObjects().values()) {
 			Ellipse2D.Double ellipse = new Ellipse2D.Double(obj.getXPosition(), obj.getYPosition(), 10, 10);
 			g2d.fill(ellipse);
 		}
