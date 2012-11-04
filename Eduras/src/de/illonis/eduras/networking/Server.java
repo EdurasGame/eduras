@@ -178,7 +178,7 @@ public class Server {
 				Socket client = null;
 				try {
 					client = server.accept();
-					System.out.println(Localization.getString("Server.newclient")); //$NON-NLS-1$
+					System.out.println(Localization.getStringF("Server.newclient", client.getInetAddress()));
 					handleConnection(client);
 				} catch (IOException e) {
 					e.printStackTrace();

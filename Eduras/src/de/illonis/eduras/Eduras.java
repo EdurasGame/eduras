@@ -10,6 +10,7 @@ import java.util.Enumeration;
 import de.illonis.eduras.events.NetworkEvent;
 import de.illonis.eduras.exceptions.ServerNotReadyForStartException;
 import de.illonis.eduras.interfaces.NetworkEventListener;
+import de.illonis.eduras.locale.Localization;
 import de.illonis.eduras.networking.Server;
 
 /**
@@ -35,13 +36,12 @@ public class Eduras {
 			try {
 				port = Integer.parseInt(args[0]);
 			} catch (NumberFormatException e) {
-				System.out.println("[ERROR] Invalid custom port: " + args[0]);
-				System.out.println("Quitting.");
+				System.err.println(Localization.getStringF("Server.invalidportarg", args[0]));
 				return;
 			}
 		}
 
-		System.out.println("Starting Eduras? server...");
+		System.out.println(Localization.getString("Server.startstart"));
 
 		Server server;
 		if (port > 0) {
@@ -64,8 +64,7 @@ public class Eduras {
 		try {
 			server.start();
 		} catch (ServerNotReadyForStartException e) {
-			System.out.println("Server could not start: " + e.getMessage());
-			e.printStackTrace();
+			System.err.println(Localization.getStringF("Server.notready", e.getMessage()));
 			return;
 		}
 
@@ -74,7 +73,7 @@ public class Eduras {
 	}
 
 	/**
-	 * Lists all IPv4 addresses server is reachable on.
+	 * Lists all IPv4 addresses server is reachable at.
 	 */
 	public static void getInterfaces() {
 
@@ -95,11 +94,11 @@ public class Eduras {
 				}
 			}
 		} catch (SocketException e) {
-			System.out.println("[ERROR] Could not determine network addresses.");
+			System.err.println(Localization.getString("Server.noaddresses"));
 			e.printStackTrace();
 			return;
 		}
-		System.out.println("[STARTUP] Server is reachable on:");
+		System.out.println(Localization.getString("Server.reachable"));
 		for (InetAddress inetAddress : addresses) {
 			System.out.println("[STARTUP] " + inetAddress.toString().substring(1));
 		}
