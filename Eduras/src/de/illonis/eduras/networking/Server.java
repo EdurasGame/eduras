@@ -42,12 +42,18 @@ public class Server {
 	private GameLogicInterface logic;
 	private int port;
 
+	/**
+	 * Creates a new Server listening on default port.
+	 */
 	public Server() {
 		this(DEFAULT_PORT);
 	}
 
 	/**
-	 * Creates a new server, that is not started yet.
+	 * Creates a new server using a custom port.
+	 * 
+	 * @param port
+	 *            port to listen on.
 	 */
 	public Server(int port) {
 		this.port = port;
