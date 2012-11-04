@@ -32,6 +32,11 @@ public class ConnectProgressDialog extends JDialog implements ActionListener {
 	private SwingWorker<Boolean, Void> worker = new SwingWorker<Boolean, Void>() {
 		@Override
 		public Boolean doInBackground() {
+			try {
+				Thread.sleep(1500);
+			} catch (InterruptedException e) {
+
+			}
 			connecting = true;
 			t = new Thread(connector);
 			t.start();
