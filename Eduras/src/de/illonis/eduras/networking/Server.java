@@ -153,9 +153,6 @@ public class Server {
 			serverSender.sendMessageToClient(clientId,
 					NetworkMessageSerializer.serialize(connectionEstablished));
 		} catch (MessageNotSupportedException e) {
-			System.out.println(e.getEventMessage());
-			System.out
-					.println("For type: " + e.getGameEventNumber().toString());
 			e.printStackTrace();
 		}
 	}

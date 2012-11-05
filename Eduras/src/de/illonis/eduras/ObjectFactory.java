@@ -78,6 +78,9 @@ public class ObjectFactory {
 				go.setOwner(ofe.getOwner());
 				if (ofe.hasId())
 					go.setId(ofe.getId());
+				else
+					ofe.setId(go.getId());
+
 				logic.getGame().addPlayer((Player) go);
 				logic.getGame().addObject(go);
 				System.out.println("Player " + ofe.getOwner() + " created");

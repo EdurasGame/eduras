@@ -21,8 +21,8 @@ import de.illonis.eduras.interfaces.GameLogicInterface;
  */
 public class Logic implements GameLogicInterface {
 
-	GameInformation currentGame;
-	ObjectFactory objectFactory;
+	private GameInformation currentGame;
+	private ObjectFactory objectFactory;
 	private LogicGameWorker lgw;
 	private final ArrayList<GameEventListener> listenerList;
 
@@ -34,7 +34,6 @@ public class Logic implements GameLogicInterface {
 		lgw = new LogicGameWorker(currentGame, listenerList);
 		Thread gameWorker = new Thread(lgw);
 		gameWorker.start();
-		System.out.println("gw started");
 	}
 
 	/**
@@ -87,8 +86,9 @@ public class Logic implements GameLogicInterface {
 			case CLIENT_SETNAME:
 				ClientRenameEvent e = (ClientRenameEvent) event;
 				Player p = currentGame.getPlayerByOwnerId(e.getOwner());
-				System.out.println("SETTING p id =" + e.getOwner() + " to "
-						+ e.getName() + "  oid=" + p.getId() + " poid="
+				System.out.println("SETTING player found by owner "
+						+ e.getOwner() + " to name: " + e.getName()
+						+ "  playerid=" + p.getId() + " playerowner="
 						+ p.getOwner());
 				p.setName(e.getName());
 				for (GameEventListener listener : listenerList) {
@@ -111,8 +111,6 @@ public class Logic implements GameLogicInterface {
 	private void handlePlayerMove(UserMovementEvent event) {
 
 		Player player = currentGame.getPlayerByOwnerId(event.getOwner());
-		System.out.println("player: " + player);
-		System.out.println("eo: " + event.getOwner());
 
 		switch (event.getType()) {
 		case MOVE_DOWN_PRESSED:
@@ -177,6 +175,6 @@ public class Logic implements GameLogicInterface {
 
 	@Override
 	public void onShutdown() {
-		lgw.stop();		
+		lgw.stop();
 	}
 }
