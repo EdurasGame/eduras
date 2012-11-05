@@ -6,6 +6,7 @@ package de.illonis.eduras.networking;
 import java.util.ArrayList;
 
 import de.illonis.eduras.GameObject;
+import de.illonis.eduras.events.ClientRenameEvent;
 import de.illonis.eduras.events.GameEvent;
 import de.illonis.eduras.events.GameEvent.GameEventNumber;
 import de.illonis.eduras.events.MovementEvent;
@@ -33,7 +34,8 @@ public class ServerGameEventListener implements GameEventListener {
 	 * @param serverSender
 	 *            The sender that is used to send messages.
 	 */
-	public ServerGameEventListener(Buffer outputBuffer, ServerSender serverSender) {
+	public ServerGameEventListener(Buffer outputBuffer,
+			ServerSender serverSender) {
 		this.outputBuffer = outputBuffer;
 		this.serverSender = serverSender;
 	}
@@ -92,6 +94,17 @@ public class ServerGameEventListener implements GameEventListener {
 			return;
 		}
 		outputBuffer.append(str);
+	}
 
+	@Override
+	public void onClientRename(ClientRenameEvent event) {
+		String string;
+		try {
+			string = NetworkMessageSerializer.serialize(event);
+		} catch (MessageNotSupportedException e) {
+			e.printStackTrace();
+			return;
+		}
+		outputBuffer.append(string);
 	}
 }

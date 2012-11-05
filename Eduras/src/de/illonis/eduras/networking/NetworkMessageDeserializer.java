@@ -214,8 +214,7 @@ public class NetworkMessageDeserializer {
 			gameEvent = objectFactoryEvent;
 			break;
 		case CLIENT_SETNAME:
-			gameEvent = new ClientRenameEvent(GameEventNumber.CLIENT_SETNAME,
-					parseInt(args[1]), args[2]);
+			gameEvent = new ClientRenameEvent(parseInt(args[1]), args[2]);
 
 			break;
 		default:

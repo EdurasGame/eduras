@@ -129,7 +129,7 @@ public class NetworkMessageSerializer {
 			break;
 		case CLIENT_SETNAME:
 			ClientRenameEvent e = (ClientRenameEvent) gameEvent;
-			serializedEvent += "#" + e.getOwner() + "#" + e.getName();
+			serializedEvent += e.getOwner() + "#" + e.getName();
 			break;
 		default:
 			break;

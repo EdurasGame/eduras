@@ -18,14 +18,15 @@ import javax.swing.JTextField;
 import de.illonis.eduras.exceptions.NoValueEnteredException;
 
 /**
- * Asks for user input to connect to server. 
+ * Asks for user input to connect to server.
+ * 
  * @author illonis
- *
+ * 
  */
 public class ConnectDialog extends JDialog implements ActionListener {
 
 	private static final long serialVersionUID = 1L;
-	private JTextField inputAddress;
+	private JTextField inputAddress, userNameField;
 	private NumericTextField inputPort;
 	private JButton okButton, abortButton;
 	private InetAddress address;
@@ -49,16 +50,21 @@ public class ConnectDialog extends JDialog implements ActionListener {
 		JPanel contentPane = (JPanel) getContentPane();
 		contentPane.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 		contentPane.setLayout(new BorderLayout());
-		JPanel inputPanel = new JPanel(new GridLayout(2, 2, 5, 10));
+		JPanel inputPanel = new JPanel(new GridLayout(3, 2, 5, 10));
 		inputAddress = new JTextField("localhost");
+		userNameField = new JTextField("");
 		inputPort = new NumericTextField(5);
 		inputPort.setText(4387 + "");
+		JLabel userLabel = new JLabel("User Name:");
+		userLabel.setLabelFor(userNameField);
 		JLabel addressLabel = new JLabel("Adresse:");
 		addressLabel.setLabelFor(inputAddress);
 		JLabel portLabel = new JLabel("Port:");
 		portLabel.setLabelFor(inputPort);
 		errorLabel = new JLabel("");
 		contentPane.add(errorLabel, BorderLayout.NORTH);
+		inputPanel.add(userLabel);
+		inputPanel.add(userNameField);
 		inputPanel.add(addressLabel);
 		inputPanel.add(inputAddress);
 		inputPanel.add(portLabel);
@@ -134,5 +140,11 @@ public class ConnectDialog extends JDialog implements ActionListener {
 	public void setErrorMessage(String message) {
 		errorLabel.setText(message);
 		pack();
+	}
+
+	public String getUserName() throws NoValueEnteredException {
+		if (userNameField.getText().isEmpty())
+			throw new NoValueEnteredException();
+		return userNameField.getText();
 	}
 }

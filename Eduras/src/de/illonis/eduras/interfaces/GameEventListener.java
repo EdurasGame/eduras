@@ -3,6 +3,7 @@ package de.illonis.eduras.interfaces;
 import java.util.ArrayList;
 
 import de.illonis.eduras.GameObject;
+import de.illonis.eduras.events.ClientRenameEvent;
 import de.illonis.eduras.events.GameEvent;
 import de.illonis.eduras.events.ObjectFactoryEvent;
 
@@ -26,12 +27,16 @@ public interface GameEventListener {
 	 * @param targetOwner
 	 *            owner that requested information.
 	 */
-	public void onInformationRequested(ArrayList<GameEvent> infos, int targetOwner);
+	public void onInformationRequested(ArrayList<GameEvent> infos,
+			int targetOwner);
 
 	/**
 	 * bla
+	 * 
 	 * @param event
 	 */
 	public void onObjectCreation(ObjectFactoryEvent event);
+
+	public void onClientRename(ClientRenameEvent event);
 
 }

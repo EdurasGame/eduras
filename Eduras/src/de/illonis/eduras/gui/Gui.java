@@ -8,6 +8,7 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
 import de.illonis.eduras.InputKeyHandler;
+import de.illonis.eduras.events.ClientRenameEvent;
 import de.illonis.eduras.events.GameInfoRequest;
 import de.illonis.eduras.exceptions.MessageNotSupportedException;
 import de.illonis.eduras.exceptions.NoValueEnteredException;
@@ -34,6 +35,7 @@ public class Gui extends JFrame {
 	private RenderThread rendererThread;
 	private ConnectDialog connectDialog;
 	private InputKeyHandler keyHandler;
+	private String clientName;
 	private NetworkEventHandler eventHandler;
 
 	private static final long serialVersionUID = 1L;
@@ -99,6 +101,7 @@ public class Gui extends JFrame {
 		try {
 			address = connectDialog.getAddress();
 			port = connectDialog.getPort();
+			clientName = connectDialog.getUserName();
 		} catch (NoValueEnteredException e) {
 			return;
 		}
@@ -124,6 +127,8 @@ public class Gui extends JFrame {
 		gamePanel.addKeyListener(keyHandler);
 		try {
 			eventSender.sendEvent(new GameInfoRequest(infoPro.getOwnerID()));
+			eventSender.sendEvent(new ClientRenameEvent(infoPro.getOwnerID(),
+					clientName));
 		} catch (WrongEventTypeException e) {
 			e.printStackTrace();
 		} catch (MessageNotSupportedException e) {

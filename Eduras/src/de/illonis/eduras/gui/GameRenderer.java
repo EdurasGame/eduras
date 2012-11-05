@@ -43,10 +43,12 @@ public class GameRenderer {
 
 		// recreate image if it does not exist
 		if (dbImage == null || dbg == null || width != dbImage.getWidth()) {
-			dbImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+			dbImage = new BufferedImage(width, height,
+					BufferedImage.TYPE_INT_RGB);
 
 			dbg = (Graphics2D) dbImage.getGraphics();
-			dbg.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+			dbg.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+					RenderingHints.VALUE_ANTIALIAS_ON);
 		}
 		// clear image
 		dbg.setColor(Color.black);
@@ -77,6 +79,8 @@ public class GameRenderer {
 			GameObject d = objs.get(i);
 			if (d instanceof Player) {
 				dbg.fillRect(d.getDrawX(), d.getDrawY(), 30, 30);
+				dbg.drawString(((Player) d).getName(), d.getDrawX() + 5,
+						d.getDrawY() - 4);
 			}
 		}
 	}

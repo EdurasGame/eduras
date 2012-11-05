@@ -86,7 +86,12 @@ public class Logic implements GameLogicInterface {
 			case CLIENT_SETNAME:
 				ClientRenameEvent e = (ClientRenameEvent) event;
 				Player p = currentGame.getPlayerByOwnerId(e.getOwner());
+				System.out.println("SETTING p id =" + e.getOwner() + " to "
+						+ e.getName() + "  oid=" + p.getId() + " poid="+  p.getOwner());
 				p.setName(e.getName());
+				for (GameEventListener listener : listenerList) {
+					listener.onClientRename(e);
+				}
 				break;
 			default:
 				break;
