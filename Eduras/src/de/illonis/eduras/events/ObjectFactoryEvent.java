@@ -10,11 +10,10 @@ import de.illonis.eduras.ObjectFactory.ObjectType;
  * @author illonis
  * 
  */
-public class ObjectFactoryEvent extends GameEvent {
+public class ObjectFactoryEvent extends OwnerGameEvent {
 
 	private ObjectType objectType;
 	private int id;
-	private int ownerId;
 
 	/**
 	 * Creates a new ObjectFactoryEvent with given parameters.
@@ -74,25 +73,6 @@ public class ObjectFactoryEvent extends GameEvent {
 	 */
 	public int getId() {
 		return id;
-	}
-
-	/**
-	 * Returns the ownerId of the related object.
-	 * 
-	 * @return the ownerId
-	 */
-	public int getOwnerId() {
-		return ownerId;
-	}
-
-	/**
-	 * Sets the ownerId of the related object.
-	 * 
-	 * @param ownerId
-	 *            the ownerId to set.
-	 */
-	public void setOwnerId(int ownerId) {
-		this.ownerId = ownerId;
 	}
 
 	/**

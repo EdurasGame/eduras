@@ -92,13 +92,15 @@ public class GameInformation {
 		ArrayList<GameEvent> infos = new ArrayList<>();
 
 		for (GameObject object : objects.values()) {
-			ObjectFactoryEvent objectEvent = new ObjectFactoryEvent(GameEventNumber.OBJECT_CREATE, ObjectType.PLAYER);
-			objectEvent.setOwnerId(object.getOwner());
+			ObjectFactoryEvent objectEvent = new ObjectFactoryEvent(
+					GameEventNumber.OBJECT_CREATE, ObjectType.PLAYER);
+			objectEvent.setOwner(object.getOwner());
 			objectEvent.setId(object.getId());
 			infos.add(objectEvent);
 
 			// send position immediately
-			MovementEvent me = new MovementEvent(GameEventNumber.SET_POS, object.getId());
+			MovementEvent me = new MovementEvent(GameEventNumber.SET_POS,
+					object.getId());
 			me.setNewXPos(object.getXPosition());
 			me.setNewYPos(object.getYPosition());
 			infos.add(me);

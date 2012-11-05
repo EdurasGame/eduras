@@ -3,6 +3,7 @@ package de.illonis.eduras;
 import java.util.ArrayList;
 
 import de.illonis.eduras.MoveableGameObject.Direction;
+import de.illonis.eduras.events.ClientRenameEvent;
 import de.illonis.eduras.events.GameEvent;
 import de.illonis.eduras.events.GameEvent.GameEventNumber;
 import de.illonis.eduras.events.GameInfoRequest;
@@ -30,7 +31,8 @@ public class Logic implements GameLogicInterface {
 		listenerList = new ArrayList<GameEventListener>();
 		objectFactory = new ObjectFactory(this);
 
-		Thread gameWorker = new Thread(new LogicGameWorker(currentGame, listenerList));
+		Thread gameWorker = new Thread(new LogicGameWorker(currentGame,
+				listenerList));
 		gameWorker.start();
 	}
 
@@ -45,7 +47,6 @@ public class Logic implements GameLogicInterface {
 		System.out.println("[LOGIC] A game event appeared: " + event.getType());
 
 		if (event instanceof ObjectFactoryEvent) {
-			System.out.println("is of");
 			objectFactory.onGameEventAppeared(event);
 		} else {
 
@@ -64,7 +65,8 @@ public class Logic implements GameLogicInterface {
 				MovementEvent moveEvent = (MovementEvent) event;
 				double newXPos = moveEvent.getNewXPos();
 				double newYPos = moveEvent.getNewYPos();
-				GameObject o = currentGame.findObjectById(moveEvent.getObjectId());
+				GameObject o = currentGame.findObjectById(moveEvent
+						.getObjectId());
 				if (o == null)
 					break;
 				o.setYPosition(newYPos);
@@ -77,8 +79,14 @@ public class Logic implements GameLogicInterface {
 			case INFORMATION_REQUEST:
 				ArrayList<GameEvent> infos = currentGame.getAllInfosAsEvent();
 				for (GameEventListener listener : listenerList) {
-					listener.onInformationRequested(infos, ((GameInfoRequest) event).getRequester());
+					listener.onInformationRequested(infos,
+							((GameInfoRequest) event).getRequester());
 				}
+				break;
+			case CLIENT_SETNAME:
+				ClientRenameEvent e = (ClientRenameEvent) event;
+				Player p = currentGame.getPlayerByOwnerId(e.getOwner());
+				p.setName(e.getName());
 				break;
 			default:
 				break;

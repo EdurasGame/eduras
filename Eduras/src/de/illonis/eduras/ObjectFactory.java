@@ -69,8 +69,8 @@ public class ObjectFactory {
 		if (ofe.getType() == GameEventNumber.OBJECT_CREATE) {
 			switch (ofe.getObjectType()) {
 			case PLAYER:
-				System.out.println("create player: " + ofe.getOwnerId());
-				go = new Player(logic.getGame(), ofe.getOwnerId());
+				System.out.println("create player: " + ofe.getOwner());
+				go = new Player(logic.getGame(), ofe.getOwner());
 				logic.getGame().addPlayer((Player) go);
 				if (ofe.hasId())
 					go.setId(ofe.getId());

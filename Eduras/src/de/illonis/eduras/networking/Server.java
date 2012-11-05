@@ -108,9 +108,11 @@ public class Server {
 	 * @param listener
 	 *            The listener
 	 */
-	public void setLogic(GameLogicInterface logic, NetworkEventListener eventListener) {
+	public void setLogic(GameLogicInterface logic,
+			NetworkEventListener eventListener) {
 		this.logic = logic;
-		logic.addGameEventListener(new ServerGameEventListener(outputBuffer, serverSender));
+		logic.addGameEventListener(new ServerGameEventListener(outputBuffer,
+				serverSender));
 		serverLogic = new ServerDecoder(inputBuffer, logic, eventListener);
 	}
 
@@ -137,19 +139,23 @@ public class Server {
 	private void handleConnection(Socket client) throws IOException {
 		int clientId = serverSender.add(client);
 
-		ObjectFactoryEvent newPlayerEvent = new ObjectFactoryEvent(GameEventNumber.OBJECT_CREATE, ObjectType.PLAYER);
-		newPlayerEvent.setOwnerId(clientId);
+		ObjectFactoryEvent newPlayerEvent = new ObjectFactoryEvent(
+				GameEventNumber.OBJECT_CREATE, ObjectType.PLAYER);
+		newPlayerEvent.setOwner(clientId);
 		logic.onGameEventAppeared(newPlayerEvent);
 
 		ServerReceiver sr = new ServerReceiver(this, inputBuffer, client);
 		sr.start();
 
-		ConnectionEstablishedEvent connectionEstablished = new ConnectionEstablishedEvent(clientId);
+		ConnectionEstablishedEvent connectionEstablished = new ConnectionEstablishedEvent(
+				clientId);
 		try {
-			serverSender.sendMessageToClient(clientId, NetworkMessageSerializer.serialize(connectionEstablished));
+			serverSender.sendMessageToClient(clientId,
+					NetworkMessageSerializer.serialize(connectionEstablished));
 		} catch (MessageNotSupportedException e) {
 			System.out.println(e.getEventMessage());
-			System.out.println("For type: " + e.getGameEventNumber().toString());
+			System.out
+					.println("For type: " + e.getGameEventNumber().toString());
 			e.printStackTrace();
 		}
 	}
@@ -173,12 +179,14 @@ public class Server {
 		 */
 		@Override
 		public void run() {
-			System.out.println(Localization.getStringF("Server.startedlistening", port));
+			System.out.println(Localization.getStringF(
+					"Server.startedlistening", port));
 			while (true) {
 				Socket client = null;
 				try {
 					client = server.accept();
-					System.out.println(Localization.getStringF("Server.newclient", client.getInetAddress()));
+					System.out.println(Localization.getStringF(
+							"Server.newclient", client.getInetAddress()));
 					handleConnection(client);
 				} catch (IOException e) {
 					e.printStackTrace();

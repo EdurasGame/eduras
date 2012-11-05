@@ -11,6 +11,26 @@ import de.illonis.eduras.shapes.NoCollisionShape;
  * 
  */
 public class Player extends MoveableGameObject implements Controllable {
+	private String name;
+
+	/**
+	 * Create a new player that belongs to the given game and has the given
+	 * owner and has a name.
+	 * 
+	 * @param game
+	 *            The game the player belongs to.
+	 * @param ownerId
+	 *            The id of the owner.
+	 * @param name
+	 *            The name of the player.
+	 */
+	public Player(GameInformation game, int ownerId, String name) {
+		super(game);
+		this.name = name;
+		setSpeed(50);
+		setOwner(ownerId);
+		setShape(new NoCollisionShape());
+	}
 
 	/**
 	 * Create a new player that belongs to the given game and has the given
@@ -22,10 +42,7 @@ public class Player extends MoveableGameObject implements Controllable {
 	 *            The id of the owner.
 	 */
 	public Player(GameInformation game, int ownerId) {
-		super(game);
-		setSpeed(50);
-		setOwner(ownerId);
-		setShape(new NoCollisionShape());
+		this(game, ownerId, "unbekannt");
 	}
 
 	@Override
@@ -63,4 +80,11 @@ public class Player extends MoveableGameObject implements Controllable {
 		setSpeedVector(new Vector2D());
 	}
 
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
 }

@@ -3,6 +3,7 @@ package de.illonis.eduras.networking;
 import java.util.LinkedList;
 
 import de.illonis.eduras.ObjectFactory.ObjectType;
+import de.illonis.eduras.events.ClientRenameEvent;
 import de.illonis.eduras.events.ConnectionEstablishedEvent;
 import de.illonis.eduras.events.Event;
 import de.illonis.eduras.events.GameEvent;
@@ -75,20 +76,26 @@ public class NetworkMessageDeserializer {
 	 *             Thrown if retrieved message is not supported.
 	 * 
 	 */
-	private static Event deserializeMessage(String msg) throws InvalidMessageFormatException, GivenParametersDoNotFitToEventException,
+	private static Event deserializeMessage(String msg)
+			throws InvalidMessageFormatException,
+			GivenParametersDoNotFitToEventException,
 			MessageNotSupportedException {
 		if (msg.isEmpty())
-			throw new InvalidMessageFormatException("Message is empty (length 0)", msg);
+			throw new InvalidMessageFormatException(
+					"Message is empty (length 0)", msg);
 		String[] args = msg.split("#");
 		if (args.length < 2)
-			throw new InvalidMessageFormatException("Message has not enough arguments (less than two).", msg);
+			throw new InvalidMessageFormatException(
+					"Message has not enough arguments (less than two).", msg);
 
 		// try to extract event type
 		int typeInt;
 		try {
 			typeInt = parseInt(args[0]);
 		} catch (NumberFormatException e) {
-			throw new InvalidMessageFormatException("Event id of message is no valid integer value: " + args[0], msg);
+			throw new InvalidMessageFormatException(
+					"Event id of message is no valid integer value: " + args[0],
+					msg);
 		}
 
 		Event result = null;
@@ -113,9 +120,11 @@ public class NetworkMessageDeserializer {
 	 *            The number representing the type of the message.
 	 * @return Returns the deserialized event.
 	 */
-	private static Event handleNetworkEvent(String msg, String[] args, int typeInt) {
+	private static Event handleNetworkEvent(String msg, String[] args,
+			int typeInt) {
 
-		NetworkEventNumber typeNumber = NetworkEvent.toNetworkEventNumber(typeInt);
+		NetworkEventNumber typeNumber = NetworkEvent
+				.toNetworkEventNumber(typeInt);
 		NetworkEvent networkEvent = null;
 
 		switch (typeNumber) {
@@ -170,8 +179,10 @@ public class NetworkMessageDeserializer {
 	 *             Thrown if the given message is not yet supported by
 	 *             deserialization.
 	 */
-	private static Event handleGameEvent(String msg, String[] args, int typeInt) throws InvalidMessageFormatException,
-			GivenParametersDoNotFitToEventException, MessageNotSupportedException {
+	private static Event handleGameEvent(String msg, String[] args, int typeInt)
+			throws InvalidMessageFormatException,
+			GivenParametersDoNotFitToEventException,
+			MessageNotSupportedException {
 		GameEventNumber typeNumber = GameEvent.toGameEventNumber(typeInt);
 		GameEvent gameEvent = null;
 
@@ -182,7 +193,7 @@ public class NetworkMessageDeserializer {
 		case MOVE_DOWN_RELEASED:
 		case MOVE_LEFT_RELEASED:
 		case MOVE_RIGHT_RELEASED:
-		case MOVE_UP_RELEASED:	
+		case MOVE_UP_RELEASED:
 		case MOVE_DOWN_PRESSED:
 		case MOVE_RIGHT_PRESSED:
 		case MOVE_LEFT_PRESSED:
@@ -194,14 +205,19 @@ public class NetworkMessageDeserializer {
 			break;
 		case OBJECT_CREATE:
 			int objectTypeNum = parseInt(args[3]);
-			ObjectType objectType = ObjectType.getObjectTypeByNumber(objectTypeNum);
-			ObjectFactoryEvent objectFactoryEvent = new ObjectFactoryEvent(GameEventNumber.OBJECT_CREATE, objectType);
+			ObjectType objectType = ObjectType
+					.getObjectTypeByNumber(objectTypeNum);
+			ObjectFactoryEvent objectFactoryEvent = new ObjectFactoryEvent(
+					GameEventNumber.OBJECT_CREATE, objectType);
 			objectFactoryEvent.setId(parseInt(args[1]));
-			objectFactoryEvent.setOwnerId(parseInt(args[2]));
+			objectFactoryEvent.setOwner(parseInt(args[2]));
 			gameEvent = objectFactoryEvent;
 			break;
-		case OBJECT_REMOVE:
+		case CLIENT_SETNAME:
+			gameEvent = new ClientRenameEvent(GameEventNumber.CLIENT_SETNAME,
+					parseInt(args[1]), args[2]);
 
+			break;
 		default:
 			throw new MessageNotSupportedException(typeNumber, msg);
 		}
@@ -209,7 +225,8 @@ public class NetworkMessageDeserializer {
 		return gameEvent;
 	}
 
-	private static GameEvent handleStartMovementEvent(String msg, String[] args, GameEventNumber typeNumber)
+	private static GameEvent handleStartMovementEvent(String msg,
+			String[] args, GameEventNumber typeNumber)
 			throws GivenParametersDoNotFitToEventException {
 
 		int owner = parseInt(args[1]);
@@ -234,10 +251,14 @@ public class NetworkMessageDeserializer {
 	 * @throws GivenParametersDoNotFitToEventException
 	 *             Thrown if generation of gameevent failed.
 	 */
-	private static GameEvent handleMovementPositionEvent(String fullMessage, String[] splittedMessage, GameEventNumber typeNumber)
-			throws InvalidMessageFormatException, GivenParametersDoNotFitToEventException {
+	private static GameEvent handleMovementPositionEvent(String fullMessage,
+			String[] splittedMessage, GameEventNumber typeNumber)
+			throws InvalidMessageFormatException,
+			GivenParametersDoNotFitToEventException {
 		if (splittedMessage.length != 4)
-			throw new InvalidMessageFormatException("Invalid number of arguments: " + splittedMessage.length + " instead of 4.", fullMessage);
+			throw new InvalidMessageFormatException(
+					"Invalid number of arguments: " + splittedMessage.length
+							+ " instead of 4.", fullMessage);
 
 		try {
 			int id = parseInt(splittedMessage[1]);
@@ -248,7 +269,8 @@ public class NetworkMessageDeserializer {
 			moveEvent.setNewYPos(newYPos);
 			return moveEvent;
 		} catch (NumberFormatException e) {
-			throw new GivenParametersDoNotFitToEventException(typeNumber, splittedMessage[1], splittedMessage[2], splittedMessage[3]);
+			throw new GivenParametersDoNotFitToEventException(typeNumber,
+					splittedMessage[1], splittedMessage[2], splittedMessage[3]);
 		}
 	}
 

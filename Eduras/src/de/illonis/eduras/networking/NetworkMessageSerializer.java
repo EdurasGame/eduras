@@ -1,5 +1,6 @@
 package de.illonis.eduras.networking;
 
+import de.illonis.eduras.events.ClientRenameEvent;
 import de.illonis.eduras.events.ConnectionEstablishedEvent;
 import de.illonis.eduras.events.Event;
 import de.illonis.eduras.events.GameEvent;
@@ -27,7 +28,8 @@ public class NetworkMessageSerializer {
 	 * @throws UnsupportedOperationException
 	 *             Occurs if there is no serialization for the given event.
 	 */
-	public static String serialize(Event event) throws MessageNotSupportedException {
+	public static String serialize(Event event)
+			throws MessageNotSupportedException {
 
 		if (event instanceof GameEvent) {
 			GameEvent gameEvent = (GameEvent) event;
@@ -56,7 +58,8 @@ public class NetworkMessageSerializer {
 
 		switch (networkEvent.getType()) {
 		case CONNECTION_ESTABLISHED:
-			serializedEvent += ((ConnectionEstablishedEvent) networkEvent).getClientId();
+			serializedEvent += ((ConnectionEstablishedEvent) networkEvent)
+					.getClientId();
 			break;
 		case CONNECTION_ABORTED:
 			// TODO: Implement this!
@@ -77,7 +80,8 @@ public class NetworkMessageSerializer {
 	 * @return The serialized GameEvent as a string.
 	 * @throws MessageNotSupportedException
 	 */
-	private static String serializeGameEvent(GameEvent gameEvent) throws MessageNotSupportedException {
+	private static String serializeGameEvent(GameEvent gameEvent)
+			throws MessageNotSupportedException {
 		String serializedEvent = "";
 
 		serializedEvent += gameEvent.getType().getNumber() + "#";
@@ -99,7 +103,8 @@ public class NetworkMessageSerializer {
 			break;
 		case OBJECT_CREATE:
 			ObjectFactoryEvent event = (ObjectFactoryEvent) gameEvent;
-			serializedEvent += event.getId() + "#" + event.getOwnerId() + "#" + event.getObjectType().getNumber();
+			serializedEvent += event.getId() + "#" + event.getOwner() + "#"
+					+ event.getObjectType().getNumber();
 			break;
 		case OBJECT_REMOVE:
 			break;
@@ -112,7 +117,8 @@ public class NetworkMessageSerializer {
 		case SET_POS:
 			MovementEvent moveEvent = (MovementEvent) gameEvent;
 			serializedEvent += moveEvent.getObjectId();
-			serializedEvent += "#" + moveEvent.getNewXPos() + "#" + moveEvent.getNewYPos();
+			serializedEvent += "#" + moveEvent.getNewXPos() + "#"
+					+ moveEvent.getNewYPos();
 			break;
 		case SHOOT_PRESSED:
 			break;
@@ -121,11 +127,16 @@ public class NetworkMessageSerializer {
 		case INFORMATION_REQUEST:
 			serializedEvent += ((GameInfoRequest) gameEvent).getRequester();
 			break;
+		case CLIENT_SETNAME:
+			ClientRenameEvent e = (ClientRenameEvent) gameEvent;
+			serializedEvent += "#" + e.getOwner() + "#" + e.getName();
+			break;
 		default:
 			break;
 		}
 		if (serializedEvent.endsWith("#"))
-			throw new MessageNotSupportedException(gameEvent.getType(), "There does not exist a serialization for the given event yet!");
+			throw new MessageNotSupportedException(gameEvent.getType(),
+					"There does not exist a serialization for the given event yet!");
 		return "##" + serializedEvent;
 
 	}
