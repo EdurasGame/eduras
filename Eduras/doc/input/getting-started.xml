@@ -52,7 +52,9 @@
 	<section>
 		<title>(jme) Coding guidelines</title>
 		<para>
-			todo...
+			Currently, we use default formatter of Eclipse that includes a maximum line width of 80.
+			We plan to provide a custom profile with our customized settings.
+			Using output or gui display, you have to localize your strings.
 		</para>
 	</section>
 	<section>
