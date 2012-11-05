@@ -27,7 +27,6 @@ public class ConnectProgressDialog extends JDialog implements ActionListener {
 	private String errorMessage;
 	private JButton backButton;
 	private Thread t;
-	private boolean connecting = false;
 
 	private SwingWorker<Boolean, Void> worker = new SwingWorker<Boolean, Void>() {
 		@Override
@@ -37,14 +36,14 @@ public class ConnectProgressDialog extends JDialog implements ActionListener {
 			} catch (InterruptedException e) {
 
 			}
-			connecting = true;
 			t = new Thread(connector);
 			t.start();
 			int i = 10;
-			while (connecting) {
+			while (true) {
 				i--;
 				try {
 					t.join(1000);
+					break;
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
@@ -64,7 +63,8 @@ public class ConnectProgressDialog extends JDialog implements ActionListener {
 			if (errorMessage.isEmpty())
 				setVisible(false);
 			else
-				label.setText("<html><b>Fehler:</b><br>" + errorMessage + "</html>");
+				label.setText("<html><b>Fehler:</b><br>" + errorMessage
+						+ "</html>");
 
 		}
 	};
@@ -132,7 +132,6 @@ public class ConnectProgressDialog extends JDialog implements ActionListener {
 				e.printStackTrace();
 			}
 			System.out.println("e");
-			connecting = false;
 		}
 	};
 

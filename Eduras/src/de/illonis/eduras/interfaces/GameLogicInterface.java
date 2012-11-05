@@ -23,5 +23,7 @@ public interface GameLogicInterface {
 	public void addGameEventListener(GameEventListener listener);
 	
 	public ArrayList<GameEventListener> getListenerList();
+	
+	public void onShutdown();
 
 }

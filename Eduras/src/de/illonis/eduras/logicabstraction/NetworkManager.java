@@ -59,4 +59,8 @@ public class NetworkManager {
 		client.setNetworkEventListener(listener);
 	}
 
+	public void disconnect() {
+		client.disconnect();
+	}
+
 }

@@ -45,12 +45,14 @@ public class Client {
 	 *             when connection establishing failed.
 	 */
 	public void connect(InetAddress addr, int port) throws IOException {
-		System.out.println("[CLIENT] Connecting...");
+		System.out.println("[CLIENT] Connecting to " + addr.toString() + " at "
+				+ port);
 		socket = new Socket();
 		InetSocketAddress iaddr = new InetSocketAddress(addr, port);
 		socket.connect(iaddr, 10000);
-	
-		new ClientReceiver(logic, socket, this).setNetworkEventListener(networkEventListener);
+		ClientReceiver r = new ClientReceiver(logic, socket, this);
+		r.setNetworkEventListener(networkEventListener);
+		r.start();
 		sender = new ClientSender(socket);
 	}
 
@@ -90,5 +92,15 @@ public class Client {
 
 	public void setNetworkEventListener(NetworkEventListener listener) {
 		this.networkEventListener = listener;
+	}
+
+	public void disconnect() {
+		logic.onShutdown();
+		if (socket != null)
+			try {
+				socket.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 	}
 }

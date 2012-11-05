@@ -73,6 +73,13 @@ public class LogicGameWorker implements Runnable {
 			beforeTime = System.nanoTime();
 		}
 	}
+	
+	/**
+	 * Stops LogicGameWorker.
+	 */
+	public void stop() {
+		running = false;
+	}
 
 	/**
 	 * Lets all moveable objects move relative to the time passed.

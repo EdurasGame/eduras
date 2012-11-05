@@ -23,6 +23,7 @@ public class Logic implements GameLogicInterface {
 
 	GameInformation currentGame;
 	ObjectFactory objectFactory;
+	private LogicGameWorker lgw;
 	private final ArrayList<GameEventListener> listenerList;
 
 	public Logic(GameInformation g) {
@@ -30,10 +31,10 @@ public class Logic implements GameLogicInterface {
 		this.currentGame = g;
 		listenerList = new ArrayList<GameEventListener>();
 		objectFactory = new ObjectFactory(this);
-
-		Thread gameWorker = new Thread(new LogicGameWorker(currentGame,
-				listenerList));
+		lgw = new LogicGameWorker(currentGame, listenerList);
+		Thread gameWorker = new Thread(lgw);
 		gameWorker.start();
+		System.out.println("gw started");
 	}
 
 	/**
@@ -87,7 +88,8 @@ public class Logic implements GameLogicInterface {
 				ClientRenameEvent e = (ClientRenameEvent) event;
 				Player p = currentGame.getPlayerByOwnerId(e.getOwner());
 				System.out.println("SETTING p id =" + e.getOwner() + " to "
-						+ e.getName() + "  oid=" + p.getId() + " poid="+  p.getOwner());
+						+ e.getName() + "  oid=" + p.getId() + " poid="
+						+ p.getOwner());
 				p.setName(e.getName());
 				for (GameEventListener listener : listenerList) {
 					listener.onClientRename(e);
@@ -171,5 +173,10 @@ public class Logic implements GameLogicInterface {
 	@Override
 	public ArrayList<GameEventListener> getListenerList() {
 		return listenerList;
+	}
+
+	@Override
+	public void onShutdown() {
+		lgw.stop();		
 	}
 }

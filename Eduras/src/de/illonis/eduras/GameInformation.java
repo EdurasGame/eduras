@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import de.illonis.eduras.ObjectFactory.ObjectType;
+import de.illonis.eduras.events.ClientRenameEvent;
 import de.illonis.eduras.events.GameEvent;
 import de.illonis.eduras.events.GameEvent.GameEventNumber;
 import de.illonis.eduras.events.MovementEvent;
@@ -89,7 +90,7 @@ public class GameInformation {
 	 */
 	public ArrayList<GameEvent> getAllInfosAsEvent() {
 
-		ArrayList<GameEvent> infos = new ArrayList<>();
+		ArrayList<GameEvent> infos = new ArrayList<GameEvent>();
 
 		for (GameObject object : objects.values()) {
 			ObjectFactoryEvent objectEvent = new ObjectFactoryEvent(
@@ -104,6 +105,9 @@ public class GameInformation {
 			me.setNewXPos(object.getXPosition());
 			me.setNewYPos(object.getYPosition());
 			infos.add(me);
+		}
+		for (Player p : players.values()) {
+			infos.add(new ClientRenameEvent(p.getOwner(), p.getName()));
 		}
 
 		return infos;

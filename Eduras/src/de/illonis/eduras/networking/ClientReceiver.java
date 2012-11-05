@@ -15,19 +15,20 @@ import de.illonis.eduras.interfaces.NetworkEventListener;
  * 
  */
 public class ClientReceiver extends Thread {
-	
+
 	private BufferedReader messageReader = null;
 
 	private final GameLogicInterface logic;
-	
+
 	private NetworkEventListener networkEventListener;
 
-	private final boolean connectionAvailable = true;
-	
+	private boolean connectionAvailable = true;
+
 	private final Client client;
 
 	/**
-	 * Retrieves
+	 * Retrieves messages from server.
+	 * 
 	 * @param logic
 	 * @param socket
 	 */
@@ -39,7 +40,7 @@ public class ClientReceiver extends Thread {
 		try {
 			messageReader = new BufferedReader(new InputStreamReader(
 					socket.getInputStream()));
-			start();
+			System.out.println("h");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -60,23 +61,27 @@ public class ClientReceiver extends Thread {
 
 			} catch (IOException e) {
 				System.err.println("Connection to server closed.");
+				connectionAvailable = false;
 				e.printStackTrace();
 			}
 		}
 	}
 
 	/**
-	 * Forwards messages to the ClientLogic, where they are deserialized and forwarded
-	 * to the GameLogic.
-	 * @param messages The message(s)-string to be forwarded.
+	 * Forwards messages to the ClientLogic, where they are deserialized and
+	 * forwarded to the GameLogic.
+	 * 
+	 * @param messages
+	 *            The message(s)-string to be forwarded.
 	 */
 	private void processMessages(String messages) {
 
-		ClientLogic clientLogic = new ClientLogic(this.logic, messages, networkEventListener, client);
+		ClientLogic clientLogic = new ClientLogic(this.logic, messages,
+				networkEventListener, client);
 		clientLogic.start();
 
 	}
-	
+
 	public void setNetworkEventListener(NetworkEventListener listener) {
 		this.networkEventListener = listener;
 	}

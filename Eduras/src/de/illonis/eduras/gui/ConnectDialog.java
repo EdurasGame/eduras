@@ -41,7 +41,6 @@ public class ConnectDialog extends JDialog implements ActionListener {
 	 */
 	public ConnectDialog(JFrame gui) {
 		super(gui, "Connect to server");
-
 		buildGui();
 	}
 

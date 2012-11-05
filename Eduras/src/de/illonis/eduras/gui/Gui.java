@@ -37,10 +37,11 @@ public class Gui extends JFrame {
 	private InputKeyHandler keyHandler;
 	private String clientName;
 	private NetworkEventHandler eventHandler;
+	private EdurasInitializer initializer;
 
 	private static final long serialVersionUID = 1L;
 
-	public Gui() {
+	private Gui() {
 		super("Eduras? Client");
 		loadTools();
 		buildGui();
@@ -63,7 +64,6 @@ public class Gui extends JFrame {
 			disconnect();
 			dispose();
 		}
-
 	}
 
 	private void buildGui() {
@@ -79,12 +79,12 @@ public class Gui extends JFrame {
 	}
 
 	private void loadTools() {
-		EdurasInitializer ei = EdurasInitializer.getInstance();
-		eventSender = ei.getEventSender();
-		infoPro = ei.getInformationProvider();
+		initializer = EdurasInitializer.getInstance();
+		eventSender = initializer.getEventSender();
+		infoPro = initializer.getInformationProvider();
 		eventHandler = new NetworkEventHandler(this);
 
-		nwm = ei.getNetworkManager();
+		nwm = initializer.getNetworkManager();
 		nwm.setNetworkEventListener(eventHandler);
 	}
 
@@ -122,13 +122,15 @@ public class Gui extends JFrame {
 		t.start();
 		System.out.println("[CLIENT] Connected. Ownerid: "
 				+ infoPro.getOwnerID());
-		setTitle(getTitle() + " #" + infoPro.getOwnerID());
+		setTitle(getTitle() + " #" + infoPro.getOwnerID() + " (" + clientName
+				+ ")");
 		keyHandler = new InputKeyHandler(infoPro.getOwnerID(), eventSender);
 		gamePanel.addKeyListener(keyHandler);
 		try {
-			eventSender.sendEvent(new GameInfoRequest(infoPro.getOwnerID()));
 			eventSender.sendEvent(new ClientRenameEvent(infoPro.getOwnerID(),
 					clientName));
+			eventSender.sendEvent(new GameInfoRequest(infoPro.getOwnerID()));
+
 		} catch (WrongEventTypeException e) {
 			e.printStackTrace();
 		} catch (MessageNotSupportedException e) {
@@ -137,6 +139,8 @@ public class Gui extends JFrame {
 	}
 
 	private void disconnect() {
-
+		rendererThread.stop();
+		initializer.shutdown();
+		nwm.disconnect();
 	}
 }

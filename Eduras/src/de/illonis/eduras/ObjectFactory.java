@@ -63,28 +63,30 @@ public class ObjectFactory {
 			return;
 
 		ObjectFactoryEvent ofe = (ObjectFactoryEvent) event;
-		if (logic.getGame().getObjects().containsKey(ofe.getId()))
-			return;
+		// if (ofe.hasId()
+		// && logic.getGame().getObjects().containsKey(ofe.getId())) {
+		// System.out.println("Object with id " + ofe.getId()
+		// + " already exists.");
+		// return;
+		// }
 		GameObject go = null;
 		if (ofe.getType() == GameEventNumber.OBJECT_CREATE) {
 			switch (ofe.getObjectType()) {
 			case PLAYER:
 				System.out.println("create player: " + ofe.getOwner());
 				go = new Player(logic.getGame(), ofe.getOwner());
-				logic.getGame().addPlayer((Player) go);
+				go.setOwner(ofe.getOwner());
 				if (ofe.hasId())
 					go.setId(ofe.getId());
+				logic.getGame().addPlayer((Player) go);
 				logic.getGame().addObject(go);
+				System.out.println("Player " + ofe.getOwner() + " created");
 				break;
 			case YELLOWCIRCLE:
 				go = new YellowCircle(logic.getGame());
 				break;
 			default:
 				return;
-			}
-			// set id if id is set in event
-			if (go != null && ofe.hasId()) {
-				go.setId(ofe.getId());
 			}
 
 			for (GameEventListener gel : logic.getListenerList()) {
