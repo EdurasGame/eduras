@@ -87,3 +87,27 @@ span.strike
  padding-left:9px;
  border-radius:7px;
 }
+
+table
+{
+	margin-left:5px;
+	cell-spacing:0;
+	border-collapse:collapse;
+	border:1px solid black;
+}
+
+table td, table th
+{
+	border:1px solid black;
+	padding:5px;
+}
+
+table th
+{
+	background:#FFFFCC;
+}
+
+table tr:hover
+{
+	background:#F0F0F0;
+}
