@@ -10,7 +10,7 @@
 		<title>What's this about.</title>
 
 		<para>
-			This document describes the eventing mechanisms and lists the
+			This document describes the eventing mechanism and lists the
 			available events.
 		</para>
 
@@ -60,7 +60,7 @@
 		<title>Events</title>
 
 		<table frame="all">
-			<title>Server- Events</title>
+			<title>Server-Events</title>
 			<tgroup cols="4">
 				<thead>
 					<row>
@@ -70,7 +70,6 @@
 						<entry>Serialization</entry>
 					</row>
 				</thead>
-
 				<tbody>
 					<row>
 						<entry>SET_POS</entry>
@@ -86,13 +85,18 @@
 						<entry>Tells that an object has been created.</entry>
 						<entry>#objectId#ownerId#typeId</entry>
 					</row>
+					<row>
+						<entry>OBJECT_REMOVE</entry>
+						<entry>121</entry>
+						<entry>Tells that an object has been removed.</entry>
+						<entry>#objectId#ownerId</entry>
+					</row>
 				</tbody>
 			</tgroup>
 		</table>
 
 		<table>
 			<title>Client-Events</title>
-
 			<tgroup cols="4">
 				<thead>
 					<row>
@@ -103,19 +107,18 @@
 					</row>
 				</thead>
 
-
 				<tbody>
-					<row>
-						<entry>MOVE_DOWN_PRESSED</entry>
-						<entry>13</entry>
-						<entry>The user triggered to move its character downwards.</entry>
-						<entry>#ownerId</entry>
+				    <row>
+						<entry>INFORMATION_REQUEST</entry>
+						<entry>1</entry>
+						<entry>The client asks for all objects to build its game information.</entry>
+						<entry>#requester</entry>
 					</row>
-					<row>
-						<entry>MOVE_UP_PRESSED</entry>
-						<entry>12</entry>
-						<entry>The user triggered to move its character upwards.</entry>
-						<entry>#ownerId</entry>
+					 <row>
+						<entry>CLIENT_SETNAME</entry>
+						<entry>2</entry>
+						<entry>The user changed is username. Also used after connecting.</entry>
+						<entry>#ownerId#newName</entry>
 					</row>
 					<row>
 						<entry>MOVE_LEFT_PRESSED</entry>
@@ -132,17 +135,15 @@
 						<entry>#ownerId</entry>
 					</row>
 					<row>
-						<entry>MOVE_DOWN_RELEASED</entry>
-						<entry>18</entry>
-						<entry>The user triggered to stop moving its character downwards.
-						</entry>
+						<entry>MOVE_UP_PRESSED</entry>
+						<entry>12</entry>
+						<entry>The user triggered to move its character upwards.</entry>
 						<entry>#ownerId</entry>
 					</row>
 					<row>
-						<entry>MOVE_UP_RELEASED</entry>
-						<entry>17</entry>
-						<entry>The user triggered to stop moving its character upwards.
-						</entry>
+						<entry>MOVE_DOWN_PRESSED</entry>
+						<entry>13</entry>
+						<entry>The user triggered to move its character downwards.</entry>
 						<entry>#ownerId</entry>
 					</row>
 					<row>
@@ -155,17 +156,56 @@
 					</row>
 					<row>
 						<entry>MOVE_RIGHT_RELEASED</entry>
-						<entry>16</entry>
+						<entry>15</entry>
 						<entry>The user triggered to stop moving its character to the
 							right.
 						</entry>
 						<entry>#ownerId</entry>
 					</row>
+					<row>
+						<entry>MOVE_UP_RELEASED</entry>
+						<entry>16</entry>
+						<entry>The user triggered to stop moving its character upwards.
+						</entry>
+						<entry>#ownerId</entry>
+					</row>
+					<row>
+						<entry>MOVE_DOWN_RELEASED</entry>
+						<entry>17</entry>
+						<entry>The user triggered to stop moving its character downwards.
+						</entry>
+						<entry>#ownerId</entry>
+					</row>
+					<row>
+						<entry>SET_SPEEDVECTOR</entry>
+						<entry>18</entry>
+						<entry>The user triggered to stop moving its character downwards.
+						</entry>
+						<entry>#ownerId#objectID#newSpeedVectorX#newSpeedVectorY</entry>
+					</row>
+					<row>
+						<entry>SET_SPEED</entry>
+						<entry>19</entry>
+						<entry>The user triggered to stop moving its character downwards.
+						</entry>
+						<entry>#ownerId#objectID#newSpeed</entry>
+					</row>´
+					<row>
+						<entry>SHOOT_PRESSED</entry>
+						<entry>30</entry>
+						<entry>The user triggered to start shooting.
+						</entry>
+						<entry>#ownerId#objectID</entry>
+					</row>
+					<row>
+						<entry>SHOOT_RELEASED</entry>
+						<entry>31</entry>
+						<entry>The user triggered to stop shooting.
+						</entry>
+						<entry>#ownerId#objectID</entry>
+					</row>
 				</tbody>
-
 			</tgroup>
-
 		</table>
 	</section>
-
 </article>
