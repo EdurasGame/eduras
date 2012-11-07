@@ -11,7 +11,7 @@ import de.illonis.eduras.InputKeyHandler;
 import de.illonis.eduras.events.ClientRenameEvent;
 import de.illonis.eduras.events.GameInfoRequest;
 import de.illonis.eduras.exceptions.MessageNotSupportedException;
-import de.illonis.eduras.exceptions.NoValueEnteredException;
+import de.illonis.eduras.exceptions.InvalidValueEnteredException;
 import de.illonis.eduras.exceptions.WrongEventTypeException;
 import de.illonis.eduras.locale.Localization;
 import de.illonis.eduras.logicabstraction.EdurasInitializer;
@@ -91,26 +91,31 @@ public class Gui extends JFrame {
 	public static void main(String[] args) {
 		Gui gui = new Gui();
 		gui.setVisible(true);
-		gui.showConnectDialog();
+		while (!gui.showConnectDialog())
+			;
 	}
 
-	void showConnectDialog() {
+	/**
+	 * Shows connection dialog that asks for user input.
+	 * 
+	 * @return true if user input was valid, false otherwise.
+	 */
+	private boolean showConnectDialog() {
 		connectDialog.setVisible(true);
 		InetAddress address;
 		int port;
+		if (connectDialog.isAborted())
+			return true;
 		try {
 			address = connectDialog.getAddress();
 			port = connectDialog.getPort();
 			clientName = connectDialog.getUserName();
-		} catch (NoValueEnteredException e) {
-			return;
+		} catch (InvalidValueEnteredException e) {
+			return false;
 		}
 		ConnectProgressDialog cpd = new ConnectProgressDialog(this, nwm);
 		cpd.start(address, port);
-		if (!cpd.isOK()) {
-			System.err.println("Invalid input. Asking again");
-			showConnectDialog();
-		}
+		return cpd.isOK();
 	}
 
 	/**

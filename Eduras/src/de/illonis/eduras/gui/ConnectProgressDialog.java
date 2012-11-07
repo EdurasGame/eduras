@@ -28,11 +28,16 @@ public class ConnectProgressDialog extends JDialog implements ActionListener {
 	private JButton backButton;
 	private Thread t;
 
+	/**
+	 * 
+	 */
 	private SwingWorker<Boolean, Void> worker = new SwingWorker<Boolean, Void>() {
 		@Override
 		public Boolean doInBackground() {
+			// wait some time to prevent a bug (progress dialog not hiding on
+			// immediate connection)
 			try {
-				Thread.sleep(1500);
+				Thread.sleep(500);
 			} catch (InterruptedException e) {
 
 			}
@@ -43,19 +48,15 @@ public class ConnectProgressDialog extends JDialog implements ActionListener {
 				i--;
 				try {
 					t.join(1000);
-					break;
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
-				System.out.println(i);
-				label.setText(label.getText() + "<br>" + i);
-				repaint();
+				if (t.isAlive()) {
+					System.out.println("Waiting..." + i);
+				} else
+					break;
 			}
-			System.out.println("ended");
-			if (errorMessage.isEmpty())
-				return true;
-			else
-				return false;
+			return errorMessage.isEmpty();
 		}
 
 		@Override
@@ -65,13 +66,11 @@ public class ConnectProgressDialog extends JDialog implements ActionListener {
 			else
 				label.setText("<html><b>Fehler:</b><br>" + errorMessage
 						+ "</html>");
-
 		}
 	};
 
 	ConnectProgressDialog(JFrame gui, NetworkManager nwm) {
 		super(gui, "Connecting...");
-		System.out.println("cpd");
 		errorMessage = "";
 		this.nwm = nwm;
 		buildGui();
@@ -86,24 +85,17 @@ public class ConnectProgressDialog extends JDialog implements ActionListener {
 		label.setEditable(false);
 		backButton = new JButton("Back");
 		backButton.addActionListener(this);
-
 		label.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
-		// label.setLineWrap(true);
 		getContentPane().setLayout(new BorderLayout());
 		getContentPane().add(label, BorderLayout.CENTER);
 		getContentPane().add(backButton, BorderLayout.SOUTH);
-
 		setLocationRelativeTo(getParent());
 	}
 
 	void start(InetAddress addr, int port) {
-		System.out.println("start");
-
 		this.addr = addr;
 		this.port = port;
-		System.out.println("started");
 		worker.execute();
-		System.out.println("show");
 		setVisible(true);
 	}
 
@@ -119,7 +111,6 @@ public class ConnectProgressDialog extends JDialog implements ActionListener {
 	}
 
 	private Runnable connector = new Runnable() {
-
 		@Override
 		public void run() {
 			errorMessage = "";
@@ -130,8 +121,13 @@ public class ConnectProgressDialog extends JDialog implements ActionListener {
 			} catch (IOException e) {
 				errorMessage = e.getMessage();
 				e.printStackTrace();
+			} finally {
+				try {
+					Thread.sleep(200);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
 			}
-			System.out.println("e");
 		}
 	};
 
@@ -139,6 +135,5 @@ public class ConnectProgressDialog extends JDialog implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		t.interrupt();
 		setVisible(false);
-
 	}
 }
