@@ -10,14 +10,15 @@ import javax.swing.JOptionPane;
 import de.illonis.eduras.InputKeyHandler;
 import de.illonis.eduras.events.ClientRenameEvent;
 import de.illonis.eduras.events.GameInfoRequest;
-import de.illonis.eduras.exceptions.MessageNotSupportedException;
 import de.illonis.eduras.exceptions.InvalidValueEnteredException;
+import de.illonis.eduras.exceptions.MessageNotSupportedException;
 import de.illonis.eduras.exceptions.WrongEventTypeException;
 import de.illonis.eduras.locale.Localization;
 import de.illonis.eduras.logicabstraction.EdurasInitializer;
 import de.illonis.eduras.logicabstraction.EventSender;
 import de.illonis.eduras.logicabstraction.InformationProvider;
 import de.illonis.eduras.logicabstraction.NetworkManager;
+import de.illonis.eduras.settings.Settings;
 
 /**
  * Graphical user interface for enduser.
@@ -38,6 +39,7 @@ public class Gui extends JFrame {
 	private String clientName;
 	private NetworkEventHandler eventHandler;
 	private EdurasInitializer initializer;
+	private Settings settings;
 
 	private static final long serialVersionUID = 1L;
 
@@ -91,6 +93,8 @@ public class Gui extends JFrame {
 	public static void main(String[] args) {
 		Gui gui = new Gui();
 		gui.setVisible(true);
+
+		// welcome to devil's loop
 		while (!gui.showConnectDialog())
 			;
 	}
@@ -125,11 +129,13 @@ public class Gui extends JFrame {
 
 		Thread t = new Thread(rendererThread);
 		t.start();
-		System.out.println("[CLIENT] Connected. Ownerid: "
+		System.out.println("[CLIENT] Connected. OwnerId: "
 				+ infoPro.getOwnerID());
 		setTitle(getTitle() + " #" + infoPro.getOwnerID() + " (" + clientName
 				+ ")");
-		keyHandler = new InputKeyHandler(infoPro.getOwnerID(), eventSender);
+		settings = initializer.getSettings();
+		keyHandler = new InputKeyHandler(infoPro.getOwnerID(), eventSender,
+				settings);
 		gamePanel.addKeyListener(keyHandler);
 		try {
 			eventSender.sendEvent(new ClientRenameEvent(infoPro.getOwnerID(),
@@ -143,6 +149,9 @@ public class Gui extends JFrame {
 		}
 	}
 
+	/**
+	 * Sends disconnect and stop-messages to all running threads and listeners.
+	 */
 	private void disconnect() {
 		rendererThread.stop();
 		initializer.shutdown();

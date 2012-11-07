@@ -7,6 +7,7 @@ import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.Logic;
 import de.illonis.eduras.interfaces.GameLogicInterface;
 import de.illonis.eduras.networking.Client;
+import de.illonis.eduras.settings.Settings;
 
 /**
  * This class provides a main entry point to the game logic and network for GUI
@@ -20,6 +21,7 @@ public class EdurasInitializer {
 	NetworkManager networkManager;
 	EventSender eventSender;
 	InformationProvider informationProvider;
+	Settings settings;
 	static EdurasInitializer instance;
 
 	private EdurasInitializer() {
@@ -31,6 +33,8 @@ public class EdurasInitializer {
 		networkManager = new NetworkManager(logic);
 
 		Client client = networkManager.getClient();
+
+		settings = new Settings();
 
 		eventSender = new EventSender(client);
 
@@ -55,6 +59,10 @@ public class EdurasInitializer {
 
 	public InformationProvider getInformationProvider() {
 		return informationProvider;
+	}
+
+	public Settings getSettings() {
+		return settings;
 	}
 
 	public void shutdown() {
