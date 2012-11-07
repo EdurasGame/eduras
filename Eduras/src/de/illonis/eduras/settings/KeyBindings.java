@@ -7,6 +7,7 @@ import de.illonis.eduras.exceptions.KeyNotBoundException;
 import de.illonis.eduras.interfaces.ResettableSetting;
 
 /**
+ * Maps keyboard keys to user-specific keybindings.
  * 
  * @author illonis
  * 

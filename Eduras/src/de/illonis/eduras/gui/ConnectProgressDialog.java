@@ -17,6 +17,13 @@ import javax.swing.SwingWorker;
 
 import de.illonis.eduras.logicabstraction.NetworkManager;
 
+/**
+ * A dialog that connects to server and shows connection progress to user and
+ * displays occuring errors.
+ * 
+ * @author illonis
+ * 
+ */
 public class ConnectProgressDialog extends JDialog implements ActionListener {
 
 	private static final long serialVersionUID = 1L;
@@ -29,7 +36,7 @@ public class ConnectProgressDialog extends JDialog implements ActionListener {
 	private Thread t;
 
 	/**
-	 * 
+	 * Handles connection timeout.
 	 */
 	private SwingWorker<Boolean, Void> worker = new SwingWorker<Boolean, Void>() {
 		@Override
@@ -99,6 +106,11 @@ public class ConnectProgressDialog extends JDialog implements ActionListener {
 		setVisible(true);
 	}
 
+	/**
+	 * Checks whether connection could be established or not.
+	 * 
+	 * @return false if an error occurred.
+	 */
 	public boolean isOK() {
 		try {
 			return worker.get();
