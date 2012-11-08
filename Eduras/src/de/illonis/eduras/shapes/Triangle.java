@@ -35,12 +35,17 @@ public class Triangle extends ObjectShape {
 	 *             Is thrown if the given vertices do not enclose the objects
 	 *             centre point.
 	 */
-	public Triangle(Vector2D first, Vector2D second, Vector2D third) throws ShapeVerticesNotApplicableException {
+	public Triangle(Vector2D first, Vector2D second, Vector2D third)
+			throws ShapeVerticesNotApplicableException {
 
-		boolean isPositiveX = first.getX() > 0 || second.getX() > 0 || third.getX() > 0;
-		boolean isNegativeX = first.getX() < 0 || second.getX() < 0 || third.getX() < 0;
-		boolean isPositiveY = first.getY() > 0 || second.getY() > 0 || third.getY() > 0;
-		boolean isNegativeY = first.getY() < 0 || second.getY() < 0 || third.getY() < 0;
+		boolean isPositiveX = first.getX() > 0 || second.getX() > 0
+				|| third.getX() > 0;
+		boolean isNegativeX = first.getX() < 0 || second.getX() < 0
+				|| third.getX() < 0;
+		boolean isPositiveY = first.getY() > 0 || second.getY() > 0
+				|| third.getY() > 0;
+		boolean isNegativeY = first.getY() < 0 || second.getY() < 0
+				|| third.getY() < 0;
 
 		if (isPositiveX && isNegativeX && isPositiveY && isNegativeY) {
 			vertices = new Vector2D[3];
@@ -59,21 +64,25 @@ public class Triangle extends ObjectShape {
 	 * de.illonis.eduras.GameObject, java.awt.geom.Point2D.Double)
 	 */
 	@Override
-	public Vector2D checkCollision(GameInformation game, GameObject thisObject, Vector2D target) {
+	public Vector2D checkCollision(GameInformation game, GameObject thisObject,
+			Vector2D target) {
 
 		Vector2D result = target;
 
 		HashMap<Integer, GameObject> gameObjects = game.getObjects();
 
 		Vector2D positionVector = thisObject.toPositionVector();
-		LinkedList<Line> lines = Geometry.getLinesBetweenShapePositions(vertices, positionVector, target);
+		LinkedList<Line> lines = Geometry.getLinesBetweenShapePositions(
+				vertices, positionVector, target);
 
 		LinkedList<Vector2D> collisions = new LinkedList<Vector2D>();
 
 		// Check for collides with objects
 		for (GameObject singleObject : gameObjects.values()) {
 			ObjectShape otherObjectShape = singleObject.getShape();
-			Vector2D res = otherObjectShape.isIntersected(lines, singleObject);
+			Vector2D res = Vector2D.findShortestDistance(
+					otherObjectShape.isIntersected(lines, singleObject),
+					positionVector);
 
 			// TODO: Replace null as 'error-code' since the null vector can be a
 			// valid result.
@@ -106,13 +115,43 @@ public class Triangle extends ObjectShape {
 	 * de.illonis.eduras.GameObject)
 	 */
 	@Override
-	public Vector2D isIntersected(LinkedList<Line> lines, GameObject thisObject) {
+	public LinkedList<Vector2D> isIntersected(LinkedList<Line> lines,
+			GameObject thisObject) {
 
-		for (int i = 0; i < vertices.length - 1; i++) {
+		LinkedList<Vector2D> interceptPoints = new LinkedList<Vector2D>();
 
+		for (Line line : lines) {
+			for (Line borderLine : getBorderLines()) {
+				Vector2D interceptPoint = Geometry
+						.getSegmentLinesInterceptPoint(borderLine, line);
+
+				if (interceptPoint == null) {
+					continue;
+				} else {
+					interceptPoints.add(interceptPoint);
+				}
+
+			}
 		}
+		return interceptPoints;
+	}
 
-		return null;
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see de.illonis.eduras.shapes.ObjectShape#getBorderLines()
+	 */
+	@Override
+	public LinkedList<Line> getBorderLines() {
+
+		LinkedList<Line> borderLines = new LinkedList<Line>();
+
+		for (int i = 0; i < vertices.length; i++) {
+			Line borderLine = new Line(vertices[i], vertices[(i + 1)
+					% vertices.length]);
+			borderLines.add(borderLine);
+		}
+		return borderLines;
 	}
 
 }

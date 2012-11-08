@@ -40,6 +40,7 @@ public class GameInformation {
 	 * @return Returns the objects position after the move. Note that the
 	 *         objects new position won't be set.
 	 */
+	@Deprecated
 	public Vector2D checkCollision(GameObject gameObject, Vector2D target) {
 		ObjectShape shape = gameObject.getShape();
 		Vector2D result = shape.checkCollision(this, gameObject, target);

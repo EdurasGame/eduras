@@ -82,10 +82,14 @@ public class Geometry {
 	}
 
 	/**
+	 * Returns the intercept point of two line segments.
 	 * 
 	 * @param first
+	 *            The first line segment.
 	 * @param second
-	 * @return
+	 *            The second line segment.
+	 * @return Returns null if there was no intercept point found and returns
+	 *         the intercept point as a vector otherwise.
 	 */
 	public static Vector2D getSegmentLinesInterceptPoint(Line first, Line second) {
 
@@ -116,14 +120,14 @@ public class Geometry {
 				/ firstDirectionX;
 		// the first line segment ends for s = 1, the second ends for r = 1 so
 		// if s > 1 || r > 1 there is no intersection
-		// point
+		// points
 
 		if (s > 1 || r > 1) {
 			return null;
 		}
 
 		Vector2D intersectPoint = second.getPointAt(s);
-		
+
 		return intersectPoint;
 
 	}

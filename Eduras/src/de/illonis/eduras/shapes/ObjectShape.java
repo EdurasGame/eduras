@@ -30,17 +30,28 @@ public abstract class ObjectShape {
 	 *            The target position
 	 * @return Returns the position of the object after the move.
 	 */
-	public abstract Vector2D checkCollision(GameInformation game, GameObject thisObject,
-			Vector2D target);
+	public abstract Vector2D checkCollision(GameInformation game,
+			GameObject thisObject, Vector2D target);
 
 	/**
 	 * Checks if the shape related to a specific object is intersected by
 	 * another moving object, which is represented by lines.
-	 * @param lines The lines representing the moving object.
-	 * @param thisObject The object to which the shape belongs.
-	 * @return Returns a position vector to the point of collision.
+	 * 
+	 * @param lines
+	 *            The lines representing the moving object.
+	 * @param thisObject
+	 *            The object to which the shape belongs.
+	 * @return Returns a linked list of position vectors to the points of
+	 *         collisions. The list will be empty if there is no collision.
 	 */
-	public abstract Vector2D isIntersected(LinkedList<Line> lines,
+	public abstract LinkedList<Vector2D> isIntersected(LinkedList<Line> lines,
 			GameObject thisObject);
+
+	/**
+	 * Returns the line segments which represents the borders of the shape.
+	 * 
+	 * @return The line segments representing the borders of the shape.
+	 */
+	public abstract LinkedList<Line> getBorderLines();
 
 }

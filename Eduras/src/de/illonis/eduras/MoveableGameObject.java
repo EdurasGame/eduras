@@ -101,9 +101,13 @@ public abstract class MoveableGameObject extends GameObject implements Moveable 
 		double targetX = unitSpeed.getX() + getXPosition();
 		double targetY = unitSpeed.getY() + getYPosition();
 
-		Vector2D targetPos = getGame().checkCollision(this,
-				new Vector2D(targetX, targetY));
+		Vector2D targetPos = this
+				.checkCollision(new Vector2D(targetX, targetY));
 
 		setPosition(targetPos.getX(), targetPos.getY());
+	}
+
+	public Vector2D checkCollision(Vector2D target) {
+		return this.getShape().checkCollision(getGame(), this, target);
 	}
 }
