@@ -5,10 +5,12 @@ import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 import java.util.HashMap;
+import java.util.LinkedList;
 
 import de.illonis.eduras.GameObject;
 import de.illonis.eduras.Player;
 import de.illonis.eduras.logicabstraction.InformationProvider;
+import de.illonis.eduras.math.Vector2D;
 
 /**
  * GameRenderer renders the buffered image for gamepanel.
@@ -19,7 +21,7 @@ import de.illonis.eduras.logicabstraction.InformationProvider;
 public class GameRenderer {
 	private BufferedImage dbImage = null;
 	private Graphics2D dbg = null;
-	private HashMap<Integer, GameObject> objs;
+	private final HashMap<Integer, GameObject> objs;
 
 	/**
 	 * Creates a new renderer.
@@ -78,9 +80,22 @@ public class GameRenderer {
 		for (int i = 0; i < objs.size(); i++) {
 			GameObject d = objs.get(i);
 			if (d instanceof Player) {
-				dbg.fillRect(d.getDrawX(), d.getDrawY(), 30, 30);
-				dbg.drawString(((Player) d).getName(), d.getDrawX() + 5,
-						d.getDrawY() - 4);
+				Player player = (Player) d;
+
+				int[] xPositions = new int[3];
+				int[] yPositions = new int[3];
+				LinkedList<Vector2D> vertices = player.getShape()
+						.getAbsoluteVertices(player);
+
+				for (int j = 0; j < 3; j++) {
+					xPositions[j] = (int) vertices.get(j).getX();
+					yPositions[j] = (int) vertices.get(j).getY();
+				}
+
+				for (int j = 0; j < 3; j++) {
+					dbg.drawLine(xPositions[j], yPositions[j],
+							xPositions[(j + 1) % 3], yPositions[(j + 1) % 3]);
+				}
 			}
 		}
 	}
