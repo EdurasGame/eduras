@@ -223,4 +223,15 @@ public class GameObject implements Comparable<GameObject> {
 		else
 			return -1;
 	}
+
+	/**
+	 * Check wether the given object is the same by comparing the ids.
+	 * 
+	 * @param object
+	 *            The object to compare.
+	 * @return Returns true if the ids match and false otherwise.
+	 */
+	public boolean equals(GameObject object) {
+		return this.id == object.getId();
+	}
 }

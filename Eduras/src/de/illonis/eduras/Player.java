@@ -1,8 +1,9 @@
 package de.illonis.eduras;
 
+import de.illonis.eduras.exceptions.ShapeVerticesNotApplicableException;
 import de.illonis.eduras.interfaces.Controllable;
 import de.illonis.eduras.math.Vector2D;
-import de.illonis.eduras.shapes.NoCollisionShape;
+import de.illonis.eduras.shapes.Triangle;
 
 /**
  * This class represents a player.
@@ -29,7 +30,17 @@ public class Player extends MoveableGameObject implements Controllable {
 		this.name = name;
 		setSpeed(50);
 		setOwner(ownerId);
-		setShape(new NoCollisionShape());
+
+		// get position
+		Vector2D firstEdge = new Vector2D(0f, 10f);
+		Vector2D secondEdge = new Vector2D(10f, -10f);
+		Vector2D thirdEdge = new Vector2D(-10f, -10f);
+
+		try {
+			setShape(new Triangle(firstEdge, secondEdge, thirdEdge));
+		} catch (ShapeVerticesNotApplicableException e) {
+			e.printStackTrace();
+		}
 	}
 
 	/**
