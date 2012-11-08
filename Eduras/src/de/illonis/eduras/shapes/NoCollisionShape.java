@@ -27,7 +27,15 @@ public class NoCollisionShape extends ObjectShape {
 	 * @see de.illonis.eduras.shapes.ObjectShape#getBorderLines()
 	 */
 	@Override
-	public LinkedList<Line> getBorderLines() {
+	public LinkedList<Line> getBorderLines(GameObject object) {
+		return null;
+	}
+
+	/* (non-Javadoc)
+	 * @see de.illonis.eduras.shapes.ObjectShape#getVertices()
+	 */
+	@Override
+	public LinkedList<Vector2D> getVertices() {
 		return null;
 	}
 

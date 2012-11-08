@@ -48,10 +48,47 @@ public abstract class ObjectShape {
 			GameObject thisObject);
 
 	/**
-	 * Returns the line segments which represents the borders of the shape.
+	 * Returns the line segments which represents the borders of the shape. The
+	 * borders are calculated in absolute values from the given object.
 	 * 
+	 * @param object
+	 *            The object from which the absolute borderlines are calculated.
 	 * @return The line segments representing the borders of the shape.
 	 */
-	public abstract LinkedList<Line> getBorderLines();
+	public abstract LinkedList<Line> getBorderLines(GameObject object);
+
+	/**
+	 * Returns the vertices this shape is made of. Note that the relative values
+	 * are returned!
+	 * 
+	 */
+	public abstract LinkedList<Vector2D> getVertices();
+
+	/**
+	 * Returns the absolute vertices of the shape assuming the shape belongs to
+	 * the given object.
+	 * 
+	 * @param object
+	 *            The object to which the shape belongs.
+	 * @return Returns a LinkedList of absolute vertices.
+	 */
+	public LinkedList<Vector2D> getAbsoluteVertices(GameObject object) {
+		double objectXPos = object.getXPosition();
+		double objectYPos = object.getYPosition();
+
+		LinkedList<Vector2D> relativeVertices = getVertices();
+		LinkedList<Vector2D> absoluteVertices = new LinkedList<Vector2D>();
+
+		for (Vector2D singleRelativeVertice : relativeVertices) {
+			double absXPos = singleRelativeVertice.getX() + objectXPos;
+			double absYPos = singleRelativeVertice.getY() + objectYPos;
+
+			Vector2D singleAbsoluteVertice = new Vector2D(absXPos, absYPos);
+
+			absoluteVertices.add(singleAbsoluteVertice);
+		}
+
+		return absoluteVertices;
+	}
 
 }

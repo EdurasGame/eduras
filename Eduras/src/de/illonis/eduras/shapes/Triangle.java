@@ -79,10 +79,20 @@ public class Triangle extends ObjectShape {
 
 		// Check for collides with objects
 		for (GameObject singleObject : gameObjects.values()) {
+
+			// skip comparing the object with itself
+			if (singleObject.equals(thisObject))
+				continue;
+
 			ObjectShape otherObjectShape = singleObject.getShape();
+
 			Vector2D res = Vector2D.findShortestDistance(
 					otherObjectShape.isIntersected(lines, singleObject),
 					positionVector);
+
+			// skip if there was no collision
+			if (res == null)
+				continue;
 
 			// TODO: Replace null as 'error-code' since the null vector can be a
 			// valid result.
@@ -104,9 +114,18 @@ public class Triangle extends ObjectShape {
 	 * 
 	 * @return The vertices.
 	 */
-	public Vector2D[] getVertices() {
-		return vertices;
+	@Override
+	public LinkedList<Vector2D> getVertices() {
+		LinkedList<Vector2D> res = new LinkedList<Vector2D>();
+
+		res.add(vertices[0]);
+		res.add(vertices[1]);
+		res.add(vertices[2]);
+
+		return res;
 	}
+	
+
 
 	/*
 	 * (non-Javadoc)
@@ -121,13 +140,16 @@ public class Triangle extends ObjectShape {
 		LinkedList<Vector2D> interceptPoints = new LinkedList<Vector2D>();
 
 		for (Line line : lines) {
-			for (Line borderLine : getBorderLines()) {
+			for (Line borderLine : getBorderLines(thisObject)) {
 				Vector2D interceptPoint = Geometry
 						.getSegmentLinesInterceptPoint(borderLine, line);
 
 				if (interceptPoint == null) {
 					continue;
 				} else {
+					System.out.println("[LOGIC][TRIANGLE] Collision at "
+							+ interceptPoint.getX() + " , "
+							+ interceptPoint.getY());
 					interceptPoints.add(interceptPoint);
 				}
 
@@ -142,13 +164,15 @@ public class Triangle extends ObjectShape {
 	 * @see de.illonis.eduras.shapes.ObjectShape#getBorderLines()
 	 */
 	@Override
-	public LinkedList<Line> getBorderLines() {
+	public LinkedList<Line> getBorderLines(GameObject object) {
 
 		LinkedList<Line> borderLines = new LinkedList<Line>();
+		
+		LinkedList<Vector2D> absoluteVertices = getAbsoluteVertices(object);
 
-		for (int i = 0; i < vertices.length; i++) {
-			Line borderLine = new Line(vertices[i], vertices[(i + 1)
-					% vertices.length]);
+		for (int i = 0; i < 3; i++) {
+			Line borderLine = new Line(absoluteVertices.get(i), absoluteVertices.get((i + 1)
+					% 3));
 			borderLines.add(borderLine);
 		}
 		return borderLines;
