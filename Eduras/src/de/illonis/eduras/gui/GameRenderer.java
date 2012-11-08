@@ -96,6 +96,8 @@ public class GameRenderer {
 					dbg.drawLine(xPositions[j], yPositions[j],
 							xPositions[(j + 1) % 3], yPositions[(j + 1) % 3]);
 				}
+				
+				dbg.drawString(player.getName(),(int) player.getXPosition(),(int) player.getYPosition());
 			}
 		}
 	}
