@@ -3,6 +3,7 @@
  */
 package de.illonis.eduras.logicabstraction;
 
+import java.awt.Rectangle;
 import java.util.HashMap;
 
 import de.illonis.eduras.GameObject;
@@ -42,9 +43,8 @@ public class InformationProvider implements InfoInterface {
 	 * @see de.illonis.eduras.interfaces.InfoInterface#getMapBounds()
 	 */
 	@Override
-	public int[] getMapBounds() {
-		// TODO IMPLEMENT!
-		return null;
+	public Rectangle getMapBounds() {
+		return logic.getGame().getMap().getBounds();
 	}
 
 	/**

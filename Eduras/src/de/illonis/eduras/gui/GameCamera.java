@@ -12,4 +12,8 @@ public class GameCamera extends Rectangle {
 
 	private static final long serialVersionUID = 1L;
 
+	public GameCamera() {
+		x = y = 0;
+	}
+
 }

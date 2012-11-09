@@ -2,6 +2,7 @@ package de.illonis.eduras.gui;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 import java.util.HashMap;
@@ -22,6 +23,7 @@ public class GameRenderer {
 	private BufferedImage dbImage = null;
 	private Graphics2D dbg = null;
 	private final HashMap<Integer, GameObject> objs;
+	private Rectangle mapSize;
 
 	/**
 	 * Creates a new renderer.
@@ -31,6 +33,7 @@ public class GameRenderer {
 	 */
 	public GameRenderer(InformationProvider informationProvider) {
 		objs = informationProvider.getGameObjects();
+		mapSize = informationProvider.getMapBounds();
 	}
 
 	/**
@@ -69,6 +72,10 @@ public class GameRenderer {
 		if ((graphics != null) && (dbImage != null)) {
 			graphics.drawImage(dbImage, 0, 0, null);
 		}
+	}
+
+	private void drawMap() {
+		// TODO: implement
 	}
 
 	/**

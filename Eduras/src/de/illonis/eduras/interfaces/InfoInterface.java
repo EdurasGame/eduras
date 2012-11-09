@@ -3,9 +3,11 @@
  */
 package de.illonis.eduras.interfaces;
 
+import java.awt.Rectangle;
 import java.util.HashMap;
 
 import de.illonis.eduras.GameObject;
+import de.illonis.eduras.Map;
 import de.illonis.eduras.Player;
 
 /**
@@ -18,12 +20,12 @@ public interface InfoInterface {
 
 	/**
 	 * Returns information about how big the map is. In detail, it returns the
-	 * maximum y-position and the maximum x-position in an array.
+	 * width and height of the map.
 	 * 
-	 * @return Returns the maximum x-position at array position [0] and the
-	 *         y-position at array position [1].
+	 * @return Returns the bounds of the map.
+	 * @see Map#getBounds()
 	 */
-	public int[] getMapBounds();
+	public Rectangle getMapBounds();
 
 	/**
 	 * Returns the player which belongs to the client.
