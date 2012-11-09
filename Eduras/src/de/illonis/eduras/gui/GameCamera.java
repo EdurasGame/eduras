@@ -15,5 +15,4 @@ public class GameCamera extends Rectangle {
 	public GameCamera() {
 		x = y = 0;
 	}
-
 }
