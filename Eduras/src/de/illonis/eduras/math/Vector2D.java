@@ -1,5 +1,7 @@
 package de.illonis.eduras.math;
 
+import java.awt.Rectangle;
+import java.awt.geom.Point2D;
 import java.util.LinkedList;
 
 /**
@@ -267,9 +269,26 @@ public class Vector2D {
 		return null;
 	}
 
+	/**
+	 * Checks if this vector equals another vector. Two vectors are identical if
+	 * they have both the same x and y values.
+	 * 
+	 * @param vec
+	 *            vector to compare to.
+	 * @return true if vectors are equal, false otherwise.
+	 */
 	public boolean equals(Vector2D vec) {
-
 		return (this.getX() == vec.getX() && this.getY() == vec.getY());
+	}
 
+	/**
+	 * Returns a point with same x and y values as vector. This can be used to
+	 * solve geometric problems with Java's builtin methods.
+	 * 
+	 * @see Rectangle#contains(Point2D)
+	 * @return vector as point.
+	 */
+	public Point2D.Double toPoint() {
+		return new Point2D.Double(x, y);
 	}
 }

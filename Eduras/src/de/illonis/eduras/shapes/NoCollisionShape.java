@@ -7,6 +7,12 @@ import de.illonis.eduras.GameObject;
 import de.illonis.eduras.math.Line;
 import de.illonis.eduras.math.Vector2D;
 
+/**
+ * A simple shape that is empty and has no collision.
+ * 
+ * @author illonis
+ * 
+ */
 public class NoCollisionShape extends ObjectShape {
 
 	@Override
@@ -31,7 +37,9 @@ public class NoCollisionShape extends ObjectShape {
 		return null;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see de.illonis.eduras.shapes.ObjectShape#getVertices()
 	 */
 	@Override
