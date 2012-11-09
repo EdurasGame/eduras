@@ -107,6 +107,15 @@ public abstract class MoveableGameObject extends GameObject implements Moveable 
 		setPosition(targetPos.getX(), targetPos.getY());
 	}
 
+	/**
+	 * Checks if there will be a collision of the movable object trying to move
+	 * to the target position.
+	 * 
+	 * @param target
+	 *            The target position.
+	 * @return Returns the objects position after the move. Note that the
+	 *         objects new position won't be set.
+	 */
 	public Vector2D checkCollision(Vector2D target) {
 		return this.getShape().checkCollision(getGame(), this, target);
 	}
