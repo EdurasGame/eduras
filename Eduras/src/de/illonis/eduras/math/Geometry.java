@@ -122,8 +122,9 @@ public class Geometry {
 		// if s > 1 || r > 1 there is no intersection
 		// points
 
-		if (s > 1 || r > 1 || Double.isNaN(s) || Double.isNaN(r)
-				|| Double.isInfinite(r) || Double.isInfinite(s)) {
+		if (s > 1 || r > 1 || s < 0 || r < 0 || Double.isNaN(s)
+				|| Double.isNaN(r) || Double.isInfinite(r)
+				|| Double.isInfinite(s)) {
 			return null;
 		}
 

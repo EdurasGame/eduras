@@ -53,7 +53,6 @@ public class Line {
 	 * @return True if line contains point, false otherwise.
 	 */
 	public boolean containsPoint(Vector2D point) {
-		System.out.println(a * point.getX() + b * point.getY() + c);
 		return Math.abs(a * point.getX() + b * point.getY() + c) < RANGE;
 	}
 
