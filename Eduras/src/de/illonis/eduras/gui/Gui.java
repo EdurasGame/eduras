@@ -53,6 +53,7 @@ public class Gui extends JFrame {
 		camera = new GameCamera();
 		cml = new CameraMouseListener(camera);
 		addMouseMotionListener(cml);
+		addMouseListener(cml);
 		addComponentListener(new ResizeMonitor());
 		buildGui();
 		connectDialog = new ConnectDialog(this);
