@@ -21,6 +21,7 @@ import de.illonis.eduras.math.Vector2D;
  */
 public class GameRenderer {
 	private BufferedImage dbImage = null;
+	private GameCamera camera;
 	private Graphics2D dbg = null;
 	private final HashMap<Integer, GameObject> objs;
 	private Rectangle mapSize;
@@ -28,10 +29,14 @@ public class GameRenderer {
 	/**
 	 * Creates a new renderer.
 	 * 
-	 * @param game
+	 * @param camera
+	 *            Game camera to use viewport.
+	 * @param informationProvider
 	 *            game-information that contains objects to render.
 	 */
-	public GameRenderer(InformationProvider informationProvider) {
+	public GameRenderer(GameCamera camera,
+			InformationProvider informationProvider) {
+		this.camera = camera;
 		objs = informationProvider.getGameObjects();
 		mapSize = informationProvider.getMapBounds();
 	}
