@@ -104,6 +104,10 @@ public class Triangle extends ObjectShape {
 		// Figure out which collision is the nearest
 		if (collisions.size() > 1) {
 			result = Vector2D.findShortestDistance(collisions, positionVector);
+		} else {
+			if (collisions.size() > 0) {
+				result = collisions.getFirst();
+			}
 		}
 
 		return result;
@@ -124,8 +128,6 @@ public class Triangle extends ObjectShape {
 
 		return res;
 	}
-	
-
 
 	/*
 	 * (non-Javadoc)
@@ -167,12 +169,12 @@ public class Triangle extends ObjectShape {
 	public LinkedList<Line> getBorderLines(GameObject object) {
 
 		LinkedList<Line> borderLines = new LinkedList<Line>();
-		
+
 		LinkedList<Vector2D> absoluteVertices = getAbsoluteVertices(object);
 
 		for (int i = 0; i < 3; i++) {
-			Line borderLine = new Line(absoluteVertices.get(i), absoluteVertices.get((i + 1)
-					% 3));
+			Line borderLine = new Line(absoluteVertices.get(i),
+					absoluteVertices.get((i + 1) % 3));
 			borderLines.add(borderLine);
 		}
 		return borderLines;
