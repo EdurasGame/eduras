@@ -40,12 +40,14 @@ public class Gui extends JFrame {
 	private NetworkEventHandler eventHandler;
 	private EdurasInitializer initializer;
 	private Settings settings;
+	private GameCamera camera;
 
 	private static final long serialVersionUID = 1L;
 
 	private Gui() {
 		super("Eduras? Client");
 		loadTools();
+		camera = new GameCamera();
 		buildGui();
 		connectDialog = new ConnectDialog(this);
 		addWindowListener(new WindowAdapter() {
@@ -71,7 +73,7 @@ public class Gui extends JFrame {
 	private void buildGui() {
 
 		gamePanel = new GamePanel();
-		renderer = new GameRenderer(infoPro);
+		renderer = new GameRenderer(camera, infoPro);
 		rendererThread = new RenderThread(renderer, gamePanel);
 		setContentPane(gamePanel);
 		setSize(500, 500);
@@ -127,6 +129,7 @@ public class Gui extends JFrame {
 	 */
 	void onConnected() {
 
+		camera.setSize(getWidth(), getHeight());
 		Thread t = new Thread(rendererThread);
 		t.start();
 		System.out.println("[CLIENT] Connected. OwnerId: "

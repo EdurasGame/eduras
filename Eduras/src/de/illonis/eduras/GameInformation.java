@@ -20,6 +20,7 @@ public class GameInformation {
 	public GameInformation() {
 		objects = new HashMap<Integer, GameObject>();
 		players = new HashMap<Integer, Player>();
+		map = new Map();
 	}
 
 	/**

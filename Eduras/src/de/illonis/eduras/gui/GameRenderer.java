@@ -21,6 +21,7 @@ import de.illonis.eduras.math.Vector2D;
  */
 public class GameRenderer {
 	private BufferedImage dbImage = null;
+	private GameCamera camera;
 	private Graphics2D dbg = null;
 	private final HashMap<Integer, GameObject> objs;
 	private Rectangle mapSize;
@@ -28,10 +29,14 @@ public class GameRenderer {
 	/**
 	 * Creates a new renderer.
 	 * 
-	 * @param game
+	 * @param camera
+	 *            Game camera to use viewport.
+	 * @param informationProvider
 	 *            game-information that contains objects to render.
 	 */
-	public GameRenderer(InformationProvider informationProvider) {
+	public GameRenderer(GameCamera camera,
+			InformationProvider informationProvider) {
+		this.camera = camera;
 		objs = informationProvider.getGameObjects();
 		mapSize = informationProvider.getMapBounds();
 	}
@@ -58,8 +63,8 @@ public class GameRenderer {
 		// clear image
 		dbg.setColor(Color.black);
 		dbg.fillRect(0, 0, width, height);
-
-		drawObjects();
+		drawMap();
+		drawObjects(camera);
 	}
 
 	/**
@@ -75,13 +80,20 @@ public class GameRenderer {
 	}
 
 	private void drawMap() {
-		// TODO: implement
+		dbg.setColor(Color.red);
+		dbg.fillRect(-camera.getBounds().x, -camera.getBounds().y,
+				camera.width, 5);
+		dbg.fillRect(-camera.getBounds().x, -camera.getBounds().y, 5,
+				camera.height);
 	}
 
 	/**
-	 * Draw every object of game-object list.
+	 * Draw every object of game-object list that is in given rectangle
+	 * 
+	 * @param r
+	 *            camera rectangle
 	 */
-	private synchronized void drawObjects() {
+	private synchronized void drawObjects(Rectangle r) {
 
 		dbg.setColor(Color.yellow);
 		for (int i = 0; i < objs.size(); i++) {
