@@ -82,22 +82,25 @@ public class GameRenderer {
 			if (d instanceof Player) {
 				Player player = (Player) d;
 
-				int[] xPositions = new int[3];
-				int[] yPositions = new int[3];
 				LinkedList<Vector2D> vertices = player.getShape()
 						.getAbsoluteVertices(player);
+				int vCount = vertices.size();
+				int[] xPositions = new int[vCount];
+				int[] yPositions = new int[vCount];
 
-				for (int j = 0; j < 3; j++) {
+				for (int j = 0; j < vCount; j++) {
 					xPositions[j] = (int) vertices.get(j).getX();
 					yPositions[j] = (int) vertices.get(j).getY();
 				}
 
-				for (int j = 0; j < 3; j++) {
+				for (int j = 0; j < vCount; j++) {
 					dbg.drawLine(xPositions[j], yPositions[j],
-							xPositions[(j + 1) % 3], yPositions[(j + 1) % 3]);
+							xPositions[(j + 1) % vCount], yPositions[(j + 1)
+									% vCount]);
 				}
-				
-				dbg.drawString(player.getName(),(int) player.getXPosition(),(int) player.getYPosition());
+
+				dbg.drawString(player.getName(), (int) player.getXPosition(),
+						(int) player.getYPosition());
 			}
 		}
 	}
