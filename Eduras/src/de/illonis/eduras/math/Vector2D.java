@@ -278,7 +278,9 @@ public class Vector2D {
 	 * @return true if vectors are equal, false otherwise.
 	 */
 	public boolean equals(Vector2D vec) {
-		return (this.getX() == vec.getX() && this.getY() == vec.getY());
+
+		return (this.getX() - vec.getX() < Line.RANGE && this.getY()
+				- vec.getY() < Line.RANGE);
 	}
 
 	/**
