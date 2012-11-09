@@ -81,10 +81,10 @@ public class GameRenderer {
 
 	private void drawMap() {
 		dbg.setColor(Color.red);
-		dbg.fillRect(-camera.getBounds().x, -camera.getBounds().y,
-				camera.width, 5);
-		dbg.fillRect(-camera.getBounds().x, -camera.getBounds().y, 5,
-				camera.height);
+		Rectangle r = mapSize.getBounds();
+		r.x -= camera.x;
+		r.y -= camera.y;
+		dbg.draw(r);
 	}
 
 	/**
