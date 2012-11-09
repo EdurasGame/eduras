@@ -15,6 +15,7 @@ import de.illonis.eduras.shapes.ObjectShape;
 public class GameInformation {
 	private final HashMap<Integer, GameObject> objects;
 	private final HashMap<Integer, Player> players;
+	private Map map;
 
 	public GameInformation() {
 		objects = new HashMap<Integer, GameObject>();
