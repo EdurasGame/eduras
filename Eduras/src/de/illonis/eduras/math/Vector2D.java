@@ -266,4 +266,10 @@ public class Vector2D {
 
 		return null;
 	}
+
+	public boolean equals(Vector2D vec) {
+
+		return (this.getX() == vec.getX() && this.getY() == vec.getY());
+
+	}
 }
