@@ -15,6 +15,8 @@ package de.illonis.eduras.math;
  */
 public class Line {
 
+	public static final double RANGE = 0.00001;
+
 	private final double a;
 	private final double b;
 	private final double c;
@@ -51,7 +53,8 @@ public class Line {
 	 * @return True if line contains point, false otherwise.
 	 */
 	public boolean containsPoint(Vector2D point) {
-		return a * point.getX() + b * point.getY() + c == 0;
+		System.out.println(a * point.getX() + b * point.getY() + c);
+		return Math.abs(a * point.getX() + b * point.getY() + c) < RANGE;
 	}
 
 	/**
