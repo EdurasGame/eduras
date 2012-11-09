@@ -204,25 +204,30 @@ public class Vector2D {
 	public String toString() {
 		return "Vector2D(" + x + ", " + y + ")";
 	}
-	
+
 	/**
-	 * Assumes the calling and the passed vector to be position vectors and calculates the distance between the points behind.
-	 * @return Returns the distance between the points represented by the vectors.
+	 * Assumes the calling and the passed vector to be position vectors and
+	 * calculates the distance between the points behind.
+	 * 
+	 * @return Returns the distance between the points represented by the
+	 *         vectors.
 	 */
 	public double calculateDistance(Vector2D vec) {
 		Vector2D copyThis = new Vector2D(this);
-		
+
 		copyThis.subtract(vec);
-		
+
 		return copyThis.getLength();
 	}
 
 	/**
 	 * Subtracts the given vector from this vector.
-	 * @param vec The vector to subtract.
+	 * 
+	 * @param vec
+	 *            The vector to subtract.
 	 */
 	public void subtract(Vector2D vec) {
-		
+
 		Vector2D copyVec = new Vector2D(vec);
 		copyVec.invert();
 		this.add(copyVec);
@@ -231,27 +236,40 @@ public class Vector2D {
 	/**
 	 * Calculates which of the points given in the list is closest to the given
 	 * position vector.
-	 * @param points The list of points.
-	 * @param positionVector The position vector.
+	 * 
+	 * @param points
+	 *            The list of points.
+	 * @param positionVector
+	 *            The position vector.
+	 * @return Returns the vector in the list that is closest to the given
+	 *         position vector. If there are multiple closest vectors, the first
+	 *         in the list is chosen.
 	 */
 	public static Vector2D findShortestDistance(LinkedList<Vector2D> points,
 			Vector2D positionVector) {
-		
-		if(points.size() > 0) {
+
+		if (points.size() > 0) {
 			Vector2D nearestPoint = points.getFirst();
-			double shortestDistance = nearestPoint.calculateDistance(positionVector);
-			
-			for(Vector2D point: points) {
+			double shortestDistance = nearestPoint
+					.calculateDistance(positionVector);
+
+			for (Vector2D point : points) {
 				double distance = point.calculateDistance(positionVector);
-				if(distance < shortestDistance) {
+				if (distance < shortestDistance) {
 					nearestPoint = point;
 					shortestDistance = distance;
 				}
 			}
-			
+
 			return nearestPoint;
 		}
-		
+
 		return null;
+	}
+
+	public boolean equals(Vector2D vec) {
+
+		return (this.getX() == vec.getX() && this.getY() == vec.getY());
+
 	}
 }

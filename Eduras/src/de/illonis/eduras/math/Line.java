@@ -118,21 +118,22 @@ public class Line {
 
 	/**
 	 * This function returns the point you will get by multiplying the given
-	 * lambda with the directional vector 'uv' (see {@link getDirectionalVector()})
-	 * and add it to the support vector 'u'.
+	 * lambda with the directional vector 'uv' (see {@link
+	 * getDirectionalVector()}) and add it to the support vector 'u'.
 	 * 
-	 * @param lambda The multiplier.
+	 * @param lambda
+	 *            The multiplier.
 	 * @return Returns u + uv * lambda
 	 */
 	public Vector2D getPointAt(double lambda) {
-		
+
 		Vector2D resultPoint = new Vector2D(getU());
-		
+
 		Vector2D temp = new Vector2D(getDirectionalVector());
 		temp.mult(lambda);
-		
+
 		resultPoint.add(temp);
-		
+
 		return resultPoint;
 	}
 
