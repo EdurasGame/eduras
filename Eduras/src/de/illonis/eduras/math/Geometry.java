@@ -122,7 +122,7 @@ public class Geometry {
 		// if s > 1 || r > 1 there is no intersection
 		// points
 
-		if (s > 1 || r > 1) {
+		if (s > 1 || r > 1 || Double.isNaN(s) || Double.isNaN(r)) {
 			return null;
 		}
 

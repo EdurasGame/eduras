@@ -43,6 +43,12 @@ public class GeometryUtilsTests {
 		interceptPoint = Geometry.getSegmentLinesInterceptPoint(line4, line1);
 
 		assertTrue(interceptPoint.equals(new Vector2D(-0.5, 0)));
+
+		Line line5 = new Line(new Vector2D(2, 0), new Vector2D(-2, 0));
+
+		interceptPoint = Geometry.getSegmentLinesInterceptPoint(line1, line5);
+
+		assertTrue(interceptPoint == null);
 	}
 
 	@Test
