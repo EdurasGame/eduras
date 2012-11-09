@@ -51,6 +51,14 @@ public class InputKeyHandler implements KeyListener {
 	public void keyTyped(KeyEvent e) {
 	}
 
+	/**
+	 * Checks if given key was pressed recently. If given key is not assigned,
+	 * false will be returned.
+	 * 
+	 * @param key
+	 *            key to check.
+	 * @return true if key was pressed recently, false otherwise.
+	 */
 	private boolean justPressed(int key) {
 		if (pressedButtons.containsKey(key))
 			return pressedButtons.get(key);
@@ -58,6 +66,13 @@ public class InputKeyHandler implements KeyListener {
 			return false;
 	}
 
+	/**
+	 * Indicates a key release internally. That means key's state will be set to
+	 * non-pressed.
+	 * 
+	 * @param key
+	 *            released key.
+	 */
 	private void keyRelease(int key) {
 		pressedButtons.put(key, false);
 	}

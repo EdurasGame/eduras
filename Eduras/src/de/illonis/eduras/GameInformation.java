@@ -22,10 +22,31 @@ public class GameInformation {
 		players = new HashMap<Integer, Player>();
 	}
 
+	/**
+	 * Returns map of current game.
+	 * 
+	 * @return map of current game.
+	 */
+	public Map getMap() {
+		return map;
+	}
+
+	/**
+	 * Adds an object to gameobjects. Objects are put in object list assigned to
+	 * their id.
+	 * 
+	 * @param object
+	 *            new object.
+	 */
 	public void addObject(GameObject object) {
 		objects.put(object.getId(), object);
 	}
 
+	/**
+	 * Returns all game objects.
+	 * 
+	 * @return game object list.
+	 */
 	public HashMap<Integer, GameObject> getObjects() {
 		return objects;
 	}
@@ -78,10 +99,24 @@ public class GameInformation {
 		return (objects.remove(go.getId()) != null);
 	}
 
+	/**
+	 * Adds a player to playerlist. Players are stored assigned to their
+	 * owner-id.
+	 * 
+	 * @param player
+	 *            player to add.
+	 */
 	public void addPlayer(Player player) {
 		players.put(player.getOwner(), player);
 	}
 
+	/**
+	 * Returns a specific player identified by owner id.
+	 * 
+	 * @param ownerId
+	 *            owner id of player.
+	 * @return player object of given owner.
+	 */
 	public Player getPlayerByOwnerId(int ownerId) {
 		return players.get(ownerId);
 	}
