@@ -140,4 +140,16 @@ public class Line {
 		return resultPoint;
 	}
 
+	/**
+	 * Compares the line with another for equality.
+	 * 
+	 * @param otherLine
+	 *            The line to compare with this line.
+	 * @return Returns true, if the two vectors the lines are made of are equal
+	 *         pairwisely.
+	 */
+	public boolean equals(Line otherLine) {
+		return u.equals(otherLine.getU()) && v.equals(otherLine.getV());
+	}
+
 }
