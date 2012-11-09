@@ -64,7 +64,7 @@ public class GameRenderer {
 		dbg.setColor(Color.black);
 		dbg.fillRect(0, 0, width, height);
 		drawMap();
-		drawObjects(camera);
+		drawObjects();
 	}
 
 	/**
@@ -79,21 +79,21 @@ public class GameRenderer {
 		}
 	}
 
+	/**
+	 * Draws a small red border where map bounds are.
+	 */
 	private void drawMap() {
 		dbg.setColor(Color.red);
-		dbg.fillRect(-camera.getBounds().x, -camera.getBounds().y,
-				camera.width, 5);
-		dbg.fillRect(-camera.getBounds().x, -camera.getBounds().y, 5,
-				camera.height);
+		Rectangle r = mapSize.getBounds();
+		r.x -= camera.x;
+		r.y -= camera.y;
+		dbg.draw(r);
 	}
 
 	/**
-	 * Draw every object of game-object list that is in given rectangle
-	 * 
-	 * @param r
-	 *            camera rectangle
+	 * Draw every object of game-object list that is in camera viewport.
 	 */
-	private synchronized void drawObjects(Rectangle r) {
+	private synchronized void drawObjects() {
 
 		dbg.setColor(Color.yellow);
 		for (int i = 0; i < objs.size(); i++) {
@@ -113,13 +113,14 @@ public class GameRenderer {
 				}
 
 				for (int j = 0; j < vCount; j++) {
-					dbg.drawLine(xPositions[j], yPositions[j],
-							xPositions[(j + 1) % vCount], yPositions[(j + 1)
-									% vCount]);
+					dbg.drawLine(xPositions[j] - camera.x, yPositions[j]
+							- camera.y,
+							xPositions[(j + 1) % vCount] - camera.x,
+							yPositions[(j + 1) % vCount] - camera.y);
 				}
 
-				dbg.drawString(player.getName(), (int) player.getXPosition(),
-						(int) player.getYPosition());
+				dbg.drawString(player.getName(), player.getDrawX() - camera.x,
+						player.getDrawY() - camera.y);
 			}
 		}
 	}

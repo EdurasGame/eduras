@@ -1,5 +1,7 @@
 package de.illonis.eduras.gui;
 
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.net.InetAddress;
@@ -48,6 +50,8 @@ public class Gui extends JFrame {
 		super("Eduras? Client");
 		loadTools();
 		camera = new GameCamera();
+		addMouseMotionListener(new CameraMouseListener(camera));
+		addComponentListener(new ResizeMonitor());
 		buildGui();
 		connectDialog = new ConnectDialog(this);
 		addWindowListener(new WindowAdapter() {
@@ -159,5 +163,21 @@ public class Gui extends JFrame {
 		rendererThread.stop();
 		initializer.shutdown();
 		nwm.disconnect();
+	}
+
+	/**
+	 * Resizes camera on frame size change.
+	 * 
+	 * @author illonis
+	 * 
+	 */
+	private class ResizeMonitor extends ComponentAdapter {
+		@Override
+		public void componentResized(ComponentEvent e) {
+			super.componentResized(e);
+			camera.setSize(getWidth(), getHeight());
+			System.out.println("[GUI] Size changed. New size: " + getWidth()
+					+ ", " + getHeight());
+		}
 	}
 }
