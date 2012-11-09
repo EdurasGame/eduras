@@ -43,6 +43,7 @@ public class Gui extends JFrame {
 	private EdurasInitializer initializer;
 	private Settings settings;
 	private GameCamera camera;
+	private CameraMouseListener cml;
 
 	private static final long serialVersionUID = 1L;
 
@@ -50,7 +51,8 @@ public class Gui extends JFrame {
 		super("Eduras? Client");
 		loadTools();
 		camera = new GameCamera();
-		addMouseMotionListener(new CameraMouseListener(camera));
+		cml = new CameraMouseListener(camera);
+		addMouseMotionListener(cml);
 		addComponentListener(new ResizeMonitor());
 		buildGui();
 		connectDialog = new ConnectDialog(this);
@@ -160,6 +162,7 @@ public class Gui extends JFrame {
 	 * Sends disconnect and stop-messages to all running threads and listeners.
 	 */
 	private void disconnect() {
+		cml.stop();
 		rendererThread.stop();
 		initializer.shutdown();
 		nwm.disconnect();

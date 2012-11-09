@@ -42,7 +42,6 @@ public class CameraMouseListener extends MouseAdapter {
 			dy = 1;
 		} else
 			dy = 0;
-		System.out.println("x=" + e.getX() + " y=" + e.getY());
 	}
 
 	/**
