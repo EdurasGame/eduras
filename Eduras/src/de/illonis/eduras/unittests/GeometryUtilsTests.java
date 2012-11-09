@@ -5,6 +5,8 @@ package de.illonis.eduras.unittests;
 
 import static org.junit.Assert.assertTrue;
 
+import java.util.LinkedList;
+
 import org.junit.Test;
 
 import de.illonis.eduras.math.Geometry;
@@ -41,5 +43,24 @@ public class GeometryUtilsTests {
 		interceptPoint = Geometry.getSegmentLinesInterceptPoint(line4, line1);
 
 		assertTrue(interceptPoint.equals(new Vector2D(-0.5, 0)));
+	}
+
+	@Test
+	public void getLinesBetweenShapePositions() {
+		Vector2D[] vertices = new Vector2D[2];
+		vertices[0] = new Vector2D(-1, 0);
+		vertices[1] = new Vector2D(1, 0);
+
+		Vector2D source = new Vector2D(0, 0);
+		Vector2D dest = new Vector2D(0, 5);
+
+		Line expectedLine1 = new Line(new Vector2D(-1, 0), new Vector2D(-1, 5));
+		Line expectedLine2 = new Line(new Vector2D(1, 0), new Vector2D(1, 5));
+
+		LinkedList<Line> resultLines = Geometry.getLinesBetweenShapePositions(
+				vertices, source, dest);
+
+		assertTrue(resultLines.get(0).equals(expectedLine1));
+		assertTrue(resultLines.get(1).equals(expectedLine2));
 	}
 }
