@@ -63,8 +63,8 @@ public class GameRenderer {
 		// clear image
 		dbg.setColor(Color.black);
 		dbg.fillRect(0, 0, width, height);
-
-		drawObjects();
+		drawMap();
+		drawObjects(camera);
 	}
 
 	/**
@@ -80,13 +80,20 @@ public class GameRenderer {
 	}
 
 	private void drawMap() {
-		// TODO: implement
+		dbg.setColor(Color.red);
+		dbg.fillRect(-camera.getBounds().x, -camera.getBounds().y,
+				camera.width, 5);
+		dbg.fillRect(-camera.getBounds().x, -camera.getBounds().y, 5,
+				camera.height);
 	}
 
 	/**
-	 * Draw every object of game-object list.
+	 * Draw every object of game-object list that is in given rectangle
+	 * 
+	 * @param r
+	 *            camera rectangle
 	 */
-	private synchronized void drawObjects() {
+	private synchronized void drawObjects(Rectangle r) {
 
 		dbg.setColor(Color.yellow);
 		for (int i = 0; i < objs.size(); i++) {
