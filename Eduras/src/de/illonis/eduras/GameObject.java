@@ -9,7 +9,7 @@ import de.illonis.eduras.shapes.ObjectShape;
  * @author Florian Mai <florian.ren.mai@googlemail.com>
  * 
  */
-public class GameObject implements Comparable<GameObject> {
+public abstract class GameObject implements Comparable<GameObject> {
 
 	public static int lastId = 0;
 	private final GameInformation game;
@@ -243,4 +243,12 @@ public class GameObject implements Comparable<GameObject> {
 	public Vector2D getPositionVector() {
 		return new Vector2D(getXPosition(), getYPosition());
 	}
+
+	/**
+	 * This method is called when an object collides with this object.
+	 * 
+	 * @param collidingObject
+	 *            The object colliding with this object.
+	 */
+	public abstract void onCollision(GameObject collidingObject);
 }

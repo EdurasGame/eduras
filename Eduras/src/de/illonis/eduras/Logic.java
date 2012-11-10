@@ -21,9 +21,9 @@ import de.illonis.eduras.interfaces.GameLogicInterface;
  */
 public class Logic implements GameLogicInterface {
 
-	private GameInformation currentGame;
-	private ObjectFactory objectFactory;
-	private LogicGameWorker lgw;
+	private final GameInformation currentGame;
+	private final ObjectFactory objectFactory;
+	private final LogicGameWorker lgw;
 	private final ArrayList<GameEventListener> listenerList;
 
 	public Logic(GameInformation g) {

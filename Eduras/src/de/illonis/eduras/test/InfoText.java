@@ -16,7 +16,7 @@ import de.illonis.eduras.interfaces.Drawable;
  */
 public class InfoText extends GameObject implements Drawable {
 
-	private MoveableGameObject obj;
+	private final MoveableGameObject obj;
 
 	public InfoText(GameInformation game, MoveableGameObject yc) {
 		super(game);
@@ -31,5 +31,17 @@ public class InfoText extends GameObject implements Drawable {
 						+ obj.getSpeed()
 						+ " ~ Left-Click: increase speed ~ Right-Click: decrease speed",
 				getDrawX(), getDrawY());
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * de.illonis.eduras.GameObject#onCollision(de.illonis.eduras.GameObject)
+	 */
+	@Override
+	public void onCollision(GameObject collidingObject) {
+		// TODO Auto-generated method stub
+
 	}
 }

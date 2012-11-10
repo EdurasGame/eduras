@@ -120,6 +120,10 @@ public abstract class MoveableGameObject extends GameObject implements Moveable 
 		if (!getGame().getMap().contains(target)) {
 			return getPositionVector();
 		}
-		return this.getShape().checkCollision(getGame(), this, target);
+
+		Vector2D collisionPoint = this.getShape().checkCollision(getGame(),
+				this, target);
+
+		return collisionPoint;
 	}
 }

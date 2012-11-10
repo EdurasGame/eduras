@@ -71,6 +71,8 @@ public class Triangle extends ObjectShape {
 
 		HashMap<Integer, GameObject> gameObjects = game.getObjects();
 
+		GameObject collisionObject = null;
+
 		Vector2D positionVector = thisObject.toPositionVector();
 		LinkedList<Line> lines = Geometry.getLinesBetweenShapePositions(
 				vertices, positionVector, target);
@@ -94,6 +96,9 @@ public class Triangle extends ObjectShape {
 			if (res == null)
 				continue;
 
+			// remember the gameObject that had a collision
+			collisionObject = singleObject;
+
 			// TODO: Replace null as 'error-code' since the null vector can be a
 			// valid result.
 			if (!res.isNull()) {
@@ -108,6 +113,12 @@ public class Triangle extends ObjectShape {
 			if (collisions.size() > 0) {
 				result = collisions.getFirst();
 			}
+		}
+
+		// if there was a collision, notify the involved objects.
+		if (result != target) {
+			thisObject.onCollision(collisionObject);
+			collisionObject.onCollision(thisObject);
 		}
 
 		return result;

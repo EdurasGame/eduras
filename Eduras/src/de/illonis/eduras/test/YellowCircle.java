@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 
 import de.illonis.eduras.GameInformation;
+import de.illonis.eduras.GameObject;
 import de.illonis.eduras.MoveableGameObject;
 import de.illonis.eduras.interfaces.Controllable;
 import de.illonis.eduras.interfaces.Drawable;
@@ -15,8 +16,9 @@ import de.illonis.eduras.math.Vector2D;
  * @author illonis
  * 
  */
-public class YellowCircle extends MoveableGameObject implements Controllable, Drawable {
-	private int size;
+public class YellowCircle extends MoveableGameObject implements Controllable,
+		Drawable {
+	private final int size;
 
 	/**
 	 * Creates a new yellow circle with default size (20).
@@ -82,5 +84,17 @@ public class YellowCircle extends MoveableGameObject implements Controllable, Dr
 	@Override
 	public void stopMoving() {
 		setSpeedVector(new Vector2D());
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * de.illonis.eduras.GameObject#onCollision(de.illonis.eduras.GameObject)
+	 */
+	@Override
+	public void onCollision(GameObject collidingObject) {
+		// TODO Auto-generated method stub
+
 	}
 }

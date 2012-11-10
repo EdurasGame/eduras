@@ -103,4 +103,16 @@ public class Player extends MoveableGameObject implements Controllable {
 	public void setName(String name) {
 		this.name = name;
 	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * de.illonis.eduras.GameObject#onCollision(de.illonis.eduras.GameObject)
+	 */
+	@Override
+	public void onCollision(GameObject collidingObject) {
+		// do nothing
+		System.out.println("I JUST COLLIDED!");
+	}
 }
