@@ -41,6 +41,11 @@ public class Player extends MoveableGameObject implements Controllable {
 		} catch (ShapeVerticesNotApplicableException e) {
 			e.printStackTrace();
 		}
+
+		// TODO: Replace setting the position to a non random value.
+		double randX = (game.getMap().getWidth()) * Math.random();
+		double randY = (game.getMap().getHeight()) * Math.random();
+		setPosition(randX, randY);
 	}
 
 	/**
