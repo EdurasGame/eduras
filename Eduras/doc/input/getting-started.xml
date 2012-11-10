@@ -277,8 +277,7 @@
 			</emphasis>
 			For a first approach we decided to expand our own platform, which you
 			can find
-			<emphasis>(TODO: INSERT LINK!)</emphasis>
-			here
+			<ulink url="http://www.eduras.illonis.de">here</ulink>
 			. It provides up-to-date DocBook and JavaDoc documentation, a
 			bug-tracking system, an overview of all GIT commits, and a
 			Kanban-board to put tasks on.
@@ -404,8 +403,7 @@
 		</para>
 		<para>
 			We decided to use
-			<emphasis>(TODO: INSERT LINK)</emphasis>
-			this platform
+			<ulink url="http://www.eduras.illonis.de">this platform</ulink>
 			for project management.
 		</para>
 
