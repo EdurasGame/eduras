@@ -86,11 +86,15 @@ public class Logic implements GameLogicInterface {
 			case CLIENT_SETNAME:
 				ClientRenameEvent e = (ClientRenameEvent) event;
 				Player p = currentGame.getPlayerByOwnerId(e.getOwner());
-				System.out.println("SETTING player found by owner "
-						+ e.getOwner() + " to name: " + e.getName()
-						+ "  playerid=" + p.getId() + " playerowner="
-						+ p.getOwner());
-				p.setName(e.getName());
+				try {
+					System.out.println("SETTING player found by owner "
+							+ e.getOwner() + " to name: " + e.getName()
+							+ "  playerid=" + p.getId() + " playerowner="
+							+ p.getOwner());
+					p.setName(e.getName());
+				} catch (NullPointerException ex) {
+					System.out.println("There is no such player (yet)!");
+				}
 				for (GameEventListener listener : listenerList) {
 					listener.onClientRename(e);
 				}
