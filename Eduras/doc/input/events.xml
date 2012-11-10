@@ -256,11 +256,17 @@
 				<tbody>
 					<row>
 						<entry>CONNECTION_ESTABLISHED</entry>
-						<entry>202</entry>
+						<entry>201</entry>
 						<entry>This event is sent to the client by the server if the
 							client connected successfully. The server assigns a clientId to
 							the client and tells the client about it.
 						</entry>
+						<entry>clientId</entry>
+					</row>
+					<row>
+						<entry>CONNECTION_ABORTED</entry>
+						<entry>202</entry>
+						<entry>This event is sent to all clients if a client disconnected. The client id of the disconnected client will be given.</entry>
 						<entry>clientId</entry>
 					</row>
 				</tbody>

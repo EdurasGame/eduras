@@ -4,6 +4,7 @@ import java.util.LinkedList;
 
 import de.illonis.eduras.ObjectFactory.ObjectType;
 import de.illonis.eduras.events.ClientRenameEvent;
+import de.illonis.eduras.events.ConnectionAbortedEvent;
 import de.illonis.eduras.events.ConnectionEstablishedEvent;
 import de.illonis.eduras.events.Event;
 import de.illonis.eduras.events.GameEvent;
@@ -129,11 +130,11 @@ public class NetworkMessageDeserializer {
 
 		switch (typeNumber) {
 		case CONNECTION_ABORTED:
+			int disconnectClientId = parseInt(args[1]);
+			networkEvent = new ConnectionAbortedEvent(disconnectClientId);
 			break;
 		case CONNECTION_ESTABLISHED:
 			int clientId = parseInt(args[1]);
-			System.out.println("deser:");
-			System.out.println(args);
 			networkEvent = new ConnectionEstablishedEvent(clientId);
 			break;
 		case NO_EVENT:

@@ -1,6 +1,7 @@
 package de.illonis.eduras.networking;
 
 import de.illonis.eduras.events.ClientRenameEvent;
+import de.illonis.eduras.events.ConnectionAbortedEvent;
 import de.illonis.eduras.events.ConnectionEstablishedEvent;
 import de.illonis.eduras.events.Event;
 import de.illonis.eduras.events.GameEvent;
@@ -62,7 +63,8 @@ public class NetworkMessageSerializer {
 					.getClientId();
 			break;
 		case CONNECTION_ABORTED:
-			// TODO: Implement this!
+			serializedEvent += ((ConnectionAbortedEvent) networkEvent)
+					.getClientId();
 			break;
 		case NO_EVENT:
 			break;
