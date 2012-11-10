@@ -117,6 +117,9 @@ public abstract class MoveableGameObject extends GameObject implements Moveable 
 	 *         objects new position won't be set.
 	 */
 	public Vector2D checkCollision(Vector2D target) {
+		if (!getGame().getMap().contains(target)) {
+			return getPositionVector();
+		}
 		return this.getShape().checkCollision(getGame(), this, target);
 	}
 }

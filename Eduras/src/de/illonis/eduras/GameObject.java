@@ -234,4 +234,13 @@ public class GameObject implements Comparable<GameObject> {
 	public boolean equals(GameObject object) {
 		return this.id == object.getId();
 	}
+
+	/**
+	 * Returns a vector pointing to the position of the object.
+	 * 
+	 * @return The position vector.
+	 */
+	public Vector2D getPositionVector() {
+		return new Vector2D(getXPosition(), getYPosition());
+	}
 }
