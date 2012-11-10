@@ -47,15 +47,62 @@
 			the currently ongoing match. For a first increment,
 			GameInfo cointains a list of all the objects in the
 			game and about the
-			map. A map itself contains of a number of fields (as a
-			two-dimensional array, indicating
-			x- and y-positions).
+			map.
+		</para>
+		<para>
+			<emphasis role="strike">A map itself contains of a number of fields
+				(as a
+				two-dimensional array, indicating
+				x- and y-positions).
+			</emphasis>
+		</para>
+		<para>
+			A map itself has a width and height representing the bounds of
+			the map.
 		</para>
 
 		<para>
 			A GameObject represents an object that is physically on the map.
 			So it's characterized by a current x- and y-position
-			on the map.
+			on the map. As
+			the map bounds are positive, the x and y positions are typically
+			positive.
+		</para>
+
+		<para>
+			The following figure shows in detail what characterizes a GameObject.
+			<informalfigure>
+				<graphic fileref="images/gameobjecthierachry.jpg"></graphic>
+			</informalfigure>
+		</para>
+
+		<para>
+			A gameobject is identified by its identifier. Also, a gameObject
+			always belongs to some owner (let it be CPU if it does not belong to
+			any player). Every object has a specific behaviour when it collides
+			with another object. Thus subclasses must override 'onCollision'.
+		</para>
+		<para>Collision is checked when a MovableObject moves (see below). A
+			MovableObject
+			moves with a speed and into a direction given by the
+			speedVector.
+			With every call of 'onMove' the passed time from the last
+			move is
+			needed to calculate the absolute movement out of the speed and
+			speedVector.
+		</para>
+		<para>
+			Furthermore each GameObject consists of an ObjectShape
+			indicating how a GameObject looks like. A shape consists of a number
+			of relative points in the two-dimensional space. Out of these
+			relative points you can get the shape of a specific gameObject by
+			combining the gameobjects position with the shapepoints (call
+			getAbsoluteVertices() for this purpose). Of course, checking a
+			collision is
+			always dependent on how the shape of the gameobject looks
+			like. Since there might be different best-practices for calculating a
+			collsion for different shapes, every shape has to implement
+			checkCollision().
 		</para>
 
 	</section>
