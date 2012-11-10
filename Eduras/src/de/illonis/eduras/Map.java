@@ -12,15 +12,15 @@ import de.illonis.eduras.math.Vector2D;
  */
 public class Map {
 
-	private int width;
-	private int height;
+	private final int width;
+	private final int height;
 
 	/**
 	 * Creates a new map with default size.
 	 */
 	public Map() {
-		width = 2000;
-		height = 2000;
+		width = 500;
+		height = 500;
 	}
 
 	/**
