@@ -41,7 +41,7 @@ public class SpriteTester extends JFrame {
 		img = new BufferedImage[s.getTileCount()];
 
 		for (int i = 0; i < s.getTileCount(); i++) {
-			img[i] = new BufferedImage(30, 30, BufferedImage.TYPE_INT_RGB);
+			img[i] = new BufferedImage(30, 30, BufferedImage.TYPE_INT_ARGB);
 			img[i].setRGB(0, 0, 30, 30, s.getTile(i).pixels, 0, 30);
 		}
 
