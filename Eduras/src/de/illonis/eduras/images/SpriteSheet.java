@@ -53,6 +53,7 @@ public class SpriteSheet {
 		try {
 			data = cut(path, tileWidth, tileHeight);
 		} catch (IOException e) {
+			tileCount = 0;
 			throw new ImageLoadingError(e.getMessage(), path);
 		}
 
@@ -75,19 +76,16 @@ public class SpriteSheet {
 	 */
 	private ImageData[] cut(String string, int w, int h) throws IOException {
 
-		BufferedImage bi = ImageLoader.load(string);
+		BufferedImage bi = ImageFiler.load(string);
 
 		int xTiles = bi.getWidth() / w;
 		int yTiles = bi.getHeight() / h;
-		System.out.println("xtiles" + xTiles + " ytiles: " + yTiles
-				+ " width: " + bi.getWidth());
 
 		ImageData[] result = new ImageData[xTiles * yTiles];
 		int i = 0;
 		for (int y = 0; y < yTiles; y++) {
 			for (int x = 0; x < xTiles; x++) {
 				result[i] = new ImageData(w, h);
-				System.out.println(x * w + " " + y * h);
 				bi.getRGB(x * w, y * h, w, h, result[i].pixels, 0, w);
 				i++;
 			}
@@ -97,7 +95,8 @@ public class SpriteSheet {
 	}
 
 	/**
-	 * Returns number of tiles this {@linkplain SpriteSheet} contains.
+	 * Returns number of tiles this {@linkplain SpriteSheet} contains. If image
+	 * could not be loaded, there are no tiles and tilecount is 0.
 	 * 
 	 * @return number of tiles.
 	 */
@@ -106,7 +105,9 @@ public class SpriteSheet {
 	}
 
 	/**
-	 * Returns imagedata of selected tile.
+	 * Returns imagedata of selected tile. Not that this may throw an
+	 * {@link ArrayIndexOutOfBoundsException} if there are too less tiles to get
+	 * requested tile.
 	 * 
 	 * @param tile
 	 *            tile index.
