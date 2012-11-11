@@ -1,6 +1,7 @@
 package de.illonis.eduras.gui;
 
 import java.awt.Graphics2D;
+import java.awt.image.BufferStrategy;
 
 /**
  * This thread does repeatedly call render methods of its renderer.
@@ -32,6 +33,10 @@ public class RenderThread implements Runnable {
 	public void run() {
 		running = true;
 		while (running) {
+			BufferStrategy bs = panel.getBufferStrategy();
+			if (bs == null) {
+				panel.createBufferStrategy(3);
+			}
 			renderer.render(panel.getWidth(), panel.getHeight());
 			renderer.paintGame((Graphics2D) panel.getGraphics());
 			try {

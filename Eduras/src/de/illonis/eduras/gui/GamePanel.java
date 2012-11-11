@@ -1,8 +1,7 @@
 package de.illonis.eduras.gui;
 
+import java.awt.Canvas;
 import java.awt.Color;
-
-import javax.swing.JPanel;
 
 /**
  * A panel that represents the gameworld. All world objects and user interface
@@ -11,7 +10,7 @@ import javax.swing.JPanel;
  * @author illonis
  * 
  */
-public class GamePanel extends JPanel {
+public class GamePanel extends Canvas {
 
 	private static final long serialVersionUID = 1L;
 
