@@ -104,11 +104,14 @@ public class NetworkMessageSerializer {
 		case NO_EVENT:
 			break;
 		case OBJECT_CREATE:
-			ObjectFactoryEvent event = (ObjectFactoryEvent) gameEvent;
-			serializedEvent += event.getId() + "#" + event.getOwner() + "#"
-					+ event.getObjectType().getNumber();
+			ObjectFactoryEvent createEvent = (ObjectFactoryEvent) gameEvent;
+			serializedEvent += createEvent.getId() + "#"
+					+ createEvent.getOwner() + "#"
+					+ createEvent.getObjectType().getNumber();
 			break;
 		case OBJECT_REMOVE:
+			ObjectFactoryEvent removeEvent = (ObjectFactoryEvent) gameEvent;
+			serializedEvent += removeEvent.getId();
 			break;
 		case SETHEALTH:
 			break;

@@ -13,6 +13,7 @@ import de.illonis.eduras.events.GameInfoRequest;
 import de.illonis.eduras.events.MovementEvent;
 import de.illonis.eduras.events.NetworkEvent;
 import de.illonis.eduras.events.NetworkEvent.NetworkEventNumber;
+import de.illonis.eduras.events.NoEvent;
 import de.illonis.eduras.events.ObjectFactoryEvent;
 import de.illonis.eduras.events.UserMovementEvent;
 import de.illonis.eduras.exceptions.GivenParametersDoNotFitToEventException;
@@ -208,15 +209,28 @@ public class NetworkMessageDeserializer {
 			int objectTypeNum = parseInt(args[3]);
 			ObjectType objectType = ObjectType
 					.getObjectTypeByNumber(objectTypeNum);
-			ObjectFactoryEvent objectFactoryEvent = new ObjectFactoryEvent(
+			ObjectFactoryEvent objectFactoryEventCreate = new ObjectFactoryEvent(
 					GameEventNumber.OBJECT_CREATE, objectType);
-			objectFactoryEvent.setId(parseInt(args[1]));
-			objectFactoryEvent.setOwner(parseInt(args[2]));
-			gameEvent = objectFactoryEvent;
+			objectFactoryEventCreate.setId(parseInt(args[1]));
+			objectFactoryEventCreate.setOwner(parseInt(args[2]));
+			gameEvent = objectFactoryEventCreate;
+			break;
+		case OBJECT_REMOVE:
+			ObjectFactoryEvent objectFactoryEventRemove = new ObjectFactoryEvent(
+					GameEventNumber.OBJECT_REMOVE, null);
+			objectFactoryEventRemove.setId(parseInt(args[1]));
+			gameEvent = objectFactoryEventRemove;
 			break;
 		case CLIENT_SETNAME:
-			gameEvent = new ClientRenameEvent(parseInt(args[1]), args[2]);
+			try {
+				gameEvent = new ClientRenameEvent(parseInt(args[1]), args[2]);
+			} catch (Exception e) {
+				gameEvent = new NoEvent();
+			}
 
+			break;
+		case NO_EVENT:
+			gameEvent = new NoEvent();
 			break;
 		default:
 			throw new MessageNotSupportedException(typeNumber, msg);
