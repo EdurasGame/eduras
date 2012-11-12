@@ -36,14 +36,14 @@ public class Gui extends JFrame {
 	private GamePanel gamePanel;
 	private GameRenderer renderer;
 	private RenderThread rendererThread;
-	private ConnectDialog connectDialog;
+	private final ConnectDialog connectDialog;
 	private InputKeyHandler keyHandler;
 	private String clientName;
 	private NetworkEventHandler eventHandler;
 	private EdurasInitializer initializer;
 	private Settings settings;
-	private GameCamera camera;
-	private CameraMouseListener cml;
+	private final GameCamera camera;
+	private final CameraMouseListener cml;
 
 	private static final long serialVersionUID = 1L;
 
@@ -156,6 +156,8 @@ public class Gui extends JFrame {
 		} catch (WrongEventTypeException e) {
 			e.printStackTrace();
 		} catch (MessageNotSupportedException e) {
+			e.printStackTrace();
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
