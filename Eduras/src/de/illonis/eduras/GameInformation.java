@@ -15,7 +15,7 @@ import de.illonis.eduras.shapes.ObjectShape;
 public class GameInformation {
 	private final HashMap<Integer, GameObject> objects;
 	private final HashMap<Integer, Player> players;
-	private Map map;
+	private final Map map;
 
 	public GameInformation() {
 		objects = new HashMap<Integer, GameObject>();
@@ -145,7 +145,12 @@ public class GameInformation {
 			infos.add(me);
 		}
 		for (Player p : players.values()) {
-			infos.add(new ClientRenameEvent(p.getOwner(), p.getName()));
+			try {
+				infos.add(new ClientRenameEvent(p.getOwner(), p.getName()));
+			} catch (Exception e) {
+				e.printStackTrace();
+				continue;
+			}
 		}
 
 		return infos;

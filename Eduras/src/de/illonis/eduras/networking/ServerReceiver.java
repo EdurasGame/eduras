@@ -15,6 +15,7 @@ public class ServerReceiver extends Thread {
 	private final Buffer inputBuffer;
 	private final ServerClient client;
 	private final Server server;
+	private boolean clientConnected;
 
 	/**
 	 * Creates a new ServerReciever that listens for new messages on given
@@ -33,6 +34,7 @@ public class ServerReceiver extends Thread {
 		this.server = server;
 		this.inputBuffer = inputBuffer;
 		this.client = client;
+		this.clientConnected = true;
 	}
 
 	/**
@@ -63,21 +65,31 @@ public class ServerReceiver extends Thread {
 		System.out.println("[SERVER] Waiting for messages...");
 		try {
 			BufferedReader br = client.getInputStream();
-			while (true) {
+			while (clientConnected) {
 				String line = br.readLine();
 				if (line != null) {
 					System.out.println("[SERVER] Received message: " + line);
 					pushToInputBuffer(line);
+				} else {
+					server.handleClientDisconnect(client);
 				}
 
 			}
 		} catch (IOException e) {
 
 			// remove the correlated player from the game
-			server.handlePlayerDisconnect(client);
+			server.handleClientDisconnect(client);
 
 			System.err.println("[SERVER] Connection to client closed.");
 			e.printStackTrace();
 		}
 	}
+
+	/**
+	 * Stops receiving message for the certain client.
+	 */
+	void stopRunning() {
+		clientConnected = false;
+	}
+
 }

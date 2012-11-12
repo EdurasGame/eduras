@@ -3,6 +3,7 @@ package de.illonis.eduras.networking;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.HashMap;
 
 import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.ObjectFactory.ObjectType;
@@ -38,6 +39,7 @@ public class Server {
 
 	private final Buffer inputBuffer, outputBuffer;
 	private final ServerSender serverSender;
+	private final HashMap<Integer, ServerReceiver> serverReceivers;
 	private ServerDecoder serverLogic;
 	private GameInformation game;
 	private GameLogicInterface logic;
@@ -60,7 +62,8 @@ public class Server {
 		this.port = port;
 		inputBuffer = new Buffer();
 		outputBuffer = new Buffer();
-		serverSender = new ServerSender(outputBuffer);
+		serverSender = new ServerSender(outputBuffer, null);
+		serverReceivers = new HashMap<Integer, ServerReceiver>();
 
 	}
 
@@ -147,6 +150,7 @@ public class Server {
 
 		ServerReceiver sr = new ServerReceiver(this, inputBuffer, client);
 		sr.start();
+		serverReceivers.put(client.getClientId(), sr);
 
 		ConnectionEstablishedEvent connectionEstablished = new ConnectionEstablishedEvent(
 				client.getClientId());
@@ -199,7 +203,7 @@ public class Server {
 	 * @param client
 	 *            Client to remove.
 	 */
-	private void removeClient(ServerClient client) {
+	void removeClient(ServerClient client) {
 		serverSender.remove(client);
 	}
 
@@ -228,12 +232,20 @@ public class Server {
 	 * @param clientId
 	 *            The id of the client.
 	 */
-	public void handlePlayerDisconnect(ServerClient client) {
+	public void handleClientDisconnect(ServerClient client) {
 		removeClient(client);
+
+		try {
+			client.closeConnection();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		serverReceivers.get(client.getClientId()).stopRunning();
 
 		ObjectFactoryEvent gonePlayerEvent = new ObjectFactoryEvent(
 				GameEventNumber.OBJECT_REMOVE, ObjectType.PLAYER);
-		gonePlayerEvent.setOwner(client.getClientId());
+		gonePlayerEvent.setId(client.getClientId());
 		logic.onGameEventAppeared(gonePlayerEvent);
 		sendEventToAll(gonePlayerEvent);
 	}

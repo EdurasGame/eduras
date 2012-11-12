@@ -88,4 +88,13 @@ public class ServerClient {
 		return bufferedReader;
 	}
 
+	/**
+	 * Returns the host address of the client as string.
+	 * 
+	 * @return The client's host address.
+	 */
+	public String getHostAddress() {
+		return socket.getInetAddress().getHostAddress();
+	}
+
 }
