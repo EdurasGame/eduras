@@ -59,7 +59,7 @@ public class ClientReceiver extends Thread {
 					processMessages(messages);
 				}
 
-			} catch (IOException e) {
+			} catch (Exception e) {
 				System.err.println("Connection to server closed.");
 				connectionAvailable = false;
 				e.printStackTrace();
@@ -82,6 +82,13 @@ public class ClientReceiver extends Thread {
 
 	}
 
+	/**
+	 * Sets the networklistener whose methods are called when cast NetworkEvents
+	 * arrive.
+	 * 
+	 * @param listener
+	 *            The listener to set.
+	 */
 	public void setNetworkEventListener(NetworkEventListener listener) {
 		this.networkEventListener = listener;
 	}

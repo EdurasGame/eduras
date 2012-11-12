@@ -20,21 +20,18 @@ public class ServerSender extends Thread {
 	 */
 	private final static int SEND_INTERVAL = 33;
 
-	private final HashMap<Integer, PrintWriter> clients;
+	private final HashMap<Integer, ServerClient> clients;
 	private final Buffer outputBuffer;
-	private Server server;
 
 	/**
 	 * Creates a new ServerSender that sends messages from given Buffer.
 	 * 
-	 * @param server
-	 *            Server to assign this sender to.
 	 * @param outputBuffer
 	 *            Buffer to fetch messages from.
 	 */
-	public ServerSender(Server server, Buffer outputBuffer) {
+	public ServerSender(Buffer outputBuffer) {
 		this.outputBuffer = outputBuffer;
-		clients = new HashMap<Integer, PrintWriter>();
+		clients = new HashMap<Integer, ServerClient>();
 	}
 
 	/**
@@ -43,8 +40,9 @@ public class ServerSender extends Thread {
 	 * @param message
 	 *            Message to send.
 	 */
-	private void sendMessage(String message) {
-		for (PrintWriter pw : clients.values()) {
+	public void sendMessage(String message) {
+		for (ServerClient serverClient : clients.values()) {
+			PrintWriter pw = serverClient.getOutputStream();
 			pw.println(message);
 		}
 	}
@@ -56,31 +54,27 @@ public class ServerSender extends Thread {
 	 *            The id of the client.
 	 */
 	public void sendMessageToClient(int clientId, String message) {
-		PrintWriter pw = clients.get(clientId);
+		PrintWriter pw = clients.get(clientId).getOutputStream();
 		pw.println(message);
 	}
 
 	/**
-	 * Adds outputstream of given socket to senderlist so it reveives messages
-	 * from server.
+	 * Creates ServerClient of given socket and adds it to senderlist so it
+	 * reveives messages from server.
 	 * 
 	 * @param client
-	 *            Client to add.
-	 * @return Returns the id that was assigned to the new client.
+	 *            Socket of the client to add.
+	 * @return Returns the created ServerClient.
+	 * @throws IOException
+	 *             Is thrown if the socket is somehow broken.
 	 */
-	public int add(Socket client) {
+	public ServerClient add(Socket client) throws IOException {
 		int clientId = getFreeClientId();
-		PrintWriter pw;
-		try {
-			pw = new PrintWriter(client.getOutputStream(), true);
-			clients.put(clientId, pw);
-			return clientId;
-		} catch (IOException e) {
-			System.out.println("[SERVER][SENDER] couldnt create printwriter.");
-			server.removeClient(client);
-			e.printStackTrace();
-			return -1;
-		}
+
+		ServerClient serverClient = new ServerClient(clientId, client);
+		clients.put(clientId, serverClient);
+		return serverClient;
+
 	}
 
 	/**
@@ -109,7 +103,7 @@ public class ServerSender extends Thread {
 	 * @param client
 	 *            Client to remove.
 	 */
-	public void remove(Socket client) {
+	public void remove(ServerClient client) {
 		clients.remove(client);
 	}
 

@@ -2,9 +2,6 @@ package de.illonis.eduras.networking;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.Socket;
 
 /**
  * The ServerReceiver receives messages from clients and pushes them to input
@@ -15,9 +12,9 @@ import java.net.Socket;
  */
 public class ServerReceiver extends Thread {
 
-	private Buffer inputBuffer;
-	private Socket client;
-	private Server server;
+	private final Buffer inputBuffer;
+	private final ServerClient client;
+	private final Server server;
 
 	/**
 	 * Creates a new ServerReciever that listens for new messages on given
@@ -29,8 +26,10 @@ public class ServerReceiver extends Thread {
 	 *            Buffer to write new messages into.
 	 * @param client
 	 *            Clientsocket that's inputstream should be used.
+	 * @param clientId
+	 *            The id of the client to receive messages from.
 	 */
-	public ServerReceiver(Server server, Buffer inputBuffer, Socket client) {
+	public ServerReceiver(Server server, Buffer inputBuffer, ServerClient client) {
 		this.server = server;
 		this.inputBuffer = inputBuffer;
 		this.client = client;
@@ -63,8 +62,7 @@ public class ServerReceiver extends Thread {
 	private void waitForMessages() {
 		System.out.println("[SERVER] Waiting for messages...");
 		try {
-			InputStream in = client.getInputStream();
-			BufferedReader br = new BufferedReader(new InputStreamReader(in));
+			BufferedReader br = client.getInputStream();
 			while (true) {
 				String line = br.readLine();
 				if (line != null) {
@@ -74,7 +72,10 @@ public class ServerReceiver extends Thread {
 
 			}
 		} catch (IOException e) {
-			server.removeClient(client);
+
+			// remove the correlated player from the game
+			server.handlePlayerDisconnect(client);
+
 			System.err.println("[SERVER] Connection to client closed.");
 			e.printStackTrace();
 		}

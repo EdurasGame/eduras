@@ -7,6 +7,7 @@ import java.net.Socket;
 import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.ObjectFactory.ObjectType;
 import de.illonis.eduras.events.ConnectionEstablishedEvent;
+import de.illonis.eduras.events.Event;
 import de.illonis.eduras.events.GameEvent.GameEventNumber;
 import de.illonis.eduras.events.ObjectFactoryEvent;
 import de.illonis.eduras.exceptions.MessageNotSupportedException;
@@ -40,7 +41,7 @@ public class Server {
 	private ServerDecoder serverLogic;
 	private GameInformation game;
 	private GameLogicInterface logic;
-	private int port;
+	private final int port;
 
 	/**
 	 * Creates a new Server listening on default port.
@@ -59,7 +60,7 @@ public class Server {
 		this.port = port;
 		inputBuffer = new Buffer();
 		outputBuffer = new Buffer();
-		serverSender = new ServerSender(this, outputBuffer);
+		serverSender = new ServerSender(outputBuffer);
 
 	}
 
@@ -132,25 +133,25 @@ public class Server {
 	/**
 	 * Handles a new connection and assigns a new ServerReceiver to it.
 	 * 
-	 * @param client
+	 * @param clientSocket
 	 *            Socket to handle.
 	 * @throws IOException
 	 */
-	private void handleConnection(Socket client) throws IOException {
-		int clientId = serverSender.add(client);
+	private void handleConnection(Socket clientSocket) throws IOException {
+		ServerClient client = serverSender.add(clientSocket);
 
 		ObjectFactoryEvent newPlayerEvent = new ObjectFactoryEvent(
 				GameEventNumber.OBJECT_CREATE, ObjectType.PLAYER);
-		newPlayerEvent.setOwner(clientId);
+		newPlayerEvent.setOwner(client.getClientId());
 		logic.onGameEventAppeared(newPlayerEvent);
 
 		ServerReceiver sr = new ServerReceiver(this, inputBuffer, client);
 		sr.start();
 
 		ConnectionEstablishedEvent connectionEstablished = new ConnectionEstablishedEvent(
-				clientId);
+				client.getClientId());
 		try {
-			serverSender.sendMessageToClient(clientId,
+			serverSender.sendMessageToClient(client.getClientId(),
 					NetworkMessageSerializer.serialize(connectionEstablished));
 		} catch (MessageNotSupportedException e) {
 			e.printStackTrace();
@@ -198,8 +199,42 @@ public class Server {
 	 * @param client
 	 *            Client to remove.
 	 */
-	public void removeClient(Socket client) {
+	private void removeClient(ServerClient client) {
 		serverSender.remove(client);
 	}
 
+	/**
+	 * Sends an event to all clients.
+	 * 
+	 * @param event
+	 *            The event to send to all clients.
+	 */
+	public void sendEventToAll(Event event) {
+		String serializedEvent = "";
+		try {
+			serializedEvent = NetworkMessageSerializer.serialize(event);
+		} catch (MessageNotSupportedException e) {
+			e.printStackTrace();
+			return;
+		}
+		serverSender.sendMessage(serializedEvent);
+	}
+
+	/**
+	 * Removes a player from the logic if the correlating client disconnected.
+	 * 
+	 * @param client
+	 *            The client's socket.
+	 * @param clientId
+	 *            The id of the client.
+	 */
+	public void handlePlayerDisconnect(ServerClient client) {
+		removeClient(client);
+
+		ObjectFactoryEvent gonePlayerEvent = new ObjectFactoryEvent(
+				GameEventNumber.OBJECT_REMOVE, ObjectType.PLAYER);
+		gonePlayerEvent.setOwner(client.getClientId());
+		logic.onGameEventAppeared(gonePlayerEvent);
+		sendEventToAll(gonePlayerEvent);
+	}
 }
