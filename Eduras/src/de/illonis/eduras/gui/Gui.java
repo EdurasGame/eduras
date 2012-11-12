@@ -52,8 +52,7 @@ public class Gui extends JFrame {
 		loadTools();
 		camera = new GameCamera();
 		cml = new CameraMouseListener(camera);
-		addMouseMotionListener(cml);
-		addMouseListener(cml);
+
 		addComponentListener(new ResizeMonitor());
 		buildGui();
 		connectDialog = new ConnectDialog(this);
@@ -80,9 +79,11 @@ public class Gui extends JFrame {
 	private void buildGui() {
 
 		gamePanel = new GamePanel();
+		gamePanel.addMouseMotionListener(cml);
+		gamePanel.addMouseListener(cml);
 		renderer = new GameRenderer(camera, infoPro);
 		rendererThread = new RenderThread(renderer, gamePanel);
-		setContentPane(gamePanel);
+		getContentPane().add(gamePanel);
 		setSize(500, 500);
 
 		setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
