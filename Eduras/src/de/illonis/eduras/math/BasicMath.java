@@ -33,4 +33,38 @@ public class BasicMath {
 	public static int square(int x) {
 		return x * x;
 	}
+
+	/**
+	 * Sums up given integer values.
+	 * 
+	 * @see #sum(double...)
+	 * 
+	 * @param values
+	 *            values to sum up.
+	 * @return sum of given values.
+	 */
+	public static int sum(int... values) {
+		int result = 0;
+		for (int i : values) {
+			result += i;
+		}
+		return result;
+	}
+
+	/**
+	 * Sums up given double values.
+	 * 
+	 * @see #sum(int...)
+	 * 
+	 * @param values
+	 *            values to sum up.
+	 * @return sum of given values.
+	 */
+	public static double sum(double... values) {
+		double result = 0;
+		for (double i : values) {
+			result += i;
+		}
+		return result;
+	}
 }
