@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE article PUBLIC "-//OASIS//DTD Simplified DocBook XML V1.0//EN"
+"http://www.oasis-open.org/docbook/xml/simple/1.0/sdocbook.dtd">
+<article>
+	<articleinfo>
+		<title>Debugging</title>
+	</articleinfo>
+	<section>
+	    <title>(jme) EduLog</title>
+	    <section>
+	        <title>Overview</title>
+		    <para>
+		        EduLog is our custom logging tool. It is designed to help developers to analyze and filter
+		        console output. This includes error messages, info messages and much more.
+		    </para>
+		    <para>
+		        A main benefit of EduLog is the opportunity to use other outputs than just console. There are
+		        also options to write log to file or view them on a graphical surface.
+		    </para>
+		    <figure>
+	            <title>An example output of EduLog's console output printing an error and an info.</title>
+	            <mediaobject>
+	                <imageobject>
+	                    <imagedata fileref="images/logger_console.png" format="PNG" />
+	                </imageobject>
+	            </mediaobject>
+	        </figure>
+	        <figure>
+	            <title>An example output of EduLog's gui output displaying messages filtered by class.</title>
+	            <mediaobject>
+	                <imageobject>
+	                    <imagedata fileref="images/logger_gui.png" format="PNG" />
+	                </imageobject>
+	            </mediaobject>
+	        </figure>
+        </section>
+        <section>
+            <title>From a programmer's point of view</title>
+            <para>
+                When coding, using EduLog is quite simple. Just don't use <computeroutput>System.out</computeroutput> anymore.
+                 Instead, use EduLog's builtin static methods that are quite easy to understand:
+            </para>
+            <itemizedlist>
+                <listitem>
+                    <para><emphasis>info(String s)</emphasis> used for info messages (e.g. listening on port x).</para>
+                </listitem>
+				<listitem>
+				    <para><emphasis>warning(String s)</emphasis> used for warning messages (e.g. player already existing).</para>
+				</listitem>
+				<listitem>
+				    <para><emphasis>error(String s)</emphasis> used for error messages (e.g. could not bind socket).</para>
+				</listitem>
+				<listitem>
+				    <para><emphasis>fine(String s)</emphasis> used for debug messages and other useless notifications.</para>
+				</listitem>
+				<listitem>
+				    <para><emphasis>log(Level l, String s)</emphasis> used to specify the message level by yourself.</para>
+				</listitem>
+            </itemizedlist>
+        </section>
+        <section>
+            <title>Debugging</title>
+            <para>
+                For debugging, nothing have to be initialized. Logging output is broadcasted to console and Gui by default.
+                You may change this programmatically on-the-fly using <computeroutput>setLogOutput(LogMode)</computeroutput>.
+                If you want to show up debug gui, just create an instance of <emphasis>LoggerGui</emphasis> and show it up.
+                For a more detailed view, please consider EduLog's JavaDoc.
+            </para>
+        </section>
+        <section>
+            <title>Development</title>
+            <para>
+                EduLog is still in development. So feel free to report any issues or feature requests. Please note that
+                logging to file is not yet available.
+            </para>
+        </section>
+	</section>
+</article>
