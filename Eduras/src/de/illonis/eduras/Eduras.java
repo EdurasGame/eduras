@@ -36,7 +36,8 @@ public class Eduras {
 			try {
 				port = Integer.parseInt(args[0]);
 			} catch (NumberFormatException e) {
-				System.err.println(Localization.getStringF("Server.invalidportarg", args[0]));
+				System.err.println(Localization.getStringF(
+						"Server.invalidportarg", args[0]));
 				return;
 			}
 		}
@@ -64,7 +65,8 @@ public class Eduras {
 		try {
 			server.start();
 		} catch (ServerNotReadyForStartException e) {
-			System.err.println(Localization.getStringF("Server.notready", e.getMessage()));
+			System.err.println(Localization.getStringF("Server.notready",
+					e.getMessage()));
 			return;
 		}
 
@@ -79,7 +81,8 @@ public class Eduras {
 
 		ArrayList<InetAddress> addresses = new ArrayList<InetAddress>();
 		try {
-			Enumeration<NetworkInterface> e = NetworkInterface.getNetworkInterfaces();
+			Enumeration<NetworkInterface> e = NetworkInterface
+					.getNetworkInterfaces();
 
 			while (e.hasMoreElements()) {
 
@@ -100,7 +103,8 @@ public class Eduras {
 		}
 		System.out.println(Localization.getString("Server.reachable"));
 		for (InetAddress inetAddress : addresses) {
-			System.out.println("[STARTUP] " + inetAddress.toString().substring(1));
+			System.out.println("[STARTUP] "
+					+ inetAddress.toString().substring(1));
 		}
 	}
 }
