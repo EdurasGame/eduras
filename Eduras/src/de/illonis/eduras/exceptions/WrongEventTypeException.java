@@ -21,12 +21,14 @@ public class WrongEventTypeException extends Exception {
 
 	/**
 	 * Creates a new WrongEventTypeException.
-	 * @param event The event that was of the wrong type.
+	 * 
+	 * @param event
+	 *            The event that was of the wrong type.
 	 */
 	public WrongEventTypeException(GameEvent event) {
 		this.event = event;
 	}
-	
+
 	public GameEvent getEvent() {
 		return this.event;
 	}

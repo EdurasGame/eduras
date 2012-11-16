@@ -4,21 +4,24 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
 
+import de.illonis.eduras.logger.EduLog;
+
 /**
  * Sends messages/events to the server.
  * 
  * @author Florian Mai <florian.ren.mai@googlemail.com>
  * 
  */
-public class ClientSender  {
+public class ClientSender {
 
 	private Socket socket = null;
 	private PrintWriter messageWriter = null;
 
 	/**
-	 * Creates a new ClientSender that sends messages via
-	 * the given socket.
-	 * @param socket The socket to send messages via.
+	 * Creates a new ClientSender that sends messages via the given socket.
+	 * 
+	 * @param socket
+	 *            The socket to send messages via.
 	 */
 	public ClientSender(Socket socket) {
 
@@ -27,16 +30,18 @@ public class ClientSender  {
 			this.messageWriter = new PrintWriter(this.socket.getOutputStream(),
 					true);
 		} catch (IOException e) {
-			e.printStackTrace();
+			EduLog.passException(e);
 		}
 	}
 
 	/**
 	 * Sends a message via the socket.
-	 * @param message The message to send.
+	 * 
+	 * @param message
+	 *            The message to send.
 	 */
 	public void sendMessage(String message) {
-		System.out.println("[CLIENT] Sending message: " + message);
+		EduLog.info("[CLIENT] Sending message: " + message);
 		messageWriter.println(message);
 	}
 

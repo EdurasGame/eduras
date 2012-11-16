@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 
 import de.illonis.eduras.events.GameEvent.GameEventNumber;
+import de.illonis.eduras.logger.EduLog;
 
 /**
  * Provides several tools to reduce network traffic.
@@ -62,7 +63,7 @@ public final class NetworkOptimizer {
 		unfilterable.addAll(speedEvents.values());
 		unfilterable.addAll(speedvectorEvents.values());
 		int n = unfilteredMessages.length - unfilterable.size();
-		System.out.println("[NETWORKOPTIMIZER] Filtered " + n
+		EduLog.info("[NETWORKOPTIMIZER] Filtered " + n
 				+ " obsolete messages (of " + unfilterable.size() + ")");
 		return (String[]) unfilterable.toArray(new String[0]);
 	}

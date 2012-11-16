@@ -12,6 +12,7 @@ import de.illonis.eduras.events.ObjectFactoryEvent;
 import de.illonis.eduras.events.UserMovementEvent;
 import de.illonis.eduras.interfaces.GameEventListener;
 import de.illonis.eduras.interfaces.GameLogicInterface;
+import de.illonis.eduras.logger.EduLog;
 
 /**
  * A first (dummy) implementation of game logic.
@@ -44,7 +45,7 @@ public class Logic implements GameLogicInterface {
 	 */
 	@Override
 	public synchronized void onGameEventAppeared(GameEvent event) {
-		System.out.println("[LOGIC] A game event appeared: " + event.getType());
+		EduLog.info("[LOGIC] A game event appeared: " + event.getType());
 
 		if (event instanceof ObjectFactoryEvent) {
 			objectFactory.onGameEventAppeared(event);
@@ -87,13 +88,12 @@ public class Logic implements GameLogicInterface {
 				ClientRenameEvent e = (ClientRenameEvent) event;
 				Player p = currentGame.getPlayerByOwnerId(e.getOwner());
 				try {
-					System.out.println("SETTING player found by owner "
-							+ e.getOwner() + " to name: " + e.getName()
-							+ "  playerid=" + p.getId() + " playerowner="
-							+ p.getOwner());
+					EduLog.info("SETTING player found by owner " + e.getOwner()
+							+ " to name: " + e.getName() + "  playerid="
+							+ p.getId() + " playerowner=" + p.getOwner());
 					p.setName(e.getName());
 				} catch (NullPointerException ex) {
-					System.out.println("There is no such player (yet)!");
+					EduLog.warning("There is no such player (yet)!");
 				}
 				for (GameEventListener listener : listenerList) {
 					listener.onClientRename(e);

@@ -30,7 +30,8 @@ public class LogicGameWorker implements Runnable {
 
 	private long lastUpdate;
 
-	public LogicGameWorker(GameInformation gameInfo, ArrayList<GameEventListener> listenerList) {
+	public LogicGameWorker(GameInformation gameInfo,
+			ArrayList<GameEventListener> listenerList) {
 		this.gameInformation = gameInfo;
 		this.listenerList = listenerList;
 	}
@@ -73,7 +74,7 @@ public class LogicGameWorker implements Runnable {
 			beforeTime = System.nanoTime();
 		}
 	}
-	
+
 	/**
 	 * Stops LogicGameWorker.
 	 */

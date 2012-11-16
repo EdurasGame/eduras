@@ -1,6 +1,3 @@
-/**
- * 
- */
 package de.illonis.eduras.networking;
 
 import java.util.ArrayList;
@@ -13,6 +10,7 @@ import de.illonis.eduras.events.MovementEvent;
 import de.illonis.eduras.events.ObjectFactoryEvent;
 import de.illonis.eduras.exceptions.MessageNotSupportedException;
 import de.illonis.eduras.interfaces.GameEventListener;
+import de.illonis.eduras.logger.EduLog;
 
 /**
  * This class implements {@link GameEventListener}. Basically it generates
@@ -59,7 +57,7 @@ public class ServerGameEventListener implements GameEventListener {
 			String msg = NetworkMessageSerializer.serialize(moveEvent);
 			outputBuffer.append(msg);
 		} catch (MessageNotSupportedException e) {
-			e.printStackTrace();
+			EduLog.passException(e);
 		}
 	}
 
@@ -90,7 +88,7 @@ public class ServerGameEventListener implements GameEventListener {
 		try {
 			str = NetworkMessageSerializer.serialize(event);
 		} catch (MessageNotSupportedException e) {
-			e.printStackTrace();
+			EduLog.passException(e);
 			return;
 		}
 		outputBuffer.append(str);
@@ -102,7 +100,7 @@ public class ServerGameEventListener implements GameEventListener {
 		try {
 			string = NetworkMessageSerializer.serialize(event);
 		} catch (MessageNotSupportedException e) {
-			e.printStackTrace();
+			EduLog.passException(e);
 			return;
 		}
 		outputBuffer.append(string);

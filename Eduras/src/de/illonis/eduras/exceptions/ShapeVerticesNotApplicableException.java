@@ -5,7 +5,7 @@ package de.illonis.eduras.exceptions;
 
 /**
  * @author Florian Mai <florian.ren.mai@googlemail.com>
- *
+ * 
  */
 public class ShapeVerticesNotApplicableException extends Exception {
 

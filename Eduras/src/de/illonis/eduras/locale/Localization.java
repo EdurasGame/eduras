@@ -5,6 +5,7 @@ import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
 import de.illonis.eduras.exceptions.LocaleNotFoundException;
+import de.illonis.eduras.logger.EduLog;
 
 /**
  * A localization class that provides features to use internationalized strings.
@@ -49,7 +50,7 @@ public final class Localization {
 			throws LocaleNotFoundException {
 		currentLocaleNumber = findIndexOf(locale);
 		currentLocale = locale;
-		System.out.println("[LOCALE] Set to " + currentLocale.toString() + ".");
+		EduLog.info("[LOCALE] Set to " + currentLocale.toString() + ".");
 	}
 
 	/**

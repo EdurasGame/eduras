@@ -16,7 +16,9 @@ public interface NetworkEventListener {
 
 	/**
 	 * This function gets called when a network event appears.
-	 * @param event The appearing event.
+	 * 
+	 * @param event
+	 *            The appearing event.
 	 */
 	public void onNetworkEventAppeared(NetworkEvent event);
 

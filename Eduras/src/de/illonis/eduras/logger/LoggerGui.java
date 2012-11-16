@@ -14,6 +14,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTextArea;
 import javax.swing.ListSelectionModel;
@@ -36,7 +37,6 @@ public class LoggerGui extends JFrame implements LogListener, ActionListener,
 
 	public LoggerGui() {
 		super("Eduras? logging result");
-
 		setSize(700, 400);
 		buildGui();
 		EduLog.getInstance().addLogListener(this);
@@ -102,8 +102,9 @@ public class LoggerGui extends JFrame implements LogListener, ActionListener,
 		list = new JList<LogEntry>(model);
 		list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		list.addListSelectionListener(this);
+		JScrollPane scroller = new JScrollPane(detailPanel);
 		JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,
-				list, detailPanel);
+				list, scroller);
 		splitPane.setDividerLocation(400);
 
 		p.add(splitPane, BorderLayout.CENTER);
@@ -138,7 +139,7 @@ public class LoggerGui extends JFrame implements LogListener, ActionListener,
 		model.removeAllElements();
 
 		for (LogEntry e : EduLog.getInstance().getLogdata()) {
-			if ((l == Level.ALL || e.getLevel() == l)
+			if ((l == Level.ALL || e.getLevel().intValue() >= l.intValue())
 					&& (selectedClass.equalsIgnoreCase("All") || e
 							.containsClass(selectedClass))) {
 				model.addElement(e);

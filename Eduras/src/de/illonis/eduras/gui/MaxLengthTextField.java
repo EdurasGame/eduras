@@ -36,7 +36,8 @@ public class MaxLengthTextField extends JTextField {
 		}
 
 		@Override
-		public void insertString(int offs, String str, AttributeSet a) throws BadLocationException {
+		public void insertString(int offs, String str, AttributeSet a)
+				throws BadLocationException {
 			if (str.length() == 0)
 				return;
 			if (getLength() + str.length() < maxLength) {

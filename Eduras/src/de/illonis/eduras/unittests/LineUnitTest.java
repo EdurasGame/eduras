@@ -9,6 +9,7 @@ import static org.junit.Assert.assertTrue;
 import org.junit.Before;
 import org.junit.Test;
 
+import de.illonis.eduras.logger.EduLog;
 import de.illonis.eduras.math.Line;
 import de.illonis.eduras.math.Vector2D;
 
@@ -75,9 +76,9 @@ public class LineUnitTest {
 				.containsPoint(new Vector2D(10001.1001, 10001.1001)));
 
 		assertTrue(randomLine.containsPoint(new Vector2D(10.505, 44)));
-		System.out.println(randomLine.getPointAt(4.5));
+		EduLog.info(randomLine.getPointAt(4.5).toString());
 		assertTrue(randomLine.containsPoint(new Vector2D(36.7675, 96.5)));
-		System.out.println(randomLine.getPointAt(4.5));
+		EduLog.info(randomLine.getPointAt(4.5).toString());
 		assertFalse(randomLine.containsPoint(new Vector2D(0, 0)));
 	}
 

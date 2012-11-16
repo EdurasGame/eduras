@@ -19,6 +19,7 @@ import de.illonis.eduras.events.UserMovementEvent;
 import de.illonis.eduras.exceptions.GivenParametersDoNotFitToEventException;
 import de.illonis.eduras.exceptions.InvalidMessageFormatException;
 import de.illonis.eduras.exceptions.MessageNotSupportedException;
+import de.illonis.eduras.logger.EduLog;
 
 /**
  * Deserializes different NetworkMessages.
@@ -41,20 +42,20 @@ public class NetworkMessageDeserializer {
 	 */
 	public static LinkedList<Event> deserialize(String eventString) {
 		LinkedList<Event> events = new LinkedList<Event>();
-		System.out.println("[DESERIALIZE] orig: " + eventString);
+		EduLog.info("[DESERIALIZE] orig: " + eventString);
 		String[] messages = eventString.substring(2).split("##");
 
 		for (String msg : messages) {
-			System.out.println("message: " + msg);
+			EduLog.info("message: " + msg);
 			try {
 				Event ge = deserializeMessage(msg);
 				events.add(ge);
 			} catch (InvalidMessageFormatException e) {
-				e.printStackTrace();
+				EduLog.passException(e);
 			} catch (GivenParametersDoNotFitToEventException e) {
-				e.printStackTrace();
+				EduLog.passException(e);
 			} catch (MessageNotSupportedException e) {
-				e.printStackTrace();
+				EduLog.passException(e);
 			}
 		}
 

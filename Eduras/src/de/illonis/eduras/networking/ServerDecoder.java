@@ -7,6 +7,7 @@ import de.illonis.eduras.events.GameEvent;
 import de.illonis.eduras.events.NetworkEvent;
 import de.illonis.eduras.interfaces.GameLogicInterface;
 import de.illonis.eduras.interfaces.NetworkEventListener;
+import de.illonis.eduras.logger.EduLog;
 
 /**
  * {@link ServerDecoder} is used to handle received messages from clients that
@@ -42,7 +43,7 @@ public class ServerDecoder extends Thread {
 
 	@Override
 	public void run() {
-		System.out.println("[ServerDecoder] Started serverlogic.");
+		EduLog.info("[ServerDecoder] Started serverlogic.");
 		readFromInputBuffer();
 	}
 
@@ -57,7 +58,7 @@ public class ServerDecoder extends Thread {
 				String s = inputBuffer.getNext();
 				decodeMessage(s);
 			} catch (InterruptedException e) {
-				e.printStackTrace();
+				EduLog.passException(e);
 			}
 		}
 	}
@@ -71,8 +72,8 @@ public class ServerDecoder extends Thread {
 	private void decodeMessage(String message) {
 		LinkedList<Event> deserializedMessages = NetworkMessageDeserializer
 				.deserialize(message);
-		System.out.println("[ServerDecoder] Decoded "
-				+ deserializedMessages.size() + " messages from: " + message);
+		EduLog.info("[ServerDecoder] Decoded " + deserializedMessages.size()
+				+ " messages from: " + message);
 		for (Event event : deserializedMessages)
 			if (event instanceof GameEvent) {
 				logic.onGameEventAppeared((GameEvent) event);

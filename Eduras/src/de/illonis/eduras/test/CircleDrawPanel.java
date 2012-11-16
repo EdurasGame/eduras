@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import javax.swing.JPanel;
 
 import de.illonis.eduras.GameObject;
+import de.illonis.eduras.logger.EduLog;
 
 /**
  * A panel where circles are drawn by click and send to server.
@@ -56,7 +57,7 @@ public class CircleDrawPanel extends JPanel implements MouseListener {
 	public void mouseClicked(MouseEvent e) {
 		int x = e.getX();
 		int y = e.getY();
-		System.out.println("Clicked at " + x + ", " + y);
+		EduLog.info("Clicked at " + x + ", " + y);
 		circles.add(new Ellipse2D.Double(x - 5, y - 5, 10, 10));
 		clientFrame.sendMouseClick(x, y);
 		repaint();
@@ -90,7 +91,8 @@ public class CircleDrawPanel extends JPanel implements MouseListener {
 		g2d.setColor(Color.BLUE);
 
 		for (GameObject obj : clientFrame.getObjects().values()) {
-			Ellipse2D.Double ellipse = new Ellipse2D.Double(obj.getXPosition(), obj.getYPosition(), 10, 10);
+			Ellipse2D.Double ellipse = new Ellipse2D.Double(obj.getXPosition(),
+					obj.getYPosition(), 10, 10);
 			g2d.fill(ellipse);
 		}
 		g2d.setColor(Color.RED);
