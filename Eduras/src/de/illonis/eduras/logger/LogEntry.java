@@ -69,11 +69,13 @@ public class LogEntry {
 		b.append("\n");
 		int i = 1;
 		for (StackTraceElement trace : stackTrace) {
+			b.append(trace);
+			b.append("\n");
 			for (int n = 0; n < i; n++)
 				b.append(" ");
-			b.append(" at (" + trace.getFileName() + ":"
-					+ trace.getLineNumber() + ") in " + trace.getMethodName()
-					+ "\n");
+			// b.append(" at (" + trace.getFileName() + ":"
+			// + trace.getLineNumber() + ") in " + trace.getMethodName()
+			// + "\n");
 			i += 3;
 		}
 		return b.toString();

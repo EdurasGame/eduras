@@ -43,7 +43,7 @@ public class ConnectDialog extends JDialog implements ActionListener {
 	 *            parent frame
 	 */
 	public ConnectDialog(JFrame gui) {
-		super(gui, "Connect to server");
+		super(gui, "Connect to server", JDialog.ModalityType.DOCUMENT_MODAL);
 		buildGui();
 		aborted = false;
 	}
@@ -59,7 +59,7 @@ public class ConnectDialog extends JDialog implements ActionListener {
 	}
 
 	private void buildGui() {
-		setModal(true);
+
 		JPanel contentPane = (JPanel) getContentPane();
 		contentPane.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 		contentPane.setLayout(new BorderLayout());

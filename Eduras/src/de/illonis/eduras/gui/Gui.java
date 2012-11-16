@@ -6,6 +6,7 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.net.InetAddress;
 
+import javax.naming.InvalidNameException;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
@@ -52,7 +53,6 @@ public class Gui extends JFrame {
 	private Gui() {
 		super("Eduras? Client");
 		loadTools();
-		new LoggerGui().setVisible(true);
 		camera = new GameCamera();
 		cml = new CameraMouseListener(camera);
 
@@ -104,6 +104,7 @@ public class Gui extends JFrame {
 	}
 
 	public static void main(String[] args) {
+		new LoggerGui().setVisible(true);
 		Gui gui = new Gui();
 		gui.setVisible(true);
 
@@ -144,8 +145,7 @@ public class Gui extends JFrame {
 		camera.setSize(getWidth(), getHeight());
 		Thread t = new Thread(rendererThread);
 		t.start();
-		System.out.println("[CLIENT] Connected. OwnerId: "
-				+ infoPro.getOwnerID());
+		EduLog.info("[CLIENT] Connected. OwnerId: " + infoPro.getOwnerID());
 		setTitle(getTitle() + " #" + infoPro.getOwnerID() + " (" + clientName
 				+ ")");
 		settings = initializer.getSettings();
@@ -158,11 +158,11 @@ public class Gui extends JFrame {
 			eventSender.sendEvent(new GameInfoRequest(infoPro.getOwnerID()));
 
 		} catch (WrongEventTypeException e) {
-			e.printStackTrace();
+			EduLog.passException(e);
 		} catch (MessageNotSupportedException e) {
-			e.printStackTrace();
-		} catch (Exception e) {
-			e.printStackTrace();
+			EduLog.passException(e);
+		} catch (InvalidNameException e) {
+			EduLog.passException(e);
 		}
 	}
 
@@ -187,8 +187,8 @@ public class Gui extends JFrame {
 		public void componentResized(ComponentEvent e) {
 			super.componentResized(e);
 			camera.setSize(getWidth(), getHeight());
-			System.out.println("[GUI] Size changed. New size: " + getWidth()
-					+ ", " + getHeight());
+			EduLog.fine("[GUI] Size changed. New size: " + getWidth() + ", "
+					+ getHeight());
 		}
 	}
 }

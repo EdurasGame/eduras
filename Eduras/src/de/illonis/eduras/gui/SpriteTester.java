@@ -66,7 +66,6 @@ public class SpriteTester extends JFrame {
 		SpriteTester t = new SpriteTester();
 		t.setLocationRelativeTo(null);
 		t.setVisible(true);
-
 	}
 
 	private class Repainter implements Runnable {

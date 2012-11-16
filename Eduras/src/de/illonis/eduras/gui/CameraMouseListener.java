@@ -3,6 +3,8 @@ package de.illonis.eduras.gui;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
+import de.illonis.eduras.logger.EduLog;
+
 /**
  * Listens for mouse movement on gui to trigger camera movement.
  * 
@@ -80,6 +82,7 @@ public class CameraMouseListener extends MouseAdapter {
 
 				}
 			}
+			EduLog.info("Camera Mover Thread stopped.");
 		}
 	}
 }
