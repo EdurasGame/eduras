@@ -10,7 +10,6 @@ import javax.naming.InvalidNameException;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
-import de.illonis.eduras.InputKeyHandler;
 import de.illonis.eduras.events.ClientRenameEvent;
 import de.illonis.eduras.events.GameInfoRequest;
 import de.illonis.eduras.exceptions.InvalidValueEnteredException;

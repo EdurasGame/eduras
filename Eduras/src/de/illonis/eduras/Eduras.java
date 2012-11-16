@@ -11,6 +11,8 @@ import de.illonis.eduras.events.NetworkEvent;
 import de.illonis.eduras.exceptions.ServerNotReadyForStartException;
 import de.illonis.eduras.interfaces.NetworkEventListener;
 import de.illonis.eduras.locale.Localization;
+import de.illonis.eduras.logger.EduLog;
+import de.illonis.eduras.logger.LoggerGui;
 import de.illonis.eduras.networking.Server;
 
 /**
@@ -31,18 +33,19 @@ public class Eduras {
 	 *            </ul>
 	 */
 	public static void main(String[] args) {
+		new LoggerGui().setVisible(true);
 		int port = 0;
 		if (args.length > 0) {
 			try {
 				port = Integer.parseInt(args[0]);
 			} catch (NumberFormatException e) {
-				System.err.println(Localization.getStringF(
-						"Server.invalidportarg", args[0]));
+				EduLog.error(Localization.getStringF("Server.invalidportarg",
+						args[0]));
 				return;
 			}
 		}
 
-		System.out.println(Localization.getString("Server.startstart"));
+		EduLog.info(Localization.getString("Server.startstart"));
 
 		Server server;
 		if (port > 0) {
@@ -65,7 +68,7 @@ public class Eduras {
 		try {
 			server.start();
 		} catch (ServerNotReadyForStartException e) {
-			System.err.println(Localization.getStringF("Server.notready",
+			EduLog.error(Localization.getStringF("Server.notready",
 					e.getMessage()));
 			return;
 		}
@@ -97,14 +100,13 @@ public class Eduras {
 				}
 			}
 		} catch (SocketException e) {
-			System.err.println(Localization.getString("Server.noaddresses"));
-			e.printStackTrace();
+			EduLog.error(Localization.getString("Server.noaddresses"));
+			EduLog.passException(e);
 			return;
 		}
-		System.out.println(Localization.getString("Server.reachable"));
+		EduLog.fine(Localization.getString("Server.reachable"));
 		for (InetAddress inetAddress : addresses) {
-			System.out.println("[STARTUP] "
-					+ inetAddress.toString().substring(1));
+			EduLog.fine("[STARTUP] " + inetAddress.toString().substring(1));
 		}
 	}
 }
