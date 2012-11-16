@@ -16,6 +16,8 @@ import de.illonis.eduras.exceptions.InvalidValueEnteredException;
 import de.illonis.eduras.exceptions.MessageNotSupportedException;
 import de.illonis.eduras.exceptions.WrongEventTypeException;
 import de.illonis.eduras.locale.Localization;
+import de.illonis.eduras.logger.EduLog;
+import de.illonis.eduras.logger.LoggerGui;
 import de.illonis.eduras.logicabstraction.EdurasInitializer;
 import de.illonis.eduras.logicabstraction.EventSender;
 import de.illonis.eduras.logicabstraction.InformationProvider;
@@ -50,6 +52,7 @@ public class Gui extends JFrame {
 	private Gui() {
 		super("Eduras? Client");
 		loadTools();
+		new LoggerGui().setVisible(true);
 		camera = new GameCamera();
 		cml = new CameraMouseListener(camera);
 
@@ -125,6 +128,7 @@ public class Gui extends JFrame {
 			port = connectDialog.getPort();
 			clientName = connectDialog.getUserName();
 		} catch (InvalidValueEnteredException e) {
+			EduLog.passException(e);
 			return false;
 		}
 		ConnectProgressDialog cpd = new ConnectProgressDialog(this, nwm);
