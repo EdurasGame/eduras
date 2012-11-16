@@ -100,11 +100,12 @@ public class LoggerGui extends JFrame implements LogListener, ActionListener,
 				+ EduLog.getInstance().getStartDate().toString() + "."));
 		p.add(statuspanel, BorderLayout.SOUTH);
 		list = new JList<LogEntry>(model);
+		JScrollPane listscroller = new JScrollPane(list);
 		list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		list.addListSelectionListener(this);
 		JScrollPane scroller = new JScrollPane(detailPanel);
 		JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,
-				list, scroller);
+				listscroller, scroller);
 		splitPane.setDividerLocation(400);
 
 		p.add(splitPane, BorderLayout.CENTER);
@@ -114,6 +115,10 @@ public class LoggerGui extends JFrame implements LogListener, ActionListener,
 	@Override
 	public void onNewLogEntry(LogEntry entry) {
 		model.addElement(entry);
+		int lastIndex = model.getSize() - 1;
+		if (lastIndex >= 0) {
+			list.ensureIndexIsVisible(lastIndex);
+		}
 	}
 
 	@Override
