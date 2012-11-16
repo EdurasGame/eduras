@@ -56,6 +56,9 @@
 				<listitem>
 				    <para><emphasis>log(Level l, String s)</emphasis> used to specify the message level by yourself.</para>
 				</listitem>
+				<listitem>
+				    <para><emphasis>passException(Exception e)</emphasis> passes a thrown exception to logger. Used in catch-Blocks.</para>
+				</listitem>
             </itemizedlist>
         </section>
         <section>
