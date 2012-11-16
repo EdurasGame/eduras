@@ -298,4 +298,38 @@ public class NetworkMessageDeserializer {
 	private static int parseInt(String str) {
 		return Integer.parseInt(str);
 	}
+
+	/**
+	 * Returns a specific argument from given serialized message.<br>
+	 * Note that this is not very fast. Use other methods if you want to get
+	 * multiple arguments. This method does not check whether serialized message
+	 * is correct.
+	 * 
+	 * @param message
+	 *            serialized message to parse.
+	 * @param argument
+	 *            argument to look at. Note that first argument is
+	 *            GameEventNumber.
+	 * @return selected argument of given message.
+	 */
+	public static String getArgumentFromMessage(String message, int argument) {
+		String[] parts = message.substring(2).split("#");
+		return parts[argument];
+	}
+
+	/**
+	 * Extracts a {@link GameEventNumber} from given serialized message.<br>
+	 * Note that this is not very fast. Use other methods if you want to get
+	 * multiple arguments. This method does not check whether serialized message
+	 * is correct.
+	 * 
+	 * @see #getArgumentFromMessage(String, int)
+	 * @param msg
+	 *            Message to parse.
+	 * @return A {@link GameEventNumber} used in given message.
+	 */
+	public static GameEventNumber extractGameEventNumber(String msg) {
+		return GameEvent.toGameEventNumber(parseInt(getArgumentFromMessage(msg,
+				0)));
+	}
 }

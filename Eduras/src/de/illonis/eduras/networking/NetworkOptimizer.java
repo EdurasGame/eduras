@@ -6,7 +6,7 @@ import java.util.LinkedList;
 import de.illonis.eduras.events.GameEvent.GameEventNumber;
 
 /**
- * Provides several tools to shrink network traffic.
+ * Provides several tools to reduce network traffic.
  * 
  * @author illonis
  * 
@@ -19,8 +19,8 @@ public final class NetworkOptimizer {
 
 	/**
 	 * Removes obsolete messages from a message array.<br>
-	 * For example, obsolete messages are SET_POS events that occured before the
-	 * last SET_POS event of a gameobject.<br>
+	 * For example, obsolete messages are multiple SET_POS events on a single
+	 * gameobject.<br>
 	 * This is done by replacing old events with new events of the same type.
 	 * 
 	 * @param s

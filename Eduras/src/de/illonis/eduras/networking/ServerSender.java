@@ -171,7 +171,8 @@ public class ServerSender extends Thread {
 	private void sendAllMessages() {
 		try {
 			String[] s = outputBuffer.getAll();
-			String message = NetworkMessageSerializer.concatenate(s);
+			String[] filtereds = NetworkOptimizer.filterObsoleteMessages(s);
+			String message = NetworkMessageSerializer.concatenate(filtereds);
 			System.out.println("[SERVER] Sent all messages.");
 			sendMessage(message);
 		} catch (BufferIsEmptyException e) {
