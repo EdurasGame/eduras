@@ -265,6 +265,18 @@ public final class EduLog {
 	}
 
 	/**
+	 * Passes an exception to logger so it will be logged.
+	 * 
+	 * @param e
+	 *            exception to log.
+	 */
+	public static void passException(Exception e) {
+		LogEntry entry = new LogEntry(Level.SEVERE, e.getMessage(),
+				e.getStackTrace());
+		getInstance().append(entry);
+	}
+
+	/**
 	 * Returns true if logger prints on given logging mode.
 	 * 
 	 * @param mode
