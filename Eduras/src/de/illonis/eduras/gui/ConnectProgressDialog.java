@@ -85,7 +85,6 @@ public class ConnectProgressDialog extends JDialog implements ActionListener {
 	}
 
 	private void buildGui() {
-		setModal(true);
 		setSize(300, 300);
 		label = new JTextPane();
 		label.setContentType("text/html");
