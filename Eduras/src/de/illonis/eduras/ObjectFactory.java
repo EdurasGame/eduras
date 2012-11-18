@@ -7,6 +7,7 @@ import de.illonis.eduras.events.GameEvent.GameEventNumber;
 import de.illonis.eduras.events.ObjectFactoryEvent;
 import de.illonis.eduras.interfaces.GameEventListener;
 import de.illonis.eduras.interfaces.GameLogicInterface;
+import de.illonis.eduras.logger.EduLog;
 import de.illonis.eduras.test.YellowCircle;
 
 /**
@@ -67,7 +68,7 @@ public class ObjectFactory {
 		ObjectFactoryEvent ofe = (ObjectFactoryEvent) event;
 		// if (ofe.hasId()
 		// && logic.getGame().getObjects().containsKey(ofe.getId())) {
-		// System.out.println("Object with id " + ofe.getId()
+		// EduLog.info("Object with id " + ofe.getId()
 		// + " already exists.");
 		// return;
 		// }
@@ -75,7 +76,6 @@ public class ObjectFactory {
 		if (ofe.getType() == GameEventNumber.OBJECT_CREATE) {
 			switch (ofe.getObjectType()) {
 			case PLAYER:
-				System.out.println("create player: " + ofe.getOwner());
 				go = new Player(logic.getGame(), ofe.getOwner());
 				go.setOwner(ofe.getOwner());
 				if (ofe.hasId())
@@ -85,7 +85,7 @@ public class ObjectFactory {
 
 				logic.getGame().addPlayer((Player) go);
 				logic.getGame().addObject(go);
-				System.out.println("Player " + ofe.getOwner() + " created");
+				EduLog.info("Player " + ofe.getOwner() + " created");
 				break;
 			case YELLOWCIRCLE:
 				go = new YellowCircle(logic.getGame());

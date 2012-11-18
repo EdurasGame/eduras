@@ -28,7 +28,8 @@ public class EventSender {
 	 * Creates an EventSender that uses the given client to forward events via
 	 * network and to the client's game logic.
 	 * 
-	 * @param client The client to use.
+	 * @param client
+	 *            The client to use.
 	 */
 	EventSender(Client client) {
 

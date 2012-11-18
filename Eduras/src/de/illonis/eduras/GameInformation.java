@@ -3,12 +3,15 @@ package de.illonis.eduras;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import javax.naming.InvalidNameException;
+
 import de.illonis.eduras.ObjectFactory.ObjectType;
 import de.illonis.eduras.events.ClientRenameEvent;
 import de.illonis.eduras.events.GameEvent;
 import de.illonis.eduras.events.GameEvent.GameEventNumber;
 import de.illonis.eduras.events.MovementEvent;
 import de.illonis.eduras.events.ObjectFactoryEvent;
+import de.illonis.eduras.logger.EduLog;
 import de.illonis.eduras.math.Vector2D;
 import de.illonis.eduras.shapes.ObjectShape;
 
@@ -147,8 +150,8 @@ public class GameInformation {
 		for (Player p : players.values()) {
 			try {
 				infos.add(new ClientRenameEvent(p.getOwner(), p.getName()));
-			} catch (Exception e) {
-				e.printStackTrace();
+			} catch (InvalidNameException e) {
+				EduLog.passException(e);
 				continue;
 			}
 		}

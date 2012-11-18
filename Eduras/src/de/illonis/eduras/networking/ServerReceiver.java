@@ -3,6 +3,8 @@ package de.illonis.eduras.networking;
 import java.io.BufferedReader;
 import java.io.IOException;
 
+import de.illonis.eduras.logger.EduLog;
+
 /**
  * The ServerReceiver receives messages from clients and pushes them to input
  * buffer.
@@ -44,12 +46,7 @@ public class ServerReceiver extends Thread {
 	 *            Message that should be pushed.
 	 */
 	private void pushToInputBuffer(String message) {
-		System.out.println("[SERVER] Pushed to input Buffer: " + message);
-
 		inputBuffer.append(message);
-
-		System.out.println("[SERVER] Pushing ok");
-		// server.wakeLogic();
 	}
 
 	@Override
@@ -62,13 +59,13 @@ public class ServerReceiver extends Thread {
 	 * passed for interpretation.
 	 */
 	private void waitForMessages() {
-		System.out.println("[SERVER] Waiting for messages...");
+		EduLog.info("[SERVER] Waiting for messages...");
 		try {
 			BufferedReader br = client.getInputStream();
 			while (clientConnected) {
 				String line = br.readLine();
 				if (line != null) {
-					System.out.println("[SERVER] Received message: " + line);
+					EduLog.info("[SERVER] Received message: " + line);
 					pushToInputBuffer(line);
 				} else {
 					server.handleClientDisconnect(client);
@@ -80,8 +77,8 @@ public class ServerReceiver extends Thread {
 			// remove the correlated player from the game
 			server.handleClientDisconnect(client);
 
-			System.err.println("[SERVER] Connection to client closed.");
-			e.printStackTrace();
+			EduLog.error("[SERVER] Connection to client closed.");
+			EduLog.passException(e);
 		}
 	}
 

@@ -43,7 +43,7 @@ public class ConnectDialog extends JDialog implements ActionListener {
 	 *            parent frame
 	 */
 	public ConnectDialog(JFrame gui) {
-		super(gui, "Connect to server");
+		super(gui, "Connect to server", JDialog.ModalityType.DOCUMENT_MODAL);
 		buildGui();
 		aborted = false;
 	}
@@ -59,7 +59,7 @@ public class ConnectDialog extends JDialog implements ActionListener {
 	}
 
 	private void buildGui() {
-		setModal(true);
+
 		JPanel contentPane = (JPanel) getContentPane();
 		contentPane.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 		contentPane.setLayout(new BorderLayout());
@@ -143,7 +143,8 @@ public class ConnectDialog extends JDialog implements ActionListener {
 	 */
 	public InetAddress getAddress() throws InvalidValueEnteredException {
 		if (address == null)
-			throw new InvalidValueEnteredException();
+			throw new InvalidValueEnteredException(
+					"Invalid address value given.");
 		return address;
 	}
 
@@ -157,7 +158,8 @@ public class ConnectDialog extends JDialog implements ActionListener {
 	 */
 	public int getPort() throws InvalidValueEnteredException {
 		if (port <= 0)
-			throw new InvalidValueEnteredException();
+			throw new InvalidValueEnteredException(
+					"Invalid port number entered.");
 		return port;
 	}
 
@@ -181,7 +183,7 @@ public class ConnectDialog extends JDialog implements ActionListener {
 	 */
 	public String getUserName() throws InvalidValueEnteredException {
 		if (userNameField.getText().length() < 3)
-			throw new InvalidValueEnteredException();
+			throw new InvalidValueEnteredException("Username too short.");
 		return userNameField.getText();
 	}
 }

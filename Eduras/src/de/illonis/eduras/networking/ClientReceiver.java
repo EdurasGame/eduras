@@ -7,6 +7,7 @@ import java.net.Socket;
 
 import de.illonis.eduras.interfaces.GameLogicInterface;
 import de.illonis.eduras.interfaces.NetworkEventListener;
+import de.illonis.eduras.logger.EduLog;
 
 /**
  * Receives incoming messages for the client.
@@ -40,9 +41,8 @@ public class ClientReceiver extends Thread {
 		try {
 			messageReader = new BufferedReader(new InputStreamReader(
 					socket.getInputStream()));
-			System.out.println("h");
 		} catch (IOException e) {
-			e.printStackTrace();
+			EduLog.passException(e);
 		}
 
 	}
@@ -54,15 +54,14 @@ public class ClientReceiver extends Thread {
 			try {
 				String messages = messageReader.readLine();
 				if (messages != null) {
-					System.out
-							.println("[CLIENT] Received message: " + messages);
+					EduLog.info("[CLIENT] Received message: " + messages);
 					processMessages(messages);
 				}
 
-			} catch (Exception e) {
-				System.err.println("Connection to server closed.");
+			} catch (IOException e) {
 				connectionAvailable = false;
-				e.printStackTrace();
+				EduLog.error("Connection to server closed.");
+				EduLog.passException(e);
 			}
 		}
 	}

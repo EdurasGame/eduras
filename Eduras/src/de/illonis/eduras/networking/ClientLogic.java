@@ -8,6 +8,7 @@ import de.illonis.eduras.events.GameEvent;
 import de.illonis.eduras.events.NetworkEvent;
 import de.illonis.eduras.interfaces.GameLogicInterface;
 import de.illonis.eduras.interfaces.NetworkEventListener;
+import de.illonis.eduras.logger.EduLog;
 
 /**
  * Processes messages that arrive at the client.
@@ -48,7 +49,7 @@ public class ClientLogic extends Thread {
 
 	@Override
 	public void run() {
-		System.out.println("run");
+		EduLog.info("Clientlogic started.");
 		LinkedList<Event> eventList = NetworkMessageDeserializer
 				.deserialize(messages);
 
@@ -58,7 +59,7 @@ public class ClientLogic extends Thread {
 			} else {
 				if (event instanceof ConnectionEstablishedEvent) {
 					ConnectionEstablishedEvent connectionEvent = (ConnectionEstablishedEvent) event;
-					System.out.println("established event");
+					EduLog.info("Received ConnectionEstablished event.");
 					client.setOwnerId(connectionEvent.getClientId());
 				}
 				networkEventListener

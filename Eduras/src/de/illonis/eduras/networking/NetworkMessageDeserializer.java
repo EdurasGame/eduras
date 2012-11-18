@@ -19,6 +19,7 @@ import de.illonis.eduras.events.UserMovementEvent;
 import de.illonis.eduras.exceptions.GivenParametersDoNotFitToEventException;
 import de.illonis.eduras.exceptions.InvalidMessageFormatException;
 import de.illonis.eduras.exceptions.MessageNotSupportedException;
+import de.illonis.eduras.logger.EduLog;
 
 /**
  * Deserializes different NetworkMessages.
@@ -41,20 +42,20 @@ public class NetworkMessageDeserializer {
 	 */
 	public static LinkedList<Event> deserialize(String eventString) {
 		LinkedList<Event> events = new LinkedList<Event>();
-		System.out.println("[DESERIALIZE] orig: " + eventString);
+		EduLog.info("[DESERIALIZE] orig: " + eventString);
 		String[] messages = eventString.substring(2).split("##");
 
 		for (String msg : messages) {
-			System.out.println("message: " + msg);
+			EduLog.info("message: " + msg);
 			try {
 				Event ge = deserializeMessage(msg);
 				events.add(ge);
 			} catch (InvalidMessageFormatException e) {
-				e.printStackTrace();
+				EduLog.passException(e);
 			} catch (GivenParametersDoNotFitToEventException e) {
-				e.printStackTrace();
+				EduLog.passException(e);
 			} catch (MessageNotSupportedException e) {
-				e.printStackTrace();
+				EduLog.passException(e);
 			}
 		}
 
@@ -297,5 +298,39 @@ public class NetworkMessageDeserializer {
 	 */
 	private static int parseInt(String str) {
 		return Integer.parseInt(str);
+	}
+
+	/**
+	 * Returns a specific argument from given serialized message.<br>
+	 * Note that this is not very fast. Use other methods if you want to get
+	 * multiple arguments. This method does not check whether serialized message
+	 * is correct.
+	 * 
+	 * @param message
+	 *            serialized message to parse.
+	 * @param argument
+	 *            argument to look at. Note that first argument is
+	 *            GameEventNumber.
+	 * @return selected argument of given message.
+	 */
+	public static String getArgumentFromMessage(String message, int argument) {
+		String[] parts = message.substring(2).split("#");
+		return parts[argument];
+	}
+
+	/**
+	 * Extracts a {@link GameEventNumber} from given serialized message.<br>
+	 * Note that this is not very fast. Use other methods if you want to get
+	 * multiple arguments. This method does not check whether serialized message
+	 * is correct.
+	 * 
+	 * @see #getArgumentFromMessage(String, int)
+	 * @param msg
+	 *            Message to parse.
+	 * @return A {@link GameEventNumber} used in given message.
+	 */
+	public static GameEventNumber extractGameEventNumber(String msg) {
+		return GameEvent.toGameEventNumber(parseInt(getArgumentFromMessage(msg,
+				0)));
 	}
 }

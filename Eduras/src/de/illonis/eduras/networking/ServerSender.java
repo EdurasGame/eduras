@@ -9,6 +9,7 @@ import java.net.UnknownHostException;
 import java.util.HashMap;
 
 import de.illonis.eduras.exceptions.BufferIsEmptyException;
+import de.illonis.eduras.logger.EduLog;
 
 /**
  * A class that sends collected messages every {@value #SEND_INTERVAL} ms.
@@ -129,7 +130,7 @@ public class ServerSender extends Thread {
 			try {
 				Thread.sleep(SEND_INTERVAL);
 			} catch (InterruptedException e) {
-				e.printStackTrace();
+				EduLog.passException(e);
 			}
 		}
 	}
@@ -157,7 +158,7 @@ public class ServerSender extends Thread {
 			} catch (UnknownHostException e) {
 				server.handleClientDisconnect(singleClient);
 			} catch (IOException e) {
-				e.printStackTrace();
+				EduLog.passException(e);
 			}
 		}
 
@@ -171,8 +172,9 @@ public class ServerSender extends Thread {
 	private void sendAllMessages() {
 		try {
 			String[] s = outputBuffer.getAll();
-			String message = NetworkMessageSerializer.concatenate(s);
-			System.out.println("[SERVER] Sent all messages.");
+			String[] filtereds = NetworkOptimizer.filterObsoleteMessages(s);
+			String message = NetworkMessageSerializer.concatenate(filtereds);
+			EduLog.info("[SERVER] Sent all messages.");
 			sendMessage(message);
 		} catch (BufferIsEmptyException e) {
 			// do nothing if there is no message.

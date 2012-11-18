@@ -4,7 +4,7 @@ public class InvalidValueEnteredException extends Exception {
 
 	private static final long serialVersionUID = 1L;
 
-	public InvalidValueEnteredException() {
-		
+	public InvalidValueEnteredException(String string) {
+		super(string);
 	}
 }

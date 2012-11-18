@@ -9,6 +9,7 @@ import java.util.LinkedList;
 import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.GameObject;
 import de.illonis.eduras.exceptions.ShapeVerticesNotApplicableException;
+import de.illonis.eduras.logger.EduLog;
 import de.illonis.eduras.math.Geometry;
 import de.illonis.eduras.math.Line;
 import de.illonis.eduras.math.Vector2D;
@@ -160,7 +161,7 @@ public class Triangle extends ObjectShape {
 				if (interceptPoint == null) {
 					continue;
 				} else {
-					System.out.println("[LOGIC][TRIANGLE] Collision at "
+					EduLog.info("[LOGIC][TRIANGLE] Collision at "
 							+ interceptPoint.getX() + " , "
 							+ interceptPoint.getY());
 					interceptPoints.add(interceptPoint);

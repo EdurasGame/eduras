@@ -15,6 +15,7 @@ import javax.swing.JFrame;
 import javax.swing.JTextPane;
 import javax.swing.SwingWorker;
 
+import de.illonis.eduras.logger.EduLog;
 import de.illonis.eduras.logicabstraction.NetworkManager;
 
 /**
@@ -46,7 +47,7 @@ public class ConnectProgressDialog extends JDialog implements ActionListener {
 			try {
 				Thread.sleep(500);
 			} catch (InterruptedException e) {
-
+				EduLog.passException(e);
 			}
 			t = new Thread(connector);
 			t.start();
@@ -56,10 +57,10 @@ public class ConnectProgressDialog extends JDialog implements ActionListener {
 				try {
 					t.join(1000);
 				} catch (InterruptedException e) {
-					e.printStackTrace();
+					EduLog.passException(e);
 				}
 				if (t.isAlive()) {
-					System.out.println("Waiting..." + i);
+					EduLog.info("Waiting..." + i);
 				} else
 					break;
 			}
@@ -77,14 +78,13 @@ public class ConnectProgressDialog extends JDialog implements ActionListener {
 	};
 
 	ConnectProgressDialog(JFrame gui, NetworkManager nwm) {
-		super(gui, "Connecting...");
+		super(gui, "Connecting...", JDialog.ModalityType.DOCUMENT_MODAL);
 		errorMessage = "";
 		this.nwm = nwm;
 		buildGui();
 	}
 
 	private void buildGui() {
-		setModal(true);
 		setSize(300, 300);
 		label = new JTextPane();
 		label.setContentType("text/html");
@@ -115,9 +115,9 @@ public class ConnectProgressDialog extends JDialog implements ActionListener {
 		try {
 			return worker.get();
 		} catch (InterruptedException e) {
-			e.printStackTrace();
+			EduLog.passException(e);
 		} catch (ExecutionException e) {
-			e.printStackTrace();
+			EduLog.passException(e);
 		}
 		return false;
 	}
@@ -132,12 +132,12 @@ public class ConnectProgressDialog extends JDialog implements ActionListener {
 				errorMessage = "Connection timeout";
 			} catch (IOException e) {
 				errorMessage = e.getMessage();
-				e.printStackTrace();
+				EduLog.passException(e);
 			} finally {
 				try {
 					Thread.sleep(200);
 				} catch (InterruptedException e) {
-					e.printStackTrace();
+					EduLog.passException(e);
 				}
 			}
 		}

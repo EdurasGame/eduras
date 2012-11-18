@@ -16,6 +16,7 @@ import de.illonis.eduras.exceptions.ServerNotReadyForStartException;
 import de.illonis.eduras.interfaces.GameLogicInterface;
 import de.illonis.eduras.interfaces.NetworkEventListener;
 import de.illonis.eduras.locale.Localization;
+import de.illonis.eduras.logger.EduLog;
 
 /**
  * A server that handles a game and its clients.
@@ -88,7 +89,7 @@ public class Server {
 			cl.start();
 		} catch (IOException e) {
 			System.err.println(Localization.getString("Server.startuperror")); //$NON-NLS-1$
-			e.printStackTrace();
+			EduLog.passException(e);
 			System.exit(0);
 		}
 
@@ -158,7 +159,7 @@ public class Server {
 			serverSender.sendMessageToClient(client.getClientId(),
 					NetworkMessageSerializer.serialize(connectionEstablished));
 		} catch (MessageNotSupportedException e) {
-			e.printStackTrace();
+			EduLog.passException(e);
 		}
 	}
 
@@ -181,17 +182,17 @@ public class Server {
 		 */
 		@Override
 		public void run() {
-			System.out.println(Localization.getStringF(
-					"Server.startedlistening", port));
+			EduLog.info(Localization
+					.getStringF("Server.startedlistening", port));
 			while (true) {
 				Socket client = null;
 				try {
 					client = server.accept();
-					System.out.println(Localization.getStringF(
-							"Server.newclient", client.getInetAddress()));
+					EduLog.info(Localization.getStringF("Server.newclient",
+							client.getInetAddress()));
 					handleConnection(client);
 				} catch (IOException e) {
-					e.printStackTrace();
+					EduLog.passException(e);
 				}
 			}
 		}
@@ -218,7 +219,7 @@ public class Server {
 		try {
 			serializedEvent = NetworkMessageSerializer.serialize(event);
 		} catch (MessageNotSupportedException e) {
-			e.printStackTrace();
+			EduLog.passException(e);
 			return;
 		}
 		serverSender.sendMessage(serializedEvent);
@@ -238,7 +239,7 @@ public class Server {
 		try {
 			client.closeConnection();
 		} catch (IOException e) {
-			e.printStackTrace();
+			EduLog.passException(e);
 		}
 
 		serverReceivers.get(client.getClientId()).stopRunning();

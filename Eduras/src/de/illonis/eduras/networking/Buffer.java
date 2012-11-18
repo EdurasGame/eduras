@@ -4,6 +4,7 @@ import java.util.NoSuchElementException;
 import java.util.concurrent.LinkedBlockingQueue;
 
 import de.illonis.eduras.exceptions.BufferIsEmptyException;
+import de.illonis.eduras.logger.EduLog;
 
 /**
  * A Buffer is a thread-safe linked list of Strings. Elements are returned in
@@ -50,9 +51,9 @@ public class Buffer {
 	}
 
 	/**
-	 * Waits until an element is available and returns and removes first element from
-	 * buffer. The first element is that element that was added before all other
-	 * elements.<br>
+	 * Waits until an element is available and returns and removes first element
+	 * from buffer. The first element is that element that was added before all
+	 * other elements.<br>
 	 * Elements are returned in same order they where added.<br>
 	 * <b>Note:</b> This method blocks and waits until an element is available.
 	 * If you do not want to wait for an element available, use
@@ -76,7 +77,7 @@ public class Buffer {
 		try {
 			list.put(string);
 		} catch (InterruptedException e) {
-			e.printStackTrace();
+			EduLog.passException(e);
 		}
 	}
 

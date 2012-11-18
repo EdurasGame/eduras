@@ -3,7 +3,6 @@
  */
 package de.illonis.eduras.events;
 
-
 /**
  * Event for any movement to any direction.
  * 

@@ -2,6 +2,7 @@ package de.illonis.eduras;
 
 import de.illonis.eduras.exceptions.ShapeVerticesNotApplicableException;
 import de.illonis.eduras.interfaces.Controllable;
+import de.illonis.eduras.logger.EduLog;
 import de.illonis.eduras.math.Vector2D;
 import de.illonis.eduras.shapes.Triangle;
 
@@ -39,7 +40,7 @@ public class Player extends MoveableGameObject implements Controllable {
 		try {
 			setShape(new Triangle(firstEdge, secondEdge, thirdEdge));
 		} catch (ShapeVerticesNotApplicableException e) {
-			e.printStackTrace();
+			EduLog.passException(e);
 		}
 
 		// TODO: Replace setting the position to a non random value.
@@ -113,6 +114,6 @@ public class Player extends MoveableGameObject implements Controllable {
 	@Override
 	public void onCollision(GameObject collidingObject) {
 		// do nothing
-		System.out.println("I JUST COLLIDED!");
+		EduLog.info("I JUST COLLIDED!");
 	}
 }

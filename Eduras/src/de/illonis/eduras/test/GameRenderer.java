@@ -7,6 +7,7 @@ import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 
 import de.illonis.eduras.GameInformation;
+import de.illonis.eduras.logger.EduLog;
 
 /**
  * GameRenderer renders the buffered image for gameworldpanel.
@@ -40,11 +41,14 @@ public class GameRenderer {
 	public void render(int width, int height) {
 
 		// recreate image if it does not exist
-		if (dbImage == null || dbg == null || width != dbImage.getWidth(gameWorldPanel)) {
-			dbImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+		if (dbImage == null || dbg == null
+				|| width != dbImage.getWidth(gameWorldPanel)) {
+			dbImage = new BufferedImage(width, height,
+					BufferedImage.TYPE_INT_RGB);
 
 			dbg = (Graphics2D) dbImage.getGraphics();
-			dbg.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+			dbg.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+					RenderingHints.VALUE_ANTIALIAS_ON);
 		}
 		// clear image
 		dbg.setColor(Color.black);
@@ -64,8 +68,8 @@ public class GameRenderer {
 				g.drawImage(dbImage, 0, 0, null);
 			g.dispose();
 		} catch (Exception e) {
-			System.out.println("Graphics context error: " + e.getMessage());
-			e.printStackTrace();
+			EduLog.error("Graphics context error: " + e.getMessage());
+			EduLog.passException(e);
 		}
 	}
 

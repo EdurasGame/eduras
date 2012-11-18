@@ -1,4 +1,4 @@
-package de.illonis.eduras;
+package de.illonis.eduras.gui;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -9,6 +9,7 @@ import de.illonis.eduras.events.UserMovementEvent;
 import de.illonis.eduras.exceptions.KeyNotBoundException;
 import de.illonis.eduras.exceptions.MessageNotSupportedException;
 import de.illonis.eduras.exceptions.WrongEventTypeException;
+import de.illonis.eduras.logger.EduLog;
 import de.illonis.eduras.logicabstraction.EventSender;
 import de.illonis.eduras.settings.KeyBindings.KeyBinding;
 import de.illonis.eduras.settings.Settings;
@@ -124,14 +125,14 @@ public class InputKeyHandler implements KeyListener {
 		try {
 			eventSender.sendEvent(moveEvent);
 		} catch (WrongEventTypeException e1) {
-			e1.printStackTrace();
+			EduLog.passException(e1);
 		} catch (MessageNotSupportedException e1) {
-			e1.printStackTrace();
+			EduLog.passException(e1);
 		}
 
 		lastTimePressed = System.currentTimeMillis();
-		System.out.println("Key pressed: " + e.getKeyCode() + " (\""
-				+ e.getKeyChar() + "\")");
+		EduLog.fine("Key pressed: " + e.getKeyCode() + " (\"" + e.getKeyChar()
+				+ "\")");
 	}
 
 	@Override
@@ -177,9 +178,9 @@ public class InputKeyHandler implements KeyListener {
 		try {
 			eventSender.sendEvent(moveEvent);
 		} catch (WrongEventTypeException e1) {
-			e1.printStackTrace();
+			EduLog.passException(e1);
 		} catch (MessageNotSupportedException e1) {
-			e1.printStackTrace();
+			EduLog.passException(e1);
 		}
 	}
 }

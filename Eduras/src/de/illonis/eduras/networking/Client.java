@@ -8,6 +8,7 @@ import java.net.Socket;
 
 import de.illonis.eduras.interfaces.GameLogicInterface;
 import de.illonis.eduras.interfaces.NetworkEventListener;
+import de.illonis.eduras.logger.EduLog;
 
 /**
  * A client that connects to the game server and starts receiving and sending
@@ -50,8 +51,7 @@ public class Client {
 	 *             when connection establishing failed.
 	 */
 	public void connect(InetAddress addr, int port) throws IOException {
-		System.out.println("[CLIENT] Connecting to " + addr.toString() + " at "
-				+ port);
+		EduLog.info("[CLIENT] Connecting to " + addr.toString() + " at " + port);
 		socket = new Socket();
 		InetSocketAddress iaddr = new InetSocketAddress(addr, port);
 		socket.connect(iaddr, 10000);
@@ -71,7 +71,7 @@ public class Client {
 		try {
 			this.echoSocket = new ServerSocket(DEFAULT_ECHO_PORT);
 		} catch (IOException e) {
-			e.printStackTrace();
+			EduLog.passException(e);
 		}
 
 	}
@@ -120,7 +120,7 @@ public class Client {
 			try {
 				socket.close();
 			} catch (IOException e) {
-				e.printStackTrace();
+				EduLog.passException(e);
 			}
 	}
 }

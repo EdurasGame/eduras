@@ -8,6 +8,7 @@ import javax.swing.JFrame;
 
 import de.illonis.eduras.exceptions.ImageLoadingError;
 import de.illonis.eduras.images.SpriteSheet;
+import de.illonis.eduras.logger.EduLog;
 
 /**
  * This class tests SpriteSheets. It draws all sprites from a spritesheet on a
@@ -35,7 +36,7 @@ public class SpriteTester extends JFrame {
 		try {
 			s = new SpriteSheet("testsprite.png", 30);
 		} catch (ImageLoadingError e) {
-			e.printStackTrace();
+			EduLog.passException(e);
 		}
 
 		img = new BufferedImage[s.getTileCount()];
@@ -66,7 +67,6 @@ public class SpriteTester extends JFrame {
 		SpriteTester t = new SpriteTester();
 		t.setLocationRelativeTo(null);
 		t.setVisible(true);
-
 	}
 
 	private class Repainter implements Runnable {
@@ -77,7 +77,7 @@ public class SpriteTester extends JFrame {
 				try {
 					Thread.sleep(REFRESH_RATE);
 				} catch (InterruptedException e) {
-					e.printStackTrace();
+					EduLog.passException(e);
 				}
 			}
 		}

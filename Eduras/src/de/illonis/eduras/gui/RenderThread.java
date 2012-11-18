@@ -3,6 +3,8 @@ package de.illonis.eduras.gui;
 import java.awt.Graphics2D;
 import java.awt.image.BufferStrategy;
 
+import de.illonis.eduras.logger.EduLog;
+
 /**
  * This thread does repeatedly call render methods of its renderer.
  * 
@@ -42,9 +44,10 @@ public class RenderThread implements Runnable {
 			try {
 				Thread.sleep(DRAW_INTERVAL);
 			} catch (InterruptedException e) {
-				e.printStackTrace();
+				EduLog.passException(e);
 			}
 		}
+		EduLog.info("RenderThread stopped.");
 	}
 
 	/**
