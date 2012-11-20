@@ -40,7 +40,7 @@ public class LoggerGui extends JFrame implements LogListener, ActionListener,
 		setSize(700, 400);
 		buildGui();
 		EduLog.getInstance().addLogListener(this);
-		EduLog.setLogOutput(LogMode.GUI, LogMode.CONSOLE);
+		EduLog.setLogOutput(LogMode.GUI);
 	}
 
 	private void initLevelSelector() {
