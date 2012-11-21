@@ -7,6 +7,7 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.HashMap;
+import java.util.logging.Level;
 
 import de.illonis.eduras.exceptions.BufferIsEmptyException;
 import de.illonis.eduras.logger.EduLog;
@@ -57,6 +58,8 @@ public class ServerSender extends Thread {
 		for (ServerClient serverClient : clients.values()) {
 			PrintWriter pw = serverClient.getOutputStream();
 			pw.println(message);
+			EduLog.log(Level.INFO, "Send message " + "'" + message
+					+ "' to client with id " + serverClient.getClientId());
 		}
 	}
 
@@ -117,7 +120,7 @@ public class ServerSender extends Thread {
 	 *            Client to remove.
 	 */
 	public void remove(ServerClient client) {
-		clients.remove(client);
+		clients.remove(client.getClientId());
 	}
 
 	@Override

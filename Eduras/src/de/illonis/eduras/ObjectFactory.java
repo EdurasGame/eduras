@@ -74,6 +74,12 @@ public class ObjectFactory {
 		// }
 		GameObject go = null;
 		if (ofe.getType() == GameEventNumber.OBJECT_CREATE) {
+
+			// skip creating object that already exist
+			if (logic.getGame().getObjects().containsKey(ofe.getId())) {
+				return;
+			}
+
 			switch (ofe.getObjectType()) {
 			case PLAYER:
 				go = new Player(logic.getGame(), ofe.getOwner());

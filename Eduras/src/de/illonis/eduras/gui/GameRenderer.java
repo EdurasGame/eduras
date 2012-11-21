@@ -21,10 +21,10 @@ import de.illonis.eduras.math.Vector2D;
  */
 public class GameRenderer {
 	private BufferedImage dbImage = null;
-	private GameCamera camera;
+	private final GameCamera camera;
 	private Graphics2D dbg = null;
 	private final HashMap<Integer, GameObject> objs;
-	private Rectangle mapSize;
+	private final Rectangle mapSize;
 
 	/**
 	 * Creates a new renderer.
@@ -96,8 +96,7 @@ public class GameRenderer {
 	private synchronized void drawObjects() {
 
 		dbg.setColor(Color.yellow);
-		for (int i = 0; i < objs.size(); i++) {
-			GameObject d = objs.get(i);
+		for (GameObject d : objs.values()) {
 			if (d instanceof Player) {
 				Player player = (Player) d;
 
