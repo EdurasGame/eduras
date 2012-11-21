@@ -11,6 +11,7 @@ import de.illonis.eduras.events.GameEvent;
 import de.illonis.eduras.events.GameEvent.GameEventNumber;
 import de.illonis.eduras.events.MovementEvent;
 import de.illonis.eduras.events.ObjectFactoryEvent;
+import de.illonis.eduras.exceptions.ObjectNotFoundException;
 import de.illonis.eduras.logger.EduLog;
 import de.illonis.eduras.math.Vector2D;
 import de.illonis.eduras.shapes.ObjectShape;
@@ -120,8 +121,15 @@ public class GameInformation {
 	 * @param ownerId
 	 *            owner id of player.
 	 * @return player object of given owner.
+	 * @throws ObjectNotFoundException
+	 *             Thrown if there is no object found
 	 */
-	public Player getPlayerByOwnerId(int ownerId) {
+	public Player getPlayerByOwnerId(int ownerId)
+			throws ObjectNotFoundException {
+		Player result = players.get(ownerId);
+		if (result == null) {
+			throw new ObjectNotFoundException(ownerId);
+		}
 		return players.get(ownerId);
 	}
 

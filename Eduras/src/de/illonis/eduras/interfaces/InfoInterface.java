@@ -9,6 +9,7 @@ import java.util.HashMap;
 import de.illonis.eduras.GameObject;
 import de.illonis.eduras.Map;
 import de.illonis.eduras.Player;
+import de.illonis.eduras.exceptions.ObjectNotFoundException;
 
 /**
  * This interface determines what information must be provided to the GUI.
@@ -31,8 +32,10 @@ public interface InfoInterface {
 	 * Returns the player which belongs to the client.
 	 * 
 	 * @return The player.
+	 * @throws ObjectNotFoundException
+	 *             Thrown if the player could not be found.
 	 */
-	public Player getPlayer();
+	public Player getPlayer() throws ObjectNotFoundException;
 
 	/**
 	 * Returns the game objects currently in the game.

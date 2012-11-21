@@ -1,6 +1,7 @@
 package de.illonis.eduras;
 
 import java.util.ArrayList;
+import java.util.logging.Level;
 
 import de.illonis.eduras.MoveableGameObject.Direction;
 import de.illonis.eduras.events.ClientRenameEvent;
@@ -10,6 +11,7 @@ import de.illonis.eduras.events.GameInfoRequest;
 import de.illonis.eduras.events.MovementEvent;
 import de.illonis.eduras.events.ObjectFactoryEvent;
 import de.illonis.eduras.events.UserMovementEvent;
+import de.illonis.eduras.exceptions.ObjectNotFoundException;
 import de.illonis.eduras.interfaces.GameEventListener;
 import de.illonis.eduras.interfaces.GameLogicInterface;
 import de.illonis.eduras.logger.EduLog;
@@ -45,7 +47,8 @@ public class Logic implements GameLogicInterface {
 	 */
 	@Override
 	public synchronized void onGameEventAppeared(GameEvent event) {
-		EduLog.info("[LOGIC] A game event appeared: " + event.getType());
+		EduLog.info("[LOGIC] A game event appeared: "
+				+ event.getType().toString());
 
 		if (event instanceof ObjectFactoryEvent) {
 			objectFactory.onGameEventAppeared(event);
@@ -86,15 +89,20 @@ public class Logic implements GameLogicInterface {
 				break;
 			case CLIENT_SETNAME:
 				ClientRenameEvent e = (ClientRenameEvent) event;
-				Player p = currentGame.getPlayerByOwnerId(e.getOwner());
+				Player p = null;
 				try {
-					EduLog.info("SETTING player found by owner " + e.getOwner()
-							+ " to name: " + e.getName() + "  playerid="
-							+ p.getId() + " playerowner=" + p.getOwner());
-					p.setName(e.getName());
-				} catch (NullPointerException ex) {
-					EduLog.warning("There is no such player (yet)!");
+					p = currentGame.getPlayerByOwnerId(e.getOwner());
+				} catch (ObjectNotFoundException e1) {
+					EduLog.warning("There is no such player with the id"
+							+ e1.getObjectId() + "(yet)!");
+					return;
 				}
+
+				EduLog.info("SETTING player found by owner " + e.getOwner()
+						+ " to name: " + e.getName() + "  playerid="
+						+ p.getId() + " playerowner=" + p.getOwner());
+				p.setName(e.getName());
+
 				for (GameEventListener listener : listenerList) {
 					listener.onClientRename(e);
 				}
@@ -114,7 +122,15 @@ public class Logic implements GameLogicInterface {
 	 */
 	private void handlePlayerMove(UserMovementEvent event) {
 
-		Player player = currentGame.getPlayerByOwnerId(event.getOwner());
+		Player player = null;
+		try {
+			player = currentGame.getPlayerByOwnerId(event.getOwner());
+		} catch (ObjectNotFoundException e) {
+			EduLog.log(Level.WARNING,
+					"The player with the id " + e.getObjectId()
+							+ "could not be found!");
+			return;
+		}
 
 		switch (event.getType()) {
 		case MOVE_DOWN_PRESSED:

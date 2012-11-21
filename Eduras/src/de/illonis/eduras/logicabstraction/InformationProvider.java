@@ -8,6 +8,7 @@ import java.util.HashMap;
 
 import de.illonis.eduras.GameObject;
 import de.illonis.eduras.Player;
+import de.illonis.eduras.exceptions.ObjectNotFoundException;
 import de.illonis.eduras.interfaces.GameEventListener;
 import de.illonis.eduras.interfaces.GameLogicInterface;
 import de.illonis.eduras.interfaces.InfoInterface;
@@ -56,10 +57,12 @@ public class InformationProvider implements InfoInterface {
 		return networkManager.getClient().getOwnerId();
 	}
 
-	public Player getPlayer() {
+	@Override
+	public Player getPlayer() throws ObjectNotFoundException {
 		return logic.getGame().getPlayerByOwnerId(getOwnerID());
 	}
 
+	@Override
 	public HashMap<Integer, GameObject> getGameObjects() {
 		return logic.getGame().getObjects();
 	}

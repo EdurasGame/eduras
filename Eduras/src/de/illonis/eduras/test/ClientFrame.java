@@ -14,6 +14,7 @@ import de.illonis.eduras.GameObject;
 import de.illonis.eduras.events.GameEvent.GameEventNumber;
 import de.illonis.eduras.events.UserMovementEvent;
 import de.illonis.eduras.exceptions.MessageNotSupportedException;
+import de.illonis.eduras.exceptions.ObjectNotFoundException;
 import de.illonis.eduras.exceptions.WrongEventTypeException;
 import de.illonis.eduras.logger.EduLog;
 import de.illonis.eduras.logicabstraction.EdurasInitializer;
@@ -99,9 +100,15 @@ public class ClientFrame extends JFrame {
 	public void sendMouseClick(int x, int y) {
 		try {
 
-			UserMovementEvent me = new UserMovementEvent(
-					GameEventNumber.MOVE_LEFT_PRESSED, informationProvider
-							.getPlayer().getId());
+			UserMovementEvent me = null;
+			try {
+				me = new UserMovementEvent(GameEventNumber.MOVE_LEFT_PRESSED,
+						informationProvider.getPlayer().getId());
+			} catch (ObjectNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				return;
+			}
 			eventSender.sendEvent(me);
 		} catch (MessageNotSupportedException e) {
 			EduLog.passException(e);
