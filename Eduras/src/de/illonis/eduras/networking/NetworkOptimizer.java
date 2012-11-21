@@ -12,11 +12,7 @@ import de.illonis.eduras.logger.EduLog;
  * @author illonis
  * 
  */
-public final class NetworkOptimizer {
-
-	private NetworkOptimizer() {
-		// this makes nobody can instantiate this class.
-	}
+public abstract class NetworkOptimizer {
 
 	/**
 	 * Removes obsolete messages from a message array.<br>
@@ -65,6 +61,6 @@ public final class NetworkOptimizer {
 		int n = unfilteredMessages.length - unfilterable.size();
 		EduLog.info("[NETWORKOPTIMIZER] Filtered " + n
 				+ " obsolete messages (of " + unfilterable.size() + ")");
-		return (String[]) unfilterable.toArray(new String[0]);
+		return unfilterable.toArray(new String[0]);
 	}
 }
