@@ -79,7 +79,7 @@ public class Triangle extends ObjectShape {
 		LinkedList<Line> lines = Geometry.getLinesBetweenShapePositions(
 				vertices, positionVector, target);
 
-		LinkedList<Vector2D> collisions = new LinkedList<Vector2D>();
+		LinkedList<CollisionPoint> collisions = new LinkedList<CollisionPoint>();
 
 		// Check for collides with objects
 		for (GameObject singleObject : gameObjects.values()) {
@@ -99,32 +99,35 @@ public class Triangle extends ObjectShape {
 				continue;
 			}
 
-			Vector2D res = nearestCollision.getInterceptPoint();
-
 			// remember the gameObject that had a collision
 			collisionObject = singleObject;
 
-			// TODO: Replace null as 'error-code' since the null vector can be a
-			// valid result.
-			if (!res.isNull()) {
-				collisions.add(res);
-			}
+			collisions.add(nearestCollision);
 		}
 
 		// Figure out which collision is the nearest
+		CollisionPoint resultingCollisionPoint = null;
 		if (collisions.size() > 1) {
-			result = Vector2D.findShortestDistance(collisions, positionVector);
+			resultingCollisionPoint = CollisionPoint
+					.findNearestCollision(collisions);
 		} else {
 			if (collisions.size() > 0) {
-				result = collisions.getFirst();
+				resultingCollisionPoint = collisions.getFirst();
 			}
 		}
 
-		// if there was a collision, notify the involved objects.
-		if (result != target) {
+		// if there was a collision, notify the involved objects and calculate
+		// the new position
+		if (collisionObject != null) {
 			thisObject.onCollision(collisionObject);
 			collisionObject.onCollision(thisObject);
+
+			Vector2D targetResult = new Vector2D(positionVector);
+			targetResult.add(resultingCollisionPoint.getDistanceVector());
+			result = targetResult;
 		}
+
+		// calculate the new position after a collision
 
 		return result;
 	}
@@ -166,14 +169,19 @@ public class Triangle extends ObjectShape {
 					continue;
 				} else {
 
+					double distanceVectorX = interceptPoint.getX()
+							- line.getU().getX();
+					double distanceVectorY = interceptPoint.getX()
+							- line.getU().getY();
+					Vector2D distanceVector = new Vector2D(distanceVectorX,
+							distanceVectorY);
+
 					EduLog.info("[LOGIC][TRIANGLE] Collision at "
 							+ interceptPoint.getX() + " , "
 							+ interceptPoint.getY());
 
-					double distance = interceptPoint
-							.calculateDistance(borderLine.getU());
 					CollisionPoint interception = new CollisionPoint(
-							interceptPoint, distance);
+							interceptPoint, distanceVector);
 					interceptPoints.add(interception);
 				}
 

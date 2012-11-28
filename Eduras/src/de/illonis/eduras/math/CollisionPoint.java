@@ -15,19 +15,19 @@ import java.util.LinkedList;
 public class CollisionPoint {
 
 	private final Vector2D interceptPoint;
-	private final double distance;
+	private final Vector2D distanceVector;
 
 	/**
 	 * Creates a new point of collision.
 	 * 
 	 * @param interceptPoint
 	 *            The point of collision.
-	 * @param distance
-	 *            The distance to that collision.
+	 * @param distanceVector
+	 *            The distancevector to this collision
 	 */
-	public CollisionPoint(Vector2D interceptPoint, double distance) {
+	public CollisionPoint(Vector2D interceptPoint, Vector2D distanceVector) {
 		this.interceptPoint = interceptPoint;
-		this.distance = distance;
+		this.distanceVector = distanceVector;
 	}
 
 	/**
@@ -45,7 +45,16 @@ public class CollisionPoint {
 	 * @return
 	 */
 	public double getDistance() {
-		return distance;
+		return distanceVector.getLength();
+	}
+
+	/**
+	 * Returns the distancevector.
+	 * 
+	 * @return The distanceVector.
+	 */
+	public Vector2D getDistanceVector() {
+		return distanceVector;
 	}
 
 	/**
