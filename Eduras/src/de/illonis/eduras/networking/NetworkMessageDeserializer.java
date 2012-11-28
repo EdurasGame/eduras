@@ -312,10 +312,21 @@ public class NetworkMessageDeserializer {
 	 *            argument to look at. Note that first argument is
 	 *            GameEventNumber.
 	 * @return selected argument of given message.
+	 * @throws There
+	 *             is a nullpointerexception thrown if something goes wrong with
+	 *             the string.
 	 */
 	public static String getArgumentFromMessage(String message, int argument) {
-		String[] parts = message.substring(2).split("#");
-		return parts[argument];
+
+		// FIXME: Very important: try to find out why a message can be
+		// errornous.
+		try {
+			String[] parts = message.substring(2).split("#");
+			return parts[argument];
+		} catch (NullPointerException e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 
 	/**

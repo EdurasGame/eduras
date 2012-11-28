@@ -34,6 +34,10 @@ public abstract class NetworkOptimizer {
 		HashMap<Integer, String> speedvectorEvents = new HashMap<Integer, String>();
 
 		for (String string : unfilteredMessages) {
+
+			if (string == null)
+				continue;
+
 			GameEventNumber n = NetworkMessageDeserializer
 					.extractGameEventNumber(string);
 			int key = Integer.parseInt(NetworkMessageDeserializer
