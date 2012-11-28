@@ -46,6 +46,10 @@ public class NetworkMessageDeserializer {
 		String[] messages = eventString.substring(2).split("##");
 
 		for (String msg : messages) {
+
+			if (msg == null)
+				continue;
+
 			EduLog.info("message: " + msg);
 			try {
 				Event ge = deserializeMessage(msg);
