@@ -110,7 +110,10 @@ public class ObjectFactory {
 			int id = ofe.getId();
 			HashMap<Integer, GameObject> gameObjects = logic.getGame()
 					.getObjects();
-			gameObjects.remove(id);
+
+			GameObject objectToRemove = gameObjects.get(id);
+			logic.getGame().removeObject(objectToRemove);
+
 		}
 
 	}

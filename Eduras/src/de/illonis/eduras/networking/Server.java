@@ -12,6 +12,7 @@ import de.illonis.eduras.events.Event;
 import de.illonis.eduras.events.GameEvent.GameEventNumber;
 import de.illonis.eduras.events.ObjectFactoryEvent;
 import de.illonis.eduras.exceptions.MessageNotSupportedException;
+import de.illonis.eduras.exceptions.ObjectNotFoundException;
 import de.illonis.eduras.exceptions.ServerNotReadyForStartException;
 import de.illonis.eduras.interfaces.GameLogicInterface;
 import de.illonis.eduras.interfaces.NetworkEventListener;
@@ -247,7 +248,18 @@ public class Server {
 
 		ObjectFactoryEvent gonePlayerEvent = new ObjectFactoryEvent(
 				GameEventNumber.OBJECT_REMOVE, ObjectType.PLAYER);
-		gonePlayerEvent.setId(client.getClientId());
+
+		int clientId = client.getClientId();
+		int objectId;
+		try {
+			objectId = game.getPlayerByOwnerId(clientId).getId();
+		} catch (ObjectNotFoundException e) {
+			EduLog.error("Player of object id " + e.getObjectId()
+					+ " not found!");
+			return;
+		}
+
+		gonePlayerEvent.setId(objectId);
 		logic.onGameEventAppeared(gonePlayerEvent);
 		sendEventToAll(gonePlayerEvent);
 	}

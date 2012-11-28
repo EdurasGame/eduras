@@ -94,14 +94,22 @@ public class GameInformation {
 	 * <tt>(o==null&nbsp;?&nbsp;get(i)==null&nbsp;:&nbsp;o.equals(get(i)))</tt>
 	 * (if such an element exists). Returns <tt>true</tt> if this list contained
 	 * the specified element (or equivalently, if this list changed as a result
-	 * of the call).
+	 * of the call). If the game object is of type 'Player' the player is also
+	 * removed from the players list.
 	 * 
 	 * @param go
 	 *            element to be removed from this list, if present
 	 * @return <tt>true</tt> if this list contained the specified element
 	 */
 	public boolean removeObject(GameObject go) {
-		return (objects.remove(go.getId()) != null);
+
+		boolean playerRemoveSuccess = true;
+
+		if (go instanceof Player) {
+			playerRemoveSuccess = players.remove(go.getOwner()) != null;
+		}
+
+		return playerRemoveSuccess && (objects.remove(go.getId()) != null);
 	}
 
 	/**
