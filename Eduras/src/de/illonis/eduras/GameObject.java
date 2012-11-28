@@ -30,7 +30,7 @@ public abstract class GameObject implements Comparable<GameObject> {
 	 */
 	public GameObject(GameInformation game) {
 		this.game = game;
-		this.id = lastId++;
+		this.id = getNextId();
 	}
 
 	/**
@@ -251,4 +251,15 @@ public abstract class GameObject implements Comparable<GameObject> {
 	 *            The object colliding with this object.
 	 */
 	public abstract void onCollision(GameObject collidingObject);
+
+	/**
+	 * A synchronized wrapper function to receive the next free objectId.
+	 * 
+	 * @return Returns a free id.
+	 */
+	private synchronized int getNextId() {
+		lastId++;
+		int nextId = lastId;
+		return nextId;
+	}
 }
