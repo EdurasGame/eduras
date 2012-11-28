@@ -10,6 +10,7 @@ import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.GameObject;
 import de.illonis.eduras.exceptions.ShapeVerticesNotApplicableException;
 import de.illonis.eduras.logger.EduLog;
+import de.illonis.eduras.math.CollisionPoint;
 import de.illonis.eduras.math.Geometry;
 import de.illonis.eduras.math.Line;
 import de.illonis.eduras.math.Vector2D;
@@ -89,13 +90,16 @@ public class Triangle extends ObjectShape {
 
 			ObjectShape otherObjectShape = singleObject.getShape();
 
-			Vector2D res = Vector2D.findShortestDistance(
-					otherObjectShape.isIntersected(lines, singleObject),
-					positionVector);
+			CollisionPoint nearestCollision = CollisionPoint
+					.findNearestCollision(otherObjectShape.isIntersected(lines,
+							singleObject));
 
 			// skip if there was no collision
-			if (res == null)
+			if (nearestCollision == null) {
 				continue;
+			}
+
+			Vector2D res = nearestCollision.getInterceptPoint();
 
 			// remember the gameObject that had a collision
 			collisionObject = singleObject;
@@ -148,10 +152,10 @@ public class Triangle extends ObjectShape {
 	 * de.illonis.eduras.GameObject)
 	 */
 	@Override
-	public LinkedList<Vector2D> isIntersected(LinkedList<Line> lines,
+	public LinkedList<CollisionPoint> isIntersected(LinkedList<Line> lines,
 			GameObject thisObject) {
 
-		LinkedList<Vector2D> interceptPoints = new LinkedList<Vector2D>();
+		LinkedList<CollisionPoint> interceptPoints = new LinkedList<CollisionPoint>();
 
 		for (Line line : lines) {
 			for (Line borderLine : getBorderLines(thisObject)) {
@@ -161,10 +165,16 @@ public class Triangle extends ObjectShape {
 				if (interceptPoint == null) {
 					continue;
 				} else {
+
 					EduLog.info("[LOGIC][TRIANGLE] Collision at "
 							+ interceptPoint.getX() + " , "
 							+ interceptPoint.getY());
-					interceptPoints.add(interceptPoint);
+
+					double distance = interceptPoint
+							.calculateDistance(borderLine.getU());
+					CollisionPoint interception = new CollisionPoint(
+							interceptPoint, distance);
+					interceptPoints.add(interception);
 				}
 
 			}

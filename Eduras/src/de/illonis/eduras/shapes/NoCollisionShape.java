@@ -4,6 +4,7 @@ import java.util.LinkedList;
 
 import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.GameObject;
+import de.illonis.eduras.math.CollisionPoint;
 import de.illonis.eduras.math.Line;
 import de.illonis.eduras.math.Vector2D;
 
@@ -22,7 +23,7 @@ public class NoCollisionShape extends ObjectShape {
 	}
 
 	@Override
-	public LinkedList<Vector2D> isIntersected(LinkedList<Line> lines,
+	public LinkedList<CollisionPoint> isIntersected(LinkedList<Line> lines,
 			GameObject thisObject) {
 		return null;
 	}

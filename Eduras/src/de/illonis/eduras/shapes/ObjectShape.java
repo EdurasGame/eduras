@@ -7,6 +7,7 @@ import java.util.LinkedList;
 
 import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.GameObject;
+import de.illonis.eduras.math.CollisionPoint;
 import de.illonis.eduras.math.Line;
 import de.illonis.eduras.math.Vector2D;
 
@@ -41,11 +42,11 @@ public abstract class ObjectShape {
 	 *            The lines representing the moving object.
 	 * @param thisObject
 	 *            The object to which the shape belongs.
-	 * @return Returns a linked list of position vectors to the points of
-	 *         collisions. The list will be empty if there is no collision.
+	 * @return Returns a linked list of collision points. The list will be empty
+	 *         if there is no collision.
 	 */
-	public abstract LinkedList<Vector2D> isIntersected(LinkedList<Line> lines,
-			GameObject thisObject);
+	public abstract LinkedList<CollisionPoint> isIntersected(
+			LinkedList<Line> lines, GameObject thisObject);
 
 	/**
 	 * Returns the line segments which represents the borders of the shape. The
