@@ -17,7 +17,7 @@ import de.illonis.eduras.exceptions.MessageNotSupportedException;
 import de.illonis.eduras.exceptions.WrongEventTypeException;
 import de.illonis.eduras.locale.Localization;
 import de.illonis.eduras.logger.EduLog;
-import de.illonis.eduras.logger.LoggerGui;
+import de.illonis.eduras.logger.EduLog.LogMode;
 import de.illonis.eduras.logicabstraction.EdurasInitializer;
 import de.illonis.eduras.logicabstraction.EventSender;
 import de.illonis.eduras.logicabstraction.InformationProvider;
@@ -103,7 +103,8 @@ public class Gui extends JFrame {
 	}
 
 	public static void main(String[] args) {
-		new LoggerGui().setVisible(true);
+		// new LoggerGui().setVisible(true);
+		EduLog.setLogOutput(LogMode.NONE);
 		Gui gui = new Gui();
 		gui.setVisible(true);
 

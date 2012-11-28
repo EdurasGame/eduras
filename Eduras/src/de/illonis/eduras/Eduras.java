@@ -12,7 +12,7 @@ import de.illonis.eduras.exceptions.ServerNotReadyForStartException;
 import de.illonis.eduras.interfaces.NetworkEventListener;
 import de.illonis.eduras.locale.Localization;
 import de.illonis.eduras.logger.EduLog;
-import de.illonis.eduras.logger.LoggerGui;
+import de.illonis.eduras.logger.EduLog.LogMode;
 import de.illonis.eduras.networking.Server;
 
 /**
@@ -33,7 +33,8 @@ public class Eduras {
 	 *            </ul>
 	 */
 	public static void main(String[] args) {
-		new LoggerGui().setVisible(true);
+		// new LoggerGui().setVisible(true);
+		EduLog.setLogOutput(LogMode.CONSOLE);
 		int port = 0;
 		if (args.length > 0) {
 			try {
@@ -89,12 +90,12 @@ public class Eduras {
 
 			while (e.hasMoreElements()) {
 
-				NetworkInterface ni = (NetworkInterface) e.nextElement();
+				NetworkInterface ni = e.nextElement();
 
 				Enumeration<InetAddress> e2 = ni.getInetAddresses();
 
 				while (e2.hasMoreElements()) {
-					InetAddress ip = (InetAddress) e2.nextElement();
+					InetAddress ip = e2.nextElement();
 					if (ip instanceof Inet4Address)
 						addresses.add(ip);
 				}
