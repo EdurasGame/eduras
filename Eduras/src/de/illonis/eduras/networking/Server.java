@@ -144,11 +144,6 @@ public class Server {
 	private void handleConnection(Socket clientSocket) throws IOException {
 		ServerClient client = serverSender.add(clientSocket);
 
-		ObjectFactoryEvent newPlayerEvent = new ObjectFactoryEvent(
-				GameEventNumber.OBJECT_CREATE, ObjectType.PLAYER);
-		newPlayerEvent.setOwner(client.getClientId());
-		logic.onGameEventAppeared(newPlayerEvent);
-
 		ServerReceiver sr = new ServerReceiver(this, inputBuffer, client);
 		sr.start();
 		serverReceivers.put(client.getClientId(), sr);
@@ -161,6 +156,12 @@ public class Server {
 		} catch (MessageNotSupportedException e) {
 			EduLog.passException(e);
 		}
+
+		ObjectFactoryEvent newPlayerEvent = new ObjectFactoryEvent(
+				GameEventNumber.OBJECT_CREATE, ObjectType.PLAYER);
+		newPlayerEvent.setOwner(client.getClientId());
+		logic.onGameEventAppeared(newPlayerEvent);
+
 	}
 
 	/**
