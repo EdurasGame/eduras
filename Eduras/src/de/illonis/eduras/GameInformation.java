@@ -134,6 +134,34 @@ public class GameInformation {
 	}
 
 	/**
+	 * Returns a specific player identified by object id.
+	 * 
+	 * @param objectId
+	 *            The id of the object which is the player.
+	 * @return Returns the player object relating to the given id.
+	 * @throws ObjectNotFoundException
+	 *             Thrown if there could be no player found that is related to
+	 *             the given id.
+	 */
+	public Player getPlayerByObjectId(int objectId)
+			throws ObjectNotFoundException {
+		Player result = null;
+		for (Player singlePlayer : players.values()) {
+			if (singlePlayer.getId() == objectId) {
+				result = singlePlayer;
+				break;
+			}
+		}
+
+		if (result == null) {
+			throw new ObjectNotFoundException(objectId);
+		}
+
+		return result;
+
+	}
+
+	/**
 	 * This method serializes all available current information about the game
 	 * into events and returns them as a list.
 	 */
