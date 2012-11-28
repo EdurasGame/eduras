@@ -123,6 +123,7 @@ public class Triangle extends ObjectShape {
 			collisionObject.onCollision(thisObject);
 
 			Vector2D targetResult = new Vector2D(positionVector);
+			resultingCollisionPoint.getDistanceVector().invert();
 			targetResult.add(resultingCollisionPoint.getDistanceVector());
 			result = targetResult;
 		}
@@ -171,7 +172,7 @@ public class Triangle extends ObjectShape {
 
 					double distanceVectorX = interceptPoint.getX()
 							- line.getU().getX();
-					double distanceVectorY = interceptPoint.getX()
+					double distanceVectorY = interceptPoint.getY()
 							- line.getU().getY();
 					Vector2D distanceVector = new Vector2D(distanceVectorX,
 							distanceVectorY);
