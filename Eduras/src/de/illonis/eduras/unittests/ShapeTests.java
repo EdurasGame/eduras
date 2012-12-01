@@ -12,7 +12,7 @@ import org.junit.Test;
 import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.Player;
 import de.illonis.eduras.math.Vector2D;
-import de.illonis.eduras.shapes.ObjectShape;
+import de.illonis.eduras.shapes.Polygon;
 
 /**
  * A unit test class for shapes.
@@ -27,13 +27,15 @@ public class ShapeTests {
 		Player player = new Player(new GameInformation(), 0);
 		player.setPosition(5, 5);
 
-		ObjectShape playerShape = player.getShape();
-		LinkedList<Vector2D> absoluteVertices = playerShape
-				.getAbsoluteVertices(player);
+		if (player.getShape() instanceof Polygon) {
+			Polygon playerShape = (Polygon) player.getShape();
+			LinkedList<Vector2D> absoluteVertices = playerShape
+					.getAbsoluteVertices(player);
 
-		assertTrue(new Vector2D(5, 15).equals(absoluteVertices.get(0)));
-		assertTrue(new Vector2D(15, -5).equals(absoluteVertices.get(1)));
-		assertTrue(new Vector2D(-5, -5).equals(absoluteVertices.get(2)));
+			assertTrue(new Vector2D(5, 15).equals(absoluteVertices.get(0)));
+			assertTrue(new Vector2D(15, -5).equals(absoluteVertices.get(1)));
+			assertTrue(new Vector2D(-5, -5).equals(absoluteVertices.get(2)));
+		}
 
 	}
 }
