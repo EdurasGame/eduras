@@ -12,6 +12,8 @@ import de.illonis.eduras.GameObject;
 import de.illonis.eduras.Player;
 import de.illonis.eduras.logicabstraction.InformationProvider;
 import de.illonis.eduras.math.Vector2D;
+import de.illonis.eduras.shapes.ObjectShape;
+import de.illonis.eduras.shapes.Polygon;
 
 /**
  * GameRenderer renders the buffered image for gamepanel.
@@ -97,30 +99,43 @@ public class GameRenderer {
 
 		dbg.setColor(Color.yellow);
 		for (GameObject d : objs.values()) {
-			if (d instanceof Player) {
-				Player player = (Player) d;
 
-				LinkedList<Vector2D> vertices = player.getShape()
-						.getAbsoluteVertices(player);
-				int vCount = vertices.size();
-				int[] xPositions = new int[vCount];
-				int[] yPositions = new int[vCount];
+			ObjectShape objectShape = d.getShape();
 
-				for (int j = 0; j < vCount; j++) {
-					xPositions[j] = (int) vertices.get(j).getX();
-					yPositions[j] = (int) vertices.get(j).getY();
+			if (objectShape instanceof Polygon) {
+
+				drawPolygon((Polygon) objectShape, d);
+
+				if (d instanceof Player) {
+					Player player = (Player) d;
+					dbg.drawString(player.getName(), player.getDrawX()
+							- camera.x, player.getDrawY() - camera.y);
 				}
-
-				for (int j = 0; j < vCount; j++) {
-					dbg.drawLine(xPositions[j] - camera.x, yPositions[j]
-							- camera.y,
-							xPositions[(j + 1) % vCount] - camera.x,
-							yPositions[(j + 1) % vCount] - camera.y);
-				}
-
-				dbg.drawString(player.getName(), player.getDrawX() - camera.x,
-						player.getDrawY() - camera.y);
 			}
 		}
+	}
+
+	/**
+	 * @param objectShape
+	 */
+	private void drawPolygon(Polygon objectShape, GameObject object) {
+		LinkedList<Vector2D> vertices = objectShape.getAbsoluteVertices(object);
+
+		int vCount = vertices.size();
+		int[] xPositions = new int[vCount];
+		int[] yPositions = new int[vCount];
+
+		for (int j = 0; j < vCount; j++) {
+			xPositions[j] = (int) vertices.get(j).getX();
+			yPositions[j] = (int) vertices.get(j).getY();
+		}
+
+		for (int j = 0; j < vCount; j++) {
+			dbg.drawLine(xPositions[j] - camera.x, yPositions[j] - camera.y,
+					xPositions[(j + 1) % vCount] - camera.x, yPositions[(j + 1)
+							% vCount]
+							- camera.y);
+		}
+
 	}
 }
