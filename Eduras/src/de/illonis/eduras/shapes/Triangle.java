@@ -3,14 +3,11 @@
  */
 package de.illonis.eduras.shapes;
 
-import java.util.HashMap;
 import java.util.LinkedList;
 
 import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.GameObject;
 import de.illonis.eduras.exceptions.ShapeVerticesNotApplicableException;
-import de.illonis.eduras.logger.EduLog;
-import de.illonis.eduras.math.CollisionPoint;
 import de.illonis.eduras.math.Geometry;
 import de.illonis.eduras.math.Line;
 import de.illonis.eduras.math.Vector2D;
@@ -21,11 +18,6 @@ import de.illonis.eduras.math.Vector2D;
  */
 public class Triangle extends ObjectShape {
 
-	/**
-	 * Determines how exactly collisions are calculated. The higher this value,
-	 * the less will gameobjects of type triangle will be able to overlap.
-	 */
-	private static final int COLLISION_ACCURACY = 20;
 	Vector2D[] vertices;
 
 	/**
@@ -74,85 +66,7 @@ public class Triangle extends ObjectShape {
 	public Vector2D checkCollision(GameInformation game, GameObject thisObject,
 			Vector2D target) {
 
-		Vector2D result = target;
-
-		HashMap<Integer, GameObject> gameObjects = game.getObjects();
-
-		GameObject collisionObject = null;
-
-		Vector2D positionVector = thisObject.toPositionVector();
-
-		// calculate border points to use for collision calculation
-		LinkedList<Line> borderLines = Geometry
-				.getRelativeBorderLines(vertices);
-
-		Vector2D[] movementPoints = new Vector2D[COLLISION_ACCURACY
-				* vertices.length];
-
-		int j = 0;
-		for (Line singleBorderLine : borderLines) {
-			for (int i = 0; i < COLLISION_ACCURACY; i++) {
-				movementPoints[j] = singleBorderLine
-						.getPointAt((1. / COLLISION_ACCURACY) * i);
-				j++;
-			}
-		}
-
-		LinkedList<Line> lines = Geometry.getLinesBetweenShapePositions(
-				movementPoints, positionVector, target);
-
-		LinkedList<CollisionPoint> collisions = new LinkedList<CollisionPoint>();
-
-		// Check for collides with objects
-		for (GameObject singleObject : gameObjects.values()) {
-
-			// skip comparing the object with itself
-			if (singleObject.equals(thisObject))
-				continue;
-
-			ObjectShape otherObjectShape = singleObject.getShape();
-
-			CollisionPoint nearestCollision = CollisionPoint
-					.findNearestCollision(otherObjectShape.isIntersected(lines,
-							singleObject));
-
-			// skip if there was no collision
-			if (nearestCollision == null) {
-				continue;
-			}
-
-			// remember the gameObject that had a collision
-			collisionObject = singleObject;
-
-			collisions.add(nearestCollision);
-		}
-
-		// Figure out which collision is the nearest
-		CollisionPoint resultingCollisionPoint = null;
-		if (collisions.size() > 1) {
-			resultingCollisionPoint = CollisionPoint
-					.findNearestCollision(collisions);
-		} else {
-			if (collisions.size() > 0) {
-				resultingCollisionPoint = collisions.getFirst();
-			}
-		}
-
-		// if there was a collision, notify the involved objects and calculate
-		// the new position
-		if (collisionObject != null) {
-			thisObject.onCollision(collisionObject);
-			collisionObject.onCollision(thisObject);
-
-			Vector2D targetResult = new Vector2D(positionVector);
-			resultingCollisionPoint.getDistanceVector().invert();
-			targetResult.add(resultingCollisionPoint.getDistanceVector());
-			result = targetResult;
-		}
-
-		// calculate the new position after a collision
-
-		return result;
+		return checkPolygonCollision(game, thisObject, target);
 	}
 
 	/**
@@ -174,48 +88,6 @@ public class Triangle extends ObjectShape {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see de.illonis.eduras.ObjectShape#isIntersected(java.util.LinkedList,
-	 * de.illonis.eduras.GameObject)
-	 */
-	@Override
-	public LinkedList<CollisionPoint> isIntersected(LinkedList<Line> lines,
-			GameObject thisObject) {
-
-		LinkedList<CollisionPoint> interceptPoints = new LinkedList<CollisionPoint>();
-
-		for (Line line : lines) {
-			for (Line borderLine : getBorderLines(thisObject)) {
-				Vector2D interceptPoint = Geometry
-						.getSegmentLinesInterceptPoint(borderLine, line);
-
-				if (interceptPoint == null) {
-					continue;
-				} else {
-
-					double distanceVectorX = interceptPoint.getX()
-							- line.getU().getX();
-					double distanceVectorY = interceptPoint.getY()
-							- line.getU().getY();
-					Vector2D distanceVector = new Vector2D(distanceVectorX,
-							distanceVectorY);
-
-					EduLog.info("[LOGIC][TRIANGLE] Collision at "
-							+ interceptPoint.getX() + " , "
-							+ interceptPoint.getY());
-
-					CollisionPoint interception = new CollisionPoint(
-							interceptPoint, distanceVector);
-					interceptPoints.add(interception);
-				}
-
-			}
-		}
-		return interceptPoints;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
 	 * @see de.illonis.eduras.shapes.ObjectShape#getBorderLines()
 	 */
 	@Override
@@ -223,4 +95,15 @@ public class Triangle extends ObjectShape {
 		return Geometry.getRelativeBorderLines(getAbsoluteVertices(object)
 				.toArray(new Vector2D[getAbsoluteVertices(object).size()]));
 	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see de.illonis.eduras.shapes.ObjectShape#getVerticesAsArray()
+	 */
+	@Override
+	public Vector2D[] getVerticesAsArray() {
+		return vertices;
+	}
+
 }

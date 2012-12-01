@@ -48,4 +48,14 @@ public class NoCollisionShape extends ObjectShape {
 		return null;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see de.illonis.eduras.shapes.ObjectShape#getVerticesAsArray()
+	 */
+	@Override
+	public Vector2D[] getVerticesAsArray() {
+		return null;
+	}
+
 }
