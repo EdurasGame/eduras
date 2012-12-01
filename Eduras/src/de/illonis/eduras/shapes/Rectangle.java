@@ -36,8 +36,8 @@ public class Rectangle extends Polygon {
 			Vector2D[] vertices = new Vector2D[4];
 			vertices[0] = topLeft;
 			vertices[1] = new Vector2D(bottomRight.getX(), topLeft.getY());
-			vertices[2] = new Vector2D(topLeft.getX(), bottomRight.getY());
-			vertices[3] = bottomRight;
+			vertices[3] = new Vector2D(topLeft.getX(), bottomRight.getY());
+			vertices[2] = bottomRight;
 			setVertices(vertices);
 		}
 	}

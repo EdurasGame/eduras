@@ -12,6 +12,7 @@ import de.illonis.eduras.events.GameEvent.GameEventNumber;
 import de.illonis.eduras.events.MovementEvent;
 import de.illonis.eduras.events.ObjectFactoryEvent;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
+import de.illonis.eduras.exceptions.ShapeVerticesNotApplicableException;
 import de.illonis.eduras.logger.EduLog;
 import de.illonis.eduras.math.Vector2D;
 import de.illonis.eduras.shapes.ObjectShape;
@@ -25,6 +26,22 @@ public class GameInformation {
 		objects = new HashMap<Integer, GameObject>();
 		players = new HashMap<Integer, Player>();
 		map = new Map();
+
+		exampleTest();
+	}
+
+	/**
+	 * Just for testing purpose.
+	 */
+	private void exampleTest() {
+		try {
+			Block exampleBlock = new Block(this, map.getWidth() / 2,
+					map.getHeight() / 2, 20, 20);
+			addObject(exampleBlock);
+		} catch (ShapeVerticesNotApplicableException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	/**
