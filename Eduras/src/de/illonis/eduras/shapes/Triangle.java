@@ -21,6 +21,11 @@ import de.illonis.eduras.math.Vector2D;
  */
 public class Triangle extends ObjectShape {
 
+	/**
+	 * Determines how exactly collisions are calculated. The higher this value,
+	 * the less will gameobjects of type triangle will be able to overlap.
+	 */
+	private static final int COLLISION_ACCURACY = 20;
 	Vector2D[] vertices;
 
 	/**
@@ -76,8 +81,25 @@ public class Triangle extends ObjectShape {
 		GameObject collisionObject = null;
 
 		Vector2D positionVector = thisObject.toPositionVector();
+
+		// calculate border points to use for collision calculation
+		LinkedList<Line> borderLines = Geometry
+				.getRelativeBorderLines(vertices);
+
+		Vector2D[] movementPoints = new Vector2D[COLLISION_ACCURACY
+				* vertices.length];
+
+		int j = 0;
+		for (Line singleBorderLine : borderLines) {
+			for (int i = 0; i < COLLISION_ACCURACY; i++) {
+				movementPoints[j] = singleBorderLine
+						.getPointAt((1. / COLLISION_ACCURACY) * i);
+				j++;
+			}
+		}
+
 		LinkedList<Line> lines = Geometry.getLinesBetweenShapePositions(
-				vertices, positionVector, target);
+				movementPoints, positionVector, target);
 
 		LinkedList<CollisionPoint> collisions = new LinkedList<CollisionPoint>();
 
@@ -198,17 +220,7 @@ public class Triangle extends ObjectShape {
 	 */
 	@Override
 	public LinkedList<Line> getBorderLines(GameObject object) {
-
-		LinkedList<Line> borderLines = new LinkedList<Line>();
-
-		LinkedList<Vector2D> absoluteVertices = getAbsoluteVertices(object);
-
-		for (int i = 0; i < 3; i++) {
-			Line borderLine = new Line(absoluteVertices.get(i),
-					absoluteVertices.get((i + 1) % 3));
-			borderLines.add(borderLine);
-		}
-		return borderLines;
+		return Geometry.getRelativeBorderLines(getAbsoluteVertices(object)
+				.toArray(new Vector2D[getAbsoluteVertices(object).size()]));
 	}
-
 }

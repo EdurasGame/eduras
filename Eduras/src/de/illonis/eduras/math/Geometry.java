@@ -107,4 +107,27 @@ public class Geometry {
 		return intersectPoint;
 
 	}
+
+	/**
+	 * Calculates the borderlines spanned by the given vertices assuming that a
+	 * borderline i is given by a line between vertex no i and vertex no (i +
+	 * 1).
+	 * 
+	 * @param vertices
+	 *            The vertices to make the borderlines of
+	 * @return The resulting borderlines.
+	 */
+	public static LinkedList<Line> getRelativeBorderLines(Vector2D[] vertices) {
+
+		LinkedList<Line> borderLines = new LinkedList<Line>();
+
+		for (int i = 0; i < vertices.length; i++) {
+			Line borderLine = new Line(vertices[i], vertices[(i + 1)
+					% vertices.length]);
+			borderLines.add(borderLine);
+		}
+
+		return borderLines;
+
+	}
 }
