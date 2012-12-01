@@ -116,10 +116,15 @@ public class GameRenderer {
 	}
 
 	/**
-	 * @param objectShape
+	 * Draws a polygon which belongs to the given object.
+	 * 
+	 * @param polygon
+	 *            The polygon to draw.
+	 * @param object
+	 *            The gameobject the polygon belongs to.
 	 */
-	private void drawPolygon(Polygon objectShape, GameObject object) {
-		LinkedList<Vector2D> vertices = objectShape.getAbsoluteVertices(object);
+	private void drawPolygon(Polygon polygon, GameObject object) {
+		LinkedList<Vector2D> vertices = polygon.getAbsoluteVertices(object);
 
 		int vCount = vertices.size();
 		int[] xPositions = new int[vCount];
