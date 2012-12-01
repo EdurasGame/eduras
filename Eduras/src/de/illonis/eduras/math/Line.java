@@ -100,25 +100,6 @@ public class Line {
 	}
 
 	/**
-	 * Checks whether the given point is inside of the shape that is given by
-	 * the lines. Note that in this context, a line is assumed to be a only a
-	 * line segment but not an infinite line. The line segment is given from the
-	 * u to v point, out of which the line was created
-	 * 
-	 * @return
-	 */
-	/*
-	 * public static boolean checkInsideLines(LinkedList<Line> lines, Vector2D
-	 * point) {
-	 * 
-	 * boolean result = false;
-	 * 
-	 * 
-	 * 
-	 * return result; }
-	 */
-
-	/**
 	 * This function returns the point you will get by multiplying the given
 	 * lambda with the directional vector 'uv' (see {@link
 	 * getDirectionalVector()}) and add it to the support vector 'u'.

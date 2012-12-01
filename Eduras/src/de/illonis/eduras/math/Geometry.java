@@ -86,26 +86,148 @@ public class Geometry {
 		double secondDirectionY = secondDirectionalVector.getY();
 
 		double s = 0;
-		s = (firstSupportY - secondSupportY + ((secondSupportX - firstSupportX) * firstDirectionY)
-				/ firstDirectionX)
-				/ (secondDirectionY - ((secondDirectionX * firstDirectionY) / firstDirectionX));
+		double r = 0;
 
-		double r = (secondSupportX + s * secondDirectionX - firstSupportX)
-				/ firstDirectionX;
-		// the first line segment ends for s = 1, the second ends for r = 1 so
-		// if s > 1 || r > 1 there is no intersection
-		// points
+		// We must distinguish between cases when one or more of the direction
+		// vectors are zero.
+		// The cases firstDirectionX == firstDirectionY == 0 and
+		// secondDirectionX == secondDirectionY == 0 cannot (or should not)
+		// occur because then one of the lines is not really a line.
+		// If the directionVectors are linearly depending on each other, the
+		// lines might be the same, so we must
+		// check for that.
+		// In any other case we can give a calculation for s and r.
 
-		if (s > 1 || r > 1 || s < 0 || r < 0 || Double.isNaN(s)
-				|| Double.isNaN(r) || Double.isInfinite(r)
-				|| Double.isInfinite(s)) {
+		if ((firstDirectionX == 0 && firstDirectionY == 0)
+				|| (secondDirectionX == 0 && secondDirectionY == 0)) {
+			try {
+				throw new Exception(
+						"There was a line given that was not correct.");
+			} catch (Exception e) {
+				e.printStackTrace();
+				return null;
+			}
+		}
+
+		if (firstDirectionalVector.isLinearTo(secondDirectionalVector)) {
+
+			boolean firstIn = false;
+			boolean secondIn = false;
+
+			if (second.containsPoint(firstSupportVector)) {
+				firstIn = firstSupportVector.calculateDistance(first.getV()) > firstSupportVector
+						.calculateDistance(secondSupportVector);
+				secondIn = secondSupportVector.calculateDistance(second.getV()) > secondSupportVector
+						.calculateDistance(firstSupportVector);
+				if (firstIn && secondIn) {
+					return secondSupportVector;
+				}
+			} else {
+				return null;
+			}
+		}
+
+		if (firstDirectionX != 0 && firstDirectionY != 0
+				&& secondDirectionX != 0 && secondDirectionY != 0) {
+
+			s = (firstSupportY - secondSupportY + ((secondSupportX - firstSupportX) * firstDirectionY)
+					/ firstDirectionX)
+					/ (secondDirectionY - ((secondDirectionX * firstDirectionY) / firstDirectionX));
+
+			r = (secondSupportX + s * secondDirectionX - firstSupportX)
+					/ firstDirectionX;
+			// the first line segment ends for s = 1, the second ends for r = 1
+			// so
+			// if s > 1 || r > 1 there is no intersection
+			// points
+
+			if (checkNotWithin(s, r)) {
+				return null;
+			}
+
+			return second.getPointAt(s);
+		}
+
+		if (firstDirectionX == 0 && secondDirectionY == 0) {
+			s = (firstSupportX - secondSupportX) / secondDirectionX;
+			r = (secondSupportY - firstSupportY) / firstDirectionY;
+			if (!checkNotWithin(s, r)) {
+				return second.getPointAt(s);
+			}
 			return null;
 		}
 
-		Vector2D intersectPoint = second.getPointAt(s);
+		if (firstDirectionX == 0) {
+			s = (firstSupportX - secondSupportX) / secondDirectionX;
+			r = (secondSupportY - firstSupportY + ((firstSupportX - secondSupportX) * secondDirectionY)
+					/ secondDirectionX)
+					/ firstDirectionY;
+			if (!checkNotWithin(s, r)) {
+				return second.getPointAt(s);
+			}
+			return null;
+		}
 
-		return intersectPoint;
+		if (firstDirectionY == 0 && secondDirectionX == 0) {
+			s = (firstSupportY - secondSupportY) / secondDirectionY;
+			r = (secondSupportX - firstSupportX) / firstDirectionX;
+			if (!checkNotWithin(s, r)) {
+				return second.getPointAt(s);
+			}
+			return null;
+		}
 
+		if (firstDirectionY == 0) {
+			s = (firstSupportY - secondSupportY) / secondDirectionY;
+			r = (secondSupportX - firstSupportX + ((firstSupportY - secondSupportY)
+					* secondDirectionX / secondDirectionY))
+					/ firstDirectionX;
+			if (!checkNotWithin(s, r)) {
+				return second.getPointAt(s);
+			}
+			return null;
+		}
+
+		if (secondDirectionX == 0) {
+			r = (secondSupportX - firstSupportX) / firstDirectionX;
+			s = (firstSupportY - secondSupportY + ((secondSupportX - firstSupportX)
+					* firstDirectionY / firstDirectionX))
+					/ secondDirectionY;
+			if (!checkNotWithin(s, r)) {
+				return second.getPointAt(s);
+			}
+			return null;
+		}
+
+		if (secondDirectionY == 0) {
+			r = (secondSupportY - firstSupportY) / firstDirectionY;
+			s = (firstSupportX - secondSupportX + ((secondSupportY - firstSupportY)
+					* firstDirectionX / firstDirectionY))
+					/ secondDirectionX;
+			if (!checkNotWithin(s, r)) {
+				return second.getPointAt(s);
+			}
+			return null;
+		}
+
+		return null;
+
+	}
+
+	/**
+	 * Checks weather the one of the given values is NaN, Infinite or not
+	 * between 0 and 1.
+	 * 
+	 * @param s
+	 *            First value
+	 * @param r
+	 *            Second value
+	 * @return Returns true if one of the properties is valid.
+	 */
+	private static boolean checkNotWithin(double s, double r) {
+		return s > 1 || r > 1 || s < 0 || r < 0 || Double.isNaN(s)
+				|| Double.isNaN(r) || Double.isInfinite(r)
+				|| Double.isInfinite(s);
 	}
 
 	/**

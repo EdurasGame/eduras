@@ -293,4 +293,29 @@ public class Vector2D {
 	public Point2D.Double toPoint() {
 		return new Point2D.Double(x, y);
 	}
+
+	/**
+	 * Calculates wether this Vector is linearly depending on the given vector.
+	 */
+	public boolean isLinearTo(Vector2D vec) {
+
+		if (getX() == 0) {
+			return vec.getX() == 0;
+		}
+
+		if (getY() == 0) {
+			return vec.getY() == 0;
+		}
+
+		// reaching this case X and Y of this vector cannot be 0 anymore.
+		if (vec.getX() == 0 || vec.getY() == 0) {
+			return false;
+		}
+
+		// so now there no component of any vector can be zero.
+
+		double r = vec.getX() / this.getX();
+
+		return this.getY() * r == vec.getY();
+	}
 }
