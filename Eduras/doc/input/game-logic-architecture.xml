@@ -93,8 +93,8 @@
 		</para>
 		<para>
 			Furthermore each GameObject consists of an ObjectShape
-			indicating how a GameObject looks like. A shape consists of a number
-			of relative points in the two-dimensional space. Out of these
+			indicating how a GameObject looks like. A big group of shapes are polygons. Polygons have much in common so there is a superclass for all of these. A polygon consists of a number
+			of relative points in the two-dimensional space and the lines between two points i and i + 1 are assumed to be a border of the polygon. Out of these
 			relative points you can get the shape of a specific gameObject by
 			combining the gameobjects position with the shapepoints (call
 			getAbsoluteVertices() for this purpose). Of course, checking a
