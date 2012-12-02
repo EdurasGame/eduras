@@ -4,12 +4,13 @@ import de.illonis.eduras.GameInformation;
 
 /**
  * An item that is stackable. Stackable means you can hold multiple of this item
- * in a single slot. On each use, stack size is reduced by one.
+ * in a single slot. On each use, stack size is reduced by one. Maximum stack
+ * size must not be above stack size at any time.
  * 
  * @author illonis
  * 
  */
-public abstract class StackableItem extends Item {
+public abstract class StackableItem extends Item implements Consumable {
 
 	private int maxStackSize = 1;
 	protected int stackSize = 1;
@@ -28,15 +29,30 @@ public abstract class StackableItem extends Item {
 	}
 
 	/**
+	 * Returns current stack size of this item. Default stack size is 1.
 	 * 
-	 * @return
+	 * @return current stack size.
 	 */
 	public int getStackSize() {
 		return stackSize;
 	}
 
+	/**
+	 * Returns maximum stack size of this item.
+	 * 
+	 * @return maximum stack size.
+	 */
 	public int getMaxStackSize() {
 		return maxStackSize;
+	}
+
+	/**
+	 * Checks if stack is full and cannot take more elements.
+	 * 
+	 * @return true if stack is full, false otherwise.
+	 */
+	public synchronized boolean isFull() {
+		return stackSize >= maxStackSize;
 	}
 
 	/**
@@ -66,6 +82,23 @@ public abstract class StackableItem extends Item {
 			return true;
 		}
 		return false;
+	}
+
+	@Override
+	public final void consume() {
+		if (takeFromStack()) {
+			consumeAction();
+		}
+	}
+
+	/**
+	 * Called when item is consumed.
+	 */
+	protected abstract void consumeAction();
+
+	@Override
+	public final void use() {
+		consume();
 	}
 
 }
