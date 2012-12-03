@@ -4,6 +4,12 @@ import de.illonis.eduras.items.Item;
 import de.illonis.eduras.items.Item.ItemType;
 import de.illonis.eduras.items.StackableItem;
 
+/**
+ * An inventory that holds items for a unit.
+ * 
+ * @author illonis
+ * 
+ */
 public class Inventory {
 
 	public final static int MAX_CAPACITY = 6;
@@ -26,6 +32,24 @@ public class Inventory {
 	 */
 	public int getGold() {
 		return gold;
+	}
+
+	/**
+	 * Spends given amount of money. If there is not enough money available, it
+	 * doesn't spend it and returns false.
+	 * 
+	 * @param amount
+	 *            amount to spend.
+	 * @return true if money was spent, false otherwise.
+	 */
+	public boolean spendGold(int amount) {
+		int newv = gold - amount;
+		if (newv < 0)
+			return false;
+		else {
+			gold = newv;
+			return true;
+		}
 	}
 
 	/**
@@ -59,8 +83,19 @@ public class Inventory {
 	 * @param item
 	 *            item to add.
 	 */
-	public void buy(Item item) {
+	public synchronized void buy(Item item) throws InventoryIsFullException,
+			NotEnoughMoneyException {
 
+		if (gold >= item.getBuyValue()) {
+			int target = findNextFreeInventorySlotForItem(item);
+			if (target == -1)
+				throw new InventoryIsFullException();
+			spendGold(item.getBuyValue());
+			itemSlots[target].putItem(item);
+
+		} else {
+			throw new NotEnoughMoneyException();
+		}
 	}
 
 	/**
@@ -75,6 +110,18 @@ public class Inventory {
 		return getItemOfTypeBetween(type, 0, MAX_CAPACITY);
 	}
 
+	/**
+	 * Returns first occurence of item of given {@link ItemType} within given
+	 * range. If there is no item of given type, -1 is returned.
+	 * 
+	 * @param type
+	 *            item type to search for.
+	 * @param from
+	 *            lower index.
+	 * @param to
+	 *            upper index.
+	 * @return index of item with given type within given range or -1.
+	 */
 	private int getItemOfTypeBetween(ItemType type, int from, int to) {
 		for (int i = from; i < to; i++) {
 			try {
@@ -86,6 +133,15 @@ public class Inventory {
 		return -1;
 	}
 
+	/**
+	 * Finds next free item slot for given item. If no free slot was found, -1
+	 * is returned. This method also considers stackable items, so it prefers to
+	 * stack up stackable items first.
+	 * 
+	 * @param item
+	 *            item to find a slot for.
+	 * @return index of free slot or -1.
+	 */
 	private synchronized int findNextFreeInventorySlotForItem(Item item) {
 
 		int targetPos = -1;
@@ -111,13 +167,16 @@ public class Inventory {
 			} while (left < MAX_CAPACITY);
 		} else {
 			targetPos = findNextFreeInventorySlot();
-			if (targetPos == -1)
-				return -1;
 		}
-
-		return -1;
+		return targetPos;
 	}
 
+	/**
+	 * Returns first free inventory slot available. If no slot is free, it
+	 * returns -1.
+	 * 
+	 * @return first free inventory slot or -1.
+	 */
 	private int findNextFreeInventorySlot() {
 		for (int i = 0; i < MAX_CAPACITY; i++) {
 			if (!itemSlots[i].hasItem())
