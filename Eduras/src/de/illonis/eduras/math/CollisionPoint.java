@@ -5,6 +5,8 @@ package de.illonis.eduras.math;
 
 import java.util.LinkedList;
 
+import de.illonis.eduras.logger.EduLog;
+
 /**
  * A wrapper class for collision points which stores not only the point of
  * collision but also the distance to that collision.
@@ -83,5 +85,29 @@ public class CollisionPoint {
 		}
 
 		return result;
+	}
+
+	/**
+	 * Creates a CollisionPoint by a given intercept point and the intercepting
+	 * line.
+	 * 
+	 * @param interceptPoint
+	 *            The point where the interception took place.
+	 * @param line
+	 *            The line that was involved in the interception.
+	 * @return Returns the correlating CollisionPoint.
+	 */
+	public static CollisionPoint createCollisionPointByInterceptPoint(
+			Vector2D interceptPoint, Line line) {
+		double distanceVectorX = interceptPoint.getX() - line.getU().getX();
+		double distanceVectorY = interceptPoint.getY() - line.getU().getY();
+		Vector2D distanceVector = new Vector2D(distanceVectorX, distanceVectorY);
+
+		EduLog.info("[LOGIC][TRIANGLE] Collision at " + interceptPoint.getX()
+				+ " , " + interceptPoint.getY());
+
+		CollisionPoint interception = new CollisionPoint(interceptPoint,
+				distanceVector);
+		return interception;
 	}
 }

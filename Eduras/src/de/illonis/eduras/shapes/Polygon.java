@@ -9,7 +9,6 @@ import java.util.LinkedList;
 import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.GameObject;
 import de.illonis.eduras.exceptions.WrongShapeTypeException;
-import de.illonis.eduras.logger.EduLog;
 import de.illonis.eduras.math.CollisionPoint;
 import de.illonis.eduras.math.Geometry;
 import de.illonis.eduras.math.Line;
@@ -247,19 +246,9 @@ public class Polygon extends ObjectShape {
 					continue;
 				} else {
 
-					double distanceVectorX = interceptPoint.getX()
-							- line.getU().getX();
-					double distanceVectorY = interceptPoint.getY()
-							- line.getU().getY();
-					Vector2D distanceVector = new Vector2D(distanceVectorX,
-							distanceVectorY);
-
-					EduLog.info("[LOGIC][TRIANGLE] Collision at "
-							+ interceptPoint.getX() + " , "
-							+ interceptPoint.getY());
-
-					CollisionPoint interception = new CollisionPoint(
-							interceptPoint, distanceVector);
+					CollisionPoint interception = CollisionPoint
+							.createCollisionPointByInterceptPoint(
+									interceptPoint, line);
 					interceptPoints.add(interception);
 				}
 
