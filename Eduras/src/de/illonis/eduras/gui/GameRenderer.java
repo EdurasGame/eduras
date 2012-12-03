@@ -12,6 +12,7 @@ import de.illonis.eduras.GameObject;
 import de.illonis.eduras.Player;
 import de.illonis.eduras.logicabstraction.InformationProvider;
 import de.illonis.eduras.math.Vector2D;
+import de.illonis.eduras.shapes.Circle;
 import de.illonis.eduras.shapes.ObjectShape;
 import de.illonis.eduras.shapes.Polygon;
 
@@ -112,7 +113,28 @@ public class GameRenderer {
 							- camera.x, player.getDrawY() - camera.y);
 				}
 			}
+
+			if (objectShape instanceof Circle) {
+				drawCircle((Circle) objectShape, d);
+			}
 		}
+	}
+
+	/**
+	 * Draws a circle which belongs to the given object.
+	 * 
+	 * @param objectShape
+	 *            The circle.
+	 * @param d
+	 *            The object.
+	 */
+	private void drawCircle(Circle objectShape, GameObject d) {
+
+		int radius = (int) objectShape.getRadius();
+
+		dbg.drawOval(d.getDrawX() - radius - camera.x, d.getDrawY() - radius
+				- camera.y, 2 * radius, 2 * radius);
+
 	}
 
 	/**
