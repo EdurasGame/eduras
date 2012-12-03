@@ -35,6 +35,9 @@ public abstract class Item extends GameObject {
 
 	private ItemType type;
 
+	private int sellValue;
+	private int buyValue;
+
 	public Item(ItemType type, GameInformation gi) {
 		super(gi);
 		this.type = type;
@@ -42,6 +45,33 @@ public abstract class Item extends GameObject {
 
 	public ItemType getType() {
 		return type;
+	}
+
+	/**
+	 * Returns true if this item is stackable.
+	 * 
+	 * @return true if this item is stackable.
+	 */
+	public final boolean stacks() {
+		return (this instanceof StackableItem);
+	}
+
+	/**
+	 * Returns gold value of item that is received when selling.
+	 * 
+	 * @return sell value of item.
+	 */
+	public int getSellValue() {
+		return sellValue;
+	}
+
+	/**
+	 * Returns gold value of item that must be spend when buying.
+	 * 
+	 * @return buying value of item.
+	 */
+	public int getBuyValue() {
+		return buyValue;
 	}
 
 	/**

@@ -56,6 +56,15 @@ public abstract class StackableItem extends Item implements Consumable {
 	}
 
 	/**
+	 * Checks if stack is empty (i.e. {@link #stackSize} == 0).
+	 * 
+	 * @return true if stack is empty, false otherwise.
+	 */
+	public synchronized boolean isEmpty() {
+		return stackSize == 0;
+	}
+
+	/**
 	 * Adds given quantity to this item. If {{@link #maxStackSize} is not big
 	 * enough to add all items, false is returned and nothing is added.
 	 * 
@@ -85,7 +94,7 @@ public abstract class StackableItem extends Item implements Consumable {
 	}
 
 	@Override
-	public final void consume() {
+	public final void use() {
 		if (takeFromStack()) {
 			consumeAction();
 		}
@@ -95,10 +104,4 @@ public abstract class StackableItem extends Item implements Consumable {
 	 * Called when item is consumed.
 	 */
 	protected abstract void consumeAction();
-
-	@Override
-	public final void use() {
-		consume();
-	}
-
 }
