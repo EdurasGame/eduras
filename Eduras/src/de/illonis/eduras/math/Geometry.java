@@ -2,6 +2,8 @@ package de.illonis.eduras.math;
 
 import java.util.LinkedList;
 
+import de.illonis.eduras.shapes.Circle;
+
 /**
  * A math class that provides useful functions that are used in two-dimensional
  * space.
@@ -251,5 +253,94 @@ public class Geometry {
 
 		return borderLines;
 
+	}
+
+	/**
+	 * Calculates the interception points of a circle and a line segment. This
+	 * method assumes that the given line is a valid one, means that it's
+	 * directional vector must not be the nullvector.
+	 * 
+	 * @param circle
+	 *            The circle.
+	 * @param centerPoint
+	 *            The circle's center point.
+	 * @param singleLine
+	 *            The line.
+	 * @return The intercept points as an array of two, if there are any. If
+	 *         there is only one intercept point, one of the array entrys is
+	 *         null. If there is no intercept points, both entrys are left null.
+	 */
+	public static Vector2D[] getCircleLineSegmentInterceptPoints(Circle circle,
+			Vector2D centerPoint, Line singleLine) {
+
+		Vector2D[] result = new Vector2D[2];
+
+		// the calculation of the intercept point is derived from the
+		// mathematical approach of simply having equations for the circle and
+		// the line containing the x and y values of the intercept point.
+		//
+		// line: let (u1,u2) be the line's supportvector and (v1,v2) the line's
+		// directional vector. For any point (x,y) on the line the following
+		// equations hold:
+		// 1. x = u1 + v1 * lambda
+		// 2. y = u2 + v2 * lambda
+
+		double u1 = singleLine.getSupportVector().getX();
+		double u2 = singleLine.getSupportVector().getY();
+
+		double v1 = singleLine.getDirectionalVector().getX();
+		double v2 = singleLine.getDirectionalVector().getY();
+
+		// circle: let (m1,m2) the circle's center point and r its radius. For
+		// any point on the circle
+		// the following equation holds:
+		// 3. r^2 = (x - m1)^2 + (y - m2)^2
+
+		double r = circle.getRadius();
+		double m1 = centerPoint.getX();
+		double m2 = centerPoint.getY();
+
+		// Applying equations one and two for the third and solving for lambda
+		// gives a square equation (in pq formula) having the following p and q:
+
+		double p = (2 * v1 * u1 - 2 * v1 * m1 + 2 * v2 * u2 - 2 * m2 * v2)
+				/ (BasicMath.square(v1) + BasicMath.square(v2));
+
+		double q = (BasicMath.square(u1) + BasicMath.square(u2)
+				+ BasicMath.square(m1) + BasicMath.square(m2) - 2 * m2 * u2 - 2
+				* m1 * u1 - BasicMath.square(r))
+				/ (BasicMath.square(v1) + BasicMath.square(v2));
+
+		// there is a solution if the pq formula's radiant is >= 0.
+		// check wether there is a solution:
+
+		double pqRadian = BasicMath.square(p / 2) - q;
+
+		if (pqRadian < 0) {
+			return result;
+		}
+
+		// if there is a solution, there is two:
+
+		double lambdaOne = -(p / 2) + pqRadian;
+		double lambdaTwo = -(p / 2) - pqRadian;
+
+		// check if the points are on the line seqment.
+
+		Vector2D firstInterceptPoint = null;
+		Vector2D secondInterceptPoint = null;
+
+		if (lambdaOne <= 1 && lambdaOne >= 0) {
+			firstInterceptPoint = singleLine.getPointAt(lambdaOne);
+		}
+
+		if (lambdaTwo <= 1 && lambdaTwo >= 0) {
+			secondInterceptPoint = singleLine.getPointAt(lambdaTwo);
+		}
+
+		result[0] = firstInterceptPoint;
+		result[1] = secondInterceptPoint;
+
+		return result;
 	}
 }

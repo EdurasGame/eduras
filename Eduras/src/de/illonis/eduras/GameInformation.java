@@ -35,9 +35,12 @@ public class GameInformation {
 	 */
 	private void exampleTest() {
 		try {
-			Block exampleBlock = new Block(this, map.getWidth() / 2,
+			Block exampleBlock = new Block(this, map.getWidth() / 2 - 25,
 					map.getHeight() / 2, 20, 20);
 			addObject(exampleBlock);
+			CircledBlock exampleCircledBlock = new CircledBlock(this, 20,
+					map.getWidth() / 2 + 25, map.getHeight() / 2);
+			addObject(exampleCircledBlock);
 		} catch (ShapeVerticesNotApplicableException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
