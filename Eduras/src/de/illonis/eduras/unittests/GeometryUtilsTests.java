@@ -12,6 +12,7 @@ import org.junit.Test;
 import de.illonis.eduras.math.Geometry;
 import de.illonis.eduras.math.Line;
 import de.illonis.eduras.math.Vector2D;
+import de.illonis.eduras.shapes.Circle;
 
 /**
  * Tests for several methods in Geometry-class.
@@ -68,5 +69,24 @@ public class GeometryUtilsTests {
 
 		assertTrue(resultLines.get(0).equals(expectedLine1));
 		assertTrue(resultLines.get(1).equals(expectedLine2));
+	}
+
+	@Test
+	public void getCircleLineSegmentInterceptPoints() {
+		Circle circle = new Circle(1);
+
+		Vector2D nullVector = new Vector2D();
+		Line xLine = new Line(new Vector2D(-2, 0), new Vector2D(2, 0));
+
+		Vector2D[] interceptPoints = Geometry
+				.getCircleLineSegmentInterceptPoints(circle, nullVector, xLine);
+
+		Vector2D expectedResult1 = new Vector2D(-1, 0);
+		Vector2D expectedResult2 = new Vector2D(1, 0);
+
+		assertTrue(interceptPoints[0].equals(expectedResult1)
+				|| interceptPoints[1].equals(expectedResult1));
+		assertTrue(interceptPoints[0].equals(expectedResult2)
+				|| interceptPoints[1].equals(expectedResult2));
 	}
 }

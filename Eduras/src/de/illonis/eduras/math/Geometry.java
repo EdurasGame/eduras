@@ -322,8 +322,8 @@ public class Geometry {
 
 		// if there is a solution, there is two:
 
-		double lambdaOne = -(p / 2) + pqRadian;
-		double lambdaTwo = -(p / 2) - pqRadian;
+		double lambdaOne = -(p / 2) + Math.sqrt(pqRadian);
+		double lambdaTwo = -(p / 2) - Math.sqrt(pqRadian);
 
 		// check if the points are on the line seqment.
 
