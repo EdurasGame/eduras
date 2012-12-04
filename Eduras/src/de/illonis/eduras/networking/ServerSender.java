@@ -1,11 +1,8 @@
 package de.illonis.eduras.networking;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
-import java.net.UnknownHostException;
 import java.util.HashMap;
 import java.util.logging.Level;
 
@@ -28,11 +25,6 @@ public class ServerSender extends Thread {
 	private final HashMap<Integer, ServerClient> clients;
 	private final Buffer outputBuffer;
 	private final Server server;
-
-	/**
-	 * Stores the time of the last check for client connections (in ms).
-	 */
-	private long lastConnectionCheck;
 
 	/**
 	 * Creates a new ServerSender that sends messages from given Buffer.
@@ -136,37 +128,6 @@ public class ServerSender extends Thread {
 				EduLog.passException(e);
 			}
 		}
-	}
-
-	/**
-	 * Checks for each client, wether it is still connected to the server.
-	 */
-	private void checkConnections() {
-		// for each client, try to receive an echo and remove it if you dont get
-		// an echo.
-		for (ServerClient singleClient : clients.values()) {
-			try {
-				Socket echoSocket = new Socket(singleClient.getHostAddress(), 7);
-				PrintWriter os = new PrintWriter(echoSocket.getOutputStream(),
-						true);
-				String echoString = "Connected!";
-				os.println(echoString);
-				BufferedReader in = new BufferedReader(new InputStreamReader(
-						echoSocket.getInputStream()));
-				String s = in.readLine();
-				if (!s.equals(echoString)) {
-					server.removeClient(singleClient);
-				}
-				echoSocket.close();
-			} catch (UnknownHostException e) {
-				server.handleClientDisconnect(singleClient);
-			} catch (IOException e) {
-				EduLog.passException(e);
-			}
-		}
-
-		lastConnectionCheck = System.currentTimeMillis();
-
 	}
 
 	/**

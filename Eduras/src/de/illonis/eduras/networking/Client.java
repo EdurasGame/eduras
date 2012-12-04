@@ -3,7 +3,6 @@ package de.illonis.eduras.networking;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
-import java.net.ServerSocket;
 import java.net.Socket;
 
 import de.illonis.eduras.interfaces.GameLogicInterface;
@@ -28,10 +27,6 @@ public class Client {
 	private ClientSender sender;
 
 	private int ownerId;
-
-	private ServerSocket echoSocket;
-
-	private static final int DEFAULT_ECHO_PORT = 19532;
 
 	/**
 	 * Creates a new Client.
@@ -61,19 +56,6 @@ public class Client {
 		sender = new ClientSender(socket);
 
 		// createEchoSocket();
-	}
-
-	/**
-	 * 
-	 */
-	private void createEchoSocket() {
-
-		try {
-			this.echoSocket = new ServerSocket(DEFAULT_ECHO_PORT);
-		} catch (IOException e) {
-			EduLog.passException(e);
-		}
-
 	}
 
 	/**
