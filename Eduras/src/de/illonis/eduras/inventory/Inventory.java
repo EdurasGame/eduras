@@ -80,22 +80,38 @@ public class Inventory {
 	/**
 	 * Buys an item and puts it into next free inventory slot.
 	 * 
+	 * @see #loot(Item)
+	 * 
 	 * @param item
-	 *            item to add.
+	 *            item to buy.
+	 * @throws InventoryIsFullException
+	 *             when inventory is full.
 	 */
 	public synchronized void buy(Item item) throws InventoryIsFullException,
 			NotEnoughMoneyException {
 
 		if (gold >= item.getBuyValue()) {
-			int target = findNextFreeInventorySlotForItem(item);
-			if (target == -1)
-				throw new InventoryIsFullException();
+			loot(item);
 			spendGold(item.getBuyValue());
-			itemSlots[target].putItem(item);
 
 		} else {
 			throw new NotEnoughMoneyException();
 		}
+	}
+
+	/**
+	 * Loots an item.
+	 * 
+	 * @param item
+	 *            item to loot.
+	 * @throws InventoryIsFullException
+	 *             when inventory is full.
+	 */
+	public synchronized void loot(Item item) throws InventoryIsFullException {
+		int target = findNextFreeInventorySlotForItem(item);
+		if (target == -1)
+			throw new InventoryIsFullException();
+		itemSlots[target].putItem(item);
 	}
 
 	/**
