@@ -127,6 +127,35 @@ public class Inventory {
 	}
 
 	/**
+	 * Checks if given item exists in inventory. This method does not check if
+	 * exactly this item is hold in inventory but only its type.
+	 * 
+	 * @see #hasItemOfType(ItemType)
+	 * 
+	 * @param item
+	 *            item to check for.
+	 * @return true if item exists, false otherwise.
+	 */
+	public boolean hasItem(Item item) {
+		return hasItemOfType(item.getType());
+
+	}
+
+	/**
+	 * Checks if an item of given {@link ItemType} exists in inventory.
+	 * 
+	 * @see #hasItem(Item)
+	 * 
+	 * @param itemType
+	 *            itemtype to look for.
+	 * @return true if an item of this type exists, false otherwise.
+	 */
+	public boolean hasItemOfType(ItemType itemType) {
+		int pos = getItemOfType(itemType);
+		return pos != -1;
+	}
+
+	/**
 	 * Returns first occurence of item of given {@link ItemType} within given
 	 * range. If there is no item of given type, -1 is returned.
 	 * 
