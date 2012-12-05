@@ -10,11 +10,13 @@ import de.illonis.eduras.events.Event;
 import de.illonis.eduras.events.GameEvent;
 import de.illonis.eduras.events.GameEvent.GameEventNumber;
 import de.illonis.eduras.events.GameInfoRequest;
+import de.illonis.eduras.events.ItemEvent;
 import de.illonis.eduras.events.MovementEvent;
 import de.illonis.eduras.events.NetworkEvent;
 import de.illonis.eduras.events.NetworkEvent.NetworkEventNumber;
 import de.illonis.eduras.events.NoEvent;
 import de.illonis.eduras.events.ObjectFactoryEvent;
+import de.illonis.eduras.events.SetOwnerEvent;
 import de.illonis.eduras.events.UserMovementEvent;
 import de.illonis.eduras.exceptions.GivenParametersDoNotFitToEventException;
 import de.illonis.eduras.exceptions.InvalidMessageFormatException;
@@ -207,8 +209,14 @@ public class NetworkMessageDeserializer {
 		case MOVE_UP_PRESSED:
 			gameEvent = handleStartMovementEvent(msg, args, typeNumber);
 			break;
+		case ITEM_USE:
+			gameEvent = handleItemEvent(msg, args, typeNumber);
+			break;
 		case INFORMATION_REQUEST:
 			gameEvent = new GameInfoRequest(parseInt(args[1]));
+			break;
+		case SET_OWNER:
+			gameEvent = new SetOwnerEvent(parseInt(args[2]), parseInt(args[1]));
 			break;
 		case OBJECT_CREATE:
 			int objectTypeNum = parseInt(args[3]);
@@ -242,6 +250,30 @@ public class NetworkMessageDeserializer {
 		}
 
 		return gameEvent;
+	}
+
+	/**
+	 * Handles an item event.
+	 * 
+	 * @param msg
+	 *            The original message.
+	 * @param args
+	 *            The arguments of the message.
+	 * @param typeNumber
+	 *            The type number of the event.
+	 * @return Returns the deserialized item event.
+	 */
+	private static GameEvent handleItemEvent(String msg, String[] args,
+			GameEventNumber typeNumber) {
+		ItemEvent itemEvent = new ItemEvent(typeNumber, parseInt(args[2]));
+		itemEvent.setObjectId(parseInt(args[1]));
+
+		if (typeNumber == GameEventNumber.ITEM_USE) {
+			itemEvent.setTargetX(parseDouble(args[3]));
+			itemEvent.setTargetY(parseDouble(args[4]));
+		}
+
+		return itemEvent;
 	}
 
 	private static GameEvent handleStartMovementEvent(String msg,
@@ -281,8 +313,8 @@ public class NetworkMessageDeserializer {
 
 		try {
 			int id = parseInt(splittedMessage[1]);
-			double newXPos = Double.parseDouble(splittedMessage[2]);
-			double newYPos = Double.parseDouble(splittedMessage[3]);
+			double newXPos = parseDouble(splittedMessage[2]);
+			double newYPos = parseDouble(splittedMessage[3]);
 			MovementEvent moveEvent = new MovementEvent(typeNumber, id);
 			moveEvent.setNewXPos(newXPos);
 			moveEvent.setNewYPos(newYPos);
@@ -302,6 +334,17 @@ public class NetworkMessageDeserializer {
 	 */
 	private static int parseInt(String str) {
 		return Integer.parseInt(str);
+	}
+
+	/**
+	 * Uses Double.parseDouble to parse a string into a double.
+	 * 
+	 * @param str
+	 *            The string to parse.
+	 * @return The parsed double value.
+	 */
+	private static double parseDouble(String str) {
+		return Double.parseDouble(str);
 	}
 
 	/**

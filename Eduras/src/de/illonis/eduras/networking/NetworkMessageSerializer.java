@@ -6,11 +6,14 @@ import de.illonis.eduras.events.ConnectionEstablishedEvent;
 import de.illonis.eduras.events.Event;
 import de.illonis.eduras.events.GameEvent;
 import de.illonis.eduras.events.GameInfoRequest;
+import de.illonis.eduras.events.ItemEvent;
 import de.illonis.eduras.events.MovementEvent;
 import de.illonis.eduras.events.NetworkEvent;
 import de.illonis.eduras.events.ObjectFactoryEvent;
+import de.illonis.eduras.events.SetOwnerEvent;
 import de.illonis.eduras.events.UserMovementEvent;
 import de.illonis.eduras.exceptions.MessageNotSupportedException;
+import de.illonis.eduras.math.Vector2D;
 
 /**
  * Serializes different NetworkMessages.
@@ -125,9 +128,17 @@ public class NetworkMessageSerializer {
 			serializedEvent += "#" + moveEvent.getNewXPos() + "#"
 					+ moveEvent.getNewYPos();
 			break;
-		case SHOOT_PRESSED:
+		case SET_OWNER:
+			SetOwnerEvent setOwnerEvent = (SetOwnerEvent) gameEvent;
+			serializedEvent += setOwnerEvent.getObjectId() + "#"
+					+ setOwnerEvent.getOwner();
 			break;
-		case SHOOT_RELEASED:
+		case ITEM_USE:
+			ItemEvent itemEvent = (ItemEvent) gameEvent;
+			Vector2D target = itemEvent.getTarget();
+			serializedEvent += itemEvent.getObjectId() + "#"
+					+ itemEvent.getOwner() + "#" + target.getX() + "#"
+					+ target.getY();
 			break;
 		case INFORMATION_REQUEST:
 			serializedEvent += ((GameInfoRequest) gameEvent).getRequester();
