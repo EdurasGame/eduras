@@ -80,22 +80,38 @@ public class Inventory {
 	/**
 	 * Buys an item and puts it into next free inventory slot.
 	 * 
+	 * @see #loot(Item)
+	 * 
 	 * @param item
-	 *            item to add.
+	 *            item to buy.
+	 * @throws InventoryIsFullException
+	 *             when inventory is full.
 	 */
 	public synchronized void buy(Item item) throws InventoryIsFullException,
 			NotEnoughMoneyException {
 
 		if (gold >= item.getBuyValue()) {
-			int target = findNextFreeInventorySlotForItem(item);
-			if (target == -1)
-				throw new InventoryIsFullException();
+			loot(item);
 			spendGold(item.getBuyValue());
-			itemSlots[target].putItem(item);
 
 		} else {
 			throw new NotEnoughMoneyException();
 		}
+	}
+
+	/**
+	 * Loots an item.
+	 * 
+	 * @param item
+	 *            item to loot.
+	 * @throws InventoryIsFullException
+	 *             when inventory is full.
+	 */
+	public synchronized void loot(Item item) throws InventoryIsFullException {
+		int target = findNextFreeInventorySlotForItem(item);
+		if (target == -1)
+			throw new InventoryIsFullException();
+		itemSlots[target].putItem(item);
 	}
 
 	/**
@@ -108,6 +124,35 @@ public class Inventory {
 	 */
 	private int getItemOfType(ItemType type) {
 		return getItemOfTypeBetween(type, 0, MAX_CAPACITY);
+	}
+
+	/**
+	 * Checks if given item exists in inventory. This method does not check if
+	 * exactly this item is hold in inventory but only its type.
+	 * 
+	 * @see #hasItemOfType(ItemType)
+	 * 
+	 * @param item
+	 *            item to check for.
+	 * @return true if item exists, false otherwise.
+	 */
+	public boolean hasItem(Item item) {
+		return hasItemOfType(item.getType());
+
+	}
+
+	/**
+	 * Checks if an item of given {@link ItemType} exists in inventory.
+	 * 
+	 * @see #hasItem(Item)
+	 * 
+	 * @param itemType
+	 *            itemtype to look for.
+	 * @return true if an item of this type exists, false otherwise.
+	 */
+	public boolean hasItemOfType(ItemType itemType) {
+		int pos = getItemOfType(itemType);
+		return pos != -1;
 	}
 
 	/**
