@@ -45,7 +45,7 @@ public abstract class AmmoWeapon extends Weapon {
 	 *            quantity to add. Must be positive.
 	 */
 	public void addAmmo(int ammo) {
-		if (ammo >= 0)
+		if (ammo <= 0)
 			throw new InvalidParameterException(
 					"Quantity adding to ammunition must be positive");
 		ammunition += ammo;

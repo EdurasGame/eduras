@@ -83,4 +83,15 @@ public abstract class Item extends GameObject {
 	public final static Item createById(ItemType id) {
 		return null;
 	}
+
+	/**
+	 * Checks if this item has the same itemtype as given item.
+	 * 
+	 * @param item
+	 *            item to compare.
+	 * @return true if item has same itemtype.
+	 */
+	public final boolean equalsType(Item item) {
+		return getType().equals(item.getType());
+	}
 }
