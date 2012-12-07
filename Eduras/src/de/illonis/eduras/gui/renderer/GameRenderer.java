@@ -29,6 +29,7 @@ public class GameRenderer {
 	private Graphics2D dbg = null;
 	private final HashMap<Integer, GameObject> objs;
 	private final Rectangle mapSize;
+	private final ImageList imagelist;
 
 	/**
 	 * Creates a new renderer.
@@ -40,6 +41,7 @@ public class GameRenderer {
 	 */
 	public GameRenderer(GameCamera camera,
 			InformationProvider informationProvider) {
+		imagelist = new ImageList();
 		this.camera = camera;
 		objs = informationProvider.getGameObjects();
 		mapSize = informationProvider.getMapBounds();
@@ -69,6 +71,14 @@ public class GameRenderer {
 		dbg.fillRect(0, 0, width, height);
 		drawMap();
 		drawObjects();
+		drawGui();
+	}
+
+	/**
+	 * Draw every gui element.
+	 */
+	private void drawGui() {
+
 	}
 
 	/**
@@ -102,13 +112,17 @@ public class GameRenderer {
 		dbg.setColor(Color.yellow);
 		for (GameObject d : objs.values()) {
 
-			// draw shape of gameObject if object has shape
-			if (d.getShape() != null) {
-				drawShapeOf(d);
-			}
+			if (d.getBoundingBox().intersects(camera)) {
 
-			if (hasImage(d)) {
-				// TODO: draw image for gameobject.
+				// draw shape of gameObject if object has shape
+				if (d.getShape() != null) {
+
+					drawShapeOf(d);
+				}
+
+				if (hasImage(d)) {
+					// TODO: draw image for gameobject.
+				}
 			}
 		}
 	}
@@ -122,8 +136,7 @@ public class GameRenderer {
 	 * @return true if gameobject has an image, false otherwise.
 	 */
 	private boolean hasImage(GameObject obj) {
-		// TODO: implement
-		return false;
+		return imagelist.hasImageFor(obj);
 	}
 
 	/**
@@ -162,7 +175,6 @@ public class GameRenderer {
 
 		dbg.drawOval(d.getDrawX() - radius - camera.x, d.getDrawY() - radius
 				- camera.y, 2 * radius, 2 * radius);
-
 	}
 
 	/**
