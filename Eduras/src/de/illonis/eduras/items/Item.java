@@ -38,13 +38,35 @@ public abstract class Item extends GameObject {
 	private int sellValue;
 	private int buyValue;
 
+	/**
+	 * Creates a new item of given item type.
+	 * 
+	 * @param type
+	 *            item type.
+	 * @param gi
+	 *            game information.
+	 */
 	public Item(ItemType type, GameInformation gi) {
 		super(gi);
 		this.type = type;
 	}
 
+	/**
+	 * Returns item type of this item.
+	 * 
+	 * @return item type.
+	 */
 	public ItemType getType() {
 		return type;
+	}
+
+	/**
+	 * Checks whether this item is usable.
+	 * 
+	 * @return true if item is usable, false otherwise.
+	 */
+	public boolean isUsable() {
+		return (this instanceof Usable);
 	}
 
 	/**

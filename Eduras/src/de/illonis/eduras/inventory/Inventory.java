@@ -217,6 +217,22 @@ public class Inventory {
 	}
 
 	/**
+	 * Returns item of given item slot.
+	 * 
+	 * @param slot
+	 *            item's slot.
+	 * @return item in given slot.
+	 * @throws ItemSlotIsEmptyException
+	 *             when slot is empty.
+	 */
+	public Item getItemBySlot(int slot) throws ItemSlotIsEmptyException {
+		if (itemSlots[slot].hasItem()) {
+			return itemSlots[slot].getItem();
+		}
+		throw new ItemSlotIsEmptyException();
+	}
+
+	/**
 	 * Returns first free inventory slot available. If no slot is free, it
 	 * returns -1.
 	 * 
