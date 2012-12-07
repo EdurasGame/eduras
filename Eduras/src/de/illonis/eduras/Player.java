@@ -35,9 +35,9 @@ public class Player extends MoveableGameObject implements Controllable {
 		setOwner(ownerId);
 
 		// get position
-		Vector2D firstEdge = new Vector2D(0f, 10f);
-		Vector2D secondEdge = new Vector2D(10f, -10f);
-		Vector2D thirdEdge = new Vector2D(-10f, -10f);
+		Vector2D firstEdge = new Vector2D(0d, 10d);
+		Vector2D secondEdge = new Vector2D(10d, -10d);
+		Vector2D thirdEdge = new Vector2D(-10d, -10d);
 
 		try {
 			setShape(new Triangle(firstEdge, secondEdge, thirdEdge));

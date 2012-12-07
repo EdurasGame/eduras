@@ -59,6 +59,8 @@ public class Triangle extends Polygon {
 		double xMax = BasicMath.max(v[0].getX(), v[1].getX(), v[2].getX());
 		double yMax = BasicMath.max(v[0].getY(), v[1].getY(), v[2].getY());
 
-		return new Rectangle2D.Double(x, y, xMax - x, yMax - y);
+		Rectangle2D.Double r = new Rectangle2D.Double(0, 0, Math.abs(x - xMax),
+				Math.abs(y + yMax));
+		return r;
 	}
 }

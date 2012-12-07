@@ -3,8 +3,6 @@
  */
 package de.illonis.eduras;
 
-import java.awt.geom.Rectangle2D;
-
 import de.illonis.eduras.exceptions.ShapeVerticesNotApplicableException;
 import de.illonis.eduras.math.Vector2D;
 import de.illonis.eduras.shapes.Rectangle;
@@ -56,10 +54,4 @@ public class Block extends GameObject {
 		// do nothing
 
 	}
-
-	@Override
-	public Rectangle2D.Double getBoundingBox() {
-		return ((Rectangle) getShape()).toJavaRect();
-	}
-
 }

@@ -272,6 +272,7 @@ public abstract class GameObject implements Comparable<GameObject> {
 		Rectangle2D.Double r = getShape().getBoundingBox();
 		r.x = getDrawX();
 		r.y = getDrawY();
+
 		return r;
 	}
 

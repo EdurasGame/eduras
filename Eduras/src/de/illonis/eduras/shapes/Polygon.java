@@ -262,7 +262,8 @@ public class Polygon extends ObjectShape {
 	@Override
 	public Double getBoundingBox() {
 		// TODO: implement
-		return new Rectangle2D.Double();
+		return new Rectangle2D.Double(0, 0, 5E100, 5E100);
+
 	}
 
 }
