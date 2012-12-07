@@ -1,10 +1,12 @@
 package de.illonis.eduras.gui;
 
+import java.awt.CardLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.net.InetAddress;
 
 import javax.naming.InvalidNameException;
 import javax.swing.JFrame;
@@ -31,7 +33,7 @@ import de.illonis.eduras.settings.Settings;
  * @author illonis
  * 
  */
-public class Gui extends JFrame {
+public class Gui extends JFrame implements ActionListener {
 
 	private InformationProvider infoPro;
 	private EventSender eventSender;
@@ -39,7 +41,6 @@ public class Gui extends JFrame {
 	private GamePanel gamePanel;
 	private GameRenderer renderer;
 	private RenderThread rendererThread;
-	private final ConnectDialog connectDialog;
 	private InputKeyHandler keyHandler;
 	private String clientName;
 	private NetworkEventHandler eventHandler;
@@ -47,6 +48,13 @@ public class Gui extends JFrame {
 	private Settings settings;
 	private final GameCamera camera;
 	private final CameraMouseListener cml;
+	private CardLayout cardLayout;
+	private LoginPanel loginPanel;
+	private ProgressPanel progressPanel;
+
+	final static String LOGINPANEL = "Login Card";
+	final static String CONNECTPANEL = "Connect Card";
+	final static String GAMEPANEL = "Game Card";
 
 	private static final long serialVersionUID = 1L;
 
@@ -58,7 +66,6 @@ public class Gui extends JFrame {
 
 		addComponentListener(new ResizeMonitor());
 		buildGui();
-		connectDialog = new ConnectDialog(this);
 		addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowClosing(WindowEvent e) {
@@ -80,13 +87,24 @@ public class Gui extends JFrame {
 	}
 
 	private void buildGui() {
+		cardLayout = new CardLayout();
+		setLayout(cardLayout);
+		loginPanel = new LoginPanel();
+		progressPanel = new ProgressPanel(this, nwm);
+		loginPanel.setActionListener(this);
+
+		cardLayout.show(getContentPane(), LOGINPANEL);
 
 		gamePanel = new GamePanel();
 		gamePanel.addMouseMotionListener(cml);
 		gamePanel.addMouseListener(cml);
 		renderer = new GameRenderer(camera, infoPro);
 		rendererThread = new RenderThread(renderer, gamePanel);
-		getContentPane().add(gamePanel);
+
+		add(loginPanel, LOGINPANEL);
+		add(progressPanel, CONNECTPANEL);
+		add(gamePanel, GAMEPANEL);
+
 		setSize(500, 500);
 
 		setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
@@ -105,44 +123,16 @@ public class Gui extends JFrame {
 
 	public static void main(String[] args) {
 		// new LoggerGui().setVisible(true);
-		EduLog.setLogOutput(LogMode.NONE);
+		EduLog.setLogOutput(LogMode.CONSOLE);
 		Gui gui = new Gui();
 		gui.setVisible(true);
-
-		// welcome to devil's loop
-		while (!gui.showConnectDialog())
-			;
-	}
-
-	/**
-	 * Shows connection dialog that asks for user input.
-	 * 
-	 * @return true if user input was valid, false otherwise.
-	 */
-	private boolean showConnectDialog() {
-		connectDialog.setVisible(true);
-		InetAddress address;
-		int port;
-		if (connectDialog.isAborted())
-			return true;
-		try {
-			address = connectDialog.getAddress();
-			port = connectDialog.getPort();
-			clientName = connectDialog.getUserName();
-		} catch (InvalidValueEnteredException e) {
-			EduLog.passException(e);
-			return false;
-		}
-		ConnectProgressDialog cpd = new ConnectProgressDialog(this, nwm);
-		cpd.start(address, port);
-		return cpd.isOK();
 	}
 
 	/**
 	 * Called when connection to server is established.
 	 */
 	void onConnected() {
-
+		showGame();
 		camera.setSize(getWidth(), getHeight());
 		Thread t = new Thread(rendererThread);
 		t.start();
@@ -191,5 +181,42 @@ public class Gui extends JFrame {
 			EduLog.fine("[GUI] Size changed. New size: " + getWidth() + ", "
 					+ getHeight());
 		}
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		// fired when user clicked login.
+		clientName = loginPanel.getUserName();
+		if (clientName.length() < 3)
+			return;
+		showProgress();
+		try {
+			progressPanel.start(loginPanel.getAddress(), loginPanel.getPort());
+		} catch (InvalidValueEnteredException e1) {
+			progressPanel.setError("Invalid values entered.");
+		}
+	}
+
+	/**
+	 * Shows login panel.
+	 */
+	public void showLogin() {
+		cardLayout.show(getContentPane(), LOGINPANEL);
+	}
+
+	/**
+	 * Shows connect progress panel.
+	 */
+	public void showProgress() {
+		progressPanel.reset();
+		cardLayout.show(getContentPane(), CONNECTPANEL);
+	}
+
+	/**
+	 * Shows gamepanel.
+	 */
+	public void showGame() {
+		cardLayout.show(getContentPane(), GAMEPANEL);
+		gamePanel.requestFocus();
 	}
 }

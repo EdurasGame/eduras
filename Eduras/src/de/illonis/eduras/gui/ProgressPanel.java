@@ -9,34 +9,73 @@ import java.net.SocketTimeoutException;
 import java.util.concurrent.ExecutionException;
 
 import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JDialog;
-import javax.swing.JFrame;
-import javax.swing.JTextPane;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.SwingConstants;
 import javax.swing.SwingWorker;
 
+import de.illonis.eduras.images.ImageFiler;
 import de.illonis.eduras.logger.EduLog;
 import de.illonis.eduras.logicabstraction.NetworkManager;
 
 /**
- * A dialog that connects to server and shows connection progress to user and
- * displays occuring errors.
- * 
- * @deprecated
+ * Displays login progress. Also shows errors occuring while connecting.
  * 
  * @author illonis
  * 
  */
-public class ConnectProgressDialog extends JDialog implements ActionListener {
+public class ProgressPanel extends JPanel implements ActionListener {
 
 	private static final long serialVersionUID = 1L;
+	private JLabel text;
+	private ImageIcon icon;
 	private NetworkManager nwm;
+	private Gui gui;
 	private InetAddress addr;
 	private int port;
-	private JTextPane label;
-	private String errorMessage;
 	private JButton backButton;
 	private Thread t;
+	private String errorMessage;
+
+	public ProgressPanel(Gui gui, NetworkManager nwm) {
+		super();
+		this.gui = gui;
+		this.nwm = nwm;
+		setLayout(new BorderLayout());
+		buildGui();
+	}
+
+	private void buildGui() {
+		text = new JLabel();
+		reset();
+		text.setHorizontalTextPosition(SwingConstants.CENTER);
+		text.setVerticalTextPosition(SwingConstants.BOTTOM);
+		text.setAlignmentX(CENTER_ALIGNMENT);
+		text.setHorizontalAlignment(JLabel.CENTER);
+		text.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+		icon = ImageFiler.loadIcon("login/ajax-loader.gif");
+		text.setIcon(icon);
+
+		add(text, BorderLayout.CENTER);
+
+		backButton = new JButton("Abbrechen");
+		backButton.addActionListener(this);
+		add(backButton, BorderLayout.SOUTH);
+	}
+
+	/**
+	 * Shows error message.
+	 * 
+	 * @param s
+	 *            error message.
+	 */
+	void setError(String s) {
+		text.setText("<html>" + s + "</html>");
+		text.setIcon(null);
+		repaint();
+	}
 
 	/**
 	 * Handles connection timeout.
@@ -71,41 +110,23 @@ public class ConnectProgressDialog extends JDialog implements ActionListener {
 
 		@Override
 		public void done() {
-			if (errorMessage.isEmpty())
-				setVisible(false);
-			else
-				label.setText("<html><b>Fehler:</b><br>" + errorMessage
-						+ "</html>");
+			if (!errorMessage.isEmpty())
+				setError("<b>Fehler:</b> " + errorMessage);
 		}
 	};
 
-	ConnectProgressDialog(JFrame gui, NetworkManager nwm) {
-		super(gui, "Connecting...", JDialog.ModalityType.DOCUMENT_MODAL);
-		errorMessage = "";
-		this.nwm = nwm;
-		buildGui();
-	}
-
-	private void buildGui() {
-		setSize(300, 300);
-		label = new JTextPane();
-		label.setContentType("text/html");
-		label.setText("<html>Connecting...<br><br>Please wait!</html>");
-		label.setEditable(false);
-		backButton = new JButton("Back");
-		backButton.addActionListener(this);
-		label.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
-		getContentPane().setLayout(new BorderLayout());
-		getContentPane().add(label, BorderLayout.CENTER);
-		getContentPane().add(backButton, BorderLayout.SOUTH);
-		setLocationRelativeTo(getParent());
-	}
-
+	/**
+	 * Starts connecting to server asynchronously using given parameters.
+	 * 
+	 * @param addr
+	 *            server address.
+	 * @param port
+	 *            server port.
+	 */
 	void start(InetAddress addr, int port) {
 		this.addr = addr;
 		this.port = port;
 		worker.execute();
-		setVisible(true);
 	}
 
 	/**
@@ -127,6 +148,11 @@ public class ConnectProgressDialog extends JDialog implements ActionListener {
 	private Runnable connector = new Runnable() {
 		@Override
 		public void run() {
+			try {
+				Thread.sleep(500);
+			} catch (InterruptedException e1) {
+				e1.printStackTrace();
+			}
 			errorMessage = "";
 			try {
 				nwm.connect(addr, port);
@@ -147,7 +173,16 @@ public class ConnectProgressDialog extends JDialog implements ActionListener {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
+		worker.cancel(true);
 		t.interrupt();
-		setVisible(false);
+		gui.showLogin();
+	}
+
+	/**
+	 * Resets message.
+	 */
+	public void reset() {
+		text.setText("Verbindung wird hergestellt...");
+		text.setIcon(icon);
 	}
 }

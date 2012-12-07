@@ -22,6 +22,8 @@ import de.illonis.eduras.exceptions.InvalidValueEnteredException;
  * Provides a form for user input that asks for connection details and username.
  * Supports a basic error message display.
  * 
+ * @deprecated
+ * 
  * @author illonis
  * 
  */
