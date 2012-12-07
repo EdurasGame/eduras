@@ -110,6 +110,14 @@
 						<entry>-</entry>
 						<entry>-</entry>
 					</row>
+					<row>
+						<entry>SET_OWNER</entry>
+						<entry>102</entry>
+						<entry>Sets the owner of an object to a new value.</entry>
+						<entry>objectId</entry>
+						<entry>newOwnerId</entry>
+						<entry>-</entry>
+					</row>
 				</tbody>
 			</tgroup>
 		</table>
@@ -223,27 +231,21 @@
 					</row>
 					´
 					<row>
-						<entry>SHOOT_PRESSED</entry>
+						<entry>ITEM_USE</entry>
 						<entry>30</entry>
-						<entry>The user triggered to start shooting.
+						<entry>The user triggered to use an item at the position (targetX,targetY).
 						</entry>
-						<entry>ownerId</entry>
 						<entry>objectID</entry>
-					</row>
-					<row>
-						<entry>SHOOT_RELEASED</entry>
-						<entry>31</entry>
-						<entry>The user triggered to stop shooting.
-						</entry>
-						<entry>ownerId</entry>
-						<entry>objectID</entry>
+						<entry>ownerID</entry>
+						<entry>targetX</entry>
+						<entry>targetY</entry>
 					</row>
 				</tbody>
 			</tgroup>
 		</table>
 
 		<table frame="all">
-			<title>Server-Events</title>
+			<title>Networking-Events</title>
 			<tgroup cols="4">
 				<thead>
 					<row>
