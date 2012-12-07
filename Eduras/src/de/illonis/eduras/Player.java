@@ -1,5 +1,6 @@
 package de.illonis.eduras;
 
+import de.illonis.eduras.ObjectFactory.ObjectType;
 import de.illonis.eduras.exceptions.ShapeVerticesNotApplicableException;
 import de.illonis.eduras.interfaces.Controllable;
 import de.illonis.eduras.logger.EduLog;
@@ -28,6 +29,7 @@ public class Player extends MoveableGameObject implements Controllable {
 	 */
 	public Player(GameInformation game, int ownerId, String name) {
 		super(game);
+		setObjectType(ObjectType.PLAYER);
 		this.name = name;
 		setSpeed(50);
 		setOwner(ownerId);

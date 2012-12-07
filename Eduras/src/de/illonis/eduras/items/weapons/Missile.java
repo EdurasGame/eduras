@@ -3,6 +3,7 @@ package de.illonis.eduras.items.weapons;
 import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.GameObject;
 import de.illonis.eduras.MoveableGameObject;
+import de.illonis.eduras.ObjectFactory.ObjectType;
 import de.illonis.eduras.shapes.Circle;
 
 /**
@@ -19,6 +20,7 @@ public class Missile extends MoveableGameObject {
 	public Missile(GameInformation game) {
 		super(game);
 		setShape(new Circle(5));
+		setObjectType(ObjectType.MISSILE);
 	}
 
 	public void setDamage(int damage) {

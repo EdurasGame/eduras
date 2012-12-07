@@ -28,7 +28,7 @@ public class ObjectFactory {
 	 * 
 	 */
 	public enum ObjectType {
-		PLAYER(1), YELLOWCIRCLE(2), NO_OBJECT(0);
+		PLAYER(1), YELLOWCIRCLE(2), MISSILE(3), NO_OBJECT(0);
 
 		private int number;
 

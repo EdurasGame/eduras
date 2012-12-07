@@ -1,5 +1,6 @@
 package de.illonis.eduras;
 
+import de.illonis.eduras.ObjectFactory.ObjectType;
 import de.illonis.eduras.math.Vector2D;
 import de.illonis.eduras.shapes.ObjectShape;
 
@@ -13,6 +14,7 @@ public abstract class GameObject implements Comparable<GameObject> {
 
 	public static int lastId = 0;
 	private final GameInformation game;
+	private ObjectType type;
 
 	private ObjectShape shape;
 
@@ -31,6 +33,20 @@ public abstract class GameObject implements Comparable<GameObject> {
 	public GameObject(GameInformation game) {
 		this.game = game;
 		this.id = getNextId();
+		setObjectType(ObjectType.NO_OBJECT);
+	}
+
+	/**
+	 * Returns type of this object.
+	 * 
+	 * @return
+	 */
+	public ObjectType getType() {
+		return type;
+	}
+
+	protected void setObjectType(ObjectType type) {
+		this.type = type;
 	}
 
 	/**
