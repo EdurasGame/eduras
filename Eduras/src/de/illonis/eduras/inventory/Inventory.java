@@ -137,7 +137,7 @@ public class Inventory {
 	 * @return true if item exists, false otherwise.
 	 */
 	public boolean hasItem(Item item) {
-		return hasItemOfType(item.getType());
+		return hasItemOfType(item.getItemType());
 
 	}
 
@@ -170,7 +170,7 @@ public class Inventory {
 	private int getItemOfTypeBetween(ItemType type, int from, int to) {
 		for (int i = from; i < to; i++) {
 			try {
-				if (itemSlots[i].getItem().getType().equals(type))
+				if (itemSlots[i].getItem().getItemType().equals(type))
 					return i;
 			} catch (ItemSlotIsEmptyException e) {
 			}
@@ -194,7 +194,7 @@ public class Inventory {
 		if (item.stacks()) {
 			int left = 0;
 			do {
-				targetPos = getItemOfTypeBetween(item.getType(), left,
+				targetPos = getItemOfTypeBetween(item.getItemType(), left,
 						MAX_CAPACITY);
 				if (targetPos >= 0) {
 					try {

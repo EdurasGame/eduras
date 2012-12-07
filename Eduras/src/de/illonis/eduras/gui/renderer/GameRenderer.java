@@ -1,4 +1,4 @@
-package de.illonis.eduras.gui;
+package de.illonis.eduras.gui.renderer;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
@@ -10,6 +10,7 @@ import java.util.LinkedList;
 
 import de.illonis.eduras.GameObject;
 import de.illonis.eduras.Player;
+import de.illonis.eduras.gui.GameCamera;
 import de.illonis.eduras.logicabstraction.InformationProvider;
 import de.illonis.eduras.math.Vector2D;
 import de.illonis.eduras.shapes.Circle;

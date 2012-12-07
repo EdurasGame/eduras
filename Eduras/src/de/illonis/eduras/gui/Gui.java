@@ -15,6 +15,7 @@ import de.illonis.eduras.events.GameInfoRequest;
 import de.illonis.eduras.exceptions.InvalidValueEnteredException;
 import de.illonis.eduras.exceptions.MessageNotSupportedException;
 import de.illonis.eduras.exceptions.WrongEventTypeException;
+import de.illonis.eduras.gui.renderer.GameRenderer;
 import de.illonis.eduras.locale.Localization;
 import de.illonis.eduras.logger.EduLog;
 import de.illonis.eduras.logger.EduLog.LogMode;

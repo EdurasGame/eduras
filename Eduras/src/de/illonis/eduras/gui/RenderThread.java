@@ -3,6 +3,7 @@ package de.illonis.eduras.gui;
 import java.awt.Graphics2D;
 import java.awt.image.BufferStrategy;
 
+import de.illonis.eduras.gui.renderer.GameRenderer;
 import de.illonis.eduras.logger.EduLog;
 
 /**

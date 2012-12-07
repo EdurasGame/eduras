@@ -56,7 +56,7 @@ public abstract class Item extends GameObject {
 	 * 
 	 * @return item type.
 	 */
-	public ItemType getType() {
+	public ItemType getItemType() {
 		return type;
 	}
 
