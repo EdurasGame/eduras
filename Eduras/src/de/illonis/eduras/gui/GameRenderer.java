@@ -101,22 +101,49 @@ public class GameRenderer {
 		dbg.setColor(Color.yellow);
 		for (GameObject d : objs.values()) {
 
-			ObjectShape objectShape = d.getShape();
-
-			if (objectShape instanceof Polygon) {
-
-				drawPolygon((Polygon) objectShape, d);
-
-				if (d instanceof Player) {
-					Player player = (Player) d;
-					dbg.drawString(player.getName(), player.getDrawX()
-							- camera.x, player.getDrawY() - camera.y);
-				}
+			// draw shape of gameObject if object has shape
+			if (d.getShape() != null) {
+				drawShapeOf(d);
 			}
 
-			if (objectShape instanceof Circle) {
-				drawCircle((Circle) objectShape, d);
+			if (hasImage(d)) {
+				// TODO: draw image for gameobject.
 			}
+		}
+	}
+
+	/**
+	 * Checks if renderer has an image that is associated to given
+	 * {@link GameObject}, so it can be drawn.
+	 * 
+	 * @param obj
+	 *            game object to test.
+	 * @return true if gameobject has an image, false otherwise.
+	 */
+	private boolean hasImage(GameObject obj) {
+		// TODO: implement
+		return false;
+	}
+
+	/**
+	 * Draws shape of a {@link GameObject}.
+	 * 
+	 * @param obj
+	 *            gameobject.
+	 */
+	private void drawShapeOf(GameObject obj) {
+		ObjectShape objectShape = obj.getShape();
+		if (objectShape instanceof Polygon) {
+
+			drawPolygon((Polygon) objectShape, obj);
+
+			if (obj instanceof Player) {
+				Player player = (Player) obj;
+				dbg.drawString(player.getName(), player.getDrawX() - camera.x,
+						player.getDrawY() - camera.y);
+			}
+		} else if (objectShape instanceof Circle) {
+			drawCircle((Circle) objectShape, obj);
 		}
 	}
 
