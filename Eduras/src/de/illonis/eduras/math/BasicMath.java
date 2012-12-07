@@ -67,4 +67,46 @@ public class BasicMath {
 		}
 		return result;
 	}
+
+	/**
+	 * Returns minimum of given values.
+	 * 
+	 * @param values
+	 *            input values.
+	 * @return minimum.
+	 */
+	public static double min(double... values) {
+		if (values.length == 0)
+			throw new NullPointerException(
+					"Passed no value to min(double...) function.");
+		if (values.length == 1)
+			return values[0];
+		double min = 0;
+		for (int i = 1; i < values.length; i++) {
+			min = Math.min(values[i], values[i - 1]);
+
+		}
+		return min;
+	}
+
+	/**
+	 * Returns maximum of given values.
+	 * 
+	 * @param values
+	 *            input values.
+	 * @return maximum.
+	 */
+	public static double max(double... values) {
+		if (values.length == 0)
+			throw new NullPointerException(
+					"Passed no value to max(double...) function.");
+		if (values.length == 1)
+			return values[0];
+		double max = 0;
+		for (int i = 1; i < values.length; i++) {
+			max = Math.max(values[i], values[i - 1]);
+
+		}
+		return max;
+	}
 }
