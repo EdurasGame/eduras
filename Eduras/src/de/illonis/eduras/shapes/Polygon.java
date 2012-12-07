@@ -3,6 +3,8 @@
  */
 package de.illonis.eduras.shapes;
 
+import java.awt.geom.Rectangle2D;
+import java.awt.geom.Rectangle2D.Double;
 import java.util.HashMap;
 import java.util.LinkedList;
 
@@ -255,6 +257,12 @@ public class Polygon extends ObjectShape {
 			}
 		}
 		return interceptPoints;
+	}
+
+	@Override
+	public Double getBoundingBox() {
+		// TODO: implement
+		return new Rectangle2D.Double();
 	}
 
 }

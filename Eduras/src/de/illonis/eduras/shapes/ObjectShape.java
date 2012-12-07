@@ -3,6 +3,7 @@
  */
 package de.illonis.eduras.shapes;
 
+import java.awt.geom.Rectangle2D;
 import java.util.LinkedList;
 
 import de.illonis.eduras.GameInformation;
@@ -47,4 +48,6 @@ public abstract class ObjectShape {
 	 */
 	public abstract LinkedList<CollisionPoint> isIntersected(
 			LinkedList<Line> lines, GameObject thisObject);
+
+	public abstract Rectangle2D.Double getBoundingBox();
 }

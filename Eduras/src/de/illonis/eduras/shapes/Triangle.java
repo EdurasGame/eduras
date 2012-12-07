@@ -3,7 +3,10 @@
  */
 package de.illonis.eduras.shapes;
 
+import java.awt.geom.Rectangle2D;
+
 import de.illonis.eduras.exceptions.ShapeVerticesNotApplicableException;
+import de.illonis.eduras.math.BasicMath;
 import de.illonis.eduras.math.Vector2D;
 
 /**
@@ -44,5 +47,18 @@ public class Triangle extends Polygon {
 		} else {
 			throw new ShapeVerticesNotApplicableException();
 		}
+	}
+
+	@Override
+	public Rectangle2D.Double getBoundingBox() {
+		// TODO: test
+		Vector2D[] v = getVerticesAsArray();
+		double x = BasicMath.min(v[0].getX(), v[1].getX(), v[2].getX());
+		double y = BasicMath.min(v[0].getY(), v[1].getY(), v[2].getY());
+
+		double xMax = BasicMath.max(v[0].getX(), v[1].getX(), v[2].getX());
+		double yMax = BasicMath.max(v[0].getY(), v[1].getY(), v[2].getY());
+
+		return new Rectangle2D.Double(x, y, xMax - x, yMax - y);
 	}
 }

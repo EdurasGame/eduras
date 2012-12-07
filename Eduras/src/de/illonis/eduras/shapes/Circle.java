@@ -3,6 +3,8 @@
  */
 package de.illonis.eduras.shapes;
 
+import java.awt.geom.Rectangle2D;
+import java.awt.geom.Rectangle2D.Double;
 import java.util.HashMap;
 import java.util.LinkedList;
 
@@ -233,6 +235,11 @@ public class Circle extends ObjectShape {
 	 */
 	public void setRadius(double radius) {
 		this.radius = radius;
+	}
+
+	@Override
+	public Double getBoundingBox() {
+		return new Rectangle2D.Double(0, 0, 2 * radius, 2 * radius);
 	}
 
 }

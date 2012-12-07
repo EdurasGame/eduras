@@ -118,4 +118,5 @@ public class Player extends MoveableGameObject implements Controllable {
 		// do nothing
 		EduLog.info("I JUST COLLIDED!");
 	}
+
 }

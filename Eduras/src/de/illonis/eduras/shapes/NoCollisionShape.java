@@ -1,5 +1,7 @@
 package de.illonis.eduras.shapes;
 
+import java.awt.geom.Rectangle2D;
+import java.awt.geom.Rectangle2D.Double;
 import java.util.LinkedList;
 
 import de.illonis.eduras.GameInformation;
@@ -14,7 +16,7 @@ import de.illonis.eduras.math.Vector2D;
  * @author illonis
  * 
  */
-public class NoCollisionShape extends ObjectShape {
+public final class NoCollisionShape extends ObjectShape {
 
 	@Override
 	public Vector2D checkCollision(GameInformation game, GameObject thisObject,
@@ -26,6 +28,11 @@ public class NoCollisionShape extends ObjectShape {
 	public LinkedList<CollisionPoint> isIntersected(LinkedList<Line> lines,
 			GameObject thisObject) {
 		return null;
+	}
+
+	@Override
+	public Double getBoundingBox() {
+		return new Rectangle2D.Double();
 	}
 
 }

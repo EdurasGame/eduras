@@ -1,5 +1,7 @@
 package de.illonis.eduras;
 
+import java.awt.geom.Rectangle2D;
+
 import de.illonis.eduras.ObjectFactory.ObjectType;
 import de.illonis.eduras.math.Vector2D;
 import de.illonis.eduras.shapes.ObjectShape;
@@ -258,6 +260,19 @@ public abstract class GameObject implements Comparable<GameObject> {
 	 */
 	public Vector2D getPositionVector() {
 		return new Vector2D(getXPosition(), getYPosition());
+	}
+
+	/**
+	 * Returns bounding box. This is required for renderer to compute which
+	 * objects are in visible region.
+	 * 
+	 * @return bounding box.
+	 */
+	public Rectangle2D.Double getBoundingBox() {
+		Rectangle2D.Double r = getShape().getBoundingBox();
+		r.x = getDrawX();
+		r.y = getDrawY();
+		return r;
 	}
 
 	/**
