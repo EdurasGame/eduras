@@ -16,6 +16,7 @@ public class SpriteSheet {
 
 	private ImageData[] data;
 	private int tileCount;
+	private int tileWidth, tileHeight;
 
 	/**
 	 * Creates a new {@linkplain SpriteSheet} using given image with square
@@ -49,6 +50,8 @@ public class SpriteSheet {
 	 */
 	public SpriteSheet(String path, int tileWidth, int tileHeight)
 			throws ImageLoadingError {
+		this.tileWidth = tileWidth;
+		this.tileHeight = tileHeight;
 
 		try {
 			data = cut(path, tileWidth, tileHeight);
@@ -105,6 +108,24 @@ public class SpriteSheet {
 	}
 
 	/**
+	 * Returns height of a single tile.
+	 * 
+	 * @return height of a single tile.
+	 */
+	public int getTileHeight() {
+		return tileHeight;
+	}
+
+	/**
+	 * Returns width of a single tile.
+	 * 
+	 * @return width of a single tile.
+	 */
+	public int getTileWidth() {
+		return tileWidth;
+	}
+
+	/**
 	 * Returns imagedata of selected tile. Not that this may throw an
 	 * {@link ArrayIndexOutOfBoundsException} if there are too less tiles to get
 	 * requested tile.
@@ -115,6 +136,22 @@ public class SpriteSheet {
 	 */
 	public ImageData getTile(int tile) {
 		return data[tile];
+	}
+
+	/**
+	 * Returns buffered image that shows selected tile. Returned image has
+	 * exactly the same size as a single tile.
+	 * 
+	 * @param tile
+	 *            tile index.
+	 * @return image of given tile.
+	 */
+	public BufferedImage getTileImage(int tile) {
+		BufferedImage img = new BufferedImage(tileWidth, tileHeight,
+				BufferedImage.TYPE_INT_ARGB);
+		img.setRGB(0, 0, tileWidth, tileHeight, getTile(tile).pixels, 0,
+				tileWidth);
+		return img;
 	}
 
 }
