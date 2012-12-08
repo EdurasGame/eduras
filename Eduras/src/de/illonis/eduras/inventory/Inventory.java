@@ -15,8 +15,11 @@ public class Inventory {
 	public final static int MAX_CAPACITY = 6;
 
 	private int gold;
-	private ItemSlot[] itemSlots;
+	private final ItemSlot[] itemSlots;
 
+	/**
+	 * Creates an empty inventory.
+	 */
 	public Inventory() {
 		itemSlots = new ItemSlot[MAX_CAPACITY];
 		for (int i = 0; i < MAX_CAPACITY; i++) {

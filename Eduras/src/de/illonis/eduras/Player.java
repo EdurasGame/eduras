@@ -3,6 +3,7 @@ package de.illonis.eduras;
 import de.illonis.eduras.ObjectFactory.ObjectType;
 import de.illonis.eduras.exceptions.ShapeVerticesNotApplicableException;
 import de.illonis.eduras.interfaces.Controllable;
+import de.illonis.eduras.inventory.Inventory;
 import de.illonis.eduras.logger.EduLog;
 import de.illonis.eduras.math.Vector2D;
 import de.illonis.eduras.shapes.Triangle;
@@ -15,6 +16,7 @@ import de.illonis.eduras.shapes.Triangle;
  */
 public class Player extends MoveableGameObject implements Controllable {
 	private String name;
+	private final Inventory inventory = new Inventory();
 
 	/**
 	 * Create a new player that belongs to the given game and has the given
@@ -117,6 +119,15 @@ public class Player extends MoveableGameObject implements Controllable {
 	public void onCollision(GameObject collidingObject) {
 		// do nothing
 		EduLog.info("I JUST COLLIDED!");
+	}
+
+	/**
+	 * Returns the player's inventory.
+	 * 
+	 * @return Player's inventory.
+	 */
+	public Inventory getInventory() {
+		return inventory;
 	}
 
 }
