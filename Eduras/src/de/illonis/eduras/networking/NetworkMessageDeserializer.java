@@ -266,7 +266,7 @@ public class NetworkMessageDeserializer {
 	private static GameEvent handleItemEvent(String msg, String[] args,
 			GameEventNumber typeNumber) {
 		ItemEvent itemEvent = new ItemEvent(typeNumber, parseInt(args[2]));
-		itemEvent.setObjectId(parseInt(args[1]));
+		itemEvent.setSlotNum(parseInt(args[1]));
 
 		if (typeNumber == GameEventNumber.ITEM_USE) {
 			itemEvent.setTargetX(parseDouble(args[3]));

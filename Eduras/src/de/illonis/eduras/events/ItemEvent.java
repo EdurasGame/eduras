@@ -17,7 +17,7 @@ import de.illonis.eduras.math.Vector2D;
  */
 public class ItemEvent extends OwnerGameEvent {
 
-	private int objectId = -1;
+	private int slotNum = -1;
 	private Vector2D target;
 
 	/**
@@ -37,22 +37,23 @@ public class ItemEvent extends OwnerGameEvent {
 	}
 
 	/**
-	 * Set the objectid of the item which is related to this event.
+	 * Set the itemslot of the player's inventory which is related to this
+	 * event.
 	 * 
-	 * @param id
-	 *            The item's id.
+	 * @param slotNum
+	 *            The number of the slot.
 	 */
-	public void setObjectId(int id) {
-		objectId = id;
+	public void setSlotNum(int slotNum) {
+		this.slotNum = slotNum;
 	}
 
 	/**
-	 * Returns the objectid of the item.
+	 * Returns the slotnumber of the item to use.
 	 * 
-	 * @return The item's objectid.
+	 * @return The slotnumber.
 	 */
-	public int getObjectId() {
-		return objectId;
+	public int getSlotNum() {
+		return this.slotNum;
 	}
 
 	/**
@@ -85,6 +86,11 @@ public class ItemEvent extends OwnerGameEvent {
 		this.target = target;
 	}
 
+	/**
+	 * Returns the target of the item event.
+	 * 
+	 * @return The target.
+	 */
 	public Vector2D getTarget() {
 		return target;
 	}

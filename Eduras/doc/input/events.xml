@@ -233,9 +233,9 @@
 					<row>
 						<entry>ITEM_USE</entry>
 						<entry>30</entry>
-						<entry>The user triggered to use an item at the position (targetX,targetY).
+						<entry>The user triggered to use the item in his inventory slot 'slotNum' at the position (targetX,targetY).
 						</entry>
-						<entry>objectID</entry>
+						<entry>slotNum</entry>
 						<entry>ownerID</entry>
 						<entry>targetX</entry>
 						<entry>targetY</entry>

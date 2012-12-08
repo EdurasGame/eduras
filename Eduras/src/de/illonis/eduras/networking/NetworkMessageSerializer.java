@@ -136,7 +136,7 @@ public class NetworkMessageSerializer {
 		case ITEM_USE:
 			ItemEvent itemEvent = (ItemEvent) gameEvent;
 			Vector2D target = itemEvent.getTarget();
-			serializedEvent += itemEvent.getObjectId() + "#"
+			serializedEvent += itemEvent.getSlotNum() + "#"
 					+ itemEvent.getOwner() + "#" + target.getX() + "#"
 					+ target.getY();
 			break;
