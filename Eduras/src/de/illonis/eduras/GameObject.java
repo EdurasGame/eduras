@@ -262,6 +262,7 @@ public abstract class GameObject implements Comparable<GameObject> {
 		return new Vector2D(getXPosition(), getYPosition());
 	}
 
+	// FIXME: Extract GUI things from here!
 	/**
 	 * Returns bounding box. This is required for renderer to compute which
 	 * objects are in visible region.

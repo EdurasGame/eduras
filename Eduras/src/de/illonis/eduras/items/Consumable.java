@@ -1,6 +1,5 @@
 package de.illonis.eduras.items;
 
-import de.illonis.eduras.GameObject;
 
 /**
  * Indicates an item is consumable, that means it is removed when used.
@@ -11,5 +10,5 @@ import de.illonis.eduras.GameObject;
 public interface Consumable extends Usable {
 
 	@Override
-	public void use(GameObject unit);
+	public void use(ItemUseInformation info);
 }

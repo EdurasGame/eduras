@@ -1,6 +1,5 @@
 package de.illonis.eduras.items;
 
-import de.illonis.eduras.GameObject;
 
 /**
  * Indicates an item is usable.
@@ -10,6 +9,6 @@ import de.illonis.eduras.GameObject;
  */
 public interface Usable {
 
-	public void use(GameObject unit);
+	public void use(ItemUseInformation info);
 
 }
