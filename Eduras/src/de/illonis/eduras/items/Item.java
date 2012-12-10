@@ -37,6 +37,7 @@ public abstract class Item extends GameObject {
 
 	private int sellValue;
 	private int buyValue;
+	private String name;
 
 	/**
 	 * Creates a new item of given item type.
@@ -49,6 +50,25 @@ public abstract class Item extends GameObject {
 	public Item(ItemType type, GameInformation gi) {
 		super(gi);
 		this.type = type;
+	}
+
+	/**
+	 * Returns name of item.
+	 * 
+	 * @return item name.
+	 */
+	public String getName() {
+		return name;
+	}
+
+	/**
+	 * Sets name of item.
+	 * 
+	 * @param name
+	 *            new itemname.
+	 */
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	/**
