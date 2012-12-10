@@ -13,6 +13,7 @@ import de.illonis.eduras.events.MovementEvent;
 import de.illonis.eduras.events.ObjectFactoryEvent;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
 import de.illonis.eduras.exceptions.ShapeVerticesNotApplicableException;
+import de.illonis.eduras.items.weapons.ExampleWeapon;
 import de.illonis.eduras.logger.EduLog;
 import de.illonis.eduras.math.Vector2D;
 import de.illonis.eduras.shapes.ObjectShape;
@@ -41,6 +42,10 @@ public class GameInformation {
 			CircledBlock exampleCircledBlock = new CircledBlock(this, 20,
 					map.getWidth() / 2 + 25, map.getHeight() / 2);
 			addObject(exampleCircledBlock);
+			ExampleWeapon exampleWeapon = new ExampleWeapon(this);
+			exampleWeapon.setPosition(map.getWidth() * 0.75,
+					map.getHeight() * 0.75);
+			addObject(exampleWeapon);
 		} catch (ShapeVerticesNotApplicableException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
