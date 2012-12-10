@@ -219,4 +219,12 @@ public class Gui extends JFrame implements ActionListener {
 		cardLayout.show(getContentPane(), GAMEPANEL);
 		gamePanel.requestFocus();
 	}
+
+	/**
+	 * Called when network connection is lost to display error message.
+	 */
+	public void networkLost() {
+		showProgress();
+		progressPanel.setError("Connection lost.");
+	}
 }

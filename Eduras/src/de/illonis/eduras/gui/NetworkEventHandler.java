@@ -22,6 +22,8 @@ public class NetworkEventHandler implements NetworkEventListener {
 	public void onNetworkEventAppeared(NetworkEvent event) {
 		switch (event.getType()) {
 		case CONNECTION_ABORTED:
+			gui.networkLost();
+
 			break;
 		case CONNECTION_ESTABLISHED:
 			gui.onConnected();
