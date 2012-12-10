@@ -3,16 +3,28 @@ package de.illonis.eduras.gui.guielements;
 import java.awt.Color;
 import java.awt.Graphics2D;
 
+import de.illonis.eduras.exceptions.ObjectNotFoundException;
+import de.illonis.eduras.inventory.Inventory;
+import de.illonis.eduras.inventory.ItemSlotIsEmptyException;
+import de.illonis.eduras.logger.EduLog;
 import de.illonis.eduras.logicabstraction.InformationProvider;
 
 public class ItemDisplay extends RenderedGuiObject {
-	private int height, width, blocksize;
+
+	private int height, width, blocksize, itemGap;
+	private GuiItem itemSlots[];
 
 	public ItemDisplay(InformationProvider info) {
 		super(info);
-		height = 110;
+
 		width = 150;
 		blocksize = 30;
+		itemGap = 10;
+		height = 20 + 3 * blocksize + 3 * itemGap;
+		itemSlots = new GuiItem[Inventory.MAX_CAPACITY];
+		for (int i = 0; i < Inventory.MAX_CAPACITY; i++) {
+			itemSlots[i] = new GuiItem(i);
+		}
 
 	}
 
@@ -21,14 +33,72 @@ public class ItemDisplay extends RenderedGuiObject {
 		g2d.setColor(Color.white);
 		g2d.fillRect(screenX, screenY, width, height);
 		g2d.setColor(Color.black);
-		g2d.drawRect(screenX + 20, screenY + 20, blocksize, blocksize);
-		g2d.drawRect(screenX + 60, screenY + 20, blocksize, blocksize);
-		g2d.drawRect(screenX + 100, screenY + 20, blocksize, blocksize);
+		for (GuiItem item : itemSlots) {
+			g2d.drawRect(item.getX() + screenX, item.getY() + screenY,
+					blocksize, blocksize);
+			g2d.drawString(item.getSlotId() + ": " + item.getName(),
+					item.getX() + screenX, item.getY() + screenY);
+
+		}
 	}
 
 	@Override
 	public void onGuiSizeChanged(int newWidth, int newHeight) {
 		screenX = 0;
 		screenY = newHeight - height;
+	}
+
+	/**
+	 * Called when an item in logic has changed. This will update gui so user
+	 * sees up to date item icon.
+	 * 
+	 * @param slot
+	 *            slot that changed.
+	 */
+	public void onItemChanged(int slot) {
+		String newName;
+		try {
+			newName = getInfo().getPlayer().getInventory().getItemBySlot(slot)
+					.getName();
+		} catch (ItemSlotIsEmptyException e) {
+			newName = "E";
+		} catch (ObjectNotFoundException e) {
+			newName = "N/A";
+			EduLog.error("Item slot was created in gui, but assigned player was not found.");
+		}
+		itemSlots[slot].setName(newName);
+	}
+
+	private class GuiItem {
+		private int x, y, slotId;
+		private String name;
+
+		GuiItem(int slotId) {
+			this.x = 20 + (blocksize + itemGap)
+					* (slotId % (Inventory.MAX_CAPACITY / 2));
+			this.y = 20 + (blocksize + itemGap) * (slotId % 2);
+			this.slotId = slotId;
+			setName("?");
+		}
+
+		int getX() {
+			return x;
+		}
+
+		int getY() {
+			return y;
+		}
+
+		int getSlotId() {
+			return slotId;
+		}
+
+		String getName() {
+			return name;
+		}
+
+		void setName(String name) {
+			this.name = name;
+		}
 	}
 }
