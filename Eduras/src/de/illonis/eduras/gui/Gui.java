@@ -180,6 +180,7 @@ public class Gui extends JFrame implements ActionListener {
 			camera.setSize(getWidth(), getHeight());
 			EduLog.fine("[GUI] Size changed. New size: " + getWidth() + ", "
 					+ getHeight());
+			renderer.notifyGuiSizeChanged(getWidth(), getHeight());
 		}
 	}
 
