@@ -100,9 +100,9 @@
 			getAbsoluteVertices() for this purpose). Of course, checking a
 			collision is
 			always dependent on how the shape of the gameobject looks
-			like. Since there might be different best-practices for calculating a
+			like. <emphasis role='strike'> Since there might be different best-practices for calculating a
 			collsion for different shapes, every shape has to implement
-			checkCollision().
+			checkCollision(). </emphasis> Every shape has to implement 'getBorderPoints' and 'isIntersected' to be able to check for a collision.
 		</para>
 
 	</section>
