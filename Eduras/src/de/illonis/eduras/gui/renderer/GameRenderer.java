@@ -7,6 +7,7 @@ import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedList;
 
 import de.illonis.eduras.GameObject;
@@ -34,6 +35,7 @@ public class GameRenderer {
 	private final Rectangle mapSize;
 	private final ImageList imagelist;
 	private ArrayList<RenderedGuiObject> uiObjects;
+	private InformationProvider informationProvider;
 
 	/**
 	 * Creates a new renderer.
@@ -45,11 +47,19 @@ public class GameRenderer {
 	 */
 	public GameRenderer(GameCamera camera,
 			InformationProvider informationProvider) {
+		this.informationProvider = informationProvider;
 		imagelist = new ImageList();
-		uiObjects = new ArrayList<RenderedGuiObject>();
 		this.camera = camera;
 		objs = informationProvider.getGameObjects();
 		mapSize = informationProvider.getMapBounds();
+		initGui();
+	}
+
+	/**
+	 * initializes gui objects
+	 */
+	private void initGui() {
+		uiObjects = new ArrayList<RenderedGuiObject>();
 		uiObjects.add(new ItemDisplay(informationProvider));
 	}
 
@@ -118,24 +128,24 @@ public class GameRenderer {
 	private synchronized void drawObjects() {
 
 		dbg.setColor(Color.yellow);
-		synchronized (objs) {
-			for (GameObject d : objs.values()) {
 
-				if (d.isVisible() == false) {
-					continue;
+		for (Iterator<GameObject> iterator = objs.values().iterator(); iterator
+				.hasNext();) {
+			GameObject d = iterator.next();
+			if (d.isVisible() == false) {
+				continue;
+			}
+
+			if (d.getBoundingBox().intersects(camera)) {
+
+				// draw shape of gameObject if object has shape
+				if (d.getShape() != null) {
+
+					drawShapeOf(d);
 				}
 
-				if (d.getBoundingBox().intersects(camera)) {
-
-					// draw shape of gameObject if object has shape
-					if (d.getShape() != null) {
-
-						drawShapeOf(d);
-					}
-
-					if (hasImage(d)) {
-						// TODO: draw image for gameobject.
-					}
+				if (hasImage(d)) {
+					// TODO: draw image for gameobject.
 				}
 			}
 		}
