@@ -94,12 +94,10 @@ public class Gui extends JFrame implements ActionListener {
 		loginPanel.setActionListener(this);
 
 		cardLayout.show(getContentPane(), LOGINPANEL);
-
+		renderer = new GameRenderer(camera, infoPro);
 		gamePanel = new GamePanel();
 		gamePanel.addMouseMotionListener(cml);
 		gamePanel.addMouseListener(cml);
-		renderer = new GameRenderer(camera, infoPro);
-		rendererThread = new RenderThread(renderer, gamePanel);
 
 		add(loginPanel, LOGINPANEL);
 		add(progressPanel, CONNECTPANEL);
@@ -133,6 +131,7 @@ public class Gui extends JFrame implements ActionListener {
 	 */
 	void onConnected() {
 		showGame();
+		rendererThread = new RenderThread(renderer, gamePanel);
 		camera.setSize(getWidth(), getHeight());
 		Thread t = new Thread(rendererThread);
 		t.start();
@@ -219,6 +218,7 @@ public class Gui extends JFrame implements ActionListener {
 	public void showGame() {
 		cardLayout.show(getContentPane(), GAMEPANEL);
 		gamePanel.requestFocus();
+		renderer.notifyGuiSizeChanged(getWidth(), getHeight());
 	}
 
 	/**

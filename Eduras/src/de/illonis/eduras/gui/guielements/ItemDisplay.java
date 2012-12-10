@@ -36,7 +36,7 @@ public class ItemDisplay extends RenderedGuiObject {
 		for (GuiItem item : itemSlots) {
 			g2d.drawRect(item.getX() + screenX, item.getY() + screenY,
 					blocksize, blocksize);
-			g2d.drawString(item.getSlotId() + ": " + item.getName(),
+			g2d.drawString("#" + item.getSlotId() + ": " + item.getName(),
 					item.getX() + screenX, item.getY() + screenY);
 
 		}
