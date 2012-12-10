@@ -49,6 +49,7 @@ public abstract class Item extends GameObject {
 	 */
 	public Item(ItemType type, GameInformation gi) {
 		super(gi);
+		this.name = "unknown";
 		this.type = type;
 	}
 
