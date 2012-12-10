@@ -44,6 +44,7 @@ public final class EduLog {
 		}
 	}
 
+	private int trackSize = 0;
 	private HashSet<String> classlist;
 	private ArrayList<LogEntry> logdata;
 	private ArrayList<LogListener> listeners;
@@ -92,6 +93,28 @@ public final class EduLog {
 	}
 
 	/**
+	 * Sets maximum track size to given value. If trackSize is 0, full track is
+	 * displayed. Track size specifies, how many steps will be taken to create
+	 * stacktrace.
+	 * 
+	 * @param trackSize
+	 *            new track size
+	 */
+	public static void setTrackDetail(int trackSize) {
+		getInstance().setTrackSize(trackSize);
+	}
+
+	/**
+	 * @see #setTrackDetail(int)
+	 * @param trackSize
+	 */
+	private void setTrackSize(int trackSize) {
+		if (trackSize < 0)
+			trackSize = 0;
+		this.trackSize = trackSize;
+	}
+
+	/**
 	 * @see EduLog#setLogOutput(LogMode...)
 	 * @param modes
 	 *            new output targets.
@@ -120,9 +143,12 @@ public final class EduLog {
 	private StackTraceElement[] getStackTrace() {
 		StackTraceElement[] s = new Throwable().fillInStackTrace()
 				.getStackTrace();
-		StackTraceElement[] newElements = new StackTraceElement[s.length - 4];
-		for (int i = 4; i < s.length; i++) {
-			newElements[i - 4] = s[i];
+		int start = (trackSize > 0) ? Math.max(4, s.length - 4 - trackSize) : 4;
+		StackTraceElement[] newElements = new StackTraceElement[s.length
+				- start];
+
+		for (int i = start; i < s.length; i++) {
+			newElements[i - start] = s[i];
 			if (classlist.add(s[i].getClassName()))
 				broadcastClassAdded(s[i].getClassName());
 		}

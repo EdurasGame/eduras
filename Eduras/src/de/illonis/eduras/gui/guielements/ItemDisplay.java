@@ -25,7 +25,6 @@ public class ItemDisplay extends RenderedGuiObject {
 		for (int i = 0; i < Inventory.MAX_CAPACITY; i++) {
 			itemSlots[i] = new GuiItem(i);
 		}
-
 	}
 
 	@Override
@@ -34,6 +33,7 @@ public class ItemDisplay extends RenderedGuiObject {
 		g2d.fillRect(screenX, screenY, width, height);
 		g2d.setColor(Color.black);
 		for (GuiItem item : itemSlots) {
+			// TODO: make nicerok
 			g2d.drawRect(item.getX() + screenX, item.getY() + screenY,
 					blocksize, blocksize);
 			g2d.drawString("#" + item.getSlotId() + ": " + item.getName(),
@@ -74,6 +74,7 @@ public class ItemDisplay extends RenderedGuiObject {
 		private String name;
 
 		GuiItem(int slotId) {
+			// TODO: Fix item display order.
 			this.x = 20 + (blocksize + itemGap)
 					* (slotId % (Inventory.MAX_CAPACITY / 2));
 			this.y = 20 + (blocksize + itemGap) * (slotId % 2);

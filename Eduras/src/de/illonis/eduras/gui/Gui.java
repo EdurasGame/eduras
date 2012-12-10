@@ -5,6 +5,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
@@ -98,6 +100,8 @@ public class Gui extends JFrame implements ActionListener {
 		gamePanel = new GamePanel();
 		gamePanel.addMouseMotionListener(cml);
 		gamePanel.addMouseListener(cml);
+		ClickListener cl = new ClickListener();
+		gamePanel.addMouseListener(cl);
 
 		add(loginPanel, LOGINPANEL);
 		add(progressPanel, CONNECTPANEL);
@@ -122,6 +126,7 @@ public class Gui extends JFrame implements ActionListener {
 	public static void main(String[] args) {
 		// new LoggerGui().setVisible(true);
 		EduLog.setLogOutput(LogMode.CONSOLE);
+		EduLog.setTrackDetail(3);
 		Gui gui = new Gui();
 		gui.setVisible(true);
 	}
@@ -180,6 +185,14 @@ public class Gui extends JFrame implements ActionListener {
 			EduLog.fine("[GUI] Size changed. New size: " + getWidth() + ", "
 					+ getHeight());
 			renderer.notifyGuiSizeChanged(getWidth(), getHeight());
+		}
+	}
+
+	private class ClickListener extends MouseAdapter {
+		@Override
+		public void mouseClicked(MouseEvent e) {
+			super.mouseClicked(e);
+			EduLog.info("Click at " + e.getX() + ", " + e.getY());
 		}
 	}
 
