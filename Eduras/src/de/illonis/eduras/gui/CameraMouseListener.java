@@ -13,6 +13,8 @@ import de.illonis.eduras.logger.EduLog;
  */
 public class CameraMouseListener extends MouseAdapter {
 
+	private static int CAMERA_SPEED = 6;
+
 	private GameCamera camera;
 	private int dx, dy;
 	private boolean running;
@@ -48,16 +50,16 @@ public class CameraMouseListener extends MouseAdapter {
 	public void mouseMoved(MouseEvent e) {
 		if (!inGui)
 			return;
-		if (e.getX() < (double) camera.width * 0.1) {
-			dx = -3;
-		} else if (e.getX() > (double) camera.width * 0.9) {
-			dx = 3;
+		if (e.getX() < (double) camera.width * 0.15) {
+			dx = -CAMERA_SPEED;
+		} else if (e.getX() > (double) camera.width * 0.85) {
+			dx = CAMERA_SPEED;
 		} else
 			dx = 0;
-		if (e.getY() < (double) camera.height * 0.1) {
-			dy = -3;
-		} else if (e.getY() > (double) camera.height * .9) {
-			dy = 3;
+		if (e.getY() < (double) camera.height * 0.15) {
+			dy = -CAMERA_SPEED;
+		} else if (e.getY() > (double) camera.height * .85) {
+			dy = CAMERA_SPEED;
 		} else
 			dy = 0;
 	}
