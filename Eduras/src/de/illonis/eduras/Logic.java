@@ -8,12 +8,17 @@ import de.illonis.eduras.events.ClientRenameEvent;
 import de.illonis.eduras.events.GameEvent;
 import de.illonis.eduras.events.GameEvent.GameEventNumber;
 import de.illonis.eduras.events.GameInfoRequest;
+import de.illonis.eduras.events.ItemEvent;
 import de.illonis.eduras.events.MovementEvent;
 import de.illonis.eduras.events.ObjectFactoryEvent;
 import de.illonis.eduras.events.UserMovementEvent;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
 import de.illonis.eduras.interfaces.GameEventListener;
 import de.illonis.eduras.interfaces.GameLogicInterface;
+import de.illonis.eduras.inventory.ItemSlotIsEmptyException;
+import de.illonis.eduras.items.Item;
+import de.illonis.eduras.items.ItemUseInformation;
+import de.illonis.eduras.items.Usable;
 import de.illonis.eduras.logger.EduLog;
 
 /**
@@ -107,10 +112,49 @@ public class Logic implements GameLogicInterface {
 					listener.onClientRename(e);
 				}
 				break;
+			case ITEM_USE:
+				ItemEvent itemEvent = (ItemEvent) event;
+				handleItemEvent(itemEvent);
+				break;
 			default:
 				break;
 			}
 		}
+	}
+
+	/**
+	 * Handle an item event.
+	 * 
+	 * @param itemEvent
+	 */
+	private void handleItemEvent(ItemEvent itemEvent) {
+
+		GameInformation gameInfo = getGame();
+		Player player = null;
+
+		try {
+			player = gameInfo.getPlayerByOwnerId(itemEvent.getOwner());
+		} catch (ObjectNotFoundException e) {
+			EduLog.passException(e);
+			return;
+		}
+
+		Item item = null;
+
+		try {
+			item = player.getInventory().getItemBySlot(itemEvent.getSlotNum());
+		} catch (ItemSlotIsEmptyException e) {
+			EduLog.passException(e);
+			return;
+		}
+
+		ItemUseInformation useInfo = new ItemUseInformation(player,
+				itemEvent.getTarget());
+
+		if (item.isUsable()) {
+			((Usable) item).use(useInfo);
+		}
+
 	}
 
 	/**
