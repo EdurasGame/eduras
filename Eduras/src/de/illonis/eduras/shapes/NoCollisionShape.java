@@ -35,4 +35,14 @@ public final class NoCollisionShape extends ObjectShape {
 		return new Rectangle2D.Double();
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see de.illonis.eduras.shapes.ObjectShape#getBorderPoints()
+	 */
+	@Override
+	public Vector2D[] getBorderPoints() {
+		return null;
+	}
+
 }

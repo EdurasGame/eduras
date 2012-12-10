@@ -4,11 +4,13 @@
 package de.illonis.eduras.shapes;
 
 import java.awt.geom.Rectangle2D;
+import java.util.HashMap;
 import java.util.LinkedList;
 
 import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.GameObject;
 import de.illonis.eduras.math.CollisionPoint;
+import de.illonis.eduras.math.Geometry;
 import de.illonis.eduras.math.Line;
 import de.illonis.eduras.math.Vector2D;
 
@@ -32,8 +34,82 @@ public abstract class ObjectShape {
 	 *            The target position
 	 * @return Returns the position of the object after the move.
 	 */
-	public abstract Vector2D checkCollision(GameInformation game,
-			GameObject thisObject, Vector2D target);
+	public Vector2D checkCollision(GameInformation game, GameObject thisObject,
+			Vector2D target) {
+
+		Vector2D result = target;
+
+		HashMap<Integer, GameObject> gameObjects = game.getObjects();
+
+		GameObject collisionObject = null;
+
+		Vector2D positionVector = thisObject.toPositionVector();
+
+		// calculate border points to use for collision calculation
+
+		Vector2D[] movementPoints = getBorderPoints();
+
+		LinkedList<Line> lines = Geometry.getLinesBetweenShapePositions(
+				movementPoints, positionVector, target);
+
+		LinkedList<CollisionPoint> collisions = new LinkedList<CollisionPoint>();
+
+		// Check for collides with objects
+		for (GameObject singleObject : gameObjects.values()) {
+
+			// skip comparing the object with itself
+			if (singleObject.equals(thisObject))
+				continue;
+
+			ObjectShape otherObjectShape = singleObject.getShape();
+
+			CollisionPoint nearestCollision = CollisionPoint
+					.findNearestCollision(otherObjectShape.isIntersected(lines,
+							singleObject));
+
+			// skip if there was no collision
+			if (nearestCollision == null) {
+				continue;
+			}
+
+			// remember the gameObject that had a collision
+			collisionObject = singleObject;
+
+			collisions.add(nearestCollision);
+		}
+
+		// Figure out which collision is the nearest
+		CollisionPoint resultingCollisionPoint = null;
+		if (collisions.size() > 1) {
+			resultingCollisionPoint = CollisionPoint
+					.findNearestCollision(collisions);
+		} else {
+			if (collisions.size() > 0) {
+				resultingCollisionPoint = collisions.getFirst();
+			}
+		}
+
+		// if there was a collision, notify the involved objects and calculate
+		// the new position
+		if (collisionObject != null) {
+			thisObject.onCollision(collisionObject);
+			collisionObject.onCollision(thisObject);
+
+			Vector2D targetResult = new Vector2D(positionVector);
+			resultingCollisionPoint.getDistanceVector().invert();
+			targetResult.add(resultingCollisionPoint.getDistanceVector());
+			result = targetResult;
+		}
+
+		// calculate the new position after a collision
+
+		return result;
+	}
+
+	/**
+	 * @return
+	 */
+	public abstract Vector2D[] getBorderPoints();
 
 	/**
 	 * Checks if the shape related to a specific object is intersected by

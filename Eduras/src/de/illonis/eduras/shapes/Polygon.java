@@ -266,4 +266,29 @@ public class Polygon extends ObjectShape {
 
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see de.illonis.eduras.shapes.ObjectShape#getBorderPoints()
+	 */
+	@Override
+	public Vector2D[] getBorderPoints() {
+		LinkedList<Line> borderLines = Geometry
+				.getRelativeBorderLines(vertices);
+
+		Vector2D[] movementPoints = new Vector2D[COLLISION_ACCURACY
+				* vertices.length];
+
+		int j = 0;
+		for (Line singleBorderLine : borderLines) {
+			for (int i = 0; i < COLLISION_ACCURACY; i++) {
+				movementPoints[j] = singleBorderLine
+						.getPointAt((1. / COLLISION_ACCURACY) * i);
+				j++;
+			}
+		}
+
+		return movementPoints;
+	}
+
 }

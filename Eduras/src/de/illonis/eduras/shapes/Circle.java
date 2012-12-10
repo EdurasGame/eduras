@@ -5,10 +5,8 @@ package de.illonis.eduras.shapes;
 
 import java.awt.geom.Rectangle2D;
 import java.awt.geom.Rectangle2D.Double;
-import java.util.HashMap;
 import java.util.LinkedList;
 
-import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.GameObject;
 import de.illonis.eduras.math.CollisionPoint;
 import de.illonis.eduras.math.Geometry;
@@ -106,71 +104,59 @@ public class Circle extends ObjectShape {
 	 * .GameInformation, de.illonis.eduras.GameObject,
 	 * de.illonis.eduras.math.Vector2D)
 	 */
-	@Override
-	public Vector2D checkCollision(GameInformation game, GameObject thisObject,
-			Vector2D target) {
-
-		Vector2D result = target;
-		HashMap<Integer, GameObject> gameObjects = game.getObjects();
-
-		LinkedList<Line> lines = new LinkedList<Line>();
-		LinkedList<Vector2D> circlePoints = getRelativePoints(COLLISION_ACCURACY);
-		Geometry.getLinesBetweenShapePositions(
-				circlePoints.toArray(new Vector2D[COLLISION_ACCURACY]),
-				thisObject.getPositionVector(), target);
-
-		LinkedList<CollisionPoint> collisions = new LinkedList<CollisionPoint>();
-
-		GameObject collidingObject = null;
-
-		for (GameObject singleGameObject : gameObjects.values()) {
-
-			if (singleGameObject.equals(thisObject)) {
-				continue;
-			}
-
-			LinkedList<CollisionPoint> collisionPoints = singleGameObject
-					.getShape().isIntersected(lines, singleGameObject);
-
-			CollisionPoint nearestCollisionPoint = CollisionPoint
-					.findNearestCollision(collisionPoints);
-
-			if (nearestCollisionPoint == null) {
-				continue;
-			}
-
-			collidingObject = singleGameObject;
-
-			collisions.add(nearestCollisionPoint);
-
-		}
-
-		// Figure out which collision is the nearest
-		CollisionPoint resultingCollisionPoint = null;
-		if (collisions.size() > 1) {
-			resultingCollisionPoint = CollisionPoint
-					.findNearestCollision(collisions);
-		} else {
-			if (collisions.size() > 0) {
-				resultingCollisionPoint = collisions.getFirst();
-			}
-		}
-
-		// if there was a collision, notify the involved objects and calculate
-		// the new position
-		if (collidingObject != null) {
-			thisObject.onCollision(collidingObject);
-			collidingObject.onCollision(thisObject);
-
-			Vector2D targetResult = new Vector2D(
-					collidingObject.getPositionVector());
-			resultingCollisionPoint.getDistanceVector().invert();
-			targetResult.add(resultingCollisionPoint.getDistanceVector());
-			result = targetResult;
-		}
-
-		return result;
-	}
+	/*
+	 * @Override public Vector2D checkCollision(GameInformation game, GameObject
+	 * thisObject, Vector2D target) {
+	 * 
+	 * Vector2D result = target; HashMap<Integer, GameObject> gameObjects =
+	 * game.getObjects();
+	 * 
+	 * LinkedList<Line> lines = new LinkedList<Line>(); LinkedList<Vector2D>
+	 * circlePoints = getRelativePoints(COLLISION_ACCURACY);
+	 * Geometry.getLinesBetweenShapePositions( circlePoints.toArray(new
+	 * Vector2D[COLLISION_ACCURACY]), thisObject.getPositionVector(), target);
+	 * 
+	 * LinkedList<CollisionPoint> collisions = new LinkedList<CollisionPoint>();
+	 * 
+	 * GameObject collidingObject = null;
+	 * 
+	 * for (GameObject singleGameObject : gameObjects.values()) {
+	 * 
+	 * if (singleGameObject.equals(thisObject)) { continue; }
+	 * 
+	 * LinkedList<CollisionPoint> collisionPoints = singleGameObject
+	 * .getShape().isIntersected(lines, singleGameObject);
+	 * 
+	 * CollisionPoint nearestCollisionPoint = CollisionPoint
+	 * .findNearestCollision(collisionPoints);
+	 * 
+	 * if (nearestCollisionPoint == null) { continue; }
+	 * 
+	 * collidingObject = singleGameObject;
+	 * 
+	 * collisions.add(nearestCollisionPoint);
+	 * 
+	 * }
+	 * 
+	 * // Figure out which collision is the nearest CollisionPoint
+	 * resultingCollisionPoint = null; if (collisions.size() > 1) {
+	 * resultingCollisionPoint = CollisionPoint
+	 * .findNearestCollision(collisions); } else { if (collisions.size() > 0) {
+	 * resultingCollisionPoint = collisions.getFirst(); } }
+	 * 
+	 * // if there was a collision, notify the involved objects and calculate //
+	 * the new position if (collidingObject != null) {
+	 * thisObject.onCollision(collidingObject);
+	 * collidingObject.onCollision(thisObject);
+	 * 
+	 * Vector2D targetResult = new Vector2D(
+	 * collidingObject.getPositionVector());
+	 * resultingCollisionPoint.getDistanceVector().invert();
+	 * targetResult.add(resultingCollisionPoint.getDistanceVector()); result =
+	 * targetResult; }
+	 * 
+	 * return result; }
+	 */
 
 	/*
 	 * (non-Javadoc)
@@ -240,6 +226,17 @@ public class Circle extends ObjectShape {
 	@Override
 	public Double getBoundingBox() {
 		return new Rectangle2D.Double(0, 0, 2 * radius, 2 * radius);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see de.illonis.eduras.shapes.ObjectShape#getBorderPoints()
+	 */
+	@Override
+	public Vector2D[] getBorderPoints() {
+		return getRelativePoints(COLLISION_ACCURACY).toArray(
+				new Vector2D[COLLISION_ACCURACY]);
 	}
 
 }
