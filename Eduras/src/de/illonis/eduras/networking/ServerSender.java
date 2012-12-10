@@ -144,4 +144,11 @@ public class ServerSender extends Thread {
 			// do nothing if there is no message.
 		}
 	}
+
+	/**
+	 * @return the server
+	 */
+	public Server getServer() {
+		return server;
+	}
 }

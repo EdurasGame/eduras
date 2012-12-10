@@ -13,4 +13,18 @@ public class LogWriter {
 	public void append(LogEntry entry) {
 	}
 
+	/**
+	 * @return the logFile
+	 */
+	public File getLogFile() {
+		return logFile;
+	}
+
+	/**
+	 * @param logFile the logFile to set
+	 */
+	public void setLogFile(File logFile) {
+		this.logFile = logFile;
+	}
+
 }
