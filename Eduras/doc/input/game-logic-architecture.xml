@@ -61,6 +61,8 @@
 			the map.
 		</para>
 
+		<section>
+		<title>GameObjects</title>
 		<para>
 			A GameObject represents an object that is physically on the map.
 			So it's characterized by a current x- and y-position
@@ -75,14 +77,15 @@
 				<graphic fileref="images/gameobjecthierachry.jpg"></graphic>
 			</informalfigure>
 		</para>
-
+		
 		<para>
 			A gameobject is identified by its identifier. Also, a gameObject
 			always belongs to some owner (let it be CPU if it does not belong to
 			any player). Every object has a specific behaviour when it collides
 			with another object. Thus subclasses must override 'onCollision'.
 		</para>
-		<para>Collision is checked when a MovableObject moves (see below). A
+		
+		<para>Collision is checked when a MovableObject moves (see chapter 'Collision'). A
 			MovableObject
 			moves with a speed and into a direction given by the
 			speedVector.
@@ -91,6 +94,7 @@
 			needed to calculate the absolute movement out of the speed and
 			speedVector.
 		</para>
+		
 		<para>
 			Furthermore each GameObject consists of an ObjectShape
 			indicating how a GameObject looks like. A big group of shapes are polygons. Polygons have much in common so there is a superclass for all of these. A polygon consists of a number
@@ -99,11 +103,43 @@
 			combining the gameobjects position with the shapepoints (call
 			getAbsoluteVertices() for this purpose). Of course, checking a
 			collision is
-			always dependent on how the shape of the gameobject looks
+			always dependent on how the shape of the gameobject looks  
 			like. <emphasis role='strike'> Since there might be different best-practices for calculating a
 			collsion for different shapes, every shape has to implement
 			checkCollision(). </emphasis> Every shape has to implement 'getBorderPoints' and 'isIntersected' to be able to check for a collision.
 		</para>
+		
+		<section>
+			<title>Player</title>
+			
+			<para>A player is a special movable object, which represents the character a user controls. Therefore it's got a name and an inventory of items.</para>
+		</section>
+		
+		<section>
+			<title>Item</title>
+			
+			<para>
+				The following figure shows what items look like:
+				<informalfigure>
+					<graphic fileref="images/items.jpg"></graphic>
+				</informalfigure>
+			
+			</para>
+			
+			<para>
+				As you can see, an inventory can keep a number of items. Special items can implement the 'Usable' interface,
+				 telling that the user shall be able to trigger the item by choosing 
+				it in the inventory and eventually clicking somewhere. Weapons are special items which
+				 have a bullet prototype and a cooldown. Weapons implement the use() function in
+				 which new bullets or missiles shall be created.
+			</para>
+		</section>
+
+		</section>
+
+
+
+
 
 	</section>
 
