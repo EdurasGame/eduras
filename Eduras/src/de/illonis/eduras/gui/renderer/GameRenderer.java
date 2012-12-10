@@ -112,6 +112,10 @@ public class GameRenderer {
 		dbg.setColor(Color.yellow);
 		for (GameObject d : objs.values()) {
 
+			if (d.isVisible() == false) {
+				continue;
+			}
+
 			if (d.getBoundingBox().intersects(camera)) {
 
 				// draw shape of gameObject if object has shape
