@@ -1,8 +1,11 @@
 package de.illonis.eduras;
 
 import java.awt.geom.Rectangle2D;
+import java.util.LinkedList;
 
 import de.illonis.eduras.ObjectFactory.ObjectType;
+import de.illonis.eduras.math.CollisionPoint;
+import de.illonis.eduras.math.Line;
 import de.illonis.eduras.math.Vector2D;
 import de.illonis.eduras.shapes.ObjectShape;
 
@@ -19,6 +22,8 @@ public abstract class GameObject implements Comparable<GameObject> {
 	private ObjectType type;
 
 	private ObjectShape shape;
+	private boolean collidable = true;
+	private boolean visible = true;
 
 	private int id;
 	private int owner = -1;
@@ -294,5 +299,63 @@ public abstract class GameObject implements Comparable<GameObject> {
 		lastId++;
 		int nextId = lastId;
 		return nextId;
+	}
+
+	/**
+	 * Returns wether this object is collidable or not.
+	 * 
+	 * @return True if it is collidable and false otherwise.
+	 */
+	public boolean isCollidable() {
+		return collidable;
+	}
+
+	/**
+	 * Sets the collidable status of the object.
+	 * 
+	 * @param collidable
+	 *            The new status of the collidable object. If true, the object
+	 *            will be collidable.
+	 */
+	public void setCollidable(boolean collidable) {
+		this.collidable = collidable;
+	}
+
+	/**
+	 * Returns the visible status of this object.
+	 * 
+	 * @return Returns true if the object is visible and false otherwise.
+	 */
+	public boolean isVisible() {
+		return visible;
+	}
+
+	/**
+	 * Sets the visible status of this object.
+	 * 
+	 * @param visible
+	 *            The new status. If you set it to false, the object won't be
+	 *            visible.
+	 */
+	public void setVisible(boolean visible) {
+		this.visible = visible;
+	}
+
+	/**
+	 * Checks if the shape related to this object is intersected by another
+	 * moving object, which is represented by lines.
+	 * 
+	 * @param lines
+	 *            The lines representing the moving object.
+	 * @return Returns a linked list of collision points. The list will be empty
+	 *         if there is no collision.
+	 */
+	public LinkedList<CollisionPoint> isIntersected(LinkedList<Line> lines) {
+
+		if (this.isCollidable()) {
+			return this.getShape().isIntersected(lines, this);
+		}
+
+		return new LinkedList<CollisionPoint>();
 	}
 }

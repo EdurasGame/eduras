@@ -61,11 +61,8 @@ public abstract class ObjectShape {
 			if (singleObject.equals(thisObject))
 				continue;
 
-			ObjectShape otherObjectShape = singleObject.getShape();
-
 			CollisionPoint nearestCollision = CollisionPoint
-					.findNearestCollision(otherObjectShape.isIntersected(lines,
-							singleObject));
+					.findNearestCollision(singleObject.isIntersected(lines));
 
 			// skip if there was no collision
 			if (nearestCollision == null) {

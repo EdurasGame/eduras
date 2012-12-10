@@ -5,12 +5,9 @@ package de.illonis.eduras.shapes;
 
 import java.awt.geom.Rectangle2D;
 import java.awt.geom.Rectangle2D.Double;
-import java.util.HashMap;
 import java.util.LinkedList;
 
-import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.GameObject;
-import de.illonis.eduras.exceptions.WrongShapeTypeException;
 import de.illonis.eduras.math.CollisionPoint;
 import de.illonis.eduras.math.Geometry;
 import de.illonis.eduras.math.Line;
@@ -65,105 +62,83 @@ public class Polygon extends ObjectShape {
 	 * .GameInformation, de.illonis.eduras.GameObject,
 	 * de.illonis.eduras.math.Vector2D)
 	 */
-	@Override
-	public Vector2D checkCollision(GameInformation game, GameObject thisObject,
-			Vector2D target) {
-
-		Polygon shape;
-
-		if (!(thisObject.getShape() instanceof Polygon)) {
-			try {
-				throw new WrongShapeTypeException();
-			} catch (WrongShapeTypeException e) {
-				e.printStackTrace();
-				return null;
-			}
-		} else {
-			shape = (Polygon) thisObject.getShape();
-		}
-
-		Vector2D[] vertices = shape.getVerticesAsArray();
-
-		Vector2D result = target;
-
-		HashMap<Integer, GameObject> gameObjects = game.getObjects();
-
-		GameObject collisionObject = null;
-
-		Vector2D positionVector = thisObject.toPositionVector();
-
-		// calculate border points to use for collision calculation
-		LinkedList<Line> borderLines = Geometry
-				.getRelativeBorderLines(vertices);
-
-		Vector2D[] movementPoints = new Vector2D[COLLISION_ACCURACY
-				* vertices.length];
-
-		int j = 0;
-		for (Line singleBorderLine : borderLines) {
-			for (int i = 0; i < COLLISION_ACCURACY; i++) {
-				movementPoints[j] = singleBorderLine
-						.getPointAt((1. / COLLISION_ACCURACY) * i);
-				j++;
-			}
-		}
-
-		LinkedList<Line> lines = Geometry.getLinesBetweenShapePositions(
-				movementPoints, positionVector, target);
-
-		LinkedList<CollisionPoint> collisions = new LinkedList<CollisionPoint>();
-
-		// Check for collides with objects
-		for (GameObject singleObject : gameObjects.values()) {
-
-			// skip comparing the object with itself
-			if (singleObject.equals(thisObject))
-				continue;
-
-			ObjectShape otherObjectShape = singleObject.getShape();
-
-			CollisionPoint nearestCollision = CollisionPoint
-					.findNearestCollision(otherObjectShape.isIntersected(lines,
-							singleObject));
-
-			// skip if there was no collision
-			if (nearestCollision == null) {
-				continue;
-			}
-
-			// remember the gameObject that had a collision
-			collisionObject = singleObject;
-
-			collisions.add(nearestCollision);
-		}
-
-		// Figure out which collision is the nearest
-		CollisionPoint resultingCollisionPoint = null;
-		if (collisions.size() > 1) {
-			resultingCollisionPoint = CollisionPoint
-					.findNearestCollision(collisions);
-		} else {
-			if (collisions.size() > 0) {
-				resultingCollisionPoint = collisions.getFirst();
-			}
-		}
-
-		// if there was a collision, notify the involved objects and calculate
-		// the new position
-		if (collisionObject != null) {
-			thisObject.onCollision(collisionObject);
-			collisionObject.onCollision(thisObject);
-
-			Vector2D targetResult = new Vector2D(positionVector);
-			resultingCollisionPoint.getDistanceVector().invert();
-			targetResult.add(resultingCollisionPoint.getDistanceVector());
-			result = targetResult;
-		}
-
-		// calculate the new position after a collision
-
-		return result;
-	}
+	/*
+	 * @Override public Vector2D checkCollision(GameInformation game, GameObject
+	 * thisObject, Vector2D target) {
+	 * 
+	 * Polygon shape;
+	 * 
+	 * if (!(thisObject.getShape() instanceof Polygon)) { try { throw new
+	 * WrongShapeTypeException(); } catch (WrongShapeTypeException e) {
+	 * e.printStackTrace(); return null; } } else { shape = (Polygon)
+	 * thisObject.getShape(); }
+	 * 
+	 * Vector2D[] vertices = shape.getVerticesAsArray();
+	 * 
+	 * Vector2D result = target;
+	 * 
+	 * HashMap<Integer, GameObject> gameObjects = game.getObjects();
+	 * 
+	 * GameObject collisionObject = null;
+	 * 
+	 * Vector2D positionVector = thisObject.toPositionVector();
+	 * 
+	 * // calculate border points to use for collision calculation
+	 * LinkedList<Line> borderLines = Geometry
+	 * .getRelativeBorderLines(vertices);
+	 * 
+	 * Vector2D[] movementPoints = new Vector2D[COLLISION_ACCURACY
+	 * vertices.length];
+	 * 
+	 * int j = 0; for (Line singleBorderLine : borderLines) { for (int i = 0; i
+	 * < COLLISION_ACCURACY; i++) { movementPoints[j] = singleBorderLine
+	 * .getPointAt((1. / COLLISION_ACCURACY) * i); j++; } }
+	 * 
+	 * LinkedList<Line> lines = Geometry.getLinesBetweenShapePositions(
+	 * movementPoints, positionVector, target);
+	 * 
+	 * LinkedList<CollisionPoint> collisions = new LinkedList<CollisionPoint>();
+	 * 
+	 * // Check for collides with objects for (GameObject singleObject :
+	 * gameObjects.values()) {
+	 * 
+	 * // skip comparing the object with itself if
+	 * (singleObject.equals(thisObject)) continue;
+	 * 
+	 * ObjectShape otherObjectShape = singleObject.getShape();
+	 * 
+	 * CollisionPoint nearestCollision = CollisionPoint
+	 * .findNearestCollision(otherObjectShape.isIntersected(lines,
+	 * singleObject));
+	 * 
+	 * // skip if there was no collision if (nearestCollision == null) {
+	 * continue; }
+	 * 
+	 * // remember the gameObject that had a collision collisionObject =
+	 * singleObject;
+	 * 
+	 * collisions.add(nearestCollision); }
+	 * 
+	 * // Figure out which collision is the nearest CollisionPoint
+	 * resultingCollisionPoint = null; if (collisions.size() > 1) {
+	 * resultingCollisionPoint = CollisionPoint
+	 * .findNearestCollision(collisions); } else { if (collisions.size() > 0) {
+	 * resultingCollisionPoint = collisions.getFirst(); } }
+	 * 
+	 * // if there was a collision, notify the involved objects and calculate //
+	 * the new position if (collisionObject != null) {
+	 * thisObject.onCollision(collisionObject);
+	 * collisionObject.onCollision(thisObject);
+	 * 
+	 * Vector2D targetResult = new Vector2D(positionVector);
+	 * resultingCollisionPoint.getDistanceVector().invert();
+	 * targetResult.add(resultingCollisionPoint.getDistanceVector()); result =
+	 * targetResult; }
+	 * 
+	 * // calculate the new position after a collision
+	 * 
+	 * return result; }
+	 */
 
 	/**
 	 * Returns the line segments which represents the borders of the shape. The
