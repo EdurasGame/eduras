@@ -15,6 +15,7 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import javax.swing.text.BadLocationException;
 
 import de.illonis.eduras.exceptions.InvalidValueEnteredException;
 
@@ -31,6 +32,7 @@ public class LoginPanel extends JPanel implements ActionListener {
 	private JTextField userInput, hostInput;
 	private NumericTextField portInput;
 	private int port;
+	private String userName;
 	private InetAddress address;
 	private ActionListener listener;
 
@@ -48,7 +50,7 @@ public class LoginPanel extends JPanel implements ActionListener {
 		JLabel userLabel = new JLabel("Benutzername:");
 		JLabel hostLabel = new JLabel("Server-Adresse:");
 		JLabel portLabel = new JLabel("Server-Port:");
-		userInput = new JTextField();
+		userInput = new UserInputField();
 		hostInput = new JTextField();
 		portInput = new NumericTextField(5);
 		userLabel.setHorizontalTextPosition(SwingConstants.RIGHT);
@@ -131,7 +133,7 @@ public class LoginPanel extends JPanel implements ActionListener {
 	 * @return username.
 	 */
 	public String getUserName() {
-		return userInput.getText();
+		return userName;
 	}
 
 	@Override
@@ -142,14 +144,26 @@ public class LoginPanel extends JPanel implements ActionListener {
 			return;
 		}
 		port = portInput.getValue();
+		userName = userInput.getText().trim();
 		listener.actionPerformed(e);
-
 	}
 
+	/**
+	 * Ensures that user name is valid.
+	 * 
+	 * @author illonis
+	 * 
+	 */
 	private class UserNameChecker implements DocumentListener {
 
 		private void check(DocumentEvent e) {
-			connectButton.setEnabled(e.getDocument().getLength() > 2);
+			try {
+				connectButton.setEnabled(e.getDocument()
+						.getText(0, e.getDocument().getLength()).trim()
+						.length() > 2);
+			} catch (BadLocationException e1) {
+				e1.printStackTrace();
+			}
 		}
 
 		@Override
