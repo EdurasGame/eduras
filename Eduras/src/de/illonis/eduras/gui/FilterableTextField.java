@@ -7,7 +7,8 @@ import javax.swing.text.PlainDocument;
 
 /**
  * A filterable text field only allows to specify a filter function on text
- * input.
+ * input. Keep in mind to call super filter method when overwriting filter
+ * method to ensure filter capability.
  * 
  * @author illonis
  * 
@@ -27,7 +28,7 @@ public class FilterableTextField extends JTextField {
 	 * added.
 	 * 
 	 * @param str
-	 *            String to check.
+	 *            typed string.
 	 * @return true if text may be added, false otherwise.
 	 */
 	protected boolean filter(String str) {
@@ -45,8 +46,6 @@ public class FilterableTextField extends JTextField {
 
 			if (filter(str))
 				super.insertString(offs, str, a);
-
 		}
 	}
-
 }

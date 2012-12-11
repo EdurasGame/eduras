@@ -20,12 +20,12 @@ public class MaxLengthTextField extends FilterableTextField {
 	 */
 	public MaxLengthTextField(int maxLength) {
 		super();
-		this.maxLength = maxLength + 1;
+		this.maxLength = maxLength;
 	}
 
 	@Override
 	protected boolean filter(String str) {
-		if (getDocument().getLength() + str.length() < maxLength)
+		if (getDocument().getLength() + str.length() <= maxLength)
 			return true;
 		return super.filter(str);
 	}
