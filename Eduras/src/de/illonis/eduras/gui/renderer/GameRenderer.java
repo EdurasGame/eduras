@@ -13,6 +13,7 @@ import java.util.LinkedList;
 import de.illonis.eduras.GameObject;
 import de.illonis.eduras.Player;
 import de.illonis.eduras.gui.GameCamera;
+import de.illonis.eduras.gui.Gui;
 import de.illonis.eduras.gui.guielements.ItemDisplay;
 import de.illonis.eduras.gui.guielements.RenderedGuiObject;
 import de.illonis.eduras.logicabstraction.InformationProvider;
@@ -36,6 +37,7 @@ public class GameRenderer {
 	private final ImageList imagelist;
 	private ArrayList<RenderedGuiObject> uiObjects;
 	private InformationProvider informationProvider;
+	private Gui gui;
 
 	/**
 	 * Creates a new renderer.
@@ -45,10 +47,11 @@ public class GameRenderer {
 	 * @param informationProvider
 	 *            game-information that contains objects to render.
 	 */
-	public GameRenderer(GameCamera camera,
+	public GameRenderer(Gui gui, GameCamera camera,
 			InformationProvider informationProvider) {
 		this.informationProvider = informationProvider;
 		imagelist = new ImageList();
+		this.gui = gui;
 		this.camera = camera;
 		objs = informationProvider.getGameObjects();
 		mapSize = informationProvider.getMapBounds();
@@ -60,7 +63,9 @@ public class GameRenderer {
 	 */
 	private void initGui() {
 		uiObjects = new ArrayList<RenderedGuiObject>();
-		uiObjects.add(new ItemDisplay(informationProvider));
+		ItemDisplay id = new ItemDisplay(gui, informationProvider);
+		uiObjects.add(id);
+		gui.addClickListener(id);
 	}
 
 	/**

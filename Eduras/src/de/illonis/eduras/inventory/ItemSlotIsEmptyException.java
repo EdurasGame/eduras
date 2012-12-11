@@ -10,4 +10,7 @@ public class ItemSlotIsEmptyException extends Exception {
 
 	private static final long serialVersionUID = 1L;
 
+	public ItemSlotIsEmptyException(int slot) {
+		super("Item slot " + slot + " is empty.");
+	}
 }

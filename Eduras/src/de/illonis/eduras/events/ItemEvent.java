@@ -37,6 +37,23 @@ public class ItemEvent extends OwnerGameEvent {
 	}
 
 	/**
+	 * (jme) Create a new ItemEvent of the given type that has an related item
+	 * slot.
+	 * 
+	 * @param eventType
+	 *            The type.
+	 * @param ownerId
+	 *            The id of the owner this item belongs to.
+	 * @param slot
+	 *            related item slot.
+	 */
+	public ItemEvent(GameEventNumber eventType, int ownerId, int slot) {
+		this(eventType, ownerId);
+		setSlotNum(slot);
+
+	}
+
+	/**
 	 * Set the itemslot of the player's inventory which is related to this
 	 * event.
 	 * 

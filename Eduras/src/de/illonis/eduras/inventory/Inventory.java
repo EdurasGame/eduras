@@ -56,6 +56,17 @@ public class Inventory {
 	}
 
 	/**
+	 * Checks if given slot holds an item.
+	 * 
+	 * @param slot
+	 *            slot number.
+	 * @return true if slot has an item.
+	 */
+	public boolean isItemInSlot(int slot) {
+		return itemSlots[slot].hasItem();
+	}
+
+	/**
 	 * Returns number of items currently hold in inventory. Item stacks count as
 	 * a single item.
 	 * 
@@ -232,7 +243,7 @@ public class Inventory {
 		if (itemSlots[slot].hasItem()) {
 			return itemSlots[slot].getItem();
 		}
-		throw new ItemSlotIsEmptyException();
+		throw new ItemSlotIsEmptyException(slot);
 	}
 
 	/**

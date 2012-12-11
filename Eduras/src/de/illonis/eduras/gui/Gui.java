@@ -1,6 +1,7 @@
 package de.illonis.eduras.gui;
 
 import java.awt.CardLayout;
+import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentAdapter;
@@ -9,17 +10,24 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.Iterator;
+import java.util.LinkedList;
 
 import javax.naming.InvalidNameException;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
 import de.illonis.eduras.events.ClientRenameEvent;
+import de.illonis.eduras.events.GameEvent;
+import de.illonis.eduras.events.GameEvent.GameEventNumber;
 import de.illonis.eduras.events.GameInfoRequest;
+import de.illonis.eduras.events.ItemEvent;
 import de.illonis.eduras.exceptions.InvalidValueEnteredException;
 import de.illonis.eduras.exceptions.MessageNotSupportedException;
 import de.illonis.eduras.exceptions.WrongEventTypeException;
+import de.illonis.eduras.gui.guielements.GuiClickReactor;
 import de.illonis.eduras.gui.renderer.GameRenderer;
+import de.illonis.eduras.inventory.Inventory;
 import de.illonis.eduras.locale.Localization;
 import de.illonis.eduras.logger.EduLog;
 import de.illonis.eduras.logger.EduLog.LogMode;
@@ -27,6 +35,7 @@ import de.illonis.eduras.logicabstraction.EdurasInitializer;
 import de.illonis.eduras.logicabstraction.EventSender;
 import de.illonis.eduras.logicabstraction.InformationProvider;
 import de.illonis.eduras.logicabstraction.NetworkManager;
+import de.illonis.eduras.math.Vector2D;
 import de.illonis.eduras.settings.Settings;
 
 /**
@@ -53,16 +62,24 @@ public class Gui extends JFrame implements ActionListener {
 	private CardLayout cardLayout;
 	private LoginPanel loginPanel;
 	private ProgressPanel progressPanel;
-
-	final static String LOGINPANEL = "Login Card";
+	private final static String LOGINPANEL = "Login Card";
 	final static String CONNECTPANEL = "Connect Card";
 	final static String GAMEPANEL = "Game Card";
+	private ClickState currentClickState;
+	private LinkedList<GuiClickReactor> clickListeners;
+	private int currentItemSelected = -1;
+
+	private enum ClickState {
+		DEFAULT, ITEM_SELECTED;
+	}
 
 	private static final long serialVersionUID = 1L;
 
 	private Gui() {
 		super("Eduras? Client");
+		clickListeners = new LinkedList<GuiClickReactor>();
 		loadTools();
+
 		camera = new GameCamera();
 		cml = new CameraMouseListener(camera);
 
@@ -74,6 +91,7 @@ public class Gui extends JFrame implements ActionListener {
 				tryExit();
 			}
 		});
+		currentClickState = ClickState.DEFAULT;
 	}
 
 	private void tryExit() {
@@ -96,7 +114,7 @@ public class Gui extends JFrame implements ActionListener {
 		loginPanel.setActionListener(this);
 
 		cardLayout.show(getContentPane(), LOGINPANEL);
-		renderer = new GameRenderer(camera, infoPro);
+		renderer = new GameRenderer(this, camera, infoPro);
 		gamePanel = new GamePanel();
 		gamePanel.addMouseMotionListener(cml);
 		gamePanel.addMouseListener(cml);
@@ -125,10 +143,20 @@ public class Gui extends JFrame implements ActionListener {
 
 	public static void main(String[] args) {
 		// new LoggerGui().setVisible(true);
-		EduLog.setLogOutput(LogMode.CONSOLE);
-		EduLog.setTrackDetail(3);
+		EduLog.setLogOutput(LogMode.NONE);
+		// EduLog.setTrackDetail(3);
 		Gui gui = new Gui();
 		gui.setVisible(true);
+	}
+
+	public void sendEvent(GameEvent e) {
+		try {
+			eventSender.sendEvent(e);
+		} catch (WrongEventTypeException e1) {
+			EduLog.passException(e1);
+		} catch (MessageNotSupportedException e1) {
+			EduLog.passException(e1);
+		}
 	}
 
 	/**
@@ -188,12 +216,51 @@ public class Gui extends JFrame implements ActionListener {
 		}
 	}
 
+	/**
+	 * Listens for click on gui and passes them to gui elements.
+	 * 
+	 * @author illonis
+	 * 
+	 */
 	private class ClickListener extends MouseAdapter {
 		@Override
 		public void mouseClicked(MouseEvent e) {
 			super.mouseClicked(e);
 			EduLog.info("Click at " + e.getX() + ", " + e.getY());
+			Point p = e.getPoint();
+			switch (currentClickState) {
+			case DEFAULT:
+				for (Iterator<GuiClickReactor> iterator = clickListeners
+						.iterator(); iterator.hasNext();) {
+					GuiClickReactor reactor = iterator.next();
+					if (reactor.onClick(p))
+						return;
+				}
+				inGameClick(p);
+				break;
+			case ITEM_SELECTED:
+				itemUsed(currentItemSelected, new Vector2D(p));
+				currentClickState = ClickState.DEFAULT;
+				break;
+			default:
+				break;
+
+			}
+
 		}
+
+	}
+
+	/**
+	 * Indicates a click into game world.<br>
+	 * Note that position information is gui-relative and has to be computed to
+	 * game coordinates.
+	 * 
+	 * @param p
+	 *            click position in gui.
+	 */
+	private void inGameClick(Point p) {
+		// TODO: implement
 	}
 
 	@Override
@@ -240,5 +307,47 @@ public class Gui extends JFrame implements ActionListener {
 	public void networkLost() {
 		showProgress();
 		progressPanel.setError("Connection lost.");
+	}
+
+	/**
+	 * Sends an item use event to server.
+	 * 
+	 * @param i
+	 *            item slot.
+	 * @param target
+	 *            target position
+	 */
+	private void itemUsed(int i, Vector2D target) {
+		ItemEvent event = new ItemEvent(GameEventNumber.ITEM_USE,
+				infoPro.getOwnerID(), i);
+		event.setTarget(computeGuiPointToGameCoordinate(target));
+		sendEvent(event);
+	}
+
+	public Vector2D computeGuiPointToGameCoordinate(Vector2D v) {
+		Vector2D vec = new Vector2D(v);
+		v.modifyX(-camera.getX());
+		v.modifyY(-camera.getY());
+		return vec;
+	}
+
+	public void itemClicked(int i) {
+		if (i >= 0 && i < Inventory.MAX_CAPACITY) {
+			currentItemSelected = i;
+			currentClickState = ClickState.ITEM_SELECTED;
+		} else {
+			currentClickState = ClickState.DEFAULT;
+			currentItemSelected = -1;
+		}
+	}
+
+	/**
+	 * Adds given listener to listener list.
+	 * 
+	 * @param l
+	 *            w listener.
+	 */
+	public void addClickListener(GuiClickReactor l) {
+		clickListeners.add(l);
 	}
 }

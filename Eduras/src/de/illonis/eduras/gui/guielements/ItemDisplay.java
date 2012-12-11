@@ -2,22 +2,27 @@ package de.illonis.eduras.gui.guielements;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.Point;
+import java.awt.Rectangle;
 
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
+import de.illonis.eduras.gui.Gui;
 import de.illonis.eduras.inventory.Inventory;
 import de.illonis.eduras.inventory.ItemSlotIsEmptyException;
 import de.illonis.eduras.logger.EduLog;
 import de.illonis.eduras.logicabstraction.InformationProvider;
 
-public class ItemDisplay extends RenderedGuiObject {
+public class ItemDisplay extends RenderedGuiObject implements GuiClickReactor {
 
 	private int height, width, blocksize, itemGap;
 	private GuiItem itemSlots[];
+	private Gui gui;
 
-	public ItemDisplay(InformationProvider info) {
+	public ItemDisplay(Gui gui, InformationProvider info) {
 		super(info);
 
 		width = 150;
+		this.gui = gui;
 		blocksize = 30;
 		itemGap = 10;
 		height = 20 + 3 * blocksize + 3 * itemGap;
@@ -48,6 +53,37 @@ public class ItemDisplay extends RenderedGuiObject {
 		screenY = newHeight - height;
 	}
 
+	@Override
+	public boolean onClick(Point p) {
+		System.out.println(p);
+		for (int i = 0; i < Inventory.MAX_CAPACITY; i++) {
+			System.out.println(i);
+			System.out.println(itemSlots[i].getClickableRect());
+			if (itemSlots[i].getClickableRect().contains(p)) {
+				System.out.println("found: " + i);
+				itemClicked(i);
+
+				return true;
+			}
+		}
+		return false;
+	}
+
+	/**
+	 * Indicates that an item has been clicked.
+	 * 
+	 * @param i
+	 *            item clicked.
+	 */
+	private void itemClicked(int i) {
+		try {
+			if (getInfo().getPlayer().getInventory().isItemInSlot(i))
+				gui.itemClicked(i);
+		} catch (ObjectNotFoundException e) {
+			EduLog.passException(e);
+		}
+	}
+
 	/**
 	 * Called when an item in logic has changed. This will update gui so user
 	 * sees up to date item icon.
@@ -69,7 +105,7 @@ public class ItemDisplay extends RenderedGuiObject {
 		itemSlots[slot].setName(newName);
 	}
 
-	private class GuiItem {
+	private class GuiItem implements ClickableElement {
 		private int x, y, slotId;
 		private String name;
 
@@ -100,6 +136,11 @@ public class ItemDisplay extends RenderedGuiObject {
 
 		void setName(String name) {
 			this.name = name;
+		}
+
+		@Override
+		public Rectangle getClickableRect() {
+			return new Rectangle(x + screenX, y + screenY, blocksize, blocksize);
 		}
 	}
 }
