@@ -1,5 +1,6 @@
 package de.illonis.eduras.math;
 
+import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.geom.Point2D;
 import java.util.LinkedList;
@@ -32,6 +33,16 @@ public class Vector2D {
 	 */
 	public Vector2D(Vector2D vector) {
 		this(vector.getX(), vector.getY());
+	}
+
+	/**
+	 * Creates a new vector based on given point's coordinates.
+	 * 
+	 * @param p
+	 *            point that's coordinates should be used.
+	 */
+	public Vector2D(Point p) {
+		this(p.x, p.y);
 	}
 
 	/**
@@ -84,6 +95,26 @@ public class Vector2D {
 	 */
 	public void setY(double y) {
 		this.y = y;
+	}
+
+	/**
+	 * Modifies X-Component by given value.
+	 * 
+	 * @param xDiff
+	 *            modifier.
+	 */
+	public void modifyX(double xDiff) {
+		this.x += xDiff;
+	}
+
+	/**
+	 * Modifies Y-Component by given value.
+	 * 
+	 * @param yDiff
+	 *            modifier.
+	 */
+	public void modifyY(double yDiff) {
+		this.y += yDiff;
 	}
 
 	/**
