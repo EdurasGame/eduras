@@ -5,7 +5,7 @@ import java.text.ParsePosition;
 
 /**
  * A textfield that accepts numeric input [0-9] only. It has a maximum value
- * lenth and does not accept float values (containing ".").
+ * lenth and does not accept float values (containing ".") or negative numbers.
  * 
  * @author illonis
  * 
@@ -26,7 +26,9 @@ public class NumericTextField extends MaxLengthTextField {
 
 	@Override
 	protected boolean filter(String str) {
-		return isNumeric(str);
+		if (!isNumeric(str))
+			return false;
+		return super.filter(str);
 	}
 
 	/**
