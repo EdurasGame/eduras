@@ -4,7 +4,7 @@
 package de.illonis.eduras.logicabstraction;
 
 import java.awt.Rectangle;
-import java.util.HashMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 import de.illonis.eduras.GameObject;
 import de.illonis.eduras.Player;
@@ -63,7 +63,7 @@ public class InformationProvider implements InfoInterface {
 	}
 
 	@Override
-	public HashMap<Integer, GameObject> getGameObjects() {
+	public ConcurrentHashMap<Integer, GameObject> getGameObjects() {
 		return logic.getGame().getObjects();
 	}
 

@@ -6,9 +6,9 @@ import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.concurrent.ConcurrentHashMap;
 
 import de.illonis.eduras.GameObject;
 import de.illonis.eduras.Player;
@@ -32,7 +32,7 @@ public class GameRenderer {
 	private BufferedImage dbImage = null;
 	private final GameCamera camera;
 	private Graphics2D dbg = null;
-	private final HashMap<Integer, GameObject> objs;
+	private final ConcurrentHashMap<Integer, GameObject> objs;
 	private final Rectangle mapSize;
 	private final ImageList imagelist;
 	private ArrayList<RenderedGuiObject> uiObjects;

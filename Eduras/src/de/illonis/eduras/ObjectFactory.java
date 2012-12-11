@@ -1,6 +1,6 @@
 package de.illonis.eduras;
 
-import java.util.HashMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 import de.illonis.eduras.events.GameEvent;
 import de.illonis.eduras.events.GameEvent.GameEventNumber;
@@ -108,8 +108,8 @@ public class ObjectFactory {
 
 		else if (ofe.getType() == GameEventNumber.OBJECT_REMOVE) {
 			int id = ofe.getId();
-			HashMap<Integer, GameObject> gameObjects = logic.getGame()
-					.getObjects();
+			ConcurrentHashMap<Integer, GameObject> gameObjects = logic
+					.getGame().getObjects();
 
 			GameObject objectToRemove = gameObjects.get(id);
 			logic.getGame().removeObject(objectToRemove);

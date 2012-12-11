@@ -5,7 +5,7 @@ import java.awt.Dimension;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
-import java.util.HashMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -131,7 +131,7 @@ public class ClientFrame extends JFrame {
 		repaint();
 	}
 
-	public HashMap<Integer, GameObject> getObjects() {
+	public ConcurrentHashMap<Integer, GameObject> getObjects() {
 		return informationProvider.getGameObjects();
 	}
 }

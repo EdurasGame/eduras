@@ -1,7 +1,7 @@
 package de.illonis.eduras;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 import javax.naming.InvalidNameException;
 
@@ -19,13 +19,13 @@ import de.illonis.eduras.math.Vector2D;
 import de.illonis.eduras.shapes.ObjectShape;
 
 public class GameInformation {
-	private final HashMap<Integer, GameObject> objects;
-	private final HashMap<Integer, Player> players;
+	private final ConcurrentHashMap<Integer, GameObject> objects;
+	private final ConcurrentHashMap<Integer, Player> players;
 	private final Map map;
 
 	public GameInformation() {
-		objects = new HashMap<Integer, GameObject>();
-		players = new HashMap<Integer, Player>();
+		objects = new ConcurrentHashMap<Integer, GameObject>();
+		players = new ConcurrentHashMap<Integer, Player>();
 		map = new Map();
 
 		exampleTest();
@@ -77,7 +77,7 @@ public class GameInformation {
 	 * 
 	 * @return game object list.
 	 */
-	public HashMap<Integer, GameObject> getObjects() {
+	public ConcurrentHashMap<Integer, GameObject> getObjects() {
 		return objects;
 	}
 
