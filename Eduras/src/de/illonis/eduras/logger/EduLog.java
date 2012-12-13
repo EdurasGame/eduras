@@ -5,6 +5,7 @@ import java.awt.HeadlessException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.logging.Level;
 
 /**
@@ -18,9 +19,13 @@ import java.util.logging.Level;
  */
 public final class EduLog {
 
-	private int outputMode = LogMode.CONSOLE.getId() | LogMode.GUI.getId();
 	private static EduLog instance;
 	private static Date startDate = new Date();
+	private int outputMode = LogMode.CONSOLE.getId();
+	private int trackSize = 0;
+	private HashSet<String> classlist;
+	private ArrayList<LogEntry> logdata;
+	private LinkedList<LogListener> listeners;
 
 	/**
 	 * Logging modes specify the way logging data is saved or displayed. Can be
@@ -44,11 +49,6 @@ public final class EduLog {
 		}
 	}
 
-	private int trackSize = 0;
-	private HashSet<String> classlist;
-	private ArrayList<LogEntry> logdata;
-	private ArrayList<LogListener> listeners;
-
 	/**
 	 * Returns current instance of {@link EduLog}.
 	 * 
@@ -66,7 +66,7 @@ public final class EduLog {
 	private EduLog() {
 		classlist = new HashSet<String>();
 		logdata = new ArrayList<LogEntry>();
-		listeners = new ArrayList<LogListener>();
+		listeners = new LinkedList<LogListener>();
 	}
 
 	/**
@@ -300,6 +300,26 @@ public final class EduLog {
 		LogEntry entry = new LogEntry(Level.SEVERE, e.getMessage(),
 				e.getStackTrace());
 		getInstance().append(entry);
+	}
+
+	/**
+	 * Prints a message to standard console.
+	 * 
+	 * @param s
+	 *            message string.
+	 */
+	public static void print(String s) {
+		System.out.println(s);
+	}
+
+	/**
+	 * Prints a message to error console.
+	 * 
+	 * @param s
+	 *            message string.
+	 */
+	public static void printError(String s) {
+		System.err.println(s);
 	}
 
 	/**
