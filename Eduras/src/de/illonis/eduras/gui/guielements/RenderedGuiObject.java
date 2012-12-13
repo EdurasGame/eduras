@@ -4,15 +4,33 @@ import java.awt.Graphics2D;
 
 import de.illonis.eduras.logicabstraction.InformationProvider;
 
+/**
+ * An element that is part of the gui and is shown to end user (that means it is
+ * rendered).
+ * 
+ * @author illonis
+ * 
+ */
 public abstract class RenderedGuiObject {
 
 	private InformationProvider info;
 	protected int screenX, screenY;
 
-	public RenderedGuiObject(InformationProvider info) {
+	/**
+	 * Creates a new {@link RenderedGuiObject} using given game information.
+	 * 
+	 * @param info
+	 *            game information to use.
+	 */
+	protected RenderedGuiObject(InformationProvider info) {
 		this.info = info;
 	}
 
+	/**
+	 * Retrieves current game information.
+	 * 
+	 * @return game information.
+	 */
 	protected InformationProvider getInfo() {
 		return info;
 	}

@@ -12,6 +12,12 @@ import de.illonis.eduras.inventory.ItemSlotIsEmptyException;
 import de.illonis.eduras.logger.EduLog;
 import de.illonis.eduras.logicabstraction.InformationProvider;
 
+/**
+ * Displays player items on user interface.
+ * 
+ * @author illonis
+ * 
+ */
 public class ItemDisplay extends ClickableGuiElement {
 
 	private int height, width, blocksize, itemGap;
@@ -36,12 +42,11 @@ public class ItemDisplay extends ClickableGuiElement {
 		g2d.fillRect(screenX, screenY, width, height);
 		g2d.setColor(Color.black);
 		for (GuiItem item : itemSlots) {
-			// TODO: make nicerok
+			// TODO: make nicer
 			g2d.drawRect(item.getX() + screenX, item.getY() + screenY,
 					blocksize, blocksize);
 			g2d.drawString("#" + item.getSlotId() + ": " + item.getName(),
 					item.getX() + screenX, item.getY() + screenY);
-
 		}
 	}
 
@@ -53,7 +58,6 @@ public class ItemDisplay extends ClickableGuiElement {
 
 	@Override
 	public boolean onClick(Point p) {
-		System.out.println(p);
 		for (int i = 0; i < Inventory.MAX_CAPACITY; i++) {
 			if (itemSlots[i].getClickableRect().contains(p)) {
 				EduLog.info("User clicked on item " + i);
@@ -100,6 +104,12 @@ public class ItemDisplay extends ClickableGuiElement {
 		itemSlots[slot].setName(newName);
 	}
 
+	/**
+	 * A single gui item that is clickable.
+	 * 
+	 * @author illonis
+	 * 
+	 */
 	private class GuiItem implements ClickableElement {
 		private int x, y, slotId;
 		private String name;

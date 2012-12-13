@@ -233,9 +233,16 @@ public class GameRenderer {
 							% vCount]
 							- camera.y);
 		}
-
 	}
 
+	/**
+	 * Notifies all ui objects that gui size has changed.
+	 * 
+	 * @param width
+	 *            new gamepanel width
+	 * @param height
+	 *            new gamepanel height
+	 */
 	public void notifyGuiSizeChanged(int width, int height) {
 		for (int i = 0; i < uiObjects.size(); i++) {
 			uiObjects.get(i).onGuiSizeChanged(width, height);
