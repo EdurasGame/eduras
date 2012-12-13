@@ -11,7 +11,6 @@ public abstract class RenderedGuiObject {
 
 	public RenderedGuiObject(InformationProvider info) {
 		this.info = info;
-
 	}
 
 	protected InformationProvider getInfo() {

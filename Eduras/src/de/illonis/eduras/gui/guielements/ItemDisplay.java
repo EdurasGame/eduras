@@ -6,23 +6,22 @@ import java.awt.Point;
 import java.awt.Rectangle;
 
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
-import de.illonis.eduras.gameclient.gui.Gui;
+import de.illonis.eduras.gameclient.gui.ClickableGuiElement;
+import de.illonis.eduras.gameclient.gui.GuiClickReactor;
 import de.illonis.eduras.inventory.Inventory;
 import de.illonis.eduras.inventory.ItemSlotIsEmptyException;
 import de.illonis.eduras.logger.EduLog;
 import de.illonis.eduras.logicabstraction.InformationProvider;
 
-public class ItemDisplay extends RenderedGuiObject implements GuiClickReactor {
+public class ItemDisplay extends ClickableGuiElement {
 
 	private int height, width, blocksize, itemGap;
 	private GuiItem itemSlots[];
-	private Gui gui;
 
-	public ItemDisplay(Gui gui, InformationProvider info) {
-		super(info);
+	public ItemDisplay(GuiClickReactor gui, InformationProvider info) {
+		super(gui, info);
 
 		width = 150;
-		this.gui = gui;
 		blocksize = 30;
 		itemGap = 10;
 		height = 20 + 3 * blocksize + 3 * itemGap;
@@ -62,7 +61,6 @@ public class ItemDisplay extends RenderedGuiObject implements GuiClickReactor {
 			if (itemSlots[i].getClickableRect().contains(p)) {
 				System.out.println("found: " + i);
 				itemClicked(i);
-
 				return true;
 			}
 		}
@@ -78,7 +76,7 @@ public class ItemDisplay extends RenderedGuiObject implements GuiClickReactor {
 	private void itemClicked(int i) {
 		try {
 			if (getInfo().getPlayer().getInventory().isItemInSlot(i))
-				gui.itemClicked(i);
+				reactor.itemClicked(i);
 		} catch (ObjectNotFoundException e) {
 			EduLog.passException(e);
 		}

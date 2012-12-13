@@ -32,16 +32,16 @@ public class ProgressPanel extends JPanel implements ActionListener {
 	private JLabel text;
 	private ImageIcon icon;
 	private NetworkManager nwm;
-	private Gui gui;
+	private ClientFrame frame;
 	private InetAddress addr;
 	private int port;
 	private JButton backButton;
 	private Thread t;
 	private String errorMessage;
 
-	public ProgressPanel(Gui gui, NetworkManager nwm) {
+	public ProgressPanel(ClientFrame frame, NetworkManager nwm) {
 		super();
-		this.gui = gui;
+		this.frame = frame;
 		this.nwm = nwm;
 		setLayout(new BorderLayout());
 		buildGui();
@@ -175,7 +175,7 @@ public class ProgressPanel extends JPanel implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		worker.cancel(true);
 		t.interrupt();
-		gui.showLogin();
+		frame.showLogin();
 	}
 
 	/**

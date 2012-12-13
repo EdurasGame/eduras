@@ -1,4 +1,4 @@
-package de.illonis.eduras.gameclient.gui;
+package de.illonis.eduras.gameclient;
 
 import de.illonis.eduras.events.NetworkEvent;
 import de.illonis.eduras.interfaces.NetworkEventListener;
@@ -12,21 +12,21 @@ import de.illonis.eduras.interfaces.NetworkEventListener;
  */
 public class NetworkEventHandler implements NetworkEventListener {
 
-	private Gui gui;
+	private NetworkEventReactor reactor;
 
-	public NetworkEventHandler(Gui gui) {
-		this.gui = gui;
+	public NetworkEventHandler(NetworkEventReactor reactor) {
+		this.reactor = reactor;
 	}
 
 	@Override
 	public void onNetworkEventAppeared(NetworkEvent event) {
 		switch (event.getType()) {
 		case CONNECTION_ABORTED:
-			gui.networkLost();
-
+			reactor.onConnectionLost();
 			break;
 		case CONNECTION_ESTABLISHED:
-			gui.onConnected();
+			reactor.onConnected();
+			break;
 		case NO_EVENT:
 			break;
 		default:

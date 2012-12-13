@@ -12,8 +12,8 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import de.illonis.eduras.GameObject;
 import de.illonis.eduras.Player;
-import de.illonis.eduras.gameclient.gui.GameCamera;
-import de.illonis.eduras.gameclient.gui.Gui;
+import de.illonis.eduras.gameclient.GameCamera;
+import de.illonis.eduras.gameclient.gui.GuiClickReactor;
 import de.illonis.eduras.gui.guielements.ItemDisplay;
 import de.illonis.eduras.gui.guielements.RenderedGuiObject;
 import de.illonis.eduras.logicabstraction.InformationProvider;
@@ -37,7 +37,7 @@ public class GameRenderer {
 	private final ImageList imagelist;
 	private ArrayList<RenderedGuiObject> uiObjects;
 	private InformationProvider informationProvider;
-	private Gui gui;
+	private GuiClickReactor gui;
 
 	/**
 	 * Creates a new renderer.
@@ -47,7 +47,7 @@ public class GameRenderer {
 	 * @param informationProvider
 	 *            game-information that contains objects to render.
 	 */
-	public GameRenderer(Gui gui, GameCamera camera,
+	public GameRenderer(GuiClickReactor gui, GameCamera camera,
 			InformationProvider informationProvider) {
 		this.informationProvider = informationProvider;
 		imagelist = new ImageList();
@@ -65,7 +65,7 @@ public class GameRenderer {
 		uiObjects = new ArrayList<RenderedGuiObject>();
 		ItemDisplay id = new ItemDisplay(gui, informationProvider);
 		uiObjects.add(id);
-		gui.addClickListener(id);
+		gui.addClickableGuiElement(id);
 	}
 
 	/**

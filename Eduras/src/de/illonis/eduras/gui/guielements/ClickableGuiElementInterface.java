@@ -2,7 +2,7 @@ package de.illonis.eduras.gui.guielements;
 
 import java.awt.Point;
 
-public interface GuiClickReactor {
+public interface ClickableGuiElementInterface {
 
 	/**
 	 * Fired on a click in gui and returns whether event is consumed or not. If

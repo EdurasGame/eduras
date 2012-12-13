@@ -1,4 +1,4 @@
-package de.illonis.eduras.gameclient.gui;
+package de.illonis.eduras.gameclient;
 
 import java.awt.Rectangle;
 
@@ -12,7 +12,7 @@ public class GameCamera extends Rectangle {
 
 	private static final long serialVersionUID = 1L;
 
-	public GameCamera() {
+	GameCamera() {
 		x = y = 0;
 	}
 }
