@@ -242,10 +242,25 @@ public class GameClient implements GuiClickReactor, NetworkEventReactor {
 		}
 	}
 
+	/**
+	 * Returns network manager.
+	 * 
+	 * @return network manager.
+	 */
 	public NetworkManager getNetworkManager() {
 		return nwm;
 	}
 
+	/**
+	 * Sends a gameevent to server.
+	 * 
+	 * @param event
+	 *            event that should be sent.
+	 * @throws WrongEventTypeException
+	 *             if event type does not fit event.
+	 * @throws MessageNotSupportedException
+	 *             if given event is not supported by logic.
+	 */
 	public void sendEvent(GameEvent event) throws WrongEventTypeException,
 			MessageNotSupportedException {
 		eventSender.sendEvent(event);

@@ -6,7 +6,6 @@ import java.awt.Point;
 import java.awt.Rectangle;
 
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
-import de.illonis.eduras.gameclient.gui.ClickableGuiElement;
 import de.illonis.eduras.gameclient.gui.GuiClickReactor;
 import de.illonis.eduras.inventory.Inventory;
 import de.illonis.eduras.inventory.ItemSlotIsEmptyException;
@@ -56,10 +55,8 @@ public class ItemDisplay extends ClickableGuiElement {
 	public boolean onClick(Point p) {
 		System.out.println(p);
 		for (int i = 0; i < Inventory.MAX_CAPACITY; i++) {
-			System.out.println(i);
-			System.out.println(itemSlots[i].getClickableRect());
 			if (itemSlots[i].getClickableRect().contains(p)) {
-				System.out.println("found: " + i);
+				EduLog.info("User clicked on item " + i);
 				itemClicked(i);
 				return true;
 			}

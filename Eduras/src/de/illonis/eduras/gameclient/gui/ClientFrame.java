@@ -57,7 +57,7 @@ public class ClientFrame extends JFrame implements NetworkEventReactor,
 		cardLayout.show(getContentPane(), LOGINPANEL);
 
 		gamePanel = new GamePanel();
-
+		client.addMouseListenersTo(gamePanel);
 		add(loginPanel, LOGINPANEL);
 		add(progressPanel, CONNECTPANEL);
 		add(gamePanel, GAMEPANEL);

@@ -1,7 +1,6 @@
-package de.illonis.eduras.gameclient.gui;
+package de.illonis.eduras.gui.guielements;
 
-import de.illonis.eduras.gui.guielements.ClickableGuiElementInterface;
-import de.illonis.eduras.gui.guielements.RenderedGuiObject;
+import de.illonis.eduras.gameclient.gui.GuiClickReactor;
 import de.illonis.eduras.logicabstraction.InformationProvider;
 
 public abstract class ClickableGuiElement extends RenderedGuiObject implements
