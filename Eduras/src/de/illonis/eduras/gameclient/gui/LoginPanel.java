@@ -150,7 +150,10 @@ public class LoginPanel extends JPanel implements ActionListener {
 	}
 
 	/**
-	 * Ensures that user name is valid.
+	 * Ensures that login button is only available when entered user name is
+	 * valid.
+	 * 
+	 * @see UserInputField
 	 * 
 	 * @author illonis
 	 * 
