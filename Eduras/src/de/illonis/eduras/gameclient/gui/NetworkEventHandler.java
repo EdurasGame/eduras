@@ -1,4 +1,4 @@
-package de.illonis.eduras.gui;
+package de.illonis.eduras.gameclient.gui;
 
 import de.illonis.eduras.events.NetworkEvent;
 import de.illonis.eduras.interfaces.NetworkEventListener;

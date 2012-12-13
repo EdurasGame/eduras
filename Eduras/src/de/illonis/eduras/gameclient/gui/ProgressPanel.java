@@ -1,4 +1,4 @@
-package de.illonis.eduras.gui;
+package de.illonis.eduras.gameclient.gui;
 
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;

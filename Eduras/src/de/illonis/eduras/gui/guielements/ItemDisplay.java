@@ -6,7 +6,7 @@ import java.awt.Point;
 import java.awt.Rectangle;
 
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
-import de.illonis.eduras.gui.Gui;
+import de.illonis.eduras.gameclient.gui.Gui;
 import de.illonis.eduras.inventory.Inventory;
 import de.illonis.eduras.inventory.ItemSlotIsEmptyException;
 import de.illonis.eduras.logger.EduLog;

@@ -1,4 +1,4 @@
-package de.illonis.eduras.gui;
+package de.illonis.eduras.gameclient.gui;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;

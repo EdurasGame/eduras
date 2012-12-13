@@ -1,4 +1,4 @@
-package de.illonis.eduras.gui;
+package de.illonis.eduras.gameclient.gui;
 
 import java.awt.CardLayout;
 import java.awt.Point;
@@ -75,7 +75,7 @@ public class Gui extends JFrame implements ActionListener {
 
 	private static final long serialVersionUID = 1L;
 
-	private Gui() {
+	public Gui() {
 		super("Eduras? Client");
 		clickListeners = new LinkedList<GuiClickReactor>();
 		loadTools();
@@ -141,15 +141,13 @@ public class Gui extends JFrame implements ActionListener {
 		nwm.setNetworkEventListener(eventHandler);
 	}
 
-	public static void main(String[] args) {
-		// new LoggerGui().setVisible(true);
-		EduLog.setLogOutput(LogMode.NONE);
-		// EduLog.setTrackDetail(3);
-		Gui gui = new Gui();
-		gui.setVisible(true);
-	}
-
-	public void sendEvent(GameEvent e) {
+	/**
+	 * Sends a game event to server using eventSender.
+	 * 
+	 * @param e
+	 *            game event to send.
+	 */
+	void sendEvent(GameEvent e) {
 		try {
 			eventSender.sendEvent(e);
 		} catch (WrongEventTypeException e1) {
