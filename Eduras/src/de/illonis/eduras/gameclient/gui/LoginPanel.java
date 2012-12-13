@@ -18,6 +18,7 @@ import javax.swing.event.DocumentListener;
 import javax.swing.text.BadLocationException;
 
 import de.illonis.eduras.exceptions.InvalidValueEnteredException;
+import de.illonis.eduras.images.ImageFiler;
 
 /**
  * Displays login form.
@@ -43,8 +44,7 @@ public class LoginPanel extends JPanel implements ActionListener {
 	}
 
 	private void buildGui() {
-		JLabel title = new JLabel("Eduras?");
-		title.setFont(title.getFont().deriveFont(30f));
+		JLabel title = new JLabel(ImageFiler.loadIcon("gui/login/logo.png"));
 		setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 		JPanel form = new JPanel(new GridLayout(4, 2, 5, 10));
 		JLabel userLabel = new JLabel("Benutzername:");
@@ -74,6 +74,7 @@ public class LoginPanel extends JPanel implements ActionListener {
 		form.add(portInput);
 		form.add(new JLabel());
 
+		// default values
 		hostInput.setText("localhost");
 		portInput.setText("4387");
 

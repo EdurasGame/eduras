@@ -55,7 +55,7 @@ public class ProgressPanel extends JPanel implements ActionListener {
 		text.setAlignmentX(CENTER_ALIGNMENT);
 		text.setHorizontalAlignment(JLabel.CENTER);
 		text.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
-		icon = ImageFiler.loadIcon("login/ajax-loader.gif");
+		icon = ImageFiler.loadIcon("gui/login/ajax-loader.gif");
 		text.setIcon(icon);
 
 		add(text, BorderLayout.CENTER);
