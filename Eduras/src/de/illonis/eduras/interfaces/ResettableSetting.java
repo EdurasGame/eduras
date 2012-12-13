@@ -10,7 +10,7 @@ package de.illonis.eduras.interfaces;
 public interface ResettableSetting {
 
 	/**
-	 * Resets settings to default values.
+	 * Resets setting to default value.
 	 */
 	public void loadDefaults();
 }

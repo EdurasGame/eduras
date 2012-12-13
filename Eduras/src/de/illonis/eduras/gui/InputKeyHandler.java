@@ -131,7 +131,7 @@ public class InputKeyHandler implements KeyListener {
 		}
 
 		lastTimePressed = System.currentTimeMillis();
-		EduLog.fine("Key pressed: " + e.getKeyCode() + " (\"" + e.getKeyChar()
+		EduLog.fine("Bound key pressed: " + e.getKeyCode() + " (\"" + e.getKeyChar()
 				+ "\")");
 	}
 

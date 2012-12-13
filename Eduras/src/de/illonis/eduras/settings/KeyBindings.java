@@ -30,17 +30,36 @@ public final class KeyBindings implements ResettableSetting {
 	 * 
 	 */
 	public enum KeyBinding {
-		MOVE_LEFT, MOVE_UP, MOVE_DOWN, MOVE_RIGHT, SHOOT;
+		MOVE_LEFT, MOVE_UP, MOVE_DOWN, MOVE_RIGHT, ITEM_1, ITEM_2, ITEM_3, ITEM_4, ITEM_5, ITEM_6;
 	}
 
 	@Override
 	public void loadDefaults() {
+		setDefaultBinding(KeyBinding.MOVE_LEFT, KeyEvent.VK_A);
+		setDefaultBinding(KeyBinding.MOVE_RIGHT, KeyEvent.VK_D);
+		setDefaultBinding(KeyBinding.MOVE_DOWN, KeyEvent.VK_S);
+		setDefaultBinding(KeyBinding.MOVE_UP, KeyEvent.VK_W);
+		setDefaultBinding(KeyBinding.ITEM_1, KeyEvent.VK_1);
+		setDefaultBinding(KeyBinding.ITEM_2, KeyEvent.VK_2);
+		setDefaultBinding(KeyBinding.ITEM_3, KeyEvent.VK_3);
+		setDefaultBinding(KeyBinding.ITEM_4, KeyEvent.VK_4);
+		setDefaultBinding(KeyBinding.ITEM_5, KeyEvent.VK_5);
+		setDefaultBinding(KeyBinding.ITEM_6, KeyEvent.VK_6);
+	}
 
-		keys.put(KeyEvent.VK_A, KeyBinding.MOVE_LEFT);
-		keys.put(KeyEvent.VK_W, KeyBinding.MOVE_UP);
-		keys.put(KeyEvent.VK_S, KeyBinding.MOVE_DOWN);
-		keys.put(KeyEvent.VK_D, KeyBinding.MOVE_RIGHT);
-		keys.put(KeyEvent.VK_SPACE, KeyBinding.SHOOT);
+	/**
+	 * Sets the default key binding for a specified binding.<br>
+	 * Use {@link KeyEvent#VK_UNDEFINED} to set default key to <i>None</i>. This
+	 * will overwrite any existing default key for this binding as each binding
+	 * can only have one key assigned.
+	 * 
+	 * @param binding
+	 *            binding to set.
+	 * @param key
+	 *            new default key, {@link KeyEvent#VK_UNDEFINED} for none.
+	 */
+	private void setDefaultBinding(KeyBinding binding, int key) {
+		keys.put(key, binding);
 	}
 
 	/**

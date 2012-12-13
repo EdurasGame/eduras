@@ -194,7 +194,8 @@ public class Gui extends JFrame implements ActionListener {
 	 */
 	private void disconnect() {
 		cml.stop();
-		rendererThread.stop();
+		if (rendererThread != null)
+			rendererThread.stop();
 		initializer.shutdown();
 		nwm.disconnect();
 	}
@@ -246,9 +247,7 @@ public class Gui extends JFrame implements ActionListener {
 				break;
 
 			}
-
 		}
-
 	}
 
 	/**
@@ -293,7 +292,8 @@ public class Gui extends JFrame implements ActionListener {
 	}
 
 	/**
-	 * Shows gamepanel.
+	 * Shows gamepanel. Also requests focus of gamepanel to be able to react to
+	 * key strokes.
 	 */
 	public void showGame() {
 		cardLayout.show(getContentPane(), GAMEPANEL);
@@ -324,6 +324,13 @@ public class Gui extends JFrame implements ActionListener {
 		sendEvent(event);
 	}
 
+	/**
+	 * Computes a point that is relative to gui into game coordinates.
+	 * 
+	 * @param v
+	 *            point to convert.
+	 * @return game-coordinate point.
+	 */
 	public Vector2D computeGuiPointToGameCoordinate(Vector2D v) {
 		Vector2D vec = new Vector2D(v);
 		v.modifyX(-camera.getX());
@@ -331,6 +338,12 @@ public class Gui extends JFrame implements ActionListener {
 		return vec;
 	}
 
+	/**
+	 * Notifies gui that an item has been clicked so it can react on next click.
+	 * 
+	 * @param i
+	 *            item slot clicked.
+	 */
 	public void itemClicked(int i) {
 		if (i >= 0 && i < Inventory.MAX_CAPACITY) {
 			currentItemSelected = i;
@@ -345,7 +358,7 @@ public class Gui extends JFrame implements ActionListener {
 	 * Adds given listener to listener list.
 	 * 
 	 * @param l
-	 *            w listener.
+	 *            new listener.
 	 */
 	public void addClickListener(GuiClickReactor l) {
 		clickListeners.add(l);
