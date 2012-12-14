@@ -4,11 +4,14 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Rectangle;
+import java.awt.image.BufferedImage;
 
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
 import de.illonis.eduras.gameclient.gui.GuiClickReactor;
+import de.illonis.eduras.gui.renderer.ImageList;
 import de.illonis.eduras.inventory.Inventory;
 import de.illonis.eduras.inventory.ItemSlotIsEmptyException;
+import de.illonis.eduras.items.Item;
 import de.illonis.eduras.logger.EduLog;
 import de.illonis.eduras.logicabstraction.InformationProvider;
 
@@ -22,14 +25,16 @@ public class ItemDisplay extends ClickableGuiElement {
 
 	private final static int ITEM_GAP = 10;
 	// top, right, bottom, left
-	private final static int OUTER_GAP[] = { 20, 5, 10, 5 };
+	private final static int OUTER_GAP[] = { 20, 5, 10, 15 };
 	private int height, width, blocksize, itemGap;
 	private GuiItem itemSlots[];
+	private ImageList images;
 
-	public ItemDisplay(GuiClickReactor gui, InformationProvider info) {
+	public ItemDisplay(GuiClickReactor gui, InformationProvider info,
+			ImageList images) {
 		super(gui, info);
-
-		width = 150;
+		this.images = images;
+		width = 140;
 		blocksize = 30;
 		itemGap = ITEM_GAP;
 		height = OUTER_GAP[0] + 2 * blocksize + OUTER_GAP[2] + ITEM_GAP;
@@ -41,15 +46,18 @@ public class ItemDisplay extends ClickableGuiElement {
 
 	@Override
 	public void render(Graphics2D g2d) {
-		g2d.setColor(Color.white);
+		g2d.setColor(Color.GRAY);
 		g2d.fillRect(screenX, screenY, width, height);
-		g2d.setColor(Color.black);
+		g2d.setColor(Color.BLACK);
 		for (GuiItem item : itemSlots) {
 			// TODO: make nicer
 			g2d.drawRect(item.getX() + screenX, item.getY() + screenY,
 					blocksize, blocksize);
 			g2d.drawString("#" + item.getSlotId() + ": " + item.getName(),
 					item.getX() + screenX, item.getY() + screenY);
+			if (item.hasImage())
+				g2d.drawImage(item.getItemImage(), item.getX() + screenX,
+						item.getY() + screenY, null);
 		}
 	}
 
@@ -96,8 +104,12 @@ public class ItemDisplay extends ClickableGuiElement {
 	public void onItemChanged(int slot) {
 		String newName;
 		try {
-			newName = getInfo().getPlayer().getInventory().getItemBySlot(slot)
-					.getName();
+			Item item = getInfo().getPlayer().getInventory()
+					.getItemBySlot(slot);
+			newName = item.getName();
+			if (images.hasImageFor(item)) {
+				itemSlots[slot].setItemImage(images.getItemFor(item));
+			}
 		} catch (ItemSlotIsEmptyException e) {
 			newName = "E";
 		} catch (ObjectNotFoundException e) {
@@ -116,9 +128,9 @@ public class ItemDisplay extends ClickableGuiElement {
 	private class GuiItem implements ClickableElement {
 		private int x, y, slotId;
 		private String name;
+		private BufferedImage itemImage;
 
 		GuiItem(int slotId) {
-			// TODO: Fix item display order.
 
 			this.x = OUTER_GAP[3] + (blocksize + itemGap)
 					* (slotId % (Inventory.MAX_CAPACITY / 2));
@@ -126,6 +138,18 @@ public class ItemDisplay extends ClickableGuiElement {
 					* (slotId / (Inventory.MAX_CAPACITY / 2));
 			this.slotId = slotId;
 			setName("?");
+		}
+
+		public boolean hasImage() {
+			return itemImage != null;
+		}
+
+		BufferedImage getItemImage() {
+			return itemImage;
+		}
+
+		void setItemImage(BufferedImage itemImage) {
+			this.itemImage = itemImage;
 		}
 
 		int getX() {

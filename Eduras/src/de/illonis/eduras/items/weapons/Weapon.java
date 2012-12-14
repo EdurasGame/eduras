@@ -1,6 +1,7 @@
 package de.illonis.eduras.items.weapons;
 
 import de.illonis.eduras.GameInformation;
+import de.illonis.eduras.ObjectFactory.ObjectType;
 import de.illonis.eduras.exceptions.NoAmmunitionException;
 import de.illonis.eduras.items.Item;
 import de.illonis.eduras.items.Lootable;
@@ -19,7 +20,7 @@ public abstract class Weapon extends Item implements Lootable, Usable {
 	private final long lastDamageTime = 0;
 	private Missile missile;
 
-	public Weapon(ItemType type, GameInformation gi) {
+	public Weapon(ObjectType type, GameInformation gi) {
 		super(type, gi);
 	}
 

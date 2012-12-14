@@ -2,6 +2,7 @@ package de.illonis.eduras.items;
 
 import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.GameObject;
+import de.illonis.eduras.ObjectFactory.ObjectType;
 
 /**
  * Items can be hold in player's inventory.
@@ -18,22 +19,6 @@ public abstract class Item extends GameObject {
 	 * @author illonis
 	 * 
 	 */
-	public static enum ItemType {
-		WEAPON_LASER(20), WEAPON_MISSILE(21);
-
-		private int id;
-
-		private ItemType(int id) {
-			this.id = id;
-		}
-
-		public final int getTypeId() {
-			return id;
-		}
-
-	}
-
-	private ItemType type;
 
 	private int sellValue;
 	private int buyValue;
@@ -47,10 +32,10 @@ public abstract class Item extends GameObject {
 	 * @param gi
 	 *            game information.
 	 */
-	public Item(ItemType type, GameInformation gi) {
+	public Item(ObjectType type, GameInformation gi) {
 		super(gi);
+		setObjectType(type);
 		this.name = "unknown";
-		this.type = type;
 	}
 
 	/**
@@ -70,15 +55,6 @@ public abstract class Item extends GameObject {
 	 */
 	public void setName(String name) {
 		this.name = name;
-	}
-
-	/**
-	 * Returns item type of this item.
-	 * 
-	 * @return item type.
-	 */
-	public ItemType getItemType() {
-		return type;
 	}
 
 	/**
@@ -121,9 +97,11 @@ public abstract class Item extends GameObject {
 	 * Creates a new item of given type.
 	 * 
 	 * @param id
-	 * @return
+	 *            item type id.
+	 * @return new item of given id.
 	 */
-	public final static Item createById(ItemType id) {
+	public final static Item createById(ObjectType id) {
+		// TODO: implement
 		return null;
 	}
 

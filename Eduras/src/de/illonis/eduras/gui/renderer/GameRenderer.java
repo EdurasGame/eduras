@@ -38,6 +38,7 @@ public class GameRenderer {
 	private ArrayList<RenderedGuiObject> uiObjects;
 	private InformationProvider informationProvider;
 	private GuiClickReactor gui;
+	ItemDisplay id;
 
 	/**
 	 * Creates a new renderer.
@@ -51,6 +52,7 @@ public class GameRenderer {
 			InformationProvider informationProvider) {
 		this.informationProvider = informationProvider;
 		imagelist = new ImageList();
+		imagelist.load(); // TODO: asynchronously
 		this.gui = gui;
 		this.camera = camera;
 		objs = informationProvider.getGameObjects();
@@ -63,8 +65,9 @@ public class GameRenderer {
 	 */
 	private void initGui() {
 		uiObjects = new ArrayList<RenderedGuiObject>();
-		ItemDisplay id = new ItemDisplay(gui, informationProvider);
+		id = new ItemDisplay(gui, informationProvider, imagelist);
 		uiObjects.add(id);
+
 		gui.addClickableGuiElement(id);
 	}
 
@@ -247,5 +250,9 @@ public class GameRenderer {
 		for (int i = 0; i < uiObjects.size(); i++) {
 			uiObjects.get(i).onGuiSizeChanged(width, height);
 		}
+	}
+
+	public void ad() {
+		id.onItemChanged(0);
 	}
 }

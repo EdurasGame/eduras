@@ -3,6 +3,7 @@ package de.illonis.eduras.items.weapons;
 import java.security.InvalidParameterException;
 
 import de.illonis.eduras.GameInformation;
+import de.illonis.eduras.ObjectFactory.ObjectType;
 import de.illonis.eduras.exceptions.NoAmmunitionException;
 
 /**
@@ -16,7 +17,7 @@ public abstract class AmmoWeapon extends Weapon {
 
 	private int ammunition;
 
-	public AmmoWeapon(ItemType type, GameInformation gi) {
+	public AmmoWeapon(ObjectType type, GameInformation gi) {
 		super(type, gi);
 	}
 
