@@ -97,7 +97,7 @@ public class GameClient implements GuiClickReactor, NetworkEventReactor {
 		initializer = EdurasInitializer.getInstance();
 		eventSender = initializer.getEventSender();
 		infoPro = initializer.getInformationProvider();
-		eventHandler = new NetworkEventHandler(this); // -> gui
+		eventHandler = new NetworkEventHandler(this);
 
 		nwm = initializer.getNetworkManager();
 		nwm.setNetworkEventListener(eventHandler);
