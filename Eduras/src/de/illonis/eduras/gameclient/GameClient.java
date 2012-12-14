@@ -105,14 +105,17 @@ public class GameClient implements GuiClickReactor, NetworkEventReactor {
 
 	private void startup() {
 		settings = initializer.getSettings();
-		keyHandler = new InputKeyHandler(infoPro.getOwnerID(), eventSender,
-				settings);
+
 	}
 
 	@Override
 	public void onConnected() {
 		EduLog.info("Connection to server established. OwnerId: "
 				+ infoPro.getOwnerID());
+		keyHandler = new InputKeyHandler(infoPro.getOwnerID(), eventSender,
+				settings);
+		frame.setTitle(frame.getTitle() + " #" + infoPro.getOwnerID() + " ("
+				+ clientName + ")");
 		frame.onConnected();
 		try {
 			sendEvent(new ClientRenameEvent(infoPro.getOwnerID(), clientName));
@@ -294,8 +297,6 @@ public class GameClient implements GuiClickReactor, NetworkEventReactor {
 	 */
 	public void setClientName(String clientName) {
 		this.clientName = clientName;
-		frame.setTitle(frame.getTitle() + " #" + infoPro.getOwnerID() + " ("
-				+ clientName + ")");
 	}
 
 	@Override

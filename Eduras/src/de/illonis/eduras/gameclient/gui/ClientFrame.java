@@ -136,9 +136,10 @@ public class ClientFrame extends JFrame implements NetworkEventReactor,
 	public void actionPerformed(ActionEvent e) {
 		// fired when user clicked login.
 		String clientName = loginPanel.getUserName();
+		client.setClientName(clientName);
 		if (clientName.length() < 3)
 			return;
-		client.setClientName(clientName);
+
 		showProgress();
 		try {
 			progressPanel.start(loginPanel.getAddress(), loginPanel.getPort());
