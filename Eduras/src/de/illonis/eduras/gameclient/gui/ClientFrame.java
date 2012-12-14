@@ -85,7 +85,8 @@ public class ClientFrame extends JFrame implements NetworkEventReactor,
 	public void showGame() {
 		cardLayout.show(getContentPane(), GAMEPANEL);
 		gamePanel.requestFocus();
-		renderer.notifyGuiSizeChanged(getWidth(), getHeight());
+		renderer.notifyGuiSizeChanged(gamePanel.getWidth(),
+				gamePanel.getHeight());
 	}
 
 	/**

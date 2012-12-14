@@ -20,6 +20,9 @@ import de.illonis.eduras.logicabstraction.InformationProvider;
  */
 public class ItemDisplay extends ClickableGuiElement {
 
+	private final static int ITEM_GAP = 10;
+	// top, right, bottom, left
+	private final static int OUTER_GAP[] = { 20, 5, 10, 5 };
 	private int height, width, blocksize, itemGap;
 	private GuiItem itemSlots[];
 
@@ -28,8 +31,8 @@ public class ItemDisplay extends ClickableGuiElement {
 
 		width = 150;
 		blocksize = 30;
-		itemGap = 10;
-		height = 20 + 3 * blocksize + 3 * itemGap;
+		itemGap = ITEM_GAP;
+		height = OUTER_GAP[0] + 2 * blocksize + OUTER_GAP[2] + ITEM_GAP;
 		itemSlots = new GuiItem[Inventory.MAX_CAPACITY];
 		for (int i = 0; i < Inventory.MAX_CAPACITY; i++) {
 			itemSlots[i] = new GuiItem(i);
@@ -116,9 +119,11 @@ public class ItemDisplay extends ClickableGuiElement {
 
 		GuiItem(int slotId) {
 			// TODO: Fix item display order.
-			this.x = 20 + (blocksize + itemGap)
+
+			this.x = OUTER_GAP[3] + (blocksize + itemGap)
 					* (slotId % (Inventory.MAX_CAPACITY / 2));
-			this.y = 20 + (blocksize + itemGap) * (slotId % 2);
+			this.y = OUTER_GAP[0] + (blocksize + itemGap)
+					* (slotId / (Inventory.MAX_CAPACITY / 2));
 			this.slotId = slotId;
 			setName("?");
 		}

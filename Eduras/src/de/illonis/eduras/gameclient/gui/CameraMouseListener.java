@@ -15,7 +15,7 @@ import de.illonis.eduras.logger.EduLog;
 public class CameraMouseListener extends MouseAdapter {
 
 	private static int CAMERA_SPEED = 6;
-	private final static double SIDE_RANGE = 0.15;
+	private final static double SIDE_RANGE = 0.04;
 
 	private GameCamera camera;
 	private int dx, dy;
