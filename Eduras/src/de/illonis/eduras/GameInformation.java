@@ -48,8 +48,7 @@ public class GameInformation {
 					map.getHeight() * 0.75);
 			addObject(exampleWeapon);
 		} catch (ShapeVerticesNotApplicableException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			EduLog.passException(e);
 		}
 	}
 

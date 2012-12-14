@@ -73,7 +73,6 @@ public class ClientFrame extends JFrame {
 		} catch (UnknownHostException e) {
 			EduLog.passException(e);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			EduLog.passException(e);
 		}
 		this.setVisible(true);
@@ -105,8 +104,7 @@ public class ClientFrame extends JFrame {
 				me = new UserMovementEvent(GameEventNumber.MOVE_LEFT_PRESSED,
 						informationProvider.getPlayer().getId());
 			} catch (ObjectNotFoundException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				EduLog.passException(e);
 				return;
 			}
 			eventSender.sendEvent(me);
