@@ -252,6 +252,9 @@ public class GameRenderer {
 		}
 	}
 
+	/**
+	 * Routine to test item display.
+	 */
 	public void ad() {
 		id.onItemChanged(0);
 	}

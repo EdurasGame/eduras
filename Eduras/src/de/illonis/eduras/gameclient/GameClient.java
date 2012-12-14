@@ -10,14 +10,12 @@ import java.util.LinkedList;
 import javax.naming.InvalidNameException;
 import javax.swing.JOptionPane;
 
-import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.events.ClientRenameEvent;
 import de.illonis.eduras.events.GameEvent;
 import de.illonis.eduras.events.GameEvent.GameEventNumber;
 import de.illonis.eduras.events.GameInfoRequest;
 import de.illonis.eduras.events.ItemEvent;
 import de.illonis.eduras.exceptions.MessageNotSupportedException;
-import de.illonis.eduras.exceptions.ObjectNotFoundException;
 import de.illonis.eduras.exceptions.WrongEventTypeException;
 import de.illonis.eduras.gameclient.gui.CameraMouseListener;
 import de.illonis.eduras.gameclient.gui.ClientFrame;
@@ -25,8 +23,6 @@ import de.illonis.eduras.gameclient.gui.GuiClickReactor;
 import de.illonis.eduras.gameclient.gui.InputKeyHandler;
 import de.illonis.eduras.gui.guielements.ClickableGuiElementInterface;
 import de.illonis.eduras.inventory.Inventory;
-import de.illonis.eduras.inventory.InventoryIsFullException;
-import de.illonis.eduras.items.weapons.ExampleWeapon;
 import de.illonis.eduras.locale.Localization;
 import de.illonis.eduras.logger.EduLog;
 import de.illonis.eduras.logicabstraction.EdurasInitializer;
@@ -120,17 +116,15 @@ public class GameClient implements GuiClickReactor, NetworkEventReactor {
 				settings);
 		frame.setTitle(frame.getTitle() + " #" + infoPro.getOwnerID() + " ("
 				+ clientName + ")");
-		try {
-			Thread.sleep(3000);
-			infoPro.getPlayer().getInventory()
-					.loot(new ExampleWeapon(new GameInformation()));
-		} catch (InventoryIsFullException e1) {
-			e1.printStackTrace();
-		} catch (ObjectNotFoundException e1) {
-			e1.printStackTrace();
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
+
+		// test routine for item display in gui:
+		/*
+		 * try { Thread.sleep(1000); infoPro.getPlayer().getInventory()
+		 * .loot(new ExampleWeapon(new GameInformation())); } catch
+		 * (InventoryIsFullException e1) { e1.printStackTrace(); } catch
+		 * (ObjectNotFoundException e1) { e1.printStackTrace(); } catch
+		 * (InterruptedException e) { e.printStackTrace(); }
+		 */
 		frame.onConnected();
 		try {
 			sendEvent(new ClientRenameEvent(infoPro.getOwnerID(), clientName));

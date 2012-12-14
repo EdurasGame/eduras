@@ -125,7 +125,9 @@ public class ClientFrame extends JFrame implements NetworkEventReactor,
 		t.start();
 		client.addKeyHandlerTo(gamePanel);
 		showGame();
-		renderer.ad();
+		// Test routine to test item display on gui (see also
+		// GameClient.onConnected() ):
+		// renderer.ad();
 	}
 
 	@Override
