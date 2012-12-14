@@ -118,6 +118,22 @@
 						<entry>newOwnerId</entry>
 						<entry>-</entry>
 					</row>
+					<row>
+						<entry>SET_VISIBLE</entry>
+						<entry>103</entry>
+						<entry>Sets the visible attribute of a gameobject.</entry>
+						<entry>objectId</entry>
+						<entry>true || false</entry>
+						<entry>-</entry>
+					</row>
+					<row>
+						<entry>SET_COLLIDABLE</entry>
+						<entry>104</entry>
+						<entry>Sets the collidable attribute of a gameobject.</entry>
+						<entry>objectId</entry>
+						<entry>true || false</entry>
+						<entry>-</entry>
+					</row>
 				</tbody>
 			</tgroup>
 		</table>

@@ -30,6 +30,8 @@ public class EdurasInitializer {
 
 		GameLogicInterface logic = new Logic(game);
 
+		game.setOf(logic.getObjectFactory());
+
 		networkManager = new NetworkManager(logic);
 
 		Client client = networkManager.getClient();

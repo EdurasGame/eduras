@@ -22,6 +22,7 @@ public class GameInformation {
 	private final ConcurrentHashMap<Integer, GameObject> objects;
 	private final ConcurrentHashMap<Integer, Player> players;
 	private final Map map;
+	private ObjectFactory of;
 
 	public GameInformation() {
 		objects = new ConcurrentHashMap<Integer, GameObject>();
@@ -50,6 +51,25 @@ public class GameInformation {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+
+	/**
+	 * Returns the objectfactory to create and remove objects with.
+	 * 
+	 * @return The objectfactory.
+	 */
+	public ObjectFactory getOf() {
+		return of;
+	}
+
+	/**
+	 * Sets the objectfactory to create and remove objects with.
+	 * 
+	 * @param of
+	 *            The objectfactory
+	 */
+	public void setOf(ObjectFactory of) {
+		this.of = of;
 	}
 
 	/**

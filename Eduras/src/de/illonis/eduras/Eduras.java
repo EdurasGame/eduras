@@ -57,6 +57,7 @@ public class Eduras {
 
 		GameInformation gameInfo = new GameInformation();
 		Logic logic = new Logic(gameInfo);
+		gameInfo.setOf(logic.getObjectFactory());
 
 		server.setGame(logic.getGame());
 		server.setLogic(logic, new NetworkEventListener() {

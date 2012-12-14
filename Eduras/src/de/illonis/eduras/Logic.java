@@ -11,6 +11,7 @@ import de.illonis.eduras.events.GameInfoRequest;
 import de.illonis.eduras.events.ItemEvent;
 import de.illonis.eduras.events.MovementEvent;
 import de.illonis.eduras.events.ObjectFactoryEvent;
+import de.illonis.eduras.events.SetGameObjectAttributeEvent;
 import de.illonis.eduras.events.UserMovementEvent;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
 import de.illonis.eduras.interfaces.GameEventListener;
@@ -116,10 +117,32 @@ public class Logic implements GameLogicInterface {
 				ItemEvent itemEvent = (ItemEvent) event;
 				handleItemEvent(itemEvent);
 				break;
+			case SET_COLLIDABLE:
+			case SET_VISIBLE:
+				handleObjectAttributeEvent((SetGameObjectAttributeEvent) event);
 			default:
 				break;
 			}
 		}
+	}
+
+	/**
+	 * @param event
+	 */
+	private void handleObjectAttributeEvent(SetGameObjectAttributeEvent event) {
+
+		GameObject object = getGame().findObjectById(event.getObjectId());
+
+		switch (event.getType()) {
+		case SET_VISIBLE:
+			object.setVisible(event.getNewValue());
+			break;
+		case SET_COLLIDABLE:
+			object.setCollidable(event.getNewValue());
+			break;
+		default:
+		}
+
 	}
 
 	/**
@@ -241,4 +264,13 @@ public class Logic implements GameLogicInterface {
 	public void onShutdown() {
 		lgw.stop();
 	}
+
+	/**
+	 * @return
+	 */
+	@Override
+	public ObjectFactory getObjectFactory() {
+		return objectFactory;
+	}
+
 }

@@ -10,6 +10,7 @@ import de.illonis.eduras.events.ItemEvent;
 import de.illonis.eduras.events.MovementEvent;
 import de.illonis.eduras.events.NetworkEvent;
 import de.illonis.eduras.events.ObjectFactoryEvent;
+import de.illonis.eduras.events.SetGameObjectAttributeEvent;
 import de.illonis.eduras.events.SetOwnerEvent;
 import de.illonis.eduras.events.UserMovementEvent;
 import de.illonis.eduras.exceptions.MessageNotSupportedException;
@@ -132,6 +133,12 @@ public class NetworkMessageSerializer {
 			SetOwnerEvent setOwnerEvent = (SetOwnerEvent) gameEvent;
 			serializedEvent += setOwnerEvent.getObjectId() + "#"
 					+ setOwnerEvent.getOwner();
+			break;
+		case SET_COLLIDABLE:
+		case SET_VISIBLE:
+			SetGameObjectAttributeEvent setAttributeEvent = (SetGameObjectAttributeEvent) gameEvent;
+			serializedEvent += setAttributeEvent.getObjectId() + "#"
+					+ setAttributeEvent.getNewValue();
 			break;
 		case ITEM_USE:
 			ItemEvent itemEvent = (ItemEvent) gameEvent;

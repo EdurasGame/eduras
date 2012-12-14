@@ -16,6 +16,7 @@ import de.illonis.eduras.events.NetworkEvent;
 import de.illonis.eduras.events.NetworkEvent.NetworkEventNumber;
 import de.illonis.eduras.events.NoEvent;
 import de.illonis.eduras.events.ObjectFactoryEvent;
+import de.illonis.eduras.events.SetGameObjectAttributeEvent;
 import de.illonis.eduras.events.SetOwnerEvent;
 import de.illonis.eduras.events.UserMovementEvent;
 import de.illonis.eduras.exceptions.GivenParametersDoNotFitToEventException;
@@ -218,6 +219,11 @@ public class NetworkMessageDeserializer {
 		case SET_OWNER:
 			gameEvent = new SetOwnerEvent(parseInt(args[2]), parseInt(args[1]));
 			break;
+		case SET_VISIBLE:
+		case SET_COLLIDABLE:
+			gameEvent = new SetGameObjectAttributeEvent(typeNumber,
+					parseInt(args[1]), parseBool(args[2]));
+			break;
 		case OBJECT_CREATE:
 			int objectTypeNum = parseInt(args[3]);
 			ObjectType objectType = ObjectType
@@ -250,6 +256,17 @@ public class NetworkMessageDeserializer {
 		}
 
 		return gameEvent;
+	}
+
+	/**
+	 * Parses a string into a boolean.
+	 * 
+	 * @param string
+	 *            The string to parse.
+	 * @return The parsed boolean.
+	 */
+	private static boolean parseBool(String string) {
+		return Boolean.parseBoolean(string);
 	}
 
 	/**
