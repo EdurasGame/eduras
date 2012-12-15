@@ -46,6 +46,7 @@ public class NetworkMessageDeserializer {
 	public static LinkedList<Event> deserialize(String eventString) {
 		LinkedList<Event> events = new LinkedList<Event>();
 		EduLog.info("[DESERIALIZE] orig: " + eventString);
+		// FIXME: Fix StringIndexOutOfBoundsException when eventString equals ""
 		String[] messages = eventString.substring(2).split("##");
 
 		for (String msg : messages) {
