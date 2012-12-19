@@ -11,8 +11,8 @@ import java.util.logging.Level;
 /**
  * Provides logging features for Eduras?. Logging results are available via
  * different access methods. For available logging outputs, see {@link LogMode}.<br>
- * This logger is designed that you will never need to instantiate it in order
- * to use it. Instead, use its logging methods (e.g. {@link #error(String)}).
+ * You will never have to instantiate this class in order to use it. Instead,
+ * use its logging methods (e.g. {@link #error(String)}).
  * 
  * @author illonis
  * 
@@ -20,12 +20,13 @@ import java.util.logging.Level;
 public final class EduLog {
 
 	private static EduLog instance;
-	private static Date startDate = new Date();
+	private Date startDate;
 	private int outputMode = LogMode.CONSOLE.getId();
 	private int trackSize = 0;
 	private HashSet<String> classlist;
 	private ArrayList<LogEntry> logdata;
 	private LinkedList<LogListener> listeners;
+	private Level logLimit;
 
 	/**
 	 * Logging modes specify the way logging data is saved or displayed. Can be
@@ -64,6 +65,8 @@ public final class EduLog {
 	 * initializes a new logger.
 	 */
 	private EduLog() {
+		startDate = new Date();
+		setLimit(Level.WARNING);
 		classlist = new HashSet<String>();
 		logdata = new ArrayList<LogEntry>();
 		listeners = new LinkedList<LogListener>();
@@ -90,6 +93,31 @@ public final class EduLog {
 	 */
 	public static void setLogOutput(LogMode... modes) {
 		getInstance().setMode(modes);
+	}
+
+	/**
+	 * Limits logging to prevent less severe errors from display. This disables
+	 * log reporting for all messages with lower severeness than given level.<br>
+	 * For example, if you pass {@link Level#WARNING}, messages with
+	 * {@link Level#INFO} and {@link Level#FINE} will not be logged.<br>
+	 * <b>Note:</b> This does not filter displayed messages but will rather
+	 * don't even track them. So by resetting limit to lower values, you won't
+	 * see lower messages logged before.
+	 * 
+	 * @param level
+	 *            level limit. Messages below will not be logged.
+	 */
+	public static void setLogLimit(Level level) {
+		setLogLimit(level);
+	}
+
+	/**
+	 * @see #setLogLimit(Level)
+	 * @param level
+	 *            level limit.
+	 */
+	private void setLimit(Level level) {
+		logLimit = level;
 	}
 
 	/**
@@ -144,6 +172,8 @@ public final class EduLog {
 		StackTraceElement[] s = new Throwable().fillInStackTrace()
 				.getStackTrace();
 		int start = (trackSize > 0) ? Math.max(4, s.length - 4 - trackSize) : 4;
+		System.out.println(s.length);
+		System.out.println(start);
 		StackTraceElement[] newElements = new StackTraceElement[s.length
 				- start];
 
@@ -174,7 +204,7 @@ public final class EduLog {
 	}
 
 	/**
-	 * Appends given log entry to log. This methods pushes given entry to
+	 * Appends given log entry to log. This methods pushes given entry to all
 	 * specified log outputs.
 	 * 
 	 * @see #append(Level, String)
@@ -183,6 +213,8 @@ public final class EduLog {
 	 *            log entry to add.
 	 */
 	private void append(LogEntry entry) {
+		if (entry.getLevel().intValue() < logLimit.intValue())
+			return;
 		if (outputMode == LogMode.NONE.getId())
 			return;
 
@@ -347,7 +379,7 @@ public final class EduLog {
 	 * 
 	 * @return logdata.
 	 */
-	public ArrayList<LogEntry> getLogdata() {
+	ArrayList<LogEntry> getLogdata() {
 		return logdata;
 	}
 
@@ -412,6 +444,15 @@ public final class EduLog {
 	 */
 	Date getStartDate() {
 		return startDate;
+	}
+
+	/**
+	 * Returns current logging limit.
+	 * 
+	 * @return current logging limit.
+	 */
+	Level getLogLimit() {
+		return logLimit;
 	}
 
 	/**

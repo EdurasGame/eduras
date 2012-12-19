@@ -21,8 +21,6 @@ import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
-import de.illonis.eduras.logger.EduLog.LogMode;
-
 public class LoggerGui extends JFrame implements LogListener, ActionListener,
 		ListSelectionListener {
 
@@ -40,7 +38,6 @@ public class LoggerGui extends JFrame implements LogListener, ActionListener,
 		setSize(700, 400);
 		buildGui();
 		EduLog.getInstance().addLogListener(this);
-		EduLog.setLogOutput(LogMode.GUI);
 	}
 
 	private void initLevelSelector() {
