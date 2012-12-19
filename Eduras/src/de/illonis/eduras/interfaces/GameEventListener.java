@@ -6,6 +6,7 @@ import de.illonis.eduras.GameObject;
 import de.illonis.eduras.events.ClientRenameEvent;
 import de.illonis.eduras.events.GameEvent;
 import de.illonis.eduras.events.ObjectFactoryEvent;
+import de.illonis.eduras.events.SetGameObjectAttributeEvent;
 
 public interface GameEventListener {
 
@@ -38,5 +39,13 @@ public interface GameEventListener {
 	public void onObjectCreation(ObjectFactoryEvent event);
 
 	public void onClientRename(ClientRenameEvent event);
+
+	/**
+	 * Called when the state of an object has changed.
+	 * 
+	 * @param event
+	 *            The correlating event.
+	 */
+	public void onObjectStateChanged(SetGameObjectAttributeEvent event);
 
 }

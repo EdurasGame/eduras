@@ -6,6 +6,7 @@ package de.illonis.eduras.interfaces;
 import java.util.ArrayList;
 
 import de.illonis.eduras.GameInformation;
+import de.illonis.eduras.ObjectFactory;
 import de.illonis.eduras.events.GameEvent;
 
 /**
@@ -27,4 +28,5 @@ public interface GameLogicInterface {
 
 	public void onShutdown();
 
+	public ObjectFactory getObjectFactory();
 }

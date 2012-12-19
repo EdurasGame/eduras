@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE article PUBLIC "-//OASIS//DTD Simplified DocBook XML V1.0//EN"
+"http://www.oasis-open.org/docbook/xml/simple/1.0/sdocbook.dtd">
+<article>
+	<articleinfo>
+		<title>Game launcher, menu and matchmaking</title>
+	</articleinfo>
+	<section>
+	    <title>(jme) General structure</title>
+	    <para>
+	        Users play the game with a game client. When client starts, it checkes for updates and then prompts user for login.
+	        The User can use the client to configure their preferences and profile, start matches with friends and spectate or review other matches.  
+	    </para>
+	</section>
+	<section>
+	    <title>(jme) Authentication</title>
+	    <para>
+	        Players need to authenticate to play the game. To login they need a unique username (account name) and a password.
+	        An authentication can be successful only when game client version matches server version.
+	    </para>
+        <para>
+	        To authenticate, players need to have an account. Account registration is done either in game client directly or on our website.
+	        To register, a valid e-mail address is required to verify your account.
+        </para>
+    </section>
+    <section>
+        <title>(jme) Profiles</title>
+        <para>
+            Each user has a user profile where he can select a profile picture and a displayname for custom games (in tournaments your account name is used always).
+            In your profile you can see your results of recent matches and replay most recent matches.
+        </para>
+    </section>
+    <section>
+        <title>(jme) Chatting</title>
+        <para>
+            Chatting between users is also available while not playing. In order to find partners and group up this is a very useful feature.
+            Chat partners are addressed by their account name.
+        </para>
+    </section>
+    <section>
+        <title>(jme) Friendlist</title>
+        <para>
+            The friendlist allows users to see if their friends are online. You can add or remove friends. Opponent must accept an friend invitation to be your friend.
+        </para>
+    </section>
+    <section>
+        <title>(jme) Creating a game</title>
+        <para>
+            To create a game, the user can use a game creation screen. There he can invite other people and configure some game-specific settings.
+        </para>
+        <figure>
+            <title>Game creating panel where players can be added and game is configured</title>
+            <mediaobject>
+                <imageobject>
+                    <imagedata fileref="images/newgame.png" format="PNG" />
+                </imageobject>
+            </mediaobject>
+        </figure>
+        <table>
+            <title>Game specific settings</title>
+            <tgroup cols="3">
+                <thead>
+                    <row>
+                        <entry>Setting</entry>
+                        <entry>Description</entry>
+                        <entry>Possible values (default is <emphasis>highlighted</emphasis>)</entry>
+                    </row>
+                </thead>
+                <tbody>
+                    <row>
+                        <entry>
+                            Allow spectators
+                        </entry>
+                        <entry>
+                            If true, other players can join the game and spectate
+                        </entry>
+                        <entry>
+                            <emphasis>true</emphasis>, false
+                        </entry>
+                    </row>
+                    <row>
+                        <entry>
+                            Disable all-chat
+                        </entry>
+                        <entry>
+                            Disables all-chat function. Team members can chat among each other but not with opponents.
+                        </entry>
+                        <entry>
+                            true, <emphasis>false</emphasis>
+                        </entry>
+                    </row>
+                    <row>
+                        <entry>
+                            Forbid surrender
+                        </entry>
+                        <entry>
+                            Disallows teams to surrender in general. This should be used with care (may be do not implement?). Overrides next setting.
+                        </entry>
+                        <entry>
+                            true, <emphasis>false</emphasis>
+                        </entry>
+                    </row>
+                    <row>
+                        <entry>
+                            Limit surrender at start
+                        </entry>
+                        <entry>
+                            Prevents teams from surrender before given game time.
+                        </entry>
+                        <entry>
+                            <emphasis>true</emphasis> (slider 1 to 50 (<emphasis>15</emphasis>)), false
+                        </entry>
+                    </row>
+                    
+                </tbody>
+            </tgroup>
+        </table>
+    </section>
+    <section>
+	    <title>(jme) Settings</title>
+	    <table>
+            <title>Profile settings</title>
+            <tgroup cols="3">
+                <thead>
+                    <row>
+                        <entry>Setting name</entry>
+                        <entry>description</entry>
+                        <entry>possible values</entry>
+                    </row>
+                </thead>
+                <tbody>
+                    <row>
+                        <entry>
+                            Profile picture
+                        </entry>
+                        <entry>
+                            Allows the player to select a profile picture that is displayed next to its name (ingame and in matchmaking).
+                        </entry>
+                        <entry>
+                            list of profile-pictures 
+                        </entry>
+                    </row>
+                    <row>
+                        <entry>
+                            Display name
+                        </entry>
+                        <entry>
+                            Player can choose a unique displayname. If a game is marked as private, users can choose any name before game starts.
+                        </entry>
+                        <entry>
+                            (textbox)
+                        </entry>
+                    </row>
+                </tbody>
+            </tgroup>
+        </table>
+        <table>
+            <title>Privacy settings</title>
+            <tgroup cols="3">
+                <thead>
+                    <row>
+                        <entry>Setting name</entry>
+                        <entry>description</entry>
+                        <entry>possible values</entry>
+                    </row>
+                </thead>
+                <tbody>
+                    <row>
+                        <entry>
+                            Online status
+                        </entry>
+                        <entry>
+                            If set to hidden, user is displayed as offline to other users.
+                        </entry>
+                        <entry>
+                            Online, Want to play, Away, Busy, Do not disturb, Hidden 
+                        </entry>
+                    </row>
+                </tbody>
+            </tgroup>
+        </table>
+        <table>
+            <title>Game settings</title>
+            <tgroup cols="3">
+                <thead>
+                    <row>
+                        <entry>Setting name</entry>
+                        <entry>description</entry>
+                        <entry>possible values</entry>
+                    </row>
+                </thead>
+                <tbody>
+                    <row>
+                        <entry>
+                            Interface scale
+                        </entry>
+                        <entry>
+                            Scales interface to given value.
+                        </entry>
+                        <entry>
+                            float value 0.5 to 2
+                        </entry>
+                    </row>
+                   
+                </tbody>
+            </tgroup>
+        </table>
+	</section>
+</article>

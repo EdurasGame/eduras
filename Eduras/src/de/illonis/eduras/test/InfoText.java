@@ -33,15 +33,8 @@ public class InfoText extends GameObject implements Drawable {
 				getDrawX(), getDrawY());
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * de.illonis.eduras.GameObject#onCollision(de.illonis.eduras.GameObject)
-	 */
 	@Override
 	public void onCollision(GameObject collidingObject) {
-		// TODO Auto-generated method stub
-
+		// a text should not collide obviously.
 	}
 }

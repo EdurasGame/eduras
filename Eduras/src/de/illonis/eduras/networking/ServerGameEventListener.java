@@ -8,6 +8,7 @@ import de.illonis.eduras.events.GameEvent;
 import de.illonis.eduras.events.GameEvent.GameEventNumber;
 import de.illonis.eduras.events.MovementEvent;
 import de.illonis.eduras.events.ObjectFactoryEvent;
+import de.illonis.eduras.events.SetGameObjectAttributeEvent;
 import de.illonis.eduras.exceptions.MessageNotSupportedException;
 import de.illonis.eduras.interfaces.GameEventListener;
 import de.illonis.eduras.logger.EduLog;
@@ -96,6 +97,25 @@ public class ServerGameEventListener implements GameEventListener {
 
 	@Override
 	public void onClientRename(ClientRenameEvent event) {
+		String string;
+		try {
+			string = NetworkMessageSerializer.serialize(event);
+		} catch (MessageNotSupportedException e) {
+			EduLog.passException(e);
+			return;
+		}
+		outputBuffer.append(string);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * de.illonis.eduras.interfaces.GameEventListener#onObjectStateChanged(de
+	 * .illonis.eduras.events.SetGameObjectAttributeEvent)
+	 */
+	@Override
+	public void onObjectStateChanged(SetGameObjectAttributeEvent event) {
 		String string;
 		try {
 			string = NetworkMessageSerializer.serialize(event);

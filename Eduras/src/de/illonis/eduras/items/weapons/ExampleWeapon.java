@@ -7,6 +7,8 @@ import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.GameObject;
 import de.illonis.eduras.ObjectFactory.ObjectType;
 import de.illonis.eduras.Player;
+import de.illonis.eduras.events.GameEvent.GameEventNumber;
+import de.illonis.eduras.events.SetGameObjectAttributeEvent;
 import de.illonis.eduras.exceptions.NoAmmunitionException;
 import de.illonis.eduras.inventory.InventoryIsFullException;
 import de.illonis.eduras.items.ItemUseInformation;
@@ -27,12 +29,12 @@ public class ExampleWeapon extends Weapon {
 	 */
 	public ExampleWeapon(GameInformation gi) {
 
-		super(ItemType.WEAPON_MISSILE, gi);
+		super(ObjectType.ITEM_WEAPON_1, gi);
 
 		Missile prototypeMissile = new Missile(gi);
 		prototypeMissile.setSpeed(5);
 		setMissile(new Missile(gi));
-
+		setName("WeaponEx");
 		setShape(new Circle(10));
 	}
 
@@ -95,11 +97,16 @@ public class ExampleWeapon extends Weapon {
 			player.getInventory().loot(this);
 			this.setVisible(false);
 			this.setCollidable(false);
+			SetGameObjectAttributeEvent visibleEvent = new SetGameObjectAttributeEvent(
+					GameEventNumber.SET_VISIBLE, this.getId(), false);
+			SetGameObjectAttributeEvent collidableEvent = new SetGameObjectAttributeEvent(
+					GameEventNumber.SET_COLLIDABLE, this.getId(), false);
+			getGame().getOf().onObjectAttributeChanged(collidableEvent);
+			getGame().getOf().onObjectAttributeChanged(visibleEvent);
 		} catch (InventoryIsFullException e) {
 			EduLog.passException(e);
 			return;
 		}
 
 	}
-
 }

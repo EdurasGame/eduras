@@ -1,7 +1,7 @@
 package de.illonis.eduras.inventory;
 
+import de.illonis.eduras.ObjectFactory.ObjectType;
 import de.illonis.eduras.items.Item;
-import de.illonis.eduras.items.Item.ItemType;
 import de.illonis.eduras.items.StackableItem;
 
 /**
@@ -125,6 +125,7 @@ public class Inventory {
 		int target = findNextFreeInventorySlotForItem(item);
 		if (target == -1)
 			throw new InventoryIsFullException();
+		System.out.println("putting item in " + target);
 		itemSlots[target].putItem(item);
 	}
 
@@ -136,7 +137,7 @@ public class Inventory {
 	 *            item type to search for.
 	 * @return index of item with given type or -1.
 	 */
-	private int getItemOfType(ItemType type) {
+	private int getItemOfType(ObjectType type) {
 		return getItemOfTypeBetween(type, 0, MAX_CAPACITY);
 	}
 
@@ -151,7 +152,7 @@ public class Inventory {
 	 * @return true if item exists, false otherwise.
 	 */
 	public boolean hasItem(Item item) {
-		return hasItemOfType(item.getItemType());
+		return hasItemOfType(item.getType());
 
 	}
 
@@ -164,7 +165,7 @@ public class Inventory {
 	 *            itemtype to look for.
 	 * @return true if an item of this type exists, false otherwise.
 	 */
-	public boolean hasItemOfType(ItemType itemType) {
+	public boolean hasItemOfType(ObjectType itemType) {
 		int pos = getItemOfType(itemType);
 		return pos != -1;
 	}
@@ -181,10 +182,10 @@ public class Inventory {
 	 *            upper index.
 	 * @return index of item with given type within given range or -1.
 	 */
-	private int getItemOfTypeBetween(ItemType type, int from, int to) {
+	private int getItemOfTypeBetween(ObjectType type, int from, int to) {
 		for (int i = from; i < to; i++) {
 			try {
-				if (itemSlots[i].getItem().getItemType().equals(type))
+				if (itemSlots[i].getItem().getType().equals(type))
 					return i;
 			} catch (ItemSlotIsEmptyException e) {
 			}
@@ -208,7 +209,7 @@ public class Inventory {
 		if (item.stacks()) {
 			int left = 0;
 			do {
-				targetPos = getItemOfTypeBetween(item.getItemType(), left,
+				targetPos = getItemOfTypeBetween(item.getType(), left,
 						MAX_CAPACITY);
 				if (targetPos >= 0) {
 					try {

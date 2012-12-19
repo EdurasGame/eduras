@@ -85,7 +85,15 @@ public class ClientFrame extends JFrame implements NetworkEventReactor,
 	public void showGame() {
 		cardLayout.show(getContentPane(), GAMEPANEL);
 		gamePanel.requestFocus();
-		renderer.notifyGuiSizeChanged(getWidth(), getHeight());
+		notifyGuiSizeChanged();
+	}
+
+	/**
+	 * Notifies ui objects that gui size has changed.
+	 */
+	private void notifyGuiSizeChanged() {
+		renderer.notifyGuiSizeChanged(gamePanel.getWidth(),
+				gamePanel.getHeight());
 	}
 
 	/**
@@ -102,7 +110,7 @@ public class ClientFrame extends JFrame implements NetworkEventReactor,
 					gamePanel.getHeight());
 			EduLog.fine("[GUI] Size changed. New size: " + getWidth() + ", "
 					+ getHeight());
-			renderer.notifyGuiSizeChanged(getWidth(), getHeight());
+			notifyGuiSizeChanged();
 		}
 	}
 
@@ -117,6 +125,9 @@ public class ClientFrame extends JFrame implements NetworkEventReactor,
 		t.start();
 		client.addKeyHandlerTo(gamePanel);
 		showGame();
+		// Test routine to test item display on gui (see also
+		// GameClient.onConnected() ):
+		// renderer.ad();
 	}
 
 	@Override
@@ -136,9 +147,10 @@ public class ClientFrame extends JFrame implements NetworkEventReactor,
 	public void actionPerformed(ActionEvent e) {
 		// fired when user clicked login.
 		String clientName = loginPanel.getUserName();
+		client.setClientName(clientName);
 		if (clientName.length() < 3)
 			return;
-		client.setClientName(clientName);
+
 		showProgress();
 		try {
 			progressPanel.start(loginPanel.getAddress(), loginPanel.getPort());

@@ -86,15 +86,8 @@ public class YellowCircle extends MoveableGameObject implements Controllable,
 		setSpeedVector(new Vector2D());
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * de.illonis.eduras.GameObject#onCollision(de.illonis.eduras.GameObject)
-	 */
 	@Override
 	public void onCollision(GameObject collidingObject) {
-		// TODO Auto-generated method stub
 
 	}
 }

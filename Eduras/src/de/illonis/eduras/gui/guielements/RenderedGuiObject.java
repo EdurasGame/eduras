@@ -24,6 +24,7 @@ public abstract class RenderedGuiObject {
 	 */
 	protected RenderedGuiObject(InformationProvider info) {
 		this.info = info;
+		screenX = screenY = 0;
 	}
 
 	/**

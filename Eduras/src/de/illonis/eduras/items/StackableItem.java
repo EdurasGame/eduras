@@ -1,6 +1,7 @@
 package de.illonis.eduras.items;
 
 import de.illonis.eduras.GameInformation;
+import de.illonis.eduras.ObjectFactory.ObjectType;
 
 /**
  * An item that is stackable. Stackable means you can hold multiple of this item
@@ -15,7 +16,7 @@ public abstract class StackableItem extends Item implements Consumable {
 	private int maxStackSize = 1;
 	protected int stackSize = 1;
 
-	public StackableItem(ItemType type, GameInformation gi) {
+	public StackableItem(ObjectType type, GameInformation gi) {
 		super(type, gi);
 		setMaxStackSize();
 	}

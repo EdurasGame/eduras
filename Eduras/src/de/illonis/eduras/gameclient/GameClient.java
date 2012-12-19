@@ -97,7 +97,7 @@ public class GameClient implements GuiClickReactor, NetworkEventReactor {
 		initializer = EdurasInitializer.getInstance();
 		eventSender = initializer.getEventSender();
 		infoPro = initializer.getInformationProvider();
-		eventHandler = new NetworkEventHandler(this); // -> gui
+		eventHandler = new NetworkEventHandler(this);
 
 		nwm = initializer.getNetworkManager();
 		nwm.setNetworkEventListener(eventHandler);
@@ -105,14 +105,26 @@ public class GameClient implements GuiClickReactor, NetworkEventReactor {
 
 	private void startup() {
 		settings = initializer.getSettings();
-		keyHandler = new InputKeyHandler(infoPro.getOwnerID(), eventSender,
-				settings);
+
 	}
 
 	@Override
 	public void onConnected() {
 		EduLog.info("Connection to server established. OwnerId: "
 				+ infoPro.getOwnerID());
+		keyHandler = new InputKeyHandler(infoPro.getOwnerID(), eventSender,
+				settings);
+		frame.setTitle(frame.getTitle() + " #" + infoPro.getOwnerID() + " ("
+				+ clientName + ")");
+
+		// test routine for item display in gui:
+		/*
+		 * try { Thread.sleep(1000); infoPro.getPlayer().getInventory()
+		 * .loot(new ExampleWeapon(new GameInformation())); } catch
+		 * (InventoryIsFullException e1) { e1.printStackTrace(); } catch
+		 * (ObjectNotFoundException e1) { e1.printStackTrace(); } catch
+		 * (InterruptedException e) { e.printStackTrace(); }
+		 */
 		frame.onConnected();
 		try {
 			sendEvent(new ClientRenameEvent(infoPro.getOwnerID(), clientName));
@@ -294,8 +306,6 @@ public class GameClient implements GuiClickReactor, NetworkEventReactor {
 	 */
 	public void setClientName(String clientName) {
 		this.clientName = clientName;
-		frame.setTitle(frame.getTitle() + " #" + infoPro.getOwnerID() + " ("
-				+ clientName + ")");
 	}
 
 	@Override

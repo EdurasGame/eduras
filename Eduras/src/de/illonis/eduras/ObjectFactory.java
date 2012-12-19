@@ -5,6 +5,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import de.illonis.eduras.events.GameEvent;
 import de.illonis.eduras.events.GameEvent.GameEventNumber;
 import de.illonis.eduras.events.ObjectFactoryEvent;
+import de.illonis.eduras.events.SetGameObjectAttributeEvent;
 import de.illonis.eduras.interfaces.GameEventListener;
 import de.illonis.eduras.interfaces.GameLogicInterface;
 import de.illonis.eduras.logger.EduLog;
@@ -28,7 +29,7 @@ public class ObjectFactory {
 	 * 
 	 */
 	public enum ObjectType {
-		PLAYER(1), YELLOWCIRCLE(2), MISSILE(3), NO_OBJECT(0);
+		PLAYER(1), YELLOWCIRCLE(2), MISSILE(3), ITEM_WEAPON_1(4), NO_OBJECT(0);
 
 		private int number;
 
@@ -58,6 +59,14 @@ public class ObjectFactory {
 	 */
 	public ObjectFactory(GameLogicInterface logic) {
 		this.logic = logic;
+	}
+
+	public void onObjectAttributeChanged(SetGameObjectAttributeEvent event) {
+
+		for (GameEventListener listener : logic.getListenerList()) {
+			listener.onObjectStateChanged(event);
+		}
+
 	}
 
 	public void onGameEventAppeared(GameEvent event) {

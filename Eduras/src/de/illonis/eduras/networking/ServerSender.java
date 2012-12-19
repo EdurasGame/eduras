@@ -32,7 +32,7 @@ public class ServerSender extends Thread {
 	 * @param outputBuffer
 	 *            Buffer to fetch messages from.
 	 * @param server
-	 *            TODO
+	 *            Target server.
 	 */
 	public ServerSender(Buffer outputBuffer, Server server) {
 		this.outputBuffer = outputBuffer;
