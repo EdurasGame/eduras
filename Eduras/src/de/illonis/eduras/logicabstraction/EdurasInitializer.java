@@ -5,6 +5,7 @@ package de.illonis.eduras.logicabstraction;
 
 import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.interfaces.GameLogicInterface;
+import de.illonis.eduras.logic.ClientEventTriggerer;
 import de.illonis.eduras.logic.Logic;
 import de.illonis.eduras.networking.Client;
 import de.illonis.eduras.settings.Settings;
@@ -30,7 +31,7 @@ public class EdurasInitializer {
 
 		GameLogicInterface logic = new Logic(game);
 
-		game.setOf(logic.getObjectFactory());
+		game.setEventTriggerer(new ClientEventTriggerer());
 
 		networkManager = new NetworkManager(logic);
 

@@ -13,6 +13,8 @@ import de.illonis.eduras.events.GameEvent;
 import de.illonis.eduras.events.GameEvent.GameEventNumber;
 import de.illonis.eduras.events.GameInfoRequest;
 import de.illonis.eduras.events.ItemEvent;
+import de.illonis.eduras.events.LootItemEvent;
+import de.illonis.eduras.events.MissileLaunchEvent;
 import de.illonis.eduras.events.MovementEvent;
 import de.illonis.eduras.events.ObjectFactoryEvent;
 import de.illonis.eduras.events.SetBooleanGameObjectAttributeEvent;
@@ -20,10 +22,13 @@ import de.illonis.eduras.events.UserMovementEvent;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
 import de.illonis.eduras.interfaces.GameEventListener;
 import de.illonis.eduras.interfaces.GameLogicInterface;
+import de.illonis.eduras.inventory.InventoryIsFullException;
 import de.illonis.eduras.inventory.ItemSlotIsEmptyException;
 import de.illonis.eduras.items.Item;
 import de.illonis.eduras.items.ItemUseInformation;
 import de.illonis.eduras.items.Usable;
+import de.illonis.eduras.items.weapons.Missile;
+import de.illonis.eduras.items.weapons.SimpleMissile;
 import de.illonis.eduras.logger.EduLog;
 
 /**
@@ -125,6 +130,41 @@ public class Logic implements GameLogicInterface {
 			case SET_COLLIDABLE:
 			case SET_VISIBLE:
 				handleObjectAttributeEvent((SetBooleanGameObjectAttributeEvent) event);
+				break;
+			case MISSILE_LAUNCH:
+				MissileLaunchEvent missileLaunchEvent = (MissileLaunchEvent) event;
+
+				Missile missile;
+				switch (missileLaunchEvent.getObjectType()) {
+				case SIMPLEMISSILE:
+					missile = new SimpleMissile(currentGame);
+					break;
+				default:
+					return;
+				}
+
+				missile.setPosition(missileLaunchEvent.getPosition().getX(),
+						missileLaunchEvent.getPosition().getY());
+				missile.setOwner(missileLaunchEvent.getOwner());
+				missile.setSpeedVector(missileLaunchEvent.getSpeedVector());
+				// TODO: inform gameeventlisteners!
+				break;
+			case LOOT_ITEM_EVENT:
+				LootItemEvent lootItemEvent = (LootItemEvent) event;
+
+				try {
+					Player player = currentGame
+							.getPlayerByObjectId(lootItemEvent.getPlayerId());
+					player.getInventory().loot(
+							(Item) currentGame.findObjectById(lootItemEvent
+									.getObjectId()));
+				} catch (ObjectNotFoundException e1) {
+					return;
+				} catch (InventoryIsFullException e1) {
+					return;
+				}
+				// TODO: inform gameeventlisteners!
+				break;
 			default:
 				break;
 			}

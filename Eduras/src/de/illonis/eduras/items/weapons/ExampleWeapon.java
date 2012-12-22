@@ -7,13 +7,7 @@ import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.GameObject;
 import de.illonis.eduras.ObjectFactory.ObjectType;
 import de.illonis.eduras.Player;
-import de.illonis.eduras.events.GameEvent.GameEventNumber;
-import de.illonis.eduras.events.MovementEvent;
-import de.illonis.eduras.events.ObjectFactoryEvent;
-import de.illonis.eduras.events.SetBooleanGameObjectAttributeEvent;
-import de.illonis.eduras.inventory.InventoryIsFullException;
 import de.illonis.eduras.items.ItemUseInformation;
-import de.illonis.eduras.logger.EduLog;
 import de.illonis.eduras.math.Vector2D;
 import de.illonis.eduras.shapes.Circle;
 
@@ -62,19 +56,10 @@ public class ExampleWeapon extends Weapon {
 
 		// TODO: This needs to be solved in another way because this will make
 		// the missile crash into the triggering object. => eventtrigger
+		Vector2D position = triggeringObject.getPositionVector();
 
-		ObjectFactoryEvent ofEvent = new ObjectFactoryEvent(
-				GameEventNumber.OBJECT_CREATE, ObjectType.SIMPLEMISSILE);
-		// TODO: set object owner
-
-		getGame().getOf().onObjectFactoryEventAppeared(ofEvent);
-
-		MovementEvent setPos = new MovementEvent(GameEventNumber.SET_POS,
-				getId());
-
-		setPos.setNewXPos(triggeringObject.getXPosition());
-		setPos.setNewYPos(triggeringObject.getYPosition());
-		// TODO: Set speed vector
+		getGame().getEventTriggerer().createMissile(ObjectType.SIMPLEMISSILE,
+				getOwner(), position, speedVector);
 
 	}
 
@@ -92,22 +77,7 @@ public class ExampleWeapon extends Weapon {
 		}
 
 		Player player = (Player) collidingObject;
-		try {
-			// TODO: make to Eventtriggerer: loot
-
-			int id = player.getInventory().loot(this);
-			// TODO: broadcast to clients
-
-			SetBooleanGameObjectAttributeEvent visibleEvent = new SetBooleanGameObjectAttributeEvent(
-					GameEventNumber.SET_VISIBLE, this.getId(), false);
-			SetBooleanGameObjectAttributeEvent collidableEvent = new SetBooleanGameObjectAttributeEvent(
-					GameEventNumber.SET_COLLIDABLE, this.getId(), false);
-			getGame().getOf().onObjectAttributeChanged(collidableEvent);
-			getGame().getOf().onObjectAttributeChanged(visibleEvent);
-		} catch (InventoryIsFullException e) {
-			EduLog.passException(e);
-			return;
-		}
+		getGame().getEventTriggerer().lootItem(getId(), player.getId());
 
 	}
 }
