@@ -13,7 +13,6 @@
 			This document describes the eventing mechanism and lists the
 			available events.
 		</para>
-
 	</section>
 
 	<section>
@@ -76,7 +75,7 @@
 				<thead>
 					<row>
 						<entry>Event</entry>
-						<entry>Id</entry>
+						<entry>Id=arg0</entry>
 						<entry>Description</entry>
 						<entry>arg1</entry>
 						<entry>arg2</entry>
@@ -95,28 +94,12 @@
 						<entry>newY</entry>
 					</row>
 					<row>
-						<entry>OBJECT_CREATE</entry>
-						<entry>120</entry>
-						<entry>Tells that an object has been created.</entry>
-						<entry>objectId</entry>
-						<entry>ownerId</entry>
-						<entry>typeId</entry>
-					</row>
-					<row>
-						<entry>OBJECT_REMOVE</entry>
-						<entry>121</entry>
-						<entry>Tells that an object has been removed.</entry>
-						<entry>objectId</entry>
-						<entry>-</entry>
-						<entry>-</entry>
-					</row>
-					<row>
 						<entry>SET_OWNER</entry>
 						<entry>102</entry>
-						<entry>Sets the owner of an object to a new value.</entry>
+						<entry>Sets the owner of an object to the given new owner.
+						</entry>
 						<entry>objectId</entry>
-						<entry>newOwnerId</entry>
-						<entry>-</entry>
+						<entry>ownerId</entry>
 					</row>
 					<row>
 						<entry>SET_VISIBLE</entry>
@@ -134,6 +117,43 @@
 						<entry>true || false</entry>
 						<entry>-</entry>
 					</row>
+					<row>
+						<entry>OBJECT_CREATE</entry>
+						<entry>120</entry>
+						<entry>Tells that an object has been created.</entry>
+						<entry>objectId</entry>
+						<entry>ownerId</entry>
+						<entry>typeId</entry>
+					</row>
+					<row>
+						<entry>OBJECT_REMOVE</entry>
+						<entry>121</entry>
+						<entry>Tells that an object has been removed.</entry>
+						<entry>objectId</entry>
+						<entry>-</entry>
+						<entry>-</entry>
+					</row>
+					<row>
+						<entry>SET_ITEM_SLOT</entry>
+						<entry>122</entry>
+						<entry>Sets the item 'slotNum' in player 'ownerID's inventory to new item 'objectId'.</entry>
+						<entry>ownerID</entry>
+						<entry>objectId</entry>
+						<entry>slotNum</entry>
+					</row>
+					<row>
+						<entry>DEATH</entry>
+						<entry>131</entry>
+						<entry>Indicates that a gameobject is dead.</entry>
+						<entry>objectId</entry>
+					</row>
+					<row>
+						<entry>SETHEALTH</entry>
+						<entry>132</entry>
+						<entry>Sets health of a gameobject to new value.</entry>
+						<entry>objectId</entry>
+						<entry>newHealth</entry>
+					</row>
 				</tbody>
 			</tgroup>
 		</table>
@@ -144,7 +164,7 @@
 				<thead>
 					<row>
 						<entry>Event</entry>
-						<entry>Id</entry>
+						<entry>Id=arg0</entry>
 						<entry>Description</entry>
 						<entry>arg1</entry>
 						<entry>arg2</entry>
@@ -229,7 +249,7 @@
 					<row>
 						<entry>SET_SPEEDVECTOR</entry>
 						<entry>18</entry>
-						<entry>The user triggered to stop moving its character downwards.
+						<entry>Sets the speed vector of a gameobject to a new value.
 						</entry>
 						<entry>ownerId</entry>
 						<entry>objectID</entry>
@@ -239,13 +259,12 @@
 					<row>
 						<entry>SET_SPEED</entry>
 						<entry>19</entry>
-						<entry>The user triggered to stop moving its character downwards.
+						<entry>Sets absolute speed of a gameobject to a new value.
 						</entry>
 						<entry>ownerId</entry>
 						<entry>objectId</entry>
 						<entry>newSpeed</entry>
 					</row>
-					´
 					<row>
 						<entry>ITEM_USE</entry>
 						<entry>30</entry>
@@ -266,7 +285,7 @@
 				<thead>
 					<row>
 						<entry>Event</entry>
-						<entry>Id</entry>
+						<entry>Id=arg0</entry>
 						<entry>Description</entry>
 						<entry>arg1</entry>
 					</row>
