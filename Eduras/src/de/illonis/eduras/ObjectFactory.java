@@ -8,6 +8,7 @@ import de.illonis.eduras.events.ObjectFactoryEvent;
 import de.illonis.eduras.events.SetGameObjectAttributeEvent;
 import de.illonis.eduras.interfaces.GameEventListener;
 import de.illonis.eduras.interfaces.GameLogicInterface;
+import de.illonis.eduras.items.weapons.SimpleMissile;
 import de.illonis.eduras.logger.EduLog;
 import de.illonis.eduras.test.YellowCircle;
 
@@ -105,6 +106,9 @@ public class ObjectFactory {
 				break;
 			case YELLOWCIRCLE:
 				go = new YellowCircle(logic.getGame());
+				break;
+			case SIMPLEMISSILE:
+				go = new SimpleMissile(logic.getGame());
 				break;
 			default:
 				return;

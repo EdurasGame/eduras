@@ -8,8 +8,9 @@ import de.illonis.eduras.GameObject;
 import de.illonis.eduras.ObjectFactory.ObjectType;
 import de.illonis.eduras.Player;
 import de.illonis.eduras.events.GameEvent.GameEventNumber;
+import de.illonis.eduras.events.MovementEvent;
+import de.illonis.eduras.events.ObjectFactoryEvent;
 import de.illonis.eduras.events.SetGameObjectAttributeEvent;
-import de.illonis.eduras.exceptions.NoAmmunitionException;
 import de.illonis.eduras.inventory.InventoryIsFullException;
 import de.illonis.eduras.items.ItemUseInformation;
 import de.illonis.eduras.logger.EduLog;
@@ -59,20 +60,19 @@ public class ExampleWeapon extends Weapon {
 		Vector2D speedVector = new Vector2D(target);
 		speedVector.subtract(triggeringObject.getPositionVector());
 
-		Missile missile = null;
-		try {
-			missile = getAMissile();
-		} catch (NoAmmunitionException e) {
-			EduLog.passException(e);
-			return;
-		}
-		missile.setSpeedVector(speedVector);
-
 		// TODO: This needs to be solved in another way because this will make
 		// the missile crash into the triggering object.
 
-		missile.setPosition(triggeringObject.getXPosition(),
-				triggeringObject.getYPosition());
+		ObjectFactoryEvent ofEvent = new ObjectFactoryEvent(
+				GameEventNumber.OBJECT_CREATE, ObjectType.SIMPLEMISSILE);
+
+		getGame().getOf().onGameEventAppeared(ofEvent);
+
+		MovementEvent setPos = new MovementEvent(GameEventNumber.SET_POS,
+				getId());
+
+		setPos.setNewXPos(triggeringObject.getXPosition());
+		setPos.setNewYPos(triggeringObject.getYPosition());
 
 	}
 
