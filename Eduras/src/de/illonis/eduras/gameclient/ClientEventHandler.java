@@ -10,11 +10,11 @@ import de.illonis.eduras.interfaces.NetworkEventListener;
  * @author illonis
  * 
  */
-public class NetworkEventHandler implements NetworkEventListener {
+public class ClientEventHandler implements NetworkEventListener {
 
 	private NetworkEventReactor reactor;
 
-	public NetworkEventHandler(NetworkEventReactor reactor) {
+	public ClientEventHandler(NetworkEventReactor reactor) {
 		this.reactor = reactor;
 	}
 

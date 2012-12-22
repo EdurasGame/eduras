@@ -7,6 +7,7 @@ import de.illonis.eduras.events.ClientRenameEvent;
 import de.illonis.eduras.events.GameEvent;
 import de.illonis.eduras.events.ObjectFactoryEvent;
 import de.illonis.eduras.events.SetGameObjectAttributeEvent;
+import de.illonis.eduras.events.SetItemSlotEvent;
 import de.illonis.eduras.events.SetOwnerEvent;
 
 public interface GameEventListener {
@@ -72,4 +73,11 @@ public interface GameEventListener {
 	 */
 	void onOwnerChanged(SetOwnerEvent event);
 
+	/**
+	 * Called when an item slot has changed.
+	 * 
+	 * @param event
+	 *            corresponding information.
+	 */
+	void onItemSlotChanged(SetItemSlotEvent event);
 }

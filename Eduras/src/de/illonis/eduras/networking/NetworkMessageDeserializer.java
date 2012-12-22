@@ -17,6 +17,7 @@ import de.illonis.eduras.events.NetworkEvent.NetworkEventNumber;
 import de.illonis.eduras.events.NoEvent;
 import de.illonis.eduras.events.ObjectFactoryEvent;
 import de.illonis.eduras.events.SetBooleanGameObjectAttributeEvent;
+import de.illonis.eduras.events.SetItemSlotEvent;
 import de.illonis.eduras.events.SetOwnerEvent;
 import de.illonis.eduras.events.UserMovementEvent;
 import de.illonis.eduras.exceptions.GivenParametersDoNotFitToEventException;
@@ -254,6 +255,10 @@ public class NetworkMessageDeserializer {
 				gameEvent = new NoEvent();
 			}
 
+			break;
+		case SET_ITEM_SLOT:
+			gameEvent = new SetItemSlotEvent(parseInt(args[2]),
+					parseInt(args[1]), parseInt(args[3]));
 			break;
 		case NO_EVENT:
 			gameEvent = new NoEvent();

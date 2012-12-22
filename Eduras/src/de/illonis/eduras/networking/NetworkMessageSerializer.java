@@ -11,6 +11,7 @@ import de.illonis.eduras.events.MovementEvent;
 import de.illonis.eduras.events.NetworkEvent;
 import de.illonis.eduras.events.ObjectFactoryEvent;
 import de.illonis.eduras.events.SetBooleanGameObjectAttributeEvent;
+import de.illonis.eduras.events.SetItemSlotEvent;
 import de.illonis.eduras.events.SetOwnerEvent;
 import de.illonis.eduras.events.UserMovementEvent;
 import de.illonis.eduras.exceptions.MessageNotSupportedException;
@@ -109,9 +110,9 @@ public class NetworkMessageSerializer {
 			break;
 		case OBJECT_CREATE:
 			ObjectFactoryEvent createEvent = (ObjectFactoryEvent) gameEvent;
-			serializedEvent += createEvent.getId() + "#"
-					+ createEvent.getOwner() + "#"
-					+ createEvent.getObjectType().getNumber();
+			serializedEvent += concatenateWithDel("#", createEvent.getId(),
+					createEvent.getOwner(), createEvent.getObjectType()
+							.getNumber());
 			break;
 		case OBJECT_REMOVE:
 			ObjectFactoryEvent removeEvent = (ObjectFactoryEvent) gameEvent;
@@ -125,34 +126,39 @@ public class NetworkMessageSerializer {
 			break;
 		case SET_POS:
 			MovementEvent moveEvent = (MovementEvent) gameEvent;
-			serializedEvent += moveEvent.getObjectId();
-			serializedEvent += "#" + moveEvent.getNewXPos() + "#"
-					+ moveEvent.getNewYPos();
+			serializedEvent += concatenateWithDel("#", moveEvent.getObjectId(),
+					moveEvent.getNewXPos(), moveEvent.getNewYPos());
 			break;
 		case SET_OWNER:
 			SetOwnerEvent setOwnerEvent = (SetOwnerEvent) gameEvent;
-			serializedEvent += setOwnerEvent.getObjectId() + "#"
-					+ setOwnerEvent.getOwner();
+			serializedEvent += concatenateWithDel("#",
+					setOwnerEvent.getObjectId(), setOwnerEvent.getOwner());
 			break;
 		case SET_COLLIDABLE:
 		case SET_VISIBLE:
 			SetBooleanGameObjectAttributeEvent setAttributeEvent = (SetBooleanGameObjectAttributeEvent) gameEvent;
-			serializedEvent += setAttributeEvent.getObjectId() + "#"
-					+ setAttributeEvent.getNewValue();
+			serializedEvent += concatenateWithDel("#",
+					setAttributeEvent.getObjectId(),
+					setAttributeEvent.getNewValue());
 			break;
 		case ITEM_USE:
 			ItemEvent itemEvent = (ItemEvent) gameEvent;
 			Vector2D target = itemEvent.getTarget();
-			serializedEvent += itemEvent.getSlotNum() + "#"
-					+ itemEvent.getOwner() + "#" + target.getX() + "#"
-					+ target.getY();
+			serializedEvent += concatenateWithDel("#", itemEvent.getSlotNum(),
+					itemEvent.getOwner(), target.getX(), target.getY());
 			break;
 		case INFORMATION_REQUEST:
 			serializedEvent += ((GameInfoRequest) gameEvent).getRequester();
 			break;
 		case CLIENT_SETNAME:
 			ClientRenameEvent e = (ClientRenameEvent) gameEvent;
-			serializedEvent += e.getOwner() + "#" + e.getName();
+			serializedEvent += concatenateWithDel("#", e.getOwner(),
+					e.getName());
+			break;
+		case SET_ITEM_SLOT:
+			SetItemSlotEvent sis = (SetItemSlotEvent) gameEvent;
+			serializedEvent += concatenateWithDel("#", sis.getOwner(),
+					sis.getObjectId(), sis.getItemSlot());
 			break;
 		default:
 			break;
@@ -178,6 +184,25 @@ public class NetworkMessageSerializer {
 			b.append(s);
 		}
 		return b.toString();
+	}
+
+	/**
+	 * Concatenates given strings with specified delimiter.
+	 * 
+	 * @param delimiter
+	 *            delimiter between strings.
+	 * @param strings
+	 *            strings to concatenate.
+	 */
+	public static String concatenateWithDel(String delimiter, Object... strings) {
+		if (strings.length <= 0)
+			return "";
+		StringBuilder builder = new StringBuilder();
+		for (Object string : strings) {
+			builder.append(string.toString()).append(delimiter);
+		}
+		builder.delete(builder.lastIndexOf(delimiter), builder.length());
+		return builder.toString();
 	}
 
 }

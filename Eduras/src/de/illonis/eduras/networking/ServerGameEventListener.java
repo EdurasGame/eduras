@@ -9,6 +9,7 @@ import de.illonis.eduras.events.GameEvent.GameEventNumber;
 import de.illonis.eduras.events.MovementEvent;
 import de.illonis.eduras.events.ObjectFactoryEvent;
 import de.illonis.eduras.events.SetGameObjectAttributeEvent;
+import de.illonis.eduras.events.SetItemSlotEvent;
 import de.illonis.eduras.events.SetOwnerEvent;
 import de.illonis.eduras.exceptions.MessageNotSupportedException;
 import de.illonis.eduras.interfaces.GameEventListener;
@@ -135,6 +136,12 @@ public class ServerGameEventListener implements GameEventListener {
 
 	@Override
 	public void onOwnerChanged(SetOwnerEvent event) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void onItemSlotChanged(SetItemSlotEvent event) {
 		// TODO Auto-generated method stub
 
 	}

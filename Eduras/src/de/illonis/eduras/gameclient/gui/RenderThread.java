@@ -3,7 +3,6 @@ package de.illonis.eduras.gameclient.gui;
 import java.awt.Graphics2D;
 import java.awt.image.BufferStrategy;
 
-import de.illonis.eduras.gui.renderer.GameRenderer;
 import de.illonis.eduras.logger.EduLog;
 
 /**
@@ -27,7 +26,7 @@ public class RenderThread implements Runnable {
 	 * @param panel
 	 *            panel to draw onto
 	 */
-	public RenderThread(GameRenderer renderer, GamePanel panel) {
+	RenderThread(GameRenderer renderer, GamePanel panel) {
 		this.renderer = renderer;
 		this.panel = panel;
 	}

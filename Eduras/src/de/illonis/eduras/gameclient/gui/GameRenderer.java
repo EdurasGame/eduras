@@ -1,4 +1,4 @@
-package de.illonis.eduras.gui.renderer;
+package de.illonis.eduras.gameclient.gui;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
@@ -13,7 +13,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import de.illonis.eduras.GameObject;
 import de.illonis.eduras.Player;
 import de.illonis.eduras.gameclient.GameCamera;
-import de.illonis.eduras.gameclient.gui.GuiClickReactor;
 import de.illonis.eduras.gui.guielements.ItemDisplay;
 import de.illonis.eduras.gui.guielements.RenderedGuiObject;
 import de.illonis.eduras.logicabstraction.InformationProvider;
@@ -38,7 +37,7 @@ public class GameRenderer {
 	private ArrayList<RenderedGuiObject> uiObjects;
 	private InformationProvider informationProvider;
 	private GuiClickReactor gui;
-	ItemDisplay id;
+	private ItemDisplay itemDisplay;
 
 	/**
 	 * Creates a new renderer.
@@ -65,10 +64,14 @@ public class GameRenderer {
 	 */
 	private void initGui() {
 		uiObjects = new ArrayList<RenderedGuiObject>();
-		id = new ItemDisplay(gui, informationProvider, imagelist);
-		uiObjects.add(id);
+		itemDisplay = new ItemDisplay(gui, informationProvider, imagelist);
+		uiObjects.add(itemDisplay);
 
-		gui.addClickableGuiElement(id);
+		gui.addClickableGuiElement(itemDisplay);
+	}
+
+	ItemDisplay getItemDisplay() {
+		return itemDisplay;
 	}
 
 	/**
@@ -256,6 +259,6 @@ public class GameRenderer {
 	 * Routine to test item display.
 	 */
 	public void ad() {
-		id.onItemChanged(0);
+		itemDisplay.onItemChanged(0);
 	}
 }
