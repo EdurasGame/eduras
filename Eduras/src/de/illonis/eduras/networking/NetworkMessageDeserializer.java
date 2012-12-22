@@ -205,6 +205,8 @@ public class NetworkMessageDeserializer {
 		GameEvent gameEvent = null;
 
 		switch (typeNumber) {
+		case SETSPEED:
+		case SETSPEEDVECTOR:
 		case SET_POS:
 			gameEvent = handleMovementPositionEvent(msg, args, typeNumber);
 			break;

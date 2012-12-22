@@ -121,9 +121,7 @@ public class NetworkMessageSerializer {
 		case SETHEALTH:
 			break;
 		case SETSPEED:
-			break;
 		case SETSPEEDVECTOR:
-			break;
 		case SET_POS:
 			MovementEvent moveEvent = (MovementEvent) gameEvent;
 			serializedEvent += concatenateWithDel("#", moveEvent.getObjectId(),
