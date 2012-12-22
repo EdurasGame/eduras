@@ -142,7 +142,17 @@ public class ServerGameEventListener implements GameEventListener {
 
 	@Override
 	public void onItemSlotChanged(SetItemSlotEvent event) {
-		// TODO Auto-generated method stub
+
+		String string;
+
+		try {
+			string = NetworkMessageSerializer.serialize(event);
+		} catch (MessageNotSupportedException e) {
+			EduLog.passException(e);
+			return;
+		}
+
+		outputBuffer.append(string);
 
 	}
 }
