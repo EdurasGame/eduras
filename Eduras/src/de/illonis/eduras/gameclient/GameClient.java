@@ -44,7 +44,7 @@ public class GameClient implements GuiClickReactor, NetworkEventReactor {
 	private EventSender eventSender;
 	private NetworkManager nwm;
 	private EdurasInitializer initializer;
-	private NetworkEventHandler eventHandler;
+	private ClientEventHandler eventHandler;
 	private Settings settings;
 	private InputKeyHandler keyHandler;
 	private final CameraMouseListener cml;
@@ -79,6 +79,11 @@ public class GameClient implements GuiClickReactor, NetworkEventReactor {
 	void startGui() {
 		frame = new ClientFrame(this);
 		frame.setVisible(true);
+		infoPro.addEventListener(new GameEventReactor(this));
+	}
+
+	public ClientFrame getFrame() {
+		return frame;
 	}
 
 	/**
@@ -97,15 +102,15 @@ public class GameClient implements GuiClickReactor, NetworkEventReactor {
 		initializer = EdurasInitializer.getInstance();
 		eventSender = initializer.getEventSender();
 		infoPro = initializer.getInformationProvider();
-		eventHandler = new NetworkEventHandler(this);
+		eventHandler = new ClientEventHandler(this);
 
 		nwm = initializer.getNetworkManager();
 		nwm.setNetworkEventListener(eventHandler);
+
 	}
 
 	private void startup() {
 		settings = initializer.getSettings();
-
 	}
 
 	@Override
@@ -327,5 +332,4 @@ public class GameClient implements GuiClickReactor, NetworkEventReactor {
 	public void addKeyHandlerTo(Component c) {
 		c.addKeyListener(keyHandler);
 	}
-
 }
