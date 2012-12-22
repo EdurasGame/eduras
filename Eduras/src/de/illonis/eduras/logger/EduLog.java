@@ -172,8 +172,6 @@ public final class EduLog {
 		StackTraceElement[] s = new Throwable().fillInStackTrace()
 				.getStackTrace();
 		int start = (trackSize > 0) ? Math.max(4, s.length - 4 - trackSize) : 4;
-		System.out.println(s.length);
-		System.out.println(start);
 		StackTraceElement[] newElements = new StackTraceElement[s.length
 				- start];
 
