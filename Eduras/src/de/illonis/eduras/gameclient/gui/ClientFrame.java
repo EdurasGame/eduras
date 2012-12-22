@@ -13,7 +13,7 @@ import javax.swing.JFrame;
 import de.illonis.eduras.exceptions.InvalidValueEnteredException;
 import de.illonis.eduras.gameclient.GameClient;
 import de.illonis.eduras.gameclient.NetworkEventReactor;
-import de.illonis.eduras.gui.renderer.GameRenderer;
+import de.illonis.eduras.gui.guielements.ItemDisplay;
 import de.illonis.eduras.logger.EduLog;
 
 public class ClientFrame extends JFrame implements NetworkEventReactor,
@@ -157,5 +157,9 @@ public class ClientFrame extends JFrame implements NetworkEventReactor,
 		} catch (InvalidValueEnteredException e1) {
 			progressPanel.setError("Invalid values entered.");
 		}
+	}
+
+	public ItemDisplay getItemDisplay() {
+		return renderer.getItemDisplay();
 	}
 }

@@ -61,8 +61,7 @@ public class GameEventReactor implements GameEventListener {
 
 	@Override
 	public void onItemSlotChanged(SetItemSlotEvent event) {
-		// TODO Auto-generated method stub
-
+		client.getFrame().getItemDisplay().onItemChanged(event.getItemSlot());
 	}
 
 }

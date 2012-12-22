@@ -8,7 +8,7 @@ import java.awt.image.BufferedImage;
 
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
 import de.illonis.eduras.gameclient.gui.GuiClickReactor;
-import de.illonis.eduras.gui.renderer.ImageList;
+import de.illonis.eduras.gameclient.gui.ImageList;
 import de.illonis.eduras.inventory.Inventory;
 import de.illonis.eduras.inventory.ItemSlotIsEmptyException;
 import de.illonis.eduras.items.Item;

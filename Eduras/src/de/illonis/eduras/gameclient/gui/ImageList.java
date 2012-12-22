@@ -1,4 +1,4 @@
-package de.illonis.eduras.gui.renderer;
+package de.illonis.eduras.gameclient.gui;
 
 import java.awt.image.BufferedImage;
 import java.io.IOException;
