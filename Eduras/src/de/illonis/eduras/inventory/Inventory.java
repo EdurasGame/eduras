@@ -57,6 +57,18 @@ public class Inventory {
 	}
 
 	/**
+	 * Sets given itemslot's item to given item.
+	 * 
+	 * @param slot
+	 *            item slot.
+	 * @param item
+	 *            new item in slot.
+	 */
+	public void setItemAt(int slot, Item item) {
+		itemSlots[slot].putItem(item);
+	}
+
+	/**
 	 * Checks if given slot holds an item.
 	 * 
 	 * @param slot

@@ -18,6 +18,7 @@ import de.illonis.eduras.events.MissileLaunchEvent;
 import de.illonis.eduras.events.MovementEvent;
 import de.illonis.eduras.events.ObjectFactoryEvent;
 import de.illonis.eduras.events.SetBooleanGameObjectAttributeEvent;
+import de.illonis.eduras.events.SetItemSlotEvent;
 import de.illonis.eduras.events.UserMovementEvent;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
 import de.illonis.eduras.interfaces.GameEventListener;
@@ -164,6 +165,23 @@ public class Logic implements GameLogicInterface {
 					return;
 				}
 				// TODO: inform gameeventlisteners!
+				break;
+			case SET_ITEM_SLOT:
+				SetItemSlotEvent slotEvent = (SetItemSlotEvent) event;
+				try {
+					currentGame
+							.getPlayerByOwnerId(slotEvent.getOwner())
+							.getInventory()
+							.setItemAt(
+									slotEvent.getItemSlot(),
+									(Item) currentGame.getObjects().get(
+											slotEvent.getObjectId()));
+				} catch (ObjectNotFoundException e1) {
+					EduLog.passException(e1);
+				}
+				for (GameEventListener listener : listenerList) {
+					listener.onItemSlotChanged(slotEvent);
+				}
 				break;
 			default:
 				break;
