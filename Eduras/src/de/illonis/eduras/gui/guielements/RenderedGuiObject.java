@@ -55,4 +55,6 @@ public abstract class RenderedGuiObject {
 	 */
 	public abstract void onGuiSizeChanged(int newWidth, int newHeight);
 
+	public abstract void onPlayerInformationReceived();
+
 }

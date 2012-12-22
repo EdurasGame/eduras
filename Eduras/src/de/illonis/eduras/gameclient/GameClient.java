@@ -332,4 +332,9 @@ public class GameClient implements GuiClickReactor, NetworkEventReactor {
 	public void addKeyHandlerTo(Component c) {
 		c.addKeyListener(keyHandler);
 	}
+
+	@Override
+	public void onPlayerReceived() {
+		frame.onPlayerReceived();
+	}
 }

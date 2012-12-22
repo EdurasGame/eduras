@@ -177,4 +177,11 @@ public class ItemDisplay extends ClickableGuiElement {
 			return new Rectangle(x + screenX, y + screenY, blocksize, blocksize);
 		}
 	}
+
+	@Override
+	public void onPlayerInformationReceived() {
+		for (int i = 0; i < Inventory.MAX_CAPACITY; i++) {
+			onItemChanged(i);
+		}
+	}
 }

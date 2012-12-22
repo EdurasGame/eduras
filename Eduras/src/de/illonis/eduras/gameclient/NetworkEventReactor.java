@@ -24,4 +24,10 @@ public interface NetworkEventReactor {
 	 * disconnect-procedure here!
 	 */
 	void onDisconnect();
+
+	/**
+	 * Indicates that the player object that is assigned to this client was
+	 * received.
+	 */
+	void onPlayerReceived();
 }

@@ -249,9 +249,18 @@ public class GameRenderer {
 	 * @param height
 	 *            new gamepanel height
 	 */
-	public void notifyGuiSizeChanged(int width, int height) {
+	void notifyGuiSizeChanged(int width, int height) {
 		for (int i = 0; i < uiObjects.size(); i++) {
 			uiObjects.get(i).onGuiSizeChanged(width, height);
+		}
+	}
+
+	/**
+	 * Notifies all ui objects that player data have been received.
+	 */
+	void notifyPlayerReceived() {
+		for (int i = 0; i < uiObjects.size(); i++) {
+			uiObjects.get(i).onPlayerInformationReceived();
 		}
 	}
 

@@ -61,6 +61,8 @@ public class ClientFrame extends JFrame implements NetworkEventReactor,
 		add(loginPanel, LOGINPANEL);
 		add(progressPanel, CONNECTPANEL);
 		add(gamePanel, GAMEPANEL);
+		renderer = new GameRenderer(client, client.getCamera(),
+				client.getInformationProvider());
 	}
 
 	/**
@@ -116,8 +118,6 @@ public class ClientFrame extends JFrame implements NetworkEventReactor,
 
 	@Override
 	public void onConnected() {
-		renderer = new GameRenderer(client, client.getCamera(),
-				client.getInformationProvider());
 		rendererThread = new RenderThread(renderer, gamePanel);
 		addComponentListener(new ResizeMonitor());
 		client.getCamera().setSize(gamePanel.getWidth(), gamePanel.getHeight());
@@ -161,5 +161,10 @@ public class ClientFrame extends JFrame implements NetworkEventReactor,
 
 	public ItemDisplay getItemDisplay() {
 		return renderer.getItemDisplay();
+	}
+
+	@Override
+	public void onPlayerReceived() {
+		renderer.notifyPlayerReceived();
 	}
 }

@@ -3,6 +3,7 @@ package de.illonis.eduras.gameclient;
 import java.util.ArrayList;
 
 import de.illonis.eduras.GameObject;
+import de.illonis.eduras.ObjectFactory.ObjectType;
 import de.illonis.eduras.events.ClientRenameEvent;
 import de.illonis.eduras.events.GameEvent;
 import de.illonis.eduras.events.ObjectFactoryEvent;
@@ -32,8 +33,9 @@ public class GameEventReactor implements GameEventListener {
 
 	@Override
 	public void onObjectCreation(ObjectFactoryEvent event) {
-		// TODO Auto-generated method stub
-
+		if (event.getOwner() == client.getInformationProvider().getOwnerID()
+				&& event.getObjectType() == ObjectType.PLAYER)
+			client.onPlayerReceived();
 	}
 
 	@Override
