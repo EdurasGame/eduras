@@ -30,11 +30,8 @@ public class ExampleWeapon extends Weapon {
 	public ExampleWeapon(GameInformation gi) {
 
 		super(ObjectType.ITEM_WEAPON_1, gi);
-
-		Missile prototypeMissile = new Missile(gi);
-		prototypeMissile.setSpeed(5);
-		setMissile(new Missile(gi));
-		setName("WeaponEx");
+		setMissile(new SimpleMissile(gi));
+		setName("WeaponExample");
 		setShape(new Circle(10));
 	}
 
