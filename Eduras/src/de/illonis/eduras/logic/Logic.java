@@ -149,22 +149,54 @@ public class Logic implements GameLogicInterface {
 				missile.setOwner(missileLaunchEvent.getOwner());
 				missile.setSpeedVector(missileLaunchEvent.getSpeedVector());
 				// TODO: inform gameeventlisteners!
+
+				// inform listeners
+
+				ObjectFactoryEvent objectFactoryEvent = new ObjectFactoryEvent(
+						GameEventNumber.OBJECT_CREATE,
+						missileLaunchEvent.getObjectType());
+				objectFactoryEvent.setId(missile.getId());
+				objectFactoryEvent.setOwner(missile.getOwner());
+
+				for (GameEventListener gel : listenerList) {
+					gel.onObjectCreation(objectFactoryEvent);
+					gel.onNewObjectPosition(missile);
+					// announce speedvector
+				}
 				break;
 			case LOOT_ITEM_EVENT:
 				LootItemEvent lootItemEvent = (LootItemEvent) event;
-
+				Player player;
+				int itemSlot;
 				try {
-					Player player = currentGame
-							.getPlayerByObjectId(lootItemEvent.getPlayerId());
-					player.getInventory().loot(
-							(Item) currentGame.findObjectById(lootItemEvent
-									.getObjectId()));
+					player = currentGame.getPlayerByObjectId(lootItemEvent
+							.getPlayerId());
+					Item item = (Item) currentGame.findObjectById(lootItemEvent
+							.getObjectId());
+					itemSlot = player.getInventory().loot(item);
+
+					item.setCollidable(false);
+					item.setVisible(false);
+
+					SetBooleanGameObjectAttributeEvent visEvent = new SetBooleanGameObjectAttributeEvent(
+							GameEventNumber.SET_VISIBLE, item.getId(), false);
+					SetBooleanGameObjectAttributeEvent colEvent = new SetBooleanGameObjectAttributeEvent(
+							GameEventNumber.SET_COLLIDABLE, item.getId(), false);
+
+					for (GameEventListener gel : listenerList) {
+						gel.onItemSlotChanged(new SetItemSlotEvent(
+								lootItemEvent.getObjectId(), player.getOwner(),
+								itemSlot));
+						gel.onObjectStateChanged(visEvent);
+						gel.onObjectStateChanged(colEvent);
+					}
+
 				} catch (ObjectNotFoundException e1) {
 					return;
 				} catch (InventoryIsFullException e1) {
 					return;
 				}
-				// TODO: inform gameeventlisteners!
+
 				break;
 			case SET_ITEM_SLOT:
 				SetItemSlotEvent slotEvent = (SetItemSlotEvent) event;
