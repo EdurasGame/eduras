@@ -12,7 +12,7 @@ public class SetItemSlotEvent extends ObjectEvent {
 	private int itemSlot;
 
 	public SetItemSlotEvent(int objectId, int owner, int itemSlot) {
-		super(GameEventNumber.ITEM_SLOT_CHANGED, objectId);
+		super(GameEventNumber.SET_ITEM_SLOT, objectId);
 		this.owner = owner;
 		this.itemSlot = itemSlot;
 	}

@@ -11,6 +11,7 @@ import de.illonis.eduras.events.MovementEvent;
 import de.illonis.eduras.events.NetworkEvent;
 import de.illonis.eduras.events.ObjectFactoryEvent;
 import de.illonis.eduras.events.SetBooleanGameObjectAttributeEvent;
+import de.illonis.eduras.events.SetItemSlotEvent;
 import de.illonis.eduras.events.SetOwnerEvent;
 import de.illonis.eduras.events.UserMovementEvent;
 import de.illonis.eduras.exceptions.MessageNotSupportedException;
@@ -153,6 +154,11 @@ public class NetworkMessageSerializer {
 		case CLIENT_SETNAME:
 			ClientRenameEvent e = (ClientRenameEvent) gameEvent;
 			serializedEvent += e.getOwner() + "#" + e.getName();
+			break;
+		case SET_ITEM_SLOT:
+			SetItemSlotEvent sis = (SetItemSlotEvent) gameEvent;
+			serializedEvent += sis.getOwner() + "#" + sis.getObjectId() + "#"
+					+ sis.getItemSlot();
 			break;
 		default:
 			break;
