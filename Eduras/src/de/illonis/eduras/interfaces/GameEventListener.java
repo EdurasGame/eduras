@@ -7,6 +7,7 @@ import de.illonis.eduras.events.ClientRenameEvent;
 import de.illonis.eduras.events.GameEvent;
 import de.illonis.eduras.events.ObjectFactoryEvent;
 import de.illonis.eduras.events.SetGameObjectAttributeEvent;
+import de.illonis.eduras.events.SetOwnerEvent;
 
 public interface GameEventListener {
 
@@ -16,7 +17,7 @@ public interface GameEventListener {
 	 * @param object
 	 *            The object.
 	 */
-	public void onNewObjectPosition(GameObject player);
+	void onNewObjectPosition(GameObject player);
 
 	/**
 	 * This method is called if the logic was asked to supply any information
@@ -28,17 +29,22 @@ public interface GameEventListener {
 	 * @param targetOwner
 	 *            owner that requested information.
 	 */
-	public void onInformationRequested(ArrayList<GameEvent> infos,
-			int targetOwner);
+	void onInformationRequested(ArrayList<GameEvent> infos, int targetOwner);
 
 	/**
 	 * bla
 	 * 
 	 * @param event
 	 */
-	public void onObjectCreation(ObjectFactoryEvent event);
+	void onObjectCreation(ObjectFactoryEvent event);
 
-	public void onClientRename(ClientRenameEvent event);
+	/**
+	 * Fired when a client has a new name.
+	 * 
+	 * @param event
+	 *            event.
+	 */
+	void onClientRename(ClientRenameEvent event);
 
 	/**
 	 * Called when the state of an object has changed.
@@ -46,6 +52,24 @@ public interface GameEventListener {
 	 * @param event
 	 *            The correlating event.
 	 */
-	public void onObjectStateChanged(SetGameObjectAttributeEvent event);
+	void onObjectStateChanged(SetGameObjectAttributeEvent<?> event);
+
+	/**
+	 * Called when health of an object has changed.
+	 * 
+	 * @param objectId
+	 *            object id.
+	 * @param newValue
+	 *            new health value.
+	 */
+	void onHealthChanged(int objectId, int newValue);
+
+	/**
+	 * Called when owner of an object has changed.
+	 * 
+	 * @param event
+	 *            event containing new owner and object.
+	 */
+	void onOwnerChanged(SetOwnerEvent event);
 
 }

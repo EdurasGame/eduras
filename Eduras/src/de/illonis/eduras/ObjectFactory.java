@@ -2,10 +2,9 @@ package de.illonis.eduras;
 
 import java.util.concurrent.ConcurrentHashMap;
 
-import de.illonis.eduras.events.GameEvent;
 import de.illonis.eduras.events.GameEvent.GameEventNumber;
 import de.illonis.eduras.events.ObjectFactoryEvent;
-import de.illonis.eduras.events.SetGameObjectAttributeEvent;
+import de.illonis.eduras.events.SetBooleanGameObjectAttributeEvent;
 import de.illonis.eduras.interfaces.GameEventListener;
 import de.illonis.eduras.interfaces.GameLogicInterface;
 import de.illonis.eduras.items.weapons.SimpleMissile;
@@ -63,7 +62,8 @@ public class ObjectFactory {
 		this.logic = logic;
 	}
 
-	public void onObjectAttributeChanged(SetGameObjectAttributeEvent event) {
+	public void onObjectAttributeChanged(
+			SetBooleanGameObjectAttributeEvent event) {
 
 		for (GameEventListener listener : logic.getListenerList()) {
 			listener.onObjectStateChanged(event);
@@ -71,12 +71,14 @@ public class ObjectFactory {
 
 	}
 
-	public void onGameEventAppeared(GameEvent event) {
-		// do not handle other events in case they are received.
-		if (!(event instanceof ObjectFactoryEvent))
-			return;
+	/**
+	 * Handles an object factory event.
+	 * 
+	 * @param event
+	 *            object factory event.
+	 */
+	public void onObjectFactoryEventAppeared(ObjectFactoryEvent event) {
 
-		ObjectFactoryEvent ofe = (ObjectFactoryEvent) event;
 		// if (ofe.hasId()
 		// && logic.getGame().getObjects().containsKey(ofe.getId())) {
 		// EduLog.info("Object with id " + ofe.getId()
@@ -84,25 +86,25 @@ public class ObjectFactory {
 		// return;
 		// }
 		GameObject go = null;
-		if (ofe.getType() == GameEventNumber.OBJECT_CREATE) {
+		if (event.getType() == GameEventNumber.OBJECT_CREATE) {
 
 			// skip creating object that already exist
-			if (logic.getGame().getObjects().containsKey(ofe.getId())) {
+			if (logic.getGame().getObjects().containsKey(event.getId())) {
 				return;
 			}
 
-			switch (ofe.getObjectType()) {
+			switch (event.getObjectType()) {
 			case PLAYER:
-				go = new Player(logic.getGame(), ofe.getOwner());
-				go.setOwner(ofe.getOwner());
-				if (ofe.hasId())
-					go.setId(ofe.getId());
+				go = new Player(logic.getGame(), event.getOwner());
+				go.setOwner(event.getOwner());
+				if (event.hasId())
+					go.setId(event.getId());
 				else
-					ofe.setId(go.getId());
+					event.setId(go.getId());
 
 				logic.getGame().addPlayer((Player) go);
-				logic.getGame().addObject(go);
-				EduLog.info("Player " + ofe.getOwner() + " created");
+
+				EduLog.info("Player " + event.getOwner() + " created");
 				break;
 			case YELLOWCIRCLE:
 				go = new YellowCircle(logic.getGame());
@@ -113,15 +115,17 @@ public class ObjectFactory {
 			default:
 				return;
 			}
+			if (go != null)
+				logic.getGame().addObject(go);
 
 			for (GameEventListener gel : logic.getListenerList()) {
-				gel.onObjectCreation(ofe);
+				gel.onObjectCreation(event);
 			}
 			// game.addObject(go);
 		}
 
-		else if (ofe.getType() == GameEventNumber.OBJECT_REMOVE) {
-			int id = ofe.getId();
+		else if (event.getType() == GameEventNumber.OBJECT_REMOVE) {
+			int id = event.getId();
 			ConcurrentHashMap<Integer, GameObject> gameObjects = logic
 					.getGame().getObjects();
 

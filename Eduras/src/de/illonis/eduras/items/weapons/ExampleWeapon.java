@@ -10,7 +10,7 @@ import de.illonis.eduras.Player;
 import de.illonis.eduras.events.GameEvent.GameEventNumber;
 import de.illonis.eduras.events.MovementEvent;
 import de.illonis.eduras.events.ObjectFactoryEvent;
-import de.illonis.eduras.events.SetGameObjectAttributeEvent;
+import de.illonis.eduras.events.SetBooleanGameObjectAttributeEvent;
 import de.illonis.eduras.inventory.InventoryIsFullException;
 import de.illonis.eduras.items.ItemUseInformation;
 import de.illonis.eduras.logger.EduLog;
@@ -61,18 +61,20 @@ public class ExampleWeapon extends Weapon {
 		speedVector.subtract(triggeringObject.getPositionVector());
 
 		// TODO: This needs to be solved in another way because this will make
-		// the missile crash into the triggering object.
+		// the missile crash into the triggering object. => eventtrigger
 
 		ObjectFactoryEvent ofEvent = new ObjectFactoryEvent(
 				GameEventNumber.OBJECT_CREATE, ObjectType.SIMPLEMISSILE);
+		// TODO: set object owner
 
-		getGame().getOf().onGameEventAppeared(ofEvent);
+		getGame().getOf().onObjectFactoryEventAppeared(ofEvent);
 
 		MovementEvent setPos = new MovementEvent(GameEventNumber.SET_POS,
 				getId());
 
 		setPos.setNewXPos(triggeringObject.getXPosition());
 		setPos.setNewYPos(triggeringObject.getYPosition());
+		// TODO: Set speed vector
 
 	}
 
@@ -91,12 +93,14 @@ public class ExampleWeapon extends Weapon {
 
 		Player player = (Player) collidingObject;
 		try {
-			player.getInventory().loot(this);
-			this.setVisible(false);
-			this.setCollidable(false);
-			SetGameObjectAttributeEvent visibleEvent = new SetGameObjectAttributeEvent(
+			// TODO: make to Eventtriggerer: loot
+
+			int id = player.getInventory().loot(this);
+			// TODO: broadcast to clients
+
+			SetBooleanGameObjectAttributeEvent visibleEvent = new SetBooleanGameObjectAttributeEvent(
 					GameEventNumber.SET_VISIBLE, this.getId(), false);
-			SetGameObjectAttributeEvent collidableEvent = new SetGameObjectAttributeEvent(
+			SetBooleanGameObjectAttributeEvent collidableEvent = new SetBooleanGameObjectAttributeEvent(
 					GameEventNumber.SET_COLLIDABLE, this.getId(), false);
 			getGame().getOf().onObjectAttributeChanged(collidableEvent);
 			getGame().getOf().onObjectAttributeChanged(visibleEvent);

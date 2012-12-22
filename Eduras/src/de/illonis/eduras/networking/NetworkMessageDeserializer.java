@@ -16,7 +16,7 @@ import de.illonis.eduras.events.NetworkEvent;
 import de.illonis.eduras.events.NetworkEvent.NetworkEventNumber;
 import de.illonis.eduras.events.NoEvent;
 import de.illonis.eduras.events.ObjectFactoryEvent;
-import de.illonis.eduras.events.SetGameObjectAttributeEvent;
+import de.illonis.eduras.events.SetBooleanGameObjectAttributeEvent;
 import de.illonis.eduras.events.SetOwnerEvent;
 import de.illonis.eduras.events.UserMovementEvent;
 import de.illonis.eduras.exceptions.GivenParametersDoNotFitToEventException;
@@ -47,7 +47,13 @@ public class NetworkMessageDeserializer {
 		LinkedList<Event> events = new LinkedList<Event>();
 		EduLog.info("[DESERIALIZE] orig: " + eventString);
 		// FIXME: Fix StringIndexOutOfBoundsException when eventString equals ""
-		String[] messages = eventString.substring(2).split("##");
+		String[] messages;
+		try {
+			messages = eventString.substring(2).split("##");
+		} catch (StringIndexOutOfBoundsException e) {
+			EduLog.error("Fix: Stringindexoutofbounds.");
+			return events;
+		}
 
 		for (String msg : messages) {
 
@@ -222,7 +228,7 @@ public class NetworkMessageDeserializer {
 			break;
 		case SET_VISIBLE:
 		case SET_COLLIDABLE:
-			gameEvent = new SetGameObjectAttributeEvent(typeNumber,
+			gameEvent = new SetBooleanGameObjectAttributeEvent(typeNumber,
 					parseInt(args[1]), parseBool(args[2]));
 			break;
 		case OBJECT_CREATE:

@@ -4,6 +4,7 @@
 package de.illonis.eduras.logicabstraction;
 
 import de.illonis.eduras.events.GameEvent;
+import de.illonis.eduras.events.GameEvent.GameEventNumber;
 import de.illonis.eduras.exceptions.MessageNotSupportedException;
 import de.illonis.eduras.exceptions.WrongEventTypeException;
 import de.illonis.eduras.interfaces.GameLogicInterface;
@@ -63,6 +64,7 @@ public class EventSender {
 		String msg = NetworkMessageSerializer.serialize(event);
 
 		client.sendMessage(msg);
-		logic.onGameEventAppeared(event);
+		if (event.getType() == GameEventNumber.SET_POS)
+			logic.onGameEventAppeared(event);
 	}
 }

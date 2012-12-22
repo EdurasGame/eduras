@@ -108,7 +108,7 @@ public final class EduLog {
 	 *            level limit. Messages below will not be logged.
 	 */
 	public static void setLogLimit(Level level) {
-		setLogLimit(level);
+		getInstance().setLimit(level);
 	}
 
 	/**

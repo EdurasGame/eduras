@@ -22,7 +22,7 @@ public class GameInformation {
 	private final ConcurrentHashMap<Integer, GameObject> objects;
 	private final ConcurrentHashMap<Integer, Player> players;
 	private final Map map;
-	private ObjectFactory of;
+	private ObjectFactory of; // TODO: remove
 
 	public GameInformation() {
 		objects = new ConcurrentHashMap<Integer, GameObject>();

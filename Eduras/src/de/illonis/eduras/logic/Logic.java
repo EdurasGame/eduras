@@ -1,9 +1,13 @@
-package de.illonis.eduras;
+package de.illonis.eduras.logic;
 
 import java.util.ArrayList;
 import java.util.logging.Level;
 
+import de.illonis.eduras.GameInformation;
+import de.illonis.eduras.GameObject;
 import de.illonis.eduras.MoveableGameObject.Direction;
+import de.illonis.eduras.ObjectFactory;
+import de.illonis.eduras.Player;
 import de.illonis.eduras.events.ClientRenameEvent;
 import de.illonis.eduras.events.GameEvent;
 import de.illonis.eduras.events.GameEvent.GameEventNumber;
@@ -11,7 +15,7 @@ import de.illonis.eduras.events.GameInfoRequest;
 import de.illonis.eduras.events.ItemEvent;
 import de.illonis.eduras.events.MovementEvent;
 import de.illonis.eduras.events.ObjectFactoryEvent;
-import de.illonis.eduras.events.SetGameObjectAttributeEvent;
+import de.illonis.eduras.events.SetBooleanGameObjectAttributeEvent;
 import de.illonis.eduras.events.UserMovementEvent;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
 import de.illonis.eduras.interfaces.GameEventListener;
@@ -57,7 +61,8 @@ public class Logic implements GameLogicInterface {
 				+ event.getType().toString());
 
 		if (event instanceof ObjectFactoryEvent) {
-			objectFactory.onGameEventAppeared(event);
+			objectFactory
+					.onObjectFactoryEventAppeared((ObjectFactoryEvent) event);
 		} else {
 
 			switch (event.getType()) {
@@ -119,7 +124,7 @@ public class Logic implements GameLogicInterface {
 				break;
 			case SET_COLLIDABLE:
 			case SET_VISIBLE:
-				handleObjectAttributeEvent((SetGameObjectAttributeEvent) event);
+				handleObjectAttributeEvent((SetBooleanGameObjectAttributeEvent) event);
 			default:
 				break;
 			}
@@ -129,7 +134,8 @@ public class Logic implements GameLogicInterface {
 	/**
 	 * @param event
 	 */
-	private void handleObjectAttributeEvent(SetGameObjectAttributeEvent event) {
+	private void handleObjectAttributeEvent(
+			SetBooleanGameObjectAttributeEvent event) {
 
 		GameObject object = getGame().findObjectById(event.getObjectId());
 

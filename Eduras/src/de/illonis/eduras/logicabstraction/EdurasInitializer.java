@@ -4,8 +4,8 @@
 package de.illonis.eduras.logicabstraction;
 
 import de.illonis.eduras.GameInformation;
-import de.illonis.eduras.Logic;
 import de.illonis.eduras.interfaces.GameLogicInterface;
+import de.illonis.eduras.logic.Logic;
 import de.illonis.eduras.networking.Client;
 import de.illonis.eduras.settings.Settings;
 

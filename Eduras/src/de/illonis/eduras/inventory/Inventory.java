@@ -3,6 +3,7 @@ package de.illonis.eduras.inventory;
 import de.illonis.eduras.ObjectFactory.ObjectType;
 import de.illonis.eduras.items.Item;
 import de.illonis.eduras.items.StackableItem;
+import de.illonis.eduras.logger.EduLog;
 
 /**
  * An inventory that holds items for a unit.
@@ -121,12 +122,13 @@ public class Inventory {
 	 * @throws InventoryIsFullException
 	 *             when inventory is full.
 	 */
-	public synchronized void loot(Item item) throws InventoryIsFullException {
+	public synchronized int loot(Item item) throws InventoryIsFullException {
 		int target = findNextFreeInventorySlotForItem(item);
 		if (target == -1)
 			throw new InventoryIsFullException();
-		System.out.println("putting item in " + target);
+		EduLog.info("putting item in " + target);
 		itemSlots[target].putItem(item);
+		return target;
 	}
 
 	/**

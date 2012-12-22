@@ -44,7 +44,8 @@ public class SimpleMissile extends Missile {
 				GameEventNumber.OBJECT_REMOVE, ObjectType.SIMPLEMISSILE);
 		ofEvent.setId(getId());
 		ofEvent.setOwner(getOwner());
-		getGame().getOf().onGameEventAppeared(ofEvent);
+		getGame().getOf().onObjectFactoryEventAppeared(ofEvent);
+		// TODO: use eventtrigger
 	}
 
 }

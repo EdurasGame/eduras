@@ -6,6 +6,7 @@ import java.net.NetworkInterface;
 import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.Enumeration;
+import java.util.logging.Level;
 
 import de.illonis.eduras.events.NetworkEvent;
 import de.illonis.eduras.exceptions.ServerNotReadyForStartException;
@@ -13,6 +14,7 @@ import de.illonis.eduras.interfaces.NetworkEventListener;
 import de.illonis.eduras.locale.Localization;
 import de.illonis.eduras.logger.EduLog;
 import de.illonis.eduras.logger.EduLog.LogMode;
+import de.illonis.eduras.logic.Logic;
 import de.illonis.eduras.networking.Server;
 
 /**
@@ -35,6 +37,7 @@ public class Eduras {
 	public static void main(String[] args) {
 		// new LoggerGui().setVisible(true);
 		EduLog.setLogOutput(LogMode.CONSOLE);
+		EduLog.setLogLimit(Level.SEVERE);
 		int port = 0;
 		if (args.length > 0) {
 			try {

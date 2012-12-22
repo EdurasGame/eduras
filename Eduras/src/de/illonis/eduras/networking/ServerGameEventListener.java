@@ -9,6 +9,7 @@ import de.illonis.eduras.events.GameEvent.GameEventNumber;
 import de.illonis.eduras.events.MovementEvent;
 import de.illonis.eduras.events.ObjectFactoryEvent;
 import de.illonis.eduras.events.SetGameObjectAttributeEvent;
+import de.illonis.eduras.events.SetOwnerEvent;
 import de.illonis.eduras.exceptions.MessageNotSupportedException;
 import de.illonis.eduras.interfaces.GameEventListener;
 import de.illonis.eduras.logger.EduLog;
@@ -115,7 +116,7 @@ public class ServerGameEventListener implements GameEventListener {
 	 * .illonis.eduras.events.SetGameObjectAttributeEvent)
 	 */
 	@Override
-	public void onObjectStateChanged(SetGameObjectAttributeEvent event) {
+	public void onObjectStateChanged(SetGameObjectAttributeEvent<?> event) {
 		String string;
 		try {
 			string = NetworkMessageSerializer.serialize(event);
@@ -124,5 +125,17 @@ public class ServerGameEventListener implements GameEventListener {
 			return;
 		}
 		outputBuffer.append(string);
+	}
+
+	@Override
+	public void onHealthChanged(int objectId, int newValue) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void onOwnerChanged(SetOwnerEvent event) {
+		// TODO Auto-generated method stub
+
 	}
 }
