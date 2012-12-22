@@ -15,6 +15,7 @@ import de.illonis.eduras.exceptions.ObjectNotFoundException;
 import de.illonis.eduras.exceptions.ShapeVerticesNotApplicableException;
 import de.illonis.eduras.items.weapons.ExampleWeapon;
 import de.illonis.eduras.logger.EduLog;
+import de.illonis.eduras.logic.EventTriggerer;
 import de.illonis.eduras.math.Vector2D;
 import de.illonis.eduras.shapes.ObjectShape;
 
@@ -22,7 +23,7 @@ public class GameInformation {
 	private final ConcurrentHashMap<Integer, GameObject> objects;
 	private final ConcurrentHashMap<Integer, Player> players;
 	private final Map map;
-	private ObjectFactory of; // TODO: remove
+	private EventTriggerer eventTriggerer;
 
 	public GameInformation() {
 		objects = new ConcurrentHashMap<Integer, GameObject>();
@@ -53,22 +54,22 @@ public class GameInformation {
 	}
 
 	/**
-	 * Returns the objectfactory to create and remove objects with.
+	 * Returns the eventtriggerer to trigger events with.
 	 * 
-	 * @return The objectfactory.
+	 * @return The eventtriggerer.
 	 */
-	public ObjectFactory getOf() {
-		return of;
+	public EventTriggerer getEventTriggerer() {
+		return eventTriggerer;
 	}
 
 	/**
-	 * Sets the objectfactory to create and remove objects with.
+	 * Sets the eventtriggerer to trigger events with.
 	 * 
-	 * @param of
-	 *            The objectfactory
+	 * @param eventTriggerer
+	 *            The eventtriggerer
 	 */
-	public void setOf(ObjectFactory of) {
-		this.of = of;
+	public void setEventTriggerer(EventTriggerer eventTriggerer) {
+		this.eventTriggerer = eventTriggerer;
 	}
 
 	/**

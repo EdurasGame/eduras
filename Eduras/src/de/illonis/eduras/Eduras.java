@@ -15,6 +15,7 @@ import de.illonis.eduras.locale.Localization;
 import de.illonis.eduras.logger.EduLog;
 import de.illonis.eduras.logger.EduLog.LogMode;
 import de.illonis.eduras.logic.Logic;
+import de.illonis.eduras.logic.ServerEventTriggerer;
 import de.illonis.eduras.networking.Server;
 
 /**
@@ -60,7 +61,7 @@ public class Eduras {
 
 		GameInformation gameInfo = new GameInformation();
 		Logic logic = new Logic(gameInfo);
-		gameInfo.setOf(logic.getObjectFactory());
+		gameInfo.setEventTriggerer(new ServerEventTriggerer(logic));
 
 		server.setGame(logic.getGame());
 		server.setLogic(logic, new NetworkEventListener() {
