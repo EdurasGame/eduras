@@ -57,6 +57,7 @@ public class ExampleWeapon extends Weapon {
 		// TODO: This needs to be solved in another way because this will make
 		// the missile crash into the triggering object. => eventtrigger
 		Vector2D position = triggeringObject.getPositionVector();
+		position.add(new Vector2D(0, 20));
 
 		getGame().getEventTriggerer().createMissile(ObjectType.SIMPLEMISSILE,
 				getOwner(), position, speedVector);
