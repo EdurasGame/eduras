@@ -199,6 +199,23 @@ public class Logic implements GameLogicInterface {
 				}
 
 				break;
+			case SET_ITEM_SLOT:
+				SetItemSlotEvent slotEvent = (SetItemSlotEvent) event;
+				try {
+					currentGame
+							.getPlayerByOwnerId(slotEvent.getOwner())
+							.getInventory()
+							.setItemAt(
+									slotEvent.getItemSlot(),
+									(Item) currentGame.getObjects().get(
+											slotEvent.getObjectId()));
+				} catch (ObjectNotFoundException e1) {
+					EduLog.passException(e1);
+				}
+				for (GameEventListener listener : listenerList) {
+					listener.onItemSlotChanged(slotEvent);
+				}
+				break;
 			default:
 				break;
 			}

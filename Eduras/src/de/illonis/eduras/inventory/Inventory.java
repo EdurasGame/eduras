@@ -57,6 +57,18 @@ public class Inventory {
 	}
 
 	/**
+	 * Sets given itemslot's item to given item.
+	 * 
+	 * @param slot
+	 *            item slot.
+	 * @param item
+	 *            new item in slot.
+	 */
+	public void setItemAt(int slot, Item item) {
+		itemSlots[slot].putItem(item);
+	}
+
+	/**
 	 * Checks if given slot holds an item.
 	 * 
 	 * @param slot
@@ -108,17 +120,18 @@ public class Inventory {
 		if (gold >= item.getBuyValue()) {
 			loot(item);
 			spendGold(item.getBuyValue());
-
 		} else {
 			throw new NotEnoughMoneyException();
 		}
 	}
 
 	/**
-	 * Loots an item.
+	 * Loots an item by putting it into next available inventory slot or
+	 * matching item stack.
 	 * 
 	 * @param item
 	 *            item to loot.
+	 * @return slot where inventory is put into.
 	 * @throws InventoryIsFullException
 	 *             when inventory is full.
 	 */
