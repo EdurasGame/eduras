@@ -56,8 +56,17 @@ public class ExampleWeapon extends Weapon {
 
 		// TODO: This needs to be solved in another way because this will make
 		// the missile crash into the triggering object. => eventtrigger
+
 		Vector2D position = triggeringObject.getPositionVector();
-		position.add(new Vector2D(0, 20));
+		Vector2D diffVector = new Vector2D(triggeringObject.getBoundingBox()
+				.getMaxX() - position.getX(), position.getY()
+				- triggeringObject.getBoundingBox().getMinY());
+
+		Vector2D diag = new Vector2D(triggeringObject.getBoundingBox()
+				.getWidth(), triggeringObject.getBoundingBox().getHeight());
+		Vector2D copy = speedVector.copy();
+		copy.setLength(diag.getLength());
+		position.add(copy);
 
 		getGame().getEventTriggerer().createMissile(ObjectType.SIMPLEMISSILE,
 				getOwner(), position, speedVector);
