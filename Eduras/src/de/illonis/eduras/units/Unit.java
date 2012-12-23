@@ -93,5 +93,14 @@ public abstract class Unit extends MoveableGameObject {
 		if (damage <= 0)
 			return;
 		setHealth(Math.max(getHealth() - damage, 0));
+		if (isDead())
+			onDead();
+	}
+
+	/**
+	 * Called when unit dies.
+	 */
+	public void onDead() {
+		getGame().getEventTriggerer().removeObject(getId());
 	}
 }

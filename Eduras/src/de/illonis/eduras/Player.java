@@ -31,7 +31,7 @@ public class Player extends Unit implements Controllable {
 	 *            The name of the player.
 	 */
 	public Player(GameInformation game, int ownerId, String name) {
-		super(game, 10);
+		super(game, 100);
 		setObjectType(ObjectType.PLAYER);
 		this.name = name;
 		setSpeed(50);
