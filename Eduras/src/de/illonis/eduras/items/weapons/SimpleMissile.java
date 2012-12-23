@@ -5,6 +5,7 @@ package de.illonis.eduras.items.weapons;
 
 import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.GameObject;
+import de.illonis.eduras.ObjectFactory.ObjectType;
 
 /**
  * @author Florian Mai <florian.ren.mai@googlemail.com>
@@ -22,6 +23,7 @@ public class SimpleMissile extends Missile {
 		setDamage(5);
 		setDamageRadius(5);
 		setSpeed(5);
+		setObjectType(ObjectType.SIMPLEMISSILE);
 	}
 
 	/*
