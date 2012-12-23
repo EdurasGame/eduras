@@ -168,7 +168,6 @@ public class Inventory {
 	 */
 	public boolean hasItem(Item item) {
 		return hasItemOfType(item.getType());
-
 	}
 
 	/**

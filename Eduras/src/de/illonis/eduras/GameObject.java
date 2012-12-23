@@ -176,7 +176,7 @@ public abstract class GameObject implements Comparable<GameObject> {
 	 * This modifies current position by adding given value. This is equal to
 	 * <code>setYPosition(getYPosition() + yDiff)</code>.
 	 * 
-	 * @see #setYPosition(int)
+	 * @see #setYPosition(Double)
 	 * 
 	 * @param yDiff
 	 *            value to be added to y-position.
