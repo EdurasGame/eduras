@@ -5,7 +5,6 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import javax.naming.InvalidNameException;
 
-import de.illonis.eduras.ObjectFactory.ObjectType;
 import de.illonis.eduras.events.ClientRenameEvent;
 import de.illonis.eduras.events.GameEvent;
 import de.illonis.eduras.events.GameEvent.GameEventNumber;
@@ -229,7 +228,7 @@ public class GameInformation {
 
 		for (GameObject object : objects.values()) {
 			ObjectFactoryEvent objectEvent = new ObjectFactoryEvent(
-					GameEventNumber.OBJECT_CREATE, ObjectType.PLAYER);
+					GameEventNumber.OBJECT_CREATE, object.getType());
 			objectEvent.setOwner(object.getOwner());
 			objectEvent.setId(object.getId());
 			infos.add(objectEvent);
