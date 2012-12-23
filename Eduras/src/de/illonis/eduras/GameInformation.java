@@ -11,6 +11,7 @@ import de.illonis.eduras.events.GameEvent;
 import de.illonis.eduras.events.GameEvent.GameEventNumber;
 import de.illonis.eduras.events.MovementEvent;
 import de.illonis.eduras.events.ObjectFactoryEvent;
+import de.illonis.eduras.events.SetBooleanGameObjectAttributeEvent;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
 import de.illonis.eduras.exceptions.ShapeVerticesNotApplicableException;
 import de.illonis.eduras.items.weapons.ExampleWeapon;
@@ -235,6 +236,16 @@ public class GameInformation {
 			me.setNewXPos(object.getXPosition());
 			me.setNewYPos(object.getYPosition());
 			infos.add(me);
+
+			// send visible / collidable status
+			SetBooleanGameObjectAttributeEvent visEvent = new SetBooleanGameObjectAttributeEvent(
+					GameEventNumber.SET_VISIBLE, object.getId(),
+					object.isVisible());
+			SetBooleanGameObjectAttributeEvent colEvent = new SetBooleanGameObjectAttributeEvent(
+					GameEventNumber.SET_COLLIDABLE, object.getId(),
+					object.isCollidable());
+			infos.add(colEvent);
+			infos.add(visEvent);
 		}
 		for (Player p : players.values()) {
 			try {
