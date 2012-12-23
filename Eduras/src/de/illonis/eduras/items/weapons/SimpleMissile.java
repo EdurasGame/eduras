@@ -24,7 +24,7 @@ public class SimpleMissile extends Missile {
 		setDamage(5);
 		setDamageRadius(5);
 		setObjectType(ObjectType.SIMPLEMISSILE);
-		setSpeed(30);
+		setSpeed(100);
 	}
 
 	/*

@@ -26,6 +26,7 @@ public class ClientReceiver extends Thread {
 	private boolean connectionAvailable = true;
 
 	private final Client client;
+	private Buffer inputBuffer;
 
 	/**
 	 * Retrieves messages from server.
@@ -50,6 +51,11 @@ public class ClientReceiver extends Thread {
 	@Override
 	public void run() {
 
+		inputBuffer = new Buffer();
+		ClientParser p = new ClientParser(logic, inputBuffer,
+				networkEventListener, client);
+		p.start();
+
 		while (connectionAvailable) {
 			try {
 				String messages = messageReader.readLine();
@@ -57,10 +63,10 @@ public class ClientReceiver extends Thread {
 					EduLog.info("[CLIENT] Received message: " + messages);
 					processMessages(messages);
 				}
-
 			} catch (IOException e) {
 				connectionAvailable = false;
 				EduLog.error("Connection to server closed.");
+				p.interrupt();
 				EduLog.passException(e);
 			}
 		}
@@ -74,10 +80,7 @@ public class ClientReceiver extends Thread {
 	 *            The message(s)-string to be forwarded.
 	 */
 	private void processMessages(String messages) {
-
-		ClientLogic clientLogic = new ClientLogic(this.logic, messages,
-				networkEventListener, client);
-		clientLogic.start();
+		inputBuffer.append(messages);
 
 	}
 

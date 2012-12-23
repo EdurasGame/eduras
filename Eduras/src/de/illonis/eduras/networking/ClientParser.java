@@ -18,12 +18,12 @@ import de.illonis.eduras.logger.EduLog;
  *         More detailed, the incoming message is deserialized and forwarded to
  *         the gamelogic or to the network listener.
  */
-public class ClientLogic extends Thread {
+public class ClientParser extends Thread {
 
 	Client client;
 	NetworkEventListener networkEventListener;
 	GameLogicInterface logic;
-	String messages;
+	private final Buffer inputBuffer;
 
 	/**
 	 * Creates a new ClientLogic that deserializes the given message into an
@@ -39,21 +39,48 @@ public class ClientLogic extends Thread {
 	 * @param client
 	 *            The client which belongs to the clientLogic.
 	 */
-	public ClientLogic(GameLogicInterface logic, String messages,
+	public ClientParser(GameLogicInterface logic, Buffer inputBuffer,
 			NetworkEventListener networkEventListener, Client client) {
 		this.client = client;
 		this.logic = logic;
-		this.messages = messages;
+		this.inputBuffer = inputBuffer;
 		this.networkEventListener = networkEventListener;
 	}
 
 	@Override
 	public void run() {
-		EduLog.info("Clientlogic started.");
-		LinkedList<Event> eventList = NetworkMessageDeserializer
-				.deserialize(messages);
+		EduLog.info("[ClientParser] Started.");
+		readFromInputBuffer();
+	}
 
-		for (Event event : eventList) {
+	/**
+	 * Reads repeatedly from input buffer and decodes those messages.<br>
+	 * This does not need a wait implementation because reading from input
+	 * buffer is blocking.
+	 */
+	private void readFromInputBuffer() {
+		while (true) {
+			try {
+				String s = inputBuffer.getNext();
+				decodeMessage(s);
+			} catch (InterruptedException e) {
+				EduLog.passException(e);
+			}
+		}
+	}
+
+	/**
+	 * Decodes given messages into one or more events and notices logic.
+	 * 
+	 * @param message
+	 *            message to decode.
+	 */
+	private void decodeMessage(String message) {
+		LinkedList<Event> deserializedMessages = NetworkMessageDeserializer
+				.deserialize(message);
+		EduLog.info("[ServerDecoder] Decoded " + deserializedMessages.size()
+				+ " messages from: " + message);
+		for (Event event : deserializedMessages)
 			if (event instanceof GameEvent) {
 				logic.onGameEventAppeared((GameEvent) event);
 			} else {
@@ -65,6 +92,5 @@ public class ClientLogic extends Thread {
 				networkEventListener
 						.onNetworkEventAppeared((NetworkEvent) event);
 			}
-		}
 	}
 }
