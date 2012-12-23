@@ -139,6 +139,7 @@ public class Logic implements GameLogicInterface {
 				switch (missileLaunchEvent.getObjectType()) {
 				case SIMPLEMISSILE:
 					missile = new SimpleMissile(currentGame);
+					currentGame.addObject(missile);
 					break;
 				default:
 					return;
