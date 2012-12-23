@@ -166,7 +166,7 @@ public class Vector2D {
 	}
 
 	/**
-	 * Inverts this vector bi multiplying all values with -1.
+	 * Inverts this vector by multiplying all values with -1.
 	 */
 	public void invert() {
 		setX(-x);
@@ -298,6 +298,14 @@ public class Vector2D {
 		}
 
 		return null;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (obj instanceof Vector2D) {
+			return equals((Vector2D) obj);
+		}
+		return super.equals(obj);
 	}
 
 	/**

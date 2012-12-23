@@ -1,8 +1,6 @@
-/**
- * 
- */
 package de.illonis.eduras.unittests;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.util.LinkedList;
@@ -19,11 +17,12 @@ import de.illonis.eduras.math.Vector2D;
  */
 public class VectorTests {
 
-	Vector2D vector;
+	Vector2D vector, lengthVector;
 
 	@Before
 	public void setUp() {
 		vector = new Vector2D(100, 100);
+		lengthVector = new Vector2D(4, 3);
 	}
 
 	@Test
@@ -31,6 +30,37 @@ public class VectorTests {
 		vector.mult(2);
 		assertTrue(vector.getX() == 200);
 		assertTrue(vector.getY() == 200);
+	}
+
+	@Test
+	public void lengthTests() {
+		assertEquals(5, lengthVector.getLength(), 0);
+		lengthVector.setLength(10);
+		assertEquals(10, lengthVector.getLength(), 0);
+		assertEquals(8, lengthVector.getX(), 0);
+		assertEquals(6, lengthVector.getY(), 0);
+		lengthVector.mult(0.5);
+		assertEquals(5, lengthVector.getLength(), 0);
+
+		assertEquals(5, lengthVector.getLength(), 0);
+		assertEquals("Length of unit vector", 1, lengthVector.getUnitVector()
+				.getLength(), 0);
+
+		Vector2D second = lengthVector.copy();
+		second.invert();
+		lengthVector.mult(-1);
+
+		assertEquals("Negative vector is same as vector *-1.", second,
+				lengthVector);
+	}
+
+	@Test
+	public void unitVectorTests() {
+		Vector2D second = lengthVector.copy();
+		second.mult(17.34);
+		assertEquals(
+				"Unitvectors of two linear dependend vectors should be the same.",
+				lengthVector.getUnitVector(), second.getUnitVector());
 	}
 
 	@Test
