@@ -110,9 +110,13 @@ public class Eduras {
 			EduLog.passException(e);
 			return;
 		}
-		EduLog.fine(Localization.getString("Server.reachable"));
+
+		StringBuilder b = new StringBuilder(
+				Localization.getString("Server.reachable") + " ");
 		for (InetAddress inetAddress : addresses) {
-			EduLog.fine("[STARTUP] " + inetAddress.toString().substring(1));
+			b.append(inetAddress.toString().substring(1));
+			b.append(", ");
 		}
+		EduLog.info(b.toString());
 	}
 }
