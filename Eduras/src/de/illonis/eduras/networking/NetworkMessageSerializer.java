@@ -11,6 +11,7 @@ import de.illonis.eduras.events.MovementEvent;
 import de.illonis.eduras.events.NetworkEvent;
 import de.illonis.eduras.events.ObjectFactoryEvent;
 import de.illonis.eduras.events.SetBooleanGameObjectAttributeEvent;
+import de.illonis.eduras.events.SetIntegerGameObjectAttributeEvent;
 import de.illonis.eduras.events.SetItemSlotEvent;
 import de.illonis.eduras.events.SetOwnerEvent;
 import de.illonis.eduras.events.UserMovementEvent;
@@ -119,6 +120,9 @@ public class NetworkMessageSerializer {
 			serializedEvent += removeEvent.getId();
 			break;
 		case SETHEALTH:
+			SetIntegerGameObjectAttributeEvent igo = (SetIntegerGameObjectAttributeEvent) gameEvent;
+			serializedEvent += concatenateWithDel("#", igo.getObjectId(),
+					igo.getNewValue());
 			break;
 		case SETSPEED:
 		case SETSPEEDVECTOR:

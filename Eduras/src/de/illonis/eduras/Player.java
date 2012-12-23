@@ -7,6 +7,7 @@ import de.illonis.eduras.inventory.Inventory;
 import de.illonis.eduras.logger.EduLog;
 import de.illonis.eduras.math.Vector2D;
 import de.illonis.eduras.shapes.Triangle;
+import de.illonis.eduras.units.Unit;
 
 /**
  * This class represents a player.
@@ -14,7 +15,7 @@ import de.illonis.eduras.shapes.Triangle;
  * @author Florian Mai <florian.ren.mai@googlemail.com>
  * 
  */
-public class Player extends MoveableGameObject implements Controllable {
+public class Player extends Unit implements Controllable {
 	private String name;
 	private final Inventory inventory = new Inventory();
 
@@ -30,7 +31,7 @@ public class Player extends MoveableGameObject implements Controllable {
 	 *            The name of the player.
 	 */
 	public Player(GameInformation game, int ownerId, String name) {
-		super(game);
+		super(game, 10);
 		setObjectType(ObjectType.PLAYER);
 		this.name = name;
 		setSpeed(50);
