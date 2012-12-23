@@ -27,17 +27,17 @@
 		</fileset>
 	</path>
 
-	<target name="clean" description="Cleans up generated files.">
+	<target name="clean" depends="createdir" description="Cleans up generated files.">
 		<delete includeemptydirs="true">
 			<fileset dir="${tests.output}" includes="**/*" />
 		</delete>
 	</target>
 	
-	<target name="createdir" depends="clean" description="Cleans up generated files.">
+	<target name="createdir" description="Cleans up generated files.">
 		<mkdir dir="${tests.output}" />
 	</target>
 
-	<target name="test" depends="createdir">
+	<target name="test" depends="clean">
 		<junit fork="yes" haltonfailure="no" showoutput="true"
 			printsummary="true">
 			<formatter type="xml" usefile="true" />
