@@ -58,9 +58,6 @@ public class ExampleWeapon extends Weapon {
 		// the missile crash into the triggering object. => eventtrigger
 
 		Vector2D position = triggeringObject.getPositionVector();
-		Vector2D diffVector = new Vector2D(triggeringObject.getBoundingBox()
-				.getMaxX() - position.getX(), position.getY()
-				- triggeringObject.getBoundingBox().getMinY());
 
 		Vector2D diag = new Vector2D(triggeringObject.getBoundingBox()
 				.getWidth(), triggeringObject.getBoundingBox().getHeight());

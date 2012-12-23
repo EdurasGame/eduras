@@ -8,6 +8,7 @@ import de.illonis.eduras.math.CollisionPoint;
 import de.illonis.eduras.math.Line;
 import de.illonis.eduras.math.Vector2D;
 import de.illonis.eduras.shapes.ObjectShape;
+import de.illonis.eduras.units.Unit;
 
 /**
  * Meta class for all objects that can be on the game's map.
@@ -357,5 +358,14 @@ public abstract class GameObject implements Comparable<GameObject> {
 		}
 
 		return new LinkedList<CollisionPoint>();
+	}
+
+	/**
+	 * Checks if this is a unit.
+	 * 
+	 * @return true if this is a unit.
+	 */
+	public final boolean isUnit() {
+		return (this instanceof Unit);
 	}
 }

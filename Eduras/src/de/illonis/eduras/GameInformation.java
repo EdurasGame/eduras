@@ -47,7 +47,11 @@ public class GameInformation {
 			ExampleWeapon exampleWeapon = new ExampleWeapon(this);
 			exampleWeapon.setPosition(map.getWidth() * 0.75,
 					map.getHeight() * 0.75);
+			ExampleWeapon exampleWeapon2 = new ExampleWeapon(this);
+			exampleWeapon2.setPosition(map.getWidth() * 0.25,
+					map.getHeight() * 0.25);
 			addObject(exampleWeapon);
+			addObject(exampleWeapon2);
 		} catch (ShapeVerticesNotApplicableException e) {
 			EduLog.passException(e);
 		}
