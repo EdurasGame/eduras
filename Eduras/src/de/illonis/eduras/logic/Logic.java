@@ -250,7 +250,7 @@ public class Logic implements GameLogicInterface {
 	private void handleItemEvent(ItemEvent itemEvent) {
 
 		GameInformation gameInfo = getGame();
-		Player player = null;
+		Player player;
 
 		try {
 			player = gameInfo.getPlayerByOwnerId(itemEvent.getOwner());
@@ -259,7 +259,7 @@ public class Logic implements GameLogicInterface {
 			return;
 		}
 
-		Item item = null;
+		Item item;
 
 		try {
 			item = player.getInventory().getItemBySlot(itemEvent.getSlotNum());

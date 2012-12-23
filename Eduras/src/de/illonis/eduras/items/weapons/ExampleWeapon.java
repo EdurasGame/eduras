@@ -47,17 +47,16 @@ public class ExampleWeapon extends Weapon {
 	 */
 	@Override
 	public void use(ItemUseInformation info) {
+		// (jme) Spawn position will be calculated in a simplified way. We use
+		// diagonal's length of shooting player to move missile away from him.
 
 		Vector2D target = info.getTarget();
 		GameObject triggeringObject = info.getTriggeringObject();
 
-		Vector2D speedVector = new Vector2D(target);
-		speedVector.subtract(triggeringObject.getPositionVector());
-
-		// TODO: This needs to be solved in another way because this will make
-		// the missile crash into the triggering object. => eventtrigger
-
 		Vector2D position = triggeringObject.getPositionVector();
+
+		Vector2D speedVector = new Vector2D(target);
+		speedVector.subtract(position);
 
 		Vector2D diag = new Vector2D(triggeringObject.getBoundingBox()
 				.getWidth(), triggeringObject.getBoundingBox().getHeight());
