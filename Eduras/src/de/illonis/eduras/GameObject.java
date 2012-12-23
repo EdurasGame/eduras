@@ -47,7 +47,7 @@ public abstract class GameObject implements Comparable<GameObject> {
 	/**
 	 * Returns type of this object.
 	 * 
-	 * @return
+	 * @return type of object.
 	 */
 	public ObjectType getType() {
 		return type;
@@ -143,7 +143,7 @@ public abstract class GameObject implements Comparable<GameObject> {
 	 * This modifies current position by adding given value. This is equal to
 	 * <code>setXPosition(getXPosition() + xDiff)</code>.
 	 * 
-	 * @see #setXPosition(int)
+	 * @see #setXPosition(double)
 	 * 
 	 * @param xDiff
 	 *            value to be added to x-position.

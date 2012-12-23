@@ -104,7 +104,9 @@ public abstract class ObjectShape {
 	}
 
 	/**
-	 * @return
+	 * Returns border points of this shape.
+	 * 
+	 * @return border points.
 	 */
 	public abstract Vector2D[] getBorderPoints();
 

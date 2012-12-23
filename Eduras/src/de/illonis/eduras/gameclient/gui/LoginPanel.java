@@ -116,7 +116,7 @@ public class LoginPanel extends JPanel implements ActionListener {
 	/**
 	 * Returns address that was accepted by this dialog.
 	 * 
-	 * @returnaddress to connect to.
+	 * @return address to connect to.
 	 * @throws InvalidValueEnteredException
 	 *             thrown when no address was entered (that is when abort is
 	 *             pressed) or input did not have a valid url format.

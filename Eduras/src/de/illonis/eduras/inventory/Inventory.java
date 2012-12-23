@@ -145,8 +145,8 @@ public class Inventory {
 	}
 
 	/**
-	 * Returns first occurence of item of given {@link ItemType}. If there is no
-	 * item of given type, -1 is returned.
+	 * Returns first occurence of item of given {@link ObjectType}. If there is
+	 * no item of given type, -1 is returned.
 	 * 
 	 * @param type
 	 *            item type to search for.
@@ -160,7 +160,7 @@ public class Inventory {
 	 * Checks if given item exists in inventory. This method does not check if
 	 * exactly this item is hold in inventory but only its type.
 	 * 
-	 * @see #hasItemOfType(ItemType)
+	 * @see #hasItemOfType(ObjectType)
 	 * 
 	 * @param item
 	 *            item to check for.
@@ -172,7 +172,7 @@ public class Inventory {
 	}
 
 	/**
-	 * Checks if an item of given {@link ItemType} exists in inventory.
+	 * Checks if an item of given {@link ObjectType} exists in inventory.
 	 * 
 	 * @see #hasItem(Item)
 	 * 
@@ -186,7 +186,7 @@ public class Inventory {
 	}
 
 	/**
-	 * Returns first occurence of item of given {@link ItemType} within given
+	 * Returns first occurence of item of given {@link ObjectType} within given
 	 * range. If there is no item of given type, -1 is returned.
 	 * 
 	 * @param type

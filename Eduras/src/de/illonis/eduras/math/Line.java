@@ -4,11 +4,10 @@
 package de.illonis.eduras.math;
 
 /**
- * Represents a two-dimensional line. See {@link http
- * ://www.java-forum.org/spiele
- * -multimedia-programmierung/6588-einiges-geometrie-
- * punkte-vektoren-geraden.html} for detailed information about the mathematics
- * behind the methods.
+ * Represents a two-dimensional line. See <a href=
+ * "http://www.java-forum.org/spiele-multimedia-programmierung/6588-einiges-geometrie-punkte-vektoren-geraden.html"
+ * >this url</a> for detailed information about the mathematics behind the
+ * methods.
  * 
  * @author Florian Mai <florian.ren.mai@googlemail.com>
  * 
@@ -101,8 +100,8 @@ public class Line {
 
 	/**
 	 * This function returns the point you will get by multiplying the given
-	 * lambda with the directional vector 'uv' (see {@link
-	 * getDirectionalVector()}) and add it to the support vector 'u'.
+	 * lambda with the directional vector 'uv' (see
+	 * {@link #getDirectionalVector()}) and add it to the support vector 'u'.
 	 * 
 	 * @param lambda
 	 *            The multiplier.

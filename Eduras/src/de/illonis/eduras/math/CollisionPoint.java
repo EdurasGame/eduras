@@ -33,9 +33,9 @@ public class CollisionPoint {
 	}
 
 	/**
-	 * Returns the point of collision
+	 * Returns the point of collision.
 	 * 
-	 * @return
+	 * @return point of collision.
 	 */
 	public Vector2D getInterceptPoint() {
 		return interceptPoint;
@@ -44,7 +44,7 @@ public class CollisionPoint {
 	/**
 	 * Returns the distance to the collision.
 	 * 
-	 * @return
+	 * @return distance to the collision.
 	 */
 	public double getDistance() {
 		return distanceVector.getLength();
@@ -62,7 +62,7 @@ public class CollisionPoint {
 	/**
 	 * Returns the collision with the shortest distance.
 	 * 
-	 * @param collisions
+	 * @param collisionPoints
 	 *            The collisions to calculate the shortest distance of.
 	 * @return Returns the collision point with the shortest distance. If the
 	 *         given list is null or empty, null will be returned.

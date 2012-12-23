@@ -111,7 +111,7 @@ public class Server {
 	 * 
 	 * @param logic
 	 *            The logic.
-	 * @param listener
+	 * @param eventListener
 	 *            The listener
 	 */
 	public void setLogic(GameLogicInterface logic,
@@ -231,9 +231,7 @@ public class Server {
 	 * Removes a player from the logic if the correlating client disconnected.
 	 * 
 	 * @param client
-	 *            The client's socket.
-	 * @param clientId
-	 *            The id of the client.
+	 *            The client.
 	 */
 	public void handleClientDisconnect(ServerClient client) {
 		removeClient(client);

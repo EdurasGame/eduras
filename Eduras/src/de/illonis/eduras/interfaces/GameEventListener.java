@@ -18,7 +18,7 @@ public interface GameEventListener {
 	 * @param object
 	 *            The object.
 	 */
-	void onNewObjectPosition(GameObject player);
+	void onNewObjectPosition(GameObject object);
 
 	/**
 	 * This method is called if the logic was asked to supply any information

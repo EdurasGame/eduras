@@ -24,7 +24,7 @@ public class BasicMath {
 	/**
 	 * Returns square of given integer number.
 	 * 
-	 * @see square
+	 * @see #square(double)
 	 * 
 	 * @param x
 	 *            number

@@ -10,11 +10,14 @@ public class SetIntegerGameObjectAttributeEvent extends
 		SetGameObjectAttributeEvent<Integer> {
 
 	/**
-	 * {@inheritDoc}
+	 * Creates a new attribute events that sets an integer value.
 	 * 
 	 * @param type
+	 *            event type.
 	 * @param objectId
+	 *            object that's attribute is changed.
 	 * @param newValue
+	 *            attribute's new value.
 	 */
 	public SetIntegerGameObjectAttributeEvent(GameEventNumber type,
 			int objectId, Integer newValue) {

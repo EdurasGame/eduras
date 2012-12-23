@@ -32,8 +32,8 @@ public class ClientParser extends Thread {
 	 * 
 	 * @param logic
 	 *            The GameLogic the event is forwarded to.
-	 * @param messages
-	 *            The message that is deserialized into an event.
+	 * @param inputBuffer
+	 *            The input buffer that this parser will read from.
 	 * @param networkEventListener
 	 *            The network event listener to forward NetworkEvents to.
 	 * @param client

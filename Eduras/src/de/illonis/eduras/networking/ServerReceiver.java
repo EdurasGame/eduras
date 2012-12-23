@@ -28,9 +28,7 @@ public class ServerReceiver extends Thread {
 	 * @param inputBuffer
 	 *            Buffer to write new messages into.
 	 * @param client
-	 *            Clientsocket that's inputstream should be used.
-	 * @param clientId
-	 *            The id of the client to receive messages from.
+	 *            Client that's inputstream should be used.
 	 */
 	public ServerReceiver(Server server, Buffer inputBuffer, ServerClient client) {
 		this.server = server;

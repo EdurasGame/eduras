@@ -20,7 +20,7 @@ public abstract class NetworkOptimizer {
 	 * gameobject.<br>
 	 * This is done by replacing old events with new events of the same type.
 	 * 
-	 * @param s
+	 * @param unfilteredMessages
 	 *            message array to filter.
 	 * @return a message array with obsolete messages removed.
 	 */

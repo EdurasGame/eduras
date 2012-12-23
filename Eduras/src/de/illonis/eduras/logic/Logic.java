@@ -55,12 +55,6 @@ public class Logic implements GameLogicInterface {
 		gameWorker.start();
 	}
 
-	/**
-	 * Handles an incoming event. See {@link GameEventNumber} for detailed
-	 * description.
-	 * 
-	 * @param event
-	 */
 	@Override
 	public synchronized void onGameEventAppeared(GameEvent event) {
 		EduLog.info("[LOGIC] A game event appeared: "
@@ -223,7 +217,10 @@ public class Logic implements GameLogicInterface {
 	}
 
 	/**
+	 * Handles an boolean object attribute event.
+	 * 
 	 * @param event
+	 *            event to handle.
 	 */
 	private void handleObjectAttributeEvent(
 			SetBooleanGameObjectAttributeEvent event) {
@@ -246,6 +243,7 @@ public class Logic implements GameLogicInterface {
 	 * Handle an item event.
 	 * 
 	 * @param itemEvent
+	 *            event to handle.
 	 */
 	private void handleItemEvent(ItemEvent itemEvent) {
 
@@ -326,23 +324,12 @@ public class Logic implements GameLogicInterface {
 		}
 	}
 
-	/**
-	 * Registers given listener for world-change events.
-	 * 
-	 * @param listener
-	 *            Listener to register.
-	 */
 	@Override
 	public void addGameEventListener(GameEventListener listener) {
 		listenerList.add(listener);
 	}
 
-	/**
-	 * Unregisters given listener for world-change events.
-	 * 
-	 * @param listener
-	 *            Listener to unregister.
-	 */
+	@Override
 	public void removeGameEventListener(GameEventListener listener) {
 		listenerList.remove(listener);
 	}
@@ -362,9 +349,6 @@ public class Logic implements GameLogicInterface {
 		lgw.stop();
 	}
 
-	/**
-	 * @return
-	 */
 	@Override
 	public ObjectFactory getObjectFactory() {
 		return objectFactory;
