@@ -4,8 +4,10 @@
 package de.illonis.eduras.logic;
 
 import de.illonis.eduras.ObjectFactory.ObjectType;
+import de.illonis.eduras.events.GameEvent.GameEventNumber;
 import de.illonis.eduras.events.LootItemEvent;
 import de.illonis.eduras.events.MissileLaunchEvent;
+import de.illonis.eduras.events.ObjectFactoryEvent;
 import de.illonis.eduras.interfaces.GameLogicInterface;
 import de.illonis.eduras.math.Vector2D;
 
@@ -47,8 +49,10 @@ public class ServerEventTriggerer implements EventTriggerer {
 	 */
 	@Override
 	public void removeObject(int objectId) {
-		// TODO Auto-generated method stub
-
+		ObjectFactoryEvent event = new ObjectFactoryEvent(
+				GameEventNumber.OBJECT_REMOVE, ObjectType.NO_OBJECT);
+		event.setId(objectId);
+		logic.getObjectFactory().onObjectFactoryEventAppeared(event);
 	}
 
 	/*

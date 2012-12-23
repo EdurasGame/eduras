@@ -36,9 +36,7 @@ public class SimpleMissile extends Missile {
 
 	@Override
 	public void onCollision(GameObject collidingObject) {
-		// TODO: Damage collidingObject
-
-		// TODO: use eventtrigger
+		getGame().getEventTriggerer().removeObject(getId());
 	}
 
 }

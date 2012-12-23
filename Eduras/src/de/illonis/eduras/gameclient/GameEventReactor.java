@@ -14,7 +14,7 @@ import de.illonis.eduras.interfaces.GameEventListener;
 
 public class GameEventReactor implements GameEventListener {
 
-	private GameClient client;
+	private final GameClient client;
 
 	public GameEventReactor(GameClient gameClient) {
 		this.client = gameClient;
@@ -65,6 +65,19 @@ public class GameEventReactor implements GameEventListener {
 	@Override
 	public void onItemSlotChanged(SetItemSlotEvent event) {
 		client.getFrame().getItemDisplay().onItemChanged(event.getItemSlot());
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * de.illonis.eduras.interfaces.GameEventListener#onObjectRemove(de.illonis
+	 * .eduras.events.ObjectFactoryEvent)
+	 */
+	@Override
+	public void onObjectRemove(ObjectFactoryEvent event) {
+		// TODO Auto-generated method stub
+
 	}
 
 }

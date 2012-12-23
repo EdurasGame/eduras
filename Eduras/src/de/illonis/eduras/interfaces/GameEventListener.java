@@ -80,4 +80,11 @@ public interface GameEventListener {
 	 *            corresponding information.
 	 */
 	void onItemSlotChanged(SetItemSlotEvent event);
+
+	/**
+	 * Called when an object is removed.
+	 * 
+	 * @param event
+	 */
+	void onObjectRemove(ObjectFactoryEvent event);
 }

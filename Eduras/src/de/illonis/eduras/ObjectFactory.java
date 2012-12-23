@@ -132,6 +132,10 @@ public class ObjectFactory {
 			GameObject objectToRemove = gameObjects.get(id);
 			logic.getGame().removeObject(objectToRemove);
 
+			for (GameEventListener gel : logic.getListenerList()) {
+				gel.onObjectRemove(event);
+			}
+
 		}
 
 	}

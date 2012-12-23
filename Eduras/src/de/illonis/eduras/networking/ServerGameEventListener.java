@@ -155,4 +155,26 @@ public class ServerGameEventListener implements GameEventListener {
 		outputBuffer.append(string);
 
 	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * de.illonis.eduras.interfaces.GameEventListener#onObjectRemove(de.illonis
+	 * .eduras.events.ObjectFactoryEvent)
+	 */
+	@Override
+	public void onObjectRemove(ObjectFactoryEvent event) {
+		String string;
+
+		try {
+			string = NetworkMessageSerializer.serialize(event);
+		} catch (MessageNotSupportedException e) {
+			EduLog.passException(e);
+			return;
+		}
+
+		outputBuffer.append(string);
+
+	}
 }
