@@ -33,6 +33,7 @@ public class GameEventReactor implements GameEventListener {
 
 	@Override
 	public void onObjectCreation(ObjectFactoryEvent event) {
+		// if our player was created, player data is there.
 		if (event.getOwner() == client.getInformationProvider().getOwnerID()
 				&& event.getObjectType() == ObjectType.PLAYER)
 			client.onPlayerReceived();
