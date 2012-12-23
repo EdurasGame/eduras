@@ -119,7 +119,7 @@ public class InputKeyHandler implements KeyListener {
 					GameEventNumber.MOVE_RIGHT_PRESSED, ownerId);
 			break;
 		default:
-			break;
+			return;
 		}
 
 		try {
@@ -131,8 +131,8 @@ public class InputKeyHandler implements KeyListener {
 		}
 
 		lastTimePressed = System.currentTimeMillis();
-		EduLog.fine("Bound key pressed: " + e.getKeyCode() + " (\"" + e.getKeyChar()
-				+ "\")");
+		EduLog.fine("Bound key pressed: " + e.getKeyCode() + " (\""
+				+ e.getKeyChar() + "\")");
 	}
 
 	@Override
@@ -172,7 +172,7 @@ public class InputKeyHandler implements KeyListener {
 					GameEventNumber.MOVE_RIGHT_RELEASED, ownerId);
 			break;
 		default:
-			break;
+			return;
 		}
 
 		try {
