@@ -1,6 +1,7 @@
 package de.illonis.eduras.gameclient.gui;
 
 import java.awt.CardLayout;
+import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentAdapter;
@@ -63,6 +64,11 @@ public class ClientFrame extends JFrame implements NetworkEventReactor,
 		add(gamePanel, GAMEPANEL);
 		renderer = new GameRenderer(client, client.getCamera(),
 				client.getInformationProvider());
+	}
+
+	@Override
+	public Point getLocationOnScreen() {
+		return gamePanel.getLocationOnScreen();
 	}
 
 	/**

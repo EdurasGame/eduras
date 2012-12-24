@@ -152,6 +152,9 @@ public class GameInformation {
 	 */
 	public boolean removeObject(GameObject go) {
 
+		// FIXME: there is tried to remove null-objects.
+		if (go == null)
+			return true;
 		boolean playerRemoveSuccess = true;
 
 		if (go instanceof Player) {

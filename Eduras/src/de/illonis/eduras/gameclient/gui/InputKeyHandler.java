@@ -1,7 +1,7 @@
 package de.illonis.eduras.gameclient.gui;
 
+import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.util.HashMap;
 
 import de.illonis.eduras.events.GameEvent.GameEventNumber;
@@ -9,6 +9,7 @@ import de.illonis.eduras.events.UserMovementEvent;
 import de.illonis.eduras.exceptions.KeyNotBoundException;
 import de.illonis.eduras.exceptions.MessageNotSupportedException;
 import de.illonis.eduras.exceptions.WrongEventTypeException;
+import de.illonis.eduras.gameclient.GameClient;
 import de.illonis.eduras.logger.EduLog;
 import de.illonis.eduras.logicabstraction.EventSender;
 import de.illonis.eduras.settings.KeyBindings.KeyBinding;
@@ -20,7 +21,7 @@ import de.illonis.eduras.settings.Settings;
  * @author illonis
  * 
  */
-public class InputKeyHandler implements KeyListener {
+public class InputKeyHandler extends KeyAdapter {
 
 	private static final long KEY_INTERVAL = 20;
 
@@ -33,10 +34,11 @@ public class InputKeyHandler implements KeyListener {
 	private final HashMap<Integer, Boolean> pressedButtons;
 	private long lastTimePressed;
 
-	private final int ownerId;
 	private Settings settings;
+	private final GameClient client;
 
-	public InputKeyHandler(int ownerId, EventSender sender, Settings settings) {
+	public InputKeyHandler(GameClient client, EventSender sender,
+			Settings settings) {
 
 		this.settings = settings;
 		pressedButtons = new HashMap<Integer, Boolean>();
@@ -45,11 +47,7 @@ public class InputKeyHandler implements KeyListener {
 
 		lastTimePressed = System.currentTimeMillis();
 
-		this.ownerId = ownerId;
-	}
-
-	@Override
-	public void keyTyped(KeyEvent e) {
+		this.client = client;
 	}
 
 	/**
@@ -104,20 +102,39 @@ public class InputKeyHandler implements KeyListener {
 		switch (binding) {
 		case MOVE_UP:
 			moveEvent = new UserMovementEvent(GameEventNumber.MOVE_UP_PRESSED,
-					ownerId);
+					client.getOwnerID());
 			break;
 		case MOVE_LEFT:
 			moveEvent = new UserMovementEvent(
-					GameEventNumber.MOVE_LEFT_PRESSED, ownerId);
+					GameEventNumber.MOVE_LEFT_PRESSED, client.getOwnerID());
 			break;
 		case MOVE_DOWN:
 			moveEvent = new UserMovementEvent(
-					GameEventNumber.MOVE_DOWN_PRESSED, ownerId);
+					GameEventNumber.MOVE_DOWN_PRESSED, client.getOwnerID());
 			break;
 		case MOVE_RIGHT:
 			moveEvent = new UserMovementEvent(
-					GameEventNumber.MOVE_RIGHT_PRESSED, ownerId);
+					GameEventNumber.MOVE_RIGHT_PRESSED, client.getOwnerID());
 			break;
+		case ITEM_1:
+			client.itemUsed(0);
+			return;
+		case ITEM_2:
+			client.itemUsed(1);
+			return;
+		case ITEM_3:
+			client.itemUsed(2);
+			return;
+		case ITEM_4:
+			client.itemUsed(3);
+			return;
+		case ITEM_5:
+			client.itemUsed(4);
+			return;
+		case ITEM_6:
+			client.itemUsed(5);
+			return;
+
 		default:
 			return;
 		}
@@ -157,19 +174,19 @@ public class InputKeyHandler implements KeyListener {
 		switch (binding) {
 		case MOVE_UP:
 			moveEvent = new UserMovementEvent(GameEventNumber.MOVE_UP_RELEASED,
-					ownerId);
+					client.getOwnerID());
 			break;
 		case MOVE_LEFT:
 			moveEvent = new UserMovementEvent(
-					GameEventNumber.MOVE_LEFT_RELEASED, ownerId);
+					GameEventNumber.MOVE_LEFT_RELEASED, client.getOwnerID());
 			break;
 		case MOVE_DOWN:
 			moveEvent = new UserMovementEvent(
-					GameEventNumber.MOVE_DOWN_RELEASED, ownerId);
+					GameEventNumber.MOVE_DOWN_RELEASED, client.getOwnerID());
 			break;
 		case MOVE_RIGHT:
 			moveEvent = new UserMovementEvent(
-					GameEventNumber.MOVE_RIGHT_RELEASED, ownerId);
+					GameEventNumber.MOVE_RIGHT_RELEASED, client.getOwnerID());
 			break;
 		default:
 			return;

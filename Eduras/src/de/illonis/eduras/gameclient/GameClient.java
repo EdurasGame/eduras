@@ -1,7 +1,9 @@
 package de.illonis.eduras.gameclient;
 
 import java.awt.Component;
+import java.awt.MouseInfo;
 import java.awt.Point;
+import java.awt.PointerInfo;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.Iterator;
@@ -98,6 +100,13 @@ public class GameClient implements GuiClickReactor, NetworkEventReactor {
 		c.addMouseListener(new ClickListener());
 	}
 
+	private Point getCurrentMousePos() {
+		PointerInfo pi = MouseInfo.getPointerInfo();
+		Point mp = pi.getLocation();
+		Point pos = frame.getLocationOnScreen();
+		return new Point(mp.x - pos.x, mp.y - pos.y);
+	}
+
 	private void loadTools() {
 		initializer = EdurasInitializer.getInstance();
 		eventSender = initializer.getEventSender();
@@ -117,8 +126,7 @@ public class GameClient implements GuiClickReactor, NetworkEventReactor {
 	public void onConnected() {
 		EduLog.info("Connection to server established. OwnerId: "
 				+ infoPro.getOwnerID());
-		keyHandler = new InputKeyHandler(infoPro.getOwnerID(), eventSender,
-				settings);
+		keyHandler = new InputKeyHandler(this, eventSender, settings);
 		frame.setTitle(frame.getTitle() + " #" + infoPro.getOwnerID() + " ("
 				+ clientName + ")");
 
@@ -156,6 +164,10 @@ public class GameClient implements GuiClickReactor, NetworkEventReactor {
 		cml.stop();
 		initializer.shutdown();
 		nwm.disconnect();
+	}
+
+	public void itemUsed(int i) {
+		itemUsed(i, new Vector2D(getCurrentMousePos()));
 	}
 
 	/**
@@ -336,5 +348,14 @@ public class GameClient implements GuiClickReactor, NetworkEventReactor {
 	@Override
 	public void onPlayerReceived() {
 		frame.onPlayerReceived();
+	}
+
+	/**
+	 * Returns owner id of client.
+	 * 
+	 * @return owner id.
+	 */
+	public int getOwnerID() {
+		return infoPro.getOwnerID();
 	}
 }
