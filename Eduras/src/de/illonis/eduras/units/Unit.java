@@ -55,12 +55,12 @@ public abstract class Unit extends MoveableGameObject {
 	 *            new current health. Must be <code>0<=health<=maxHealth</code>,
 	 *            otherwise it will be adjusted to fit.
 	 */
-	public void setHealth(int health) {
+	protected void setHealth(int health) {
 		this.health = Math.min(Math.max(health, 0), maxHealth);
 	}
 
 	/**
-	 * Sets maximum health of unit.
+	 * Sets maximum health of unit. Current health will scale percental.
 	 * 
 	 * @param maxHealth
 	 *            maximum health. Must be greater than 0.
@@ -100,7 +100,7 @@ public abstract class Unit extends MoveableGameObject {
 	/**
 	 * Called when unit dies.
 	 */
-	public void onDead() {
+	protected void onDead() {
 		removeSelf();
 	}
 }

@@ -18,6 +18,11 @@ import de.illonis.eduras.logger.EduLog;
  */
 public class Client {
 
+	/**
+	 * Connection timeout when connecting to server (in ms).
+	 */
+	public final static int CONNECT_TIMEOUT = 10000;
+
 	private Socket socket;
 
 	private final GameLogicInterface logic;
@@ -49,7 +54,7 @@ public class Client {
 		EduLog.info("[CLIENT] Connecting to " + addr.toString() + " at " + port);
 		socket = new Socket();
 		InetSocketAddress iaddr = new InetSocketAddress(addr, port);
-		socket.connect(iaddr, 10000);
+		socket.connect(iaddr, CONNECT_TIMEOUT);
 		ClientReceiver r = new ClientReceiver(logic, socket, this);
 		r.setNetworkEventListener(networkEventListener);
 		r.start();

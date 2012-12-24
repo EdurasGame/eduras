@@ -3,6 +3,8 @@ package de.illonis.eduras.gameclient.gui;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.SocketTimeoutException;
@@ -19,6 +21,7 @@ import javax.swing.SwingWorker;
 import de.illonis.eduras.images.ImageFiler;
 import de.illonis.eduras.logger.EduLog;
 import de.illonis.eduras.logicabstraction.NetworkManager;
+import de.illonis.eduras.networking.Client;
 
 /**
  * Displays login progress. Also shows errors occuring while connecting.
@@ -38,6 +41,7 @@ public class ProgressPanel extends JPanel implements ActionListener {
 	private JButton backButton;
 	private Thread t;
 	private String errorMessage;
+	private ConnectionWaiter worker;
 
 	public ProgressPanel(ClientFrame frame, NetworkManager nwm) {
 		super();
@@ -78,44 +82,6 @@ public class ProgressPanel extends JPanel implements ActionListener {
 	}
 
 	/**
-	 * Handles connection timeout.
-	 */
-	private SwingWorker<Boolean, Void> worker = new SwingWorker<Boolean, Void>() {
-		@Override
-		public Boolean doInBackground() {
-			// wait some time to prevent a bug (progress dialog not hiding on
-			// immediate connection)
-			try {
-				Thread.sleep(500);
-			} catch (InterruptedException e) {
-				EduLog.passException(e);
-			}
-			t = new Thread(connector);
-			t.start();
-			int i = 10;
-			while (true) {
-				i--;
-				try {
-					t.join(1000);
-				} catch (InterruptedException e) {
-					EduLog.passException(e);
-				}
-				if (t.isAlive()) {
-					EduLog.info("Waiting..." + i);
-				} else
-					break;
-			}
-			return errorMessage.isEmpty();
-		}
-
-		@Override
-		public void done() {
-			if (!errorMessage.isEmpty())
-				setError("<b>Fehler:</b> " + errorMessage);
-		}
-	};
-
-	/**
 	 * Starts connecting to server asynchronously using given parameters.
 	 * 
 	 * @param addr
@@ -126,6 +92,18 @@ public class ProgressPanel extends JPanel implements ActionListener {
 	void start(InetAddress addr, int port) {
 		this.addr = addr;
 		this.port = port;
+		worker = new ConnectionWaiter();
+		worker.addPropertyChangeListener(new PropertyChangeListener() {
+
+			@Override
+			public void propertyChange(PropertyChangeEvent evt) {
+				if (evt.getPropertyName().equals("timeWaited")) {
+					int nv = (int) evt.getNewValue();
+					if (nv >= 0)
+						updateTimeMessage(nv);
+				}
+			}
+		});
 		worker.execute();
 	}
 
@@ -148,11 +126,6 @@ public class ProgressPanel extends JPanel implements ActionListener {
 	private Runnable connector = new Runnable() {
 		@Override
 		public void run() {
-			try {
-				Thread.sleep(500);
-			} catch (InterruptedException e1) {
-				e1.printStackTrace();
-			}
 			errorMessage = "";
 			try {
 				nwm.connect(addr, port);
@@ -175,6 +148,12 @@ public class ProgressPanel extends JPanel implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		worker.cancel(true);
 		t.interrupt();
+		try {
+			t.join();
+		} catch (InterruptedException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 		frame.showLogin();
 	}
 
@@ -182,7 +161,54 @@ public class ProgressPanel extends JPanel implements ActionListener {
 	 * Resets message.
 	 */
 	public void reset() {
-		text.setText("Verbindung wird hergestellt...");
+		updateTimeMessage(Client.CONNECT_TIMEOUT / 1000);
 		text.setIcon(icon);
+	}
+
+	private void updateTimeMessage(int t) {
+		text.setText("<html><center>Verbindung wird hergestellt...<br>Warte "
+				+ t + "s</center></html>");
+	}
+
+	/**
+	 * Handles waiting for established connection.
+	 * 
+	 * @author illonis
+	 * 
+	 */
+	private class ConnectionWaiter extends SwingWorker<Boolean, Void> {
+		@Override
+		public Boolean doInBackground() {
+			// wait some time to prevent a bug (progress dialog not hiding on
+			// immediate connection)
+			try {
+				Thread.sleep(200);
+			} catch (InterruptedException e) {
+				EduLog.passException(e);
+			}
+			t = new Thread(connector);
+			t.start();
+			int i = Client.CONNECT_TIMEOUT / 1000;
+			while (true) {
+				i--;
+				try {
+					t.join(1000);
+				} catch (InterruptedException e) {
+					EduLog.passException(e);
+				}
+
+				if (t.isAlive()) {
+					firePropertyChange("timeWaited", i + 1, i);
+				} else
+					break;
+			}
+			return errorMessage.isEmpty();
+		}
+
+		@Override
+		public void done() {
+			if (!errorMessage.isEmpty())
+				setError("<b>Fehler:</b> " + errorMessage);
+		}
 	}
 }
