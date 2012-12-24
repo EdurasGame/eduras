@@ -90,4 +90,10 @@ public class YellowCircle extends MoveableGameObject implements Controllable,
 	public void onCollision(GameObject collidingObject) {
 
 	}
+
+	@Override
+	public void onMapBoundsReached() {
+		// TODO Auto-generated method stub
+
+	}
 }

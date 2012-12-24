@@ -17,4 +17,9 @@ public interface Moveable {
 	 */
 	void onMove(long delta);
 
+	/**
+	 * Indicate that object leaves map with current move.
+	 */
+	void onMapBoundsReached();
+
 }

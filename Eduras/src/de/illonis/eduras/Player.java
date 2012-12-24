@@ -130,4 +130,8 @@ public class Player extends Unit implements Controllable {
 	public Inventory getInventory() {
 		return inventory;
 	}
+
+	@Override
+	public void onMapBoundsReached() {
+	}
 }

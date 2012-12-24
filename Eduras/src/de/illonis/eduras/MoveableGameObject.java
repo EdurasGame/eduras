@@ -101,10 +101,13 @@ public abstract class MoveableGameObject extends GameObject implements Moveable 
 		double targetX = unitSpeed.getX() + getXPosition();
 		double targetY = unitSpeed.getY() + getYPosition();
 
-		Vector2D targetPos = this
-				.checkCollision(new Vector2D(targetX, targetY));
-
-		setPosition(targetPos.getX(), targetPos.getY());
+		Vector2D targetPos;
+		try {
+			targetPos = this.checkCollision(new Vector2D(targetX, targetY));
+			setPosition(targetPos.getX(), targetPos.getY());
+		} catch (MapBorderReachedException e) {
+			onMapBoundsReached();
+		}
 	}
 
 	/**
@@ -116,9 +119,10 @@ public abstract class MoveableGameObject extends GameObject implements Moveable 
 	 * @return Returns the objects position after the move. Note that the
 	 *         objects new position won't be set.
 	 */
-	public Vector2D checkCollision(Vector2D target) {
+	public Vector2D checkCollision(Vector2D target)
+			throws MapBorderReachedException {
 		if (!getGame().getMap().contains(target)) {
-			return getPositionVector();
+			throw new MapBorderReachedException();
 		}
 
 		Vector2D collisionPoint = this.getShape().checkCollision(getGame(),

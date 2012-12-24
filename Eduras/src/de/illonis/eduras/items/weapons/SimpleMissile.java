@@ -45,4 +45,10 @@ public class SimpleMissile extends Missile {
 		getGame().getEventTriggerer().removeObject(getId());
 	}
 
+	@Override
+	public void onMapBoundsReached() {
+		getGame().getEventTriggerer().removeObject(getId());
+
+	}
+
 }
