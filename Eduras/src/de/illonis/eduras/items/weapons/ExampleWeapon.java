@@ -5,8 +5,8 @@ package de.illonis.eduras.items.weapons;
 
 import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.GameObject;
-import de.illonis.eduras.ObjectFactory.ObjectType;
 import de.illonis.eduras.Player;
+import de.illonis.eduras.ObjectFactory.ObjectType;
 import de.illonis.eduras.items.ItemUseInformation;
 import de.illonis.eduras.math.Vector2D;
 import de.illonis.eduras.shapes.Circle;

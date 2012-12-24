@@ -101,6 +101,6 @@ public abstract class Unit extends MoveableGameObject {
 	 * Called when unit dies.
 	 */
 	public void onDead() {
-		getGame().getEventTriggerer().removeObject(getId());
+		removeSelf();
 	}
 }

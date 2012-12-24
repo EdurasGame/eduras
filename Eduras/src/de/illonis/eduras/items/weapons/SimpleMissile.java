@@ -42,13 +42,12 @@ public class SimpleMissile extends Missile {
 		if (collidingObject.isUnit()) {
 			((Unit) collidingObject).damage(getDamage());
 		}
-		getGame().getEventTriggerer().removeObject(getId());
+		removeSelf();
 	}
 
 	@Override
 	public void onMapBoundsReached() {
-		getGame().getEventTriggerer().removeObject(getId());
-
+		removeSelf();
 	}
 
 }

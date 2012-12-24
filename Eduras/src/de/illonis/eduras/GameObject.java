@@ -368,4 +368,11 @@ public abstract class GameObject implements Comparable<GameObject> {
 	public final boolean isUnit() {
 		return (this instanceof Unit);
 	}
+
+	/**
+	 * Triggers a remove of this object from gameobject list.
+	 */
+	protected final void removeSelf() {
+		getGame().getEventTriggerer().removeObject(getId());
+	}
 }
