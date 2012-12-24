@@ -100,11 +100,17 @@ public class GameClient implements GuiClickReactor, NetworkEventReactor {
 		c.addMouseListener(new ClickListener());
 	}
 
+	/**
+	 * Calculates current mouse position in gamePanel
+	 * 
+	 * @return mouse position.
+	 */
 	private Point getCurrentMousePos() {
 		PointerInfo pi = MouseInfo.getPointerInfo();
 		Point mp = pi.getLocation();
 		Point pos = frame.getLocationOnScreen();
-		return new Point(mp.x - pos.x, mp.y - pos.y);
+		Point p = new Point(mp.x - pos.x, mp.y - pos.y);
+		return p;
 	}
 
 	private void loadTools() {
@@ -115,9 +121,11 @@ public class GameClient implements GuiClickReactor, NetworkEventReactor {
 
 		nwm = initializer.getNetworkManager();
 		nwm.setNetworkEventListener(eventHandler);
-
 	}
 
+	/**
+	 * Loads settings.
+	 */
 	private void startup() {
 		settings = initializer.getSettings();
 	}
@@ -198,8 +206,8 @@ public class GameClient implements GuiClickReactor, NetworkEventReactor {
 	 */
 	public Vector2D computeGuiPointToGameCoordinate(Vector2D v) {
 		Vector2D vec = new Vector2D(v);
-		v.modifyX(-camera.getX());
-		v.modifyY(-camera.getY());
+		vec.modifyX(camera.getX());
+		vec.modifyY(camera.getY());
 		return vec;
 	}
 
