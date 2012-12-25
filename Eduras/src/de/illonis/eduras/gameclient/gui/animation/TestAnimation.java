@@ -34,6 +34,7 @@ public class TestAnimation extends JPanel {
 	}
 
 	void test() {
+		// render thread
 		Thread t = new Thread(new Runnable() {
 
 			@Override

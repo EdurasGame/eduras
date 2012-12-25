@@ -2,21 +2,28 @@ package de.illonis.eduras.gameclient.gui.animation;
 
 import de.illonis.eduras.math.Vector2D;
 
+/**
+ * Simulates a simple star animation.
+ * 
+ * @author illonis
+ * 
+ */
 public class StarsAnimation extends Animation {
 
+	// Must be NUM_STARS % 4 == 0
 	public final static int NUM_STARS = 20;
 	private Vector2D stars[];
 	private int width, height;
 	private double length;
 	Vector2D middle;
 
-	public Vector2D getMiddle() {
+	Vector2D getMiddle() {
 		return middle;
 	}
 
-	public StarsAnimation() {
+	StarsAnimation() {
 		width = height = 500;
-
+		// init stars
 		stars = new Vector2D[NUM_STARS];
 
 		middle = new Vector2D(width / 2, height / 2);
@@ -27,20 +34,12 @@ public class StarsAnimation extends Animation {
 			double newl = (i + .1) * (length / q);
 			Vector2D add = new Vector2D(i + .1, i + .1);
 			add.setLength(newl);
-			stars[i] = add;
 
-			Vector2D add2 = new Vector2D(-i - .1, i + .1);
-			add2.setLength(newl);
-			stars[i + q] = add2;
-
-			Vector2D add3 = new Vector2D(-i - .1, -i - .1);
-			add3.setLength(newl);
-			stars[i + q * 2] = add3;
-
-			Vector2D add4 = new Vector2D(i + .1, -i - .1);
-			add4.setLength(newl);
-			stars[i + q * 3] = add4;
-
+			// add 4 stars with different rotation
+			for (int j = 0; j < 4; j++) {
+				add.rotate(90);
+				stars[i + q * j] = add.copy();
+			}
 		}
 	}
 
@@ -63,7 +62,7 @@ public class StarsAnimation extends Animation {
 		}
 	}
 
-	public Vector2D[] getStars() {
+	Vector2D[] getStars() {
 		return stars;
 	}
 }
