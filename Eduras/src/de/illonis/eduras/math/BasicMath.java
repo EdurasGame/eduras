@@ -69,7 +69,7 @@ public class BasicMath {
 	}
 
 	/**
-	 * Returns minimum of given values.
+	 * Returns minimum of any number of values.
 	 * 
 	 * @param values
 	 *            input values.
@@ -78,13 +78,12 @@ public class BasicMath {
 	public static double min(double... values) {
 		if (values.length == 0)
 			throw new NullPointerException(
-					"Passed no value to min(double...) function.");
+					"Passed no value to min(double...) function. Must be at least one.");
 		if (values.length == 1)
 			return values[0];
 		double min = 0;
 		for (int i = 1; i < values.length; i++) {
 			min = Math.min(values[i], values[i - 1]);
-
 		}
 		return min;
 	}
@@ -99,13 +98,12 @@ public class BasicMath {
 	public static double max(double... values) {
 		if (values.length == 0)
 			throw new NullPointerException(
-					"Passed no value to max(double...) function.");
+					"Passed no value to max(double...) function. Must be at least one.");
 		if (values.length == 1)
 			return values[0];
 		double max = 0;
 		for (int i = 1; i < values.length; i++) {
 			max = Math.max(values[i], values[i - 1]);
-
 		}
 		return max;
 	}

@@ -20,10 +20,32 @@ public class Geometry {
 	 *            leg a
 	 * @param b
 	 *            leg b
-	 * @return length of hypotenuse
+	 * @return length of hypotenuse.
 	 */
 	public static double getHypotenuseLength(double a, double b) {
 		return Math.sqrt(BasicMath.square(a) + BasicMath.square(b));
+	}
+
+	/**
+	 * Converts given degree value to radian.
+	 * 
+	 * @param degree
+	 *            value in degree.
+	 * @return value in radian.
+	 */
+	public static double toRadian(double degree) {
+		return degree * (Math.PI / 180);
+	}
+
+	/**
+	 * Converts given radian value to degree.
+	 * 
+	 * @param radian
+	 *            value in radian.
+	 * @return value in degree.
+	 */
+	public static double toDegree(double radian) {
+		return radian * (180 / Math.PI);
 	}
 
 	/**
