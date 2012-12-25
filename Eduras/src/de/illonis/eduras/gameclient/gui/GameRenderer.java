@@ -315,8 +315,7 @@ public class GameRenderer implements TooltipHandler {
 				|| !((ItemTooltip) tooltip).getItem().equals(item))
 			tooltip = new ItemTooltip(informationProvider, item);
 
-		tooltip.setX(p.x);
-		tooltip.setY(p.y);
+		tooltip.moveTo(p);
 	}
 
 	@Override
