@@ -5,6 +5,12 @@ import java.awt.Point;
 import de.illonis.eduras.gui.guielements.TooltipTriggerer;
 import de.illonis.eduras.items.Item;
 
+/**
+ * Handles tooltip triggerer.
+ * 
+ * @author illonis
+ * 
+ */
 public interface TooltipHandler {
 
 	/**

@@ -8,23 +8,30 @@ import de.illonis.eduras.gameclient.gui.ImageList;
 import de.illonis.eduras.items.Item;
 import de.illonis.eduras.logicabstraction.InformationProvider;
 
+/**
+ * Shows information concerning an item.
+ * 
+ * @author illonis
+ * 
+ */
 public class ItemTooltip extends Tooltip {
 
 	private Item item;
 
+	/**
+	 * Creates a new item tooltip that uses given information and displays data
+	 * about given item.
+	 * 
+	 * @param info
+	 *            game information.
+	 * @param item
+	 *            item to present.
+	 */
 	public ItemTooltip(InformationProvider info, Item item) {
 		super(info);
 		width = 200;
 		height = 100;
 		this.item = item;
-	}
-
-	public void setX(int x) {
-		this.screenX = x;
-	}
-
-	public void setY(int y) {
-		this.screenY = y - height;
 	}
 
 	@Override
