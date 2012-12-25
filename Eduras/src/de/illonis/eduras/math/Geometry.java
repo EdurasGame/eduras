@@ -27,6 +27,28 @@ public class Geometry {
 	}
 
 	/**
+	 * Converts given degree value to radian.
+	 * 
+	 * @param degree
+	 *            value in degree.
+	 * @return value in radian.
+	 */
+	public static double toRadian(double degree) {
+		return degree * (Math.PI / 180);
+	}
+
+	/**
+	 * Converts given radian value to degree.
+	 * 
+	 * @param radian
+	 *            value in radian.
+	 * @return value in degree.
+	 */
+	public static double toDegree(double radian) {
+		return radian * (180 / Math.PI);
+	}
+
+	/**
 	 * Returns all the lines between a shape's corner points and its counterpart
 	 * of a second shape, that is a shifted copy of the first shape.
 	 * 

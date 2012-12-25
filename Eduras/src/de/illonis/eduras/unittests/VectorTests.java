@@ -28,6 +28,8 @@ public class VectorTests {
 	@Test
 	public void rotations() {
 		Vector2D copy = vector.copy();
+		copy.rotate(0);
+		assertEquals(vector, copy);
 		copy.rotate(360);
 		assertEquals(vector, copy);
 		copy.rotate(90);
@@ -35,9 +37,12 @@ public class VectorTests {
 		copy.rotate(90);
 		assertEquals(new Vector2D(-100, -100), copy);
 		copy.rotate(90);
-		assertEquals(new Vector2D(100, -100), copy);
+		Vector2D check = new Vector2D(100, -100);
+		assertEquals(check, copy);
 		copy.rotate(90);
 		assertEquals(vector, copy);
+		copy.rotate(-90);
+		assertEquals(check, copy);
 	}
 
 	@Test
