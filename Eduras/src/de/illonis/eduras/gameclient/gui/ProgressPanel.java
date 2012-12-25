@@ -151,8 +151,6 @@ public class ProgressPanel extends JPanel implements ActionListener {
 		try {
 			t.join();
 		} catch (InterruptedException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
 		}
 		frame.showLogin();
 	}

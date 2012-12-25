@@ -2,6 +2,7 @@ package de.illonis.eduras.gameclient.gui;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
@@ -13,8 +14,12 @@ import java.util.concurrent.ConcurrentHashMap;
 import de.illonis.eduras.GameObject;
 import de.illonis.eduras.Player;
 import de.illonis.eduras.gameclient.GameCamera;
+import de.illonis.eduras.gameclient.TooltipHandler;
 import de.illonis.eduras.gui.guielements.ItemDisplay;
+import de.illonis.eduras.gui.guielements.ItemTooltip;
 import de.illonis.eduras.gui.guielements.RenderedGuiObject;
+import de.illonis.eduras.gui.guielements.TooltipTriggerer;
+import de.illonis.eduras.items.Item;
 import de.illonis.eduras.logicabstraction.InformationProvider;
 import de.illonis.eduras.math.Vector2D;
 import de.illonis.eduras.shapes.Circle;
@@ -28,7 +33,7 @@ import de.illonis.eduras.units.Unit;
  * @author illonis
  * 
  */
-public class GameRenderer {
+public class GameRenderer implements TooltipHandler {
 	private BufferedImage dbImage = null;
 	private final GameCamera camera;
 	private Graphics2D dbg = null;
@@ -40,6 +45,7 @@ public class GameRenderer {
 	private GuiClickReactor gui;
 	private ItemDisplay itemDisplay;
 	private final static int HEALTHBAR_WIDTH = 50;
+	private ItemTooltip tooltip;
 
 	/**
 	 * Creates a new renderer.
@@ -68,7 +74,7 @@ public class GameRenderer {
 		uiObjects = new ArrayList<RenderedGuiObject>();
 		itemDisplay = new ItemDisplay(gui, informationProvider, imagelist);
 		uiObjects.add(itemDisplay);
-
+		gui.registerTooltipTriggerer(itemDisplay);
 		gui.addClickableGuiElement(itemDisplay);
 	}
 
@@ -108,8 +114,10 @@ public class GameRenderer {
 	 */
 	private void drawGui(int width, int height) {
 		for (int i = 0; i < uiObjects.size(); i++)
-			uiObjects.get(i).render(dbg);
+			uiObjects.get(i).render(dbg, imagelist);
 
+		if (tooltip != null)
+			tooltip.render(dbg, imagelist);
 	}
 
 	/**
@@ -293,10 +301,32 @@ public class GameRenderer {
 		}
 	}
 
-	/**
-	 * Routine to test item display.
-	 */
-	public void ad() {
-		itemDisplay.onItemChanged(0);
+	@Override
+	public void registerTooltipTriggerer(TooltipTriggerer elem) {
+	}
+
+	@Override
+	public void removeTooltipTriggerer(TooltipTriggerer elem) {
+	}
+
+	@Override
+	public void showItemTooltip(Point p, Item item) {
+		if (tooltip == null || !(tooltip instanceof ItemTooltip)
+				|| !((ItemTooltip) tooltip).getItem().equals(item))
+			tooltip = new ItemTooltip(informationProvider, item);
+
+		tooltip.setX(p.x);
+		tooltip.setY(p.y);
+	}
+
+	@Override
+	public void showTooltip(Point p, String text) {
+		// TODO: implement
+
+	}
+
+	@Override
+	public void hideTooltip() {
+		tooltip = null;
 	}
 }

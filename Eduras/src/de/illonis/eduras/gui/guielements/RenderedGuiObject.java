@@ -2,6 +2,7 @@ package de.illonis.eduras.gui.guielements;
 
 import java.awt.Graphics2D;
 
+import de.illonis.eduras.gameclient.gui.ImageList;
 import de.illonis.eduras.logicabstraction.InformationProvider;
 
 /**
@@ -41,8 +42,10 @@ public abstract class RenderedGuiObject {
 	 * 
 	 * @param g2d
 	 *            graphic target.
+	 * @param imageList
+	 *            image list, that can be accessed to.
 	 */
-	public abstract void render(Graphics2D g2d);
+	public abstract void render(Graphics2D g2d, ImageList imageList);
 
 	/**
 	 * Indicates that gui has changed and interface positions have to be

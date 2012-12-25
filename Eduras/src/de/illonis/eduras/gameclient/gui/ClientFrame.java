@@ -66,9 +66,15 @@ public class ClientFrame extends JFrame implements NetworkEventReactor,
 				client.getInformationProvider());
 	}
 
+	public GameRenderer getRenderer() {
+		return renderer;
+	}
+
 	@Override
 	public Point getLocationOnScreen() {
-		return gamePanel.getLocationOnScreen();
+		if (gamePanel.isVisible())
+			return gamePanel.getLocationOnScreen();
+		return super.getLocationOnScreen();
 	}
 
 	/**

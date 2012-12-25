@@ -24,7 +24,9 @@ import de.illonis.eduras.gameclient.gui.ClientFrame;
 import de.illonis.eduras.gameclient.gui.GuiClickReactor;
 import de.illonis.eduras.gameclient.gui.InputKeyHandler;
 import de.illonis.eduras.gui.guielements.ClickableGuiElementInterface;
+import de.illonis.eduras.gui.guielements.TooltipTriggerer;
 import de.illonis.eduras.inventory.Inventory;
+import de.illonis.eduras.items.Item;
 import de.illonis.eduras.locale.Localization;
 import de.illonis.eduras.logger.EduLog;
 import de.illonis.eduras.logicabstraction.EdurasInitializer;
@@ -40,7 +42,8 @@ import de.illonis.eduras.settings.Settings;
  * @author illonis
  * 
  */
-public class GameClient implements GuiClickReactor, NetworkEventReactor {
+public class GameClient implements GuiClickReactor, NetworkEventReactor,
+		TooltipHandler {
 
 	private InformationProvider infoPro;
 	private EventSender eventSender;
@@ -55,6 +58,7 @@ public class GameClient implements GuiClickReactor, NetworkEventReactor {
 	private ClickState currentClickState;
 	private int currentItemSelected = -1;
 	private LinkedList<ClickableGuiElementInterface> clickListeners;
+	private LinkedList<TooltipTriggerer> triggerers;
 
 	private String clientName;
 
@@ -67,6 +71,7 @@ public class GameClient implements GuiClickReactor, NetworkEventReactor {
 	 */
 	public GameClient() {
 		clickListeners = new LinkedList<ClickableGuiElementInterface>();
+		triggerers = new LinkedList<TooltipTriggerer>();
 		currentClickState = ClickState.DEFAULT;
 		camera = new GameCamera();
 		cml = new CameraMouseListener(camera);
@@ -97,7 +102,9 @@ public class GameClient implements GuiClickReactor, NetworkEventReactor {
 	public void addMouseListenersTo(Component c) {
 		c.addMouseMotionListener(cml);
 		c.addMouseListener(cml);
-		c.addMouseListener(new ClickListener());
+		ClickListener cl = new ClickListener();
+		c.addMouseListener(cl);
+		c.addMouseMotionListener(cl);
 	}
 
 	/**
@@ -212,12 +219,21 @@ public class GameClient implements GuiClickReactor, NetworkEventReactor {
 	}
 
 	/**
-	 * Listens for click on gui and passes them to gui elements.
+	 * Listens for click on gui and passes them to gui elements. Additionally
+	 * looks for mouse position to handle tooltips.
 	 * 
 	 * @author illonis
 	 * 
 	 */
 	private class ClickListener extends MouseAdapter {
+
+		@Override
+		public void mouseMoved(MouseEvent e) {
+			for (TooltipTriggerer t : triggerers) {
+				t.onMouseAt(e.getPoint());
+			}
+		}
+
 		@Override
 		public void mouseClicked(MouseEvent e) {
 			super.mouseClicked(e);
@@ -365,5 +381,30 @@ public class GameClient implements GuiClickReactor, NetworkEventReactor {
 	 */
 	public int getOwnerID() {
 		return infoPro.getOwnerID();
+	}
+
+	@Override
+	public void registerTooltipTriggerer(TooltipTriggerer elem) {
+		triggerers.add(elem);
+	}
+
+	@Override
+	public void removeTooltipTriggerer(TooltipTriggerer elem) {
+		triggerers.remove(elem);
+	}
+
+	@Override
+	public void showItemTooltip(Point p, Item data) {
+		frame.getRenderer().showItemTooltip(p, data);
+	}
+
+	@Override
+	public void showTooltip(Point p, String text) {
+		frame.getRenderer().showTooltip(p, text);
+	}
+
+	@Override
+	public void hideTooltip() {
+		frame.getRenderer().hideTooltip();
 	}
 }

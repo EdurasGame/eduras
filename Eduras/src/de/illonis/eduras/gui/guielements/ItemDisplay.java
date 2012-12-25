@@ -21,7 +21,8 @@ import de.illonis.eduras.logicabstraction.InformationProvider;
  * @author illonis
  * 
  */
-public class ItemDisplay extends ClickableGuiElement {
+public class ItemDisplay extends ClickableGuiElement implements
+		TooltipTriggerer {
 
 	private final static int ITEM_GAP = 10;
 	// top, right, bottom, left
@@ -45,7 +46,7 @@ public class ItemDisplay extends ClickableGuiElement {
 	}
 
 	@Override
-	public void render(Graphics2D g2d) {
+	public void render(Graphics2D g2d, ImageList imageList) {
 		g2d.setColor(Color.GRAY);
 		g2d.fillRect(screenX, screenY, width, height);
 		g2d.setColor(Color.BLACK);
@@ -183,5 +184,25 @@ public class ItemDisplay extends ClickableGuiElement {
 		for (int i = 0; i < Inventory.MAX_CAPACITY; i++) {
 			onItemChanged(i);
 		}
+	}
+
+	@Override
+	public void onMouseAt(Point p) {
+		if (new Rectangle(screenX, screenY, width, height).contains(p)) {
+			for (int i = 0; i < Inventory.MAX_CAPACITY; i++) {
+				if (itemSlots[i].getClickableRect().contains(p)) {
+					try {
+						reactor.showItemTooltip(p, getInfo().getPlayer()
+								.getInventory().getItemBySlot(i));
+						return;
+					} catch (ItemSlotIsEmptyException e) {
+
+					} catch (ObjectNotFoundException e) {
+
+					}
+				}
+			}
+		}
+		reactor.hideTooltip();
 	}
 }
