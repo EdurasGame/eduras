@@ -38,9 +38,9 @@ public class Player extends Unit implements Controllable {
 		setOwner(ownerId);
 
 		// get position
-		Vector2D firstEdge = new Vector2D(0d, 10d);
-		Vector2D secondEdge = new Vector2D(10d, -10d);
-		Vector2D thirdEdge = new Vector2D(-10d, -10d);
+		Vector2D firstEdge = new Vector2D(0, 10);
+		Vector2D secondEdge = new Vector2D(10, -10);
+		Vector2D thirdEdge = new Vector2D(-10, -10);
 
 		try {
 			setShape(new Triangle(firstEdge, secondEdge, thirdEdge));
