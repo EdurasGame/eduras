@@ -196,23 +196,27 @@ public class Vector2D {
 	}
 
 	/**
-	 * Returns a unitvector of this vector
+	 * Returns a unitvector of this vector. Unit vectors have the same direction
+	 * as their original, but lenght 1.
 	 * 
 	 * @return unitvector of vector
 	 */
 	public Vector2D getUnitVector() {
-		final double len = getLength();
-		return new Vector2D(x / len, y / len);
+		Vector2D unit = this.copy();
+		unit.setLength(1);
+		return unit;
 	}
 
 	/**
 	 * Recalculates vector by scaling it to match given length keeping aspect
-	 * ratio.
+	 * ratio. This does not have any effect when this is a nullvector.
 	 * 
 	 * @param newLength
 	 *            new length.
 	 */
 	public void setLength(double newLength) {
+		if (isNull())
+			return;
 		if (x == 0) {
 			setY((y > 0) ? newLength : -newLength);
 		} else if (y == 0) {
@@ -222,6 +226,18 @@ public class Vector2D {
 			double factor = newLength / length;
 			mult(factor);
 		}
+	}
+
+	/**
+	 * Modifies length by given value.
+	 * 
+	 * @see #setLength(double)
+	 * 
+	 * @param diff
+	 *            difference.
+	 */
+	public void modifyLength(double diff) {
+		setLength(getLength() + diff);
 	}
 
 	/**

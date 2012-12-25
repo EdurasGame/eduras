@@ -29,7 +29,7 @@ public class TestAnimation extends JPanel {
 		for (int i = 0; i < StarsAnimation.NUM_STARS; i++) {
 			Vector2D star = stars.getStars()[i].copy();
 			star.add(stars.getMiddle());
-			g2d.fillOval((int) star.getX(), (int) star.getY(), 15, 15);
+			g2d.fillOval((int) star.getX(), (int) star.getY(), 10, 10);
 		}
 	}
 
