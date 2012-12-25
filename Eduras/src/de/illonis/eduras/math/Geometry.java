@@ -20,7 +20,7 @@ public class Geometry {
 	 *            leg a
 	 * @param b
 	 *            leg b
-	 * @return length of hypotenuse
+	 * @return length of hypotenuse.
 	 */
 	public static double getHypotenuseLength(double a, double b) {
 		return Math.sqrt(BasicMath.square(a) + BasicMath.square(b));

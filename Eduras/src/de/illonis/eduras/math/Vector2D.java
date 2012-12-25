@@ -6,7 +6,8 @@ import java.awt.geom.Point2D;
 import java.util.LinkedList;
 
 /**
- * Provides a basic class for two-dimensional-vectors
+ * Provides a basic class for two-dimensional-vectors that supports several
+ * mathematical and geometric operations.
  * 
  * @author illonis
  * 
@@ -17,26 +18,28 @@ public class Vector2D {
 	private double y;
 
 	/**
-	 * Creates an empty vector (0,0).
+	 * Creates an empty vector (0,0) ("Nullvector").
 	 * 
 	 * @see #Vector2D(double, double)
+	 * @see #isNull()
 	 */
 	public Vector2D() {
 		this(0, 0);
 	}
 
 	/**
-	 * Creates a new vector that is a copy of given vector.
+	 * Creates a new vector that is an independend copy of given vector.
 	 * 
 	 * @param vector
-	 *            vector to copy
+	 *            vector to copy.
 	 */
 	public Vector2D(Vector2D vector) {
 		this(vector.getX(), vector.getY());
 	}
 
 	/**
-	 * Creates a new vector based on given point's coordinates.
+	 * Creates a new vector based on given point's coordinates. Vector will not
+	 * change when point is changed later on.
 	 * 
 	 * @param p
 	 *            point that's coordinates should be used.
@@ -174,9 +177,22 @@ public class Vector2D {
 	}
 
 	/**
+	 * Rotates this vector by given angle.
+	 * 
+	 * @param degrees
+	 *            angle in degrees.
+	 */
+	public void rotate(int degrees) {
+		degrees = degrees % 360;
+		if (degrees == 0)
+			return;
+
+	}
+
+	/**
 	 * Returns length of vector.
 	 * 
-	 * @return length of vector
+	 * @return length of vector.
 	 */
 	public double getLength() {
 		if (x == 0)
@@ -222,8 +238,7 @@ public class Vector2D {
 		} else if (y == 0) {
 			setX((x > 0) ? newLength : -newLength);
 		} else {
-			final double length = getLength();
-			double factor = newLength / length;
+			double factor = newLength / getLength();
 			mult(factor);
 		}
 	}
@@ -270,13 +285,15 @@ public class Vector2D {
 	}
 
 	/**
-	 * Subtracts the given vector from this vector.
+	 * Subtracts the given vector from this vector. This is done by adding the
+	 * inverse of given vector.
+	 * 
+	 * @see #add(Vector2D)
 	 * 
 	 * @param vec
 	 *            The vector to subtract.
 	 */
 	public void subtract(Vector2D vec) {
-
 		Vector2D copyVec = new Vector2D(vec);
 		copyVec.invert();
 		this.add(copyVec);
@@ -326,16 +343,15 @@ public class Vector2D {
 
 	/**
 	 * Checks if this vector equals another vector. Two vectors are identical if
-	 * they have both the same x and y values.
+	 * they have the same x and y values.
 	 * 
 	 * @param vec
 	 *            vector to compare to.
 	 * @return true if vectors are equal, false otherwise.
 	 */
 	public boolean equals(Vector2D vec) {
-
-		return (this.getX() - vec.getX() < Line.RANGE && this.getY()
-				- vec.getY() < Line.RANGE);
+		return (Math.abs(this.getX() - vec.getX()) < Line.RANGE && Math
+				.abs(this.getY() - vec.getY()) < Line.RANGE);
 	}
 
 	/**
@@ -343,14 +359,14 @@ public class Vector2D {
 	 * solve geometric problems with Java's builtin methods.
 	 * 
 	 * @see Rectangle#contains(Point2D)
-	 * @return vector as point.
+	 * @return copy of vector as point.
 	 */
 	public Point2D.Double toPoint() {
 		return new Point2D.Double(x, y);
 	}
 
 	/**
-	 * Calculates wether this Vector is linearly depending on the given vector.
+	 * Calculates whether this Vector is linearly depending on the given vector.
 	 */
 	public boolean isLinearTo(Vector2D vec) {
 

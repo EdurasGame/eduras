@@ -26,6 +26,21 @@ public class VectorTests {
 	}
 
 	@Test
+	public void rotations() {
+		Vector2D copy = vector.copy();
+		copy.rotate(360);
+		assertEquals(vector, copy);
+		copy.rotate(90);
+		assertEquals(new Vector2D(-100, 100), copy);
+		copy.rotate(90);
+		assertEquals(new Vector2D(-100, -100), copy);
+		copy.rotate(90);
+		assertEquals(new Vector2D(100, -100), copy);
+		copy.rotate(90);
+		assertEquals(vector, copy);
+	}
+
+	@Test
 	public void mult() {
 		vector.mult(2);
 		assertTrue(vector.getX() == 200);
