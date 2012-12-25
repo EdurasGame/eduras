@@ -20,6 +20,7 @@ import de.illonis.eduras.math.Vector2D;
 import de.illonis.eduras.shapes.Circle;
 import de.illonis.eduras.shapes.ObjectShape;
 import de.illonis.eduras.shapes.Polygon;
+import de.illonis.eduras.units.Unit;
 
 /**
  * GameRenderer renders the buffered image for gamepanel.
@@ -38,6 +39,7 @@ public class GameRenderer {
 	private InformationProvider informationProvider;
 	private GuiClickReactor gui;
 	private ItemDisplay itemDisplay;
+	private final static int HEALTHBAR_WIDTH = 50;
 
 	/**
 	 * Creates a new renderer.
@@ -143,7 +145,7 @@ public class GameRenderer {
 		for (Iterator<GameObject> iterator = objs.values().iterator(); iterator
 				.hasNext();) {
 			GameObject d = iterator.next();
-			if (d.isVisible() == false) {
+			if (!d.isVisible()) {
 				continue;
 			}
 
@@ -151,14 +153,41 @@ public class GameRenderer {
 
 				// draw shape of gameObject if object has shape
 				if (d.getShape() != null) {
-
 					drawShapeOf(d);
 				}
 
 				if (hasImage(d)) {
 					// TODO: draw image for gameobject.
 				}
+
+				if (d.isUnit()) {
+					drawHealthBarFor((Unit) d);
+				}
 			}
+		}
+
+	}
+
+	private void drawHealthBarFor(Unit unit) {
+		if (unit.isDead())
+			return;
+
+		int[] insets = new int[unit.getMaxHealth()];
+		int segments = unit.getMaxHealth() + 1;
+		for (int i = 0; i < unit.getMaxHealth(); i++) {
+			insets[i] = i * (HEALTHBAR_WIDTH / segments)
+					+ (HEALTHBAR_WIDTH / unit.getMaxHealth()) / 2;
+		}
+		int xOffset = (int) (unit.getBoundingBox().getWidth() - HEALTHBAR_WIDTH) / 2;
+		dbg.setColor(Color.black);
+		dbg.fillRect((int) unit.getBoundingBox().getX() + xOffset - camera.x,
+				(int) unit.getBoundingBox().getY() - 10 - camera.y,
+				HEALTHBAR_WIDTH, 10);
+		dbg.setColor(Color.yellow);
+		for (int i = 0; i < unit.getHealth(); i++) {
+			dbg.fillRect((int) unit.getBoundingBox().getX() - camera.x
+					+ xOffset + insets[i], (int) unit.getBoundingBox().getY()
+					- 8 - camera.y, HEALTHBAR_WIDTH / unit.getMaxHealth(), 6);
 		}
 
 	}
