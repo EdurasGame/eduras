@@ -90,6 +90,22 @@
 		</para>
 
 	</section>
+	<section>
+	    <title>(jme) Network structure</title>
+	    <para>
+	        The following scheme illustrates how both network parts work together.
+	        Keep in mind that there are multiple clients connected to a single server
+	        that (generally) sends information to all clients.
+	    </para>
+	    <figure>
+            <title>Describes how communication between server and client is solved at each end.</title>
+            <mediaobject>
+                <imageobject>
+                    <imagedata fileref="images/server-client.png" format="PNG" />
+                </imageobject>
+            </mediaobject>
+        </figure>
+	</section>
 	
 	<section>
 		
