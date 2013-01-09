@@ -168,9 +168,12 @@ public class GameRenderer implements TooltipHandler {
 					// TODO: draw image for gameobject.
 				}
 
-				if (d.isUnit()) {
-					drawHealthBarFor((Unit) d);
-				}
+				// if (d.isUnit()) {
+				// drawHealthBarFor((Unit) d);
+				// }
+
+				dbg.drawString(d.getId() + "", d.getDrawX() - camera.x,
+						d.getDrawY() - camera.y - 15);
 			}
 		}
 
