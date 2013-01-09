@@ -66,4 +66,12 @@ public class ClientEventTriggerer implements EventTriggerer {
 
 	}
 
+	@Override
+	public void init() {
+	}
+
+	@Override
+	public void createObject(ObjectType object, int owner) {
+	}
+
 }

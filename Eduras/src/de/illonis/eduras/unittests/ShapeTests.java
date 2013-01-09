@@ -24,7 +24,7 @@ public class ShapeTests {
 
 	@Test
 	public void getAbsoluteVertices() {
-		Player player = new Player(new GameInformation(), 0);
+		Player player = new Player(new GameInformation(), 0, 0);
 		player.setPosition(5, 5);
 
 		if (player.getShape() instanceof Polygon) {

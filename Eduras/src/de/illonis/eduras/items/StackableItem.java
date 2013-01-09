@@ -16,8 +16,8 @@ public abstract class StackableItem extends Item implements Consumable {
 	private int maxStackSize = 1;
 	protected int stackSize = 1;
 
-	public StackableItem(ObjectType type, GameInformation gi) {
-		super(type, gi);
+	public StackableItem(ObjectType type, GameInformation gi, int id) {
+		super(type, gi, id);
 		setMaxStackSize();
 	}
 

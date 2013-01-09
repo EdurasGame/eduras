@@ -18,7 +18,6 @@ import de.illonis.eduras.units.Unit;
  */
 public abstract class GameObject implements Comparable<GameObject> {
 
-	public static int lastId = 0;
 	private final GameInformation game;
 	private ObjectType type;
 
@@ -38,9 +37,9 @@ public abstract class GameObject implements Comparable<GameObject> {
 	 * @param game
 	 *            game that contains this object.
 	 */
-	public GameObject(GameInformation game) {
+	public GameObject(GameInformation game, int id) {
 		this.game = game;
-		this.id = getNextId();
+		this.id = id;
 		setObjectType(ObjectType.NO_OBJECT);
 	}
 
@@ -268,7 +267,6 @@ public abstract class GameObject implements Comparable<GameObject> {
 		return new Vector2D(getXPosition(), getYPosition());
 	}
 
-	// FIXME: Extract GUI things from here!
 	/**
 	 * Returns bounding box. This is required for renderer to compute which
 	 * objects are in visible region.
@@ -290,17 +288,6 @@ public abstract class GameObject implements Comparable<GameObject> {
 	 *            The object colliding with this object.
 	 */
 	public abstract void onCollision(GameObject collidingObject);
-
-	/**
-	 * A synchronized wrapper function to receive the next free objectId.
-	 * 
-	 * @return Returns a free id.
-	 */
-	private synchronized int getNextId() {
-		lastId++;
-		int nextId = lastId;
-		return nextId;
-	}
 
 	/**
 	 * Returns wether this object is collidable or not.

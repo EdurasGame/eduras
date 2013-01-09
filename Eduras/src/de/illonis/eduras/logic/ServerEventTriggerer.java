@@ -3,10 +3,12 @@
  */
 package de.illonis.eduras.logic;
 
+import de.illonis.eduras.Map;
 import de.illonis.eduras.ObjectFactory.ObjectType;
 import de.illonis.eduras.events.GameEvent.GameEventNumber;
 import de.illonis.eduras.events.LootItemEvent;
 import de.illonis.eduras.events.MissileLaunchEvent;
+import de.illonis.eduras.events.MovementEvent;
 import de.illonis.eduras.events.ObjectFactoryEvent;
 import de.illonis.eduras.interfaces.GameLogicInterface;
 import de.illonis.eduras.math.Vector2D;
@@ -16,6 +18,8 @@ import de.illonis.eduras.math.Vector2D;
  * 
  */
 public class ServerEventTriggerer implements EventTriggerer {
+
+	private static int lastGameObjectId = 0;
 
 	private final GameLogicInterface logic;
 
@@ -36,7 +40,7 @@ public class ServerEventTriggerer implements EventTriggerer {
 			Vector2D position, Vector2D speedVector) {
 
 		MissileLaunchEvent event = new MissileLaunchEvent(missileType,
-				position, speedVector, owner);
+				position, speedVector, owner, getNextId());
 
 		logic.onGameEventAppeared(event);
 
@@ -64,7 +68,18 @@ public class ServerEventTriggerer implements EventTriggerer {
 	 */
 	@Override
 	public void createObjectAt(ObjectType object, Vector2D position, int owner) {
-		// TODO Auto-generated method stub
+
+		ObjectFactoryEvent newObjectEvent = new ObjectFactoryEvent(
+				GameEventNumber.OBJECT_CREATE, object);
+		int id = getNextId();
+		newObjectEvent.setId(id);
+		newObjectEvent.setOwner(owner);
+		logic.onGameEventAppeared(newObjectEvent);
+
+		MovementEvent setPos = new MovementEvent(GameEventNumber.SET_POS, id);
+		setPos.setNewXPos(position.getX());
+		setPos.setNewYPos(position.getY());
+		logic.onGameEventAppeared(setPos);
 
 	}
 
@@ -94,4 +109,36 @@ public class ServerEventTriggerer implements EventTriggerer {
 
 	}
 
+	/**
+	 * A synchronized wrapper function to receive the next free objectId.
+	 * 
+	 * @return Returns a free id.
+	 */
+	private synchronized int getNextId() {
+		lastGameObjectId++;
+		int nextId = lastGameObjectId;
+		return nextId;
+	}
+
+	@Override
+	public void init() {
+		Map map = logic.getGame().getMap();
+
+		Vector2D posWeap1 = new Vector2D(map.getWidth() * 0.75,
+				map.getHeight() * 0.75);
+		this.createObjectAt(ObjectType.ITEM_WEAPON_1, posWeap1, -1);
+		Vector2D posWeap2 = new Vector2D(map.getWidth() * 0.25,
+				map.getHeight() * 0.25);
+		this.createObjectAt(ObjectType.ITEM_WEAPON_1, posWeap2, -1);
+
+	}
+
+	@Override
+	public void createObject(ObjectType object, int owner) {
+		ObjectFactoryEvent newObjectEvent = new ObjectFactoryEvent(
+				GameEventNumber.OBJECT_CREATE, object);
+		newObjectEvent.setId(getNextId());
+		newObjectEvent.setOwner(owner);
+		logic.onGameEventAppeared(newObjectEvent);
+	}
 }

@@ -17,6 +17,7 @@ public class MissileLaunchEvent extends GameEvent {
 	private final Vector2D position;
 	private final Vector2D speedVector;
 	private final int owner;
+	private final int id;
 	private final ObjectType objectType;
 
 	/**
@@ -34,8 +35,9 @@ public class MissileLaunchEvent extends GameEvent {
 	 *            the id of the owner
 	 */
 	public MissileLaunchEvent(ObjectType objectType, Vector2D position,
-			Vector2D speedVector, int owner) {
+			Vector2D speedVector, int owner, int id) {
 		super(GameEventNumber.MISSILE_LAUNCH);
+		this.id = id;
 		this.position = position;
 		this.speedVector = speedVector;
 		this.owner = owner;
@@ -68,6 +70,15 @@ public class MissileLaunchEvent extends GameEvent {
 	 */
 	public ObjectType getObjectType() {
 		return objectType;
+	}
+
+	/**
+	 * Returns the id of the missile.
+	 * 
+	 * @return
+	 */
+	public int getId() {
+		return id;
 	}
 
 }

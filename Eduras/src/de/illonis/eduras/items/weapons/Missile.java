@@ -15,8 +15,8 @@ public abstract class Missile extends MoveableGameObject {
 	private int damage;
 	private double damageRadius;
 
-	public Missile(GameInformation game) {
-		super(game);
+	public Missile(GameInformation game, int id) {
+		super(game, id);
 		setShape(new Circle(5));
 	}
 

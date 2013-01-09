@@ -20,8 +20,8 @@ public abstract class Weapon extends Item implements Lootable, Usable {
 	private final long lastDamageTime = 0;
 	private Missile missile;
 
-	public Weapon(ObjectType type, GameInformation gi) {
-		super(type, gi);
+	public Weapon(ObjectType type, GameInformation gi, int id) {
+		super(type, gi, id);
 	}
 
 	/**

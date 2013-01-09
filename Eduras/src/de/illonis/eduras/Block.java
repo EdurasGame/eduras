@@ -31,8 +31,8 @@ public class Block extends GameObject {
 	 *             Thrown if the given position values do not apply.
 	 */
 	public Block(GameInformation game, double xPos, double yPos, double width,
-			double height) throws ShapeVerticesNotApplicableException {
-		super(game);
+			double height, int id) throws ShapeVerticesNotApplicableException {
+		super(game, id);
 
 		this.width = width;
 		this.height = height;

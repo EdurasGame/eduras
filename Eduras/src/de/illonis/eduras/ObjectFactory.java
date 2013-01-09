@@ -5,11 +5,12 @@ import java.util.concurrent.ConcurrentHashMap;
 import de.illonis.eduras.events.GameEvent.GameEventNumber;
 import de.illonis.eduras.events.ObjectFactoryEvent;
 import de.illonis.eduras.events.SetBooleanGameObjectAttributeEvent;
+import de.illonis.eduras.exceptions.DataMissingException;
 import de.illonis.eduras.interfaces.GameEventListener;
 import de.illonis.eduras.interfaces.GameLogicInterface;
+import de.illonis.eduras.items.weapons.ExampleWeapon;
 import de.illonis.eduras.items.weapons.SimpleMissile;
 import de.illonis.eduras.logger.EduLog;
-import de.illonis.eduras.test.YellowCircle;
 
 /**
  * ObjectFactory is in charge of handling Objectfactory events and creating and
@@ -30,7 +31,7 @@ public class ObjectFactory {
 	 */
 	public enum ObjectType {
 		PLAYER(1), YELLOWCIRCLE(2), SIMPLEMISSILE(3), ITEM_WEAPON_1(4), NO_OBJECT(
-				0);
+				0), BLOCK(5), CIRCLEDBLOCK(6);
 
 		private int number;
 
@@ -93,33 +94,42 @@ public class ObjectFactory {
 				return;
 			}
 
+			int owner = event.getOwner();
+			int id;
+			// TODO: Find a more suitable catch clause if the id is missing.
+			if (event.hasId()) {
+				id = event.getId();
+			} else {
+				try {
+					throw new DataMissingException("No id assigned!");
+				} catch (DataMissingException e) {
+					e.printStackTrace();
+					return;
+				}
+			}
+
 			switch (event.getObjectType()) {
 			case PLAYER:
-				go = new Player(logic.getGame(), event.getOwner());
-				go.setOwner(event.getOwner());
-
-
+				go = new Player(logic.getGame(), event.getOwner(), id);
 				logic.getGame().addPlayer((Player) go);
 
 				EduLog.info("Player " + event.getOwner() + " created");
 				break;
-			case YELLOWCIRCLE:
-				go = new YellowCircle(logic.getGame());
-				break;
 			case SIMPLEMISSILE:
-				go = new SimpleMissile(logic.getGame());
+				go = new SimpleMissile(logic.getGame(), id);
+				break;
+			case ITEM_WEAPON_1:
+				go = new ExampleWeapon(logic.getGame(), id);
 				break;
 			default:
 				return;
 			}
+
+			go.setId(id);
+			go.setOwner(owner);
+
 			if (go != null)
 				logic.getGame().addObject(go);
-			
-			// extract the id if there is one
-			if (event.hasId())
-				go.setId(event.getId());
-			else
-				event.setId(go.getId());
 
 			for (GameEventListener gel : logic.getListenerList()) {
 				gel.onObjectCreation(event);

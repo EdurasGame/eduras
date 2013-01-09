@@ -30,8 +30,8 @@ public class Player extends Unit implements Controllable {
 	 * @param name
 	 *            The name of the player.
 	 */
-	public Player(GameInformation game, int ownerId, String name) {
-		super(game, 30);
+	public Player(GameInformation game, int ownerId, String name, int id) {
+		super(game, 30, id);
 		setObjectType(ObjectType.PLAYER);
 		this.name = name;
 		setSpeed(50);
@@ -63,8 +63,8 @@ public class Player extends Unit implements Controllable {
 	 * @param ownerId
 	 *            The id of the owner.
 	 */
-	public Player(GameInformation game, int ownerId) {
-		this(game, ownerId, "unbekannt");
+	public Player(GameInformation game, int ownerId, int id) {
+		this(game, ownerId, "unbekannt", id);
 	}
 
 	@Override

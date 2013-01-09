@@ -37,9 +37,9 @@ public class CircledBlock extends GameObject {
 	 *            The y-component of the position.
 	 */
 	public CircledBlock(GameInformation game, double radius, double posX,
-			double posY) {
+			double posY, int id) {
 
-		super(game);
+		super(game, id);
 
 		setPosition(posX, posY);
 		setShape(new Circle(radius));

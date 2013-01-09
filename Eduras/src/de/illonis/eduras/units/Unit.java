@@ -23,8 +23,8 @@ public abstract class Unit extends MoveableGameObject {
 	 * @param maxHealth
 	 *            maximum health. Must be >0. Will be set to 1 otherwise.
 	 */
-	public Unit(GameInformation game, int maxHealth) {
-		super(game);
+	public Unit(GameInformation game, int maxHealth, int id) {
+		super(game,id);
 		if (maxHealth <= 0)
 			maxHealth = 1;
 		this.health = this.maxHealth = maxHealth;

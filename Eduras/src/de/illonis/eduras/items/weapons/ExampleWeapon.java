@@ -5,8 +5,8 @@ package de.illonis.eduras.items.weapons;
 
 import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.GameObject;
-import de.illonis.eduras.Player;
 import de.illonis.eduras.ObjectFactory.ObjectType;
+import de.illonis.eduras.Player;
 import de.illonis.eduras.items.ItemUseInformation;
 import de.illonis.eduras.math.Vector2D;
 import de.illonis.eduras.shapes.Circle;
@@ -22,10 +22,11 @@ public class ExampleWeapon extends Weapon {
 	 * 
 	 * @param gi
 	 */
-	public ExampleWeapon(GameInformation gi) {
+	public ExampleWeapon(GameInformation gi, int id) {
 
-		super(ObjectType.ITEM_WEAPON_1, gi);
-		setMissile(new SimpleMissile(gi));
+		super(ObjectType.ITEM_WEAPON_1, gi, id);
+		// TODO: Need to get away the missile prototypes.
+		setMissile(null);
 		setName("WeaponExample");
 		setShape(new Circle(10));
 	}

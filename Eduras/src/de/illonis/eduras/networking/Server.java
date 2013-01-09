@@ -158,10 +158,8 @@ public class Server {
 			EduLog.passException(e);
 		}
 
-		ObjectFactoryEvent newPlayerEvent = new ObjectFactoryEvent(
-				GameEventNumber.OBJECT_CREATE, ObjectType.PLAYER);
-		newPlayerEvent.setOwner(client.getClientId());
-		logic.onGameEventAppeared(newPlayerEvent);
+		logic.getGame().getEventTriggerer()
+				.createObject(ObjectType.PLAYER, client.getClientId());
 
 	}
 

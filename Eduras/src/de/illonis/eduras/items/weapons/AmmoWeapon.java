@@ -17,8 +17,8 @@ public abstract class AmmoWeapon extends Weapon {
 
 	private int ammunition;
 
-	public AmmoWeapon(ObjectType type, GameInformation gi) {
-		super(type, gi);
+	public AmmoWeapon(ObjectType type, GameInformation gi, int id) {
+		super(type, gi, id);
 	}
 
 	/**
@@ -54,6 +54,7 @@ public abstract class AmmoWeapon extends Weapon {
 	}
 
 	@Override
+	@Deprecated
 	public Missile getAMissile() throws NoAmmunitionException {
 		if (ammunition > 0) {
 			ammunition--;

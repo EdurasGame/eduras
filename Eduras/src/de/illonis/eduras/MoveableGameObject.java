@@ -44,8 +44,8 @@ public abstract class MoveableGameObject extends GameObject implements Moveable 
 	 * @param game
 	 *            game that contains this object.
 	 */
-	public MoveableGameObject(GameInformation game) {
-		super(game);
+	public MoveableGameObject(GameInformation game, int id) {
+		super(game, id);
 	}
 
 	/**

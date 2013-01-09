@@ -48,6 +48,16 @@ public interface EventTriggerer {
 	void createObjectAt(ObjectType object, Vector2D position, int owner);
 
 	/**
+	 * Creates an object.
+	 * 
+	 * @param object
+	 *            The type of the object.
+	 * @param owner
+	 *            The owner of the object.
+	 */
+	public void createObject(ObjectType object, int owner);
+
+	/**
 	 * Creates loot events.
 	 * 
 	 * @param objectId
@@ -66,4 +76,9 @@ public interface EventTriggerer {
 	 *            target position.
 	 */
 	void setPositionOfObject(int objectId, Vector2D newPosition);
+
+	/**
+	 * You can implement this method if you need to do some setup.
+	 */
+	void init();
 }

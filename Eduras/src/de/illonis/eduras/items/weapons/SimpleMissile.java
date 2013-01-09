@@ -19,8 +19,8 @@ public class SimpleMissile extends Missile {
 	 * 
 	 * @param game
 	 */
-	public SimpleMissile(GameInformation game) {
-		super(game);
+	public SimpleMissile(GameInformation game, int id) {
+		super(game, id);
 		setDamage(5);
 		setDamageRadius(5);
 		setObjectType(ObjectType.SIMPLEMISSILE);
@@ -33,8 +33,9 @@ public class SimpleMissile extends Missile {
 	 * @see de.illonis.eduras.items.weapons.Missile#spawn()
 	 */
 	@Override
+	@Deprecated
 	public Missile spawn() {
-		return new SimpleMissile(getGame());
+		return null;
 	}
 
 	@Override

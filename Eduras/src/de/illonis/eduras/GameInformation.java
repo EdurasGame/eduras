@@ -12,8 +12,6 @@ import de.illonis.eduras.events.MovementEvent;
 import de.illonis.eduras.events.ObjectFactoryEvent;
 import de.illonis.eduras.events.SetBooleanGameObjectAttributeEvent;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
-import de.illonis.eduras.exceptions.ShapeVerticesNotApplicableException;
-import de.illonis.eduras.items.weapons.ExampleWeapon;
 import de.illonis.eduras.logger.EduLog;
 import de.illonis.eduras.logic.EventTriggerer;
 import de.illonis.eduras.math.Vector2D;
@@ -30,31 +28,6 @@ public class GameInformation {
 		players = new ConcurrentHashMap<Integer, Player>();
 		map = new Map();
 
-		exampleTest();
-	}
-
-	/**
-	 * Just for testing purpose.
-	 */
-	private void exampleTest() {
-		try {
-			Block exampleBlock = new Block(this, map.getWidth() / 2 - 25,
-					map.getHeight() / 2, 20, 20);
-			addObject(exampleBlock);
-			CircledBlock exampleCircledBlock = new CircledBlock(this, 20,
-					map.getWidth() / 2 + 25, map.getHeight() / 2);
-			addObject(exampleCircledBlock);
-			ExampleWeapon exampleWeapon = new ExampleWeapon(this);
-			exampleWeapon.setPosition(map.getWidth() * 0.75,
-					map.getHeight() * 0.75);
-			ExampleWeapon exampleWeapon2 = new ExampleWeapon(this);
-			exampleWeapon2.setPosition(map.getWidth() * 0.25,
-					map.getHeight() * 0.25);
-			addObject(exampleWeapon);
-			addObject(exampleWeapon2);
-		} catch (ShapeVerticesNotApplicableException e) {
-			EduLog.passException(e);
-		}
 	}
 
 	/**
@@ -74,6 +47,7 @@ public class GameInformation {
 	 */
 	public void setEventTriggerer(EventTriggerer eventTriggerer) {
 		this.eventTriggerer = eventTriggerer;
+		eventTriggerer.init();
 	}
 
 	/**

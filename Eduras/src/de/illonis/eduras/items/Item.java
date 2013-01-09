@@ -32,8 +32,8 @@ public abstract class Item extends GameObject {
 	 * @param gi
 	 *            game information.
 	 */
-	public Item(ObjectType type, GameInformation gi) {
-		super(gi);
+	public Item(ObjectType type, GameInformation gi, int id) {
+		super(gi, id);
 		setObjectType(type);
 		this.name = "unknown";
 	}

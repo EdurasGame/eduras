@@ -5,9 +5,9 @@ import java.util.logging.Level;
 
 import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.GameObject;
-import de.illonis.eduras.Player;
 import de.illonis.eduras.MoveableGameObject.Direction;
 import de.illonis.eduras.ObjectFactory;
+import de.illonis.eduras.Player;
 import de.illonis.eduras.events.ClientRenameEvent;
 import de.illonis.eduras.events.GameEvent;
 import de.illonis.eduras.events.GameEvent.GameEventNumber;
@@ -132,7 +132,8 @@ public class Logic implements GameLogicInterface {
 				Missile missile;
 				switch (missileLaunchEvent.getObjectType()) {
 				case SIMPLEMISSILE:
-					missile = new SimpleMissile(currentGame);
+					missile = new SimpleMissile(currentGame,
+							missileLaunchEvent.getId());
 					currentGame.addObject(missile);
 					break;
 				default:
