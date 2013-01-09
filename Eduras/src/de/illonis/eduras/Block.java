@@ -13,7 +13,7 @@ import de.illonis.eduras.shapes.Rectangle;
  * @author Florian Mai <florian.ren.mai@googlemail.com>
  * 
  */
-public class Block extends GameObject {
+public abstract class Block extends GameObject {
 
 	double height;
 	double width;
@@ -38,6 +38,25 @@ public class Block extends GameObject {
 		this.height = height;
 
 		setPosition(xPos, xPos);
+		setShape(new Rectangle(new Vector2D(-width / 2, height / 2),
+				new Vector2D(width / 2, -height / 2)));
+	}
+
+	/**
+	 * Creates a new block.
+	 * 
+	 * @param game
+	 *            The game information.
+	 * @throws ShapeVerticesNotApplicableException
+	 *             Thrown if the given position values do not apply.
+	 */
+	public Block(GameInformation game, double width, double height, int id)
+			throws ShapeVerticesNotApplicableException {
+		super(game, id);
+
+		this.width = width;
+		this.height = height;
+
 		setShape(new Rectangle(new Vector2D(-width / 2, height / 2),
 				new Vector2D(width / 2, -height / 2)));
 	}

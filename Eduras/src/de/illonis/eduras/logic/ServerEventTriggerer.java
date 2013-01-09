@@ -134,6 +134,9 @@ public class ServerEventTriggerer implements EventTriggerer {
 				map.getHeight() * 0.25);
 		this.createObjectAt(ObjectType.ITEM_WEAPON_1, posWeap2, -1);
 
+		this.createObjectAt(ObjectType.BIGBLOCK, new Vector2D(
+				map.getWidth() * 0.5, map.getHeight() * 0.5), -1);
+
 	}
 
 	@Override

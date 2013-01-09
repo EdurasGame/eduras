@@ -6,6 +6,7 @@ import de.illonis.eduras.events.GameEvent.GameEventNumber;
 import de.illonis.eduras.events.ObjectFactoryEvent;
 import de.illonis.eduras.events.SetBooleanGameObjectAttributeEvent;
 import de.illonis.eduras.exceptions.DataMissingException;
+import de.illonis.eduras.exceptions.ShapeVerticesNotApplicableException;
 import de.illonis.eduras.interfaces.GameEventListener;
 import de.illonis.eduras.interfaces.GameLogicInterface;
 import de.illonis.eduras.items.weapons.ExampleWeapon;
@@ -31,7 +32,7 @@ public class ObjectFactory {
 	 */
 	public enum ObjectType {
 		PLAYER(1), YELLOWCIRCLE(2), SIMPLEMISSILE(3), ITEM_WEAPON_1(4), NO_OBJECT(
-				0), BLOCK(5), CIRCLEDBLOCK(6);
+				0), BIGBLOCK(5), SMALLCIRCLEDBLOCK(6);
 
 		private int number;
 
@@ -120,6 +121,14 @@ public class ObjectFactory {
 				break;
 			case ITEM_WEAPON_1:
 				go = new ExampleWeapon(logic.getGame(), id);
+				break;
+			case BIGBLOCK:
+				try {
+					go = new BigBlock(logic.getGame(), id);
+				} catch (ShapeVerticesNotApplicableException e) {
+					e.printStackTrace();
+					return;
+				}
 				break;
 			default:
 				return;

@@ -11,7 +11,7 @@ import de.illonis.eduras.shapes.Circle;
  * @author Florian Mai <florian.ren.mai@googlemail.com>
  * 
  */
-public class CircledBlock extends GameObject {
+public abstract class CircledBlock extends GameObject {
 
 	/*
 	 * (non-Javadoc)
