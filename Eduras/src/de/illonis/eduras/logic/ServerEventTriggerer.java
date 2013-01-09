@@ -12,6 +12,7 @@ import de.illonis.eduras.events.MovementEvent;
 import de.illonis.eduras.events.ObjectFactoryEvent;
 import de.illonis.eduras.interfaces.GameLogicInterface;
 import de.illonis.eduras.math.Vector2D;
+import de.illonis.eduras.networking.Buffer;
 
 /**
  * @author Florian Mai <florian.ren.mai@googlemail.com>
@@ -22,6 +23,8 @@ public class ServerEventTriggerer implements EventTriggerer {
 	private static int lastGameObjectId = 0;
 
 	private final GameLogicInterface logic;
+
+	private Buffer outputBuffer;
 
 	public ServerEventTriggerer(GameLogicInterface logic) {
 		this.logic = logic;
@@ -140,5 +143,15 @@ public class ServerEventTriggerer implements EventTriggerer {
 		newObjectEvent.setId(getNextId());
 		newObjectEvent.setOwner(owner);
 		logic.onGameEventAppeared(newObjectEvent);
+	}
+
+	/**
+	 * Sets the outputbuffer to write the messages to.
+	 * 
+	 * @param buf
+	 *            The outputbuffer to set.
+	 */
+	public void setOutputBuffer(Buffer buf) {
+		outputBuffer = buf;
 	}
 }

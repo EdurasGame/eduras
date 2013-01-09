@@ -259,4 +259,14 @@ public class Server {
 		logic.onGameEventAppeared(gonePlayerEvent);
 		sendEventToAll(gonePlayerEvent);
 	}
+
+	/**
+	 * Returns the outputbuffer of this server.
+	 * 
+	 * @return The outputbuffer.
+	 */
+	public Buffer getOutputBuffer() {
+		return outputBuffer;
+	}
+
 }
