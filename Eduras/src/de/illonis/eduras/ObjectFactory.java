@@ -97,10 +97,7 @@ public class ObjectFactory {
 			case PLAYER:
 				go = new Player(logic.getGame(), event.getOwner());
 				go.setOwner(event.getOwner());
-				if (event.hasId())
-					go.setId(event.getId());
-				else
-					event.setId(go.getId());
+
 
 				logic.getGame().addPlayer((Player) go);
 
@@ -117,6 +114,12 @@ public class ObjectFactory {
 			}
 			if (go != null)
 				logic.getGame().addObject(go);
+			
+			// extract the id if there is one
+			if (event.hasId())
+				go.setId(event.getId());
+			else
+				event.setId(go.getId());
 
 			for (GameEventListener gel : logic.getListenerList()) {
 				gel.onObjectCreation(event);
