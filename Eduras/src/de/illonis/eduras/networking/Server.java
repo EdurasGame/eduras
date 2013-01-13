@@ -281,7 +281,12 @@ public class Server {
 	 * Stops the server.
 	 */
 	public void stopServer() {
+
 		running = false;
+
+		for (ServerReceiver receiver : serverReceivers.values()) {
+			receiver.stopRunning();
+		}
 	}
 
 }

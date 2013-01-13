@@ -13,6 +13,7 @@ import de.illonis.eduras.Player;
 import de.illonis.eduras.events.ClientRenameEvent;
 import de.illonis.eduras.events.GameEvent.GameEventNumber;
 import de.illonis.eduras.events.LootItemEvent;
+import de.illonis.eduras.events.MatchEndEvent;
 import de.illonis.eduras.events.MissileLaunchEvent;
 import de.illonis.eduras.events.MovementEvent;
 import de.illonis.eduras.events.ObjectFactoryEvent;
@@ -223,5 +224,12 @@ public class ServerEventTriggerer implements EventTriggerer {
 			return;
 		}
 
+	}
+
+	@Override
+	public void onMatchEnd() {
+		MatchEndEvent matchEndEvent = new MatchEndEvent(gameInfo
+				.getGameSettings().getStats().findPlayerWithMostFrags());
+		logic.onGameEventAppeared(matchEndEvent);
 	}
 }

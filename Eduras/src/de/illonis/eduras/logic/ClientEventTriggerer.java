@@ -87,4 +87,9 @@ public class ClientEventTriggerer implements EventTriggerer {
 	public void renamePlayer(int ownerId, String newName) {
 	}
 
+	@Override
+	public void onMatchEnd() {
+
+	}
+
 }

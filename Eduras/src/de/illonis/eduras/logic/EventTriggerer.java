@@ -110,4 +110,9 @@ public interface EventTriggerer {
 	 *            The new name of the player.
 	 */
 	void renamePlayer(int ownerId, String newName);
+
+	/**
+	 * Called when the match ends.
+	 */
+	void onMatchEnd();
 }

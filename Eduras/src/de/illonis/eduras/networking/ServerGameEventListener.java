@@ -183,6 +183,6 @@ public class ServerGameEventListener implements GameEventListener {
 
 	@Override
 	public void onMatchEnd(MatchEndEvent event) {
-
+		server.stopServer();
 	}
 }
