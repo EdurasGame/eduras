@@ -212,6 +212,7 @@ public class ServerEventTriggerer implements EventTriggerer {
 		try {
 			ClientRenameEvent renameEvent = new ClientRenameEvent(ownerId,
 					newName);
+			logic.onGameEventAppeared(renameEvent);
 			outputBuffer
 					.append(NetworkMessageSerializer.serialize(renameEvent));
 		} catch (InvalidNameException e) {

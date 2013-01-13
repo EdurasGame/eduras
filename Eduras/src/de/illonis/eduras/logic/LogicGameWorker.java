@@ -86,10 +86,12 @@ public class LogicGameWorker implements Runnable {
 	}
 
 	/**
-	 * Lets all moveable objects move relative to the time passed.
+	 * Lets all moveable objects move relative to the time passed. Resetts the
+	 * GameSettings' remaining time.
 	 * 
 	 */
 	private synchronized void gameUpdate() {
+
 		if (lastUpdate <= 0)
 			lastUpdate = System.nanoTime();
 		// delta in seconds
@@ -97,6 +99,17 @@ public class LogicGameWorker implements Runnable {
 		if (delta == 0)
 			return;
 		lastUpdate = System.nanoTime();
+
+		// check game settings
+		long gameRemainingTime = gameInformation.getGameSettings()
+				.getRemainingTime();
+
+		if (gameRemainingTime <= 0) {
+			gameInformation.getGameSettings().getGameMode().onTimeUp();
+		} else {
+			gameInformation.getGameSettings().changeTime(
+					gameRemainingTime - delta);
+		}
 
 		for (GameObject o : gameInformation.getObjects().values()) {
 
