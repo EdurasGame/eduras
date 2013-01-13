@@ -3,6 +3,8 @@
  */
 package de.illonis.eduras.logic;
 
+import de.illonis.eduras.GameInformation;
+import de.illonis.eduras.GameObject;
 import de.illonis.eduras.Map;
 import de.illonis.eduras.ObjectFactory.ObjectType;
 import de.illonis.eduras.events.GameEvent.GameEventNumber;
@@ -10,9 +12,14 @@ import de.illonis.eduras.events.LootItemEvent;
 import de.illonis.eduras.events.MissileLaunchEvent;
 import de.illonis.eduras.events.MovementEvent;
 import de.illonis.eduras.events.ObjectFactoryEvent;
+import de.illonis.eduras.events.SetIntegerGameObjectAttributeEvent;
+import de.illonis.eduras.exceptions.MessageNotSupportedException;
 import de.illonis.eduras.interfaces.GameLogicInterface;
+import de.illonis.eduras.logger.EduLog;
 import de.illonis.eduras.math.Vector2D;
 import de.illonis.eduras.networking.Buffer;
+import de.illonis.eduras.networking.NetworkMessageSerializer;
+import de.illonis.eduras.units.Unit;
 
 /**
  * @author Florian Mai <florian.ren.mai@googlemail.com>
@@ -23,11 +30,13 @@ public class ServerEventTriggerer implements EventTriggerer {
 	private static int lastGameObjectId = 0;
 
 	private final GameLogicInterface logic;
+	private GameInformation gameInfo;
 
 	private Buffer outputBuffer;
 
 	public ServerEventTriggerer(GameLogicInterface logic) {
 		this.logic = logic;
+		this.gameInfo = logic.getGame();
 	}
 
 	/*
@@ -156,5 +165,27 @@ public class ServerEventTriggerer implements EventTriggerer {
 	 */
 	public void setOutputBuffer(Buffer buf) {
 		outputBuffer = buf;
+	}
+
+	@Override
+	public void setHealth(int id, int newHealth) {
+		GameObject object = gameInfo.findObjectById(id);
+
+		if (object instanceof Unit) {
+			Unit unit = (Unit) object;
+
+			unit.setHealth(newHealth);
+
+			// announce to network
+			SetIntegerGameObjectAttributeEvent event = new SetIntegerGameObjectAttributeEvent(
+					GameEventNumber.SETHEALTH, id, newHealth);
+			try {
+				String eventString = NetworkMessageSerializer.serialize(event);
+				outputBuffer.append(eventString);
+			} catch (MessageNotSupportedException e) {
+				EduLog.passException(e);
+				return;
+			}
+		}
 	}
 }
