@@ -14,6 +14,7 @@ import de.illonis.eduras.events.GameEvent.GameEventNumber;
 import de.illonis.eduras.events.GameInfoRequest;
 import de.illonis.eduras.events.ItemEvent;
 import de.illonis.eduras.events.LootItemEvent;
+import de.illonis.eduras.events.MatchEndEvent;
 import de.illonis.eduras.events.MissileLaunchEvent;
 import de.illonis.eduras.events.MovementEvent;
 import de.illonis.eduras.events.ObjectFactoryEvent;
@@ -211,6 +212,10 @@ public class Logic implements GameLogicInterface {
 					listener.onItemSlotChanged(slotEvent);
 				}
 				break;
+			case MATCH_END:
+				for (GameEventListener listener : listenerList) {
+					listener.onMatchEnd((MatchEndEvent) event);
+				}
 			default:
 				break;
 			}

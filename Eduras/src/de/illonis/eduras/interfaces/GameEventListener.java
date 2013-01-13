@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import de.illonis.eduras.GameObject;
 import de.illonis.eduras.events.ClientRenameEvent;
 import de.illonis.eduras.events.GameEvent;
+import de.illonis.eduras.events.MatchEndEvent;
 import de.illonis.eduras.events.ObjectFactoryEvent;
 import de.illonis.eduras.events.SetGameObjectAttributeEvent;
 import de.illonis.eduras.events.SetItemSlotEvent;
@@ -87,4 +88,11 @@ public interface GameEventListener {
 	 * @param event
 	 */
 	void onObjectRemove(ObjectFactoryEvent event);
+
+	/**
+	 * Called when a match ended.
+	 * 
+	 * @param event
+	 */
+	void onMatchEnd(MatchEndEvent event);
 }

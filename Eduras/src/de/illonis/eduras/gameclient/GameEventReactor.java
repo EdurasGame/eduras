@@ -6,6 +6,7 @@ import de.illonis.eduras.GameObject;
 import de.illonis.eduras.ObjectFactory.ObjectType;
 import de.illonis.eduras.events.ClientRenameEvent;
 import de.illonis.eduras.events.GameEvent;
+import de.illonis.eduras.events.MatchEndEvent;
 import de.illonis.eduras.events.ObjectFactoryEvent;
 import de.illonis.eduras.events.SetGameObjectAttributeEvent;
 import de.illonis.eduras.events.SetItemSlotEvent;
@@ -77,6 +78,13 @@ public class GameEventReactor implements GameEventListener {
 	@Override
 	public void onObjectRemove(ObjectFactoryEvent event) {
 		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void onMatchEnd(MatchEndEvent event) {
+
+		// TODO: Implement!
 
 	}
 

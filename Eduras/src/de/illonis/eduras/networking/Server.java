@@ -46,6 +46,7 @@ public class Server {
 	private GameInformation game;
 	private GameLogicInterface logic;
 	private final int port;
+	private boolean running = true;
 
 	/**
 	 * Creates a new Server listening on default port.
@@ -118,7 +119,7 @@ public class Server {
 			NetworkEventListener eventListener) {
 		this.logic = logic;
 		logic.addGameEventListener(new ServerGameEventListener(outputBuffer,
-				serverSender));
+				serverSender, this));
 		serverLogic = new ServerDecoder(inputBuffer, logic, eventListener);
 	}
 
@@ -184,7 +185,7 @@ public class Server {
 		public void run() {
 			EduLog.info(Localization
 					.getStringF("Server.startedlistening", port));
-			while (true) {
+			while (running) {
 				Socket client = null;
 				try {
 					client = server.accept();
@@ -267,6 +268,20 @@ public class Server {
 	 */
 	public Buffer getOutputBuffer() {
 		return outputBuffer;
+	}
+
+	/**
+	 * Here should something be done, for example to restart the server.
+	 */
+	public void onMatchEnd() {
+		stopServer();
+	}
+
+	/**
+	 * Stops the server.
+	 */
+	public void stopServer() {
+		running = false;
 	}
 
 }

@@ -7,6 +7,7 @@ import de.illonis.eduras.events.Event;
 import de.illonis.eduras.events.GameEvent;
 import de.illonis.eduras.events.GameInfoRequest;
 import de.illonis.eduras.events.ItemEvent;
+import de.illonis.eduras.events.MatchEndEvent;
 import de.illonis.eduras.events.MovementEvent;
 import de.illonis.eduras.events.NetworkEvent;
 import de.illonis.eduras.events.ObjectFactoryEvent;
@@ -161,6 +162,11 @@ public class NetworkMessageSerializer {
 			SetItemSlotEvent sis = (SetItemSlotEvent) gameEvent;
 			serializedEvent += concatenateWithDel("#", sis.getOwner(),
 					sis.getObjectId(), sis.getItemSlot());
+			break;
+		case MATCH_END:
+			MatchEndEvent matchEndEvent = (MatchEndEvent) gameEvent;
+			serializedEvent += concatenateWithDel("#",
+					matchEndEvent.getWinnerId());
 			break;
 		default:
 			break;

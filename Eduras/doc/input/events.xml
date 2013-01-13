@@ -154,6 +154,12 @@
 						<entry>objectId</entry>
 						<entry>newHealth</entry>
 					</row>
+					<row>
+						<entry>MATCH_END</entry>
+						<entry>190</entry>
+						<entry>Tells that the match ended and that the winner has got the passed id.</entry>
+						<entry>winnerId</entry>
+					</row>
 				</tbody>
 			</tgroup>
 		</table>

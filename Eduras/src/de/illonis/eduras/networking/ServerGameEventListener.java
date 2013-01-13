@@ -6,6 +6,7 @@ import de.illonis.eduras.GameObject;
 import de.illonis.eduras.events.ClientRenameEvent;
 import de.illonis.eduras.events.GameEvent;
 import de.illonis.eduras.events.GameEvent.GameEventNumber;
+import de.illonis.eduras.events.MatchEndEvent;
 import de.illonis.eduras.events.MovementEvent;
 import de.illonis.eduras.events.ObjectFactoryEvent;
 import de.illonis.eduras.events.SetGameObjectAttributeEvent;
@@ -26,6 +27,7 @@ public class ServerGameEventListener implements GameEventListener {
 
 	private final Buffer outputBuffer;
 	private final ServerSender serverSender;
+	private final Server server;
 
 	/**
 	 * Creates a new ServerGameEventListener with the given outputBuffer.
@@ -36,9 +38,10 @@ public class ServerGameEventListener implements GameEventListener {
 	 *            The sender that is used to send messages.
 	 */
 	public ServerGameEventListener(Buffer outputBuffer,
-			ServerSender serverSender) {
+			ServerSender serverSender, Server server) {
 		this.outputBuffer = outputBuffer;
 		this.serverSender = serverSender;
+		this.server = server;
 	}
 
 	/*
@@ -175,6 +178,11 @@ public class ServerGameEventListener implements GameEventListener {
 		}
 
 		outputBuffer.append(string);
+
+	}
+
+	@Override
+	public void onMatchEnd(MatchEndEvent event) {
 
 	}
 }
