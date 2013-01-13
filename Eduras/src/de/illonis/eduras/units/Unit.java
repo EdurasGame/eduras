@@ -24,7 +24,7 @@ public abstract class Unit extends MoveableGameObject {
 	 *            maximum health. Must be >0. Will be set to 1 otherwise.
 	 */
 	public Unit(GameInformation game, int maxHealth, int id) {
-		super(game,id);
+		super(game, id);
 		if (maxHealth <= 0)
 			maxHealth = 1;
 		this.health = this.maxHealth = maxHealth;
@@ -55,7 +55,7 @@ public abstract class Unit extends MoveableGameObject {
 	 *            new current health. Must be <code>0<=health<=maxHealth</code>,
 	 *            otherwise it will be adjusted to fit.
 	 */
-	protected void setHealth(int health) {
+	public void setHealth(int health) {
 		this.health = Math.min(Math.max(health, 0), maxHealth);
 	}
 
@@ -101,6 +101,6 @@ public abstract class Unit extends MoveableGameObject {
 	 * Called when unit dies.
 	 */
 	protected void onDead() {
-		removeSelf();
+		getGame().getGameSettings().getGameMode().onDeath(this, null);
 	}
 }

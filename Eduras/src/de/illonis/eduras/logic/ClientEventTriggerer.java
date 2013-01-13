@@ -74,4 +74,8 @@ public class ClientEventTriggerer implements EventTriggerer {
 	public void createObject(ObjectType object, int owner) {
 	}
 
+	@Override
+	public void setHealth(int id, int newHealth) {
+	}
+
 }

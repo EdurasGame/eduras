@@ -81,4 +81,14 @@ public interface EventTriggerer {
 	 * You can implement this method if you need to do some setup.
 	 */
 	void init();
+
+	/**
+	 * Set the health of an object to a new value.
+	 * 
+	 * @param id
+	 *            The object's id.
+	 * @param newHealth
+	 *            the new value of the health.
+	 */
+	void setHealth(int id, int newHealth);
 }

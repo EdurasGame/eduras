@@ -158,8 +158,8 @@ public class Server {
 			EduLog.passException(e);
 		}
 
-		logic.getGame().getEventTriggerer()
-				.createObject(ObjectType.PLAYER, client.getClientId());
+		logic.getGame().getGameSettings().getGameMode()
+				.onConnect(client.getClientId());
 
 	}
 

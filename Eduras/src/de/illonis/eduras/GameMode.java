@@ -1,5 +1,7 @@
 package de.illonis.eduras;
 
+import de.illonis.eduras.units.Unit;
+
 /**
  * This interface serves a number of methods which are called when a certain
  * event appears and an implementation shall reflect a game mode's behavior on
@@ -20,16 +22,21 @@ public interface GameMode {
 	/**
 	 * Called when someon died.
 	 * 
-	 * @param killedPlayer
+	 * @param killedUnit
 	 *            The player who died.
-	 * @param killingPlayer
+	 * @param killingUnit
 	 *            The player who killed the other player. Null if there is none.
 	 */
-	public void onDeath(Player killedPlayer, Player killingPlayer);
+	public void onDeath(Unit killedUnit, Unit killingUnit);
 
 	/**
 	 * Called when the time is up.
 	 */
 	public void onTimeUp();
+
+	/**
+	 * Called when a player connects.
+	 */
+	public void onConnect(int ownerId);
 
 }

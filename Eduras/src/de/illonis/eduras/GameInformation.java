@@ -22,11 +22,13 @@ public class GameInformation {
 	private final ConcurrentHashMap<Integer, Player> players;
 	private final Map map;
 	private EventTriggerer eventTriggerer;
+	private GameSettings gameSettings;
 
 	public GameInformation() {
 		objects = new ConcurrentHashMap<Integer, GameObject>();
 		players = new ConcurrentHashMap<Integer, Player>();
 		map = new Map();
+		gameSettings = new GameSettings(this);
 
 	}
 
@@ -237,6 +239,24 @@ public class GameInformation {
 		}
 
 		return infos;
+	}
+
+	/**
+	 * Returns the game settings.
+	 * 
+	 * @return The game settings.
+	 */
+	public GameSettings getGameSettings() {
+		return gameSettings;
+	}
+
+	/**
+	 * Sets the game settings.
+	 * 
+	 * @param gameSettings
+	 */
+	public void setGameSettings(GameSettings gameSettings) {
+		this.gameSettings = gameSettings;
 	}
 
 }
