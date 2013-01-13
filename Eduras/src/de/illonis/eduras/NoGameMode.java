@@ -28,15 +28,15 @@ public class NoGameMode implements GameMode {
 	public void onDeath(Unit killedUnit, Unit killingUnit) {
 		// The player's health is set to max and he is respawned somewhere.
 		// Other units are simply removed.
-		// TODO: This is an ugly way of resetting the health and position,
-		// change this.
 
 		EventTriggerer triggerer = gameInfo.getEventTriggerer();
-		triggerer.removeObject(killedUnit.getId());
 
 		if (killedUnit instanceof Player) {
 			Player killedPlayer = (Player) killedUnit;
-			triggerer.createObject(ObjectType.PLAYER, killedPlayer.getOwner());
+
+			triggerer.respawnPlayer(killedPlayer);
+		} else {
+			triggerer.removeObject(killedUnit.getId());
 		}
 	}
 

@@ -3,10 +3,14 @@
  */
 package de.illonis.eduras.logic;
 
+import javax.naming.InvalidNameException;
+
 import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.GameObject;
 import de.illonis.eduras.Map;
 import de.illonis.eduras.ObjectFactory.ObjectType;
+import de.illonis.eduras.Player;
+import de.illonis.eduras.events.ClientRenameEvent;
 import de.illonis.eduras.events.GameEvent.GameEventNumber;
 import de.illonis.eduras.events.LootItemEvent;
 import de.illonis.eduras.events.MissileLaunchEvent;
@@ -187,5 +191,36 @@ public class ServerEventTriggerer implements EventTriggerer {
 				return;
 			}
 		}
+	}
+
+	@Override
+	public void respawnPlayer(Player player) {
+		// TODO: This is an ugly way of resetting the health and position,
+		// change this.
+		this.removeObject(player.getId());
+		this.createObject(ObjectType.PLAYER, player.getOwner());
+
+		// TODO: It should be the client's part to get the name after a respawn.
+		// We have to change this as soon as the gui is told that a player was
+		// killed.
+		renamePlayer(player.getOwner(), player.getName());
+	}
+
+	@Override
+	public void renamePlayer(int ownerId, String newName) {
+
+		try {
+			ClientRenameEvent renameEvent = new ClientRenameEvent(ownerId,
+					newName);
+			outputBuffer
+					.append(NetworkMessageSerializer.serialize(renameEvent));
+		} catch (InvalidNameException e) {
+			EduLog.passException(e);
+			return;
+		} catch (MessageNotSupportedException e) {
+			EduLog.passException(e);
+			return;
+		}
+
 	}
 }

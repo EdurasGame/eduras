@@ -1,6 +1,7 @@
 package de.illonis.eduras.logic;
 
 import de.illonis.eduras.ObjectFactory.ObjectType;
+import de.illonis.eduras.Player;
 import de.illonis.eduras.math.Vector2D;
 
 /**
@@ -91,4 +92,22 @@ public interface EventTriggerer {
 	 *            the new value of the health.
 	 */
 	void setHealth(int id, int newHealth);
+
+	/**
+	 * Respawns a player. Assumes the player has not been removed yet.
+	 * 
+	 * @param player
+	 *            The player to respawn.
+	 */
+	void respawnPlayer(Player player);
+
+	/**
+	 * Called when a player changes his name.
+	 * 
+	 * @param ownerId
+	 *            The player's owner id.
+	 * @param newName
+	 *            The new name of the player.
+	 */
+	void renamePlayer(int ownerId, String newName);
 }

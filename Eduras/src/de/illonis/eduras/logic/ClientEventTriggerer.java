@@ -4,6 +4,7 @@
 package de.illonis.eduras.logic;
 
 import de.illonis.eduras.ObjectFactory.ObjectType;
+import de.illonis.eduras.Player;
 import de.illonis.eduras.math.Vector2D;
 
 /**
@@ -76,6 +77,14 @@ public class ClientEventTriggerer implements EventTriggerer {
 
 	@Override
 	public void setHealth(int id, int newHealth) {
+	}
+
+	@Override
+	public void respawnPlayer(Player player) {
+	}
+
+	@Override
+	public void renamePlayer(int ownerId, String newName) {
 	}
 
 }
