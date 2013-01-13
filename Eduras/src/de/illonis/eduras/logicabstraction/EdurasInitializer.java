@@ -3,6 +3,7 @@
  */
 package de.illonis.eduras.logicabstraction;
 
+import de.illonis.eduras.ClientGameMode;
 import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.interfaces.GameLogicInterface;
 import de.illonis.eduras.logic.ClientEventTriggerer;
@@ -28,6 +29,10 @@ public class EdurasInitializer {
 	private EdurasInitializer() {
 
 		GameInformation game = new GameInformation();
+
+		// needed because all the game game mode action shall be performed on
+		// the server.
+		game.getGameSettings().changeGameMode(new ClientGameMode());
 
 		GameLogicInterface logic = new Logic(game);
 

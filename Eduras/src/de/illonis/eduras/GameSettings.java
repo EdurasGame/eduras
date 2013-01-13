@@ -4,6 +4,7 @@ import java.util.LinkedList;
 
 public class GameSettings {
 
+	private GameInformation gameInfo;
 	private GameMode gameMode;
 	private long remainingTime;
 	private NumberOfTeams numberOfTeams;
@@ -16,8 +17,22 @@ public class GameSettings {
 
 	}
 
-	public GameSettings() {
-		// TODO: Implemnt!
+	/**
+	 * Creates standard gamesettings for the server with {@link NoGameMode}
+	 * enabled.
+	 * 
+	 * @param gameInfo
+	 *            The gameinformation to work on.
+	 */
+	public GameSettings(GameInformation gameInfo) {
+
+		this.gameInfo = gameInfo;
+
+		gameMode = new NoGameMode(gameInfo);
+		remainingTime = 0;
+		numberOfTeams = NumberOfTeams.FFA;
+		stats = new Statistic();
+		teams = new LinkedList<Team>();
 	}
 
 	public void changeTime(long time) {
@@ -50,6 +65,10 @@ public class GameSettings {
 
 	public LinkedList<Team> getTeams() {
 		return teams;
+	}
+
+	public GameMode getGameMode() {
+		return gameMode;
 	}
 
 }
