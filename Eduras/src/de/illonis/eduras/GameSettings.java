@@ -29,7 +29,7 @@ public class GameSettings {
 		this.gameInfo = gameInfo;
 
 		gameMode = new Deathmatch(gameInfo);
-		remainingTime = 200000;
+		remainingTime = 30000;
 		numberOfTeams = NumberOfTeams.FFA;
 		stats = new Statistic();
 		teams = new LinkedList<Team>();

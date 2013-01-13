@@ -49,6 +49,9 @@ public class Deathmatch implements GameMode {
 		// simply create the player
 		gameInfo.getEventTriggerer().createObject(ObjectType.PLAYER, ownerId);
 
+		// and add it to the statistic
+		gameInfo.getGameSettings().getStats().addPlayerToStats(ownerId);
+
 	}
 
 }

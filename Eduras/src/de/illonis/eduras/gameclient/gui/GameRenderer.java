@@ -331,4 +331,9 @@ public class GameRenderer implements TooltipHandler {
 	public void hideTooltip() {
 		tooltip = null;
 	}
+
+	public void drawWin(int winnerId) {
+		dbg.drawString("Player with id " + winnerId + " won the game!",
+				(int) mapSize.getCenterX(), (int) mapSize.getCenterY());
+	}
 }

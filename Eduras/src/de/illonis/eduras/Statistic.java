@@ -55,4 +55,14 @@ public class Statistic {
 		return maxPlayerId;
 	}
 
+	/**
+	 * Adds a player to the frag count and initializes his count with 0.
+	 * 
+	 * @param ownerId
+	 *            The id of the player.
+	 */
+	public void addPlayerToStats(int ownerId) {
+		killsOfPlayer.put(ownerId, 0);
+	}
+
 }

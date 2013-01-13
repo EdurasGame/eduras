@@ -84,7 +84,7 @@ public class GameEventReactor implements GameEventListener {
 	@Override
 	public void onMatchEnd(MatchEndEvent event) {
 
-		// TODO: Implement!
+		client.getFrame().getRenderer().drawWin(event.getWinnerId());
 
 	}
 
