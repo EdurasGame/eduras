@@ -1,15 +1,19 @@
 package de.illonis.eduras.networking;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.HashMap;
+import java.util.LinkedList;
 
 import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.ObjectFactory.ObjectType;
 import de.illonis.eduras.events.ConnectionEstablishedEvent;
 import de.illonis.eduras.events.Event;
 import de.illonis.eduras.events.GameEvent.GameEventNumber;
+import de.illonis.eduras.events.GameInfoRequest;
+import de.illonis.eduras.events.InitInformationEvent;
 import de.illonis.eduras.events.ObjectFactoryEvent;
 import de.illonis.eduras.exceptions.MessageNotSupportedException;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
@@ -18,6 +22,8 @@ import de.illonis.eduras.interfaces.GameLogicInterface;
 import de.illonis.eduras.interfaces.NetworkEventListener;
 import de.illonis.eduras.locale.Localization;
 import de.illonis.eduras.logger.EduLog;
+import de.illonis.eduras.networking.ServerClient.ClientRole;
+import de.illonis.eduras.utils.CollectionUtils;
 
 /**
  * A server that handles a game and its clients.
@@ -146,10 +152,7 @@ public class Server {
 	private void handleConnection(Socket clientSocket) throws IOException {
 		ServerClient client = serverSender.add(clientSocket);
 
-		ServerReceiver sr = new ServerReceiver(this, inputBuffer, client);
-		sr.start();
-		serverReceivers.put(client.getClientId(), sr);
-
+		// inform client about clientconnection.
 		ConnectionEstablishedEvent connectionEstablished = new ConnectionEstablishedEvent(
 				client.getClientId());
 		try {
@@ -159,8 +162,66 @@ public class Server {
 			EduLog.passException(e);
 		}
 
-		logic.getGame().getGameSettings().getGameMode()
-				.onConnect(client.getClientId());
+		ClientRole clientRole = getInitInfos(client);
+
+		if (clientRole == ClientRole.PLAYER) {
+			logic.getGame().getGameSettings().getGameMode()
+					.onConnect(client.getClientId());
+		}
+	}
+
+	/**
+	 * Waits for the client to send initial data and sends back game infos in
+	 * case of success.
+	 * 
+	 * @param client
+	 *            The client to get information from.
+	 * @return Returns the client's role.
+	 */
+	private ClientRole getInitInfos(ServerClient client) {
+		synchronized (client) {
+			// do init stuff
+			BufferedReader inputStream = client.getInputStream();
+
+			// wait for the client to pass information
+			InitInformationEvent initInfoEvent;
+			String initInformation;
+			Object obj = null;
+			try {
+
+				initInformation = inputStream.readLine();
+				LinkedList<Event> events = NetworkMessageDeserializer
+						.deserialize(initInformation);
+
+				obj = CollectionUtils.getElementOfClass(
+						InitInformationEvent.class, events);
+			} catch (IOException e1) {
+				EduLog.passException(e1);
+				return null;
+			}
+
+			if (obj != null) {
+				initInfoEvent = (InitInformationEvent) obj;
+			} else {
+				return null;
+			}
+
+			if (initInfoEvent.getRole() == ClientRole.PLAYER) {
+				ServerReceiver sr = new ServerReceiver(this, client);
+				sr.start();
+				serverReceivers.put(client.getClientId(), sr);
+			}
+
+			// transfer information to client
+			GameInfoRequest gameInfos = new GameInfoRequest(
+					client.getClientId());
+			logic.onGameEventAppeared(gameInfos);
+
+			// wake up receiver
+			client.setConnected(true);
+			client.notify();
+			return initInfoEvent.getRole();
+		}
 
 	}
 
@@ -284,9 +345,36 @@ public class Server {
 
 		running = false;
 
+		serverSender.stopSender();
+
 		for (ServerReceiver receiver : serverReceivers.values()) {
 			receiver.stopRunning();
 		}
+	}
+
+	/**
+	 * Returns the serverreceivers.
+	 * 
+	 * @return The serverreceivers.
+	 */
+	HashMap<Integer, ServerReceiver> getServerReceivers() {
+		return serverReceivers;
+	}
+
+	/**
+	 * Returns the inputbuffer.
+	 * 
+	 * @return The inputbuffer.
+	 */
+	public Buffer getInputBuffer() {
+		return inputBuffer;
+	}
+
+	/**
+	 * Returns the server's logic
+	 */
+	public GameLogicInterface getLogic() {
+		return logic;
 	}
 
 }

@@ -6,6 +6,7 @@ import de.illonis.eduras.events.ConnectionEstablishedEvent;
 import de.illonis.eduras.events.Event;
 import de.illonis.eduras.events.GameEvent;
 import de.illonis.eduras.events.GameInfoRequest;
+import de.illonis.eduras.events.InitInformationEvent;
 import de.illonis.eduras.events.ItemEvent;
 import de.illonis.eduras.events.MatchEndEvent;
 import de.illonis.eduras.events.MovementEvent;
@@ -74,6 +75,11 @@ public class NetworkMessageSerializer {
 					.getClientId();
 			break;
 		case NO_EVENT:
+			break;
+		case INIT_INFORMATION:
+			InitInformationEvent initEvent = (InitInformationEvent) networkEvent;
+			serializedEvent += concatenateWithDel("#", initEvent.getRole()
+					.getTypeNum(), initEvent.getName());
 			break;
 		default:
 			break;
