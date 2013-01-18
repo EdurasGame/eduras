@@ -30,4 +30,10 @@ public interface NetworkEventReactor {
 	 * received.
 	 */
 	void onPlayerReceived();
+
+	/**
+	 * Indicates that the game client was successfully registered on server and
+	 * the game is ready.
+	 */
+	void onGameReady();
 }

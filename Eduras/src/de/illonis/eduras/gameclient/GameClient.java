@@ -403,4 +403,9 @@ public class GameClient implements GuiClickReactor, NetworkEventReactor,
 	public void hideTooltip() {
 		frame.getRenderer().hideTooltip();
 	}
+
+	@Override
+	public void onGameReady() {
+		frame.onGameReady();
+	}
 }
