@@ -138,6 +138,7 @@ public class GameClient implements GuiClickReactor, NetworkEventReactor,
 
 	@Override
 	public void onConnected(int clientId) {
+
 		if (clientId != getOwnerID()) // only handle my connection
 			return;
 		EduLog.info("Connection to server established. OwnerId: "
@@ -146,15 +147,8 @@ public class GameClient implements GuiClickReactor, NetworkEventReactor,
 		frame.setTitle(frame.getTitle() + " #" + infoPro.getOwnerID() + " ("
 				+ clientName + ")");
 
-		// test routine for item display in gui:
-		/*
-		 * try { Thread.sleep(1000); infoPro.getPlayer().getInventory()
-		 * .loot(new ExampleWeapon(new GameInformation())); } catch
-		 * (InventoryIsFullException e1) { e1.printStackTrace(); } catch
-		 * (ObjectNotFoundException e1) { e1.printStackTrace(); } catch
-		 * (InterruptedException e) { e.printStackTrace(); }
-		 */
-		frame.onConnected(clientId);
+		frame.onConnected(clientId); // pass to gui
+
 		try {
 			sendEvent(new InitInformationEvent(ClientRole.PLAYER, clientName));
 		} catch (WrongEventTypeException e) {
