@@ -137,7 +137,9 @@ public class GameClient implements GuiClickReactor, NetworkEventReactor,
 	}
 
 	@Override
-	public void onConnected() {
+	public void onConnected(int clientId) {
+		if (clientId != getOwnerID()) // only handle my connection
+			return;
 		EduLog.info("Connection to server established. OwnerId: "
 				+ infoPro.getOwnerID());
 		keyHandler = new InputKeyHandler(this, eventSender, settings);
@@ -152,7 +154,7 @@ public class GameClient implements GuiClickReactor, NetworkEventReactor,
 		 * (ObjectNotFoundException e1) { e1.printStackTrace(); } catch
 		 * (InterruptedException e) { e.printStackTrace(); }
 		 */
-		frame.onConnected();
+		frame.onConnected(clientId);
 		try {
 			sendEvent(new InitInformationEvent(ClientRole.PLAYER, clientName));
 		} catch (WrongEventTypeException e) {

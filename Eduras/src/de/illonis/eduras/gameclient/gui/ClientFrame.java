@@ -129,7 +129,7 @@ public class ClientFrame extends JFrame implements NetworkEventReactor,
 	}
 
 	@Override
-	public void onConnected() {
+	public void onConnected(int clientId) {
 	}
 
 	@Override
