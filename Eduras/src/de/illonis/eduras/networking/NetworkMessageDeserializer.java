@@ -107,9 +107,9 @@ public class NetworkMessageDeserializer {
 			throw new InvalidMessageFormatException(
 					"Message is empty (length 0)", msg);
 		String[] args = msg.split("#");
-		if (args.length < 2)
+		if (args.length < 1)
 			throw new InvalidMessageFormatException(
-					"Message has not enough arguments (less than two).", msg);
+					"Message has not enough arguments (less than one).", msg);
 
 		// try to extract event type
 		int typeInt;
