@@ -3,8 +3,10 @@
  */
 package de.illonis.eduras.logicabstraction;
 
+import de.illonis.eduras.events.Event;
 import de.illonis.eduras.events.GameEvent;
 import de.illonis.eduras.events.GameEvent.GameEventNumber;
+import de.illonis.eduras.events.NetworkEvent;
 import de.illonis.eduras.exceptions.MessageNotSupportedException;
 import de.illonis.eduras.exceptions.WrongEventTypeException;
 import de.illonis.eduras.interfaces.GameLogicInterface;
@@ -52,19 +54,42 @@ public class EventSender {
 	 *             Occurs if the given event is not yet supported by the
 	 *             serializer.
 	 */
-	public void sendEvent(GameEvent event) throws WrongEventTypeException,
+	public void sendEvent(Event event) throws WrongEventTypeException,
 			MessageNotSupportedException {
 
 		// TODO: Think of a rearragement of the event to make it fit better to a
 		// distinction of events.
-		if (!(event.getType().getNumber() < 100)) {
-			throw new WrongEventTypeException(event);
+
+		if (event instanceof NetworkEvent) {
+			NetworkEvent networkEvent = (NetworkEvent) event;
+			sendNetworkEvent(networkEvent);
+			return;
+		}
+
+		GameEvent gameEvent = (GameEvent) event;
+
+		if (!(gameEvent.getType().getNumber() < 100)) {
+			throw new WrongEventTypeException(gameEvent);
 		}
 
 		String msg = NetworkMessageSerializer.serialize(event);
 
 		client.sendMessage(msg);
-		if (event.getType() == GameEventNumber.SET_POS)
-			logic.onGameEventAppeared(event);
+		if (gameEvent.getType() == GameEventNumber.SET_POS)
+			logic.onGameEventAppeared(gameEvent);
+	}
+
+	/**
+	 * Sends a networkevent.
+	 * 
+	 * @param event
+	 *            The event o send.
+	 * @throws MessageNotSupportedException
+	 */
+	private void sendNetworkEvent(NetworkEvent event)
+			throws MessageNotSupportedException {
+		String msg = NetworkMessageSerializer.serialize(event);
+
+		client.sendMessage(msg);
 	}
 }

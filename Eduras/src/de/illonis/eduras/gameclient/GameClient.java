@@ -13,9 +13,9 @@ import javax.naming.InvalidNameException;
 import javax.swing.JOptionPane;
 
 import de.illonis.eduras.events.ClientRenameEvent;
-import de.illonis.eduras.events.GameEvent;
+import de.illonis.eduras.events.Event;
 import de.illonis.eduras.events.GameEvent.GameEventNumber;
-import de.illonis.eduras.events.GameInfoRequest;
+import de.illonis.eduras.events.InitInformationEvent;
 import de.illonis.eduras.events.ItemEvent;
 import de.illonis.eduras.exceptions.MessageNotSupportedException;
 import de.illonis.eduras.exceptions.WrongEventTypeException;
@@ -34,6 +34,7 @@ import de.illonis.eduras.logicabstraction.EventSender;
 import de.illonis.eduras.logicabstraction.InformationProvider;
 import de.illonis.eduras.logicabstraction.NetworkManager;
 import de.illonis.eduras.math.Vector2D;
+import de.illonis.eduras.networking.ServerClient.ClientRole;
 import de.illonis.eduras.settings.Settings;
 
 /**
@@ -155,8 +156,8 @@ public class GameClient implements GuiClickReactor, NetworkEventReactor,
 		 */
 		frame.onConnected();
 		try {
+			sendEvent(new InitInformationEvent(ClientRole.PLAYER, clientName));
 			sendEvent(new ClientRenameEvent(infoPro.getOwnerID(), clientName));
-			sendEvent(new GameInfoRequest(infoPro.getOwnerID()));
 		} catch (WrongEventTypeException e) {
 			EduLog.passException(e);
 		} catch (MessageNotSupportedException e) {
@@ -305,7 +306,7 @@ public class GameClient implements GuiClickReactor, NetworkEventReactor,
 	}
 
 	/**
-	 * Sends a gameevent to server.
+	 * Sends an event to server.
 	 * 
 	 * @param event
 	 *            event that should be sent.
@@ -314,7 +315,7 @@ public class GameClient implements GuiClickReactor, NetworkEventReactor,
 	 * @throws MessageNotSupportedException
 	 *             if given event is not supported by logic.
 	 */
-	public void sendEvent(GameEvent event) throws WrongEventTypeException,
+	public void sendEvent(Event event) throws WrongEventTypeException,
 			MessageNotSupportedException {
 		eventSender.sendEvent(event);
 	}

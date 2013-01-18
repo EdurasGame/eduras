@@ -17,7 +17,6 @@ public class ServerReceiver extends Thread {
 	private final Buffer inputBuffer;
 	private final ServerClient client;
 	private final Server server;
-	private boolean clientConnected;
 
 	/**
 	 * Creates a new ServerReciever that listens for new messages on given
@@ -30,11 +29,10 @@ public class ServerReceiver extends Thread {
 	 * @param client
 	 *            Client that's inputstream should be used.
 	 */
-	public ServerReceiver(Server server, Buffer inputBuffer, ServerClient client) {
+	public ServerReceiver(Server server, ServerClient client) {
 		this.server = server;
-		this.inputBuffer = inputBuffer;
+		this.inputBuffer = server.getInputBuffer();
 		this.client = client;
-		this.clientConnected = true;
 	}
 
 	/**
@@ -49,6 +47,15 @@ public class ServerReceiver extends Thread {
 
 	@Override
 	public void run() {
+		synchronized (client) {
+			if (!client.isConnected()) {
+				try {
+					client.wait();
+				} catch (InterruptedException e) {
+					// do nothing
+				}
+			}
+		}
 		waitForMessages();
 	}
 
@@ -60,7 +67,7 @@ public class ServerReceiver extends Thread {
 		EduLog.info("[SERVER] Waiting for messages...");
 		try {
 			BufferedReader br = client.getInputStream();
-			while (clientConnected) {
+			while (client.isConnected()) {
 				String line = br.readLine();
 				if (line != null) {
 					EduLog.info("[SERVER] Received message: " + line);
@@ -84,7 +91,7 @@ public class ServerReceiver extends Thread {
 	 * Stops receiving message for the certain client.
 	 */
 	void stopRunning() {
-		clientConnected = false;
+		client.setConnected(false);
 	}
 
 }

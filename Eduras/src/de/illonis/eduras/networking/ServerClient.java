@@ -21,6 +21,42 @@ public class ServerClient {
 	private final Socket socket;
 	private final PrintWriter printWriter;
 	private final BufferedReader bufferedReader;
+	private boolean connected;
+
+	/**
+	 * Specifies the role of the client. If the client states to be spectator,
+	 * it will receive all the info a player-client also gets, but it can't pass
+	 * information to the server.
+	 * 
+	 * @author Florian Mai <florian.ren.mai@googlemail.com>
+	 * 
+	 */
+	public enum ClientRole {
+
+		PLAYER(0), SPECTATOR(1);
+
+		int typeNumber;
+
+		public static ClientRole getValueOf(int clientRoleNum) {
+			switch (clientRoleNum) {
+			case 0:
+				return ClientRole.PLAYER;
+			case 1:
+				return ClientRole.SPECTATOR;
+			default:
+				return null;
+			}
+		}
+
+		private ClientRole(int type) {
+			typeNumber = type;
+		}
+
+		public int getTypeNum() {
+			return typeNumber;
+		}
+
+	}
 
 	/**
 	 * Creates a new ServerClient with the given id and that uses the given
@@ -40,6 +76,8 @@ public class ServerClient {
 		this.printWriter = new PrintWriter(socket.getOutputStream(), true);
 		this.bufferedReader = new BufferedReader(new InputStreamReader(
 				socket.getInputStream()));
+
+		connected = false;
 
 	}
 
@@ -95,6 +133,25 @@ public class ServerClient {
 	 */
 	public String getHostAddress() {
 		return socket.getInetAddress().getHostAddress();
+	}
+
+	/**
+	 * Returns whether the client is connected or not.
+	 * 
+	 * @return True if connected, false otherwise.
+	 */
+	public boolean isConnected() {
+		return connected;
+	}
+
+	/**
+	 * Sets the connected status.
+	 * 
+	 * @param connected
+	 *            The new status.
+	 */
+	public void setConnected(boolean connected) {
+		this.connected = connected;
 	}
 
 }

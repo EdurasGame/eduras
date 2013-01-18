@@ -14,7 +14,8 @@ public abstract class NetworkEvent extends Event {
 	private final NetworkEventNumber type;
 
 	public enum NetworkEventNumber {
-		CONNECTION_ESTABLISHED(201), CONNECTION_ABORTED(202), NO_EVENT(299);
+		CONNECTION_ESTABLISHED(201), CONNECTION_ABORTED(202), INIT_INFORMATION(
+				203), NO_EVENT(299);
 
 		int number = 299;
 
