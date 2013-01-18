@@ -16,6 +16,7 @@ import de.illonis.eduras.events.ConnectionEstablishedEvent;
 import de.illonis.eduras.events.Event;
 import de.illonis.eduras.events.GameEvent.GameEventNumber;
 import de.illonis.eduras.events.GameInfoRequest;
+import de.illonis.eduras.events.GameReadyEvent;
 import de.illonis.eduras.events.InitInformationEvent;
 import de.illonis.eduras.events.ObjectFactoryEvent;
 import de.illonis.eduras.exceptions.MessageNotSupportedException;
@@ -228,6 +229,15 @@ public class Server {
 			GameInfoRequest gameInfos = new GameInfoRequest(
 					client.getClientId());
 			logic.onGameEventAppeared(gameInfos);
+
+			// inform client that the connectionprocess has finished
+			GameReadyEvent gameReady = new GameReadyEvent();
+			try {
+				serverSender.sendMessageToClient(client.getClientId(),
+						NetworkMessageSerializer.serialize(gameReady));
+			} catch (MessageNotSupportedException e) {
+				EduLog.passException(e);
+			}
 
 			// wake up receiver
 			client.setConnected(true);
