@@ -9,10 +9,8 @@ import java.awt.event.MouseEvent;
 import java.util.Iterator;
 import java.util.LinkedList;
 
-import javax.naming.InvalidNameException;
 import javax.swing.JOptionPane;
 
-import de.illonis.eduras.events.ClientRenameEvent;
 import de.illonis.eduras.events.Event;
 import de.illonis.eduras.events.GameEvent.GameEventNumber;
 import de.illonis.eduras.events.InitInformationEvent;
@@ -157,12 +155,9 @@ public class GameClient implements GuiClickReactor, NetworkEventReactor,
 		frame.onConnected();
 		try {
 			sendEvent(new InitInformationEvent(ClientRole.PLAYER, clientName));
-			sendEvent(new ClientRenameEvent(infoPro.getOwnerID(), clientName));
 		} catch (WrongEventTypeException e) {
 			EduLog.passException(e);
 		} catch (MessageNotSupportedException e) {
-			EduLog.passException(e);
-		} catch (InvalidNameException e) {
 			EduLog.passException(e);
 		}
 
