@@ -81,6 +81,8 @@ public class NetworkMessageSerializer {
 			serializedEvent += concatenateWithDel("#", initEvent.getRole()
 					.getTypeNum(), initEvent.getName());
 			break;
+		case GAME_READY:
+			break;
 		default:
 			break;
 		}

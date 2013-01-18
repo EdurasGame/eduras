@@ -7,12 +7,16 @@ import java.net.Socket;
 import java.util.HashMap;
 import java.util.LinkedList;
 
+import javax.naming.InvalidNameException;
+
 import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.ObjectFactory.ObjectType;
+import de.illonis.eduras.events.ClientRenameEvent;
 import de.illonis.eduras.events.ConnectionEstablishedEvent;
 import de.illonis.eduras.events.Event;
 import de.illonis.eduras.events.GameEvent.GameEventNumber;
 import de.illonis.eduras.events.GameInfoRequest;
+import de.illonis.eduras.events.GameReadyEvent;
 import de.illonis.eduras.events.InitInformationEvent;
 import de.illonis.eduras.events.ObjectFactoryEvent;
 import de.illonis.eduras.exceptions.MessageNotSupportedException;
@@ -162,11 +166,20 @@ public class Server {
 			EduLog.passException(e);
 		}
 
-		ClientRole clientRole = getInitInfos(client);
+		InitInformationEvent initInfo = getInitInfos(client);
 
-		if (clientRole == ClientRole.PLAYER) {
+		// extract role and name
+		if (initInfo.getRole() == ClientRole.PLAYER) {
 			logic.getGame().getGameSettings().getGameMode()
 					.onConnect(client.getClientId());
+
+			String playerName = initInfo.getName();
+			try {
+				logic.onGameEventAppeared(new ClientRenameEvent(client
+						.getClientId(), playerName));
+			} catch (InvalidNameException e) {
+				EduLog.passException(e);
+			}
 		}
 	}
 
@@ -178,7 +191,7 @@ public class Server {
 	 *            The client to get information from.
 	 * @return Returns the client's role.
 	 */
-	private ClientRole getInitInfos(ServerClient client) {
+	private InitInformationEvent getInitInfos(ServerClient client) {
 		synchronized (client) {
 			// do init stuff
 			BufferedReader inputStream = client.getInputStream();
@@ -217,10 +230,19 @@ public class Server {
 					client.getClientId());
 			logic.onGameEventAppeared(gameInfos);
 
+			// inform client that the connectionprocess has finished
+			GameReadyEvent gameReady = new GameReadyEvent();
+			try {
+				serverSender.sendMessageToClient(client.getClientId(),
+						NetworkMessageSerializer.serialize(gameReady));
+			} catch (MessageNotSupportedException e) {
+				EduLog.passException(e);
+			}
+
 			// wake up receiver
 			client.setConnected(true);
 			client.notify();
-			return initInfoEvent.getRole();
+			return initInfoEvent;
 		}
 
 	}

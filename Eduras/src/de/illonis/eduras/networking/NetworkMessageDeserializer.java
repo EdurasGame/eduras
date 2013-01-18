@@ -10,6 +10,7 @@ import de.illonis.eduras.events.Event;
 import de.illonis.eduras.events.GameEvent;
 import de.illonis.eduras.events.GameEvent.GameEventNumber;
 import de.illonis.eduras.events.GameInfoRequest;
+import de.illonis.eduras.events.GameReadyEvent;
 import de.illonis.eduras.events.InitInformationEvent;
 import de.illonis.eduras.events.ItemEvent;
 import de.illonis.eduras.events.MatchEndEvent;
@@ -165,6 +166,9 @@ public class NetworkMessageDeserializer {
 			ClientRole clientRole = ClientRole.getValueOf(clientRoleNum);
 			String name = args[2];
 			networkEvent = new InitInformationEvent(clientRole, name);
+			break;
+		case GAME_READY:
+			networkEvent = new GameReadyEvent();
 			break;
 		default:
 			// TODO: Maybe we should generalize NetworkEventNumber and
