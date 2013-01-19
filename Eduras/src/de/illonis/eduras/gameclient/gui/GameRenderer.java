@@ -163,7 +163,8 @@ public class GameRenderer implements TooltipHandler {
 				if (hasImage(d)) {
 					// TODO: draw image for gameobject.
 				} // draw shape of gameObject instead if object has shape
-				else if (d.getShape() != null) {
+					// TODO: d
+				if (d.getShape() != null) {
 					drawShapeOf(d);
 				}
 
