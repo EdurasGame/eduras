@@ -129,17 +129,7 @@ public class ClientFrame extends JFrame implements NetworkEventReactor,
 	}
 
 	@Override
-	public void onConnected() {
-		rendererThread = new RenderThread(renderer, gamePanel);
-		addComponentListener(new ResizeMonitor());
-		client.getCamera().setSize(gamePanel.getWidth(), gamePanel.getHeight());
-		Thread t = new Thread(rendererThread);
-		t.start();
-		client.addKeyHandlerTo(gamePanel);
-		showGame();
-		// Test routine to test item display on gui (see also
-		// GameClient.onConnected() ):
-		// renderer.ad();
+	public void onConnected(int clientId) {
 	}
 
 	@Override
@@ -178,5 +168,16 @@ public class ClientFrame extends JFrame implements NetworkEventReactor,
 	@Override
 	public void onPlayerReceived() {
 		renderer.notifyPlayerReceived();
+	}
+
+	@Override
+	public void onGameReady() {
+		rendererThread = new RenderThread(renderer, gamePanel);
+		addComponentListener(new ResizeMonitor());
+		client.getCamera().setSize(gamePanel.getWidth(), gamePanel.getHeight());
+		Thread t = new Thread(rendererThread);
+		t.start();
+		client.addKeyHandlerTo(gamePanel);
+		showGame();
 	}
 }

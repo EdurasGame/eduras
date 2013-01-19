@@ -10,6 +10,8 @@ import de.illonis.eduras.events.Event;
 import de.illonis.eduras.events.GameEvent;
 import de.illonis.eduras.events.GameEvent.GameEventNumber;
 import de.illonis.eduras.events.GameInfoRequest;
+import de.illonis.eduras.events.GameReadyEvent;
+import de.illonis.eduras.events.InitInformationEvent;
 import de.illonis.eduras.events.ItemEvent;
 import de.illonis.eduras.events.MatchEndEvent;
 import de.illonis.eduras.events.MovementEvent;
@@ -26,6 +28,7 @@ import de.illonis.eduras.exceptions.GivenParametersDoNotFitToEventException;
 import de.illonis.eduras.exceptions.InvalidMessageFormatException;
 import de.illonis.eduras.exceptions.MessageNotSupportedException;
 import de.illonis.eduras.logger.EduLog;
+import de.illonis.eduras.networking.ServerClient.ClientRole;
 
 /**
  * Deserializes different NetworkMessages.
@@ -104,9 +107,9 @@ public class NetworkMessageDeserializer {
 			throw new InvalidMessageFormatException(
 					"Message is empty (length 0)", msg);
 		String[] args = msg.split("#");
-		if (args.length < 2)
+		if (args.length < 1)
 			throw new InvalidMessageFormatException(
-					"Message has not enough arguments (less than two).", msg);
+					"Message has not enough arguments (less than one).", msg);
 
 		// try to extract event type
 		int typeInt;
@@ -157,6 +160,15 @@ public class NetworkMessageDeserializer {
 			networkEvent = new ConnectionEstablishedEvent(clientId);
 			break;
 		case NO_EVENT:
+			break;
+		case INIT_INFORMATION:
+			int clientRoleNum = parseInt(args[1]);
+			ClientRole clientRole = ClientRole.getValueOf(clientRoleNum);
+			String name = args[2];
+			networkEvent = new InitInformationEvent(clientRole, name);
+			break;
+		case GAME_READY:
+			networkEvent = new GameReadyEvent();
 			break;
 		default:
 			// TODO: Maybe we should generalize NetworkEventNumber and

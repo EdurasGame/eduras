@@ -294,6 +294,7 @@
 						<entry>Id=arg0</entry>
 						<entry>Description</entry>
 						<entry>arg1</entry>
+						<entry>arg2</entry>
 					</row>
 				</thead>
 				<tbody>
@@ -311,6 +312,13 @@
 						<entry>202</entry>
 						<entry>This event is sent to all clients if a client disconnected. The client id of the disconnected client will be given.</entry>
 						<entry>clientId</entry>
+					</row>
+					<row>
+						<entry>INIT_INFORMATION</entry>
+						<entry>203</entry>
+						<entry>This event must be sent by the client to pass information the server needs for connection initialization.</entry>
+						<entry>clientRole</entry>
+						<entry>clientName</entry>
 					</row>
 				</tbody>
 			</tgroup>

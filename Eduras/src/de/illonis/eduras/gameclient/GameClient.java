@@ -9,13 +9,11 @@ import java.awt.event.MouseEvent;
 import java.util.Iterator;
 import java.util.LinkedList;
 
-import javax.naming.InvalidNameException;
 import javax.swing.JOptionPane;
 
-import de.illonis.eduras.events.ClientRenameEvent;
-import de.illonis.eduras.events.GameEvent;
+import de.illonis.eduras.events.Event;
 import de.illonis.eduras.events.GameEvent.GameEventNumber;
-import de.illonis.eduras.events.GameInfoRequest;
+import de.illonis.eduras.events.InitInformationEvent;
 import de.illonis.eduras.events.ItemEvent;
 import de.illonis.eduras.exceptions.MessageNotSupportedException;
 import de.illonis.eduras.exceptions.WrongEventTypeException;
@@ -34,6 +32,7 @@ import de.illonis.eduras.logicabstraction.EventSender;
 import de.illonis.eduras.logicabstraction.InformationProvider;
 import de.illonis.eduras.logicabstraction.NetworkManager;
 import de.illonis.eduras.math.Vector2D;
+import de.illonis.eduras.networking.ServerClient.ClientRole;
 import de.illonis.eduras.settings.Settings;
 
 /**
@@ -138,30 +137,23 @@ public class GameClient implements GuiClickReactor, NetworkEventReactor,
 	}
 
 	@Override
-	public void onConnected() {
+	public void onConnected(int clientId) {
+
+		if (clientId != getOwnerID()) // only handle my connection
+			return;
 		EduLog.info("Connection to server established. OwnerId: "
 				+ infoPro.getOwnerID());
 		keyHandler = new InputKeyHandler(this, eventSender, settings);
 		frame.setTitle(frame.getTitle() + " #" + infoPro.getOwnerID() + " ("
 				+ clientName + ")");
 
-		// test routine for item display in gui:
-		/*
-		 * try { Thread.sleep(1000); infoPro.getPlayer().getInventory()
-		 * .loot(new ExampleWeapon(new GameInformation())); } catch
-		 * (InventoryIsFullException e1) { e1.printStackTrace(); } catch
-		 * (ObjectNotFoundException e1) { e1.printStackTrace(); } catch
-		 * (InterruptedException e) { e.printStackTrace(); }
-		 */
-		frame.onConnected();
+		frame.onConnected(clientId); // pass to gui
+
 		try {
-			sendEvent(new ClientRenameEvent(infoPro.getOwnerID(), clientName));
-			sendEvent(new GameInfoRequest(infoPro.getOwnerID()));
+			sendEvent(new InitInformationEvent(ClientRole.PLAYER, clientName));
 		} catch (WrongEventTypeException e) {
 			EduLog.passException(e);
 		} catch (MessageNotSupportedException e) {
-			EduLog.passException(e);
-		} catch (InvalidNameException e) {
 			EduLog.passException(e);
 		}
 
@@ -305,7 +297,7 @@ public class GameClient implements GuiClickReactor, NetworkEventReactor,
 	}
 
 	/**
-	 * Sends a gameevent to server.
+	 * Sends an event to server.
 	 * 
 	 * @param event
 	 *            event that should be sent.
@@ -314,7 +306,7 @@ public class GameClient implements GuiClickReactor, NetworkEventReactor,
 	 * @throws MessageNotSupportedException
 	 *             if given event is not supported by logic.
 	 */
-	public void sendEvent(GameEvent event) throws WrongEventTypeException,
+	public void sendEvent(Event event) throws WrongEventTypeException,
 			MessageNotSupportedException {
 		eventSender.sendEvent(event);
 	}
@@ -406,5 +398,10 @@ public class GameClient implements GuiClickReactor, NetworkEventReactor,
 	@Override
 	public void hideTooltip() {
 		frame.getRenderer().hideTooltip();
+	}
+
+	@Override
+	public void onGameReady() {
+		frame.onGameReady();
 	}
 }

@@ -25,6 +25,7 @@ public class ServerSender extends Thread {
 	private final HashMap<Integer, ServerClient> clients;
 	private final Buffer outputBuffer;
 	private final Server server;
+	private boolean running;
 
 	/**
 	 * Creates a new ServerSender that sends messages from given Buffer.
@@ -38,6 +39,7 @@ public class ServerSender extends Thread {
 		this.outputBuffer = outputBuffer;
 		clients = new HashMap<Integer, ServerClient>();
 		this.server = server;
+		running = true;
 	}
 
 	/**
@@ -117,7 +119,7 @@ public class ServerSender extends Thread {
 
 	@Override
 	public void run() {
-		while (true) {
+		while (running) {
 			// if (System.currentTimeMillis() - lastConnectionCheck > 10000) {
 			// checkConnections();
 			// }
@@ -150,5 +152,12 @@ public class ServerSender extends Thread {
 	 */
 	public Server getServer() {
 		return server;
+	}
+
+	/**
+	 * Stops the sender.
+	 */
+	public void stopSender() {
+		running = false;
 	}
 }

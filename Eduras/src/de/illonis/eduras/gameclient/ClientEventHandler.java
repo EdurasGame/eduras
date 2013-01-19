@@ -1,5 +1,6 @@
 package de.illonis.eduras.gameclient;
 
+import de.illonis.eduras.events.ConnectionEstablishedEvent;
 import de.illonis.eduras.events.NetworkEvent;
 import de.illonis.eduras.interfaces.NetworkEventListener;
 
@@ -25,7 +26,11 @@ public class ClientEventHandler implements NetworkEventListener {
 			reactor.onConnectionLost();
 			break;
 		case CONNECTION_ESTABLISHED:
-			reactor.onConnected();
+			ConnectionEstablishedEvent ce = (ConnectionEstablishedEvent) event;
+			reactor.onConnected(ce.getClientId());
+			break;
+		case GAME_READY:
+			reactor.onGameReady();
 			break;
 		case NO_EVENT:
 			break;

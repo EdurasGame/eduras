@@ -9,9 +9,14 @@ package de.illonis.eduras.gameclient;
 public interface NetworkEventReactor {
 
 	/**
-	 * Indicates that network connection was successfully established.
+	 * 
+	 * Indicates that a client's network connection was successfully
+	 * established.
+	 * 
+	 * @param clientId
+	 *            id of client that connected.
 	 */
-	void onConnected();
+	void onConnected(int clientId);
 
 	/**
 	 * Indicates that network connection was lost. This is fired when connection
@@ -30,4 +35,10 @@ public interface NetworkEventReactor {
 	 * received.
 	 */
 	void onPlayerReceived();
+
+	/**
+	 * Indicates that the game client was successfully registered on server and
+	 * the game is ready.
+	 */
+	void onGameReady();
 }
