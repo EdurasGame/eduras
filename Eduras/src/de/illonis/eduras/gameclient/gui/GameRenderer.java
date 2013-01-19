@@ -106,13 +106,13 @@ public class GameRenderer implements TooltipHandler {
 		dbg.fillRect(0, 0, width, height);
 		drawMap();
 		drawObjects();
-		drawGui(width, height);
+		drawGui();
 	}
 
 	/**
 	 * Draw every gui element.
 	 */
-	private void drawGui(int width, int height) {
+	private void drawGui() {
 		for (int i = 0; i < uiObjects.size(); i++)
 			uiObjects.get(i).render(dbg, imagelist);
 
@@ -157,21 +157,22 @@ public class GameRenderer implements TooltipHandler {
 				continue;
 			}
 
+			// draw only if in current view point
 			if (d.getBoundingBox().intersects(camera)) {
-
-				// draw shape of gameObject if object has shape
-				if (d.getShape() != null) {
-					drawShapeOf(d);
-				}
 
 				if (hasImage(d)) {
 					// TODO: draw image for gameobject.
+				} // draw shape of gameObject instead if object has shape
+					// TODO: d
+				if (d.getShape() != null) {
+					drawShapeOf(d);
 				}
 
 				// if (d.isUnit()) {
 				// drawHealthBarFor((Unit) d);
 				// }
 
+				// draws unit id next to unit for testing purpose
 				dbg.drawString(d.getId() + "", d.getDrawX() - camera.x,
 						d.getDrawY() - camera.y - 15);
 			}
@@ -179,6 +180,13 @@ public class GameRenderer implements TooltipHandler {
 
 	}
 
+	/**
+	 * Draws health bar that is assigned to given unit. It will be automatically
+	 * be placed above the unit.
+	 * 
+	 * @param unit
+	 *            assigned unit.
+	 */
 	private void drawHealthBarFor(Unit unit) {
 		if (unit.isDead())
 			return;
