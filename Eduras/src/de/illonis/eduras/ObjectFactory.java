@@ -74,19 +74,14 @@ public class ObjectFactory {
 	}
 
 	/**
-	 * Handles an object factory event.
+	 * Handles an object factory event. That means it creates a new gameobject
+	 * of given type. An id has to be assigned to objectfactory event.
 	 * 
 	 * @param event
-	 *            object factory event.
+	 *            object factory event with object id attached.
 	 */
 	public void onObjectFactoryEventAppeared(ObjectFactoryEvent event) {
 
-		// if (ofe.hasId()
-		// && logic.getGame().getObjects().containsKey(ofe.getId())) {
-		// EduLog.info("Object with id " + ofe.getId()
-		// + " already exists.");
-		// return;
-		// }
 		GameObject go = null;
 		if (event.getType() == GameEventNumber.OBJECT_CREATE) {
 
@@ -97,16 +92,11 @@ public class ObjectFactory {
 
 			int owner = event.getOwner();
 			int id;
-			// TODO: Find a more suitable catch clause if the id is missing.
 			if (event.hasId()) {
 				id = event.getId();
 			} else {
-				try {
-					throw new DataMissingException("No id assigned!");
-				} catch (DataMissingException e) {
-					e.printStackTrace();
-					return;
-				}
+				EduLog.passException(new DataMissingException("No id assigned!"));
+				return;
 			}
 
 			switch (event.getObjectType()) {
@@ -126,7 +116,7 @@ public class ObjectFactory {
 				try {
 					go = new BigBlock(logic.getGame(), id);
 				} catch (ShapeVerticesNotApplicableException e) {
-					e.printStackTrace();
+					EduLog.passException(e);
 					return;
 				}
 				break;
