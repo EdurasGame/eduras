@@ -1,8 +1,9 @@
 /**
  * 
  */
-package de.illonis.eduras;
+package de.illonis.eduras.gameobjects;
 
+import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.exceptions.ShapeVerticesNotApplicableException;
 import de.illonis.eduras.math.Vector2D;
 import de.illonis.eduras.shapes.Rectangle;

@@ -1,8 +1,8 @@
 package de.illonis.eduras.items;
 
 import de.illonis.eduras.GameInformation;
-import de.illonis.eduras.GameObject;
 import de.illonis.eduras.ObjectFactory.ObjectType;
+import de.illonis.eduras.gameobjects.GameObject;
 
 /**
  * Items can be hold in player's inventory.

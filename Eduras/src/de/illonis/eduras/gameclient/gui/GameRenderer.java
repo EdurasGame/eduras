@@ -11,10 +11,9 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.concurrent.ConcurrentHashMap;
 
-import de.illonis.eduras.GameObject;
-import de.illonis.eduras.Player;
 import de.illonis.eduras.gameclient.GameCamera;
 import de.illonis.eduras.gameclient.TooltipHandler;
+import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.gui.guielements.ItemDisplay;
 import de.illonis.eduras.gui.guielements.ItemTooltip;
 import de.illonis.eduras.gui.guielements.RenderedGuiObject;
@@ -25,6 +24,7 @@ import de.illonis.eduras.math.Vector2D;
 import de.illonis.eduras.shapes.Circle;
 import de.illonis.eduras.shapes.ObjectShape;
 import de.illonis.eduras.shapes.Polygon;
+import de.illonis.eduras.units.Player;
 import de.illonis.eduras.units.Unit;
 
 /**

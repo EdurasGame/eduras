@@ -1,6 +1,6 @@
 package de.illonis.eduras.interfaces;
 
-import de.illonis.eduras.MoveableGameObject.Direction;
+import de.illonis.eduras.gameobjects.MoveableGameObject.Direction;
 
 public interface Controllable {
 

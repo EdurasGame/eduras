@@ -12,10 +12,12 @@ import de.illonis.eduras.events.MovementEvent;
 import de.illonis.eduras.events.ObjectFactoryEvent;
 import de.illonis.eduras.events.SetBooleanGameObjectAttributeEvent;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
+import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.logger.EduLog;
 import de.illonis.eduras.logic.EventTriggerer;
 import de.illonis.eduras.math.Vector2D;
 import de.illonis.eduras.shapes.ObjectShape;
+import de.illonis.eduras.units.Player;
 
 public class GameInformation {
 	private final ConcurrentHashMap<Integer, GameObject> objects;

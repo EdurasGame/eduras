@@ -4,8 +4,8 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.HashMap;
 
-import de.illonis.eduras.GameObject;
 import de.illonis.eduras.ObjectFactory.ObjectType;
+import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.images.ImageFiler;
 
 /**

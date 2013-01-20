@@ -6,12 +6,12 @@ package de.illonis.eduras.logicabstraction;
 import java.awt.Rectangle;
 import java.util.concurrent.ConcurrentHashMap;
 
-import de.illonis.eduras.GameObject;
-import de.illonis.eduras.Player;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
+import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.interfaces.GameEventListener;
 import de.illonis.eduras.interfaces.GameLogicInterface;
 import de.illonis.eduras.interfaces.InfoInterface;
+import de.illonis.eduras.units.Player;
 
 /**
  * This class provides a connection between GUI and logic. GUI developers can

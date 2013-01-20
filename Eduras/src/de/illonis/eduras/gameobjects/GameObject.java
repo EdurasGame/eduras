@@ -1,8 +1,10 @@
-package de.illonis.eduras;
+package de.illonis.eduras.gameobjects;
 
 import java.awt.geom.Rectangle2D;
 import java.util.LinkedList;
 
+import de.illonis.eduras.GameInformation;
+import de.illonis.eduras.ObjectFactory;
 import de.illonis.eduras.ObjectFactory.ObjectType;
 import de.illonis.eduras.math.CollisionPoint;
 import de.illonis.eduras.math.Line;

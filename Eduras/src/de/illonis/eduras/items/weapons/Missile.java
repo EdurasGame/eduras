@@ -1,7 +1,7 @@
 package de.illonis.eduras.items.weapons;
 
 import de.illonis.eduras.GameInformation;
-import de.illonis.eduras.MoveableGameObject;
+import de.illonis.eduras.gameobjects.MoveableGameObject;
 import de.illonis.eduras.shapes.Circle;
 
 /**

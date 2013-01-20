@@ -2,6 +2,8 @@ package de.illonis.eduras;
 
 import java.util.LinkedList;
 
+import de.illonis.eduras.units.Player;
+
 public class Team {
 
 	private LinkedList<Player> players;

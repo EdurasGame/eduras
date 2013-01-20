@@ -5,11 +5,14 @@ import de.illonis.eduras.events.ObjectFactoryEvent;
 import de.illonis.eduras.events.SetGameObjectAttributeEvent;
 import de.illonis.eduras.exceptions.DataMissingException;
 import de.illonis.eduras.exceptions.ShapeVerticesNotApplicableException;
+import de.illonis.eduras.gameobjects.BigBlock;
+import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.interfaces.GameEventListener;
 import de.illonis.eduras.interfaces.GameLogicInterface;
 import de.illonis.eduras.items.weapons.ExampleWeapon;
 import de.illonis.eduras.items.weapons.SimpleMissile;
 import de.illonis.eduras.logger.EduLog;
+import de.illonis.eduras.units.Player;
 
 /**
  * ObjectFactory is in charge of handling Objectfactory events and creating and

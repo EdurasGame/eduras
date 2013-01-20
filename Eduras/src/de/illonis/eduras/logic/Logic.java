@@ -4,10 +4,7 @@ import java.util.ArrayList;
 import java.util.logging.Level;
 
 import de.illonis.eduras.GameInformation;
-import de.illonis.eduras.GameObject;
-import de.illonis.eduras.MoveableGameObject.Direction;
 import de.illonis.eduras.ObjectFactory;
-import de.illonis.eduras.Player;
 import de.illonis.eduras.events.ClientRenameEvent;
 import de.illonis.eduras.events.GameEvent;
 import de.illonis.eduras.events.GameEvent.GameEventNumber;
@@ -22,6 +19,8 @@ import de.illonis.eduras.events.SetBooleanGameObjectAttributeEvent;
 import de.illonis.eduras.events.SetItemSlotEvent;
 import de.illonis.eduras.events.UserMovementEvent;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
+import de.illonis.eduras.gameobjects.GameObject;
+import de.illonis.eduras.gameobjects.MoveableGameObject.Direction;
 import de.illonis.eduras.interfaces.GameEventListener;
 import de.illonis.eduras.interfaces.GameLogicInterface;
 import de.illonis.eduras.inventory.InventoryIsFullException;
@@ -32,6 +31,7 @@ import de.illonis.eduras.items.Usable;
 import de.illonis.eduras.items.weapons.Missile;
 import de.illonis.eduras.items.weapons.SimpleMissile;
 import de.illonis.eduras.logger.EduLog;
+import de.illonis.eduras.units.Player;
 
 /**
  * A first (dummy) implementation of game logic.
