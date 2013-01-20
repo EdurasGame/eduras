@@ -76,6 +76,8 @@ public class ClientParser extends Thread {
 	 *            message to decode.
 	 */
 	private void decodeMessage(String message) {
+		if (message.isEmpty())
+			return;
 		LinkedList<Event> deserializedMessages = NetworkMessageDeserializer
 				.deserialize(message);
 		EduLog.info("[ServerDecoder] Decoded " + deserializedMessages.size()

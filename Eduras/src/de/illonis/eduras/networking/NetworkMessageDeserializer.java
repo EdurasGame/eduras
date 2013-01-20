@@ -51,15 +51,11 @@ public class NetworkMessageDeserializer {
 	 */
 	public static LinkedList<Event> deserialize(String eventString) {
 		LinkedList<Event> events = new LinkedList<Event>();
-		EduLog.info("[DESERIALIZE] orig: " + eventString);
-		// FIXME: Fix StringIndexOutOfBoundsException when eventString equals ""
-		String[] messages;
-		try {
-			messages = eventString.substring(2).split("##");
-		} catch (StringIndexOutOfBoundsException e) {
-			EduLog.error("Fix: Stringindexoutofbounds.");
+		if (eventString.isEmpty())
 			return events;
-		}
+		EduLog.info("[DESERIALIZE] orig: " + eventString);
+		String[] messages;
+		messages = eventString.substring(2).split("##");
 
 		for (String msg : messages) {
 
