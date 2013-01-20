@@ -4,8 +4,6 @@ import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.ObjectFactory.ObjectType;
 import de.illonis.eduras.exceptions.ShapeVerticesNotApplicableException;
 import de.illonis.eduras.gameobjects.GameObject;
-import de.illonis.eduras.gameobjects.MoveableGameObject;
-import de.illonis.eduras.gameobjects.MoveableGameObject.Direction;
 import de.illonis.eduras.interfaces.Controllable;
 import de.illonis.eduras.inventory.Inventory;
 import de.illonis.eduras.logger.EduLog;
