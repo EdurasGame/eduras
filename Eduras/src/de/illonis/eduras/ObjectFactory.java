@@ -1,10 +1,8 @@
 package de.illonis.eduras;
 
-import java.util.concurrent.ConcurrentHashMap;
-
 import de.illonis.eduras.events.GameEvent.GameEventNumber;
 import de.illonis.eduras.events.ObjectFactoryEvent;
-import de.illonis.eduras.events.SetBooleanGameObjectAttributeEvent;
+import de.illonis.eduras.events.SetGameObjectAttributeEvent;
 import de.illonis.eduras.exceptions.DataMissingException;
 import de.illonis.eduras.exceptions.ShapeVerticesNotApplicableException;
 import de.illonis.eduras.interfaces.GameEventListener;
@@ -64,8 +62,13 @@ public class ObjectFactory {
 		this.logic = logic;
 	}
 
-	public void onObjectAttributeChanged(
-			SetBooleanGameObjectAttributeEvent event) {
+	/**
+	 * Handles an object attribute changed event.
+	 * 
+	 * @param event
+	 *            {@link SetGameObjectAttributeEvent} that occured.
+	 */
+	public void onObjectAttributeChanged(SetGameObjectAttributeEvent<?> event) {
 
 		for (GameEventListener listener : logic.getListenerList()) {
 			listener.onObjectStateChanged(event);
@@ -138,17 +141,13 @@ public class ObjectFactory {
 
 		else if (event.getType() == GameEventNumber.OBJECT_REMOVE) {
 			int id = event.getId();
-			ConcurrentHashMap<Integer, GameObject> gameObjects = logic
-					.getGame().getObjects();
 
-			GameObject objectToRemove = gameObjects.get(id);
+			GameObject objectToRemove = logic.getGame().getObjects().get(id);
 			logic.getGame().removeObject(objectToRemove);
 
 			for (GameEventListener gel : logic.getListenerList()) {
 				gel.onObjectRemove(event);
 			}
-
 		}
-
 	}
 }
