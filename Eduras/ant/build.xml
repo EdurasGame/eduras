@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="build" default="jars">
+
+	<property name="src" value="../src" />
+	<property name="build" value="../bin" />
+	<property name="jars" value="../output/jars" />
+	<property name="exclude" value="**/unittests/*" />
+
+	<target name="clean">
+		<delete dir="${build}" />
+		<delete dir="${jars}" />
+	</target>
+
+	<target name="compile">
+		<mkdir dir="${build}" />
+		<javac srcdir="${src}" destdir="${build}" includeAntRuntime="false">
+			<include name="**/*.java" />
+			<exclude name="${exclude}" />
+		</javac>
+	</target>
+
+	<target name="jar-client" depends="compile">
+		<jar destfile="${jars}/EdurasClient.jar" basedir="${build}">
+			<fileset dir="${src}">
+				<include name="**/*.gif" />
+				<include name="**/*.jpg" />
+				<include name="**/*.png" />
+				<include name="**/*.properties" />
+			</fileset>
+			<manifest>
+				<attribute name="Main-Class"
+					value="de.illonis.eduras.gameclient.EdurasClient" />
+			</manifest>
+		</jar>
+	</target>
+
+	<target name="jar-server" depends="compile">
+		<jar destfile="${jars}/EdurasServer.jar" basedir="${build}">
+			<fileset dir="${src}">
+				<include name="**/*.properties" />
+			</fileset>
+			<manifest>
+				<attribute name="Main-Class" value="de.illonis.eduras.Eduras" />
+			</manifest>
+		</jar>
+	</target>
+
+	<target name="jars" depends="jar-server,jar-client">
+		<mkdir dir="${jars}" />
+	</target>
+
+</project>
