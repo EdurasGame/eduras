@@ -3,7 +3,7 @@
  */
 package de.illonis.eduras.items;
 
-import de.illonis.eduras.GameObject;
+import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.math.Vector2D;
 
 /**

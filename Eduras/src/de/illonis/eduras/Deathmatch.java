@@ -1,6 +1,7 @@
 package de.illonis.eduras;
 
 import de.illonis.eduras.ObjectFactory.ObjectType;
+import de.illonis.eduras.units.Player;
 import de.illonis.eduras.units.Unit;
 
 /**

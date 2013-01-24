@@ -8,7 +8,7 @@ import java.util.LinkedList;
 import java.util.concurrent.ConcurrentHashMap;
 
 import de.illonis.eduras.GameInformation;
-import de.illonis.eduras.GameObject;
+import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.math.CollisionPoint;
 import de.illonis.eduras.math.Geometry;
 import de.illonis.eduras.math.Line;

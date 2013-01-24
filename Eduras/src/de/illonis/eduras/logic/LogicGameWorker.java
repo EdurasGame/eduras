@@ -6,8 +6,8 @@ package de.illonis.eduras.logic;
 import java.util.ArrayList;
 
 import de.illonis.eduras.GameInformation;
-import de.illonis.eduras.GameObject;
-import de.illonis.eduras.MoveableGameObject;
+import de.illonis.eduras.gameobjects.GameObject;
+import de.illonis.eduras.gameobjects.MoveableGameObject;
 import de.illonis.eduras.interfaces.GameEventListener;
 
 /**

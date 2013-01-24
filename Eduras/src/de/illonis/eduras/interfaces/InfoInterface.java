@@ -6,10 +6,10 @@ package de.illonis.eduras.interfaces;
 import java.awt.Rectangle;
 import java.util.concurrent.ConcurrentHashMap;
 
-import de.illonis.eduras.GameObject;
 import de.illonis.eduras.Map;
-import de.illonis.eduras.Player;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
+import de.illonis.eduras.gameobjects.GameObject;
+import de.illonis.eduras.units.Player;
 
 /**
  * This interface determines what information must be provided to the GUI.

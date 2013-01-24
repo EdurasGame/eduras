@@ -10,9 +10,9 @@ import java.util.LinkedList;
 import org.junit.Test;
 
 import de.illonis.eduras.GameInformation;
-import de.illonis.eduras.Player;
 import de.illonis.eduras.math.Vector2D;
 import de.illonis.eduras.shapes.Polygon;
+import de.illonis.eduras.units.Player;
 
 /**
  * A unit test class for shapes.

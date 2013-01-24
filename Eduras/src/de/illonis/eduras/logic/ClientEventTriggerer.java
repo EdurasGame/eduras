@@ -4,8 +4,8 @@
 package de.illonis.eduras.logic;
 
 import de.illonis.eduras.ObjectFactory.ObjectType;
-import de.illonis.eduras.Player;
 import de.illonis.eduras.math.Vector2D;
+import de.illonis.eduras.units.Player;
 
 /**
  * @author Florian Mai <florian.ren.mai@googlemail.com>

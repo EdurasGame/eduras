@@ -2,6 +2,8 @@ package de.illonis.eduras;
 
 import java.util.HashMap;
 
+import de.illonis.eduras.units.Player;
+
 public class Statistic {
 
 	/**

@@ -1,17 +1,18 @@
 package de.illonis.eduras;
 
-import java.util.concurrent.ConcurrentHashMap;
-
 import de.illonis.eduras.events.GameEvent.GameEventNumber;
 import de.illonis.eduras.events.ObjectFactoryEvent;
-import de.illonis.eduras.events.SetBooleanGameObjectAttributeEvent;
+import de.illonis.eduras.events.SetGameObjectAttributeEvent;
 import de.illonis.eduras.exceptions.DataMissingException;
 import de.illonis.eduras.exceptions.ShapeVerticesNotApplicableException;
+import de.illonis.eduras.gameobjects.BigBlock;
+import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.interfaces.GameEventListener;
 import de.illonis.eduras.interfaces.GameLogicInterface;
 import de.illonis.eduras.items.weapons.ExampleWeapon;
 import de.illonis.eduras.items.weapons.SimpleMissile;
 import de.illonis.eduras.logger.EduLog;
+import de.illonis.eduras.units.Player;
 
 /**
  * ObjectFactory is in charge of handling Objectfactory events and creating and
@@ -64,8 +65,13 @@ public class ObjectFactory {
 		this.logic = logic;
 	}
 
-	public void onObjectAttributeChanged(
-			SetBooleanGameObjectAttributeEvent event) {
+	/**
+	 * Handles an object attribute changed event.
+	 * 
+	 * @param event
+	 *            {@link SetGameObjectAttributeEvent} that occured.
+	 */
+	public void onObjectAttributeChanged(SetGameObjectAttributeEvent<?> event) {
 
 		for (GameEventListener listener : logic.getListenerList()) {
 			listener.onObjectStateChanged(event);
@@ -74,19 +80,14 @@ public class ObjectFactory {
 	}
 
 	/**
-	 * Handles an object factory event.
+	 * Handles an object factory event. That means it creates a new gameobject
+	 * of given type. An id has to be assigned to objectfactory event.
 	 * 
 	 * @param event
-	 *            object factory event.
+	 *            object factory event with object id attached.
 	 */
 	public void onObjectFactoryEventAppeared(ObjectFactoryEvent event) {
 
-		// if (ofe.hasId()
-		// && logic.getGame().getObjects().containsKey(ofe.getId())) {
-		// EduLog.info("Object with id " + ofe.getId()
-		// + " already exists.");
-		// return;
-		// }
 		GameObject go = null;
 		if (event.getType() == GameEventNumber.OBJECT_CREATE) {
 
@@ -97,16 +98,11 @@ public class ObjectFactory {
 
 			int owner = event.getOwner();
 			int id;
-			// TODO: Find a more suitable catch clause if the id is missing.
 			if (event.hasId()) {
 				id = event.getId();
 			} else {
-				try {
-					throw new DataMissingException("No id assigned!");
-				} catch (DataMissingException e) {
-					e.printStackTrace();
-					return;
-				}
+				EduLog.passException(new DataMissingException("No id assigned!"));
+				return;
 			}
 
 			switch (event.getObjectType()) {
@@ -126,7 +122,7 @@ public class ObjectFactory {
 				try {
 					go = new BigBlock(logic.getGame(), id);
 				} catch (ShapeVerticesNotApplicableException e) {
-					e.printStackTrace();
+					EduLog.passException(e);
 					return;
 				}
 				break;
@@ -148,17 +144,13 @@ public class ObjectFactory {
 
 		else if (event.getType() == GameEventNumber.OBJECT_REMOVE) {
 			int id = event.getId();
-			ConcurrentHashMap<Integer, GameObject> gameObjects = logic
-					.getGame().getObjects();
 
-			GameObject objectToRemove = gameObjects.get(id);
+			GameObject objectToRemove = logic.getGame().getObjects().get(id);
 			logic.getGame().removeObject(objectToRemove);
 
 			for (GameEventListener gel : logic.getListenerList()) {
 				gel.onObjectRemove(event);
 			}
-
 		}
-
 	}
 }

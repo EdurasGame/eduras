@@ -1,7 +1,7 @@
 package de.illonis.eduras.units;
 
 import de.illonis.eduras.GameInformation;
-import de.illonis.eduras.MoveableGameObject;
+import de.illonis.eduras.gameobjects.MoveableGameObject;
 
 /**
  * A unit is a moveable object that has health. A unit can never have negative

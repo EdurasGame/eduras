@@ -2,7 +2,6 @@ package de.illonis.eduras.interfaces;
 
 import java.util.ArrayList;
 
-import de.illonis.eduras.GameObject;
 import de.illonis.eduras.events.ClientRenameEvent;
 import de.illonis.eduras.events.GameEvent;
 import de.illonis.eduras.events.MatchEndEvent;
@@ -10,6 +9,7 @@ import de.illonis.eduras.events.ObjectFactoryEvent;
 import de.illonis.eduras.events.SetGameObjectAttributeEvent;
 import de.illonis.eduras.events.SetItemSlotEvent;
 import de.illonis.eduras.events.SetOwnerEvent;
+import de.illonis.eduras.gameobjects.GameObject;
 
 public interface GameEventListener {
 

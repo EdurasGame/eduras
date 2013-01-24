@@ -1,5 +1,7 @@
-package de.illonis.eduras;
+package de.illonis.eduras.gameobjects;
 
+import de.illonis.eduras.GameInformation;
+import de.illonis.eduras.MapBorderReachedException;
 import de.illonis.eduras.interfaces.Moveable;
 import de.illonis.eduras.math.Vector2D;
 

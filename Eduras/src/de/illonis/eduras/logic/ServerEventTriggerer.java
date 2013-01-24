@@ -6,10 +6,8 @@ package de.illonis.eduras.logic;
 import javax.naming.InvalidNameException;
 
 import de.illonis.eduras.GameInformation;
-import de.illonis.eduras.GameObject;
 import de.illonis.eduras.Map;
 import de.illonis.eduras.ObjectFactory.ObjectType;
-import de.illonis.eduras.Player;
 import de.illonis.eduras.events.ClientRenameEvent;
 import de.illonis.eduras.events.GameEvent.GameEventNumber;
 import de.illonis.eduras.events.LootItemEvent;
@@ -19,11 +17,13 @@ import de.illonis.eduras.events.MovementEvent;
 import de.illonis.eduras.events.ObjectFactoryEvent;
 import de.illonis.eduras.events.SetIntegerGameObjectAttributeEvent;
 import de.illonis.eduras.exceptions.MessageNotSupportedException;
+import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.interfaces.GameLogicInterface;
 import de.illonis.eduras.logger.EduLog;
 import de.illonis.eduras.math.Vector2D;
 import de.illonis.eduras.networking.Buffer;
 import de.illonis.eduras.networking.NetworkMessageSerializer;
+import de.illonis.eduras.units.Player;
 import de.illonis.eduras.units.Unit;
 
 /**
@@ -148,6 +148,13 @@ public class ServerEventTriggerer implements EventTriggerer {
 				map.getHeight() * 0.25);
 		this.createObjectAt(ObjectType.ITEM_WEAPON_1, posWeap2, -1);
 
+		Vector2D posWeap3 = new Vector2D(map.getWidth() * 0.25,
+				map.getHeight() * 0.75);
+		this.createObjectAt(ObjectType.ITEM_WEAPON_1, posWeap3, -1);
+
+		Vector2D posWeap4 = new Vector2D(map.getWidth() * 0.75,
+				map.getHeight() * 0.25);
+		this.createObjectAt(ObjectType.ITEM_WEAPON_1, posWeap4, -1);
 		this.createObjectAt(ObjectType.BIGBLOCK, new Vector2D(
 				map.getWidth() * 0.5, map.getHeight() * 0.5), -1);
 

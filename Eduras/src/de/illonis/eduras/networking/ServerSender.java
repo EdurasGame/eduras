@@ -140,6 +140,10 @@ public class ServerSender extends Thread {
 			String[] s = outputBuffer.getAll();
 			String[] filtereds = NetworkOptimizer.filterObsoleteMessages(s);
 			String message = NetworkMessageSerializer.concatenate(filtereds);
+
+			if (message.equals("")) {
+				EduLog.error("Message empty!!");
+			}
 			EduLog.info("[SERVER] Sent all messages.");
 			sendMessage(message);
 		} catch (BufferIsEmptyException e) {

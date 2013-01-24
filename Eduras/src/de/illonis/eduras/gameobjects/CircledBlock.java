@@ -1,12 +1,13 @@
 /**
  * 
  */
-package de.illonis.eduras;
+package de.illonis.eduras.gameobjects;
 
+import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.shapes.Circle;
 
 /**
- * 
+ * A circled block.
  * 
  * @author Florian Mai <florian.ren.mai@googlemail.com>
  * 

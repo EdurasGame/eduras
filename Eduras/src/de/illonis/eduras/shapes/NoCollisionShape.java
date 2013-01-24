@@ -5,7 +5,7 @@ import java.awt.geom.Rectangle2D.Double;
 import java.util.LinkedList;
 
 import de.illonis.eduras.GameInformation;
-import de.illonis.eduras.GameObject;
+import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.math.CollisionPoint;
 import de.illonis.eduras.math.Line;
 import de.illonis.eduras.math.Vector2D;
