@@ -13,11 +13,7 @@
 	<property name="src" value="../src" />
 	<property name="build" value="../bin" />
 
-	<property name="jars" value="../dist" />
-
 	<property name="lib" value="../lib" />
-	<property name="docbook" value="../doc" />
-
 
 	<path id="test.classpath">
 		<pathelement location="${build}" />
@@ -32,12 +28,16 @@
 			<fileset dir="${tests.output}" includes="**/*" />
 		</delete>
 	</target>
-	
-	<target name="createdir" description="Cleans up generated files.">
+
+	<target name="createdir" description="Creates output directory.">
 		<mkdir dir="${tests.output}" />
 	</target>
 
-	<target name="test" depends="clean">
+	<target name="test" depends="clean" description="Performs JUnit tests.">
+		<javac srcdir="${src}" destdir="${build}" includeAntRuntime="false">
+			<include name="**/${tests.folder}/*Test*.java" />
+			<classpath refid="test.classpath" />
+		</javac>
 		<junit fork="yes" haltonfailure="no" showoutput="true"
 			printsummary="true">
 			<formatter type="xml" usefile="true" />
@@ -49,5 +49,9 @@
 			</batchtest>
 		</junit>
 	</target>
-
+	<!-- Does not work yet: <target name="export" depends="test" description="Exports 
+		test results to html."> <mkdir dir="${tests.output}/export" /> <mkdir dir="${tests.output}/export/html" 
+		/> <junitreport todir="${tests.output}/export"> <fileset dir="${tests.output}"> 
+		<include name="TEST-*.xml" /> </fileset> <report todir="${tests.output}/export/html" 
+		format="noframes"> </report> </junitreport> </target> -->
 </project> 
