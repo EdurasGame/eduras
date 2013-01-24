@@ -34,6 +34,7 @@
 	</target>
 
 	<target name="test" depends="clean" description="Performs JUnit tests.">
+		<mkdir dir="${build}" />
 		<javac srcdir="${src}" destdir="${build}" includeAntRuntime="false">
 			<include name="**/${tests.folder}/*Test*.java" />
 			<classpath refid="test.classpath" />
