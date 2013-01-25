@@ -309,68 +309,68 @@ Java HotSpot(TM) 64-Bit Server VM (build 23.3-b01, mixed mode)</programlisting>
 	            Continue installation process. You will need to restart eclipse at the end.
 	        </para>
 		</section>
-		<section>
-		    <title>Connecting to Eduras? repository</title>
-		    <para>
-		        Now it is time to connect to Eduras? repository.
-		        Ensure you have read <emphasis>Getting started</emphasis> section in
-		        our documentation before editing any code.
-		    </para>
-		    <para>
-		        Choose <computeroutput>File -> Import... -> Git -> Projects from Git</computeroutput>.
-		        You might get a notification that you have not installed git. Check the checkbox
-		        and continue.
-		    </para>
-		    <figure>
-	            <title>Connecting to eduras.git</title>
-	            <mediaobject>
-	                <imageobject>
-	                    <imagedata fileref="images/setup7.png" format="PNG" />
-	                </imageobject>
-	            </mediaobject>
-	        </figure>
-	        <figure>
-	            <title>Notice of missing git</title>
-	            <mediaobject>
-	                <imageobject>
-	                    <imagedata fileref="images/setup8.png" format="PNG" />
-	                </imageobject>
-	            </mediaobject>
-	        </figure>
-	        <para>
-	            Choose <computeroutput>URI</computeroutput>.
-	            In the next form, enter connection details of eduras? repository.
-	            Take them from the following picture. You can simply fill in the URI field
-	            and eclipse fills in the other fields for you.
-	            Get your access password from your project leader.
-	        </para>
-	        <figure>
-	            <title>Connection details for eduras.git</title>
-	            <mediaobject>
-	                <imageobject>
-	                    <imagedata fileref="images/setup9.png" format="PNG" />
-	                </imageobject>
-	            </mediaobject>
-	        </figure>
-	        <para>
-	            Eclipse is now retrieving data from repository.
-	            Confirm occuring popups with <computeroutput>yes</computeroutput> and click
-	            <computeroutput>Next</computeroutput>.
-	            You can now choose, which branches you want to receive, choose All.
-	        </para>
-	        <para>
-	            In the next view you can specify a directory where you want to store your git
-	            repository. You may keep default values.
-	        </para>
-	        <para>
-	            You may come across a message concerning Secure Storage. This is kind of a
-	            master password for your passwords stored in eclipse.
-	        </para>
-	        <para>
-	            Now click <computeroutput>Next</computeroutput> and <computeroutput>Finish</computeroutput>
-	            until dialog is complete.
-	            You do now have Eduras project in your workspace and are ready to start.
-	        </para>
-		</section>
+	</section>
+	<section>
+	    <title>Step 3: Connecting to Eduras? repository</title>
+	    <para>
+	        Now it is time to connect to Eduras? repository.
+	        Ensure you have read <emphasis>Getting started</emphasis> section in
+	        our documentation before editing any code.
+	    </para>
+	    <para>
+	        Choose <computeroutput>File -> Import... -> Git -> Projects from Git</computeroutput>.
+	        You might get a notification that you have not installed git. Check the checkbox
+	        and continue.
+	    </para>
+	    <figure>
+            <title>Connecting to eduras.git</title>
+            <mediaobject>
+                <imageobject>
+                    <imagedata fileref="images/setup7.png" format="PNG" />
+                </imageobject>
+            </mediaobject>
+        </figure>
+        <figure>
+            <title>Notice of missing git</title>
+            <mediaobject>
+                <imageobject>
+                    <imagedata fileref="images/setup8.png" format="PNG" />
+                </imageobject>
+            </mediaobject>
+        </figure>
+        <para>
+            Choose <computeroutput>URI</computeroutput>.
+            In the next form, enter connection details of eduras? repository.
+            Take them from the following picture. You can simply fill in the URI field
+            and eclipse fills in the other fields for you.
+            Get your access password from your project leader.
+        </para>
+        <figure>
+            <title>Connection details for eduras.git</title>
+            <mediaobject>
+                <imageobject>
+                    <imagedata fileref="images/setup9.png" format="PNG" />
+                </imageobject>
+            </mediaobject>
+        </figure>
+        <para>
+            Eclipse is now retrieving data from repository.
+            Confirm occuring popups with <computeroutput>yes</computeroutput> and click
+            <computeroutput>Next</computeroutput>.
+            You can now choose, which branches you want to receive, choose All.
+        </para>
+        <para>
+            In the next view you can specify a directory where you want to store your git
+            repository. You may keep default values.
+        </para>
+        <para>
+            You may come across a message concerning Secure Storage. This is kind of a
+            master password for your passwords stored in eclipse.
+        </para>
+        <para>
+            Now click <computeroutput>Next</computeroutput> and <computeroutput>Finish</computeroutput>
+            until dialog is complete.
+            You do now have Eduras project in your workspace and are ready to start.
+        </para>
 	</section>
 </article>
