@@ -24,8 +24,6 @@ public class ServerReceiver extends Thread {
 	 * 
 	 * @param server
 	 *            Server that this receiver is assigned to.
-	 * @param inputBuffer
-	 *            Buffer to write new messages into.
 	 * @param client
 	 *            Client that's inputstream should be used.
 	 */

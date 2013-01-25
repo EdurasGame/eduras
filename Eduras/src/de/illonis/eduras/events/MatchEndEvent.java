@@ -27,7 +27,7 @@ public class MatchEndEvent extends GameEvent {
 	/**
 	 * Returns the winner's id.
 	 * 
-	 * @return
+	 * @return The id of the winner.
 	 */
 	public int getWinnerId() {
 		return winnerId;

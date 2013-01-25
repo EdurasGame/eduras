@@ -75,7 +75,7 @@ public class MissileLaunchEvent extends GameEvent {
 	/**
 	 * Returns the id of the missile.
 	 * 
-	 * @return
+	 * @return missile id.
 	 */
 	public int getId() {
 		return id;
