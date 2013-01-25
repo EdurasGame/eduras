@@ -12,11 +12,10 @@ import de.illonis.eduras.math.Vector2D;
  * @author Florian Mai <florian.ren.mai@googlemail.com>
  * 
  */
-public class MissileLaunchEvent extends GameEvent {
+public class MissileLaunchEvent extends OwnerGameEvent {
 
 	private final Vector2D position;
 	private final Vector2D speedVector;
-	private final int owner;
 	private final int id;
 	private final ObjectType objectType;
 
@@ -36,15 +35,17 @@ public class MissileLaunchEvent extends GameEvent {
 	 */
 	public MissileLaunchEvent(ObjectType objectType, Vector2D position,
 			Vector2D speedVector, int owner, int id) {
-		super(GameEventNumber.MISSILE_LAUNCH);
+		super(GameEventNumber.MISSILE_LAUNCH, owner);
 		this.id = id;
 		this.position = position;
 		this.speedVector = speedVector;
-		this.owner = owner;
 		this.objectType = objectType;
+
 	}
 
 	/**
+	 * Returns spawning position
+	 * 
 	 * @return the position
 	 */
 	public Vector2D getPosition() {
@@ -52,6 +53,8 @@ public class MissileLaunchEvent extends GameEvent {
 	}
 
 	/**
+	 * Returns speed vector of spawned missile.
+	 * 
 	 * @return the speedVector
 	 */
 	public Vector2D getSpeedVector() {
@@ -59,13 +62,8 @@ public class MissileLaunchEvent extends GameEvent {
 	}
 
 	/**
-	 * @return the owner
-	 */
-	public int getOwner() {
-		return owner;
-	}
-
-	/**
+	 * Returns object type of missile.
+	 * 
 	 * @return the objectType
 	 */
 	public ObjectType getObjectType() {
