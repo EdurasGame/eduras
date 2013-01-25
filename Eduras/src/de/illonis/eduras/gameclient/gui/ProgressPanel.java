@@ -158,7 +158,7 @@ public class ProgressPanel extends JPanel implements ActionListener {
 	/**
 	 * Resets message.
 	 */
-	public void reset() {
+	void reset() {
 		updateTimeMessage(Client.CONNECT_TIMEOUT / 1000);
 		text.setIcon(icon);
 	}
@@ -177,13 +177,7 @@ public class ProgressPanel extends JPanel implements ActionListener {
 	private class ConnectionWaiter extends SwingWorker<Boolean, Void> {
 		@Override
 		public Boolean doInBackground() {
-			// wait some time to prevent a bug (progress dialog not hiding on
-			// immediate connection)
-			try {
-				Thread.sleep(200);
-			} catch (InterruptedException e) {
-				EduLog.passException(e);
-			}
+
 			t = new Thread(connector);
 			t.start();
 			int i = Client.CONNECT_TIMEOUT / 1000;

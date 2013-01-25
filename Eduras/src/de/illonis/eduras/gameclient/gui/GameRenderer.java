@@ -44,7 +44,6 @@ public class GameRenderer implements TooltipHandler {
 	private InformationProvider informationProvider;
 	private GuiClickReactor gui;
 	private ItemDisplay itemDisplay;
-	private final static int HEALTHBAR_WIDTH = 50;
 	private ItemTooltip tooltip;
 
 	/**
@@ -161,22 +160,24 @@ public class GameRenderer implements TooltipHandler {
 
 			// draw only if in current view point
 			if (d.getBoundingBox().intersects(camera)) {
-
+				// TODO: distinguish between object images and icon images
 				if (hasImage(d)) {
 					// TODO: draw image for gameobject.
 				} // draw shape of gameObject instead if object has shape
-					// TODO: d
+
 				if (d.getShape() != null) {
 					drawShapeOf(d);
 				}
 
-				// if (d.isUnit()) {
-				// drawHealthBarFor((Unit) d);
-				// }
+				if (d.isUnit()) {
+					drawHealthBarFor((Unit) d);
+				}
 
 				// draws unit id next to unit for testing purpose
-				dbg.drawString(d.getId() + "", d.getDrawX() - camera.x,
-						d.getDrawY() - camera.y - 15);
+				/*
+				 * dbg.drawString(d.getId() + "", d.getDrawX() - camera.x,
+				 * d.getDrawY() - camera.y - 15);
+				 */
 			}
 		}
 
@@ -184,7 +185,7 @@ public class GameRenderer implements TooltipHandler {
 
 	/**
 	 * Draws health bar that is assigned to given unit. It will be automatically
-	 * be placed above the unit.
+	 * be placed centered above the unit.
 	 * 
 	 * @param unit
 	 *            assigned unit.
@@ -193,23 +194,8 @@ public class GameRenderer implements TooltipHandler {
 		if (unit.isDead())
 			return;
 
-		int[] insets = new int[unit.getMaxHealth()];
-		int segments = unit.getMaxHealth() + 1;
-		for (int i = 0; i < unit.getMaxHealth(); i++) {
-			insets[i] = i * (HEALTHBAR_WIDTH / segments)
-					+ (HEALTHBAR_WIDTH / unit.getMaxHealth()) / 2;
-		}
-		int xOffset = (int) (unit.getBoundingBox().getWidth() - HEALTHBAR_WIDTH) / 2;
-		dbg.setColor(Color.black);
-		dbg.fillRect((int) unit.getBoundingBox().getX() + xOffset - camera.x,
-				(int) unit.getBoundingBox().getY() - 10 - camera.y,
-				HEALTHBAR_WIDTH, 10);
-		dbg.setColor(Color.yellow);
-		for (int i = 0; i < unit.getHealth(); i++) {
-			dbg.fillRect((int) unit.getBoundingBox().getX() - camera.x
-					+ xOffset + insets[i], (int) unit.getBoundingBox().getY()
-					- 8 - camera.y, HEALTHBAR_WIDTH / unit.getMaxHealth(), 6);
-		}
+		HealthBar.calculateFor(unit);
+		HealthBar.draw(dbg, camera);
 
 	}
 
