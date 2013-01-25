@@ -183,7 +183,7 @@ public class GameRenderer implements TooltipHandler {
 
 	/**
 	 * Draws health bar that is assigned to given unit. It will be automatically
-	 * be placed above the unit.
+	 * be placed centered above the unit.
 	 * 
 	 * @param unit
 	 *            assigned unit.
@@ -192,8 +192,8 @@ public class GameRenderer implements TooltipHandler {
 		if (unit.isDead())
 			return;
 
-		HealthBar.createFor(unit, camera);
-		HealthBar.draw(dbg);
+		HealthBar.calculateFor(unit);
+		HealthBar.draw(dbg, camera);
 
 	}
 

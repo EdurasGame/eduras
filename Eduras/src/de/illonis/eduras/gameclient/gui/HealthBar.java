@@ -7,7 +7,8 @@ import de.illonis.eduras.gameclient.GameCamera;
 import de.illonis.eduras.units.Unit;
 
 /**
- * Represents a unit health bar manager.
+ * Represents a unit health bar manager. There are no specific healthbar objects
+ * stored. Instead, an internal object's values are changed.
  * 
  * @author illonis
  * 
@@ -17,6 +18,9 @@ public class HealthBar {
 	private final static HealthBar instance = new HealthBar();
 	private final static int HEALTHBAR_WIDTH = 50;
 	private final static int HEALTHBAR_HEIGHT = 5;
+	/**
+	 * Gap between unit and health bar.
+	 */
 	private final static int UNIT_GAP = 15;
 
 	private int x, y, w, h;
@@ -27,7 +31,13 @@ public class HealthBar {
 		h = HEALTHBAR_HEIGHT;
 	}
 
-	protected static void createFor(Unit unit, GameCamera camera) {
+	/**
+	 * Calculates healthbar data for given unit.
+	 * 
+	 * @param unit
+	 *            unit that's health should be shown.
+	 */
+	protected static void calculateFor(Unit unit) {
 		int maxHealth = unit.getMaxHealth();
 		int health = unit.getHealth();
 
@@ -35,26 +45,32 @@ public class HealthBar {
 				* HEALTHBAR_WIDTH);
 
 		double overlength = (HEALTHBAR_WIDTH - unit.getBoundingBox().getWidth()) / 2;
-		System.out.println("over: " + overlength);
-		System.out.println("w: " + instance.w);
+
 		instance.x = (int) Math.round(unit.getDrawX() - overlength);
+
+		// TODO: make position of objects either topleft or center, but make it
+		// unitary.
 		// fix because topleft is middle in triangles.
 		instance.x -= (int) unit.getBoundingBox().getWidth() / 2;
-		System.out.println(instance.x);
-		System.out.println("d: " + unit.getDrawX());
-		System.out.println("x: " + instance.x);
+
 		instance.y = (int) (unit.getBoundingBox().getY() - HEALTHBAR_HEIGHT - UNIT_GAP);
-
-		instance.x -= camera.x;
-
-		instance.y -= camera.y;
 
 	}
 
-	protected static void draw(Graphics2D g2d) {
+	/**
+	 * Draws current healthbar settings to given graphic object.
+	 * 
+	 * @param g2d
+	 *            target graphics.
+	 * @param camera
+	 *            camera offset.
+	 */
+	protected static void draw(Graphics2D g2d, GameCamera camera) {
 		g2d.setColor(Color.black);
-		g2d.fillRect(instance.x, instance.y, HEALTHBAR_WIDTH, HEALTHBAR_HEIGHT);
+		g2d.fillRect(instance.x - camera.x, instance.y - camera.y,
+				HEALTHBAR_WIDTH, HEALTHBAR_HEIGHT);
 		g2d.setColor(Color.yellow);
-		g2d.fillRect(instance.x, instance.y, instance.w, instance.h);
+		g2d.fillRect(instance.x - camera.x, instance.y - camera.y, instance.w,
+				instance.h);
 	}
 }
