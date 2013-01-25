@@ -49,6 +49,8 @@ public class GameRenderer implements TooltipHandler {
 	/**
 	 * Creates a new renderer.
 	 * 
+	 * @param gui
+	 *            reactor that handles gui events.
 	 * @param camera
 	 *            Game camera to use viewport.
 	 * @param informationProvider

@@ -187,6 +187,31 @@ public class NetworkMessageSerializer {
 	}
 
 	/**
+	 * Creates an event string based on given id and parameters. The returned
+	 * string is the serialized version of given parameters according to event
+	 * string syntax (including ## and so on). You should pass arguments
+	 * appropriate to event list in documentation.<br>
+	 * <b>Note:</b> This method does not check for valid argument order or
+	 * id/argument combination.
+	 * 
+	 * @param eventId
+	 *            id of event.
+	 * @param args
+	 *            arguments. Non-String arguments will converted using
+	 *            {@link Object#toString()} method automatically.
+	 * @return serialized eventstring.
+	 */
+	private static String buildEventString(int eventId, Object... args) {
+		StringBuilder builder = new StringBuilder("##");
+		builder.append(String.valueOf(eventId));
+		for (Object object : args) {
+			builder.append("#");
+			builder.append(object.toString());
+		}
+		return builder.toString();
+	}
+
+	/**
 	 * Concatenates given strings.
 	 * 
 	 * @param messages
