@@ -13,6 +13,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import de.illonis.eduras.gameclient.GameCamera;
 import de.illonis.eduras.gameclient.TooltipHandler;
+import de.illonis.eduras.gameclient.gui.guielements.GameStatBar;
 import de.illonis.eduras.gameclient.gui.guielements.ItemDisplay;
 import de.illonis.eduras.gameclient.gui.guielements.ItemTooltip;
 import de.illonis.eduras.gameclient.gui.guielements.RenderedGuiObject;
@@ -75,6 +76,7 @@ public class GameRenderer implements TooltipHandler {
 		uiObjects = new ArrayList<RenderedGuiObject>();
 		itemDisplay = new ItemDisplay(gui, informationProvider, imagelist);
 		uiObjects.add(itemDisplay);
+		uiObjects.add(new GameStatBar(informationProvider));
 		gui.registerTooltipTriggerer(itemDisplay);
 		gui.addClickableGuiElement(itemDisplay);
 	}
