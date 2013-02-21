@@ -6,6 +6,12 @@ import java.awt.Graphics2D;
 import de.illonis.eduras.gameclient.gui.ImageList;
 import de.illonis.eduras.logicabstraction.InformationProvider;
 
+/**
+ * A simple status bar that shows the current game mode at top of screen.
+ * 
+ * @author illonis
+ * 
+ */
 public class GameStatBar extends RenderedGuiObject {
 	private String mode;
 

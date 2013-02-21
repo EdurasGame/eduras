@@ -1,4 +1,4 @@
-package de.illonis.eduras.gameclient.gui;
+package de.illonis.eduras.test;
 
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
