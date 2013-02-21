@@ -141,7 +141,8 @@ public class GameRenderer implements TooltipHandler {
 		Rectangle r = mapSize.getBounds();
 		r.x -= camera.x;
 		r.y -= camera.y;
-		dbg.draw(r);
+		dbg.setColor(Color.BLUE);
+		dbg.fill(r);
 	}
 
 	/**
