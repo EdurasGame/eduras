@@ -6,7 +6,9 @@ package de.illonis.eduras.interfaces;
 import java.awt.Rectangle;
 import java.util.concurrent.ConcurrentHashMap;
 
+import de.illonis.eduras.GameMode;
 import de.illonis.eduras.Map;
+import de.illonis.eduras.Statistic;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
 import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.units.Player;
@@ -44,4 +46,17 @@ public interface InfoInterface {
 	 */
 	public ConcurrentHashMap<Integer, GameObject> getGameObjects();
 
+	/**
+	 * Returns game statistics.
+	 * 
+	 * @return a statistics object.
+	 */
+	public Statistic getStatistics();
+
+	/**
+	 * Returns current game mode.
+	 * 
+	 * @return game mode.
+	 */
+	public GameMode getGameMode();
 }

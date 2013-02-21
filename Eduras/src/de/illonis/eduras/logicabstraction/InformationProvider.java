@@ -6,6 +6,8 @@ package de.illonis.eduras.logicabstraction;
 import java.awt.Rectangle;
 import java.util.concurrent.ConcurrentHashMap;
 
+import de.illonis.eduras.GameMode;
+import de.illonis.eduras.Statistic;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
 import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.interfaces.GameEventListener;
@@ -75,6 +77,16 @@ public class InformationProvider implements InfoInterface {
 	 */
 	public void addEventListener(GameEventListener listener) {
 		logic.addGameEventListener(listener);
+	}
+
+	@Override
+	public Statistic getStatistics() {
+		return logic.getGame().getGameSettings().getStats();
+	}
+
+	@Override
+	public GameMode getGameMode() {
+		return logic.getGame().getGameSettings().getGameMode();
 	}
 
 }
