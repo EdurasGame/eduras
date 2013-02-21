@@ -71,10 +71,7 @@ public class InputKeyHandler extends KeyAdapter {
 	public void releaseAllKeys() {
 		for (java.util.Map.Entry<Integer, Boolean> button : pressedButtons
 				.entrySet()) {
-			System.out.println("key " + button.getKey() + " value: "
-					+ button.getValue());
 			if (button.getValue()) {
-				System.out.println("pressed " + button.getKey());
 				keyReleased(button.getKey());
 			}
 		}
