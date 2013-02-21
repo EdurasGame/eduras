@@ -38,12 +38,20 @@ public class ClientFrame extends JFrame implements NetworkEventReactor,
 		setSize(500, 500);
 		setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
 		setLocationRelativeTo(null);
+		addWindowFocusListener(new WindowAdapter() {
+			@Override
+			public void windowLostFocus(WindowEvent e) {
+				System.out.println("FL");
+				client.onFocusLost();
+			}
+		});
 
 		addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowClosing(WindowEvent e) {
 				client.tryExit();
 			}
+
 		});
 		buildGui();
 	}

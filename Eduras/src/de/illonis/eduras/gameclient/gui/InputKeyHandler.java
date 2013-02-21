@@ -66,25 +66,34 @@ public class InputKeyHandler extends KeyAdapter {
 	}
 
 	/**
-	 * Indicates a key release internally. That means key's state will be set to
-	 * non-pressed.
-	 * 
-	 * @param key
-	 *            released key.
+	 * Releases all pressed keys and handles keyRelease events.
 	 */
-	private void keyRelease(int key) {
-		pressedButtons.put(key, false);
+	public void releaseAllKeys() {
+		for (java.util.Map.Entry<Integer, Boolean> button : pressedButtons
+				.entrySet()) {
+			System.out.println("key " + button.getKey() + " value: "
+					+ button.getValue());
+			if (button.getValue()) {
+				System.out.println("pressed " + button.getKey());
+				keyReleased(button.getKey());
+			}
+		}
 	}
 
-	@Override
-	public void keyPressed(KeyEvent e) {
-
+	/**
+	 * Handles key press of given key. This includes changing press state and
+	 * sending event to server.
+	 * 
+	 * @param keyCode
+	 *            key code of pressed key.
+	 */
+	private void keyPressed(int keyCode) {
 		// don't handle other keys
-		if (!settings.getKeyBindings().isBound(e.getKeyCode()))
+		if (!settings.getKeyBindings().isBound(keyCode))
 			return;
 
 		// if already pressed, do not send a new event
-		if (justPressed(e.getKeyCode()))
+		if (justPressed(keyCode))
 			return;
 
 		if (lastTimePressed < KEY_INTERVAL)
@@ -94,10 +103,11 @@ public class InputKeyHandler extends KeyAdapter {
 
 		KeyBinding binding;
 		try {
-			binding = settings.getKeyBindings().getBindingOf(e.getKeyCode());
+			binding = settings.getKeyBindings().getBindingOf(keyCode);
 		} catch (KeyNotBoundException ex) {
 			return;
 		}
+		pressedButtons.put(keyCode, true);
 
 		switch (binding) {
 		case MOVE_UP:
@@ -148,25 +158,24 @@ public class InputKeyHandler extends KeyAdapter {
 		}
 
 		lastTimePressed = System.currentTimeMillis();
-		EduLog.fine("Bound key pressed: " + e.getKeyCode() + " (\""
-				+ e.getKeyChar() + "\")");
+		EduLog.fine("Bound key pressed: " + keyCode);
 	}
 
-	@Override
-	public void keyReleased(KeyEvent e) {
+	private void keyReleased(int keyCode) {
 		// don't handle other keys
-		if (!settings.getKeyBindings().isBound(e.getKeyCode()))
+		if (!settings.getKeyBindings().isBound(keyCode))
 			return;
 
 		if (lastTimePressed < KEY_INTERVAL)
 			return;
 		UserMovementEvent moveEvent = null;
 
-		keyRelease(e.getKeyCode());
+		// release button
+		pressedButtons.put(keyCode, false);
 
 		KeyBinding binding;
 		try {
-			binding = settings.getKeyBindings().getBindingOf(e.getKeyCode());
+			binding = settings.getKeyBindings().getBindingOf(keyCode);
 		} catch (KeyNotBoundException ex) {
 			return;
 		}
@@ -199,5 +208,15 @@ public class InputKeyHandler extends KeyAdapter {
 		} catch (MessageNotSupportedException e1) {
 			EduLog.passException(e1);
 		}
+	}
+
+	@Override
+	public void keyPressed(KeyEvent e) {
+		keyPressed(e.getKeyCode());
+	}
+
+	@Override
+	public void keyReleased(KeyEvent e) {
+		keyReleased(e.getKeyCode());
 	}
 }
