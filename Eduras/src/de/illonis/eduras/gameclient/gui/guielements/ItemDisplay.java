@@ -24,7 +24,7 @@ import de.illonis.eduras.logicabstraction.InformationProvider;
 public class ItemDisplay extends ClickableGuiElement implements
 		TooltipTriggerer {
 
-	private final static int ITEM_GAP = 10;
+	private final static int ITEM_GAP = 15;
 	// top, right, bottom, left
 	private final static int OUTER_GAP[] = { 20, 5, 10, 15 };
 	private int height, width, blocksize, itemGap;
@@ -54,8 +54,8 @@ public class ItemDisplay extends ClickableGuiElement implements
 			// TODO: make nicer
 			g2d.drawRect(item.getX() + screenX, item.getY() + screenY,
 					blocksize, blocksize);
-			g2d.drawString("#" + item.getSlotId() + ": " + item.getName(),
-					item.getX() + screenX, item.getY() + screenY);
+			g2d.drawString("#" + (item.getSlotId() + 1), item.getX() + screenX
+					+ blocksize / 4, item.getY() + screenY - 2);
 			if (item.hasImage())
 				g2d.drawImage(item.getItemImage(), item.getX() + screenX,
 						item.getY() + screenY, null);
