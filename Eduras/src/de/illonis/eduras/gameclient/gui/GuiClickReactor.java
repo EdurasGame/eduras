@@ -1,7 +1,7 @@
 package de.illonis.eduras.gameclient.gui;
 
 import de.illonis.eduras.gameclient.TooltipHandler;
-import de.illonis.eduras.gui.guielements.ClickableGuiElementInterface;
+import de.illonis.eduras.gameclient.gui.guielements.ClickableGuiElementInterface;
 
 /**
  * Represents an object that reacts on clicks on gui elements. It provides

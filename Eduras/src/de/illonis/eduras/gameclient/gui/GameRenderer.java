@@ -13,11 +13,11 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import de.illonis.eduras.gameclient.GameCamera;
 import de.illonis.eduras.gameclient.TooltipHandler;
+import de.illonis.eduras.gameclient.gui.guielements.ItemDisplay;
+import de.illonis.eduras.gameclient.gui.guielements.ItemTooltip;
+import de.illonis.eduras.gameclient.gui.guielements.RenderedGuiObject;
+import de.illonis.eduras.gameclient.gui.guielements.TooltipTriggerer;
 import de.illonis.eduras.gameobjects.GameObject;
-import de.illonis.eduras.gui.guielements.ItemDisplay;
-import de.illonis.eduras.gui.guielements.ItemTooltip;
-import de.illonis.eduras.gui.guielements.RenderedGuiObject;
-import de.illonis.eduras.gui.guielements.TooltipTriggerer;
 import de.illonis.eduras.items.Item;
 import de.illonis.eduras.logicabstraction.InformationProvider;
 import de.illonis.eduras.math.Vector2D;

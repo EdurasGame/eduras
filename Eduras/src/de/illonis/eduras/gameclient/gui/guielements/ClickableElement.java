@@ -1,4 +1,4 @@
-package de.illonis.eduras.gui.guielements;
+package de.illonis.eduras.gameclient.gui.guielements;
 
 public interface ClickableElement {
 	/**

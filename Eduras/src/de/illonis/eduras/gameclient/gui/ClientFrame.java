@@ -14,7 +14,7 @@ import javax.swing.JFrame;
 import de.illonis.eduras.exceptions.InvalidValueEnteredException;
 import de.illonis.eduras.gameclient.GameClient;
 import de.illonis.eduras.gameclient.NetworkEventReactor;
-import de.illonis.eduras.gui.guielements.ItemDisplay;
+import de.illonis.eduras.gameclient.gui.guielements.ItemDisplay;
 import de.illonis.eduras.logger.EduLog;
 
 public class ClientFrame extends JFrame implements NetworkEventReactor,

@@ -2,7 +2,7 @@ package de.illonis.eduras.gameclient;
 
 import java.awt.Point;
 
-import de.illonis.eduras.gui.guielements.TooltipTriggerer;
+import de.illonis.eduras.gameclient.gui.guielements.TooltipTriggerer;
 import de.illonis.eduras.items.Item;
 
 /**
