@@ -3,8 +3,6 @@
  */
 package de.illonis.eduras.logic;
 
-import javax.naming.InvalidNameException;
-
 import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.Map;
 import de.illonis.eduras.ObjectFactory.ObjectType;
@@ -16,6 +14,7 @@ import de.illonis.eduras.events.MissileLaunchEvent;
 import de.illonis.eduras.events.MovementEvent;
 import de.illonis.eduras.events.ObjectFactoryEvent;
 import de.illonis.eduras.events.SetIntegerGameObjectAttributeEvent;
+import de.illonis.eduras.exceptions.InvalidNameException;
 import de.illonis.eduras.exceptions.MessageNotSupportedException;
 import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.interfaces.GameLogicInterface;

@@ -1,6 +1,6 @@
 package de.illonis.eduras.events;
 
-import javax.naming.InvalidNameException;
+import de.illonis.eduras.exceptions.InvalidNameException;
 
 public class ClientRenameEvent extends OwnerGameEvent {
 	private final String name;

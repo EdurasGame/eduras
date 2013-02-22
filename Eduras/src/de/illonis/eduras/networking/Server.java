@@ -7,8 +7,6 @@ import java.net.Socket;
 import java.util.HashMap;
 import java.util.LinkedList;
 
-import javax.naming.InvalidNameException;
-
 import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.ObjectFactory.ObjectType;
 import de.illonis.eduras.events.ClientRenameEvent;
@@ -19,6 +17,7 @@ import de.illonis.eduras.events.GameInfoRequest;
 import de.illonis.eduras.events.GameReadyEvent;
 import de.illonis.eduras.events.InitInformationEvent;
 import de.illonis.eduras.events.ObjectFactoryEvent;
+import de.illonis.eduras.exceptions.InvalidNameException;
 import de.illonis.eduras.exceptions.MessageNotSupportedException;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
 import de.illonis.eduras.exceptions.ServerNotReadyForStartException;
