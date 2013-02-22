@@ -205,8 +205,8 @@ public class GameClient implements GuiClickReactor, NetworkEventReactor,
 	 */
 	public Vector2D computeGuiPointToGameCoordinate(Vector2D v) {
 		Vector2D vec = new Vector2D(v);
-		vec.modifyX(camera.x);
-		vec.modifyY(camera.y);
+		vec.modifyX(camera.getX());
+		vec.modifyY(camera.getY());
 		return vec;
 	}
 

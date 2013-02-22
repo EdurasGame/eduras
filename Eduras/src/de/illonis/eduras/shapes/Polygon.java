@@ -3,13 +3,14 @@
  */
 package de.illonis.eduras.shapes;
 
+import java.awt.geom.Rectangle2D;
+import java.awt.geom.Rectangle2D.Double;
 import java.util.LinkedList;
 
 import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.math.CollisionPoint;
 import de.illonis.eduras.math.Geometry;
 import de.illonis.eduras.math.Line;
-import de.illonis.eduras.math.RectangleDouble;
 import de.illonis.eduras.math.Vector2D;
 
 /**
@@ -234,9 +235,9 @@ public class Polygon extends ObjectShape {
 	}
 
 	@Override
-	public RectangleDouble getBoundingBox() {
+	public Double getBoundingBox() {
 		// TODO: implement
-		return new RectangleDouble(0, 0, 5E100, 5E100);
+		return new Rectangle2D.Double(0, 0, 5E100, 5E100);
 
 	}
 

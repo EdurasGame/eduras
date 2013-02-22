@@ -1,6 +1,7 @@
 package de.illonis.eduras;
 
-import de.illonis.eduras.math.Rectangle;
+import java.awt.Rectangle;
+
 import de.illonis.eduras.math.Vector2D;
 
 /**
@@ -58,7 +59,7 @@ public class Map {
 	 * @return true if point is on map.
 	 */
 	public boolean contains(Vector2D point) {
-		return getBounds().contains(point);
+		return getBounds().contains(point.toPoint());
 	}
 
 }

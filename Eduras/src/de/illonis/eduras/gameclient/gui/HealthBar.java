@@ -44,16 +44,16 @@ public class HealthBar {
 		instance.w = (int) Math.floor((double) ((double) health / maxHealth)
 				* HEALTHBAR_WIDTH);
 
-		double overlength = (HEALTHBAR_WIDTH - unit.getBoundingBox().width) / 2;
+		double overlength = (HEALTHBAR_WIDTH - unit.getBoundingBox().getWidth()) / 2;
 
 		instance.x = (int) Math.round(unit.getDrawX() - overlength);
 
 		// TODO: make position of objects either topleft or center, but make it
 		// unitary.
 		// fix because topleft is middle in triangles.
-		instance.x -= (int) unit.getBoundingBox().width / 2;
+		instance.x -= (int) unit.getBoundingBox().getWidth() / 2;
 
-		instance.y = (int) (unit.getBoundingBox().y - HEALTHBAR_HEIGHT - UNIT_GAP);
+		instance.y = (int) (unit.getBoundingBox().getY() - HEALTHBAR_HEIGHT - UNIT_GAP);
 
 	}
 

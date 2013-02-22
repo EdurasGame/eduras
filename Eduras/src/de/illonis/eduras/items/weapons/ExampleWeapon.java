@@ -59,8 +59,8 @@ public class ExampleWeapon extends Weapon {
 		Vector2D speedVector = new Vector2D(target);
 		speedVector.subtract(position);
 
-		Vector2D diag = new Vector2D(triggeringObject.getBoundingBox().width,
-				triggeringObject.getBoundingBox().height);
+		Vector2D diag = new Vector2D(triggeringObject.getBoundingBox()
+				.getWidth(), triggeringObject.getBoundingBox().getHeight());
 		Vector2D copy = speedVector.copy();
 		copy.setLength(diag.getLength());
 		position.add(copy);

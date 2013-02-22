@@ -1,12 +1,13 @@
 package de.illonis.eduras.shapes;
 
+import java.awt.geom.Rectangle2D;
+import java.awt.geom.Rectangle2D.Double;
 import java.util.LinkedList;
 
 import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.math.CollisionPoint;
 import de.illonis.eduras.math.Line;
-import de.illonis.eduras.math.RectangleDouble;
 import de.illonis.eduras.math.Vector2D;
 
 /**
@@ -30,8 +31,8 @@ public final class NoCollisionShape extends ObjectShape {
 	}
 
 	@Override
-	public RectangleDouble getBoundingBox() {
-		return new RectangleDouble();
+	public Double getBoundingBox() {
+		return new Rectangle2D.Double();
 	}
 
 	/*
