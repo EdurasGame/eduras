@@ -3,10 +3,8 @@
  */
 package de.illonis.eduras.shapes;
 
-import java.awt.geom.Rectangle2D;
-import java.awt.geom.Rectangle2D.Double;
-
 import de.illonis.eduras.exceptions.ShapeVerticesNotApplicableException;
+import de.illonis.eduras.math.RectangleDouble;
 import de.illonis.eduras.math.Vector2D;
 
 /**
@@ -50,14 +48,14 @@ public class Rectangle extends Polygon {
 	 * 
 	 * @return java-rectangle representation.
 	 */
-	public Rectangle2D.Double toJavaRect() {
+	public RectangleDouble toJavaRect() {
 		Vector2D[] v = getVerticesAsArray();
-		return new Rectangle2D.Double(v[0].getX(), v[0].getY(), Math.abs(v[2]
+		return new RectangleDouble(v[0].getX(), v[0].getY(), Math.abs(v[2]
 				.getX() - v[0].getX()), Math.abs(v[2].getY() - v[0].getY()));
 	}
 
 	@Override
-	public Double getBoundingBox() {
+	public RectangleDouble getBoundingBox() {
 		return toJavaRect();
 	}
 }

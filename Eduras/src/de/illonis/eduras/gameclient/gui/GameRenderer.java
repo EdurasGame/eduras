@@ -3,7 +3,6 @@ package de.illonis.eduras.gameclient.gui;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Point;
-import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
@@ -21,6 +20,7 @@ import de.illonis.eduras.gameclient.gui.guielements.TooltipTriggerer;
 import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.items.Item;
 import de.illonis.eduras.logicabstraction.InformationProvider;
+import de.illonis.eduras.math.Rectangle;
 import de.illonis.eduras.math.Vector2D;
 import de.illonis.eduras.shapes.Circle;
 import de.illonis.eduras.shapes.ObjectShape;
@@ -140,7 +140,8 @@ public class GameRenderer implements TooltipHandler {
 	 */
 	private void drawMap() {
 		dbg.setColor(Color.red);
-		Rectangle r = mapSize.getBounds();
+		java.awt.Rectangle r = new java.awt.Rectangle(mapSize.x, mapSize.y,
+				mapSize.width, mapSize.height);
 		r.x -= camera.x;
 		r.y -= camera.y;
 		dbg.setColor(Color.BLUE);

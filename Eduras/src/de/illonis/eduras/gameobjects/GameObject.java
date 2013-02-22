@@ -1,12 +1,12 @@
 package de.illonis.eduras.gameobjects;
 
-import java.awt.geom.Rectangle2D;
 import java.util.LinkedList;
 
 import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.ObjectFactory.ObjectType;
 import de.illonis.eduras.math.CollisionPoint;
 import de.illonis.eduras.math.Line;
+import de.illonis.eduras.math.RectangleDouble;
 import de.illonis.eduras.math.Vector2D;
 import de.illonis.eduras.shapes.ObjectShape;
 import de.illonis.eduras.units.Unit;
@@ -274,8 +274,8 @@ public abstract class GameObject implements Comparable<GameObject> {
 	 * 
 	 * @return bounding box.
 	 */
-	public Rectangle2D.Double getBoundingBox() {
-		Rectangle2D.Double r = getShape().getBoundingBox();
+	public RectangleDouble getBoundingBox() {
+		RectangleDouble r = getShape().getBoundingBox();
 		r.x = getDrawX();
 		r.y = getDrawY();
 

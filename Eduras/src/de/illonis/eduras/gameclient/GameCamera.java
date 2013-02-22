@@ -1,6 +1,6 @@
 package de.illonis.eduras.gameclient;
 
-import java.awt.Rectangle;
+import de.illonis.eduras.math.Rectangle;
 
 /**
  * GameCamera stores where current viewport of player is.
@@ -10,9 +10,7 @@ import java.awt.Rectangle;
  */
 public class GameCamera extends Rectangle {
 
-	private static final long serialVersionUID = 1L;
-
 	GameCamera() {
-		x = y = 0;
+		super(1, 1);
 	}
 }

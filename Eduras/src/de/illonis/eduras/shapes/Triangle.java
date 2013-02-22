@@ -3,10 +3,9 @@
  */
 package de.illonis.eduras.shapes;
 
-import java.awt.geom.Rectangle2D;
-
 import de.illonis.eduras.exceptions.ShapeVerticesNotApplicableException;
 import de.illonis.eduras.math.BasicMath;
+import de.illonis.eduras.math.RectangleDouble;
 import de.illonis.eduras.math.Vector2D;
 
 /**
@@ -50,7 +49,7 @@ public class Triangle extends Polygon {
 	}
 
 	@Override
-	public Rectangle2D.Double getBoundingBox() {
+	public RectangleDouble getBoundingBox() {
 		// FIXME: Bounding box is at wrong position in gameobjects because
 		// center point is used instead of topleft. This may occur in other
 		// shapes, too.
@@ -61,7 +60,7 @@ public class Triangle extends Polygon {
 		double xMax = BasicMath.max(v[0].getX(), v[1].getX(), v[2].getX());
 		double yMax = BasicMath.max(v[0].getY(), v[1].getY(), v[2].getY());
 
-		Rectangle2D.Double r = new Rectangle2D.Double(0, 0, Math.abs(x - xMax),
+		RectangleDouble r = new RectangleDouble(0, 0, Math.abs(x - xMax),
 				Math.abs(y + yMax));
 		return r;
 	}
