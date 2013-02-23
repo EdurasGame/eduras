@@ -41,7 +41,6 @@ public class ClientFrame extends JFrame implements NetworkEventReactor,
 		addWindowFocusListener(new WindowAdapter() {
 			@Override
 			public void windowLostFocus(WindowEvent e) {
-				System.out.println("FL");
 				client.onFocusLost();
 			}
 		});

@@ -27,7 +27,7 @@ public class EdurasInitializer {
 	static EdurasInitializer instance;
 
 	private EdurasInitializer() {
-
+		instance = this;
 		GameInformation game = new GameInformation();
 
 		// needed because all the game game mode action shall be performed on
