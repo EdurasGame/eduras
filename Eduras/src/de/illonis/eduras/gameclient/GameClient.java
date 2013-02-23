@@ -409,6 +409,7 @@ public class GameClient implements GuiClickReactor, NetworkEventReactor,
 	 * Indicates that client frame's focus is lost.
 	 */
 	public void onFocusLost() {
-		keyHandler.releaseAllKeys();
+		if (keyHandler != null)
+			keyHandler.releaseAllKeys();
 	}
 }
