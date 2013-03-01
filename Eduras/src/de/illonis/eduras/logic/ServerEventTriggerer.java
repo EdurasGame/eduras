@@ -4,7 +4,6 @@
 package de.illonis.eduras.logic;
 
 import de.illonis.eduras.GameInformation;
-import de.illonis.eduras.GameMode;
 import de.illonis.eduras.Map;
 import de.illonis.eduras.ObjectFactory.ObjectType;
 import de.illonis.eduras.events.ClientRenameEvent;
@@ -17,6 +16,7 @@ import de.illonis.eduras.events.ObjectFactoryEvent;
 import de.illonis.eduras.events.SetIntegerGameObjectAttributeEvent;
 import de.illonis.eduras.exceptions.InvalidNameException;
 import de.illonis.eduras.exceptions.MessageNotSupportedException;
+import de.illonis.eduras.gamemodes.GameMode;
 import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.interfaces.GameLogicInterface;
 import de.illonis.eduras.logger.EduLog;
