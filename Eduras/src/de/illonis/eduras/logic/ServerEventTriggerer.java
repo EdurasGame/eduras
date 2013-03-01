@@ -44,6 +44,10 @@ public class ServerEventTriggerer implements EventTriggerer {
 		this.gameInfo = logic.getGame();
 	}
 
+	public GameInformation getGameInfo() {
+		return gameInfo;
+	}
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -256,7 +260,9 @@ public class ServerEventTriggerer implements EventTriggerer {
 
 	@Override
 	public void changeGameMode(GameMode newMode) {
-		// TODO Auto-generated method stub
+		gameInfo.getGameSettings().changeGameMode(newMode);
+
+		// TODO: Send gamemode change to clients!
 
 	}
 }
