@@ -225,12 +225,10 @@ public class ServerConsole implements Runnable {
 	 *             illegal conditions. For specification of all possible
 	 *             formatting errors, see the detail section of
 	 *             {@link Formatter} class specification.
-	 * @throws NoConsoleException
-	 *             when there is no command line is available
 	 */
-	public static void printf(String s, Object args) throws NoConsoleException {
-		if (isRunning()) {
-			getInstance().console.printf(s, args);
+	public void printf(String s, Object args) {
+		if (exists()) {
+			System.out.printf(s, args);
 		}
 	}
 
