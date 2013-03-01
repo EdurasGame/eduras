@@ -155,6 +155,12 @@
 						<entry>newHealth</entry>
 					</row>
 					<row>
+					    <entry>SET_GAMEMODE</entry>
+					    <entry>140</entry>
+					    <entry>Sets game mode to a new mode.</entry>
+					    <entry>newMode</entry>
+					</row>
+					<row>
 						<entry>MATCH_END</entry>
 						<entry>190</entry>
 						<entry>Tells that the match ended and that the winner has got the passed id.</entry>

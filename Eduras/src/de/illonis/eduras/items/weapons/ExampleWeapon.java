@@ -21,6 +21,9 @@ public class ExampleWeapon extends Weapon {
 	 * Creates a new instance of the example weapon.
 	 * 
 	 * @param gi
+	 *            game information
+	 * @param id
+	 *            id of weapon
 	 */
 	public ExampleWeapon(GameInformation gi, int id) {
 
