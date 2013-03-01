@@ -21,7 +21,7 @@ public class HealthBar {
 	/**
 	 * Gap between unit and health bar.
 	 */
-	private final static int UNIT_GAP = 15;
+	private final static int UNIT_GAP = 5;
 
 	private int x, y, w, h;
 
@@ -41,7 +41,7 @@ public class HealthBar {
 		int maxHealth = unit.getMaxHealth();
 		int health = unit.getHealth();
 
-		instance.w = (int) Math.floor((double) ((double) health / maxHealth)
+		instance.w = (int) Math.round((double) ((double) health / maxHealth)
 				* HEALTHBAR_WIDTH);
 
 		double overlength = (HEALTHBAR_WIDTH - unit.getBoundingBox().getWidth()) / 2;
