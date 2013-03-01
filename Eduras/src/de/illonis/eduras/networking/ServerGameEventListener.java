@@ -12,6 +12,7 @@ import de.illonis.eduras.events.SetGameObjectAttributeEvent;
 import de.illonis.eduras.events.SetItemSlotEvent;
 import de.illonis.eduras.events.SetOwnerEvent;
 import de.illonis.eduras.exceptions.MessageNotSupportedException;
+import de.illonis.eduras.gamemodes.GameMode;
 import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.interfaces.GameEventListener;
 import de.illonis.eduras.logger.EduLog;
@@ -190,5 +191,9 @@ public class ServerGameEventListener implements GameEventListener {
 			e.printStackTrace();
 		}
 		server.stopServer();
+	}
+
+	@Override
+	public void onGameModeChanged(GameMode newGameMode) {
 	}
 }
