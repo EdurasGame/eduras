@@ -178,7 +178,8 @@ public class NetworkMessageSerializer {
 					matchEndEvent.getWinnerId());
 			break;
 		default:
-			break;
+			throw new MessageNotSupportedException(gameEvent.getType(),
+					"There does not exist a serialization for the given event yet!");
 		}
 		if (serializedEvent.endsWith("#"))
 			throw new MessageNotSupportedException(gameEvent.getType(),
