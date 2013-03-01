@@ -6,7 +6,7 @@ import java.util.HashMap;
 import java.util.IllegalFormatException;
 
 import de.illonis.eduras.logger.EduLog;
-import de.illonis.eduras.logic.ServerEventTriggerer;
+import de.illonis.eduras.logic.ConsoleEventTriggerer;
 
 /**
  * Provides a command line interface on server to make administrator able to run
@@ -29,22 +29,11 @@ public class ServerConsole implements Runnable {
 	private final static String HELP_DESCRIPTION = "Prints all available commands";
 	private static ServerConsole instance;
 	private Thread thread;
-	private ServerEventTriggerer triggerer;
+	private ConsoleEventTriggerer triggerer;
 
 	private final HashMap<String, ConsoleCommand> commands;
 	private final Console console;
 	private boolean running = false;
-
-	/**
-	 * Returns triggerer to trigger events on server on.
-	 * 
-	 * @return triggerer
-	 * @throws NoConsoleException
-	 *             if no command line available.
-	 */
-	static ServerEventTriggerer getTriggerer() throws NoConsoleException {
-		return getInstance().triggerer;
-	}
 
 	/**
 	 * Sets event triggerer to given triggerer.
@@ -52,7 +41,7 @@ public class ServerConsole implements Runnable {
 	 * @param triggerer
 	 *            new triggerer.
 	 */
-	public static void setEventTriggerer(ServerEventTriggerer triggerer) {
+	public static void setEventTriggerer(ConsoleEventTriggerer triggerer) {
 		try {
 			getInstance().triggerer = triggerer;
 		} catch (NoConsoleException e) {
@@ -75,7 +64,7 @@ public class ServerConsole implements Runnable {
 				HELP_DESCRIPTION) {
 
 			@Override
-			public void onCommand(String[] args) {
+			public void onCommand(String[] args, ConsoleEventTriggerer triggerer) {
 				listCommands();
 			}
 		});
@@ -209,7 +198,7 @@ public class ServerConsole implements Runnable {
 		if (cmd == null) {
 			System.out.println("Command not found: " + command);
 		} else {
-			cmd.onCommand(args);
+			cmd.onCommand(args, triggerer);
 		}
 	}
 
