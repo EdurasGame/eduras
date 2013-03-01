@@ -92,7 +92,8 @@ public abstract class Unit extends MoveableGameObject {
 	public void damage(int damage) {
 		if (damage <= 0)
 			return;
-		setHealth(Math.max(getHealth() - damage, 0));
+		int newHealth = Math.max(getHealth() - damage, 0);
+		getGame().getEventTriggerer().setHealth(this.getId(), newHealth);
 		if (isDead())
 			onDead();
 	}

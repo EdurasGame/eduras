@@ -210,6 +210,8 @@ public class ServerEventTriggerer implements EventTriggerer {
 		// TODO: It should be the client's part to get the name after a respawn.
 		// We have to change this as soon as the gui is told that a player was
 		// killed.
+		// (jme) When we don't remove and create the object, name doesn't have
+		// to be set again.
 		renamePlayer(player.getOwner(), player.getName());
 	}
 
