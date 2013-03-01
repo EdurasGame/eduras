@@ -91,7 +91,7 @@ public class GameEventReactor implements GameEventListener {
 
 	@Override
 	public void onGameModeChanged(GameMode newGameMode) {
-		// TODO: implement.
+		client.getFrame().getStatBar().onGameModeChanged(newGameMode);
 	}
 
 }
