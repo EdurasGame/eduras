@@ -45,6 +45,7 @@ public class GameRenderer implements TooltipHandler {
 	private InformationProvider informationProvider;
 	private GuiClickReactor gui;
 	private ItemDisplay itemDisplay;
+	private GameStatBar statBar;
 	private ItemTooltip tooltip;
 
 	/**
@@ -76,7 +77,8 @@ public class GameRenderer implements TooltipHandler {
 		uiObjects = new ArrayList<RenderedGuiObject>();
 		itemDisplay = new ItemDisplay(gui, informationProvider, imagelist);
 		uiObjects.add(itemDisplay);
-		uiObjects.add(new GameStatBar(informationProvider));
+		statBar = new GameStatBar(informationProvider);
+		uiObjects.add(statBar);
 		gui.registerTooltipTriggerer(itemDisplay);
 		gui.addClickableGuiElement(itemDisplay);
 	}
@@ -334,5 +336,9 @@ public class GameRenderer implements TooltipHandler {
 	public void drawWin(int winnerId) {
 		dbg.drawString("Player with id " + winnerId + " won the game!",
 				(int) mapSize.getCenterX(), (int) mapSize.getCenterY());
+	}
+
+	GameStatBar getStatBar() {
+		return statBar;
 	}
 }
