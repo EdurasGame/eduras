@@ -2,6 +2,9 @@ package de.illonis.eduras;
 
 import java.util.LinkedList;
 
+import de.illonis.eduras.gamemodes.GameMode;
+import de.illonis.eduras.gamemodes.NoGameMode;
+
 public class GameSettings {
 
 	private GameInformation gameInfo;
