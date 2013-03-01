@@ -1,4 +1,6 @@
-package de.illonis.eduras.serverconsole;
+package de.illonis.eduras.serverconsole.commands;
+
+import de.illonis.eduras.serverconsole.CommandHandler;
 
 /**
  * Represents a console command that can be executed.

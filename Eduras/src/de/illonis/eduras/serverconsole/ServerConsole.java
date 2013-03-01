@@ -7,6 +7,7 @@ import java.util.IllegalFormatException;
 
 import de.illonis.eduras.logger.EduLog;
 import de.illonis.eduras.logic.ConsoleEventTriggerer;
+import de.illonis.eduras.serverconsole.commands.ConsoleCommand;
 
 /**
  * Provides a command line interface on server to make administrator able to run
@@ -64,7 +65,8 @@ public class ServerConsole implements Runnable {
 				HELP_DESCRIPTION) {
 
 			@Override
-			public void onCommand(String[] args, ConsoleEventTriggerer triggerer) {
+			public void onCommand(String[] args, ServerConsole console,
+					ConsoleEventTriggerer triggerer) {
 				listCommands();
 			}
 		});
@@ -198,7 +200,7 @@ public class ServerConsole implements Runnable {
 		if (cmd == null) {
 			System.out.println("Command not found: " + command);
 		} else {
-			cmd.onCommand(args, triggerer);
+			cmd.onCommand(args, this, triggerer);
 		}
 	}
 
@@ -238,7 +240,7 @@ public class ServerConsole implements Runnable {
 	 * @param s
 	 *            text.
 	 */
-	static void print(String s) {
+	public void print(String s) {
 		if (exists())
 			System.out.println(s);
 	}
@@ -257,7 +259,7 @@ public class ServerConsole implements Runnable {
 
 		try {
 			ServerConsole.start();
-			ServerConsole.registerCommand(new ExampleCommand());
+
 		} catch (NoConsoleException e) {
 			EduLog.passException(e);
 		}

@@ -16,8 +16,12 @@ public interface CommandHandler {
 	 * @param args
 	 *            command with args. args[0] is the command and args[1-n] are
 	 *            arguments.
+	 * 
+	 * @param console
+	 *            console that triggered command. Use this to print output on.
 	 * @param triggerer
 	 *            the triggerer where events can be called.
 	 */
-	void onCommand(String[] args, ConsoleEventTriggerer triggerer);
+	void onCommand(String[] args, ServerConsole console,
+			ConsoleEventTriggerer triggerer);
 }
