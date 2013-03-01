@@ -11,7 +11,7 @@ import de.illonis.eduras.logic.ConsoleEventTriggerer;
 public interface CommandHandler {
 
 	/**
-	 * Called when a command is received to execute it.<br>
+	 * Called when a command is received to execute it.
 	 * 
 	 * @param args
 	 *            command with args. args[0] is the command and args[1-n] are
@@ -21,7 +21,8 @@ public interface CommandHandler {
 	 *            console that triggered command. Use this to print output on.
 	 * @param triggerer
 	 *            the triggerer where events can be called.
+	 * @return true when command was successful, false otherwise.
 	 */
-	void onCommand(String[] args, ServerConsole console,
+	boolean onCommand(String[] args, ServerConsole console,
 			ConsoleEventTriggerer triggerer);
 }

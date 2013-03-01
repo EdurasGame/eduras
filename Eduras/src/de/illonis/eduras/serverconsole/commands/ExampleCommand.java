@@ -10,8 +10,9 @@ public class ExampleCommand extends ConsoleCommand {
 	}
 
 	@Override
-	public void onCommand(String[] args, ServerConsole console,
+	public boolean onCommand(String[] args, ServerConsole console,
 			ConsoleEventTriggerer triggerer) {
 		console.print("Hat geklappt.");
+		return true;
 	}
 }
