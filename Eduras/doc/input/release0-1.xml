@@ -3,46 +3,79 @@
 "http://www.oasis-open.org/docbook/xml/simple/1.0/sdocbook.dtd">
 <article>
 	<articleinfo>
-		<title>Game graphics</title>
+		<title>Feature planning</title>
 	</articleinfo>
 	<section>
-	<title>(fma)Features for release 0.1</title>
-	<para>
-	We are aiming for the following features to be included in Eduras 0.1:
-	</para>
-	<itemizedlist>
-		<listitem>
-			<para>
-				Player-centered scrolling
-			</para>
-			<para>
-				Scaling and full-screen mode.
-			</para>
-			<para>
-				At least three different weapons.
-			</para>
-			<para>
-				At least one seriously elaborate map.
-			</para>
-			<para>
-				Cooldown for weapons.
-			</para>
-			<para>
-				Make weapons be able to respawn.
-			</para>
-			<para>
-				An easily configurable server including features like server-restart, -shut and -open, gamemode- and map-change and limitations on playercount.
-			</para>
-			<para>
-				A more complete HUD showing healthpoints, weapons and eventually score correctly.
-			</para>
-			<para>
-				A very simple website where you can download Eduras from and which gives basic information about the game and its current and future features.
-			</para>
-			<para>
-				Support for EdurasViewer for Android and iOS.
-			</para>
-		</listitem>
-	</itemizedlist>
+		<title>(fma) Features for release 0.1</title>
+		<para>
+			We are aiming for the following features to be included in Eduras 0.1:
+		</para>
+		<itemizedlist>
+			<listitem>
+				<para>
+					Player-centered scrolling
+				</para>
+			</listitem>
+			<listitem>
+				<para>
+					(Scaling and) full-screen mode.
+				</para>
+			</listitem>
+			<listitem>
+				<para>
+					At least three different weapons.
+				</para>
+			</listitem>
+			<listitem>
+				<para>
+					At least one seriously elaborate map.
+				</para>
+			</listitem>
+			<listitem>
+				<para>
+					Cooldown for weapons.
+				</para>
+			</listitem>
+			<listitem>
+				<para>
+					Make items be able to respawn.
+				</para>
+			</listitem>
+			<listitem>
+				<para>
+					An easily configurable server including features like server-restart,
+					-shut and -open, gamemode- and map-change and limitations on
+					playercount.
+				</para>
+			</listitem>
+			<listitem>
+				<para>
+					A more complete HUD showing healthpoints, weapons and eventually
+					score correctly.
+				</para>
+			</listitem>
+			<listitem>
+				<para>
+					A very simple website where you can download Eduras from and which
+					gives basic information about the game and its current and future
+					features.
+				</para>
+			</listitem>
+			<listitem>
+				<para>
+					<emphasis role="strike">Support for EdurasViewer for Android and iOS.</emphasis>
+				</para>
+			</listitem>
+		</itemizedlist>
 	</section>
+	<section>
+		<title>(fma) Features for release 0.2</title>
+		<itemizedlist>
+		    <listitem>
+		        <para>
+		            Dynamic objects (add/send them at runtime)
+		        </para>
+		    </listitem>
+		</itemizedlist>
+		</section>
 </article>
