@@ -4,6 +4,7 @@
 package de.illonis.eduras.logic;
 
 import de.illonis.eduras.GameInformation;
+import de.illonis.eduras.GameMode;
 import de.illonis.eduras.Map;
 import de.illonis.eduras.ObjectFactory.ObjectType;
 import de.illonis.eduras.events.ClientRenameEvent;
@@ -237,5 +238,23 @@ public class ServerEventTriggerer implements EventTriggerer {
 		MatchEndEvent matchEndEvent = new MatchEndEvent(gameInfo
 				.getGameSettings().getStats().findPlayerWithMostFrags());
 		logic.onGameEventAppeared(matchEndEvent);
+	}
+
+	@Override
+	public void restartRound() {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void setRemainingTime(long remainingTime) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void changeGameMode(GameMode newMode) {
+		// TODO Auto-generated method stub
+
 	}
 }
