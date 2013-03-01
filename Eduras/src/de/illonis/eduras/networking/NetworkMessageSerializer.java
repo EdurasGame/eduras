@@ -101,8 +101,6 @@ public class NetworkMessageSerializer {
 			throws MessageNotSupportedException {
 		String serializedEvent = "";
 
-		serializedEvent += gameEvent.getType().getNumber() + "#";
-
 		switch (gameEvent.getType()) {
 		case DEATH:
 			break;
@@ -114,19 +112,20 @@ public class NetworkMessageSerializer {
 		case MOVE_RIGHT_RELEASED:
 		case MOVE_UP_PRESSED:
 		case MOVE_UP_RELEASED:
-			serializedEvent += ((UserMovementEvent) gameEvent).getOwner() + "";
+			serializedEvent = buildEventString(gameEvent,
+					((UserMovementEvent) gameEvent).getOwner());
 			break;
 		case NO_EVENT:
 			break;
 		case OBJECT_CREATE:
 			ObjectFactoryEvent createEvent = (ObjectFactoryEvent) gameEvent;
-			serializedEvent += concatenateWithDel("#", createEvent.getId(),
-					createEvent.getOwner(), createEvent.getObjectType()
-							.getNumber());
+			serializedEvent = buildEventString(createEvent,
+					createEvent.getId(), createEvent.getOwner(), createEvent
+							.getObjectType().getNumber());
 			break;
 		case OBJECT_REMOVE:
 			ObjectFactoryEvent removeEvent = (ObjectFactoryEvent) gameEvent;
-			serializedEvent += removeEvent.getId();
+			serializedEvent = buildEventString(removeEvent, removeEvent.getId());
 			break;
 		case SETHEALTH:
 			SetIntegerGameObjectAttributeEvent igo = (SetIntegerGameObjectAttributeEvent) gameEvent;
@@ -137,43 +136,45 @@ public class NetworkMessageSerializer {
 		case SETSPEEDVECTOR:
 		case SET_POS:
 			MovementEvent moveEvent = (MovementEvent) gameEvent;
-			serializedEvent += concatenateWithDel("#", moveEvent.getObjectId(),
-					moveEvent.getNewXPos(), moveEvent.getNewYPos());
+			serializedEvent = buildEventString(moveEvent,
+					moveEvent.getObjectId(), moveEvent.getNewXPos(),
+					moveEvent.getNewYPos());
 			break;
 		case SET_OWNER:
 			SetOwnerEvent setOwnerEvent = (SetOwnerEvent) gameEvent;
-			serializedEvent += concatenateWithDel("#",
+			serializedEvent = buildEventString(setOwnerEvent,
 					setOwnerEvent.getObjectId(), setOwnerEvent.getOwner());
 			break;
 		case SET_COLLIDABLE:
 		case SET_VISIBLE:
 			SetBooleanGameObjectAttributeEvent setAttributeEvent = (SetBooleanGameObjectAttributeEvent) gameEvent;
-			serializedEvent += concatenateWithDel("#",
+			serializedEvent = buildEventString(setAttributeEvent,
 					setAttributeEvent.getObjectId(),
 					setAttributeEvent.getNewValue());
 			break;
 		case ITEM_USE:
 			ItemEvent itemEvent = (ItemEvent) gameEvent;
 			Vector2D target = itemEvent.getTarget();
-			serializedEvent += concatenateWithDel("#", itemEvent.getSlotNum(),
-					itemEvent.getOwner(), target.getX(), target.getY());
+			serializedEvent = buildEventString(itemEvent,
+					itemEvent.getSlotNum(), itemEvent.getOwner(),
+					target.getX(), target.getY());
 			break;
 		case INFORMATION_REQUEST:
-			serializedEvent += ((GameInfoRequest) gameEvent).getRequester();
+			serializedEvent = buildEventString(gameEvent,
+					((GameInfoRequest) gameEvent).getRequester());
 			break;
 		case CLIENT_SETNAME:
 			ClientRenameEvent e = (ClientRenameEvent) gameEvent;
-			serializedEvent += concatenateWithDel("#", e.getOwner(),
-					e.getName());
+			serializedEvent = buildEventString(e, e.getOwner(), e.getName());
 			break;
 		case SET_ITEM_SLOT:
 			SetItemSlotEvent sis = (SetItemSlotEvent) gameEvent;
-			serializedEvent += concatenateWithDel("#", sis.getOwner(),
+			serializedEvent = buildEventString(sis, sis.getOwner(),
 					sis.getObjectId(), sis.getItemSlot());
 			break;
 		case MATCH_END:
 			MatchEndEvent matchEndEvent = (MatchEndEvent) gameEvent;
-			serializedEvent += concatenateWithDel("#",
+			serializedEvent = buildEventString(matchEndEvent,
 					matchEndEvent.getWinnerId());
 			break;
 		default:
@@ -182,7 +183,7 @@ public class NetworkMessageSerializer {
 		if (serializedEvent.endsWith("#"))
 			throw new MessageNotSupportedException(gameEvent.getType(),
 					"There does not exist a serialization for the given event yet!");
-		return "##" + serializedEvent;
+		return serializedEvent;
 
 	}
 
@@ -202,7 +203,7 @@ public class NetworkMessageSerializer {
 	 * @return serialized eventstring.
 	 */
 	private static String buildEventString(GameEvent ev, Object... args) {
-		StringBuilder builder = new StringBuilder("");
+		StringBuilder builder = new StringBuilder("##");
 		builder.append(ev.getType().toString());
 		for (Object object : args) {
 			builder.append("#");
