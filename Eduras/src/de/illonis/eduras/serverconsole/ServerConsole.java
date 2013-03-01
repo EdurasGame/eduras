@@ -66,10 +66,10 @@ public class ServerConsole implements Runnable {
 				HELP_DESCRIPTION) {
 
 			@Override
-			public boolean onCommand(String[] args, ServerConsole console,
+			public void onCommand(String[] args, ServerConsole console,
 					ConsoleEventTriggerer triggerer) {
 				listCommands();
-				return true;
+				return;
 			}
 		});
 		instance = this;

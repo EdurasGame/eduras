@@ -19,10 +19,10 @@ public interface CommandHandler {
 	 * 
 	 * @param console
 	 *            console that triggered command. Use this to print output on.
+	 * 
 	 * @param triggerer
 	 *            the triggerer where events can be called.
-	 * @return true when command was successful, false otherwise.
 	 */
-	boolean onCommand(String[] args, ServerConsole console,
+	void onCommand(String[] args, ServerConsole console,
 			ConsoleEventTriggerer triggerer);
 }

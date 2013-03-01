@@ -5,7 +5,9 @@ import de.illonis.eduras.serverconsole.CommandHandler;
 import de.illonis.eduras.serverconsole.ServerConsole;
 
 /**
- * Represents a console command that can be executed.
+ * Represents a console command that can be executed.<br>
+ * A command can have arguments. The number of arguments must be in a given
+ * range (default: exactly zero).
  * 
  * @author illonis
  * 
@@ -23,7 +25,8 @@ public abstract class ConsoleCommand implements CommandHandler {
 	 * @param command
 	 *            console command.
 	 * @param description
-	 *            command description.
+	 *            command description. Command and its arguments should be
+	 *            explained here.
 	 */
 	public ConsoleCommand(String command, String description) {
 		this.command = command;
