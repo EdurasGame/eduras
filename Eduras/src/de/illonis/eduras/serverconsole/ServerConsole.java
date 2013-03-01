@@ -186,7 +186,8 @@ public class ServerConsole implements Runnable {
 	}
 
 	/**
-	 * Parses a command line input.
+	 * Parses a command line input. Checks, if a command exists and has a valid
+	 * number of arguments given, then executes it.
 	 * 
 	 * @param command
 	 *            command to parse.
@@ -194,15 +195,34 @@ public class ServerConsole implements Runnable {
 	private void parseCommand(String command) {
 		if (command.trim().isEmpty())
 			return;
+
+		if (triggerer == null) {
+			EduLog.error("Retrieved a console command but no triggerer is available.");
+			return;
+		}
+
 		EduLog.fine("Received command: " + command);
 
 		String[] args = command.split(" ");
 
 		ConsoleCommand cmd = commands.get(args[0]);
 		if (cmd == null) {
-			System.out.println("Command not found: " + command);
+			println("Command not found: " + command);
 		} else {
-			cmd.onCommand(args, this, triggerer);
+			if (cmd.argumentCountMatches(args.length - 1)) {
+				cmd.onCommand(args, this, triggerer);
+			} else {
+				if (cmd.getMinimumArguments() == cmd.getMaximumArguments()) {
+					printlnf(
+							"Invalid number of arguments given. Command '%s' requires exactly %d arguments.",
+							args[0], cmd.getMaximumArguments());
+				} else {
+					printlnf(
+							"Invalid number of arguments given. Command '%s' requires at least %d arguments, to a a maximum of %d arguments.",
+							args[0], cmd.getMinimumArguments(),
+							cmd.getMaximumArguments());
+				}
+			}
 		}
 	}
 
@@ -228,21 +248,21 @@ public class ServerConsole implements Runnable {
 	 *             formatting errors, see the detail section of
 	 *             {@link Formatter} class specification.
 	 */
-	public void printf(String s, Object... args) {
+	public void printlnf(String s, Object... args) {
 		if (exists()) {
-			System.out.printf(s, args);
+			System.out.printf(s + "\n", args);
 		}
 	}
 
 	/**
 	 * Prints given text to console.
 	 * 
-	 * @param s
-	 *            text.
+	 * @param text
+	 *            text to print.
 	 */
-	public void print(String s) {
+	public void println(String text) {
 		if (exists())
-			System.out.println(s);
+			System.out.println(text);
 	}
 
 	/**
@@ -250,8 +270,7 @@ public class ServerConsole implements Runnable {
 	 */
 	private void listCommands() {
 		for (ConsoleCommand command : commands.values()) {
-			System.out.println(command.getCommand() + " - "
-					+ command.getDescription());
+			println(command.getCommand() + " - " + command.getDescription());
 		}
 	}
 
@@ -263,6 +282,5 @@ public class ServerConsole implements Runnable {
 		} catch (NoConsoleException e) {
 			EduLog.passException(e);
 		}
-
 	}
 }

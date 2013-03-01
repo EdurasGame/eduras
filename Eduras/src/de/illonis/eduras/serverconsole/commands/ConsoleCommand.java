@@ -31,7 +31,9 @@ public abstract class ConsoleCommand implements CommandHandler {
 	}
 
 	/**
-	 * Sets minimum count of command arguments to given value.
+	 * Sets minimum count of command arguments to given value.<br>
+	 * Argument number is always checked before calling
+	 * {@link #onCommand(String[], ServerConsole, ConsoleEventTriggerer)}.
 	 * 
 	 * @param minArgs
 	 *            new minimum number of args. Must be >= 0. If new value is
@@ -47,7 +49,9 @@ public abstract class ConsoleCommand implements CommandHandler {
 	}
 
 	/**
-	 * Sets maximum count of command arguments to given value.
+	 * Sets maximum count of command arguments to given value.<br>
+	 * Argument number is always checked before calling
+	 * {@link #onCommand(String[], ServerConsole, ConsoleEventTriggerer)}.
 	 * 
 	 * @param maxArgs
 	 *            new maximum number of arguments. Must be greater than or equal
@@ -60,13 +64,35 @@ public abstract class ConsoleCommand implements CommandHandler {
 
 	/**
 	 * Sets exact number or arguments required. This sets minimum and maximum
-	 * number of arguments to the new value.
+	 * number of arguments to the new value.<br>
+	 * Argument number is always checked before calling
+	 * {@link #onCommand(String[], ServerConsole, ConsoleEventTriggerer)}.
 	 * 
 	 * @param numArgs
 	 *            new value.
+	 * @see #setMinimumNumArgs(int)
+	 * @see #setMaximumNumArgs(int)
 	 */
 	protected void setExactNumArgs(int numArgs) {
 		minimumArguments = maximumArguments = numArgs;
+	}
+
+	/**
+	 * Returns maximum number of arguments that is allowed.
+	 * 
+	 * @return maximum arguments count.
+	 */
+	public int getMaximumArguments() {
+		return maximumArguments;
+	}
+
+	/**
+	 * Returns minimum number of arguments that is allowed.
+	 * 
+	 * @return minimum arguments count.
+	 */
+	public int getMinimumArguments() {
+		return minimumArguments;
 	}
 
 	/**
@@ -88,34 +114,14 @@ public abstract class ConsoleCommand implements CommandHandler {
 	}
 
 	/**
-	 * Checks if given command has correct number of arguments.
+	 * Compares given argument count to required argument count.
 	 * 
-	 * @param args
-	 *            command including arguments.
-	 * @param console
-	 *            console that command was called on.
-	 * @return true if command has valid number of arguments, false otherwise.
+	 * @param argCount
+	 *            argument count to compare.
+	 * @return true if given argument count is in range of allowed argument
+	 *         counts.
 	 */
-	private boolean validArgumentCountGiven(String[] args, ServerConsole console) {
-		if (args.length - 1 < minimumArguments
-				|| args.length - 1 > maximumArguments) {
-			if (minimumArguments == maximumArguments) {
-				console.printf(
-						"Invalid number of arguments given. Command '%s' requires exactly %d arguments.",
-						args[0], minimumArguments);
-			} else {
-				console.printf(
-						"Invalid number of arguments given. Command '%s' requires at least %d arguments, to a a maximum of %d arguments.",
-						args[0], minimumArguments, maximumArguments);
-			}
-			return false;
-		}
-		return true;
-	}
-
-	@Override
-	public boolean onCommand(String[] args, ServerConsole console,
-			ConsoleEventTriggerer triggerer) {
-		return validArgumentCountGiven(args, console);
+	public boolean argumentCountMatches(int argCount) {
+		return !(argCount < minimumArguments || argCount > maximumArguments);
 	}
 }
