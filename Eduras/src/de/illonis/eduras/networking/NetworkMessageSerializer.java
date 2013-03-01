@@ -130,7 +130,7 @@ public class NetworkMessageSerializer {
 			break;
 		case SETHEALTH:
 			SetIntegerGameObjectAttributeEvent igo = (SetIntegerGameObjectAttributeEvent) gameEvent;
-			serializedEvent += concatenateWithDel("#", igo.getObjectId(),
+			serializedEvent = buildEventString(igo, igo.getObjectId(),
 					igo.getNewValue());
 			break;
 		case SETSPEED:
@@ -201,9 +201,9 @@ public class NetworkMessageSerializer {
 	 *            {@link Object#toString()} method automatically.
 	 * @return serialized eventstring.
 	 */
-	private static String buildEventString(int eventId, Object... args) {
-		StringBuilder builder = new StringBuilder("##");
-		builder.append(String.valueOf(eventId));
+	private static String buildEventString(GameEvent ev, Object... args) {
+		StringBuilder builder = new StringBuilder("");
+		builder.append(ev.getType().toString());
 		for (Object object : args) {
 			builder.append("#");
 			builder.append(object.toString());

@@ -1,4 +1,4 @@
-package de.illonis.eduras;
+package de.illonis.eduras.gamemodes;
 
 import de.illonis.eduras.units.Unit;
 

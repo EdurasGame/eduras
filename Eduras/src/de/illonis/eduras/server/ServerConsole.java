@@ -1,0 +1,277 @@
+package de.illonis.eduras.server;
+
+import java.io.Console;
+import java.util.Formatter;
+import java.util.HashMap;
+import java.util.IllegalFormatException;
+
+import de.illonis.eduras.logger.EduLog;
+import de.illonis.eduras.logic.ServerEventTriggerer;
+
+/**
+ * Provides a command line interface on server to make administrator able to run
+ * some commands at runtime.<br>
+ * Command line cannot be left unless a command is registerd that calls
+ * {@link ServerConsole#stop()}.<br>
+ * By default, a <code>help</code>-command is implemented that echoes a list of
+ * available commands. You can override this command by registering a new
+ * command with the same command name.<br>
+ * <i>Note that this feature is not available when debugging/running in
+ * eclipse.</i>
+ * 
+ * @author illonis
+ * 
+ */
+public class ServerConsole implements Runnable {
+
+	private final static String CMD_PROMPT = "eduras>";
+	private final static String HELP_COMMAND = "help";
+	private final static String HELP_DESCRIPTION = "Prints all available commands";
+	private static ServerConsole instance;
+	private Thread thread;
+	private ServerEventTriggerer triggerer;
+
+	private final HashMap<String, ConsoleCommand> commands;
+	private final Console console;
+	private boolean running = false;
+
+	/**
+	 * Returns triggerer to trigger events on server on.
+	 * 
+	 * @return triggerer
+	 * @throws NoConsoleException
+	 *             if no command line available.
+	 */
+	static ServerEventTriggerer getTriggerer() throws NoConsoleException {
+		return getInstance().triggerer;
+	}
+
+	/**
+	 * Sets event triggerer to given triggerer.
+	 * 
+	 * @param triggerer
+	 *            new triggerer.
+	 */
+	public static void setEventTriggerer(ServerEventTriggerer triggerer) {
+		try {
+			getInstance().triggerer = triggerer;
+		} catch (NoConsoleException e) {
+			EduLog.passException(e);
+		}
+	}
+
+	/**
+	 * Creates a new console that can be accessed to.
+	 * 
+	 * @throws NoConsoleException
+	 *             when no command line is available.
+	 */
+	private ServerConsole() throws NoConsoleException {
+		if (!exists())
+			throw new NoConsoleException();
+		console = System.console();
+		commands = new HashMap<String, ConsoleCommand>();
+		commands.put(HELP_COMMAND, new ConsoleCommand(HELP_COMMAND,
+				HELP_DESCRIPTION) {
+
+			@Override
+			public void onCommand(String[] args) {
+				listCommands();
+			}
+		});
+		instance = this;
+	}
+
+	/**
+	 * Starts server console. Has no effect if a console is already running.
+	 * 
+	 * @see #stop()
+	 * @throws NoConsoleException
+	 *             when there is no command line available.
+	 */
+	public static void start() throws NoConsoleException {
+		if (!isRunning())
+			getInstance().runMeAsync();
+	}
+
+	private void runMeAsync() {
+		thread = new Thread(this);
+		running = true;
+		thread.start();
+	}
+
+	private void stopMe() {
+		if (thread != null) {
+			running = false;
+			thread.interrupt();
+		}
+	}
+
+	/**
+	 * Checks if a console exists where server console can be displayed. If a
+	 * console exists, commands can be added without throwing an exception.
+	 * 
+	 * @return true if a console exists.
+	 */
+	public static boolean exists() {
+		return (System.console() != null);
+	}
+
+	private static ServerConsole getInstance() throws NoConsoleException {
+		if (instance == null) {
+			new ServerConsole();
+		}
+		return instance;
+	}
+
+	/**
+	 * Checks whether a server console instance is running.
+	 * 
+	 * @return true if a server console is running, false otherwise.
+	 */
+	public static boolean isRunning() {
+		if (instance == null)
+			return false;
+		return instance.running;
+	}
+
+	/**
+	 * Stops server console. A stopped server can be started again. Has no
+	 * effect if no console is running.
+	 * 
+	 * @throws NoConsoleException
+	 *             if no console available.
+	 * 
+	 * @see #start()
+	 */
+	public static void stop() throws NoConsoleException {
+		getInstance().stopMe();
+	}
+
+	/**
+	 * Registers given command with this console. Command names are unique. That
+	 * means, if a command with same name exists, it will be overwritten.
+	 * 
+	 * @param command
+	 *            command that should be registered.
+	 */
+	public static void registerCommand(ConsoleCommand command) {
+		try {
+			getInstance().commands.put(command.getCommand(), command);
+		} catch (NoConsoleException e) {
+			EduLog.passException(e);
+		}
+	}
+
+	/**
+	 * Checks if given command already exists.
+	 * 
+	 * @param cmd
+	 *            command name.
+	 * @return true if command exists, false otherwise.
+	 * @throws NoConsoleException
+	 *             when no command line is available.
+	 */
+	public static boolean commandExists(String cmd) throws NoConsoleException {
+		return getInstance().commands.containsKey(cmd);
+	}
+
+	@Override
+	public void run() {
+		readFromConsole();
+	}
+
+	/**
+	 * Reads from console repeatedly.
+	 */
+	private void readFromConsole() {
+		String command;
+		while (running) {
+			command = console.readLine(CMD_PROMPT);
+			parseCommand(command);
+		}
+	}
+
+	/**
+	 * Parses a command line input.
+	 * 
+	 * @param command
+	 *            command to parse.
+	 */
+	private void parseCommand(String command) {
+		if (command.trim().isEmpty())
+			return;
+		EduLog.fine("Received command: " + command);
+
+		String[] args = command.split(" ");
+
+		ConsoleCommand cmd = commands.get(args[0]);
+		if (cmd == null) {
+			System.out.println("Command not found: " + command);
+		} else {
+			cmd.onCommand(args);
+		}
+	}
+
+	/**
+	 * Prints given (formatted) string to current server console.<br>
+	 * <i>Note: This method neither throws an exception nor prints anything if a
+	 * command line is available but no server console running. Use
+	 * {@link EduLog} for that.</i>
+	 * 
+	 * @see Formatter
+	 * 
+	 * @param s
+	 *            A (format) string that should be printed.
+	 * 
+	 * @param args
+	 *            Format arguments.
+	 * 
+	 * @throws IllegalFormatException
+	 *             If a format string contains an illegal syntax, a format
+	 *             specifier that is incompatible with the given arguments,
+	 *             insufficient arguments given the format string, or other
+	 *             illegal conditions. For specification of all possible
+	 *             formatting errors, see the detail section of
+	 *             {@link Formatter} class specification.
+	 * @throws NoConsoleException
+	 *             when there is no command line is available
+	 */
+	public static void printf(String s, Object args) throws NoConsoleException {
+		if (isRunning()) {
+			getInstance().console.printf(s, args);
+		}
+	}
+
+	/**
+	 * Prints given text to console.
+	 * 
+	 * @param s
+	 *            text.
+	 */
+	static void print(String s) {
+		if (exists())
+			System.out.println(s);
+	}
+
+	/**
+	 * Lists all available commands.
+	 */
+	private void listCommands() {
+		for (ConsoleCommand command : commands.values()) {
+			System.out.println(command.getCommand() + " - "
+					+ command.getDescription());
+		}
+	}
+
+	public static void main(String[] args) {
+
+		try {
+			ServerConsole.start();
+			ServerConsole.registerCommand(new ExampleCommand());
+		} catch (NoConsoleException e) {
+			EduLog.passException(e);
+		}
+
+	}
+}
