@@ -1,4 +1,4 @@
-package de.illonis.eduras.server;
+package de.illonis.eduras.serverconsole;
 
 /**
  * Thrown when no console is available.

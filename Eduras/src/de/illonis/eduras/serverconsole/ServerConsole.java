@@ -1,4 +1,4 @@
-package de.illonis.eduras.server;
+package de.illonis.eduras.serverconsole;
 
 import java.io.Console;
 import java.util.Formatter;

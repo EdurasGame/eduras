@@ -1,4 +1,4 @@
-package de.illonis.eduras.server;
+package de.illonis.eduras.serverconsole;
 
 /**
  * Represents a console command that can be executed.
@@ -25,16 +25,18 @@ public abstract class ConsoleCommand implements CommandHandler {
 	}
 
 	/**
+	 * Returns command name.
 	 * 
-	 * @return
+	 * @return command name.
 	 */
 	public String getCommand() {
 		return command;
 	}
 
 	/**
+	 * Returns description of this command.
 	 * 
-	 * @return
+	 * @return command description.
 	 */
 	public String getDescription() {
 		return description;
