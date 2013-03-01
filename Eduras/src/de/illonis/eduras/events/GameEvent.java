@@ -35,6 +35,11 @@ public abstract class GameEvent extends Event {
 			return number;
 		}
 
+		@Override
+		public String toString() {
+			return getNumber() + "";
+		}
+
 	}
 
 	/**
