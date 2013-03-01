@@ -87,7 +87,9 @@ public class Geometry {
 	 * @param second
 	 *            The second line segment.
 	 * @return Returns null if there was no intercept point found and returns
-	 *         the intercept point as a vector otherwise.
+	 *         the intercept point as a vector otherwise. If there's an infinite
+	 *         number of intercept points, one of them will be returned (but you
+	 *         cant say which).
 	 */
 	public static Vector2D getSegmentLinesInterceptPoint(Line first, Line second) {
 

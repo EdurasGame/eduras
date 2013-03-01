@@ -16,6 +16,7 @@ import de.illonis.eduras.events.ObjectFactoryEvent;
 import de.illonis.eduras.events.SetIntegerGameObjectAttributeEvent;
 import de.illonis.eduras.exceptions.InvalidNameException;
 import de.illonis.eduras.exceptions.MessageNotSupportedException;
+import de.illonis.eduras.gamemodes.GameMode;
 import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.interfaces.GameLogicInterface;
 import de.illonis.eduras.logger.EduLog;
@@ -239,5 +240,23 @@ public class ServerEventTriggerer implements EventTriggerer {
 		MatchEndEvent matchEndEvent = new MatchEndEvent(gameInfo
 				.getGameSettings().getStats().findPlayerWithMostFrags());
 		logic.onGameEventAppeared(matchEndEvent);
+	}
+
+	@Override
+	public void restartRound() {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void setRemainingTime(long remainingTime) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void changeGameMode(GameMode newMode) {
+		// TODO Auto-generated method stub
+
 	}
 }

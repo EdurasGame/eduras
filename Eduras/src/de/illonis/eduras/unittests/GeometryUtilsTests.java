@@ -49,7 +49,7 @@ public class GeometryUtilsTests {
 
 		interceptPoint = Geometry.getSegmentLinesInterceptPoint(line1, line5);
 
-		assertTrue(interceptPoint == null);
+		assertTrue(interceptPoint != null);
 	}
 
 	@Test
