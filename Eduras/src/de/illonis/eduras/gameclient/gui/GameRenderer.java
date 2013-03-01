@@ -338,6 +338,11 @@ public class GameRenderer implements TooltipHandler {
 				(int) mapSize.getCenterX(), (int) mapSize.getCenterY());
 	}
 
+	/**
+	 * Returns status bar.
+	 * 
+	 * @return status bar.
+	 */
 	GameStatBar getStatBar() {
 		return statBar;
 	}

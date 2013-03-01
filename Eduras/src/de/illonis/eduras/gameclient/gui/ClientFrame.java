@@ -189,6 +189,11 @@ public class ClientFrame extends JFrame implements NetworkEventReactor,
 		showGame();
 	}
 
+	/**
+	 * Returns statbar.
+	 * 
+	 * @return statbar.
+	 */
 	public GameStatBar getStatBar() {
 		return renderer.getStatBar();
 	}
