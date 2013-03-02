@@ -7,7 +7,6 @@ import java.util.IllegalFormatException;
 
 import de.illonis.eduras.logger.EduLog;
 import de.illonis.eduras.logic.ConsoleEventTriggerer;
-import de.illonis.eduras.serverconsole.commands.CommandInitializer;
 import de.illonis.eduras.serverconsole.commands.ConsoleCommand;
 
 /**
@@ -265,16 +264,6 @@ public class ServerConsole implements Runnable {
 	private void listCommands() {
 		for (ConsoleCommand command : commands.values()) {
 			println(command.getCommand() + " - " + command.getDescription());
-		}
-	}
-
-	public static void main(String[] args) {
-
-		try {
-			ServerConsole.start();
-			CommandInitializer.initCommands();
-		} catch (NoConsoleException e) {
-			EduLog.passException(e);
 		}
 	}
 }
