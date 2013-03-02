@@ -14,9 +14,13 @@ import de.illonis.eduras.interfaces.NetworkEventListener;
 import de.illonis.eduras.locale.Localization;
 import de.illonis.eduras.logger.EduLog;
 import de.illonis.eduras.logger.EduLog.LogMode;
+import de.illonis.eduras.logic.ConsoleEventTriggerer;
 import de.illonis.eduras.logic.Logic;
 import de.illonis.eduras.logic.ServerEventTriggerer;
 import de.illonis.eduras.networking.Server;
+import de.illonis.eduras.serverconsole.NoConsoleException;
+import de.illonis.eduras.serverconsole.ServerConsole;
+import de.illonis.eduras.serverconsole.commands.CommandInitializer;
 
 /**
  * Used to start eduras?-server via main method.
@@ -63,6 +67,7 @@ public class Eduras {
 		Logic logic = new Logic(gameInfo);
 
 		ServerEventTriggerer eventTriggerer = new ServerEventTriggerer(logic);
+
 		eventTriggerer.setOutputBuffer(server.getOutputBuffer());
 		gameInfo.setEventTriggerer(eventTriggerer);
 
@@ -83,6 +88,15 @@ public class Eduras {
 		}
 
 		getInterfaces();
+
+		try {
+			ServerConsole.start();
+			CommandInitializer.initCommands();
+			ServerConsole.setEventTriggerer(new ConsoleEventTriggerer(
+					eventTriggerer, server));
+		} catch (NoConsoleException e1) {
+			EduLog.passException(e1);
+		}
 
 	}
 

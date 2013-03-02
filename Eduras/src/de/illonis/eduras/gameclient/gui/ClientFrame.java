@@ -14,6 +14,7 @@ import javax.swing.JFrame;
 import de.illonis.eduras.exceptions.InvalidValueEnteredException;
 import de.illonis.eduras.gameclient.GameClient;
 import de.illonis.eduras.gameclient.NetworkEventReactor;
+import de.illonis.eduras.gameclient.gui.guielements.GameStatBar;
 import de.illonis.eduras.gameclient.gui.guielements.ItemDisplay;
 import de.illonis.eduras.logger.EduLog;
 
@@ -186,5 +187,14 @@ public class ClientFrame extends JFrame implements NetworkEventReactor,
 		t.start();
 		client.addKeyHandlerTo(gamePanel);
 		showGame();
+	}
+
+	/**
+	 * Returns statbar.
+	 * 
+	 * @return statbar.
+	 */
+	public GameStatBar getStatBar() {
+		return renderer.getStatBar();
 	}
 }

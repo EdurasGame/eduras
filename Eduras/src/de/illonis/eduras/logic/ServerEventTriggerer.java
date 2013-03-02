@@ -17,6 +17,7 @@ import de.illonis.eduras.events.SetGameModeEvent;
 import de.illonis.eduras.events.SetIntegerGameObjectAttributeEvent;
 import de.illonis.eduras.exceptions.InvalidNameException;
 import de.illonis.eduras.exceptions.MessageNotSupportedException;
+import de.illonis.eduras.gamemodes.GameMode;
 import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.interfaces.GameLogicInterface;
 import de.illonis.eduras.logger.EduLog;
@@ -42,6 +43,10 @@ public class ServerEventTriggerer implements EventTriggerer {
 	public ServerEventTriggerer(GameLogicInterface logic) {
 		this.logic = logic;
 		this.gameInfo = logic.getGame();
+	}
+
+	public GameInformation getGameInfo() {
+		return gameInfo;
 	}
 
 	/*
@@ -242,9 +247,23 @@ public class ServerEventTriggerer implements EventTriggerer {
 		logic.onGameEventAppeared(matchEndEvent);
 	}
 
-	public void setGameMode(String newMode) {
+	@Override
+	public void restartRound() {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void setRemainingTime(long remainingTime) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void changeGameMode(GameMode newMode) {
+		gameInfo.getGameSettings().changeGameMode(newMode);
 		SetGameModeEvent event = new SetGameModeEvent(
-				GameEventNumber.SET_GAMEMODE, newMode);
+				GameEventNumber.SET_GAMEMODE, newMode.getName());
 		try {
 			String eventString = NetworkMessageSerializer.serialize(event);
 			outputBuffer.append(eventString);

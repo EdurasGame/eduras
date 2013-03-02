@@ -8,7 +8,6 @@ import de.illonis.eduras.interfaces.Controllable;
 import de.illonis.eduras.inventory.Inventory;
 import de.illonis.eduras.logger.EduLog;
 import de.illonis.eduras.math.Vector2D;
-import de.illonis.eduras.shapes.Rectangle;
 import de.illonis.eduras.shapes.Triangle;
 
 /**
@@ -45,9 +44,6 @@ public class Player extends Unit implements Controllable {
 		Vector2D thirdEdge = new Vector2D(-10, -10);
 
 		try {
-			Rectangle r = new Rectangle(new Vector2D(-10, 10), new Vector2D(20,
-					-20));
-			// setShape(r);
 			setShape(new Triangle(firstEdge, secondEdge, thirdEdge));
 		} catch (ShapeVerticesNotApplicableException e) {
 

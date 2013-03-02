@@ -1,6 +1,7 @@
 package de.illonis.eduras.logic;
 
 import de.illonis.eduras.ObjectFactory.ObjectType;
+import de.illonis.eduras.gamemodes.GameMode;
 import de.illonis.eduras.math.Vector2D;
 import de.illonis.eduras.units.Player;
 
@@ -117,7 +118,22 @@ public interface EventTriggerer {
 	void onMatchEnd();
 
 	/**
-	 * Sets a new gamemode
+	 * Resets statistics, respawns each player, resets health, and loads initial
+	 * map objects.
 	 */
-	void setGameMode(String newMode);
+	void restartRound();
+
+	/**
+	 * Sets the remaining time to 'remainingTime'.
+	 * 
+	 * @param remainingTime
+	 */
+	void setRemainingTime(long remainingTime);
+
+	/**
+	 * Changes the gamemode to newMode.
+	 * 
+	 * @param newMode
+	 */
+	void changeGameMode(GameMode newMode);
 }

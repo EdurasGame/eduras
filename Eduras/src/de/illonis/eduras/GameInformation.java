@@ -1,6 +1,7 @@
 package de.illonis.eduras;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.concurrent.ConcurrentHashMap;
 
 import de.illonis.eduras.events.ClientRenameEvent;
@@ -40,6 +41,10 @@ public class GameInformation {
 	 */
 	public EventTriggerer getEventTriggerer() {
 		return eventTriggerer;
+	}
+
+	public Collection<Player> getPlayers() {
+		return players.values();
 	}
 
 	/**

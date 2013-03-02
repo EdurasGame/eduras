@@ -4,6 +4,7 @@
 package de.illonis.eduras.logic;
 
 import de.illonis.eduras.ObjectFactory.ObjectType;
+import de.illonis.eduras.gamemodes.GameMode;
 import de.illonis.eduras.math.Vector2D;
 import de.illonis.eduras.units.Player;
 
@@ -91,8 +92,23 @@ public class ClientEventTriggerer implements EventTriggerer {
 	public void onMatchEnd() {
 
 	}
+
 	@Override
-	public void setGameMode(String newMode) {
+	public void restartRound() {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void setRemainingTime(long remainingTime) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void changeGameMode(GameMode newMode) {
+		// TODO Auto-generated method stub
+
 	}
 
 }
