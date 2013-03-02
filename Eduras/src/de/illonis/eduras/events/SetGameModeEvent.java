@@ -7,7 +7,8 @@ public class SetGameModeEvent extends GameEvent {
 		super(type);
 		this.newMode = newMode;
 	}
-public String getNewMode() {
-	return newMode;
-}
+
+	public String getNewMode() {
+		return newMode;
+	}
 }
