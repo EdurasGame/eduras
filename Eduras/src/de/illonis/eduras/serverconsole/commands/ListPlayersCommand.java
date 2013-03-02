@@ -27,7 +27,7 @@ public class ListPlayersCommand extends ConsoleCommand {
 			console.println("No players online.");
 		else {
 			for (Player player : players) {
-				console.printlnf("%d - %s", player.getId(), player.getName());
+				console.printlnf("%d - %s", player.getOwner(), player.getName());
 			}
 		}
 	}
