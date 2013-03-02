@@ -107,11 +107,15 @@ public class GameRenderer implements TooltipHandler {
 					RenderingHints.VALUE_ANTIALIAS_ON);
 		}
 		// clear image
-		dbg.setColor(Color.black);
-		dbg.fillRect(0, 0, width, height);
+		clear(width, height);
 		drawMap();
 		drawObjects();
 		drawGui();
+	}
+
+	private void clear(int width, int height) {
+		dbg.setColor(Color.black);
+		dbg.fillRect(0, 0, width, height);
 	}
 
 	/**
