@@ -32,6 +32,11 @@ public class ConsoleEventTriggerer {
 		this.server = server;
 	}
 
+	/**
+	 * Returns a collection containing all online players.
+	 * 
+	 * @return list of players.
+	 */
 	public Collection<Player> getPlayers() {
 		return triggerer.getGameInfo().getPlayers();
 	}
