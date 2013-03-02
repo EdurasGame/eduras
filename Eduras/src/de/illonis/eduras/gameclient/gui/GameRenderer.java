@@ -13,8 +13,6 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import de.illonis.eduras.gameclient.GameCamera;
 import de.illonis.eduras.gameclient.TooltipHandler;
-import de.illonis.eduras.gameclient.gui.guielements.GameStatBar;
-import de.illonis.eduras.gameclient.gui.guielements.ItemDisplay;
 import de.illonis.eduras.gameclient.gui.guielements.ItemTooltip;
 import de.illonis.eduras.gameclient.gui.guielements.RenderedGuiObject;
 import de.illonis.eduras.gameclient.gui.guielements.TooltipTriggerer;
@@ -40,13 +38,9 @@ public class GameRenderer implements TooltipHandler {
 	private Graphics2D dbg = null;
 	private final ConcurrentHashMap<Integer, GameObject> objs;
 	private final Rectangle mapSize;
-	private final ImageList imagelist;
-	private ArrayList<RenderedGuiObject> uiObjects;
 	private InformationProvider informationProvider;
-	private GuiClickReactor gui;
-	private ItemDisplay itemDisplay;
-	private GameStatBar statBar;
 	private ItemTooltip tooltip;
+	private ArrayList<RenderedGuiObject> uiObjects = new ArrayList<RenderedGuiObject>();
 
 	/**
 	 * Creates a new renderer.
@@ -58,33 +52,14 @@ public class GameRenderer implements TooltipHandler {
 	 * @param informationProvider
 	 *            game-information that contains objects to render.
 	 */
-	public GameRenderer(GuiClickReactor gui, GameCamera camera,
-			InformationProvider informationProvider) {
+	public GameRenderer(ArrayList<RenderedGuiObject> uiObjects,
+			GameCamera camera, InformationProvider informationProvider) {
 		this.informationProvider = informationProvider;
-		imagelist = new ImageList();
-		imagelist.load(); // TODO: asynchronously
-		this.gui = gui;
+		ImageList.load(); // TODO: asynchronously
+		this.uiObjects = uiObjects;
 		this.camera = camera;
 		objs = informationProvider.getGameObjects();
 		mapSize = informationProvider.getMapBounds();
-		initGui();
-	}
-
-	/**
-	 * initializes gui objects
-	 */
-	private void initGui() {
-		uiObjects = new ArrayList<RenderedGuiObject>();
-		itemDisplay = new ItemDisplay(gui, informationProvider, imagelist);
-		uiObjects.add(itemDisplay);
-		statBar = new GameStatBar(informationProvider);
-		uiObjects.add(statBar);
-		gui.registerTooltipTriggerer(itemDisplay);
-		gui.addClickableGuiElement(itemDisplay);
-	}
-
-	ItemDisplay getItemDisplay() {
-		return itemDisplay;
 	}
 
 	/**
@@ -123,10 +98,10 @@ public class GameRenderer implements TooltipHandler {
 	 */
 	private void drawGui() {
 		for (int i = 0; i < uiObjects.size(); i++)
-			uiObjects.get(i).render(dbg, imagelist);
+			uiObjects.get(i).render(dbg);
 
 		if (tooltip != null)
-			tooltip.render(dbg, imagelist);
+			tooltip.render(dbg);
 	}
 
 	/**
@@ -171,7 +146,7 @@ public class GameRenderer implements TooltipHandler {
 			if (d.getBoundingBox().intersects(camera)) {
 				// TODO: distinguish between object images and icon images
 				if (hasImage(d)) {
-					// TODO: draw image for gameobject.
+					drawImageOf(d);
 				} // draw shape of gameObject instead if object has shape
 
 				if (d.getShape() != null) {
@@ -193,6 +168,16 @@ public class GameRenderer implements TooltipHandler {
 	}
 
 	/**
+	 * Draws image for given object.
+	 * 
+	 * @param obj
+	 *            object to draw image for.
+	 */
+	private void drawImageOf(GameObject obj) {
+		// TODO: implement
+	}
+
+	/**
 	 * Draws health bar that is assigned to given unit. It will be automatically
 	 * be placed centered above the unit.
 	 * 
@@ -205,7 +190,6 @@ public class GameRenderer implements TooltipHandler {
 
 		HealthBar.calculateFor(unit);
 		HealthBar.draw(dbg, camera);
-
 	}
 
 	/**
@@ -217,7 +201,7 @@ public class GameRenderer implements TooltipHandler {
 	 * @return true if gameobject has an image, false otherwise.
 	 */
 	private boolean hasImage(GameObject obj) {
-		return imagelist.hasImageFor(obj);
+		return ImageList.hasImageFor(obj);
 	}
 
 	/**
@@ -286,29 +270,6 @@ public class GameRenderer implements TooltipHandler {
 		}
 	}
 
-	/**
-	 * Notifies all ui objects that gui size has changed.
-	 * 
-	 * @param width
-	 *            new gamepanel width
-	 * @param height
-	 *            new gamepanel height
-	 */
-	void notifyGuiSizeChanged(int width, int height) {
-		for (int i = 0; i < uiObjects.size(); i++) {
-			uiObjects.get(i).onGuiSizeChanged(width, height);
-		}
-	}
-
-	/**
-	 * Notifies all ui objects that player data have been received.
-	 */
-	void notifyPlayerReceived() {
-		for (int i = 0; i < uiObjects.size(); i++) {
-			uiObjects.get(i).onPlayerInformationReceived();
-		}
-	}
-
 	@Override
 	public void registerTooltipTriggerer(TooltipTriggerer elem) {
 	}
@@ -340,14 +301,5 @@ public class GameRenderer implements TooltipHandler {
 	public void drawWin(int winnerId) {
 		dbg.drawString("Player with id " + winnerId + " won the game!",
 				(int) mapSize.getCenterX(), (int) mapSize.getCenterY());
-	}
-
-	/**
-	 * Returns status bar.
-	 * 
-	 * @return status bar.
-	 */
-	GameStatBar getStatBar() {
-		return statBar;
 	}
 }
