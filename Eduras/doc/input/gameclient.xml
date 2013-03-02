@@ -37,5 +37,30 @@
 			</mediaobject>
 		</figure>
 	</section>
+	<section>
+	    <title>Rendering process</title>
+	    <para>
+	        Understanding rendering process is not very easy. The following scheme
+	        makes logic control flow more understandable.
+	     	The render thread calls render-method periodically. This makes calls
+	     	on every gui elements, map and game objects.
+	    </para>
+	    <figure>
+			<title>Rendering loop explained</title>
+			<mediaobject>
+				<imageobject>
+					<imagedata fileref="images/renderingloop.png" format="PNG" />
+				</imageobject>
+			</mediaobject>
+		</figure>
+	    <figure>
+			<title>Sequence of rendering in client gui</title>
+			<mediaobject>
+				<imageobject>
+					<imagedata fileref="images/renderingprocess.png" format="PNG" />
+				</imageobject>
+			</mediaobject>
+		</figure>
+	</section>
 
 </article>
