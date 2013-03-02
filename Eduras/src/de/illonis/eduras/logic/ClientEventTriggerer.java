@@ -91,5 +91,8 @@ public class ClientEventTriggerer implements EventTriggerer {
 	public void onMatchEnd() {
 
 	}
+	@Override
+	public void setGameMode(String newMode) {
+	}
 
 }

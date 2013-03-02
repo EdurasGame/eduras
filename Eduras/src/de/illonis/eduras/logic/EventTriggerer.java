@@ -115,4 +115,9 @@ public interface EventTriggerer {
 	 * Called when the match ends.
 	 */
 	void onMatchEnd();
+
+	/**
+	 * Sets a new gamemode
+	 */
+	void setGameMode(String newMode);
 }

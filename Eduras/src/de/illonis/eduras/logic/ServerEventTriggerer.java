@@ -13,6 +13,7 @@ import de.illonis.eduras.events.MatchEndEvent;
 import de.illonis.eduras.events.MissileLaunchEvent;
 import de.illonis.eduras.events.MovementEvent;
 import de.illonis.eduras.events.ObjectFactoryEvent;
+import de.illonis.eduras.events.SetGameModeEvent;
 import de.illonis.eduras.events.SetIntegerGameObjectAttributeEvent;
 import de.illonis.eduras.exceptions.InvalidNameException;
 import de.illonis.eduras.exceptions.MessageNotSupportedException;
@@ -239,5 +240,17 @@ public class ServerEventTriggerer implements EventTriggerer {
 		MatchEndEvent matchEndEvent = new MatchEndEvent(gameInfo
 				.getGameSettings().getStats().findPlayerWithMostFrags());
 		logic.onGameEventAppeared(matchEndEvent);
+	}
+
+	public void setGameMode(String newMode) {
+		SetGameModeEvent event = new SetGameModeEvent(
+				GameEventNumber.SET_GAMEMODE, newMode);
+		try {
+			String eventString = NetworkMessageSerializer.serialize(event);
+			outputBuffer.append(eventString);
+		} catch (MessageNotSupportedException e) {
+			EduLog.passException(e);
+			return;
+		}
 	}
 }
