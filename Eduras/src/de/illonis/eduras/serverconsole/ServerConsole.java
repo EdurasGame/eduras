@@ -195,12 +195,6 @@ public class ServerConsole implements Runnable {
 	private void parseCommand(String command) {
 		if (command.trim().isEmpty())
 			return;
-
-		if (triggerer == null) {
-			EduLog.error("Retrieved a console command but no triggerer is available.");
-			return;
-		}
-
 		EduLog.fine("Received command: " + command);
 
 		String[] args = command.split(" ");

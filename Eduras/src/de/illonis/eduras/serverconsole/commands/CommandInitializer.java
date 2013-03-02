@@ -17,5 +17,9 @@ public class CommandInitializer {
 	 */
 	public static void initCommands() {
 		ServerConsole.registerCommand(new KickPlayerCommand());
+		ServerConsole.registerCommand(new ListPlayersCommand());
+		ServerConsole.registerCommand(new RespawnCommand());
+		ServerConsole.registerCommand(new ShutdownCommand());
+		ServerConsole.registerCommand(new GameModeChangeCommand());
 	}
 }
