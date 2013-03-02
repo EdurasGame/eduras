@@ -5,31 +5,37 @@
 	<articleinfo>
 		<title>Game client</title>
 	</articleinfo>
-	
+
 	<section>
-	
+
 		<title>What is game client?</title>
 		<para>
-		    The game client handles all end-user related things. It organizes client-frame and networkmanager.
-		    After initialized by EdurasClient, it builds the connection between gui and logic on client side.
-		    In addition to mouse-related events, it also manages game camera and network events and passes them to gui.
-		    In the other direction, it reacts on user-interaction on gui and sends events to server.
+			The game client handles all end-user related things. It organizes
+			client-frame and networkmanager.
+			After initialized by EdurasClient, it builds the connection between gui
+			and logic on client side.
+			In addition to mouse-related events, it also manages game camera and
+			network events and passes them to gui.
+			In the other direction, it reacts on user-interaction on gui and sends
+			events to server.
 		</para>
 	</section>
 	<section>
-	    <title>Game client startup</title>
-	    <para>
-	        The following graph shows a startup-sequence of game client. This does not contain all special
-	        actions other classes perform, but rather gives a quick overview how initialization is done.
-	    </para>
-	    <figure>
-	            <title>Startup of game client</title>
-	            <mediaobject>
-	                <imageobject>
-	                    <imagedata fileref="images/client_startup.png" format="PNG" />
-	                </imageobject>
-	            </mediaobject>
-        	</figure>
+		<title>Game client startup</title>
+		<para>
+			The following graph shows a startup-sequence of game client. This does
+			not contain all special
+			actions other classes perform, but rather gives a quick overview how
+			initialization is done.
+		</para>
+		<figure>
+			<title>Startup of game client</title>
+			<mediaobject>
+				<imageobject>
+					<imagedata fileref="images/client_startup.png" format="PNG" />
+				</imageobject>
+			</mediaobject>
+		</figure>
 	</section>
-	
+
 </article>
