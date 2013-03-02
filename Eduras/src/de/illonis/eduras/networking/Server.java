@@ -278,6 +278,11 @@ public class Server {
 					EduLog.passException(e);
 				}
 			}
+			try {
+				server.close();
+			} catch (IOException e) {
+				EduLog.passException(e);
+			}
 		}
 	}
 
