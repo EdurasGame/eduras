@@ -164,4 +164,8 @@ public class ServerSender extends Thread {
 	public void stopSender() {
 		running = false;
 	}
+
+	ServerClient getClientById(int id) {
+		return clients.get(id);
+	}
 }

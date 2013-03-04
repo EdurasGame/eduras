@@ -2,9 +2,11 @@ package de.illonis.eduras;
 
 import java.util.LinkedList;
 
+import de.illonis.eduras.gamemodes.GameMode;
+import de.illonis.eduras.gamemodes.NoGameMode;
+
 public class GameSettings {
 
-	private GameInformation gameInfo;
 	private GameMode gameMode;
 	private long remainingTime;
 	private NumberOfTeams numberOfTeams;
@@ -25,8 +27,6 @@ public class GameSettings {
 	 *            The gameinformation to work on.
 	 */
 	public GameSettings(GameInformation gameInfo) {
-
-		this.gameInfo = gameInfo;
 
 		gameMode = new NoGameMode(gameInfo);
 		remainingTime = 3000000;

@@ -5,31 +5,62 @@
 	<articleinfo>
 		<title>Game client</title>
 	</articleinfo>
-	
+
 	<section>
-	
+
 		<title>What is game client?</title>
 		<para>
-		    The game client handles all end-user related things. It organizes client-frame and networkmanager.
-		    After initialized by EdurasClient, it builds the connection between gui and logic on client side.
-		    In addition to mouse-related events, it also manages game camera and network events and passes them to gui.
-		    In the other direction, it reacts on user-interaction on gui and sends events to server.
+			The game client handles all end-user related things. It organizes
+			client-frame and networkmanager.
+			After initialized by EdurasClient, it builds the connection between gui
+			and logic on client side.
+			In addition to mouse-related events, it also manages game camera and
+			network events and passes them to gui.
+			In the other direction, it reacts on user-interaction on gui and sends
+			events to server.
 		</para>
 	</section>
 	<section>
-	    <title>Game client startup</title>
+		<title>Game client startup</title>
+		<para>
+			The following graph shows a startup-sequence of game client. This does
+			not contain all special
+			actions other classes perform, but rather gives a quick overview how
+			initialization is done.
+		</para>
+		<figure>
+			<title>Startup of game client</title>
+			<mediaobject>
+				<imageobject>
+					<imagedata fileref="images/client_startup.png" format="PNG" />
+				</imageobject>
+			</mediaobject>
+		</figure>
+	</section>
+	<section>
+	    <title>Rendering process</title>
 	    <para>
-	        The following graph shows a startup-sequence of game client. This does not contain all special
-	        actions other classes perform, but rather gives a quick overview how initialization is done.
+	        Understanding rendering process is not very easy. The following scheme
+	        makes logic control flow more understandable.
+	     	The render thread calls render-method periodically. This makes calls
+	     	on every gui elements, map and game objects.
 	    </para>
 	    <figure>
-	            <title>Startup of game client</title>
-	            <mediaobject>
-	                <imageobject>
-	                    <imagedata fileref="images/client_startup.png" format="PNG" />
-	                </imageobject>
-	            </mediaobject>
-        	</figure>
+			<title>Rendering loop explained</title>
+			<mediaobject>
+				<imageobject>
+					<imagedata fileref="images/renderingloop.png" format="PNG" />
+				</imageobject>
+			</mediaobject>
+		</figure>
+	    <figure>
+			<title>Sequence of rendering in client gui</title>
+			<mediaobject>
+				<imageobject>
+					<imagedata fileref="images/renderingprocess.png" format="PNG" />
+				</imageobject>
+			</mediaobject>
+		</figure>
 	</section>
-	
+
 </article>

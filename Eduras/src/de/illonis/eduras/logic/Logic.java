@@ -16,6 +16,7 @@ import de.illonis.eduras.events.MissileLaunchEvent;
 import de.illonis.eduras.events.MovementEvent;
 import de.illonis.eduras.events.ObjectFactoryEvent;
 import de.illonis.eduras.events.SetBooleanGameObjectAttributeEvent;
+import de.illonis.eduras.events.SetIntegerGameObjectAttributeEvent;
 import de.illonis.eduras.events.SetItemSlotEvent;
 import de.illonis.eduras.events.UserMovementEvent;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
@@ -32,6 +33,7 @@ import de.illonis.eduras.items.weapons.Missile;
 import de.illonis.eduras.items.weapons.SimpleMissile;
 import de.illonis.eduras.logger.EduLog;
 import de.illonis.eduras.units.Player;
+import de.illonis.eduras.units.Unit;
 
 /**
  * A first (dummy) implementation of game logic.
@@ -91,6 +93,21 @@ public class Logic implements GameLogicInterface {
 				for (GameEventListener gameEventListener : listenerList) {
 					gameEventListener.onNewObjectPosition(o);
 				}
+				break;
+			case SETHEALTH:
+				SetIntegerGameObjectAttributeEvent healthEvent = (SetIntegerGameObjectAttributeEvent) event;
+				int objectId = healthEvent.getObjectId();
+				int newHealth = healthEvent.getNewValue();
+				GameObject obj = currentGame.findObjectById(objectId);
+				if (obj == null)
+					break;
+				Unit unit = (Unit) obj;
+				unit.setHealth(newHealth);
+
+				for (GameEventListener gameEventListener : listenerList) {
+					gameEventListener.onHealthChanged(objectId, newHealth);
+				}
+
 				break;
 			case INFORMATION_REQUEST:
 				ArrayList<GameEvent> infos = currentGame.getAllInfosAsEvent();

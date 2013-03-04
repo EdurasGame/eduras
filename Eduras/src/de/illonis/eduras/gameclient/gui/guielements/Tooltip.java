@@ -5,7 +5,6 @@ import java.awt.Graphics2D;
 import java.awt.Point;
 
 import de.illonis.eduras.gameclient.gui.GameRenderer;
-import de.illonis.eduras.gameclient.gui.ImageList;
 import de.illonis.eduras.logicabstraction.InformationProvider;
 
 /**
@@ -44,7 +43,7 @@ public abstract class Tooltip extends RenderedGuiObject {
 	}
 
 	@Override
-	public void render(Graphics2D g2d, ImageList imageList) {
+	public void render(Graphics2D g2d) {
 		g2d.setColor(Color.BLACK);
 		g2d.fillRect(screenX, screenY, width, height);
 		g2d.setColor(Color.GRAY);

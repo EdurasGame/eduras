@@ -6,6 +6,7 @@ import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 
+import de.illonis.eduras.events.SetItemSlotEvent;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
 import de.illonis.eduras.gameclient.gui.GuiClickReactor;
 import de.illonis.eduras.gameclient.gui.ImageList;
@@ -29,12 +30,9 @@ public class ItemDisplay extends ClickableGuiElement implements
 	private final static int OUTER_GAP[] = { 20, 5, 10, 15 };
 	private int height, width, blocksize, itemGap;
 	private GuiItem itemSlots[];
-	private ImageList images;
 
-	public ItemDisplay(GuiClickReactor gui, InformationProvider info,
-			ImageList images) {
+	public ItemDisplay(GuiClickReactor gui, InformationProvider info) {
 		super(gui, info);
-		this.images = images;
 		width = 140;
 		blocksize = 30;
 		itemGap = ITEM_GAP;
@@ -46,7 +44,7 @@ public class ItemDisplay extends ClickableGuiElement implements
 	}
 
 	@Override
-	public void render(Graphics2D g2d, ImageList imageList) {
+	public void render(Graphics2D g2d) {
 		g2d.setColor(Color.GRAY);
 		g2d.fillRect(screenX, screenY, width, height);
 		g2d.setColor(Color.BLACK);
@@ -95,6 +93,11 @@ public class ItemDisplay extends ClickableGuiElement implements
 		}
 	}
 
+	@Override
+	public void onItemSlotChanged(SetItemSlotEvent event) {
+		onItemChanged(event.getItemSlot());
+	}
+
 	/**
 	 * Called when an item in logic has changed. This will update gui so user
 	 * sees up to date item icon.
@@ -102,14 +105,14 @@ public class ItemDisplay extends ClickableGuiElement implements
 	 * @param slot
 	 *            slot that changed.
 	 */
-	public void onItemChanged(int slot) {
+	private void onItemChanged(int slot) {
 		String newName;
 		try {
 			Item item = getInfo().getPlayer().getInventory()
 					.getItemBySlot(slot);
 			newName = item.getName();
-			if (images.hasImageFor(item)) {
-				itemSlots[slot].setItemImage(images.getItemFor(item));
+			if (ImageList.hasImageFor(item)) {
+				itemSlots[slot].setItemImage(ImageList.getImageFor(item));
 			}
 		} catch (ItemSlotIsEmptyException e) {
 			newName = "E";
@@ -149,8 +152,8 @@ public class ItemDisplay extends ClickableGuiElement implements
 			return itemImage;
 		}
 
-		void setItemImage(BufferedImage itemImage) {
-			this.itemImage = itemImage;
+		void setItemImage(BufferedImage image) {
+			this.itemImage = image;
 		}
 
 		int getX() {
@@ -163,10 +166,6 @@ public class ItemDisplay extends ClickableGuiElement implements
 
 		int getSlotId() {
 			return slotId;
-		}
-
-		String getName() {
-			return name;
 		}
 
 		void setName(String name) {

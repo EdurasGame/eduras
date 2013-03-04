@@ -46,6 +46,7 @@ public class Player extends Unit implements Controllable {
 		try {
 			setShape(new Triangle(firstEdge, secondEdge, thirdEdge));
 		} catch (ShapeVerticesNotApplicableException e) {
+
 			EduLog.passException(e);
 		}
 

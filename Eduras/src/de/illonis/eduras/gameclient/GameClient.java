@@ -363,7 +363,6 @@ public class GameClient implements GuiClickReactor, NetworkEventReactor,
 
 	@Override
 	public void onPlayerReceived() {
-		frame.onPlayerReceived();
 	}
 
 	/**

@@ -278,6 +278,11 @@ public class Server {
 					EduLog.passException(e);
 				}
 			}
+			try {
+				server.close();
+			} catch (IOException e) {
+				EduLog.passException(e);
+			}
 		}
 	}
 
@@ -289,6 +294,7 @@ public class Server {
 	 */
 	void removeClient(ServerClient client) {
 		serverSender.remove(client);
+		serverReceivers.get(client.getClientId()).stopRunning();
 	}
 
 	/**
@@ -322,8 +328,6 @@ public class Server {
 		} catch (IOException e) {
 			EduLog.passException(e);
 		}
-
-		serverReceivers.get(client.getClientId()).stopRunning();
 
 		ObjectFactoryEvent gonePlayerEvent = new ObjectFactoryEvent(
 				GameEventNumber.OBJECT_REMOVE, ObjectType.PLAYER);
@@ -396,6 +400,10 @@ public class Server {
 	 */
 	public GameLogicInterface getLogic() {
 		return logic;
+	}
+
+	public ServerClient getClientById(int ownerId) {
+		return serverSender.getClientById(ownerId);
 	}
 
 }

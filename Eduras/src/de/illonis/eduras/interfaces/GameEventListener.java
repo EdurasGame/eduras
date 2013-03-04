@@ -9,6 +9,7 @@ import de.illonis.eduras.events.ObjectFactoryEvent;
 import de.illonis.eduras.events.SetGameObjectAttributeEvent;
 import de.illonis.eduras.events.SetItemSlotEvent;
 import de.illonis.eduras.events.SetOwnerEvent;
+import de.illonis.eduras.gamemodes.GameMode;
 import de.illonis.eduras.gameobjects.GameObject;
 
 public interface GameEventListener {
@@ -55,6 +56,14 @@ public interface GameEventListener {
 	 *            The correlating event.
 	 */
 	void onObjectStateChanged(SetGameObjectAttributeEvent<?> event);
+
+	/**
+	 * Called when the game mode has changed.
+	 * 
+	 * @param newGameMode
+	 *            new game mode.
+	 */
+	void onGameModeChanged(GameMode newGameMode);
 
 	/**
 	 * Called when health of an object has changed.

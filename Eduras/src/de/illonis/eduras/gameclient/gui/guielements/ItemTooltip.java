@@ -35,15 +35,15 @@ public class ItemTooltip extends Tooltip {
 	}
 
 	@Override
-	public void render(Graphics2D g2d, ImageList imageList) {
-		super.render(g2d, imageList);
+	public void render(Graphics2D g2d) {
+		super.render(g2d);
 		g2d.setColor(Color.YELLOW);
 		g2d.drawString(item.getName(), screenX + 8, screenY + 20);
 		g2d.setColor(Color.WHITE);
 		g2d.drawString(item.getType().toString(), screenX + 8, screenY + 40);
 		g2d.drawString("id: " + item.getId(), screenX + 8, screenY + 70);
 		g2d.drawString("owner: " + item.getOwner(), screenX + 8, screenY + 90);
-		BufferedImage img = imageList.getItemFor(item);
+		BufferedImage img = ImageList.getImageFor(item);
 		g2d.drawImage(img, screenX + width - img.getWidth() - 2, screenY + 2,
 				null);
 	}

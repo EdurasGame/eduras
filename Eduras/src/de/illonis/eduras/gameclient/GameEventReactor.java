@@ -10,9 +10,17 @@ import de.illonis.eduras.events.ObjectFactoryEvent;
 import de.illonis.eduras.events.SetGameObjectAttributeEvent;
 import de.illonis.eduras.events.SetItemSlotEvent;
 import de.illonis.eduras.events.SetOwnerEvent;
+import de.illonis.eduras.gameclient.gui.GuiNotifier;
+import de.illonis.eduras.gamemodes.GameMode;
 import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.interfaces.GameEventListener;
 
+/**
+ * Reacts on game events on client side and passes them to client logic and gui.
+ * 
+ * @author illonis
+ * 
+ */
 public class GameEventReactor implements GameEventListener {
 
 	private final GameClient client;
@@ -23,7 +31,6 @@ public class GameEventReactor implements GameEventListener {
 
 	@Override
 	public void onNewObjectPosition(GameObject player) {
-		// TODO Auto-generated method stub
 
 	}
 
@@ -37,55 +44,50 @@ public class GameEventReactor implements GameEventListener {
 		// if our player was created, player data is there.
 		if (event.getOwner() == client.getInformationProvider().getOwnerID()
 				&& event.getObjectType() == ObjectType.PLAYER)
-			client.onPlayerReceived();
+			getNotifier().onPlayerReceived();
 	}
 
 	@Override
 	public void onClientRename(ClientRenameEvent event) {
-		// TODO Auto-generated method stub
-
+		getNotifier().onClientRename(event);
 	}
 
 	@Override
 	public void onObjectStateChanged(SetGameObjectAttributeEvent<?> event) {
-		// TODO Auto-generated method stub
-
+		getNotifier().onObjectStateChanged(event);
 	}
 
 	@Override
 	public void onHealthChanged(int objectId, int newValue) {
-		// TODO Auto-generated method stub
-
+		getNotifier().onHealthChanged(objectId, newValue);
 	}
 
 	@Override
 	public void onOwnerChanged(SetOwnerEvent event) {
-
+		getNotifier().onOwnerChanged(event);
 	}
 
 	@Override
 	public void onItemSlotChanged(SetItemSlotEvent event) {
-		client.getFrame().getItemDisplay().onItemChanged(event.getItemSlot());
+		getNotifier().onItemSlotChanged(event);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * de.illonis.eduras.interfaces.GameEventListener#onObjectRemove(de.illonis
-	 * .eduras.events.ObjectFactoryEvent)
-	 */
 	@Override
 	public void onObjectRemove(ObjectFactoryEvent event) {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override
 	public void onMatchEnd(MatchEndEvent event) {
-
 		client.getFrame().getRenderer().drawWin(event.getWinnerId());
+	}
 
+	@Override
+	public void onGameModeChanged(GameMode newGameMode) {
+		getNotifier().onGameModeChanged(newGameMode);
+	}
+
+	private GuiNotifier getNotifier() {
+		return client.getFrame().getNotifier();
 	}
 
 }

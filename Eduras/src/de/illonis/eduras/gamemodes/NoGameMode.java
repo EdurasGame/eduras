@@ -1,5 +1,6 @@
-package de.illonis.eduras;
+package de.illonis.eduras.gamemodes;
 
+import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.ObjectFactory.ObjectType;
 import de.illonis.eduras.logic.EventTriggerer;
 import de.illonis.eduras.units.Player;
