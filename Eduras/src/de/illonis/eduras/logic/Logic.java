@@ -162,10 +162,8 @@ public class Logic implements GameLogicInterface {
 						missileLaunchEvent.getPosition().getY());
 				missile.setOwner(missileLaunchEvent.getOwner());
 				missile.setSpeedVector(missileLaunchEvent.getSpeedVector());
-				// TODO: inform gameeventlisteners!
 
 				// inform listeners
-
 				ObjectFactoryEvent objectFactoryEvent = new ObjectFactoryEvent(
 						GameEventNumber.OBJECT_CREATE,
 						missileLaunchEvent.getObjectType());

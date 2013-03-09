@@ -119,12 +119,6 @@ public class ServerEventTriggerer implements EventTriggerer {
 
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see de.illonis.eduras.logic.EventTriggerer#setPositionOfObject(int,
-	 * de.illonis.eduras.math.Vector2D)
-	 */
 	@Override
 	public void setPositionOfObject(int objectId, Vector2D newPosition) {
 		// TODO Auto-generated method stub

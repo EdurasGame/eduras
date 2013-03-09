@@ -51,9 +51,6 @@ public class Triangle extends Polygon {
 
 	@Override
 	public Rectangle2D.Double getBoundingBox() {
-		// FIXME: Bounding box is at wrong position in gameobjects because
-		// center point is used instead of topleft. This may occur in other
-		// shapes, too.
 		Vector2D[] v = getVerticesAsArray();
 		double x = BasicMath.min(v[0].getX(), v[1].getX(), v[2].getX());
 		double y = BasicMath.min(v[0].getY(), v[1].getY(), v[2].getY());

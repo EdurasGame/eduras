@@ -94,18 +94,6 @@ public abstract class Item extends GameObject {
 	}
 
 	/**
-	 * Creates a new item of given type.
-	 * 
-	 * @param id
-	 *            item type id.
-	 * @return new item of given id.
-	 */
-	public final static Item createById(ObjectType id) {
-		// TODO: implement
-		return null;
-	}
-
-	/**
 	 * Checks if this item has the same itemtype as given item.
 	 * 
 	 * @param item

@@ -95,19 +95,15 @@ public class ClientEventTriggerer implements EventTriggerer {
 
 	@Override
 	public void restartRound() {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override
 	public void setRemainingTime(long remainingTime) {
-		// TODO Auto-generated method stub
 
 	}
 
 	@Override
 	public void changeGameMode(GameMode newMode) {
-		// TODO Auto-generated method stub
 
 	}
 

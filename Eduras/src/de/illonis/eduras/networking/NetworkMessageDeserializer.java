@@ -335,9 +335,8 @@ public class NetworkMessageDeserializer {
 		return new UserMovementEvent(typeNumber, owner);
 	}
 
-	// TODO: fix and enhance javadoc
 	/**
-	 * (jme) Handles a position event.
+	 * (jme) Handles a SET_POS event.
 	 * 
 	 * @param fullMessage
 	 *            Full message

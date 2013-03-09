@@ -187,8 +187,7 @@ public class ServerGameEventListener implements GameEventListener {
 		try {
 			outputBuffer.append(NetworkMessageSerializer.serialize(event));
 		} catch (MessageNotSupportedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			EduLog.passException(e);
 		}
 		server.stopServer();
 	}
