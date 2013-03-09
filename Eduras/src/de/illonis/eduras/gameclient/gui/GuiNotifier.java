@@ -14,6 +14,12 @@ import de.illonis.eduras.gamemodes.GameMode;
 import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.interfaces.GameEventListener;
 
+/**
+ * Listens for game events and notifies all gui elements.
+ * 
+ * @author illonis
+ * 
+ */
 public class GuiNotifier implements GameEventListener {
 	private ArrayList<RenderedGuiObject> uiObjects;
 
@@ -23,11 +29,17 @@ public class GuiNotifier implements GameEventListener {
 
 	@Override
 	public void onNewObjectPosition(GameObject object) {
+		for (RenderedGuiObject obj : uiObjects) {
+			obj.onNewObjectPosition(object);
+		}
 	}
 
 	@Override
 	public void onInformationRequested(ArrayList<GameEvent> infos,
 			int targetOwner) {
+		for (RenderedGuiObject obj : uiObjects) {
+			obj.onInformationRequested(infos, targetOwner);
+		}
 	}
 
 	@Override
