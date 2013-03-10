@@ -57,15 +57,14 @@ public class EdurasClient {
 		client.startGui();
 	}
 
-	protected static void startFullScreen() {
+	protected static void startFullScreen(DisplayMode displayMode) {
 		GameClient client = new GameClient();
 
 		GraphicsEnvironment graphicsEnvironment = GraphicsEnvironment
 				.getLocalGraphicsEnvironment();
 
 		ClientFrame f = new FullScreenClientFrame(
-				graphicsEnvironment.getDefaultScreenDevice(),
-				graphicsEnvironment.getDefaultScreenDevice().getDisplayMode(),
+				graphicsEnvironment.getDefaultScreenDevice(), displayMode,
 				client);
 
 		client.useFrame(f);
@@ -96,18 +95,7 @@ public class EdurasClient {
 		panel.add(fullPanel, BorderLayout.CENTER);
 
 		JButton okButton = new JButton("Start");
-		okButton.addActionListener(new ActionListener() {
 
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				if (fullscreenRadio.isSelected()) {
-					startFullScreen();
-				} else {
-					startWindowed();
-				}
-				cf.dispose();
-			}
-		});
 		JLabel currentRes = new JLabel();
 		fullPanel.add(currentRes, BorderLayout.CENTER);
 		DisplayMode currentMode;
@@ -129,7 +117,7 @@ public class EdurasClient {
 			}
 		}
 
-		JComboBox<DisplayMode> comboBox = new JComboBox<DisplayMode>(v);
+		final JComboBox<DisplayMode> comboBox = new JComboBox<DisplayMode>(v);
 		comboBox.setRenderer(new ListCellRenderer<DisplayMode>() {
 
 			@Override
@@ -138,6 +126,18 @@ public class EdurasClient {
 					int index, boolean isSelected, boolean cellHasFocus) {
 				return new JLabel(value.getWidth() + "x" + value.getHeight()
 						+ " (" + value.getRefreshRate() + "Hz)");
+			}
+		});
+		okButton.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if (fullscreenRadio.isSelected()) {
+					startFullScreen((DisplayMode) comboBox.getSelectedItem());
+				} else {
+					startWindowed();
+				}
+				cf.dispose();
 			}
 		});
 		currentMode = graphicsEnvironment.getDefaultScreenDevice()
