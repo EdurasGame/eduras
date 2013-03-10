@@ -142,17 +142,7 @@ public class ClientFrame extends JFrame implements NetworkEventReactor,
 	 * 
 	 */
 	private void notifyGuiSizeChanged() {
-		for (RenderedGuiObject obj : uiObjects) {
-			obj.onGuiSizeChanged(gamePanel.getWidth(), gamePanel.getHeight());
-		}
-	}
-
-	@Override
-	public void onPlayerReceived() {
-		// Notifies all ui objects that player data have been received.
-		for (RenderedGuiObject obj : uiObjects) {
-			obj.onPlayerInformationReceived();
-		}
+		notifier.onGuiSizeChanged(gamePanel.getWidth(), gamePanel.getHeight());
 	}
 
 	/**
@@ -193,6 +183,10 @@ public class ClientFrame extends JFrame implements NetworkEventReactor,
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		// fired when user clicked login.
+		loginAction();
+	}
+
+	private void loginAction() {
 		String clientName = loginPanel.getUserName();
 		client.setClientName(clientName);
 		if (clientName.length() < 3)
@@ -238,5 +232,10 @@ public class ClientFrame extends JFrame implements NetworkEventReactor,
 	 */
 	public GuiNotifier getNotifier() {
 		return notifier;
+	}
+
+	@Override
+	public void onPlayerReceived() {
+		// nothing to do here because object factory notices guinotifier.
 	}
 }

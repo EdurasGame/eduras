@@ -110,4 +110,18 @@ public class GuiNotifier implements GameEventListener {
 			obj.onPlayerInformationReceived();
 		}
 	}
+
+	/**
+	 * Notifies gui objects that game panel size has changed.
+	 * 
+	 * @param width
+	 *            new width.
+	 * @param height
+	 *            new height.
+	 */
+	public void onGuiSizeChanged(int width, int height) {
+		for (RenderedGuiObject obj : uiObjects) {
+			obj.onGuiSizeChanged(width, height);
+		}
+	}
 }
