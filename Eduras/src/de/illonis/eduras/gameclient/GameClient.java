@@ -40,8 +40,7 @@ import de.illonis.eduras.settings.Settings;
  * @author illonis
  * 
  */
-public class GameClient implements GuiClickReactor, NetworkEventReactor,
-		TooltipHandler {
+public class GameClient implements GuiClickReactor, NetworkEventReactor {
 
 	private InformationProvider infoPro;
 	private EventSender eventSender;
@@ -182,7 +181,9 @@ public class GameClient implements GuiClickReactor, NetworkEventReactor,
 		event.setTarget(frame.computeGuiPointToGameCoordinate(target));
 		try {
 			sendEvent(event);
-		} catch (WrongEventTypeException | MessageNotSupportedException e) {
+		} catch (WrongEventTypeException e) {
+			EduLog.passException(e);
+		} catch (MessageNotSupportedException e) {
 			EduLog.passException(e);
 		}
 	}
