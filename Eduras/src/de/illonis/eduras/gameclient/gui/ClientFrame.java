@@ -8,16 +8,12 @@ import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.util.ArrayList;
 
 import javax.swing.JFrame;
 
 import de.illonis.eduras.exceptions.InvalidValueEnteredException;
 import de.illonis.eduras.gameclient.GameClient;
 import de.illonis.eduras.gameclient.NetworkEventReactor;
-import de.illonis.eduras.gameclient.gui.guielements.GameStatBar;
-import de.illonis.eduras.gameclient.gui.guielements.ItemDisplay;
-import de.illonis.eduras.gameclient.gui.guielements.RenderedGuiObject;
 import de.illonis.eduras.logger.EduLog;
 import de.illonis.eduras.math.Vector2D;
 
@@ -35,10 +31,7 @@ public class ClientFrame extends JFrame implements NetworkEventReactor,
 	private GamePanel gamePanel;
 	private GameRenderer renderer; //
 	private RenderThread rendererThread; //
-	private ArrayList<RenderedGuiObject> uiObjects = new ArrayList<RenderedGuiObject>(); //
-	private ItemDisplay itemDisplay; //
-	private GameStatBar statBar; //
-	private UserInterface notifier;
+	private UserInterface userInterface;
 	private final GameCamera camera;
 	private final CameraMouseListener cml;
 
@@ -70,14 +63,8 @@ public class ClientFrame extends JFrame implements NetworkEventReactor,
 
 	private void initGuiElements() {
 
-		uiObjects = new ArrayList<RenderedGuiObject>();
-		notifier = new UserInterface(uiObjects);
-		itemDisplay = new ItemDisplay(client, client.getInformationProvider());
-		uiObjects.add(itemDisplay);
-		statBar = new GameStatBar(client.getInformationProvider());
-		uiObjects.add(statBar);
-		client.registerTooltipTriggerer(itemDisplay);
-		client.addClickableGuiElement(itemDisplay);
+		userInterface = new UserInterface(client.getInformationProvider(),
+				client, client);
 	}
 
 	private void buildGui() {
@@ -96,7 +83,7 @@ public class ClientFrame extends JFrame implements NetworkEventReactor,
 		add(loginPanel, LOGINPANEL);
 		add(progressPanel, CONNECTPANEL);
 		add(gamePanel, GAMEPANEL);
-		renderer = new GameRenderer(uiObjects, camera,
+		renderer = new GameRenderer(camera, userInterface,
 				client.getInformationProvider());
 
 	}
@@ -142,7 +129,8 @@ public class ClientFrame extends JFrame implements NetworkEventReactor,
 	 * 
 	 */
 	private void notifyGuiSizeChanged() {
-		notifier.onGuiSizeChanged(gamePanel.getWidth(), gamePanel.getHeight());
+		userInterface.onGuiSizeChanged(gamePanel.getWidth(),
+				gamePanel.getHeight());
 	}
 
 	/**
@@ -231,7 +219,7 @@ public class ClientFrame extends JFrame implements NetworkEventReactor,
 	 * @return gui notifier.
 	 */
 	public UserInterface getNotifier() {
-		return notifier;
+		return userInterface;
 	}
 
 	@Override

@@ -10,6 +10,9 @@ import de.illonis.eduras.events.ObjectFactoryEvent;
 import de.illonis.eduras.events.SetGameObjectAttributeEvent;
 import de.illonis.eduras.events.SetItemSlotEvent;
 import de.illonis.eduras.events.SetOwnerEvent;
+import de.illonis.eduras.gameclient.TooltipHandler;
+import de.illonis.eduras.gameclient.gui.GuiClickReactor;
+import de.illonis.eduras.gameclient.gui.UserInterface;
 import de.illonis.eduras.gamemodes.GameMode;
 import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.interfaces.GameEventListener;
@@ -24,19 +27,42 @@ import de.illonis.eduras.logicabstraction.InformationProvider;
  * 
  */
 public abstract class RenderedGuiObject implements GameEventListener {
-
-	private InformationProvider info;
+	private UserInterface gui;
 	protected int screenX, screenY;
 
 	/**
-	 * Creates a new {@link RenderedGuiObject} using given game information.
+	 * Creates a new {@link RenderedGuiObject} that is attached to given
+	 * userinterface. The element is added to interface's guielement list
+	 * automatically.
 	 * 
-	 * @param info
-	 *            game information to use.
+	 * @param gui
+	 *            userinterface this guielement should be attached to.
 	 */
-	protected RenderedGuiObject(InformationProvider info) {
-		this.info = info;
+	protected RenderedGuiObject(UserInterface gui) {
+		this.gui = gui;
 		screenX = screenY = 0;
+		gui.addElement(this);
+	}
+
+	protected final TooltipHandler getTooltipHandler() {
+		return gui.getTooltipHandler();
+	}
+
+	/**
+	 * Returns {@link GuiClickReactor} that is responsible for event handling of
+	 * assigned userinterface.
+	 * 
+	 * @return attached click reactor.
+	 */
+	protected final GuiClickReactor getClickReactor() {
+		return gui.getClickReactor();
+	}
+
+	/**
+	 * Removes this gui object from userinterface it is attached to.
+	 */
+	public void removeFromGui() {
+		gui.removeGuiElement(this);
 	}
 
 	/**
@@ -45,7 +71,7 @@ public abstract class RenderedGuiObject implements GameEventListener {
 	 * @return game information.
 	 */
 	protected InformationProvider getInfo() {
-		return info;
+		return gui.getInfo();
 	}
 
 	/**

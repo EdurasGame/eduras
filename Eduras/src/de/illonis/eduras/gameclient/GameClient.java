@@ -40,7 +40,8 @@ import de.illonis.eduras.settings.Settings;
  * @author illonis
  * 
  */
-public class GameClient implements GuiClickReactor, NetworkEventReactor {
+public class GameClient implements GuiClickReactor, NetworkEventReactor,
+		TooltipHandler {
 
 	private InformationProvider infoPro;
 	private EventSender eventSender;
@@ -199,8 +200,9 @@ public class GameClient implements GuiClickReactor, NetworkEventReactor {
 
 		@Override
 		public void mouseMoved(MouseEvent e) {
+			// TODO : notify only elements that are in area.
 			for (TooltipTriggerer t : triggerers) {
-				t.onMouseAt(e.getPoint());
+				t.onMouseOver(e.getPoint());
 			}
 		}
 
@@ -211,6 +213,7 @@ public class GameClient implements GuiClickReactor, NetworkEventReactor {
 			Point p = e.getPoint();
 			switch (currentClickState) {
 			case DEFAULT:
+				// TODO: Notify only elements that are really clicked.
 				for (Iterator<ClickableGuiElementInterface> iterator = clickListeners
 						.iterator(); iterator.hasNext();) {
 					ClickableGuiElementInterface reactor = iterator.next();

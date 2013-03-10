@@ -1,11 +1,11 @@
 package de.illonis.eduras.gameclient.gui.guielements;
 
 import de.illonis.eduras.gameclient.gui.GuiClickReactor;
-import de.illonis.eduras.logicabstraction.InformationProvider;
+import de.illonis.eduras.gameclient.gui.UserInterface;
 
 /**
  * A gui element that is clickable. All clickable elements can trigger events on
- * their {@link GuiClickReactor}.
+ * the userinterface's {@link GuiClickReactor}.
  * 
  * @author illonis
  * 
@@ -13,11 +13,14 @@ import de.illonis.eduras.logicabstraction.InformationProvider;
 public abstract class ClickableGuiElement extends RenderedGuiObject implements
 		ClickableGuiElementInterface {
 
-	protected GuiClickReactor reactor;
-
-	protected ClickableGuiElement(GuiClickReactor reactor,
-			InformationProvider info) {
-		super(info);
-		this.reactor = reactor;
+	/**
+	 * Creates a clickable gui element that triggers clicks on given gui.
+	 * 
+	 * @param gui
+	 *            user interface.
+	 */
+	protected ClickableGuiElement(UserInterface gui) {
+		super(gui);
+		getClickReactor().addClickableGuiElement(this);
 	}
 }

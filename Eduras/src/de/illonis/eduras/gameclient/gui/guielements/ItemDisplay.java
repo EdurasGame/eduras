@@ -8,13 +8,12 @@ import java.awt.image.BufferedImage;
 
 import de.illonis.eduras.events.SetItemSlotEvent;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
-import de.illonis.eduras.gameclient.gui.GuiClickReactor;
 import de.illonis.eduras.gameclient.gui.ImageList;
+import de.illonis.eduras.gameclient.gui.UserInterface;
 import de.illonis.eduras.inventory.Inventory;
 import de.illonis.eduras.inventory.ItemSlotIsEmptyException;
 import de.illonis.eduras.items.Item;
 import de.illonis.eduras.logger.EduLog;
-import de.illonis.eduras.logicabstraction.InformationProvider;
 
 /**
  * Displays player items on user interface.
@@ -31,8 +30,8 @@ public class ItemDisplay extends ClickableGuiElement implements
 	private int height, width, blocksize, itemGap;
 	private GuiItem itemSlots[];
 
-	public ItemDisplay(GuiClickReactor gui, InformationProvider info) {
-		super(gui, info);
+	public ItemDisplay(UserInterface gui) {
+		super(gui);
 		width = 140;
 		blocksize = 30;
 		itemGap = ITEM_GAP;
@@ -41,6 +40,7 @@ public class ItemDisplay extends ClickableGuiElement implements
 		for (int i = 0; i < Inventory.MAX_CAPACITY; i++) {
 			itemSlots[i] = new GuiItem(i);
 		}
+		getTooltipHandler().registerTooltipTriggerer(this);
 	}
 
 	@Override
@@ -87,7 +87,7 @@ public class ItemDisplay extends ClickableGuiElement implements
 	private void itemClicked(int i) {
 		try {
 			if (getInfo().getPlayer().getInventory().isItemInSlot(i))
-				reactor.itemClicked(i);
+				getClickReactor().itemClicked(i);
 		} catch (ObjectNotFoundException e) {
 			EduLog.passException(e);
 		}
@@ -186,13 +186,15 @@ public class ItemDisplay extends ClickableGuiElement implements
 	}
 
 	@Override
-	public void onMouseAt(Point p) {
+	public void onMouseOver(Point p) {
 		if (new Rectangle(screenX, screenY, width, height).contains(p)) {
 			for (int i = 0; i < Inventory.MAX_CAPACITY; i++) {
 				if (itemSlots[i].getClickableRect().contains(p)) {
 					try {
-						reactor.showItemTooltip(p, getInfo().getPlayer()
-								.getInventory().getItemBySlot(i));
+						getTooltipHandler().showItemTooltip(
+								p,
+								getInfo().getPlayer().getInventory()
+										.getItemBySlot(i));
 						return;
 					} catch (ItemSlotIsEmptyException e) {
 
@@ -202,6 +204,21 @@ public class ItemDisplay extends ClickableGuiElement implements
 				}
 			}
 		}
-		reactor.hideTooltip();
+		getTooltipHandler().hideTooltip();
+	}
+
+	@Override
+	public Rectangle getBounds() {
+		return null;
+	}
+
+	@Override
+	public void onMouseLeft() {
+		getTooltipHandler().hideTooltip();
+	}
+
+	@Override
+	public Rectangle getTriggerArea() {
+		return null;
 	}
 }

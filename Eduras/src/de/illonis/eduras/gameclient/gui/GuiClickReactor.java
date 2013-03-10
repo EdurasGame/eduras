@@ -1,6 +1,5 @@
 package de.illonis.eduras.gameclient.gui;
 
-import de.illonis.eduras.gameclient.TooltipHandler;
 import de.illonis.eduras.gameclient.gui.guielements.ClickableGuiElementInterface;
 
 /**
@@ -10,7 +9,7 @@ import de.illonis.eduras.gameclient.gui.guielements.ClickableGuiElementInterface
  * @author illonis
  * 
  */
-public interface GuiClickReactor extends TooltipHandler {
+public interface GuiClickReactor {
 
 	/**
 	 * Indicates that a specific item has been clicked.

@@ -9,10 +9,14 @@ import de.illonis.eduras.events.ObjectFactoryEvent;
 import de.illonis.eduras.events.SetGameObjectAttributeEvent;
 import de.illonis.eduras.events.SetItemSlotEvent;
 import de.illonis.eduras.events.SetOwnerEvent;
+import de.illonis.eduras.gameclient.TooltipHandler;
+import de.illonis.eduras.gameclient.gui.guielements.GameStatBar;
+import de.illonis.eduras.gameclient.gui.guielements.ItemDisplay;
 import de.illonis.eduras.gameclient.gui.guielements.RenderedGuiObject;
 import de.illonis.eduras.gamemodes.GameMode;
 import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.interfaces.GameEventListener;
+import de.illonis.eduras.logicabstraction.InformationProvider;
 
 /**
  * Listens for game events and notifies all gui elements.
@@ -22,9 +26,38 @@ import de.illonis.eduras.interfaces.GameEventListener;
  */
 public class UserInterface implements GameEventListener {
 	private ArrayList<RenderedGuiObject> uiObjects;
+	private InformationProvider infos;
+	private GuiClickReactor reactor;
+	private TooltipHandler tooltipHandler;
 
-	UserInterface(ArrayList<RenderedGuiObject> uiObjects) {
-		this.uiObjects = uiObjects;
+	UserInterface(InformationProvider infos, GuiClickReactor clickReactor,
+			TooltipHandler tooltipHandler) {
+		this.uiObjects = new ArrayList<RenderedGuiObject>();
+		this.infos = infos;
+		this.reactor = clickReactor;
+		this.tooltipHandler = tooltipHandler;
+		createElements();
+	}
+
+	private void createElements() {
+
+		ItemDisplay itemDisplay = new ItemDisplay(this);
+		uiObjects.add(itemDisplay);
+		GameStatBar statBar = new GameStatBar(this);
+		uiObjects.add(statBar);
+	}
+
+	/**
+	 * Returns informationprovider.
+	 * 
+	 * @return informationprovider.
+	 */
+	public InformationProvider getInfo() {
+		return infos;
+	}
+
+	ArrayList<RenderedGuiObject> getUiObjects() {
+		return uiObjects;
 	}
 
 	@Override
@@ -124,4 +157,43 @@ public class UserInterface implements GameEventListener {
 			obj.onGuiSizeChanged(width, height);
 		}
 	}
+
+	/**
+	 * Removes given gui object from this userinterface.
+	 * 
+	 * @param renderedGuiObject
+	 *            object to remove.
+	 */
+	public void removeGuiElement(RenderedGuiObject renderedGuiObject) {
+		uiObjects.remove(renderedGuiObject);
+	}
+
+	/**
+	 * Adds given gui object to userinterface.
+	 * 
+	 * @param renderedGuiObject
+	 *            element.
+	 */
+	public void addElement(RenderedGuiObject renderedGuiObject) {
+		uiObjects.add(renderedGuiObject);
+	}
+
+	/**
+	 * Returns {@link GuiClickReactor} that reacts on click events from gui.
+	 * 
+	 * @return click reactor.
+	 */
+	public GuiClickReactor getClickReactor() {
+		return reactor;
+	}
+
+	/**
+	 * Returns the correspondend tooltip handler.
+	 * 
+	 * @return tooltip handler.
+	 */
+	public TooltipHandler getTooltipHandler() {
+		return tooltipHandler;
+	}
+
 }

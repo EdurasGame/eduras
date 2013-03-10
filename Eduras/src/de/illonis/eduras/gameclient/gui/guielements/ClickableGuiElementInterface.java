@@ -1,6 +1,7 @@
 package de.illonis.eduras.gameclient.gui.guielements;
 
 import java.awt.Point;
+import java.awt.Rectangle;
 
 public interface ClickableGuiElementInterface {
 
@@ -13,4 +14,11 @@ public interface ClickableGuiElementInterface {
 	 * @return true if event is consumed, false otherwise.
 	 */
 	boolean onClick(Point p);
+
+	/**
+	 * Returns bounds of the clickable element relative to game screen.
+	 * 
+	 * @return bounds.
+	 */
+	Rectangle getBounds();
 }

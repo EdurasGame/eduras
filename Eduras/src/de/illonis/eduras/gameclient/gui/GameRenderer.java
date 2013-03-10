@@ -34,11 +34,12 @@ import de.illonis.eduras.units.Unit;
 public class GameRenderer implements TooltipHandler {
 	private BufferedImage dbImage = null;
 	private final GameCamera camera;
+	private UserInterface gui;
 	private Graphics2D dbg = null;
 	private final ConcurrentHashMap<Integer, GameObject> objs;
 	private final Rectangle mapSize;
-	private InformationProvider informationProvider;
 	private ItemTooltip tooltip;
+	private boolean tooltipShown = false;
 	private ArrayList<RenderedGuiObject> uiObjects = new ArrayList<RenderedGuiObject>();
 
 	/**
@@ -51,14 +52,14 @@ public class GameRenderer implements TooltipHandler {
 	 * @param informationProvider
 	 *            game-information that contains objects to render.
 	 */
-	public GameRenderer(ArrayList<RenderedGuiObject> uiObjects,
-			GameCamera camera, InformationProvider informationProvider) {
-		this.informationProvider = informationProvider;
+	public GameRenderer(GameCamera camera, UserInterface gui,
+			InformationProvider info) {
 		ImageList.load(); // TODO: asynchronously
-		this.uiObjects = uiObjects;
+		this.uiObjects = gui.getUiObjects();
 		this.camera = camera;
-		objs = informationProvider.getGameObjects();
-		mapSize = informationProvider.getMapBounds();
+		objs = info.getGameObjects();
+		mapSize = info.getMapBounds();
+		this.gui = gui;
 	}
 
 	/**
@@ -99,7 +100,7 @@ public class GameRenderer implements TooltipHandler {
 		for (int i = 0; i < uiObjects.size(); i++)
 			uiObjects.get(i).render(dbg);
 
-		if (tooltip != null)
+		if (tooltipShown)
 			tooltip.render(dbg);
 	}
 
@@ -279,11 +280,13 @@ public class GameRenderer implements TooltipHandler {
 
 	@Override
 	public void showItemTooltip(Point p, Item item) {
-		if (tooltip == null || !(tooltip instanceof ItemTooltip)
-				|| !((ItemTooltip) tooltip).getItem().equals(item))
-			tooltip = new ItemTooltip(informationProvider, item);
-
+		if (tooltip == null) {
+			tooltip = new ItemTooltip(gui, item);
+		} else {
+			tooltip.setItem(item);
+		}
 		tooltip.moveTo(p);
+		tooltipShown = true;
 	}
 
 	@Override
@@ -294,7 +297,7 @@ public class GameRenderer implements TooltipHandler {
 
 	@Override
 	public void hideTooltip() {
-		tooltip = null;
+		tooltipShown = false;
 	}
 
 	public void drawWin(int winnerId) {

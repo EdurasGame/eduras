@@ -5,7 +5,7 @@ import java.awt.Graphics2D;
 import java.awt.Point;
 
 import de.illonis.eduras.gameclient.gui.GameRenderer;
-import de.illonis.eduras.logicabstraction.InformationProvider;
+import de.illonis.eduras.gameclient.gui.UserInterface;
 
 /**
  * Shows detailed information depending on mouse position. Only one tooltip will
@@ -22,8 +22,8 @@ public abstract class Tooltip extends RenderedGuiObject {
 	 * @param info
 	 *            game information.
 	 */
-	protected Tooltip(InformationProvider info) {
-		super(info);
+	protected Tooltip(UserInterface gui) {
+		super(gui);
 	}
 
 	protected int width, height;

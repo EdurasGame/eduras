@@ -3,8 +3,8 @@ package de.illonis.eduras.gameclient.gui.guielements;
 import java.awt.Color;
 import java.awt.Graphics2D;
 
+import de.illonis.eduras.gameclient.gui.UserInterface;
 import de.illonis.eduras.gamemodes.GameMode;
-import de.illonis.eduras.logicabstraction.InformationProvider;
 
 /**
  * A simple status bar that shows the current game mode at top of screen.
@@ -15,8 +15,8 @@ import de.illonis.eduras.logicabstraction.InformationProvider;
 public class GameStatBar extends RenderedGuiObject {
 	private String mode;
 
-	public GameStatBar(InformationProvider info) {
-		super(info);
+	public GameStatBar(UserInterface gui) {
+		super(gui);
 		mode = "unknown game mode";
 		screenX = 30;
 		screenY = 0;

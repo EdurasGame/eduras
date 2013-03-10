@@ -5,8 +5,8 @@ import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 
 import de.illonis.eduras.gameclient.gui.ImageList;
+import de.illonis.eduras.gameclient.gui.UserInterface;
 import de.illonis.eduras.items.Item;
-import de.illonis.eduras.logicabstraction.InformationProvider;
 
 /**
  * Shows information concerning an item.
@@ -27,8 +27,8 @@ public class ItemTooltip extends Tooltip {
 	 * @param item
 	 *            item to present.
 	 */
-	public ItemTooltip(InformationProvider info, Item item) {
-		super(info);
+	public ItemTooltip(UserInterface gui, Item item) {
+		super(gui);
 		width = 200;
 		height = 100;
 		this.item = item;
@@ -60,6 +60,10 @@ public class ItemTooltip extends Tooltip {
 
 	public Item getItem() {
 		return item;
+	}
+
+	public void setItem(Item item) {
+		this.item = item;
 	}
 
 }
