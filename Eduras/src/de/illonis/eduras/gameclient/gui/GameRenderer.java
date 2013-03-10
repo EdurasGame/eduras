@@ -97,11 +97,13 @@ public class GameRenderer implements TooltipHandler {
 	 * Draw every gui element.
 	 */
 	private void drawGui() {
-		for (int i = 0; i < uiObjects.size(); i++)
+		for (int i = 0; i < uiObjects.size(); i++) {
 			uiObjects.get(i).render(dbg);
-
-		if (tooltipShown)
+		}
+		if (tooltipShown) {
 			tooltip.render(dbg);
+		}
+
 	}
 
 	/**
@@ -282,6 +284,7 @@ public class GameRenderer implements TooltipHandler {
 	public void showItemTooltip(Point p, Item item) {
 		if (tooltip == null) {
 			tooltip = new ItemTooltip(gui, item);
+			tooltip.removeFromGui();
 		} else {
 			tooltip.setItem(item);
 		}

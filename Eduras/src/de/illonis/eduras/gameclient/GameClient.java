@@ -200,9 +200,18 @@ public class GameClient implements GuiClickReactor, NetworkEventReactor,
 
 		@Override
 		public void mouseMoved(MouseEvent e) {
+			Point p = e.getPoint();
 			// TODO : notify only elements that are in area.
+			boolean triggered = false;
 			for (TooltipTriggerer t : triggerers) {
-				t.onMouseOver(e.getPoint());
+				if (t.getTriggerArea().contains(p)) {
+					t.onMouseOver(p);
+					triggered = true;
+					break;
+				}
+			}
+			if (!triggered) {
+				hideTooltip();
 			}
 		}
 

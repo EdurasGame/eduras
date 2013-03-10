@@ -187,20 +187,19 @@ public class ItemDisplay extends ClickableGuiElement implements
 
 	@Override
 	public void onMouseOver(Point p) {
-		if (new Rectangle(screenX, screenY, width, height).contains(p)) {
-			for (int i = 0; i < Inventory.MAX_CAPACITY; i++) {
-				if (itemSlots[i].getClickableRect().contains(p)) {
-					try {
-						getTooltipHandler().showItemTooltip(
-								p,
-								getInfo().getPlayer().getInventory()
-										.getItemBySlot(i));
-						return;
-					} catch (ItemSlotIsEmptyException e) {
 
-					} catch (ObjectNotFoundException e) {
+		for (int i = 0; i < Inventory.MAX_CAPACITY; i++) {
+			if (itemSlots[i].getClickableRect().contains(p)) {
+				try {
+					getTooltipHandler().showItemTooltip(
+							p,
+							getInfo().getPlayer().getInventory()
+									.getItemBySlot(i));
+					return;
+				} catch (ItemSlotIsEmptyException e) {
 
-					}
+				} catch (ObjectNotFoundException e) {
+
 				}
 			}
 		}
@@ -213,12 +212,7 @@ public class ItemDisplay extends ClickableGuiElement implements
 	}
 
 	@Override
-	public void onMouseLeft() {
-		getTooltipHandler().hideTooltip();
-	}
-
-	@Override
 	public Rectangle getTriggerArea() {
-		return null;
+		return new Rectangle(screenX, screenY, width, height);
 	}
 }

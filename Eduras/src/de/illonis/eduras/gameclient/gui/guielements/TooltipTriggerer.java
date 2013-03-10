@@ -20,13 +20,8 @@ public interface TooltipTriggerer {
 	void onMouseOver(Point p);
 
 	/**
-	 * Notifies triggerer that mouse left trigger area. Triggerer should hide
-	 * his tooltip here.
-	 */
-	void onMouseLeft();
-
-	/**
-	 * Returns area on that tooltip is triggered.
+	 * Returns area on that tooltip is triggered relative to game area. This
+	 * must not overlap any of other trigger areas.
 	 * 
 	 * @return trigger area.
 	 */
