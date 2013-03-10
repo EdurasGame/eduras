@@ -32,7 +32,7 @@ public final class EduLog {
 	 * Logging modes specify the way logging data is saved or displayed. Can be
 	 * multiple values at once.
 	 * 
-	 * @see EduLog#setLogOutput(LogMode)
+	 * @see EduLog#setLogOutput(LogMode...)
 	 * @author illonis
 	 * 
 	 */
