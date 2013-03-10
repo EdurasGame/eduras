@@ -9,10 +9,13 @@ import de.illonis.eduras.events.ObjectFactoryEvent;
 import de.illonis.eduras.events.SetGameObjectAttributeEvent;
 import de.illonis.eduras.events.SetItemSlotEvent;
 import de.illonis.eduras.events.SetOwnerEvent;
+import de.illonis.eduras.gameclient.GameEventReactor;
 import de.illonis.eduras.gameclient.TooltipHandler;
+import de.illonis.eduras.gameclient.TooltipTriggererNotifier;
 import de.illonis.eduras.gameclient.gui.guielements.GameStatBar;
 import de.illonis.eduras.gameclient.gui.guielements.ItemDisplay;
 import de.illonis.eduras.gameclient.gui.guielements.RenderedGuiObject;
+import de.illonis.eduras.gameclient.gui.guielements.TooltipTriggerer;
 import de.illonis.eduras.gamemodes.GameMode;
 import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.interfaces.GameEventListener;
@@ -30,14 +33,28 @@ public class UserInterface implements GameEventListener {
 	private InformationProvider infos;
 	private GuiClickReactor reactor;
 	private TooltipHandler tooltipHandler;
+	private TooltipTriggererNotifier tooltipNotifier;
 
-	UserInterface(InformationProvider infos, GuiClickReactor clickReactor,
-			TooltipHandler tooltipHandler) {
+	/**
+	 * Creates the user interface. The tooltip handler will be set manually
+	 * later on using {@link #setTooltipHandler(RendererTooltipHandler)}.
+	 * 
+	 * @param infos
+	 *            information.
+	 * @param tooltipNotifier
+	 *            tooltip notifier.
+	 * @param clickReactor
+	 *            click reactor.
+	 */
+	UserInterface(InformationProvider infos,
+			TooltipTriggererNotifier tooltipNotifier,
+			GuiClickReactor clickReactor) {
 		this.uiObjects = new ArrayList<RenderedGuiObject>();
 		this.infos = infos;
 		this.reactor = clickReactor;
-		this.tooltipHandler = tooltipHandler;
+		this.tooltipNotifier = tooltipNotifier;
 		createElements();
+		infos.addEventListener(new GameEventReactor(this));
 	}
 
 	private void createElements() {
@@ -50,7 +67,7 @@ public class UserInterface implements GameEventListener {
 	 * 
 	 * @return informationprovider.
 	 */
-	public InformationProvider getInfo() {
+	public InformationProvider getInfos() {
 		return infos;
 	}
 
@@ -194,4 +211,23 @@ public class UserInterface implements GameEventListener {
 		return tooltipHandler;
 	}
 
+	/**
+	 * Registers given triggerer to tooltip notifier.
+	 * 
+	 * @param triggerer
+	 *            trigger.
+	 */
+	public void registerTooltipTriggerer(TooltipTriggerer triggerer) {
+		tooltipNotifier.registerTooltipTriggerer(triggerer);
+	}
+
+	/**
+	 * Sets tooltip handler to given tooltiphandler.
+	 * 
+	 * @param h
+	 *            new tooltip handler.
+	 */
+	void setTooltipHandler(TooltipHandler h) {
+		this.tooltipHandler = h;
+	}
 }

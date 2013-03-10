@@ -46,7 +46,7 @@ public class ItemDisplay extends ClickableGuiElement implements
 		for (int i = 0; i < Inventory.MAX_CAPACITY; i++) {
 			itemSlots[i] = new GuiItem(i);
 		}
-		getTooltipHandler().registerTooltipTriggerer(this);
+		registerAsTooltipTriggerer(this);
 	}
 
 	@Override

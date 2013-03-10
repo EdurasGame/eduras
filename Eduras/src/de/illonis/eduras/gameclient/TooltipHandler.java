@@ -2,7 +2,6 @@ package de.illonis.eduras.gameclient;
 
 import java.awt.Point;
 
-import de.illonis.eduras.gameclient.gui.guielements.TooltipTriggerer;
 import de.illonis.eduras.items.Item;
 
 /**
@@ -12,22 +11,6 @@ import de.illonis.eduras.items.Item;
  * 
  */
 public interface TooltipHandler {
-
-	/**
-	 * Adds a tooltip triggerer.
-	 * 
-	 * @param elem
-	 *            triggerer to add.
-	 */
-	void registerTooltipTriggerer(TooltipTriggerer elem);
-
-	/**
-	 * Removes a tooltip triggerer.
-	 * 
-	 * @param elem
-	 *            triggerer to remove.
-	 */
-	void removeTooltipTriggerer(TooltipTriggerer elem);
 
 	/**
 	 * Shows a tooltip that shows description of given item.

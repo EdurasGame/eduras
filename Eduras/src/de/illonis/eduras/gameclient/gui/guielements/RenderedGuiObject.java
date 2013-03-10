@@ -48,6 +48,10 @@ public abstract class RenderedGuiObject implements GameEventListener {
 		return gui.getTooltipHandler();
 	}
 
+	protected final void registerAsTooltipTriggerer(TooltipTriggerer triggerer) {
+		gui.registerTooltipTriggerer(triggerer);
+	}
+
 	/**
 	 * Returns {@link GuiClickReactor} that is responsible for event handling of
 	 * assigned userinterface.
@@ -71,7 +75,7 @@ public abstract class RenderedGuiObject implements GameEventListener {
 	 * @return game information.
 	 */
 	protected InformationProvider getInfo() {
-		return gui.getInfo();
+		return gui.getInfos();
 	}
 
 	/**

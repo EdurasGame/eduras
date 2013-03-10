@@ -23,10 +23,16 @@ import de.illonis.eduras.interfaces.GameEventListener;
  */
 public class GameEventReactor implements GameEventListener {
 
-	private final GameClient client;
+	private final UserInterface ui;
 
-	public GameEventReactor(GameClient gameClient) {
-		this.client = gameClient;
+	/**
+	 * Creates a new reactor.
+	 * 
+	 * @param ui
+	 *            associated user interface.
+	 */
+	public GameEventReactor(UserInterface ui) {
+		this.ui = ui;
 	}
 
 	@Override
@@ -42,34 +48,34 @@ public class GameEventReactor implements GameEventListener {
 	@Override
 	public void onObjectCreation(ObjectFactoryEvent event) {
 		// if our player was created, player data is there.
-		if (event.getOwner() == client.getInformationProvider().getOwnerID()
+		if (event.getOwner() == ui.getInfos().getOwnerID()
 				&& event.getObjectType() == ObjectType.PLAYER)
-			getNotifier().onPlayerReceived();
+			ui.onPlayerReceived();
 	}
 
 	@Override
 	public void onClientRename(ClientRenameEvent event) {
-		getNotifier().onClientRename(event);
+		ui.onClientRename(event);
 	}
 
 	@Override
 	public void onObjectStateChanged(SetGameObjectAttributeEvent<?> event) {
-		getNotifier().onObjectStateChanged(event);
+		ui.onObjectStateChanged(event);
 	}
 
 	@Override
 	public void onHealthChanged(int objectId, int newValue) {
-		getNotifier().onHealthChanged(objectId, newValue);
+		ui.onHealthChanged(objectId, newValue);
 	}
 
 	@Override
 	public void onOwnerChanged(SetOwnerEvent event) {
-		getNotifier().onOwnerChanged(event);
+		ui.onOwnerChanged(event);
 	}
 
 	@Override
 	public void onItemSlotChanged(SetItemSlotEvent event) {
-		getNotifier().onItemSlotChanged(event);
+		ui.onItemSlotChanged(event);
 	}
 
 	@Override
@@ -78,16 +84,11 @@ public class GameEventReactor implements GameEventListener {
 
 	@Override
 	public void onMatchEnd(MatchEndEvent event) {
-		client.getFrame().getRenderer().drawWin(event.getWinnerId());
+		ui.onMatchEnd(event);
 	}
 
 	@Override
 	public void onGameModeChanged(GameMode newGameMode) {
-		getNotifier().onGameModeChanged(newGameMode);
+		ui.onGameModeChanged(newGameMode);
 	}
-
-	private UserInterface getNotifier() {
-		return client.getFrame().getNotifier();
-	}
-
 }

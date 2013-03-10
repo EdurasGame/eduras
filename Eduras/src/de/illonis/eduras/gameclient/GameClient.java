@@ -23,7 +23,6 @@ import de.illonis.eduras.gameclient.gui.InputKeyHandler;
 import de.illonis.eduras.gameclient.gui.guielements.ClickableGuiElementInterface;
 import de.illonis.eduras.gameclient.gui.guielements.TooltipTriggerer;
 import de.illonis.eduras.inventory.Inventory;
-import de.illonis.eduras.items.Item;
 import de.illonis.eduras.locale.Localization;
 import de.illonis.eduras.logger.EduLog;
 import de.illonis.eduras.logicabstraction.EdurasInitializer;
@@ -41,7 +40,7 @@ import de.illonis.eduras.settings.Settings;
  * 
  */
 public class GameClient implements GuiClickReactor, NetworkEventReactor,
-		TooltipHandler {
+		TooltipTriggererNotifier {
 
 	private InformationProvider infoPro;
 	private EventSender eventSender;
@@ -55,6 +54,7 @@ public class GameClient implements GuiClickReactor, NetworkEventReactor,
 	private int currentItemSelected = -1;
 	private LinkedList<ClickableGuiElementInterface> clickListeners;
 	private LinkedList<TooltipTriggerer> triggerers;
+	// private TooltipHandler tooltipHandler;
 
 	private String clientName;
 
@@ -78,12 +78,8 @@ public class GameClient implements GuiClickReactor, NetworkEventReactor,
 	 */
 	void startGui() {
 		frame = new ClientFrame(this);
+		frame.initUserInterface();
 		frame.setVisible(true);
-		infoPro.addEventListener(new GameEventReactor(this));
-	}
-
-	public ClientFrame getFrame() {
-		return frame;
 	}
 
 	/**
@@ -164,6 +160,12 @@ public class GameClient implements GuiClickReactor, NetworkEventReactor,
 		nwm.disconnect();
 	}
 
+	/**
+	 * Triggers item used events.
+	 * 
+	 * @param i
+	 *            item slot.
+	 */
 	public void itemUsed(int i) {
 		itemUsed(i, new Vector2D(getCurrentMousePos()));
 	}
@@ -200,18 +202,16 @@ public class GameClient implements GuiClickReactor, NetworkEventReactor,
 
 		@Override
 		public void mouseMoved(MouseEvent e) {
+			frame.getTooltipHandler().hideTooltip();
 			Point p = e.getPoint();
 			// TODO : notify only elements that are in area.
-			boolean triggered = false;
+
 			for (TooltipTriggerer t : triggerers) {
 				if (t.getTriggerArea().contains(p)) {
 					t.onMouseOver(p);
-					triggered = true;
+
 					break;
 				}
-			}
-			if (!triggered) {
-				hideTooltip();
 			}
 		}
 
@@ -363,21 +363,6 @@ public class GameClient implements GuiClickReactor, NetworkEventReactor,
 	@Override
 	public void removeTooltipTriggerer(TooltipTriggerer elem) {
 		triggerers.remove(elem);
-	}
-
-	@Override
-	public void showItemTooltip(Point p, Item data) {
-		frame.getRenderer().showItemTooltip(p, data);
-	}
-
-	@Override
-	public void showTooltip(Point p, String text) {
-		frame.getRenderer().showTooltip(p, text);
-	}
-
-	@Override
-	public void hideTooltip() {
-		frame.getRenderer().hideTooltip();
 	}
 
 	@Override

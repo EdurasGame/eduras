@@ -14,7 +14,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import de.illonis.eduras.gameclient.TooltipHandler;
 import de.illonis.eduras.gameclient.gui.guielements.ItemTooltip;
 import de.illonis.eduras.gameclient.gui.guielements.RenderedGuiObject;
-import de.illonis.eduras.gameclient.gui.guielements.TooltipTriggerer;
 import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.items.Item;
 import de.illonis.eduras.logicabstraction.InformationProvider;
@@ -37,6 +36,7 @@ public class GameRenderer implements TooltipHandler {
 	private UserInterface gui;
 	private Graphics2D dbg = null;
 	private final ConcurrentHashMap<Integer, GameObject> objs;
+	private RenderThread rendererThread;
 	private final Rectangle mapSize;
 	private ItemTooltip tooltip;
 	private boolean tooltipShown = false;
@@ -61,6 +61,8 @@ public class GameRenderer implements TooltipHandler {
 		objs = info.getGameObjects();
 		mapSize = info.getMapBounds();
 		this.gui = gui;
+		RendererTooltipHandler h = new RendererTooltipHandler(this);
+		gui.setTooltipHandler(h);
 	}
 
 	/**
@@ -274,14 +276,6 @@ public class GameRenderer implements TooltipHandler {
 	}
 
 	@Override
-	public void registerTooltipTriggerer(TooltipTriggerer elem) {
-	}
-
-	@Override
-	public void removeTooltipTriggerer(TooltipTriggerer elem) {
-	}
-
-	@Override
 	public void showItemTooltip(Point p, Item item) {
 		if (tooltip == null) {
 			tooltip = new ItemTooltip(gui, item);
@@ -304,9 +298,24 @@ public class GameRenderer implements TooltipHandler {
 		tooltipShown = false;
 	}
 
+	/**
+	 * Stopps rendering process.
+	 */
+	void stopRendering() {
+		if (rendererThread != null)
+			rendererThread.stop();
+	}
+
+	void startRendering(GamePanel panel) {
+		rendererThread = new RenderThread(this, panel);
+		Thread t = new Thread(rendererThread);
+		t.start();
+	}
+
 	public void drawWin(int winnerId) {
 		// TODO: make working
 		dbg.drawString("Player with id " + winnerId + " won the game!",
 				(int) mapSize.getCenterX(), (int) mapSize.getCenterY());
 	}
+
 }

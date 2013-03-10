@@ -14,6 +14,7 @@ import javax.swing.JFrame;
 import de.illonis.eduras.exceptions.InvalidValueEnteredException;
 import de.illonis.eduras.gameclient.GameClient;
 import de.illonis.eduras.gameclient.NetworkEventReactor;
+import de.illonis.eduras.gameclient.TooltipHandler;
 import de.illonis.eduras.logger.EduLog;
 import de.illonis.eduras.math.Vector2D;
 
@@ -35,8 +36,6 @@ public class ClientFrame extends JFrame implements NetworkEventReactor,
 	private final static String GAMEPANEL = "Game Card";
 	private final GameClient client;
 	private GamePanel gamePanel;
-	private GameRenderer renderer; //
-	private RenderThread rendererThread; //
 	private UserInterface userInterface;
 	private final GameCamera camera;
 	private final CameraMouseListener cml;
@@ -69,14 +68,8 @@ public class ClientFrame extends JFrame implements NetworkEventReactor,
 			}
 
 		});
-		initGuiElements();
+
 		buildGui();
-	}
-
-	private void initGuiElements() {
-
-		userInterface = new UserInterface(client.getInformationProvider(),
-				client, client);
 	}
 
 	private void buildGui() {
@@ -89,24 +82,23 @@ public class ClientFrame extends JFrame implements NetworkEventReactor,
 		cardLayout.show(getContentPane(), LOGINPANEL);
 
 		gamePanel = new GamePanel();
+
 		client.addMouseListenersTo(gamePanel);
 		gamePanel.addMouseMotionListener(cml);
 		gamePanel.addMouseListener(cml);
 		add(loginPanel, LOGINPANEL);
 		add(progressPanel, CONNECTPANEL);
 		add(gamePanel, GAMEPANEL);
-		renderer = new GameRenderer(camera, userInterface,
-				client.getInformationProvider());
-
 	}
 
 	/**
-	 * Returns renderer.
-	 * 
-	 * @return renderer.
+	 * Initializes user interface.
 	 */
-	public GameRenderer getRenderer() {
-		return renderer;
+	public void initUserInterface() {
+		userInterface = new UserInterface(client.getInformationProvider(),
+				client, client);
+		gamePanel.initRenderer(camera, userInterface,
+				client.getInformationProvider());
 	}
 
 	@Override
@@ -179,9 +171,8 @@ public class ClientFrame extends JFrame implements NetworkEventReactor,
 
 	@Override
 	public void onDisconnect() {
+		gamePanel.stopRendering();
 		cml.stop();
-		if (rendererThread != null)
-			rendererThread.stop();
 		dispose();
 	}
 
@@ -207,11 +198,11 @@ public class ClientFrame extends JFrame implements NetworkEventReactor,
 
 	@Override
 	public void onGameReady() {
-		rendererThread = new RenderThread(renderer, gamePanel);
+		gamePanel.startRendering();
+
 		addComponentListener(new ResizeMonitor());
 		camera.setSize(gamePanel.getWidth(), gamePanel.getHeight());
-		Thread t = new Thread(rendererThread);
-		t.start();
+
 		client.addKeyHandlerTo(gamePanel);
 		showGame();
 	}
@@ -231,12 +222,12 @@ public class ClientFrame extends JFrame implements NetworkEventReactor,
 	}
 
 	/**
-	 * Returns gui notifier that notifies gui elements.
+	 * Returns tooltip handler that handles tooltips.
 	 * 
-	 * @return gui notifier.
+	 * @return tooltip handler.
 	 */
-	public UserInterface getNotifier() {
-		return userInterface;
+	public TooltipHandler getTooltipHandler() {
+		return userInterface.getTooltipHandler();
 	}
 
 	@Override
