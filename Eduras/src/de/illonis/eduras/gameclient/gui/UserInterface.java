@@ -20,10 +20,10 @@ import de.illonis.eduras.interfaces.GameEventListener;
  * @author illonis
  * 
  */
-public class GuiNotifier implements GameEventListener {
+public class UserInterface implements GameEventListener {
 	private ArrayList<RenderedGuiObject> uiObjects;
 
-	public GuiNotifier(ArrayList<RenderedGuiObject> uiObjects) {
+	UserInterface(ArrayList<RenderedGuiObject> uiObjects) {
 		this.uiObjects = uiObjects;
 	}
 
@@ -119,7 +119,7 @@ public class GuiNotifier implements GameEventListener {
 	 * @param height
 	 *            new height.
 	 */
-	public void onGuiSizeChanged(int width, int height) {
+	void onGuiSizeChanged(int width, int height) {
 		for (RenderedGuiObject obj : uiObjects) {
 			obj.onGuiSizeChanged(width, height);
 		}

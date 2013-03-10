@@ -10,7 +10,7 @@ import de.illonis.eduras.events.ObjectFactoryEvent;
 import de.illonis.eduras.events.SetGameObjectAttributeEvent;
 import de.illonis.eduras.events.SetItemSlotEvent;
 import de.illonis.eduras.events.SetOwnerEvent;
-import de.illonis.eduras.gameclient.gui.GuiNotifier;
+import de.illonis.eduras.gameclient.gui.UserInterface;
 import de.illonis.eduras.gamemodes.GameMode;
 import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.interfaces.GameEventListener;
@@ -86,7 +86,7 @@ public class GameEventReactor implements GameEventListener {
 		getNotifier().onGameModeChanged(newGameMode);
 	}
 
-	private GuiNotifier getNotifier() {
+	private UserInterface getNotifier() {
 		return client.getFrame().getNotifier();
 	}
 

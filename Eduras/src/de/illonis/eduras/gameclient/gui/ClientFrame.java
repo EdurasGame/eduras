@@ -38,7 +38,7 @@ public class ClientFrame extends JFrame implements NetworkEventReactor,
 	private ArrayList<RenderedGuiObject> uiObjects = new ArrayList<RenderedGuiObject>(); //
 	private ItemDisplay itemDisplay; //
 	private GameStatBar statBar; //
-	private GuiNotifier notifier;
+	private UserInterface notifier;
 	private final GameCamera camera;
 	private final CameraMouseListener cml;
 
@@ -71,7 +71,7 @@ public class ClientFrame extends JFrame implements NetworkEventReactor,
 	private void initGuiElements() {
 
 		uiObjects = new ArrayList<RenderedGuiObject>();
-		notifier = new GuiNotifier(uiObjects);
+		notifier = new UserInterface(uiObjects);
 		itemDisplay = new ItemDisplay(client, client.getInformationProvider());
 		uiObjects.add(itemDisplay);
 		statBar = new GameStatBar(client.getInformationProvider());
@@ -230,7 +230,7 @@ public class ClientFrame extends JFrame implements NetworkEventReactor,
 	 * 
 	 * @return gui notifier.
 	 */
-	public GuiNotifier getNotifier() {
+	public UserInterface getNotifier() {
 		return notifier;
 	}
 
