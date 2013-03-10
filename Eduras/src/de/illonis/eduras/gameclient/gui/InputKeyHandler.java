@@ -151,6 +151,9 @@ public class InputKeyHandler extends KeyAdapter {
 		case ITEM_6:
 			client.itemUsed(5);
 			return;
+		case EXIT_CLIENT:
+			client.onDisconnect();
+			return;
 
 		default:
 			return;

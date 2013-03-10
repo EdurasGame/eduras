@@ -1,7 +1,6 @@
 package de.illonis.eduras.gameclient.gui;
 
 import java.awt.Graphics2D;
-import java.awt.image.BufferStrategy;
 
 import de.illonis.eduras.logger.EduLog;
 
@@ -35,10 +34,10 @@ public class RenderThread implements Runnable {
 	public void run() {
 		running = true;
 		while (running) {
-			BufferStrategy bs = panel.getBufferStrategy();
-			if (bs == null) {
-				panel.createBufferStrategy(3);
-			}
+			// BufferStrategy bs = panel.getBufferStrategy();
+			// if (bs == null) {
+			// panel.createBufferStrategy(3);
+			// }
 			renderer.render(panel.getWidth(), panel.getHeight());
 			renderer.paintGame((Graphics2D) panel.getGraphics());
 			try {

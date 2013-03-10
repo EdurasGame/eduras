@@ -86,9 +86,9 @@ public class ClientFrame extends JFrame implements NetworkEventReactor,
 		client.addMouseListenersTo(gamePanel);
 		gamePanel.addMouseMotionListener(cml);
 		gamePanel.addMouseListener(cml);
-		add(loginPanel, LOGINPANEL);
-		add(progressPanel, CONNECTPANEL);
-		add(gamePanel, GAMEPANEL);
+		getContentPane().add(loginPanel, LOGINPANEL);
+		getContentPane().add(progressPanel, CONNECTPANEL);
+		getContentPane().add(gamePanel, GAMEPANEL);
 	}
 
 	/**

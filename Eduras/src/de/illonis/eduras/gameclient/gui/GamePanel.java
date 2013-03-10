@@ -1,7 +1,8 @@
 package de.illonis.eduras.gameclient.gui;
 
-import java.awt.Canvas;
 import java.awt.Color;
+
+import javax.swing.JPanel;
 
 import de.illonis.eduras.logicabstraction.InformationProvider;
 
@@ -12,7 +13,7 @@ import de.illonis.eduras.logicabstraction.InformationProvider;
  * @author illonis
  * 
  */
-public class GamePanel extends Canvas {
+public class GamePanel extends JPanel {
 
 	private static final long serialVersionUID = 1L;
 	private GameRenderer renderer; //

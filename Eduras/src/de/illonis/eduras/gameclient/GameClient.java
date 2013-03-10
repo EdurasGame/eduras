@@ -73,11 +73,14 @@ public class GameClient implements GuiClickReactor, NetworkEventReactor,
 		startup();
 	}
 
+	void useFrame(ClientFrame frame) {
+		this.frame = frame;
+	}
+
 	/**
 	 * Initializes and shows up gui.
 	 */
 	void startGui() {
-		frame = new ClientFrame(this);
 		frame.initUserInterface();
 		frame.setVisible(true);
 	}
