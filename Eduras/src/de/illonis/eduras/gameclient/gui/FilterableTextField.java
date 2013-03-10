@@ -17,6 +17,9 @@ public class FilterableTextField extends JTextField {
 
 	private static final long serialVersionUID = 1L;
 
+	/**
+	 * Creates a filterable text field.
+	 */
 	public FilterableTextField() {
 		setDocument(new FilterDocument());
 	}

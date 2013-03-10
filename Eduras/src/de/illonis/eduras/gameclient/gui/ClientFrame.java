@@ -17,6 +17,12 @@ import de.illonis.eduras.gameclient.NetworkEventReactor;
 import de.illonis.eduras.logger.EduLog;
 import de.illonis.eduras.math.Vector2D;
 
+/**
+ * The client frame that holds game panel and all other gui things.
+ * 
+ * @author illonis
+ * 
+ */
 public class ClientFrame extends JFrame implements NetworkEventReactor,
 		ActionListener {
 
@@ -88,6 +94,11 @@ public class ClientFrame extends JFrame implements NetworkEventReactor,
 
 	}
 
+	/**
+	 * Returns renderer.
+	 * 
+	 * @return renderer.
+	 */
 	public GameRenderer getRenderer() {
 		return renderer;
 	}

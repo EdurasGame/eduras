@@ -37,6 +37,9 @@ public class LoginPanel extends JPanel implements ActionListener {
 	private InetAddress address;
 	private ActionListener listener;
 
+	/**
+	 * Creates the login panel.
+	 */
 	public LoginPanel() {
 		super();
 		setLayout(new BorderLayout());

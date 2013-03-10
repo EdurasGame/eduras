@@ -58,10 +58,12 @@ public class ItemTooltip extends Tooltip {
 
 	}
 
-	public Item getItem() {
-		return item;
-	}
-
+	/**
+	 * Changes item that should be displayed.
+	 * 
+	 * @param item
+	 *            new item.
+	 */
 	public void setItem(Item item) {
 		this.item = item;
 	}

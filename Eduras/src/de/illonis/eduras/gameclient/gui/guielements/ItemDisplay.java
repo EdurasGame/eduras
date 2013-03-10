@@ -30,6 +30,12 @@ public class ItemDisplay extends ClickableGuiElement implements
 	private int height, width, blocksize, itemGap;
 	private GuiItem itemSlots[];
 
+	/**
+	 * Creates a new item toolbar.
+	 * 
+	 * @param gui
+	 *            associated gui.
+	 */
 	public ItemDisplay(UserInterface gui) {
 		super(gui);
 		width = 140;
@@ -129,7 +135,7 @@ public class ItemDisplay extends ClickableGuiElement implements
 	 * @author illonis
 	 * 
 	 */
-	private class GuiItem implements ClickableElement {
+	private class GuiItem {
 		private int x, y, slotId;
 		private String name;
 		private BufferedImage itemImage;
@@ -172,8 +178,7 @@ public class ItemDisplay extends ClickableGuiElement implements
 			this.name = name;
 		}
 
-		@Override
-		public Rectangle getClickableRect() {
+		protected Rectangle getClickableRect() {
 			return new Rectangle(x + screenX, y + screenY, blocksize, blocksize);
 		}
 	}

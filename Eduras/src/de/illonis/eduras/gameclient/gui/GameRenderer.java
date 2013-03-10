@@ -305,6 +305,7 @@ public class GameRenderer implements TooltipHandler {
 	}
 
 	public void drawWin(int winnerId) {
+		// TODO: make working
 		dbg.drawString("Player with id " + winnerId + " won the game!",
 				(int) mapSize.getCenterX(), (int) mapSize.getCenterY());
 	}

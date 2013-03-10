@@ -37,6 +37,16 @@ public class InputKeyHandler extends KeyAdapter {
 	private Settings settings;
 	private final GameClient client;
 
+	/**
+	 * Creates a new input key handler.
+	 * 
+	 * @param client
+	 *            associated client.
+	 * @param sender
+	 *            associated event sender.
+	 * @param settings
+	 *            associated user settings.
+	 */
 	public InputKeyHandler(GameClient client, EventSender sender,
 			Settings settings) {
 

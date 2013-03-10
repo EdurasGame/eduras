@@ -43,6 +43,14 @@ public class ProgressPanel extends JPanel implements ActionListener {
 	private String errorMessage;
 	private ConnectionWaiter worker;
 
+	/**
+	 * Creates the progress panel
+	 * 
+	 * @param frame
+	 *            parent frame
+	 * @param nwm
+	 *            network manager.
+	 */
 	public ProgressPanel(ClientFrame frame, NetworkManager nwm) {
 		super();
 		this.frame = frame;
