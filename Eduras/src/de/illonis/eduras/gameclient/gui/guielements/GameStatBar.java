@@ -15,6 +15,12 @@ import de.illonis.eduras.gamemodes.GameMode;
 public class GameStatBar extends RenderedGuiObject {
 	private String mode;
 
+	/**
+	 * Creates the game stat bar.
+	 * 
+	 * @param gui
+	 *            associated gui.
+	 */
 	public GameStatBar(UserInterface gui) {
 		super(gui);
 		mode = "unknown game mode";

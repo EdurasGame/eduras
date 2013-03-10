@@ -3,6 +3,12 @@ package de.illonis.eduras.gameclient.gui.guielements;
 import java.awt.Point;
 import java.awt.Rectangle;
 
+/**
+ * A clickable gui element.
+ * 
+ * @author illonis
+ * 
+ */
 public interface ClickableGuiElementInterface {
 
 	/**

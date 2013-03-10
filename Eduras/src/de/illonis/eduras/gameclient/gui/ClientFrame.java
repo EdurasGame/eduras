@@ -41,6 +41,12 @@ public class ClientFrame extends JFrame implements NetworkEventReactor,
 	private final GameCamera camera;
 	private final CameraMouseListener cml;
 
+	/**
+	 * Creates a new clientframe.
+	 * 
+	 * @param client
+	 *            associated client.
+	 */
 	public ClientFrame(final GameClient client) {
 		super("Eduras? Client");
 		this.client = client;
