@@ -4,6 +4,8 @@ package de.illonis.eduras.gameclient;
  * Listens to a {@link AsyncLoader}.
  * 
  * @author illonis
+ * @param <T>
+ *            Type of data being loaded.
  * 
  */
 public interface AsyncLoadCompletedListener<T> {

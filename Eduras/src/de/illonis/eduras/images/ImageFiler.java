@@ -23,7 +23,7 @@ public class ImageFiler {
 	 * @param fileName
 	 *            file name of image. Must be relative to images-package.
 	 * @return image.
-	 * @throws IOExccetion
+	 * @throws IOException
 	 *             when image could not be loaded.
 	 */
 	public static BufferedImage load(String fileName) throws IOException {

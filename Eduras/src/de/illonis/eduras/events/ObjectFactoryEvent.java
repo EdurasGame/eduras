@@ -22,7 +22,9 @@ public class ObjectFactoryEvent extends OwnerGameEvent {
 	 *            typenumber of event.
 	 * @param objectType
 	 *            type of object (see {@link ObjectType}). Irrelevant if event
-	 *            is {@link GameEventNumber#OBJECT_REMOVE}.
+	 *            is
+	 *            {@link de.illonis.eduras.events.GameEvent.GameEventNumber#OBJECT_REMOVE}
+	 *            .
 	 */
 	public ObjectFactoryEvent(GameEventNumber eventType, ObjectType objectType) {
 		super(eventType);
@@ -43,7 +45,7 @@ public class ObjectFactoryEvent extends OwnerGameEvent {
 	 * Sets object type of this event. An object of this type will be created or
 	 * deleted with this event.<br>
 	 * <b>Note:</b> Object type is neglected if type of event is
-	 * {@link GameEventNumber#OBJECT_REMOVE}.
+	 * {@link de.illonis.eduras.events.GameEvent.GameEventNumber#OBJECT_REMOVE}.
 	 * 
 	 * @see #getType()
 	 * 

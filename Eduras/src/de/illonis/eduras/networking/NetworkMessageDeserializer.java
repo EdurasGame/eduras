@@ -407,9 +407,9 @@ public class NetworkMessageDeserializer {
 	 *            argument to look at. Note that first argument is
 	 *            GameEventNumber.
 	 * @return selected argument of given message.
-	 * @throws There
-	 *             is a nullpointerexception thrown if something goes wrong with
-	 *             the string.
+	 * @throws NullPointerException
+	 *             is a nullpointerexception is thrown if something goes wrong
+	 *             with the string.
 	 */
 	public static String getArgumentFromMessage(String message, int argument) {
 
