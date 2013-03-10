@@ -17,7 +17,6 @@ import de.illonis.eduras.events.InitInformationEvent;
 import de.illonis.eduras.events.ItemEvent;
 import de.illonis.eduras.exceptions.MessageNotSupportedException;
 import de.illonis.eduras.exceptions.WrongEventTypeException;
-import de.illonis.eduras.gameclient.gui.CameraMouseListener;
 import de.illonis.eduras.gameclient.gui.ClientFrame;
 import de.illonis.eduras.gameclient.gui.GuiClickReactor;
 import de.illonis.eduras.gameclient.gui.InputKeyHandler;
@@ -51,8 +50,6 @@ public class GameClient implements GuiClickReactor, NetworkEventReactor,
 	private ClientEventHandler eventHandler;
 	private Settings settings;
 	private InputKeyHandler keyHandler;
-	private final CameraMouseListener cml;
-	private final GameCamera camera;
 	private ClientFrame frame;
 	private ClickState currentClickState;
 	private int currentItemSelected = -1;
@@ -72,9 +69,6 @@ public class GameClient implements GuiClickReactor, NetworkEventReactor,
 		clickListeners = new LinkedList<ClickableGuiElementInterface>();
 		triggerers = new LinkedList<TooltipTriggerer>();
 		currentClickState = ClickState.DEFAULT;
-		camera = new GameCamera();
-		cml = new CameraMouseListener(camera);
-
 		loadTools();
 		startup();
 	}
@@ -99,8 +93,6 @@ public class GameClient implements GuiClickReactor, NetworkEventReactor,
 	 *            listeners will be added to this component.
 	 */
 	public void addMouseListenersTo(Component c) {
-		c.addMouseMotionListener(cml);
-		c.addMouseListener(cml);
 		ClickListener cl = new ClickListener();
 		c.addMouseListener(cl);
 		c.addMouseMotionListener(cl);
@@ -168,7 +160,6 @@ public class GameClient implements GuiClickReactor, NetworkEventReactor,
 	@Override
 	public void onDisconnect() {
 		frame.onDisconnect();
-		cml.stop();
 		initializer.shutdown();
 		nwm.disconnect();
 	}
@@ -188,26 +179,12 @@ public class GameClient implements GuiClickReactor, NetworkEventReactor,
 	void itemUsed(int i, Vector2D target) {
 		ItemEvent event = new ItemEvent(GameEventNumber.ITEM_USE,
 				infoPro.getOwnerID(), i);
-		event.setTarget(computeGuiPointToGameCoordinate(target));
+		event.setTarget(frame.computeGuiPointToGameCoordinate(target));
 		try {
 			sendEvent(event);
 		} catch (WrongEventTypeException | MessageNotSupportedException e) {
 			EduLog.passException(e);
 		}
-	}
-
-	/**
-	 * Computes a point that is relative to gui into game coordinates.
-	 * 
-	 * @param v
-	 *            point to convert.
-	 * @return game-coordinate point.
-	 */
-	public Vector2D computeGuiPointToGameCoordinate(Vector2D v) {
-		Vector2D vec = new Vector2D(v);
-		vec.modifyX(camera.getX());
-		vec.modifyY(camera.getY());
-		return vec;
 	}
 
 	/**
@@ -262,15 +239,6 @@ public class GameClient implements GuiClickReactor, NetworkEventReactor,
 	 */
 	private void inGameClick(Point p) {
 		// TODO: implement
-	}
-
-	/**
-	 * Returns game camera.
-	 * 
-	 * @return game camera.
-	 */
-	public GameCamera getCamera() {
-		return camera;
 	}
 
 	/**

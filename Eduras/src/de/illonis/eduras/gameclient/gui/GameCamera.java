@@ -1,4 +1,4 @@
-package de.illonis.eduras.gameclient;
+package de.illonis.eduras.gameclient.gui;
 
 import java.awt.Rectangle;
 

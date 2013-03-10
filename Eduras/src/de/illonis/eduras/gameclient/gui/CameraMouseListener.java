@@ -3,7 +3,6 @@ package de.illonis.eduras.gameclient.gui;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
-import de.illonis.eduras.gameclient.GameCamera;
 import de.illonis.eduras.logger.EduLog;
 
 /**

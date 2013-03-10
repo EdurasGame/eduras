@@ -19,6 +19,7 @@ import de.illonis.eduras.gameclient.gui.guielements.GameStatBar;
 import de.illonis.eduras.gameclient.gui.guielements.ItemDisplay;
 import de.illonis.eduras.gameclient.gui.guielements.RenderedGuiObject;
 import de.illonis.eduras.logger.EduLog;
+import de.illonis.eduras.math.Vector2D;
 
 public class ClientFrame extends JFrame implements NetworkEventReactor,
 		ActionListener {
@@ -38,11 +39,14 @@ public class ClientFrame extends JFrame implements NetworkEventReactor,
 	private ItemDisplay itemDisplay;
 	private GameStatBar statBar;
 	private GuiNotifier notifier;
+	private final GameCamera camera;
+	private final CameraMouseListener cml;
 
 	public ClientFrame(final GameClient client) {
 		super("Eduras? Client");
 		this.client = client;
-
+		camera = new GameCamera();
+		cml = new CameraMouseListener(camera);
 		setSize(500, 500);
 		setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
 		setLocationRelativeTo(null);
@@ -87,10 +91,12 @@ public class ClientFrame extends JFrame implements NetworkEventReactor,
 
 		gamePanel = new GamePanel();
 		client.addMouseListenersTo(gamePanel);
+		gamePanel.addMouseMotionListener(cml);
+		gamePanel.addMouseListener(cml);
 		add(loginPanel, LOGINPANEL);
 		add(progressPanel, CONNECTPANEL);
 		add(gamePanel, GAMEPANEL);
-		renderer = new GameRenderer(uiObjects, client.getCamera(),
+		renderer = new GameRenderer(uiObjects, camera,
 				client.getInformationProvider());
 
 	}
@@ -159,8 +165,7 @@ public class ClientFrame extends JFrame implements NetworkEventReactor,
 		@Override
 		public void componentResized(ComponentEvent e) {
 			super.componentResized(e);
-			client.getCamera().setSize(gamePanel.getWidth(),
-					gamePanel.getHeight());
+			camera.setSize(gamePanel.getWidth(), gamePanel.getHeight());
 			EduLog.fine("[GUI] Size changed. New size: " + getWidth() + ", "
 					+ getHeight());
 			notifyGuiSizeChanged();
@@ -179,6 +184,7 @@ public class ClientFrame extends JFrame implements NetworkEventReactor,
 
 	@Override
 	public void onDisconnect() {
+		cml.stop();
 		if (rendererThread != null)
 			rendererThread.stop();
 		dispose();
@@ -204,11 +210,25 @@ public class ClientFrame extends JFrame implements NetworkEventReactor,
 	public void onGameReady() {
 		rendererThread = new RenderThread(renderer, gamePanel);
 		addComponentListener(new ResizeMonitor());
-		client.getCamera().setSize(gamePanel.getWidth(), gamePanel.getHeight());
+		camera.setSize(gamePanel.getWidth(), gamePanel.getHeight());
 		Thread t = new Thread(rendererThread);
 		t.start();
 		client.addKeyHandlerTo(gamePanel);
 		showGame();
+	}
+
+	/**
+	 * Computes a point that is relative to gui into game coordinates.
+	 * 
+	 * @param v
+	 *            point to convert.
+	 * @return game-coordinate point.
+	 */
+	public Vector2D computeGuiPointToGameCoordinate(Vector2D v) {
+		Vector2D vec = new Vector2D(v);
+		vec.modifyX(camera.getX());
+		vec.modifyY(camera.getY());
+		return vec;
 	}
 
 	/**

@@ -11,7 +11,6 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.concurrent.ConcurrentHashMap;
 
-import de.illonis.eduras.gameclient.GameCamera;
 import de.illonis.eduras.gameclient.TooltipHandler;
 import de.illonis.eduras.gameclient.gui.guielements.ItemTooltip;
 import de.illonis.eduras.gameclient.gui.guielements.RenderedGuiObject;
