@@ -33,11 +33,11 @@ public class ClientFrame extends JFrame implements NetworkEventReactor,
 	private final static String GAMEPANEL = "Game Card";
 	private final GameClient client;
 	private GamePanel gamePanel;
-	private GameRenderer renderer;
-	private RenderThread rendererThread;
-	private ArrayList<RenderedGuiObject> uiObjects = new ArrayList<RenderedGuiObject>();
-	private ItemDisplay itemDisplay;
-	private GameStatBar statBar;
+	private GameRenderer renderer; //
+	private RenderThread rendererThread; //
+	private ArrayList<RenderedGuiObject> uiObjects = new ArrayList<RenderedGuiObject>(); //
+	private ItemDisplay itemDisplay; //
+	private GameStatBar statBar; //
 	private GuiNotifier notifier;
 	private final GameCamera camera;
 	private final CameraMouseListener cml;
