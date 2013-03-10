@@ -19,7 +19,8 @@ import de.illonis.eduras.interfaces.GameEventListener;
 import de.illonis.eduras.logicabstraction.InformationProvider;
 
 /**
- * Listens for game events and notifies all gui elements.
+ * Holds all user interface elements and listens for game events and notifies
+ * all gui elements.
  * 
  * @author illonis
  * 
@@ -40,11 +41,8 @@ public class UserInterface implements GameEventListener {
 	}
 
 	private void createElements() {
-
-		ItemDisplay itemDisplay = new ItemDisplay(this);
-		uiObjects.add(itemDisplay);
-		GameStatBar statBar = new GameStatBar(this);
-		uiObjects.add(statBar);
+		uiObjects.add(new ItemDisplay(this));
+		uiObjects.add(new GameStatBar(this));
 	}
 
 	/**

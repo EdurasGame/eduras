@@ -22,8 +22,8 @@ public class ItemTooltip extends Tooltip {
 	 * Creates a new item tooltip that uses given information and displays data
 	 * about given item.
 	 * 
-	 * @param info
-	 *            game information.
+	 * @param gui
+	 *            user interface.
 	 * @param item
 	 *            item to present.
 	 */
