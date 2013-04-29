@@ -45,4 +45,8 @@ public final class NoCollisionShape extends ObjectShape {
 		return null;
 	}
 
+	@Override
+	public ObjectShape getScaled(double scale) {
+		return this;
+	}
 }

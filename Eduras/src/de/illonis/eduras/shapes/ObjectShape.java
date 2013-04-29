@@ -124,5 +124,20 @@ public abstract class ObjectShape {
 	public abstract LinkedList<CollisionPoint> isIntersected(
 			LinkedList<Line> lines, GameObject thisObject);
 
+	/**
+	 * Returns a rectangular bounding box containing the complete shape.
+	 * 
+	 * @return the bounding box.
+	 */
 	public abstract Rectangle2D.Double getBoundingBox();
+
+	/**
+	 * Returns a scaled version of this shape. The returned shape is a copy of
+	 * this shape.
+	 * 
+	 * @param scale
+	 *            new scale.
+	 * @return scaled copy of this shape.
+	 */
+	public abstract ObjectShape getScaled(double scale);
 }
