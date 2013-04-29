@@ -270,6 +270,6 @@ public class Polygon extends ObjectShape {
 	@Override
 	public ObjectShape getScaled(double scale) {
 		// TODO: implement
-		return null;
+		return this;
 	}
 }

@@ -75,7 +75,7 @@ public class GameRenderer implements TooltipHandler {
 	public void render() {
 		int width = target.getWidth();
 		int height = target.getHeight();
-		System.out.println("H: " + height + " W: " + width);
+		// System.out.println("H: " + height + " W: " + width);
 
 		// recreate image if it does not exist
 		if (dbImage == null || dbg == null || width != dbImage.getWidth()) {
