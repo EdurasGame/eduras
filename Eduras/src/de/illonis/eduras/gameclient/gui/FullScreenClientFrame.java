@@ -5,18 +5,33 @@ import java.awt.GraphicsDevice;
 
 import de.illonis.eduras.gameclient.GameClient;
 
+/**
+ * A full screen client frame.
+ * 
+ * @author illonis
+ * 
+ */
 public class FullScreenClientFrame extends ClientFrame {
 
 	private static final long serialVersionUID = 1L;
 	private DisplayMode oldDisplayMode;
 	private GraphicsDevice device;
 
+	/**
+	 * Creates a new fullscreen frame that displays on given environment.
+	 * 
+	 * @param graphicsDevice
+	 *            target graphics device.
+	 * @param mode
+	 *            display mode.
+	 * @param client
+	 *            gameclient.
+	 */
 	public FullScreenClientFrame(GraphicsDevice graphicsDevice,
 			DisplayMode mode, GameClient client) {
 		super(client);
 		this.oldDisplayMode = graphicsDevice.getDisplayMode();
 		this.device = graphicsDevice;
-		setSize(1024, 768);
 		setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
 		setLocationRelativeTo(null);
 		if (graphicsDevice.isFullScreenSupported()) {
@@ -31,6 +46,7 @@ public class FullScreenClientFrame extends ClientFrame {
 
 			// validate();
 		} else {
+			// TODO: user alert
 			System.out.println("Fullscreen is not supported.");
 		}
 	}
