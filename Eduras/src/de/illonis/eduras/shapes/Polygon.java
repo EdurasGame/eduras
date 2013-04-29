@@ -157,6 +157,8 @@ public class Polygon extends ObjectShape {
 	 * Returns the vertices this shape is made of. Note that the relative values
 	 * are returned!
 	 * 
+	 * @return the vertices.
+	 * 
 	 */
 	public LinkedList<Vector2D> getVertices() {
 		LinkedList<Vector2D> result = new LinkedList<Vector2D>();
@@ -238,7 +240,6 @@ public class Polygon extends ObjectShape {
 	public Double getBoundingBox() {
 		// TODO: implement
 		return new Rectangle2D.Double(0, 0, 5E100, 5E100);
-
 	}
 
 	/*
@@ -266,4 +267,9 @@ public class Polygon extends ObjectShape {
 		return movementPoints;
 	}
 
+	@Override
+	public ObjectShape getScaled(double scale) {
+		// TODO: implement
+		return null;
+	}
 }

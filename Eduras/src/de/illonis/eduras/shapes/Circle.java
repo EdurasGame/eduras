@@ -239,4 +239,8 @@ public class Circle extends ObjectShape {
 				new Vector2D[COLLISION_ACCURACY]);
 	}
 
+	@Override
+	public ObjectShape getScaled(double scale) {
+		return new Circle(radius * scale);
+	}
 }
