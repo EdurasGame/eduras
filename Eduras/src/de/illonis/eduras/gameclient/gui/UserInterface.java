@@ -83,10 +83,10 @@ public class UserInterface implements GameEventListener {
 	}
 
 	@Override
-	public void onInformationRequested(ArrayList<GameEvent> infos,
+	public void onInformationRequested(ArrayList<GameEvent> events,
 			int targetOwner) {
 		for (RenderedGuiObject obj : uiObjects) {
-			obj.onInformationRequested(infos, targetOwner);
+			obj.onInformationRequested(events, targetOwner);
 		}
 	}
 

@@ -37,6 +37,7 @@ public class GameRenderer implements TooltipHandler {
 	private Graphics2D dbg = null;
 	private final ConcurrentHashMap<Integer, GameObject> objs;
 	private RenderThread rendererThread;
+	private GamePanel target;
 	private final Rectangle mapSize;
 	private ItemTooltip tooltip;
 	private boolean tooltipShown = false;
@@ -66,14 +67,11 @@ public class GameRenderer implements TooltipHandler {
 	}
 
 	/**
-	 * Renders buffered image with given size.
-	 * 
-	 * @param width
-	 *            width of image.
-	 * @param height
-	 *            height of image.
+	 * Renders buffered image with size of current target.
 	 */
-	public void render(int width, int height) {
+	public void render() {
+		int width = target.getWidth();
+		int height = target.getHeight();
 
 		// recreate image if it does not exist
 		if (dbImage == null || dbg == null || width != dbImage.getWidth()) {
@@ -110,14 +108,13 @@ public class GameRenderer implements TooltipHandler {
 	}
 
 	/**
-	 * Actively renders the buffer images to given graphics.
+	 * Actively renders the buffered image on draw target.
 	 * 
-	 * @param graphics
-	 *            images are painted here.
 	 */
-	public void paintGame(Graphics2D graphics) {
-		if ((graphics != null) && (dbImage != null)) {
-			graphics.drawImage(dbImage, 0, 0, null);
+	public void paintGame() {
+		if ((target != null) && (dbImage != null)) {
+			Graphics2D g2d = (Graphics2D) target.getGraphics();
+			g2d.drawImage(dbImage, 0, 0, null);
 		}
 	}
 
@@ -306,8 +303,8 @@ public class GameRenderer implements TooltipHandler {
 			rendererThread.stop();
 	}
 
-	void startRendering(GamePanel panel) {
-		rendererThread = new RenderThread(this, panel);
+	void startRendering() {
+		rendererThread = new RenderThread(this);
 		Thread t = new Thread(rendererThread);
 		t.start();
 	}
@@ -316,6 +313,14 @@ public class GameRenderer implements TooltipHandler {
 		// TODO: make working
 		dbg.drawString("Player with id " + winnerId + " won the game!",
 				(int) mapSize.getCenterX(), (int) mapSize.getCenterY());
+	}
+
+	/**
+	 * 
+	 * @param gamePanel
+	 */
+	void setTarget(GamePanel gamePanel) {
+		this.target = gamePanel;
 	}
 
 }

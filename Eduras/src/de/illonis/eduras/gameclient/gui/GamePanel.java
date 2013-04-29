@@ -41,6 +41,7 @@ public class GamePanel extends JPanel {
 	void initRenderer(GameCamera camera, UserInterface gui,
 			InformationProvider infos) {
 		renderer = new GameRenderer(camera, gui, infos);
+		renderer.setTarget(this);
 	}
 
 	/**
@@ -54,7 +55,7 @@ public class GamePanel extends JPanel {
 	 * Starts rendering process.
 	 */
 	void startRendering() {
-		renderer.startRendering(this);
+		renderer.startRendering();
 	}
 
 }

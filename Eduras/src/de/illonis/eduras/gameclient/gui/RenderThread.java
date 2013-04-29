@@ -1,7 +1,5 @@
 package de.illonis.eduras.gameclient.gui;
 
-import java.awt.Graphics2D;
-
 import de.illonis.eduras.logger.EduLog;
 
 /**
@@ -15,7 +13,6 @@ public class RenderThread implements Runnable {
 	private final static int DRAW_INTERVAL = 20;
 	private GameRenderer renderer;
 	private boolean running;
-	private GamePanel panel;
 
 	/**
 	 * Creates a new {@link RenderThread} that calls given {@link GameRenderer}.
@@ -25,9 +22,8 @@ public class RenderThread implements Runnable {
 	 * @param panel
 	 *            panel to draw onto
 	 */
-	RenderThread(GameRenderer renderer, GamePanel panel) {
+	RenderThread(GameRenderer renderer) {
 		this.renderer = renderer;
-		this.panel = panel;
 	}
 
 	@Override
@@ -38,8 +34,8 @@ public class RenderThread implements Runnable {
 			// if (bs == null) {
 			// panel.createBufferStrategy(3);
 			// }
-			renderer.render(panel.getWidth(), panel.getHeight());
-			renderer.paintGame((Graphics2D) panel.getGraphics());
+			renderer.render();
+			renderer.paintGame();
 			try {
 				Thread.sleep(DRAW_INTERVAL);
 			} catch (InterruptedException e) {
