@@ -73,8 +73,14 @@ public class GameClient implements GuiClickReactor, NetworkEventReactor,
 		startup();
 	}
 
-	void useFrame(ClientFrame frame) {
-		this.frame = frame;
+	/**
+	 * Tells gameclient which frame it should use to display game.
+	 * 
+	 * @param clientFrame
+	 *            target client frame.
+	 */
+	void useFrame(ClientFrame clientFrame) {
+		this.frame = clientFrame;
 	}
 
 	/**
