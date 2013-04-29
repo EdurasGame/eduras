@@ -16,7 +16,7 @@ import de.illonis.eduras.logicabstraction.InformationProvider;
 public class GamePanel extends JPanel {
 
 	private static final long serialVersionUID = 1L;
-	private GameRenderer renderer; //
+	private GameRenderer renderer;
 
 	/**
 	 * Creates a new gamePanel with black background.
@@ -24,7 +24,6 @@ public class GamePanel extends JPanel {
 	public GamePanel() {
 		setFocusable(true);
 		setBackground(Color.black);
-
 	}
 
 	/**

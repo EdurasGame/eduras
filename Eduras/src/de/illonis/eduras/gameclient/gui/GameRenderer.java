@@ -5,6 +5,7 @@ import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.RenderingHints;
+import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -40,6 +41,7 @@ public class GameRenderer implements TooltipHandler {
 	private GamePanel target;
 	private final Rectangle mapSize;
 	private ItemTooltip tooltip;
+	private double scale;
 	private boolean tooltipShown = false;
 	private ArrayList<RenderedGuiObject> uiObjects = new ArrayList<RenderedGuiObject>();
 
@@ -60,6 +62,7 @@ public class GameRenderer implements TooltipHandler {
 		this.uiObjects = gui.getUiObjects();
 		this.camera = camera;
 		objs = info.getGameObjects();
+		scale = 2.0;
 		mapSize = info.getMapBounds();
 		this.gui = gui;
 		RendererTooltipHandler h = new RendererTooltipHandler(this);
@@ -72,6 +75,7 @@ public class GameRenderer implements TooltipHandler {
 	public void render() {
 		int width = target.getWidth();
 		int height = target.getHeight();
+		System.out.println("H: " + height + " W: " + width);
 
 		// recreate image if it does not exist
 		if (dbImage == null || dbg == null || width != dbImage.getWidth()) {
@@ -98,6 +102,7 @@ public class GameRenderer implements TooltipHandler {
 	 * Draw every gui element.
 	 */
 	private void drawGui() {
+		// TODO: make resolution independent
 		for (int i = 0; i < uiObjects.size(); i++) {
 			uiObjects.get(i).render(dbg);
 		}
@@ -114,6 +119,7 @@ public class GameRenderer implements TooltipHandler {
 	public void paintGame() {
 		if ((target != null) && (dbImage != null)) {
 			Graphics2D g2d = (Graphics2D) target.getGraphics();
+
 			g2d.drawImage(dbImage, 0, 0, null);
 		}
 	}
@@ -124,10 +130,14 @@ public class GameRenderer implements TooltipHandler {
 	private void drawMap() {
 		dbg.setColor(Color.red);
 		Rectangle r = mapSize.getBounds();
-		r.x -= camera.x;
-		r.y -= camera.y;
+		Rectangle2D.Double r2d = new Rectangle2D.Double(r.x, r.y, r.width,
+				r.height);
+		r2d.x -= camera.x;
+		r2d.y -= camera.y;
+		r2d.width *= scale;
+		r2d.height *= scale;
 		dbg.setColor(Color.BLUE);
-		dbg.fill(r);
+		dbg.fill(r2d);
 	}
 
 	/**
@@ -176,7 +186,7 @@ public class GameRenderer implements TooltipHandler {
 	 *            object to draw image for.
 	 */
 	private void drawImageOf(GameObject obj) {
-		// TODO: implement
+		// TODO: implement (use scale!)
 	}
 
 	/**
@@ -189,7 +199,7 @@ public class GameRenderer implements TooltipHandler {
 	private void drawHealthBarFor(Unit unit) {
 		if (unit.isDead())
 			return;
-
+		// TODO: use scale
 		HealthBar.calculateFor(unit);
 		HealthBar.draw(dbg, camera);
 	}
@@ -213,7 +223,12 @@ public class GameRenderer implements TooltipHandler {
 	 *            gameobject.
 	 */
 	private void drawShapeOf(GameObject obj) {
-		ObjectShape objectShape = obj.getShape();
+		ObjectShape objectShape;
+		if (scale == 1)
+			objectShape = obj.getShape();
+		else
+			objectShape = obj.getShape().getScaled(scale);
+
 		if (objectShape instanceof Polygon) {
 
 			drawPolygon((Polygon) objectShape, obj);
@@ -316,8 +331,10 @@ public class GameRenderer implements TooltipHandler {
 	}
 
 	/**
+	 * Sets drawing target of renderer.
 	 * 
 	 * @param gamePanel
+	 *            target game panel.
 	 */
 	void setTarget(GamePanel gamePanel) {
 		this.target = gamePanel;

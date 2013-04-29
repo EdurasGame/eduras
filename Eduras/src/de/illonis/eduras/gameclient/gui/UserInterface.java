@@ -28,7 +28,7 @@ import de.illonis.eduras.logicabstraction.InformationProvider;
  * @author illonis
  * 
  */
-public class UserInterface implements GameEventListener {
+public class UserInterface implements GameEventListener, GuiResizeListener {
 	private ArrayList<RenderedGuiObject> uiObjects;
 	private InformationProvider infos;
 	private GuiClickReactor reactor;
@@ -159,15 +159,8 @@ public class UserInterface implements GameEventListener {
 		}
 	}
 
-	/**
-	 * Notifies gui objects that game panel size has changed.
-	 * 
-	 * @param width
-	 *            new width.
-	 * @param height
-	 *            new height.
-	 */
-	void onGuiSizeChanged(int width, int height) {
+	@Override
+	public void onGuiSizeChanged(int width, int height) {
 		for (RenderedGuiObject obj : uiObjects) {
 			obj.onGuiSizeChanged(width, height);
 		}
