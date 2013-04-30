@@ -1,5 +1,6 @@
 package de.illonis.eduras.gameclient.gui;
 
+import java.awt.AlphaComposite;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Point;
@@ -33,9 +34,13 @@ import de.illonis.eduras.units.Unit;
  */
 public class GameRenderer implements TooltipHandler {
 	private BufferedImage dbImage = null;
+	private BufferedImage dbUiImage = null;
+	private BufferedImage displayImage = null;
 	private final GameCamera camera;
 	private UserInterface gui;
 	private Graphics2D dbg = null;
+	private Graphics2D dbuig = null;
+	private Graphics2D displayg = null;
 	private final ConcurrentHashMap<Integer, GameObject> objs;
 	private RenderThread rendererThread;
 	private GamePanel target;
@@ -78,12 +83,26 @@ public class GameRenderer implements TooltipHandler {
 		// System.out.println("H: " + height + " W: " + width);
 
 		// recreate image if it does not exist
-		if (dbImage == null || dbg == null || width != dbImage.getWidth()) {
+		if (dbImage == null || dbg == null || dbUiImage == null
+				|| dbuig == null || width != dbImage.getWidth()) {
 			dbImage = new BufferedImage(width, height,
 					BufferedImage.TYPE_INT_RGB);
+			dbUiImage = new BufferedImage(width, height,
+					BufferedImage.TYPE_INT_ARGB);
+			displayImage = new BufferedImage(width, height,
+					BufferedImage.TYPE_INT_RGB);
+
+			displayg = (Graphics2D) displayImage.getGraphics();
+			displayg.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+					RenderingHints.VALUE_ANTIALIAS_ON);
 
 			dbg = (Graphics2D) dbImage.getGraphics();
 			dbg.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+					RenderingHints.VALUE_ANTIALIAS_ON);
+
+			dbg.scale(scale, scale);
+			dbuig = (Graphics2D) dbUiImage.getGraphics();
+			dbuig.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
 					RenderingHints.VALUE_ANTIALIAS_ON);
 		}
 		// clear image
@@ -93,9 +112,17 @@ public class GameRenderer implements TooltipHandler {
 		drawGui();
 	}
 
-	private void clear(int width, int height) {
+	private synchronized void clear(int width, int height) {
 		dbg.setColor(Color.black);
 		dbg.fillRect(0, 0, width, height);
+		displayg.setColor(Color.black);
+		displayg.fillRect(0, 0, width, height);
+		dbuig.setComposite(AlphaComposite.getInstance(AlphaComposite.CLEAR));
+
+		dbuig.fillRect(0, 0, width, height);
+
+		// reset composite
+		dbuig.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER));
 	}
 
 	/**
@@ -104,10 +131,10 @@ public class GameRenderer implements TooltipHandler {
 	private void drawGui() {
 		// TODO: make resolution independent
 		for (int i = 0; i < uiObjects.size(); i++) {
-			uiObjects.get(i).render(dbg);
+			uiObjects.get(i).render(dbuig);
 		}
 		if (tooltipShown) {
-			tooltip.render(dbg);
+			tooltip.render(dbuig);
 		}
 
 	}
@@ -117,10 +144,12 @@ public class GameRenderer implements TooltipHandler {
 	 * 
 	 */
 	public void paintGame() {
-		if ((target != null) && (dbImage != null)) {
-			Graphics2D g2d = (Graphics2D) target.getGraphics();
+		if ((target != null) && (dbImage != null) && dbUiImage != null) {
 
-			g2d.drawImage(dbImage, 0, 0, null);
+			Graphics2D g2d = (Graphics2D) target.getGraphics();
+			displayg.drawImage(dbImage, 0, 0, null);
+			displayg.drawImage(dbUiImage, 0, 0, null);
+			g2d.drawImage(displayImage, 0, 0, null);
 		}
 	}
 
@@ -223,11 +252,7 @@ public class GameRenderer implements TooltipHandler {
 	 *            gameobject.
 	 */
 	private void drawShapeOf(GameObject obj) {
-		ObjectShape objectShape;
-		if (scale == 1)
-			objectShape = obj.getShape();
-		else
-			objectShape = obj.getShape().getScaled(scale);
+		ObjectShape objectShape = obj.getShape();
 
 		if (objectShape instanceof Polygon) {
 
