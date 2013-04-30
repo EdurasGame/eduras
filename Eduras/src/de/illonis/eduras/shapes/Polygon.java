@@ -30,6 +30,9 @@ public class Polygon extends ObjectShape {
 
 	private Vector2D[] vertices;
 
+	/**
+	 * Creates a polygon with no vertices.
+	 */
 	public Polygon() {
 	}
 

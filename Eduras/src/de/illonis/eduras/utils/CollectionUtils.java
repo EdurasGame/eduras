@@ -2,6 +2,12 @@ package de.illonis.eduras.utils;
 
 import java.util.LinkedList;
 
+/**
+ * Holds several utils concerning collections.
+ * 
+ * @author Florian Mai <florian.ren.mai@googlemail.com>
+ * 
+ */
 public abstract class CollectionUtils {
 
 	/**

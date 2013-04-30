@@ -30,6 +30,8 @@ public class Player extends Unit implements Controllable {
 	 *            The id of the owner.
 	 * @param name
 	 *            The name of the player.
+	 * @param id
+	 *            id of the player.
 	 */
 	public Player(GameInformation game, int ownerId, String name, int id) {
 		super(game, 30, id);
@@ -64,6 +66,8 @@ public class Player extends Unit implements Controllable {
 	 *            The game the player belongs to.
 	 * @param ownerId
 	 *            The id of the owner.
+	 * @param id
+	 *            The id of the player.
 	 */
 	public Player(GameInformation game, int ownerId, int id) {
 		this(game, ownerId, "unbekannt", id);
@@ -104,10 +108,21 @@ public class Player extends Unit implements Controllable {
 		setSpeedVector(new Vector2D());
 	}
 
+	/**
+	 * Returns name of player.
+	 * 
+	 * @return player's name.
+	 */
 	public String getName() {
 		return name;
 	}
 
+	/**
+	 * Sets name of player.
+	 * 
+	 * @param name
+	 *            new player name.
+	 */
 	public void setName(String name) {
 		this.name = name;
 	}
