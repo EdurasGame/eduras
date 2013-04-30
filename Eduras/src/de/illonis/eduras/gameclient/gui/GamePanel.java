@@ -44,6 +44,15 @@ public class GamePanel extends JPanel {
 	}
 
 	/**
+	 * Returns current rendering scale.
+	 * 
+	 * @return current scale factor.
+	 */
+	double getCurrentScale() {
+		return renderer.getCurrentScale();
+	}
+
+	/**
 	 * Stopps rendering process.
 	 */
 	void stopRendering() {

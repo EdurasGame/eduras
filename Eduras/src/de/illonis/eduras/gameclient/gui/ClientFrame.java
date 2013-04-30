@@ -215,9 +215,11 @@ public class ClientFrame extends JFrame implements NetworkEventReactor,
 	 * @return game-coordinate point.
 	 */
 	public Vector2D computeGuiPointToGameCoordinate(Vector2D v) {
+		double scale = gamePanel.getCurrentScale();
 		Vector2D vec = new Vector2D(v);
-		vec.modifyX(camera.getX());
-		vec.modifyY(camera.getY());
+		vec.modifyX(camera.getX() * scale);
+		vec.modifyY(camera.getY() * scale);
+		vec.mult(1 / scale);
 		return vec;
 	}
 
