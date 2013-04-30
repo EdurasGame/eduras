@@ -107,4 +107,17 @@ public class BasicMath {
 		}
 		return max;
 	}
+
+	/**
+	 * Calculates arithmetic average of two given numbers.
+	 * 
+	 * @param x
+	 *            first value.
+	 * @param y
+	 *            second value.
+	 * @return the average.
+	 */
+	public static double avg(double x, double y) {
+		return (x + y) / 2;
+	}
 }
