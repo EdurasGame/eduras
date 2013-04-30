@@ -18,6 +18,7 @@ import de.illonis.eduras.gameclient.gui.guielements.RenderedGuiObject;
 import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.items.Item;
 import de.illonis.eduras.logicabstraction.InformationProvider;
+import de.illonis.eduras.math.BasicMath;
 import de.illonis.eduras.math.Vector2D;
 import de.illonis.eduras.shapes.Circle;
 import de.illonis.eduras.shapes.ObjectShape;
@@ -48,6 +49,8 @@ public class GameRenderer implements TooltipHandler {
 	private double scale;
 	private boolean tooltipShown = false;
 	private ArrayList<RenderedGuiObject> uiObjects = new ArrayList<RenderedGuiObject>();
+	private final static int DEFAULT_WIDTH = 484;
+	private final static int DEFAULT_HEIGHT = 462;
 
 	/**
 	 * Creates a new renderer.
@@ -74,6 +77,28 @@ public class GameRenderer implements TooltipHandler {
 	}
 
 	/**
+	 * Calculates gui scale based on given ui dimensions.
+	 * 
+	 * @param currentWidth
+	 *            current ui width.
+	 * @param currentHeight
+	 *            current ui height.
+	 * @return new scale factor.
+	 */
+	private double calculateScale(int currentWidth, int currentHeight) {
+		if (currentHeight == DEFAULT_HEIGHT && currentWidth == DEFAULT_WIDTH)
+			return 1;
+
+		double diffW = (double) currentWidth / DEFAULT_WIDTH;
+		double diffH = (double) currentHeight / DEFAULT_HEIGHT;
+
+		double newScale = BasicMath.avg(diffW, diffH);
+		System.out.println(diffW + " " + diffH);
+		System.out.println("new scale: " + newScale);
+		return newScale;
+	}
+
+	/**
 	 * Renders buffered image with size of current target.
 	 */
 	public void render() {
@@ -89,7 +114,7 @@ public class GameRenderer implements TooltipHandler {
 					BufferedImage.TYPE_INT_ARGB);
 			displayImage = new BufferedImage(width, height,
 					BufferedImage.TYPE_INT_RGB);
-
+			scale = calculateScale(width, height);
 			displayg = (Graphics2D) displayImage.getGraphics();
 			displayg.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
 					RenderingHints.VALUE_ANTIALIAS_ON);
@@ -97,7 +122,7 @@ public class GameRenderer implements TooltipHandler {
 			dbg = (Graphics2D) dbImage.getGraphics();
 			dbg.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
 					RenderingHints.VALUE_ANTIALIAS_ON);
-
+			System.out.println("w: " + width + " h: " + height);
 			dbg.scale(scale, scale);
 			dbuig = (Graphics2D) dbUiImage.getGraphics();
 			dbuig.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
