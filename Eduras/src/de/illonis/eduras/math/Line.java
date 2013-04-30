@@ -1,6 +1,3 @@
-/**
- * 
- */
 package de.illonis.eduras.math;
 
 /**
@@ -14,7 +11,7 @@ package de.illonis.eduras.math;
  */
 public class Line {
 
-	public static final double RANGE = 0.00001;
+	static final double RANGE = 0.00001;
 
 	private final double a;
 	private final double b;

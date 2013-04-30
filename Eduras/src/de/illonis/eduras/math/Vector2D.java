@@ -124,14 +124,14 @@ public class Vector2D {
 	 * Sets X- and Y-components to a new value. This will have the same result
 	 * as if X and Y were set individually.
 	 * 
-	 * @param x
+	 * @param newX
 	 *            new X-value
-	 * @param y
+	 * @param newY
 	 *            new Y-value
 	 */
-	public void update(double x, double y) {
-		setX(x);
-		setY(y);
+	public void update(double newX, double newY) {
+		setX(newX);
+		setY(newY);
 	}
 
 	/**
@@ -187,8 +187,7 @@ public class Vector2D {
 		double radian = Geometry.toRadian(degrees);
 		if (degrees == 0)
 			return;
-		double x = this.x;
-		double y = this.y;
+
 		this.x = x * Math.cos(radian) - y * Math.sin(radian);
 		this.y = x * Math.sin(radian) + y * Math.cos(radian);
 	}
@@ -276,6 +275,9 @@ public class Vector2D {
 	/**
 	 * Assumes the calling and the passed vector to be position vectors and
 	 * calculates the distance between the points behind.
+	 * 
+	 * @param vec
+	 *            target vector.
 	 * 
 	 * @return Returns the distance between the points represented by the
 	 *         vectors.
@@ -371,6 +373,11 @@ public class Vector2D {
 
 	/**
 	 * Calculates whether this Vector is linearly depending on the given vector.
+	 * 
+	 * @param vec
+	 *            second vector.
+	 * 
+	 * @return true if vectors are linearly depending.
 	 */
 	public boolean isLinearTo(Vector2D vec) {
 
