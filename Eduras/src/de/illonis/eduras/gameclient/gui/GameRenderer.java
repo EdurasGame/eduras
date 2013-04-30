@@ -33,14 +33,14 @@ import de.illonis.eduras.units.Unit;
  * 
  */
 public class GameRenderer implements TooltipHandler {
-	private BufferedImage dbImage = null;
-	private BufferedImage dbUiImage = null;
+	private BufferedImage mapImage = null;
+	private BufferedImage guiImage = null;
 	private BufferedImage displayImage = null;
 	private final GameCamera camera;
 	private UserInterface gui;
-	private Graphics2D dbg = null;
-	private Graphics2D dbuig = null;
-	private Graphics2D displayg = null;
+	private Graphics2D mapGraphics = null;
+	private Graphics2D guiGraphics = null;
+	private Graphics2D bothGraphics = null;
 	private final ConcurrentHashMap<Integer, GameObject> objs;
 	private RenderThread rendererThread;
 	private GamePanel target;
@@ -68,8 +68,8 @@ public class GameRenderer implements TooltipHandler {
 		ImageList.load(); // TODO: asynchronously
 		this.uiObjects = gui.getUiObjects();
 		this.camera = camera;
+		scale = 1;
 		objs = info.getGameObjects();
-		scale = 2.0;
 		mapSize = info.getMapBounds();
 		this.gui = gui;
 		RendererTooltipHandler h = new RendererTooltipHandler(this);
@@ -93,8 +93,6 @@ public class GameRenderer implements TooltipHandler {
 		double diffH = (double) currentHeight / DEFAULT_HEIGHT;
 
 		double newScale = BasicMath.avg(diffW, diffH);
-		System.out.println(diffW + " " + diffH);
-		System.out.println("new scale: " + newScale);
 		return newScale;
 	}
 
@@ -106,27 +104,9 @@ public class GameRenderer implements TooltipHandler {
 		int height = target.getHeight();
 
 		// recreate image if it does not exist
-		if (dbImage == null || dbg == null || dbUiImage == null
-				|| dbuig == null || width != dbImage.getWidth()) {
-			dbImage = new BufferedImage(width, height,
-					BufferedImage.TYPE_INT_RGB);
-			dbUiImage = new BufferedImage(width, height,
-					BufferedImage.TYPE_INT_ARGB);
-			displayImage = new BufferedImage(width, height,
-					BufferedImage.TYPE_INT_RGB);
-			scale = calculateScale(width, height);
-			displayg = (Graphics2D) displayImage.getGraphics();
-			displayg.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-					RenderingHints.VALUE_ANTIALIAS_ON);
-
-			dbg = (Graphics2D) dbImage.getGraphics();
-			dbg.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-					RenderingHints.VALUE_ANTIALIAS_ON);
-			System.out.println("w: " + width + " h: " + height);
-			dbg.scale(scale, scale);
-			dbuig = (Graphics2D) dbUiImage.getGraphics();
-			dbuig.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-					RenderingHints.VALUE_ANTIALIAS_ON);
+		if (mapImage == null || mapGraphics == null || guiImage == null
+				|| guiGraphics == null || width != mapImage.getWidth()) {
+			createGraphics(width, height);
 		}
 		// clear image
 		clear(width, height);
@@ -135,19 +115,48 @@ public class GameRenderer implements TooltipHandler {
 		drawGui();
 	}
 
+	/**
+	 * Rebuilds buffer graphics.
+	 * 
+	 * @param width
+	 *            graphics width.
+	 * @param height
+	 *            graphics height.
+	 */
+	private void createGraphics(int width, int height) {
+		mapImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+		guiImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+		displayImage = new BufferedImage(width, height,
+				BufferedImage.TYPE_INT_RGB);
+		scale = calculateScale(width, height);
+		bothGraphics = (Graphics2D) displayImage.getGraphics();
+		bothGraphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+				RenderingHints.VALUE_ANTIALIAS_ON);
+
+		mapGraphics = (Graphics2D) mapImage.getGraphics();
+		mapGraphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+				RenderingHints.VALUE_ANTIALIAS_ON);
+		mapGraphics.scale(scale, scale);
+		guiGraphics = (Graphics2D) guiImage.getGraphics();
+		guiGraphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+				RenderingHints.VALUE_ANTIALIAS_ON);
+	}
+
 	private synchronized void clear(int width, int height) {
-		dbg.setColor(Color.black);
-		dbg.fillRect(0, 0, width, height);
-		displayg.setColor(Color.black);
-		displayg.fillRect(0, 0, width, height);
+		mapGraphics.setColor(Color.black);
+		mapGraphics.fillRect(0, 0, width, height);
+		bothGraphics.setColor(Color.black);
+		bothGraphics.fillRect(0, 0, width, height);
 
 		// clears ui image with alpha value to let map shine through
-		dbuig.setComposite(AlphaComposite.getInstance(AlphaComposite.CLEAR));
+		guiGraphics.setComposite(AlphaComposite
+				.getInstance(AlphaComposite.CLEAR));
 
-		dbuig.fillRect(0, 0, width, height);
+		guiGraphics.fillRect(0, 0, width, height);
 
 		// reset composite
-		dbuig.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER));
+		guiGraphics.setComposite(AlphaComposite
+				.getInstance(AlphaComposite.SRC_OVER));
 	}
 
 	/**
@@ -155,10 +164,10 @@ public class GameRenderer implements TooltipHandler {
 	 */
 	private void drawGui() {
 		for (int i = 0; i < uiObjects.size(); i++) {
-			uiObjects.get(i).render(dbuig);
+			uiObjects.get(i).render(guiGraphics);
 		}
 		if (tooltipShown) {
-			tooltip.render(dbuig);
+			tooltip.render(guiGraphics);
 		}
 	}
 
@@ -167,12 +176,12 @@ public class GameRenderer implements TooltipHandler {
 	 * 
 	 */
 	public void paintGame() {
-		if ((target != null) && (dbImage != null) && dbUiImage != null
+		if ((target != null) && (mapImage != null) && guiImage != null
 				&& (displayImage != null)) {
 
 			Graphics2D g2d = (Graphics2D) target.getGraphics();
-			displayg.drawImage(dbImage, 0, 0, null);
-			displayg.drawImage(dbUiImage, 0, 0, null);
+			bothGraphics.drawImage(mapImage, 0, 0, null);
+			bothGraphics.drawImage(guiImage, 0, 0, null);
 			g2d.drawImage(displayImage, 0, 0, null);
 		}
 	}
@@ -181,12 +190,12 @@ public class GameRenderer implements TooltipHandler {
 	 * Draws a small red border where map bounds are.
 	 */
 	private void drawMap() {
-		dbg.setColor(Color.red);
+		mapGraphics.setColor(Color.red);
 		Rectangle r = mapSize.getBounds();
 		r.x -= camera.x;
 		r.y -= camera.y;
-		dbg.setColor(Color.BLUE);
-		dbg.fill(r);
+		mapGraphics.setColor(Color.BLUE);
+		mapGraphics.fill(r);
 	}
 
 	/**
@@ -194,7 +203,7 @@ public class GameRenderer implements TooltipHandler {
 	 */
 	private synchronized void drawObjects() {
 
-		dbg.setColor(Color.yellow);
+		mapGraphics.setColor(Color.yellow);
 
 		for (Iterator<GameObject> iterator = objs.values().iterator(); iterator
 				.hasNext();) {
@@ -250,7 +259,7 @@ public class GameRenderer implements TooltipHandler {
 			return;
 		// TODO: use scale
 		HealthBar.calculateFor(unit);
-		HealthBar.draw(dbg, camera);
+		HealthBar.draw(mapGraphics, camera);
 	}
 
 	/**
@@ -280,8 +289,8 @@ public class GameRenderer implements TooltipHandler {
 
 			if (obj instanceof Player) {
 				Player player = (Player) obj;
-				dbg.drawString(player.getName(), player.getDrawX() - camera.x,
-						player.getDrawY() - camera.y);
+				mapGraphics.drawString(player.getName(), player.getDrawX()
+						- camera.x, player.getDrawY() - camera.y);
 			}
 		} else if (objectShape instanceof Circle) {
 			drawCircle((Circle) objectShape, obj);
@@ -300,8 +309,8 @@ public class GameRenderer implements TooltipHandler {
 
 		int radius = (int) objectShape.getRadius();
 
-		dbg.drawOval(d.getDrawX() - radius - camera.x, d.getDrawY() - radius
-				- camera.y, 2 * radius, 2 * radius);
+		mapGraphics.drawOval(d.getDrawX() - radius - camera.x, d.getDrawY()
+				- radius - camera.y, 2 * radius, 2 * radius);
 	}
 
 	/**
@@ -325,10 +334,9 @@ public class GameRenderer implements TooltipHandler {
 		}
 
 		for (int j = 0; j < vCount; j++) {
-			dbg.drawLine(xPositions[j] - camera.x, yPositions[j] - camera.y,
-					xPositions[(j + 1) % vCount] - camera.x, yPositions[(j + 1)
-							% vCount]
-							- camera.y);
+			mapGraphics.drawLine(xPositions[j] - camera.x, yPositions[j]
+					- camera.y, xPositions[(j + 1) % vCount] - camera.x,
+					yPositions[(j + 1) % vCount] - camera.y);
 		}
 	}
 
@@ -369,9 +377,10 @@ public class GameRenderer implements TooltipHandler {
 		t.start();
 	}
 
+	// (jme) This is totally wrong here...
 	public void drawWin(int winnerId) {
 		// TODO: make working
-		dbg.drawString("Player with id " + winnerId + " won the game!",
+		mapGraphics.drawString("Player with id " + winnerId + " won the game!",
 				(int) mapSize.getCenterX(), (int) mapSize.getCenterY());
 	}
 
