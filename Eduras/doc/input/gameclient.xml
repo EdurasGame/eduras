@@ -90,5 +90,46 @@
 				</mediaobject>
 			</figure>
 		</section>
+		<section>
+			<title>(jme) Gui scaling</title>
+			<para>
+			    Gui scaling is currently done in a very simple way. We might have a
+			    detailed look at this once it comes to render images. This scaling
+			    method might stretch them.
+			</para>
+			<para>
+				The graphic below describes the scaling process roughly. The following steps are taken:
+			</para>
+			<orderedlist>
+			    <listitem>
+			        <para>
+			            At first, the map and its objects are rendered as normal. The scaling process
+			            is <ulink url="http://docs.oracle.com/javase/1.4.2/docs/api/java/awt/Graphics2D.html#scale%28double,%20double%29">
+			            done implicitly</ulink> while creating the graphics object.
+			        </para>
+			    </listitem>
+			    <listitem>
+			        <para>
+			            Secondly, all interface elements like minimap and inventory are drawn onto a separate
+			            graphics object. 
+			        </para>
+			    </listitem>
+			    <listitem>
+			        <para>
+			            In the last step, the interface graphics from step 2 are drawn onto the scaled
+			            map at current camera position. The result is presented to user by being drawn
+			            onto the client frame.
+			        </para>
+			    </listitem>
+			</orderedlist>
+			<figure>
+				<title>Gui scaling flow</title>
+				<mediaobject>
+					<imageobject>
+						<imagedata fileref="images/gui-scaling.png" format="PNG" />
+					</imageobject>
+				</mediaobject>
+			</figure>
+		</section>
 	</section>
 </article>
