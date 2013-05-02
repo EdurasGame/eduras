@@ -184,12 +184,14 @@ public class Vector2D {
 	 */
 	public void rotate(double degrees) {
 		degrees = degrees % 360;
-		double radian = Geometry.toRadian(degrees);
+
 		if (degrees == 0)
 			return;
-
-		this.x = x * Math.cos(radian) - y * Math.sin(radian);
-		this.y = x * Math.sin(radian) + y * Math.cos(radian);
+		double oldX = this.x;
+		double oldY = this.y;
+		double radian = Geometry.toRadian(degrees);
+		this.x = oldX * Math.cos(radian) - oldY * Math.sin(radian);
+		this.y = oldX * Math.sin(radian) + oldY * Math.cos(radian);
 	}
 
 	/**
