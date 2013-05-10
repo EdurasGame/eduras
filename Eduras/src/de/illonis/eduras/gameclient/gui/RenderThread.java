@@ -19,8 +19,6 @@ public class RenderThread implements Runnable {
 	 * 
 	 * @param renderer
 	 *            renderer to repeatedly call.
-	 * @param panel
-	 *            panel to draw onto
 	 */
 	RenderThread(GameRenderer renderer) {
 		this.renderer = renderer;

@@ -189,23 +189,23 @@ public class NetworkMessageSerializer {
 	}
 
 	/**
-	 * Creates an event string based on given id and parameters. The returned
+	 * Creates an event string based on given event and parameters. The returned
 	 * string is the serialized version of given parameters according to event
 	 * string syntax (including ## and so on). You should pass arguments
 	 * appropriate to event list in documentation.<br>
 	 * <b>Note:</b> This method does not check for valid argument order or
 	 * id/argument combination.
 	 * 
-	 * @param eventId
-	 *            id of event.
+	 * @param event
+	 *            the event.
 	 * @param args
 	 *            arguments. Non-String arguments will converted using
 	 *            {@link Object#toString()} method automatically.
 	 * @return serialized eventstring.
 	 */
-	private static String buildEventString(GameEvent ev, Object... args) {
+	private static String buildEventString(GameEvent event, Object... args) {
 		StringBuilder builder = new StringBuilder("##");
-		builder.append(ev.getType().toString());
+		builder.append(event.getType().toString());
 		for (Object object : args) {
 			builder.append("#");
 			builder.append(object.toString());

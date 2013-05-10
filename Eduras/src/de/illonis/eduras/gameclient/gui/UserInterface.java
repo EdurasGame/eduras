@@ -37,7 +37,7 @@ public class UserInterface implements GameEventListener, GuiResizeListener {
 
 	/**
 	 * Creates the user interface. The tooltip handler will be set manually
-	 * later on using {@link #setTooltipHandler(RendererTooltipHandler)}.
+	 * later on using {@link #setTooltipHandler(TooltipHandler)}.
 	 * 
 	 * @param infos
 	 *            information.

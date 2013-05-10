@@ -17,10 +17,10 @@ import de.illonis.eduras.gameclient.gui.UserInterface;
 public abstract class Tooltip extends RenderedGuiObject {
 
 	/**
-	 * Creates a new tooltip that uses given information.
+	 * Creates a new tooltip.
 	 * 
-	 * @param info
-	 *            game information.
+	 * @param gui
+	 *            the associated user interface.
 	 */
 	protected Tooltip(UserInterface gui) {
 		super(gui);
