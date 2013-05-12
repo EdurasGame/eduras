@@ -245,8 +245,7 @@ public class ServerEventTriggerer implements EventTriggerer {
 	@Override
 	public void changeGameMode(GameMode newMode) {
 		gameInfo.getGameSettings().changeGameMode(newMode);
-		SetGameModeEvent event = new SetGameModeEvent(
-				GameEventNumber.SET_GAMEMODE, newMode.getName());
+		SetGameModeEvent event = new SetGameModeEvent(newMode.getName());
 		try {
 			String eventString = NetworkMessageSerializer.serialize(event);
 			outputBuffer.append(eventString);
