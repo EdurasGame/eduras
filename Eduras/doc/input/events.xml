@@ -301,6 +301,7 @@
 						<entry>Description</entry>
 						<entry>arg1</entry>
 						<entry>arg2</entry>
+						<entry>arg3</entry>
 					</row>
 				</thead>
 				<tbody>
@@ -325,6 +326,7 @@
 						<entry>This event must be sent by the client to pass information the server needs for connection initialization.</entry>
 						<entry>clientRole</entry>
 						<entry>clientName</entry>
+						<entry>clientId</entry>
 					</row>
 				</tbody>
 			</tgroup>
