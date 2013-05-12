@@ -32,12 +32,6 @@ public class ManyBlocks extends Map {
 		}
 
 		setInitialObjects(initialObjects);
-		System.out.println(initialObjects.size());
-
-		for (GameObject gameObject : initialObjects) {
-			System.out.println(gameObject.getDrawX());
-			System.out.println(gameObject.getDrawY());
-		}
 	}
 
 }
