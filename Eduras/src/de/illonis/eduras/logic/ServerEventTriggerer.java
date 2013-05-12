@@ -258,6 +258,8 @@ public class ServerEventTriggerer implements EventTriggerer {
 
 	public void changeMap(Map map) {
 
+		gameInfo.setMap(map);
+
 		removeAllObjects();
 
 		for (GameObject initialObject : map.getInitialObjects()) {

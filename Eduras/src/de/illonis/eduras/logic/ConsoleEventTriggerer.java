@@ -2,6 +2,9 @@ package de.illonis.eduras.logic;
 
 import java.util.Collection;
 
+import de.illonis.eduras.ManyBlocks;
+import de.illonis.eduras.Map;
+import de.illonis.eduras.SimpleMap;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
 import de.illonis.eduras.gamemodes.Deathmatch;
 import de.illonis.eduras.gamemodes.GameMode;
@@ -90,9 +93,8 @@ public class ConsoleEventTriggerer {
 	public boolean changeGameMode(String gameModeName) {
 
 		GameMode gameMode = null;
-
-		switch (gameModeName) {
-		case "Deathmatch":
+		switch (gameModeName.toLowerCase()) {
+		case "deathmatch":
 			gameMode = new Deathmatch(triggerer.getGameInfo());
 			break;
 		default:
@@ -107,8 +109,23 @@ public class ConsoleEventTriggerer {
 	}
 
 	public boolean changeMap(String mapName) {
-		// TODO: Implement
-		return false;
+		Map map = null;
+		switch (mapName.toLowerCase()) {
+		case "simple":
+			map = new SimpleMap();
+			break;
+		case "manyblocks":
+			map = new ManyBlocks();
+			break;
+		default:
+		}
+
+		if (map == null) {
+			return false;
+		}
+
+		triggerer.changeMap(map);
+		return true;
 	}
 
 	public boolean restartRound() {

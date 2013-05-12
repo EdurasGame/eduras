@@ -38,7 +38,7 @@ public abstract class Block extends GameObject {
 		this.width = width;
 		this.height = height;
 
-		setPosition(xPos, xPos);
+		setPosition(xPos, yPos);
 		setShape(new Rectangle(new Vector2D(-width / 2, height / 2),
 				new Vector2D(width / 2, -height / 2)));
 	}
