@@ -50,7 +50,6 @@ public class ClientFrame extends JFrame implements NetworkEventReactor,
 		super("Eduras? Client");
 		this.client = client;
 		camera = new GameCamera();
-		cml = new CameraMouseListener(camera);
 		setSize(500, 500);
 		setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
 		setLocationRelativeTo(null);
@@ -68,6 +67,7 @@ public class ClientFrame extends JFrame implements NetworkEventReactor,
 			}
 
 		});
+		cml = new CameraMouseListener(camera);
 
 		buildGui();
 	}
@@ -82,10 +82,11 @@ public class ClientFrame extends JFrame implements NetworkEventReactor,
 		cardLayout.show(getContentPane(), LOGINPANEL);
 
 		gamePanel = new GamePanel();
-
-		client.addMouseListenersTo(gamePanel);
 		gamePanel.addMouseMotionListener(cml);
 		gamePanel.addMouseListener(cml);
+		client.addMouseListenersTo(gamePanel);
+		addComponentListener(new ResizeMonitor());
+
 		getContentPane().add(loginPanel, LOGINPANEL);
 		getContentPane().add(progressPanel, CONNECTPANEL);
 		getContentPane().add(gamePanel, GAMEPANEL);
@@ -129,8 +130,9 @@ public class ClientFrame extends JFrame implements NetworkEventReactor,
 	 */
 	public void showGame() {
 		cardLayout.show(getContentPane(), GAMEPANEL);
-		gamePanel.requestFocus();
 		notifyGuiSizeChanged();
+		gamePanel.requestFocus();
+		gamePanel.requestFocusInWindow();
 	}
 
 	/**
@@ -209,10 +211,11 @@ public class ClientFrame extends JFrame implements NetworkEventReactor,
 	@Override
 	public void onGameReady() {
 		gamePanel.startRendering();
-		addComponentListener(new ResizeMonitor());
-		camera.setSize(gamePanel.getWidth(), gamePanel.getHeight());
+		camera.reset();
 
 		client.addKeyHandlerTo(gamePanel);
+		camera.setSize(gamePanel.getWidth(), gamePanel.getHeight());
+		cml.start();
 		showGame();
 	}
 

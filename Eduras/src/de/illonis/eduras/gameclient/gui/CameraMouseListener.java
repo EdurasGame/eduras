@@ -29,11 +29,7 @@ public class CameraMouseListener extends MouseAdapter {
 	 */
 	public CameraMouseListener(GameCamera camera) {
 		inGui = true;
-		dx = dy = 0;
 		this.camera = camera;
-		running = true;
-		Thread t = new Thread(new CameraMover());
-		t.start();
 	}
 
 	@Override
@@ -71,6 +67,14 @@ public class CameraMouseListener extends MouseAdapter {
 	 */
 	public void stop() {
 		running = false;
+	}
+
+	public void start() {
+		running = true;
+		dx = dy = 0;
+		Thread t = new Thread(new CameraMover());
+		t.setName("CameraMover");
+		t.start();
 	}
 
 	private class CameraMover implements Runnable {
