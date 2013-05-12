@@ -138,24 +138,13 @@ public class ServerEventTriggerer implements EventTriggerer {
 
 	@Override
 	public void init() {
+
 		Map map = logic.getGame().getMap();
 
-		Vector2D posWeap1 = new Vector2D(map.getWidth() * 0.75,
-				map.getHeight() * 0.75);
-		this.createObjectAt(ObjectType.ITEM_WEAPON_1, posWeap1, -1);
-		Vector2D posWeap2 = new Vector2D(map.getWidth() * 0.25,
-				map.getHeight() * 0.25);
-		this.createObjectAt(ObjectType.ITEM_WEAPON_1, posWeap2, -1);
-
-		Vector2D posWeap3 = new Vector2D(map.getWidth() * 0.25,
-				map.getHeight() * 0.75);
-		this.createObjectAt(ObjectType.ITEM_WEAPON_1, posWeap3, -1);
-
-		Vector2D posWeap4 = new Vector2D(map.getWidth() * 0.75,
-				map.getHeight() * 0.25);
-		this.createObjectAt(ObjectType.ITEM_WEAPON_1, posWeap4, -1);
-		this.createObjectAt(ObjectType.BIGBLOCK, new Vector2D(
-				map.getWidth() * 0.5, map.getHeight() * 0.5), -1);
+		for (GameObject singleObject : map.getInitialObjects()) {
+			this.createObjectAt(singleObject.getType(),
+					singleObject.getPositionVector(), singleObject.getOwner());
+		}
 
 	}
 
@@ -264,6 +253,26 @@ public class ServerEventTriggerer implements EventTriggerer {
 		} catch (MessageNotSupportedException e) {
 			EduLog.passException(e);
 			return;
+		}
+	}
+
+	public void changeMap(Map map) {
+
+		removeAllObjects();
+
+		for (GameObject initialObject : map.getInitialObjects()) {
+			createObjectAt(initialObject.getType(),
+					initialObject.getPositionVector(), initialObject.getOwner());
+		}
+
+		for (Player player : gameInfo.getPlayers()) {
+			createObject(player.getType(), player.getOwner());
+		}
+	}
+
+	public void removeAllObjects() {
+		for (GameObject oldObject : gameInfo.getObjects().values()) {
+			removeObject(oldObject.getId());
 		}
 	}
 }

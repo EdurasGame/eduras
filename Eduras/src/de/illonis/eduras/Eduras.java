@@ -79,6 +79,8 @@ public class Eduras {
 			}
 		});
 
+		eventTriggerer.changeMap(new SimpleMap());
+
 		try {
 			server.start();
 		} catch (ServerNotReadyForStartException e) {

@@ -18,6 +18,7 @@ public class BigBlock extends Block {
 	public BigBlock(GameInformation game, double xPos, double yPos, int id)
 			throws ShapeVerticesNotApplicableException {
 		super(game, xPos, yPos, WIDTH, HEIGHT, id);
+		setObjectType(ObjectType.BIGBLOCK);
 	}
 
 	public BigBlock(GameInformation game, int id)
