@@ -9,6 +9,7 @@ import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.gameobjects.MoveableGameObject;
 import de.illonis.eduras.interfaces.GameEventListener;
+import de.illonis.eduras.items.Usable;
 
 /**
  * This class is responsible for updating the current game information triggered
@@ -94,7 +95,7 @@ public class LogicGameWorker implements Runnable {
 
 		if (lastUpdate <= 0)
 			lastUpdate = System.nanoTime();
-		// delta in seconds
+		// delta in milliseconds
 		long delta = (System.nanoTime() - lastUpdate) / 1000000L;
 		if (delta == 0)
 			return;
@@ -112,7 +113,9 @@ public class LogicGameWorker implements Runnable {
 		}
 
 		for (GameObject o : gameInformation.getObjects().values()) {
-
+			if (o instanceof Usable) {
+				((Usable) o).reduceCooldown(delta);
+			}
 			if (o instanceof MoveableGameObject) {
 				if (!((MoveableGameObject) o).getSpeedVector().isNull()) {
 					((MoveableGameObject) o).onMove(delta);
