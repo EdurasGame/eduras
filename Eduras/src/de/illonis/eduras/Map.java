@@ -1,7 +1,10 @@
 package de.illonis.eduras;
 
 import java.awt.Rectangle;
+import java.util.Collection;
+import java.util.LinkedList;
 
+import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.math.Vector2D;
 
 /**
@@ -10,17 +13,30 @@ import de.illonis.eduras.math.Vector2D;
  * @author illonis
  * 
  */
-public class Map {
+public abstract class Map {
+
+	private final String name;
 
 	private final int width;
 	private final int height;
 
+	private Collection<GameObject> initialObjects;
+	private Collection<Vector2D> spawnPoints;
+
 	/**
-	 * Creates a new map with default size.
+	 * Creates a new map with the given name and size and empty spawnpoint- and
+	 * objectlist.
+	 * 
+	 * @param name
+	 * @param width
+	 * @param height
 	 */
-	public Map() {
-		width = 500;
-		height = 500;
+	public Map(String name, int width, int height) {
+		this.name = name;
+		this.width = width;
+		this.height = height;
+		initialObjects = new LinkedList<GameObject>();
+		spawnPoints = new LinkedList<Vector2D>();
 	}
 
 	/**
@@ -42,6 +58,24 @@ public class Map {
 	}
 
 	/**
+	 * Returns name of the map.
+	 * 
+	 * @return the name
+	 */
+	public String getName() {
+		return name;
+	}
+
+	/**
+	 * Returns the objects the map contains initially.
+	 * 
+	 * @return The initial objects.
+	 */
+	public Collection<GameObject> getInitialObjects() {
+		return initialObjects;
+	}
+
+	/**
 	 * Returns bounds of map. A map's top left corner always has coordinates
 	 * (0,0), so any negative coordinates are not in map area.
 	 * 
@@ -49,6 +83,15 @@ public class Map {
 	 */
 	public Rectangle getBounds() {
 		return new Rectangle(0, 0, width, height);
+	}
+
+	/**
+	 * Returns the possible spawnpoints.
+	 * 
+	 * @return A collection of spawnpoints.
+	 */
+	public Collection<Vector2D> getSpawnPoints() {
+		return spawnPoints;
 	}
 
 	/**
@@ -60,6 +103,24 @@ public class Map {
 	 */
 	public boolean contains(Vector2D point) {
 		return getBounds().contains(point.toPoint());
+	}
+
+	/**
+	 * Sets the map's collection of initial Objects.
+	 * 
+	 * @param objects
+	 */
+	public void setInitialObjects(Collection<GameObject> objects) {
+		this.initialObjects = objects;
+	}
+
+	/**
+	 * Sets the map's spawnpoints.
+	 * 
+	 * @param spawnPoints
+	 */
+	public void setSpawnPoints(Collection<Vector2D> spawnPoints) {
+		this.spawnPoints = spawnPoints;
 	}
 
 }

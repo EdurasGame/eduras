@@ -22,14 +22,14 @@ import de.illonis.eduras.units.Player;
 public class GameInformation {
 	private final ConcurrentHashMap<Integer, GameObject> objects;
 	private final ConcurrentHashMap<Integer, Player> players;
-	private final Map map;
+	private Map map;
 	private EventTriggerer eventTriggerer;
 	private GameSettings gameSettings;
 
 	public GameInformation() {
 		objects = new ConcurrentHashMap<Integer, GameObject>();
 		players = new ConcurrentHashMap<Integer, Player>();
-		map = new Map();
+		map = new SimpleMap();
 		gameSettings = new GameSettings(this);
 
 	}
