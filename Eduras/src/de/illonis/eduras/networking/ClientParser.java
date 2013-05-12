@@ -41,6 +41,7 @@ public class ClientParser extends Thread {
 	 */
 	public ClientParser(GameLogicInterface logic, Buffer inputBuffer,
 			NetworkEventListener networkEventListener, Client client) {
+		setName("ClientParser");
 		this.client = client;
 		this.logic = logic;
 		this.inputBuffer = inputBuffer;
@@ -64,7 +65,8 @@ public class ClientParser extends Thread {
 				String s = inputBuffer.getNext();
 				decodeMessage(s);
 			} catch (InterruptedException e) {
-				EduLog.passException(e);
+				EduLog.info("ClientParser interrupted.");
+				break;
 			}
 		}
 	}
@@ -89,7 +91,7 @@ public class ClientParser extends Thread {
 				if (event instanceof ConnectionEstablishedEvent) {
 					ConnectionEstablishedEvent connectionEvent = (ConnectionEstablishedEvent) event;
 					EduLog.info("Received ConnectionEstablished event.");
-					client.setOwnerId(connectionEvent.getClientId());
+					client.setOwnerId(connectionEvent.getClient());
 				}
 				networkEventListener
 						.onNetworkEventAppeared((NetworkEvent) event);

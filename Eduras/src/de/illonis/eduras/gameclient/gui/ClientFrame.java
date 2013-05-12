@@ -161,12 +161,22 @@ public class ClientFrame extends JFrame implements NetworkEventReactor,
 
 	@Override
 	public void onConnected(int clientId) {
+		if (client.getOwnerID() == clientId) {
+			setTitle("Eduras? Client #" + clientId + " ("
+					+ client.getClientName() + ")");
+		}
 	}
 
 	@Override
-	public void onConnectionLost() {
-		showProgress();
-		progressPanel.setError("Connection lost.");
+	public void onConnectionLost(int clientId) {
+		if (clientId == client.getOwnerID()) {
+			EduLog.warning("Connection lost.");
+			gamePanel.stopRendering();
+			cml.stop();
+			showProgress();
+			progressPanel.setError("Connection lost.");
+			setTitle("Eduras? Client");
+		}
 	}
 
 	@Override
@@ -199,7 +209,6 @@ public class ClientFrame extends JFrame implements NetworkEventReactor,
 	@Override
 	public void onGameReady() {
 		gamePanel.startRendering();
-
 		addComponentListener(new ResizeMonitor());
 		camera.setSize(gamePanel.getWidth(), gamePanel.getHeight());
 

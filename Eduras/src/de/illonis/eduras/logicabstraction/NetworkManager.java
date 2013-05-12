@@ -59,8 +59,25 @@ public class NetworkManager {
 		client.setNetworkEventListener(listener);
 	}
 
-	public void disconnect() {
+	/**
+	 * Notifies network manager that connection to server has been closed.
+	 * Network manager will notify all other components, then.
+	 * 
+	 * 
+	 * @author illonis
+	 */
+	public void notifyDisconnect() {
 		client.disconnect();
 	}
 
+	/**
+	 * Notifies network manager that connection to server closed gracefully.
+	 * Network manager will notify all other components then.
+	 * 
+	 * 
+	 * @author illonis
+	 */
+	public void notifyConnectionClosed() {
+
+	}
 }

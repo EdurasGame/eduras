@@ -20,6 +20,7 @@ import de.illonis.eduras.events.NetworkEvent.NetworkEventNumber;
 import de.illonis.eduras.events.NoEvent;
 import de.illonis.eduras.events.ObjectFactoryEvent;
 import de.illonis.eduras.events.SetBooleanGameObjectAttributeEvent;
+import de.illonis.eduras.events.SetGameModeEvent;
 import de.illonis.eduras.events.SetIntegerGameObjectAttributeEvent;
 import de.illonis.eduras.events.SetItemSlotEvent;
 import de.illonis.eduras.events.SetOwnerEvent;
@@ -161,7 +162,8 @@ public class NetworkMessageDeserializer {
 			int clientRoleNum = parseInt(args[1]);
 			ClientRole clientRole = ClientRole.getValueOf(clientRoleNum);
 			String name = args[2];
-			networkEvent = new InitInformationEvent(clientRole, name);
+			int id = parseInt(args[3]);
+			networkEvent = new InitInformationEvent(clientRole, name, id);
 			break;
 		case GAME_READY:
 			networkEvent = new GameReadyEvent();
@@ -282,6 +284,10 @@ public class NetworkMessageDeserializer {
 			break;
 		case MATCH_END:
 			gameEvent = new MatchEndEvent(parseInt(args[1]));
+			break;
+		case SET_GAMEMODE:
+			gameEvent = new SetGameModeEvent(extractGameEventNumber(args[1]),
+					args[2]);
 			break;
 		default:
 			throw new MessageNotSupportedException(typeNumber, msg);

@@ -72,9 +72,4 @@ public class EdurasInitializer {
 	public Settings getSettings() {
 		return settings;
 	}
-
-	public void shutdown() {
-		networkManager.disconnect();
-	}
-
 }

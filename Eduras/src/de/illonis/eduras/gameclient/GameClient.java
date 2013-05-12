@@ -141,13 +141,12 @@ public class GameClient implements GuiClickReactor, NetworkEventReactor,
 		EduLog.info("Connection to server established. OwnerId: "
 				+ infoPro.getOwnerID());
 		keyHandler = new InputKeyHandler(this, eventSender, settings);
-		frame.setTitle(frame.getTitle() + " #" + infoPro.getOwnerID() + " ("
-				+ clientName + ")");
 
 		frame.onConnected(clientId); // pass to gui
 
 		try {
-			sendEvent(new InitInformationEvent(ClientRole.PLAYER, clientName));
+			sendEvent(new InitInformationEvent(ClientRole.PLAYER, clientName,
+					clientId));
 		} catch (WrongEventTypeException e) {
 			EduLog.passException(e);
 		} catch (MessageNotSupportedException e) {
@@ -157,16 +156,19 @@ public class GameClient implements GuiClickReactor, NetworkEventReactor,
 	}
 
 	@Override
-	public void onConnectionLost() {
-		EduLog.info("Connection to server lost.");
-		frame.onConnectionLost();
+	public void onConnectionLost(int client) {
+		if (client == getOwnerID()) {
+			EduLog.warning("Connection lost");
+			frame.onConnectionLost(client);
+		} else {
+			// TODO: other client left
+		}
 	}
 
 	@Override
 	public void onDisconnect() {
+		EduLog.info("Disconnected");
 		frame.onDisconnect();
-		initializer.shutdown();
-		nwm.disconnect();
 	}
 
 	/**
@@ -377,6 +379,17 @@ public class GameClient implements GuiClickReactor, NetworkEventReactor,
 	@Override
 	public void onGameReady() {
 		frame.onGameReady();
+	}
+
+	/**
+	 * Returns the username of this client.
+	 * 
+	 * @return this client's name.
+	 * 
+	 * @author illonis
+	 */
+	public String getClientName() {
+		return clientName;
 	}
 
 	/**

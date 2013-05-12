@@ -19,10 +19,13 @@ public interface NetworkEventReactor {
 	void onConnected(int clientId);
 
 	/**
-	 * Indicates that network connection was lost. This is fired when connection
-	 * closed gracefully.
+	 * Indicates that network connection of a client was lost. This is fired
+	 * when connection closed gracefully.
+	 * 
+	 * @param client
+	 *            the client that disconnected.
 	 */
-	void onConnectionLost();
+	void onConnectionLost(int client);
 
 	/**
 	 * Indicates that client wants to disconnect. Write your

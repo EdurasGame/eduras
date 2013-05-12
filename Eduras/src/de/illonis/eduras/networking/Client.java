@@ -5,6 +5,9 @@ import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 
+import de.illonis.eduras.events.ConnectionAbortedEvent;
+import de.illonis.eduras.events.NetworkEvent;
+import de.illonis.eduras.exceptions.ConnectionLostException;
 import de.illonis.eduras.interfaces.GameLogicInterface;
 import de.illonis.eduras.interfaces.NetworkEventListener;
 import de.illonis.eduras.logger.EduLog;
@@ -30,11 +33,15 @@ public class Client {
 	private NetworkEventListener networkEventListener;
 
 	private ClientSender sender;
+	private ClientReceiver receiver;
 
 	private int ownerId;
 
 	/**
 	 * Creates a new Client.
+	 * 
+	 * @param logic
+	 *            the logic that client uses.
 	 */
 	public Client(GameLogicInterface logic) {
 		this.logic = logic;
@@ -55,9 +62,9 @@ public class Client {
 		socket = new Socket();
 		InetSocketAddress iaddr = new InetSocketAddress(addr, port);
 		socket.connect(iaddr, CONNECT_TIMEOUT);
-		ClientReceiver r = new ClientReceiver(logic, socket, this);
-		r.setNetworkEventListener(networkEventListener);
-		r.start();
+		receiver = new ClientReceiver(logic, socket, this);
+		receiver.setNetworkEventListener(networkEventListener);
+		receiver.start();
 		sender = new ClientSender(socket);
 
 		// createEchoSocket();
@@ -70,7 +77,11 @@ public class Client {
 	 *            message to send
 	 */
 	public void sendMessage(String message) {
-		sender.sendMessage(message);
+		try {
+			sender.sendMessage(message);
+		} catch (ConnectionLostException e) {
+			connectionLost();
+		}
 
 	}
 
@@ -101,7 +112,14 @@ public class Client {
 		this.networkEventListener = listener;
 	}
 
+	public void connectionLost() {
+		NetworkEvent ev = new ConnectionAbortedEvent(ownerId);
+		networkEventListener.onNetworkEventAppeared(ev);
+		receiver.interrupt();
+	}
+
 	public void disconnect() {
+		receiver.interrupt();
 		logic.onShutdown();
 		if (socket != null)
 			try {

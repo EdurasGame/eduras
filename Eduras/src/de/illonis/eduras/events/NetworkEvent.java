@@ -12,6 +12,7 @@ package de.illonis.eduras.events;
 public abstract class NetworkEvent extends Event {
 
 	private final NetworkEventNumber type;
+	private final int client;
 
 	public enum NetworkEventNumber {
 		CONNECTION_ESTABLISHED(201), CONNECTION_ABORTED(202), INIT_INFORMATION(
@@ -24,6 +25,7 @@ public abstract class NetworkEvent extends Event {
 		 * 
 		 * @param num
 		 *            The number.
+		 * 
 		 */
 		NetworkEventNumber(int num) {
 			this.number = num;
@@ -44,9 +46,23 @@ public abstract class NetworkEvent extends Event {
 	 * 
 	 * @param type
 	 *            The type of the new NetworkEvent.
+	 * @param client
+	 *            The client on that event appeared.
 	 */
-	public NetworkEvent(NetworkEventNumber type) {
+	public NetworkEvent(NetworkEventNumber type, int client) {
 		this.type = type;
+		this.client = client;
+	}
+
+	/**
+	 * Returns the client event occured on.
+	 * 
+	 * @return affected client.
+	 * 
+	 * @author illonis
+	 */
+	public int getClient() {
+		return client;
 	}
 
 	/**
