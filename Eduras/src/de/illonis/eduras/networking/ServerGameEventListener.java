@@ -37,6 +37,8 @@ public class ServerGameEventListener implements GameEventListener {
 	 *            The outputBuffer to pass events to.
 	 * @param serverSender
 	 *            The sender that is used to send messages.
+	 * @param server
+	 *            The associated server.
 	 */
 	public ServerGameEventListener(Buffer outputBuffer,
 			ServerSender serverSender, Server server) {
@@ -91,14 +93,14 @@ public class ServerGameEventListener implements GameEventListener {
 
 	@Override
 	public void onObjectCreation(ObjectFactoryEvent event) {
-		String str;
+
 		try {
-			str = NetworkMessageSerializer.serialize(event);
+			String str = NetworkMessageSerializer.serialize(event);
+			outputBuffer.append(str);
 		} catch (MessageNotSupportedException e) {
 			EduLog.passException(e);
 			return;
 		}
-		outputBuffer.append(str);
 	}
 
 	@Override
@@ -122,14 +124,13 @@ public class ServerGameEventListener implements GameEventListener {
 	 */
 	@Override
 	public void onObjectStateChanged(SetGameObjectAttributeEvent<?> event) {
-		String string;
 		try {
-			string = NetworkMessageSerializer.serialize(event);
+			String string = NetworkMessageSerializer.serialize(event);
+			outputBuffer.append(string);
 		} catch (MessageNotSupportedException e) {
 			EduLog.passException(e);
 			return;
 		}
-		outputBuffer.append(string);
 	}
 
 	@Override
@@ -140,24 +141,24 @@ public class ServerGameEventListener implements GameEventListener {
 
 	@Override
 	public void onOwnerChanged(SetOwnerEvent event) {
-		// TODO Auto-generated method stub
+		try {
+			String string = NetworkMessageSerializer.serialize(event);
+			outputBuffer.append(string);
+		} catch (MessageNotSupportedException e) {
+			e.printStackTrace();
+		}
 
 	}
 
 	@Override
 	public void onItemSlotChanged(SetItemSlotEvent event) {
-
-		String string;
-
 		try {
-			string = NetworkMessageSerializer.serialize(event);
+			String string = NetworkMessageSerializer.serialize(event);
+			outputBuffer.append(string);
 		} catch (MessageNotSupportedException e) {
 			EduLog.passException(e);
 			return;
 		}
-
-		outputBuffer.append(string);
-
 	}
 
 	/*
@@ -169,17 +170,14 @@ public class ServerGameEventListener implements GameEventListener {
 	 */
 	@Override
 	public void onObjectRemove(ObjectFactoryEvent event) {
-		String string;
 
 		try {
-			string = NetworkMessageSerializer.serialize(event);
+			String string = NetworkMessageSerializer.serialize(event);
+			outputBuffer.append(string);
 		} catch (MessageNotSupportedException e) {
 			EduLog.passException(e);
 			return;
 		}
-
-		outputBuffer.append(string);
-
 	}
 
 	@Override
