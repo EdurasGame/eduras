@@ -54,8 +54,9 @@ public class ExampleWeapon extends Weapon {
 	public void use(ItemUseInformation info) {
 		// (jme) Spawn position will be calculated in a simplified way. We use
 		// diagonal's length of shooting player to move missile away from him.
-		super.use(info);
-		if (hasCooldown() == false) {
+
+		if (!hasCooldown()) {
+			super.use(info);
 			Vector2D target = info.getTarget();
 			GameObject triggeringObject = info.getTriggeringObject();
 
