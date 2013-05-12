@@ -164,8 +164,9 @@ public class ClientFrame extends JFrame implements NetworkEventReactor,
 	}
 
 	@Override
-	public void onConnectionLost() {
-		EduLog.warning("Connection lost.");
+	public void onConnectionLost(int clientId) {
+		if (clientId == client.getOwnerID())
+			EduLog.warning("Connection lost.");
 		// TODO: handle disconnect.
 		// Problem is that client calls networkmanager-disconnect and vice
 		// versa.

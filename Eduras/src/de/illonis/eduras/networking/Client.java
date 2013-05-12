@@ -79,7 +79,7 @@ public class Client {
 		try {
 			sender.sendMessage(message);
 		} catch (ConnectionLostException e) {
-			disconnect();
+			connectionLost();
 		}
 
 	}
@@ -111,9 +111,12 @@ public class Client {
 		this.networkEventListener = listener;
 	}
 
-	public void disconnect() {
+	public void connectionLost() {
 		NetworkEvent ev = new ConnectionAbortedEvent(ownerId);
 		networkEventListener.onNetworkEventAppeared(ev);
+	}
+
+	public void disconnect() {
 		logic.onShutdown();
 		if (socket != null)
 			try {
