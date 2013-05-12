@@ -18,7 +18,7 @@ public abstract class Weapon extends Item implements Lootable, Usable {
 
 	private final int damage = 0;
 	private long cooldown = 0;
-	private long defaultCooldown = 0;
+	protected long defaultCooldown = 0;
 	private Missile missile;
 
 	public Weapon(ObjectType type, GameInformation gi, int id) {
