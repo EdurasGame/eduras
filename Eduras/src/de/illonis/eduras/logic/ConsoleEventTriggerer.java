@@ -91,19 +91,19 @@ public class ConsoleEventTriggerer {
 
 		GameMode gameMode = null;
 
-		if (gameModeName.equals("Deathmatch")) {
+		switch (gameModeName) {
+		case "Deathmatch":
 			gameMode = new Deathmatch(triggerer.getGameInfo());
-		} else {
-			if (gameModeName.equals("NONE")) {
-				gameMode = new NoGameMode(triggerer.getGameInfo());
-			}
+			break;
+		default:
+			gameMode = new NoGameMode(triggerer.getGameInfo());
+			break;
 		}
 
-		if (gameMode != null) {
-			triggerer.changeGameMode(gameMode);
-			return true;
-		}
-		return false;
+		triggerer.changeGameMode(gameMode);
+		if (gameMode instanceof NoGameMode)
+			return false;
+		return true;
 	}
 
 	public boolean changeMap(String mapName) {
