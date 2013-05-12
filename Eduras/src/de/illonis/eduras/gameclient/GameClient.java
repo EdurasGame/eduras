@@ -160,13 +160,11 @@ public class GameClient implements GuiClickReactor, NetworkEventReactor,
 	@Override
 	public void onConnectionLost() {
 		EduLog.warning("Connection lost");
-		frame.onConnectionLost();
 	}
 
 	@Override
 	public void onDisconnect() {
-		EduLog.error("Disconnected");
-		System.out.println("dc");
+		EduLog.info("Disconnected");
 		frame.onDisconnect();
 		initializer.shutdown();
 		nwm.disconnect();

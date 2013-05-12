@@ -60,7 +60,6 @@ public class ClientReceiver extends Thread {
 				networkEventListener, client);
 		p.start();
 
-		EduLog.warning("hi");
 		while (connectionAvailable) {
 			try {
 				String messages = messageReader.readLine();

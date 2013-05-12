@@ -165,8 +165,15 @@ public class ClientFrame extends JFrame implements NetworkEventReactor,
 
 	@Override
 	public void onConnectionLost() {
-		showProgress();
-		progressPanel.setError("Connection lost.");
+		EduLog.warning("Connection lost.");
+		// TODO: handle disconnect.
+		// Problem is that client calls networkmanager-disconnect and vice
+		// versa.
+		// gamePanel.stopRendering();
+		// cml.stop();
+		// showProgress();
+		// progressPanel.setError("Connection lost.");
+
 	}
 
 	@Override
@@ -199,7 +206,6 @@ public class ClientFrame extends JFrame implements NetworkEventReactor,
 	@Override
 	public void onGameReady() {
 		gamePanel.startRendering();
-
 		addComponentListener(new ResizeMonitor());
 		camera.setSize(gamePanel.getWidth(), gamePanel.getHeight());
 
