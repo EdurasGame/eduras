@@ -20,6 +20,10 @@ public class GameModeChangeCommand extends ConsoleCommand {
 	public void onCommand(String[] args, ServerConsole console,
 			ConsoleEventTriggerer triggerer) {
 		console.printlnf("Changing game mode to %s...", args[1]);
-		triggerer.changeGameMode(args[1]);
+		if (triggerer.changeGameMode(args[1])) {
+			console.println("Success.");
+		} else {
+			console.printlnf("%s is no valid game mode.", args[1]);
+		}
 	}
 }
