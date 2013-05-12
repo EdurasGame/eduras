@@ -16,10 +16,14 @@ import de.illonis.eduras.events.MissileLaunchEvent;
 import de.illonis.eduras.events.MovementEvent;
 import de.illonis.eduras.events.ObjectFactoryEvent;
 import de.illonis.eduras.events.SetBooleanGameObjectAttributeEvent;
+import de.illonis.eduras.events.SetGameModeEvent;
 import de.illonis.eduras.events.SetIntegerGameObjectAttributeEvent;
 import de.illonis.eduras.events.SetItemSlotEvent;
 import de.illonis.eduras.events.UserMovementEvent;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
+import de.illonis.eduras.gamemodes.Deathmatch;
+import de.illonis.eduras.gamemodes.GameMode;
+import de.illonis.eduras.gamemodes.NoGameMode;
 import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.gameobjects.MoveableGameObject.Direction;
 import de.illonis.eduras.interfaces.GameEventListener;
@@ -231,6 +235,20 @@ public class Logic implements GameLogicInterface {
 				for (GameEventListener listener : listenerList) {
 					listener.onMatchEnd((MatchEndEvent) event);
 				}
+			case SET_GAMEMODE:
+				SetGameModeEvent modeChangeEvent = (SetGameModeEvent) event;
+				GameMode newGameMode;
+				String newMode = modeChangeEvent.getNewMode();
+				if (newMode == "Deathmatch") {
+					newGameMode = new Deathmatch(currentGame);
+				} else {
+					newGameMode = new NoGameMode(currentGame);
+				}
+
+				for (GameEventListener listener : listenerList) {
+					listener.onGameModeChanged(newGameMode);
+				}
+				break;
 			default:
 				break;
 			}
