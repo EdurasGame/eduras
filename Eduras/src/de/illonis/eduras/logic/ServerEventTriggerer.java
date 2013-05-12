@@ -259,7 +259,7 @@ public class ServerEventTriggerer implements EventTriggerer {
 
 		gameInfo.setMap(map);
 
-		removeAllObjects();
+		removeAllNonPlayers();
 
 		for (GameObject initialObject : map.getInitialObjects()) {
 			createObjectAt(initialObject.getType(),
@@ -267,13 +267,15 @@ public class ServerEventTriggerer implements EventTriggerer {
 		}
 
 		for (Player player : gameInfo.getPlayers()) {
-			createObject(player.getType(), player.getOwner());
+			respawnPlayer(player);
 		}
+
 	}
 
-	public void removeAllObjects() {
+	public void removeAllNonPlayers() {
 		for (GameObject oldObject : gameInfo.getObjects().values()) {
-			removeObject(oldObject.getId());
+			if (!(oldObject instanceof Player))
+				removeObject(oldObject.getId());
 		}
 	}
 }
