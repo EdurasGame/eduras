@@ -86,7 +86,7 @@ public class ExampleWeapon extends Weapon {
 	@Override
 	public void onCollision(GameObject collidingObject) {
 
-		if (!(collidingObject.getType() == ObjectType.PLAYER)) {
+		if (collidingObject.getType() != ObjectType.PLAYER) {
 			return;
 		}
 
