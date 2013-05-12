@@ -71,11 +71,10 @@ public class ConsoleEventTriggerer {
 	public boolean respawnPlayerById(int ownerId) {
 		Player player;
 		try {
-			player = triggerer.getGameInfo().getPlayerByObjectId(ownerId);
+			player = triggerer.getGameInfo().getPlayerByOwnerId(ownerId);
 		} catch (ObjectNotFoundException e) {
 			return false;
 		}
-
 		triggerer.respawnPlayer(player);
 
 		return true;

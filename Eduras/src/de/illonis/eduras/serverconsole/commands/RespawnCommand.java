@@ -26,7 +26,11 @@ public class RespawnCommand extends ConsoleCommand {
 			console.printlnf("Invalid player id: %s", args[1]);
 			return;
 		}
-		triggerer.respawnPlayerById(player);
-		console.printlnf("Player %d has been respawned.", player);
+		if (triggerer.respawnPlayerById(player)) {
+			console.printlnf("Player %d has been respawned.", player);
+		} else {
+			console.printlnf("Player %d not found.", player);
+		}
+
 	}
 }
