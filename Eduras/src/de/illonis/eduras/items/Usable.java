@@ -48,6 +48,16 @@ public interface Usable {
 	public void reduceCooldown(long value);
 
 	/**
+	 * Returns true if this item cannot be used at this moment because it has
+	 * cooldown.
+	 * 
+	 * @return true if item has cooldown.
+	 * 
+	 * @author illonis
+	 */
+	public boolean hasCooldown();
+
+	/**
 	 * Resets cooldown
 	 * 
 	 * @author illonis
