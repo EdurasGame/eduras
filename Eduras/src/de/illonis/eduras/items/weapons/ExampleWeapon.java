@@ -32,7 +32,7 @@ public class ExampleWeapon extends Weapon {
 		setMissile(null);
 		setName("WeaponExample");
 		setShape(new Circle(10));
-		defaultCooldown = 2000;
+		defaultCooldown = 300;
 	}
 
 	/*
