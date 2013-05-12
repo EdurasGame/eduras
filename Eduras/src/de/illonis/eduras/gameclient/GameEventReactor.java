@@ -70,6 +70,7 @@ public class GameEventReactor implements GameEventListener {
 
 	@Override
 	public void onOwnerChanged(SetOwnerEvent event) {
+
 		ui.onOwnerChanged(event);
 	}
 

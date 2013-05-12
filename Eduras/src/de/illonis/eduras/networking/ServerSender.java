@@ -142,7 +142,8 @@ public class ServerSender extends Thread {
 			String message = NetworkMessageSerializer.concatenate(filtereds);
 
 			if (message.equals("")) {
-				EduLog.error("Message empty!!");
+				EduLog.warning("Message empty!!");
+				return;
 			}
 			EduLog.info("[SERVER] Sent all messages.");
 			sendMessage(message);

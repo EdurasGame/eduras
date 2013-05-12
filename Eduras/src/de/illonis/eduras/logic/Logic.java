@@ -19,6 +19,7 @@ import de.illonis.eduras.events.SetBooleanGameObjectAttributeEvent;
 import de.illonis.eduras.events.SetGameModeEvent;
 import de.illonis.eduras.events.SetIntegerGameObjectAttributeEvent;
 import de.illonis.eduras.events.SetItemSlotEvent;
+import de.illonis.eduras.events.SetOwnerEvent;
 import de.illonis.eduras.events.UserMovementEvent;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
 import de.illonis.eduras.gamemodes.Deathmatch;
@@ -190,7 +191,7 @@ public class Logic implements GameLogicInterface {
 					Item item = (Item) currentGame.findObjectById(lootItemEvent
 							.getObjectId());
 					itemSlot = player.getInventory().loot(item);
-
+					item.setOwner(lootItemEvent.getPlayerId());
 					item.setCollidable(false);
 					item.setVisible(false);
 
@@ -198,11 +199,14 @@ public class Logic implements GameLogicInterface {
 							GameEventNumber.SET_VISIBLE, item.getId(), false);
 					SetBooleanGameObjectAttributeEvent colEvent = new SetBooleanGameObjectAttributeEvent(
 							GameEventNumber.SET_COLLIDABLE, item.getId(), false);
+					SetOwnerEvent soEvent = new SetOwnerEvent(player.getId(),
+							item.getId());
 
 					for (GameEventListener gel : listenerList) {
 						gel.onItemSlotChanged(new SetItemSlotEvent(
 								lootItemEvent.getObjectId(), player.getOwner(),
 								itemSlot));
+						gel.onOwnerChanged(soEvent);
 						gel.onObjectStateChanged(visEvent);
 						gel.onObjectStateChanged(colEvent);
 					}
@@ -249,6 +253,15 @@ public class Logic implements GameLogicInterface {
 				}
 				for (GameEventListener listener : listenerList) {
 					listener.onGameModeChanged(newGameMode);
+				}
+				break;
+			case SET_OWNER:
+				SetOwnerEvent setownerEvent = (SetOwnerEvent) event;
+				Item item = (Item) currentGame.findObjectById(setownerEvent
+						.getObjectId());
+				item.setOwner(setownerEvent.getOwner());
+				for (GameEventListener listener : listenerList) {
+					listener.onOwnerChanged(setownerEvent);
 				}
 				break;
 			default:

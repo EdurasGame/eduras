@@ -3,6 +3,7 @@
  */
 package de.illonis.eduras.events;
 
+
 /**
  * Set the owner of an object to a new value.
  * 
