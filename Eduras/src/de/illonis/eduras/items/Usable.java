@@ -25,7 +25,7 @@ public interface Usable {
 	 * 
 	 * @author illonis
 	 */
-	public int getCooldown();
+	public long getCooldown();
 
 	/**
 	 * Returns default cooldown time of this item.
@@ -34,18 +34,18 @@ public interface Usable {
 	 * 
 	 * @author illonis
 	 */
-	public int getCooldownTime();
+	public long getCooldownTime();
 
 	/**
-	 * Reduces the cooldown of this item by given value. A cooldown will never
-	 * be lower than 0.
+	 * Reduces the current cooldown of this item by given value. A cooldown will
+	 * never be lower than 0.
 	 * 
 	 * @param value
-	 *            cooldown reducing in seconds.
+	 *            cooldown reducing in milliseconds.
 	 * 
 	 * @author illonis
 	 */
-	public void reduceCooldown(int value);
+	public void reduceCooldown(long value);
 
 	/**
 	 * Resets cooldown
