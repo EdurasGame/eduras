@@ -33,6 +33,7 @@ public class Client {
 	private NetworkEventListener networkEventListener;
 
 	private ClientSender sender;
+	private ClientReceiver receiver;
 
 	private int ownerId;
 
@@ -61,9 +62,9 @@ public class Client {
 		socket = new Socket();
 		InetSocketAddress iaddr = new InetSocketAddress(addr, port);
 		socket.connect(iaddr, CONNECT_TIMEOUT);
-		ClientReceiver r = new ClientReceiver(logic, socket, this);
-		r.setNetworkEventListener(networkEventListener);
-		r.start();
+		receiver = new ClientReceiver(logic, socket, this);
+		receiver.setNetworkEventListener(networkEventListener);
+		receiver.start();
 		sender = new ClientSender(socket);
 
 		// createEchoSocket();
@@ -114,9 +115,11 @@ public class Client {
 	public void connectionLost() {
 		NetworkEvent ev = new ConnectionAbortedEvent(ownerId);
 		networkEventListener.onNetworkEventAppeared(ev);
+		receiver.interrupt();
 	}
 
 	public void disconnect() {
+		receiver.interrupt();
 		logic.onShutdown();
 		if (socket != null)
 			try {

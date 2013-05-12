@@ -161,20 +161,22 @@ public class ClientFrame extends JFrame implements NetworkEventReactor,
 
 	@Override
 	public void onConnected(int clientId) {
+		if (client.getOwnerID() == clientId) {
+			setTitle("Eduras? Client #" + clientId + " ("
+					+ client.getClientName() + ")");
+		}
 	}
 
 	@Override
 	public void onConnectionLost(int clientId) {
-		if (clientId == client.getOwnerID())
+		if (clientId == client.getOwnerID()) {
 			EduLog.warning("Connection lost.");
-		// TODO: handle disconnect.
-		// Problem is that client calls networkmanager-disconnect and vice
-		// versa.
-		// gamePanel.stopRendering();
-		// cml.stop();
-		// showProgress();
-		// progressPanel.setError("Connection lost.");
-
+			gamePanel.stopRendering();
+			cml.stop();
+			showProgress();
+			progressPanel.setError("Connection lost.");
+			setTitle("Eduras? Client");
+		}
 	}
 
 	@Override

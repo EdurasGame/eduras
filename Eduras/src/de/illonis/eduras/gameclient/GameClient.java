@@ -141,8 +141,6 @@ public class GameClient implements GuiClickReactor, NetworkEventReactor,
 		EduLog.info("Connection to server established. OwnerId: "
 				+ infoPro.getOwnerID());
 		keyHandler = new InputKeyHandler(this, eventSender, settings);
-		frame.setTitle(frame.getTitle() + " #" + infoPro.getOwnerID() + " ("
-				+ clientName + ")");
 
 		frame.onConnected(clientId); // pass to gui
 
@@ -381,6 +379,17 @@ public class GameClient implements GuiClickReactor, NetworkEventReactor,
 	@Override
 	public void onGameReady() {
 		frame.onGameReady();
+	}
+
+	/**
+	 * Returns the username of this client.
+	 * 
+	 * @return this client's name.
+	 * 
+	 * @author illonis
+	 */
+	public String getClientName() {
+		return clientName;
 	}
 
 	/**

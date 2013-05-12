@@ -27,6 +27,7 @@ public class ClientReceiver extends Thread {
 
 	private final Client client;
 	private Buffer inputBuffer;
+	private ClientParser p;
 
 	/**
 	 * Retrieves messages from server.
@@ -42,7 +43,7 @@ public class ClientReceiver extends Thread {
 
 		this.client = client;
 		this.logic = logic;
-
+		setName("ClientReceiver");
 		try {
 			messageReader = new BufferedReader(new InputStreamReader(
 					socket.getInputStream()));
@@ -54,10 +55,8 @@ public class ClientReceiver extends Thread {
 
 	@Override
 	public void run() {
-
 		inputBuffer = new Buffer();
-		ClientParser p = new ClientParser(logic, inputBuffer,
-				networkEventListener, client);
+		p = new ClientParser(logic, inputBuffer, networkEventListener, client);
 		p.start();
 
 		while (connectionAvailable) {
@@ -74,6 +73,13 @@ public class ClientReceiver extends Thread {
 				EduLog.passException(e);
 			}
 		}
+	}
+
+	@Override
+	public void interrupt() {
+		if (p != null)
+			p.interrupt();
+		super.interrupt();
 	}
 
 	/**
