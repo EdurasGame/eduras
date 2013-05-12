@@ -37,7 +37,8 @@ public interface Usable {
 	public int getCooldownTime();
 
 	/**
-	 * Reduces the cooldown of this item by given value.
+	 * Reduces the cooldown of this item by given value. A cooldown will never
+	 * be lower than 0.
 	 * 
 	 * @param value
 	 *            cooldown reducing in seconds.
