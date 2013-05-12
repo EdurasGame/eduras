@@ -286,8 +286,7 @@ public class NetworkMessageDeserializer {
 			gameEvent = new MatchEndEvent(parseInt(args[1]));
 			break;
 		case SET_GAMEMODE:
-			gameEvent = new SetGameModeEvent(extractGameEventNumber(args[1]),
-					args[2]);
+			gameEvent = new SetGameModeEvent(args[1]);
 			break;
 		default:
 			throw new MessageNotSupportedException(typeNumber, msg);
@@ -421,8 +420,8 @@ public class NetworkMessageDeserializer {
 
 		// FIXME: Very important: try to find out why a message can be
 		// errornous.
+		String[] parts = message.substring(2).split("#");
 		try {
-			String[] parts = message.substring(2).split("#");
 			return parts[argument];
 		} catch (NullPointerException e) {
 			e.printStackTrace();
