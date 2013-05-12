@@ -4,6 +4,7 @@ import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.ObjectFactory.ObjectType;
 import de.illonis.eduras.exceptions.NoAmmunitionException;
 import de.illonis.eduras.items.Item;
+import de.illonis.eduras.items.ItemUseInformation;
 import de.illonis.eduras.items.Lootable;
 import de.illonis.eduras.items.Usable;
 
@@ -16,8 +17,8 @@ import de.illonis.eduras.items.Usable;
 public abstract class Weapon extends Item implements Lootable, Usable {
 
 	private final int damage = 0;
-	private final long cooldown = 0;
-	private final long lastDamageTime = 0;
+	private long cooldown = 0;
+	private long defaultCooldown = 0;
 	private Missile missile;
 
 	public Weapon(ObjectType type, GameInformation gi, int id) {
@@ -72,31 +73,37 @@ public abstract class Weapon extends Item implements Lootable, Usable {
 		missile.setSpeed(missileSpeed);
 	}
 
-	/**
-	 * Returns cooldown of weapon in milliseconds.
-	 * 
-	 * @return weapon cooldown in milliseconds.
-	 */
+	@Override
 	public long getCooldown() {
 		return cooldown;
 	}
 
-	/**
-	 * Returns last time weapon was used.
-	 * 
-	 * @return last weapon use time.
-	 */
-	public long getLastDamageTime() {
-		return lastDamageTime;
+	@Override
+	public long getCooldownTime() {
+		return defaultCooldown;
 	}
 
-	/**
-	 * Returns time interval in milliseconds that is elapsed since last shoot.
-	 * 
-	 * @return time since last shoot in milliseconds.
-	 */
-	public long getDamageTimeElapsed() {
-		return System.currentTimeMillis() - lastDamageTime;
+	@Override
+	public void reduceCooldown(long value) {
+		cooldown = Math.max(0, cooldown - value);
+	}
+
+	@Override
+	public void resetCooldown() {
+		cooldown = 0;
+	}
+
+	@Override
+	public void use(ItemUseInformation info) {
+		cooldown = defaultCooldown;
+	}
+
+	@Override
+	public boolean hasCooldown() {
+		if (cooldown > 0)
+			return true;
+		else
+			return false;
 	}
 
 	/**

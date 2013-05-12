@@ -35,7 +35,7 @@ public class NetworkMessageSerializer {
 	 * @param event
 	 *            The event to be serialized.
 	 * @return The string.
-	 * @throws UnsupportedOperationException
+	 * @throws MessageNotSupportedException
 	 *             Occurs if there is no serialization for the given event.
 	 */
 	public static String serialize(Event event)

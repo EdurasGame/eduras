@@ -40,8 +40,13 @@ public abstract class NetworkOptimizer {
 
 			GameEventNumber n = NetworkMessageDeserializer
 					.extractGameEventNumber(string);
-			int key = Integer.parseInt(NetworkMessageDeserializer
-					.getArgumentFromMessage(string, 1));
+			int key;
+			try {
+				key = Integer.parseInt(NetworkMessageDeserializer
+						.getArgumentFromMessage(string, 1));
+			} catch (NumberFormatException e) {
+				continue;
+			}
 			switch (n) {
 			case SET_POS:
 				posEvents.put(key, string);

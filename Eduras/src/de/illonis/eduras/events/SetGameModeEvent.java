@@ -3,8 +3,8 @@ package de.illonis.eduras.events;
 public class SetGameModeEvent extends GameEvent {
 	private String newMode;
 
-	public SetGameModeEvent(GameEventNumber type, String newMode) {
-		super(type);
+	public SetGameModeEvent(String newMode) {
+		super(GameEventNumber.SET_GAMEMODE);
 		this.newMode = newMode;
 	}
 

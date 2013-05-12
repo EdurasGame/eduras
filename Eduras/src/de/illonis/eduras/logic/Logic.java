@@ -239,12 +239,14 @@ public class Logic implements GameLogicInterface {
 				SetGameModeEvent modeChangeEvent = (SetGameModeEvent) event;
 				GameMode newGameMode;
 				String newMode = modeChangeEvent.getNewMode();
-				if (newMode == "Deathmatch") {
+				switch (newMode) {
+				case "Deathmatch":
 					newGameMode = new Deathmatch(currentGame);
-				} else {
+					break;
+				default:
 					newGameMode = new NoGameMode(currentGame);
+					break;
 				}
-
 				for (GameEventListener listener : listenerList) {
 					listener.onGameModeChanged(newGameMode);
 				}
