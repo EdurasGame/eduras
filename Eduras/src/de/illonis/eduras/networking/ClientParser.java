@@ -89,7 +89,7 @@ public class ClientParser extends Thread {
 				if (event instanceof ConnectionEstablishedEvent) {
 					ConnectionEstablishedEvent connectionEvent = (ConnectionEstablishedEvent) event;
 					EduLog.info("Received ConnectionEstablished event.");
-					client.setOwnerId(connectionEvent.getClientId());
+					client.setOwnerId(connectionEvent.getClient());
 				}
 				networkEventListener
 						.onNetworkEventAppeared((NetworkEvent) event);

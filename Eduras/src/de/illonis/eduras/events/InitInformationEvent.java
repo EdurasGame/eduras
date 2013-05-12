@@ -22,9 +22,11 @@ public class InitInformationEvent extends NetworkEvent {
 	 *            The role.
 	 * @param name
 	 *            The name.
+	 * @param clientId
+	 *            the id of the client.
 	 */
-	public InitInformationEvent(ClientRole role, String name) {
-		super(NetworkEventNumber.INIT_INFORMATION);
+	public InitInformationEvent(ClientRole role, String name, int clientId) {
+		super(NetworkEventNumber.INIT_INFORMATION, clientId);
 
 		this.role = role;
 		this.name = name;

@@ -42,7 +42,7 @@ public class Eduras {
 	public static void main(String[] args) {
 		// new LoggerGui().setVisible(true);
 		EduLog.setLogOutput(LogMode.CONSOLE);
-		EduLog.setLogLimit(Level.INFO);
+		EduLog.setLogLimit(Level.OFF);
 		int port = 0;
 		if (args.length > 0) {
 			try {

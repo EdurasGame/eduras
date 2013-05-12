@@ -27,7 +27,7 @@ public class ClientEventHandler implements NetworkEventListener {
 			break;
 		case CONNECTION_ESTABLISHED:
 			ConnectionEstablishedEvent ce = (ConnectionEstablishedEvent) event;
-			reactor.onConnected(ce.getClientId());
+			reactor.onConnected(ce.getClient());
 			break;
 		case GAME_READY:
 			reactor.onGameReady();

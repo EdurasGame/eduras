@@ -5,6 +5,9 @@ import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 
+import de.illonis.eduras.events.ConnectionAbortedEvent;
+import de.illonis.eduras.events.NetworkEvent;
+import de.illonis.eduras.exceptions.ConnectionLostException;
 import de.illonis.eduras.interfaces.GameLogicInterface;
 import de.illonis.eduras.interfaces.NetworkEventListener;
 import de.illonis.eduras.logger.EduLog;
@@ -35,6 +38,9 @@ public class Client {
 
 	/**
 	 * Creates a new Client.
+	 * 
+	 * @param logic
+	 *            the logic that client uses.
 	 */
 	public Client(GameLogicInterface logic) {
 		this.logic = logic;
@@ -70,7 +76,11 @@ public class Client {
 	 *            message to send
 	 */
 	public void sendMessage(String message) {
-		sender.sendMessage(message);
+		try {
+			sender.sendMessage(message);
+		} catch (ConnectionLostException e) {
+			disconnect();
+		}
 
 	}
 
@@ -102,6 +112,8 @@ public class Client {
 	}
 
 	public void disconnect() {
+		NetworkEvent ev = new ConnectionAbortedEvent(ownerId);
+		networkEventListener.onNetworkEventAppeared(ev);
 		logic.onShutdown();
 		if (socket != null)
 			try {

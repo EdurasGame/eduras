@@ -68,18 +68,18 @@ public class NetworkMessageSerializer {
 		switch (networkEvent.getType()) {
 		case CONNECTION_ESTABLISHED:
 			serializedEvent += ((ConnectionEstablishedEvent) networkEvent)
-					.getClientId();
+					.getClient();
 			break;
 		case CONNECTION_ABORTED:
 			serializedEvent += ((ConnectionAbortedEvent) networkEvent)
-					.getClientId();
+					.getClient();
 			break;
 		case NO_EVENT:
 			break;
 		case INIT_INFORMATION:
 			InitInformationEvent initEvent = (InitInformationEvent) networkEvent;
 			serializedEvent += concatenateWithDel("#", initEvent.getRole()
-					.getTypeNum(), initEvent.getName());
+					.getTypeNum(), initEvent.getName(), initEvent.getClient());
 			break;
 		case GAME_READY:
 			break;

@@ -42,7 +42,7 @@ public class EdurasClient {
 	public static void main(String[] args) {
 		// new LoggerGui().setVisible(true);
 		EduLog.setLogOutput(LogMode.CONSOLE);
-		EduLog.setLogLimit(Level.SEVERE);
+		EduLog.setLogLimit(Level.WARNING);
 
 		// Note that this is very bad coded due to testing ;)
 		buildChooserFrame();

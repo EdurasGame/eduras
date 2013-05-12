@@ -147,7 +147,8 @@ public class GameClient implements GuiClickReactor, NetworkEventReactor,
 		frame.onConnected(clientId); // pass to gui
 
 		try {
-			sendEvent(new InitInformationEvent(ClientRole.PLAYER, clientName));
+			sendEvent(new InitInformationEvent(ClientRole.PLAYER, clientName,
+					clientId));
 		} catch (WrongEventTypeException e) {
 			EduLog.passException(e);
 		} catch (MessageNotSupportedException e) {
@@ -158,12 +159,14 @@ public class GameClient implements GuiClickReactor, NetworkEventReactor,
 
 	@Override
 	public void onConnectionLost() {
-		EduLog.info("Connection to server lost.");
+		EduLog.warning("Connection lost");
 		frame.onConnectionLost();
 	}
 
 	@Override
 	public void onDisconnect() {
+		EduLog.error("Disconnected");
+		System.out.println("dc");
 		frame.onDisconnect();
 		initializer.shutdown();
 		nwm.disconnect();

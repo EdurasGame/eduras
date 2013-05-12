@@ -161,7 +161,8 @@ public class NetworkMessageDeserializer {
 			int clientRoleNum = parseInt(args[1]);
 			ClientRole clientRole = ClientRole.getValueOf(clientRoleNum);
 			String name = args[2];
-			networkEvent = new InitInformationEvent(clientRole, name);
+			int id = parseInt(args[3]);
+			networkEvent = new InitInformationEvent(clientRole, name, id);
 			break;
 		case GAME_READY:
 			networkEvent = new GameReadyEvent();

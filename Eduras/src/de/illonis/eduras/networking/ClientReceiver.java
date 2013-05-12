@@ -32,7 +32,11 @@ public class ClientReceiver extends Thread {
 	 * Retrieves messages from server.
 	 * 
 	 * @param logic
+	 *            The logic used.
 	 * @param socket
+	 *            The socket receiving on.
+	 * @param client
+	 *            The associated client.
 	 */
 	public ClientReceiver(GameLogicInterface logic, Socket socket, Client client) {
 
@@ -56,6 +60,7 @@ public class ClientReceiver extends Thread {
 				networkEventListener, client);
 		p.start();
 
+		EduLog.warning("hi");
 		while (connectionAvailable) {
 			try {
 				String messages = messageReader.readLine();
