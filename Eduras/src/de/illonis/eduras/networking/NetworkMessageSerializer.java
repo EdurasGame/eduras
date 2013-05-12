@@ -13,6 +13,7 @@ import de.illonis.eduras.events.MovementEvent;
 import de.illonis.eduras.events.NetworkEvent;
 import de.illonis.eduras.events.ObjectFactoryEvent;
 import de.illonis.eduras.events.SetBooleanGameObjectAttributeEvent;
+import de.illonis.eduras.events.SetGameModeEvent;
 import de.illonis.eduras.events.SetIntegerGameObjectAttributeEvent;
 import de.illonis.eduras.events.SetItemSlotEvent;
 import de.illonis.eduras.events.SetOwnerEvent;
@@ -176,6 +177,11 @@ public class NetworkMessageSerializer {
 			MatchEndEvent matchEndEvent = (MatchEndEvent) gameEvent;
 			serializedEvent = buildEventString(matchEndEvent,
 					matchEndEvent.getWinnerId());
+			break;
+		case SET_GAMEMODE:
+			SetGameModeEvent setGameMode = (SetGameModeEvent) gameEvent;
+			serializedEvent = buildEventString(setGameMode,
+					setGameMode.getNewMode());
 			break;
 		default:
 			throw new MessageNotSupportedException(gameEvent.getType(),
