@@ -69,6 +69,9 @@ public class CameraMouseListener extends MouseAdapter {
 		running = false;
 	}
 
+	/**
+	 * Starts camera mouse listener.
+	 */
 	public void start() {
 		running = true;
 		dx = dy = 0;

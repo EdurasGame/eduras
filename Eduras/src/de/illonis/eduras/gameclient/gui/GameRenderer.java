@@ -12,11 +12,13 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.concurrent.ConcurrentHashMap;
 
+import de.illonis.eduras.exceptions.ObjectNotFoundException;
 import de.illonis.eduras.gameclient.TooltipHandler;
 import de.illonis.eduras.gameclient.gui.guielements.ItemTooltip;
 import de.illonis.eduras.gameclient.gui.guielements.RenderedGuiObject;
 import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.items.Item;
+import de.illonis.eduras.logger.EduLog;
 import de.illonis.eduras.logicabstraction.InformationProvider;
 import de.illonis.eduras.math.BasicMath;
 import de.illonis.eduras.math.Vector2D;
@@ -110,9 +112,19 @@ public class GameRenderer implements TooltipHandler {
 		}
 		// clear image
 		clear(width, height);
+		adjustCamera();
 		drawMap();
 		drawObjects();
 		drawGui();
+	}
+
+	private void adjustCamera() {
+		try {
+			Player p = getClientPlayer();
+			camera.centerAt(p.getDrawX(), p.getDrawY());
+		} catch (ObjectNotFoundException e) {
+			EduLog.passException(e);
+		}
 	}
 
 	/**
@@ -190,7 +202,6 @@ public class GameRenderer implements TooltipHandler {
 	 * Draws a small red border where map bounds are.
 	 */
 	private void drawMap() {
-		mapGraphics.setColor(Color.red);
 		Rectangle r = mapSize.getBounds();
 		r.x -= camera.x;
 		r.y -= camera.y;
@@ -401,6 +412,10 @@ public class GameRenderer implements TooltipHandler {
 	 */
 	double getCurrentScale() {
 		return scale;
+	}
+
+	private Player getClientPlayer() throws ObjectNotFoundException {
+		return gui.getInfos().getPlayer();
 	}
 
 }

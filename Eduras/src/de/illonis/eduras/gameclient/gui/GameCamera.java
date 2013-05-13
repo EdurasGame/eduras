@@ -21,7 +21,20 @@ public class GameCamera extends Rectangle {
 	 * 
 	 * @author illonis
 	 */
-	public void reset() {
+	void reset() {
 		setLocation(0, 0);
 	}
+
+	/**
+	 * Centers camera to given point.
+	 * 
+	 * @param newX
+	 *            x coordinate of new center.
+	 * @param newY
+	 *            y coordinate of new center.
+	 */
+	void centerAt(int newX, int newY) {
+		setLocation(newX - width / 2, newY - height / 2);
+	}
+
 }
