@@ -327,8 +327,8 @@ public final class EduLog {
 	 *            exception to log.
 	 */
 	public static void passException(Exception e) {
-		LogEntry entry = new LogEntry(Level.SEVERE, e.getMessage(),
-				e.getStackTrace());
+		LogEntry entry = new LogEntry(Level.SEVERE, e.getClass()
+				.getSimpleName() + ": " + e.getMessage(), e.getStackTrace());
 		getInstance().append(entry);
 	}
 
