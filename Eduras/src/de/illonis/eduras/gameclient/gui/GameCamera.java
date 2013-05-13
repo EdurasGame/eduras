@@ -11,9 +11,15 @@ import java.awt.Rectangle;
 public class GameCamera extends Rectangle {
 
 	private static final long serialVersionUID = 1L;
+	private double scale;
 
 	GameCamera() {
 		reset();
+		scale = 1;
+	}
+
+	void setScale(double scale) {
+		this.scale = scale;
 	}
 
 	/**
@@ -34,7 +40,8 @@ public class GameCamera extends Rectangle {
 	 *            y coordinate of new center.
 	 */
 	void centerAt(int newX, int newY) {
-		setLocation(newX - width / 2, newY - height / 2);
+		setLocation((int) Math.round(newX - (width / scale) / 2),
+				(int) Math.round(newY - (height / scale) / 2));
 	}
 
 }

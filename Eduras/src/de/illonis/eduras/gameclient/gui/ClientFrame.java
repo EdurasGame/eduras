@@ -140,6 +140,7 @@ public class ClientFrame extends JFrame implements NetworkEventReactor,
 	 * 
 	 */
 	private void notifyGuiSizeChanged() {
+
 		userInterface.onGuiSizeChanged(gamePanel.getWidth(),
 				gamePanel.getHeight());
 	}
@@ -154,7 +155,7 @@ public class ClientFrame extends JFrame implements NetworkEventReactor,
 		@Override
 		public void componentResized(ComponentEvent e) {
 			super.componentResized(e);
-			camera.setSize(gamePanel.getWidth(), gamePanel.getHeight());
+
 			EduLog.fine("[GUI] Size changed. New size: " + getWidth() + ", "
 					+ getHeight());
 			notifyGuiSizeChanged();

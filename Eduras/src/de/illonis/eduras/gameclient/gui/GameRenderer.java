@@ -109,6 +109,8 @@ public class GameRenderer implements TooltipHandler {
 		if (mapImage == null || mapGraphics == null || guiImage == null
 				|| guiGraphics == null || width != mapImage.getWidth()) {
 			createGraphics(width, height);
+			camera.setSize(width, height);
+			camera.setScale(scale);
 		}
 		// clear image
 		clear(width, height);
@@ -121,7 +123,9 @@ public class GameRenderer implements TooltipHandler {
 	private void adjustCamera() {
 		try {
 			Player p = getClientPlayer();
-			camera.centerAt(p.getDrawX(), p.getDrawY());
+			Vector2D pos = p.getPositionVector().copy();
+
+			camera.centerAt((int) pos.getX(), (int) pos.getY());
 		} catch (ObjectNotFoundException e) {
 			EduLog.passException(e);
 		}
@@ -141,6 +145,7 @@ public class GameRenderer implements TooltipHandler {
 		displayImage = new BufferedImage(width, height,
 				BufferedImage.TYPE_INT_RGB);
 		scale = calculateScale(width, height);
+
 		bothGraphics = (Graphics2D) displayImage.getGraphics();
 		bothGraphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
 				RenderingHints.VALUE_ANTIALIAS_ON);
@@ -202,7 +207,7 @@ public class GameRenderer implements TooltipHandler {
 	 * Draws a small red border where map bounds are.
 	 */
 	private void drawMap() {
-		Rectangle r = mapSize.getBounds();
+		Rectangle r = new Rectangle(mapSize.getBounds());
 		r.x -= camera.x;
 		r.y -= camera.y;
 		mapGraphics.setColor(Color.BLUE);
