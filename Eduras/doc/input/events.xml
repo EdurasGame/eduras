@@ -328,6 +328,20 @@
 						<entry>clientName</entry>
 						<entry>clientId</entry>
 					</row>
+					<row>
+						<entry>GAME_READY</entry>
+						<entry>204</entry>
+						<entry>This event is triggered locally on client to notify that all data has been loaded.</entry>
+						<entry>-</entry>
+						<entry>-</entry>
+						<entry>-</entry>
+					</row>
+					<row>
+						<entry>CONNECTION_QUIT</entry>
+						<entry>205</entry>
+						<entry>This event is sent from client when user closes client.</entry>
+						<entry>clientId</entry>
+					</row>
 				</tbody>
 			</tgroup>
 		</table>
