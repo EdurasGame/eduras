@@ -3,9 +3,13 @@ package de.illonis.eduras.gameclient.gui;
 import java.awt.AlphaComposite;
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.GraphicsConfiguration;
+import java.awt.GraphicsDevice;
+import java.awt.GraphicsEnvironment;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.RenderingHints;
+import java.awt.Transparency;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -138,16 +142,26 @@ public class GameRenderer implements TooltipHandler {
 	 *            graphics height.
 	 */
 	private void createGraphics(int width, int height) {
-		mapImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
-		guiImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
-		displayImage = new BufferedImage(width, height,
-				BufferedImage.TYPE_INT_RGB);
+		// mapImage = new BufferedImage(width, height,
+		// BufferedImage.TYPE_INT_RGB);
+
+		GraphicsEnvironment env = GraphicsEnvironment
+				.getLocalGraphicsEnvironment();
+		GraphicsDevice device = env.getDefaultScreenDevice();
+		GraphicsConfiguration config = device.getDefaultConfiguration();
+
+		mapImage = config.createCompatibleImage(width, height,
+				Transparency.OPAQUE);
+		guiImage = config.createCompatibleImage(width, height,
+				Transparency.TRANSLUCENT);
+		displayImage = config.createCompatibleImage(width, height,
+				Transparency.OPAQUE);
+
 		scale = calculateScale(width, height);
 
 		bothGraphics = (Graphics2D) displayImage.getGraphics();
 		bothGraphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
 				RenderingHints.VALUE_ANTIALIAS_ON);
-
 		mapGraphics = (Graphics2D) mapImage.getGraphics();
 		mapGraphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
 				RenderingHints.VALUE_ANTIALIAS_ON);
