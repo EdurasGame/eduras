@@ -8,6 +8,8 @@ import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.util.Vector;
 import java.util.logging.Level;
 
@@ -94,7 +96,7 @@ public class EdurasClient {
 		panel.add(windowPanel, BorderLayout.NORTH);
 		panel.add(fullPanel, BorderLayout.CENTER);
 
-		JButton okButton = new JButton("Start");
+		final JButton okButton = new JButton("Start");
 
 		JLabel currentRes = new JLabel();
 		fullPanel.add(currentRes, BorderLayout.CENTER);
@@ -140,6 +142,14 @@ public class EdurasClient {
 				cf.dispose();
 			}
 		});
+		okButton.addKeyListener(new KeyAdapter() {
+
+			@Override
+			public void keyPressed(KeyEvent evt) {
+				if (evt.getKeyCode() == KeyEvent.VK_ENTER)
+					okButton.doClick();
+			}
+		});
 		currentMode = graphicsEnvironment.getDefaultScreenDevice()
 				.getDisplayMode();
 		comboBox.setSelectedItem(currentMode);
@@ -151,5 +161,6 @@ public class EdurasClient {
 		cf.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		cf.setLocationRelativeTo(null);
 		cf.setVisible(true);
+		okButton.requestFocus();
 	}
 }
