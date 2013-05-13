@@ -34,7 +34,7 @@ public class ClientFrame extends JFrame implements NetworkEventReactor,
 	private final static String LOGINPANEL = "Login Card";
 	private final static String CONNECTPANEL = "Connect Card";
 	private final static String GAMEPANEL = "Game Card";
-	private final GameClient client;
+	protected final GameClient client;
 	private GamePanel gamePanel;
 	private UserInterface userInterface;
 	private final GameCamera camera;
@@ -183,10 +183,12 @@ public class ClientFrame extends JFrame implements NetworkEventReactor,
 	}
 
 	@Override
-	public void onDisconnect() {
-		gamePanel.stopRendering();
-		cml.stop();
-		dispose();
+	public void onDisconnect(int clientId) {
+		if (clientId == client.getOwnerID()) {
+			gamePanel.stopRendering();
+			cml.stop();
+			dispose();
+		}
 	}
 
 	@Override

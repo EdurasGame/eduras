@@ -52,8 +52,9 @@ public class FullScreenClientFrame extends ClientFrame {
 	}
 
 	@Override
-	public void onDisconnect() {
-		device.setDisplayMode(oldDisplayMode);
-		super.onDisconnect();
+	public void onDisconnect(int clientId) {
+		if (clientId == client.getOwnerID())
+			device.setDisplayMode(oldDisplayMode);
+		super.onDisconnect(clientId);
 	}
 }

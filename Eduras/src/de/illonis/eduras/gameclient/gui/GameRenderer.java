@@ -123,9 +123,7 @@ public class GameRenderer implements TooltipHandler {
 	private void adjustCamera() {
 		try {
 			Player p = getClientPlayer();
-			Vector2D pos = p.getPositionVector().copy();
-
-			camera.centerAt((int) pos.getX(), (int) pos.getY());
+			camera.centerAt(p.getDrawX(), p.getDrawY());
 		} catch (ObjectNotFoundException e) {
 			EduLog.passException(e);
 		}

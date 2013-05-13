@@ -68,9 +68,9 @@ public class ClientReceiver extends Thread {
 				}
 			} catch (IOException e) {
 				connectionAvailable = false;
-				EduLog.error("Connection to server closed.");
-				p.interrupt();
+				EduLog.error("Connection to server closed. See next exception.");
 				EduLog.passException(e);
+				p.interrupt();
 			}
 		}
 	}

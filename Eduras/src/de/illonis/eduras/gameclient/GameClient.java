@@ -166,9 +166,9 @@ public class GameClient implements GuiClickReactor, NetworkEventReactor,
 	}
 
 	@Override
-	public void onDisconnect() {
-		EduLog.info("Disconnected");
-		frame.onDisconnect();
+	public void onDisconnect(int clientId) {
+		EduLog.info("Disconnected: " + clientId);
+		frame.onDisconnect(clientId);
 	}
 
 	/**
@@ -275,7 +275,7 @@ public class GameClient implements GuiClickReactor, NetworkEventReactor,
 				JOptionPane.YES_NO_OPTION);
 
 		if (result == JOptionPane.YES_OPTION) {
-			onDisconnect();
+			nwm.notifyDisconnect();
 		}
 	}
 

@@ -6,6 +6,7 @@ import java.net.InetSocketAddress;
 import java.net.Socket;
 
 import de.illonis.eduras.events.ConnectionAbortedEvent;
+import de.illonis.eduras.events.ConnectionQuitEvent;
 import de.illonis.eduras.events.NetworkEvent;
 import de.illonis.eduras.exceptions.ConnectionLostException;
 import de.illonis.eduras.interfaces.GameLogicInterface;
@@ -112,13 +113,22 @@ public class Client {
 		this.networkEventListener = listener;
 	}
 
+	/**
+	 * Invokes connection lost action.
+	 */
 	public void connectionLost() {
 		NetworkEvent ev = new ConnectionAbortedEvent(ownerId);
 		networkEventListener.onNetworkEventAppeared(ev);
 		receiver.interrupt();
 	}
 
+	/**
+	 * Invokes disconnect action.
+	 */
 	public void disconnect() {
+		NetworkEvent ev = new ConnectionQuitEvent(ownerId);
+		networkEventListener.onNetworkEventAppeared(ev);
+
 		receiver.interrupt();
 		logic.onShutdown();
 		if (socket != null)

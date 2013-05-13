@@ -23,15 +23,17 @@ public interface NetworkEventReactor {
 	 * when connection closed gracefully.
 	 * 
 	 * @param client
-	 *            the client that disconnected.
+	 *            the client that lost connection.
 	 */
 	void onConnectionLost(int client);
 
 	/**
-	 * Indicates that client wants to disconnect. Write your
-	 * disconnect-procedure here!
+	 * Indicates that a client has disconnected from server.
+	 * 
+	 * @param client
+	 *            the client that quit session.
 	 */
-	void onDisconnect();
+	void onDisconnect(int client);
 
 	/**
 	 * Indicates that the player object that is assigned to this client was

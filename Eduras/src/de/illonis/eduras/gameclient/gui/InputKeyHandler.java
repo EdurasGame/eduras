@@ -152,7 +152,7 @@ public class InputKeyHandler extends KeyAdapter {
 			client.itemUsed(5);
 			return;
 		case EXIT_CLIENT:
-			client.onDisconnect();
+			client.getNetworkManager().notifyDisconnect();
 			return;
 
 		default:

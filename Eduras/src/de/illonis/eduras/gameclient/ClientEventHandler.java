@@ -2,6 +2,7 @@ package de.illonis.eduras.gameclient;
 
 import de.illonis.eduras.events.ConnectionAbortedEvent;
 import de.illonis.eduras.events.ConnectionEstablishedEvent;
+import de.illonis.eduras.events.ConnectionQuitEvent;
 import de.illonis.eduras.events.NetworkEvent;
 import de.illonis.eduras.interfaces.NetworkEventListener;
 
@@ -33,6 +34,10 @@ public class ClientEventHandler implements NetworkEventListener {
 			break;
 		case GAME_READY:
 			reactor.onGameReady();
+			break;
+		case CONNECTION_QUIT:
+			ConnectionQuitEvent qe = (ConnectionQuitEvent) event;
+			reactor.onDisconnect(qe.getClient());
 			break;
 		case NO_EVENT:
 			break;
