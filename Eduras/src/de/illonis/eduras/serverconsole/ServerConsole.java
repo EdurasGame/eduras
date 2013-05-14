@@ -61,14 +61,14 @@ public class ServerConsole implements Runnable {
 			throw new NoConsoleException();
 		console = System.console();
 		commands = new HashMap<String, ConsoleCommand>();
+		// init help command
 		commands.put(HELP_COMMAND, new ConsoleCommand(HELP_COMMAND,
 				HELP_DESCRIPTION) {
 
 			@Override
-			public void onCommand(String[] args, ServerConsole console,
-					ConsoleEventTriggerer triggerer) {
+			public void onCommand(String[] args, ServerConsole c,
+					ConsoleEventTriggerer t) {
 				listCommands();
-				return;
 			}
 		});
 		instance = this;
@@ -249,7 +249,7 @@ public class ServerConsole implements Runnable {
 	}
 
 	/**
-	 * Prints given text to console.
+	 * Prints given text line to console.
 	 * 
 	 * @param text
 	 *            text to print.
