@@ -15,7 +15,7 @@ public interface CommandHandler {
 	 * 
 	 * @param args
 	 *            command with args. args[0] is the command and args[1-n] are
-	 *            arguments.
+	 *            arguments as strings.
 	 * 
 	 * @param console
 	 *            console that triggered command. Use this to print output on.

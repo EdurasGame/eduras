@@ -1,6 +1,7 @@
 package de.illonis.eduras.serverconsole.commands;
 
 import de.illonis.eduras.logic.ConsoleEventTriggerer;
+import de.illonis.eduras.serverconsole.NoConsoleException;
 import de.illonis.eduras.serverconsole.ServerConsole;
 
 /**
@@ -20,6 +21,10 @@ public class ShutdownCommand extends ConsoleCommand {
 	public void onCommand(String[] args, ServerConsole console,
 			ConsoleEventTriggerer triggerer) {
 		console.println("Shutting server down...");
+		try {
+			ServerConsole.stop();
+		} catch (NoConsoleException e) {
+		}
 		triggerer.shutDown();
 	}
 }

@@ -23,7 +23,7 @@ public abstract class ConsoleCommand implements CommandHandler {
 	 * command to console to make it available.
 	 * 
 	 * @param command
-	 *            console command.
+	 *            the console command that must be typed to call this command.
 	 * @param description
 	 *            command description. Command and its arguments should be
 	 *            explained here.

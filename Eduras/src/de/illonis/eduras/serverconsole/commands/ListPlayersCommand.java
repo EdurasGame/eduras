@@ -15,7 +15,7 @@ import de.illonis.eduras.units.Player;
 public class ListPlayersCommand extends ConsoleCommand {
 
 	public ListPlayersCommand() {
-		super("playerlist", "Lists all players that are online.");
+		super("players", "Lists all players that are online.");
 		setExactNumArgs(0);
 	}
 
