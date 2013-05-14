@@ -45,7 +45,7 @@ public abstract class ConsoleCommand implements CommandHandler {
 	 * 
 	 * @see #setMaximumNumArgs(int)
 	 */
-	protected void setMinimumNumArgs(int minArgs) {
+	protected final void setMinimumNumArgs(int minArgs) {
 		minimumArguments = Math.min(0, minArgs);
 		if (minimumArguments > maximumArguments)
 			maximumArguments = minimumArguments;
@@ -61,7 +61,7 @@ public abstract class ConsoleCommand implements CommandHandler {
 	 *            to minimum value. Otherwise, it will be set to minimum value.
 	 * @see #setMinimumNumArgs(int)
 	 */
-	protected void setMaximumNumArgs(int maxArgs) {
+	protected final void setMaximumNumArgs(int maxArgs) {
 		minimumArguments = Math.max(minimumArguments, maxArgs);
 	}
 
@@ -76,7 +76,7 @@ public abstract class ConsoleCommand implements CommandHandler {
 	 * @see #setMinimumNumArgs(int)
 	 * @see #setMaximumNumArgs(int)
 	 */
-	protected void setExactNumArgs(int numArgs) {
+	protected final void setExactNumArgs(int numArgs) {
 		minimumArguments = maximumArguments = numArgs;
 	}
 
@@ -85,7 +85,7 @@ public abstract class ConsoleCommand implements CommandHandler {
 	 * 
 	 * @return maximum arguments count.
 	 */
-	public int getMaximumArguments() {
+	public final int getMaximumArguments() {
 		return maximumArguments;
 	}
 
@@ -94,7 +94,7 @@ public abstract class ConsoleCommand implements CommandHandler {
 	 * 
 	 * @return minimum arguments count.
 	 */
-	public int getMinimumArguments() {
+	public final int getMinimumArguments() {
 		return minimumArguments;
 	}
 
@@ -103,7 +103,7 @@ public abstract class ConsoleCommand implements CommandHandler {
 	 * 
 	 * @return command name.
 	 */
-	public String getCommand() {
+	public final String getCommand() {
 		return command;
 	}
 
@@ -112,7 +112,7 @@ public abstract class ConsoleCommand implements CommandHandler {
 	 * 
 	 * @return command description.
 	 */
-	public String getDescription() {
+	public final String getDescription() {
 		return description;
 	}
 
@@ -124,7 +124,7 @@ public abstract class ConsoleCommand implements CommandHandler {
 	 * @return true if given argument count is in range of allowed argument
 	 *         counts.
 	 */
-	public boolean argumentCountMatches(int argCount) {
+	public final boolean argumentCountMatches(int argCount) {
 		return !(argCount < minimumArguments || argCount > maximumArguments);
 	}
 }

@@ -88,6 +88,7 @@ public class ServerConsole implements Runnable {
 
 	private void runMeAsync() {
 		thread = new Thread(this);
+		thread.setName("ServerConsole");
 		running = true;
 		thread.start();
 	}
