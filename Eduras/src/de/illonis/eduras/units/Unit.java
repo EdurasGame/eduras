@@ -42,6 +42,15 @@ public abstract class Unit extends MoveableGameObject {
 	}
 
 	/**
+	 * Fills health up to maximum health.
+	 * 
+	 * @author illonis
+	 */
+	public void resetHealth() {
+		health = maxHealth;
+	}
+
+	/**
 	 * Returns unit's current health.
 	 * 
 	 * @return current health.

@@ -1,7 +1,7 @@
-/**
- * 
- */
 package de.illonis.eduras.logic;
+
+import java.awt.Rectangle;
+import java.util.Random;
 
 import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.Map;
@@ -121,8 +121,10 @@ public class ServerEventTriggerer implements EventTriggerer {
 
 	@Override
 	public void setPositionOfObject(int objectId, Vector2D newPosition) {
-		// TODO Auto-generated method stub
-
+		MovementEvent e = new MovementEvent(GameEventNumber.SET_POS, objectId);
+		e.setNewXPos(newPosition.getX());
+		e.setNewYPos(newPosition.getY());
+		logic.onGameEventAppeared(e);
 	}
 
 	/**
@@ -191,17 +193,14 @@ public class ServerEventTriggerer implements EventTriggerer {
 
 	@Override
 	public void respawnPlayer(Player player) {
-		// TODO: This is an ugly way of resetting the health and position,
-		// change this.
-		this.removeObject(player.getId());
-		this.createObject(ObjectType.PLAYER, player.getOwner());
-
-		// TODO: It should be the client's part to get the name after a respawn.
-		// We have to change this as soon as the gui is told that a player was
-		// killed.
-		// (jme) When we don't remove and create the object, name doesn't have
-		// to be set again.
-		renamePlayer(player.getOwner(), player.getName());
+		// TODO: Fire a respawn event to client.
+		player.resetHealth();
+		Random r = new Random();
+		Rectangle m = gameInfo.getMap().getBounds();
+		int x = r.nextInt(m.width);
+		int y = r.nextInt(m.height);
+		setHealth(player.getId(), player.getHealth());
+		setPositionOfObject(player.getId(), new Vector2D(x, y));
 	}
 
 	@Override
