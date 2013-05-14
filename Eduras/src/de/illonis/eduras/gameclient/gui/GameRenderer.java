@@ -22,7 +22,6 @@ import de.illonis.eduras.gameclient.gui.guielements.ItemTooltip;
 import de.illonis.eduras.gameclient.gui.guielements.RenderedGuiObject;
 import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.items.Item;
-import de.illonis.eduras.logger.EduLog;
 import de.illonis.eduras.logicabstraction.InformationProvider;
 import de.illonis.eduras.math.BasicMath;
 import de.illonis.eduras.math.Vector2D;
@@ -129,7 +128,7 @@ public class GameRenderer implements TooltipHandler {
 			Player p = getClientPlayer();
 			camera.centerAt(p.getDrawX(), p.getDrawY());
 		} catch (ObjectNotFoundException e) {
-			EduLog.passException(e);
+			// EduLog.passException(e);
 		}
 	}
 

@@ -33,11 +33,13 @@ public class EventSender {
 	 * 
 	 * @param client
 	 *            The client to use.
+	 * @param logic
+	 *            The logic to use.
 	 */
-	EventSender(Client client) {
+	EventSender(Client client, GameLogicInterface logic) {
 
 		this.client = client;
-		this.logic = client.getLogic();
+		this.logic = logic;
 	}
 
 	/**

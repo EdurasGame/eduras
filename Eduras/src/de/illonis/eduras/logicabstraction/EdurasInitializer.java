@@ -44,7 +44,7 @@ public class EdurasInitializer {
 
 		settings = new Settings();
 
-		eventSender = new EventSender(client);
+		eventSender = new EventSender(client, logic);
 
 		informationProvider = new InformationProvider(logic, networkManager);
 

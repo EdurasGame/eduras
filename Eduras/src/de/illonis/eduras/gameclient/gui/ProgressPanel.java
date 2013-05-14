@@ -187,6 +187,7 @@ public class ProgressPanel extends JPanel implements ActionListener {
 		public Boolean doInBackground() {
 
 			t = new Thread(connector);
+			t.setName("Connector");
 			t.start();
 			int i = Client.CONNECT_TIMEOUT / 1000;
 			while (true) {

@@ -109,6 +109,14 @@ public class Client {
 		return logic;
 	}
 
+	/**
+	 * Sets the network event listener. This replaces any old listener.
+	 * 
+	 * @param listener
+	 *            the new listener.
+	 * 
+	 * @author illonis
+	 */
 	public void setNetworkEventListener(NetworkEventListener listener) {
 		this.networkEventListener = listener;
 	}
@@ -129,7 +137,8 @@ public class Client {
 		NetworkEvent ev = new ConnectionQuitEvent(ownerId);
 		networkEventListener.onNetworkEventAppeared(ev);
 
-		receiver.interrupt();
+		if (receiver != null)
+			receiver.interrupt();
 		logic.onShutdown();
 		if (socket != null)
 			try {

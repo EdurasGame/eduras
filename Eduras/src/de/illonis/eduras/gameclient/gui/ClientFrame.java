@@ -200,6 +200,7 @@ public class ClientFrame extends JFrame implements NetworkEventReactor,
 	private void loginAction() {
 		String clientName = loginPanel.getUserName();
 		client.setClientName(clientName);
+		client.setRole(loginPanel.getRole());
 		if (clientName.length() < 3)
 			return;
 

@@ -57,6 +57,7 @@ public class GameClient implements GuiClickReactor, NetworkEventReactor,
 	// private TooltipHandler tooltipHandler;
 
 	private String clientName;
+	private ClientRole role;
 
 	private enum ClickState {
 		DEFAULT, ITEM_SELECTED;
@@ -145,8 +146,7 @@ public class GameClient implements GuiClickReactor, NetworkEventReactor,
 		frame.onConnected(clientId); // pass to gui
 
 		try {
-			sendEvent(new InitInformationEvent(ClientRole.PLAYER, clientName,
-					clientId));
+			sendEvent(new InitInformationEvent(role, clientName, clientId));
 		} catch (WrongEventTypeException e) {
 			EduLog.passException(e);
 		} catch (MessageNotSupportedException e) {
@@ -398,5 +398,17 @@ public class GameClient implements GuiClickReactor, NetworkEventReactor,
 	public void onFocusLost() {
 		if (keyHandler != null)
 			keyHandler.releaseAllKeys();
+	}
+
+	/**
+	 * Sets the role of the client.
+	 * 
+	 * @param role
+	 *            new role.
+	 * 
+	 * @author illonis
+	 */
+	public void setRole(ClientRole role) {
+		this.role = role;
 	}
 }

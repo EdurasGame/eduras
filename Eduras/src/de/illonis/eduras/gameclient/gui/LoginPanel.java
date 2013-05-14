@@ -9,6 +9,7 @@ import java.net.UnknownHostException;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
@@ -19,6 +20,7 @@ import javax.swing.text.BadLocationException;
 
 import de.illonis.eduras.exceptions.InvalidValueEnteredException;
 import de.illonis.eduras.images.ImageFiler;
+import de.illonis.eduras.networking.ServerClient.ClientRole;
 
 /**
  * Displays login form.
@@ -32,6 +34,7 @@ public class LoginPanel extends JPanel implements ActionListener {
 	private JButton connectButton;
 	private JTextField userInput, hostInput;
 	private NumericTextField portInput;
+	private JComboBox<ClientRole> roleSelect;
 	private int port;
 	private String userName;
 	private InetAddress address;
@@ -49,28 +52,36 @@ public class LoginPanel extends JPanel implements ActionListener {
 	private void buildGui() {
 		JLabel title = new JLabel(ImageFiler.loadIcon("gui/login/logo.png"));
 		setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-		JPanel form = new JPanel(new GridLayout(4, 2, 5, 10));
+		JPanel form = new JPanel(new GridLayout(5, 2, 5, 10));
 		JLabel userLabel = new JLabel("Benutzername:");
+		JLabel roleLabel = new JLabel("Rolle:");
 		JLabel hostLabel = new JLabel("Server-Adresse:");
 		JLabel portLabel = new JLabel("Server-Port:");
 		userInput = new UserInputField();
 		hostInput = new JTextField();
 		portInput = new NumericTextField(5);
+		roleSelect = new JComboBox<ClientRole>(ClientRole.values());
 		userLabel.setHorizontalTextPosition(SwingConstants.RIGHT);
+		roleLabel.setHorizontalTextPosition(SwingConstants.RIGHT);
 		hostLabel.setHorizontalTextPosition(SwingConstants.RIGHT);
 		portLabel.setHorizontalTextPosition(SwingConstants.RIGHT);
 		userLabel.setAlignmentX(RIGHT_ALIGNMENT);
+		roleLabel.setAlignmentX(RIGHT_ALIGNMENT);
 		hostLabel.setAlignmentX(RIGHT_ALIGNMENT);
 		portLabel.setAlignmentX(RIGHT_ALIGNMENT);
 		userLabel.setHorizontalAlignment(JLabel.RIGHT);
+		roleLabel.setHorizontalAlignment(JLabel.RIGHT);
 		hostLabel.setHorizontalAlignment(JLabel.RIGHT);
 		portLabel.setHorizontalAlignment(JLabel.RIGHT);
 		userLabel.setLabelFor(userInput);
+		roleLabel.setLabelFor(roleSelect);
 		portLabel.setLabelFor(portInput);
 		hostLabel.setLabelFor(hostInput);
 		userInput.getDocument().addDocumentListener(new UserNameChecker());
 		form.add(userLabel);
 		form.add(userInput);
+		form.add(roleLabel);
+		form.add(roleSelect);
 		form.add(hostLabel);
 		form.add(hostInput);
 		form.add(portLabel);
@@ -114,6 +125,17 @@ public class LoginPanel extends JPanel implements ActionListener {
 	 */
 	public int getPort() {
 		return port;
+	}
+
+	/**
+	 * Returns the role that is selected by user.
+	 * 
+	 * @return selected role.
+	 * 
+	 * @author illonis
+	 */
+	public ClientRole getRole() {
+		return (ClientRole) roleSelect.getSelectedItem();
 	}
 
 	/**
