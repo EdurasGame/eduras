@@ -37,6 +37,7 @@ public class ServerSender extends Thread {
 	 */
 	public ServerSender(Buffer outputBuffer, Server server) {
 		this.outputBuffer = outputBuffer;
+		setName("ServerSender");
 		clients = new HashMap<Integer, ServerClient>();
 		this.server = server;
 		running = true;

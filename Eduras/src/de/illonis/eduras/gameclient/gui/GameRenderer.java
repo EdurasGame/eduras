@@ -254,6 +254,12 @@ public class GameRenderer implements TooltipHandler {
 					drawHealthBarFor((Unit) d);
 				}
 
+				if (d instanceof Player) {
+					Player player = (Player) d;
+					mapGraphics.drawString(player.getName(), player.getDrawX()
+							- camera.x, player.getDrawY() - camera.y);
+				}
+
 				// draws unit id next to unit for testing purpose
 				/*
 				 * dbg.drawString(d.getId() + "", d.getDrawX() - camera.x,
@@ -314,11 +320,6 @@ public class GameRenderer implements TooltipHandler {
 
 			drawPolygon((Polygon) objectShape, obj);
 
-			if (obj instanceof Player) {
-				Player player = (Player) obj;
-				mapGraphics.drawString(player.getName(), player.getDrawX()
-						- camera.x, player.getDrawY() - camera.y);
-			}
 		} else if (objectShape instanceof Circle) {
 			drawCircle((Circle) objectShape, obj);
 		}
@@ -391,16 +392,22 @@ public class GameRenderer implements TooltipHandler {
 	}
 
 	/**
-	 * Stopps rendering process.
+	 * Stops rendering process.
 	 */
 	void stopRendering() {
 		if (rendererThread != null)
 			rendererThread.stop();
 	}
 
+	/**
+	 * Starts rendering process by creating a new renderer thread. *
+	 * 
+	 * @author illonis
+	 */
 	void startRendering() {
 		rendererThread = new RenderThread(this);
 		Thread t = new Thread(rendererThread);
+		t.setName("RendererThread");
 		t.start();
 	}
 

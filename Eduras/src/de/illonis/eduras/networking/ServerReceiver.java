@@ -29,6 +29,7 @@ public class ServerReceiver extends Thread {
 	 */
 	public ServerReceiver(Server server, ServerClient client) {
 		this.server = server;
+		setName("ServerReceiver (Client " + client.getClientId() + ")");
 		this.inputBuffer = server.getInputBuffer();
 		this.client = client;
 	}
@@ -78,10 +79,11 @@ public class ServerReceiver extends Thread {
 		} catch (IOException e) {
 
 			// remove the correlated player from the game
-			server.handleClientDisconnect(client);
 
 			EduLog.error("[SERVER] Connection to client closed.");
 			EduLog.passException(e);
+		} finally {
+			server.handleClientDisconnect(client);
 		}
 	}
 

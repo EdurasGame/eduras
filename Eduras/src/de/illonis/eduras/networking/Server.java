@@ -220,6 +220,8 @@ public class Server {
 
 			if (initInfoEvent.getRole() == ClientRole.PLAYER) {
 				ServerReceiver sr = new ServerReceiver(this, client);
+				sr.setName("ServerReceiver (Client " + client.getClientId()
+						+ ")");
 				sr.start();
 				serverReceivers.put(client.getClientId(), sr);
 			}
@@ -257,6 +259,7 @@ public class Server {
 		private final ServerSocket server;
 
 		public ConnectionListener() throws IOException {
+			setName("ConnectionListener");
 			server = new ServerSocket(port);
 		}
 
@@ -374,6 +377,7 @@ public class Server {
 
 		for (ServerReceiver receiver : serverReceivers.values()) {
 			receiver.stopRunning();
+			receiver.interrupt();
 		}
 	}
 
