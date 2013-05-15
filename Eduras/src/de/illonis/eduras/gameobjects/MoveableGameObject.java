@@ -20,6 +20,7 @@ public abstract class MoveableGameObject extends GameObject implements Moveable 
 	 * @author illonis
 	 * 
 	 */
+	@SuppressWarnings("javadoc")
 	public static enum Direction {
 		LEFT, RIGHT, TOP, BOTTOM, TOPLEFT, TOPRIGHT, BOTTOMLEFT, BOTTOMRIGHT
 	}
@@ -45,6 +46,8 @@ public abstract class MoveableGameObject extends GameObject implements Moveable 
 	 * 
 	 * @param game
 	 *            game that contains this object.
+	 * @param id
+	 *            the object id.
 	 */
 	public MoveableGameObject(GameInformation game, int id) {
 		super(game, id);
@@ -89,6 +92,13 @@ public abstract class MoveableGameObject extends GameObject implements Moveable 
 		this.speedVector = speedVector;
 	}
 
+	/**
+	 * Returns the speed vector.
+	 * 
+	 * @return the speed vector.
+	 * 
+	 * @author illonis
+	 */
 	public Vector2D getSpeedVector() {
 		return speedVector;
 	}
@@ -120,6 +130,8 @@ public abstract class MoveableGameObject extends GameObject implements Moveable 
 	 *            The target position.
 	 * @return Returns the objects position after the move. Note that the
 	 *         objects new position won't be set.
+	 * @throws MapBorderReachedException
+	 *             if object reached map border.
 	 */
 	public Vector2D checkCollision(Vector2D target)
 			throws MapBorderReachedException {

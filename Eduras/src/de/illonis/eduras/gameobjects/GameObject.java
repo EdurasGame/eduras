@@ -37,6 +37,8 @@ public abstract class GameObject implements Comparable<GameObject> {
 	 * 
 	 * @param game
 	 *            game that contains this object.
+	 * @param id
+	 *            the object id.
 	 */
 	public GameObject(GameInformation game, int id) {
 		this.game = game;

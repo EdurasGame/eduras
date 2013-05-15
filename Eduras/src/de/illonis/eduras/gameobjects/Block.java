@@ -28,6 +28,12 @@ public abstract class Block extends GameObject {
 	 *            The x position of the block.
 	 * @param yPos
 	 *            The y position of the block.
+	 * @param width
+	 *            the width of the block
+	 * @param height
+	 *            the height of the block
+	 * @param id
+	 *            the id of the object.
 	 * @throws ShapeVerticesNotApplicableException
 	 *             Thrown if the given position values do not apply.
 	 */
@@ -48,6 +54,12 @@ public abstract class Block extends GameObject {
 	 * 
 	 * @param game
 	 *            The game information.
+	 * @param width
+	 *            the width of the block.
+	 * @param height
+	 *            the height of the block.
+	 * @param id
+	 *            the object id.
 	 * @throws ShapeVerticesNotApplicableException
 	 *             Thrown if the given position values do not apply.
 	 */
@@ -62,16 +74,8 @@ public abstract class Block extends GameObject {
 				new Vector2D(width / 2, -height / 2)));
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * de.illonis.eduras.GameObject#onCollision(de.illonis.eduras.GameObject)
-	 */
 	@Override
 	public void onCollision(GameObject collidingObject) {
-
 		// do nothing
-
 	}
 }
