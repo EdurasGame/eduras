@@ -1,10 +1,8 @@
-/**
- * 
- */
 package de.illonis.eduras.logic;
 
 import de.illonis.eduras.ObjectFactory.ObjectType;
 import de.illonis.eduras.gamemodes.GameMode;
+import de.illonis.eduras.items.Item;
 import de.illonis.eduras.math.Vector2D;
 import de.illonis.eduras.units.Player;
 
@@ -107,4 +105,7 @@ public class ClientEventTriggerer implements EventTriggerer {
 
 	}
 
+	@Override
+	public void changeItemSlot(int slot, int player, Item newItem) {
+	}
 }

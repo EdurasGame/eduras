@@ -2,6 +2,7 @@ package de.illonis.eduras.logic;
 
 import de.illonis.eduras.ObjectFactory.ObjectType;
 import de.illonis.eduras.gamemodes.GameMode;
+import de.illonis.eduras.items.Item;
 import de.illonis.eduras.math.Vector2D;
 import de.illonis.eduras.units.Player;
 
@@ -68,6 +69,20 @@ public interface EventTriggerer {
 	 *            player that looted
 	 */
 	void lootItem(int objectId, int playerId);
+
+	/**
+	 * Changes an itemslot of a specific player.
+	 * 
+	 * @param slot
+	 *            the item slot that changed.
+	 * @param player
+	 *            the player, whose item slot changed.
+	 * @param newItem
+	 *            the new item at given slot. Use null to clear slot.
+	 * 
+	 * @author illonis
+	 */
+	void changeItemSlot(int slot, int player, Item newItem);
 
 	/**
 	 * Moves a specific object to a new position instantly.

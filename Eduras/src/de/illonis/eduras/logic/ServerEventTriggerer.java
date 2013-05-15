@@ -15,11 +15,13 @@ import de.illonis.eduras.events.MovementEvent;
 import de.illonis.eduras.events.ObjectFactoryEvent;
 import de.illonis.eduras.events.SetGameModeEvent;
 import de.illonis.eduras.events.SetIntegerGameObjectAttributeEvent;
+import de.illonis.eduras.events.SetItemSlotEvent;
 import de.illonis.eduras.exceptions.InvalidNameException;
 import de.illonis.eduras.exceptions.MessageNotSupportedException;
 import de.illonis.eduras.gamemodes.GameMode;
 import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.interfaces.GameLogicInterface;
+import de.illonis.eduras.items.Item;
 import de.illonis.eduras.logger.EduLog;
 import de.illonis.eduras.math.Vector2D;
 import de.illonis.eduras.networking.Buffer;
@@ -193,6 +195,10 @@ public class ServerEventTriggerer implements EventTriggerer {
 
 	@Override
 	public void respawnPlayer(Player player) {
+		// TODO: This should be dependend on game mode:
+		for (int i = 0; i < 6; i++)
+			changeItemSlot(i, player.getId(), null);
+
 		// TODO: Fire a respawn event to client.
 		player.resetHealth();
 		Random r = new Random();
@@ -268,13 +274,28 @@ public class ServerEventTriggerer implements EventTriggerer {
 		for (Player player : gameInfo.getPlayers()) {
 			respawnPlayer(player);
 		}
-
 	}
 
 	public void removeAllNonPlayers() {
 		for (GameObject oldObject : gameInfo.getObjects().values()) {
 			if (!(oldObject instanceof Player))
 				removeObject(oldObject.getId());
+		}
+	}
+
+	@Override
+	public void changeItemSlot(int slot, int player, Item newItem) {
+		int objectId;
+		if (newItem == null)
+			objectId = -1;
+		else
+			objectId = newItem.getId();
+		SetItemSlotEvent e = new SetItemSlotEvent(objectId, player, slot);
+		logic.onGameEventAppeared(e);
+		try {
+			outputBuffer.append(NetworkMessageSerializer.serialize(e));
+		} catch (MessageNotSupportedException e1) {
+			e1.printStackTrace();
 		}
 	}
 }

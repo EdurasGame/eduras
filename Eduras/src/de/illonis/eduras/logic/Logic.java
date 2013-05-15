@@ -60,6 +60,7 @@ public class Logic implements GameLogicInterface {
 		objectFactory = new ObjectFactory(this);
 		lgw = new LogicGameWorker(currentGame, listenerList);
 		Thread gameWorker = new Thread(lgw);
+		gameWorker.setName("LogicGameWorker");
 		gameWorker.start();
 	}
 
