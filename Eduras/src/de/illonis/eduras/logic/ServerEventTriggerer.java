@@ -4,7 +4,6 @@ import java.awt.Rectangle;
 import java.util.Random;
 
 import de.illonis.eduras.GameInformation;
-import de.illonis.eduras.Map;
 import de.illonis.eduras.ObjectFactory.ObjectType;
 import de.illonis.eduras.events.ClientRenameEvent;
 import de.illonis.eduras.events.GameEvent.GameEventNumber;
@@ -23,6 +22,7 @@ import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.interfaces.GameLogicInterface;
 import de.illonis.eduras.items.Item;
 import de.illonis.eduras.logger.EduLog;
+import de.illonis.eduras.maps.Map;
 import de.illonis.eduras.math.Vector2D;
 import de.illonis.eduras.networking.Buffer;
 import de.illonis.eduras.networking.NetworkMessageSerializer;

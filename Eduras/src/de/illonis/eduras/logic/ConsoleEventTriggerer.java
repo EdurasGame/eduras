@@ -2,13 +2,13 @@ package de.illonis.eduras.logic;
 
 import java.util.Collection;
 
-import de.illonis.eduras.ManyBlocks;
-import de.illonis.eduras.Map;
-import de.illonis.eduras.SimpleMap;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
 import de.illonis.eduras.gamemodes.Deathmatch;
 import de.illonis.eduras.gamemodes.GameMode;
 import de.illonis.eduras.gamemodes.NoGameMode;
+import de.illonis.eduras.maps.ManyBlocks;
+import de.illonis.eduras.maps.Map;
+import de.illonis.eduras.maps.SimpleMap;
 import de.illonis.eduras.networking.Server;
 import de.illonis.eduras.units.Player;
 

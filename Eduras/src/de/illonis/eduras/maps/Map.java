@@ -1,4 +1,4 @@
-package de.illonis.eduras;
+package de.illonis.eduras.maps;
 
 import java.awt.Rectangle;
 import java.util.Collection;

@@ -1,4 +1,4 @@
-package de.illonis.eduras;
+package de.illonis.eduras.maps;
 
 import java.util.LinkedList;
 
