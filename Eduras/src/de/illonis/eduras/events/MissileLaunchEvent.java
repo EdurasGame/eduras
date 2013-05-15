@@ -1,6 +1,3 @@
-/**
- * 
- */
 package de.illonis.eduras.events;
 
 import de.illonis.eduras.ObjectFactory.ObjectType;
@@ -32,6 +29,8 @@ public class MissileLaunchEvent extends OwnerGameEvent {
 	 *            The speedvector
 	 * @param owner
 	 *            the id of the owner
+	 * @param id
+	 *            the id of the missile.
 	 */
 	public MissileLaunchEvent(ObjectType objectType, Vector2D position,
 			Vector2D speedVector, int owner, int id) {

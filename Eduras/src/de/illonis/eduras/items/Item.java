@@ -31,6 +31,8 @@ public abstract class Item extends GameObject {
 	 *            item type.
 	 * @param gi
 	 *            game information.
+	 * @param id
+	 *            the object id of the item.
 	 */
 	public Item(ObjectType type, GameInformation gi, int id) {
 		super(gi, id);

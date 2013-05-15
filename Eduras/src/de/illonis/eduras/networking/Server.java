@@ -401,11 +401,22 @@ public class Server {
 
 	/**
 	 * Returns the server's logic
+	 * 
+	 * @return the logic.
 	 */
 	public GameLogicInterface getLogic() {
 		return logic;
 	}
 
+	/**
+	 * Returns the serverclient that handles given client.
+	 * 
+	 * @param ownerId
+	 *            id of client.
+	 * @return the client with given id.
+	 * 
+	 * @author illonis
+	 */
 	public ServerClient getClientById(int ownerId) {
 		return serverSender.getClientById(ownerId);
 	}

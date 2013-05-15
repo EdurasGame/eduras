@@ -15,6 +15,9 @@ public abstract class ObjectEvent extends GameEvent {
 	 * Creates a new ObjectEvent belonging to the object identified by the given
 	 * id.
 	 * 
+	 * @param type
+	 *            the event type.
+	 * 
 	 * @param id
 	 *            Id of the associated object.
 	 */
@@ -31,9 +34,4 @@ public abstract class ObjectEvent extends GameEvent {
 	public int getObjectId() {
 		return objectId;
 	}
-
-	public void setId(int id) {
-		this.objectId = id;
-	}
-
 }

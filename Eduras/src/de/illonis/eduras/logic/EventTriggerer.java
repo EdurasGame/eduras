@@ -3,6 +3,7 @@ package de.illonis.eduras.logic;
 import de.illonis.eduras.ObjectFactory.ObjectType;
 import de.illonis.eduras.gamemodes.GameMode;
 import de.illonis.eduras.items.Item;
+import de.illonis.eduras.maps.Map;
 import de.illonis.eduras.math.Vector2D;
 import de.illonis.eduras.units.Player;
 
@@ -144,6 +145,16 @@ public interface EventTriggerer {
 	 * @param remainingTime
 	 */
 	void setRemainingTime(long remainingTime);
+
+	/**
+	 * Changes current map to given map.
+	 * 
+	 * @param map
+	 *            new map.
+	 * 
+	 * @author illonis
+	 */
+	void changeMap(Map map);
 
 	/**
 	 * Changes the gamemode to newMode.

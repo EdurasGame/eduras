@@ -242,6 +242,7 @@ public class NetworkMessageSerializer {
 	 *            delimiter between strings.
 	 * @param strings
 	 *            strings to concatenate.
+	 * @return a string representing all strings delimited with given delimiter.
 	 */
 	public static String concatenateWithDel(String delimiter, Object... strings) {
 		if (strings.length <= 0)

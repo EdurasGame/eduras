@@ -22,6 +22,12 @@ import de.illonis.eduras.math.Vector2D;
 import de.illonis.eduras.shapes.ObjectShape;
 import de.illonis.eduras.units.Player;
 
+/**
+ * Holds all game information of the current game.
+ * 
+ * @author illonis
+ * 
+ */
 public class GameInformation {
 	private final ConcurrentHashMap<Integer, GameObject> objects;
 	private final ConcurrentHashMap<Integer, Player> players;
@@ -29,6 +35,9 @@ public class GameInformation {
 	private EventTriggerer eventTriggerer;
 	private GameSettings gameSettings;
 
+	/**
+	 * Creates a new game information object with emtpy object lists.
+	 */
 	public GameInformation() {
 		objects = new ConcurrentHashMap<Integer, GameObject>();
 		players = new ConcurrentHashMap<Integer, Player>();
@@ -46,6 +55,13 @@ public class GameInformation {
 		return eventTriggerer;
 	}
 
+	/**
+	 * Returns all players that are connected.
+	 * 
+	 * @return a list of players.
+	 * 
+	 * @author illonis
+	 */
 	public Collection<Player> getPlayers() {
 		return players.values();
 	}
@@ -273,6 +289,14 @@ public class GameInformation {
 		this.gameSettings = gameSettings;
 	}
 
+	/**
+	 * Sets map to given map.
+	 * 
+	 * @param map
+	 *            new map.
+	 * 
+	 * @author illonis
+	 */
 	public void setMap(Map map) {
 		this.map = map;
 

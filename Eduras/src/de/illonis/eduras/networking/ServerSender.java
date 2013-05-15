@@ -63,6 +63,8 @@ public class ServerSender extends Thread {
 	 * 
 	 * @param clientId
 	 *            The id of the client.
+	 * @param message
+	 *            the serialized message that should be sent.
 	 */
 	public void sendMessageToClient(int clientId, String message) {
 		PrintWriter pw = clients.get(clientId).getOutputStream();

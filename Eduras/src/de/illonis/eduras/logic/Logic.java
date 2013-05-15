@@ -53,6 +53,12 @@ public class Logic implements GameLogicInterface {
 	private final LogicGameWorker lgw;
 	private final ArrayList<GameEventListener> listenerList;
 
+	/**
+	 * Creates a new logic.
+	 * 
+	 * @param g
+	 *            information to use.
+	 */
 	public Logic(GameInformation g) {
 
 		this.currentGame = g;

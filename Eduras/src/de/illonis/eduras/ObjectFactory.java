@@ -31,6 +31,7 @@ public class ObjectFactory {
 	 * @author illonis
 	 * 
 	 */
+	@SuppressWarnings("javadoc")
 	public enum ObjectType {
 		PLAYER(1), YELLOWCIRCLE(2), SIMPLEMISSILE(3), ITEM_WEAPON_1(4), NO_OBJECT(
 				0), BIGBLOCK(5), SMALLCIRCLEDBLOCK(6);

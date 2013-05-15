@@ -21,7 +21,7 @@ import de.illonis.eduras.items.Usable;
 public class LogicGameWorker implements Runnable {
 
 	/**
-	 * Tells how much time shall be between two updates.
+	 * Tells how much time shall be between two updates in nanoseconds.
 	 */
 	private static final long TICKRATE = 15000000L;
 
@@ -34,6 +34,14 @@ public class LogicGameWorker implements Runnable {
 
 	private long lastUpdate;
 
+	/**
+	 * Creates a new logic game worker.
+	 * 
+	 * @param gameInfo
+	 *            information used.
+	 * @param listenerList
+	 *            listeners.
+	 */
 	public LogicGameWorker(GameInformation gameInfo,
 			ArrayList<GameEventListener> listenerList) {
 		this.gameInformation = gameInfo;

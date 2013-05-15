@@ -16,6 +16,7 @@ public abstract class GameEvent extends Event {
 	 * 
 	 * @author Florian Mai <florian.ren.mai@googlemail.com>
 	 */
+	@SuppressWarnings("javadoc")
 	public enum GameEventNumber {
 		INFORMATION_REQUEST(1), CLIENT_SETNAME(2), MOVE_LEFT_PRESSED(10), MOVE_RIGHT_PRESSED(
 				11), MOVE_UP_PRESSED(12), MOVE_DOWN_PRESSED(13), MOVE_LEFT_RELEASED(

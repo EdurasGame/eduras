@@ -8,5 +8,10 @@ package de.illonis.eduras.items;
  */
 public interface Lootable {
 
+	/**
+	 * Indicates a loot event.
+	 * 
+	 * @author illonis
+	 */
 	public void loot();
 }

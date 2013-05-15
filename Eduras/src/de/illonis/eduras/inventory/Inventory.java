@@ -13,6 +13,9 @@ import de.illonis.eduras.logger.EduLog;
  */
 public class Inventory {
 
+	/**
+	 * Maximum number of items that can be stored.
+	 */
 	public final static int MAX_CAPACITY = 6;
 
 	private int gold;
@@ -113,6 +116,8 @@ public class Inventory {
 	 *            item to buy.
 	 * @throws InventoryIsFullException
 	 *             when inventory is full.
+	 * @throws NotEnoughMoneyException
+	 *             if user has not enough money to buy this item.
 	 */
 	public synchronized void buy(Item item) throws InventoryIsFullException,
 			NotEnoughMoneyException {

@@ -4,6 +4,12 @@ import java.util.HashMap;
 
 import de.illonis.eduras.units.Player;
 
+/**
+ * Holds all statistics data.
+ * 
+ * @author illonis
+ * 
+ */
 public class Statistic {
 
 	/**
@@ -11,6 +17,9 @@ public class Statistic {
 	 */
 	private HashMap<Integer, Integer> killsOfPlayer;
 
+	/**
+	 * Creates a new empty statistic.
+	 */
 	public Statistic() {
 		killsOfPlayer = new HashMap<Integer, Integer>();
 	}

@@ -1,6 +1,3 @@
-/**
- * 
- */
 package de.illonis.eduras.exceptions;
 
 import de.illonis.eduras.events.GameEvent;
@@ -29,6 +26,13 @@ public class WrongEventTypeException extends Exception {
 		this.event = event;
 	}
 
+	/**
+	 * Returns the wrong event.
+	 * 
+	 * @return the wrong event.
+	 * 
+	 * @author illonis
+	 */
 	public GameEvent getEvent() {
 		return this.event;
 	}

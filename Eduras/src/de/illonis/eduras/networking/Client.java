@@ -105,6 +105,13 @@ public class Client {
 		return ownerId;
 	}
 
+	/**
+	 * Returns the logic that is used by this client.
+	 * 
+	 * @return the used logic.
+	 * 
+	 * @author illonis
+	 */
 	public GameLogicInterface getLogic() {
 		return logic;
 	}

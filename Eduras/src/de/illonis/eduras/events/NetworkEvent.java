@@ -14,6 +14,13 @@ public abstract class NetworkEvent extends Event {
 	private final NetworkEventNumber type;
 	private final int client;
 
+	/**
+	 * The network event number identifying the type of the event.
+	 * 
+	 * @author illonis
+	 * 
+	 */
+	@SuppressWarnings("javadoc")
 	public enum NetworkEventNumber {
 		CONNECTION_ESTABLISHED(201), CONNECTION_ABORTED(202), INIT_INFORMATION(
 				203), GAME_READY(204), CONNECTION_QUIT(205), NO_EVENT(299);

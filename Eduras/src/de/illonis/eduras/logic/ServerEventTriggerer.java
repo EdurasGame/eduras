@@ -42,11 +42,24 @@ public class ServerEventTriggerer implements EventTriggerer {
 
 	private Buffer outputBuffer;
 
+	/**
+	 * Initializes a new {@link ServerEventTriggerer}.
+	 * 
+	 * @param logic
+	 *            the logic used.
+	 */
 	public ServerEventTriggerer(GameLogicInterface logic) {
 		this.logic = logic;
 		this.gameInfo = logic.getGame();
 	}
 
+	/**
+	 * Returns the game information used.
+	 * 
+	 * @return the information.
+	 * 
+	 * @author illonis
+	 */
 	public GameInformation getGameInfo() {
 		return gameInfo;
 	}
@@ -260,6 +273,7 @@ public class ServerEventTriggerer implements EventTriggerer {
 		}
 	}
 
+	@Override
 	public void changeMap(Map map) {
 
 		gameInfo.setMap(map);
@@ -276,6 +290,11 @@ public class ServerEventTriggerer implements EventTriggerer {
 		}
 	}
 
+	/**
+	 * Removes all non-player objects from gameobject list.
+	 * 
+	 * @author illonis
+	 */
 	public void removeAllNonPlayers() {
 		for (GameObject oldObject : gameInfo.getObjects().values()) {
 			if (!(oldObject instanceof Player))

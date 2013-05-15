@@ -12,6 +12,12 @@ import de.illonis.eduras.events.SetOwnerEvent;
 import de.illonis.eduras.gamemodes.GameMode;
 import de.illonis.eduras.gameobjects.GameObject;
 
+/**
+ * reacts on game events and performs action.
+ * 
+ * @author illonis
+ * 
+ */
 public interface GameEventListener {
 
 	/**

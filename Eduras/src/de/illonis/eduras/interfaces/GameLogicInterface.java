@@ -1,6 +1,3 @@
-/**
- * 
- */
 package de.illonis.eduras.interfaces;
 
 import java.util.ArrayList;
@@ -58,6 +55,11 @@ public interface GameLogicInterface {
 	 */
 	public ArrayList<GameEventListener> getListenerList();
 
+	/**
+	 * Indicates shutdown of server/client.
+	 * 
+	 * @author illonis
+	 */
 	public void onShutdown();
 
 	/**

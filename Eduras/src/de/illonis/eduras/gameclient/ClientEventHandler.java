@@ -17,6 +17,12 @@ public class ClientEventHandler implements NetworkEventListener {
 
 	private NetworkEventReactor reactor;
 
+	/**
+	 * Creates a new client event handler.
+	 * 
+	 * @param reactor
+	 *            the event reactor.
+	 */
 	public ClientEventHandler(NetworkEventReactor reactor) {
 		this.reactor = reactor;
 	}

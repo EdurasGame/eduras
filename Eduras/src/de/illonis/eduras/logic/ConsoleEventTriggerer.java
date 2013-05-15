@@ -28,6 +28,9 @@ public class ConsoleEventTriggerer {
 	 * functionality provided by serverTriggerer.
 	 * 
 	 * @param serverTriggerer
+	 *            the servertriggerer.
+	 * @param server
+	 *            the server.
 	 */
 	public ConsoleEventTriggerer(ServerEventTriggerer serverTriggerer,
 			Server server) {
@@ -108,6 +111,16 @@ public class ConsoleEventTriggerer {
 		return true;
 	}
 
+	/**
+	 * Changes map to given map. If no map with given name is found, map is not
+	 * changed.
+	 * 
+	 * @param mapName
+	 *            the name of the new map.
+	 * @return true if map changed, false otherwise.
+	 * 
+	 * @author illonis
+	 */
 	public boolean changeMap(String mapName) {
 		Map map = null;
 		switch (mapName.toLowerCase()) {
@@ -128,6 +141,13 @@ public class ConsoleEventTriggerer {
 		return true;
 	}
 
+	/**
+	 * Restarts round of current map.
+	 * 
+	 * @return true if successful.
+	 * 
+	 * @author illonis
+	 */
 	public boolean restartRound() {
 		// TODO: Implement
 		return false;

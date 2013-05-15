@@ -1,6 +1,3 @@
-/**
- * 
- */
 package de.illonis.eduras.networking;
 
 import java.io.BufferedReader;
@@ -33,10 +30,26 @@ public class ServerClient {
 	 */
 	public enum ClientRole {
 
-		PLAYER(0), SPECTATOR(1);
+		/**
+		 * A player can actively play.
+		 */
+		PLAYER(0),
+		/**
+		 * a spectator can only spectate and not interact with game.
+		 */
+		SPECTATOR(1);
 
-		int typeNumber;
+		private int typeNumber;
 
+		/**
+		 * Returns the {@link ClientRole} that has given number.
+		 * 
+		 * @param clientRoleNum
+		 *            the number of clientrole.
+		 * @return the role.
+		 * 
+		 * @author illonis
+		 */
 		public static ClientRole getValueOf(int clientRoleNum) {
 			switch (clientRoleNum) {
 			case 0:
@@ -52,6 +65,13 @@ public class ServerClient {
 			typeNumber = type;
 		}
 
+		/**
+		 * Returns the type number of this role.
+		 * 
+		 * @return the type number.
+		 * 
+		 * @author illonis
+		 */
 		public int getTypeNum() {
 			return typeNumber;
 		}
