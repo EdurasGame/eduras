@@ -10,6 +10,7 @@ import de.illonis.eduras.events.GameEvent.GameEventNumber;
 import de.illonis.eduras.events.MovementEvent;
 import de.illonis.eduras.events.ObjectFactoryEvent;
 import de.illonis.eduras.events.SetBooleanGameObjectAttributeEvent;
+import de.illonis.eduras.events.SetGameModeEvent;
 import de.illonis.eduras.exceptions.InvalidNameException;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
 import de.illonis.eduras.gameobjects.GameObject;
@@ -208,6 +209,8 @@ public class GameInformation {
 	/**
 	 * This method serializes all available current information about the game
 	 * into events and returns them as a list.
+	 * 
+	 * @return a list of events representing current game state.
 	 */
 	public ArrayList<GameEvent> getAllInfosAsEvent() {
 
@@ -245,6 +248,9 @@ public class GameInformation {
 				continue;
 			}
 		}
+		SetGameModeEvent e = new SetGameModeEvent(gameSettings.getGameMode()
+				.getName());
+		infos.add(e);
 
 		return infos;
 	}
