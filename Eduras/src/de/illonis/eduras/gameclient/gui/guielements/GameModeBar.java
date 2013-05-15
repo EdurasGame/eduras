@@ -12,7 +12,7 @@ import de.illonis.eduras.gamemodes.GameMode;
  * @author illonis
  * 
  */
-public class GameStatBar extends RenderedGuiObject {
+public class GameModeBar extends RenderedGuiObject {
 	private String mode;
 
 	/**
@@ -21,7 +21,7 @@ public class GameStatBar extends RenderedGuiObject {
 	 * @param gui
 	 *            associated gui.
 	 */
-	public GameStatBar(UserInterface gui) {
+	public GameModeBar(UserInterface gui) {
 		super(gui);
 		mode = "unknown game mode";
 		screenX = 30;
@@ -46,12 +46,7 @@ public class GameStatBar extends RenderedGuiObject {
 		mode = getInfo().getGameMode().getName();
 	}
 
-	/**
-	 * Called when game mode changed.
-	 * 
-	 * @param newMode
-	 *            new game mode.
-	 */
+	@Override
 	public void onGameModeChanged(GameMode newMode) {
 		mode = newMode.getName();
 	}

@@ -12,7 +12,7 @@ import de.illonis.eduras.events.SetOwnerEvent;
 import de.illonis.eduras.gameclient.GameEventReactor;
 import de.illonis.eduras.gameclient.TooltipHandler;
 import de.illonis.eduras.gameclient.TooltipTriggererNotifier;
-import de.illonis.eduras.gameclient.gui.guielements.GameStatBar;
+import de.illonis.eduras.gameclient.gui.guielements.GameModeBar;
 import de.illonis.eduras.gameclient.gui.guielements.ItemDisplay;
 import de.illonis.eduras.gameclient.gui.guielements.RenderedGuiObject;
 import de.illonis.eduras.gameclient.gui.guielements.TooltipTriggerer;
@@ -59,7 +59,7 @@ public class UserInterface implements GameEventListener, GuiResizeListener {
 
 	private void createElements() {
 		uiObjects.add(new ItemDisplay(this));
-		uiObjects.add(new GameStatBar(this));
+		uiObjects.add(new GameModeBar(this));
 	}
 
 	/**

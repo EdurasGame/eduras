@@ -29,6 +29,7 @@ public final class KeyBindings implements ResettableSetting {
 	 * @author illonis
 	 * 
 	 */
+	@SuppressWarnings("javadoc")
 	public enum KeyBinding {
 		MOVE_LEFT, MOVE_UP, MOVE_DOWN, MOVE_RIGHT, ITEM_1, ITEM_2, ITEM_3, ITEM_4, ITEM_5, ITEM_6, EXIT_CLIENT;
 	}

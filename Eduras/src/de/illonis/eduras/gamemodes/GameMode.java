@@ -36,6 +36,9 @@ public interface GameMode {
 
 	/**
 	 * Called when a player connects.
+	 * 
+	 * @param ownerId
+	 *            id of connected player.
 	 */
 	public void onConnect(int ownerId);
 

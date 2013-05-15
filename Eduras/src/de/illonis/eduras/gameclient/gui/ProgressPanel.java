@@ -39,7 +39,7 @@ public class ProgressPanel extends JPanel implements ActionListener {
 	private InetAddress addr;
 	private int port;
 	private JButton backButton;
-	private Thread t;
+	private Thread thread;
 	private String errorMessage;
 	private ConnectionWaiter worker;
 
@@ -92,14 +92,14 @@ public class ProgressPanel extends JPanel implements ActionListener {
 	/**
 	 * Starts connecting to server asynchronously using given parameters.
 	 * 
-	 * @param addr
+	 * @param address
 	 *            server address.
-	 * @param port
+	 * @param serverPort
 	 *            server port.
 	 */
-	void start(InetAddress addr, int port) {
-		this.addr = addr;
-		this.port = port;
+	void start(InetAddress address, int serverPort) {
+		this.addr = address;
+		this.port = serverPort;
 		worker = new ConnectionWaiter();
 		worker.addPropertyChangeListener(new PropertyChangeListener() {
 
@@ -155,9 +155,9 @@ public class ProgressPanel extends JPanel implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		worker.cancel(true);
-		t.interrupt();
+		thread.interrupt();
 		try {
-			t.join();
+			thread.join();
 		} catch (InterruptedException e1) {
 		}
 		frame.showLogin();
@@ -186,19 +186,19 @@ public class ProgressPanel extends JPanel implements ActionListener {
 		@Override
 		public Boolean doInBackground() {
 
-			t = new Thread(connector);
-			t.setName("Connector");
-			t.start();
+			thread = new Thread(connector);
+			thread.setName("Connector");
+			thread.start();
 			int i = Client.CONNECT_TIMEOUT / 1000;
 			while (true) {
 				i--;
 				try {
-					t.join(1000);
+					thread.join(1000);
 				} catch (InterruptedException e) {
 					EduLog.passException(e);
 				}
 
-				if (t.isAlive()) {
+				if (thread.isAlive()) {
 					firePropertyChange("timeWaited", i + 1, i);
 				} else
 					break;
