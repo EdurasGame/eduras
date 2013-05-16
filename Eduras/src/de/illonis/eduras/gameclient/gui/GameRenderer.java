@@ -411,13 +411,6 @@ public class GameRenderer implements TooltipHandler {
 		t.start();
 	}
 
-	// (jme) This is totally wrong here...
-	public void drawWin(int winnerId) {
-		// TODO: make working
-		mapGraphics.drawString("Player with id " + winnerId + " won the game!",
-				(int) mapSize.getCenterX(), (int) mapSize.getCenterY());
-	}
-
 	/**
 	 * Sets drawing target of renderer.
 	 * 
