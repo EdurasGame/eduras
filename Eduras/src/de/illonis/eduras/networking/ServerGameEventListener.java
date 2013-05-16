@@ -9,6 +9,7 @@ import de.illonis.eduras.events.MatchEndEvent;
 import de.illonis.eduras.events.MovementEvent;
 import de.illonis.eduras.events.ObjectFactoryEvent;
 import de.illonis.eduras.events.SetGameObjectAttributeEvent;
+import de.illonis.eduras.events.SetIntegerGameObjectAttributeEvent;
 import de.illonis.eduras.events.SetItemSlotEvent;
 import de.illonis.eduras.events.SetOwnerEvent;
 import de.illonis.eduras.exceptions.MessageNotSupportedException;
@@ -134,9 +135,23 @@ public class ServerGameEventListener implements GameEventListener {
 	}
 
 	@Override
-	public void onHealthChanged(int objectId, int newValue) {
-		// TODO Auto-generated method stub
+	public void onHealthChanged(SetIntegerGameObjectAttributeEvent event) {
+		try {
+			String string = NetworkMessageSerializer.serialize(event);
+			outputBuffer.append(string);
+		} catch (MessageNotSupportedException e) {
+			e.printStackTrace();
+		}
+	}
 
+	@Override
+	public void onMaxHealthChanged(SetIntegerGameObjectAttributeEvent event) {
+		try {
+			String string = NetworkMessageSerializer.serialize(event);
+			outputBuffer.append(string);
+		} catch (MessageNotSupportedException e) {
+			e.printStackTrace();
+		}
 	}
 
 	@Override
@@ -193,4 +208,5 @@ public class ServerGameEventListener implements GameEventListener {
 	@Override
 	public void onGameModeChanged(GameMode newGameMode) {
 	}
+
 }

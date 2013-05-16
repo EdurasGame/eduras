@@ -8,6 +8,7 @@ import de.illonis.eduras.events.GameEvent;
 import de.illonis.eduras.events.MatchEndEvent;
 import de.illonis.eduras.events.ObjectFactoryEvent;
 import de.illonis.eduras.events.SetGameObjectAttributeEvent;
+import de.illonis.eduras.events.SetIntegerGameObjectAttributeEvent;
 import de.illonis.eduras.events.SetItemSlotEvent;
 import de.illonis.eduras.events.SetOwnerEvent;
 import de.illonis.eduras.gameclient.TooltipHandler;
@@ -129,7 +130,7 @@ public abstract class RenderedGuiObject implements GameEventListener {
 	}
 
 	@Override
-	public void onHealthChanged(int objectId, int newValue) {
+	public void onHealthChanged(SetIntegerGameObjectAttributeEvent event) {
 	}
 
 	@Override
@@ -146,6 +147,10 @@ public abstract class RenderedGuiObject implements GameEventListener {
 
 	@Override
 	public void onMatchEnd(MatchEndEvent event) {
+	}
+
+	@Override
+	public void onMaxHealthChanged(SetIntegerGameObjectAttributeEvent event) {
 	}
 
 }

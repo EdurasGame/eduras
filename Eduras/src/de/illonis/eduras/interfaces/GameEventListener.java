@@ -7,6 +7,7 @@ import de.illonis.eduras.events.GameEvent;
 import de.illonis.eduras.events.MatchEndEvent;
 import de.illonis.eduras.events.ObjectFactoryEvent;
 import de.illonis.eduras.events.SetGameObjectAttributeEvent;
+import de.illonis.eduras.events.SetIntegerGameObjectAttributeEvent;
 import de.illonis.eduras.events.SetItemSlotEvent;
 import de.illonis.eduras.events.SetOwnerEvent;
 import de.illonis.eduras.gamemodes.GameMode;
@@ -74,12 +75,18 @@ public interface GameEventListener {
 	/**
 	 * Called when health of an object has changed.
 	 * 
-	 * @param objectId
-	 *            object id.
-	 * @param newValue
-	 *            new health value.
+	 * @param event
+	 *            the event holding information.
 	 */
-	void onHealthChanged(int objectId, int newValue);
+	void onHealthChanged(SetIntegerGameObjectAttributeEvent event);
+
+	/**
+	 * Called when maximum health of an object has changed.
+	 * 
+	 * @param event
+	 *            the event holding information.
+	 */
+	void onMaxHealthChanged(SetIntegerGameObjectAttributeEvent event);
 
 	/**
 	 * Called when owner of an object has changed.

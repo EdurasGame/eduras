@@ -117,7 +117,7 @@ public class Logic implements GameLogicInterface {
 				unit.setHealth(newHealth);
 
 				for (GameEventListener gameEventListener : listenerList) {
-					gameEventListener.onHealthChanged(objectId, newHealth);
+					gameEventListener.onHealthChanged(healthEvent);
 				}
 
 				break;

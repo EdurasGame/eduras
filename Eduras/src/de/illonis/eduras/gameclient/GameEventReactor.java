@@ -8,6 +8,7 @@ import de.illonis.eduras.events.GameEvent;
 import de.illonis.eduras.events.MatchEndEvent;
 import de.illonis.eduras.events.ObjectFactoryEvent;
 import de.illonis.eduras.events.SetGameObjectAttributeEvent;
+import de.illonis.eduras.events.SetIntegerGameObjectAttributeEvent;
 import de.illonis.eduras.events.SetItemSlotEvent;
 import de.illonis.eduras.events.SetOwnerEvent;
 import de.illonis.eduras.gameclient.gui.UserInterface;
@@ -64,8 +65,8 @@ public class GameEventReactor implements GameEventListener {
 	}
 
 	@Override
-	public void onHealthChanged(int objectId, int newValue) {
-		ui.onHealthChanged(objectId, newValue);
+	public void onHealthChanged(SetIntegerGameObjectAttributeEvent event) {
+		ui.onHealthChanged(event);
 	}
 
 	@Override
@@ -91,5 +92,10 @@ public class GameEventReactor implements GameEventListener {
 	@Override
 	public void onGameModeChanged(GameMode newGameMode) {
 		ui.onGameModeChanged(newGameMode);
+	}
+
+	@Override
+	public void onMaxHealthChanged(SetIntegerGameObjectAttributeEvent event) {
+		ui.onMaxHealthChanged(event);
 	}
 }
