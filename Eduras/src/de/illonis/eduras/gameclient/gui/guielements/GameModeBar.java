@@ -43,7 +43,6 @@ public class GameModeBar extends RenderedGuiObject {
 
 	@Override
 	public void onPlayerInformationReceived() {
-		mode = getInfo().getGameMode().getName();
 	}
 
 	@Override

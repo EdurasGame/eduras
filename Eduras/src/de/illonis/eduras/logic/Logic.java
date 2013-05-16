@@ -258,6 +258,9 @@ public class Logic implements GameLogicInterface {
 					newGameMode = new NoGameMode(currentGame);
 					break;
 				}
+
+				currentGame.getGameSettings().changeGameMode(newGameMode);
+
 				for (GameEventListener listener : listenerList) {
 					listener.onGameModeChanged(newGameMode);
 				}
