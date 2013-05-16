@@ -323,7 +323,7 @@ public class Logic implements GameLogicInterface {
 		try {
 			item = player.getInventory().getItemBySlot(itemEvent.getSlotNum());
 		} catch (ItemSlotIsEmptyException e) {
-			EduLog.passException(e);
+			EduLog.log(Level.INFO, e.getMessage());
 			return;
 		}
 
