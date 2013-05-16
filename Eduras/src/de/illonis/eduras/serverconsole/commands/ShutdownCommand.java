@@ -12,6 +12,9 @@ import de.illonis.eduras.serverconsole.ServerConsole;
  */
 public class ShutdownCommand extends ConsoleCommand {
 
+	/**
+	 * Create a new instance of the command.
+	 */
 	public ShutdownCommand() {
 		super("shutdown", "shuts down server.");
 		setExactNumArgs(0);

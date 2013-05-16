@@ -12,6 +12,8 @@ import org.junit.Test;
 import de.illonis.eduras.math.Vector2D;
 
 /**
+ * Unit test class for Vector2D.
+ * 
  * @author Florian Mai <florian.ren.mai@googlemail.com>
  * 
  */
@@ -19,12 +21,19 @@ public class VectorTests {
 
 	Vector2D vector, lengthVector;
 
+	/**
+	 * Executed before each test to set up some vectors.
+	 */
 	@Before
 	public void setUp() {
 		vector = new Vector2D(100, 100);
 		lengthVector = new Vector2D(4, 3);
 	}
 
+	/**
+	 * Tests the {@link de.illonis.eduras.math.Vector2D#rotate(double) rotate()}
+	 * method of a Vector2D.
+	 */
 	@Test
 	public void rotations() {
 		Vector2D copy = vector.copy();
@@ -45,6 +54,10 @@ public class VectorTests {
 		assertEquals(check, copy);
 	}
 
+	/**
+	 * Tests the {@link de.illonis.eduras.math.Vector2D#mult(double) mult()}
+	 * method of a Vector2D.
+	 */
 	@Test
 	public void mult() {
 		vector.mult(2);
@@ -52,6 +65,11 @@ public class VectorTests {
 		assertTrue(vector.getY() == 200);
 	}
 
+	/**
+	 * Tests the {@link de.illonis.eduras.math.Vector2D#getLength() getLength()}
+	 * and {@link de.illonis.eduras.math.Vector2D#setLength(double) setLength()}
+	 * methods of a Vector2D.
+	 */
 	@Test
 	public void lengthTests() {
 		assertEquals(5, lengthVector.getLength(), 0);
@@ -74,6 +92,10 @@ public class VectorTests {
 				lengthVector);
 	}
 
+	/**
+	 * Tests the {@link de.illonis.eduras.math.Vector2D#getUnitVector()
+	 * getUnitVector()} method of a Vector2D.
+	 */
 	@Test
 	public void unitVectorTests() {
 		Vector2D second = lengthVector.copy();
@@ -83,6 +105,11 @@ public class VectorTests {
 				lengthVector.getUnitVector(), second.getUnitVector());
 	}
 
+	/**
+	 * Tests the
+	 * {@link de.illonis.eduras.math.Vector2D#findShortestDistance(LinkedList, Vector2D)
+	 * findShortestDistance()} method of a Vector2D.
+	 */
 	@Test
 	public void findClosestPoint() {
 
@@ -104,6 +131,9 @@ public class VectorTests {
 
 	}
 
+	/**
+	 * Executed after each test method.
+	 */
 	@After
 	public void deSetUp() {
 		vector = null;

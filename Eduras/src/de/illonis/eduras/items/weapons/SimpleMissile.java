@@ -18,6 +18,9 @@ public class SimpleMissile extends Missile {
 	 * Creates a new simplemissile
 	 * 
 	 * @param game
+	 *            The game context
+	 * @param id
+	 *            The id of the new missile
 	 */
 	public SimpleMissile(GameInformation game, int id) {
 		super(game, id);

@@ -22,6 +22,11 @@ import de.illonis.eduras.shapes.Circle;
  */
 public class GeometryUtilsTests {
 
+	/**
+	 * Tests the
+	 * {@link de.illonis.eduras.math.Geometry#getSegmentLinesInterceptPoint(Line, Line)
+	 * getSegmentLineInterceptPoint} method.
+	 */
 	@Test
 	public void getSegmentLineInterceptPoint() {
 
@@ -52,6 +57,11 @@ public class GeometryUtilsTests {
 		assertTrue(interceptPoint != null);
 	}
 
+	/**
+	 * Tests the
+	 * {@link de.illonis.eduras.math.Geometry#getLinesBetweenShapePositions(Vector2D[], Vector2D, Vector2D)
+	 * getLinesBetweenShapePositions} method.
+	 */
 	@Test
 	public void getLinesBetweenShapePositions() {
 		Vector2D[] vertices = new Vector2D[2];
@@ -71,6 +81,11 @@ public class GeometryUtilsTests {
 		assertTrue(resultLines.get(1).equals(expectedLine2));
 	}
 
+	/**
+	 * Tests the
+	 * {@link de.illonis.eduras.math.Geometry#getCircleLineSegmentInterceptPoints(Circle, Vector2D, Line)
+	 * getCircleLineSegmentInterceptPoints} method.
+	 */
 	@Test
 	public void getCircleLineSegmentInterceptPoints() {
 		Circle circle = new Circle(1);

@@ -11,6 +11,9 @@ import de.illonis.eduras.serverconsole.ServerConsole;
  */
 public class RespawnCommand extends ConsoleCommand {
 
+	/**
+	 * Creates a new instance of this command.
+	 */
 	public RespawnCommand() {
 		super("respawn", "Respawns player with given player id.");
 		setExactNumArgs(1);

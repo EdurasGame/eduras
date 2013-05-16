@@ -21,6 +21,15 @@ public abstract class Weapon extends Item implements Lootable, Usable {
 	protected long defaultCooldown = 0;
 	private Missile missile;
 
+	/**
+	 * Creates a new weapon being of the type given.
+	 * 
+	 * @param type
+	 * @param gi
+	 *            The gameinformation context
+	 * @param id
+	 *            The id of the new weapon.
+	 */
 	public Weapon(ObjectType type, GameInformation gi, int id) {
 		super(type, gi, id);
 	}

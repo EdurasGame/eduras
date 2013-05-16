@@ -11,6 +11,9 @@ import de.illonis.eduras.serverconsole.ServerConsole;
  */
 public class GameModeChangeCommand extends ConsoleCommand {
 
+	/**
+	 * Creates a new instance of the command.
+	 */
 	public GameModeChangeCommand() {
 		super("mode", "Changes game mode to given mode.");
 		setExactNumArgs(1);

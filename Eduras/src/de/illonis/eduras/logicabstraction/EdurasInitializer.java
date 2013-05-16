@@ -13,7 +13,7 @@ import de.illonis.eduras.settings.Settings;
 
 /**
  * This class provides a main entry point to the game logic and network for GUI
- * developers.
+ * developers. This is a singleton class.
  * 
  * @author Florian Mai <florian.ren.mai@googlemail.com>
  * 
@@ -50,10 +50,20 @@ public class EdurasInitializer {
 
 	}
 
+	/**
+	 * Returns the {@link NetworkManager}.
+	 * 
+	 * @return The NetworkManager
+	 */
 	public NetworkManager getNetworkManager() {
 		return networkManager;
 	}
 
+	/**
+	 * Returns the unique {@link EdurasInitializer} instance.
+	 * 
+	 * @return The EdurasInitializer instance
+	 */
 	public static EdurasInitializer getInstance() {
 		if (instance == null) {
 			return new EdurasInitializer();
@@ -61,14 +71,29 @@ public class EdurasInitializer {
 		return instance;
 	}
 
+	/**
+	 * Returns the {@link EventSender}.
+	 * 
+	 * @return The EventSender
+	 */
 	public EventSender getEventSender() {
 		return eventSender;
 	}
 
+	/**
+	 * Returns the {@link InformationProvider}
+	 * 
+	 * @return The InformationProvider
+	 */
 	public InformationProvider getInformationProvider() {
 		return informationProvider;
 	}
 
+	/**
+	 * Returns the current {@Settings} of the current game.
+	 * 
+	 * @return the settings
+	 */
 	public Settings getSettings() {
 		return settings;
 	}

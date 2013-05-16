@@ -15,6 +15,11 @@ public class Deathmatch implements GameMode {
 
 	private GameInformation gameInfo;
 
+	/**
+	 * Creates a new instance of deathmatch.
+	 * 
+	 * @param gameInfo
+	 */
 	public Deathmatch(GameInformation gameInfo) {
 		this.gameInfo = gameInfo;
 	}

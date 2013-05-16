@@ -11,6 +11,9 @@ import de.illonis.eduras.serverconsole.ServerConsole;
  */
 public class MapChangeCommand extends ConsoleCommand {
 
+	/**
+	 * Creates a new instance of the command.
+	 */
 	public MapChangeCommand() {
 		super("map", "Changes map.");
 		setExactNumArgs(1);

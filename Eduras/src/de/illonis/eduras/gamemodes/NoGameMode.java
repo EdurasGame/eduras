@@ -17,6 +17,11 @@ public class NoGameMode implements GameMode {
 
 	private GameInformation gameInfo;
 
+	/**
+	 * Creates a new instance of this gamemode.
+	 * 
+	 * @param gameInfo
+	 */
 	public NoGameMode(GameInformation gameInfo) {
 		this.gameInfo = gameInfo;
 	}

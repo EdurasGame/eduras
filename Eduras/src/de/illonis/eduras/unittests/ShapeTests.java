@@ -22,6 +22,11 @@ import de.illonis.eduras.units.Player;
  */
 public class ShapeTests {
 
+	/**
+	 * Tests the
+	 * {@link de.illonis.eduras.shapes.Polygon#getAbsoluteVertices(de.illonis.eduras.gameobjects.GameObject)
+	 * getAbsoluteVertices()} method.
+	 */
 	@Test
 	public void getAbsoluteVertices() {
 		Player player = new Player(new GameInformation(), 0, 0);

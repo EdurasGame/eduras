@@ -7,8 +7,19 @@ import de.illonis.eduras.gameobjects.BigBlock;
 import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.logger.EduLog;
 
+/**
+ * This is a sample map containing
+ * {@link de.illonis.eduras.gameobjects.BigBlock BigBlocks} in a square-like
+ * fashion.
+ * 
+ * @author Florian Mai <florian.ren.mai@googlemail.com>
+ * 
+ */
 public class ManyBlocks extends Map {
 
+	/**
+	 * Create a new instance of the map.
+	 */
 	public ManyBlocks() {
 		super("manyblocks", 500, 500);
 

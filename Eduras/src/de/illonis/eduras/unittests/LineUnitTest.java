@@ -25,6 +25,9 @@ public class LineUnitTest {
 	Line fourtyFiveDegreesLineThroughOrigin;
 	Line randomLine;
 
+	/**
+	 * Creates some lines needed before each test method is executed.
+	 */
 	@Before
 	public void init() {
 		horizontallineThroughOrigin = new Line(new Vector2D(1, 0),
@@ -34,6 +37,12 @@ public class LineUnitTest {
 		randomLine = new Line(new Vector2D(-10.505, 2), new Vector2D(0, 23));
 	}
 
+	/**
+	 * Tests the {@link de.illonis.eduras.math.Line#getSupportVector()
+	 * getSupportVector()} and
+	 * {@link de.illonis.eduras.math.Line#getDirectionalVector()
+	 * getDirectionVector()} methods. getSegmentLineInterceptPoint} method.
+	 */
 	@Test
 	public void supportAndDirectionVectorCreation() {
 
@@ -59,6 +68,10 @@ public class LineUnitTest {
 
 	}
 
+	/**
+	 * Tests the {@link de.illonis.eduras.math.Line#containsPoint(Vector2D)
+	 * containsPoint()} method.
+	 */
 	@Test
 	public void containsPointTest() {
 		assertTrue(horizontallineThroughOrigin
