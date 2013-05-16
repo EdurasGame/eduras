@@ -2,6 +2,7 @@ package de.illonis.eduras.logger;
 
 import de.illonis.eduras.logger.EduLog.LogMode;
 
+//TODO: Maybe we can discard this?
 public class TestClass {
 
 	public TestClass() {
