@@ -45,7 +45,7 @@ public class UserInterface implements GuiResizeListener {
 		this.reactor = clickReactor;
 		this.tooltipNotifier = tooltipNotifier;
 		createElements();
-		EventListenerGui elg = new EventListenerGui(infos);
+		EventListenerGui elg = new EventListenerGui(infos, uiObjects);
 		infos.addEventListener(new GameEventReactor(elg));
 	}
 

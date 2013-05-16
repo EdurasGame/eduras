@@ -34,8 +34,10 @@ public class EventListenerGui implements GameEventListener {
 	 * @param infos
 	 *            game information to use.
 	 */
-	public EventListenerGui(InformationProvider infos) {
+	public EventListenerGui(InformationProvider infos,
+			ArrayList<RenderedGuiObject> uiObjects) {
 		this.infos = infos;
+		this.uiObjects = uiObjects;
 	}
 
 	@Override
