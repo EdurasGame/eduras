@@ -108,18 +108,30 @@ public class Logic implements GameLogicInterface {
 				break;
 			case SETHEALTH:
 				SetIntegerGameObjectAttributeEvent healthEvent = (SetIntegerGameObjectAttributeEvent) event;
-				int objectId = healthEvent.getObjectId();
-				int newHealth = healthEvent.getNewValue();
-				GameObject obj = currentGame.findObjectById(objectId);
+				GameObject obj = currentGame.findObjectById(healthEvent
+						.getObjectId());
 				if (obj == null)
 					break;
 				Unit unit = (Unit) obj;
-				unit.setHealth(newHealth);
+				unit.setHealth(healthEvent.getNewValue());
 
 				for (GameEventListener gameEventListener : listenerList) {
 					gameEventListener.onHealthChanged(healthEvent);
 				}
 
+				break;
+			case SETMAXHEALTH:
+				SetIntegerGameObjectAttributeEvent mhealthEvent = (SetIntegerGameObjectAttributeEvent) event;
+				GameObject gobj = currentGame.findObjectById(mhealthEvent
+						.getObjectId());
+				if (gobj == null)
+					break;
+				Unit u = (Unit) gobj;
+				u.setMaxHealth(mhealthEvent.getNewValue());
+
+				for (GameEventListener gameEventListener : listenerList) {
+					gameEventListener.onHealthChanged(mhealthEvent);
+				}
 				break;
 			case INFORMATION_REQUEST:
 				ArrayList<GameEvent> infos = currentGame.getAllInfosAsEvent();

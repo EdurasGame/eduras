@@ -128,6 +128,7 @@ public class NetworkMessageSerializer {
 			ObjectFactoryEvent removeEvent = (ObjectFactoryEvent) gameEvent;
 			serializedEvent = buildEventString(removeEvent, removeEvent.getId());
 			break;
+		case SETMAXHEALTH:
 		case SETHEALTH:
 			SetIntegerGameObjectAttributeEvent igo = (SetIntegerGameObjectAttributeEvent) gameEvent;
 			serializedEvent = buildEventString(igo, igo.getObjectId(),
