@@ -25,9 +25,16 @@ public class ItemDisplay extends ClickableGuiElement implements
 		TooltipTriggerer {
 
 	private final static int ITEM_GAP = 15;
+	private final static int BLOCKSIZE = 30;
+
 	// top, right, bottom, left
 	private final static int OUTER_GAP[] = { 20, 5, 10, 15 };
-	private int height, width, blocksize, itemGap;
+
+	final static int HEIGHT = OUTER_GAP[0] + 2 * BLOCKSIZE + OUTER_GAP[2]
+			+ ITEM_GAP;
+
+	private final static int WIDTH = 140;
+
 	private GuiItem itemSlots[];
 
 	/**
@@ -38,10 +45,6 @@ public class ItemDisplay extends ClickableGuiElement implements
 	 */
 	public ItemDisplay(UserInterface gui) {
 		super(gui);
-		width = 140;
-		blocksize = 30;
-		itemGap = ITEM_GAP;
-		height = OUTER_GAP[0] + 2 * blocksize + OUTER_GAP[2] + ITEM_GAP;
 		itemSlots = new GuiItem[Inventory.MAX_CAPACITY];
 		for (int i = 0; i < Inventory.MAX_CAPACITY; i++) {
 			itemSlots[i] = new GuiItem(i);
@@ -52,14 +55,14 @@ public class ItemDisplay extends ClickableGuiElement implements
 	@Override
 	public void render(Graphics2D g2d) {
 		g2d.setColor(Color.GRAY);
-		g2d.fillRect(screenX, screenY, width, height);
+		g2d.fillRect(screenX, screenY, WIDTH, HEIGHT);
 		g2d.setColor(Color.BLACK);
 		for (GuiItem item : itemSlots) {
 			// TODO: make nicer
 			g2d.drawRect(item.getX() + screenX, item.getY() + screenY,
-					blocksize, blocksize);
+					BLOCKSIZE, BLOCKSIZE);
 			g2d.drawString("#" + (item.getSlotId() + 1), item.getX() + screenX
-					+ blocksize / 4, item.getY() + screenY - 2);
+					+ BLOCKSIZE / 4, item.getY() + screenY - 2);
 			if (item.hasImage())
 				g2d.drawImage(item.getItemImage(), item.getX() + screenX,
 						item.getY() + screenY, null);
@@ -69,7 +72,7 @@ public class ItemDisplay extends ClickableGuiElement implements
 	@Override
 	public void onGuiSizeChanged(int newWidth, int newHeight) {
 		screenX = 0;
-		screenY = newHeight - height;
+		screenY = newHeight - HEIGHT;
 	}
 
 	@Override
@@ -142,9 +145,9 @@ public class ItemDisplay extends ClickableGuiElement implements
 
 		GuiItem(int slotId) {
 
-			this.x = OUTER_GAP[3] + (blocksize + itemGap)
+			this.x = OUTER_GAP[3] + (BLOCKSIZE + ITEM_GAP)
 					* (slotId % (Inventory.MAX_CAPACITY / 2));
-			this.y = OUTER_GAP[0] + (blocksize + itemGap)
+			this.y = OUTER_GAP[0] + (BLOCKSIZE + ITEM_GAP)
 					* (slotId / (Inventory.MAX_CAPACITY / 2));
 			this.slotId = slotId;
 			setName("?");
@@ -179,7 +182,7 @@ public class ItemDisplay extends ClickableGuiElement implements
 		}
 
 		protected Rectangle getClickableRect() {
-			return new Rectangle(x + screenX, y + screenY, blocksize, blocksize);
+			return new Rectangle(x + screenX, y + screenY, BLOCKSIZE, BLOCKSIZE);
 		}
 	}
 
@@ -218,6 +221,6 @@ public class ItemDisplay extends ClickableGuiElement implements
 
 	@Override
 	public Rectangle getTriggerArea() {
-		return new Rectangle(screenX, screenY, width, height);
+		return new Rectangle(screenX, screenY, WIDTH, HEIGHT);
 	}
 }

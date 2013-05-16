@@ -18,7 +18,7 @@ import de.illonis.eduras.units.Player;
 public class PlayerStatBar extends RenderedGuiObject {
 
 	private final static int MAX_WIDTH = 140;
-	private final static int HEIGHT = 40;
+	private final static int HEIGHT = 20;
 	private final static Color COLOR_BAR = Color.YELLOW;
 	private final static Color COLOR_BG = Color.BLACK;
 
@@ -50,14 +50,16 @@ public class PlayerStatBar extends RenderedGuiObject {
 
 	@Override
 	public void onGuiSizeChanged(int newWidth, int newHeight) {
-		screenY = newHeight - HEIGHT;
+		screenY = newHeight - HEIGHT - ItemDisplay.HEIGHT;
 	}
 
 	@Override
 	public void onPlayerInformationReceived() {
 		try {
-			System.out.println(getInfo().getPlayer().getMaxHealth());
 			player = getInfo().getPlayer();
+			maxHealth = player.getMaxHealth();
+			health = player.getHealth();
+			recalculate();
 		} catch (ObjectNotFoundException e) {
 			EduLog.passException(e);
 		}
