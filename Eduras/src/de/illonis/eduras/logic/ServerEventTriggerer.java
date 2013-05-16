@@ -210,7 +210,7 @@ public class ServerEventTriggerer implements EventTriggerer {
 	public void respawnPlayer(Player player) {
 		// TODO: This should be dependend on game mode:
 		for (int i = 0; i < 6; i++)
-			changeItemSlot(i, player.getId(), null);
+			changeItemSlot(i, player.getOwner(), null);
 
 		// TODO: Fire a respawn event to client.
 		player.resetHealth();
