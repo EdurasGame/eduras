@@ -6,6 +6,7 @@ import de.illonis.eduras.items.Item;
 import de.illonis.eduras.maps.Map;
 import de.illonis.eduras.math.Vector2D;
 import de.illonis.eduras.units.Player;
+import de.illonis.eduras.units.Unit;
 
 /**
  * The client eventtriggerer does not do anything as client does not trigger
@@ -80,5 +81,9 @@ public class ClientEventTriggerer implements EventTriggerer {
 
 	@Override
 	public void changeMap(Map map) {
+	}
+
+	@Override
+	public void remaxHealth(Unit unit) {
 	}
 }

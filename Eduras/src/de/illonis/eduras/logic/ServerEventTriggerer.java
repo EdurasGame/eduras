@@ -213,12 +213,12 @@ public class ServerEventTriggerer implements EventTriggerer {
 			changeItemSlot(i, player.getOwner(), null);
 
 		// TODO: Fire a respawn event to client.
-		player.resetHealth();
+		remaxHealth(player);
+
 		Random r = new Random();
 		Rectangle m = gameInfo.getMap().getBounds();
 		int x = r.nextInt(m.width);
 		int y = r.nextInt(m.height);
-		setHealth(player.getId(), player.getHealth());
 		setPositionOfObject(player.getId(), new Vector2D(x, y));
 	}
 
@@ -316,5 +316,11 @@ public class ServerEventTriggerer implements EventTriggerer {
 		} catch (MessageNotSupportedException e1) {
 			e1.printStackTrace();
 		}
+	}
+
+	@Override
+	public void remaxHealth(Unit unit) {
+		unit.resetHealth();
+		setHealth(unit.getId(), unit.getHealth());
 	}
 }

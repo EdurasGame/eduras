@@ -6,6 +6,7 @@ import de.illonis.eduras.items.Item;
 import de.illonis.eduras.maps.Map;
 import de.illonis.eduras.math.Vector2D;
 import de.illonis.eduras.units.Player;
+import de.illonis.eduras.units.Unit;
 
 /**
  * Allows objects to trigger specific events that will be interpreted by logic
@@ -162,4 +163,11 @@ public interface EventTriggerer {
 	 * @param newMode
 	 */
 	void changeGameMode(GameMode newMode);
+
+	/**
+	 * Remaxes the health of the unit.
+	 * 
+	 * @param unit
+	 */
+	void remaxHealth(Unit unit);
 }
