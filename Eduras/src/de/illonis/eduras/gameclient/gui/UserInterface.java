@@ -2,14 +2,6 @@ package de.illonis.eduras.gameclient.gui;
 
 import java.util.ArrayList;
 
-import de.illonis.eduras.events.ClientRenameEvent;
-import de.illonis.eduras.events.GameEvent;
-import de.illonis.eduras.events.MatchEndEvent;
-import de.illonis.eduras.events.ObjectFactoryEvent;
-import de.illonis.eduras.events.SetGameObjectAttributeEvent;
-import de.illonis.eduras.events.SetIntegerGameObjectAttributeEvent;
-import de.illonis.eduras.events.SetItemSlotEvent;
-import de.illonis.eduras.events.SetOwnerEvent;
 import de.illonis.eduras.gameclient.GameEventReactor;
 import de.illonis.eduras.gameclient.TooltipHandler;
 import de.illonis.eduras.gameclient.TooltipTriggererNotifier;
@@ -18,9 +10,6 @@ import de.illonis.eduras.gameclient.gui.guielements.ItemDisplay;
 import de.illonis.eduras.gameclient.gui.guielements.PlayerStatBar;
 import de.illonis.eduras.gameclient.gui.guielements.RenderedGuiObject;
 import de.illonis.eduras.gameclient.gui.guielements.TooltipTriggerer;
-import de.illonis.eduras.gamemodes.GameMode;
-import de.illonis.eduras.gameobjects.GameObject;
-import de.illonis.eduras.interfaces.GameEventListener;
 import de.illonis.eduras.logicabstraction.InformationProvider;
 
 /**
@@ -30,7 +19,7 @@ import de.illonis.eduras.logicabstraction.InformationProvider;
  * @author illonis
  * 
  */
-public class UserInterface implements GameEventListener, GuiResizeListener {
+public class UserInterface implements GuiResizeListener {
 	private ArrayList<RenderedGuiObject> uiObjects;
 	private InformationProvider infos;
 	private GuiClickReactor reactor;
@@ -56,7 +45,8 @@ public class UserInterface implements GameEventListener, GuiResizeListener {
 		this.reactor = clickReactor;
 		this.tooltipNotifier = tooltipNotifier;
 		createElements();
-		infos.addEventListener(new GameEventReactor(this));
+		EventListenerGui elg = new EventListenerGui(infos);
+		infos.addEventListener(new GameEventReactor(elg));
 	}
 
 	private void createElements() {
@@ -76,97 +66,6 @@ public class UserInterface implements GameEventListener, GuiResizeListener {
 
 	ArrayList<RenderedGuiObject> getUiObjects() {
 		return uiObjects;
-	}
-
-	@Override
-	public void onNewObjectPosition(GameObject object) {
-		for (RenderedGuiObject obj : uiObjects) {
-			obj.onNewObjectPosition(object);
-		}
-	}
-
-	@Override
-	public void onInformationRequested(ArrayList<GameEvent> events,
-			int targetOwner) {
-		for (RenderedGuiObject obj : uiObjects) {
-			obj.onInformationRequested(events, targetOwner);
-		}
-	}
-
-	@Override
-	public void onObjectCreation(ObjectFactoryEvent event) {
-		for (RenderedGuiObject obj : uiObjects) {
-			obj.onObjectCreation(event);
-		}
-	}
-
-	@Override
-	public void onClientRename(ClientRenameEvent event) {
-		for (RenderedGuiObject obj : uiObjects) {
-			obj.onClientRename(event);
-		}
-	}
-
-	@Override
-	public void onObjectStateChanged(SetGameObjectAttributeEvent<?> event) {
-		for (RenderedGuiObject obj : uiObjects) {
-			obj.onObjectStateChanged(event);
-		}
-	}
-
-	@Override
-	public void onGameModeChanged(GameMode newGameMode) {
-		for (RenderedGuiObject obj : uiObjects) {
-			obj.onGameModeChanged(newGameMode);
-		}
-	}
-
-	@Override
-	public void onHealthChanged(SetIntegerGameObjectAttributeEvent event) {
-		for (RenderedGuiObject obj : uiObjects) {
-			obj.onHealthChanged(event);
-		}
-	}
-
-	@Override
-	public void onOwnerChanged(SetOwnerEvent event) {
-		for (RenderedGuiObject obj : uiObjects) {
-			obj.onOwnerChanged(event);
-		}
-	}
-
-	@Override
-	public void onItemSlotChanged(SetItemSlotEvent event) {
-		for (RenderedGuiObject obj : uiObjects) {
-			obj.onItemSlotChanged(event);
-		}
-	}
-
-	@Override
-	public void onObjectRemove(ObjectFactoryEvent event) {
-	}
-
-	@Override
-	public void onMatchEnd(MatchEndEvent event) {
-		for (RenderedGuiObject obj : uiObjects) {
-			obj.onMatchEnd(event);
-		}
-	}
-
-	/**
-	 * Notifies gui objects that player object has been received.
-	 */
-	public void onPlayerReceived() {
-		for (RenderedGuiObject obj : uiObjects) {
-			obj.onPlayerInformationReceived();
-		}
-	}
-
-	@Override
-	public void onGuiSizeChanged(int width, int height) {
-		for (RenderedGuiObject obj : uiObjects) {
-			obj.onGuiSizeChanged(width, height);
-		}
 	}
 
 	/**
@@ -228,9 +127,10 @@ public class UserInterface implements GameEventListener, GuiResizeListener {
 	}
 
 	@Override
-	public void onMaxHealthChanged(SetIntegerGameObjectAttributeEvent event) {
+	public void onGuiSizeChanged(int width, int height) {
 		for (RenderedGuiObject obj : uiObjects) {
-			obj.onMaxHealthChanged(event);
+			obj.onGuiSizeChanged(width, height);
 		}
 	}
+
 }

@@ -11,7 +11,7 @@ import de.illonis.eduras.events.SetGameObjectAttributeEvent;
 import de.illonis.eduras.events.SetIntegerGameObjectAttributeEvent;
 import de.illonis.eduras.events.SetItemSlotEvent;
 import de.illonis.eduras.events.SetOwnerEvent;
-import de.illonis.eduras.gameclient.gui.UserInterface;
+import de.illonis.eduras.gameclient.gui.EventListenerGui;
 import de.illonis.eduras.gamemodes.GameMode;
 import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.interfaces.GameEventListener;
@@ -24,15 +24,15 @@ import de.illonis.eduras.interfaces.GameEventListener;
  */
 public class GameEventReactor implements GameEventListener {
 
-	private final UserInterface ui;
+	private final EventListenerGui ui;
 
 	/**
 	 * Creates a new reactor.
 	 * 
 	 * @param ui
-	 *            associated user interface.
+	 *            associated user interface event listener.
 	 */
-	public GameEventReactor(UserInterface ui) {
+	public GameEventReactor(EventListenerGui ui) {
 		this.ui = ui;
 	}
 
