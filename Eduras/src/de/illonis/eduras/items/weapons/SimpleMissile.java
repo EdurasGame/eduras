@@ -44,7 +44,7 @@ public class SimpleMissile extends Missile {
 	@Override
 	public void onCollision(GameObject collidingObject) {
 		if (collidingObject.isUnit()) {
-			((Unit) collidingObject).damage(getDamage());
+			((Unit) collidingObject).damagedBy(getDamage(), getOwner());
 		}
 		removeSelf();
 	}

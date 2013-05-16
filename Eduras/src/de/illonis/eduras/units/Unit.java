@@ -99,20 +99,25 @@ public abstract class Unit extends MoveableGameObject {
 	 * 
 	 * @param damage
 	 *            damage (must be >0).
+	 * @param damager
+	 *            the owner id of the object which caused the damage.
 	 */
-	public void damage(int damage) {
+	public void damagedBy(int damage, int damager) {
 		if (damage <= 0)
 			return;
 		int newHealth = Math.max(getHealth() - damage, 0);
 		getGame().getEventTriggerer().setHealth(this.getId(), newHealth);
 		if (isDead())
-			onDead();
+			onDead(damager);
 	}
 
 	/**
 	 * Called when unit dies.
+	 * 
+	 * @param killer
+	 *            Specifies who killed this object. -1 if there is no killer.
 	 */
-	protected void onDead() {
-		getGame().getGameSettings().getGameMode().onDeath(this, null);
+	protected void onDead(int killer) {
+		getGame().getGameSettings().getGameMode().onDeath(this, killer);
 	}
 }

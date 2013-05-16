@@ -2,6 +2,7 @@ package de.illonis.eduras.gamemodes;
 
 import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.ObjectFactory.ObjectType;
+import de.illonis.eduras.exceptions.ObjectNotFoundException;
 import de.illonis.eduras.units.Player;
 import de.illonis.eduras.units.Unit;
 
@@ -30,12 +31,13 @@ public class Deathmatch implements GameMode {
 	}
 
 	@Override
-	public void onDeath(Unit killedUnit, Unit killingUnit) {
+	public void onDeath(Unit killedUnit, int killingUnit) {
 
-		if (killingUnit instanceof Player) {
-
-			gameInfo.getGameSettings().getStats()
-					.addKillForPlayer((Player) killingUnit);
+		try {
+			Player killer = gameInfo.getPlayerByOwnerId(killingUnit);
+			gameInfo.getGameSettings().getStats().addKillForPlayer(killer);
+		} catch (ObjectNotFoundException e) {
+			// do nothing here
 		}
 
 		if (killedUnit instanceof Player) {

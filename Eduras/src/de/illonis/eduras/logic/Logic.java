@@ -198,7 +198,7 @@ public class Logic implements GameLogicInterface {
 					Item item = (Item) currentGame.findObjectById(lootItemEvent
 							.getObjectId());
 					itemSlot = player.getInventory().loot(item);
-					item.setOwner(lootItemEvent.getPlayerId());
+					item.setOwner(player.getOwner());
 					item.setCollidable(false);
 					item.setVisible(false);
 

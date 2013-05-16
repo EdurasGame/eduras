@@ -24,10 +24,10 @@ public interface GameMode {
 	 * 
 	 * @param killedUnit
 	 *            The player who died.
-	 * @param killingUnit
+	 * @param killingPlayer
 	 *            The player who killed the other player. Null if there is none.
 	 */
-	public void onDeath(Unit killedUnit, Unit killingUnit);
+	public void onDeath(Unit killedUnit, int killingPlayer);
 
 	/**
 	 * Called when the time is up.

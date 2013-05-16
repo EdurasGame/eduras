@@ -18,7 +18,7 @@ public class ClientGameMode implements GameMode {
 	}
 
 	@Override
-	public void onDeath(Unit killedUnit, Unit killingUnit) {
+	public void onDeath(Unit killedUnit, int killingUnit) {
 
 		// do nothing
 
