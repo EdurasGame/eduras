@@ -2,6 +2,12 @@ package de.illonis.eduras.logger;
 
 import java.io.File;
 
+/**
+ * A module that features logging to file.
+ * 
+ * @author illonis
+ * 
+ */
 public class LogWriter {
 
 	private File logFile;
@@ -21,7 +27,8 @@ public class LogWriter {
 	}
 
 	/**
-	 * @param logFile the logFile to set
+	 * @param logFile
+	 *            the logFile to set
 	 */
 	public void setLogFile(File logFile) {
 		this.logFile = logFile;

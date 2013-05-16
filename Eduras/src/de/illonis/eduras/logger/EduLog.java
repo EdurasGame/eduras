@@ -36,6 +36,7 @@ public final class EduLog {
 	 * @author illonis
 	 * 
 	 */
+	@SuppressWarnings("javadoc")
 	public static enum LogMode {
 		CONSOLE(0x100), GUI(0x1), FILE(0x10), NONE(0x0);
 
@@ -45,6 +46,11 @@ public final class EduLog {
 			this.id = id;
 		}
 
+		/**
+		 * Returns the id of this log mode.
+		 * 
+		 * @return the id.
+		 */
 		public int getId() {
 			return id;
 		}
