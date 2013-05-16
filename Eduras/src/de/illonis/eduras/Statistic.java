@@ -32,7 +32,9 @@ public class Statistic {
 	 * @return The number of kills.
 	 */
 	public int getKillsOfPlayer(Player player) {
-		return killsOfPlayer.get(player);
+		if (killsOfPlayer.containsKey(player))
+			return killsOfPlayer.get(player);
+		return 0;
 	}
 
 	/**
