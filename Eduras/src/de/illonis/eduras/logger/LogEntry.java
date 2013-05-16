@@ -64,6 +64,11 @@ public class LogEntry {
 		return stackTrace;
 	}
 
+	/**
+	 * Returns a complete representation of this entry as a single string.
+	 * 
+	 * @return this entry as single string.
+	 */
 	public String toFullString() {
 		StringBuilder b = new StringBuilder(toString());
 		b.append("\n");

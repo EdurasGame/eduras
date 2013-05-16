@@ -21,6 +21,12 @@ import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
+/**
+ * A gui that tracks logging entries and provides filter functions.
+ * 
+ * @author illonis
+ * 
+ */
 public class LoggerGui extends JFrame implements LogListener, ActionListener,
 		ListSelectionListener {
 
@@ -33,6 +39,10 @@ public class LoggerGui extends JFrame implements LogListener, ActionListener,
 	private DefaultComboBoxModel<Level> levelModel;
 	private JTextArea details;
 
+	/**
+	 * Creates a new logging window. You should never use more than one at a
+	 * time.
+	 */
 	public LoggerGui() {
 		super("Eduras? logging result");
 		setSize(700, 400);

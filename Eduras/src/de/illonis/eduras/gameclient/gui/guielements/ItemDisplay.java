@@ -101,7 +101,11 @@ public class ItemDisplay extends ClickableGuiElement implements
 
 	@Override
 	public void onItemSlotChanged(SetItemSlotEvent event) {
-		onItemChanged(event.getItemSlot());
+		if (event.getOwner() == getInfo().getOwnerID()) {
+			Item item = (Item) getInfo().getGameObjects().get(
+					event.getObjectId());
+			onItemChanged(event.getItemSlot(), item);
+		}
 	}
 
 	/**
@@ -111,22 +115,18 @@ public class ItemDisplay extends ClickableGuiElement implements
 	 * @param slot
 	 *            slot that changed.
 	 */
-	private void onItemChanged(int slot) {
-		String newName;
-		try {
-			Item item = getInfo().getPlayer().getInventory()
-					.getItemBySlot(slot);
-			newName = item.getName();
-			if (ImageList.hasImageFor(item)) {
-				itemSlots[slot].setItemImage(ImageList.getImageFor(item));
+	private void onItemChanged(int slot, Item newItem) {
+		if (newItem == null) {
+			itemSlots[slot].setName("EMPTY");
+			itemSlots[slot].setItemImage(null);
+		} else {
+			String newName = newItem.getName();
+			if (ImageList.hasImageFor(newItem)) {
+				itemSlots[slot].setItemImage(ImageList.getImageFor(newItem));
 			}
-		} catch (ItemSlotIsEmptyException e) {
-			newName = "E";
-		} catch (ObjectNotFoundException e) {
-			newName = "N/A";
-			EduLog.error("Item slot was created in gui, but assigned player was not found.");
+
+			itemSlots[slot].setName(newName);
 		}
-		itemSlots[slot].setName(newName);
 	}
 
 	/**
@@ -186,7 +186,7 @@ public class ItemDisplay extends ClickableGuiElement implements
 	@Override
 	public void onPlayerInformationReceived() {
 		for (int i = 0; i < Inventory.MAX_CAPACITY; i++) {
-			onItemChanged(i);
+			// onItemChanged(i);
 		}
 	}
 

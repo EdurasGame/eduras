@@ -7,6 +7,8 @@ import java.net.URL;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 
+import de.illonis.eduras.logger.EduLog;
+
 /**
  * Provides utility features to load or interact with images stored in game
  * package. All images are stored in image-package or subpackages.
@@ -30,12 +32,19 @@ public class ImageFiler {
 		return ImageIO.read(ImageFiler.class.getResource(fileName));
 	}
 
+	/**
+	 * Loads an icon from internal filesystem.
+	 * 
+	 * @param path
+	 *            file name of icon. Must be relative to images-package.
+	 * @return an {@link ImageIcon} from given file.
+	 */
 	public static ImageIcon loadIcon(String path) {
 		URL imgURL = ImageFiler.class.getResource(path);
 		if (imgURL != null) {
 			return new ImageIcon(imgURL);
 		} else {
-			System.err.println("Couldn't find image file: " + path);
+			EduLog.error("Couldn't find image file: " + path);
 			return null;
 		}
 	}
