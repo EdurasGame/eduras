@@ -58,8 +58,8 @@ public class UserInterface implements GameEventListener, GuiResizeListener {
 	}
 
 	private void createElements() {
-		uiObjects.add(new ItemDisplay(this));
-		uiObjects.add(new GameModeBar(this));
+		new ItemDisplay(this);
+		new GameModeBar(this);
 	}
 
 	/**
