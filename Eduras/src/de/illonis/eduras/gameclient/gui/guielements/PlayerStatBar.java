@@ -26,6 +26,7 @@ public class PlayerStatBar extends RenderedGuiObject {
 	private int maxHealth;
 	private int barWidth;
 	private Player player;
+	private int kills;
 
 	/**
 	 * Creates a new player stat bar.
@@ -36,7 +37,7 @@ public class PlayerStatBar extends RenderedGuiObject {
 	public PlayerStatBar(UserInterface gui) {
 		super(gui);
 		health = maxHealth = 10;
-		screenX = 0;
+		screenX = kills = 0;
 		recalculate();
 	}
 
@@ -46,6 +47,8 @@ public class PlayerStatBar extends RenderedGuiObject {
 		g2d.fillRect(screenX, screenY, MAX_WIDTH, HEIGHT);
 		g2d.setColor(COLOR_BAR);
 		g2d.fillRect(screenX, screenY, barWidth, HEIGHT);
+		g2d.setColor(Color.BLACK);
+		g2d.drawString(kills + "", screenX, screenY);
 	}
 
 	@Override
