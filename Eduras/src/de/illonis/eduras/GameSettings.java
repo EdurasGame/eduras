@@ -2,6 +2,7 @@ package de.illonis.eduras;
 
 import java.util.LinkedList;
 
+import de.illonis.eduras.gamemodes.Deathmatch;
 import de.illonis.eduras.gamemodes.GameMode;
 import de.illonis.eduras.gamemodes.NoGameMode;
 
@@ -39,7 +40,7 @@ public class GameSettings {
 	 */
 	public GameSettings(GameInformation gameInfo) {
 
-		gameMode = new NoGameMode(gameInfo);
+		gameMode = new Deathmatch(gameInfo);
 		remainingTime = 3000000;
 		numberOfTeams = NumberOfTeams.FFA;
 		stats = new Statistic();
