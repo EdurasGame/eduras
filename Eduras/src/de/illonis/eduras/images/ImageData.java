@@ -2,14 +2,25 @@ package de.illonis.eduras.images;
 
 /**
  * Represents image data. Data are hold as a pixel array that is public
- * accessible.
+ * accessible. This is a relevant class for spritesheets.
  * 
  * @author illonis
  * 
  */
 public class ImageData {
 
-	public int w, h;
+	/**
+	 * width
+	 */
+	public int w;
+
+	/**
+	 * height
+	 */
+	public int h;
+	/**
+	 * The pixels.
+	 */
 	public int[] pixels;
 
 	/**
