@@ -64,6 +64,14 @@ public class InputKeyHandler extends KeyAdapter {
 		this.client = client;
 	}
 
+	/**
+	 * Adds a {@link UserInputListener}.
+	 * 
+	 * @param listener
+	 *            the new listener.
+	 * 
+	 * @author illonis
+	 */
 	public void addUserInputListener(UserInputListener listener) {
 		listeners.add(listener);
 	}

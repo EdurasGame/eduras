@@ -4,10 +4,7 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.util.Collection;
 
-import de.illonis.eduras.events.GameEvent.GameEventNumber;
-import de.illonis.eduras.events.ObjectFactoryEvent;
 import de.illonis.eduras.gameclient.gui.UserInterface;
-import de.illonis.eduras.logger.EduLog;
 import de.illonis.eduras.units.Player;
 
 /**
@@ -70,23 +67,10 @@ public class StatisticsWindow extends RenderedGuiObject {
 	public void onGuiSizeChanged(int newWidth, int newHeight) {
 		width = newWidth - 100;
 		height = newHeight - 100;
-
 	}
 
 	@Override
 	public void onPlayerInformationReceived() {
 		players = getInfo().getPlayers();
 	}
-
-	@Override
-	public void onObjectCreation(ObjectFactoryEvent event) {
-		if (event.getType() == GameEventNumber.OBJECT_CREATE) {
-			if (getInfo().getGameObjects().get(event.getId()) instanceof Player) {
-				EduLog.info("new player");
-
-			}
-		}
-		super.onObjectCreation(event);
-	}
-
 }

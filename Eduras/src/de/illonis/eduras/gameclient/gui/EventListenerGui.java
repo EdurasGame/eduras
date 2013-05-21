@@ -33,6 +33,8 @@ public class EventListenerGui implements GameEventListener {
 	 * 
 	 * @param infos
 	 *            game information to use.
+	 * @param uiObjects
+	 *            rendered ui objects.
 	 */
 	public EventListenerGui(InformationProvider infos,
 			ArrayList<RenderedGuiObject> uiObjects) {
