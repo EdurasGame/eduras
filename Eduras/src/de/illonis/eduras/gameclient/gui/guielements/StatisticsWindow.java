@@ -17,6 +17,8 @@ public class StatisticsWindow extends RenderedGuiObject {
 
 	private final static Color COLOR_BG = new Color(0, 0, 0, 200);
 	private final static Color COLOR_TEXT = Color.WHITE;
+	private final static int BORDERSIZE = 50;
+	private final static int LINEHEIGHT = 30;
 	private Collection<Player> players;
 	private int width, height;
 	private boolean visible;
@@ -30,8 +32,8 @@ public class StatisticsWindow extends RenderedGuiObject {
 	public StatisticsWindow(UserInterface gui) {
 		super(gui);
 		visible = false;
-		screenX = 50;
-		screenY = 50;
+		screenX = BORDERSIZE;
+		screenY = BORDERSIZE;
 		width = height = 10;
 	}
 
@@ -51,22 +53,24 @@ public class StatisticsWindow extends RenderedGuiObject {
 	public void render(Graphics2D g2d) {
 		if (!visible)
 			return;
-		int i = 0;
 		g2d.setPaint(COLOR_BG);
 		g2d.fillRect(screenX, screenY, width, height);
 		g2d.setColor(COLOR_TEXT);
+
+		int i = 0;
 		for (Player p : players) {
-			g2d.drawString(p.getName(), screenX + 50, screenY + 50 + i * 30);
+			g2d.drawString(p.getName(), screenX + 50, screenY + 50 + i
+					* LINEHEIGHT);
 			g2d.drawString(getInfo().getStatistics().getKillsOfPlayer(p) + "",
-					screenX + 150, screenY + 50 + i * 30);
+					screenX + 150, screenY + 50 + i * LINEHEIGHT);
 			i++;
 		}
 	}
 
 	@Override
 	public void onGuiSizeChanged(int newWidth, int newHeight) {
-		width = newWidth - 100;
-		height = newHeight - 100;
+		width = newWidth - BORDERSIZE * 2;
+		height = newHeight - BORDERSIZE * 2;
 	}
 
 	@Override
