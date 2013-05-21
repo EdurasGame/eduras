@@ -46,7 +46,6 @@ public class Statistic {
 
 		killsOfPlayer.put(player.getOwner(),
 				killsOfPlayer.get(player.getOwner()) + 1);
-
 	}
 
 	/**
