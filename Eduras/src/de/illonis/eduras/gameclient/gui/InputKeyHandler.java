@@ -3,6 +3,7 @@ package de.illonis.eduras.gameclient.gui;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.util.HashMap;
+import java.util.LinkedList;
 
 import de.illonis.eduras.events.GameEvent.GameEventNumber;
 import de.illonis.eduras.events.UserMovementEvent;
@@ -24,6 +25,8 @@ import de.illonis.eduras.settings.Settings;
 public class InputKeyHandler extends KeyAdapter {
 
 	private static final long KEY_INTERVAL = 20;
+	private LinkedList<UserInputListener> listeners;
+	private ListenerPromoter promoter;
 
 	private EventSender eventSender;
 
@@ -49,7 +52,8 @@ public class InputKeyHandler extends KeyAdapter {
 	 */
 	public InputKeyHandler(GameClient client, EventSender sender,
 			Settings settings) {
-
+		promoter = new ListenerPromoter();
+		listeners = new LinkedList<UserInputListener>();
 		this.settings = settings;
 		pressedButtons = new HashMap<Integer, Boolean>();
 
@@ -58,6 +62,10 @@ public class InputKeyHandler extends KeyAdapter {
 		lastTimePressed = System.currentTimeMillis();
 
 		this.client = client;
+	}
+
+	public void addUserInputListener(UserInputListener listener) {
+		listeners.add(listener);
 	}
 
 	/**
@@ -151,6 +159,9 @@ public class InputKeyHandler extends KeyAdapter {
 		case ITEM_6:
 			client.itemUsed(5);
 			return;
+		case SHOW_STATS:
+			promoter.showStatWindow();
+			return;
 		case EXIT_CLIENT:
 			client.getNetworkManager().notifyDisconnect();
 			return;
@@ -207,6 +218,9 @@ public class InputKeyHandler extends KeyAdapter {
 			moveEvent = new UserMovementEvent(
 					GameEventNumber.MOVE_RIGHT_RELEASED, client.getOwnerID());
 			break;
+		case SHOW_STATS:
+			promoter.hideStatWindow();
+			return;
 		default:
 			return;
 		}
@@ -228,5 +242,23 @@ public class InputKeyHandler extends KeyAdapter {
 	@Override
 	public void keyReleased(KeyEvent e) {
 		keyReleased(e.getKeyCode());
+	}
+
+	private class ListenerPromoter implements UserInputListener {
+
+		@Override
+		public void showStatWindow() {
+			for (UserInputListener listener : listeners) {
+				listener.showStatWindow();
+			}
+		}
+
+		@Override
+		public void hideStatWindow() {
+			for (UserInputListener listener : listeners) {
+				listener.hideStatWindow();
+			}
+		}
+
 	}
 }

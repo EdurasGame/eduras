@@ -23,6 +23,7 @@ public class GamePanel extends JPanel {
 	 */
 	public GamePanel() {
 		setFocusable(true);
+		setFocusTraversalKeysEnabled(false);
 		setBackground(Color.black);
 		setDoubleBuffered(true);
 	}

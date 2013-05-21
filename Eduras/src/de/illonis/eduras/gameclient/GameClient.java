@@ -142,7 +142,7 @@ public class GameClient implements GuiClickReactor, NetworkEventReactor,
 		EduLog.info("Connection to server established. OwnerId: "
 				+ infoPro.getOwnerID());
 		keyHandler = new InputKeyHandler(this, eventSender, settings);
-
+		keyHandler.addUserInputListener(frame);
 		frame.onConnected(clientId); // pass to gui
 
 		try {

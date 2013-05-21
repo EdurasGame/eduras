@@ -4,6 +4,7 @@
 package de.illonis.eduras.interfaces;
 
 import java.awt.Rectangle;
+import java.util.Collection;
 import java.util.concurrent.ConcurrentHashMap;
 
 import de.illonis.eduras.Statistic;
@@ -45,6 +46,15 @@ public interface InfoInterface {
 	 * @return The game objects as a hashmap.
 	 */
 	public ConcurrentHashMap<Integer, GameObject> getGameObjects();
+
+	/**
+	 * Returns a list of all players online.
+	 * 
+	 * @return player list.
+	 * 
+	 * @author illonis
+	 */
+	public Collection<Player> getPlayers();
 
 	/**
 	 * Returns game statistics.

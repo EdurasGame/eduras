@@ -25,7 +25,7 @@ import de.illonis.eduras.math.Vector2D;
  * 
  */
 public class ClientFrame extends JFrame implements NetworkEventReactor,
-		ActionListener {
+		ActionListener, UserInputListener {
 
 	private static final long serialVersionUID = 1L;
 	private CardLayout cardLayout;
@@ -251,5 +251,15 @@ public class ClientFrame extends JFrame implements NetworkEventReactor,
 	@Override
 	public void onPlayerReceived() {
 		// nothing to do here because object factory notices guinotifier.
+	}
+
+	@Override
+	public void showStatWindow() {
+		userInterface.showStatWindow();
+	}
+
+	@Override
+	public void hideStatWindow() {
+		userInterface.hideStatWindow();
 	}
 }

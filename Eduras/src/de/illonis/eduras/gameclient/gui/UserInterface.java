@@ -9,6 +9,7 @@ import de.illonis.eduras.gameclient.gui.guielements.GameModeBar;
 import de.illonis.eduras.gameclient.gui.guielements.ItemDisplay;
 import de.illonis.eduras.gameclient.gui.guielements.PlayerStatBar;
 import de.illonis.eduras.gameclient.gui.guielements.RenderedGuiObject;
+import de.illonis.eduras.gameclient.gui.guielements.StatisticsWindow;
 import de.illonis.eduras.gameclient.gui.guielements.TooltipTriggerer;
 import de.illonis.eduras.logicabstraction.InformationProvider;
 
@@ -19,12 +20,13 @@ import de.illonis.eduras.logicabstraction.InformationProvider;
  * @author illonis
  * 
  */
-public class UserInterface implements GuiResizeListener {
+public class UserInterface implements GuiResizeListener, UserInputListener {
 	private ArrayList<RenderedGuiObject> uiObjects;
 	private InformationProvider infos;
 	private GuiClickReactor reactor;
 	private TooltipHandler tooltipHandler;
 	private TooltipTriggererNotifier tooltipNotifier;
+	private StatisticsWindow statWindow;
 
 	/**
 	 * Creates the user interface. The tooltip handler will be set manually
@@ -53,6 +55,7 @@ public class UserInterface implements GuiResizeListener {
 		new ItemDisplay(this);
 		new GameModeBar(this);
 		new PlayerStatBar(this);
+		statWindow = new StatisticsWindow(this);
 	}
 
 	/**
@@ -131,6 +134,16 @@ public class UserInterface implements GuiResizeListener {
 		for (RenderedGuiObject obj : uiObjects) {
 			obj.onGuiSizeChanged(width, height);
 		}
+	}
+
+	@Override
+	public void showStatWindow() {
+		statWindow.setVisible(true);
+	}
+
+	@Override
+	public void hideStatWindow() {
+		statWindow.setVisible(false);
 	}
 
 }
