@@ -5,7 +5,8 @@ import java.util.LinkedList;
 /**
  * A loader that loads data asynchronously. This may be data that need a large
  * amount of time to load. {@link AsyncLoader}s are designed in a way that data
- * will be only loaded once.
+ * will be only loaded once. Assigned listeners will be notified automatically
+ * when loading finished.
  * 
  * @author illonis
  * 
@@ -33,13 +34,9 @@ public abstract class AsyncLoader<T> implements Runnable {
 	 */
 	public final void startLoading() {
 		Thread t = new Thread(this);
+		t.setName("Async-Loader");
 		t.start();
 	}
-
-	/**
-	 * Called when loading has finished.
-	 */
-	protected abstract void onLoadingFinished();
 
 	/**
 	 * Return whether data have been loaded completely.
@@ -85,7 +82,7 @@ public abstract class AsyncLoader<T> implements Runnable {
 	 * This method will be executed asynchronously when {@link #startLoading()}
 	 * is called. Put your loading stuff here. You should call
 	 * {@link #setProgress(int)} to announce progress. Call
-	 * {@link #setData(Object)} to store loaded data.
+	 * {@link #setData(Object)} in the end to store loaded data.
 	 */
 	protected abstract void loadAsync();
 
@@ -112,7 +109,7 @@ public abstract class AsyncLoader<T> implements Runnable {
 	 *             when data not loaded yet.
 	 */
 	public final T getData() throws DataNotAvailableException {
-		if (hasFinished())
+		if (hasFinished() && data != null)
 			return data;
 		else {
 			throw new DataNotAvailableException();
