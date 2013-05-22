@@ -35,7 +35,8 @@ public class StatisticsWindow extends RenderedGuiObject {
 		visible = false;
 		screenX = BORDERSIZE;
 		screenY = BORDERSIZE;
-		width = height = 10;
+		width = 400;
+		height = 300;
 	}
 
 	/**
@@ -75,8 +76,11 @@ public class StatisticsWindow extends RenderedGuiObject {
 
 	@Override
 	public void onGuiSizeChanged(int newWidth, int newHeight) {
-		width = newWidth - BORDERSIZE * 2;
-		height = newHeight - BORDERSIZE * 2;
+		screenX = (newWidth - width) / 2;
+		screenY = (newHeight - height) / 2;
+
+		// width = newWidth - BORDERSIZE * 2;
+		// height = newHeight - BORDERSIZE * 2;
 	}
 
 	@Override
