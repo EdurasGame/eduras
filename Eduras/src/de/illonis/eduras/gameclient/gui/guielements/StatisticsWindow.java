@@ -2,9 +2,13 @@ package de.illonis.eduras.gameclient.gui.guielements;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.util.Collection;
 
 import de.illonis.eduras.gameclient.gui.UserInterface;
+import de.illonis.eduras.images.ImageFiler;
+import de.illonis.eduras.logger.EduLog;
 import de.illonis.eduras.units.Player;
 
 /**
@@ -20,6 +24,7 @@ public class StatisticsWindow extends RenderedGuiObject {
 	private final static Color COLOR_HEADER = Color.YELLOW;
 	private final static int BORDERSIZE = 100;
 	private final static int LINEHEIGHT = 30;
+	private BufferedImage artwork;
 	private Collection<Player> players;
 	private int width, height;
 	private boolean visible;
@@ -37,6 +42,11 @@ public class StatisticsWindow extends RenderedGuiObject {
 		screenY = BORDERSIZE;
 		width = 400;
 		height = 300;
+		try {
+			artwork = ImageFiler.load("gui/artwork/statwindow.png");
+		} catch (IOException e) {
+			EduLog.passException(e);
+		}
 	}
 
 	/**
@@ -57,7 +67,9 @@ public class StatisticsWindow extends RenderedGuiObject {
 			return;
 		// background
 		g2d.setPaint(COLOR_BG);
-		g2d.fillRect(screenX, screenY, width, height);
+		//g2d.fillRect(screenX, screenY, width, height);
+		g2d.drawImage(artwork, screenX, screenY, null);
+
 		// header
 		g2d.setColor(COLOR_HEADER);
 		g2d.drawString("Player", screenX + 50, screenY + 50);
