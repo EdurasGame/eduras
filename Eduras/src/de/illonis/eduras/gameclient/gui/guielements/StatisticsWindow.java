@@ -67,21 +67,21 @@ public class StatisticsWindow extends RenderedGuiObject {
 			return;
 		// background
 		g2d.setPaint(COLOR_BG);
-		//g2d.fillRect(screenX, screenY, width, height);
+		// g2d.fillRect(screenX, screenY, width, height);
 		g2d.drawImage(artwork, screenX, screenY, null);
 
 		// header
 		g2d.setColor(COLOR_HEADER);
-		g2d.drawString("Player", screenX + 50, screenY + 50);
-		g2d.drawString("Kills", screenX + 150, screenY + 50);
+		g2d.drawString("Player", screenX + 120, screenY + 80);
+		g2d.drawString("Kills", screenX + 220, screenY + 80);
 		// players
 		g2d.setColor(COLOR_TEXT);
 		int i = 1;
 		for (Player p : players) {
-			g2d.drawString(p.getName(), screenX + 50, screenY + 50 + i
+			g2d.drawString(p.getName(), screenX + 120, screenY + 80 + i
 					* LINEHEIGHT);
 			g2d.drawString(getInfo().getStatistics().getKillsOfPlayer(p) + "",
-					screenX + 150, screenY + 50 + i * LINEHEIGHT);
+					screenX + 220, screenY + 80 + i * LINEHEIGHT);
 			i++;
 		}
 	}

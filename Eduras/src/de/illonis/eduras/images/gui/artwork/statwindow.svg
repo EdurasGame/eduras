@@ -31,24 +31,48 @@
          id="feBlend3773" />
     </filter>
     <filter
-       color-interpolation-filters="sRGB"
        inkscape:collect="always"
-       id="filter3771-86">
-      <feBlend
+       id="filter3926">
+      <feGaussianBlur
          inkscape:collect="always"
-         mode="lighten"
-         in2="BackgroundImage"
-         id="feBlend3773-8" />
+         stdDeviation="1.7676715"
+         id="feGaussianBlur3928" />
     </filter>
     <filter
        color-interpolation-filters="sRGB"
        inkscape:collect="always"
-       id="filter3771-3">
-      <feBlend
+       id="filter3926-6">
+      <feGaussianBlur
          inkscape:collect="always"
-         mode="lighten"
-         in2="BackgroundImage"
-         id="feBlend3773-9" />
+         stdDeviation="1.7676715"
+         id="feGaussianBlur3928-5" />
+    </filter>
+    <filter
+       color-interpolation-filters="sRGB"
+       inkscape:collect="always"
+       id="filter3926-9">
+      <feGaussianBlur
+         inkscape:collect="always"
+         stdDeviation="1.7676715"
+         id="feGaussianBlur3928-2" />
+    </filter>
+    <filter
+       color-interpolation-filters="sRGB"
+       inkscape:collect="always"
+       id="filter3926-5">
+      <feGaussianBlur
+         inkscape:collect="always"
+         stdDeviation="1.7676715"
+         id="feGaussianBlur3928-25" />
+    </filter>
+    <filter
+       color-interpolation-filters="sRGB"
+       inkscape:collect="always"
+       id="filter3926-69">
+      <feGaussianBlur
+         inkscape:collect="always"
+         stdDeviation="1.7676715"
+         id="feGaussianBlur3928-6" />
     </filter>
   </defs>
   <sodipodi:namedview
@@ -58,14 +82,14 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.98994949"
-     inkscape:cx="154.91807"
-     inkscape:cy="112.45599"
+     inkscape:zoom="1.4"
+     inkscape:cx="205"
+     inkscape:cy="89.626952"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
      borderlayer="true"
-     inkscape:window-width="1280"
+     inkscape:window-width="1366"
      inkscape:window-height="744"
      inkscape:window-x="0"
      inkscape:window-y="24"
@@ -80,7 +104,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -92,10 +116,10 @@
      style="display:inline;filter:url(#filter3771)">
     <path
        style="opacity:0.75;color:#000000;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1.91611254;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
-       d="m 14.330409,752.36218 371.339181,0 c 7.93905,0 14.33041,6.39137 14.33041,14.33041 l 0,271.33921 c 0,7.939 -6.39152,14.3809 -14.33041,14.3304 -6.85654,-0.044 -4.72708,-15.6017 -10.49617,-17.2151 -12.14215,-3.3958 -29.35907,5.5902 -42.9498,4.3324 -9.77356,-0.9045 -26.80588,10.3789 -37.08935,6.8802 -9.78481,-3.3291 -33.98789,-11.3717 -41.78214,0.1217 -3.48661,5.1414 -13.52268,-10.1193 -19.99447,-10.4954 -14.0277,-0.8152 -47.88878,9.3698 -60.78804,8.3198 -13.86039,-1.1283 -14.23915,-13.065 -27.12832,-13.423 -10.86567,-0.3018 -37.14904,24.7558 -45.31657,19.2117 -15.842007,-10.7534 -12.160611,-1.7172 -25.32228,-2.5662 -12.588655,-0.8119 -21.410132,10.3275 -30.780308,1.8137 -9.241286,-8.3968 -17.239873,-4.5187 -22.620665,-1.0204 C 13.260641,1053.6143 0,1045.9708 0,1038.0318 L 0,766.69259 c 0,-7.93904 6.3913624,-14.33041 14.330409,-14.33041 z"
+       d="m 14.330409,753.79075 371.339181,0 c 7.93905,0 14.33041,6.39137 14.33041,14.33041 l 0,271.33924 c -40.13482,9.3065 -398.7224022,20.9383 -400,0 L 0,768.12116 c 0,-7.93904 6.3913624,-14.33041 14.330409,-14.33041 z"
        id="rect2985"
        inkscape:connector-curvature="0"
-       sodipodi:nodetypes="sssssssssssssssssss" />
+       sodipodi:nodetypes="sssccss" />
     <rect
        style="color:#000000;fill:#280b0b;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:2;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
        id="rect3756"
