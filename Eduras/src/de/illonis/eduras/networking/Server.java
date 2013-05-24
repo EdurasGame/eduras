@@ -16,6 +16,7 @@ import de.illonis.eduras.events.GameEvent.GameEventNumber;
 import de.illonis.eduras.events.GameInfoRequest;
 import de.illonis.eduras.events.GameReadyEvent;
 import de.illonis.eduras.events.InitInformationEvent;
+import de.illonis.eduras.events.MovementEvent;
 import de.illonis.eduras.events.ObjectFactoryEvent;
 import de.illonis.eduras.exceptions.InvalidNameException;
 import de.illonis.eduras.exceptions.MessageNotSupportedException;
@@ -26,6 +27,7 @@ import de.illonis.eduras.interfaces.NetworkEventListener;
 import de.illonis.eduras.locale.Localization;
 import de.illonis.eduras.logger.EduLog;
 import de.illonis.eduras.networking.ServerClient.ClientRole;
+import de.illonis.eduras.units.Player;
 import de.illonis.eduras.utils.CollectionUtils;
 
 /**
@@ -171,6 +173,25 @@ public class Server {
 		if (initInfo.getRole() == ClientRole.PLAYER) {
 			logic.getGame().getGameSettings().getGameMode()
 					.onConnect(client.getClientId());
+
+			// send player position so it is initially available (fix of bug
+			// #37)
+			try {
+				Player p = logic.getGame().getPlayerByOwnerId(
+						client.getClientId());
+				MovementEvent me = new MovementEvent(GameEventNumber.SET_POS,
+						p.getId());
+				me.setNewXPos(p.getXPosition());
+				me.setNewYPos(p.getYPosition());
+
+				serverSender
+						.sendMessage(NetworkMessageSerializer.serialize(me));
+
+			} catch (ObjectNotFoundException e1) {
+				e1.printStackTrace();
+			} catch (MessageNotSupportedException e) {
+				e.printStackTrace();
+			}
 
 			String playerName = initInfo.getName();
 			try {
