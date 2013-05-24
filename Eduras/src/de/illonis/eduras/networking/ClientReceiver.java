@@ -43,7 +43,7 @@ public class ClientReceiver extends Thread {
 
 		this.client = client;
 		this.logic = logic;
-		setName("ClientReceiver");
+		setName("ClientReceiver for #" + client.getOwnerId());
 		try {
 			messageReader = new BufferedReader(new InputStreamReader(
 					socket.getInputStream()));

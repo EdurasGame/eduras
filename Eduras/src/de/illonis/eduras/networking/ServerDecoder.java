@@ -36,6 +36,7 @@ public class ServerDecoder extends Thread {
 	 */
 	public ServerDecoder(Buffer inputBuffer, GameLogicInterface logic,
 			NetworkEventListener networkEventListener) {
+		setName("ServerDecoder");
 		this.logic = logic;
 		this.inputBuffer = inputBuffer;
 		this.networkEventListener = networkEventListener;
