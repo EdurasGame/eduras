@@ -12,7 +12,7 @@ import de.illonis.eduras.logger.EduLog;
 import de.illonis.eduras.units.Player;
 
 /**
- * Displays a statistics frame.
+ * Displays a statistics frame that displays player stats of all players.
  * 
  * @author illonis
  * 
@@ -22,8 +22,10 @@ public class StatisticsWindow extends RenderedGuiObject {
 	private final static Color COLOR_BG = new Color(0, 0, 0, 200);
 	private final static Color COLOR_TEXT = Color.WHITE;
 	private final static Color COLOR_HEADER = Color.YELLOW;
-	private final static int BORDERSIZE = 100;
+	private final static int[] COLUMN_X = { 80, 180, 280 };
+	private final static int PADDING_Y = 80;
 	private final static int LINEHEIGHT = 30;
+
 	private BufferedImage artwork;
 	private Collection<Player> players;
 	private int width, height;
@@ -38,8 +40,8 @@ public class StatisticsWindow extends RenderedGuiObject {
 	public StatisticsWindow(UserInterface gui) {
 		super(gui);
 		visible = false;
-		screenX = BORDERSIZE;
-		screenY = BORDERSIZE;
+		screenX = 0;
+		screenY = 0;
 		width = 400;
 		height = 300;
 		try {
@@ -67,32 +69,44 @@ public class StatisticsWindow extends RenderedGuiObject {
 			return;
 		// background
 		g2d.setPaint(COLOR_BG);
-		// g2d.fillRect(screenX, screenY, width, height);
-		g2d.drawImage(artwork, screenX, screenY, null);
+		if (artwork != null)
+			g2d.drawImage(artwork, screenX, screenY, null);
+		else
+			g2d.fillRect(screenX, screenY, width, height);
 
 		// header
 		g2d.setColor(COLOR_HEADER);
-		g2d.drawString("Player", screenX + 120, screenY + 80);
-		g2d.drawString("Kills", screenX + 220, screenY + 80);
+		g2d.drawString("Player", screenX + COLUMN_X[0], screenY + PADDING_Y);
+		g2d.drawString("Kills", screenX + COLUMN_X[1], screenY + PADDING_Y);
+		g2d.drawString("Deaths", screenX + COLUMN_X[2], screenY + PADDING_Y);
 		// players
 		g2d.setColor(COLOR_TEXT);
 		int i = 1;
 		for (Player p : players) {
-			g2d.drawString(p.getName(), screenX + 120, screenY + 80 + i
-					* LINEHEIGHT);
-			g2d.drawString(getInfo().getStatistics().getKillsOfPlayer(p) + "",
-					screenX + 220, screenY + 80 + i * LINEHEIGHT);
+			drawPlayerRow(g2d, p, i);
 			i++;
 		}
 	}
 
+	private void drawPlayerRow(Graphics2D g2d, Player p, int i) {
+		// name
+		g2d.drawString(p.getName(), screenX + COLUMN_X[0], screenY + PADDING_Y
+				+ i * LINEHEIGHT);
+
+		// deaths
+		g2d.drawString(getInfo().getStatistics().getKillsOfPlayer(p) + "",
+				screenX + COLUMN_X[1], screenY + PADDING_Y + i * LINEHEIGHT);
+
+		// kills
+		g2d.drawString(getInfo().getStatistics().getDeathsOfPlayer(p) + "",
+				screenX + COLUMN_X[2], screenY + PADDING_Y + i * LINEHEIGHT);
+	}
+
 	@Override
 	public void onGuiSizeChanged(int newWidth, int newHeight) {
+		// change position so window is centered again
 		screenX = (newWidth - width) / 2;
 		screenY = (newHeight - height) / 2;
-
-		// width = newWidth - BORDERSIZE * 2;
-		// height = newHeight - BORDERSIZE * 2;
 	}
 
 	@Override

@@ -38,6 +38,18 @@ public class Statistic {
 	}
 
 	/**
+	 * Returns the number of deaths of the given player.
+	 * 
+	 * @param player
+	 *            The player
+	 * @return The number of deaths.
+	 */
+	public int getDeathsOfPlayer(Player player) {
+		// TODO: implement
+		return 0;
+	}
+
+	/**
 	 * Increments the kill count of the given player.
 	 * 
 	 * @param player
