@@ -36,7 +36,7 @@ public class ObjectFactory {
 	@SuppressWarnings("javadoc")
 	public enum ObjectType {
 		PLAYER(1), YELLOWCIRCLE(2), SIMPLEMISSILE(3), ITEM_WEAPON_1(4), NO_OBJECT(
-				0), BIGBLOCK(5), SMALLCIRCLEDBLOCK(6), SNIPERMISSILE(7), ITEM_WEAPON_2(
+				0), BIGBLOCK(5), SMALLCIRCLEDBLOCK(6), SNIPERMISSILE(7), ITEM_WEAPON_SNIPER(
 				8);
 
 		private int number;
@@ -133,7 +133,7 @@ public class ObjectFactory {
 			case SNIPERMISSILE:
 				go = new SniperMissile(logic.getGame(), id);
 				break;
-			case ITEM_WEAPON_2:
+			case ITEM_WEAPON_SNIPER:
 				go = new SniperWeapon(logic.getGame(), id);
 				break;
 			default:

@@ -26,7 +26,7 @@ public class SniperWeapon extends Weapon {
 	 */
 	public SniperWeapon(GameInformation gi, int id) {
 
-		super(ObjectType.ITEM_WEAPON_2, gi, id);
+		super(ObjectType.ITEM_WEAPON_SNIPER, gi, id);
 		setMissile(null);
 		setName("Sniper");
 		setShape(new Circle(5));
