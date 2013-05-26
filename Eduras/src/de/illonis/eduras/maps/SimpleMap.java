@@ -6,6 +6,7 @@ import de.illonis.eduras.exceptions.ShapeVerticesNotApplicableException;
 import de.illonis.eduras.gameobjects.BigBlock;
 import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.items.weapons.ExampleWeapon;
+import de.illonis.eduras.items.weapons.SniperWeapon;
 import de.illonis.eduras.logger.EduLog;
 
 /**
@@ -28,6 +29,10 @@ public class SimpleMap extends Map {
 		ExampleWeapon weap1 = new ExampleWeapon(null, -1);
 		weap1.setPosition(getWidth() * 0.75, getHeight() * 0.75);
 		initialObjects.add(weap1);
+
+		SniperWeapon tw = new SniperWeapon(null, -1);
+		tw.setPosition(getWidth() * 0.5, getHeight() * 0.75);
+		initialObjects.add(tw);
 
 		ExampleWeapon weap2 = new ExampleWeapon(null, -1);
 		weap2.setPosition(getWidth() * 0.75, getHeight() * 0.25);
