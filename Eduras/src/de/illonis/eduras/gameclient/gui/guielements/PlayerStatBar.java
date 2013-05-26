@@ -17,7 +17,7 @@ import de.illonis.eduras.units.Player;
  */
 public class PlayerStatBar extends RenderedGuiObject {
 
-	private final static int MAX_WIDTH = 140;
+	private final static int MAX_WIDTH = ItemDisplay.WIDTH;
 	private final static int HEIGHT = 20;
 	private final static Color COLOR_BAR = Color.YELLOW;
 	private final static Color COLOR_BG = Color.BLACK;

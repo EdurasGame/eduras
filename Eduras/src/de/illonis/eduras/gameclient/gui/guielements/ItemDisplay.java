@@ -25,7 +25,7 @@ public class ItemDisplay extends ClickableGuiElement implements
 		TooltipTriggerer {
 
 	private final static int ITEM_GAP = 15;
-	private final static int BLOCKSIZE = 30;
+	private final static int BLOCKSIZE = 48;
 
 	// top, right, bottom, left
 	private final static int OUTER_GAP[] = { 20, 5, 10, 15 };
@@ -33,7 +33,7 @@ public class ItemDisplay extends ClickableGuiElement implements
 	final static int HEIGHT = OUTER_GAP[0] + 2 * BLOCKSIZE + OUTER_GAP[2]
 			+ ITEM_GAP;
 
-	private final static int WIDTH = 140;
+	public final static int WIDTH = BLOCKSIZE * 3 + 4 * ITEM_GAP;
 
 	private GuiItem itemSlots[];
 
