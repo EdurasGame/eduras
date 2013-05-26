@@ -36,6 +36,7 @@ import de.illonis.eduras.items.ItemUseInformation;
 import de.illonis.eduras.items.Usable;
 import de.illonis.eduras.items.weapons.Missile;
 import de.illonis.eduras.items.weapons.SimpleMissile;
+import de.illonis.eduras.items.weapons.SniperMissile;
 import de.illonis.eduras.logger.EduLog;
 import de.illonis.eduras.units.Player;
 import de.illonis.eduras.units.Unit;
@@ -173,6 +174,9 @@ public class Logic implements GameLogicInterface {
 
 				Missile missile;
 				switch (missileLaunchEvent.getObjectType()) {
+				case SNIPERMISSILE:
+					missile = new SniperMissile(currentGame,
+							missileLaunchEvent.getId());
 				case SIMPLEMISSILE:
 					missile = new SimpleMissile(currentGame,
 							missileLaunchEvent.getId());
