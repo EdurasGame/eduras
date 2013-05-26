@@ -1,5 +1,6 @@
 package de.illonis.eduras.gameclient.gui.guielements;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Point;
@@ -26,6 +27,7 @@ public class ItemDisplay extends ClickableGuiElement implements
 
 	private final static int ITEM_GAP = 15;
 	private final static int BLOCKSIZE = 48;
+	private int currentItem = -1;
 
 	// top, right, bottom, left
 	private final static int OUTER_GAP[] = { 20, 5, 10, 15 };
@@ -59,9 +61,13 @@ public class ItemDisplay extends ClickableGuiElement implements
 	public void render(Graphics2D g2d) {
 		g2d.setColor(Color.GRAY);
 		g2d.fillRect(screenX, screenY, WIDTH, HEIGHT);
-		g2d.setColor(Color.BLACK);
 		for (GuiItem item : itemSlots) {
 			// TODO: make nicer
+			if (item.getSlotId() == currentItem) {
+				g2d.setColor(Color.RED);
+			} else
+				g2d.setColor(Color.BLACK);
+			g2d.setStroke(new BasicStroke(3));
 			g2d.drawRect(item.getX() + screenX, item.getY() + screenY,
 					BLOCKSIZE, BLOCKSIZE);
 			g2d.drawString("#" + (item.getSlotId() + 1), item.getX() + screenX
@@ -97,9 +103,13 @@ public class ItemDisplay extends ClickableGuiElement implements
 	 *            item clicked.
 	 */
 	private void itemClicked(int i) {
+
 		try {
-			if (getInfo().getPlayer().getInventory().isItemInSlot(i))
+			if (getInfo().getPlayer().getInventory().isItemInSlot(i)) {
 				getClickReactor().itemClicked(i);
+				currentItem = i;
+				System.out.println("current: " + currentItem);
+			}
 		} catch (ObjectNotFoundException e) {
 			EduLog.passException(e);
 		}

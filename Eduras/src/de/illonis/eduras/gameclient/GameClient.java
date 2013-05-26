@@ -232,6 +232,9 @@ public class GameClient implements GuiClickReactor, NetworkEventReactor,
 			EduLog.info("Click at " + e.getX() + ", " + e.getY());
 			Point p = e.getPoint();
 			switch (currentClickState) {
+			case ITEM_SELECTED:
+				if (currentItemSelected != -1)
+					itemUsed(currentItemSelected, new Vector2D(p));
 			case DEFAULT:
 				// TODO: Notify only elements that are really clicked.
 				for (Iterator<ClickableGuiElementInterface> iterator = clickListeners
@@ -241,10 +244,6 @@ public class GameClient implements GuiClickReactor, NetworkEventReactor,
 						return;
 				}
 				inGameClick(p);
-				break;
-			case ITEM_SELECTED:
-				itemUsed(currentItemSelected, new Vector2D(p));
-				currentClickState = ClickState.DEFAULT;
 				break;
 			default:
 				break;
