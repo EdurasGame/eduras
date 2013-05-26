@@ -33,6 +33,9 @@ public class ItemDisplay extends ClickableGuiElement implements
 	final static int HEIGHT = OUTER_GAP[0] + 2 * BLOCKSIZE + OUTER_GAP[2]
 			+ ITEM_GAP;
 
+	/**
+	 * Width of the total inventory.
+	 */
 	public final static int WIDTH = BLOCKSIZE * 3 + 4 * ITEM_GAP;
 
 	private GuiItem itemSlots[];
