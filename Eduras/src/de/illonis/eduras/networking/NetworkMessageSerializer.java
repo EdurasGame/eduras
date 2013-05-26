@@ -3,6 +3,7 @@ package de.illonis.eduras.networking;
 import de.illonis.eduras.events.ClientRenameEvent;
 import de.illonis.eduras.events.ConnectionAbortedEvent;
 import de.illonis.eduras.events.ConnectionEstablishedEvent;
+import de.illonis.eduras.events.DeathEvent;
 import de.illonis.eduras.events.Event;
 import de.illonis.eduras.events.GameEvent;
 import de.illonis.eduras.events.GameInfoRequest;
@@ -104,6 +105,9 @@ public class NetworkMessageSerializer {
 
 		switch (gameEvent.getType()) {
 		case DEATH:
+			DeathEvent death = (DeathEvent) gameEvent;
+			serializedEvent = buildEventString(death, death.getDead(),
+					death.getKilledBy());
 			break;
 		case MOVE_DOWN_PRESSED:
 		case MOVE_DOWN_RELEASED:

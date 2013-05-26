@@ -6,6 +6,7 @@ import de.illonis.eduras.ObjectFactory.ObjectType;
 import de.illonis.eduras.events.ClientRenameEvent;
 import de.illonis.eduras.events.ConnectionAbortedEvent;
 import de.illonis.eduras.events.ConnectionEstablishedEvent;
+import de.illonis.eduras.events.DeathEvent;
 import de.illonis.eduras.events.Event;
 import de.illonis.eduras.events.GameEvent;
 import de.illonis.eduras.events.GameEvent.GameEventNumber;
@@ -222,6 +223,8 @@ public class NetworkMessageDeserializer {
 		case SET_POS:
 			gameEvent = handleMovementPositionEvent(msg, args, typeNumber);
 			break;
+		case DEATH:
+			gameEvent = new DeathEvent(parseInt(args[1]), parseInt(args[2]));
 		case MOVE_DOWN_RELEASED:
 		case MOVE_LEFT_RELEASED:
 		case MOVE_RIGHT_RELEASED:
