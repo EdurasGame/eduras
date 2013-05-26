@@ -26,6 +26,7 @@
 	<target name="clean" depends="createdir" description="Cleans up generated files.">
 		<delete includeemptydirs="true">
 			<fileset dir="${tests.output}" includes="**/*" />
+			<fileset dir="${build}" includes="**/*" />
 		</delete>
 	</target>
 
