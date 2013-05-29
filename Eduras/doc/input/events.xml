@@ -161,6 +161,20 @@
 					    <entry>newMode</entry>
 					</row>
 					<row>
+					    <entry>SET_KILLS</entry>
+					    <entry>150</entry>
+					    <entry>Sets the kill count of a player.</entry>
+					    <entry>ownerId</entry>
+					    <entry>newCount</entry>
+					</row>
+					<row>
+					    <entry>SET_DEATHS</entry>
+					    <entry>151</entry>
+					    <entry>Sets the death count of a player.</entry>
+					    <entry>ownerId</entry>
+					    <entry>newCount</entry>
+					</row>
+					<row>
 						<entry>MATCH_END</entry>
 						<entry>190</entry>
 						<entry>Tells that the match ended and that the winner has got the passed id.</entry>

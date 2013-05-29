@@ -123,4 +123,24 @@ public class Statistic {
 		}
 
 	}
+
+	/**
+	 * Sets the kill count of a player.
+	 * 
+	 * @param playerId
+	 * @param newCount
+	 */
+	public void setKills(int playerId, int newCount) {
+		killsOfPlayer.put(playerId, newCount);
+	}
+
+	/**
+	 * Sets the death count of a player.
+	 * 
+	 * @param playerId
+	 * @param newCount
+	 */
+	public void setDeaths(int playerId, int newCount) {
+		deathsOfPlayer.put(playerId, newCount);
+	}
 }

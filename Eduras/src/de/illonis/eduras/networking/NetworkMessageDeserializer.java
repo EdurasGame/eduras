@@ -281,6 +281,8 @@ public class NetworkMessageDeserializer {
 		case NO_EVENT:
 			gameEvent = new NoEvent();
 			break;
+		case SET_KILLS:
+		case SET_DEATHS:
 		case SETMAXHEALTH:
 		case SETHEALTH:
 			gameEvent = new SetIntegerGameObjectAttributeEvent(

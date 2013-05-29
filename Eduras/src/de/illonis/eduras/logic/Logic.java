@@ -50,7 +50,7 @@ import de.illonis.eduras.units.Unit;
  */
 public class Logic implements GameLogicInterface {
 
-	private final GameInformation currentGame;
+	private final GameInformation gameInfo;
 	private final ObjectFactory objectFactory;
 	private final LogicGameWorker lgw;
 	private final ArrayList<GameEventListener> listenerList;
@@ -63,10 +63,10 @@ public class Logic implements GameLogicInterface {
 	 */
 	public Logic(GameInformation g) {
 
-		this.currentGame = g;
+		this.gameInfo = g;
 		listenerList = new ArrayList<GameEventListener>();
 		objectFactory = new ObjectFactory(this);
-		lgw = new LogicGameWorker(currentGame, listenerList);
+		lgw = new LogicGameWorker(gameInfo, listenerList);
 		Thread gameWorker = new Thread(lgw);
 		gameWorker.setName("LogicGameWorker");
 		gameWorker.start();
@@ -97,8 +97,7 @@ public class Logic implements GameLogicInterface {
 				MovementEvent moveEvent = (MovementEvent) event;
 				double newXPos = moveEvent.getNewXPos();
 				double newYPos = moveEvent.getNewYPos();
-				GameObject o = currentGame.findObjectById(moveEvent
-						.getObjectId());
+				GameObject o = gameInfo.findObjectById(moveEvent.getObjectId());
 				if (o == null)
 					break;
 				o.setYPosition(newYPos);
@@ -110,7 +109,7 @@ public class Logic implements GameLogicInterface {
 				break;
 			case SETHEALTH:
 				SetIntegerGameObjectAttributeEvent healthEvent = (SetIntegerGameObjectAttributeEvent) event;
-				GameObject obj = currentGame.findObjectById(healthEvent
+				GameObject obj = gameInfo.findObjectById(healthEvent
 						.getObjectId());
 				if (obj == null)
 					break;
@@ -124,7 +123,7 @@ public class Logic implements GameLogicInterface {
 				break;
 			case SETMAXHEALTH:
 				SetIntegerGameObjectAttributeEvent mhealthEvent = (SetIntegerGameObjectAttributeEvent) event;
-				GameObject gobj = currentGame.findObjectById(mhealthEvent
+				GameObject gobj = gameInfo.findObjectById(mhealthEvent
 						.getObjectId());
 				if (gobj == null)
 					break;
@@ -136,7 +135,7 @@ public class Logic implements GameLogicInterface {
 				}
 				break;
 			case INFORMATION_REQUEST:
-				ArrayList<GameEvent> infos = currentGame.getAllInfosAsEvent();
+				ArrayList<GameEvent> infos = gameInfo.getAllInfosAsEvent();
 				for (GameEventListener listener : listenerList) {
 					listener.onInformationRequested(infos,
 							((GameInfoRequest) event).getRequester());
@@ -144,10 +143,10 @@ public class Logic implements GameLogicInterface {
 				break;
 			case DEATH:
 				DeathEvent de = (DeathEvent) event;
-				GameObject killed = currentGame.findObjectById(de.getKilled());
+				GameObject killed = gameInfo.findObjectById(de.getKilled());
 				if (killed.isUnit()) {
 					Unit un = (Unit) killed;
-					currentGame.getGameSettings().getGameMode()
+					gameInfo.getGameSettings().getGameMode()
 							.onDeath(un, de.getKillerOwner());
 					for (GameEventListener listener : listenerList) {
 						listener.onDeath(de);
@@ -159,7 +158,7 @@ public class Logic implements GameLogicInterface {
 				ClientRenameEvent e = (ClientRenameEvent) event;
 				Player p = null;
 				try {
-					p = currentGame.getPlayerByOwnerId(e.getOwner());
+					p = gameInfo.getPlayerByOwnerId(e.getOwner());
 				} catch (ObjectNotFoundException e1) {
 					EduLog.warning("There is no such player with the id"
 							+ e1.getObjectId() + "(yet)!");
@@ -189,12 +188,12 @@ public class Logic implements GameLogicInterface {
 				Missile missile;
 				switch (missileLaunchEvent.getObjectType()) {
 				case SNIPERMISSILE:
-					missile = new SniperMissile(currentGame,
+					missile = new SniperMissile(gameInfo,
 							missileLaunchEvent.getId());
 				case SIMPLEMISSILE:
-					missile = new SimpleMissile(currentGame,
+					missile = new SimpleMissile(gameInfo,
 							missileLaunchEvent.getId());
-					currentGame.addObject(missile);
+					gameInfo.addObject(missile);
 					break;
 				default:
 					return;
@@ -223,9 +222,9 @@ public class Logic implements GameLogicInterface {
 				Player player;
 				int itemSlot;
 				try {
-					player = currentGame.getPlayerByObjectId(lootItemEvent
+					player = gameInfo.getPlayerByObjectId(lootItemEvent
 							.getPlayerId());
-					Item item = (Item) currentGame.findObjectById(lootItemEvent
+					Item item = (Item) gameInfo.findObjectById(lootItemEvent
 							.getObjectId());
 					itemSlot = player.getInventory().loot(item);
 					item.setOwner(player.getOwner());
@@ -258,12 +257,11 @@ public class Logic implements GameLogicInterface {
 			case SET_ITEM_SLOT:
 				SetItemSlotEvent slotEvent = (SetItemSlotEvent) event;
 				try {
-					currentGame
-							.getPlayerByOwnerId(slotEvent.getOwner())
+					gameInfo.getPlayerByOwnerId(slotEvent.getOwner())
 							.getInventory()
 							.setItemAt(
 									slotEvent.getItemSlot(),
-									(Item) currentGame.getObjects().get(
+									(Item) gameInfo.getObjects().get(
 											slotEvent.getObjectId()));
 				} catch (ObjectNotFoundException e1) {
 					EduLog.passException(e1);
@@ -282,14 +280,14 @@ public class Logic implements GameLogicInterface {
 				String newMode = modeChangeEvent.getNewMode();
 				switch (newMode) {
 				case "Deathmatch":
-					newGameMode = new Deathmatch(currentGame);
+					newGameMode = new Deathmatch(gameInfo);
 					break;
 				default:
-					newGameMode = new NoGameMode(currentGame);
+					newGameMode = new NoGameMode(gameInfo);
 					break;
 				}
 
-				currentGame.getGameSettings().changeGameMode(newGameMode);
+				gameInfo.getGameSettings().changeGameMode(newGameMode);
 
 				for (GameEventListener listener : listenerList) {
 					listener.onGameModeChanged(newGameMode);
@@ -297,12 +295,26 @@ public class Logic implements GameLogicInterface {
 				break;
 			case SET_OWNER:
 				SetOwnerEvent setownerEvent = (SetOwnerEvent) event;
-				Item item = (Item) currentGame.findObjectById(setownerEvent
+				Item item = (Item) gameInfo.findObjectById(setownerEvent
 						.getObjectId());
 				item.setOwner(setownerEvent.getOwner());
 				for (GameEventListener listener : listenerList) {
 					listener.onOwnerChanged(setownerEvent);
 				}
+				break;
+			case SET_KILLS:
+				SetIntegerGameObjectAttributeEvent setKillsEvent = (SetIntegerGameObjectAttributeEvent) event;
+				int ownerId = setKillsEvent.getObjectId();
+				int newCount = setKillsEvent.getNewValue();
+				gameInfo.getGameSettings().getStats()
+						.setKills(ownerId, newCount);
+				break;
+			case SET_DEATHS:
+				SetIntegerGameObjectAttributeEvent setDeathsEvent = (SetIntegerGameObjectAttributeEvent) event;
+				ownerId = setDeathsEvent.getObjectId();
+				newCount = setDeathsEvent.getNewValue();
+				gameInfo.getGameSettings().getStats()
+						.setKills(ownerId, newCount);
 				break;
 			default:
 				break;
@@ -380,7 +392,7 @@ public class Logic implements GameLogicInterface {
 
 		Player player = null;
 		try {
-			player = currentGame.getPlayerByOwnerId(event.getOwner());
+			player = gameInfo.getPlayerByOwnerId(event.getOwner());
 		} catch (ObjectNotFoundException e) {
 			EduLog.log(Level.WARNING,
 					"The player with the id " + e.getObjectId()
@@ -430,7 +442,7 @@ public class Logic implements GameLogicInterface {
 
 	@Override
 	public GameInformation getGame() {
-		return currentGame;
+		return gameInfo;
 	}
 
 	@Override
