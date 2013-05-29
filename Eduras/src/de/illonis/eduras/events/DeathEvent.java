@@ -1,29 +1,49 @@
 package de.illonis.eduras.events;
 
+/**
+ * A event that indicates the death of a unit.
+ * 
+ * @author illonis
+ * 
+ */
 public class DeathEvent extends GameEvent {
-	int killedBy;
-	int dead;
+	int killerOwner;
+	int killed;
 
-	public DeathEvent(int dead, int killedBy) {
+	/**
+	 * Creates a new death event.
+	 * 
+	 * @param killed
+	 *            id of killed unit.
+	 * @param killerOwner
+	 *            owner of killing object.
+	 */
+	public DeathEvent(int killed, int killerOwner) {
 		super(GameEventNumber.DEATH);
-		this.dead = dead;
-		this.killedBy = killedBy;
+		this.killed = killed;
+		this.killerOwner = killerOwner;
 	}
 
-	public int getKilledBy() {
-		return killedBy;
+	/**
+	 * Returns the owner id of the killing object.
+	 * 
+	 * @return owner id of killer.
+	 * 
+	 * @author illonis
+	 */
+	public int getKillerOwner() {
+		return killerOwner;
 	}
 
-	public void setKilledBy(int killedBy) {
-		this.killedBy = killedBy;
-	}
-
-	public int getDead() {
-		return dead;
-	}
-
-	public void setDead(int dead) {
-		this.dead = dead;
+	/**
+	 * Returns the object id of killed unit.
+	 * 
+	 * @return units object id.
+	 * 
+	 * @author illonis
+	 */
+	public int getKilled() {
+		return killed;
 	}
 
 }

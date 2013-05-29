@@ -144,11 +144,11 @@ public class Logic implements GameLogicInterface {
 				break;
 			case DEATH:
 				DeathEvent de = (DeathEvent) event;
-				GameObject killed = currentGame.findObjectById(de.getDead());
+				GameObject killed = currentGame.findObjectById(de.getKilled());
 				if (killed.isUnit()) {
 					Unit un = (Unit) killed;
 					currentGame.getGameSettings().getGameMode()
-							.onDeath(un, de.getKilledBy());
+							.onDeath(un, de.getKillerOwner());
 					for (GameEventListener listener : listenerList) {
 						listener.onDeath(de);
 					}

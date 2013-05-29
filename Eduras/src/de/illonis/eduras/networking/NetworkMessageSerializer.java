@@ -106,8 +106,8 @@ public class NetworkMessageSerializer {
 		switch (gameEvent.getType()) {
 		case DEATH:
 			DeathEvent death = (DeathEvent) gameEvent;
-			serializedEvent = buildEventString(death, death.getDead(),
-					death.getKilledBy());
+			serializedEvent = buildEventString(death, death.getKilled(),
+					death.getKillerOwner());
 			break;
 		case MOVE_DOWN_PRESSED:
 		case MOVE_DOWN_RELEASED:
