@@ -252,7 +252,11 @@ public class ServerEventTriggerer implements EventTriggerer {
 	@Override
 	public void restartRound() {
 
-		gameInfo.getGameSettings().getStats().reset();
+		for (Player player : gameInfo.getPlayers()) {
+			resetStats(player);
+			System.out.println("reset player!");
+		}
+
 		changeMap(gameInfo.getMap());
 
 	}
@@ -333,5 +337,30 @@ public class ServerEventTriggerer implements EventTriggerer {
 		gameInfo.getGameSettings().getGameMode().onDeath(unit, killer);
 		logic.onGameEventAppeared(event);
 
+	}
+
+	/**
+	 * Sets all stats of the given player to zero.
+	 * 
+	 * @param player
+	 */
+	private void resetStats(Player player) {
+		int playerId = player.getOwner();
+
+		SetIntegerGameObjectAttributeEvent setdeaths = new SetIntegerGameObjectAttributeEvent(
+				GameEventNumber.SET_DEATHS, playerId, 0);
+		SetIntegerGameObjectAttributeEvent setkills = new SetIntegerGameObjectAttributeEvent(
+				GameEventNumber.SET_KILLS, playerId, 0);
+
+		try {
+			outputBuffer.append(NetworkMessageSerializer.serialize(setdeaths));
+			outputBuffer.append(NetworkMessageSerializer.serialize(setkills));
+		} catch (MessageNotSupportedException e) {
+			EduLog.passException(e);
+			return;
+		}
+
+		logic.onGameEventAppeared(setkills);
+		logic.onGameEventAppeared(setdeaths);
 	}
 }

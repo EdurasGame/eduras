@@ -314,7 +314,7 @@ public class Logic implements GameLogicInterface {
 				ownerId = setDeathsEvent.getObjectId();
 				newCount = setDeathsEvent.getNewValue();
 				gameInfo.getGameSettings().getStats()
-						.setKills(ownerId, newCount);
+						.setDeaths(ownerId, newCount);
 				break;
 			default:
 				break;
