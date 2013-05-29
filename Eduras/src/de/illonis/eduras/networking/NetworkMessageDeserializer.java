@@ -25,6 +25,7 @@ import de.illonis.eduras.events.SetGameModeEvent;
 import de.illonis.eduras.events.SetIntegerGameObjectAttributeEvent;
 import de.illonis.eduras.events.SetItemSlotEvent;
 import de.illonis.eduras.events.SetOwnerEvent;
+import de.illonis.eduras.events.SetRemainingTimeEvent;
 import de.illonis.eduras.events.UserMovementEvent;
 import de.illonis.eduras.exceptions.GivenParametersDoNotFitToEventException;
 import de.illonis.eduras.exceptions.InvalidMessageFormatException;
@@ -294,11 +295,24 @@ public class NetworkMessageDeserializer {
 		case SET_GAMEMODE:
 			gameEvent = new SetGameModeEvent(args[1]);
 			break;
+		case SET_REMAININGTIME:
+			gameEvent = new SetRemainingTimeEvent(parseLong(args[1]));
+			break;
 		default:
 			throw new MessageNotSupportedException(typeNumber, msg);
 		}
 
 		return gameEvent;
+	}
+
+	/**
+	 * Parses a string into long
+	 * 
+	 * @param string
+	 * @return
+	 */
+	private static long parseLong(String string) {
+		return Long.parseLong(string);
 	}
 
 	/**

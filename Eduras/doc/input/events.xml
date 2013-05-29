@@ -175,6 +175,12 @@
 					    <entry>newCount</entry>
 					</row>
 					<row>
+					    <entry>SET_REMAININGTIME</entry>
+					    <entry>180</entry>
+					    <entry>Sets the remaininig time.</entry>
+					    <entry>remainingTime</entry>
+					</row>
+					<row>
 						<entry>MATCH_END</entry>
 						<entry>190</entry>
 						<entry>Tells that the match ended and that the winner has got the passed id.</entry>

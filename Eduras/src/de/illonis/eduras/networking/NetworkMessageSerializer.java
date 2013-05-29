@@ -18,6 +18,7 @@ import de.illonis.eduras.events.SetGameModeEvent;
 import de.illonis.eduras.events.SetIntegerGameObjectAttributeEvent;
 import de.illonis.eduras.events.SetItemSlotEvent;
 import de.illonis.eduras.events.SetOwnerEvent;
+import de.illonis.eduras.events.SetRemainingTimeEvent;
 import de.illonis.eduras.events.UserMovementEvent;
 import de.illonis.eduras.exceptions.MessageNotSupportedException;
 import de.illonis.eduras.math.Vector2D;
@@ -189,6 +190,11 @@ public class NetworkMessageSerializer {
 			SetGameModeEvent setGameMode = (SetGameModeEvent) gameEvent;
 			serializedEvent = buildEventString(setGameMode,
 					setGameMode.getNewMode());
+			break;
+		case SET_REMAININGTIME:
+			SetRemainingTimeEvent setRemainingTime = (SetRemainingTimeEvent) gameEvent;
+			serializedEvent = buildEventString(setRemainingTime,
+					setRemainingTime.getRemainingTime());
 			break;
 		default:
 			throw new MessageNotSupportedException(gameEvent.getType(),

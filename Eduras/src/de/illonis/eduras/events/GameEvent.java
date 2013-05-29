@@ -26,7 +26,7 @@ public abstract class GameEvent extends Event {
 				121), SET_ITEM_SLOT(122), ITEM_USE(30), DEATH(131), SETHEALTH(
 				132), SETMAXHEALTH(133), MATCH_END(190), NO_EVENT(99), MISSILE_LAUNCH(
 				301), LOOT_ITEM_EVENT(302), SET_GAMEMODE(140), SET_KILLS(150), SET_DEATHS(
-				151);
+				151), SET_REMAININGTIME(180);
 		private int number;
 
 		GameEventNumber(int num) {

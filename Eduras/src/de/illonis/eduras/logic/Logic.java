@@ -21,6 +21,7 @@ import de.illonis.eduras.events.SetGameModeEvent;
 import de.illonis.eduras.events.SetIntegerGameObjectAttributeEvent;
 import de.illonis.eduras.events.SetItemSlotEvent;
 import de.illonis.eduras.events.SetOwnerEvent;
+import de.illonis.eduras.events.SetRemainingTimeEvent;
 import de.illonis.eduras.events.UserMovementEvent;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
 import de.illonis.eduras.gamemodes.Deathmatch;
@@ -274,6 +275,7 @@ public class Logic implements GameLogicInterface {
 				for (GameEventListener listener : listenerList) {
 					listener.onMatchEnd((MatchEndEvent) event);
 				}
+				break;
 			case SET_GAMEMODE:
 				SetGameModeEvent modeChangeEvent = (SetGameModeEvent) event;
 				GameMode newGameMode;
@@ -315,6 +317,11 @@ public class Logic implements GameLogicInterface {
 				newCount = setDeathsEvent.getNewValue();
 				gameInfo.getGameSettings().getStats()
 						.setDeaths(ownerId, newCount);
+				break;
+			case SET_REMAININGTIME:
+				SetRemainingTimeEvent remainingTimeEvent = (SetRemainingTimeEvent) event;
+				long remainingTime = remainingTimeEvent.getRemainingTime();
+				gameInfo.getGameSettings().changeTime(remainingTime);
 				break;
 			default:
 				break;
