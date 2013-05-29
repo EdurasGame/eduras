@@ -90,7 +90,7 @@ public class EdurasInitializer {
 	}
 
 	/**
-	 * Returns the current {@Settings} of the current game.
+	 * Returns the current {@link Settings} of the current game.
 	 * 
 	 * @return the settings
 	 */
