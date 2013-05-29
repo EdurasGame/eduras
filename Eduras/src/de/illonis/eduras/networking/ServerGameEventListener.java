@@ -81,16 +81,15 @@ public class ServerGameEventListener implements GameEventListener {
 	 */
 	@Override
 	public void onInformationRequested(ArrayList<GameEvent> infos, int owner) {
-
+		StringBuilder builder = new StringBuilder();
 		for (GameEvent event : infos) {
-			String msg;
 			try {
-				msg = NetworkMessageSerializer.serialize(event);
+				builder.append(NetworkMessageSerializer.serialize(event));
 			} catch (MessageNotSupportedException e) {
 				continue;
 			}
-			serverSender.sendMessageToClient(owner, msg);
 		}
+		serverSender.sendMessageToClient(owner, builder.toString());
 	}
 
 	@Override
