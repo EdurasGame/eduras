@@ -1,6 +1,7 @@
 package de.illonis.eduras;
 
 import java.util.HashMap;
+import java.util.LinkedList;
 
 import de.illonis.eduras.units.Player;
 
@@ -105,4 +106,21 @@ public class Statistic {
 		deathsOfPlayer.put(ownerId, 0);
 	}
 
+	/**
+	 * Resets all statistics, which means that for all players every count is
+	 * set to zero.
+	 */
+	public void reset() {
+
+		LinkedList<Integer> players = new LinkedList<Integer>(
+				killsOfPlayer.keySet());
+
+		killsOfPlayer.clear();
+		deathsOfPlayer.clear();
+
+		for (Integer player : players) {
+			addPlayerToStats(player);
+		}
+
+	}
 }
