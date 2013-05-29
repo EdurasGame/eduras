@@ -18,10 +18,16 @@ public class Statistic {
 	private HashMap<Integer, Integer> killsOfPlayer;
 
 	/**
+	 * Maps the owner id of a player to his death count.
+	 */
+	private HashMap<Integer, Integer> deathsOfPlayer;
+
+	/**
 	 * Creates a new empty statistic.
 	 */
 	public Statistic() {
 		killsOfPlayer = new HashMap<Integer, Integer>();
+		deathsOfPlayer = new HashMap<Integer, Integer>();
 	}
 
 	/**
@@ -45,8 +51,18 @@ public class Statistic {
 	 * @return The number of deaths.
 	 */
 	public int getDeathsOfPlayer(Player player) {
-		// TODO: implement
+		if (deathsOfPlayer.containsKey(player.getOwner()))
+			return deathsOfPlayer.get(player.getOwner());
 		return 0;
+	}
+
+	/**
+	 * Increments the death count of the given player.
+	 * 
+	 * @param player
+	 */
+	public void addDeathForPlayer(Player player) {
+		deathsOfPlayer.put(player.getOwner(), getDeathsOfPlayer(player) + 1);
 	}
 
 	/**
@@ -86,6 +102,7 @@ public class Statistic {
 	 */
 	public void addPlayerToStats(int ownerId) {
 		killsOfPlayer.put(ownerId, 0);
+		deathsOfPlayer.put(ownerId, 0);
 	}
 
 }

@@ -44,6 +44,8 @@ public class Deathmatch implements GameMode {
 
 		if (killedUnit instanceof Player) {
 			gameInfo.getEventTriggerer().respawnPlayer((Player) killedUnit);
+			gameInfo.getGameSettings().getStats()
+					.addDeathForPlayer((Player) killedUnit);
 		}
 	}
 
