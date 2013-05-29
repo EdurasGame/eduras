@@ -8,10 +8,11 @@
 	<section>
 		<title>(fma) Features for release 0.1</title>
 		<para>
-		    0.1 is scheduled for July 1st, 2013.
+			0.1 is scheduled for July 1st, 2013.
 		</para>
 		<para>
-			We are aiming for the following features to be included in Eduras 0.1:
+			We are aiming for the following features to be included in
+			Eduras 0.1:
 		</para>
 		<itemizedlist>
 			<listitem>
@@ -46,27 +47,34 @@
 			</listitem>
 			<listitem>
 				<para>
-					An easily configurable server including features like server-restart,
-					-shut and -open, gamemode- and map-change and limitations on
+					An easily configurable server including features like
+					server-restart,
+					-shut and -open, gamemode- and map-change and
+					limitations on
 					playercount.
 				</para>
 			</listitem>
 			<listitem>
 				<para>
-					A more complete HUD showing healthpoints, weapons and eventually
+					A more complete HUD showing healthpoints, weapons and
+					eventually
 					score correctly.
 				</para>
 			</listitem>
 			<listitem>
 				<para>
-					A very simple website where you can download Eduras from and which
-					gives basic information about the game and its current and future
+					A very simple website where you can download Eduras from and
+					which
+					gives basic information about the game and its current and
+					future
 					features.
 				</para>
 			</listitem>
 			<listitem>
 				<para>
-					<emphasis role="strike">Support for EdurasViewer for Android and iOS.</emphasis>
+					<emphasis role="strike">Support for EdurasViewer for Android and
+						iOS.
+					</emphasis>
 				</para>
 			</listitem>
 		</itemizedlist>
@@ -74,11 +82,42 @@
 	<section>
 		<title>(fma) Features for release 0.2</title>
 		<itemizedlist>
-		    <listitem>
-		        <para>
-		            Dynamic objects (add/send them at runtime)
-		        </para>
-		    </listitem>
+			<listitem>
+				<para>
+					Dynamic objects (add/send them at runtime)
+				</para>
+			</listitem>
+			<listitem>
+				<para>
+					(limited) Ammunition for weapons
+				</para>
+			</listitem>
+			<listitem>
+				<para>
+					Smooth camera
+				</para>
+			</listitem>
+			<listitem>
+				<para>Team deathmatch</para>
+			</listitem>
+			<listitem>
+			    <para>Animation (Death, Loot,...)</para>
+			</listitem>
+			<listitem>
+			    <para>Elaborate Docbook (How to create
+			        gameobjects, shapes, items, etc.)</para>
+			</listitem>
 		</itemizedlist>
-		</section>
+	</section>
+	<section>
+		<title>Features for release 0.3</title>
+		<itemizedlist>
+			<listitem>
+				<para>Capture-the-flag game mode</para>
+			</listitem>
+			<listitem>
+			    <para>Support for EdurasViewer for Android and iOS</para>
+			</listitem>
+		</itemizedlist>
+	</section>
 </article>
