@@ -4,6 +4,7 @@ import java.util.LinkedList;
 
 import de.illonis.eduras.exceptions.ShapeVerticesNotApplicableException;
 import de.illonis.eduras.gameobjects.BigBlock;
+import de.illonis.eduras.gameobjects.Building;
 import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.items.weapons.ExampleWeapon;
 import de.illonis.eduras.items.weapons.SniperWeapon;
@@ -45,6 +46,10 @@ public class SimpleMap extends Map {
 		ExampleWeapon weap4 = new ExampleWeapon(null, -1);
 		weap4.setPosition(getWidth() * 0.25, getHeight() * 0.25);
 		initialObjects.add(weap4);
+
+		Building b = new Building(null, -1);
+		b.setPosition(80, 80);
+		initialObjects.add(b);
 
 		try {
 			BigBlock block = new BigBlock(null, getWidth() / 2,
