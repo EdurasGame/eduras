@@ -3,6 +3,7 @@ package de.illonis.eduras.gameclient.gui;
 import java.util.ArrayList;
 
 import de.illonis.eduras.events.ClientRenameEvent;
+import de.illonis.eduras.events.DeathEvent;
 import de.illonis.eduras.events.GameEvent;
 import de.illonis.eduras.events.MatchEndEvent;
 import de.illonis.eduras.events.ObjectFactoryEvent;
@@ -147,4 +148,10 @@ public class EventListenerGui implements GameEventListener {
 		return infos;
 	}
 
+	@Override
+	public void onDeath(DeathEvent event) {
+		for (RenderedGuiObject obj : uiObjects) {
+			obj.onDeath(event);
+		}
+	}
 }

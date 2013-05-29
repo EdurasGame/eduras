@@ -95,4 +95,15 @@ public class InformationProvider implements InfoInterface {
 		return logic.getGame().getPlayers();
 	}
 
+	@Override
+	public GameObject findObjectById(int id) {
+		return logic.getGame().findObjectById(id);
+	}
+
+	@Override
+	public Player getPlayerByOwnerId(int ownerId)
+			throws ObjectNotFoundException {
+		return logic.getGame().getPlayerByOwnerId(ownerId);
+	}
+
 }

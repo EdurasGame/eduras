@@ -158,6 +158,18 @@ public interface EventTriggerer {
 	void changeMap(Map map);
 
 	/**
+	 * Notifies of death of unit.
+	 * 
+	 * @param unit
+	 *            killed unit.
+	 * @param killer
+	 *            owner id of killing object.
+	 * 
+	 * @author illonis
+	 */
+	void onDeath(Unit unit, int killer);
+
+	/**
 	 * Changes the gamemode to newMode.
 	 * 
 	 * @param newMode

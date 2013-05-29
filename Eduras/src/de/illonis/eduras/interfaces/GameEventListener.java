@@ -3,6 +3,7 @@ package de.illonis.eduras.interfaces;
 import java.util.ArrayList;
 
 import de.illonis.eduras.events.ClientRenameEvent;
+import de.illonis.eduras.events.DeathEvent;
 import de.illonis.eduras.events.GameEvent;
 import de.illonis.eduras.events.MatchEndEvent;
 import de.illonis.eduras.events.ObjectFactoryEvent;
@@ -108,6 +109,7 @@ public interface GameEventListener {
 	 * Called when an object is removed.
 	 * 
 	 * @param event
+	 *            the event holding information.
 	 */
 	void onObjectRemove(ObjectFactoryEvent event);
 
@@ -115,6 +117,17 @@ public interface GameEventListener {
 	 * Called when a match ended.
 	 * 
 	 * @param event
+	 *            the event holding information.
 	 */
 	void onMatchEnd(MatchEndEvent event);
+
+	/**
+	 * Called when a unit is killed.
+	 * 
+	 * @param event
+	 *            the event holding information.
+	 * 
+	 * @author illonis
+	 */
+	void onDeath(DeathEvent event);
 }

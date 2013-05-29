@@ -149,8 +149,8 @@ public class ConsoleEventTriggerer {
 	 * @author illonis
 	 */
 	public boolean restartRound() {
-		// TODO: Implement
-		return false;
+		triggerer.restartRound();
+		return true;
 	}
 
 	/**

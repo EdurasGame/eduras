@@ -4,6 +4,7 @@ import java.awt.Graphics2D;
 import java.util.ArrayList;
 
 import de.illonis.eduras.events.ClientRenameEvent;
+import de.illonis.eduras.events.DeathEvent;
 import de.illonis.eduras.events.GameEvent;
 import de.illonis.eduras.events.MatchEndEvent;
 import de.illonis.eduras.events.ObjectFactoryEvent;
@@ -151,6 +152,10 @@ public abstract class RenderedGuiObject implements GameEventListener {
 
 	@Override
 	public void onMaxHealthChanged(SetIntegerGameObjectAttributeEvent event) {
+	}
+
+	@Override
+	public void onDeath(DeathEvent event) {
 	}
 
 }

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import de.illonis.eduras.ObjectFactory.ObjectType;
 import de.illonis.eduras.events.ClientRenameEvent;
+import de.illonis.eduras.events.DeathEvent;
 import de.illonis.eduras.events.GameEvent;
 import de.illonis.eduras.events.MatchEndEvent;
 import de.illonis.eduras.events.ObjectFactoryEvent;
@@ -97,5 +98,10 @@ public class GameEventReactor implements GameEventListener {
 	@Override
 	public void onMaxHealthChanged(SetIntegerGameObjectAttributeEvent event) {
 		ui.onMaxHealthChanged(event);
+	}
+
+	@Override
+	public void onDeath(DeathEvent event) {
+		ui.onDeath(event);
 	}
 }

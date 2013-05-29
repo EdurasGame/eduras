@@ -1,6 +1,7 @@
 package de.illonis.eduras;
 
 import java.util.HashMap;
+import java.util.LinkedList;
 
 import de.illonis.eduras.units.Player;
 
@@ -18,10 +19,16 @@ public class Statistic {
 	private HashMap<Integer, Integer> killsOfPlayer;
 
 	/**
+	 * Maps the owner id of a player to his death count.
+	 */
+	private HashMap<Integer, Integer> deathsOfPlayer;
+
+	/**
 	 * Creates a new empty statistic.
 	 */
 	public Statistic() {
 		killsOfPlayer = new HashMap<Integer, Integer>();
+		deathsOfPlayer = new HashMap<Integer, Integer>();
 	}
 
 	/**
@@ -32,8 +39,8 @@ public class Statistic {
 	 * @return The number of kills.
 	 */
 	public int getKillsOfPlayer(Player player) {
-		if (killsOfPlayer.containsKey(player))
-			return killsOfPlayer.get(player);
+		if (killsOfPlayer.containsKey(player.getOwner()))
+			return killsOfPlayer.get(player.getOwner());
 		return 0;
 	}
 
@@ -45,8 +52,18 @@ public class Statistic {
 	 * @return The number of deaths.
 	 */
 	public int getDeathsOfPlayer(Player player) {
-		// TODO: implement
+		if (deathsOfPlayer.containsKey(player.getOwner()))
+			return deathsOfPlayer.get(player.getOwner());
 		return 0;
+	}
+
+	/**
+	 * Increments the death count of the given player.
+	 * 
+	 * @param player
+	 */
+	public void addDeathForPlayer(Player player) {
+		deathsOfPlayer.put(player.getOwner(), getDeathsOfPlayer(player) + 1);
 	}
 
 	/**
@@ -55,9 +72,8 @@ public class Statistic {
 	 * @param player
 	 */
 	public void addKillForPlayer(Player player) {
-
-		killsOfPlayer.put(player.getOwner(),
-				killsOfPlayer.get(player.getOwner()) + 1);
+		killsOfPlayer.put(player.getOwner(), getKillsOfPlayer(player) + 1);
+		System.out.println(getKillsOfPlayer(player));
 	}
 
 	/**
@@ -87,6 +103,24 @@ public class Statistic {
 	 */
 	public void addPlayerToStats(int ownerId) {
 		killsOfPlayer.put(ownerId, 0);
+		deathsOfPlayer.put(ownerId, 0);
 	}
 
+	/**
+	 * Resets all statistics, which means that for all players every count is
+	 * set to zero.
+	 */
+	public void reset() {
+
+		LinkedList<Integer> players = new LinkedList<Integer>(
+				killsOfPlayer.keySet());
+
+		killsOfPlayer.clear();
+		deathsOfPlayer.clear();
+
+		for (Integer player : players) {
+			addPlayerToStats(player);
+		}
+
+	}
 }
