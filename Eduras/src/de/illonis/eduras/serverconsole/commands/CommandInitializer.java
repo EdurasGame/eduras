@@ -22,5 +22,6 @@ public class CommandInitializer {
 		ServerConsole.registerCommand(new ShutdownCommand());
 		ServerConsole.registerCommand(new GameModeChangeCommand());
 		ServerConsole.registerCommand(new MapChangeCommand());
+		ServerConsole.registerCommand(new RestartRoundCommand());
 	}
 }

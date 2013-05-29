@@ -251,7 +251,9 @@ public class ServerEventTriggerer implements EventTriggerer {
 
 	@Override
 	public void restartRound() {
-		// TODO Auto-generated method stub
+
+		gameInfo.getGameSettings().getStats().reset();
+		changeMap(gameInfo.getMap());
 
 	}
 
