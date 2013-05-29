@@ -198,12 +198,6 @@ public class ServerGameEventListener implements GameEventListener {
 
 	@Override
 	public void onMatchEnd(MatchEndEvent event) {
-		try {
-			outputBuffer.append(NetworkMessageSerializer.serialize(event));
-		} catch (MessageNotSupportedException e) {
-			EduLog.passException(e);
-		}
-		server.stopServer();
 	}
 
 	@Override

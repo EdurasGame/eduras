@@ -41,7 +41,7 @@ public class GameSettings {
 	 */
 	public GameSettings(GameInformation gameInfo) {
 
-		roundTime = 30000;
+		roundTime = 300000;
 		gameMode = new Deathmatch(gameInfo);
 		remainingTime = roundTime;
 		numberOfTeams = NumberOfTeams.FFA;

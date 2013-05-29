@@ -16,6 +16,7 @@ import de.illonis.eduras.events.ObjectFactoryEvent;
 import de.illonis.eduras.events.SetGameModeEvent;
 import de.illonis.eduras.events.SetIntegerGameObjectAttributeEvent;
 import de.illonis.eduras.events.SetItemSlotEvent;
+import de.illonis.eduras.events.SetRemainingTimeEvent;
 import de.illonis.eduras.exceptions.InvalidNameException;
 import de.illonis.eduras.exceptions.MessageNotSupportedException;
 import de.illonis.eduras.gamemodes.GameMode;
@@ -246,7 +247,15 @@ public class ServerEventTriggerer implements EventTriggerer {
 	public void onMatchEnd() {
 		MatchEndEvent matchEndEvent = new MatchEndEvent(gameInfo
 				.getGameSettings().getStats().findPlayerWithMostFrags());
-		logic.onGameEventAppeared(matchEndEvent);
+
+		try {
+			outputBuffer.append(NetworkMessageSerializer
+					.serialize(matchEndEvent));
+		} catch (MessageNotSupportedException e) {
+			EduLog.passException(e);
+		}
+
+		restartRound();
 	}
 
 	@Override
@@ -254,10 +263,11 @@ public class ServerEventTriggerer implements EventTriggerer {
 
 		for (Player player : gameInfo.getPlayers()) {
 			resetStats(player);
-			System.out.println("reset player!");
 		}
 
 		changeMap(gameInfo.getMap());
+
+		resetSettings();
 
 	}
 
@@ -362,5 +372,20 @@ public class ServerEventTriggerer implements EventTriggerer {
 
 		logic.onGameEventAppeared(setkills);
 		logic.onGameEventAppeared(setdeaths);
+	}
+
+	private void resetSettings() {
+
+		gameInfo.getGameSettings().resetRemainingTime();
+
+		SetRemainingTimeEvent setTimeEvent = new SetRemainingTimeEvent(gameInfo
+				.getGameSettings().getRemainingTime());
+
+		try {
+			outputBuffer.append(NetworkMessageSerializer
+					.serialize(setTimeEvent));
+		} catch (MessageNotSupportedException e) {
+			EduLog.passException(e);
+		}
 	}
 }
