@@ -225,6 +225,7 @@ public class NetworkMessageDeserializer {
 			break;
 		case DEATH:
 			gameEvent = new DeathEvent(parseInt(args[1]), parseInt(args[2]));
+			break;
 		case MOVE_DOWN_RELEASED:
 		case MOVE_LEFT_RELEASED:
 		case MOVE_RIGHT_RELEASED:
