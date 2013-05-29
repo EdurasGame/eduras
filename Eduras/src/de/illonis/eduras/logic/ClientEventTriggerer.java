@@ -86,4 +86,8 @@ public class ClientEventTriggerer implements EventTriggerer {
 	@Override
 	public void remaxHealth(Unit unit) {
 	}
+
+	@Override
+	public void onDeath(Unit unit, int killer) {
+	}
 }

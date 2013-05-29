@@ -6,6 +6,7 @@ import java.util.logging.Level;
 import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.ObjectFactory;
 import de.illonis.eduras.events.ClientRenameEvent;
+import de.illonis.eduras.events.DeathEvent;
 import de.illonis.eduras.events.GameEvent;
 import de.illonis.eduras.events.GameEvent.GameEventNumber;
 import de.illonis.eduras.events.GameInfoRequest;
@@ -140,6 +141,19 @@ public class Logic implements GameLogicInterface {
 					listener.onInformationRequested(infos,
 							((GameInfoRequest) event).getRequester());
 				}
+				break;
+			case DEATH:
+				DeathEvent de = (DeathEvent) event;
+				GameObject killed = currentGame.findObjectById(de.getDead());
+				if (killed.isUnit()) {
+					Unit un = (Unit) killed;
+					currentGame.getGameSettings().getGameMode()
+							.onDeath(un, de.getKilledBy());
+					for (GameEventListener listener : listenerList) {
+						listener.onDeath(de);
+					}
+				}
+
 				break;
 			case CLIENT_SETNAME:
 				ClientRenameEvent e = (ClientRenameEvent) event;

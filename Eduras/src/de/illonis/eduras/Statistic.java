@@ -32,8 +32,8 @@ public class Statistic {
 	 * @return The number of kills.
 	 */
 	public int getKillsOfPlayer(Player player) {
-		if (killsOfPlayer.containsKey(player))
-			return killsOfPlayer.get(player);
+		if (killsOfPlayer.containsKey(player.getOwner()))
+			return killsOfPlayer.get(player.getOwner());
 		return 0;
 	}
 
@@ -55,9 +55,8 @@ public class Statistic {
 	 * @param player
 	 */
 	public void addKillForPlayer(Player player) {
-
-		killsOfPlayer.put(player.getOwner(),
-				killsOfPlayer.get(player.getOwner()) + 1);
+		killsOfPlayer.put(player.getOwner(), getKillsOfPlayer(player) + 1);
+		System.out.println(getKillsOfPlayer(player));
 	}
 
 	/**

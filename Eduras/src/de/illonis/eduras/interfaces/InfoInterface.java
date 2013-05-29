@@ -69,4 +69,29 @@ public interface InfoInterface {
 	 * @return game mode.
 	 */
 	public GameMode getGameMode();
+
+	/**
+	 * Returns the game object with given id.
+	 * 
+	 * @param id
+	 *            id of object.
+	 * @return the game object.
+	 * 
+	 * @author illonis
+	 */
+	public GameObject findObjectById(int id);
+
+	/**
+	 * Returns the player that has given ownerid.
+	 * 
+	 * @param ownerId
+	 *            owner id.
+	 * @return the player.
+	 * 
+	 * @author illonis
+	 * @throws ObjectNotFoundException
+	 *             if player does not exist.
+	 */
+	public Player getPlayerByOwnerId(int ownerId)
+			throws ObjectNotFoundException;
 }

@@ -6,6 +6,7 @@ import java.util.Random;
 import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.ObjectFactory.ObjectType;
 import de.illonis.eduras.events.ClientRenameEvent;
+import de.illonis.eduras.events.DeathEvent;
 import de.illonis.eduras.events.GameEvent.GameEventNumber;
 import de.illonis.eduras.events.LootItemEvent;
 import de.illonis.eduras.events.MatchEndEvent;
@@ -322,5 +323,13 @@ public class ServerEventTriggerer implements EventTriggerer {
 	public void remaxHealth(Unit unit) {
 		unit.resetHealth();
 		setHealth(unit.getId(), unit.getHealth());
+	}
+
+	@Override
+	public void onDeath(Unit unit, int killer) {
+		DeathEvent event = new DeathEvent(unit.getId(), killer);
+		gameInfo.getGameSettings().getGameMode().onDeath(unit, killer);
+		logic.onGameEventAppeared(event);
+
 	}
 }

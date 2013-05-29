@@ -118,7 +118,6 @@ public abstract class Unit extends MoveableGameObject {
 	 *            Specifies who killed this object. -1 if there is no killer.
 	 */
 	protected void onDead(int killer) {
-		// TODO: announce to clients
-		getGame().getGameSettings().getGameMode().onDeath(this, killer);
+		getGame().getEventTriggerer().onDeath(this, killer);
 	}
 }

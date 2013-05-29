@@ -3,6 +3,7 @@ package de.illonis.eduras.networking;
 import java.util.ArrayList;
 
 import de.illonis.eduras.events.ClientRenameEvent;
+import de.illonis.eduras.events.DeathEvent;
 import de.illonis.eduras.events.GameEvent;
 import de.illonis.eduras.events.GameEvent.GameEventNumber;
 import de.illonis.eduras.events.MatchEndEvent;
@@ -207,6 +208,15 @@ public class ServerGameEventListener implements GameEventListener {
 
 	@Override
 	public void onGameModeChanged(GameMode newGameMode) {
+	}
+
+	@Override
+	public void onDeath(DeathEvent deathEvent) {
+		try {
+			outputBuffer.append(NetworkMessageSerializer.serialize(deathEvent));
+		} catch (MessageNotSupportedException e) {
+			EduLog.passException(e);
+		}
 	}
 
 }
