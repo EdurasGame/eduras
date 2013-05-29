@@ -180,6 +180,7 @@ public class Server {
 				EduLog.passException(e);
 			}
 		}
+
 	}
 
 	/**
@@ -220,8 +221,6 @@ public class Server {
 
 			if (initInfoEvent.getRole() == ClientRole.PLAYER) {
 				ServerReceiver sr = new ServerReceiver(this, client);
-				sr.setName("ServerReceiver (Client " + client.getClientId()
-						+ ")");
 				sr.start();
 				serverReceivers.put(client.getClientId(), sr);
 			}
