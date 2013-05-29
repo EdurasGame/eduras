@@ -15,6 +15,7 @@ import de.illonis.eduras.gamemodes.NoGameMode;
 public class GameSettings {
 
 	private GameMode gameMode;
+	private long roundTime;
 	private long remainingTime;
 	private NumberOfTeams numberOfTeams;
 	private LinkedList<Team> teams;
@@ -40,8 +41,9 @@ public class GameSettings {
 	 */
 	public GameSettings(GameInformation gameInfo) {
 
+		roundTime = 30000;
 		gameMode = new Deathmatch(gameInfo);
-		remainingTime = 3000000;
+		remainingTime = roundTime;
 		numberOfTeams = NumberOfTeams.FFA;
 		stats = new Statistic();
 		teams = new LinkedList<Team>();
@@ -57,6 +59,13 @@ public class GameSettings {
 	 */
 	public void changeTime(long time) {
 		remainingTime = time;
+	}
+
+	/**
+	 * Sets remaining time to roundtime.
+	 */
+	public void resetRemainingTime() {
+		remainingTime = roundTime;
 	}
 
 	/**
