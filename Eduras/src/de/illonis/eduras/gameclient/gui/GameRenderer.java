@@ -192,7 +192,9 @@ public class GameRenderer implements TooltipHandler {
 	 */
 	private void drawGui() {
 		for (int i = 0; i < uiObjects.size(); i++) {
-			uiObjects.get(i).render(guiGraphics);
+			RenderedGuiObject o = uiObjects.get(i);
+			if (!gui.isSpectator() || o.isVisibleForSpectator())
+				o.render(guiGraphics);
 		}
 		if (tooltipShown) {
 			tooltip.render(guiGraphics);

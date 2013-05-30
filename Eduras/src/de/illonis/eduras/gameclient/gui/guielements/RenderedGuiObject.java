@@ -23,7 +23,9 @@ import de.illonis.eduras.logicabstraction.InformationProvider;
 /**
  * An element that is part of the gui and is shown to end user (that means it is
  * rendered). Gui objects can receive events and handle them if they override
- * event listeners.
+ * event listeners.<br>
+ * Guielements can be selected to be invisible for spectators using
+ * {@link #setVisibleForSpectator(boolean)}.
  * 
  * @author illonis
  * 
@@ -31,6 +33,7 @@ import de.illonis.eduras.logicabstraction.InformationProvider;
 public abstract class RenderedGuiObject implements GameEventListener {
 	private UserInterface gui;
 	protected int screenX, screenY;
+	private boolean visibleForSpectator;
 
 	/**
 	 * Creates a new {@link RenderedGuiObject} that is attached to given
@@ -42,8 +45,28 @@ public abstract class RenderedGuiObject implements GameEventListener {
 	 */
 	protected RenderedGuiObject(UserInterface gui) {
 		this.gui = gui;
+		visibleForSpectator = false;
 		screenX = screenY = 0;
 		gui.addElement(this);
+	}
+
+	/**
+	 * Returns whether this element is visible to spectators or not.
+	 * 
+	 * @return true if element is visible to spectators, false otherwise.
+	 */
+	public final boolean isVisibleForSpectator() {
+		return visibleForSpectator;
+	}
+
+	/**
+	 * Sets if this gui element is visible to spectators (default false).
+	 * 
+	 * @param visibleForSpectator
+	 *            true if visible to spectators, false otherwise.
+	 */
+	protected void setVisibleForSpectator(boolean visibleForSpectator) {
+		this.visibleForSpectator = visibleForSpectator;
 	}
 
 	protected final TooltipHandler getTooltipHandler() {

@@ -409,5 +409,6 @@ public class GameClient implements GuiClickReactor, NetworkEventReactor,
 	 */
 	public void setRole(ClientRole role) {
 		this.role = role;
+
 	}
 }

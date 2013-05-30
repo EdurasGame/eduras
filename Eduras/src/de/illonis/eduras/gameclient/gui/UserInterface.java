@@ -13,6 +13,7 @@ import de.illonis.eduras.gameclient.gui.guielements.StatisticsWindow;
 import de.illonis.eduras.gameclient.gui.guielements.TimeFrame;
 import de.illonis.eduras.gameclient.gui.guielements.TooltipTriggerer;
 import de.illonis.eduras.logicabstraction.InformationProvider;
+import de.illonis.eduras.networking.ServerClient.ClientRole;
 
 /**
  * Holds all user interface elements and listens for game events and notifies
@@ -28,6 +29,7 @@ public class UserInterface implements GuiResizeListener, UserInputListener {
 	private TooltipHandler tooltipHandler;
 	private TooltipTriggererNotifier tooltipNotifier;
 	private StatisticsWindow statWindow;
+	private boolean spectator;
 
 	/**
 	 * Creates the user interface. The tooltip handler will be set manually
@@ -45,6 +47,7 @@ public class UserInterface implements GuiResizeListener, UserInputListener {
 			GuiClickReactor clickReactor) {
 		this.uiObjects = new ArrayList<RenderedGuiObject>();
 		this.infos = infos;
+		spectator = false;
 		this.reactor = clickReactor;
 		this.tooltipNotifier = tooltipNotifier;
 		createElements();
@@ -146,6 +149,19 @@ public class UserInterface implements GuiResizeListener, UserInputListener {
 	@Override
 	public void hideStatWindow() {
 		statWindow.setVisible(false);
+	}
+
+	/**
+	 * Returns whether this is a spectator gui or not.
+	 * 
+	 * @return true if this gui is for a spectator.
+	 */
+	public boolean isSpectator() {
+		return spectator;
+	}
+
+	void setRole(ClientRole role) {
+		spectator = (role == ClientRole.SPECTATOR);
 	}
 
 }

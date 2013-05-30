@@ -24,6 +24,7 @@ public class TimeFrame extends RenderedGuiObject {
 	 */
 	public TimeFrame(UserInterface gui) {
 		super(gui);
+		setVisibleForSpectator(true);
 		screenX = 0;
 		screenY = 0;
 	}

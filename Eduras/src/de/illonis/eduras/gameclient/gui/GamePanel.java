@@ -58,7 +58,8 @@ public class GamePanel extends JPanel {
 	 * Stopps rendering process.
 	 */
 	void stopRendering() {
-		renderer.stopRendering();
+		if (renderer != null)
+			renderer.stopRendering();
 	}
 
 	/**

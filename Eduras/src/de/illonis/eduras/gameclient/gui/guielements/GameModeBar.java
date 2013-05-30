@@ -23,6 +23,7 @@ public class GameModeBar extends RenderedGuiObject {
 	 */
 	public GameModeBar(UserInterface gui) {
 		super(gui);
+		setVisibleForSpectator(true);
 		mode = "unknown game mode";
 		screenX = 30;
 		screenY = 0;
