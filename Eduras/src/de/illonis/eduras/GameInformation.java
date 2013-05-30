@@ -11,6 +11,7 @@ import de.illonis.eduras.events.MovementEvent;
 import de.illonis.eduras.events.ObjectFactoryEvent;
 import de.illonis.eduras.events.SetBooleanGameObjectAttributeEvent;
 import de.illonis.eduras.events.SetGameModeEvent;
+import de.illonis.eduras.events.SetRemainingTimeEvent;
 import de.illonis.eduras.exceptions.InvalidNameException;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
 import de.illonis.eduras.gameobjects.GameObject;
@@ -267,6 +268,9 @@ public class GameInformation {
 		SetGameModeEvent e = new SetGameModeEvent(gameSettings.getGameMode()
 				.getName());
 		infos.add(e);
+		SetRemainingTimeEvent remaining = new SetRemainingTimeEvent(
+				gameSettings.getRemainingTime());
+		infos.add(remaining);
 
 		return infos;
 	}
