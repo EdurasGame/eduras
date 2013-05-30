@@ -106,4 +106,9 @@ public class InformationProvider implements InfoInterface {
 		return logic.getGame().getPlayerByOwnerId(ownerId);
 	}
 
+	@Override
+	public long getRemainingTime() {
+		return logic.getGame().getGameSettings().getRemainingTime();
+	}
+
 }

@@ -94,4 +94,11 @@ public interface InfoInterface {
 	 */
 	public Player getPlayerByOwnerId(int ownerId)
 			throws ObjectNotFoundException;
+
+	/**
+	 * Returns the remaining game time.
+	 * 
+	 * @return remaining time in milliseconds.
+	 */
+	public long getRemainingTime();
 }

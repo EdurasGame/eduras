@@ -10,6 +10,7 @@ import de.illonis.eduras.gameclient.gui.guielements.ItemDisplay;
 import de.illonis.eduras.gameclient.gui.guielements.PlayerStatBar;
 import de.illonis.eduras.gameclient.gui.guielements.RenderedGuiObject;
 import de.illonis.eduras.gameclient.gui.guielements.StatisticsWindow;
+import de.illonis.eduras.gameclient.gui.guielements.TimeFrame;
 import de.illonis.eduras.gameclient.gui.guielements.TooltipTriggerer;
 import de.illonis.eduras.logicabstraction.InformationProvider;
 
@@ -55,6 +56,7 @@ public class UserInterface implements GuiResizeListener, UserInputListener {
 		new ItemDisplay(this);
 		new GameModeBar(this);
 		new PlayerStatBar(this);
+		new TimeFrame(this);
 		statWindow = new StatisticsWindow(this);
 	}
 
