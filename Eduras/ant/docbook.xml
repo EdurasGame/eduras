@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<!-- - Author: Lars Vogel -->
+<!-- - Author: illonis -->
 <project name="docbook-src" default="build-html">
 
 	<description>
@@ -21,7 +21,6 @@
 		<pathelement location="${doc.path}/lib/saxon.jar" />
 	</path>
 
-
 	<!-- - target: usage -->
 	<target name="usage" description="Prints the Ant build.xml usage">
 		<echo message="Use -projecthelp to get a list of the available targets." />
@@ -33,13 +32,13 @@
 	</target>
 
 	<!-- - target: depends -->
-	<target name="depends">
+	<target name="create-dir" description="Creates output directory">
 		<mkdir dir="${output.dir}" />
 	</target>
 
 	<!-- - target: build-html - description: Iterates through a directory and 
 		transforms - .xml files into .html files using the DocBook XSL. -->
-	<target name="build-html" depends="depends"
+	<target name="build-html" depends="create-dir"
 		description="Generates HTML files from DocBook XML">
 		<xslt style="${html.stylesheet}" extension=".html" basedir="${input.dir}"
 			destdir="${output.dir}">
