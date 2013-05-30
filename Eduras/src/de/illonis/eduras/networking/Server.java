@@ -128,7 +128,7 @@ public class Server {
 			NetworkEventListener eventListener) {
 		this.logic = logic;
 		logic.addGameEventListener(new ServerGameEventListener(outputBuffer,
-				serverSender, this));
+				serverSender));
 		serverLogic = new ServerDecoder(inputBuffer, logic, eventListener);
 	}
 

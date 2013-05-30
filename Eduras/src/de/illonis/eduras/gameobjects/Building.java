@@ -12,6 +12,14 @@ import de.illonis.eduras.shapes.House;
  */
 public class Building extends GameObject {
 
+	/**
+	 * Creates a new building.
+	 * 
+	 * @param game
+	 *            game information.
+	 * @param id
+	 *            object id.
+	 */
 	public Building(GameInformation game, int id) {
 		super(game, id);
 		setObjectType(ObjectType.BUILDING);
@@ -20,8 +28,6 @@ public class Building extends GameObject {
 
 	@Override
 	public void onCollision(GameObject collidingObject) {
-		// TODO Auto-generated method stub
-
 	}
 
 }

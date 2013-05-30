@@ -30,7 +30,6 @@ public class ServerGameEventListener implements GameEventListener {
 
 	private final Buffer outputBuffer;
 	private final ServerSender serverSender;
-	private final Server server;
 
 	/**
 	 * Creates a new ServerGameEventListener with the given outputBuffer.
@@ -39,23 +38,13 @@ public class ServerGameEventListener implements GameEventListener {
 	 *            The outputBuffer to pass events to.
 	 * @param serverSender
 	 *            The sender that is used to send messages.
-	 * @param server
-	 *            The associated server.
 	 */
 	public ServerGameEventListener(Buffer outputBuffer,
-			ServerSender serverSender, Server server) {
+			ServerSender serverSender) {
 		this.outputBuffer = outputBuffer;
 		this.serverSender = serverSender;
-		this.server = server;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * de.illonis.eduras.interfaces.GameEventListener#onNewObjectPosition(de
-	 * .illonis.eduras.GameObject)
-	 */
 	@Override
 	public void onNewObjectPosition(GameObject o) {
 
@@ -72,13 +61,6 @@ public class ServerGameEventListener implements GameEventListener {
 		}
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * de.illonis.eduras.interfaces.GameEventListener#onInformationRequested
-	 * (java.util.ArrayList)
-	 */
 	@Override
 	public void onInformationRequested(ArrayList<GameEvent> infos, int owner) {
 		StringBuilder builder = new StringBuilder();
@@ -116,13 +98,6 @@ public class ServerGameEventListener implements GameEventListener {
 		outputBuffer.append(string);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * de.illonis.eduras.interfaces.GameEventListener#onObjectStateChanged(de
-	 * .illonis.eduras.events.SetGameObjectAttributeEvent)
-	 */
 	@Override
 	public void onObjectStateChanged(SetGameObjectAttributeEvent<?> event) {
 		try {
@@ -176,13 +151,6 @@ public class ServerGameEventListener implements GameEventListener {
 		}
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * de.illonis.eduras.interfaces.GameEventListener#onObjectRemove(de.illonis
-	 * .eduras.events.ObjectFactoryEvent)
-	 */
 	@Override
 	public void onObjectRemove(ObjectFactoryEvent event) {
 

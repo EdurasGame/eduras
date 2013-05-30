@@ -40,11 +40,11 @@ public class ItemSlot {
 	 * Puts an item into this slot. Note that this method overwrites any
 	 * existing item.
 	 * 
-	 * @param item
+	 * @param newItem
 	 *            item to put into.
 	 */
-	void putItem(Item item) {
-		this.item = item;
+	void putItem(Item newItem) {
+		this.item = newItem;
 	}
 
 	/**
