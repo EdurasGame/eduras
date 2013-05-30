@@ -11,7 +11,10 @@ public class SetRemainingTimeEvent extends GameEvent {
 	private long remainingTime;
 
 	/**
-	 * Creates a new SetRemainingTimeEvent
+	 * Creates a new SetRemainingTimeEvent.
+	 * 
+	 * @param remainingTime
+	 *            the remaining time in milliseconds.
 	 */
 	public SetRemainingTimeEvent(long remainingTime) {
 		super(GameEventNumber.SET_REMAININGTIME);
@@ -21,7 +24,7 @@ public class SetRemainingTimeEvent extends GameEvent {
 	/**
 	 * Returns the remaining time.
 	 * 
-	 * @return The remaining time.
+	 * @return The remaining time in milliseconds.
 	 */
 	public long getRemainingTime() {
 		return remainingTime;
