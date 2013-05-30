@@ -162,6 +162,13 @@ public class UserInterface implements GuiResizeListener, UserInputListener {
 
 	void setRole(ClientRole role) {
 		spectator = (role == ClientRole.SPECTATOR);
+		if (spectator) {
+			for (int i = 0; i < uiObjects.size(); i++) {
+				RenderedGuiObject o = uiObjects.get(i);
+				if (!o.isVisibleForSpectator())
+					removeGuiElement(o);
+			}
+		}
 	}
 
 }
