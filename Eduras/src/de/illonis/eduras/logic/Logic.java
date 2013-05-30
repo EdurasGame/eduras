@@ -359,8 +359,6 @@ public class Logic implements GameLogicInterface {
 	 *            event to handle.
 	 */
 	private void handleItemEvent(ItemEvent itemEvent) {
-
-		GameInformation gameInfo = getGame();
 		Player player;
 
 		try {
