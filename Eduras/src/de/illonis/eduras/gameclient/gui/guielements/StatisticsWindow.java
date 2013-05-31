@@ -6,6 +6,7 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.Collection;
 
+import de.illonis.eduras.events.MatchEndEvent;
 import de.illonis.eduras.gameclient.gui.UserInterface;
 import de.illonis.eduras.images.ImageFiler;
 import de.illonis.eduras.logger.EduLog;
@@ -25,6 +26,7 @@ public class StatisticsWindow extends RenderedGuiObject {
 	private final static int[] COLUMN_X = { 80, 180, 280 };
 	private final static int PADDING_Y = 80;
 	private final static int LINEHEIGHT = 30;
+	private final static long DISPLAY_TIME = 3000;
 
 	private BufferedImage artwork;
 	private Collection<Player> players;
@@ -113,4 +115,25 @@ public class StatisticsWindow extends RenderedGuiObject {
 	public void onPlayerInformationReceived() {
 		players = getInfo().getPlayers();
 	}
+
+	@Override
+	public void onMatchEnd(MatchEndEvent event) {
+		Thread t = new Thread(delayedHider);
+		t.setName("DelayedHider");
+		setVisible(true);
+		t.start();
+		super.onMatchEnd(event);
+	}
+
+	private Runnable delayedHider = new Runnable() {
+		@Override
+		public void run() {
+			try {
+				Thread.sleep(DISPLAY_TIME);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+			setVisible(false);
+		}
+	};
 }
