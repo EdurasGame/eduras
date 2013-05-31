@@ -191,14 +191,16 @@ public class Logic implements GameLogicInterface {
 				case SNIPERMISSILE:
 					missile = new SniperMissile(gameInfo,
 							missileLaunchEvent.getId());
+					break;
 				case SIMPLEMISSILE:
 					missile = new SimpleMissile(gameInfo,
 							missileLaunchEvent.getId());
-					gameInfo.addObject(missile);
 					break;
 				default:
 					return;
 				}
+
+				gameInfo.addObject(missile);
 
 				missile.setPosition(missileLaunchEvent.getPosition().getX(),
 						missileLaunchEvent.getPosition().getY());
