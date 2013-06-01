@@ -1,7 +1,7 @@
 body
 {
 	background:#E0E0E0;
-	font-family:serif,sans-serif;
+	font-family:Arial,sans-serif;
 }
 
 a {
@@ -47,7 +47,7 @@ a img {
 	width:100%;
 	padding:0;
 	height:40px;
-	border-bottom:7px solid #A0A0A0;
+	border-bottom:10px solid #A0A0A0;
 	border-top-left-radius:10px;
 	border-top-right-radius:10px;
 }
@@ -77,6 +77,9 @@ a img {
 	text-decoration:none;
 	border-top-left-radius:10px;
 	border-top-right-radius:10px;
+	background:-moz-linear-gradient(top, #A0A0A0, #A0A0A0 50%, silver);
+	background:-webkit-gradient(linear, left top, left bottom, color-stop(0, #A0A0A0), color-stop(.5, #A0A0A0), to(silver));
+  background:-o-linear-gradient(top, #A0A0A0, #A0A0A0 50%,silver);
 }
 
 #pageNav div:first-child a
@@ -92,11 +95,17 @@ a img {
 #pageNav div a:hover
 {
 	background:#B0B0B0;
+	background:-moz-linear-gradient(top, gray, #A0A0A0 50%, silver);
+	background:-webkit-gradient(linear, left top, left bottom, color-stop(0, gray), color-stop(.5, #A0A0A0), to(silver));
+  background:-o-linear-gradient(top, gray, #A0A0A0 50%,silver);
 	text-decoration:none;
 }
 
 #pageNav div a.active {
 	background:#A0A0A0;
+	background:-moz-linear-gradient(top, gray, gray 50%, #A0A0A0);
+	background:-webkit-gradient(linear, left top, left bottom, color-stop(0, gray), color-stop(.5, gray), to(#A0A0A0));
+  background:-o-linear-gradient(top, gray, gray 50%,#A0A0A0);
 	color:black;
 }
 
@@ -128,11 +137,6 @@ a img {
 #footer a
 {
 	color:gray;
-}
-
-#footer a:hover
-{
-	
 }
 
 .bx-wrapper, #pageNav {
@@ -251,4 +255,22 @@ a.download:hover {
   color:gray;
   font-size:small;
   margin-left:10px;
+}
+
+div.sideimagebox {
+  float:right;
+  width:200px;
+  padding:20px;
+  padding-left:15px;
+}
+
+div.sideimagebox img {
+  border-radius:5px;
+}
+
+.bx-wrapper .bxslider>div div.sideimagebox p {
+  padding:0;
+  font-size:x-small;
+  margin:2px 10px;
+  text-align:left;
 }
