@@ -5,17 +5,18 @@
 		<meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
 		<meta http-equiv="Content-Language" content="de">
 		<title>Eduras? Website</title>
-		<!-- jQuery library (served from Google) -->
-		<script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.1/jquery.min.js"></script>
+		<!-- jQuery library (served from Google)
+		<script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.1/jquery.min.js"></script> -->
+		
 		<!-- offline alternative (no internet here so testing offline :) -->
-		<script src="js/jquery-1.9.1.min.js"></script>
+		<script src="js/jquery-1.9.1.min.js" type="text/javascript"></script>
 		<!-- bxSlider Javascript file -->
-		<script src="js/jquery.bxslider.min.js"></script>
+		<script src="js/jquery.bxslider.min.js" type="text/javascript"></script>
 		<!-- bxSlider CSS file -->
-		<link href="lib/jquery.bxslider.css" rel="stylesheet" />
-
+		<link rel="stylesheet" href="lib/jquery.bxslider.css" type="text/css">
+    <script type="text/javascript" src="http://www.google.com/recaptcha/api/js/recaptcha_ajax.js"></script>
 		<link rel="stylesheet" href="lib/style.css" type="text/css">
-		<script src="js/main.js"></script>
+		<script src="js/main.js" type="text/javascript"></script>
 	</head>
 	<body>
 		<div id="wrapper">
@@ -31,16 +32,30 @@
             <a href="images/screen1.png"><img src="images/screen1_small.png" alt="Screenshot"></a>
             <p>Screenshot of deathmatch mode</p>
 					</div>
-					<p class="text">Lorem Ipsum</p>
-					<p class="text">Lorem Ipsum dolor sit amet<br>bla</p>
-					<p class="text">Lorem Ipsum</p>
-					<p class="text">Lorem Ipsum dolor sit amet Lorem Ipsum dolor sit amet<br>bla</p>
-					<p class="text">Lorem Ipsum Lorem Ipsum dolor sit amet</p>
-					<p class="text">Lorem Ipsum dolor sit amet Lorem Ipsum dolor sit amet Lorem Ipsum dolor sit amet<br>
-          bla Lorem Ipsum dolor sit amet</p>
+					<p class="text">Eduras? is a online multiplayer strategy shooter.</p>
+					<p class="text">Playing with your friends, you can compete for items, strength and kills.</p>
+					<h3>Features</h3>
+					<ul>
+					    <li>Many maps varied in size, opportunities and difficulty</li>
+					    <li>No player limit</li>
+					    <li>Three game modes: Deathmatch, Team-Deathmatch, Capture-The-Flag</li>
+					    <li>Play with your friends via internet</li>
+					    <li>Platform independent (Java)</li>
+					    <li>Spectator mode</li>
+				  </ul>
 				</div>
 				<div>
 					<h2>Tutorial</h2>
+					<p class="text">Starting and playing Eduras? should be self-explaining. If you need any help, this page should help you. If not, feel free to contact us.
+					<h3>Setup</h3>
+					<div class="sideimagebox">
+            <img src="images/console.png" alt="Starting server with custom port">
+            <p>Starting server with custom port</p>
+					</div>
+					<p class="text sub">After starting the server application, the server automatically listens on port 4387.
+          To change the port, you can provide a custom port as first parameter.</p>
+          
+					<h3>Controls</h3>
 				</div>
 				<div>
 					<h2>Download</h2>
@@ -66,12 +81,49 @@
 				</div>
 				<div>
 					<h2>Contribute</h2>
+					<div class="sideimagebox">
+            <img src="images/feedback.png" alt="Screenshot">
+					</div>
 					<p class="text">Eduras? is currently developed by a small team of students.
 					While working a lot on this project, we try to ensure a high gaming quality,
 					but like every other person we are not perfect (sadly).</p>
 					<p class="text">So we ask you to give us feedback on gaming experience and quality.
 					And if you come across a bug or suffer performance-issues, please let us know!</p>
-					<p><a href="#">Send feedback right now!</a></p>
+					<p><a href="#" id="feedbacktoggler">Send us feedback right now!</a></p>
+					<div id="feedback">
+					<form>
+					<p>hi there</p>
+					<p>hi here</p>
+					</form>
+					</div>
+				</div>
+				<div>
+					<h2>Feedback</h2>
+					<form action="submit.php" method="POST">
+			      <table>
+			        <tr>
+			          <td><label for="i_name">Name:</label></td><td><input type="text" id="i_name" name="name"></td>
+              </tr>
+				      <tr>
+			          <td><label for="i_name">E-Mail:</label></td><td><input type="text" name="email" id="i_email"></td>
+					    </tr>
+					    <tr>
+			          <td><label for="i_type">Type:</label></td><td><select name="type" id="i_type">
+			          <option>Feedback</option>
+                <option>Bug report</option>
+                <option>Feature request</option>
+                <option>Performance issues</option>
+                <option>Other</option>
+                </select></td>
+					    </tr>
+				      <tr>
+			          <td><label for="i_text">Text:</label></td><td><textarea name="text" cols="20" rows="5" id="i_text"></textarea></td>
+              </tr>
+              <tr>
+              <td></td><td><div id="recaptcha_div"></div></td>
+              </tr><tr><td></td><td><input type="submit" value="Send"></td></tr>
+			       </table>
+					</form>
 				</div>
 				<div>
 					<h2>Impressum</h2>
@@ -79,6 +131,7 @@
 				</div>
 			</div>
 			<div id="footer">
+			  <p>&copy; 2013 - illonis</p>
 				<a href="#" id="impressum">Impressum</a>
 			</div>
 		</div>

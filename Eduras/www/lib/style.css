@@ -127,15 +127,21 @@ a img {
 
 #footer
 {
+  position:relative;
 	margin-right:25px;
 	margin-left:25px;
 	margin-top:8px;
 	font-size:small;
-	text-align:right;
+	text-align:left;
+	color:gray;
 }
+
 
 #footer a
 {
+  position:absolute;
+  top:0;
+  right:0;
 	color:gray;
 }
 
@@ -257,20 +263,57 @@ a.download:hover {
   margin-left:10px;
 }
 
-div.sideimagebox {
+.bx-wrapper .bxslider>div div.sideimagebox {
   float:right;
-  width:200px;
+  text-align:right;
+  width:300px;
   padding:20px;
   padding-left:15px;
 }
 
-div.sideimagebox img {
+.bx-wrapper .bxslider>div div.sideimagebox img {
   border-radius:5px;
+  display:inline;
+  max-width:300px;
 }
 
 .bx-wrapper .bxslider>div div.sideimagebox p {
   padding:0;
+  text-align:right;
   font-size:x-small;
   margin:2px 10px;
-  text-align:left;
+}
+
+#feedback {
+  display:none;
+}
+
+#recaptcha_div {
+  height:140px;
+  width:322px;
+}
+
+form
+{
+ width:50%;
+ margin-left:20px;
+}
+
+table {
+ width:100%;
+}
+
+table td {
+ vertical-align:top;
+}
+
+table tr td:first-child {
+ text-align:right;
+ 
+}
+
+input[type=text], textarea {
+ display: block;
+ max-width:100%;
+ width:100%;
 }
