@@ -5,43 +5,74 @@
 		<meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
 		<meta http-equiv="Content-Language" content="de">
 		<title>Eduras? Website</title>
-		<link rel="stylesheet" href="lib/style.css" type="text/css">
 		<!-- jQuery library (served from Google) -->
 		<script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.1/jquery.min.js"></script>
+		<!-- offline alternative (no internet here so testing offline :) -->
+		<script src="js/jquery-1.9.1.min.js"></script>
 		<!-- bxSlider Javascript file -->
 		<script src="js/jquery.bxslider.min.js"></script>
 		<!-- bxSlider CSS file -->
 		<link href="lib/jquery.bxslider.css" rel="stylesheet" />
 
+		<link rel="stylesheet" href="lib/style.css" type="text/css">
 		<script src="js/main.js"></script>
 	</head>
 	<body>
-		<h1>Eduras?</h1>
-		<div id="pageNav">
-			<a data-slide-index="0" href="">About</a>
-			<a data-slide-index="1" href="">Tutorial</a>
-  			<a data-slide-index="2" href="">Download</a>
-  			<a data-slide-index="3" href="">Team</a>
-  			<a data-slide-index="4" href="">Contribute</a>
+		<div id="wrapper">
+			<h1>Eduras?</h1>
+			<div id="pageNav">
+				<div><a data-slide-index="0" href="">About</a></div><div><a data-slide-index="1" href="">Tutorial</a></div><div><a data-slide-index="2" href="">Download</a></div><div><a data-slide-index="3" href="">Contribute</a></div>
+			</div>
+			<div class="bxslider">
+				<div>
+					<h2>About</h2>
+					<p>Lorem Ipsum</p>
+					<p>Lorem Ipsum dolor sit amet<br>bla</p>
+					<p>Lorem Ipsum</p>
+					<p>Lorem Ipsum dolor sit amet Lorem Ipsum dolor sit amet<br>bla</p>
+					<p>Lorem Ipsum Lorem Ipsum dolor sit amet</p>
+					<p>Lorem Ipsum dolor sit amet Lorem Ipsum dolor sit amet Lorem Ipsum dolor sit amet<br>bla Lorem Ipsum dolor sit amet</p>
+				</div>
+				<div>
+					<h2>Tutorial</h2>
+				</div>
+				<div>
+					<h2>Download</h2>
+					<p><i>Current version:</i> 0.1 from July 1st, 2013</p>
+					<div class="twocolumns">
+						<div class="leftcolumn">
+							<h3>Client</h3>
+							<p class="sub"><a href="#">Download Client</a> (514kb)</p>
+						</div>
+						<div class="rightcolumn">
+							<h3>Server</h3>
+							<p class="sub"><a href="#">Download Server</a> (184kb)</p>
+						</div>
+					</div>
+					<h3>Change notes:</h3>
+					<ul>
+						<li>a change</li>
+						<li>another change</li>
+					</ul>
+				</div>
+				<div>
+					<h2>Contribute</h2>
+					<p class="text">Eduras? is currently developed by a small team of students.
+					Working a lot on this project, we try to ensure a high gaming quality,
+					but like every other person we are not perfect (sadly!).</p>
+					<p class="text">So we ask you to give us feedback on gaming experience and quality.
+					And if you come across a bug or suffer performance-issues, please let us know!</p>
+					<p><a href="#">Send feedback right now!</a></p>
+				</div>
+				<div>
+					<h2>Impressum</h2>
+					<p>eduras@illonis.de</p>
+				</div>
+			</div>
+			<div id="footer">
+				<a href="#" id="impressum">Impressum</a>
+			</div>
 		</div>
-		<div class="bxslider">
-			<div>
-				<h2>About</h2>
-				<p>Lorem Ipsum</p>
-			</div>
-			<div>
-				<h2>Tutorial</h2>
-			</div>
-			<div>
-				<h2>Download</h2>
-			</div>
-			<div>
-				<h2>Team</h2>
-			</div>
-			<div>
-				<h2>Contribute</h2>
-			</div>
-		</div>
-	
 	</body>
 </html>
+

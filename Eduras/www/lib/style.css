@@ -1,31 +1,204 @@
 body
 {
-	margin:0;
-	padding:0;
 	background:#E0E0E0;
+	font-family:serif,sans-serif;
+}
+
+a {
+	color:blue;
+	text-decoration:none;
+}
+
+a:hover {
+	text-decoration:underline;
+}
+
+a img {
+	border:0;
+}
+
+#wrapper, h1
+{
+	max-width:800px;
+	position:relative;
+	padding:0;
+	margin:auto;
+}
+
+#wrapper {
+	background:#E0E0E0 url('../images/eduras.png') top 30px right 20px no-repeat;
 }
 
 h1
 {
-	margin:20px;	
+	padding-top:60px;
+	margin-bottom:20px;
+	padding-left:30px;
+	font-weight:lighter;
+	letter-spacing:3px;
 }
 
 #pageNav
 {
-	background:silver;
+	background:#E0E0E0;
+	margin:0;
+	width:100%;
+	padding:0;
+	height:40px;
+	border-bottom:7px solid #A0A0A0;
+	border-top-left-radius:10px;
+	border-top-right-radius:10px;
 }
 
-#pageNav a
+#pageNav div
 {
 	display:inline-block;
+	background:none;
+	margin:0;
+	line-height:40px;
+	padding:0;
+	height:40px;
+	width:25%;
+}
+
+#pageNav div a {
 	background:silver;
-	padding:10px;
-	margin-left:5px;
-	margin-right:5px;
+	font-size:1em;
+	text-align:center;
+	display:block;
+	margin:0;
+	margin-left:1px;
+	margin-right:1px;
+	height:40px;
+	color:black;
+	line-height:40px;
+	text-decoration:none;
+	border-top-left-radius:10px;
+	border-top-right-radius:10px;
+}
+
+#pageNav div:first-child a
+{
+	margin-left:0;
+}
+
+#pageNav div:last-child a
+{
+	margin-right:0;
+}
+
+#pageNav div a:hover
+{
+	background:#B0B0B0;
 	text-decoration:none;
 }
 
-#pageNav a:hover
+#pageNav div a.active {
+	background:#A0A0A0;
+	color:black;
+}
+
+.bx-wrapper .bx-controls {
+	display:none;
+}
+
+.bx-wrapper .bx-viewport {
+	left:0;
+	right:0;
+	border:0;
+	margin:0;
+	padding:0;
+	bottom:0;
+	max-width:800px;
+	border-bottom-left-radius:10px;
+	border-bottom-right-radius:10px;
+}
+
+#footer
 {
-	background:#B0B0B0;
+	margin-right:25px;
+	margin-left:25px;
+	margin-top:8px;
+	font-size:small;
+	text-align:right;
+}
+
+#footer a
+{
+	color:gray;
+}
+
+#footer a:hover
+{
+	
+}
+
+.bx-wrapper, #pageNav {
+	-moz-box-shadow:2px 3px 3px rgba(0,0,0,0.3); /* Firefox - alte Syntax */
+	-webkit-box-shadow:2px 3px 3px rgba(0,0,0,0.3); /* Safari, Chrome - alte Syntax */
+	box-shadow:2px 3px 3px rgba(0,0,0,0.3); /* alle neuen Browser, W3C Standard */
+}
+.bx-wrapper {
+	border-bottom-right-radius:10px;
+	border-bottom-left-radius:10px;
+}	
+
+/* Content panel */
+.bx-wrapper .bxslider div {
+	padding:10px;
+	max-width:780px;
+	padding-bottom:1em;
+}
+
+
+.bx-wrapper .bxslider>div p {
+	margin-left:20px;
+	text-align:justify;
+}
+
+.bx-wrapper .bxslider>div p.sub, .bx-wrapper .bxslider>div ul {
+	margin-left:40px;
+}
+
+.bx-wrapper .bxslider>div p.text {
+	max-width:50%;	
+}
+
+h2 {
+	border-bottom:1px solid silver;
+	width:50%;
+	margin-left:5px;
+	padding-left:15px;
+	font-weight:lighter;
+	letter-spacing:2px;
+}
+
+h3 {
+	border-bottom:1px solid silver;
+	min-width:25%;
+	width:25%;
+	margin-left:25px;
+	padding-left:15px;
+	font-weight:lighter;
+	letter-spacing:2px;
+}
+
+.twocolumns {
+	position:relative;
+	height:100px;
+}	
+
+.leftcolumn, .rightcolumn {
+	position:absolute;
+	top:0;
+	bottom:0;
+	width:50%;
+}
+
+.leftcolumn {
+	left:0;
+}
+
+.rightcolumn {
+	right:0;
 }
