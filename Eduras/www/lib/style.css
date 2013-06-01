@@ -17,7 +17,7 @@ a img {
 	border:0;
 }
 
-#wrapper, h1
+#wrapper
 {
 	max-width:800px;
 	position:relative;
@@ -26,16 +26,18 @@ a img {
 }
 
 #wrapper {
-	background:#E0E0E0 url('../images/eduras.png') top 30px right 20px no-repeat;
+  overflow:visible;
 }
 
-h1
+#logo
 {
-	padding-top:60px;
-	margin-bottom:20px;
-	padding-left:30px;
-	font-weight:lighter;
+  display:block;
+  margin:auto;
+  margin-top:40px;
+  margin-bottom:5px;
 	letter-spacing:3px;
+	width:261px;
+	height:100px;
 }
 
 #pageNav
@@ -138,14 +140,15 @@ h1
 	-webkit-box-shadow:2px 3px 3px rgba(0,0,0,0.3); /* Safari, Chrome - alte Syntax */
 	box-shadow:2px 3px 3px rgba(0,0,0,0.3); /* alle neuen Browser, W3C Standard */
 }
-.bx-wrapper {
+.bx-wrapper, .bx-viewport, .bxslider, .bxslider>div{
 	border-bottom-right-radius:10px;
 	border-bottom-left-radius:10px;
 }	
 
 /* Content panel */
-.bx-wrapper .bxslider div {
+.bxslider>div {
 	padding:10px;
+	background:white;
 	max-width:780px;
 	padding-bottom:1em;
 }
@@ -201,4 +204,51 @@ h3 {
 
 .rightcolumn {
 	right:0;
+}
+
+noscript {
+  display:block;
+  border:2px solid gray;
+  padding:5px;
+  background:white;
+  z-index:99;
+}
+
+a.download {
+  display:inline-block;
+  height:30px;
+  line-height:30px;
+  padding:5px 20px;
+  padding-left:50px;
+  color:black;
+  margin-bottom:3px;
+  background:url('../images/download.png') 10px no-repeat;
+  background:url('../images/download.png') 10px no-repeat, -moz-linear-gradient(top, #CCFFCC, #66FF99 50%, #00FF99);
+	background:url('../images/download.png') 10px no-repeat, -webkit-gradient(linear, left top, left bottom, color-stop(0, #CCFFCC), color-stop(.5, #66FF99), to(#00FF99));
+
+  /* NEU NEU NEU - Für Presto (Opera etc) */
+  background:url('../images/download.png') 10px no-repeat, -o-linear-gradient(top, #CCFFCC, #66FF99 50%,#00FF99);
+  border:0;
+  
+  border-radius:5px;
+  -moz-box-shadow:2px 2px 2px rgba(0,0,0,0.3); /* Firefox - alte Syntax */
+	-webkit-box-shadow:2px 2px 2px rgba(0,0,0,0.3); /* Safari, Chrome - alte Syntax */
+	box-shadow:2px 2px 2px rgba(0,0,0,0.3); /* alle neuen Browser, W3C Standard */
+}
+
+a.download:hover {
+  text-decoration:none;
+  text-shadow: 1px 1px 1px #00CC66;
+  background:url('../images/download.png') 10px no-repeat, -moz-linear-gradient(top, #66FF99, #66FF99 51%, #00CC66);
+	background:url('../images/download.png') 10px no-repeat, -webkit-gradient(linear, left top, left bottom, color-stop(0, #66FF99), color-stop(.5, #66FF99), to(#00CC66));
+	background:url('../images/download.png') 10px no-repeat, -o-linear-gradient(top, #66FF99, #66FF99 50%,#00CC66);
+	-moz-box-shadow:2px 2px 2px rgba(0,0,0,0.4); /* Firefox - alte Syntax */
+	-webkit-box-shadow:2px 2px 2px rgba(0,0,0,0.4); /* Safari, Chrome - alte Syntax */
+	box-shadow:2px 2px 2px rgba(0,0,0,0.4); /* alle neuen Browser, W3C Standard */
+}
+
+.fsize {
+  color:gray;
+  font-size:small;
+  margin-left:10px;
 }

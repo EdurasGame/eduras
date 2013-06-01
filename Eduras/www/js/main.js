@@ -4,6 +4,7 @@ $(document).ready(function(){
   		autoStart: false,
 		pagerCustom: $('#pageNav'),
 		mode: 'fade',
+		speed: 300,
 		controls: false
   });
   
