@@ -5,6 +5,7 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Rectangle;
+import java.awt.geom.Arc2D;
 import java.awt.image.BufferedImage;
 
 import de.illonis.eduras.events.SetItemSlotEvent;
@@ -14,6 +15,7 @@ import de.illonis.eduras.gameclient.gui.UserInterface;
 import de.illonis.eduras.inventory.Inventory;
 import de.illonis.eduras.inventory.ItemSlotIsEmptyException;
 import de.illonis.eduras.items.Item;
+import de.illonis.eduras.items.Usable;
 import de.illonis.eduras.logger.EduLog;
 
 /**
@@ -28,6 +30,7 @@ public class ItemDisplay extends ClickableGuiElement implements
 	private final static int ITEM_GAP = 15;
 	private final static int BLOCKSIZE = 48;
 	private int currentItem = -1;
+	private final static Color COLOR_SEMITRANSPARENT = new Color(0, 0, 0, 120);
 
 	// top, right, bottom, left
 	private final static int OUTER_GAP[] = { 20, 5, 10, 15 };
@@ -68,13 +71,20 @@ public class ItemDisplay extends ClickableGuiElement implements
 			} else
 				g2d.setColor(Color.BLACK);
 			g2d.setStroke(new BasicStroke(3));
-			g2d.drawRect(item.getX() + screenX, item.getY() + screenY,
-					BLOCKSIZE, BLOCKSIZE);
+			Rectangle itemRect = new Rectangle(item.getX() + screenX,
+					item.getY() + screenY, BLOCKSIZE, BLOCKSIZE);
+			g2d.draw(itemRect);
 			g2d.drawString("#" + (item.getSlotId() + 1), item.getX() + screenX
 					+ BLOCKSIZE / 4, item.getY() + screenY - 2);
 			if (item.hasImage())
 				g2d.drawImage(item.getItemImage(), item.getX() + screenX,
 						item.getY() + screenY, null);
+			long cd = item.getCooldown();
+			if (cd > 0) {
+				g2d.setPaint(COLOR_SEMITRANSPARENT);
+				g2d.fill(new Arc2D.Double(itemRect, 90, item.getCooldownArc(),
+						Arc2D.PIE));
+			}
 		}
 	}
 
@@ -140,7 +150,7 @@ public class ItemDisplay extends ClickableGuiElement implements
 			if (ImageList.hasImageFor(newItem)) {
 				itemSlots[slot].setItemImage(ImageList.getImageFor(newItem));
 			}
-
+			itemSlots[slot].setItem(newItem);
 			itemSlots[slot].setName(newName);
 		}
 	}
@@ -154,6 +164,7 @@ public class ItemDisplay extends ClickableGuiElement implements
 	private class GuiItem {
 		private int x, y, slotId;
 		private String name;
+		private Item item;
 		private BufferedImage itemImage;
 
 		GuiItem(int slotId) {
@@ -166,6 +177,10 @@ public class ItemDisplay extends ClickableGuiElement implements
 			setName("?");
 		}
 
+		public void setItem(Item newItem) {
+			this.item = newItem;
+		}
+
 		public boolean hasImage() {
 			return itemImage != null;
 		}
@@ -176,6 +191,21 @@ public class ItemDisplay extends ClickableGuiElement implements
 
 		void setItemImage(BufferedImage image) {
 			this.itemImage = image;
+		}
+
+		long getCooldown() {
+			if (item instanceof Usable)
+				return ((Usable) item).getCooldown();
+			return 0;
+		}
+
+		double getCooldownArc() {
+			double e = 0;
+			if (item instanceof Usable) {
+				Usable u = (Usable) item;
+				e = (double) u.getCooldown() / u.getCooldownTime() * 360;
+			}
+			return e;
 		}
 
 		int getX() {
