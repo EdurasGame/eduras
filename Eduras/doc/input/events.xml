@@ -142,6 +142,18 @@
 						<entry>slotNum</entry>
 					</row>
 					<row>
+					    <entry>ITEM_CD_START</entry>
+					    <entry>123</entry>
+					    <entry>Indicates that an item cooldown has started.</entry>
+					    <entry>objectId</entry>
+					</row>
+					<row>
+					    <entry>ITEM_CD_FINISHED</entry>
+					    <entry>124</entry>
+					    <entry>Indicates that an item cooldown has finished.</entry>
+					    <entry>objectId</entry>
+					</row>
+					<row>
 						<entry>DEATH</entry>
 						<entry>131</entry>
 						<entry>Indicates that a gameobject is dead.</entry>
@@ -311,9 +323,9 @@
 			</tgroup>
 		</table>
 
-		<table frame="all">
+		<table>
 			<title>Networking-Events</title>
-			<tgroup cols="4">
+			<tgroup cols="6">
 				<thead>
 					<row>
 						<entry>Event</entry>
@@ -352,9 +364,6 @@
 						<entry>GAME_READY</entry>
 						<entry>204</entry>
 						<entry>This event is triggered locally on client to notify that all data has been loaded.</entry>
-						<entry>-</entry>
-						<entry>-</entry>
-						<entry>-</entry>
 					</row>
 					<row>
 						<entry>CONNECTION_QUIT</entry>
