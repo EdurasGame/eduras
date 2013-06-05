@@ -131,14 +131,15 @@ public class LogicGameWorker implements Runnable {
 
 				boolean rs = ((Lootable) o).reduceRespawnRemaining(delta);
 				if (rs) {
-					System.out.println("RS: " + o.getId());
 					SetBooleanGameObjectAttributeEvent sc = new SetBooleanGameObjectAttributeEvent(
 							GameEventNumber.SET_COLLIDABLE, o.getId(), true);
 					SetBooleanGameObjectAttributeEvent sv = new SetBooleanGameObjectAttributeEvent(
 							GameEventNumber.SET_VISIBLE, o.getId(), true);
+					o.setCollidable(true);
+					o.setVisible(true);
 					for (GameEventListener listener : listenerList) {
-						listener.onObjectStateChanged(sc);
 						listener.onObjectStateChanged(sv);
+						listener.onObjectStateChanged(sc);
 					}
 				}
 			}

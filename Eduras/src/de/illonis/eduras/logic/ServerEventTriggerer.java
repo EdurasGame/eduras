@@ -131,16 +131,15 @@ public class ServerEventTriggerer implements EventTriggerer {
 	@Override
 	public void lootItem(int objectId, int playerId) {
 
-		GameObject o = gameInfo.findObjectById(objectId);
-		if (o instanceof Lootable) {
-			((Lootable) o).loot();
-		}
 		SetBooleanGameObjectAttributeEvent bo = new SetBooleanGameObjectAttributeEvent(
 				GameEventNumber.SET_COLLIDABLE, objectId, false);
 		SetBooleanGameObjectAttributeEvent bov = new SetBooleanGameObjectAttributeEvent(
 				GameEventNumber.SET_VISIBLE, objectId, false);
 		logic.onGameEventAppeared(bo);
 		logic.onGameEventAppeared(bov);
+		GameObject o = gameInfo.findObjectById(objectId);
+		if (o instanceof Lootable)
+			((Lootable) o).loot();
 		int newObjId = createObject(o.getType(), playerId);
 		LootItemEvent lootEvent = new LootItemEvent(newObjId, playerId);
 		logic.onGameEventAppeared(lootEvent);
