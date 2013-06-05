@@ -34,11 +34,6 @@ public class SniperWeapon extends Weapon {
 	}
 
 	@Override
-	public void loot() {
-
-	}
-
-	@Override
 	public void use(ItemUseInformation info) {
 		// (jme) Spawn position will be calculated in a simplified way. We use
 		// diagonal's length of shooting player to move missile away from him.

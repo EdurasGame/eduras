@@ -6,9 +6,12 @@ package de.illonis.eduras.logic;
 import java.util.ArrayList;
 
 import de.illonis.eduras.GameInformation;
+import de.illonis.eduras.events.GameEvent.GameEventNumber;
+import de.illonis.eduras.events.SetBooleanGameObjectAttributeEvent;
 import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.gameobjects.MoveableGameObject;
 import de.illonis.eduras.interfaces.GameEventListener;
+import de.illonis.eduras.items.Lootable;
 import de.illonis.eduras.items.Usable;
 
 /**
@@ -123,6 +126,21 @@ public class LogicGameWorker implements Runnable {
 		for (GameObject o : gameInformation.getObjects().values()) {
 			if (o instanceof Usable) {
 				((Usable) o).reduceCooldown(delta);
+			}
+			if (o instanceof Lootable) {
+
+				boolean rs = ((Lootable) o).reduceRespawnRemaining(delta);
+				if (rs) {
+					System.out.println("RS: " + o.getId());
+					SetBooleanGameObjectAttributeEvent sc = new SetBooleanGameObjectAttributeEvent(
+							GameEventNumber.SET_COLLIDABLE, o.getId(), true);
+					SetBooleanGameObjectAttributeEvent sv = new SetBooleanGameObjectAttributeEvent(
+							GameEventNumber.SET_VISIBLE, o.getId(), true);
+					for (GameEventListener listener : listenerList) {
+						listener.onObjectStateChanged(sc);
+						listener.onObjectStateChanged(sv);
+					}
+				}
 			}
 			if (o instanceof MoveableGameObject) {
 				if (!((MoveableGameObject) o).getSpeedVector().isNull()) {

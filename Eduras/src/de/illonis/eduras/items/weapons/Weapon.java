@@ -20,6 +20,8 @@ public abstract class Weapon extends Item implements Lootable, Usable {
 	private long cooldown = 0;
 	protected long defaultCooldown = 0;
 	private Missile missile;
+	protected long respawnTime = 5000;
+	private long respawnTimeRemaining = 0;
 
 	/**
 	 * Creates a new weapon being of the type given.
@@ -125,6 +127,32 @@ public abstract class Weapon extends Item implements Lootable, Usable {
 	 */
 	public Missile getAMissile() throws NoAmmunitionException {
 		return missile.spawn();
+	}
+
+	@Override
+	public long getRespawnTime() {
+		return respawnTime;
+	}
+
+	@Override
+	public long getRespawnTimeRemaining() {
+		return respawnTimeRemaining;
+	}
+
+	@Override
+	public boolean reduceRespawnRemaining(long value) {
+		if (respawnTimeRemaining == 0)
+			return false;
+		respawnTimeRemaining = Math.max(0, respawnTimeRemaining - value);
+		if (respawnTimeRemaining == 0) {
+			return true;
+		}
+		return false;
+	}
+
+	@Override
+	public void loot() {
+		respawnTimeRemaining = respawnTime;
 	}
 
 }

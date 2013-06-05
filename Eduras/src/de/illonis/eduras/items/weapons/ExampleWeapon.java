@@ -38,16 +38,6 @@ public class ExampleWeapon extends Weapon {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see de.illonis.eduras.items.Lootable#loot()
-	 */
-	@Override
-	public void loot() {
-
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
 	 * @see de.illonis.eduras.items.Usable#use(de.illonis.eduras.GameObject)
 	 */
 	@Override
