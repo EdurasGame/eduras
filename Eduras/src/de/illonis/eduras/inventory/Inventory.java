@@ -165,7 +165,7 @@ public class Inventory {
 	 * Checks if given item exists in inventory. This method does not check if
 	 * exactly this item is hold in inventory but only its type.
 	 * 
-	 * @see #hasItemOfType(ObjectType)
+	 * @see #hasItemOfType(de.illonis.eduras.ObjectFactory.ObjectType)
 	 * 
 	 * @param item
 	 *            item to check for.
