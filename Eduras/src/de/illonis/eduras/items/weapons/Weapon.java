@@ -3,10 +3,12 @@ package de.illonis.eduras.items.weapons;
 import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.ObjectFactory.ObjectType;
 import de.illonis.eduras.exceptions.NoAmmunitionException;
+import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.items.Item;
 import de.illonis.eduras.items.ItemUseInformation;
 import de.illonis.eduras.items.Lootable;
 import de.illonis.eduras.items.Usable;
+import de.illonis.eduras.units.Player;
 
 /**
  * A weapon holds a missile prototype that is used for shooting.
@@ -153,6 +155,17 @@ public abstract class Weapon extends Item implements Lootable, Usable {
 	@Override
 	public void loot() {
 		respawnTimeRemaining = respawnTime;
+	}
+
+	@Override
+	public void onCollision(GameObject collidingObject) {
+		if (collidingObject.getType() != ObjectType.PLAYER) {
+			return;
+		}
+
+		Player player = (Player) collidingObject;
+		getGame().getEventTriggerer().lootItem(getId(), player.getId());
+
 	}
 
 }

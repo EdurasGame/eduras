@@ -9,7 +9,6 @@ import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.items.ItemUseInformation;
 import de.illonis.eduras.math.Vector2D;
 import de.illonis.eduras.shapes.Circle;
-import de.illonis.eduras.units.Player;
 
 /**
  * 
@@ -60,15 +59,4 @@ public class SniperWeapon extends Weapon {
 		}
 	}
 
-	@Override
-	public void onCollision(GameObject collidingObject) {
-
-		if (collidingObject.getType() != ObjectType.PLAYER) {
-			return;
-		}
-
-		Player player = (Player) collidingObject;
-		getGame().getEventTriggerer().lootItem(getId(), player.getId());
-
-	}
 }
