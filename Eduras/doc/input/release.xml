@@ -107,6 +107,9 @@
 			    <para>Elaborate Docbook (How to create
 			        gameobjects, shapes, items, etc.)</para>
 			</listitem>
+			<listitem>
+			    <para>Access serverconsole from external (via client with role ADMIN and password)</para>
+			</listitem>
 		</itemizedlist>
 	</section>
 	<section>
