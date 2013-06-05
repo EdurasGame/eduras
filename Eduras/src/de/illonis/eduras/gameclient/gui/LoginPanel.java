@@ -6,6 +6,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.util.Random;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -95,6 +96,10 @@ public class LoginPanel extends JPanel implements ActionListener {
 		connectButton = new JButton("Verbinden");
 		connectButton.setEnabled(false);
 		form.add(connectButton);
+
+		// default user name
+		Random r = new Random();
+		userInput.setText("user" + r.nextInt(100));
 
 		connectButton.addActionListener(this);
 		userInput.addActionListener(this);
