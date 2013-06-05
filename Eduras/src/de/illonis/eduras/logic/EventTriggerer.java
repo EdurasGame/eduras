@@ -49,8 +49,9 @@ public interface EventTriggerer {
 	 *            position of new object
 	 * @param owner
 	 *            owner id of new object.
+	 * @return the id of the created object.
 	 */
-	void createObjectAt(ObjectType object, Vector2D position, int owner);
+	int createObjectAt(ObjectType object, Vector2D position, int owner);
 
 	/**
 	 * Creates an object.
@@ -59,8 +60,9 @@ public interface EventTriggerer {
 	 *            The type of the object.
 	 * @param owner
 	 *            The owner of the object.
+	 * @return the id of the created object.
 	 */
-	public void createObject(ObjectType object, int owner);
+	public int createObject(ObjectType object, int owner);
 
 	/**
 	 * Creates loot events.

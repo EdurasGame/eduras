@@ -229,6 +229,7 @@ public class Logic implements GameLogicInterface {
 							.getPlayerId());
 					Item item = (Item) gameInfo.findObjectById(lootItemEvent
 							.getObjectId());
+
 					itemSlot = player.getInventory().loot(item);
 					item.setOwner(player.getOwner());
 					item.setCollidable(false);
@@ -350,6 +351,10 @@ public class Logic implements GameLogicInterface {
 			object.setCollidable(event.getNewValue());
 			break;
 		default:
+		}
+
+		for (GameEventListener listener : listenerList) {
+			listener.onObjectStateChanged(event);
 		}
 
 	}

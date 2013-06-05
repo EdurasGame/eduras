@@ -9,7 +9,9 @@ package de.illonis.eduras.items;
 public interface Lootable {
 
 	/**
-	 * Indicates a loot event.
+	 * Called when this object is looted. It is automatically added to player's
+	 * inventory and hidden to game, so only do the special stuff here, e.g.
+	 * respawning etc.
 	 * 
 	 * @author illonis
 	 */

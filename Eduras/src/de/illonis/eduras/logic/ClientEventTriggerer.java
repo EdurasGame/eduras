@@ -27,7 +27,8 @@ public class ClientEventTriggerer implements EventTriggerer {
 	}
 
 	@Override
-	public void createObjectAt(ObjectType object, Vector2D position, int owner) {
+	public int createObjectAt(ObjectType object, Vector2D position, int owner) {
+		return -1;
 	}
 
 	@Override
@@ -43,7 +44,8 @@ public class ClientEventTriggerer implements EventTriggerer {
 	}
 
 	@Override
-	public void createObject(ObjectType object, int owner) {
+	public int createObject(ObjectType object, int owner) {
+		return -1;
 	}
 
 	@Override

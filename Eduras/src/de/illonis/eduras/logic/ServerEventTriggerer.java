@@ -13,6 +13,7 @@ import de.illonis.eduras.events.MatchEndEvent;
 import de.illonis.eduras.events.MissileLaunchEvent;
 import de.illonis.eduras.events.MovementEvent;
 import de.illonis.eduras.events.ObjectFactoryEvent;
+import de.illonis.eduras.events.SetBooleanGameObjectAttributeEvent;
 import de.illonis.eduras.events.SetGameModeEvent;
 import de.illonis.eduras.events.SetIntegerGameObjectAttributeEvent;
 import de.illonis.eduras.events.SetItemSlotEvent;
@@ -23,6 +24,7 @@ import de.illonis.eduras.gamemodes.GameMode;
 import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.interfaces.GameLogicInterface;
 import de.illonis.eduras.items.Item;
+import de.illonis.eduras.items.Lootable;
 import de.illonis.eduras.logger.EduLog;
 import de.illonis.eduras.maps.Map;
 import de.illonis.eduras.math.Vector2D;
@@ -98,15 +100,18 @@ public class ServerEventTriggerer implements EventTriggerer {
 		logic.getObjectFactory().onObjectFactoryEventAppeared(event);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * de.illonis.eduras.logic.EventTriggerer#createObjectAt(de.illonis.eduras
-	 * .ObjectFactory.ObjectType, de.illonis.eduras.math.Vector2D, int)
-	 */
 	@Override
-	public void createObjectAt(ObjectType object, Vector2D position, int owner) {
+	public int createObject(ObjectType object, int owner) {
+		ObjectFactoryEvent newObjectEvent = new ObjectFactoryEvent(
+				GameEventNumber.OBJECT_CREATE, object);
+		newObjectEvent.setId(getNextId());
+		newObjectEvent.setOwner(owner);
+		logic.onGameEventAppeared(newObjectEvent);
+		return newObjectEvent.getId();
+	}
+
+	@Override
+	public int createObjectAt(ObjectType object, Vector2D position, int owner) {
 
 		ObjectFactoryEvent newObjectEvent = new ObjectFactoryEvent(
 				GameEventNumber.OBJECT_CREATE, object);
@@ -119,21 +124,26 @@ public class ServerEventTriggerer implements EventTriggerer {
 		setPos.setNewXPos(position.getX());
 		setPos.setNewYPos(position.getY());
 		logic.onGameEventAppeared(setPos);
+		return newObjectEvent.getId();
 
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see de.illonis.eduras.logic.EventTriggerer#lootItem(int, int)
-	 */
 	@Override
 	public void lootItem(int objectId, int playerId) {
 
-		LootItemEvent lootEvent = new LootItemEvent(objectId, playerId);
-
+		GameObject o = gameInfo.findObjectById(objectId);
+		if (o instanceof Lootable) {
+			((Lootable) o).loot();
+		}
+		SetBooleanGameObjectAttributeEvent bo = new SetBooleanGameObjectAttributeEvent(
+				GameEventNumber.SET_COLLIDABLE, objectId, false);
+		SetBooleanGameObjectAttributeEvent bov = new SetBooleanGameObjectAttributeEvent(
+				GameEventNumber.SET_VISIBLE, objectId, false);
+		logic.onGameEventAppeared(bo);
+		logic.onGameEventAppeared(bov);
+		int newObjId = createObject(o.getType(), playerId);
+		LootItemEvent lootEvent = new LootItemEvent(newObjId, playerId);
 		logic.onGameEventAppeared(lootEvent);
-
 	}
 
 	@Override
@@ -165,15 +175,6 @@ public class ServerEventTriggerer implements EventTriggerer {
 					singleObject.getPositionVector(), singleObject.getOwner());
 		}
 
-	}
-
-	@Override
-	public void createObject(ObjectType object, int owner) {
-		ObjectFactoryEvent newObjectEvent = new ObjectFactoryEvent(
-				GameEventNumber.OBJECT_CREATE, object);
-		newObjectEvent.setId(getNextId());
-		newObjectEvent.setOwner(owner);
-		logic.onGameEventAppeared(newObjectEvent);
 	}
 
 	/**
