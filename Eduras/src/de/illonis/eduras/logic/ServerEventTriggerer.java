@@ -20,6 +20,7 @@ import de.illonis.eduras.events.SetItemSlotEvent;
 import de.illonis.eduras.events.SetRemainingTimeEvent;
 import de.illonis.eduras.exceptions.InvalidNameException;
 import de.illonis.eduras.exceptions.MessageNotSupportedException;
+import de.illonis.eduras.exceptions.ObjectNotFoundException;
 import de.illonis.eduras.gamemodes.GameMode;
 import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.interfaces.GameLogicInterface;
@@ -131,6 +132,16 @@ public class ServerEventTriggerer implements EventTriggerer {
 	@Override
 	public void lootItem(int objectId, int playerId) {
 
+		Item i = (Item) gameInfo.findObjectById(objectId);
+		try {
+			if (i.isUnique()
+					&& gameInfo.getPlayerByObjectId(playerId).getInventory()
+							.hasItemOfType(i.getType())) {
+				return;
+			}
+		} catch (ObjectNotFoundException e) {
+			e.printStackTrace();
+		}
 		SetBooleanGameObjectAttributeEvent bo = new SetBooleanGameObjectAttributeEvent(
 				GameEventNumber.SET_COLLIDABLE, objectId, false);
 		SetBooleanGameObjectAttributeEvent bov = new SetBooleanGameObjectAttributeEvent(

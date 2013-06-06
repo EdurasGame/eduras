@@ -27,7 +27,7 @@ public class Inventory {
 	public Inventory() {
 		itemSlots = new ItemSlot[MAX_CAPACITY];
 		for (int i = 0; i < MAX_CAPACITY; i++) {
-			ItemSlot is = new ItemSlot();
+			ItemSlot is = new ItemSlot(i);
 			itemSlots[i] = is;
 		}
 	}
