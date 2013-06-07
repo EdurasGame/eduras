@@ -14,7 +14,7 @@ public class StarsAnimation extends Animation {
 	/**
 	 * Number of axis that stars will fly on from center.
 	 */
-	public final static int AXES = 20;
+	public final static int AXES = 10;
 	/**
 	 * Stars per axis.
 	 */

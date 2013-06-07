@@ -7,5 +7,10 @@
 			<attribute name="javadoc_location" value="jar:platform:/resource/Eduras/lib/docs/junit-doc.zip!/javadoc"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="lib" path="lib/timingframework-swing-7.1.jar" sourcepath="lib/timingframework-swing-src.zip">
+		<attributes>
+			<attribute name="javadoc_location" value="jar:platform:/resource/Eduras/lib/docs/timingframework-swing-doc.zip!/"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
