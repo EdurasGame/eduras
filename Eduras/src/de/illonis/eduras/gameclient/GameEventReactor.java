@@ -6,6 +6,7 @@ import de.illonis.eduras.ObjectFactory.ObjectType;
 import de.illonis.eduras.events.ClientRenameEvent;
 import de.illonis.eduras.events.DeathEvent;
 import de.illonis.eduras.events.GameEvent;
+import de.illonis.eduras.events.ItemEvent;
 import de.illonis.eduras.events.MatchEndEvent;
 import de.illonis.eduras.events.ObjectFactoryEvent;
 import de.illonis.eduras.events.SetGameObjectAttributeEvent;
@@ -103,5 +104,15 @@ public class GameEventReactor implements GameEventListener {
 	@Override
 	public void onDeath(DeathEvent event) {
 		ui.onDeath(event);
+	}
+
+	@Override
+	public void onCooldownStarted(ItemEvent event) {
+		ui.onCooldownStarted(event);
+	}
+
+	@Override
+	public void onCooldownFinished(ItemEvent event) {
+		ui.onCooldownFinished(event);
 	}
 }

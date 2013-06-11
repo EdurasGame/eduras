@@ -6,6 +6,7 @@ import de.illonis.eduras.events.ClientRenameEvent;
 import de.illonis.eduras.events.DeathEvent;
 import de.illonis.eduras.events.GameEvent;
 import de.illonis.eduras.events.GameEvent.GameEventNumber;
+import de.illonis.eduras.events.ItemEvent;
 import de.illonis.eduras.events.MatchEndEvent;
 import de.illonis.eduras.events.MovementEvent;
 import de.illonis.eduras.events.ObjectFactoryEvent;
@@ -175,6 +176,24 @@ public class ServerGameEventListener implements GameEventListener {
 	public void onDeath(DeathEvent deathEvent) {
 		try {
 			outputBuffer.append(NetworkMessageSerializer.serialize(deathEvent));
+		} catch (MessageNotSupportedException e) {
+			EduLog.passException(e);
+		}
+	}
+
+	@Override
+	public void onCooldownStarted(ItemEvent event) {
+		try {
+			outputBuffer.append(NetworkMessageSerializer.serialize(event));
+		} catch (MessageNotSupportedException e) {
+			EduLog.passException(e);
+		}
+	}
+
+	@Override
+	public void onCooldownFinished(ItemEvent event) {
+		try {
+			outputBuffer.append(NetworkMessageSerializer.serialize(event));
 		} catch (MessageNotSupportedException e) {
 			EduLog.passException(e);
 		}

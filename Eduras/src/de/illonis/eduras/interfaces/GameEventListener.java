@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import de.illonis.eduras.events.ClientRenameEvent;
 import de.illonis.eduras.events.DeathEvent;
 import de.illonis.eduras.events.GameEvent;
+import de.illonis.eduras.events.ItemEvent;
 import de.illonis.eduras.events.MatchEndEvent;
 import de.illonis.eduras.events.ObjectFactoryEvent;
 import de.illonis.eduras.events.SetGameObjectAttributeEvent;
@@ -130,4 +131,24 @@ public interface GameEventListener {
 	 * @author illonis
 	 */
 	void onDeath(DeathEvent event);
+
+	/**
+	 * Called when cooldown of an item has finished.
+	 * 
+	 * @param event
+	 *            finish event.
+	 * 
+	 * @author illonis
+	 */
+	void onCooldownStarted(ItemEvent event);
+
+	/**
+	 * Called when cooldown of an item has started.
+	 * 
+	 * @param event
+	 *            start event.
+	 * 
+	 * @author illonis
+	 */
+	void onCooldownFinished(ItemEvent event);
 }

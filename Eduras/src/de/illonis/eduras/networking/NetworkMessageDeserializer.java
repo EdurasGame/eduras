@@ -237,6 +237,8 @@ public class NetworkMessageDeserializer {
 		case MOVE_UP_PRESSED:
 			gameEvent = handleStartMovementEvent(msg, args, typeNumber);
 			break;
+		case ITEM_CD_START:
+		case ITEM_CD_FINISHED:
 		case ITEM_USE:
 			gameEvent = handleItemEvent(msg, args, typeNumber);
 			break;
@@ -339,8 +341,8 @@ public class NetworkMessageDeserializer {
 	 */
 	private static GameEvent handleItemEvent(String msg, String[] args,
 			GameEventNumber typeNumber) {
-		ItemEvent itemEvent = new ItemEvent(typeNumber, parseInt(args[2]));
-		itemEvent.setSlotNum(parseInt(args[1]));
+		ItemEvent itemEvent = new ItemEvent(typeNumber, parseInt(args[2]),
+				parseInt(args[1]));
 
 		if (typeNumber == GameEventNumber.ITEM_USE) {
 			itemEvent.setTargetX(parseDouble(args[3]));
