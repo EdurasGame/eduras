@@ -12,6 +12,7 @@ import de.illonis.eduras.events.MovementEvent;
 import de.illonis.eduras.events.ObjectFactoryEvent;
 import de.illonis.eduras.events.SetBooleanGameObjectAttributeEvent;
 import de.illonis.eduras.events.SetGameModeEvent;
+import de.illonis.eduras.events.SetIntegerGameObjectAttributeEvent;
 import de.illonis.eduras.events.SetRemainingTimeEvent;
 import de.illonis.eduras.exceptions.InvalidNameException;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
@@ -257,6 +258,7 @@ public class GameInformation {
 					object.isCollidable());
 			infos.add(colEvent);
 			infos.add(visEvent);
+
 		}
 		for (Player p : players.values()) {
 			try {
@@ -272,6 +274,22 @@ public class GameInformation {
 		SetRemainingTimeEvent remaining = new SetRemainingTimeEvent(
 				gameSettings.getRemainingTime());
 		infos.add(remaining);
+
+		// send statistics
+		Statistic stats = gameSettings.getStats();
+
+		for (Player player : players.values()) {
+			int killsOfPlayer = stats.getKillsOfPlayer(player);
+			SetIntegerGameObjectAttributeEvent setKillsEvent = new SetIntegerGameObjectAttributeEvent(
+					GameEventNumber.SET_KILLS, player.getOwner(), killsOfPlayer);
+			infos.add(setKillsEvent);
+
+			int deathsOfPlayer = stats.getDeathsOfPlayer(player);
+			SetIntegerGameObjectAttributeEvent setDeathsEvent = new SetIntegerGameObjectAttributeEvent(
+					GameEventNumber.SET_DEATHS, player.getOwner(),
+					deathsOfPlayer);
+			infos.add(setDeathsEvent);
+		}
 
 		return infos;
 	}
