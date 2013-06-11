@@ -75,7 +75,7 @@ public class BasicMath {
 	 *            input values.
 	 * @return minimum.
 	 */
-	public static double min(double... values) {
+	public static double min(Double... values) {
 		if (values.length == 0)
 			throw new NullPointerException(
 					"Passed no value to min(double...) function. Must be at least one.");
@@ -95,7 +95,7 @@ public class BasicMath {
 	 *            input values.
 	 * @return maximum.
 	 */
-	public static double max(double... values) {
+	public static double max(Double... values) {
 		if (values.length == 0)
 			throw new NullPointerException(
 					"Passed no value to max(double...) function. Must be at least one.");

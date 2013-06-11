@@ -51,11 +51,6 @@ public class Player extends Unit implements Controllable {
 
 			EduLog.passException(e);
 		}
-
-		// TODO: Replace setting the position to a non random value.
-		double randX = (game.getMap().getWidth()) * Math.random();
-		double randY = (game.getMap().getHeight()) * Math.random();
-		setPosition(randX, randY);
 	}
 
 	/**

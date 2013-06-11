@@ -59,8 +59,15 @@ public class Deathmatch implements GameMode {
 	@Override
 	public void onConnect(int ownerId) {
 
-		// simply create the player
+		// simply create the player and respawn it somewhere
 		gameInfo.getEventTriggerer().createObject(ObjectType.PLAYER, ownerId);
+
+		try {
+			gameInfo.getEventTriggerer().respawnPlayer(
+					gameInfo.getPlayerByOwnerId(ownerId));
+		} catch (ObjectNotFoundException e) {
+			EduLog.passException(e);
+		}
 
 		// and add it to the statistic
 		gameInfo.getGameSettings().getStats().addPlayerToStats(ownerId);
