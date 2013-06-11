@@ -1,6 +1,7 @@
 package de.illonis.eduras.logic;
 
 import java.awt.Rectangle;
+import java.awt.geom.Rectangle2D;
 import java.util.Random;
 
 import de.illonis.eduras.GameInformation;
@@ -230,9 +231,14 @@ public class ServerEventTriggerer implements EventTriggerer {
 
 		Random r = new Random();
 		Rectangle m = gameInfo.getMap().getBounds();
-		int x = r.nextInt(m.width);
-		int y = r.nextInt(m.height);
-		setPositionOfObject(player.getId(), new Vector2D(x, y));
+		Rectangle2D.Double newBounds = new Rectangle2D.Double(0, 0,
+				player.getBoundingBox().width, player.getBoundingBox().height);
+		do {
+			newBounds.x = r.nextInt(m.width);
+			newBounds.y = r.nextInt(m.height);
+		} while (gameInfo.isObjectWithin(newBounds));
+		setPositionOfObject(player.getId(), new Vector2D(newBounds.getX(),
+				newBounds.getY()));
 	}
 
 	@Override
