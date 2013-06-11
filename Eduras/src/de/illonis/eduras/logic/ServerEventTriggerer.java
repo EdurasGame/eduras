@@ -1,6 +1,7 @@
 package de.illonis.eduras.logic;
 
 import java.awt.Rectangle;
+import java.awt.geom.Rectangle2D;
 import java.util.Random;
 
 import de.illonis.eduras.GameInformation;
@@ -133,15 +134,7 @@ public class ServerEventTriggerer implements EventTriggerer {
 	public void lootItem(int objectId, int playerId) {
 
 		Item i = (Item) gameInfo.findObjectById(objectId);
-		try {
-			if (i.isUnique()
-					&& gameInfo.getPlayerByObjectId(playerId).getInventory()
-							.hasItemOfType(i.getType())) {
-				return;
-			}
-		} catch (ObjectNotFoundException e) {
-			e.printStackTrace();
-		}
+
 		SetBooleanGameObjectAttributeEvent bo = new SetBooleanGameObjectAttributeEvent(
 				GameEventNumber.SET_COLLIDABLE, objectId, false);
 		SetBooleanGameObjectAttributeEvent bov = new SetBooleanGameObjectAttributeEvent(
@@ -151,6 +144,15 @@ public class ServerEventTriggerer implements EventTriggerer {
 		GameObject o = gameInfo.findObjectById(objectId);
 		if (o instanceof Lootable)
 			((Lootable) o).loot();
+		try {
+			if (i.isUnique()
+					&& gameInfo.getPlayerByObjectId(playerId).getInventory()
+							.hasItemOfType(i.getType())) {
+				return;
+			}
+		} catch (ObjectNotFoundException e) {
+			e.printStackTrace();
+		}
 		int newObjId = createObject(o.getType(), playerId);
 		LootItemEvent lootEvent = new LootItemEvent(newObjId, playerId);
 		logic.onGameEventAppeared(lootEvent);
@@ -230,9 +232,14 @@ public class ServerEventTriggerer implements EventTriggerer {
 
 		Random r = new Random();
 		Rectangle m = gameInfo.getMap().getBounds();
-		int x = r.nextInt(m.width);
-		int y = r.nextInt(m.height);
-		setPositionOfObject(player.getId(), new Vector2D(x, y));
+		Rectangle2D.Double newBounds = new Rectangle2D.Double(0, 0,
+				player.getBoundingBox().width, player.getBoundingBox().height);
+		do {
+			newBounds.x = r.nextInt(m.width);
+			newBounds.y = r.nextInt(m.height);
+		} while (gameInfo.isObjectWithin(newBounds));
+		setPositionOfObject(player.getId(), new Vector2D(newBounds.getX(),
+				newBounds.getY()));
 	}
 
 	@Override

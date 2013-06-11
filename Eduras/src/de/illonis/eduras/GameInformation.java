@@ -1,5 +1,6 @@
 package de.illonis.eduras;
 
+import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.concurrent.ConcurrentHashMap;
@@ -322,6 +323,23 @@ public class GameInformation {
 	public void setMap(Map map) {
 		this.map = map;
 
+	}
+
+	/**
+	 * Checks whether any gameobject is within given bounds.
+	 * 
+	 * @param bounds
+	 *            rectangular shape.
+	 * @return true if object is in bounds.,
+	 * 
+	 * @author illonis
+	 */
+	public boolean isObjectWithin(Rectangle2D bounds) {
+		for (GameObject o : objects.values()) {
+			if (o.getBoundingBox().intersects(bounds))
+				return true;
+		}
+		return false;
 	}
 
 }
