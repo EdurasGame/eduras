@@ -355,7 +355,6 @@ public class ServerEventTriggerer implements EventTriggerer {
 	@Override
 	public void onDeath(Unit unit, int killer) {
 		DeathEvent event = new DeathEvent(unit.getId(), killer);
-		gameInfo.getGameSettings().getGameMode().onDeath(unit, killer);
 		logic.onGameEventAppeared(event);
 
 	}
