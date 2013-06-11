@@ -17,7 +17,7 @@ import de.illonis.eduras.logger.EduLog.LogMode;
 import de.illonis.eduras.logic.ConsoleEventTriggerer;
 import de.illonis.eduras.logic.Logic;
 import de.illonis.eduras.logic.ServerEventTriggerer;
-import de.illonis.eduras.maps.SimpleMap;
+import de.illonis.eduras.maps.FunMap;
 import de.illonis.eduras.networking.Server;
 import de.illonis.eduras.serverconsole.NoConsoleException;
 import de.illonis.eduras.serverconsole.ServerConsole;
@@ -80,7 +80,7 @@ public class Eduras {
 			}
 		});
 
-		eventTriggerer.changeMap(new SimpleMap());
+		eventTriggerer.changeMap(new FunMap());
 
 		try {
 			server.start();

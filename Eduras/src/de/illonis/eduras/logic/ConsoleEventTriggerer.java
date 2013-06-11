@@ -6,6 +6,7 @@ import de.illonis.eduras.exceptions.ObjectNotFoundException;
 import de.illonis.eduras.gamemodes.Deathmatch;
 import de.illonis.eduras.gamemodes.GameMode;
 import de.illonis.eduras.gamemodes.NoGameMode;
+import de.illonis.eduras.maps.FunMap;
 import de.illonis.eduras.maps.ManyBlocks;
 import de.illonis.eduras.maps.Map;
 import de.illonis.eduras.maps.SimpleMap;
@@ -124,6 +125,9 @@ public class ConsoleEventTriggerer {
 	public boolean changeMap(String mapName) {
 		Map map = null;
 		switch (mapName.toLowerCase()) {
+		case "funmap":
+			map = new FunMap();
+			break;
 		case "simple":
 			map = new SimpleMap();
 			break;
