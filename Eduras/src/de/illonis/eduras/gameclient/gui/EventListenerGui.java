@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import de.illonis.eduras.events.ClientRenameEvent;
 import de.illonis.eduras.events.DeathEvent;
 import de.illonis.eduras.events.GameEvent;
+import de.illonis.eduras.events.ItemEvent;
 import de.illonis.eduras.events.MatchEndEvent;
 import de.illonis.eduras.events.ObjectFactoryEvent;
 import de.illonis.eduras.events.SetGameObjectAttributeEvent;
@@ -152,6 +153,20 @@ public class EventListenerGui implements GameEventListener {
 	public void onDeath(DeathEvent event) {
 		for (RenderedGuiObject obj : uiObjects) {
 			obj.onDeath(event);
+		}
+	}
+
+	@Override
+	public void onCooldownStarted(ItemEvent event) {
+		for (RenderedGuiObject obj : uiObjects) {
+			obj.onCooldownStarted(event);
+		}
+	}
+
+	@Override
+	public void onCooldownFinished(ItemEvent event) {
+		for (RenderedGuiObject obj : uiObjects) {
+			obj.onCooldownFinished(event);
 		}
 	}
 }

@@ -16,7 +16,6 @@ import de.illonis.eduras.events.GameEvent.GameEventNumber;
 import de.illonis.eduras.events.InitInformationEvent;
 import de.illonis.eduras.events.ItemEvent;
 import de.illonis.eduras.exceptions.MessageNotSupportedException;
-import de.illonis.eduras.exceptions.ObjectNotFoundException;
 import de.illonis.eduras.exceptions.WrongEventTypeException;
 import de.illonis.eduras.gameclient.gui.ClientFrame;
 import de.illonis.eduras.gameclient.gui.GuiClickReactor;
@@ -24,10 +23,6 @@ import de.illonis.eduras.gameclient.gui.InputKeyHandler;
 import de.illonis.eduras.gameclient.gui.guielements.ClickableGuiElementInterface;
 import de.illonis.eduras.gameclient.gui.guielements.TooltipTriggerer;
 import de.illonis.eduras.inventory.Inventory;
-import de.illonis.eduras.inventory.ItemSlotIsEmptyException;
-import de.illonis.eduras.items.Item;
-import de.illonis.eduras.items.ItemUseInformation;
-import de.illonis.eduras.items.Usable;
 import de.illonis.eduras.locale.Localization;
 import de.illonis.eduras.logger.EduLog;
 import de.illonis.eduras.logicabstraction.EdurasInitializer;
@@ -198,18 +193,6 @@ public class GameClient implements GuiClickReactor, NetworkEventReactor,
 		ItemEvent event = new ItemEvent(GameEventNumber.ITEM_USE,
 				infoPro.getOwnerID(), i);
 		event.setTarget(frame.computeGuiPointToGameCoordinate(target));
-
-		// hacky thing to allow gui to display item cooldown.
-		// TODO: improve by event (maybe item_ready and item_used.
-		try {
-			Item item = infoPro.getPlayer().getInventory().getItemBySlot(i);
-			((Usable) item).use(new ItemUseInformation(infoPro
-					.findObjectById(item.getId()), target));
-		} catch (ItemSlotIsEmptyException e1) {
-
-		} catch (ObjectNotFoundException e1) {
-
-		}
 
 		try {
 			sendEvent(event);

@@ -175,6 +175,8 @@ public class Logic implements GameLogicInterface {
 					listener.onClientRename(e);
 				}
 				break;
+			case ITEM_CD_START:
+			case ITEM_CD_FINISHED:
 			case ITEM_USE:
 				ItemEvent itemEvent = (ItemEvent) event;
 				handleItemEvent(itemEvent);
@@ -383,12 +385,31 @@ public class Logic implements GameLogicInterface {
 			EduLog.log(Level.INFO, e.getMessage());
 			return;
 		}
-
 		ItemUseInformation useInfo = new ItemUseInformation(player,
 				itemEvent.getTarget());
+		ItemEvent cooldownEvent = new ItemEvent(GameEventNumber.ITEM_CD_START,
+				itemEvent.getOwner(), itemEvent.getSlotNum());
 
-		if (item.isUsable()) {
-			((Usable) item).use(useInfo);
+		switch (itemEvent.getType()) {
+		case ITEM_USE:
+		case ITEM_CD_START:
+			if (item.isUsable())
+				((Usable) item).use(useInfo);
+			for (GameEventListener listener : listenerList) {
+				listener.onCooldownStarted(cooldownEvent);
+			}
+			break;
+		case ITEM_CD_FINISHED:
+			if (item.isUsable())
+				((Usable) item).resetCooldown();
+
+			cooldownEvent.setType(GameEventNumber.ITEM_CD_FINISHED);
+			for (GameEventListener listener : listenerList) {
+				listener.onCooldownFinished(cooldownEvent);
+			}
+			break;
+		default:
+			break;
 		}
 
 	}

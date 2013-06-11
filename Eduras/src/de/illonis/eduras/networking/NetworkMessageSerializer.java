@@ -161,6 +161,12 @@ public class NetworkMessageSerializer {
 					setAttributeEvent.getObjectId(),
 					setAttributeEvent.getNewValue());
 			break;
+		case ITEM_CD_START:
+		case ITEM_CD_FINISHED:
+			ItemEvent itemCdEvent = (ItemEvent) gameEvent;
+			serializedEvent = buildEventString(itemCdEvent,
+					itemCdEvent.getSlotNum(), itemCdEvent.getOwner());
+			break;
 		case ITEM_USE:
 			ItemEvent itemEvent = (ItemEvent) gameEvent;
 			Vector2D target = itemEvent.getTarget();
