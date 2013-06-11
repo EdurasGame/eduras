@@ -81,9 +81,9 @@ public class BasicMath {
 					"Passed no value to min(double...) function. Must be at least one.");
 		if (values.length == 1)
 			return values[0];
-		double min = 0;
+		double min = values[0];
 		for (int i = 1; i < values.length; i++) {
-			min = Math.min(values[i], values[i - 1]);
+			min = Math.min(values[i], min);
 		}
 		return min;
 	}
@@ -101,9 +101,9 @@ public class BasicMath {
 					"Passed no value to max(double...) function. Must be at least one.");
 		if (values.length == 1)
 			return values[0];
-		double max = 0;
+		double max = values[0];
 		for (int i = 1; i < values.length; i++) {
-			max = Math.max(values[i], values[i - 1]);
+			max = Math.max(values[i], max);
 		}
 		return max;
 	}
