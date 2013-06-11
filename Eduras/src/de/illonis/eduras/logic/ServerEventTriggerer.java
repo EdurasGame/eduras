@@ -134,15 +134,7 @@ public class ServerEventTriggerer implements EventTriggerer {
 	public void lootItem(int objectId, int playerId) {
 
 		Item i = (Item) gameInfo.findObjectById(objectId);
-		try {
-			if (i.isUnique()
-					&& gameInfo.getPlayerByObjectId(playerId).getInventory()
-							.hasItemOfType(i.getType())) {
-				return;
-			}
-		} catch (ObjectNotFoundException e) {
-			e.printStackTrace();
-		}
+
 		SetBooleanGameObjectAttributeEvent bo = new SetBooleanGameObjectAttributeEvent(
 				GameEventNumber.SET_COLLIDABLE, objectId, false);
 		SetBooleanGameObjectAttributeEvent bov = new SetBooleanGameObjectAttributeEvent(
@@ -152,6 +144,15 @@ public class ServerEventTriggerer implements EventTriggerer {
 		GameObject o = gameInfo.findObjectById(objectId);
 		if (o instanceof Lootable)
 			((Lootable) o).loot();
+		try {
+			if (i.isUnique()
+					&& gameInfo.getPlayerByObjectId(playerId).getInventory()
+							.hasItemOfType(i.getType())) {
+				return;
+			}
+		} catch (ObjectNotFoundException e) {
+			e.printStackTrace();
+		}
 		int newObjId = createObject(o.getType(), playerId);
 		LootItemEvent lootEvent = new LootItemEvent(newObjId, playerId);
 		logic.onGameEventAppeared(lootEvent);
