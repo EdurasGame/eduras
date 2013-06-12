@@ -7,8 +7,23 @@ import de.illonis.eduras.math.Vector2D;
 import de.illonis.eduras.shapes.Circle;
 import de.illonis.eduras.units.Unit;
 
+/**
+ * A missile that explodes on collision and spawns several
+ * {@link SplashedMissile}s.
+ * 
+ * @author illonis
+ * 
+ */
 public class SplashMissile extends Missile {
 
+	/**
+	 * Creates a new splashmissile.
+	 * 
+	 * @param game
+	 *            game infos.
+	 * @param id
+	 *            object id.
+	 */
 	public SplashMissile(GameInformation game, int id) {
 		super(game, id);
 		setObjectType(ObjectType.MISSILE_SPLASH);

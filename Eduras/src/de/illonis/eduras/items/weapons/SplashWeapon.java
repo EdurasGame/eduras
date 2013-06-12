@@ -16,6 +16,14 @@ import de.illonis.eduras.shapes.Circle;
  */
 public class SplashWeapon extends Weapon {
 
+	/**
+	 * Creates a new splashweapon.
+	 * 
+	 * @param infos
+	 *            game info.
+	 * @param id
+	 *            object id.
+	 */
 	public SplashWeapon(GameInformation infos, int id) {
 		super(ObjectType.ITEM_WEAPON_SPLASH, infos, id);
 		setMissile(null);
