@@ -1,6 +1,3 @@
-/**
- * 
- */
 package de.illonis.eduras.items.weapons;
 
 import de.illonis.eduras.GameInformation;
@@ -11,6 +8,7 @@ import de.illonis.eduras.math.Vector2D;
 import de.illonis.eduras.shapes.Circle;
 
 /**
+ * A sniper weapon that shoots fast missiles with higher damage and cooldown.
  * 
  * @author Jan Reese
  * 
