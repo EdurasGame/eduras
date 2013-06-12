@@ -15,7 +15,7 @@
    version="1.1"
    inkscape:version="0.48.3.1 r9886"
    sodipodi:docname="icon-weapon-splash.svg"
-   inkscape:export-filename="/home/illonis/git/eduras/Eduras/src/de/illonis/eduras/images/gui/icons/item-weapon-splash.png"
+   inkscape:export-filename="/home/illonis/git/eduras/Eduras/src/de/illonis/eduras/images/gui/icons/icon-weapon-splash.png"
    inkscape:export-xdpi="27.25"
    inkscape:export-ydpi="27.25">
   <defs
@@ -75,7 +75,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title />
+        <dc:title></dc:title>
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -125,13 +125,13 @@
        inkscape:transform-center-y="-2.0304277" />
     <path
        sodipodi:type="arc"
-       style="color:#000000;fill:#ff0000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:5;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;filter:url(#filter3806)"
+       style="color:#000000;fill:#ff0000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:5;marker:none;visibility:visible;display:inline;overflow:visible;filter:url(#filter3806);enable-background:accumulate"
        id="path3776"
        sodipodi:cx="82.678574"
        sodipodi:cy="82.284882"
        sodipodi:rx="5.5357141"
        sodipodi:ry="5.8928571"
        d="m 88.214288,82.284882 a 5.5357141,5.8928571 0 1 1 -11.071429,0 5.5357141,5.8928571 0 1 1 11.071429,0 z"
-       transform="translate(171.85626,311.92176)" />
+       transform="translate(171.14197,311.56462)" />
   </g>
 </svg>
