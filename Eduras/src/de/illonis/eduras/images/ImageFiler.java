@@ -27,8 +27,11 @@ public class ImageFiler {
 	 * @return image.
 	 * @throws IOException
 	 *             when image could not be loaded.
+	 * @throws IllegalArgumentException
+	 *             if there is no file with given filename.
 	 */
-	public static BufferedImage load(String fileName) throws IOException {
+	public static BufferedImage load(String fileName) throws IOException,
+			IllegalArgumentException {
 		return ImageIO.read(ImageFiler.class.getResource(fileName));
 	}
 

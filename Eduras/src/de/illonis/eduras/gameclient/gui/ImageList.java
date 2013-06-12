@@ -16,7 +16,16 @@ import de.illonis.eduras.images.ImageFiler;
  */
 public class ImageList {
 
-	private static HashMap<ObjectType, BufferedImage> images = new HashMap<ObjectType, BufferedImage>();
+	private static final HashMap<ObjectType, BufferedImage> images = new HashMap<ObjectType, BufferedImage>();
+	private static BufferedImage defaultImage;
+
+	static {
+		try {
+			defaultImage = ImageFiler.load("gui/icon/noimage.png");
+		} catch (IllegalArgumentException | IOException e) {
+			defaultImage = new BufferedImage(30, 30, BufferedImage.TYPE_INT_RGB);
+		}
+	}
 
 	/**
 	 * Checks if an image for given gameobject exists.
@@ -37,6 +46,8 @@ public class ImageList {
 	 * @return object's image.
 	 */
 	public static BufferedImage getImageFor(GameObject obj) {
+		if (!images.containsKey(obj.getType()))
+			return defaultImage;
 		return images.get(obj.getType());
 	}
 
