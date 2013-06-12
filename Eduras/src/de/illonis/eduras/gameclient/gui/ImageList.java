@@ -66,6 +66,9 @@ public class ImageList {
 			BufferedImage is = ImageFiler
 					.load("gui/icons/icon-weapon-sniper.png");
 			images.put(ObjectType.ITEM_WEAPON_SNIPER, is);
+			BufferedImage spl = ImageFiler
+					.load("gui/icons/icon-weapon-splash.png");
+			images.put(ObjectType.ITEM_WEAPON_SPLASH, spl);
 			// TODO: load all :)
 		} catch (IOException e) {
 			e.printStackTrace();
