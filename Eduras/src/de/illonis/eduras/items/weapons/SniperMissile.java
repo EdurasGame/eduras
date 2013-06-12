@@ -33,12 +33,6 @@ public class SniperMissile extends Missile {
 	}
 
 	@Override
-	@Deprecated
-	public Missile spawn() {
-		return null;
-	}
-
-	@Override
 	public void onCollision(GameObject collidingObject) {
 		if (collidingObject.isUnit()) {
 			((Unit) collidingObject).damagedBy(getDamage(), getOwner());

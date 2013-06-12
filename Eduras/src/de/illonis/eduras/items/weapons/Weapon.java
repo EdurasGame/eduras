@@ -128,7 +128,7 @@ public abstract class Weapon extends Item implements Lootable, Usable {
 	 * @throws NoAmmunitionException
 	 */
 	public Missile getAMissile() throws NoAmmunitionException {
-		return missile.spawn();
+		return null;
 	}
 
 	@Override

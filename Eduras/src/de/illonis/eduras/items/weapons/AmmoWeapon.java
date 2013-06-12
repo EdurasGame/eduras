@@ -4,7 +4,6 @@ import java.security.InvalidParameterException;
 
 import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.ObjectFactory.ObjectType;
-import de.illonis.eduras.exceptions.NoAmmunitionException;
 
 /**
  * An weapon that needs ammunition. Ammunition is stored directly in
@@ -53,13 +52,4 @@ public abstract class AmmoWeapon extends Weapon {
 		ammunition += ammo;
 	}
 
-	@Override
-	@Deprecated
-	public Missile getAMissile() throws NoAmmunitionException {
-		if (ammunition > 0) {
-			ammunition--;
-			return getMissilePrototype().spawn();
-		}
-		throw new NoAmmunitionException();
-	}
 }

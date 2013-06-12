@@ -28,17 +28,6 @@ public class SimpleMissile extends Missile {
 		setMaxRange(200);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see de.illonis.eduras.items.weapons.Missile#spawn()
-	 */
-	@Override
-	@Deprecated
-	public Missile spawn() {
-		return null;
-	}
-
 	@Override
 	public void onCollision(GameObject collidingObject) {
 		if (collidingObject.isUnit()) {

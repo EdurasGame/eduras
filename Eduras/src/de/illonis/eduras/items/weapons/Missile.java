@@ -95,13 +95,6 @@ public abstract class Missile extends MoveableGameObject {
 		this.damageRadius = damageRadius;
 	}
 
-	/**
-	 * Creates a new missile.
-	 * 
-	 * @return a new missile that is identic to this one.
-	 */
-	public abstract Missile spawn();
-
 	@Override
 	public void onMove(long delta) {
 		if (maxRange == 0)
