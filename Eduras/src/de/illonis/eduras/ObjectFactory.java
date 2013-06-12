@@ -15,6 +15,8 @@ import de.illonis.eduras.items.weapons.ExampleWeapon;
 import de.illonis.eduras.items.weapons.SimpleMissile;
 import de.illonis.eduras.items.weapons.SniperMissile;
 import de.illonis.eduras.items.weapons.SniperWeapon;
+import de.illonis.eduras.items.weapons.SplashMissile;
+import de.illonis.eduras.items.weapons.SplashWeapon;
 import de.illonis.eduras.logger.EduLog;
 import de.illonis.eduras.units.Player;
 
@@ -39,7 +41,8 @@ public class ObjectFactory {
 	public enum ObjectType {
 		PLAYER(1), YELLOWCIRCLE(2), SIMPLEMISSILE(3), ITEM_WEAPON_1(4), NO_OBJECT(
 				0), BIGBLOCK(5), SMALLCIRCLEDBLOCK(6), SNIPERMISSILE(7), ITEM_WEAPON_SNIPER(
-				8), BUILDING(9), BIGGERBLOCK(10);
+				8), BUILDING(9), BIGGERBLOCK(10), ITEM_WEAPON_SPLASH(11), MISSILE_SPLASH(
+				12), MISSILE_SPLASHED(13);
 
 		private int number;
 
@@ -145,6 +148,15 @@ public class ObjectFactory {
 				break;
 			case SNIPERMISSILE:
 				go = new SniperMissile(logic.getGame(), id);
+				break;
+			case MISSILE_SPLASH:
+				go = new SplashMissile(logic.getGame(), id);
+				break;
+			case MISSILE_SPLASHED:
+				go = new SplashMissile(logic.getGame(), id);
+				break;
+			case ITEM_WEAPON_SPLASH:
+				go = new SplashWeapon(logic.getGame(), id);
 				break;
 			case ITEM_WEAPON_SNIPER:
 				go = new SniperWeapon(logic.getGame(), id);
