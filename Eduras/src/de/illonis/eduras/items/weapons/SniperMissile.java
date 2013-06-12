@@ -29,7 +29,7 @@ public class SniperMissile extends Missile {
 		setDamageRadius(1.5);
 		setObjectType(ObjectType.SNIPERMISSILE);
 		setShape(new Circle(1.5));
-		setSpeed(1000);
+		setSpeed(500);
 	}
 
 	@Override

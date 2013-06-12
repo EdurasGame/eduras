@@ -17,6 +17,7 @@ import de.illonis.eduras.items.weapons.SniperMissile;
 import de.illonis.eduras.items.weapons.SniperWeapon;
 import de.illonis.eduras.items.weapons.SplashMissile;
 import de.illonis.eduras.items.weapons.SplashWeapon;
+import de.illonis.eduras.items.weapons.SplashedMissile;
 import de.illonis.eduras.logger.EduLog;
 import de.illonis.eduras.units.Player;
 
@@ -153,7 +154,7 @@ public class ObjectFactory {
 				go = new SplashMissile(logic.getGame(), id);
 				break;
 			case MISSILE_SPLASHED:
-				go = new SplashMissile(logic.getGame(), id);
+				go = new SplashedMissile(logic.getGame(), id);
 				break;
 			case ITEM_WEAPON_SPLASH:
 				go = new SplashWeapon(logic.getGame(), id);

@@ -13,7 +13,7 @@ public class SplashedMissile extends Missile {
 		setObjectType(ObjectType.MISSILE_SPLASHED);
 		setDamage(3);
 		setDamageRadius(1);
-		setShape(new Circle(1));
+		setShape(new Circle(3));
 		setSpeed(250);
 	}
 
