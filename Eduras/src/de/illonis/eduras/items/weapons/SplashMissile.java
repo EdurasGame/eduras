@@ -30,7 +30,7 @@ public class SplashMissile extends Missile {
 		setDamage(7);
 		setDamageRadius(1);
 		setShape(new Circle(5));
-		setSpeed(150);
+		setSpeed(250);
 	}
 
 	@Override
