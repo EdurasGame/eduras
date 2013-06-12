@@ -9,6 +9,7 @@ import de.illonis.eduras.gameobjects.Building;
 import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.items.weapons.ExampleWeapon;
 import de.illonis.eduras.items.weapons.SniperWeapon;
+import de.illonis.eduras.items.weapons.SplashWeapon;
 import de.illonis.eduras.logger.EduLog;
 
 /**
@@ -55,6 +56,10 @@ public class FunMap extends Map {
 		SniperWeapon snip0 = new SniperWeapon(null, -1);
 		snip0.setPosition(getWidth() / 2, getHeight() / 2);
 		initialObjects.add(snip0);
+
+		SplashWeapon splash0 = new SplashWeapon(null, -1);
+		splash0.setPosition(getWidth() / 2, (double) getHeight() / 3);
+		initialObjects.add(splash0);
 
 		Building b = new Building(null, -1);
 		Building b1 = new Building(null, -1);
