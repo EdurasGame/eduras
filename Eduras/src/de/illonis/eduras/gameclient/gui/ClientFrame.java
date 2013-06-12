@@ -185,6 +185,7 @@ public class ClientFrame extends JFrame implements NetworkEventReactor,
 	@Override
 	public void onDisconnect(int clientId) {
 		if (clientId == client.getOwnerID()) {
+			camera.stopMoving();
 			gamePanel.stopRendering();
 			cml.stop();
 			dispose();
