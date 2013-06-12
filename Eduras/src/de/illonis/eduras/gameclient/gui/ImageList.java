@@ -7,6 +7,7 @@ import java.util.HashMap;
 import de.illonis.eduras.ObjectFactory.ObjectType;
 import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.images.ImageFiler;
+import de.illonis.eduras.logger.EduLog;
 
 /**
  * Loads and contains all images that can be drawn by renderer.
@@ -17,12 +18,15 @@ import de.illonis.eduras.images.ImageFiler;
 public class ImageList {
 
 	private static final HashMap<ObjectType, BufferedImage> images = new HashMap<ObjectType, BufferedImage>();
+	private static final String DEF_IMAGE_FILE = "gui/icons/noicon.png";
 	private static BufferedImage defaultImage;
 
 	static {
 		try {
-			defaultImage = ImageFiler.load("gui/icon/noimage.png");
+			defaultImage = ImageFiler.load(DEF_IMAGE_FILE);
 		} catch (IllegalArgumentException | IOException e) {
+			EduLog.error("Default image for iconimages not found: "
+					+ DEF_IMAGE_FILE);
 			defaultImage = new BufferedImage(30, 30, BufferedImage.TYPE_INT_RGB);
 		}
 	}
