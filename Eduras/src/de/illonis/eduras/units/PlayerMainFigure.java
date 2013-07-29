@@ -16,7 +16,7 @@ import de.illonis.eduras.shapes.Triangle;
  * @author Florian Mai <florian.ren.mai@googlemail.com>
  * 
  */
-public class Player extends Unit implements Controllable {
+public class PlayerMainFigure extends Unit implements Controllable {
 	private String name;
 	private final Inventory inventory = new Inventory();
 
@@ -33,7 +33,7 @@ public class Player extends Unit implements Controllable {
 	 * @param id
 	 *            id of the player.
 	 */
-	public Player(GameInformation game, int ownerId, String name, int id) {
+	public PlayerMainFigure(GameInformation game, int ownerId, String name, int id) {
 		super(game, 30, id);
 		setObjectType(ObjectType.PLAYER);
 		this.name = name;
@@ -64,7 +64,7 @@ public class Player extends Unit implements Controllable {
 	 * @param id
 	 *            The id of the player.
 	 */
-	public Player(GameInformation game, int ownerId, int id) {
+	public PlayerMainFigure(GameInformation game, int ownerId, int id) {
 		this(game, ownerId, "unbekannt", id);
 	}
 

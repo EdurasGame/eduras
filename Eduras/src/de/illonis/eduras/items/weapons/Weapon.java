@@ -8,7 +8,7 @@ import de.illonis.eduras.items.Item;
 import de.illonis.eduras.items.ItemUseInformation;
 import de.illonis.eduras.items.Lootable;
 import de.illonis.eduras.items.Usable;
-import de.illonis.eduras.units.Player;
+import de.illonis.eduras.units.PlayerMainFigure;
 
 /**
  * A weapon holds a missile prototype that is used for shooting.
@@ -163,7 +163,7 @@ public abstract class Weapon extends Item implements Lootable, Usable {
 			return;
 		}
 
-		Player player = (Player) collidingObject;
+		PlayerMainFigure player = (PlayerMainFigure) collidingObject;
 		getGame().getEventTriggerer().lootItem(getId(), player.getId());
 
 	}

@@ -23,7 +23,7 @@ import de.illonis.eduras.maps.FunMap;
 import de.illonis.eduras.maps.Map;
 import de.illonis.eduras.math.Vector2D;
 import de.illonis.eduras.shapes.ObjectShape;
-import de.illonis.eduras.units.Player;
+import de.illonis.eduras.units.PlayerMainFigure;
 
 /**
  * Holds all game information of the current game.
@@ -33,7 +33,7 @@ import de.illonis.eduras.units.Player;
  */
 public class GameInformation {
 	private final ConcurrentHashMap<Integer, GameObject> objects;
-	private final ConcurrentHashMap<Integer, Player> players;
+	private final ConcurrentHashMap<Integer, PlayerMainFigure> players;
 	private Map map;
 	private EventTriggerer eventTriggerer;
 	private GameSettings gameSettings;
@@ -43,7 +43,7 @@ public class GameInformation {
 	 */
 	public GameInformation() {
 		objects = new ConcurrentHashMap<Integer, GameObject>();
-		players = new ConcurrentHashMap<Integer, Player>();
+		players = new ConcurrentHashMap<Integer, PlayerMainFigure>();
 		map = new FunMap();
 		gameSettings = new GameSettings(this);
 
@@ -65,7 +65,7 @@ public class GameInformation {
 	 * 
 	 * @author illonis
 	 */
-	public Collection<Player> getPlayers() {
+	public Collection<PlayerMainFigure> getPlayers() {
 		return players.values();
 	}
 
@@ -161,7 +161,7 @@ public class GameInformation {
 			return true;
 		boolean playerRemoveSuccess = true;
 
-		if (go instanceof Player) {
+		if (go instanceof PlayerMainFigure) {
 			playerRemoveSuccess = players.remove(go.getOwner()) != null;
 		}
 
@@ -175,7 +175,7 @@ public class GameInformation {
 	 * @param player
 	 *            player to add.
 	 */
-	public void addPlayer(Player player) {
+	public void addPlayer(PlayerMainFigure player) {
 		players.put(player.getOwner(), player);
 	}
 
@@ -188,9 +188,9 @@ public class GameInformation {
 	 * @throws ObjectNotFoundException
 	 *             Thrown if there is no object found
 	 */
-	public Player getPlayerByOwnerId(int ownerId)
+	public PlayerMainFigure getPlayerByOwnerId(int ownerId)
 			throws ObjectNotFoundException {
-		Player result = players.get(ownerId);
+		PlayerMainFigure result = players.get(ownerId);
 		if (result == null) {
 			throw new ObjectNotFoundException(ownerId);
 		}
@@ -207,10 +207,10 @@ public class GameInformation {
 	 *             Thrown if there could be no player found that is related to
 	 *             the given id.
 	 */
-	public Player getPlayerByObjectId(int objectId)
+	public PlayerMainFigure getPlayerByObjectId(int objectId)
 			throws ObjectNotFoundException {
-		Player result = null;
-		for (Player singlePlayer : players.values()) {
+		PlayerMainFigure result = null;
+		for (PlayerMainFigure singlePlayer : players.values()) {
 			if (singlePlayer.getId() == objectId) {
 				result = singlePlayer;
 				break;
@@ -260,7 +260,7 @@ public class GameInformation {
 			infos.add(visEvent);
 
 		}
-		for (Player p : players.values()) {
+		for (PlayerMainFigure p : players.values()) {
 			try {
 				infos.add(new ClientRenameEvent(p.getOwner(), p.getName()));
 			} catch (InvalidNameException e) {
@@ -278,7 +278,7 @@ public class GameInformation {
 		// send statistics
 		Statistic stats = gameSettings.getStats();
 
-		for (Player player : players.values()) {
+		for (PlayerMainFigure player : players.values()) {
 			int killsOfPlayer = stats.getKillsOfPlayer(player);
 			SetIntegerGameObjectAttributeEvent setKillsEvent = new SetIntegerGameObjectAttributeEvent(
 					GameEventNumber.SET_KILLS, player.getOwner(), killsOfPlayer);

@@ -11,7 +11,7 @@ import de.illonis.eduras.maps.ManyBlocks;
 import de.illonis.eduras.maps.Map;
 import de.illonis.eduras.maps.SimpleMap;
 import de.illonis.eduras.networking.Server;
-import de.illonis.eduras.units.Player;
+import de.illonis.eduras.units.PlayerMainFigure;
 
 /**
  * Triggers events from console.
@@ -44,7 +44,7 @@ public class ConsoleEventTriggerer {
 	 * 
 	 * @return list of players.
 	 */
-	public Collection<Player> getPlayers() {
+	public Collection<PlayerMainFigure> getPlayers() {
 		return triggerer.getGameInfo().getPlayers();
 	}
 
@@ -76,7 +76,7 @@ public class ConsoleEventTriggerer {
 	 * @return false, if the player couldnt be found.
 	 */
 	public boolean respawnPlayerById(int ownerId) {
-		Player player;
+		PlayerMainFigure player;
 		try {
 			player = triggerer.getGameInfo().getPlayerByOwnerId(ownerId);
 		} catch (ObjectNotFoundException e) {

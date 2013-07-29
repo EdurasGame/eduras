@@ -32,7 +32,7 @@ import de.illonis.eduras.maps.Map;
 import de.illonis.eduras.math.Vector2D;
 import de.illonis.eduras.networking.Buffer;
 import de.illonis.eduras.networking.NetworkMessageSerializer;
-import de.illonis.eduras.units.Player;
+import de.illonis.eduras.units.PlayerMainFigure;
 import de.illonis.eduras.units.Unit;
 
 /**
@@ -222,7 +222,7 @@ public class ServerEventTriggerer implements EventTriggerer {
 	}
 
 	@Override
-	public void respawnPlayer(Player player) {
+	public void respawnPlayer(PlayerMainFigure player) {
 		// TODO: This should be dependend on game mode:
 		for (int i = 0; i < 6; i++)
 			changeItemSlot(i, player.getOwner(), null);
@@ -279,7 +279,7 @@ public class ServerEventTriggerer implements EventTriggerer {
 	@Override
 	public void restartRound() {
 
-		for (Player player : gameInfo.getPlayers()) {
+		for (PlayerMainFigure player : gameInfo.getPlayers()) {
 			resetStats(player);
 		}
 
@@ -320,7 +320,7 @@ public class ServerEventTriggerer implements EventTriggerer {
 					initialObject.getPositionVector(), initialObject.getOwner());
 		}
 
-		for (Player player : gameInfo.getPlayers()) {
+		for (PlayerMainFigure player : gameInfo.getPlayers()) {
 			respawnPlayer(player);
 		}
 	}
@@ -332,7 +332,7 @@ public class ServerEventTriggerer implements EventTriggerer {
 	 */
 	public void removeAllNonPlayers() {
 		for (GameObject oldObject : gameInfo.getObjects().values()) {
-			if (!(oldObject instanceof Player))
+			if (!(oldObject instanceof PlayerMainFigure))
 				removeObject(oldObject.getId());
 		}
 	}
@@ -371,7 +371,7 @@ public class ServerEventTriggerer implements EventTriggerer {
 	 * 
 	 * @param player
 	 */
-	private void resetStats(Player player) {
+	private void resetStats(PlayerMainFigure player) {
 		int playerId = player.getOwner();
 
 		SetIntegerGameObjectAttributeEvent setdeaths = new SetIntegerGameObjectAttributeEvent(

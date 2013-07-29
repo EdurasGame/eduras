@@ -42,7 +42,7 @@ import de.illonis.eduras.items.weapons.SniperMissile;
 import de.illonis.eduras.items.weapons.SplashMissile;
 import de.illonis.eduras.items.weapons.SplashedMissile;
 import de.illonis.eduras.logger.EduLog;
-import de.illonis.eduras.units.Player;
+import de.illonis.eduras.units.PlayerMainFigure;
 import de.illonis.eduras.units.Unit;
 
 /**
@@ -159,7 +159,7 @@ public class Logic implements GameLogicInterface {
 				break;
 			case CLIENT_SETNAME:
 				ClientRenameEvent e = (ClientRenameEvent) event;
-				Player p = null;
+				PlayerMainFigure p = null;
 				try {
 					p = gameInfo.getPlayerByOwnerId(e.getOwner());
 				} catch (ObjectNotFoundException e1) {
@@ -234,7 +234,7 @@ public class Logic implements GameLogicInterface {
 				break;
 			case LOOT_ITEM_EVENT:
 				LootItemEvent lootItemEvent = (LootItemEvent) event;
-				Player player;
+				PlayerMainFigure player;
 				int itemSlot;
 				try {
 					player = gameInfo.getPlayerByObjectId(lootItemEvent
@@ -378,7 +378,7 @@ public class Logic implements GameLogicInterface {
 	 *            event to handle.
 	 */
 	private void handleItemEvent(ItemEvent itemEvent) {
-		Player player;
+		PlayerMainFigure player;
 
 		try {
 			player = gameInfo.getPlayerByOwnerId(itemEvent.getOwner());
@@ -433,7 +433,7 @@ public class Logic implements GameLogicInterface {
 	 */
 	private void handlePlayerMove(UserMovementEvent event) {
 
-		Player player = null;
+		PlayerMainFigure player = null;
 		try {
 			player = gameInfo.getPlayerByOwnerId(event.getOwner());
 		} catch (ObjectNotFoundException e) {

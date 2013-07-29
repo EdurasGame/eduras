@@ -19,7 +19,7 @@ import de.illonis.eduras.items.weapons.SplashMissile;
 import de.illonis.eduras.items.weapons.SplashWeapon;
 import de.illonis.eduras.items.weapons.SplashedMissile;
 import de.illonis.eduras.logger.EduLog;
-import de.illonis.eduras.units.Player;
+import de.illonis.eduras.units.PlayerMainFigure;
 
 /**
  * ObjectFactory is in charge of handling Objectfactory events and creating and
@@ -117,8 +117,8 @@ public class ObjectFactory {
 
 			switch (event.getObjectType()) {
 			case PLAYER:
-				go = new Player(logic.getGame(), event.getOwner(), id);
-				logic.getGame().addPlayer((Player) go);
+				go = new PlayerMainFigure(logic.getGame(), event.getOwner(), id);
+				logic.getGame().addPlayer((PlayerMainFigure) go);
 
 				EduLog.info("Player " + event.getOwner() + " created");
 				break;

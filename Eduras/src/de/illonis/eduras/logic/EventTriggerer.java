@@ -5,7 +5,7 @@ import de.illonis.eduras.gamemodes.GameMode;
 import de.illonis.eduras.items.Item;
 import de.illonis.eduras.maps.Map;
 import de.illonis.eduras.math.Vector2D;
-import de.illonis.eduras.units.Player;
+import de.illonis.eduras.units.PlayerMainFigure;
 import de.illonis.eduras.units.Unit;
 
 /**
@@ -119,7 +119,7 @@ public interface EventTriggerer {
 	 * @param player
 	 *            The player to respawn.
 	 */
-	void respawnPlayer(Player player);
+	void respawnPlayer(PlayerMainFigure player);
 
 	/**
 	 * Called when a player changes his name.

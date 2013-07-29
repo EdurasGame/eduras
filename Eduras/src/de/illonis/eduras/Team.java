@@ -2,7 +2,7 @@ package de.illonis.eduras;
 
 import java.util.LinkedList;
 
-import de.illonis.eduras.units.Player;
+import de.illonis.eduras.units.PlayerMainFigure;
 
 /**
  * Represents a team of players.
@@ -12,7 +12,7 @@ import de.illonis.eduras.units.Player;
  */
 public class Team {
 
-	private LinkedList<Player> players;
+	private LinkedList<PlayerMainFigure> players;
 
 	/**
 	 * Creates a new team.
@@ -20,7 +20,7 @@ public class Team {
 	 * @param players
 	 *            initial player list.
 	 */
-	public Team(LinkedList<Player> players) {
+	public Team(LinkedList<PlayerMainFigure> players) {
 		this.players = players;
 	}
 
@@ -32,7 +32,7 @@ public class Team {
 	 * 
 	 * @author illonis
 	 */
-	public void addPlayer(Player newPlayer) {
+	public void addPlayer(PlayerMainFigure newPlayer) {
 		players.add(newPlayer);
 	}
 
@@ -44,7 +44,7 @@ public class Team {
 	 * 
 	 * @author illonis
 	 */
-	public void removePlayer(Player playerToRemove) {
+	public void removePlayer(PlayerMainFigure playerToRemove) {
 		players.remove(playerToRemove);
 	}
 
