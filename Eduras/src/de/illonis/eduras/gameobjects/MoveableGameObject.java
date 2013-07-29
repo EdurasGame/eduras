@@ -12,7 +12,8 @@ import de.illonis.eduras.math.Vector2D;
  * @author illonis
  * 
  */
-public abstract class MoveableGameObject extends GameObject implements Moveable {
+public abstract class MoveableGameObject extends ActiveGameObject implements
+		Moveable {
 
 	/**
 	 * Directions of movement.
@@ -143,5 +144,11 @@ public abstract class MoveableGameObject extends GameObject implements Moveable 
 				this, target);
 
 		return collisionPoint;
+	}
+
+	public void setCurrentDirection(Direction direction) {
+
+		this.currentDirection = direction;
+
 	}
 }

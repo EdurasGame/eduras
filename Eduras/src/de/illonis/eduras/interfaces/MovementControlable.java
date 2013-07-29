@@ -8,7 +8,7 @@ import de.illonis.eduras.gameobjects.MoveableGameObject.Direction;
  * @author illonis
  * 
  */
-public interface Controllable {
+public interface MovementControlable {
 
 	/**
 	 * Starts moving this object into given direction. Movement in other

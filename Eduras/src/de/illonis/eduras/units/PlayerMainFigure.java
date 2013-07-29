@@ -3,8 +3,9 @@ package de.illonis.eduras.units;
 import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.ObjectFactory.ObjectType;
 import de.illonis.eduras.exceptions.ShapeVerticesNotApplicableException;
+import de.illonis.eduras.gameobjects.ArtificialIntelligence;
 import de.illonis.eduras.gameobjects.GameObject;
-import de.illonis.eduras.interfaces.Controllable;
+import de.illonis.eduras.interfaces.MovementControlable;
 import de.illonis.eduras.inventory.Inventory;
 import de.illonis.eduras.logger.EduLog;
 import de.illonis.eduras.math.Vector2D;
@@ -16,7 +17,7 @@ import de.illonis.eduras.shapes.Triangle;
  * @author Florian Mai <florian.ren.mai@googlemail.com>
  * 
  */
-public class PlayerMainFigure extends Unit implements Controllable {
+public class PlayerMainFigure extends Unit implements MovementControlable {
 	private String name;
 	private final Inventory inventory = new Inventory();
 
@@ -33,7 +34,8 @@ public class PlayerMainFigure extends Unit implements Controllable {
 	 * @param id
 	 *            id of the player.
 	 */
-	public PlayerMainFigure(GameInformation game, int ownerId, String name, int id) {
+	public PlayerMainFigure(GameInformation game, int ownerId, String name,
+			int id) {
 		super(game, 30, id);
 		setObjectType(ObjectType.PLAYER);
 		this.name = name;
@@ -145,5 +147,11 @@ public class PlayerMainFigure extends Unit implements Controllable {
 
 	@Override
 	public void onMapBoundsReached() {
+	}
+
+	@Override
+	public ArtificialIntelligence getAI() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

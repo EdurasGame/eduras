@@ -2,6 +2,7 @@ package de.illonis.eduras.items.weapons;
 
 import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.ObjectFactory.ObjectType;
+import de.illonis.eduras.gameobjects.ArtificialIntelligence;
 import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.math.Vector2D;
 import de.illonis.eduras.shapes.Circle;
@@ -53,6 +54,12 @@ public class SplashMissile extends Missile {
 	@Override
 	public void onMapBoundsReached() {
 		removeSelf();
+	}
+
+	@Override
+	public ArtificialIntelligence getAI() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }
