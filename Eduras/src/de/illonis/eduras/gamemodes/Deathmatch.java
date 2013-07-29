@@ -36,17 +36,21 @@ public class Deathmatch implements GameMode {
 
 		try {
 			// TODO: should not track npc kills this way.
-			PlayerMainFigure killer = gameInfo.getPlayerByOwnerId(killingPlayer);
+			PlayerMainFigure killer = gameInfo
+					.getPlayerByOwnerId(killingPlayer);
+			if (killedUnit instanceof PlayerMainFigure) {
+				gameInfo.getEventTriggerer().respawnPlayer(
+						(PlayerMainFigure) killedUnit);
+				gameInfo.getGameSettings().getStats()
+						.addDeathForPlayer((PlayerMainFigure) killedUnit);
+			}
+			if (killer.equals(killedUnit))
+				return;
 			gameInfo.getGameSettings().getStats().addKillForPlayer(killer);
 		} catch (ObjectNotFoundException e) {
 			EduLog.passException(e);
 		}
 
-		if (killedUnit instanceof PlayerMainFigure) {
-			gameInfo.getEventTriggerer().respawnPlayer((PlayerMainFigure) killedUnit);
-			gameInfo.getGameSettings().getStats()
-					.addDeathForPlayer((PlayerMainFigure) killedUnit);
-		}
 	}
 
 	@Override
