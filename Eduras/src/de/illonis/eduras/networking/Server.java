@@ -306,14 +306,11 @@ public class Server {
 	 *            The event to send to all clients.
 	 */
 	public void sendEventToAll(Event event) {
-		String serializedEvent = "";
 		try {
-			serializedEvent = NetworkMessageSerializer.serialize(event);
+			serverSender.sendMessage(NetworkMessageSerializer.serialize(event));
 		} catch (MessageNotSupportedException e) {
 			EduLog.passException(e);
-			return;
 		}
-		serverSender.sendMessage(serializedEvent);
 	}
 
 	/**
@@ -345,7 +342,7 @@ public class Server {
 		}
 
 		gonePlayerEvent.setId(objectId);
-		logic.onGameEventAppeared(gonePlayerEvent);
+		// logic.getObjectFactory().onObjectFactoryEventAppeared(gonePlayerEvent);
 		sendEventToAll(gonePlayerEvent);
 	}
 
