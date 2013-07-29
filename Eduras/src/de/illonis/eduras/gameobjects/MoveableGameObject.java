@@ -145,10 +145,4 @@ public abstract class MoveableGameObject extends ActiveGameObject implements
 
 		return collisionPoint;
 	}
-
-	public void setCurrentDirection(Direction direction) {
-
-		this.currentDirection = direction;
-
-	}
 }

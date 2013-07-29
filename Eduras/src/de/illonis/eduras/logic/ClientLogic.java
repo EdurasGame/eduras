@@ -47,6 +47,13 @@ public class ClientLogic implements GameLogicInterface {
 	private final LogicGameWorker lgw;
 	private final ArrayList<GameEventListener> listenerList;
 
+	/**
+	 * Create ClientLogic instant.
+	 * 
+	 * @param g
+	 *            The game information.
+	 * 
+	 */
 	public ClientLogic(GameInformation g) {
 		this.gameInfo = g;
 		listenerList = new ArrayList<GameEventListener>();
