@@ -74,18 +74,6 @@ public class ServerEventTriggerer implements EventTriggerer {
 		return gameInfo;
 	}
 
-	private void sendEvents(GameEvent... events) {
-		String estr = "";
-		for (GameEvent gameEvent : events) {
-			try {
-				estr += NetworkMessageSerializer.serialize(gameEvent);
-			} catch (MessageNotSupportedException e) {
-				EduLog.passException(e);
-			}
-		}
-		outputBuffer.append(estr);
-	}
-
 	@Override
 	public void createMissile(ObjectType missileType, int owner,
 			Vector2D position, Vector2D speedVector) {
@@ -436,4 +424,25 @@ public class ServerEventTriggerer implements EventTriggerer {
 
 		sendEvents(setTimeEvent);
 	}
+
+	/**
+	 * Serializes all given events and sends them to output buffer.
+	 * 
+	 * @param events
+	 *            events to send.
+	 * 
+	 * @author illonis
+	 */
+	private void sendEvents(GameEvent... events) {
+		String estr = "";
+		for (GameEvent gameEvent : events) {
+			try {
+				estr += NetworkMessageSerializer.serialize(gameEvent);
+			} catch (MessageNotSupportedException e) {
+				EduLog.passException(e);
+			}
+		}
+		outputBuffer.append(estr);
+	}
+
 }
