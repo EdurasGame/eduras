@@ -15,7 +15,7 @@ import de.illonis.eduras.locale.Localization;
 import de.illonis.eduras.logger.EduLog;
 import de.illonis.eduras.logger.EduLog.LogMode;
 import de.illonis.eduras.logic.ConsoleEventTriggerer;
-import de.illonis.eduras.logic.Logic;
+import de.illonis.eduras.logic.ServerLogic;
 import de.illonis.eduras.logic.ServerEventTriggerer;
 import de.illonis.eduras.maps.FunMap;
 import de.illonis.eduras.networking.Server;
@@ -65,7 +65,7 @@ public class Eduras {
 		}
 
 		GameInformation gameInfo = new GameInformation();
-		Logic logic = new Logic(gameInfo);
+		ServerLogic logic = new ServerLogic(gameInfo);
 
 		ServerEventTriggerer eventTriggerer = new ServerEventTriggerer(logic);
 

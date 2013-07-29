@@ -8,16 +8,16 @@ import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.ObjectFactory.ObjectType;
 import de.illonis.eduras.events.ClientRenameEvent;
 import de.illonis.eduras.events.DeathEvent;
+import de.illonis.eduras.events.GameEvent;
 import de.illonis.eduras.events.GameEvent.GameEventNumber;
-import de.illonis.eduras.events.LootItemEvent;
 import de.illonis.eduras.events.MatchEndEvent;
-import de.illonis.eduras.events.MissileLaunchEvent;
 import de.illonis.eduras.events.MovementEvent;
 import de.illonis.eduras.events.ObjectFactoryEvent;
 import de.illonis.eduras.events.SetBooleanGameObjectAttributeEvent;
 import de.illonis.eduras.events.SetGameModeEvent;
 import de.illonis.eduras.events.SetIntegerGameObjectAttributeEvent;
 import de.illonis.eduras.events.SetItemSlotEvent;
+import de.illonis.eduras.events.SetOwnerEvent;
 import de.illonis.eduras.events.SetRemainingTimeEvent;
 import de.illonis.eduras.exceptions.InvalidNameException;
 import de.illonis.eduras.exceptions.MessageNotSupportedException;
@@ -25,8 +25,10 @@ import de.illonis.eduras.exceptions.ObjectNotFoundException;
 import de.illonis.eduras.gamemodes.GameMode;
 import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.interfaces.GameLogicInterface;
+import de.illonis.eduras.inventory.InventoryIsFullException;
 import de.illonis.eduras.items.Item;
 import de.illonis.eduras.items.Lootable;
+import de.illonis.eduras.items.weapons.Missile;
 import de.illonis.eduras.logger.EduLog;
 import de.illonis.eduras.maps.Map;
 import de.illonis.eduras.math.Vector2D;
@@ -36,7 +38,9 @@ import de.illonis.eduras.units.PlayerMainFigure;
 import de.illonis.eduras.units.Unit;
 
 /**
- * @author Florian Mai <florian.ren.mai@googlemail.com>
+ * Server Event Triggerer
+ * 
+ * @author illonis
  * 
  */
 public class ServerEventTriggerer implements EventTriggerer {
@@ -70,22 +74,32 @@ public class ServerEventTriggerer implements EventTriggerer {
 		return gameInfo;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * de.illonis.eduras.logic.EventTriggerer#createMissile(de.illonis.eduras
-	 * .ObjectFactory.ObjectType, int, de.illonis.eduras.math.Vector2D,
-	 * de.illonis.eduras.math.Vector2D)
-	 */
+	private void sendEvents(GameEvent... events) {
+		String estr = "";
+		for (GameEvent gameEvent : events) {
+			try {
+				estr += NetworkMessageSerializer.serialize(gameEvent);
+			} catch (MessageNotSupportedException e) {
+				EduLog.passException(e);
+			}
+		}
+		outputBuffer.append(estr);
+	}
+
 	@Override
 	public void createMissile(ObjectType missileType, int owner,
 			Vector2D position, Vector2D speedVector) {
 
-		MissileLaunchEvent event = new MissileLaunchEvent(missileType,
-				position, speedVector, owner, getNextId());
+		int missileId = createObjectAt(missileType, position, owner);
+		Missile o = (Missile) gameInfo.findObjectById(missileId);
 
-		logic.onGameEventAppeared(event);
+		o.setSpeedVector(speedVector);
+		MovementEvent me = new MovementEvent(GameEventNumber.SETSPEEDVECTOR,
+				missileId);
+		me.setNewXPos(speedVector.getX());
+		me.setNewYPos(speedVector.getY());
+
+		sendEvents(me);
 
 	}
 
@@ -108,7 +122,8 @@ public class ServerEventTriggerer implements EventTriggerer {
 				GameEventNumber.OBJECT_CREATE, object);
 		newObjectEvent.setId(getNextId());
 		newObjectEvent.setOwner(owner);
-		logic.onGameEventAppeared(newObjectEvent);
+		logic.getObjectFactory().onObjectFactoryEventAppeared(newObjectEvent);
+
 		return newObjectEvent.getId();
 	}
 
@@ -120,12 +135,17 @@ public class ServerEventTriggerer implements EventTriggerer {
 		int id = getNextId();
 		newObjectEvent.setId(id);
 		newObjectEvent.setOwner(owner);
-		logic.onGameEventAppeared(newObjectEvent);
 
+		logic.getObjectFactory().onObjectFactoryEventAppeared(newObjectEvent);
+
+		GameObject o = gameInfo.findObjectById(id);
+		o.setXPosition(position.getX());
+		o.setYPosition(position.getY());
 		MovementEvent setPos = new MovementEvent(GameEventNumber.SET_POS, id);
 		setPos.setNewXPos(position.getX());
 		setPos.setNewYPos(position.getY());
-		logic.onGameEventAppeared(setPos);
+
+		sendEvents(newObjectEvent, setPos);
 		return newObjectEvent.getId();
 
 	}
@@ -137,13 +157,16 @@ public class ServerEventTriggerer implements EventTriggerer {
 
 		SetBooleanGameObjectAttributeEvent bo = new SetBooleanGameObjectAttributeEvent(
 				GameEventNumber.SET_COLLIDABLE, objectId, false);
+
+		i.setCollidable(false);
+
 		SetBooleanGameObjectAttributeEvent bov = new SetBooleanGameObjectAttributeEvent(
 				GameEventNumber.SET_VISIBLE, objectId, false);
-		logic.onGameEventAppeared(bo);
-		logic.onGameEventAppeared(bov);
-		GameObject o = gameInfo.findObjectById(objectId);
-		if (o instanceof Lootable)
-			((Lootable) o).loot();
+		i.setVisible(false);
+		sendEvents(bo, bov);
+
+		if (i instanceof Lootable)
+			((Lootable) i).loot();
 		try {
 			if (i.isUnique()
 					&& gameInfo.getPlayerByObjectId(playerId).getInventory()
@@ -153,9 +176,36 @@ public class ServerEventTriggerer implements EventTriggerer {
 		} catch (ObjectNotFoundException e) {
 			e.printStackTrace();
 		}
-		int newObjId = createObject(o.getType(), playerId);
-		LootItemEvent lootEvent = new LootItemEvent(newObjId, playerId);
-		logic.onGameEventAppeared(lootEvent);
+		int newObjId = createObject(i.getType(), playerId);
+		int itemSlot;
+		try {
+			PlayerMainFigure player = gameInfo.getPlayerByObjectId(playerId);
+			Item item = (Item) gameInfo.findObjectById(newObjId);
+
+			itemSlot = player.getInventory().loot(item);
+			item.setOwner(player.getOwner());
+
+			item.setCollidable(false);
+			item.setVisible(false);
+
+			SetBooleanGameObjectAttributeEvent visEvent = new SetBooleanGameObjectAttributeEvent(
+					GameEventNumber.SET_VISIBLE, item.getId(), false);
+			SetBooleanGameObjectAttributeEvent colEvent = new SetBooleanGameObjectAttributeEvent(
+					GameEventNumber.SET_COLLIDABLE, item.getId(), false);
+			SetOwnerEvent soEvent = new SetOwnerEvent(player.getId(),
+					item.getId());
+
+			SetItemSlotEvent sis = new SetItemSlotEvent(newObjId,
+					player.getOwner(), itemSlot);
+
+			sendEvents(visEvent, colEvent, soEvent, sis);
+
+		} catch (ObjectNotFoundException e1) {
+			return;
+		} catch (InventoryIsFullException e1) {
+			return;
+		}
+
 	}
 
 	@Override
@@ -163,7 +213,11 @@ public class ServerEventTriggerer implements EventTriggerer {
 		MovementEvent e = new MovementEvent(GameEventNumber.SET_POS, objectId);
 		e.setNewXPos(newPosition.getX());
 		e.setNewYPos(newPosition.getY());
-		logic.onGameEventAppeared(e);
+
+		GameObject o = gameInfo.findObjectById(objectId);
+		o.setXPosition(newPosition.getX());
+		o.setYPosition(newPosition.getY());
+		sendEvents(e);
 	}
 
 	/**
@@ -211,13 +265,7 @@ public class ServerEventTriggerer implements EventTriggerer {
 			// announce to network
 			SetIntegerGameObjectAttributeEvent event = new SetIntegerGameObjectAttributeEvent(
 					GameEventNumber.SETHEALTH, id, newHealth);
-			try {
-				String eventString = NetworkMessageSerializer.serialize(event);
-				outputBuffer.append(eventString);
-			} catch (MessageNotSupportedException e) {
-				EduLog.passException(e);
-				return;
-			}
+			sendEvents(event);
 		}
 	}
 
@@ -248,17 +296,14 @@ public class ServerEventTriggerer implements EventTriggerer {
 		try {
 			ClientRenameEvent renameEvent = new ClientRenameEvent(ownerId,
 					newName);
+			// TODO: check if this call causes recursion due to repeated sending
+			// by logic.
 			logic.onGameEventAppeared(renameEvent);
-			outputBuffer
-					.append(NetworkMessageSerializer.serialize(renameEvent));
+			sendEvents(renameEvent);
 		} catch (InvalidNameException e) {
 			EduLog.passException(e);
 			return;
-		} catch (MessageNotSupportedException e) {
-			EduLog.passException(e);
-			return;
 		}
-
 	}
 
 	@Override
@@ -266,13 +311,7 @@ public class ServerEventTriggerer implements EventTriggerer {
 		MatchEndEvent matchEndEvent = new MatchEndEvent(gameInfo
 				.getGameSettings().getStats().findPlayerWithMostFrags());
 
-		try {
-			outputBuffer.append(NetworkMessageSerializer
-					.serialize(matchEndEvent));
-		} catch (MessageNotSupportedException e) {
-			EduLog.passException(e);
-		}
-
+		sendEvents(matchEndEvent);
 		restartRound();
 	}
 
@@ -299,13 +338,8 @@ public class ServerEventTriggerer implements EventTriggerer {
 	public void changeGameMode(GameMode newMode) {
 		gameInfo.getGameSettings().changeGameMode(newMode);
 		SetGameModeEvent event = new SetGameModeEvent(newMode.getName());
-		try {
-			String eventString = NetworkMessageSerializer.serialize(event);
-			outputBuffer.append(eventString);
-		} catch (MessageNotSupportedException e) {
-			EduLog.passException(e);
-			return;
-		}
+
+		sendEvents(event);
 	}
 
 	@Override
@@ -345,12 +379,15 @@ public class ServerEventTriggerer implements EventTriggerer {
 		else
 			objectId = newItem.getId();
 		SetItemSlotEvent e = new SetItemSlotEvent(objectId, player, slot);
-		logic.onGameEventAppeared(e);
 		try {
-			outputBuffer.append(NetworkMessageSerializer.serialize(e));
-		} catch (MessageNotSupportedException e1) {
-			e1.printStackTrace();
+			gameInfo.getPlayerByOwnerId(e.getOwner())
+					.getInventory()
+					.setItemAt(e.getItemSlot(),
+							(Item) gameInfo.getObjects().get(e.getObjectId()));
+		} catch (ObjectNotFoundException ex) {
+			EduLog.passException(ex);
 		}
+		sendEvents(e);
 	}
 
 	@Override
@@ -362,8 +399,14 @@ public class ServerEventTriggerer implements EventTriggerer {
 	@Override
 	public void onDeath(Unit unit, int killer) {
 		DeathEvent event = new DeathEvent(unit.getId(), killer);
-		logic.onGameEventAppeared(event);
+		GameObject killed = gameInfo.findObjectById(event.getKilled());
+		if (killed.isUnit()) {
+			Unit un = (Unit) killed;
+			gameInfo.getGameSettings().getGameMode()
+					.onDeath(un, event.getKillerOwner());
+		}
 
+		sendEvents(event);
 	}
 
 	/**
@@ -374,21 +417,14 @@ public class ServerEventTriggerer implements EventTriggerer {
 	private void resetStats(PlayerMainFigure player) {
 		int playerId = player.getOwner();
 
+		gameInfo.getGameSettings().getStats().setDeaths(playerId, 0);
+
 		SetIntegerGameObjectAttributeEvent setdeaths = new SetIntegerGameObjectAttributeEvent(
 				GameEventNumber.SET_DEATHS, playerId, 0);
 		SetIntegerGameObjectAttributeEvent setkills = new SetIntegerGameObjectAttributeEvent(
 				GameEventNumber.SET_KILLS, playerId, 0);
 
-		try {
-			outputBuffer.append(NetworkMessageSerializer.serialize(setdeaths));
-			outputBuffer.append(NetworkMessageSerializer.serialize(setkills));
-		} catch (MessageNotSupportedException e) {
-			EduLog.passException(e);
-			return;
-		}
-
-		logic.onGameEventAppeared(setkills);
-		logic.onGameEventAppeared(setdeaths);
+		sendEvents(setdeaths, setkills);
 	}
 
 	private void resetSettings() {
@@ -398,11 +434,6 @@ public class ServerEventTriggerer implements EventTriggerer {
 		SetRemainingTimeEvent setTimeEvent = new SetRemainingTimeEvent(gameInfo
 				.getGameSettings().getRemainingTime());
 
-		try {
-			outputBuffer.append(NetworkMessageSerializer
-					.serialize(setTimeEvent));
-		} catch (MessageNotSupportedException e) {
-			EduLog.passException(e);
-		}
+		sendEvents(setTimeEvent);
 	}
 }

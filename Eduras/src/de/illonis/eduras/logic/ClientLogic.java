@@ -9,11 +9,8 @@ import de.illonis.eduras.events.ClientRenameEvent;
 import de.illonis.eduras.events.DeathEvent;
 import de.illonis.eduras.events.GameEvent;
 import de.illonis.eduras.events.GameEvent.GameEventNumber;
-import de.illonis.eduras.events.GameInfoRequest;
 import de.illonis.eduras.events.ItemEvent;
-import de.illonis.eduras.events.LootItemEvent;
 import de.illonis.eduras.events.MatchEndEvent;
-import de.illonis.eduras.events.MissileLaunchEvent;
 import de.illonis.eduras.events.MovementEvent;
 import de.illonis.eduras.events.ObjectFactoryEvent;
 import de.illonis.eduras.events.SetBooleanGameObjectAttributeEvent;
@@ -22,50 +19,35 @@ import de.illonis.eduras.events.SetIntegerGameObjectAttributeEvent;
 import de.illonis.eduras.events.SetItemSlotEvent;
 import de.illonis.eduras.events.SetOwnerEvent;
 import de.illonis.eduras.events.SetRemainingTimeEvent;
-import de.illonis.eduras.events.UserMovementEvent;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
 import de.illonis.eduras.gamemodes.Deathmatch;
 import de.illonis.eduras.gamemodes.GameMode;
 import de.illonis.eduras.gamemodes.NoGameMode;
 import de.illonis.eduras.gameobjects.GameObject;
-import de.illonis.eduras.gameobjects.MoveableGameObject.Direction;
 import de.illonis.eduras.interfaces.GameEventListener;
 import de.illonis.eduras.interfaces.GameLogicInterface;
-import de.illonis.eduras.inventory.InventoryIsFullException;
 import de.illonis.eduras.inventory.ItemSlotIsEmptyException;
 import de.illonis.eduras.items.Item;
 import de.illonis.eduras.items.ItemUseInformation;
 import de.illonis.eduras.items.Usable;
-import de.illonis.eduras.items.weapons.Missile;
-import de.illonis.eduras.items.weapons.SimpleMissile;
-import de.illonis.eduras.items.weapons.SniperMissile;
-import de.illonis.eduras.items.weapons.SplashMissile;
-import de.illonis.eduras.items.weapons.SplashedMissile;
 import de.illonis.eduras.logger.EduLog;
 import de.illonis.eduras.units.PlayerMainFigure;
 import de.illonis.eduras.units.Unit;
 
 /**
- * A first (dummy) implementation of game logic.
+ * Logic for client.
  * 
- * @author Florian Mai <florian.ren.mai@googlemail.com>
+ * @author illonis
  * 
  */
-public class Logic implements GameLogicInterface {
+public class ClientLogic implements GameLogicInterface {
 
 	private final GameInformation gameInfo;
 	private final ObjectFactory objectFactory;
 	private final LogicGameWorker lgw;
 	private final ArrayList<GameEventListener> listenerList;
 
-	/**
-	 * Creates a new logic.
-	 * 
-	 * @param g
-	 *            information to use.
-	 */
-	public Logic(GameInformation g) {
-
+	public ClientLogic(GameInformation g) {
 		this.gameInfo = g;
 		listenerList = new ArrayList<GameEventListener>();
 		objectFactory = new ObjectFactory(this);
@@ -76,7 +58,7 @@ public class Logic implements GameLogicInterface {
 	}
 
 	@Override
-	public synchronized void onGameEventAppeared(GameEvent event) {
+	public void onGameEventAppeared(GameEvent event) {
 		EduLog.info("[LOGIC] A game event appeared: "
 				+ event.getType().toString());
 
@@ -86,16 +68,7 @@ public class Logic implements GameLogicInterface {
 		} else {
 
 			switch (event.getType()) {
-			case MOVE_DOWN_PRESSED:
-			case MOVE_DOWN_RELEASED:
-			case MOVE_UP_PRESSED:
-			case MOVE_UP_RELEASED:
-			case MOVE_LEFT_PRESSED:
-			case MOVE_LEFT_RELEASED:
-			case MOVE_RIGHT_PRESSED:
-			case MOVE_RIGHT_RELEASED:
-				handlePlayerMove((UserMovementEvent) event);
-				break;
+
 			case SET_POS:
 				MovementEvent moveEvent = (MovementEvent) event;
 				double newXPos = moveEvent.getNewXPos();
@@ -137,13 +110,7 @@ public class Logic implements GameLogicInterface {
 					gameEventListener.onHealthChanged(mhealthEvent);
 				}
 				break;
-			case INFORMATION_REQUEST:
-				ArrayList<GameEvent> infos = gameInfo.getAllInfosAsEvent();
-				for (GameEventListener listener : listenerList) {
-					listener.onInformationRequested(infos,
-							((GameInfoRequest) event).getRequester());
-				}
-				break;
+
 			case DEATH:
 				DeathEvent de = (DeathEvent) event;
 				GameObject killed = gameInfo.findObjectById(de.getKilled());
@@ -186,89 +153,6 @@ public class Logic implements GameLogicInterface {
 			case SET_COLLIDABLE:
 			case SET_VISIBLE:
 				handleObjectAttributeEvent((SetBooleanGameObjectAttributeEvent) event);
-				break;
-			case MISSILE_LAUNCH:
-				MissileLaunchEvent missileLaunchEvent = (MissileLaunchEvent) event;
-
-				Missile missile;
-				switch (missileLaunchEvent.getObjectType()) {
-				case SNIPERMISSILE:
-					missile = new SniperMissile(gameInfo,
-							missileLaunchEvent.getId());
-					break;
-				case MISSILE_SPLASH:
-					missile = new SplashMissile(gameInfo,
-							missileLaunchEvent.getId());
-					break;
-				case MISSILE_SPLASHED:
-					missile = new SplashedMissile(gameInfo,
-							missileLaunchEvent.getId());
-					break;
-				case SIMPLEMISSILE:
-					missile = new SimpleMissile(gameInfo,
-							missileLaunchEvent.getId());
-					break;
-				default:
-					return;
-				}
-
-				gameInfo.addObject(missile);
-
-				missile.setPosition(missileLaunchEvent.getPosition().getX(),
-						missileLaunchEvent.getPosition().getY());
-				missile.setOwner(missileLaunchEvent.getOwner());
-				missile.setSpeedVector(missileLaunchEvent.getSpeedVector());
-
-				// inform listeners
-				ObjectFactoryEvent objectFactoryEvent = new ObjectFactoryEvent(
-						GameEventNumber.OBJECT_CREATE,
-						missileLaunchEvent.getObjectType());
-				objectFactoryEvent.setId(missile.getId());
-				objectFactoryEvent.setOwner(missile.getOwner());
-
-				for (GameEventListener gel : listenerList) {
-					gel.onObjectCreation(objectFactoryEvent);
-					gel.onNewObjectPosition(missile);
-					// announce speedvector
-				}
-				break;
-			case LOOT_ITEM_EVENT:
-				LootItemEvent lootItemEvent = (LootItemEvent) event;
-				PlayerMainFigure player;
-				int itemSlot;
-				try {
-					player = gameInfo.getPlayerByObjectId(lootItemEvent
-							.getPlayerId());
-					Item item = (Item) gameInfo.findObjectById(lootItemEvent
-							.getObjectId());
-
-					itemSlot = player.getInventory().loot(item);
-					item.setOwner(player.getOwner());
-					item.setCollidable(false);
-					item.setVisible(false);
-
-					SetBooleanGameObjectAttributeEvent visEvent = new SetBooleanGameObjectAttributeEvent(
-							GameEventNumber.SET_VISIBLE, item.getId(), false);
-					SetBooleanGameObjectAttributeEvent colEvent = new SetBooleanGameObjectAttributeEvent(
-							GameEventNumber.SET_COLLIDABLE, item.getId(), false);
-					SetOwnerEvent soEvent = new SetOwnerEvent(player.getId(),
-							item.getId());
-
-					for (GameEventListener gel : listenerList) {
-						gel.onItemSlotChanged(new SetItemSlotEvent(
-								lootItemEvent.getObjectId(), player.getOwner(),
-								itemSlot));
-						gel.onOwnerChanged(soEvent);
-						gel.onObjectStateChanged(visEvent);
-						gel.onObjectStateChanged(colEvent);
-					}
-
-				} catch (ObjectNotFoundException e1) {
-					return;
-				} catch (InventoryIsFullException e1) {
-					return;
-				}
-
 				break;
 			case SET_ITEM_SLOT:
 				SetItemSlotEvent slotEvent = (SetItemSlotEvent) event;
@@ -345,33 +229,6 @@ public class Logic implements GameLogicInterface {
 	}
 
 	/**
-	 * Handles an boolean object attribute event.
-	 * 
-	 * @param event
-	 *            event to handle.
-	 */
-	private void handleObjectAttributeEvent(
-			SetBooleanGameObjectAttributeEvent event) {
-
-		GameObject object = getGame().findObjectById(event.getObjectId());
-
-		switch (event.getType()) {
-		case SET_VISIBLE:
-			object.setVisible(event.getNewValue());
-			break;
-		case SET_COLLIDABLE:
-			object.setCollidable(event.getNewValue());
-			break;
-		default:
-		}
-
-		for (GameEventListener listener : listenerList) {
-			listener.onObjectStateChanged(event);
-		}
-
-	}
-
-	/**
 	 * Handle an item event.
 	 * 
 	 * @param itemEvent
@@ -425,52 +282,30 @@ public class Logic implements GameLogicInterface {
 	}
 
 	/**
-	 * Handles a player move. These events are only received on serverside.
+	 * Handles an boolean object attribute event.
 	 * 
-	 * @author illonis
 	 * @param event
-	 *            event.
+	 *            event to handle.
 	 */
-	private void handlePlayerMove(UserMovementEvent event) {
+	private void handleObjectAttributeEvent(
+			SetBooleanGameObjectAttributeEvent event) {
 
-		PlayerMainFigure player = null;
-		try {
-			player = gameInfo.getPlayerByOwnerId(event.getOwner());
-		} catch (ObjectNotFoundException e) {
-			EduLog.log(Level.WARNING,
-					"The player with the id " + e.getObjectId()
-							+ "could not be found!");
-			return;
-		}
+		GameObject object = getGame().findObjectById(event.getObjectId());
 
 		switch (event.getType()) {
-		case MOVE_DOWN_PRESSED:
-			player.startMoving(Direction.BOTTOM);
+		case SET_VISIBLE:
+			object.setVisible(event.getNewValue());
 			break;
-		case MOVE_DOWN_RELEASED:
-			player.stopMoving(Direction.BOTTOM);
-			break;
-		case MOVE_UP_PRESSED:
-			player.startMoving(Direction.TOP);
-			break;
-		case MOVE_UP_RELEASED:
-			player.stopMoving(Direction.TOP);
-			break;
-		case MOVE_LEFT_PRESSED:
-			player.startMoving(Direction.LEFT);
-			break;
-		case MOVE_LEFT_RELEASED:
-			player.stopMoving(Direction.LEFT);
-			break;
-		case MOVE_RIGHT_PRESSED:
-			player.startMoving(Direction.RIGHT);
-			break;
-		case MOVE_RIGHT_RELEASED:
-			player.stopMoving(Direction.RIGHT);
+		case SET_COLLIDABLE:
+			object.setCollidable(event.getNewValue());
 			break;
 		default:
-			break;
 		}
+
+		for (GameEventListener listener : listenerList) {
+			listener.onObjectStateChanged(event);
+		}
+
 	}
 
 	@Override
