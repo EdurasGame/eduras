@@ -41,6 +41,8 @@ public class Deathmatch implements GameMode {
 					.getPlayerByOwnerId(killingPlayer);
 			if (killedUnit instanceof PlayerMainFigure) {
 				EventTriggerer et = gameInfo.getEventTriggerer();
+				// need to check here because client has no event triggerer.
+				// TODO: find a solution for client-workaraound.
 				if (et != null)
 					gameInfo.getEventTriggerer().respawnPlayer(
 							(PlayerMainFigure) killedUnit);
