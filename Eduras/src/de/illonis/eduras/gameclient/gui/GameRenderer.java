@@ -28,7 +28,7 @@ import de.illonis.eduras.math.Vector2D;
 import de.illonis.eduras.shapes.Circle;
 import de.illonis.eduras.shapes.ObjectShape;
 import de.illonis.eduras.shapes.Polygon;
-import de.illonis.eduras.units.Player;
+import de.illonis.eduras.units.PlayerMainFigure;
 import de.illonis.eduras.units.Unit;
 
 /**
@@ -125,7 +125,7 @@ public class GameRenderer implements TooltipHandler {
 
 	private void adjustCamera() {
 		try {
-			Player p = getClientPlayer();
+			PlayerMainFigure p = getClientPlayer();
 			camera.centerAt(p.getDrawX(), p.getDrawY());
 		} catch (ObjectNotFoundException e) {
 			// EduLog.passException(e);
@@ -256,8 +256,8 @@ public class GameRenderer implements TooltipHandler {
 					drawHealthBarFor((Unit) d);
 				}
 
-				if (d instanceof Player) {
-					Player player = (Player) d;
+				if (d instanceof PlayerMainFigure) {
+					PlayerMainFigure player = (PlayerMainFigure) d;
 					mapGraphics.drawString(player.getName(), player.getDrawX()
 							- camera.x, player.getDrawY() - camera.y);
 				}
@@ -432,7 +432,7 @@ public class GameRenderer implements TooltipHandler {
 		return scale;
 	}
 
-	private Player getClientPlayer() throws ObjectNotFoundException {
+	private PlayerMainFigure getClientPlayer() throws ObjectNotFoundException {
 		return gui.getInfos().getPlayer();
 	}
 

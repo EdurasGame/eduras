@@ -16,7 +16,6 @@ import de.illonis.eduras.events.GameEvent.GameEventNumber;
 import de.illonis.eduras.events.InitInformationEvent;
 import de.illonis.eduras.events.ItemEvent;
 import de.illonis.eduras.exceptions.MessageNotSupportedException;
-import de.illonis.eduras.exceptions.ObjectNotFoundException;
 import de.illonis.eduras.exceptions.WrongEventTypeException;
 import de.illonis.eduras.gameclient.gui.ClientFrame;
 import de.illonis.eduras.gameclient.gui.GuiClickReactor;
@@ -24,10 +23,6 @@ import de.illonis.eduras.gameclient.gui.InputKeyHandler;
 import de.illonis.eduras.gameclient.gui.guielements.ClickableGuiElementInterface;
 import de.illonis.eduras.gameclient.gui.guielements.TooltipTriggerer;
 import de.illonis.eduras.inventory.Inventory;
-import de.illonis.eduras.inventory.ItemSlotIsEmptyException;
-import de.illonis.eduras.items.Item;
-import de.illonis.eduras.items.ItemUseInformation;
-import de.illonis.eduras.items.Usable;
 import de.illonis.eduras.locale.Localization;
 import de.illonis.eduras.logger.EduLog;
 import de.illonis.eduras.logicabstraction.EdurasInitializer;
@@ -36,6 +31,8 @@ import de.illonis.eduras.logicabstraction.InformationProvider;
 import de.illonis.eduras.logicabstraction.NetworkManager;
 import de.illonis.eduras.math.Vector2D;
 import de.illonis.eduras.networking.ServerClient.ClientRole;
+import de.illonis.eduras.networking.discover.ServerFoundListener;
+import de.illonis.eduras.networking.discover.ServerSearcher;
 import de.illonis.eduras.settings.Settings;
 
 /**
@@ -59,6 +56,7 @@ public class GameClient implements GuiClickReactor, NetworkEventReactor,
 	private int currentItemSelected = -1;
 	private LinkedList<ClickableGuiElementInterface> clickListeners;
 	private LinkedList<TooltipTriggerer> triggerers;
+	private ServerSearcher searcher;
 	// private TooltipHandler tooltipHandler;
 
 	private String clientName;
@@ -199,18 +197,6 @@ public class GameClient implements GuiClickReactor, NetworkEventReactor,
 				infoPro.getOwnerID(), i);
 		event.setTarget(frame.computeGuiPointToGameCoordinate(target));
 
-		// hacky thing to allow gui to display item cooldown.
-		// TODO: improve by event (maybe item_ready and item_used.
-		try {
-			Item item = infoPro.getPlayer().getInventory().getItemBySlot(i);
-			((Usable) item).use(new ItemUseInformation(infoPro
-					.findObjectById(item.getId()), target));
-		} catch (ItemSlotIsEmptyException e1) {
-
-		} catch (ObjectNotFoundException e1) {
-
-		}
-
 		try {
 			sendEvent(event);
 		} catch (WrongEventTypeException e) {
@@ -293,6 +279,7 @@ public class GameClient implements GuiClickReactor, NetworkEventReactor,
 
 		if (result == JOptionPane.YES_OPTION) {
 			nwm.notifyDisconnect();
+			stopDiscovery();
 		}
 	}
 
@@ -428,5 +415,25 @@ public class GameClient implements GuiClickReactor, NetworkEventReactor,
 	public void setRole(ClientRole role) {
 		this.role = role;
 
+	}
+
+	/**
+	 * Starts searching for servers in local network.
+	 * 
+	 * @param listener
+	 *            the listener that retrieves found servers.
+	 */
+	public void startDiscovery(ServerFoundListener listener) {
+		searcher = new ServerSearcher(listener);
+		searcher.start();
+	}
+
+	/**
+	 * Stops searching for servers.
+	 */
+	public void stopDiscovery() {
+		if (searcher == null)
+			return;
+		searcher.interrupt();
 	}
 }

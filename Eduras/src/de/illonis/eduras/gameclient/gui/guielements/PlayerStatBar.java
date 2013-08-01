@@ -7,7 +7,7 @@ import de.illonis.eduras.events.SetIntegerGameObjectAttributeEvent;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
 import de.illonis.eduras.gameclient.gui.UserInterface;
 import de.illonis.eduras.logger.EduLog;
-import de.illonis.eduras.units.Player;
+import de.illonis.eduras.units.PlayerMainFigure;
 
 /**
  * Displays player details like stats, health, etc.
@@ -25,7 +25,7 @@ public class PlayerStatBar extends RenderedGuiObject {
 	private int health;
 	private int maxHealth;
 	private int barWidth;
-	private Player player;
+	private PlayerMainFigure player;
 	private int kills;
 
 	/**

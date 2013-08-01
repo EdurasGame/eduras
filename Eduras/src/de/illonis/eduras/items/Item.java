@@ -23,6 +23,7 @@ public abstract class Item extends GameObject {
 	private int sellValue;
 	private int buyValue;
 	private String name;
+	private boolean unique;
 
 	/**
 	 * Creates a new item of given item type.
@@ -38,6 +39,7 @@ public abstract class Item extends GameObject {
 		super(gi, id);
 		setObjectType(type);
 		this.name = "unknown";
+		unique = true;
 	}
 
 	/**
@@ -47,6 +49,19 @@ public abstract class Item extends GameObject {
 	 */
 	public String getName() {
 		return name;
+	}
+
+	/**
+	 * Sets whether this item is unique. Unique items can exist only once in
+	 * inventory.
+	 * 
+	 * @param unique
+	 *            new unqique flag, default true.
+	 * 
+	 * @author illonis
+	 */
+	protected void setUnique(boolean unique) {
+		this.unique = unique;
 	}
 
 	/**
@@ -104,5 +119,17 @@ public abstract class Item extends GameObject {
 	 */
 	public final boolean equalsType(Item item) {
 		return getType().equals(item.getType());
+	}
+
+	/**
+	 * Returns whether this item is unique.
+	 * 
+	 * @see #setUnique(boolean)
+	 * @return true if this item is unique.
+	 * 
+	 * @author illonis
+	 */
+	public boolean isUnique() {
+		return unique;
 	}
 }

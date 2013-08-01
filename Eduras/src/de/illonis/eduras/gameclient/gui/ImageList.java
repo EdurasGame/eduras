@@ -7,6 +7,7 @@ import java.util.HashMap;
 import de.illonis.eduras.ObjectFactory.ObjectType;
 import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.images.ImageFiler;
+import de.illonis.eduras.logger.EduLog;
 
 /**
  * Loads and contains all images that can be drawn by renderer.
@@ -16,7 +17,19 @@ import de.illonis.eduras.images.ImageFiler;
  */
 public class ImageList {
 
-	private static HashMap<ObjectType, BufferedImage> images = new HashMap<ObjectType, BufferedImage>();
+	private static final HashMap<ObjectType, BufferedImage> images = new HashMap<ObjectType, BufferedImage>();
+	private static final String DEF_IMAGE_FILE = "gui/icons/noicon.png";
+	private static BufferedImage defaultImage;
+
+	static {
+		try {
+			defaultImage = ImageFiler.load(DEF_IMAGE_FILE);
+		} catch (IllegalArgumentException | IOException e) {
+			EduLog.error("Default image for iconimages not found: "
+					+ DEF_IMAGE_FILE);
+			defaultImage = new BufferedImage(30, 30, BufferedImage.TYPE_INT_RGB);
+		}
+	}
 
 	/**
 	 * Checks if an image for given gameobject exists.
@@ -37,6 +50,8 @@ public class ImageList {
 	 * @return object's image.
 	 */
 	public static BufferedImage getImageFor(GameObject obj) {
+		if (!images.containsKey(obj.getType()))
+			return defaultImage;
 		return images.get(obj.getType());
 	}
 
@@ -51,6 +66,9 @@ public class ImageList {
 			BufferedImage is = ImageFiler
 					.load("gui/icons/icon-weapon-sniper.png");
 			images.put(ObjectType.ITEM_WEAPON_SNIPER, is);
+			BufferedImage spl = ImageFiler
+					.load("gui/icons/icon-weapon-splash.png");
+			images.put(ObjectType.ITEM_WEAPON_SPLASH, spl);
 			// TODO: load all :)
 		} catch (IOException e) {
 			e.printStackTrace();

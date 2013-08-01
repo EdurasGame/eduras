@@ -4,10 +4,11 @@
 package de.illonis.eduras.shapes;
 
 import java.awt.geom.Rectangle2D;
-import java.awt.geom.Rectangle2D.Double;
+import java.util.ArrayList;
 import java.util.LinkedList;
 
 import de.illonis.eduras.gameobjects.GameObject;
+import de.illonis.eduras.math.BasicMath;
 import de.illonis.eduras.math.CollisionPoint;
 import de.illonis.eduras.math.Geometry;
 import de.illonis.eduras.math.Line;
@@ -240,9 +241,21 @@ public class Polygon extends ObjectShape {
 	}
 
 	@Override
-	public Double getBoundingBox() {
-		// TODO: implement
-		return new Rectangle2D.Double(0, 0, 5E100, 5E100);
+	public Rectangle2D.Double getBoundingBox() {
+		ArrayList<Double> xValues = new ArrayList<Double>();
+		ArrayList<Double> yValues = new ArrayList<Double>();
+		for (Vector2D vertex : vertices) {
+			xValues.add(vertex.getX());
+			yValues.add(vertex.getY());
+		}
+
+		double maxX = BasicMath.max(xValues.toArray(new Double[1]));
+		double maxY = BasicMath.max(yValues.toArray(new Double[1]));
+
+		double minX = BasicMath.min(xValues.toArray(new Double[1]));
+		double minY = BasicMath.min(yValues.toArray(new Double[1]));
+
+		return new Rectangle2D.Double(minX, minY, maxX - minX, maxY - minY);
 	}
 
 	/*

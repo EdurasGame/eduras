@@ -11,9 +11,10 @@ import de.illonis.eduras.items.Item;
 public class ItemSlot {
 
 	private Item item = null;
+	private int slot;
 
-	ItemSlot() {
-
+	ItemSlot(int slot) {
+		this.slot = slot;
 	}
 
 	/**
@@ -33,6 +34,8 @@ public class ItemSlot {
 	 *             when slot is empty.
 	 */
 	Item getItem() throws ItemSlotIsEmptyException {
+		if (item == null)
+			throw new ItemSlotIsEmptyException(slot);
 		return item;
 	}
 

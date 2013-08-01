@@ -3,7 +3,7 @@ package de.illonis.eduras;
 import java.util.HashMap;
 import java.util.LinkedList;
 
-import de.illonis.eduras.units.Player;
+import de.illonis.eduras.units.PlayerMainFigure;
 
 /**
  * Holds all statistics data.
@@ -38,7 +38,7 @@ public class Statistic {
 	 *            The player
 	 * @return The number of kills.
 	 */
-	public int getKillsOfPlayer(Player player) {
+	public int getKillsOfPlayer(PlayerMainFigure player) {
 		if (killsOfPlayer.containsKey(player.getOwner()))
 			return killsOfPlayer.get(player.getOwner());
 		return 0;
@@ -51,7 +51,7 @@ public class Statistic {
 	 *            The player
 	 * @return The number of deaths.
 	 */
-	public int getDeathsOfPlayer(Player player) {
+	public int getDeathsOfPlayer(PlayerMainFigure player) {
 		if (deathsOfPlayer.containsKey(player.getOwner()))
 			return deathsOfPlayer.get(player.getOwner());
 		return 0;
@@ -62,7 +62,7 @@ public class Statistic {
 	 * 
 	 * @param player
 	 */
-	public void addDeathForPlayer(Player player) {
+	public void addDeathForPlayer(PlayerMainFigure player) {
 		deathsOfPlayer.put(player.getOwner(), getDeathsOfPlayer(player) + 1);
 	}
 
@@ -71,7 +71,7 @@ public class Statistic {
 	 * 
 	 * @param player
 	 */
-	public void addKillForPlayer(Player player) {
+	public void addKillForPlayer(PlayerMainFigure player) {
 		killsOfPlayer.put(player.getOwner(), getKillsOfPlayer(player) + 1);
 		System.out.println(getKillsOfPlayer(player));
 	}

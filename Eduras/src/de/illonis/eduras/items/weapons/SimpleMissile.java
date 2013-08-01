@@ -1,10 +1,8 @@
-/**
- * 
- */
 package de.illonis.eduras.items.weapons;
 
 import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.ObjectFactory.ObjectType;
+import de.illonis.eduras.gameobjects.ArtificialIntelligence;
 import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.units.Unit;
 
@@ -28,17 +26,7 @@ public class SimpleMissile extends Missile {
 		setDamageRadius(5);
 		setObjectType(ObjectType.SIMPLEMISSILE);
 		setSpeed(100);
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see de.illonis.eduras.items.weapons.Missile#spawn()
-	 */
-	@Override
-	@Deprecated
-	public Missile spawn() {
-		return null;
+		setMaxRange(200);
 	}
 
 	@Override
@@ -52,6 +40,12 @@ public class SimpleMissile extends Missile {
 	@Override
 	public void onMapBoundsReached() {
 		removeSelf();
+	}
+
+	@Override
+	public ArtificialIntelligence getAI() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

@@ -10,7 +10,7 @@ import de.illonis.eduras.events.MatchEndEvent;
 import de.illonis.eduras.gameclient.gui.UserInterface;
 import de.illonis.eduras.images.ImageFiler;
 import de.illonis.eduras.logger.EduLog;
-import de.illonis.eduras.units.Player;
+import de.illonis.eduras.units.PlayerMainFigure;
 
 /**
  * Displays a statistics frame that displays player stats of all players.
@@ -29,7 +29,7 @@ public class StatisticsWindow extends RenderedGuiObject {
 	private final static long DISPLAY_TIME = 3000;
 
 	private BufferedImage artwork;
-	private Collection<Player> players;
+	private Collection<PlayerMainFigure> players;
 	private int width, height;
 	private boolean visible;
 
@@ -84,13 +84,13 @@ public class StatisticsWindow extends RenderedGuiObject {
 		// players
 		g2d.setColor(COLOR_TEXT);
 		int i = 1;
-		for (Player p : players) {
+		for (PlayerMainFigure p : players) {
 			drawPlayerRow(g2d, p, i);
 			i++;
 		}
 	}
 
-	private void drawPlayerRow(Graphics2D g2d, Player p, int i) {
+	private void drawPlayerRow(Graphics2D g2d, PlayerMainFigure p, int i) {
 		// name
 		g2d.drawString(p.getName(), screenX + COLUMN_X[0], screenY + PADDING_Y
 				+ i * LINEHEIGHT);

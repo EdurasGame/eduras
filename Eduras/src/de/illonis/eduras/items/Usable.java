@@ -19,6 +19,11 @@ public interface Usable {
 	public void use(ItemUseInformation info);
 
 	/**
+	 * Starts cooldown. This should be called on every use.
+	 */
+	public void startCooldown();
+
+	/**
 	 * Returns current cooldown of item.
 	 * 
 	 * @return current cooldown.

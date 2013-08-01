@@ -6,16 +6,19 @@ import de.illonis.eduras.events.SetGameObjectAttributeEvent;
 import de.illonis.eduras.exceptions.DataMissingException;
 import de.illonis.eduras.exceptions.ShapeVerticesNotApplicableException;
 import de.illonis.eduras.gameobjects.BigBlock;
+import de.illonis.eduras.gameobjects.BiggerBlock;
 import de.illonis.eduras.gameobjects.Building;
 import de.illonis.eduras.gameobjects.GameObject;
-import de.illonis.eduras.interfaces.GameEventListener;
 import de.illonis.eduras.interfaces.GameLogicInterface;
 import de.illonis.eduras.items.weapons.ExampleWeapon;
 import de.illonis.eduras.items.weapons.SimpleMissile;
 import de.illonis.eduras.items.weapons.SniperMissile;
 import de.illonis.eduras.items.weapons.SniperWeapon;
+import de.illonis.eduras.items.weapons.SplashMissile;
+import de.illonis.eduras.items.weapons.SplashWeapon;
+import de.illonis.eduras.items.weapons.SplashedMissile;
 import de.illonis.eduras.logger.EduLog;
-import de.illonis.eduras.units.Player;
+import de.illonis.eduras.units.PlayerMainFigure;
 
 /**
  * ObjectFactory is in charge of handling Objectfactory events and creating and
@@ -38,7 +41,8 @@ public class ObjectFactory {
 	public enum ObjectType {
 		PLAYER(1), YELLOWCIRCLE(2), SIMPLEMISSILE(3), ITEM_WEAPON_1(4), NO_OBJECT(
 				0), BIGBLOCK(5), SMALLCIRCLEDBLOCK(6), SNIPERMISSILE(7), ITEM_WEAPON_SNIPER(
-				8), BUILDING(9);
+				8), BUILDING(9), BIGGERBLOCK(10), ITEM_WEAPON_SPLASH(11), MISSILE_SPLASH(
+				12), MISSILE_SPLASHED(13);
 
 		private int number;
 
@@ -77,11 +81,7 @@ public class ObjectFactory {
 	 *            {@link SetGameObjectAttributeEvent} that occured.
 	 */
 	public void onObjectAttributeChanged(SetGameObjectAttributeEvent<?> event) {
-
-		for (GameEventListener listener : logic.getListenerList()) {
-			listener.onObjectStateChanged(event);
-		}
-
+		logic.getListener().onObjectStateChanged(event);
 	}
 
 	/**
@@ -112,8 +112,8 @@ public class ObjectFactory {
 
 			switch (event.getObjectType()) {
 			case PLAYER:
-				go = new Player(logic.getGame(), event.getOwner(), id);
-				logic.getGame().addPlayer((Player) go);
+				go = new PlayerMainFigure(logic.getGame(), event.getOwner(), id);
+				logic.getGame().addPlayer((PlayerMainFigure) go);
 
 				EduLog.info("Player " + event.getOwner() + " created");
 				break;
@@ -122,6 +122,14 @@ public class ObjectFactory {
 				break;
 			case BUILDING:
 				go = new Building(logic.getGame(), id);
+				break;
+			case BIGGERBLOCK:
+				try {
+					go = new BiggerBlock(logic.getGame(), id);
+				} catch (ShapeVerticesNotApplicableException e) {
+					EduLog.passException(e);
+					return;
+				}
 				break;
 			case ITEM_WEAPON_1:
 				go = new ExampleWeapon(logic.getGame(), id);
@@ -137,6 +145,15 @@ public class ObjectFactory {
 			case SNIPERMISSILE:
 				go = new SniperMissile(logic.getGame(), id);
 				break;
+			case MISSILE_SPLASH:
+				go = new SplashMissile(logic.getGame(), id);
+				break;
+			case MISSILE_SPLASHED:
+				go = new SplashedMissile(logic.getGame(), id);
+				break;
+			case ITEM_WEAPON_SPLASH:
+				go = new SplashWeapon(logic.getGame(), id);
+				break;
 			case ITEM_WEAPON_SNIPER:
 				go = new SniperWeapon(logic.getGame(), id);
 				break;
@@ -150,10 +167,13 @@ public class ObjectFactory {
 			if (go != null)
 				logic.getGame().addObject(go);
 
-			for (GameEventListener gel : logic.getListenerList()) {
-				gel.onObjectCreation(event);
+			try {
+				logic.getListener().onObjectCreation(event);
+			} catch (IllegalStateException e) {
+				// (jme) we need to catch it here because a listener is not
+				// assigned on initial map creation.
 			}
-			// game.addObject(go);
+
 		}
 
 		else if (event.getType() == GameEventNumber.OBJECT_REMOVE) {
@@ -162,9 +182,8 @@ public class ObjectFactory {
 			GameObject objectToRemove = logic.getGame().getObjects().get(id);
 			logic.getGame().removeObject(objectToRemove);
 
-			for (GameEventListener gel : logic.getListenerList()) {
-				gel.onObjectRemove(event);
-			}
+			logic.getListener().onObjectRemove(event);
+
 		}
 	}
 }

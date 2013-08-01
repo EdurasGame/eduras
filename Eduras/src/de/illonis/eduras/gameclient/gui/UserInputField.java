@@ -21,12 +21,8 @@ public class UserInputField extends FilterableTextField {
 
 	@Override
 	public void setText(String t) {
-		System.out.println("settext");
-		if (filter(t)) {
-			System.out.println("filter ok");
-
+		if (filter(t))
 			super.setText(t);
-		}
 	}
 
 }

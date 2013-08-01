@@ -1,5 +1,6 @@
 package de.illonis.eduras;
 
+import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.concurrent.ConcurrentHashMap;
@@ -11,17 +12,18 @@ import de.illonis.eduras.events.MovementEvent;
 import de.illonis.eduras.events.ObjectFactoryEvent;
 import de.illonis.eduras.events.SetBooleanGameObjectAttributeEvent;
 import de.illonis.eduras.events.SetGameModeEvent;
+import de.illonis.eduras.events.SetIntegerGameObjectAttributeEvent;
 import de.illonis.eduras.events.SetRemainingTimeEvent;
 import de.illonis.eduras.exceptions.InvalidNameException;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
 import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.logger.EduLog;
 import de.illonis.eduras.logic.EventTriggerer;
+import de.illonis.eduras.maps.FunMap;
 import de.illonis.eduras.maps.Map;
-import de.illonis.eduras.maps.SimpleMap;
 import de.illonis.eduras.math.Vector2D;
 import de.illonis.eduras.shapes.ObjectShape;
-import de.illonis.eduras.units.Player;
+import de.illonis.eduras.units.PlayerMainFigure;
 
 /**
  * Holds all game information of the current game.
@@ -31,7 +33,7 @@ import de.illonis.eduras.units.Player;
  */
 public class GameInformation {
 	private final ConcurrentHashMap<Integer, GameObject> objects;
-	private final ConcurrentHashMap<Integer, Player> players;
+	private final ConcurrentHashMap<Integer, PlayerMainFigure> players;
 	private Map map;
 	private EventTriggerer eventTriggerer;
 	private GameSettings gameSettings;
@@ -41,8 +43,8 @@ public class GameInformation {
 	 */
 	public GameInformation() {
 		objects = new ConcurrentHashMap<Integer, GameObject>();
-		players = new ConcurrentHashMap<Integer, Player>();
-		map = new SimpleMap();
+		players = new ConcurrentHashMap<Integer, PlayerMainFigure>();
+		map = new FunMap();
 		gameSettings = new GameSettings(this);
 
 	}
@@ -63,7 +65,7 @@ public class GameInformation {
 	 * 
 	 * @author illonis
 	 */
-	public Collection<Player> getPlayers() {
+	public Collection<PlayerMainFigure> getPlayers() {
 		return players.values();
 	}
 
@@ -159,7 +161,7 @@ public class GameInformation {
 			return true;
 		boolean playerRemoveSuccess = true;
 
-		if (go instanceof Player) {
+		if (go instanceof PlayerMainFigure) {
 			playerRemoveSuccess = players.remove(go.getOwner()) != null;
 		}
 
@@ -173,7 +175,7 @@ public class GameInformation {
 	 * @param player
 	 *            player to add.
 	 */
-	public void addPlayer(Player player) {
+	public void addPlayer(PlayerMainFigure player) {
 		players.put(player.getOwner(), player);
 	}
 
@@ -186,9 +188,9 @@ public class GameInformation {
 	 * @throws ObjectNotFoundException
 	 *             Thrown if there is no object found
 	 */
-	public Player getPlayerByOwnerId(int ownerId)
+	public PlayerMainFigure getPlayerByOwnerId(int ownerId)
 			throws ObjectNotFoundException {
-		Player result = players.get(ownerId);
+		PlayerMainFigure result = players.get(ownerId);
 		if (result == null) {
 			throw new ObjectNotFoundException(ownerId);
 		}
@@ -205,10 +207,10 @@ public class GameInformation {
 	 *             Thrown if there could be no player found that is related to
 	 *             the given id.
 	 */
-	public Player getPlayerByObjectId(int objectId)
+	public PlayerMainFigure getPlayerByObjectId(int objectId)
 			throws ObjectNotFoundException {
-		Player result = null;
-		for (Player singlePlayer : players.values()) {
+		PlayerMainFigure result = null;
+		for (PlayerMainFigure singlePlayer : players.values()) {
 			if (singlePlayer.getId() == objectId) {
 				result = singlePlayer;
 				break;
@@ -256,8 +258,9 @@ public class GameInformation {
 					object.isCollidable());
 			infos.add(colEvent);
 			infos.add(visEvent);
+
 		}
-		for (Player p : players.values()) {
+		for (PlayerMainFigure p : players.values()) {
 			try {
 				infos.add(new ClientRenameEvent(p.getOwner(), p.getName()));
 			} catch (InvalidNameException e) {
@@ -271,6 +274,22 @@ public class GameInformation {
 		SetRemainingTimeEvent remaining = new SetRemainingTimeEvent(
 				gameSettings.getRemainingTime());
 		infos.add(remaining);
+
+		// send statistics
+		Statistic stats = gameSettings.getStats();
+
+		for (PlayerMainFigure player : players.values()) {
+			int killsOfPlayer = stats.getKillsOfPlayer(player);
+			SetIntegerGameObjectAttributeEvent setKillsEvent = new SetIntegerGameObjectAttributeEvent(
+					GameEventNumber.SET_KILLS, player.getOwner(), killsOfPlayer);
+			infos.add(setKillsEvent);
+
+			int deathsOfPlayer = stats.getDeathsOfPlayer(player);
+			SetIntegerGameObjectAttributeEvent setDeathsEvent = new SetIntegerGameObjectAttributeEvent(
+					GameEventNumber.SET_DEATHS, player.getOwner(),
+					deathsOfPlayer);
+			infos.add(setDeathsEvent);
+		}
 
 		return infos;
 	}
@@ -304,6 +323,23 @@ public class GameInformation {
 	public void setMap(Map map) {
 		this.map = map;
 
+	}
+
+	/**
+	 * Checks whether any gameobject is within given bounds.
+	 * 
+	 * @param bounds
+	 *            rectangular shape.
+	 * @return true if object is in bounds.,
+	 * 
+	 * @author illonis
+	 */
+	public boolean isObjectWithin(Rectangle2D bounds) {
+		for (GameObject o : objects.values()) {
+			if (o.getBoundingBox().intersects(bounds))
+				return true;
+		}
+		return false;
 	}
 
 }

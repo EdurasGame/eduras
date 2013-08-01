@@ -48,6 +48,7 @@ public class Server {
 	 */
 	public final static int DEFAULT_PORT = 4387;
 
+	private final static String DEFAULT_NAME = "unnamed server";
 	private final Buffer inputBuffer, outputBuffer;
 	private final ServerSender serverSender;
 	private final HashMap<Integer, ServerReceiver> serverReceivers;
@@ -56,9 +57,12 @@ public class Server {
 	private GameLogicInterface logic;
 	private final int port;
 	private boolean running = true;
+	private final String name;
 
 	/**
 	 * Creates a new Server listening on default port.
+	 * 
+	 * @see Server#Server(String)
 	 */
 	public Server() {
 		this(DEFAULT_PORT);
@@ -71,12 +75,41 @@ public class Server {
 	 *            port to listen on.
 	 */
 	public Server(int port) {
+		this(port, DEFAULT_NAME);
+	}
+
+	/**
+	 * Creates a new server that listens on default port.
+	 * 
+	 * @param serverName
+	 *            name of the server.
+	 */
+	public Server(String serverName) {
+		this(DEFAULT_PORT, serverName);
+	}
+
+	/**
+	 * Creates a new server.
+	 * 
+	 * @param port
+	 *            port server listens on.
+	 * @param serverName
+	 *            name of the server.
+	 */
+	public Server(int port, String serverName) {
+		this.name = serverName;
 		this.port = port;
 		inputBuffer = new Buffer();
 		outputBuffer = new Buffer();
 		serverSender = new ServerSender(outputBuffer, null);
 		serverReceivers = new HashMap<Integer, ServerReceiver>();
+	}
 
+	/**
+	 * @return name of this server.
+	 */
+	public String getName() {
+		return name;
 	}
 
 	/**
@@ -127,7 +160,7 @@ public class Server {
 	public void setLogic(GameLogicInterface logic,
 			NetworkEventListener eventListener) {
 		this.logic = logic;
-		logic.addGameEventListener(new ServerGameEventListener(outputBuffer,
+		logic.setGameEventListener(new ServerGameEventListener(outputBuffer,
 				serverSender));
 		serverLogic = new ServerDecoder(inputBuffer, logic, eventListener);
 	}
@@ -306,14 +339,11 @@ public class Server {
 	 *            The event to send to all clients.
 	 */
 	public void sendEventToAll(Event event) {
-		String serializedEvent = "";
 		try {
-			serializedEvent = NetworkMessageSerializer.serialize(event);
+			serverSender.sendMessage(NetworkMessageSerializer.serialize(event));
 		} catch (MessageNotSupportedException e) {
 			EduLog.passException(e);
-			return;
 		}
-		serverSender.sendMessage(serializedEvent);
 	}
 
 	/**
@@ -345,7 +375,7 @@ public class Server {
 		}
 
 		gonePlayerEvent.setId(objectId);
-		logic.onGameEventAppeared(gonePlayerEvent);
+		// logic.getObjectFactory().onObjectFactoryEventAppeared(gonePlayerEvent);
 		sendEventToAll(gonePlayerEvent);
 	}
 

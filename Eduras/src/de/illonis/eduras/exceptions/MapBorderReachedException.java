@@ -1,4 +1,4 @@
-package de.illonis.eduras;
+package de.illonis.eduras.exceptions;
 
 /**
  * Thrown when calculating a move target position that is out of map.

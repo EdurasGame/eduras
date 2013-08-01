@@ -10,12 +10,12 @@ $(document).ready(function(){
      // $slideElement: jQuery element of the destination element
      // oldIndex: element index of the previous slide (before the transition)
      // newIndex: element index of the destination slide (after the transition)
-       if (newIndex == 4) {
+      /* if (newIndex == 4) {
          showRecaptcha();
        }
        else {
          Recaptcha.destroy();
-       }
+       } */
      }
   });
   

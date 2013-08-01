@@ -35,7 +35,7 @@ public abstract class NetworkOptimizer {
 
 		for (String string : unfilteredMessages) {
 
-			if (string == null)
+			if (string == null || string.isEmpty())
 				continue;
 
 			GameEventNumber n = NetworkMessageDeserializer

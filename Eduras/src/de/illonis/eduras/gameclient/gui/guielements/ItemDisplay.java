@@ -147,9 +147,8 @@ public class ItemDisplay extends ClickableGuiElement implements
 			itemSlots[slot].setItemImage(null);
 		} else {
 			String newName = newItem.getName();
-			if (ImageList.hasImageFor(newItem)) {
-				itemSlots[slot].setItemImage(ImageList.getImageFor(newItem));
-			}
+			itemSlots[slot].setItemImage(ImageList.getImageFor(newItem));
+
 			itemSlots[slot].setItem(newItem);
 			itemSlots[slot].setName(newName);
 		}

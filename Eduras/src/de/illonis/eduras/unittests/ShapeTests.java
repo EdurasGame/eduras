@@ -12,7 +12,7 @@ import org.junit.Test;
 import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.math.Vector2D;
 import de.illonis.eduras.shapes.Polygon;
-import de.illonis.eduras.units.Player;
+import de.illonis.eduras.units.PlayerMainFigure;
 
 /**
  * A unit test class for shapes.
@@ -29,7 +29,7 @@ public class ShapeTests {
 	 */
 	@Test
 	public void getAbsoluteVertices() {
-		Player player = new Player(new GameInformation(), 0, 0);
+		PlayerMainFigure player = new PlayerMainFigure(new GameInformation(), 0, 0);
 		player.setPosition(5, 5);
 
 		if (player.getShape() instanceof Polygon) {

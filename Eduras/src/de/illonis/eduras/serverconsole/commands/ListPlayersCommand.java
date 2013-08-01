@@ -4,7 +4,7 @@ import java.util.Collection;
 
 import de.illonis.eduras.logic.ConsoleEventTriggerer;
 import de.illonis.eduras.serverconsole.ServerConsole;
-import de.illonis.eduras.units.Player;
+import de.illonis.eduras.units.PlayerMainFigure;
 
 /**
  * A command that lists all players currently online.
@@ -25,11 +25,11 @@ public class ListPlayersCommand extends ConsoleCommand {
 	@Override
 	public void onCommand(String[] args, ServerConsole console,
 			ConsoleEventTriggerer triggerer) {
-		Collection<Player> players = triggerer.getPlayers();
+		Collection<PlayerMainFigure> players = triggerer.getPlayers();
 		if (players.isEmpty())
 			console.println("No players online.");
 		else {
-			for (Player player : players) {
+			for (PlayerMainFigure player : players) {
 				console.printlnf("%d - %s", player.getOwner(), player.getName());
 			}
 		}

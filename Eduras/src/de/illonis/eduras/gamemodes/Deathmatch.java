@@ -4,7 +4,8 @@ import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.ObjectFactory.ObjectType;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
 import de.illonis.eduras.logger.EduLog;
-import de.illonis.eduras.units.Player;
+import de.illonis.eduras.logic.EventTriggerer;
+import de.illonis.eduras.units.PlayerMainFigure;
 import de.illonis.eduras.units.Unit;
 
 /**
@@ -36,17 +37,25 @@ public class Deathmatch implements GameMode {
 
 		try {
 			// TODO: should not track npc kills this way.
-			Player killer = gameInfo.getPlayerByOwnerId(killingPlayer);
+			PlayerMainFigure killer = gameInfo
+					.getPlayerByOwnerId(killingPlayer);
+			if (killedUnit instanceof PlayerMainFigure) {
+				EventTriggerer et = gameInfo.getEventTriggerer();
+				// need to check here because client has no event triggerer.
+				// TODO: find a solution for client-workaraound.
+				if (et != null)
+					gameInfo.getEventTriggerer().respawnPlayer(
+							(PlayerMainFigure) killedUnit);
+				gameInfo.getGameSettings().getStats()
+						.addDeathForPlayer((PlayerMainFigure) killedUnit);
+			}
+			if (killer.equals(killedUnit))
+				return;
 			gameInfo.getGameSettings().getStats().addKillForPlayer(killer);
 		} catch (ObjectNotFoundException e) {
 			EduLog.passException(e);
 		}
 
-		if (killedUnit instanceof Player) {
-			gameInfo.getEventTriggerer().respawnPlayer((Player) killedUnit);
-			gameInfo.getGameSettings().getStats()
-					.addDeathForPlayer((Player) killedUnit);
-		}
 	}
 
 	@Override
@@ -59,8 +68,15 @@ public class Deathmatch implements GameMode {
 	@Override
 	public void onConnect(int ownerId) {
 
-		// simply create the player
+		// simply create the player and respawn it somewhere
 		gameInfo.getEventTriggerer().createObject(ObjectType.PLAYER, ownerId);
+
+		try {
+			gameInfo.getEventTriggerer().respawnPlayer(
+					gameInfo.getPlayerByOwnerId(ownerId));
+		} catch (ObjectNotFoundException e) {
+			EduLog.passException(e);
+		}
 
 		// and add it to the statistic
 		gameInfo.getGameSettings().getStats().addPlayerToStats(ownerId);

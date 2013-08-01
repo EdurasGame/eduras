@@ -12,7 +12,7 @@ import de.illonis.eduras.exceptions.ObjectNotFoundException;
 import de.illonis.eduras.gamemodes.GameMode;
 import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.maps.Map;
-import de.illonis.eduras.units.Player;
+import de.illonis.eduras.units.PlayerMainFigure;
 
 /**
  * This interface determines what information must be provided to the GUI.
@@ -38,7 +38,7 @@ public interface InfoInterface {
 	 * @throws ObjectNotFoundException
 	 *             Thrown if the player could not be found.
 	 */
-	public Player getPlayer() throws ObjectNotFoundException;
+	public PlayerMainFigure getPlayer() throws ObjectNotFoundException;
 
 	/**
 	 * Returns the game objects currently in the game.
@@ -54,7 +54,7 @@ public interface InfoInterface {
 	 * 
 	 * @author illonis
 	 */
-	public Collection<Player> getPlayers();
+	public Collection<PlayerMainFigure> getPlayers();
 
 	/**
 	 * Returns game statistics.
@@ -92,7 +92,7 @@ public interface InfoInterface {
 	 * @throws ObjectNotFoundException
 	 *             if player does not exist.
 	 */
-	public Player getPlayerByOwnerId(int ownerId)
+	public PlayerMainFigure getPlayerByOwnerId(int ownerId)
 			throws ObjectNotFoundException;
 
 	/**

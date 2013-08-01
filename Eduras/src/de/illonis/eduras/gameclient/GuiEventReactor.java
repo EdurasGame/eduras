@@ -6,6 +6,7 @@ import de.illonis.eduras.ObjectFactory.ObjectType;
 import de.illonis.eduras.events.ClientRenameEvent;
 import de.illonis.eduras.events.DeathEvent;
 import de.illonis.eduras.events.GameEvent;
+import de.illonis.eduras.events.ItemEvent;
 import de.illonis.eduras.events.MatchEndEvent;
 import de.illonis.eduras.events.ObjectFactoryEvent;
 import de.illonis.eduras.events.SetGameObjectAttributeEvent;
@@ -18,12 +19,12 @@ import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.interfaces.GameEventListener;
 
 /**
- * Reacts on game events on client side and passes them to client logic and gui.
+ * Reacts on game events on client side and passes them to gui.
  * 
  * @author illonis
  * 
  */
-public class GameEventReactor implements GameEventListener {
+public class GuiEventReactor implements GameEventListener {
 
 	private final EventListenerGui ui;
 
@@ -33,7 +34,7 @@ public class GameEventReactor implements GameEventListener {
 	 * @param ui
 	 *            associated user interface event listener.
 	 */
-	public GameEventReactor(EventListenerGui ui) {
+	public GuiEventReactor(EventListenerGui ui) {
 		this.ui = ui;
 	}
 
@@ -103,5 +104,15 @@ public class GameEventReactor implements GameEventListener {
 	@Override
 	public void onDeath(DeathEvent event) {
 		ui.onDeath(event);
+	}
+
+	@Override
+	public void onCooldownStarted(ItemEvent event) {
+		ui.onCooldownStarted(event);
+	}
+
+	@Override
+	public void onCooldownFinished(ItemEvent event) {
+		ui.onCooldownFinished(event);
 	}
 }

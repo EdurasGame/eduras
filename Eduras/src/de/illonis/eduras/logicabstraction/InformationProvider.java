@@ -14,7 +14,7 @@ import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.interfaces.GameEventListener;
 import de.illonis.eduras.interfaces.GameLogicInterface;
 import de.illonis.eduras.interfaces.InfoInterface;
-import de.illonis.eduras.units.Player;
+import de.illonis.eduras.units.PlayerMainFigure;
 
 /**
  * This class provides a connection between GUI and logic. GUI developers can
@@ -61,7 +61,7 @@ public class InformationProvider implements InfoInterface {
 	}
 
 	@Override
-	public Player getPlayer() throws ObjectNotFoundException {
+	public PlayerMainFigure getPlayer() throws ObjectNotFoundException {
 		return logic.getGame().getPlayerByOwnerId(getOwnerID());
 	}
 
@@ -77,7 +77,7 @@ public class InformationProvider implements InfoInterface {
 	 *            The listener.
 	 */
 	public void addEventListener(GameEventListener listener) {
-		logic.addGameEventListener(listener);
+		logic.setGameEventListener(listener);
 	}
 
 	@Override
@@ -91,7 +91,7 @@ public class InformationProvider implements InfoInterface {
 	}
 
 	@Override
-	public Collection<Player> getPlayers() {
+	public Collection<PlayerMainFigure> getPlayers() {
 		return logic.getGame().getPlayers();
 	}
 
@@ -101,7 +101,7 @@ public class InformationProvider implements InfoInterface {
 	}
 
 	@Override
-	public Player getPlayerByOwnerId(int ownerId)
+	public PlayerMainFigure getPlayerByOwnerId(int ownerId)
 			throws ObjectNotFoundException {
 		return logic.getGame().getPlayerByOwnerId(ownerId);
 	}

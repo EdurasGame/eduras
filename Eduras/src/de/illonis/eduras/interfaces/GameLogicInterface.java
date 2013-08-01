@@ -1,7 +1,5 @@
 package de.illonis.eduras.interfaces;
 
-import java.util.ArrayList;
-
 import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.ObjectFactory;
 import de.illonis.eduras.events.GameEvent;
@@ -33,27 +31,20 @@ public interface GameLogicInterface {
 	public GameInformation getGame();
 
 	/**
-	 * Registers given listener for world-change events.
+	 * Registers given listener for world-change events. Note that only one
+	 * listener can be registered at once.
 	 * 
 	 * @param listener
 	 *            Listener to register.
 	 */
-	public void addGameEventListener(GameEventListener listener);
+	public void setGameEventListener(GameEventListener listener);
 
 	/**
-	 * Unregisters given listener for world-change events.
+	 * Returns the listener.
 	 * 
-	 * @param listener
-	 *            Listener to unregister.
+	 * @return listener.
 	 */
-	public void removeGameEventListener(GameEventListener listener);
-
-	/**
-	 * Returns all listeners as list.
-	 * 
-	 * @return listener list.
-	 */
-	public ArrayList<GameEventListener> getListenerList();
+	public GameEventListener getListener();
 
 	/**
 	 * Indicates shutdown of server/client.

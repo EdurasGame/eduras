@@ -8,7 +8,7 @@ import de.illonis.eduras.items.Item;
 import de.illonis.eduras.items.ItemUseInformation;
 import de.illonis.eduras.items.Lootable;
 import de.illonis.eduras.items.Usable;
-import de.illonis.eduras.units.Player;
+import de.illonis.eduras.units.PlayerMainFigure;
 
 /**
  * A weapon holds a missile prototype that is used for shooting.
@@ -92,24 +92,41 @@ public abstract class Weapon extends Item implements Lootable, Usable {
 	}
 
 	@Override
-	public long getCooldownTime() {
+	public final long getCooldownTime() {
 		return defaultCooldown;
 	}
 
 	@Override
-	public void reduceCooldown(long value) {
+	public final void reduceCooldown(long value) {
 		cooldown = Math.max(0, cooldown - value);
 	}
 
 	@Override
-	public void resetCooldown() {
+	public final void resetCooldown() {
 		cooldown = 0;
 	}
 
 	@Override
-	public void use(ItemUseInformation info) {
+	public final void startCooldown() {
 		cooldown = defaultCooldown;
 	}
+
+	@Override
+	public final void use(ItemUseInformation info) {
+		if (!hasCooldown()) {
+			startCooldown();
+			doIfReady(info);
+		}
+	}
+
+	/**
+	 * Performs given action if weapon is ready. If weapon is not ready, no
+	 * action will performed.
+	 * 
+	 * @param info
+	 *            item use information.
+	 */
+	protected abstract void doIfReady(ItemUseInformation info);
 
 	@Override
 	public boolean hasCooldown() {
@@ -128,7 +145,7 @@ public abstract class Weapon extends Item implements Lootable, Usable {
 	 * @throws NoAmmunitionException
 	 */
 	public Missile getAMissile() throws NoAmmunitionException {
-		return missile.spawn();
+		return null;
 	}
 
 	@Override
@@ -163,7 +180,7 @@ public abstract class Weapon extends Item implements Lootable, Usable {
 			return;
 		}
 
-		Player player = (Player) collidingObject;
+		PlayerMainFigure player = (PlayerMainFigure) collidingObject;
 		getGame().getEventTriggerer().lootItem(getId(), player.getId());
 
 	}

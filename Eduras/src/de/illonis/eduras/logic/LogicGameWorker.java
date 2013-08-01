@@ -1,9 +1,4 @@
-/**
- * 
- */
 package de.illonis.eduras.logic;
-
-import java.util.ArrayList;
 
 import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.events.GameEvent.GameEventNumber;
@@ -33,7 +28,7 @@ public class LogicGameWorker implements Runnable {
 	private boolean running = false;
 
 	private final GameInformation gameInformation;
-	private ArrayList<GameEventListener> listenerList;
+	private ListenerHolder<? extends GameEventListener> listenerHolder;
 
 	private long lastUpdate;
 
@@ -42,13 +37,13 @@ public class LogicGameWorker implements Runnable {
 	 * 
 	 * @param gameInfo
 	 *            information used.
-	 * @param listenerList
-	 *            listeners.
+	 * @param listenerHolder
+	 *            a placeholder for later attached listener.
 	 */
 	public LogicGameWorker(GameInformation gameInfo,
-			ArrayList<GameEventListener> listenerList) {
+			ListenerHolder<? extends GameEventListener> listenerHolder) {
 		this.gameInformation = gameInfo;
-		this.listenerList = listenerList;
+		this.listenerHolder = listenerHolder;
 	}
 
 	/*
@@ -137,18 +132,19 @@ public class LogicGameWorker implements Runnable {
 							GameEventNumber.SET_VISIBLE, o.getId(), true);
 					o.setCollidable(true);
 					o.setVisible(true);
-					for (GameEventListener listener : listenerList) {
-						listener.onObjectStateChanged(sv);
-						listener.onObjectStateChanged(sc);
+					if (listenerHolder.hasListener()) {
+						listenerHolder.getListener().onObjectStateChanged(sv);
+						listenerHolder.getListener().onObjectStateChanged(sc);
+
 					}
 				}
 			}
 			if (o instanceof MoveableGameObject) {
 				if (!((MoveableGameObject) o).getSpeedVector().isNull()) {
 					((MoveableGameObject) o).onMove(delta);
-					for (GameEventListener listener : listenerList) {
-						listener.onNewObjectPosition(o);
-					}
+					if (listenerHolder.hasListener())
+						listenerHolder.getListener().onNewObjectPosition(o);
+
 				}
 			}
 		}

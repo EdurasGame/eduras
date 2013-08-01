@@ -70,6 +70,7 @@ public class ClientFrame extends JFrame implements NetworkEventReactor,
 		cml = new CameraMouseListener(camera);
 
 		buildGui();
+		showLogin();
 	}
 
 	private void buildGui() {
@@ -114,6 +115,7 @@ public class ClientFrame extends JFrame implements NetworkEventReactor,
 	 */
 	public void showLogin() {
 		cardLayout.show(getContentPane(), LOGINPANEL);
+		client.startDiscovery(loginPanel);
 	}
 
 	/**
@@ -185,10 +187,13 @@ public class ClientFrame extends JFrame implements NetworkEventReactor,
 	@Override
 	public void onDisconnect(int clientId) {
 		if (clientId == client.getOwnerID()) {
+			camera.stopMoving();
 			gamePanel.stopRendering();
 			cml.stop();
+			client.stopDiscovery();
 			dispose();
 		}
+
 	}
 
 	@Override
@@ -198,6 +203,7 @@ public class ClientFrame extends JFrame implements NetworkEventReactor,
 	}
 
 	private void loginAction() {
+		client.stopDiscovery();
 		String clientName = loginPanel.getUserName();
 		client.setClientName(clientName);
 		client.setRole(loginPanel.getRole());
