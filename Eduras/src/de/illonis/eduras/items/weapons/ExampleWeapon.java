@@ -34,11 +34,6 @@ public class ExampleWeapon extends Weapon {
 		defaultCooldown = 300;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see de.illonis.eduras.items.Usable#use(de.illonis.eduras.GameObject)
-	 */
 	@Override
 	public void use(ItemUseInformation info) {
 		// (jme) Spawn position will be calculated in a simplified way. We use
@@ -63,6 +58,7 @@ public class ExampleWeapon extends Weapon {
 			getGame().getEventTriggerer()
 					.createMissile(ObjectType.SIMPLEMISSILE, getOwner(),
 							position, speedVector);
+
 		}
 	}
 }

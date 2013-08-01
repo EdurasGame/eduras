@@ -107,8 +107,13 @@ public abstract class Weapon extends Item implements Lootable, Usable {
 	}
 
 	@Override
-	public void use(ItemUseInformation info) {
+	public void startCooldown() {
 		cooldown = defaultCooldown;
+	}
+
+	@Override
+	public void use(ItemUseInformation info) {
+		startCooldown();
 	}
 
 	@Override

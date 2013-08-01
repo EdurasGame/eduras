@@ -140,10 +140,11 @@ public class ServerLogic implements GameLogicInterface {
 		switch (itemEvent.getType()) {
 		case ITEM_USE:
 		case ITEM_CD_START:
-			if (item.isUsable())
+			if (item.isUsable() && !((Usable) item).hasCooldown()) {
 				((Usable) item).use(useInfo);
-			for (GameEventListener listener : listenerList) {
-				listener.onCooldownStarted(cooldownEvent);
+				for (GameEventListener listener : listenerList) {
+					listener.onCooldownStarted(cooldownEvent);
+				}
 			}
 			break;
 		case ITEM_CD_FINISHED:

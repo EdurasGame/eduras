@@ -28,7 +28,6 @@ import de.illonis.eduras.interfaces.GameEventListener;
 import de.illonis.eduras.interfaces.GameLogicInterface;
 import de.illonis.eduras.inventory.ItemSlotIsEmptyException;
 import de.illonis.eduras.items.Item;
-import de.illonis.eduras.items.ItemUseInformation;
 import de.illonis.eduras.items.Usable;
 import de.illonis.eduras.logger.EduLog;
 import de.illonis.eduras.units.PlayerMainFigure;
@@ -256,11 +255,9 @@ public class ClientLogic implements GameLogicInterface {
 		try {
 			item = player.getInventory().getItemBySlot(itemEvent.getSlotNum());
 		} catch (ItemSlotIsEmptyException e) {
-			EduLog.log(Level.INFO, e.getMessage());
+			EduLog.log(Level.WARNING, e.getMessage());
 			return;
 		}
-		ItemUseInformation useInfo = new ItemUseInformation(player,
-				itemEvent.getTarget());
 		ItemEvent cooldownEvent = new ItemEvent(GameEventNumber.ITEM_CD_START,
 				itemEvent.getOwner(), itemEvent.getSlotNum());
 
@@ -268,7 +265,7 @@ public class ClientLogic implements GameLogicInterface {
 		case ITEM_USE:
 		case ITEM_CD_START:
 			if (item.isUsable())
-				((Usable) item).use(useInfo);
+				((Usable) item).startCooldown();
 			for (GameEventListener listener : listenerList) {
 				listener.onCooldownStarted(cooldownEvent);
 			}

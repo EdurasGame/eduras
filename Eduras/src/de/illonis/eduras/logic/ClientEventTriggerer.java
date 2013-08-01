@@ -33,6 +33,7 @@ public class ClientEventTriggerer implements EventTriggerer {
 
 	@Override
 	public void lootItem(int objectId, int playerId) {
+		System.out.println("client loot");
 	}
 
 	@Override
