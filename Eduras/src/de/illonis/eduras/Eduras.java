@@ -15,10 +15,11 @@ import de.illonis.eduras.locale.Localization;
 import de.illonis.eduras.logger.EduLog;
 import de.illonis.eduras.logger.EduLog.LogMode;
 import de.illonis.eduras.logic.ConsoleEventTriggerer;
-import de.illonis.eduras.logic.ServerLogic;
 import de.illonis.eduras.logic.ServerEventTriggerer;
+import de.illonis.eduras.logic.ServerLogic;
 import de.illonis.eduras.maps.FunMap;
 import de.illonis.eduras.networking.Server;
+import de.illonis.eduras.networking.discover.ServerDiscoveryListener;
 import de.illonis.eduras.serverconsole.NoConsoleException;
 import de.illonis.eduras.serverconsole.ServerConsole;
 import de.illonis.eduras.serverconsole.commands.CommandInitializer;
@@ -44,7 +45,7 @@ public class Eduras {
 		// new LoggerGui().setVisible(true);
 		EduLog.setLogOutput(LogMode.CONSOLE);
 		EduLog.setLogLimit(Level.WARNING);
-		int port = 0;
+		int port = Server.DEFAULT_PORT;
 		if (args.length > 0) {
 			try {
 				port = Integer.parseInt(args[0]);
@@ -57,12 +58,7 @@ public class Eduras {
 
 		EduLog.info(Localization.getString("Server.startstart"));
 
-		Server server;
-		if (port > 0) {
-			server = new Server(port);
-		} else {
-			server = new Server();
-		}
+		Server server = new Server(port);
 
 		GameInformation gameInfo = new GameInformation();
 		ServerLogic logic = new ServerLogic(gameInfo);
@@ -100,6 +96,10 @@ public class Eduras {
 		} catch (NoConsoleException e1) {
 			EduLog.passException(e1);
 		}
+
+		ServerDiscoveryListener sdl = new ServerDiscoveryListener(
+				server.getName(), port);
+		sdl.start();
 
 	}
 
