@@ -160,7 +160,7 @@ public class Server {
 	public void setLogic(GameLogicInterface logic,
 			NetworkEventListener eventListener) {
 		this.logic = logic;
-		logic.addGameEventListener(new ServerGameEventListener(outputBuffer,
+		logic.setGameEventListener(new ServerGameEventListener(outputBuffer,
 				serverSender));
 		serverLogic = new ServerDecoder(inputBuffer, logic, eventListener);
 	}

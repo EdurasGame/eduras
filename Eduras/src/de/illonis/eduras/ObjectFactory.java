@@ -9,7 +9,6 @@ import de.illonis.eduras.gameobjects.BigBlock;
 import de.illonis.eduras.gameobjects.BiggerBlock;
 import de.illonis.eduras.gameobjects.Building;
 import de.illonis.eduras.gameobjects.GameObject;
-import de.illonis.eduras.interfaces.GameEventListener;
 import de.illonis.eduras.interfaces.GameLogicInterface;
 import de.illonis.eduras.items.weapons.ExampleWeapon;
 import de.illonis.eduras.items.weapons.SimpleMissile;
@@ -82,11 +81,7 @@ public class ObjectFactory {
 	 *            {@link SetGameObjectAttributeEvent} that occured.
 	 */
 	public void onObjectAttributeChanged(SetGameObjectAttributeEvent<?> event) {
-
-		for (GameEventListener listener : logic.getListenerList()) {
-			listener.onObjectStateChanged(event);
-		}
-
+		logic.getListener().onObjectStateChanged(event);
 	}
 
 	/**
@@ -172,10 +167,13 @@ public class ObjectFactory {
 			if (go != null)
 				logic.getGame().addObject(go);
 
-			for (GameEventListener gel : logic.getListenerList()) {
-				gel.onObjectCreation(event);
+			try {
+				logic.getListener().onObjectCreation(event);
+			} catch (IllegalStateException e) {
+				// (jme) we need to catch it here because a listener is not
+				// assigned on initial map creation.
 			}
-			// game.addObject(go);
+
 		}
 
 		else if (event.getType() == GameEventNumber.OBJECT_REMOVE) {
@@ -184,9 +182,8 @@ public class ObjectFactory {
 			GameObject objectToRemove = logic.getGame().getObjects().get(id);
 			logic.getGame().removeObject(objectToRemove);
 
-			for (GameEventListener gel : logic.getListenerList()) {
-				gel.onObjectRemove(event);
-			}
+			logic.getListener().onObjectRemove(event);
+
 		}
 	}
 }

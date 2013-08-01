@@ -19,12 +19,12 @@ import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.interfaces.GameEventListener;
 
 /**
- * Reacts on game events on client side and passes them to client logic and gui.
+ * Reacts on game events on client side and passes them to gui.
  * 
  * @author illonis
  * 
  */
-public class GameEventReactor implements GameEventListener {
+public class GuiEventReactor implements GameEventListener {
 
 	private final EventListenerGui ui;
 
@@ -34,7 +34,7 @@ public class GameEventReactor implements GameEventListener {
 	 * @param ui
 	 *            associated user interface event listener.
 	 */
-	public GameEventReactor(EventListenerGui ui) {
+	public GuiEventReactor(EventListenerGui ui) {
 		this.ui = ui;
 	}
 

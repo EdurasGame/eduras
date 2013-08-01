@@ -77,7 +77,7 @@ public class InformationProvider implements InfoInterface {
 	 *            The listener.
 	 */
 	public void addEventListener(GameEventListener listener) {
-		logic.addGameEventListener(listener);
+		logic.setGameEventListener(listener);
 	}
 
 	@Override

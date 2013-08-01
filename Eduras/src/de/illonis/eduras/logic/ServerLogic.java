@@ -33,7 +33,7 @@ public class ServerLogic implements GameLogicInterface {
 	private final GameInformation gameInfo;
 	private final ObjectFactory objectFactory;
 	private final LogicGameWorker lgw;
-	private final ArrayList<GameEventListener> listenerList;
+	private final ListenerHolder<GameEventListener> listenerHolder;
 
 	/**
 	 * Creates a new logic.
@@ -42,11 +42,10 @@ public class ServerLogic implements GameLogicInterface {
 	 *            information to use.
 	 */
 	public ServerLogic(GameInformation g) {
-
+		listenerHolder = new ListenerHolder<GameEventListener>();
 		this.gameInfo = g;
-		listenerList = new ArrayList<GameEventListener>();
 		objectFactory = new ObjectFactory(this);
-		lgw = new LogicGameWorker(gameInfo, listenerList);
+		lgw = new LogicGameWorker(gameInfo, listenerHolder);
 		Thread gameWorker = new Thread(lgw);
 		gameWorker.setName("LogicGameWorker");
 		gameWorker.start();
@@ -71,10 +70,10 @@ public class ServerLogic implements GameLogicInterface {
 
 		case INFORMATION_REQUEST:
 			ArrayList<GameEvent> infos = gameInfo.getAllInfosAsEvent();
-			for (GameEventListener listener : listenerList) {
-				listener.onInformationRequested(infos,
-						((GameInfoRequest) event).getRequester());
-			}
+
+			getListener().onInformationRequested(infos,
+					((GameInfoRequest) event).getRequester());
+
 			break;
 		case CLIENT_SETNAME:
 			ClientRenameEvent e = (ClientRenameEvent) event;
@@ -92,9 +91,8 @@ public class ServerLogic implements GameLogicInterface {
 					+ " playerowner=" + p.getOwner());
 			p.setName(e.getName());
 
-			for (GameEventListener listener : listenerList) {
-				listener.onClientRename(e);
-			}
+			getListener().onClientRename(e);
+
 			break;
 		case ITEM_USE:
 			ItemEvent itemEvent = (ItemEvent) event;
@@ -142,9 +140,9 @@ public class ServerLogic implements GameLogicInterface {
 		case ITEM_CD_START:
 			if (item.isUsable() && !((Usable) item).hasCooldown()) {
 				((Usable) item).use(useInfo);
-				for (GameEventListener listener : listenerList) {
-					listener.onCooldownStarted(cooldownEvent);
-				}
+
+				getListener().onCooldownStarted(cooldownEvent);
+
 			}
 			break;
 		case ITEM_CD_FINISHED:
@@ -152,9 +150,7 @@ public class ServerLogic implements GameLogicInterface {
 				((Usable) item).resetCooldown();
 
 			cooldownEvent.setType(GameEventNumber.ITEM_CD_FINISHED);
-			for (GameEventListener listener : listenerList) {
-				listener.onCooldownFinished(cooldownEvent);
-			}
+			getListener().onCooldownFinished(cooldownEvent);
 			break;
 		default:
 			break;
@@ -212,13 +208,8 @@ public class ServerLogic implements GameLogicInterface {
 	}
 
 	@Override
-	public void addGameEventListener(GameEventListener listener) {
-		listenerList.add(listener);
-	}
-
-	@Override
-	public void removeGameEventListener(GameEventListener listener) {
-		listenerList.remove(listener);
+	public void setGameEventListener(GameEventListener listener) {
+		listenerHolder.setListener(listener);
 	}
 
 	@Override
@@ -227,8 +218,8 @@ public class ServerLogic implements GameLogicInterface {
 	}
 
 	@Override
-	public ArrayList<GameEventListener> getListenerList() {
-		return listenerList;
+	public GameEventListener getListener() {
+		return listenerHolder.getListener();
 	}
 
 	@Override

@@ -1,6 +1,5 @@
 package de.illonis.eduras.logic;
 
-import java.util.ArrayList;
 import java.util.logging.Level;
 
 import de.illonis.eduras.GameInformation;
@@ -44,7 +43,7 @@ public class ClientLogic implements GameLogicInterface {
 	private final GameInformation gameInfo;
 	private final ObjectFactory objectFactory;
 	private final LogicGameWorker lgw;
-	private final ArrayList<GameEventListener> listenerList;
+	private final ListenerHolder<GameEventListener> listenerHolder;
 
 	/**
 	 * Create ClientLogic instant.
@@ -55,9 +54,9 @@ public class ClientLogic implements GameLogicInterface {
 	 */
 	public ClientLogic(GameInformation g) {
 		this.gameInfo = g;
-		listenerList = new ArrayList<GameEventListener>();
 		objectFactory = new ObjectFactory(this);
-		lgw = new LogicGameWorker(gameInfo, listenerList);
+		listenerHolder = new ListenerHolder<GameEventListener>();
+		lgw = new LogicGameWorker(gameInfo, listenerHolder);
 		Thread gameWorker = new Thread(lgw);
 		gameWorker.setName("LogicGameWorker");
 		gameWorker.start();
@@ -85,9 +84,8 @@ public class ClientLogic implements GameLogicInterface {
 				o.setYPosition(newYPos);
 				o.setXPosition(newXPos);
 
-				for (GameEventListener gameEventListener : listenerList) {
-					gameEventListener.onNewObjectPosition(o);
-				}
+				getListener().onNewObjectPosition(o);
+
 				break;
 			case SETHEALTH:
 				SetIntegerGameObjectAttributeEvent healthEvent = (SetIntegerGameObjectAttributeEvent) event;
@@ -98,9 +96,7 @@ public class ClientLogic implements GameLogicInterface {
 				Unit unit = (Unit) obj;
 				unit.setHealth(healthEvent.getNewValue());
 
-				for (GameEventListener gameEventListener : listenerList) {
-					gameEventListener.onHealthChanged(healthEvent);
-				}
+				getListener().onHealthChanged(healthEvent);
 
 				break;
 			case SETMAXHEALTH:
@@ -112,9 +108,8 @@ public class ClientLogic implements GameLogicInterface {
 				Unit u = (Unit) gobj;
 				u.setMaxHealth(mhealthEvent.getNewValue());
 
-				for (GameEventListener gameEventListener : listenerList) {
-					gameEventListener.onHealthChanged(mhealthEvent);
-				}
+				getListener().onHealthChanged(mhealthEvent);
+
 				break;
 
 			case DEATH:
@@ -124,9 +119,8 @@ public class ClientLogic implements GameLogicInterface {
 					Unit un = (Unit) killed;
 					gameInfo.getGameSettings().getGameMode()
 							.onDeath(un, de.getKillerOwner());
-					for (GameEventListener listener : listenerList) {
-						listener.onDeath(de);
-					}
+					getListener().onDeath(de);
+
 				}
 
 				break;
@@ -146,9 +140,8 @@ public class ClientLogic implements GameLogicInterface {
 						+ p.getId() + " playerowner=" + p.getOwner());
 				p.setName(e.getName());
 
-				for (GameEventListener listener : listenerList) {
-					listener.onClientRename(e);
-				}
+				getListener().onClientRename(e);
+
 				break;
 			case ITEM_CD_START:
 			case ITEM_CD_FINISHED:
@@ -172,14 +165,12 @@ public class ClientLogic implements GameLogicInterface {
 				} catch (ObjectNotFoundException e1) {
 					EduLog.passException(e1);
 				}
-				for (GameEventListener listener : listenerList) {
-					listener.onItemSlotChanged(slotEvent);
-				}
+				getListener().onItemSlotChanged(slotEvent);
+
 				break;
 			case MATCH_END:
-				for (GameEventListener listener : listenerList) {
-					listener.onMatchEnd((MatchEndEvent) event);
-				}
+				getListener().onMatchEnd((MatchEndEvent) event);
+
 				break;
 			case SET_GAMEMODE:
 				SetGameModeEvent modeChangeEvent = (SetGameModeEvent) event;
@@ -196,18 +187,16 @@ public class ClientLogic implements GameLogicInterface {
 
 				gameInfo.getGameSettings().changeGameMode(newGameMode);
 
-				for (GameEventListener listener : listenerList) {
-					listener.onGameModeChanged(newGameMode);
-				}
+				getListener().onGameModeChanged(newGameMode);
+
 				break;
 			case SET_OWNER:
 				SetOwnerEvent setownerEvent = (SetOwnerEvent) event;
 				Item item = (Item) gameInfo.findObjectById(setownerEvent
 						.getObjectId());
 				item.setOwner(setownerEvent.getOwner());
-				for (GameEventListener listener : listenerList) {
-					listener.onOwnerChanged(setownerEvent);
-				}
+				getListener().onOwnerChanged(setownerEvent);
+
 				break;
 			case SET_KILLS:
 				SetIntegerGameObjectAttributeEvent setKillsEvent = (SetIntegerGameObjectAttributeEvent) event;
@@ -266,18 +255,16 @@ public class ClientLogic implements GameLogicInterface {
 		case ITEM_CD_START:
 			if (item.isUsable())
 				((Usable) item).startCooldown();
-			for (GameEventListener listener : listenerList) {
-				listener.onCooldownStarted(cooldownEvent);
-			}
+			getListener().onCooldownStarted(cooldownEvent);
+
 			break;
 		case ITEM_CD_FINISHED:
 			if (item.isUsable())
 				((Usable) item).resetCooldown();
 
 			cooldownEvent.setType(GameEventNumber.ITEM_CD_FINISHED);
-			for (GameEventListener listener : listenerList) {
-				listener.onCooldownFinished(cooldownEvent);
-			}
+			getListener().onCooldownFinished(cooldownEvent);
+
 			break;
 		default:
 			break;
@@ -306,20 +293,8 @@ public class ClientLogic implements GameLogicInterface {
 		default:
 		}
 
-		for (GameEventListener listener : listenerList) {
-			listener.onObjectStateChanged(event);
-		}
+		getListener().onObjectStateChanged(event);
 
-	}
-
-	@Override
-	public void addGameEventListener(GameEventListener listener) {
-		listenerList.add(listener);
-	}
-
-	@Override
-	public void removeGameEventListener(GameEventListener listener) {
-		listenerList.remove(listener);
 	}
 
 	@Override
@@ -328,8 +303,8 @@ public class ClientLogic implements GameLogicInterface {
 	}
 
 	@Override
-	public ArrayList<GameEventListener> getListenerList() {
-		return listenerList;
+	public GameEventListener getListener() {
+		return listenerHolder.getListener();
 	}
 
 	@Override
@@ -340,6 +315,11 @@ public class ClientLogic implements GameLogicInterface {
 	@Override
 	public ObjectFactory getObjectFactory() {
 		return objectFactory;
+	}
+
+	@Override
+	public void setGameEventListener(GameEventListener listener) {
+		listenerHolder.setListener(listener);
 	}
 
 }
