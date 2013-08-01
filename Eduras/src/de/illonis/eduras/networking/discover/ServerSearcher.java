@@ -18,7 +18,15 @@ import de.illonis.eduras.logger.EduLog;
  */
 public class ServerSearcher extends Thread {
 	private DatagramSocket c;
-	private final ServerFoundListener listener;
+	private ServerFoundListener listener;
+
+	/**
+	 * Creates a new server searcher. The listener must be applied later before
+	 * starting.
+	 */
+	public ServerSearcher() {
+		super("ServerSearcher");
+	}
 
 	/**
 	 * Creates a new server searcher.
@@ -27,12 +35,26 @@ public class ServerSearcher extends Thread {
 	 *            the listener object that receives the found servers.
 	 */
 	public ServerSearcher(ServerFoundListener answerListener) {
-		super("ServerSearcher");
+		this();
 		this.listener = answerListener;
+	}
+
+	/**
+	 * Sets the listener.
+	 * 
+	 * @param listener
+	 *            new listener.
+	 */
+	public void setListener(ServerFoundListener listener) {
+		this.listener = listener;
 	}
 
 	@Override
 	public void run() {
+		if (listener == null) {
+			throw new IllegalStateException(
+					"There is no listener attached to ServerSearcher.");
+		}
 		// Find the server using UDP broadcast
 		try {
 			// Open a random port to send the package
@@ -113,8 +135,9 @@ public class ServerSearcher extends Thread {
 				int port = 0;
 				try {
 					port = Integer.parseInt(msgparts[2]);
-					listener.onServerFound(msgparts[1],
+					ServerInfo info = new ServerInfo(msgparts[1],
 							receivePacket.getAddress(), port);
+					listener.onServerFound(info);
 				} catch (NumberFormatException ne) {
 				}
 
@@ -125,6 +148,12 @@ public class ServerSearcher extends Thread {
 		} catch (IOException ex) {
 			EduLog.passException(ex);
 		}
+	}
+
+	@Override
+	public void interrupt() {
+		c.close();
+		super.interrupt();
 	}
 
 }

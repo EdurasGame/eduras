@@ -23,7 +23,7 @@ public class ServerDiscoveryListener extends Thread {
 	/**
 	 * The port where server listens on.
 	 */
-	public final static int DISCOVERY_PORT = 8555;
+	public final static int DISCOVERY_PORT = 9876;
 	/**
 	 * The message that is send for discovery.
 	 */
@@ -54,7 +54,8 @@ public class ServerDiscoveryListener extends Thread {
 
 	@Override
 	public void run() {
-		EduLog.info("ServerSearcher is starting to listen for UDP-Broadcasts.");
+		EduLog.info("ServerSearcher is starting to listen for UDP-Broadcasts on port "
+				+ DISCOVERY_PORT + ".");
 		try {
 			// Keep a socket open to listen to all the UDP trafic that is
 			// destined for this port
