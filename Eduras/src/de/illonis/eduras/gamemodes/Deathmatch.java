@@ -4,6 +4,7 @@ import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.ObjectFactory.ObjectType;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
 import de.illonis.eduras.logger.EduLog;
+import de.illonis.eduras.logic.EventTriggerer;
 import de.illonis.eduras.units.PlayerMainFigure;
 import de.illonis.eduras.units.Unit;
 
@@ -39,8 +40,10 @@ public class Deathmatch implements GameMode {
 			PlayerMainFigure killer = gameInfo
 					.getPlayerByOwnerId(killingPlayer);
 			if (killedUnit instanceof PlayerMainFigure) {
-				gameInfo.getEventTriggerer().respawnPlayer(
-						(PlayerMainFigure) killedUnit);
+				EventTriggerer et = gameInfo.getEventTriggerer();
+				if (et != null)
+					gameInfo.getEventTriggerer().respawnPlayer(
+							(PlayerMainFigure) killedUnit);
 				gameInfo.getGameSettings().getStats()
 						.addDeathForPlayer((PlayerMainFigure) killedUnit);
 			}
