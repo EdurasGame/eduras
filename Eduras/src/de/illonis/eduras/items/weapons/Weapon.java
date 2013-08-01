@@ -92,29 +92,41 @@ public abstract class Weapon extends Item implements Lootable, Usable {
 	}
 
 	@Override
-	public long getCooldownTime() {
+	public final long getCooldownTime() {
 		return defaultCooldown;
 	}
 
 	@Override
-	public void reduceCooldown(long value) {
+	public final void reduceCooldown(long value) {
 		cooldown = Math.max(0, cooldown - value);
 	}
 
 	@Override
-	public void resetCooldown() {
+	public final void resetCooldown() {
 		cooldown = 0;
 	}
 
 	@Override
-	public void startCooldown() {
+	public final void startCooldown() {
 		cooldown = defaultCooldown;
 	}
 
 	@Override
-	public void use(ItemUseInformation info) {
-		startCooldown();
+	public final void use(ItemUseInformation info) {
+		if (!hasCooldown()) {
+			startCooldown();
+			doIfReady(info);
+		}
 	}
+
+	/**
+	 * Performs given action if weapon is ready. If weapon is not ready, no
+	 * action will performed.
+	 * 
+	 * @param info
+	 *            item use information.
+	 */
+	protected abstract void doIfReady(ItemUseInformation info);
 
 	@Override
 	public boolean hasCooldown() {
