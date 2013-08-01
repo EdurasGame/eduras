@@ -31,6 +31,8 @@ import de.illonis.eduras.logicabstraction.InformationProvider;
 import de.illonis.eduras.logicabstraction.NetworkManager;
 import de.illonis.eduras.math.Vector2D;
 import de.illonis.eduras.networking.ServerClient.ClientRole;
+import de.illonis.eduras.networking.discover.ServerFoundListener;
+import de.illonis.eduras.networking.discover.ServerSearcher;
 import de.illonis.eduras.settings.Settings;
 
 /**
@@ -54,6 +56,7 @@ public class GameClient implements GuiClickReactor, NetworkEventReactor,
 	private int currentItemSelected = -1;
 	private LinkedList<ClickableGuiElementInterface> clickListeners;
 	private LinkedList<TooltipTriggerer> triggerers;
+	private ServerSearcher searcher;
 	// private TooltipHandler tooltipHandler;
 
 	private String clientName;
@@ -276,6 +279,7 @@ public class GameClient implements GuiClickReactor, NetworkEventReactor,
 
 		if (result == JOptionPane.YES_OPTION) {
 			nwm.notifyDisconnect();
+			stopDiscovery();
 		}
 	}
 
@@ -411,5 +415,25 @@ public class GameClient implements GuiClickReactor, NetworkEventReactor,
 	public void setRole(ClientRole role) {
 		this.role = role;
 
+	}
+
+	/**
+	 * Starts searching for servers in local network.
+	 * 
+	 * @param listener
+	 *            the listener that retrieves found servers.
+	 */
+	public void startDiscovery(ServerFoundListener listener) {
+		searcher = new ServerSearcher(listener);
+		searcher.start();
+	}
+
+	/**
+	 * Stops searching for servers.
+	 */
+	public void stopDiscovery() {
+		if (searcher == null)
+			return;
+		searcher.interrupt();
 	}
 }
