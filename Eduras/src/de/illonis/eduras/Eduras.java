@@ -38,7 +38,8 @@ public class Eduras {
 	 * @param args
 	 *            Arguments passed from console.
 	 *            <ul>
-	 *            <li><b>arg0:</b> custom port to listen on.
+	 *            <li><b>arg0:</b> custom server name.</li>
+	 *            <li><b>arg1:</b> custom port to listen on.</li>
 	 *            </ul>
 	 */
 	public static void main(String[] args) {
@@ -46,19 +47,24 @@ public class Eduras {
 		EduLog.setLogOutput(LogMode.CONSOLE);
 		EduLog.setLogLimit(Level.WARNING);
 		int port = Server.DEFAULT_PORT;
+		String name = Server.DEFAULT_NAME;
+
 		if (args.length > 0) {
-			try {
-				port = Integer.parseInt(args[0]);
-			} catch (NumberFormatException e) {
-				EduLog.error(Localization.getStringF("Server.invalidportarg",
-						args[0]));
-				return;
+			name = args[0];
+			if (args.length > 1) {
+				try {
+					port = Integer.parseInt(args[0]);
+				} catch (NumberFormatException e) {
+					EduLog.error(Localization.getStringF(
+							"Server.invalidportarg", args[0]));
+					return;
+				}
 			}
 		}
 
 		EduLog.info(Localization.getString("Server.startstart"));
 
-		Server server = new Server(port);
+		Server server = new Server(port, name);
 
 		GameInformation gameInfo = new GameInformation();
 		ServerLogic logic = new ServerLogic(gameInfo);

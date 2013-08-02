@@ -47,8 +47,11 @@ public class Server {
 	 * Default port where server listens for new clients.
 	 */
 	public final static int DEFAULT_PORT = 4387;
+	/**
+	 * Default server name.
+	 */
+	public final static String DEFAULT_NAME = "unnamed server";
 
-	private final static String DEFAULT_NAME = "unnamed server";
 	private final Buffer inputBuffer, outputBuffer;
 	private final ServerSender serverSender;
 	private final HashMap<Integer, ServerReceiver> serverReceivers;
