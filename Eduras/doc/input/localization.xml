@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE article PUBLIC "-//OASIS//DTD Simplified DocBook XML V1.0//EN"
+"http://www.oasis-open.org/docbook/xml/simple/1.0/sdocbook.dtd">
+<article>
+	<articleinfo>
+		<title>Localization</title>
+	</articleinfo>
+	<section>
+		<title>(jme) Why locale?</title>
+		<para>
+			Localization is required to make texts in our game language-independent.
+			We want to target a huge audience and with this feature, we can
+			immediately reach thousands of people.
+		</para>
+	</section>
+	<section>
+	    <title>(jme) How it works</title>
+	    <para>
+	        Basically, each text fragment is represented by a placeholder and requires a call
+	        to <computeroutput>Localization.getString(String)</computeroutput>. This method
+	        replaces the key string with a real string in current active language.
+	    </para>
+	</section>
+	<section>
+		<figure>
+			<title>Locale replacement procedure illustrated.</title>
+			<mediaobject>
+				<imageobject>
+					<imagedata fileref="images/locale.png" format="PNG" />
+				</imageobject>
+			</mediaobject>
+		</figure>
+
+	</section>
+	<section>
+	    <title>(jme) Usage</title>
+	    <para>
+	        Using the locale is very simple as there are a lot of helping functions.
+	        If you want to see some usage examples, take a look into
+	        <computeroutput>Eduras</computeroutput>-class.
+	    </para>
+	    <section>
+	        <title>Creating the locale string</title>
+	        <para>
+	            First, you have to create a locale variable and a translated value.
+	            To do this, check the <computeroutput>.properties</computeroutput>-files
+	            in <computeroutput>locale</computeroutput> package.
+	            There is one file for each language.
+	        </para>
+	        <para>
+	            These files consist of many <emphasis>Key=Value</emphasis> pairs.
+	            You will quickly realize what you need to do:
+	            Just add a line to at least the default language file (en).
+	            You can make up any key value but please keep it significant.
+	        </para>
+	    </section>
+	    <section>
+	        <title>Using the locale string</title>
+	        <para>
+	            To use locale strings, you have two methods available:
+	        </para>
+	        <itemizedlist>
+	            <listitem>
+	                <para><emphasis>getString(String key)</emphasis></para>
+	                <para>
+	                    You will use this method when there are no variables
+	                    that have to be put in your message, e.g. in "Really exit?".
+	                </para>
+	            </listitem>
+	            <listitem>
+	                <para><emphasis>getStringF(String key, Object... args)</emphasis></para>
+	                <para>
+	                    Use this if you are using variables, for example in "It is 5 o'clock."
+	                    there is a variable representing the hour. Different languages can differ
+	                    in position of hour.
+	                </para>
+	                <para>
+	                    To avoid using two separated strings use a
+	                    <ulink url="http://docs.oracle.com/javase/7/docs/api/java/util/Formatter.html#syntax">formatted string</ulink>
+	                    and use this method.
+	                    For example the above mentioned sentence would be "It is %d o'clock." in english and "Son las %d." in spanish.
+	                </para>
+	            </listitem>
+	        </itemizedlist>
+	        <para>
+	            Both methods work similar to the <computeroutput>print</computeroutput> and <computeroutput>printf</computeroutput> methods
+	            in <computeroutput>System.out</computeroutput>.
+	        </para>
+	    </section>
+	</section>
+</article>
