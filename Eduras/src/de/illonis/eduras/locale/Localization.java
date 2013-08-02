@@ -19,7 +19,7 @@ import de.illonis.eduras.logger.EduLog;
  * 
  */
 public final class Localization {
-	private static final String BUNDLE_NAME = "de.illonis.eduras.locale.lang";
+	private static final String BUNDLE_NAME = "de.illonis.eduras.locale.lang"; //$NON-NLS-1$
 
 	/**
 	 * Contains all supported languages. First language is default language.
