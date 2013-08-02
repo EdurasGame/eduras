@@ -26,13 +26,8 @@
 	</target>
 
 	<target name="jar-client" depends="compile" description="Creates client-executable.">
-		<jar destfile="${jars}/EdurasClient.jar" basedir="${build}">
-			<fileset dir="${src}">
-				<include name="**/*.gif" />
-				<include name="**/*.jpg" />
-				<include name="**/*.png" />
-				<include name="**/*.properties" />
-			</fileset>
+		<jar destfile="${jars}/EdurasClient.jar" basedir="${build}"
+			excludes="**/*.svg, **/unittests/**">
 			<manifest>
 				<attribute name="Main-Class"
 					value="de.illonis.eduras.gameclient.EdurasClient" />
@@ -41,10 +36,8 @@
 	</target>
 
 	<target name="jar-server" depends="compile" description="Creates server-executable.">
-		<jar destfile="${jars}/EdurasServer.jar" basedir="${build}">
-			<fileset dir="${src}">
-				<include name="**/*.properties" />
-			</fileset>
+		<jar destfile="${jars}/EdurasServer.jar" basedir="${build}"
+			excludes="**/images/**, **/unittests/**">
 			<manifest>
 				<attribute name="Main-Class" value="de.illonis.eduras.Eduras" />
 			</manifest>
