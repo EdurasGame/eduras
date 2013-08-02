@@ -22,7 +22,7 @@ public class Buffer {
 	@Deprecated
 	public final static Object SYNCER = new Object();
 
-	private LinkedBlockingQueue<String> list;
+	private final LinkedBlockingQueue<String> list;
 
 	/**
 	 * Creates a new empty buffer.
@@ -63,7 +63,7 @@ public class Buffer {
 	 * @throws InterruptedException
 	 *             if interrupted while waiting
 	 */
-	public String getNext() throws InterruptedException {
+	public synchronized String getNext() throws InterruptedException {
 		return list.take();
 	}
 
@@ -73,7 +73,7 @@ public class Buffer {
 	 * @param string
 	 *            String to add.
 	 */
-	public void append(String string) {
+	public synchronized void append(String string) {
 		try {
 			list.put(string);
 		} catch (InterruptedException e) {
