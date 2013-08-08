@@ -16,4 +16,10 @@ public interface ServerFoundListener {
 	 */
 	void onServerFound(ServerInfo info);
 
+	/**
+	 * Called when an error occured during discovery.
+	 * 
+	 * @author illonis
+	 */
+	void onDiscoveryFailed();
 }
