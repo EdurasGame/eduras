@@ -121,9 +121,9 @@
 						<entry>SET_POLYGON_DATA</entry>
 						<entry>105</entry>
 						<entry>Sets polygon data of a dynamic polygon block.</entry>
+						<entry>objectId</entry>
 						<entry>first x</entry>
-						<entry>first y</entry>
-						<entry>second x (and so on)</entry>
+						<entry>first y (and so on)</entry>
 					</row>
 					<row>
 						<entry>OBJECT_CREATE</entry>
