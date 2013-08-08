@@ -118,6 +118,14 @@
 						<entry>-</entry>
 					</row>
 					<row>
+						<entry>SET_POLYGON_DATA</entry>
+						<entry>105</entry>
+						<entry>Sets polygon data of a dynamic polygon block.</entry>
+						<entry>first x</entry>
+						<entry>first y</entry>
+						<entry>second x (and so on)</entry>
+					</row>
+					<row>
 						<entry>OBJECT_CREATE</entry>
 						<entry>120</entry>
 						<entry>Tells that an object has been created.</entry>
