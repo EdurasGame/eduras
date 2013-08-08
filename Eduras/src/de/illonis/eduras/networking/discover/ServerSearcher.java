@@ -19,6 +19,10 @@ public class ServerSearcher extends Thread {
 	private DiscoveryChannel c;
 	private ClientServerResponseHandler handler;
 	private ServerFoundListener listener;
+	/**
+	 * Broadcast interval in milliseconds.
+	 */
+	public final static int BROADCAST_INTERVAL = 2000;
 
 	/**
 	 * Creates a new server searcher. The listener must be applied later before
@@ -50,36 +54,16 @@ public class ServerSearcher extends Thread {
 		this.listener = listener;
 	}
 
-	@Override
-	public void run() {
-		if (listener == null) {
-			throw new IllegalStateException(
-					"There is no listener attached to ServerSearcher.");
-		}
+	private void sendDiscoverBroadcast() {
+
 		// Find the server using UDP broadcast
 		try {
-			// Open a random port to send the package
-			c = new DiscoveryChannel(false);
-
 			InetSocketAddress target = new InetSocketAddress(
 					InetAddress.getByName("255.255.255.255"),
 					ServerDiscoveryListener.SERVER_PORT);
 
-			handler = new ClientServerResponseHandler(listener);
-			handler.start();
-			try {
-				synchronized (handler) {
-					// wait for response handler to be ready.
-					// this is required so we do not receive anything before we
-					// listen to it.
-					handler.wait();
-				}
-			} catch (InterruptedException e1) {
-				return;
-			}
 			c.send(ServerDiscoveryListener.REQUEST_MSG, target);
 			EduLog.info("[ServerSearcher] Sent request packet via 255.255.255.255.");
-
 			// Broadcast the message over all the network interfaces
 			Enumeration<NetworkInterface> interfaces = NetworkInterface
 					.getNetworkInterfaces();
@@ -110,12 +94,57 @@ public class ServerSearcher extends Thread {
 
 				}
 			}
-
-			// Close the port!
-			c.close();
-		} catch (IOException ex) {
-			EduLog.passException(ex);
+		} catch (IOException e) {
+			EduLog.passException(e);
 		}
+	}
+
+	private boolean init() {
+		try {
+			// Open a random port to send the package
+			c = new DiscoveryChannel(false);
+		} catch (IOException e) {
+			EduLog.passException(e);
+			return false;
+		}
+
+		handler = new ClientServerResponseHandler(listener);
+		handler.start();
+
+		try {
+			synchronized (handler) {
+				// wait for response handler to be ready.
+				// this is required so we do not receive anything before we
+				// listen to it.
+				handler.wait();
+			}
+		} catch (InterruptedException e) {
+			EduLog.passException(e);
+			return false;
+		}
+		return true;
+	}
+
+	@Override
+	public void run() {
+		if (listener == null) {
+			throw new IllegalStateException(
+					"There is no listener attached to ServerSearcher.");
+		}
+
+		if (!init())
+			return;
+
+		while (true) {
+			sendDiscoverBroadcast();
+			try {
+				Thread.sleep(BROADCAST_INTERVAL);
+			} catch (InterruptedException e) {
+				break;
+			}
+		}
+
+		c.close();
 	}
 
 	@Override
