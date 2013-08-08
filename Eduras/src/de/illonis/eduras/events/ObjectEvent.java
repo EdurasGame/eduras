@@ -1,9 +1,8 @@
-/**
- * 
- */
 package de.illonis.eduras.events;
 
 /**
+ * An event that is involved with a gameobject specified by id.
+ * 
  * @author Florian Mai <florian.ren.mai@googlemail.com>
  * 
  */
