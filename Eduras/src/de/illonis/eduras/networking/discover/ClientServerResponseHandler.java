@@ -85,7 +85,6 @@ public class ClientServerResponseHandler extends Thread {
 
 	@Override
 	public void interrupt() {
-		System.out.println("d int");
 		c.close();
 		super.interrupt();
 	}
