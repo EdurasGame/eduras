@@ -41,6 +41,21 @@ public interface EventTriggerer {
 	void removeObject(int objectId);
 
 	/**
+	 * Creates a dynamic polygon.
+	 * 
+	 * @param polygonVertices
+	 *            vertices of polygon.
+	 * @param position
+	 *            position of polygon.
+	 * @param owner
+	 *            owner id of new polygon.
+	 * 
+	 * @author illonis
+	 */
+	void createDynamicPolygonAt(Vector2D[] polygonVertices, Vector2D position,
+			int owner);
+
+	/**
 	 * Creates an object at given position.
 	 * 
 	 * @param object
@@ -50,8 +65,22 @@ public interface EventTriggerer {
 	 * @param owner
 	 *            owner id of new object.
 	 * @return the id of the created object.
+	 * @see #createDynamicPolygonAt(Vector2D[], Vector2D, int)
 	 */
-	int createObjectAt(ObjectType object, Vector2D position, int owner);
+	public int createObjectAt(ObjectType object, Vector2D position, int owner);
+
+	/**
+	 * Sets polygon data of a polygon with given id.
+	 * 
+	 * @param objectId
+	 *            object id of polygon.
+	 * @param polygonVertices
+	 *            new vertices of polygon.
+	 * @see #createDynamicPolygonAt(Vector2D[], Vector2D, int)
+	 * 
+	 * @author illonis
+	 */
+	public void setPolygonData(int objectId, Vector2D[] polygonVertices);
 
 	/**
 	 * Creates an object.

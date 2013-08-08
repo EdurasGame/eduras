@@ -25,12 +25,14 @@ import de.illonis.eduras.events.SetGameModeEvent;
 import de.illonis.eduras.events.SetIntegerGameObjectAttributeEvent;
 import de.illonis.eduras.events.SetItemSlotEvent;
 import de.illonis.eduras.events.SetOwnerEvent;
+import de.illonis.eduras.events.SetPolygonDataEvent;
 import de.illonis.eduras.events.SetRemainingTimeEvent;
 import de.illonis.eduras.events.UserMovementEvent;
 import de.illonis.eduras.exceptions.GivenParametersDoNotFitToEventException;
 import de.illonis.eduras.exceptions.InvalidMessageFormatException;
 import de.illonis.eduras.exceptions.MessageNotSupportedException;
 import de.illonis.eduras.logger.EduLog;
+import de.illonis.eduras.math.Vector2D;
 import de.illonis.eduras.networking.ServerClient.ClientRole;
 
 /**
@@ -252,6 +254,21 @@ public class NetworkMessageDeserializer {
 		case SET_COLLIDABLE:
 			gameEvent = new SetBooleanGameObjectAttributeEvent(typeNumber,
 					parseInt(args[1]), parseBool(args[2]));
+			break;
+		case SET_POLYGON_DATA:
+			int numArgs = args.length;
+			int numVerts = (numArgs - 2) / 2;
+			Vector2D[] verts = new Vector2D[numVerts];
+			try {
+				for (int i = 0; i < numVerts; i++) {
+					verts[i] = new Vector2D(parseDouble(args[2 * i + 2]),
+							parseDouble(args[2 * i + 3]));
+				}
+			} catch (NumberFormatException e) {
+				throw new GivenParametersDoNotFitToEventException(
+						GameEventNumber.SET_POLYGON_DATA, args);
+			}
+			gameEvent = new SetPolygonDataEvent(parseInt(args[1]), verts);
 			break;
 		case OBJECT_CREATE:
 			int objectTypeNum = parseInt(args[3]);

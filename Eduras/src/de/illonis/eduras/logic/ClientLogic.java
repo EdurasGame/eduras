@@ -17,11 +17,13 @@ import de.illonis.eduras.events.SetGameModeEvent;
 import de.illonis.eduras.events.SetIntegerGameObjectAttributeEvent;
 import de.illonis.eduras.events.SetItemSlotEvent;
 import de.illonis.eduras.events.SetOwnerEvent;
+import de.illonis.eduras.events.SetPolygonDataEvent;
 import de.illonis.eduras.events.SetRemainingTimeEvent;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
 import de.illonis.eduras.gamemodes.Deathmatch;
 import de.illonis.eduras.gamemodes.GameMode;
 import de.illonis.eduras.gamemodes.NoGameMode;
+import de.illonis.eduras.gameobjects.DynamicPolygonBlock;
 import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.interfaces.GameEventListener;
 import de.illonis.eduras.interfaces.GameLogicInterface;
@@ -98,6 +100,20 @@ public class ClientLogic implements GameLogicInterface {
 
 				getListener().onHealthChanged(healthEvent);
 
+				break;
+			case SET_POLYGON_DATA:
+				SetPolygonDataEvent polyEvent = (SetPolygonDataEvent) event;
+				GameObject gameObj = gameInfo.findObjectById(polyEvent
+						.getObjectId());
+				if (gameObj == null)
+					break;
+				if (gameObj instanceof DynamicPolygonBlock) {
+					((DynamicPolygonBlock) gameObj)
+							.setPolygonVertices(polyEvent.getVertices());
+				} else {
+					EduLog.warning("Given object id in SET_POLYGON_DATA event does not match a DynamicPolygonBlock, instead object is a "
+							+ gameObj.getClass().getName());
+				}
 				break;
 			case SETMAXHEALTH:
 				SetIntegerGameObjectAttributeEvent mhealthEvent = (SetIntegerGameObjectAttributeEvent) event;

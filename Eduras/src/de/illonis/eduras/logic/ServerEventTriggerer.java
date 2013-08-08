@@ -18,11 +18,13 @@ import de.illonis.eduras.events.SetGameModeEvent;
 import de.illonis.eduras.events.SetIntegerGameObjectAttributeEvent;
 import de.illonis.eduras.events.SetItemSlotEvent;
 import de.illonis.eduras.events.SetOwnerEvent;
+import de.illonis.eduras.events.SetPolygonDataEvent;
 import de.illonis.eduras.events.SetRemainingTimeEvent;
 import de.illonis.eduras.exceptions.InvalidNameException;
 import de.illonis.eduras.exceptions.MessageNotSupportedException;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
 import de.illonis.eduras.gamemodes.GameMode;
+import de.illonis.eduras.gameobjects.DynamicPolygonBlock;
 import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.interfaces.GameLogicInterface;
 import de.illonis.eduras.inventory.InventoryIsFullException;
@@ -443,6 +445,25 @@ public class ServerEventTriggerer implements EventTriggerer {
 			}
 		}
 		outputBuffer.append(estr);
+	}
+
+	@Override
+	public void createDynamicPolygonAt(Vector2D[] polygonVertices,
+			Vector2D position, int owner) {
+		int objId = createObjectAt(ObjectType.DYNAMIC_POLYGON, position, owner);
+		setPolygonData(objId, polygonVertices);
+	}
+
+	@Override
+	public void setPolygonData(int objectId, Vector2D[] polygonVertices) {
+		GameObject object = gameInfo.findObjectById(objectId);
+		if (object instanceof DynamicPolygonBlock) {
+			DynamicPolygonBlock block = (DynamicPolygonBlock) object;
+			block.setPolygonVertices(polygonVertices);
+			SetPolygonDataEvent event = new SetPolygonDataEvent(objectId,
+					polygonVertices);
+			sendEvents(event);
+		}
 	}
 
 }

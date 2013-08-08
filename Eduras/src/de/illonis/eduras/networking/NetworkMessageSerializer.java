@@ -18,6 +18,7 @@ import de.illonis.eduras.events.SetGameModeEvent;
 import de.illonis.eduras.events.SetIntegerGameObjectAttributeEvent;
 import de.illonis.eduras.events.SetItemSlotEvent;
 import de.illonis.eduras.events.SetOwnerEvent;
+import de.illonis.eduras.events.SetPolygonDataEvent;
 import de.illonis.eduras.events.SetRemainingTimeEvent;
 import de.illonis.eduras.events.UserMovementEvent;
 import de.illonis.eduras.exceptions.MessageNotSupportedException;
@@ -148,6 +149,14 @@ public class NetworkMessageSerializer {
 			serializedEvent = buildEventString(moveEvent,
 					moveEvent.getObjectId(), moveEvent.getNewXPos(),
 					moveEvent.getNewYPos());
+			break;
+		case SET_POLYGON_DATA:
+			SetPolygonDataEvent polyEvent = (SetPolygonDataEvent) gameEvent;
+			serializedEvent = buildEventString(polyEvent,
+					polyEvent.getObjectId());
+			for (Vector2D vert : polyEvent.getVertices()) {
+				serializedEvent += "#" + vert.getX() + "#" + vert.getY();
+			}
 			break;
 		case SET_OWNER:
 			SetOwnerEvent setOwnerEvent = (SetOwnerEvent) gameEvent;
