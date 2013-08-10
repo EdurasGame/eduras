@@ -47,7 +47,7 @@ public class ServerLogic implements GameLogicInterface {
 		objectFactory = new ObjectFactory(this);
 		lgw = new LogicGameWorker(gameInfo, listenerHolder);
 		Thread gameWorker = new Thread(lgw);
-		gameWorker.setName("LogicGameWorker");
+		gameWorker.setName("ServerLogicGameWorker");
 		gameWorker.start();
 	}
 

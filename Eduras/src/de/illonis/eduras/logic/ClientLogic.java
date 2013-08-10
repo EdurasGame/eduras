@@ -60,7 +60,7 @@ public class ClientLogic implements GameLogicInterface {
 		listenerHolder = new ListenerHolder<GameEventListener>();
 		lgw = new LogicGameWorker(gameInfo, listenerHolder);
 		Thread gameWorker = new Thread(lgw);
-		gameWorker.setName("LogicGameWorker");
+		gameWorker.setName("ClientLogicGameWorker");
 		gameWorker.start();
 	}
 
