@@ -12,14 +12,6 @@ import de.illonis.eduras.gameobjects.GameObject;
  */
 public abstract class Item extends GameObject {
 
-	/**
-	 * Item types are unique and identify every item type. Note that multiple
-	 * items can have the same item-type but not the same id.
-	 * 
-	 * @author illonis
-	 * 
-	 */
-
 	private int sellValue;
 	private int buyValue;
 	private String name;
