@@ -88,6 +88,12 @@ public class ClientReceiver extends Thread {
 		super.interrupt();
 	}
 
+	/**
+	 * Listens to UDP messages and processes them.
+	 * 
+	 * @author Florian Mai <florian.ren.mai@googlemail.com>
+	 * 
+	 */
 	class UDPMessageReceiver extends Thread {
 
 		private static final int MAX_UDP_SIZE = 1024;
