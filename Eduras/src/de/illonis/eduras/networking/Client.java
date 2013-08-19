@@ -154,4 +154,13 @@ public class Client {
 				EduLog.passException(e);
 			}
 	}
+
+	/**
+	 * Returns the number of the port this client's socket is bound to.
+	 * 
+	 * @return The number of the local port.
+	 */
+	public int getPortNumber() {
+		return socket.getLocalPort();
+	}
 }
