@@ -63,7 +63,7 @@ public class ClientReceiver extends Thread {
 		p.start();
 
 		UDPMessageReceiver udpMessageReceiver = new UDPMessageReceiver();
-		udpMessageReceiver.run();
+		udpMessageReceiver.start();
 
 		while (connectionAvailable) {
 			try {
