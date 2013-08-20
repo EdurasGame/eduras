@@ -141,6 +141,7 @@ public class Inventory {
 	 *             when inventory is full.
 	 */
 	public synchronized int loot(Item item) throws InventoryIsFullException {
+		// TODO: filter unique items and prevent double looting them.
 		int target = findNextFreeInventorySlotForItem(item);
 		if (target == -1)
 			throw new InventoryIsFullException();
