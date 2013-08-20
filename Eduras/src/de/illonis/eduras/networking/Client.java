@@ -12,6 +12,7 @@ import de.illonis.eduras.exceptions.ConnectionLostException;
 import de.illonis.eduras.interfaces.GameLogicInterface;
 import de.illonis.eduras.interfaces.NetworkEventListener;
 import de.illonis.eduras.logger.EduLog;
+import de.illonis.eduras.networking.ClientSender.PacketType;
 
 /**
  * A client that connects to the game server and starts receiving and sending
@@ -76,10 +77,12 @@ public class Client {
 	 * 
 	 * @param message
 	 *            message to send
+	 * @param packetType
+	 *            tells whether the packet is a UDP or TCP packet
 	 */
-	public void sendMessage(String message) {
+	public void sendMessage(String message, PacketType packetType) {
 		try {
-			sender.sendMessage(message);
+			sender.sendMessage(message, packetType);
 		} catch (ConnectionLostException e) {
 			connectionLost();
 		}
