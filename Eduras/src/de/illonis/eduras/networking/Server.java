@@ -21,7 +21,6 @@ import de.illonis.eduras.events.GameReadyEvent;
 import de.illonis.eduras.events.InitInformationEvent;
 import de.illonis.eduras.events.ObjectFactoryEvent;
 import de.illonis.eduras.exceptions.InvalidNameException;
-import de.illonis.eduras.exceptions.MessageNotSupportedException;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
 import de.illonis.eduras.exceptions.ServerNotReadyForStartException;
 import de.illonis.eduras.interfaces.GameLogicInterface;
@@ -55,7 +54,7 @@ public class Server {
 	 */
 	public final static String DEFAULT_NAME = "unnamed server";
 
-	private final Buffer inputBuffer, outputBuffer;
+	private final Buffer inputBuffer;
 	private final ServerSender serverSender;
 	private final HashMap<Integer, ServerTCPReceiver> serverTCPReceivers;
 	private ServerDecoder serverLogic;
@@ -107,8 +106,7 @@ public class Server {
 		this.name = serverName;
 		this.port = port;
 		inputBuffer = new Buffer();
-		outputBuffer = new Buffer();
-		serverSender = new ServerSender(outputBuffer, null);
+		serverSender = new ServerSender(this);
 		serverTCPReceivers = new HashMap<Integer, ServerTCPReceiver>();
 		serverUDPReceiver = new UDPMessageReceiver();
 	}
@@ -207,8 +205,7 @@ public class Server {
 	public void setLogic(GameLogicInterface logic,
 			NetworkEventListener eventListener) {
 		this.logic = logic;
-		logic.setGameEventListener(new ServerGameEventListener(outputBuffer,
-				serverSender));
+		logic.setGameEventListener(new ServerGameEventListener(serverSender));
 		serverLogic = new ServerDecoder(inputBuffer, logic, eventListener);
 	}
 
@@ -238,12 +235,9 @@ public class Server {
 		// inform client about clientconnection.
 		ConnectionEstablishedEvent connectionEstablished = new ConnectionEstablishedEvent(
 				client.getClientId());
-		try {
-			serverSender.sendMessageToClient(client.getClientId(),
-					NetworkMessageSerializer.serialize(connectionEstablished));
-		} catch (MessageNotSupportedException e) {
-			EduLog.passException(e);
-		}
+
+		serverSender.sendEventToClient(connectionEstablished,
+				client.getClientId());
 
 		InitInformationEvent initInfo = getInitInfos(client);
 
@@ -312,12 +306,7 @@ public class Server {
 
 			// inform client that the connectionprocess has finished
 			GameReadyEvent gameReady = new GameReadyEvent();
-			try {
-				serverSender.sendMessageToClient(client.getClientId(),
-						NetworkMessageSerializer.serialize(gameReady));
-			} catch (MessageNotSupportedException e) {
-				EduLog.passException(e);
-			}
+			serverSender.sendEventToClient(gameReady, client.getClientId());
 
 			// wake up receiver
 			client.setConnected(true);
@@ -386,11 +375,7 @@ public class Server {
 	 *            The event to send to all clients.
 	 */
 	public void sendEventToAll(Event event) {
-		try {
-			serverSender.sendMessage(NetworkMessageSerializer.serialize(event));
-		} catch (MessageNotSupportedException e) {
-			EduLog.passException(e);
-		}
+		serverSender.sendEventToAll(event);
 	}
 
 	/**
@@ -424,15 +409,6 @@ public class Server {
 		gonePlayerEvent.setId(objectId);
 		// logic.getObjectFactory().onObjectFactoryEventAppeared(gonePlayerEvent);
 		sendEventToAll(gonePlayerEvent);
-	}
-
-	/**
-	 * Returns the outputbuffer of this server.
-	 * 
-	 * @return The outputbuffer.
-	 */
-	public Buffer getOutputBuffer() {
-		return outputBuffer;
 	}
 
 	/**
@@ -495,6 +471,24 @@ public class Server {
 	 */
 	public ServerClient getClientById(int ownerId) {
 		return serverSender.getClientById(ownerId);
+	}
+
+	/**
+	 * Returns the port to which the server is bound.
+	 * 
+	 * @return the port
+	 */
+	public int getPort() {
+		return port;
+	}
+
+	/**
+	 * Returns the server sender.
+	 * 
+	 * @return the server sender.
+	 */
+	public ServerSender getServerSender() {
+		return serverSender;
 	}
 
 }

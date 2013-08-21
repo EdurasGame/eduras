@@ -21,7 +21,6 @@ import de.illonis.eduras.events.SetOwnerEvent;
 import de.illonis.eduras.events.SetPolygonDataEvent;
 import de.illonis.eduras.events.SetRemainingTimeEvent;
 import de.illonis.eduras.exceptions.InvalidNameException;
-import de.illonis.eduras.exceptions.MessageNotSupportedException;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
 import de.illonis.eduras.gamemodes.GameMode;
 import de.illonis.eduras.gameobjects.DynamicPolygonBlock;
@@ -34,8 +33,7 @@ import de.illonis.eduras.items.weapons.Missile;
 import de.illonis.eduras.logger.EduLog;
 import de.illonis.eduras.maps.Map;
 import de.illonis.eduras.math.Vector2D;
-import de.illonis.eduras.networking.Buffer;
-import de.illonis.eduras.networking.NetworkMessageSerializer;
+import de.illonis.eduras.networking.ServerSender;
 import de.illonis.eduras.units.PlayerMainFigure;
 import de.illonis.eduras.units.Unit;
 
@@ -52,7 +50,7 @@ public class ServerEventTriggerer implements EventTriggerer {
 	private final GameLogicInterface logic;
 	private GameInformation gameInfo;
 
-	private Buffer outputBuffer;
+	private ServerSender serverSender;
 
 	/**
 	 * Initializes a new {@link ServerEventTriggerer}.
@@ -234,13 +232,13 @@ public class ServerEventTriggerer implements EventTriggerer {
 	}
 
 	/**
-	 * Sets the outputbuffer to write the messages to.
+	 * Sets the server sender.
 	 * 
-	 * @param buf
-	 *            The outputbuffer to set.
+	 * @param sender
+	 *            The sender.
 	 */
-	public void setOutputBuffer(Buffer buf) {
-		outputBuffer = buf;
+	public void setServerSender(ServerSender sender) {
+		this.serverSender = sender;
 	}
 
 	@Override
@@ -436,15 +434,9 @@ public class ServerEventTriggerer implements EventTriggerer {
 	 * @author illonis
 	 */
 	private void sendEvents(GameEvent... events) {
-		String estr = "";
 		for (GameEvent gameEvent : events) {
-			try {
-				estr += NetworkMessageSerializer.serialize(gameEvent);
-			} catch (MessageNotSupportedException e) {
-				EduLog.passException(e);
-			}
+			serverSender.sendEventToAll(gameEvent);
 		}
-		outputBuffer.append(estr);
 	}
 
 	@Override
