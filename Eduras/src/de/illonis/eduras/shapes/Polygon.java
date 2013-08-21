@@ -32,6 +32,7 @@ public class Polygon extends ObjectShape {
 	 * Creates a polygon with no vertices.
 	 */
 	public Polygon() {
+		this.vertices = new Vector2D[0];
 	}
 
 	/**
@@ -186,5 +187,16 @@ public class Polygon extends ObjectShape {
 	public ObjectShape getScaled(double scale) {
 		// TODO: implement
 		return this;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (obj instanceof Polygon) {
+			Polygon p = (Polygon) obj;
+			if (getVertices().isEmpty())
+				return p.getVertices().isEmpty();
+			return p.getVertices().equals(getVertices());
+		} else
+			return super.equals(obj);
 	}
 }
