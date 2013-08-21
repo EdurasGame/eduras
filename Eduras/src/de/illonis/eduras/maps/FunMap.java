@@ -1,5 +1,6 @@
 package de.illonis.eduras.maps;
 
+import java.awt.geom.Rectangle2D;
 import java.util.LinkedList;
 
 import de.illonis.eduras.exceptions.ShapeVerticesNotApplicableException;
@@ -11,6 +12,7 @@ import de.illonis.eduras.items.weapons.ExampleWeapon;
 import de.illonis.eduras.items.weapons.SniperWeapon;
 import de.illonis.eduras.items.weapons.SplashWeapon;
 import de.illonis.eduras.logger.EduLog;
+import de.illonis.eduras.maps.SpawnPosition.SpawnType;
 
 /**
  * a deathmatch map
@@ -222,7 +224,22 @@ public class FunMap extends Map {
 
 		setInitialObjects(initialObjects);
 
-		// TODO: Set spawnpoints
+		// Creating spawnpoints
+		Rectangle2D.Double rec = new Rectangle2D.Double(1, 1, 75, 100);
+		Rectangle2D.Double rec2 = new Rectangle2D.Double(1, getHeight() - 75,
+				200, 70);
+		Rectangle2D.Double rec3 = new Rectangle2D.Double(getWidth() - 39, 1,
+				35, 100);
+		Rectangle2D.Double rec4 = new Rectangle2D.Double(getWidth() - 205,
+				getHeight() - 75, 200, 70);
+		SpawnPosition p = new SpawnPosition(rec, SpawnType.DEATHMATCH);
+		SpawnPosition p2 = new SpawnPosition(rec2, SpawnType.DEATHMATCH);
+		SpawnPosition p3 = new SpawnPosition(rec3, SpawnType.DEATHMATCH);
+		SpawnPosition p4 = new SpawnPosition(rec4, SpawnType.DEATHMATCH);
+		getSpawnAreas().add(p);
+		getSpawnAreas().add(p2);
+		getSpawnAreas().add(p3);
+		getSpawnAreas().add(p4);
 
 	}
 }

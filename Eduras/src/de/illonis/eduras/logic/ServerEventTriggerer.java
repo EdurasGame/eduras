@@ -1,7 +1,7 @@
 package de.illonis.eduras.logic;
 
-import java.awt.Rectangle;
 import java.awt.geom.Rectangle2D;
+import java.util.LinkedList;
 import java.util.Random;
 
 import de.illonis.eduras.GameInformation;
@@ -33,6 +33,7 @@ import de.illonis.eduras.items.Lootable;
 import de.illonis.eduras.items.weapons.Missile;
 import de.illonis.eduras.logger.EduLog;
 import de.illonis.eduras.maps.Map;
+import de.illonis.eduras.maps.SpawnPosition;
 import de.illonis.eduras.math.Vector2D;
 import de.illonis.eduras.networking.Buffer;
 import de.illonis.eduras.networking.NetworkMessageSerializer;
@@ -48,6 +49,8 @@ import de.illonis.eduras.units.Unit;
 public class ServerEventTriggerer implements EventTriggerer {
 
 	private static int lastGameObjectId = 0;
+
+	private static final Random RANDOM = new Random();
 
 	private final GameLogicInterface logic;
 	private GameInformation gameInfo;
@@ -268,16 +271,25 @@ public class ServerEventTriggerer implements EventTriggerer {
 		// TODO: Fire a respawn event to client.
 		remaxHealth(player);
 
-		Random r = new Random();
-		Rectangle m = gameInfo.getMap().getBounds();
-		Rectangle2D.Double newBounds = new Rectangle2D.Double(0, 0,
-				player.getBoundingBox().width, player.getBoundingBox().height);
+		LinkedList<SpawnPosition> spawnAreas = new LinkedList<SpawnPosition>(
+				gameInfo.getMap().getSpawnAreas());
+
+		// TODO: separate spawnpositions by teams when it's possible soon.
+
+		int area = RANDOM.nextInt(spawnAreas.size());
+		SpawnPosition spawnPos = spawnAreas.get(area);
+		Rectangle2D.Double boundings = new Rectangle2D.Double();
+		boundings.width = player.getBoundingBox().width;
+		boundings.height = player.getBoundingBox().height;
+
+		Vector2D newPos;
 		do {
-			newBounds.x = r.nextInt(m.width);
-			newBounds.y = r.nextInt(m.height);
-		} while (gameInfo.isObjectWithin(newBounds));
-		setPositionOfObject(player.getId(), new Vector2D(newBounds.getX(),
-				newBounds.getY()));
+			newPos = spawnPos.getAPoint(player.getShape());
+			boundings.x = newPos.getX();
+			boundings.y = newPos.getY();
+		} while (gameInfo.isObjectWithin(boundings));
+
+		setPositionOfObject(player.getId(), newPos);
 	}
 
 	@Override
