@@ -3,6 +3,7 @@ package de.illonis.eduras;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.LinkedList;
 import java.util.concurrent.ConcurrentHashMap;
 
 import de.illonis.eduras.events.ClientRenameEvent;
@@ -37,6 +38,7 @@ public class GameInformation {
 	private Map map;
 	private EventTriggerer eventTriggerer;
 	private GameSettings gameSettings;
+	private final LinkedList<Team> teams;
 
 	/**
 	 * Creates a new game information object with emtpy object lists.
@@ -46,7 +48,7 @@ public class GameInformation {
 		players = new ConcurrentHashMap<Integer, PlayerMainFigure>();
 		map = new FunMap();
 		gameSettings = new GameSettings(this);
-
+		teams = new LinkedList<Team>();
 	}
 
 	/**
@@ -67,6 +69,17 @@ public class GameInformation {
 	 */
 	public Collection<PlayerMainFigure> getPlayers() {
 		return players.values();
+	}
+
+	/**
+	 * Returns all teams.
+	 * 
+	 * @return a list of all teams.
+	 * 
+	 * @author illonis
+	 */
+	public LinkedList<Team> getTeams() {
+		return teams;
 	}
 
 	/**

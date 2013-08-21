@@ -2,6 +2,7 @@ package de.illonis.eduras.units;
 
 import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.ObjectFactory.ObjectType;
+import de.illonis.eduras.Team;
 import de.illonis.eduras.exceptions.ShapeVerticesNotApplicableException;
 import de.illonis.eduras.gameobjects.ArtificialIntelligence;
 import de.illonis.eduras.gameobjects.GameObject;
@@ -19,6 +20,7 @@ import de.illonis.eduras.shapes.Triangle;
  */
 public class PlayerMainFigure extends Unit implements MovementControlable {
 	private String name;
+	private Team team;
 	private final Inventory inventory = new Inventory();
 
 	/**
@@ -103,6 +105,27 @@ public class PlayerMainFigure extends Unit implements MovementControlable {
 	@Override
 	public void stopMoving() {
 		setSpeedVector(new Vector2D());
+	}
+
+	/**
+	 * @return player's team.
+	 * 
+	 * @author illonis
+	 */
+	public Team getTeam() {
+		return team;
+	}
+
+	/**
+	 * Assigns player to given team.
+	 * 
+	 * @param team
+	 *            new team.
+	 * 
+	 * @author illonis
+	 */
+	public void setTeam(Team team) {
+		this.team = team;
 	}
 
 	/**

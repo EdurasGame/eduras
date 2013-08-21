@@ -2,6 +2,8 @@ package de.illonis.eduras.gamemodes;
 
 import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.ObjectFactory.ObjectType;
+import de.illonis.eduras.Team;
+import de.illonis.eduras.Team.TeamColor;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
 import de.illonis.eduras.logger.EduLog;
 import de.illonis.eduras.logic.EventTriggerer;
@@ -71,16 +73,29 @@ public class Deathmatch implements GameMode {
 		// simply create the player and respawn it somewhere
 		gameInfo.getEventTriggerer().createObject(ObjectType.PLAYER, ownerId);
 
+		PlayerMainFigure newPlayer;
 		try {
-			gameInfo.getEventTriggerer().respawnPlayer(
-					gameInfo.getPlayerByOwnerId(ownerId));
+			newPlayer = gameInfo.getPlayerByOwnerId(ownerId);
 		} catch (ObjectNotFoundException e) {
 			EduLog.passException(e);
+			return;
 		}
+
+		gameInfo.getEventTriggerer().addPlayerToTeam(ownerId,
+				gameInfo.getTeams().getFirst());
+		gameInfo.getEventTriggerer().respawnPlayer(newPlayer);
 
 		// and add it to the statistic
 		gameInfo.getGameSettings().getStats().addPlayerToStats(ownerId);
-
 	}
 
+	@Override
+	public void onGameStart() {
+		Team team = new Team("All Players", TeamColor.NEUTRAL);
+		gameInfo.getEventTriggerer().setTeams(team);
+		for (PlayerMainFigure player : gameInfo.getPlayers()) {
+			gameInfo.getEventTriggerer().addPlayerToTeam(player.getOwner(),
+					team);
+		}
+	}
 }

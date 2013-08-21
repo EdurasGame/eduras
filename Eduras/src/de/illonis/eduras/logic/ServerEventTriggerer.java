@@ -6,6 +6,7 @@ import java.util.Random;
 
 import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.ObjectFactory.ObjectType;
+import de.illonis.eduras.Team;
 import de.illonis.eduras.events.ClientRenameEvent;
 import de.illonis.eduras.events.DeathEvent;
 import de.illonis.eduras.events.GameEvent;
@@ -350,6 +351,7 @@ public class ServerEventTriggerer implements EventTriggerer {
 		gameInfo.setMap(map);
 
 		removeAllNonPlayers();
+		gameInfo.getGameSettings().getGameMode().onGameStart();
 
 		for (GameObject initialObject : map.getInitialObjects()) {
 			createObjectAt(initialObject.getType(),
@@ -420,6 +422,7 @@ public class ServerEventTriggerer implements EventTriggerer {
 		int playerId = player.getOwner();
 
 		gameInfo.getGameSettings().getStats().setDeaths(playerId, 0);
+		gameInfo.getGameSettings().getStats().setKills(playerId, 0);
 
 		SetIntegerGameObjectAttributeEvent setdeaths = new SetIntegerGameObjectAttributeEvent(
 				GameEventNumber.SET_DEATHS, playerId, 0);
@@ -476,6 +479,28 @@ public class ServerEventTriggerer implements EventTriggerer {
 					polygonVertices);
 			sendEvents(event);
 		}
+	}
+
+	@Override
+	public void setTeams(Team... teams) {
+		gameInfo.getTeams().clear();
+		for (Team team : teams)
+			gameInfo.getTeams().add(team);
+
+		// TODO: send event.
+	}
+
+	@Override
+	public void addPlayerToTeam(int ownerId, Team team) {
+		PlayerMainFigure newPlayer;
+		try {
+			newPlayer = gameInfo.getPlayerByOwnerId(ownerId);
+		} catch (ObjectNotFoundException e) {
+			EduLog.passException(e);
+			return;
+		}
+		team.addPlayer(newPlayer);
+		// TODO: Send evenet.
 	}
 
 }
