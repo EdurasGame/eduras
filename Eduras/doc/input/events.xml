@@ -206,6 +206,21 @@
 						<entry>Tells that the match ended and that the winner has got the passed id.</entry>
 						<entry>winnerId</entry>
 					</row>
+					<row>
+					    <entry>SET_TEAMS</entry>
+					    <entry>191</entry>
+					    <entry>Tells client which teams are playing.</entry>
+					    <entry>name#1</entry>
+					    <entry>color#1</entry>
+					    <entry>name#1...</entry>
+					</row>
+					<row>
+					    <entry>ADD_PLAYER_TO_TEAM</entry>
+					    <entry>192</entry>
+					    <entry>Adds a player to a team.</entry>
+					    <entry>ownerId</entry>
+					    <entry>teamcolor</entry>
+					</row>
 				</tbody>
 			</tgroup>
 		</table>
