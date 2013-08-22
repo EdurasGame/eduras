@@ -31,5 +31,18 @@ public class AnimationTestFrame extends JFrame {
 
 		frame.setVisible(true);
 		frame.getP().start();
+		try {
+			Thread.sleep(5000);
+		} catch (InterruptedException e) {
+
+		}
+		frame.getP().stop();
+		try {
+			Thread.sleep(5000);
+		} catch (InterruptedException e) {
+
+		}
+		frame.getP().start();
 	}
+
 }
