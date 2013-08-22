@@ -7,6 +7,7 @@ import java.util.Random;
 import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.ObjectFactory.ObjectType;
 import de.illonis.eduras.Team;
+import de.illonis.eduras.events.AddPlayerToTeamEvent;
 import de.illonis.eduras.events.ClientRenameEvent;
 import de.illonis.eduras.events.DeathEvent;
 import de.illonis.eduras.events.GameEvent;
@@ -21,6 +22,7 @@ import de.illonis.eduras.events.SetItemSlotEvent;
 import de.illonis.eduras.events.SetOwnerEvent;
 import de.illonis.eduras.events.SetPolygonDataEvent;
 import de.illonis.eduras.events.SetRemainingTimeEvent;
+import de.illonis.eduras.events.SetTeamsEvent;
 import de.illonis.eduras.exceptions.InvalidNameException;
 import de.illonis.eduras.exceptions.MessageNotSupportedException;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
@@ -351,7 +353,6 @@ public class ServerEventTriggerer implements EventTriggerer {
 		gameInfo.setMap(map);
 
 		removeAllNonPlayers();
-		gameInfo.getGameSettings().getGameMode().onGameStart();
 
 		for (GameObject initialObject : map.getInitialObjects()) {
 			createObjectAt(initialObject.getType(),
@@ -361,6 +362,7 @@ public class ServerEventTriggerer implements EventTriggerer {
 		for (PlayerMainFigure player : gameInfo.getPlayers()) {
 			respawnPlayer(player);
 		}
+		gameInfo.getGameSettings().getGameMode().onGameStart();
 	}
 
 	/**
@@ -484,10 +486,12 @@ public class ServerEventTriggerer implements EventTriggerer {
 	@Override
 	public void setTeams(Team... teams) {
 		gameInfo.getTeams().clear();
-		for (Team team : teams)
+		SetTeamsEvent event = new SetTeamsEvent();
+		for (Team team : teams) {
 			gameInfo.getTeams().add(team);
-
-		// TODO: send event.
+			event.addTeam(team.getColor(), team.getName());
+		}
+		sendEvents(event);
 	}
 
 	@Override
@@ -500,7 +504,9 @@ public class ServerEventTriggerer implements EventTriggerer {
 			return;
 		}
 		team.addPlayer(newPlayer);
-		// TODO: Send evenet.
+		AddPlayerToTeamEvent event = new AddPlayerToTeamEvent(ownerId,
+				team.getColor());
+		sendEvents(event);
 	}
 
 }

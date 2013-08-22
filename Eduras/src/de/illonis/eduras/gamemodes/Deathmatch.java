@@ -62,9 +62,11 @@ public class Deathmatch implements GameMode {
 
 	@Override
 	public void onTimeUp() {
-
-		gameInfo.getEventTriggerer().onMatchEnd();
-
+		try {
+			gameInfo.getEventTriggerer().onMatchEnd();
+		} catch (NullPointerException e) {
+			// FIXME: Client should never trigger this.
+		}
 	}
 
 	@Override
@@ -97,5 +99,6 @@ public class Deathmatch implements GameMode {
 			gameInfo.getEventTriggerer().addPlayerToTeam(player.getOwner(),
 					team);
 		}
+
 	}
 }

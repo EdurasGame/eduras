@@ -3,6 +3,8 @@ package de.illonis.eduras.networking;
 import java.util.LinkedList;
 
 import de.illonis.eduras.ObjectFactory.ObjectType;
+import de.illonis.eduras.Team.TeamColor;
+import de.illonis.eduras.events.AddPlayerToTeamEvent;
 import de.illonis.eduras.events.ClientRenameEvent;
 import de.illonis.eduras.events.ConnectionAbortedEvent;
 import de.illonis.eduras.events.ConnectionEstablishedEvent;
@@ -27,6 +29,7 @@ import de.illonis.eduras.events.SetItemSlotEvent;
 import de.illonis.eduras.events.SetOwnerEvent;
 import de.illonis.eduras.events.SetPolygonDataEvent;
 import de.illonis.eduras.events.SetRemainingTimeEvent;
+import de.illonis.eduras.events.SetTeamsEvent;
 import de.illonis.eduras.events.UserMovementEvent;
 import de.illonis.eduras.exceptions.GivenParametersDoNotFitToEventException;
 import de.illonis.eduras.exceptions.InvalidMessageFormatException;
@@ -293,6 +296,22 @@ public class NetworkMessageDeserializer {
 				gameEvent = new NoEvent();
 			}
 
+			break;
+		case SET_TEAMS:
+			if ((args.length + 1) % 2 != 0 || args.length == 1)
+				throw new InvalidMessageFormatException(
+						"Invalid number of team parameters.", msg);
+
+			SetTeamsEvent teamEvent = new SetTeamsEvent();
+			for (int i = 1; i < args.length; i++) {
+				teamEvent.addTeam(TeamColor.valueOf(args[i]), args[++i]);
+			}
+			gameEvent = teamEvent;
+
+			break;
+		case ADD_PLAYER_TO_TEAM:
+			gameEvent = new AddPlayerToTeamEvent(parseInt(args[1]),
+					TeamColor.valueOf(args[2]));
 			break;
 		case SET_ITEM_SLOT:
 			gameEvent = new SetItemSlotEvent(parseInt(args[2]),

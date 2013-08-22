@@ -50,7 +50,10 @@ public class Team {
 	 * @author illonis
 	 */
 	public void addPlayer(PlayerMainFigure newPlayer) {
+
 		newPlayer.setTeam(this);
+		if (players.contains(newPlayer))
+			return;
 		players.add(newPlayer);
 	}
 

@@ -6,6 +6,7 @@ import java.util.Collection;
 import java.util.LinkedList;
 import java.util.concurrent.ConcurrentHashMap;
 
+import de.illonis.eduras.events.AddPlayerToTeamEvent;
 import de.illonis.eduras.events.ClientRenameEvent;
 import de.illonis.eduras.events.GameEvent;
 import de.illonis.eduras.events.GameEvent.GameEventNumber;
@@ -15,6 +16,7 @@ import de.illonis.eduras.events.SetBooleanGameObjectAttributeEvent;
 import de.illonis.eduras.events.SetGameModeEvent;
 import de.illonis.eduras.events.SetIntegerGameObjectAttributeEvent;
 import de.illonis.eduras.events.SetRemainingTimeEvent;
+import de.illonis.eduras.events.SetTeamsEvent;
 import de.illonis.eduras.exceptions.InvalidNameException;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
 import de.illonis.eduras.gameobjects.GameObject;
@@ -303,6 +305,19 @@ public class GameInformation {
 					deathsOfPlayer);
 			infos.add(setDeathsEvent);
 		}
+
+		SetTeamsEvent teamEvent = new SetTeamsEvent();
+		LinkedList<AddPlayerToTeamEvent> teamPlayerEvents = new LinkedList<AddPlayerToTeamEvent>();
+		for (Team team : getTeams()) {
+			teamEvent.addTeam(team.getColor(), team.getName());
+			for (PlayerMainFigure player : team.getPlayers()) {
+				teamPlayerEvents.add(new AddPlayerToTeamEvent(
+						player.getOwner(), team.getColor()));
+			}
+		}
+
+		infos.add(teamEvent);
+		infos.addAll(teamPlayerEvents);
 
 		return infos;
 	}
