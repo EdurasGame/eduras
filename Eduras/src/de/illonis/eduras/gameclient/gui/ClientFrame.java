@@ -11,6 +11,10 @@ import java.awt.event.WindowEvent;
 
 import javax.swing.JFrame;
 
+import org.jdesktop.core.animation.timing.Animator;
+import org.jdesktop.core.animation.timing.TimingSource;
+import org.jdesktop.swing.animation.timing.sources.SwingTimerTimingSource;
+
 import de.illonis.eduras.exceptions.InvalidValueEnteredException;
 import de.illonis.eduras.gameclient.GameClient;
 import de.illonis.eduras.gameclient.NetworkEventReactor;
@@ -69,6 +73,10 @@ public class ClientFrame extends JFrame implements NetworkEventReactor,
 		});
 		cml = new CameraMouseListener(camera);
 
+		final TimingSource ts = new SwingTimerTimingSource();
+		Animator.setDefaultTimingSource(ts);
+		ts.init();
+
 		buildGui();
 		showLogin();
 	}
@@ -116,6 +124,7 @@ public class ClientFrame extends JFrame implements NetworkEventReactor,
 	public void showLogin() {
 		cardLayout.show(getContentPane(), LOGINPANEL);
 		client.startDiscovery(loginPanel);
+		loginPanel.startAnimation();
 	}
 
 	/**
@@ -124,6 +133,7 @@ public class ClientFrame extends JFrame implements NetworkEventReactor,
 	public void showProgress() {
 		progressPanel.reset();
 		cardLayout.show(getContentPane(), CONNECTPANEL);
+		loginPanel.stopAnimation();
 	}
 
 	/**
@@ -191,6 +201,7 @@ public class ClientFrame extends JFrame implements NetworkEventReactor,
 			gamePanel.stopRendering();
 			cml.stop();
 			client.stopDiscovery();
+			loginPanel.stopAnimation();
 			dispose();
 		}
 
@@ -269,4 +280,5 @@ public class ClientFrame extends JFrame implements NetworkEventReactor,
 	public void hideStatWindow() {
 		userInterface.hideStatWindow();
 	}
+
 }

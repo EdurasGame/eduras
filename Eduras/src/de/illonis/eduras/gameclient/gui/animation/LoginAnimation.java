@@ -14,27 +14,41 @@ import org.jdesktop.core.animation.timing.Animator;
 import org.jdesktop.core.animation.timing.Animator.RepeatBehavior;
 import org.jdesktop.core.animation.timing.TimingTarget;
 
+/**
+ * A very beautiful animation for the login panel.
+ * 
+ * @author illonis
+ * 
+ */
 public class LoginAnimation extends JPanel {
+
+	private static final long serialVersionUID = 1L;
 	private final Animator animator;
 	private LinkedList<Circle> circles;
 	private final static int ANIM_HEIGHT = 60;
 	private final static double LIMIT = 0.01;
 	private final static Random r = new Random();
 
+	/**
+	 * Creates a new animation panel.
+	 */
 	public LoginAnimation() {
 		super();
 
 		animator = new Animator.Builder().setDebugName("LoginAnimation")
 				.setRepeatCount(Animator.INFINITE)
-				.setDuration(1500, TimeUnit.MILLISECONDS)
+				.setDuration(1000, TimeUnit.MILLISECONDS)
 				.setRepeatBehavior(RepeatBehavior.LOOP).build();
 
 	}
 
+	/**
+	 * Starts animation.
+	 */
 	public void start() {
 
 		circles = new LinkedList<Circle>();
-		for (int x = 0; x < 70; x++) {
+		for (int x = 0; x < 2000; x++) {
 			Circle c = new Circle();
 			circles.add(c);
 			animator.addTarget(c);
@@ -42,6 +56,9 @@ public class LoginAnimation extends JPanel {
 		animator.start();
 	}
 
+	/**
+	 * Stops animation.
+	 */
 	public void stop() {
 		animator.stop();
 	}
@@ -51,6 +68,7 @@ public class LoginAnimation extends JPanel {
 		private int y;
 		private int oldY;
 		private double delay;
+		private double addition;
 		public final static int CIRCLE_WIDTH = 10;
 		public final static int CIRCLE_HEIGHT = 10;
 
@@ -60,11 +78,15 @@ public class LoginAnimation extends JPanel {
 			myRepeat();
 			alpha = 1;
 			y = oldY;
+			addition = 0;
+			if (r.nextFloat() < 0.2)
+				addition = r.nextFloat() * 20;
+
 			this.delay = r.nextFloat();
 		}
 
 		private void myRepeat() {
-			this.x = r.nextInt(getWidth());
+			this.x = r.nextInt(getWidth() + 20) - 10;
 			oldY = getHeight() + 10;
 		}
 
@@ -109,11 +131,13 @@ public class LoginAnimation extends JPanel {
 		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
 				RenderingHints.VALUE_ANTIALIAS_ON);
 
-		for (Circle c : circles) {
-			g2d.setPaint(new Color(0, 0, 1, c.alpha));
-			g2d.fillOval(c.x, c.y, Circle.CIRCLE_WIDTH, Circle.CIRCLE_HEIGHT);
+		for (int i = 0; i < circles.size(); i++) {
+			Circle c = circles.get(i);
+			g2d.setPaint(new Color(.67f, .003f, .0015f, c.alpha));
+			g2d.fillOval(c.x, c.y - (int) c.addition, Circle.CIRCLE_WIDTH,
+					Circle.CIRCLE_HEIGHT);
 		}
-
+		paintComponents(g2d);
 		g2d.dispose();
 	}
 }
