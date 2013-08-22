@@ -13,7 +13,7 @@ import de.illonis.eduras.math.Vector2D;
 /**
  * A simple shape that is empty and has no collision.
  * 
- * @author illonis
+ * @author Florian Mai <florian.ren.mai@googlemail.com>
  * 
  */
 public final class NoCollisionShape extends ObjectShape {

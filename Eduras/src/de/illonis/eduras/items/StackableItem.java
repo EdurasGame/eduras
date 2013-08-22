@@ -5,8 +5,8 @@ import de.illonis.eduras.ObjectFactory.ObjectType;
 
 /**
  * An item that is stackable. Stackable means you can hold multiple of this item
- * in a single slot. On each use, stack size is reduced by one. Maximum stack
- * size must not be above stack size at any time.
+ * in a single slot. On each use, stack size is reduced by one. The stack has a
+ * maximum size that cannot be exceeded.
  * 
  * @author illonis
  * 
@@ -28,15 +28,17 @@ public abstract class StackableItem extends Item implements Consumable {
 	 */
 	public StackableItem(ObjectType type, GameInformation gi, int id) {
 		super(type, gi, id);
-		setMaxStackSize();
+		setMaxStackSize(5);
 	}
 
 	/**
 	 * Sets the maximum stack size of this item to size specified by itemtype.
+	 * 
+	 * @param newSize
+	 *            the new maximum stack size, must be greater than zero.
 	 */
-	private void setMaxStackSize() {
-		// TODO: item-type dependent set of stacksize (use switch-case).
-		maxStackSize = 3;
+	private void setMaxStackSize(int newSize) {
+		maxStackSize = newSize;
 	}
 
 	/**
@@ -99,6 +101,8 @@ public abstract class StackableItem extends Item implements Consumable {
 	public synchronized boolean takeFromStack() {
 		if (stackSize > 0) {
 			stackSize--;
+			if (stackSize == 0)
+				onAllGone();
 			return true;
 		}
 		return false;

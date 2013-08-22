@@ -18,6 +18,7 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
@@ -30,6 +31,7 @@ import javax.swing.text.BadLocationException;
 
 import de.illonis.eduras.exceptions.InvalidValueEnteredException;
 import de.illonis.eduras.images.ImageFiler;
+import de.illonis.eduras.locale.Localization;
 import de.illonis.eduras.networking.ServerClient.ClientRole;
 import de.illonis.eduras.networking.discover.ServerFoundListener;
 import de.illonis.eduras.networking.discover.ServerInfo;
@@ -283,6 +285,14 @@ public class LoginPanel extends JPanel implements ActionListener,
 
 	@Override
 	public void onServerFound(ServerInfo info) {
-		serverData.addElement(info);
+		if (!serverData.contains(info))
+			serverData.addElement(info);
+	}
+
+	@Override
+	public void onDiscoveryFailed() {
+		serverData.clear();
+		JOptionPane.showMessageDialog(this,
+				Localization.getString("client.discovery.failed"));
 	}
 }

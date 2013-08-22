@@ -51,4 +51,14 @@ public class ServerInfo {
 	public InetAddress getUrl() {
 		return url;
 	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (obj instanceof ServerInfo) {
+			ServerInfo other = (ServerInfo) obj;
+			return other.getUrl().equals(getUrl())
+					&& getPort() == other.getPort();
+		}
+		return false;
+	}
 }

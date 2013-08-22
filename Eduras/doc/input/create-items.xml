@@ -1,0 +1,342 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE article PUBLIC "-//OASIS//DTD Simplified DocBook XML V1.0//EN"
+"http://www.oasis-open.org/docbook/xml/simple/1.0/sdocbook.dtd">
+<article>
+	<articleinfo>
+		<title>Items: Creation, Implementation and more</title>
+	</articleinfo>
+	<section>
+		<title>What's this about?</title>
+		<para>
+			In this chapter you will learn a lot about items, their features,
+			capabilities and how to create them.
+			For most of your needs, there will probably already exist a solution
+			in some way.
+		</para>
+		<para>
+			Note that this document does <emphasis>not</emphasis> provide
+			information regarding concept and design. At this point, we assume
+			that you have a ready-to-implement weapon or item design or at least
+			some facts to start off. 
+		</para>
+	</section>
+	<section>
+		<title>Item creation</title>
+		<para>
+			The parts you need to implement differs according to item's type.
+			Unfortunately, we only support active items at this time.
+		</para>
+		<para>
+			In order to fully implement an item, you will need to follow the
+			following steps that will explained in the subsections.
+		</para>
+		<orderedlist>
+			<listitem>
+				<para>Create an object type for your item</para>
+			</listitem>
+			<listitem>
+				<para>Create the object itself</para>
+			</listitem>
+			<listitem>
+				<para>Include it in objectfactory</para>
+			</listitem>
+			<listitem>
+				<para>Include the item image</para>
+			</listitem>
+		</orderedlist>
+		<section>
+			<title>Step 1: Create an object type</title>
+			<para>
+				This should be the very first point of your work because it covers
+				the key part and prevents identity conflicts.
+			</para>
+			<para>
+				Use Java Search to search for <computeroutput>ObjectType</computeroutput>
+				or go into <computeroutput>ObjectFactory</computeroutput>.
+				You should find the enum in the very beginning of the factory.
+				As you can see, there is an enum literal for each type of object.
+				Add your item to the end of the list and give it the next free id.
+			</para>
+			<para>
+				For example, if you are creating a firestab and the last used id
+				is 14, add a <computeroutput>FIRESTAB(15)</computeroutput> to
+				the end of the list.
+			</para>
+		</section>
+		<section>
+			<title>Step 2: Create the object</title>
+			<para>
+				Create a new Java class that derives from
+				<computeroutput>eduras.items.Item</computeroutput>.
+				You will have to call the non-default constructor of
+				<computeroutput>Item</computeroutput> class in your
+				constructor. Therefore you have to provide the ObjectType you
+				specified in step one as well as a GameInformation object and
+				an id that you will receive in your own constructor.
+			</para>
+			<para>
+				Within your constructor you can call several methods to specify
+				some details of your weapon:
+			</para>
+			<itemizedlist>
+				<listitem>
+					<para><emphasis>setName(String)</emphasis></para>
+					<para>Sets the name	of the item. This will be displayed in
+					tooltips and so on.</para>
+				</listitem>
+				<listitem>
+					<para><emphasis>setShape(Shape)</emphasis></para>
+					<para>Sets the shape of this item. The shape is used to
+					display the item on the map. For details, see the tutorial
+					on shapes.</para>
+				</listitem>
+			</itemizedlist>
+			<para>
+				You may want to make your item usable and/or lootable.
+				Therefore, just implement the interfaces named the same.
+				You can also create stackable items in a very easy way.
+				All these are described in detail later on in this document.
+			</para>
+			<para>
+				If you are creating a weapon, derive from
+				<computeroutput>Weapon</computeroutput> because this will make
+				a lot of your problems simplier. More details are described
+				in next chapter.
+			</para>
+			<para>
+				An example for a constructor can be seen below.
+			</para>
+			<programlisting language="java">public SplashedMissile(GameInformation game, int id) {
+		super(game, id);
+		setObjectType(ObjectType.MISSILE_SPLASHED);
+		setDamage(3);
+		setDamageRadius(1);
+		setShape(new Circle(3));
+		setSpeed(250);
+	}</programlisting>
+			<warning>
+				<para>
+					Never ever provide a default constructor in your item class!
+				</para>
+				<para>
+					Creating gameobjects without an ID can result in undesired game behaviour.
+				</para>
+			</warning>
+		</section>
+		<section xml:id="factory">
+			<title>Step 3: Going industrial</title>
+
+			<para>
+				To make Eduras? able to create instances of your item,
+				the object factory needs to know of it. To achieve this,
+				go into <computeroutput>ObjectFactory</computeroutput> class
+				and to <computeroutput>onObjectFactoryEventAppeared(...)</computeroutput>
+				method. There, you should find a switch where you have to add
+				a case with your ObjectType. Create an instance of your item here.
+				That's enough. 
+			</para>
+		</section>
+		<section>
+			<title>Step 4: Visual aid</title>
+			<para>
+				Giving your item an individual icon makes it more recognizable.
+				Creating the image might be the task that is more difficult for you
+				because it requires graphic skills. However, we provide some small
+				tips for you to make your life easier and describe how you include
+				your image into the game.
+			</para>
+			<section>
+				<title>a) Graphical work</title>
+				<para>
+					We have a template for you to take some work from you.
+					Open the <computeroutput>icon-templates.svg</computeroutput> in
+					<ulink url="http://inkscape.org/">Inkscape</ulink>.
+					Don't forget to save it using another name to prevent overwriting
+					the template.
+					Feel free to be an artist now and draw your icon.
+				</para>
+				<para>
+					After finishing that, export your image:
+					<computeroutput>Datei -> Bitmap exportieren...</computeroutput>
+					Make sure, "Seite" is selected on top of dialog and the size is 48x48px.
+				</para>
+				<important>
+					<para>
+						Do NOT copy any images from other sources when you are not
+						allowed to!
+					</para>
+				</important>
+			</section>
+			<section>
+				<title>b) Technical work</title>
+				<para>
+					Including your image into Eduras? is rather simple.
+					Put your image and its source file into
+					<computeroutput>images.gui.icons</computeroutput> package. Keep
+					your eye open if there is a substructure where you should put
+					your icon into.
+				</para>
+				<para>
+					To associate your image with your item, go into
+					<computeroutput>gameclient.gui.ImageList</computeroutput>. At the
+					end of that class, you will find a <computeroutput>load()</computeroutput>
+					method where you should add two lines for your item that are self-explanatory.
+				</para>
+				<programlisting>BufferedImage i = ImageFiler.load("gui/icons/icon-firestab.png");
+images.put(ObjectType.FIRESTAB, i);</programlisting>
+			</section>
+		</section>
+	</section>
+	<section>
+		<title>Weapons</title>
+		<para>
+			We choose to explain weapons in detail here because they need a lot of
+			initialization before they work properly. Otherwise your weapon may be not
+			more than decoration.
+		</para>
+		<para>
+			The one thing of the weapon is the weapon itself, the other is its missile.
+			You will have to implement a new subtype of <computeroutput>Missile</computeroutput>
+			or extend a special existing one.
+			The best way to learn how a weapon is created is looking at a sample.
+		</para>
+		<section>
+			<title>The weapon part</title>
+			<programlisting>public SplashWeapon(GameInformation infos, int id) {
+		super(ObjectType.ITEM_WEAPON_SPLASH, infos, id);
+		setMissile(null);
+		setName("SplashWeapon");
+		setShape(new Circle(7));
+		defaultCooldown = 900;
+	}</programlisting>
+			<para>
+				In this constructor the weapon gets a name ("SplashWeapon") and a shape that
+				represents its form on the map when lying around.
+				There is also specified a defaultCooldown of 900ms.
+				You can also change the respawn time by setting <computeroutput>respawnTime</computeroutput>
+				in ms.
+			</para>
+			<para>
+				The <computeroutput>doIfReady(ItemUseInformation)</computeroutput> method will
+				contain the fire process written by you. The key point is the following line that
+				launches a missile of a specific type at given position with given speed.
+			</para>
+			<programlisting>getGame().getEventTriggerer().createMissile(ObjectType.MISSILE_SPLASH,
+			getOwner(), position, speedVector);</programlisting>
+		</section>
+		<section>
+			<title>The missile part</title>
+			<para>
+				Creating the missile is not that hard. Just create a new class extending from
+				<computeroutput>Missile</computeroutput> and implement the required methods.
+				For the methods, have a look at <computeroutput>SimpleMissile</computeroutput> for
+				tips and tricks.
+			</para>
+			<para>
+				In the constructor you can specify the attributes of the missile. We recommend to
+				set all of them to prevent errors. They should all be self-explanatory.
+			</para>
+			<programlisting>setDamage(5);
+setDamageRadius(5);
+setObjectType(ObjectType.MISSILE_SPLASH);
+setSpeed(100);
+setMaxRange(200);</programlisting>
+		</section>
+		<section>
+			<title>Make it all work</title>
+			<para>
+				An important point developers often forget is to add their objects to the factory.
+				You can find these introductions in <xref linkend="factory" />.
+				If you are unsure, go through the item creation guide at the beginning.
+			</para>	
+		</section>
+	</section>
+	<section>
+		<title>Item interfaces and classes</title>
+		<para>
+			There already exist some interfaces that give your items special abilities.
+			We will describe them in the following to help you selecting what you need.
+		</para>
+		<section>
+			<title>Usable / Consumable</title>
+			<para>
+				Usable and Consumable items can be used by the user (surprise!). Consumable
+				is a subtype of Usable and indicates that the item will be removed on use.
+				For example, a weapon will be a Usable and a potion will be Consumable.
+			</para>
+			<para>
+				You will need to implement the following methods if implementing one of them.
+			</para>
+			<itemizedlist>
+	  			<listitem>
+	  				<para>use(ItemUseInformation info)</para>
+	  				<para>
+	  					Triggered when the item is used. You should break immediately if
+	  					your item is on cooldown. Otherwise start cooldown here.
+	  				</para>
+	  			</listitem>
+	  			<listitem>
+	  				<para>startCooldown()</para>
+	  			</listitem>
+	  			<listitem>
+	  				<para>getCooldownTime()</para>
+	  			</listitem>
+	  			<listitem>
+	  				<para>reduceCooldown(long value)</para>
+	  			</listitem>
+	  			<listitem>
+	  				<para>hasCooldown()</para>
+	  			</listitem>
+	  			<listitem>
+	  				<para>resetCooldown()</para>
+	  			</listitem>
+			</itemizedlist>
+			<para>
+				For more information on these methods, check the JavaDoc.
+			</para>
+			<note>
+				<para>
+					We are planning to provide a custom abstract Item class that
+					handles all cooldown stuff so that you don't have to bother with it.
+				</para>
+				<para>
+					If you want your item to have a "special" cooldown system, you
+					can override those methods.
+				</para>	
+				<para>
+					As long as this helper class is not finished, have a look at weapon
+					for implementation examples.
+				</para>
+			</note>
+			<para>
+				The Consumable interface additionally requires you to implement
+				<computeroutput>onAllGone()</computeroutput> that is called when
+				your item or all of your stacks are consumed.
+			</para>
+		</section>
+		<section>
+			<title>Lootable</title>
+			<para>
+				The lootable interface allows your item to be lootable.
+				In the <computeroutput>loot()</computeroutput> method, you can specify
+				special things to happen on every loot. Note that you do not have to
+				handle the add-to-player thing and so on. That is done automatically.
+			</para>
+			<para>
+				Changing your item's attributes will not have any affect on the looted item
+				since the user is gaining a copy of this item.
+			</para>
+			<para>
+				You also have to handle respawn cooldowns.
+			</para>
+		</section>
+		<section>
+			<title>StackableItem</title>
+			<para>
+				The stackable item is a subclass of Item and provides almost all functionality
+				of a stackable item. It handles the stack on its own and allows you to keep
+				your eyes focused on your things. A stackable item is consumable.
+			</para>
+		</section>
+	</section>	
+</article>

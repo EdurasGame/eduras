@@ -8,6 +8,7 @@ import java.util.Collection;
 import java.util.concurrent.ConcurrentHashMap;
 
 import de.illonis.eduras.Statistic;
+import de.illonis.eduras.Team;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
 import de.illonis.eduras.gamemodes.GameMode;
 import de.illonis.eduras.gameobjects.GameObject;
@@ -55,6 +56,13 @@ public interface InfoInterface {
 	 * @author illonis
 	 */
 	public Collection<PlayerMainFigure> getPlayers();
+
+	/**
+	 * @return team list.
+	 * 
+	 * @author illonis
+	 */
+	public Collection<Team> getTeams();
 
 	/**
 	 * Returns game statistics.

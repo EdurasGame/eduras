@@ -2,8 +2,11 @@ package de.illonis.eduras.networking;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.SocketException;
 import java.util.HashMap;
 import java.util.LinkedList;
 
@@ -47,17 +50,21 @@ public class Server {
 	 * Default port where server listens for new clients.
 	 */
 	public final static int DEFAULT_PORT = 4387;
+	/**
+	 * Default server name.
+	 */
+	public final static String DEFAULT_NAME = "unnamed server";
 
-	private final static String DEFAULT_NAME = "unnamed server";
 	private final Buffer inputBuffer, outputBuffer;
 	private final ServerSender serverSender;
-	private final HashMap<Integer, ServerReceiver> serverReceivers;
+	private final HashMap<Integer, ServerTCPReceiver> serverTCPReceivers;
 	private ServerDecoder serverLogic;
 	private GameInformation game;
 	private GameLogicInterface logic;
 	private final int port;
 	private boolean running = true;
 	private final String name;
+	private UDPMessageReceiver serverUDPReceiver;
 
 	/**
 	 * Creates a new Server listening on default port.
@@ -102,7 +109,46 @@ public class Server {
 		inputBuffer = new Buffer();
 		outputBuffer = new Buffer();
 		serverSender = new ServerSender(outputBuffer, null);
-		serverReceivers = new HashMap<Integer, ServerReceiver>();
+		serverTCPReceivers = new HashMap<Integer, ServerTCPReceiver>();
+		serverUDPReceiver = new UDPMessageReceiver();
+	}
+
+	/**
+	 * Receives UDP messages and processes them.
+	 * 
+	 * @author Florian Mai <florian.ren.mai@googlemail.com>
+	 * 
+	 */
+	class UDPMessageReceiver extends Thread {
+
+		private static final int MAX_UDP_SIZE = 1024;
+
+		@Override
+		public void run() {
+			DatagramSocket udpSocket = null;
+			try {
+				udpSocket = new DatagramSocket(port);
+			} catch (SocketException e) {
+				EduLog.error("UDP connection failed. See next exception.");
+				EduLog.passException(e);
+				stopServer();
+			}
+
+			while (running) {
+				DatagramPacket packet = new DatagramPacket(
+						new byte[MAX_UDP_SIZE], MAX_UDP_SIZE);
+				try {
+					udpSocket.receive(packet);
+					String messages = new String(packet.getData(), 0,
+							packet.getLength());
+					inputBuffer.append(messages);
+				} catch (IOException e) {
+					EduLog.error("UDP connection to server closed. See next exception.");
+					EduLog.passException(e);
+					stopServer();
+				}
+			}
+		}
 	}
 
 	/**
@@ -127,6 +173,7 @@ public class Server {
 
 		serverLogic.start();
 		serverSender.start();
+		serverUDPReceiver.start();
 
 		try {
 			ConnectionListener cl = new ConnectionListener();
@@ -253,9 +300,9 @@ public class Server {
 			}
 
 			if (initInfoEvent.getRole() == ClientRole.PLAYER) {
-				ServerReceiver sr = new ServerReceiver(this, client);
+				ServerTCPReceiver sr = new ServerTCPReceiver(this, client);
 				sr.start();
-				serverReceivers.put(client.getClientId(), sr);
+				serverTCPReceivers.put(client.getClientId(), sr);
 			}
 
 			// transfer information to client
@@ -329,7 +376,7 @@ public class Server {
 	 */
 	void removeClient(ServerClient client) {
 		serverSender.remove(client);
-		serverReceivers.get(client.getClientId()).stopRunning();
+		serverTCPReceivers.get(client.getClientId()).stopRunning();
 	}
 
 	/**
@@ -404,7 +451,7 @@ public class Server {
 
 		serverSender.stopSender();
 
-		for (ServerReceiver receiver : serverReceivers.values()) {
+		for (ServerTCPReceiver receiver : serverTCPReceivers.values()) {
 			receiver.stopRunning();
 			receiver.interrupt();
 		}
@@ -415,8 +462,8 @@ public class Server {
 	 * 
 	 * @return The serverreceivers.
 	 */
-	HashMap<Integer, ServerReceiver> getServerReceivers() {
-		return serverReceivers;
+	HashMap<Integer, ServerTCPReceiver> getServerReceivers() {
+		return serverTCPReceivers;
 	}
 
 	/**

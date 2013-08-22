@@ -21,22 +21,25 @@ public abstract class Map {
 	private final int height;
 
 	private Collection<GameObject> initialObjects;
-	private Collection<Vector2D> spawnPoints;
+	private final Collection<SpawnPosition> spawnAreas;
 
 	/**
 	 * Creates a new map with the given name and size and empty spawnpoint- and
 	 * objectlist.
 	 * 
 	 * @param name
+	 *            name of the map.
 	 * @param width
+	 *            width of the map.
 	 * @param height
+	 *            height of the map.
 	 */
 	public Map(String name, int width, int height) {
 		this.name = name;
 		this.width = width;
 		this.height = height;
 		initialObjects = new LinkedList<GameObject>();
-		spawnPoints = new LinkedList<Vector2D>();
+		spawnAreas = new LinkedList<SpawnPosition>();
 	}
 
 	/**
@@ -90,8 +93,8 @@ public abstract class Map {
 	 * 
 	 * @return A collection of spawnpoints.
 	 */
-	public Collection<Vector2D> getSpawnPoints() {
-		return spawnPoints;
+	public Collection<SpawnPosition> getSpawnAreas() {
+		return spawnAreas;
 	}
 
 	/**
@@ -113,14 +116,4 @@ public abstract class Map {
 	public void setInitialObjects(Collection<GameObject> objects) {
 		this.initialObjects = objects;
 	}
-
-	/**
-	 * Sets the map's spawnpoints.
-	 * 
-	 * @param spawnPoints
-	 */
-	public void setSpawnPoints(Collection<Vector2D> spawnPoints) {
-		this.spawnPoints = spawnPoints;
-	}
-
 }

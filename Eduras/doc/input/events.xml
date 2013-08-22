@@ -118,6 +118,14 @@
 						<entry>-</entry>
 					</row>
 					<row>
+						<entry>SET_POLYGON_DATA</entry>
+						<entry>105</entry>
+						<entry>Sets polygon data of a dynamic polygon block.</entry>
+						<entry>objectId</entry>
+						<entry>first x</entry>
+						<entry>first y (and so on)</entry>
+					</row>
+					<row>
 						<entry>OBJECT_CREATE</entry>
 						<entry>120</entry>
 						<entry>Tells that an object has been created.</entry>
@@ -197,6 +205,21 @@
 						<entry>190</entry>
 						<entry>Tells that the match ended and that the winner has got the passed id.</entry>
 						<entry>winnerId</entry>
+					</row>
+					<row>
+					    <entry>SET_TEAMS</entry>
+					    <entry>191</entry>
+					    <entry>Tells client which teams are playing.</entry>
+					    <entry>name#1</entry>
+					    <entry>color#1</entry>
+					    <entry>name#1...</entry>
+					</row>
+					<row>
+					    <entry>ADD_PLAYER_TO_TEAM</entry>
+					    <entry>192</entry>
+					    <entry>Adds a player to a team.</entry>
+					    <entry>ownerId</entry>
+					    <entry>teamcolor</entry>
 					</row>
 				</tbody>
 			</tgroup>

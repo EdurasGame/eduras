@@ -8,6 +8,7 @@ import java.util.Collection;
 import java.util.concurrent.ConcurrentHashMap;
 
 import de.illonis.eduras.Statistic;
+import de.illonis.eduras.Team;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
 import de.illonis.eduras.gamemodes.GameMode;
 import de.illonis.eduras.gameobjects.GameObject;
@@ -109,6 +110,11 @@ public class InformationProvider implements InfoInterface {
 	@Override
 	public long getRemainingTime() {
 		return logic.getGame().getGameSettings().getRemainingTime();
+	}
+
+	@Override
+	public Collection<Team> getTeams() {
+		return logic.getGame().getTeams();
 	}
 
 }

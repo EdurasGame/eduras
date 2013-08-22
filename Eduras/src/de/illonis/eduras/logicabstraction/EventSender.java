@@ -11,7 +11,10 @@ import de.illonis.eduras.exceptions.MessageNotSupportedException;
 import de.illonis.eduras.exceptions.WrongEventTypeException;
 import de.illonis.eduras.interfaces.GameLogicInterface;
 import de.illonis.eduras.networking.Client;
+import de.illonis.eduras.networking.ClientSender.PacketType;
+import de.illonis.eduras.networking.InetPolizei;
 import de.illonis.eduras.networking.NetworkMessageSerializer;
+import de.illonis.eduras.networking.NetworkPolicy;
 
 /**
  * This class provides a connection between GUI and logic for sending events, on
@@ -62,9 +65,13 @@ public class EventSender {
 		// TODO: Think of a rearragement of the event to make it fit better to a
 		// distinction of events.
 
+		// TODO: Replace inet polizei with something better!
+		NetworkPolicy policy = new InetPolizei();
+		PacketType networkType = policy.determinePacketType(event);
+
 		if (event instanceof NetworkEvent) {
 			NetworkEvent networkEvent = (NetworkEvent) event;
-			sendNetworkEvent(networkEvent);
+			sendNetworkEvent(networkEvent, networkType);
 			return;
 		}
 
@@ -76,7 +83,7 @@ public class EventSender {
 
 		String msg = NetworkMessageSerializer.serialize(event);
 
-		client.sendMessage(msg);
+		client.sendMessage(msg, networkType);
 		if (gameEvent.getType() == GameEventNumber.SET_POS)
 			logic.onGameEventAppeared(gameEvent);
 	}
@@ -86,12 +93,13 @@ public class EventSender {
 	 * 
 	 * @param event
 	 *            The event o send.
+	 * @param type
 	 * @throws MessageNotSupportedException
 	 */
-	private void sendNetworkEvent(NetworkEvent event)
+	private void sendNetworkEvent(NetworkEvent event, PacketType type)
 			throws MessageNotSupportedException {
 		String msg = NetworkMessageSerializer.serialize(event);
 
-		client.sendMessage(msg);
+		client.sendMessage(msg, type);
 	}
 }

@@ -6,13 +6,13 @@ import java.io.IOException;
 import de.illonis.eduras.logger.EduLog;
 
 /**
- * The ServerReceiver receives messages from clients and pushes them to input
+ * The ServerReceiver receives messages from a client and pushes them to input
  * buffer.
  * 
  * @author illonis
  * 
  */
-public class ServerReceiver extends Thread {
+public class ServerTCPReceiver extends Thread {
 
 	private final Buffer inputBuffer;
 	private final ServerClient client;
@@ -27,7 +27,7 @@ public class ServerReceiver extends Thread {
 	 * @param client
 	 *            Client that's inputstream should be used.
 	 */
-	public ServerReceiver(Server server, ServerClient client) {
+	public ServerTCPReceiver(Server server, ServerClient client) {
 		this.server = server;
 		setName("ServerReceiver (Client " + client.getClientId() + ")");
 		this.inputBuffer = server.getInputBuffer();

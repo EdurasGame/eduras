@@ -62,4 +62,9 @@ public class NoGameMode implements GameMode {
 
 	}
 
+	@Override
+	public void onGameStart() {
+
+	}
+
 }

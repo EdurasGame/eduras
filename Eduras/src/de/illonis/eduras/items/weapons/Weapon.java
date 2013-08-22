@@ -11,13 +11,13 @@ import de.illonis.eduras.items.Usable;
 import de.illonis.eduras.units.PlayerMainFigure;
 
 /**
- * A weapon holds a missile prototype that is used for shooting.
+ * A weapon holds a missile prototype that is used for shooting. This is wrong!
  * 
  * @author illonis
  * 
  */
 public abstract class Weapon extends Item implements Lootable, Usable {
-
+	// TODO: remove that missile stuff. Weapons do not hold any missiles.
 	private final int damage = 0;
 	private long cooldown = 0;
 	protected long defaultCooldown = 0;
@@ -29,6 +29,7 @@ public abstract class Weapon extends Item implements Lootable, Usable {
 	 * Creates a new weapon being of the type given.
 	 * 
 	 * @param type
+	 *            the objecttype of the weapon.
 	 * @param gi
 	 *            The gameinformation context
 	 * @param id

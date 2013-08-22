@@ -1,6 +1,7 @@
 package de.illonis.eduras.logic;
 
 import de.illonis.eduras.ObjectFactory.ObjectType;
+import de.illonis.eduras.Team;
 import de.illonis.eduras.gamemodes.GameMode;
 import de.illonis.eduras.items.Item;
 import de.illonis.eduras.maps.Map;
@@ -41,6 +42,21 @@ public interface EventTriggerer {
 	void removeObject(int objectId);
 
 	/**
+	 * Creates a dynamic polygon.
+	 * 
+	 * @param polygonVertices
+	 *            vertices of polygon.
+	 * @param position
+	 *            position of polygon.
+	 * @param owner
+	 *            owner id of new polygon.
+	 * 
+	 * @author illonis
+	 */
+	void createDynamicPolygonAt(Vector2D[] polygonVertices, Vector2D position,
+			int owner);
+
+	/**
 	 * Creates an object at given position.
 	 * 
 	 * @param object
@@ -50,8 +66,22 @@ public interface EventTriggerer {
 	 * @param owner
 	 *            owner id of new object.
 	 * @return the id of the created object.
+	 * @see #createDynamicPolygonAt(Vector2D[], Vector2D, int)
 	 */
-	int createObjectAt(ObjectType object, Vector2D position, int owner);
+	public int createObjectAt(ObjectType object, Vector2D position, int owner);
+
+	/**
+	 * Sets polygon data of a polygon with given id.
+	 * 
+	 * @param objectId
+	 *            object id of polygon.
+	 * @param polygonVertices
+	 *            new vertices of polygon.
+	 * @see #createDynamicPolygonAt(Vector2D[], Vector2D, int)
+	 * 
+	 * @author illonis
+	 */
+	public void setPolygonData(int objectId, Vector2D[] polygonVertices);
 
 	/**
 	 * Creates an object.
@@ -175,6 +205,7 @@ public interface EventTriggerer {
 	 * Changes the gamemode to newMode.
 	 * 
 	 * @param newMode
+	 *            the new gamemode.
 	 */
 	void changeGameMode(GameMode newMode);
 
@@ -182,6 +213,29 @@ public interface EventTriggerer {
 	 * Remaxes the health of the unit.
 	 * 
 	 * @param unit
+	 *            the unit.
 	 */
 	void remaxHealth(Unit unit);
+
+	/**
+	 * Sets teams to given teams.
+	 * 
+	 * @param teams
+	 *            the new teams.
+	 * 
+	 * @author illonis
+	 */
+	void setTeams(Team... teams);
+
+	/**
+	 * Adds a player to given team.
+	 * 
+	 * @param ownerId
+	 *            owner id of player.
+	 * @param team
+	 *            team.
+	 * 
+	 * @author illonis
+	 */
+	void addPlayerToTeam(int ownerId, Team team);
 }

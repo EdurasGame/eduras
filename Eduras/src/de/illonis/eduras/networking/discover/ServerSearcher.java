@@ -1,9 +1,8 @@
 package de.illonis.eduras.networking.discover;
 
 import java.io.IOException;
-import java.net.DatagramPacket;
-import java.net.DatagramSocket;
 import java.net.InetAddress;
+import java.net.InetSocketAddress;
 import java.net.InterfaceAddress;
 import java.net.NetworkInterface;
 import java.util.Enumeration;
@@ -17,8 +16,13 @@ import de.illonis.eduras.logger.EduLog;
  * 
  */
 public class ServerSearcher extends Thread {
-	private DatagramSocket c;
+	private DiscoveryChannel c;
+	private ClientServerResponseHandler handler;
 	private ServerFoundListener listener;
+	/**
+	 * Broadcast interval in milliseconds.
+	 */
+	public final static int BROADCAST_INTERVAL = 2000;
 
 	/**
 	 * Creates a new server searcher. The listener must be applied later before
@@ -36,6 +40,7 @@ public class ServerSearcher extends Thread {
 	 */
 	public ServerSearcher(ServerFoundListener answerListener) {
 		this();
+		setName(getClass().getName());
 		this.listener = answerListener;
 	}
 
@@ -49,33 +54,16 @@ public class ServerSearcher extends Thread {
 		this.listener = listener;
 	}
 
-	@Override
-	public void run() {
-		if (listener == null) {
-			throw new IllegalStateException(
-					"There is no listener attached to ServerSearcher.");
-		}
+	private void sendDiscoverBroadcast() {
+
 		// Find the server using UDP broadcast
 		try {
-			// Open a random port to send the package
-			c = new DatagramSocket();
-			c.setBroadcast(true);
+			InetSocketAddress target = new InetSocketAddress(
+					InetAddress.getByName("255.255.255.255"),
+					ServerDiscoveryListener.SERVER_PORT);
 
-			byte[] sendData = ServerDiscoveryListener.REQUEST_MSG.getBytes();
-
-			// Try the 255.255.255.255 first
-			try {
-				DatagramPacket sendPacket = new DatagramPacket(sendData,
-						sendData.length,
-						InetAddress.getByName("255.255.255.255"),
-						ServerDiscoveryListener.DISCOVERY_PORT);
-				c.send(sendPacket);
-				System.out
-						.println(getClass().getName()
-								+ ">>> Request packet sent to: 255.255.255.255 (DEFAULT)");
-			} catch (Exception e) {
-			}
-
+			c.send(ServerDiscoveryListener.REQUEST_MSG, target);
+			EduLog.info("[ServerSearcher] Sent request packet via 255.255.255.255.");
 			// Broadcast the message over all the network interfaces
 			Enumeration<NetworkInterface> interfaces = NetworkInterface
 					.getNetworkInterfaces();
@@ -83,8 +71,8 @@ public class ServerSearcher extends Thread {
 				NetworkInterface networkInterface = interfaces.nextElement();
 
 				if (networkInterface.isLoopback() || !networkInterface.isUp()) {
-					continue; // Don't want to broadcast to the loopback
-								// interface
+					continue;
+					// Don't want to broadcast to the loopback interface
 				}
 
 				for (InterfaceAddress interfaceAddress : networkInterface
@@ -94,65 +82,75 @@ public class ServerSearcher extends Thread {
 						continue;
 					}
 
+					target = new InetSocketAddress(broadcast.getHostAddress(),
+							ServerDiscoveryListener.SERVER_PORT);
+
 					// Send the broadcast package!
-					try {
-						DatagramPacket sendPacket = new DatagramPacket(
-								sendData, sendData.length, broadcast,
-								ServerDiscoveryListener.DISCOVERY_PORT);
-						c.send(sendPacket);
-					} catch (Exception e) {
-					}
 
-					System.out.println(getClass().getName()
-							+ ">>> Request packet sent to: "
-							+ broadcast.getHostAddress() + "; Interface: "
-							+ networkInterface.getDisplayName());
+					c.send(ServerDiscoveryListener.REQUEST_MSG, target);
+					EduLog.info("[ServerSearcher] Sent request packet to "
+							+ broadcast.getHostAddress() + " via "
+							+ networkInterface.getDisplayName() + ".");
+
 				}
 			}
-
-			System.out
-					.println(getClass().getName()
-							+ ">>> Done looping over all network interfaces. Now waiting for a reply!");
-
-			// Wait for a response
-			byte[] recvBuf = new byte[15000];
-			DatagramPacket receivePacket = new DatagramPacket(recvBuf,
-					recvBuf.length);
-			c.receive(receivePacket);
-
-			// We have a response
-			System.out.println(getClass().getName()
-					+ ">>> Broadcast response from server: "
-					+ receivePacket.getAddress().getHostAddress());
-
-			// Check if the message is correct
-			String message = new String(receivePacket.getData()).trim();
-			if (message.contains(ServerDiscoveryListener.ANSWER_MSG)) {
-				String[] msgparts = message.split("#");
-
-				// DO SOMETHING WITH THE SERVER'S IP (for example, store it in
-				// your controller)
-				int port = 0;
-				try {
-					port = Integer.parseInt(msgparts[2]);
-					ServerInfo info = new ServerInfo(msgparts[1],
-							receivePacket.getAddress(), port);
-					listener.onServerFound(info);
-				} catch (NumberFormatException ne) {
-				}
-
-			}
-
-			// Close the port!
-			c.close();
-		} catch (IOException ex) {
-			EduLog.passException(ex);
+		} catch (IOException e) {
+			EduLog.passException(e);
 		}
+	}
+
+	private boolean init() {
+		try {
+			// Open a random port to send the package
+			c = new DiscoveryChannel(false);
+		} catch (IOException e) {
+			EduLog.passException(e);
+			return false;
+		}
+
+		handler = new ClientServerResponseHandler(listener);
+		handler.start();
+
+		try {
+			synchronized (handler) {
+				// wait for response handler to be ready.
+				// this is required so we do not receive anything before we
+				// listen to it.
+				handler.wait();
+			}
+		} catch (InterruptedException e) {
+			EduLog.passException(e);
+			return false;
+		}
+		return true;
+	}
+
+	@Override
+	public void run() {
+		if (listener == null) {
+			throw new IllegalStateException(
+					"There is no listener attached to ServerSearcher.");
+		}
+
+		if (!init())
+			return;
+
+		while (true) {
+			sendDiscoverBroadcast();
+			try {
+				Thread.sleep(BROADCAST_INTERVAL);
+			} catch (InterruptedException e) {
+				break;
+			}
+		}
+
+		c.close();
 	}
 
 	@Override
 	public void interrupt() {
 		c.close();
+		handler.interrupt();
 		super.interrupt();
 	}
 

@@ -4,6 +4,9 @@ import java.util.logging.Level;
 
 import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.ObjectFactory;
+import de.illonis.eduras.Team;
+import de.illonis.eduras.Team.TeamColor;
+import de.illonis.eduras.events.AddPlayerToTeamEvent;
 import de.illonis.eduras.events.ClientRenameEvent;
 import de.illonis.eduras.events.DeathEvent;
 import de.illonis.eduras.events.GameEvent;
@@ -17,11 +20,14 @@ import de.illonis.eduras.events.SetGameModeEvent;
 import de.illonis.eduras.events.SetIntegerGameObjectAttributeEvent;
 import de.illonis.eduras.events.SetItemSlotEvent;
 import de.illonis.eduras.events.SetOwnerEvent;
+import de.illonis.eduras.events.SetPolygonDataEvent;
 import de.illonis.eduras.events.SetRemainingTimeEvent;
+import de.illonis.eduras.events.SetTeamsEvent;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
 import de.illonis.eduras.gamemodes.Deathmatch;
 import de.illonis.eduras.gamemodes.GameMode;
 import de.illonis.eduras.gamemodes.NoGameMode;
+import de.illonis.eduras.gameobjects.DynamicPolygonBlock;
 import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.interfaces.GameEventListener;
 import de.illonis.eduras.interfaces.GameLogicInterface;
@@ -58,7 +64,7 @@ public class ClientLogic implements GameLogicInterface {
 		listenerHolder = new ListenerHolder<GameEventListener>();
 		lgw = new LogicGameWorker(gameInfo, listenerHolder);
 		Thread gameWorker = new Thread(lgw);
-		gameWorker.setName("LogicGameWorker");
+		gameWorker.setName("ClientLogicGameWorker");
 		gameWorker.start();
 	}
 
@@ -99,6 +105,20 @@ public class ClientLogic implements GameLogicInterface {
 				getListener().onHealthChanged(healthEvent);
 
 				break;
+			case SET_POLYGON_DATA:
+				SetPolygonDataEvent polyEvent = (SetPolygonDataEvent) event;
+				GameObject gameObj = gameInfo.findObjectById(polyEvent
+						.getObjectId());
+				if (gameObj == null)
+					break;
+				if (gameObj instanceof DynamicPolygonBlock) {
+					((DynamicPolygonBlock) gameObj)
+							.setPolygonVertices(polyEvent.getVertices());
+				} else {
+					EduLog.warning("Given object id in SET_POLYGON_DATA event does not match a DynamicPolygonBlock, instead object is a "
+							+ gameObj.getClass().getName());
+				}
+				break;
 			case SETMAXHEALTH:
 				SetIntegerGameObjectAttributeEvent mhealthEvent = (SetIntegerGameObjectAttributeEvent) event;
 				GameObject gobj = gameInfo.findObjectById(mhealthEvent
@@ -111,7 +131,31 @@ public class ClientLogic implements GameLogicInterface {
 				getListener().onHealthChanged(mhealthEvent);
 
 				break;
+			case SET_TEAMS:
+				SetTeamsEvent teamEvent = (SetTeamsEvent) event;
 
+				gameInfo.getTeams().clear();
+				for (TeamColor color : teamEvent.getTeamList().keySet()) {
+					String name = teamEvent.getTeamList().get(color);
+					Team t = new Team(name, color);
+					gameInfo.getTeams().add(t);
+				}
+				break;
+			case ADD_PLAYER_TO_TEAM:
+				AddPlayerToTeamEvent pteEvent = (AddPlayerToTeamEvent) event;
+				for (Team t : gameInfo.getTeams()) {
+					if (t.getColor() == pteEvent.getTeamColor()) {
+						PlayerMainFigure player;
+						try {
+							player = gameInfo.getPlayerByOwnerId(pteEvent
+									.getOwner());
+						} catch (ObjectNotFoundException e1) {
+							return;
+						}
+						t.addPlayer(player);
+					}
+				}
+				break;
 			case DEATH:
 				DeathEvent de = (DeathEvent) event;
 				GameObject killed = gameInfo.findObjectById(de.getKilled());

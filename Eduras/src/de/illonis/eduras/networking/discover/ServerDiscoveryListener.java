@@ -1,29 +1,35 @@
 package de.illonis.eduras.networking.discover;
 
 import java.io.IOException;
-import java.net.DatagramPacket;
-import java.net.DatagramSocket;
 import java.net.InetAddress;
+import java.net.InetSocketAddress;
+import java.net.SocketAddress;
 
 import de.illonis.eduras.logger.EduLog;
+import de.illonis.eduras.utils.Pair;
 
 /**
- * Listens on Port {@value #DISCOVERY_PORT} to receive UDP broadcast packages.
+ * Listens on Port {@value #SERVER_PORT} to receive UDP broadcast packages.
  * 
  * @author illonis
  * 
  */
 public class ServerDiscoveryListener extends Thread {
 	/*
-	 * Most parts of this code are written by Michiel De Mey and modified
-	 * slightly. Source:
+	 * Main idea of this code is from Michiel De Mey and has been modified to
+	 * fit to Eduras?. Source:
 	 * http://michieldemey.be/blog/network-discovery-using-udp-broadcast/
 	 */
 
 	/**
-	 * The port where server listens on.
+	 * The port where discovery server listens on.
 	 */
-	public final static int DISCOVERY_PORT = 9876;
+	public final static int SERVER_PORT = 9876;
+
+	/**
+	 * The port where discovery client receives answer on.
+	 */
+	public final static int CLIENT_PORT = 9875;
 	/**
 	 * The message that is send for discovery.
 	 */
@@ -36,7 +42,7 @@ public class ServerDiscoveryListener extends Thread {
 	private final String name;
 	private final int port;
 
-	private DatagramSocket socket;
+	private DiscoveryChannel channel;
 
 	/**
 	 * Creates a new server that listens for discovery requests from UDP.
@@ -55,44 +61,47 @@ public class ServerDiscoveryListener extends Thread {
 	@Override
 	public void run() {
 		EduLog.info("ServerSearcher is starting to listen for UDP-Broadcasts on port "
-				+ DISCOVERY_PORT + ".");
+				+ SERVER_PORT + ".");
+
+		// prepare answer data:
+		String answer = ServerDiscoveryListener.ANSWER_MSG + "#" + name + "#"
+				+ port;
+
 		try {
-			// Keep a socket open to listen to all the UDP trafic that is
+			// Keep a socket open to listen to all the UDP traffic that is
 			// destined for this port
-			socket = new DatagramSocket(ServerDiscoveryListener.DISCOVERY_PORT,
-					InetAddress.getByName("0.0.0.0"));
-			socket.setBroadcast(true);
+			channel = new DiscoveryChannel(true);
+
+			InetSocketAddress listenAddress = new InetSocketAddress(
+					InetAddress.getByName("0.0.0.0"), SERVER_PORT);
+			channel.bind(listenAddress);
+
+			Pair<SocketAddress, String> returnData = null;
 
 			while (true) {
 				// Receive a packet
-				byte[] recvBuf = new byte[15000];
-				DatagramPacket packet = new DatagramPacket(recvBuf,
-						recvBuf.length);
-				socket.receive(packet);
+				returnData = channel.receive();
+				if (returnData == null)
+					continue;
 
+				InetSocketAddress isa = (InetSocketAddress) returnData
+						.getFirst();
+
+				String message = returnData.getSecond();
 				// Packet received
-				System.out.println(getClass().getName()
-						+ ">>>Discovery packet received from: "
-						+ packet.getAddress().getHostAddress());
-				System.out.println(getClass().getName()
-						+ ">>>Packet received; data: "
-						+ new String(packet.getData()));
+				EduLog.info("Discovery packet received from: "
+						+ isa.getAddress().getHostAddress() + ", Data: "
+						+ message);
 
 				// See if the packet holds the right command (message)
-				String message = new String(packet.getData()).trim();
 				if (message.equals(ServerDiscoveryListener.REQUEST_MSG)) {
-					byte[] sendData = (ServerDiscoveryListener.ANSWER_MSG + "#"
-							+ name + "#" + port).getBytes();
-
+					isa = new InetSocketAddress(isa.getAddress(), CLIENT_PORT);
 					// Send a response
-					DatagramPacket sendPacket = new DatagramPacket(sendData,
-							sendData.length, packet.getAddress(),
-							packet.getPort());
-					socket.send(sendPacket);
-
-					System.out.println(getClass().getName()
-							+ ">>>Sent packet to: "
-							+ sendPacket.getAddress().getHostAddress());
+					channel.send(answer, isa);
+					EduLog.info("Sent packet to: "
+							+ isa.getAddress().getHostAddress());
+				} else {
+					EduLog.warning("Received invalid broadcast message.");
 				}
 			}
 		} catch (IOException ex) {

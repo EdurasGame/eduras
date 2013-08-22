@@ -1,5 +1,7 @@
 package de.illonis.eduras.networking;
 
+import de.illonis.eduras.Team.TeamColor;
+import de.illonis.eduras.events.AddPlayerToTeamEvent;
 import de.illonis.eduras.events.ClientRenameEvent;
 import de.illonis.eduras.events.ConnectionAbortedEvent;
 import de.illonis.eduras.events.ConnectionEstablishedEvent;
@@ -18,7 +20,9 @@ import de.illonis.eduras.events.SetGameModeEvent;
 import de.illonis.eduras.events.SetIntegerGameObjectAttributeEvent;
 import de.illonis.eduras.events.SetItemSlotEvent;
 import de.illonis.eduras.events.SetOwnerEvent;
+import de.illonis.eduras.events.SetPolygonDataEvent;
 import de.illonis.eduras.events.SetRemainingTimeEvent;
+import de.illonis.eduras.events.SetTeamsEvent;
 import de.illonis.eduras.events.UserMovementEvent;
 import de.illonis.eduras.exceptions.MessageNotSupportedException;
 import de.illonis.eduras.math.Vector2D;
@@ -149,6 +153,14 @@ public class NetworkMessageSerializer {
 					moveEvent.getObjectId(), moveEvent.getNewXPos(),
 					moveEvent.getNewYPos());
 			break;
+		case SET_POLYGON_DATA:
+			SetPolygonDataEvent polyEvent = (SetPolygonDataEvent) gameEvent;
+			serializedEvent = buildEventString(polyEvent,
+					polyEvent.getObjectId());
+			for (Vector2D vert : polyEvent.getVertices()) {
+				serializedEvent += "#" + vert.getX() + "#" + vert.getY();
+			}
+			break;
 		case SET_OWNER:
 			SetOwnerEvent setOwnerEvent = (SetOwnerEvent) gameEvent;
 			serializedEvent = buildEventString(setOwnerEvent,
@@ -191,6 +203,21 @@ public class NetworkMessageSerializer {
 			MatchEndEvent matchEndEvent = (MatchEndEvent) gameEvent;
 			serializedEvent = buildEventString(matchEndEvent,
 					matchEndEvent.getWinnerId());
+			break;
+		case ADD_PLAYER_TO_TEAM:
+			AddPlayerToTeamEvent addPlayerEvent = (AddPlayerToTeamEvent) gameEvent;
+			serializedEvent = buildEventString(addPlayerEvent,
+					addPlayerEvent.getOwner(), addPlayerEvent.getTeamColor()
+							.toString());
+			break;
+		case SET_TEAMS:
+			SetTeamsEvent teamsEvent = (SetTeamsEvent) gameEvent;
+			serializedEvent = buildEventString(teamsEvent);
+
+			for (TeamColor color : teamsEvent.getTeamList().keySet()) {
+				String name = teamsEvent.getTeamList().get(color);
+				serializedEvent += "#" + color.toString() + "#" + name;
+			}
 			break;
 		case SET_GAMEMODE:
 			SetGameModeEvent setGameMode = (SetGameModeEvent) gameEvent;

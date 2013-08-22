@@ -36,4 +36,10 @@ public class ClientGameMode implements GameMode {
 
 	}
 
+	@Override
+	public void onGameStart() {
+		// nothing
+
+	}
+
 }

@@ -1,11 +1,13 @@
 package de.illonis.eduras.logic;
 
-import java.awt.Rectangle;
 import java.awt.geom.Rectangle2D;
+import java.util.LinkedList;
 import java.util.Random;
 
 import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.ObjectFactory.ObjectType;
+import de.illonis.eduras.Team;
+import de.illonis.eduras.events.AddPlayerToTeamEvent;
 import de.illonis.eduras.events.ClientRenameEvent;
 import de.illonis.eduras.events.DeathEvent;
 import de.illonis.eduras.events.GameEvent;
@@ -18,11 +20,14 @@ import de.illonis.eduras.events.SetGameModeEvent;
 import de.illonis.eduras.events.SetIntegerGameObjectAttributeEvent;
 import de.illonis.eduras.events.SetItemSlotEvent;
 import de.illonis.eduras.events.SetOwnerEvent;
+import de.illonis.eduras.events.SetPolygonDataEvent;
 import de.illonis.eduras.events.SetRemainingTimeEvent;
+import de.illonis.eduras.events.SetTeamsEvent;
 import de.illonis.eduras.exceptions.InvalidNameException;
 import de.illonis.eduras.exceptions.MessageNotSupportedException;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
 import de.illonis.eduras.gamemodes.GameMode;
+import de.illonis.eduras.gameobjects.DynamicPolygonBlock;
 import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.interfaces.GameLogicInterface;
 import de.illonis.eduras.inventory.InventoryIsFullException;
@@ -31,6 +36,7 @@ import de.illonis.eduras.items.Lootable;
 import de.illonis.eduras.items.weapons.Missile;
 import de.illonis.eduras.logger.EduLog;
 import de.illonis.eduras.maps.Map;
+import de.illonis.eduras.maps.SpawnPosition;
 import de.illonis.eduras.math.Vector2D;
 import de.illonis.eduras.networking.Buffer;
 import de.illonis.eduras.networking.NetworkMessageSerializer;
@@ -46,6 +52,8 @@ import de.illonis.eduras.units.Unit;
 public class ServerEventTriggerer implements EventTriggerer {
 
 	private static int lastGameObjectId = 0;
+
+	private static final Random RANDOM = new Random();
 
 	private final GameLogicInterface logic;
 	private GameInformation gameInfo;
@@ -266,16 +274,25 @@ public class ServerEventTriggerer implements EventTriggerer {
 		// TODO: Fire a respawn event to client.
 		remaxHealth(player);
 
-		Random r = new Random();
-		Rectangle m = gameInfo.getMap().getBounds();
-		Rectangle2D.Double newBounds = new Rectangle2D.Double(0, 0,
-				player.getBoundingBox().width, player.getBoundingBox().height);
+		LinkedList<SpawnPosition> spawnAreas = new LinkedList<SpawnPosition>(
+				gameInfo.getMap().getSpawnAreas());
+
+		// TODO: separate spawnpositions by teams when it's possible soon.
+
+		int area = RANDOM.nextInt(spawnAreas.size());
+		SpawnPosition spawnPos = spawnAreas.get(area);
+		Rectangle2D.Double boundings = new Rectangle2D.Double();
+		boundings.width = player.getBoundingBox().width;
+		boundings.height = player.getBoundingBox().height;
+
+		Vector2D newPos;
 		do {
-			newBounds.x = r.nextInt(m.width);
-			newBounds.y = r.nextInt(m.height);
-		} while (gameInfo.isObjectWithin(newBounds));
-		setPositionOfObject(player.getId(), new Vector2D(newBounds.getX(),
-				newBounds.getY()));
+			newPos = spawnPos.getAPoint(player.getShape());
+			boundings.x = newPos.getX();
+			boundings.y = newPos.getY();
+		} while (gameInfo.isObjectWithin(boundings));
+
+		setPositionOfObject(player.getId(), newPos);
 	}
 
 	@Override
@@ -345,6 +362,7 @@ public class ServerEventTriggerer implements EventTriggerer {
 		for (PlayerMainFigure player : gameInfo.getPlayers()) {
 			respawnPlayer(player);
 		}
+		gameInfo.getGameSettings().getGameMode().onGameStart();
 	}
 
 	/**
@@ -406,6 +424,7 @@ public class ServerEventTriggerer implements EventTriggerer {
 		int playerId = player.getOwner();
 
 		gameInfo.getGameSettings().getStats().setDeaths(playerId, 0);
+		gameInfo.getGameSettings().getStats().setKills(playerId, 0);
 
 		SetIntegerGameObjectAttributeEvent setdeaths = new SetIntegerGameObjectAttributeEvent(
 				GameEventNumber.SET_DEATHS, playerId, 0);
@@ -443,6 +462,51 @@ public class ServerEventTriggerer implements EventTriggerer {
 			}
 		}
 		outputBuffer.append(estr);
+	}
+
+	@Override
+	public void createDynamicPolygonAt(Vector2D[] polygonVertices,
+			Vector2D position, int owner) {
+		int objId = createObjectAt(ObjectType.DYNAMIC_POLYGON, position, owner);
+		setPolygonData(objId, polygonVertices);
+	}
+
+	@Override
+	public void setPolygonData(int objectId, Vector2D[] polygonVertices) {
+		GameObject object = gameInfo.findObjectById(objectId);
+		if (object instanceof DynamicPolygonBlock) {
+			DynamicPolygonBlock block = (DynamicPolygonBlock) object;
+			block.setPolygonVertices(polygonVertices);
+			SetPolygonDataEvent event = new SetPolygonDataEvent(objectId,
+					polygonVertices);
+			sendEvents(event);
+		}
+	}
+
+	@Override
+	public void setTeams(Team... teams) {
+		gameInfo.getTeams().clear();
+		SetTeamsEvent event = new SetTeamsEvent();
+		for (Team team : teams) {
+			gameInfo.getTeams().add(team);
+			event.addTeam(team.getColor(), team.getName());
+		}
+		sendEvents(event);
+	}
+
+	@Override
+	public void addPlayerToTeam(int ownerId, Team team) {
+		PlayerMainFigure newPlayer;
+		try {
+			newPlayer = gameInfo.getPlayerByOwnerId(ownerId);
+		} catch (ObjectNotFoundException e) {
+			EduLog.passException(e);
+			return;
+		}
+		team.addPlayer(newPlayer);
+		AddPlayerToTeamEvent event = new AddPlayerToTeamEvent(ownerId,
+				team.getColor());
+		sendEvents(event);
 	}
 
 }

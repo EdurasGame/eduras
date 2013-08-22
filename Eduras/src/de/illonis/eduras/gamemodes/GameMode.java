@@ -42,4 +42,11 @@ public interface GameMode {
 	 */
 	public void onConnect(int ownerId);
 
+	/**
+	 * Called when match begins to let gamemode initalize some things.
+	 * 
+	 * @author illonis
+	 */
+	public void onGameStart();
+
 }

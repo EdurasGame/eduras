@@ -16,7 +16,7 @@ import de.illonis.eduras.gamemodes.GameMode;
 import de.illonis.eduras.gameobjects.GameObject;
 
 /**
- * reacts on game events and performs action.
+ * Reacts on game events and performs action.
  * 
  * @author illonis
  * 
@@ -44,9 +44,10 @@ public interface GameEventListener {
 	void onInformationRequested(ArrayList<GameEvent> infos, int targetOwner);
 
 	/**
-	 * bla
+	 * Called when a gameobject has been created.
 	 * 
 	 * @param event
+	 *            the corresponding event.
 	 */
 	void onObjectCreation(ObjectFactoryEvent event);
 
@@ -54,7 +55,7 @@ public interface GameEventListener {
 	 * Fired when a client has a new name.
 	 * 
 	 * @param event
-	 *            event.
+	 *            event holding data.
 	 */
 	void onClientRename(ClientRenameEvent event);
 
