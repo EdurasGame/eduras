@@ -405,13 +405,6 @@ public class Server {
 	 *            The client.
 	 */
 	public void handleClientDisconnect(ServerClient client) {
-		removeClient(client);
-
-		try {
-			client.closeConnection();
-		} catch (IOException e) {
-			EduLog.passException(e);
-		}
 
 		ObjectFactoryEvent gonePlayerEvent = new ObjectFactoryEvent(
 				GameEventNumber.OBJECT_REMOVE, ObjectType.PLAYER);
@@ -426,6 +419,13 @@ public class Server {
 			EduLog.error("Player of object id " + e.getObjectId()
 					+ " not found!");
 			return;
+		}
+		removeClient(client);
+
+		try {
+			client.closeConnection();
+		} catch (IOException e) {
+			EduLog.passException(e);
 		}
 
 		gonePlayerEvent.setId(objectId);
