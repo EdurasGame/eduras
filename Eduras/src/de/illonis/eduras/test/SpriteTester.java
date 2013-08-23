@@ -27,6 +27,9 @@ public class SpriteTester extends JFrame {
 	private BufferedImage[] img;
 	private Random r;
 
+	/**
+	 * Creates a new testing frame.
+	 */
 	public SpriteTester() {
 		super("Spritetester");
 		r = new Random();
@@ -46,6 +49,7 @@ public class SpriteTester extends JFrame {
 		}
 
 		Thread t = new Thread(new Repainter());
+		t.setName("RepaintThread");
 		t.start();
 
 	}
@@ -62,6 +66,12 @@ public class SpriteTester extends JFrame {
 		}
 	}
 
+	/**
+	 * Starts the sprite tester.
+	 * 
+	 * @param args
+	 *            no args used.
+	 */
 	public static void main(String[] args) {
 		SpriteTester t = new SpriteTester();
 		t.setLocationRelativeTo(null);

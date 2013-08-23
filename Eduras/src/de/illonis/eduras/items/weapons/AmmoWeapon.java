@@ -16,6 +16,16 @@ public abstract class AmmoWeapon extends Weapon {
 
 	private int ammunition;
 
+	/**
+	 * Creates a new weapon with ammunition.
+	 * 
+	 * @param type
+	 *            weapon type.
+	 * @param gi
+	 *            game data.
+	 * @param id
+	 *            weapon id.
+	 */
 	public AmmoWeapon(ObjectType type, GameInformation gi, int id) {
 		super(type, gi, id);
 	}
