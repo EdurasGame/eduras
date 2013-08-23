@@ -123,6 +123,10 @@ public class Server {
 
 		private static final int MAX_UDP_SIZE = 1024;
 
+		public UDPMessageReceiver() {
+			super("UDPMessageReceiver");
+		}
+
 		@Override
 		public void run() {
 			DatagramSocket udpSocket = null;
