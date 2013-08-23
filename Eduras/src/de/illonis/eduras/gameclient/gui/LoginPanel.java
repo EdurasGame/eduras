@@ -78,6 +78,7 @@ public class LoginPanel extends JPanel implements ActionListener,
 	 */
 	public LoginPanel() {
 		super();
+		setBackground(Color.BLACK);
 		setLayout(new BorderLayout());
 		serverData = new DefaultListModel<ServerInfo>();
 		buildGui();
@@ -181,6 +182,7 @@ public class LoginPanel extends JPanel implements ActionListener,
 		connectButton = new JButton("Verbinden");
 		connectButton.setEnabled(false);
 		form.add(connectButton, c);
+		form.setBackground(new Color(.67f, .003f, .0015f, 1));
 
 		// default user name
 		Random r = new Random();
