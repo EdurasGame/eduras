@@ -232,10 +232,10 @@ public class FunMap extends Map {
 				35, 100);
 		Rectangle2D.Double rec4 = new Rectangle2D.Double(getWidth() - 205,
 				getHeight() - 75, 200, 70);
-		SpawnPosition p = new SpawnPosition(rec, SpawnType.DEATHMATCH);
-		SpawnPosition p2 = new SpawnPosition(rec2, SpawnType.DEATHMATCH);
-		SpawnPosition p3 = new SpawnPosition(rec3, SpawnType.DEATHMATCH);
-		SpawnPosition p4 = new SpawnPosition(rec4, SpawnType.DEATHMATCH);
+		SpawnPosition p = new SpawnPosition(rec, SpawnType.TEAM_A);
+		SpawnPosition p2 = new SpawnPosition(rec2, SpawnType.TEAM_A);
+		SpawnPosition p3 = new SpawnPosition(rec3, SpawnType.TEAM_B);
+		SpawnPosition p4 = new SpawnPosition(rec4, SpawnType.TEAM_B);
 		getSpawnAreas().add(p);
 		getSpawnAreas().add(p2);
 		getSpawnAreas().add(p3);

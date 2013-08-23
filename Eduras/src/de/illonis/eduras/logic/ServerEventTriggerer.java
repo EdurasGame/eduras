@@ -19,6 +19,7 @@ import de.illonis.eduras.events.SetOwnerEvent;
 import de.illonis.eduras.events.SetPolygonDataEvent;
 import de.illonis.eduras.events.SetRemainingTimeEvent;
 import de.illonis.eduras.events.SetTeamsEvent;
+import de.illonis.eduras.exceptions.GameModeNotSupportedByMapException;
 import de.illonis.eduras.exceptions.InvalidNameException;
 import de.illonis.eduras.exceptions.MessageNotSupportedException;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
@@ -267,7 +268,12 @@ public class ServerEventTriggerer implements EventTriggerer {
 		// TODO: Fire a respawn event to client.
 		remaxHealth(player);
 
-		Vector2D spawnPosition = gameInfo.getSpawnPointFor(player);
+		Vector2D spawnPosition = null;
+		try {
+			spawnPosition = gameInfo.getSpawnPointFor(player);
+		} catch (GameModeNotSupportedByMapException e) {
+			e.printStackTrace();
+		}
 
 		setPositionOfObject(player.getId(), spawnPosition);
 	}
@@ -474,6 +480,7 @@ public class ServerEventTriggerer implements EventTriggerer {
 
 	@Override
 	public void addPlayerToTeam(int ownerId, Team team) {
+
 		PlayerMainFigure newPlayer;
 		try {
 			newPlayer = gameInfo.getPlayerByOwnerId(ownerId);
@@ -481,7 +488,11 @@ public class ServerEventTriggerer implements EventTriggerer {
 			EduLog.passException(e);
 			return;
 		}
+
+		if (newPlayer.getTeam() != null)
+			newPlayer.getTeam().removePlayer(newPlayer);
 		team.addPlayer(newPlayer);
+
 		AddPlayerToTeamEvent event = new AddPlayerToTeamEvent(ownerId,
 				team.getColor());
 		sendEvents(event);

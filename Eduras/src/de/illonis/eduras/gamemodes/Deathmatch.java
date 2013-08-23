@@ -19,7 +19,7 @@ import de.illonis.eduras.units.Unit;
  */
 public class Deathmatch implements GameMode {
 
-	private GameInformation gameInfo;
+	protected GameInformation gameInfo;
 
 	/**
 	 * Creates a new instance of deathmatch.

@@ -19,6 +19,7 @@ import de.illonis.eduras.events.SetGameModeEvent;
 import de.illonis.eduras.events.SetIntegerGameObjectAttributeEvent;
 import de.illonis.eduras.events.SetRemainingTimeEvent;
 import de.illonis.eduras.events.SetTeamsEvent;
+import de.illonis.eduras.exceptions.GameModeNotSupportedByMapException;
 import de.illonis.eduras.exceptions.InvalidNameException;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
 import de.illonis.eduras.gameobjects.GameObject;
@@ -405,8 +406,11 @@ public class GameInformation {
 	 * @param player
 	 *            the player that spawns.
 	 * @return the new spawning position.
+	 * @throws GameModeNotSupportedByMapException
+	 *             if current game does not support game mode.
 	 */
-	public Vector2D getSpawnPointFor(PlayerMainFigure player) {
+	public Vector2D getSpawnPointFor(PlayerMainFigure player)
+			throws GameModeNotSupportedByMapException {
 
 		SpawnType spawnType = spawnGroups.get(player.getTeam());
 
@@ -419,6 +423,9 @@ public class GameInformation {
 			if (p.getTeaming() == spawnType)
 				availableSpawnings.add(p);
 		}
+
+		if (availableSpawnings.size() == 0)
+			throw new GameModeNotSupportedByMapException();
 
 		int area = RANDOM.nextInt(availableSpawnings.size());
 		SpawnPosition spawnPos = availableSpawnings.get(area);

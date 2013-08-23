@@ -6,6 +6,7 @@ import de.illonis.eduras.exceptions.ObjectNotFoundException;
 import de.illonis.eduras.gamemodes.Deathmatch;
 import de.illonis.eduras.gamemodes.GameMode;
 import de.illonis.eduras.gamemodes.NoGameMode;
+import de.illonis.eduras.gamemodes.TeamDeathmatch;
 import de.illonis.eduras.maps.FunMap;
 import de.illonis.eduras.maps.ManyBlocks;
 import de.illonis.eduras.maps.Map;
@@ -100,6 +101,9 @@ public class ConsoleEventTriggerer {
 		switch (gameModeName.toLowerCase()) {
 		case "deathmatch":
 			gameMode = new Deathmatch(triggerer.getGameInfo());
+			break;
+		case "teamdeathmatch":
+			gameMode = new TeamDeathmatch(triggerer.getGameInfo());
 			break;
 		default:
 			gameMode = new NoGameMode(triggerer.getGameInfo());

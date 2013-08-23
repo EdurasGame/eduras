@@ -27,6 +27,7 @@ import de.illonis.eduras.exceptions.ObjectNotFoundException;
 import de.illonis.eduras.gamemodes.Deathmatch;
 import de.illonis.eduras.gamemodes.GameMode;
 import de.illonis.eduras.gamemodes.NoGameMode;
+import de.illonis.eduras.gamemodes.TeamDeathmatch;
 import de.illonis.eduras.gameobjects.DynamicPolygonBlock;
 import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.interfaces.GameEventListener;
@@ -151,6 +152,8 @@ public class ClientLogic implements GameLogicInterface {
 						} catch (ObjectNotFoundException e1) {
 							return;
 						}
+						if (player.getTeam() != null)
+							player.getTeam().removePlayer(player);
 						t.addPlayer(player);
 					}
 				}
@@ -222,6 +225,9 @@ public class ClientLogic implements GameLogicInterface {
 				switch (newMode) {
 				case "Deathmatch":
 					newGameMode = new Deathmatch(gameInfo);
+					break;
+				case "Team-Deathmatch":
+					newGameMode = new TeamDeathmatch(gameInfo);
 					break;
 				default:
 					newGameMode = new NoGameMode(gameInfo);

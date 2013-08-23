@@ -29,6 +29,7 @@ import de.illonis.eduras.interfaces.NetworkEventListener;
 import de.illonis.eduras.locale.Localization;
 import de.illonis.eduras.logger.EduLog;
 import de.illonis.eduras.networking.ServerClient.ClientRole;
+import de.illonis.eduras.units.PlayerMainFigure;
 import de.illonis.eduras.utils.CollectionUtils;
 
 /**
@@ -417,8 +418,10 @@ public class Server {
 
 		int clientId = client.getClientId();
 		int objectId;
+		PlayerMainFigure mainFigure;
 		try {
-			objectId = game.getPlayerByOwnerId(clientId).getId();
+			mainFigure = game.getPlayerByOwnerId(clientId);
+			objectId = mainFigure.getId();
 		} catch (ObjectNotFoundException e) {
 			EduLog.error("Player of object id " + e.getObjectId()
 					+ " not found!");
@@ -426,7 +429,7 @@ public class Server {
 		}
 
 		gonePlayerEvent.setId(objectId);
-		// logic.getObjectFactory().onObjectFactoryEventAppeared(gonePlayerEvent);
+		logic.getObjectFactory().onObjectFactoryEventAppeared(gonePlayerEvent);
 		sendEventToAll(gonePlayerEvent);
 	}
 

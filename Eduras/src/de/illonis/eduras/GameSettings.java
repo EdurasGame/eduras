@@ -1,8 +1,8 @@
 package de.illonis.eduras;
 
-import de.illonis.eduras.gamemodes.Deathmatch;
 import de.illonis.eduras.gamemodes.GameMode;
 import de.illonis.eduras.gamemodes.NoGameMode;
+import de.illonis.eduras.gamemodes.TeamDeathmatch;
 
 /**
  * Holds all current game settings and statistics.
@@ -27,7 +27,7 @@ public class GameSettings {
 	public GameSettings(GameInformation gameInfo) {
 
 		roundTime = 300000;
-		gameMode = new Deathmatch(gameInfo);
+		gameMode = new TeamDeathmatch(gameInfo);
 		remainingTime = roundTime;
 		stats = new Statistic();
 	}
