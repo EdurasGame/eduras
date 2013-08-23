@@ -7,6 +7,7 @@ import de.illonis.eduras.Team.TeamColor;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
 import de.illonis.eduras.logger.EduLog;
 import de.illonis.eduras.logic.EventTriggerer;
+import de.illonis.eduras.maps.SpawnPosition.SpawnType;
 import de.illonis.eduras.units.PlayerMainFigure;
 import de.illonis.eduras.units.Unit;
 
@@ -100,5 +101,10 @@ public class Deathmatch implements GameMode {
 					team);
 		}
 
+	}
+
+	@Override
+	public SpawnType getSpawnTypeForTeam(Team team) {
+		return SpawnType.DEATHMATCH;
 	}
 }

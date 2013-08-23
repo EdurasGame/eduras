@@ -95,5 +95,4 @@ public class GameSettings {
 	public GameMode getGameMode() {
 		return gameMode;
 	}
-
 }

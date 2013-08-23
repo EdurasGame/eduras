@@ -2,7 +2,9 @@ package de.illonis.eduras.gamemodes;
 
 import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.ObjectFactory.ObjectType;
+import de.illonis.eduras.Team;
 import de.illonis.eduras.logic.EventTriggerer;
+import de.illonis.eduras.maps.SpawnPosition.SpawnType;
 import de.illonis.eduras.units.PlayerMainFigure;
 import de.illonis.eduras.units.Unit;
 
@@ -65,6 +67,11 @@ public class NoGameMode implements GameMode {
 	@Override
 	public void onGameStart() {
 
+	}
+
+	@Override
+	public SpawnType getSpawnTypeForTeam(Team team) {
+		return SpawnType.DEATHMATCH;
 	}
 
 }

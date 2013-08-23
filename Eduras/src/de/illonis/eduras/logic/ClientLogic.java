@@ -133,12 +133,11 @@ public class ClientLogic implements GameLogicInterface {
 				break;
 			case SET_TEAMS:
 				SetTeamsEvent teamEvent = (SetTeamsEvent) event;
-
-				gameInfo.getTeams().clear();
+				gameInfo.clearTeams();
 				for (TeamColor color : teamEvent.getTeamList().keySet()) {
 					String name = teamEvent.getTeamList().get(color);
 					Team t = new Team(name, color);
-					gameInfo.getTeams().add(t);
+					gameInfo.addTeam(t);
 				}
 				break;
 			case ADD_PLAYER_TO_TEAM:

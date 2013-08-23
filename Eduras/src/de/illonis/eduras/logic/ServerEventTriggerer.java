@@ -1,9 +1,5 @@
 package de.illonis.eduras.logic;
 
-import java.awt.geom.Rectangle2D;
-import java.util.LinkedList;
-import java.util.Random;
-
 import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.ObjectFactory.ObjectType;
 import de.illonis.eduras.Team;
@@ -36,7 +32,6 @@ import de.illonis.eduras.items.Lootable;
 import de.illonis.eduras.items.weapons.Missile;
 import de.illonis.eduras.logger.EduLog;
 import de.illonis.eduras.maps.Map;
-import de.illonis.eduras.maps.SpawnPosition;
 import de.illonis.eduras.math.Vector2D;
 import de.illonis.eduras.networking.Buffer;
 import de.illonis.eduras.networking.NetworkMessageSerializer;
@@ -52,8 +47,6 @@ import de.illonis.eduras.units.Unit;
 public class ServerEventTriggerer implements EventTriggerer {
 
 	private static int lastGameObjectId = 0;
-
-	private static final Random RANDOM = new Random();
 
 	private final GameLogicInterface logic;
 	private GameInformation gameInfo;
@@ -274,25 +267,9 @@ public class ServerEventTriggerer implements EventTriggerer {
 		// TODO: Fire a respawn event to client.
 		remaxHealth(player);
 
-		LinkedList<SpawnPosition> spawnAreas = new LinkedList<SpawnPosition>(
-				gameInfo.getMap().getSpawnAreas());
+		Vector2D spawnPosition = gameInfo.getSpawnPointFor(player);
 
-		// TODO: separate spawnpositions by teams when it's possible soon.
-
-		int area = RANDOM.nextInt(spawnAreas.size());
-		SpawnPosition spawnPos = spawnAreas.get(area);
-		Rectangle2D.Double boundings = new Rectangle2D.Double();
-		boundings.width = player.getBoundingBox().width;
-		boundings.height = player.getBoundingBox().height;
-
-		Vector2D newPos;
-		do {
-			newPos = spawnPos.getAPoint(player.getShape());
-			boundings.x = newPos.getX();
-			boundings.y = newPos.getY();
-		} while (gameInfo.isObjectWithin(boundings));
-
-		setPositionOfObject(player.getId(), newPos);
+		setPositionOfObject(player.getId(), spawnPosition);
 	}
 
 	@Override
@@ -359,10 +336,11 @@ public class ServerEventTriggerer implements EventTriggerer {
 					initialObject.getPositionVector(), initialObject.getOwner());
 		}
 
+		gameInfo.getGameSettings().getGameMode().onGameStart();
+
 		for (PlayerMainFigure player : gameInfo.getPlayers()) {
 			respawnPlayer(player);
 		}
-		gameInfo.getGameSettings().getGameMode().onGameStart();
 	}
 
 	/**
@@ -485,10 +463,10 @@ public class ServerEventTriggerer implements EventTriggerer {
 
 	@Override
 	public void setTeams(Team... teams) {
-		gameInfo.getTeams().clear();
+		gameInfo.clearTeams();
 		SetTeamsEvent event = new SetTeamsEvent();
 		for (Team team : teams) {
-			gameInfo.getTeams().add(team);
+			gameInfo.addTeam(team);
 			event.addTeam(team.getColor(), team.getName());
 		}
 		sendEvents(event);
