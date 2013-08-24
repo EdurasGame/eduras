@@ -47,7 +47,7 @@ public abstract class Map {
 	 * 
 	 * @return height of map.
 	 */
-	public int getHeight() {
+	public final int getHeight() {
 		return height;
 	}
 
@@ -56,7 +56,7 @@ public abstract class Map {
 	 * 
 	 * @return width of map.
 	 */
-	public int getWidth() {
+	public final int getWidth() {
 		return width;
 	}
 
@@ -65,7 +65,7 @@ public abstract class Map {
 	 * 
 	 * @return the name
 	 */
-	public String getName() {
+	public final String getName() {
 		return name;
 	}
 
@@ -84,7 +84,7 @@ public abstract class Map {
 	 * 
 	 * @return bounds of map as rectangle.
 	 */
-	public Rectangle getBounds() {
+	public final Rectangle getBounds() {
 		return new Rectangle(0, 0, width, height);
 	}
 
@@ -93,7 +93,7 @@ public abstract class Map {
 	 * 
 	 * @return A collection of spawnpoints.
 	 */
-	public Collection<SpawnPosition> getSpawnAreas() {
+	public final Collection<SpawnPosition> getSpawnAreas() {
 		return spawnAreas;
 	}
 
@@ -104,7 +104,7 @@ public abstract class Map {
 	 *            point to test.
 	 * @return true if point is on map.
 	 */
-	public boolean contains(Vector2D point) {
+	public final boolean contains(Vector2D point) {
 		return getBounds().contains(point.toPoint());
 	}
 
