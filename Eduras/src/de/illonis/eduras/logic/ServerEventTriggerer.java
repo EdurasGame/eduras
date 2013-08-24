@@ -224,12 +224,7 @@ public class ServerEventTriggerer implements EventTriggerer {
 	@Override
 	public void init() {
 
-		Map map = logic.getGame().getMap();
-
-		for (GameObject singleObject : map.getInitialObjects()) {
-			this.createObjectAt(singleObject.getType(),
-					singleObject.getPositionVector(), singleObject.getOwner());
-		}
+		changeMap(logic.getGame().getMap());
 
 	}
 
