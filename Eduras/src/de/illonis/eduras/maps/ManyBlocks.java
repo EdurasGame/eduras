@@ -1,14 +1,7 @@
 package de.illonis.eduras.maps;
 
-import java.awt.geom.Rectangle2D;
-import java.util.Collection;
-import java.util.LinkedList;
-
-import de.illonis.eduras.exceptions.ShapeVerticesNotApplicableException;
+import de.illonis.eduras.ObjectFactory.ObjectType;
 import de.illonis.eduras.gamemodes.GameMode.GameModeNumber;
-import de.illonis.eduras.gameobjects.BigBlock;
-import de.illonis.eduras.gameobjects.GameObject;
-import de.illonis.eduras.logger.EduLog;
 import de.illonis.eduras.maps.SpawnPosition.SpawnType;
 
 /**
@@ -30,8 +23,9 @@ public class ManyBlocks extends Map {
 	}
 
 	@Override
-	public Collection<GameObject> getInitialObjects() {
-		LinkedList<GameObject> initialObjects = new LinkedList<GameObject>();
+	protected void buildMap() {
+		addSupportedGameMode(GameModeNumber.DEATHMATCH);
+		addSpawnArea(0, 0, getWidth(), getHeight(), SpawnType.ANY);
 
 		int bigBlockWidth = 20;
 		int bigBlockHeight = 20;
@@ -40,32 +34,10 @@ public class ManyBlocks extends Map {
 
 		for (int i = 0; i < getWidth() / (space * bigBlockWidth); i++) {
 			for (int j = 0; j < getHeight() / (space * bigBlockHeight); j++) {
-				try {
-					BigBlock bigBlock = new BigBlock(null, space * i
-							* bigBlockWidth, space * j * bigBlockHeight, -1);
-					initialObjects.add(bigBlock);
-				} catch (ShapeVerticesNotApplicableException e) {
-					EduLog.passException(e);
-				}
+				addObject(ObjectType.BIGBLOCK, space * i * bigBlockWidth, space
+						* j * bigBlockHeight);
 			}
 		}
-		return initialObjects;
-	}
-
-	@Override
-	public Collection<SpawnPosition> getSpawnAreas() {
-		SpawnPosition p = new SpawnPosition(new Rectangle2D.Double(0, 0,
-				getWidth(), getHeight()), SpawnType.ANY);
-		LinkedList<SpawnPosition> positions = new LinkedList<SpawnPosition>();
-		positions.add(p);
-		return positions;
-	}
-
-	@Override
-	public Collection<GameModeNumber> getSupportedGameModes() {
-		LinkedList<GameModeNumber> modes = new LinkedList<GameModeNumber>();
-		modes.add(GameModeNumber.DEATHMATCH);
-		return modes;
 	}
 
 }

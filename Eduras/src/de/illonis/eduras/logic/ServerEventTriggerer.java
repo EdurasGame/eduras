@@ -32,6 +32,7 @@ import de.illonis.eduras.items.Item;
 import de.illonis.eduras.items.Lootable;
 import de.illonis.eduras.items.weapons.Missile;
 import de.illonis.eduras.logger.EduLog;
+import de.illonis.eduras.maps.InitialObjectData;
 import de.illonis.eduras.maps.Map;
 import de.illonis.eduras.math.Vector2D;
 import de.illonis.eduras.networking.Buffer;
@@ -332,9 +333,9 @@ public class ServerEventTriggerer implements EventTriggerer {
 
 		removeAllNonPlayers();
 
-		for (GameObject initialObject : map.getInitialObjects()) {
+		for (InitialObjectData initialObject : map.getInitialObjects()) {
 			createObjectAt(initialObject.getType(),
-					initialObject.getPositionVector(), initialObject.getOwner());
+					initialObject.getPosition(), -1);
 		}
 
 		gameInfo.getGameSettings().getGameMode().onGameStart();
