@@ -26,7 +26,8 @@ public class SimpleMap extends Map {
 	 * Creates a new simple map.
 	 */
 	public SimpleMap() {
-		super("simple", 500, 500);
+		super("simple", "Eduras Team", 500, 500);
+		setCreated("2012-11-10");
 	}
 
 	@Override

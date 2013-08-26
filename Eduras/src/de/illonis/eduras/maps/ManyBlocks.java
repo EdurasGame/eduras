@@ -25,7 +25,8 @@ public class ManyBlocks extends Map {
 	 * Create a new instance of the map.
 	 */
 	public ManyBlocks() {
-		super("manyblocks", 500, 500);
+		super("manyblocks", "Florian Mai", 500, 500);
+		setCreated("2013-05-12");
 	}
 
 	@Override

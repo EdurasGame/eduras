@@ -25,10 +25,11 @@ import de.illonis.eduras.maps.SpawnPosition.SpawnType;
 public class FunMap extends Map {
 
 	/**
-	 * Creates the map
+	 * Creates the map.
 	 */
 	public FunMap() {
-		super("funmap", 600, 600);
+		super("funmap", "Jan Reese", 600, 600);
+		setCreated("2013-06-11");
 	}
 
 	@Override

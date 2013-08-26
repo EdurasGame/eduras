@@ -1,7 +1,10 @@
 package de.illonis.eduras.maps;
 
 import java.awt.Rectangle;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Collection;
+import java.util.Date;
 
 import de.illonis.eduras.gamemodes.GameMode.GameModeNumber;
 import de.illonis.eduras.gameobjects.GameObject;
@@ -15,7 +18,12 @@ import de.illonis.eduras.math.Vector2D;
  */
 public abstract class Map {
 
+	protected final static SimpleDateFormat DATE_FORMAT = new SimpleDateFormat(
+			"yyyy-MM-dd");
+
 	private final String name;
+	private final String author;
+	private Date created;
 	private final int width;
 	private final int height;
 
@@ -24,15 +32,19 @@ public abstract class Map {
 	 * 
 	 * @param name
 	 *            name of the map.
+	 * @param author
+	 *            name of the author of the map.
 	 * @param width
 	 *            width of the map.
 	 * @param height
 	 *            height of the map.
 	 */
-	public Map(String name, int width, int height) {
+	public Map(String name, String author, int width, int height) {
 		this.name = name;
 		this.width = width;
 		this.height = height;
+		this.author = author;
+		created = new Date();
 	}
 
 	/**
@@ -51,6 +63,47 @@ public abstract class Map {
 	 */
 	public final int getWidth() {
 		return width;
+	}
+
+	/**
+	 * Sets the date of map creation.
+	 * 
+	 * @param created
+	 *            date of map creation.
+	 */
+	protected void setCreated(Date created) {
+		this.created = created;
+	}
+
+	/**
+	 * Sets the date of map creation.
+	 * 
+	 * @param created
+	 *            date of map creation as String
+	 * @see #DATE_FORMAT
+	 */
+	protected void setCreated(String created) {
+		try {
+			setCreated(DATE_FORMAT.parse(created));
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+	}
+
+	/**
+	 * Returns the author of the map.
+	 * 
+	 * @return author of map.
+	 */
+	public final String getAuthor() {
+		return author;
+	}
+
+	/**
+	 * @return date of creation.
+	 */
+	public final Date getCreated() {
+		return created;
 	}
 
 	/**
