@@ -1,14 +1,18 @@
 package de.illonis.eduras.maps;
 
+import java.awt.geom.Rectangle2D;
+import java.util.Collection;
 import java.util.LinkedList;
 
 import de.illonis.eduras.exceptions.ShapeVerticesNotApplicableException;
+import de.illonis.eduras.gamemodes.GameMode.GameModeNumber;
 import de.illonis.eduras.gameobjects.BigBlock;
 import de.illonis.eduras.gameobjects.Building;
 import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.items.weapons.ExampleWeapon;
 import de.illonis.eduras.items.weapons.SniperWeapon;
 import de.illonis.eduras.logger.EduLog;
+import de.illonis.eduras.maps.SpawnPosition.SpawnType;
 
 /**
  * This is a very simple map containing 4 example weapons and a block.
@@ -22,9 +26,11 @@ public class SimpleMap extends Map {
 	 * Creates a new simple map.
 	 */
 	public SimpleMap() {
-
 		super("simple", 500, 500);
+	}
 
+	@Override
+	public Collection<GameObject> getInitialObjects() {
 		LinkedList<GameObject> initialObjects = new LinkedList<GameObject>();
 
 		ExampleWeapon weap1 = new ExampleWeapon(null, -1);
@@ -60,9 +66,22 @@ public class SimpleMap extends Map {
 			EduLog.passException(e);
 		}
 
-		setInitialObjects(initialObjects);
+		return initialObjects;
+	}
 
-		// TODO: Set spawnpoints
+	@Override
+	public Collection<SpawnPosition> getSpawnAreas() {
+		SpawnPosition p = new SpawnPosition(new Rectangle2D.Double(0, 0,
+				getWidth(), getHeight()), SpawnType.DEATHMATCH);
+		LinkedList<SpawnPosition> positions = new LinkedList<SpawnPosition>();
+		positions.add(p);
+		return positions;
+	}
 
+	@Override
+	public Collection<GameModeNumber> getSupportedGameModes() {
+		LinkedList<GameModeNumber> modes = new LinkedList<GameModeNumber>();
+		modes.add(GameModeNumber.DEATHMATCH);
+		return modes;
 	}
 }

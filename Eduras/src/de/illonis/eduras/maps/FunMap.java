@@ -1,9 +1,11 @@
 package de.illonis.eduras.maps;
 
 import java.awt.geom.Rectangle2D;
+import java.util.Collection;
 import java.util.LinkedList;
 
 import de.illonis.eduras.exceptions.ShapeVerticesNotApplicableException;
+import de.illonis.eduras.gamemodes.GameMode.GameModeNumber;
 import de.illonis.eduras.gameobjects.BigBlock;
 import de.illonis.eduras.gameobjects.BiggerBlock;
 import de.illonis.eduras.gameobjects.Building;
@@ -26,9 +28,11 @@ public class FunMap extends Map {
 	 * Creates the map
 	 */
 	public FunMap() {
-
 		super("funmap", 600, 600);
+	}
 
+	@Override
+	public Collection<GameObject> getInitialObjects() {
 		LinkedList<GameObject> initialObjects = new LinkedList<GameObject>();
 
 		ExampleWeapon weap0 = new ExampleWeapon(null, -1);
@@ -222,8 +226,13 @@ public class FunMap extends Map {
 			EduLog.passException(e);
 		}
 
-		setInitialObjects(initialObjects);
+		return initialObjects;
+	}
 
+	@Override
+	public Collection<SpawnPosition> getSpawnAreas() {
+
+		LinkedList<SpawnPosition> spawnPositions = new LinkedList<SpawnPosition>();
 		// Creating spawnpoints
 		Rectangle2D.Double rec = new Rectangle2D.Double(1, 1, 75, 100);
 		Rectangle2D.Double rec2 = new Rectangle2D.Double(1, getHeight() - 75,
@@ -236,10 +245,19 @@ public class FunMap extends Map {
 		SpawnPosition p2 = new SpawnPosition(rec2, SpawnType.TEAM_A);
 		SpawnPosition p3 = new SpawnPosition(rec3, SpawnType.TEAM_B);
 		SpawnPosition p4 = new SpawnPosition(rec4, SpawnType.TEAM_B);
-		getSpawnAreas().add(p);
-		getSpawnAreas().add(p2);
-		getSpawnAreas().add(p3);
-		getSpawnAreas().add(p4);
+		spawnPositions.add(p);
+		spawnPositions.add(p2);
+		spawnPositions.add(p3);
+		spawnPositions.add(p4);
 
+		return spawnPositions;
+	}
+
+	@Override
+	public Collection<GameModeNumber> getSupportedGameModes() {
+		LinkedList<GameModeNumber> modes = new LinkedList<GameModeNumber>();
+		modes.add(GameModeNumber.DEATHMATCH);
+		modes.add(GameModeNumber.TEAM_DEATHMATCH);
+		return modes;
 	}
 }

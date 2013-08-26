@@ -1,11 +1,15 @@
 package de.illonis.eduras.maps;
 
+import java.awt.geom.Rectangle2D;
+import java.util.Collection;
 import java.util.LinkedList;
 
 import de.illonis.eduras.exceptions.ShapeVerticesNotApplicableException;
+import de.illonis.eduras.gamemodes.GameMode.GameModeNumber;
 import de.illonis.eduras.gameobjects.BigBlock;
 import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.logger.EduLog;
+import de.illonis.eduras.maps.SpawnPosition.SpawnType;
 
 /**
  * This is a sample map containing
@@ -22,7 +26,10 @@ public class ManyBlocks extends Map {
 	 */
 	public ManyBlocks() {
 		super("manyblocks", 500, 500);
+	}
 
+	@Override
+	public Collection<GameObject> getInitialObjects() {
 		LinkedList<GameObject> initialObjects = new LinkedList<GameObject>();
 
 		int bigBlockWidth = 20;
@@ -41,8 +48,23 @@ public class ManyBlocks extends Map {
 				}
 			}
 		}
+		return initialObjects;
+	}
 
-		setInitialObjects(initialObjects);
+	@Override
+	public Collection<SpawnPosition> getSpawnAreas() {
+		SpawnPosition p = new SpawnPosition(new Rectangle2D.Double(0, 0,
+				getWidth(), getHeight()), SpawnType.DEATHMATCH);
+		LinkedList<SpawnPosition> positions = new LinkedList<SpawnPosition>();
+		positions.add(p);
+		return positions;
+	}
+
+	@Override
+	public Collection<GameModeNumber> getSupportedGameModes() {
+		LinkedList<GameModeNumber> modes = new LinkedList<GameModeNumber>();
+		modes.add(GameModeNumber.DEATHMATCH);
+		return modes;
 	}
 
 }

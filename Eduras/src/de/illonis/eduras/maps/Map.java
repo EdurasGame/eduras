@@ -2,8 +2,8 @@ package de.illonis.eduras.maps;
 
 import java.awt.Rectangle;
 import java.util.Collection;
-import java.util.LinkedList;
 
+import de.illonis.eduras.gamemodes.GameMode.GameModeNumber;
 import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.math.Vector2D;
 
@@ -16,16 +16,11 @@ import de.illonis.eduras.math.Vector2D;
 public abstract class Map {
 
 	private final String name;
-
 	private final int width;
 	private final int height;
 
-	private Collection<GameObject> initialObjects;
-	private final Collection<SpawnPosition> spawnAreas;
-
 	/**
-	 * Creates a new map with the given name and size and empty spawnpoint- and
-	 * objectlist.
+	 * Creates a new map with the given name and size.
 	 * 
 	 * @param name
 	 *            name of the map.
@@ -38,8 +33,6 @@ public abstract class Map {
 		this.name = name;
 		this.width = width;
 		this.height = height;
-		initialObjects = new LinkedList<GameObject>();
-		spawnAreas = new LinkedList<SpawnPosition>();
 	}
 
 	/**
@@ -70,15 +63,6 @@ public abstract class Map {
 	}
 
 	/**
-	 * Returns the objects the map contains initially.
-	 * 
-	 * @return The initial objects.
-	 */
-	public Collection<GameObject> getInitialObjects() {
-		return initialObjects;
-	}
-
-	/**
 	 * Returns bounds of map. A map's top left corner always has coordinates
 	 * (0,0), so any negative coordinates are not in map area.
 	 * 
@@ -86,15 +70,6 @@ public abstract class Map {
 	 */
 	public final Rectangle getBounds() {
 		return new Rectangle(0, 0, width, height);
-	}
-
-	/**
-	 * Returns the possible spawnpoints.
-	 * 
-	 * @return A collection of spawnpoints.
-	 */
-	public final Collection<SpawnPosition> getSpawnAreas() {
-		return spawnAreas;
 	}
 
 	/**
@@ -109,11 +84,23 @@ public abstract class Map {
 	}
 
 	/**
-	 * Sets the map's collection of initial Objects.
+	 * Returns the possible spawnpoints.
 	 * 
-	 * @param objects
+	 * @return A collection of all spawnpoints on the map.
 	 */
-	public void setInitialObjects(Collection<GameObject> objects) {
-		this.initialObjects = objects;
-	}
+	public abstract Collection<SpawnPosition> getSpawnAreas();
+
+	/**
+	 * Returns the objects the map contains initially.
+	 * 
+	 * @return The initial objects.
+	 */
+	public abstract Collection<GameObject> getInitialObjects();
+
+	/**
+	 * Lists all gamemodes supported by this map.
+	 * 
+	 * @return a list of supported gamemodes.
+	 */
+	public abstract Collection<GameModeNumber> getSupportedGameModes();
 }
