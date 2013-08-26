@@ -74,4 +74,9 @@ public class NoGameMode implements GameMode {
 		return SpawnType.DEATHMATCH;
 	}
 
+	@Override
+	public GameModeNumber getNumber() {
+		return GameModeNumber.NO_GAMEMODE;
+	}
+
 }

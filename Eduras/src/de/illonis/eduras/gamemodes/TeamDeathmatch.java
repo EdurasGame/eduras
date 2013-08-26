@@ -85,4 +85,9 @@ public class TeamDeathmatch extends Deathmatch {
 			return SpawnType.TEAM_B;
 		}
 	}
+
+	@Override
+	public GameModeNumber getNumber() {
+		return GameModeNumber.TEAM_DEATHMATCH;
+	}
 }

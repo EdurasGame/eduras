@@ -48,4 +48,9 @@ public class ClientGameMode implements GameMode {
 		return null;
 	}
 
+	@Override
+	public GameModeNumber getNumber() {
+		return GameModeNumber.NO_GAMEMODE;
+	}
+
 }

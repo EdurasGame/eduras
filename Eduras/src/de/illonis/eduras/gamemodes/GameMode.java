@@ -15,6 +15,24 @@ import de.illonis.eduras.units.Unit;
 public interface GameMode {
 
 	/**
+	 * A list of all available gamemodes.
+	 * 
+	 * @author illonis
+	 * 
+	 */
+	@SuppressWarnings("javadoc")
+	public enum GameModeNumber {
+		NO_GAMEMODE, DEATHMATCH, TEAM_DEATHMATCH, CAPTURE_THE_FLAG, NINJA_VS_SAMURAI;
+	}
+
+	/**
+	 * Returns the associated {@link GameModeNumber}.
+	 * 
+	 * @return this mode's number.
+	 */
+	public GameModeNumber getNumber();
+
+	/**
 	 * Returns the game mode's name.
 	 * 
 	 * @return The name of the game mode.
