@@ -54,7 +54,7 @@ public class ManyBlocks extends Map {
 	@Override
 	public Collection<SpawnPosition> getSpawnAreas() {
 		SpawnPosition p = new SpawnPosition(new Rectangle2D.Double(0, 0,
-				getWidth(), getHeight()), SpawnType.DEATHMATCH);
+				getWidth(), getHeight()), SpawnType.ANY);
 		LinkedList<SpawnPosition> positions = new LinkedList<SpawnPosition>();
 		positions.add(p);
 		return positions;

@@ -106,7 +106,7 @@ public class Deathmatch implements GameMode {
 
 	@Override
 	public SpawnType getSpawnTypeForTeam(Team team) {
-		return SpawnType.DEATHMATCH;
+		return SpawnType.ANY;
 	}
 
 	@Override
