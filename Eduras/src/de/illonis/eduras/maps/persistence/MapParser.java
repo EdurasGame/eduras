@@ -2,6 +2,7 @@ package de.illonis.eduras.maps.persistence;
 
 import java.awt.geom.Rectangle2D;
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
@@ -102,7 +103,11 @@ public class MapParser {
 					}
 					break;
 				case "gamemodes":
-
+					String[] modes = value.split(",");
+					for (int i = 0; i < modes.length; i++) {
+						gameModes.add(GameModeNumber.valueOf(modes[i].trim()
+								.toUpperCase()));
+					}
 					break;
 				default:
 					throw new InvalidDataException("Unknown tag found: @" + key);
@@ -214,6 +219,19 @@ public class MapParser {
 		ScriptEngine engine = mgr.getEngineByName("JavaScript");
 		Object result = engine.eval(expression);
 		return (Double) result;
+	}
+
+	public static void main(String[] args) {
+		File file = new File(MapParser.class.getResource("../data/funmap.erm")
+				.getFile());
+		try {
+			Map m = readMap(file.toPath());
+			System.out.println(m.getSupportedGameModes());
+		} catch (InvalidDataException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 }
