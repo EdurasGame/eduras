@@ -1,0 +1,340 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE article PUBLIC "-//OASIS//DTD Simplified DocBook XML V1.0//EN"
+"http://www.oasis-open.org/docbook/xml/simple/1.0/sdocbook.dtd">
+<article>
+	<articleinfo>
+		<title>Maps: Creation and Implementation</title>
+	</articleinfo>
+	<section>
+		<title>What's this about?</title>
+		<para>
+			In this chapter you will learn a lot about map creation and how
+			you
+			can make your map work.
+		</para>
+		<para>
+			Note that this document does
+			<emphasis>not</emphasis>
+			provide
+			information regarding concept and design. At this point, we
+			assume
+			that you have a ready-to-implement weapon or item design or at
+			least
+			some facts to start off.
+		</para>
+	</section>
+	<section>
+		<title>Structure of a map</title>
+		<note>
+		    <para>
+		        In this article, the terms "Spawnpoint" and "Spawnarea" are
+		        often mixed up. They both mean the same thing, but as they
+		        are actually areas they are often named "Spawnareas".
+		    </para>
+		</note>
+		<para>
+			A map consists of three types of data as illustrated in the
+			graphics
+			below.
+		</para>
+		<figure>
+			<title>The content of a map illustrated</title>
+			<mediaobject>
+				<imageobject>
+					<imagedata fileref="images/map-illustration.png" format="PNG" />
+				</imageobject>
+			</mediaobject>
+		</figure>
+		<para>
+			A valid map has to match several criteria to be accepted:
+		</para>
+		<itemizedlist>
+			<listitem>
+				<para>Contain valid metadata. This means a positive width and
+					height
+					as well as at least one supported game mode.
+				</para>
+			</listitem>
+			<listitem>
+				<para>
+					Contain at least one spawnpoint.
+				</para>
+			</listitem>
+			<listitem>
+				<para>If created from file, the file needs to have a
+					valid syntax
+					(described later)
+				</para>
+			</listitem>
+		</itemizedlist>
+	</section>
+	<section>
+		<title>Create a map</title>
+		<para>
+			Currently, we do not have an automated map loader yet. This
+			means you have to implement a few lines of code to load
+			your map. But
+			do not hesitate - we will show you where
+			and what.
+		</para>
+		<section>
+		    <title>Implementing the content</title>
+		    <para>
+		        You have two ways to implement your map. Either put
+		        the initialization code into the map class or
+		        load the data from a custom file.
+		    </para>
+		    <para>
+		        Regardless of which way you choose, you have to
+		        create a class that extends from
+		        <computeroutput>Map</computeroutput>.
+		        You will see that you have to override the
+		        <computeroutput>buildMap()</computeroutput> method
+		        and provide a custom constructor.
+		    </para>
+		    <para>
+		        Your code structure should look similar to the following:
+		    </para>
+		    <programlisting>public class SimpleMap extends Map {
+
+	public SimpleMap() {
+		super("simple", "Eduras Team", 500, 500);
+		setCreated("2012-11-10");
+	}
+
+	@Override
+	protected void buildMap() {
+		
+	}
+}</programlisting>
+			<para>
+			    This would create a map named "simple" that was created by
+			    "Eduras Team" on November 10th, 2012 and has a size of 500x500.
+		    </para>
+			<para>
+			    Have a look at autocomplete or JavaDoc to see which
+			    super-constructor you need to call.
+			    You can use the <computeroutput>setCreated</computeroutput>
+			    method to easily specify a creation date. It either takes
+			    a String in the format <computeroutput>YYYY-MM-DD</computeroutput>
+			    or a Date object.
+			</para>
+			<para>
+			    Now, the <computeroutput>buildMap()</computeroutput> method
+			    needs your attention. This method is called once your map is
+			    being loaded, so you have to put your initialization code here.
+			</para>
+			<warning>
+			    <para>
+			        Do not put map data code into the constructor.
+			        This will make your map loading process inefficient and maybe
+			        cause your map to contain objects multiple times.
+			    </para>
+			</warning>
+			<para>
+			    You now have the choice of direct implementation or file loading.
+			    We will describe both methods here.
+			</para>
+			<section>
+			    <title>Loading from file</title>
+			    <para>
+			        To load your map from file, simply put the following code
+			        into your build-method. The mapfile must be located in the
+			        subpackage "eduras.maps.data". To learn about the structure
+			        of the file take a look further down into the section "Map files".
+			    </para>
+			    <programlisting>try {
+	loadFromFile("mapname.erm");
+} catch (InvalidDataException e) {
+	EduLog.passException(e);
+} catch (IOException e) {
+	EduLog.passException(e);
+}</programlisting>
+			</section>
+			<section>
+			    <title>Direct implementation</title>
+			    <para>
+			        To directly put your map data in the class file, the
+			        <computeroutput>Map</computeroutput> class provides several
+			        helping methods:
+			    </para>
+			    <itemizedlist>
+			        <listitem>
+			            <para><emphasis>addSpawnArea</emphasis></para>
+			            <para>
+			                Adds a spawnarea to the map. You need to specify
+			                a rectangular area and a type. If you are supporting
+			                team-deathmatch you have to provide at least one
+			                spawnarea for TEAM_A and one for TEAM_B. In deathmatch
+			                mode, all spawnareas will be used. 
+			            </para>
+			        </listitem>
+			        <listitem>
+			            <para><emphasis>addObject</emphasis></para>
+			            <para>
+			                Adds an object of the given type at given position.
+			            </para>
+			        </listitem>
+			        <listitem>
+			            <para>
+			                <emphasis>addSupportedGameMode(GameMode)</emphasis>
+			            </para>
+			            <para>
+			                adds given game mode to the list of gamemodes that
+			                are supported by this map.
+			            </para>
+			        </listitem>
+			    </itemizedlist>
+			</section>
+		</section>
+		<section>
+		    <title>Implement map loading</title>
+		    <para>
+		        As already mentioned, automated loading by name is
+		        not yet supported. We are planning to support this
+		        feature soon. Until then, you have to code some lines
+		        to make your map loadable.
+		    </para>
+		    <para>
+		        Go into <computeroutput>ConsoleEventTriggerer</computeroutput>
+		        and add a switch case for your map in the
+		        <computeroutput>changeMap</computeroutput> method.
+		        You will just need to call your constructor there.
+		    </para>
+		</section>
+	</section>
+	<section>
+	   	<title>Map files</title>
+	   	<para>
+	   	    Map files provide an easy way to exchange and load maps dynamically.
+	   	    They also offer an interface to create maps with third-party tools.
+	   	    The structure is rather simple. As you have seen in the structure
+	   	    description it contains three parts: a metadata section, spawnpoint
+	   	    declaration and gameobject data. They are explained in detail below.
+	   	</para>
+	   	<para>
+	   	    If you want to see a full example, take a look at the
+	   	    <computeroutput>maps.data</computeroutput> package.
+	   	</para>
+	   	<section>
+	   	    <title>General info</title>
+	   	    <para>
+	   	        To make your file clearly arranged, you can use some tricks
+	   	        the parser allows you to do.  This makes you able to provide
+	   	        a visually nice map file using tabs or spaces to align values.
+	   	    </para>
+	   	    <itemizedlist>
+	   	        <listitem>
+	   	            <para>Empty lines are ignored</para>
+	   	        </listitem>
+	   	        <listitem>
+	   	            <para>
+	   	                lines starting with a "#" are considered as comments
+	   	                and ignored.
+	   	            </para>
+	   	        </listitem>
+	   	       	<listitem>
+	   	       		<para>
+	   	        		Any trailing whitespaces or whitespaces
+	   	        		between the key symbols are ignored, too
+	   	   			</para>
+	   	    		<para>
+	   	        		For example, the following lines are equal:
+	   	   			</para>
+	   	    		<programlisting>@author = Name des Autors
+@author   =		Name des Authors 
+
+@gamemodes = Deathmatch, Team_Deathmatch
+@gamemodes =  Deathmatch  ,  Team_Deathmatch</programlisting>
+	   	       	</listitem>
+	   	    </itemizedlist>
+	   	</section>
+	   	<section>
+	   	    <title>Metadata</title>
+	   	    <para>
+	   	        Metadata are provided in simple key-value pairs. Each pair has
+	   	        to be on a single line. You have to provide all metadata in your
+	   	        file. Take a look at how it looks like:
+	   	    </para>
+	   	    <programlisting>@mapname	= funmap
+@author		= Jan Reese
+@gamemodes	= Deathmatch, Team_Deathmatch
+@created	= 2013-03-14
+@width		= 600
+@height		= 600</programlisting>
+			<para>
+			    The available gamemodes can be seen in the
+			    <computeroutput>GameMode</computeroutput> interface. Take a look at the
+			    <computeroutput>GameModeNumber</computeroutput> enum and take these
+			    values. Make sure you spell them
+			    correctly though they are parsed case-insensitive.
+			</para>
+	   	</section>
+	   	<section>
+	   	    <title>Spawnpoints</title>
+	   	    <para>
+	   	        The spawnpoint section is introduced with a 
+	   	        <computeroutput>:spawnpoints</computeroutput> in a single line.
+	   	        Each line in that section represents one spawnpoint that has five
+	   	        comma-separated parameters: x, y, width, height and type.
+	   	    </para>
+	   	    <para>
+	   	        The type parameter requires one value of TEAM_A, TEAM_B or ANY.
+	   	    </para>
+	   	    <para>
+	   	        The following example shows a spawnpoint section containing four
+	   	        spawnpoints.
+	   	    </para>
+	   	    <programlisting>:spawnpoints
+# X-Pos	Y-Pos	Width	Height	Type
+1,	1,	75,	100,	TEAM_A
+1,	H - 75,	200,	70,	TEAM_A
+W - 39,	1,	35,	100,	TEAM_B
+W - 205,H - 75,	200,	70,	TEAM_B</programlisting>
+			<para>
+			    As you can see, the section was introduced by a comment to
+			    keep the overview about the nicely arranged columns.
+			</para>
+			<para>
+			    You may notice the special letters "W" and "H". They can be used in
+			    coordinates and size parameters to refer to the map width and height.
+			    You can use any simple arithmetic function within a parameter to
+			    make some calculations. The parser uses a javascript engine to parse
+			    those expressions.
+			</para>
+			<para>
+			    The following block shows some example calculations that can be used:
+			</para>
+			<programlisting>6+3
+124/3
+W-H
+W/2
+W/2+3
+3e5
+(W+5)/2</programlisting>
+	   	</section>
+	   	<section>
+	   	   <title>Gameobject data</title>
+	   	   <para>
+	   	       Similar to the spawnpoint section, the gameobject section is
+	   	       introduced with a <computeroutput>:objects</computeroutput> in a single line.
+	   	        Each line in that section represents one object that has three
+	   	        comma-separated parameters: type, x and y.
+	   	    </para>
+	   	    <para>
+	   	        The type must be exactly spelled as in the
+	   	        <computeroutput>ObjectType</computeroutput> you can find in
+	   	        <computeroutput>ObjectFactory</computeroutput>.
+	   	        The position parameters can also contain calculations using W and H.
+	   	    </para>
+	   	    <para>
+	   	        The following example shows the creation of four blocks:
+	   	    </para>
+	   	    <programlisting>:objects
+BIGGERBLOCK,	W/2+45,	25
+BIGGERBLOCK,	W/2-45,	25
+BIGGERBLOCK,	W/2+45,	H-25
+BIGGERBLOCK,	W/2-45,	H-25</programlisting>
+	   	</section>
+	</section>
+</article>
