@@ -6,11 +6,11 @@
 @height		= 600
 
 :spawnpoints
-# X	Y	W	H	Type
-1,	1,	75,	100,	TEAM_A
-1,	H - 75,	200,	70,	TEAM_A
-W - 39,	1,	35,	100,	TEAM_B
-W - 205,H - 75,	200,	70,	TEAM_B
+# X		Y		W		H		Type
+1,		1,		75,		100,	TEAM_A
+1,		H - 75,	200,	70,		TEAM_A
+W - 39,	1,		35,		100,	TEAM_B
+W - 205,H - 75,	200,	70,		TEAM_B
 
 :objects
 ITEM_WEAPON_1,		25,	25
