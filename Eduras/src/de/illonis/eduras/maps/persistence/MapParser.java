@@ -105,8 +105,13 @@ public class MapParser {
 				case "gamemodes":
 					String[] modes = value.split(",");
 					for (int i = 0; i < modes.length; i++) {
-						gameModes.add(GameModeNumber.valueOf(modes[i].trim()
-								.toUpperCase()));
+						try {
+							gameModes.add(GameModeNumber.valueOf(modes[i]
+									.trim().toUpperCase()));
+						} catch (IllegalArgumentException e) {
+							throw new InvalidDataException(
+									"Gamemode does not exist: " + modes[i]);
+						}
 					}
 					break;
 				default:
@@ -134,19 +139,22 @@ public class MapParser {
 					String[] objectData = line.split(",");
 					double objX = 0,
 					objY = 0;
-					ObjectType objectType = ObjectType.valueOf(objectData[0]
-							.trim());
 					try {
+						ObjectType objectType = ObjectType
+								.valueOf(objectData[0].trim());
 						objX = evaluateString(objectData[1], width, height);
 						objY = evaluateString(objectData[2], width, height);
+						InitialObjectData oData = new InitialObjectData(
+								objectType, objX, objY);
+						gameObjects.add(oData);
 					} catch (ScriptException e) {
 						throw new InvalidDataException(
 								"Invalid math expression: " + e.getMessage());
+					} catch (IllegalArgumentException e) {
+						throw new InvalidDataException(
+								"Illegal game object type: "
+										+ objectData[0].trim());
 					}
-
-					InitialObjectData oData = new InitialObjectData(objectType,
-							objX, objY);
-					gameObjects.add(oData);
 
 					break;
 				case SPAWNPOINTS:
