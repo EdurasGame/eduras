@@ -57,16 +57,22 @@
 	<section>
 		<title>Step 1: Basics</title>
 		<para>
-			Setup of Java Development Kit and Eclipse.
+			This step covers setup of Java Development Kit and Eclipse.
+		</para>
+		<para>
+			You can head over to step two if
+			you already have an existing Eclipse setup with Java 7.
 		</para>
 		<section>
 			<title>on Ubuntu</title>
-			<para>
-			    <emphasis>Note:</emphasis> You might want to update your system first,
-			    using the following command. This may take some time.
-			</para>
-			<programlisting>
+			<note>
+				<para>
+					You might want to update your system first,
+			    	using the following command. This may take some time.
+				</para>
+				<programlisting>
 sudo apt-get update &amp;&amp; sudo apt-get upgrade &amp;&amp; sudo apt-get dist-upgrade</programlisting>
+			</note>
 			<section>
 			    <title>Install Java</title>
 				    
@@ -114,6 +120,9 @@ OpenJDK Client VM (build 23.2-b09, mixed mode, sharing)</programlisting>
 				    After download finished, go back to terminal and switch to directory where you downloaded
 				    eclipse setup file (e.g. <computeroutput>eclipse-java-juno-SR1-linux-gtk.tar.gz</computeroutput>) to.
 				    This is usually <computeroutput>~/Downloads</computeroutput>.			    
+				</para>
+				<para>
+					The following code extracts your downloaded file and moves it to <computeroutput>/opt/eclipse</computeroutput>.
 				</para>
 				<programlisting>
 tar -zxvf eclipse-java-juno-SR1-linux-gtk.tar.gz
@@ -293,7 +302,8 @@ Java HotSpot(TM) 64-Bit Server VM (build 23.3-b01, mixed mode)</programlisting>
 		    </para>
 		    <para>
 		        Go to <computeroutput>Help -> Install New Software...</computeroutput>
-		        and select <computeroutput>Juno</computeroutput>. Now a list should be listed.
+		        and select <computeroutput>Juno</computeroutput>. Now a list should be loaded
+		        (this may take up to several minutes).
 		        There, choose <computeroutput>Collaboration -> Eclipse EGit</computeroutput>
 		        and click <computeroutput>Next</computeroutput>.
 		    </para>
@@ -382,5 +392,14 @@ Java HotSpot(TM) 64-Bit Server VM (build 23.3-b01, mixed mode)</programlisting>
 	        You will find the main class of server in <computeroutput>de.illonis.eduras.Eduras</computeroutput>
 	        and the main class of client in <computeroutput>de.illonis.eduras.gameclient.EdurasClient</computeroutput>.
 	    </para>
+	</section>
+	<section>
+		<title>What's next?</title>
+		<para>
+			To get an overview about Eduras? features and possibilities, read through some
+			documentation pages. If you have not read the "Getting started" section yet,
+			this is a good time to do so. It is a very well written guide that teachs you
+			some basics in Eduras? coding guidelines. 
+		</para>
 	</section>
 </article>
