@@ -4,6 +4,10 @@
 <article>
 	<articleinfo>
 		<title>Game client</title>
+		<author>
+			<firstname>Jannis</firstname>
+			<surname>Mell</surname>
+		</author>
 	</articleinfo>
 
 	<section>
@@ -26,7 +30,7 @@
 		</para>
 	</section>
 	<section>
-	    <title>(jme) Architecture</title>
+	    <title>Architecture</title>
 	    <para>
 	        The client architecture is currently under heavy development.
 	        It became clear that logic and GUI were not as isolated as they should be.
@@ -45,7 +49,7 @@
 		</figure>
 	</section>
 	<section>
-		<title>(jme) Game client startup</title>
+		<title>Game client startup</title>
 		<para>
 			The following graph shows a startup-sequence of game client.
 			This does
@@ -64,7 +68,7 @@
 		</figure>
 	</section>
 	<section>
-		<title>(jme) Gui</title>
+		<title>Gui</title>
 		<section>
 			<title>Rendering process</title>
 			<para>
@@ -91,7 +95,7 @@
 			</figure>
 		</section>
 		<section>
-			<title>(jme) Gui scaling</title>
+			<title>Gui scaling</title>
 			<para>
 			    Gui scaling is currently done in a very simple way. We might have a
 			    detailed look at this once it comes to render images. This scaling

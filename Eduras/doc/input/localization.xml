@@ -4,9 +4,13 @@
 <article>
 	<articleinfo>
 		<title>Localization</title>
+		<author>
+			<firstname>Jannis</firstname>
+			<surname>Mell</surname>
+		</author>
 	</articleinfo>
 	<section>
-		<title>(jme) Why locale?</title>
+		<title>Why locale?</title>
 		<para>
 			Localization is required to make texts in our game language-independent.
 			We want to target a huge audience and with this feature, we can
@@ -14,7 +18,7 @@
 		</para>
 	</section>
 	<section>
-	    <title>(jme) How it works</title>
+	    <title>How it works</title>
 	    <para>
 	        Basically, each text fragment is represented by a placeholder and requires a call
 	        to <computeroutput>Localization.getString(String)</computeroutput>. This method
@@ -33,7 +37,7 @@
 
 	</section>
 	<section>
-	    <title>(jme) Usage</title>
+	    <title>Usage</title>
 	    <para>
 	        Using the locale is very simple as there are a lot of helping functions.
 	        If you want to see some usage examples, take a look into

@@ -4,10 +4,18 @@
 <article>
 	<articleinfo>
 		<title>Gameplay</title>
+		<author>
+			<firstname>Florian</firstname>
+			<surname>Mai</surname>
+		</author>
+		<author>
+			<firstname>Jannis</firstname>
+			<surname>Mell</surname>
+		</author>
 	</articleinfo>
 	
 	<section>
-		<title>(jme) Game setting and goal</title>
+		<title>Game setting and goal</title>
 		<para>
 			Two teams fight against on a large map. Each team consists of a
 			maximum of 5 players. The first team that destroys enemy base wins.
@@ -15,7 +23,7 @@
 		</para>
 	</section>
 	<section>
-		<title>(jme) General game cycle</title>
+		<title>General game cycle</title>
 		<para>
 			Both teams start randomly at either top-left or bottom-right
 			corner of map (yes, this is contrary to common multiplayer maps like
@@ -26,7 +34,7 @@
 		</para>
 	</section>
 	<section>
-		<title>(jme) Neutral bases</title>
+		<title>Neutral bases</title>
 		<para>
 			Neutral bases can be conquered by a team. Once a base is conquered it should
 			be defended against enemy team.
@@ -108,7 +116,7 @@
 		</section>
 	</section>
 	<section>
-		<title>(jme) Player abilities</title>
+		<title>Player abilities</title>
 		<section>
 		    <title>Shooting</title>
 		    <para>

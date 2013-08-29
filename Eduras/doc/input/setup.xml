@@ -4,6 +4,10 @@
 <article>
 	<articleinfo>
 		<title>Setup</title>
+		<author>
+			<firstname>Jannis</firstname>
+			<surname>Mell</surname>
+		</author>
 	</articleinfo>
 	<!-- 
 		Important note: Do not perform autoformat on this file
