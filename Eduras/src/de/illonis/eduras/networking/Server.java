@@ -29,6 +29,7 @@ import de.illonis.eduras.interfaces.NetworkEventListener;
 import de.illonis.eduras.locale.Localization;
 import de.illonis.eduras.logger.EduLog;
 import de.illonis.eduras.networking.ServerClient.ClientRole;
+import de.illonis.eduras.units.PlayerMainFigure;
 import de.illonis.eduras.utils.CollectionUtils;
 
 /**
@@ -122,6 +123,10 @@ public class Server {
 	class UDPMessageReceiver extends Thread {
 
 		private static final int MAX_UDP_SIZE = 1024;
+
+		public UDPMessageReceiver() {
+			super("UDPMessageReceiver");
+		}
 
 		@Override
 		public void run() {
@@ -400,6 +405,21 @@ public class Server {
 	 *            The client.
 	 */
 	public void handleClientDisconnect(ServerClient client) {
+
+		ObjectFactoryEvent gonePlayerEvent = new ObjectFactoryEvent(
+				GameEventNumber.OBJECT_REMOVE, ObjectType.PLAYER);
+
+		int clientId = client.getClientId();
+		int objectId;
+		PlayerMainFigure mainFigure;
+		try {
+			mainFigure = game.getPlayerByOwnerId(clientId);
+			objectId = mainFigure.getId();
+		} catch (ObjectNotFoundException e) {
+			EduLog.error("Player of object id " + e.getObjectId()
+					+ " not found!");
+			return;
+		}
 		removeClient(client);
 
 		try {
@@ -408,21 +428,8 @@ public class Server {
 			EduLog.passException(e);
 		}
 
-		ObjectFactoryEvent gonePlayerEvent = new ObjectFactoryEvent(
-				GameEventNumber.OBJECT_REMOVE, ObjectType.PLAYER);
-
-		int clientId = client.getClientId();
-		int objectId;
-		try {
-			objectId = game.getPlayerByOwnerId(clientId).getId();
-		} catch (ObjectNotFoundException e) {
-			EduLog.error("Player of object id " + e.getObjectId()
-					+ " not found!");
-			return;
-		}
-
 		gonePlayerEvent.setId(objectId);
-		// logic.getObjectFactory().onObjectFactoryEventAppeared(gonePlayerEvent);
+		logic.getObjectFactory().onObjectFactoryEventAppeared(gonePlayerEvent);
 		sendEventToAll(gonePlayerEvent);
 	}
 

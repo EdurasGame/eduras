@@ -1,6 +1,7 @@
 package de.illonis.eduras;
 
 import de.illonis.eduras.gamemodes.GameMode;
+import de.illonis.eduras.maps.SpawnPosition.SpawnType;
 import de.illonis.eduras.units.Unit;
 
 /**
@@ -40,6 +41,16 @@ public class ClientGameMode implements GameMode {
 	public void onGameStart() {
 		// nothing
 
+	}
+
+	@Override
+	public SpawnType getSpawnTypeForTeam(Team team) {
+		return null;
+	}
+
+	@Override
+	public GameModeNumber getNumber() {
+		return GameModeNumber.NO_GAMEMODE;
 	}
 
 }

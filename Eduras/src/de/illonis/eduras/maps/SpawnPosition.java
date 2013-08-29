@@ -40,7 +40,7 @@ public class SpawnPosition {
 		TEAM_B, /**
 		 * Indicates that every player can spawn here.
 		 */
-		DEATHMATCH, /**
+		ANY, /**
 		 * Indicates that only one player can spawn here.
 		 */
 		SINGLE

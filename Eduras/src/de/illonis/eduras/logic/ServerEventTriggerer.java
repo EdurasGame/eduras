@@ -1,9 +1,5 @@
 package de.illonis.eduras.logic;
 
-import java.awt.geom.Rectangle2D;
-import java.util.LinkedList;
-import java.util.Random;
-
 import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.ObjectFactory.ObjectType;
 import de.illonis.eduras.Team;
@@ -23,6 +19,7 @@ import de.illonis.eduras.events.SetOwnerEvent;
 import de.illonis.eduras.events.SetPolygonDataEvent;
 import de.illonis.eduras.events.SetRemainingTimeEvent;
 import de.illonis.eduras.events.SetTeamsEvent;
+import de.illonis.eduras.exceptions.GameModeNotSupportedByMapException;
 import de.illonis.eduras.exceptions.InvalidNameException;
 import de.illonis.eduras.exceptions.MessageNotSupportedException;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
@@ -35,8 +32,8 @@ import de.illonis.eduras.items.Item;
 import de.illonis.eduras.items.Lootable;
 import de.illonis.eduras.items.weapons.Missile;
 import de.illonis.eduras.logger.EduLog;
+import de.illonis.eduras.maps.InitialObjectData;
 import de.illonis.eduras.maps.Map;
-import de.illonis.eduras.maps.SpawnPosition;
 import de.illonis.eduras.math.Vector2D;
 import de.illonis.eduras.networking.Buffer;
 import de.illonis.eduras.networking.NetworkMessageSerializer;
@@ -52,8 +49,6 @@ import de.illonis.eduras.units.Unit;
 public class ServerEventTriggerer implements EventTriggerer {
 
 	private static int lastGameObjectId = 0;
-
-	private static final Random RANDOM = new Random();
 
 	private final GameLogicInterface logic;
 	private GameInformation gameInfo;
@@ -230,12 +225,7 @@ public class ServerEventTriggerer implements EventTriggerer {
 	@Override
 	public void init() {
 
-		Map map = logic.getGame().getMap();
-
-		for (GameObject singleObject : map.getInitialObjects()) {
-			this.createObjectAt(singleObject.getType(),
-					singleObject.getPositionVector(), singleObject.getOwner());
-		}
+		changeMap(logic.getGame().getMap());
 
 	}
 
@@ -274,25 +264,14 @@ public class ServerEventTriggerer implements EventTriggerer {
 		// TODO: Fire a respawn event to client.
 		remaxHealth(player);
 
-		LinkedList<SpawnPosition> spawnAreas = new LinkedList<SpawnPosition>(
-				gameInfo.getMap().getSpawnAreas());
+		Vector2D spawnPosition = null;
+		try {
+			spawnPosition = gameInfo.getSpawnPointFor(player);
+		} catch (GameModeNotSupportedByMapException e) {
+			e.printStackTrace();
+		}
 
-		// TODO: separate spawnpositions by teams when it's possible soon.
-
-		int area = RANDOM.nextInt(spawnAreas.size());
-		SpawnPosition spawnPos = spawnAreas.get(area);
-		Rectangle2D.Double boundings = new Rectangle2D.Double();
-		boundings.width = player.getBoundingBox().width;
-		boundings.height = player.getBoundingBox().height;
-
-		Vector2D newPos;
-		do {
-			newPos = spawnPos.getAPoint(player.getShape());
-			boundings.x = newPos.getX();
-			boundings.y = newPos.getY();
-		} while (gameInfo.isObjectWithin(boundings));
-
-		setPositionOfObject(player.getId(), newPos);
+		setPositionOfObject(player.getId(), spawnPosition);
 	}
 
 	@Override
@@ -354,15 +333,16 @@ public class ServerEventTriggerer implements EventTriggerer {
 
 		removeAllNonPlayers();
 
-		for (GameObject initialObject : map.getInitialObjects()) {
+		for (InitialObjectData initialObject : map.getInitialObjects()) {
 			createObjectAt(initialObject.getType(),
-					initialObject.getPositionVector(), initialObject.getOwner());
+					initialObject.getPosition(), -1);
 		}
+
+		gameInfo.getGameSettings().getGameMode().onGameStart();
 
 		for (PlayerMainFigure player : gameInfo.getPlayers()) {
 			respawnPlayer(player);
 		}
-		gameInfo.getGameSettings().getGameMode().onGameStart();
 	}
 
 	/**
@@ -485,10 +465,10 @@ public class ServerEventTriggerer implements EventTriggerer {
 
 	@Override
 	public void setTeams(Team... teams) {
-		gameInfo.getTeams().clear();
+		gameInfo.clearTeams();
 		SetTeamsEvent event = new SetTeamsEvent();
 		for (Team team : teams) {
-			gameInfo.getTeams().add(team);
+			gameInfo.addTeam(team);
 			event.addTeam(team.getColor(), team.getName());
 		}
 		sendEvents(event);
@@ -496,6 +476,7 @@ public class ServerEventTriggerer implements EventTriggerer {
 
 	@Override
 	public void addPlayerToTeam(int ownerId, Team team) {
+
 		PlayerMainFigure newPlayer;
 		try {
 			newPlayer = gameInfo.getPlayerByOwnerId(ownerId);
@@ -503,7 +484,11 @@ public class ServerEventTriggerer implements EventTriggerer {
 			EduLog.passException(e);
 			return;
 		}
+
+		if (newPlayer.getTeam() != null)
+			newPlayer.getTeam().removePlayer(newPlayer);
 		team.addPlayer(newPlayer);
+
 		AddPlayerToTeamEvent event = new AddPlayerToTeamEvent(ownerId,
 				team.getColor());
 		sendEvents(event);
