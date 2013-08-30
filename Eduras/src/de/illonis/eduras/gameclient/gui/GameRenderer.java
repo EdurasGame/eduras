@@ -49,13 +49,13 @@ public class GameRenderer implements TooltipHandler {
 	private final ConcurrentHashMap<Integer, GameObject> objs;
 	private RenderThread rendererThread;
 	private GamePanel target;
-	private final Rectangle mapSize;
 	private ItemTooltip tooltip;
 	private double scale;
 	private boolean tooltipShown = false;
 	private ArrayList<RenderedGuiObject> uiObjects = new ArrayList<RenderedGuiObject>();
 	private final static int DEFAULT_WIDTH = 484;
 	private final static int DEFAULT_HEIGHT = 462;
+	private final InformationProvider info;
 
 	/**
 	 * Creates a new renderer.
@@ -75,7 +75,7 @@ public class GameRenderer implements TooltipHandler {
 		this.camera = camera;
 		scale = 1;
 		objs = info.getGameObjects();
-		mapSize = info.getMapBounds();
+		this.info = info;
 		this.gui = gui;
 		RendererTooltipHandler h = new RendererTooltipHandler(this);
 		gui.setTooltipHandler(h);
@@ -220,7 +220,7 @@ public class GameRenderer implements TooltipHandler {
 	 * Draws a small red border where map bounds are.
 	 */
 	private void drawMap() {
-		Rectangle r = new Rectangle(mapSize.getBounds());
+		Rectangle r = new Rectangle(info.getMapBounds());
 		r.x -= camera.x;
 		r.y -= camera.y;
 		mapGraphics.setColor(Color.BLUE);

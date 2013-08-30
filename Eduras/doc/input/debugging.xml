@@ -4,9 +4,13 @@
 <article>
 	<articleinfo>
 		<title>Debugging</title>
+		<author>
+			<firstname>Jannis</firstname>
+			<surname>Mell</surname>
+		</author>
 	</articleinfo>
 	<section>
-	    <title>(jme) EduLog</title>
+	    <title>EduLog</title>
 	    <section>
 	        <title>Overview</title>
 		    <para>

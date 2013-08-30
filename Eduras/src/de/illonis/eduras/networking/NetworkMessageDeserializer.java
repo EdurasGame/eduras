@@ -121,8 +121,9 @@ public class NetworkMessageDeserializer {
 			typeInt = parseInt(args[0]);
 		} catch (NumberFormatException e) {
 			throw new InvalidMessageFormatException(
-					"Event id of message is no valid integer value: " + args[0],
-					msg);
+					"Event id of message is no valid integer value: " + args[0]
+							+ " Original message: " + msg + " Error: "
+							+ e.getMessage(), msg);
 		}
 
 		Event result = null;

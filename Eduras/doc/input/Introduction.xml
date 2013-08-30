@@ -2,12 +2,18 @@
 <!DOCTYPE article PUBLIC "-//OASIS//DTD Simplified DocBook XML V1.0//EN"
 "http://www.oasis-open.org/docbook/xml/simple/1.0/sdocbook.dtd">
 <article>
+	<articleinfo>
+		<title>Introduction</title>
+		<author>
+			<firstname>Florian</firstname>
+			<surname>Mai</surname>
+		</author>
+	</articleinfo>
      <informalfigure>
        <graphic fileref="images/logo_small.png"></graphic>
 	</informalfigure>
-	<title>Introduction</title>	
 	<section>
-		<title>(fma) What we aim for</title>
+		<title>What we aim for</title>
 			<para>
 				This project is about developing a multiplayer game appropiate to be
 				played competitively as an eSport title. For us, a successful eSport title
@@ -50,7 +56,7 @@
 			</itemizedlist>
 
 		<section>
-			<title>(fma) Many players</title>
+			<title>Many players</title>
 				<para>
 					To achieve a huge amount of players the game must fulfill the following
 					properties:
@@ -95,7 +101,7 @@
 		</section>
 		
 		<section>
-			<title>(fma) Many spectators</title>
+			<title>Many spectators</title>
 				<para>
 					To achieve a huge amount of spectators the game must fulfill the following
 					properties:
@@ -119,7 +125,7 @@
 		</section>
 		
 		<section>
-			<title>(fma) Deep sportive characteristic</title>
+			<title>Deep sportive characteristic</title>
 				<para>
 					To achieve a deep sportive characteristic the game must fulfill the following
 					properties:

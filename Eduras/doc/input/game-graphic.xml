@@ -4,9 +4,13 @@
 <article>
 	<articleinfo>
 		<title>Game graphics</title>
+		<author>
+			<firstname>Jannis</firstname>
+			<surname>Mell</surname>
+		</author>
 	</articleinfo>
 	<section>
-		<title>(jme) Sprites</title>
+		<title>Sprites</title>
 		<para>
 			A sprite (or sprite-sheet) is an image that is tiled into many equal parts where each part contains an independend graphic.
 			Sprites are commonly used in computer games with two-dimensional graphic resources. It's often used to create animations

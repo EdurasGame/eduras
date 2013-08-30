@@ -91,6 +91,9 @@ public class GameCamera extends Rectangle {
 		}
 	};
 
+	/**
+	 * Stops automatic camera movement.
+	 */
 	public void stopMoving() {
 		running = false;
 	}

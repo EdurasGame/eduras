@@ -5,16 +5,12 @@
 	<articleinfo>
 	    <title>Interface-Design</title>
 		<author>
-			<firstname>Florian</firstname>
-			<surname>Mai</surname>
-		</author>
-		<author>
 			<firstname>Jannis</firstname>
 			<surname>Mell</surname>
 		</author>
 	</articleinfo>
 	<section>
-	    <title>(jme) Why is interface design so important?</title>
+	    <title>Why is interface design so important?</title>
 	    <para>
 			The interface of a game is more important than you think! Providing control over the whole game and presenting information to the player,
 			it is one of the most important parts considering game design. It requires hard work to find a compromise between much control and a good overview.
@@ -22,7 +18,7 @@
 	    </para>
 	</section>
 	<section>
-	    <title>(jme) Functional requirements</title>
+	    <title>Functional requirements</title>
 	    <para>
 	         There are many requirements that an interface has to meet.
 	    </para>
@@ -52,7 +48,7 @@
 	    </itemizedlist>
 	</section>
 	<section>
-	    <title>(jme) Graphical targets</title>
+	    <title>Graphical targets</title>
 	    <para>
 			The Interface should be clean but not too abstract. It's style should match the game's style.
 			Graphics should not be too complicated to distract the user from game itself but epic artwork style is epic.
@@ -65,7 +61,7 @@
 	    </para>
 	</section>
 	<section>
-	    <title>(jme) Usability</title>
+	    <title>Usability</title>
 	    <para>
 	        The interface doesn't only consist of the visual part of user interaction, there are also hidden things like keybindings, mouse interaction and so on.
 	        This leads to an important point of gamer-friendlyness: individuality. A game with static possibilities to use is a silly game. A user wants to change
@@ -110,7 +106,7 @@
 	    </section>
 	</section>
 	<section>
-	    <title>(jme) Spectator mode</title>
+	    <title>Spectator mode</title>
 	    <para>
 	        Spectator mode is a two-sided sword: One the one hand it allows other players to join in and learn from other player's gameplay. They can view significant matches
 	        and discuss about teamplay. On the other hand it provides a way to get information about your opponent. If there's communication between spectators and players, this
@@ -121,7 +117,7 @@
 	    </para>
 	</section>
 	<section>
-	    <title>(jme) Game recording</title>
+	    <title>Game recording</title>
 	    <para>
 	        A very exciting feature is game recording. It allows a team to review their recent games, discuss failures and review group behaviour.
 	        Due to recording mechanics, a recorded game requires only a small amount of memory as the game is not recorded as video file. Because of this players need to use their
@@ -132,7 +128,7 @@
 	    </para>
 	</section>
 	<section>
-	    <title>(jme) GUI-Elements</title>
+	    <title>GUI-Elements</title>
 	    <para>
 	        In this section we collect all elements that are shown in the main GUI and their description.
 	    </para>

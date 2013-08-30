@@ -4,6 +4,14 @@
 <article>
 	<articleinfo>
 		<title>Getting started</title>
+		<author>
+			<firstname>Florian</firstname>
+			<surname>Mai</surname>
+		</author>
+		<author>
+			<firstname>Jannis</firstname>
+			<surname>Mell</surname>
+		</author>
 	</articleinfo>
 
 	<section>
@@ -341,7 +349,7 @@
 			</emphasis>
 			For a first approach we decided to expand our own platform, which you
 			can find
-			<ulink url="http://www.eduras.illonis.de">here</ulink>
+			<ulink url="http://illonis.dyndns.org/pstatus">here</ulink>
 			. It provides up-to-date DocBook and JavaDoc documentation, a
 			bug-tracking system, an overview of all GIT commits, and a
 			Kanban-board to put tasks on.
@@ -467,7 +475,7 @@
 		</para>
 		<para>
 			We decided to use
-			<ulink url="http://eduras.illonis.de">this platform</ulink>
+			<ulink url="http://illonis.dyndns.org/pstatus">this platform</ulink>
 			for project management.
 		</para>
 

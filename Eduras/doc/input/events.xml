@@ -4,10 +4,22 @@
 <article>
 	<articleinfo>
 		<title>Events</title>
+		<author>
+			<firstname>Florian</firstname>
+			<surname>Mai</surname>
+		</author>
+		<author>
+			<firstname>Jannis</firstname>
+			<surname>Mell</surname>
+		</author>
+		<author>
+			<firstname>Jan</firstname>
+			<surname>Reese</surname>
+		</author>
 	</articleinfo>
 
 	<section>
-		<title>What's this about.</title>
+		<title>What's this about?</title>
 
 		<para>
 			This document describes the eventing mechanism and lists the
@@ -67,7 +79,7 @@
 
 
 	<section>
-		<title>Events</title>
+		<title>Event list</title>
 
 		<table frame="all">
 			<title>Server-Events</title>

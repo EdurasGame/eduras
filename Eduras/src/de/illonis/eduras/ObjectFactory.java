@@ -180,8 +180,11 @@ public class ObjectFactory {
 			int id = event.getId();
 
 			GameObject objectToRemove = logic.getGame().getObjects().get(id);
+			if (objectToRemove instanceof PlayerMainFigure) {
+				PlayerMainFigure mainFigure = (PlayerMainFigure) objectToRemove;
+				mainFigure.getTeam().removePlayer(mainFigure);
+			}
 			logic.getGame().removeObject(objectToRemove);
-
 			logic.getListener().onObjectRemove(event);
 
 		}

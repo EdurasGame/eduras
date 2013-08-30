@@ -58,7 +58,7 @@ public interface InfoInterface {
 	public Collection<PlayerMainFigure> getPlayers();
 
 	/**
-	 * @return team list.
+	 * @return copy of the team list.
 	 * 
 	 * @author illonis
 	 */

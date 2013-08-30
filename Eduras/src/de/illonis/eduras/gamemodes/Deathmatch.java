@@ -7,6 +7,7 @@ import de.illonis.eduras.Team.TeamColor;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
 import de.illonis.eduras.logger.EduLog;
 import de.illonis.eduras.logic.EventTriggerer;
+import de.illonis.eduras.maps.SpawnPosition.SpawnType;
 import de.illonis.eduras.units.PlayerMainFigure;
 import de.illonis.eduras.units.Unit;
 
@@ -18,7 +19,7 @@ import de.illonis.eduras.units.Unit;
  */
 public class Deathmatch implements GameMode {
 
-	private GameInformation gameInfo;
+	protected GameInformation gameInfo;
 
 	/**
 	 * Creates a new instance of deathmatch.
@@ -48,6 +49,7 @@ public class Deathmatch implements GameMode {
 				if (et != null)
 					gameInfo.getEventTriggerer().respawnPlayer(
 							(PlayerMainFigure) killedUnit);
+				// TODO: give player items here if game mode should do.
 				gameInfo.getGameSettings().getStats()
 						.addDeathForPlayer((PlayerMainFigure) killedUnit);
 			}
@@ -100,5 +102,15 @@ public class Deathmatch implements GameMode {
 					team);
 		}
 
+	}
+
+	@Override
+	public SpawnType getSpawnTypeForTeam(Team team) {
+		return SpawnType.ANY;
+	}
+
+	@Override
+	public GameModeNumber getNumber() {
+		return GameModeNumber.DEATHMATCH;
 	}
 }
