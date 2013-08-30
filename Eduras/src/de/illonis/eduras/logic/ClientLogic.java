@@ -191,7 +191,6 @@ public class ClientLogic implements GameLogicInterface {
 				break;
 			case ITEM_CD_START:
 			case ITEM_CD_FINISHED:
-			case ITEM_USE:
 				ItemEvent itemEvent = (ItemEvent) event;
 				handleItemEvent(itemEvent);
 				break;
@@ -300,7 +299,6 @@ public class ClientLogic implements GameLogicInterface {
 				itemEvent.getOwner(), itemEvent.getSlotNum());
 
 		switch (itemEvent.getType()) {
-		case ITEM_USE:
 		case ITEM_CD_START:
 			if (item.isUsable())
 				((Usable) item).startCooldown();

@@ -132,25 +132,18 @@ public class ServerLogic implements GameLogicInterface {
 		}
 		ItemUseInformation useInfo = new ItemUseInformation(player,
 				itemEvent.getTarget());
-		ItemEvent cooldownEvent = new ItemEvent(GameEventNumber.ITEM_CD_START,
-				itemEvent.getOwner(), itemEvent.getSlotNum());
 
 		switch (itemEvent.getType()) {
 		case ITEM_USE:
-		case ITEM_CD_START:
 			if (item.isUsable() && !((Usable) item).hasCooldown()) {
 				((Usable) item).use(useInfo);
+				ItemEvent cooldownEvent = new ItemEvent(
+						GameEventNumber.ITEM_CD_START, itemEvent.getOwner(),
+						itemEvent.getSlotNum());
 
 				getListener().onCooldownStarted(cooldownEvent);
 
 			}
-			break;
-		case ITEM_CD_FINISHED:
-			if (item.isUsable())
-				((Usable) item).resetCooldown();
-
-			cooldownEvent.setType(GameEventNumber.ITEM_CD_FINISHED);
-			getListener().onCooldownFinished(cooldownEvent);
 			break;
 		default:
 			break;
