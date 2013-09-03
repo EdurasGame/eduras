@@ -116,6 +116,7 @@ public class ClientFrame extends JFrame implements NetworkEventReactor,
 	public void showLogin() {
 		cardLayout.show(getContentPane(), LOGINPANEL);
 		client.startDiscovery(loginPanel);
+		loginPanel.startAnimation();
 	}
 
 	/**
@@ -124,6 +125,7 @@ public class ClientFrame extends JFrame implements NetworkEventReactor,
 	public void showProgress() {
 		progressPanel.reset();
 		cardLayout.show(getContentPane(), CONNECTPANEL);
+		loginPanel.stopAnimation();
 	}
 
 	/**
@@ -191,6 +193,7 @@ public class ClientFrame extends JFrame implements NetworkEventReactor,
 			gamePanel.stopRendering();
 			cml.stop();
 			client.stopDiscovery();
+			loginPanel.stopAnimation();
 			dispose();
 		}
 
@@ -269,4 +272,5 @@ public class ClientFrame extends JFrame implements NetworkEventReactor,
 	public void hideStatWindow() {
 		userInterface.hideStatWindow();
 	}
+
 }

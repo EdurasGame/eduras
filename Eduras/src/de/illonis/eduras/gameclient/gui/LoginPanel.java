@@ -30,6 +30,7 @@ import javax.swing.event.ListSelectionListener;
 import javax.swing.text.BadLocationException;
 
 import de.illonis.eduras.exceptions.InvalidValueEnteredException;
+import de.illonis.eduras.gameclient.gui.animation.LoginAnimation;
 import de.illonis.eduras.images.ImageFiler;
 import de.illonis.eduras.locale.Localization;
 import de.illonis.eduras.networking.ServerClient.ClientRole;
@@ -56,12 +57,28 @@ public class LoginPanel extends JPanel implements ActionListener,
 	private ActionListener listener;
 	private JList<ServerInfo> serverList;
 	private DefaultListModel<ServerInfo> serverData;
+	private LoginAnimation titlePanel;
+
+	/**
+	 * Starts login animation.
+	 */
+	public void startAnimation() {
+		titlePanel.start();
+	}
+
+	/**
+	 * Stops login animation.
+	 */
+	public void stopAnimation() {
+		titlePanel.stop();
+	}
 
 	/**
 	 * Creates the login panel.
 	 */
 	public LoginPanel() {
 		super();
+		setBackground(Color.BLACK);
 		setLayout(new BorderLayout());
 		serverData = new DefaultListModel<ServerInfo>();
 		buildGui();
@@ -80,11 +97,13 @@ public class LoginPanel extends JPanel implements ActionListener,
 	}
 
 	private void buildGui() {
+		titlePanel = new LoginAnimation();
 		JLabel title = new JLabel(ImageFiler.loadIcon("gui/login/logo.png"));
-		setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+		titlePanel.add(title);
+		// setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
 		JPanel form = new JPanel(new GridBagLayout());
-
+		form.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 		serverList = new JList<ServerInfo>(serverData);
 		serverList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		serverList.setPreferredSize(new Dimension(300, 150));
@@ -163,6 +182,7 @@ public class LoginPanel extends JPanel implements ActionListener,
 		connectButton = new JButton("Verbinden");
 		connectButton.setEnabled(false);
 		form.add(connectButton, c);
+		form.setBackground(new Color(.67f, .003f, .0015f, 1));
 
 		// default user name
 		Random r = new Random();
@@ -175,7 +195,7 @@ public class LoginPanel extends JPanel implements ActionListener,
 		title.setAlignmentX(CENTER_ALIGNMENT);
 		title.setHorizontalAlignment(JLabel.CENTER);
 		title.setHorizontalTextPosition(SwingConstants.CENTER);
-		add(title, BorderLayout.CENTER);
+		add(titlePanel, BorderLayout.CENTER);
 		add(form, BorderLayout.SOUTH);
 	}
 
