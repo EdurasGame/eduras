@@ -2,9 +2,9 @@ package de.illonis.eduras.maps.persistence;
 
 import java.awt.geom.Rectangle2D;
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.URL;
 import java.nio.file.Path;
 import java.text.ParseException;
 import java.util.Date;
@@ -54,7 +54,7 @@ public class MapParser {
 	 * @throws IOException
 	 *             if an I/O error occurs while reading the file.
 	 */
-	public static Map readMap(File inputFile) throws InvalidDataException,
+	public static Map readMap(URL inputFile) throws InvalidDataException,
 			IOException {
 
 		String mapName = "";
@@ -69,7 +69,8 @@ public class MapParser {
 
 		// Charset charset = Charset.forName("UTF-8");
 
-		BufferedReader reader = new BufferedReader(new FileReader(inputFile));
+		BufferedReader reader = new BufferedReader(new InputStreamReader(
+				inputFile.openStream()));
 
 		String line = null;
 		while ((line = reader.readLine()) != null) {

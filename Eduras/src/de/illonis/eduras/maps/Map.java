@@ -2,7 +2,6 @@ package de.illonis.eduras.maps;
 
 import java.awt.Rectangle;
 import java.awt.geom.Rectangle2D;
-import java.io.File;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -258,9 +257,8 @@ public abstract class Map {
 	 */
 	protected final void loadFromFile(String mapFileName)
 			throws InvalidDataException, IOException {
-		File file = new File(getClass().getResource("data/" + mapFileName)
-				.getFile());
-		Map map = MapParser.readMap(file);
+		Map map = MapParser.readMap(getClass().getResource(
+				"data/" + mapFileName));
 		initialObjects.addAll(map.getInitialObjects());
 		spawnPositions.addAll(map.getSpawnAreas());
 		supportedGameModes.addAll(map.getSupportedGameModes());
