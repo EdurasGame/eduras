@@ -3,9 +3,8 @@ package de.illonis.eduras.maps.persistence;
 import java.awt.geom.Rectangle2D;
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
-import java.nio.charset.Charset;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.text.ParseException;
 import java.util.Date;
@@ -55,7 +54,7 @@ public class MapParser {
 	 * @throws IOException
 	 *             if an I/O error occurs while reading the file.
 	 */
-	public static Map readMap(Path inputFile) throws InvalidDataException,
+	public static Map readMap(File inputFile) throws InvalidDataException,
 			IOException {
 
 		String mapName = "";
@@ -68,8 +67,10 @@ public class MapParser {
 		final LinkedList<SpawnPosition> spawnPositions = new LinkedList<SpawnPosition>();
 		final LinkedList<InitialObjectData> gameObjects = new LinkedList<InitialObjectData>();
 
-		Charset charset = Charset.forName("UTF-8");
-		BufferedReader reader = Files.newBufferedReader(inputFile, charset);
+		// Charset charset = Charset.forName("UTF-8");
+
+		BufferedReader reader = new BufferedReader(new FileReader(inputFile));
+
 		String line = null;
 		while ((line = reader.readLine()) != null) {
 			if (line.trim().isEmpty())
@@ -186,6 +187,7 @@ public class MapParser {
 				}
 			}
 		}
+		reader.close();
 		return new LoadedMap(mapName, author, width, height, created,
 				spawnPositions, gameObjects, gameModes);
 	}
@@ -227,19 +229,6 @@ public class MapParser {
 		ScriptEngine engine = mgr.getEngineByName("JavaScript");
 		Object result = engine.eval(expression);
 		return (Double) result;
-	}
-
-	public static void main(String[] args) {
-		File file = new File(MapParser.class.getResource("../data/funmap.erm")
-				.getFile());
-		try {
-			Map m = readMap(file.toPath());
-			System.out.println(m.getSupportedGameModes());
-		} catch (InvalidDataException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
 	}
 
 }

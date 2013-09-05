@@ -260,7 +260,7 @@ public abstract class Map {
 			throws InvalidDataException, IOException {
 		File file = new File(getClass().getResource("data/" + mapFileName)
 				.getFile());
-		Map map = MapParser.readMap(file.toPath());
+		Map map = MapParser.readMap(file);
 		initialObjects.addAll(map.getInitialObjects());
 		spawnPositions.addAll(map.getSpawnAreas());
 		supportedGameModes.addAll(map.getSupportedGameModes());
