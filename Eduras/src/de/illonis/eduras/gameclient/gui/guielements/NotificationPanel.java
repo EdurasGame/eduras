@@ -95,10 +95,13 @@ public class NotificationPanel extends RenderedGuiObject {
 			int killedOwner = getInfo().findObjectById(event.getKilled())
 					.getOwner();
 			PlayerMainFigure killed = getInfo().getPlayerByOwnerId(killedOwner);
-
-			String note = Localization.getStringF(
-					"Client.gui.notifications.kill", killer.getName(),
-					killed.getName());
+			String note;
+			if (getInfo().getPlayer().equals(killed)) {
+				note = Localization.getStringF(
+						"Client.gui.notifications.killedyou", killer.getName());
+			} else
+				note = Localization.getStringF("Client.gui.notifications.kill",
+						killer.getName(), killed.getName());
 			addNotification(note);
 
 		} catch (ObjectNotFoundException e) {
