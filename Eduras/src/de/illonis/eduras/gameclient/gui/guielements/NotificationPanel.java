@@ -115,8 +115,9 @@ public class NotificationPanel extends RenderedGuiObject {
 		String note;
 		try {
 			if (name.equals(getInfo().getPlayer().getName()))
-				note = Localization
-						.getString("Client.gui.notifications.welcome");
+				note = Localization.getStringF(
+						"Client.gui.notifications.welcome", getInfo()
+								.getMapName());
 			else
 				note = Localization.getStringF("Client.gui.notifications.join",
 						name);

@@ -42,14 +42,9 @@ public class InformationProvider implements InfoInterface {
 		this.networkManager = networkManager;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see de.illonis.eduras.interfaces.InfoInterface#getMapBounds()
-	 */
 	@Override
 	public Rectangle getMapBounds() {
-		return logic.getGame().getMap().getBounds();
+		return new Rectangle(logic.getGame().getMap().getBounds());
 	}
 
 	/**
@@ -59,6 +54,17 @@ public class InformationProvider implements InfoInterface {
 	 */
 	public int getOwnerID() {
 		return networkManager.getClient().getOwnerId();
+	}
+
+	/**
+	 * Returns the name of the current map.
+	 * 
+	 * @return current's map name.
+	 * 
+	 * @author illonis
+	 */
+	public String getMapName() {
+		return logic.getGame().getMap().getName();
 	}
 
 	@Override
