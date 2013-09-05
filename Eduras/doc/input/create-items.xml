@@ -155,6 +155,9 @@
 					We have a template for you to take some work from you.
 					Open the <computeroutput>icon-templates.svg</computeroutput> in
 					<ulink url="http://inkscape.org/">Inkscape</ulink>.
+					You can find it in the
+					<computeroutput>de.illonis.eduras.images.gui.icons</computeroutput>
+					package.
 					Don't forget to save it using another name to prevent overwriting
 					the template.
 					Feel free to be an artist now and draw your icon.
