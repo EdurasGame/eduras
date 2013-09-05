@@ -14,7 +14,9 @@ public class SwordMissile extends Missile {
 		setDamageRadius(1);
 		setObjectType(ObjectType.SWORDMISSILE);
 		setShape(new Sword());
-		setSpeed(200);
+		setSpeed(100);
+		setMaxRange(10);
+
 	}
 
 	@Override
