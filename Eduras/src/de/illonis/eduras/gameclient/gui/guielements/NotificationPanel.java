@@ -8,8 +8,11 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 
 import de.illonis.eduras.events.ClientRenameEvent;
 import de.illonis.eduras.events.DeathEvent;
+import de.illonis.eduras.events.SetItemSlotEvent;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
 import de.illonis.eduras.gameclient.gui.UserInterface;
+import de.illonis.eduras.inventory.ItemSlotIsEmptyException;
+import de.illonis.eduras.items.Item;
 import de.illonis.eduras.locale.Localization;
 import de.illonis.eduras.logger.EduLog;
 import de.illonis.eduras.units.PlayerMainFigure;
@@ -119,5 +122,20 @@ public class NotificationPanel extends RenderedGuiObject {
 			EduLog.passException(e);
 		}
 
+	}
+
+	@Override
+	public void onItemSlotChanged(SetItemSlotEvent event) {
+		int slot = event.getItemSlot();
+		try {
+			Item item = getInfo().getPlayer().getInventory()
+					.getItemBySlot(slot);
+			String note = Localization.getStringF(
+					"Client.gui.notifications.loot", item.getName());
+			addNotification(note);
+		} catch (ItemSlotIsEmptyException | ObjectNotFoundException e) {
+			EduLog.passException(e);
+		}
+		super.onItemSlotChanged(event);
 	}
 }
