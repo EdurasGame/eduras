@@ -69,14 +69,15 @@ public class ClientReceiver extends Thread {
 			try {
 				String messages = messageReader.readLine();
 				if (messages != null) {
-					EduLog.info("[CLIENT] Received message: " + messages);
+					EduLog.infoLF("Client.networking.msgreceive", messages);
 					processMessages(messages);
 				}
 			} catch (IOException e) {
 				connectionAvailable = false;
-				EduLog.error("TCP Connection to server closed. See next exception.");
+				EduLog.errorL("Client.networking.tcpclose");
 				EduLog.passException(e);
-				p.interrupt();
+				interrupt();
+				return;
 			}
 		}
 	}
@@ -105,9 +106,11 @@ public class ClientReceiver extends Thread {
 				udpSocket = new DatagramSocket(client.getPortNumber());
 			} catch (SocketException e) {
 				connectionAvailable = false;
-				EduLog.error("UDP connection to server closed. See next exception.");
+				EduLog.errorLF("Client.networking.udpopenerror",
+						client.getPortNumber());
 				EduLog.passException(e);
-				p.interrupt();
+				interrupt();
+				return;
 			}
 
 			while (connectionAvailable) {
@@ -120,11 +123,12 @@ public class ClientReceiver extends Thread {
 					processMessages(messages);
 				} catch (IOException e) {
 					connectionAvailable = false;
-					EduLog.error("UDP connection to server closed. See next exception.");
+					EduLog.errorL("Client.networking.udpclose");
 					EduLog.passException(e);
-					p.interrupt();
+					interrupt();
 				}
 			}
+			udpSocket.close();
 		}
 	}
 
