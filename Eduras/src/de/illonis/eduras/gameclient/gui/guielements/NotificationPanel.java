@@ -137,7 +137,8 @@ public class NotificationPanel extends RenderedGuiObject {
 			String note = Localization.getStringF(
 					"Client.gui.notifications.loot", item.getName());
 			addNotification(note);
-		} catch (ItemSlotIsEmptyException | ObjectNotFoundException e) {
+		} catch (ItemSlotIsEmptyException i) {
+		} catch (ObjectNotFoundException e) {
 			EduLog.passException(e);
 		}
 		super.onItemSlotChanged(event);
