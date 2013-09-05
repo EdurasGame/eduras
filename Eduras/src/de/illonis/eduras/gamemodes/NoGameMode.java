@@ -3,6 +3,8 @@ package de.illonis.eduras.gamemodes;
 import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.ObjectFactory.ObjectType;
 import de.illonis.eduras.Team;
+import de.illonis.eduras.gameobjects.GameObject;
+import de.illonis.eduras.gameobjects.GameObject.Relation;
 import de.illonis.eduras.logic.EventTriggerer;
 import de.illonis.eduras.maps.SpawnPosition.SpawnType;
 import de.illonis.eduras.units.PlayerMainFigure;
@@ -79,4 +81,8 @@ public class NoGameMode implements GameMode {
 		return GameModeNumber.NO_GAMEMODE;
 	}
 
+	@Override
+	public Relation getRelation(GameObject a, GameObject b) {
+		return Relation.HOSTILE;
+	}
 }

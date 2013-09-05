@@ -1,6 +1,8 @@
 package de.illonis.eduras.gamemodes;
 
 import de.illonis.eduras.Team;
+import de.illonis.eduras.gameobjects.GameObject;
+import de.illonis.eduras.gameobjects.GameObject.Relation;
 import de.illonis.eduras.maps.SpawnPosition.SpawnType;
 import de.illonis.eduras.units.Unit;
 
@@ -38,6 +40,18 @@ public interface GameMode {
 	 * @return The name of the game mode.
 	 */
 	public String getName();
+
+	/**
+	 * Retrieves the relation status of given two gameobjects.
+	 * 
+	 * @param a
+	 *            the first gameobject.
+	 * @param b
+	 *            the second gameobject.
+	 * @return the relation between both objects.
+	 * @author illonis
+	 */
+	public Relation getRelation(GameObject a, GameObject b);
 
 	/**
 	 * Called when someon died.

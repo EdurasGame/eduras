@@ -5,6 +5,8 @@ import de.illonis.eduras.ObjectFactory.ObjectType;
 import de.illonis.eduras.Team;
 import de.illonis.eduras.Team.TeamColor;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
+import de.illonis.eduras.gameobjects.GameObject;
+import de.illonis.eduras.gameobjects.GameObject.Relation;
 import de.illonis.eduras.logger.EduLog;
 import de.illonis.eduras.logic.EventTriggerer;
 import de.illonis.eduras.maps.SpawnPosition.SpawnType;
@@ -112,5 +114,10 @@ public class Deathmatch implements GameMode {
 	@Override
 	public GameModeNumber getNumber() {
 		return GameModeNumber.DEATHMATCH;
+	}
+
+	@Override
+	public Relation getRelation(GameObject a, GameObject b) {
+		return Relation.HOSTILE;
 	}
 }

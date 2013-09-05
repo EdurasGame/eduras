@@ -5,6 +5,8 @@ import de.illonis.eduras.ObjectFactory.ObjectType;
 import de.illonis.eduras.Team;
 import de.illonis.eduras.Team.TeamColor;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
+import de.illonis.eduras.gameobjects.GameObject;
+import de.illonis.eduras.gameobjects.GameObject.Relation;
 import de.illonis.eduras.logger.EduLog;
 import de.illonis.eduras.maps.SpawnPosition.SpawnType;
 import de.illonis.eduras.units.PlayerMainFigure;
@@ -89,5 +91,25 @@ public class TeamDeathmatch extends Deathmatch {
 	@Override
 	public GameModeNumber getNumber() {
 		return GameModeNumber.TEAM_DEATHMATCH;
+	}
+
+	@Override
+	public Relation getRelation(GameObject a, GameObject b) {
+		PlayerMainFigure playerA, playerB;
+		int ownerA = a.getOwner();
+		int ownerB = b.getOwner();
+		if (ownerA == -1 || ownerB == -1)
+			return Relation.ENVIRONMENT;
+		try {
+			playerA = gameInfo.getPlayerByOwnerId(a.getOwner());
+			playerB = gameInfo.getPlayerByOwnerId(b.getOwner());
+		} catch (ObjectNotFoundException e) {
+			EduLog.passException(e);
+			return Relation.UNKNOWN;
+		}
+		if (playerA.getTeam().equals(playerB.getTeam())) {
+			return Relation.ALLIED;
+		} else
+			return Relation.HOSTILE;
 	}
 }
