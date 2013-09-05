@@ -147,12 +147,6 @@ public class PlayerMainFigure extends Unit implements MovementControlable {
 		this.name = name;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * de.illonis.eduras.GameObject#onCollision(de.illonis.eduras.GameObject)
-	 */
 	@Override
 	public void onCollision(GameObject collidingObject) {
 		// do nothing
