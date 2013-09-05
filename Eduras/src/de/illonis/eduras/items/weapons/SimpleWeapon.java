@@ -29,7 +29,7 @@ public class SimpleWeapon extends Weapon {
 		super(ObjectType.ITEM_WEAPON_SIMPLE, gi, id);
 		// TODO: Need to get away the missile prototypes.
 		setMissile(null);
-		setName("WeaponExample");
+		setName("SimpleWeapon");
 		setShape(new Circle(10));
 		defaultCooldown = 300;
 	}
