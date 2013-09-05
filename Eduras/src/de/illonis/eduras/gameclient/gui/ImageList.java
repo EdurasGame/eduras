@@ -62,7 +62,7 @@ public class ImageList {
 	static void load() {
 		try {
 			BufferedImage i = ImageFiler.load("gui/icons/icon-weapon1.png");
-			images.put(ObjectType.ITEM_WEAPON_1, i);
+			images.put(ObjectType.ITEM_WEAPON_SIMPLE, i);
 			BufferedImage is = ImageFiler
 					.load("gui/icons/icon-weapon-sniper.png");
 			images.put(ObjectType.ITEM_WEAPON_SNIPER, is);

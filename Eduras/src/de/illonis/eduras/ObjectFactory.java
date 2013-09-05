@@ -10,8 +10,8 @@ import de.illonis.eduras.gameobjects.BiggerBlock;
 import de.illonis.eduras.gameobjects.Building;
 import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.interfaces.GameLogicInterface;
-import de.illonis.eduras.items.weapons.ExampleWeapon;
 import de.illonis.eduras.items.weapons.SimpleMissile;
+import de.illonis.eduras.items.weapons.SimpleWeapon;
 import de.illonis.eduras.items.weapons.SniperMissile;
 import de.illonis.eduras.items.weapons.SniperWeapon;
 import de.illonis.eduras.items.weapons.SplashMissile;
@@ -39,7 +39,7 @@ public class ObjectFactory {
 	 */
 	@SuppressWarnings("javadoc")
 	public enum ObjectType {
-		PLAYER(1), YELLOWCIRCLE(2), SIMPLEMISSILE(3), ITEM_WEAPON_1(4), NO_OBJECT(
+		PLAYER(1), YELLOWCIRCLE(2), SIMPLEMISSILE(3), ITEM_WEAPON_SIMPLE(4), NO_OBJECT(
 				0), BIGBLOCK(5), SMALLCIRCLEDBLOCK(6), SNIPERMISSILE(7), ITEM_WEAPON_SNIPER(
 				8), BUILDING(9), BIGGERBLOCK(10), ITEM_WEAPON_SPLASH(11), MISSILE_SPLASH(
 				12), MISSILE_SPLASHED(13), DYNAMIC_POLYGON(14);
@@ -131,8 +131,8 @@ public class ObjectFactory {
 					return;
 				}
 				break;
-			case ITEM_WEAPON_1:
-				go = new ExampleWeapon(logic.getGame(), id);
+			case ITEM_WEAPON_SIMPLE:
+				go = new SimpleWeapon(logic.getGame(), id);
 				break;
 			case BIGBLOCK:
 				try {
