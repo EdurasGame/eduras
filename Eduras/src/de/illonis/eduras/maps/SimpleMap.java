@@ -25,11 +25,11 @@ public class SimpleMap extends Map {
 		addSupportedGameMode(GameModeNumber.DEATHMATCH);
 		addSpawnArea(0, 0, getWidth(), getHeight(), SpawnType.ANY);
 
-		addObject(ObjectType.ITEM_WEAPON_1, getWidth() * .75, getHeight() * .75);
+		addObject(ObjectType.ITEM_WEAPON_SIMPLE, getWidth() * .75, getHeight() * .75);
 		addObject(ObjectType.ITEM_WEAPON_SNIPER, getWidth() * .5,
 				getHeight() * .75);
-		addObject(ObjectType.ITEM_WEAPON_1, getWidth() * .75, getHeight() * .25);
-		addObject(ObjectType.ITEM_WEAPON_1, getWidth() * .25, getHeight() * .75);
+		addObject(ObjectType.ITEM_WEAPON_SIMPLE, getWidth() * .75, getHeight() * .25);
+		addObject(ObjectType.ITEM_WEAPON_SIMPLE, getWidth() * .25, getHeight() * .75);
 		addObject(ObjectType.BUILDING, getWidth() * .25, getHeight() * .25);
 		addObject(ObjectType.BIGBLOCK, getWidth() / 2, getHeight() / 2);
 	}
