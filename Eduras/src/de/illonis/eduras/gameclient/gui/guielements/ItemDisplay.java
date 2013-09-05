@@ -63,6 +63,7 @@ public class ItemDisplay extends ClickableGuiElement implements
 
 	@Override
 	public void render(Graphics2D g2d) {
+		g2d.setFont(DEFAULT_FONT);
 		g2d.setColor(Color.GRAY);
 		g2d.fillRect(screenX, screenY, WIDTH, HEIGHT);
 		for (GuiItem item : itemSlots) {

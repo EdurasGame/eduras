@@ -75,6 +75,7 @@ public class StatisticsWindow extends RenderedGuiObject {
 		else
 			g2d.fillRect(screenX, screenY, width, height);
 
+		g2d.setFont(DEFAULT_FONT);
 		// header
 		g2d.setColor(COLOR_HEADER);
 		g2d.drawString("Player", screenX + COLUMN_X[0], screenY + PADDING_Y);

@@ -31,7 +31,7 @@ public class TimeFrame extends RenderedGuiObject {
 
 	@Override
 	public void render(Graphics2D g2d) {
-
+		g2d.setFont(DEFAULT_FONT);
 		String timeString = getRemainingTimeString();
 		FontMetrics fm = g2d.getFontMetrics();
 		int textWidth = fm.stringWidth(timeString);

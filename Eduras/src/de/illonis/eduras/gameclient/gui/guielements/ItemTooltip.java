@@ -37,6 +37,7 @@ public class ItemTooltip extends Tooltip {
 	@Override
 	public void render(Graphics2D g2d) {
 		super.render(g2d);
+		g2d.setFont(DEFAULT_FONT);
 		g2d.setColor(Color.YELLOW);
 		g2d.drawString(item.getName(), screenX + 8, screenY + 20);
 		g2d.setColor(Color.WHITE);
