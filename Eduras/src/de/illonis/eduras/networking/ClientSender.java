@@ -80,7 +80,7 @@ public class ClientSender {
 				EduLog.info("[CLIENT] Sending message: " + message);
 				messageWriter.println(message);
 				if (messageWriter.checkError()) {
-					EduLog.error("[CLIENT][SENDER] Error sending message. Closing writer.");
+					EduLog.errorL("Client.networking.senderror");
 					active = false;
 					close();
 					throw new ConnectionLostException();
@@ -102,8 +102,6 @@ public class ClientSender {
 				}
 				break;
 			default:
-				;
-
 			}
 
 		}
