@@ -29,7 +29,7 @@ public class ServerTCPReceiver extends Thread {
 	 */
 	public ServerTCPReceiver(Server server, ServerClient client) {
 		this.server = server;
-		setName("ServerReceiver (Client " + client.getClientId() + ")");
+		setName("ServerTCPReceiver (Client " + client.getClientId() + ")");
 		this.inputBuffer = server.getInputBuffer();
 		this.client = client;
 	}
@@ -63,24 +63,20 @@ public class ServerTCPReceiver extends Thread {
 	 * passed for interpretation.
 	 */
 	private void waitForMessages() {
-		EduLog.info("[SERVER] Waiting for messages...");
 		try {
 			BufferedReader br = client.getInputStream();
 			while (client.isConnected()) {
 				String line = br.readLine();
 				if (line != null) {
-					EduLog.info("[SERVER] Received message: " + line);
+					EduLog.infoLF("Server.networking.msgreceive", line);
 					pushToInputBuffer(line);
 				} else {
-					server.handleClientDisconnect(client);
+					throw new IOException("Received message was null");
 				}
 
 			}
 		} catch (IOException e) {
-
-			// remove the correlated player from the game
-
-			EduLog.error("[SERVER] Connection to client closed.");
+			EduLog.errorLF("Server.networking.clientbye", client.getClientId());
 			EduLog.passException(e);
 		} finally {
 			server.handleClientDisconnect(client);

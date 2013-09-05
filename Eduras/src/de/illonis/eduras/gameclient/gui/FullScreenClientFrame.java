@@ -4,6 +4,8 @@ import java.awt.DisplayMode;
 import java.awt.GraphicsDevice;
 
 import de.illonis.eduras.gameclient.GameClient;
+import de.illonis.eduras.locale.Localization;
+import de.illonis.eduras.logger.EduLog;
 
 /**
  * A full screen client frame.
@@ -46,8 +48,7 @@ public class FullScreenClientFrame extends ClientFrame {
 
 			// validate();
 		} else {
-			// TODO: user alert
-			System.out.println("Fullscreen is not supported.");
+			EduLog.error(Localization.getString("Client.errors.nofullscreen"));
 		}
 	}
 

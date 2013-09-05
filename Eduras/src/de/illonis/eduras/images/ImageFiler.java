@@ -7,6 +7,7 @@ import java.net.URL;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 
+import de.illonis.eduras.locale.Localization;
 import de.illonis.eduras.logger.EduLog;
 
 /**
@@ -47,7 +48,8 @@ public class ImageFiler {
 		if (imgURL != null) {
 			return new ImageIcon(imgURL);
 		} else {
-			EduLog.error("Couldn't find image file: " + path);
+			EduLog.error(Localization.getStringF(
+					"Client.errors.io.imagenotfound", path));
 			return null;
 		}
 	}

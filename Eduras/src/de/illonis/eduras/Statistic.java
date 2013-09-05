@@ -73,7 +73,6 @@ public class Statistic {
 	 */
 	public void addKillForPlayer(PlayerMainFigure player) {
 		killsOfPlayer.put(player.getOwner(), getKillsOfPlayer(player) + 1);
-		System.out.println(getKillsOfPlayer(player));
 	}
 
 	/**

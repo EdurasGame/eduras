@@ -19,6 +19,7 @@ import de.illonis.eduras.inventory.ItemSlotIsEmptyException;
 import de.illonis.eduras.items.Item;
 import de.illonis.eduras.items.ItemUseInformation;
 import de.illonis.eduras.items.Usable;
+import de.illonis.eduras.locale.Localization;
 import de.illonis.eduras.logger.EduLog;
 import de.illonis.eduras.units.PlayerMainFigure;
 
@@ -53,8 +54,8 @@ public class ServerLogic implements GameLogicInterface {
 
 	@Override
 	public synchronized void onGameEventAppeared(GameEvent event) {
-		EduLog.info("[LOGIC] A game event appeared: "
-				+ event.getType().toString());
+		EduLog.info(Localization.getStringF("Client.networking.event", event
+				.getType().toString()));
 
 		switch (event.getType()) {
 		case MOVE_DOWN_PRESSED:
@@ -99,9 +100,8 @@ public class ServerLogic implements GameLogicInterface {
 			handleItemEvent(itemEvent);
 			break;
 		default:
-			EduLog.error("An illegal event has been sent to server: "
-					+ event.getClass());
-			System.exit(0);
+			EduLog.errorLF("Server.networking.illegalevent", event.getClass());
+			System.exit(1);
 			break;
 		}
 	}
@@ -164,9 +164,7 @@ public class ServerLogic implements GameLogicInterface {
 		try {
 			player = gameInfo.getPlayerByOwnerId(event.getOwner());
 		} catch (ObjectNotFoundException e) {
-			EduLog.log(Level.WARNING,
-					"The player with the id " + e.getObjectId()
-							+ "could not be found!");
+			EduLog.warningLF("Server.logic.playernotfound", e.getObjectId());
 			return;
 		}
 

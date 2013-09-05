@@ -26,7 +26,6 @@ import de.illonis.eduras.exceptions.ObjectNotFoundException;
 import de.illonis.eduras.exceptions.ServerNotReadyForStartException;
 import de.illonis.eduras.interfaces.GameLogicInterface;
 import de.illonis.eduras.interfaces.NetworkEventListener;
-import de.illonis.eduras.locale.Localization;
 import de.illonis.eduras.logger.EduLog;
 import de.illonis.eduras.networking.ServerClient.ClientRole;
 import de.illonis.eduras.units.PlayerMainFigure;
@@ -34,16 +33,16 @@ import de.illonis.eduras.utils.CollectionUtils;
 
 /**
  * A server that handles a game and its clients.
+ * <p>
+ * (fma)The common workflow for the server is as follows:<br>
+ * First you use the default constructor to create a new server. <br>
+ * Then you set the initial game and the logic (must implement
+ * {@link GameLogicInterface}). <br>
+ * At last use {@link #start()} to make your server listen to clients and start
+ * working.(/fma)
+ * </p>
  * 
  * @author illonis
- * 
- *         (fma)The common workflow for the server is as follows:<br>
- *         First you use the default constructor to create a new server. <br>
- *         Then you set the initial game and the logic (must implement
- *         GameLogicInterface). <br>
- *         At last use start() to make your server listen to clients and start
- *         working.(/fma)
- * 
  */
 public class Server {
 
@@ -134,7 +133,7 @@ public class Server {
 			try {
 				udpSocket = new DatagramSocket(port);
 			} catch (SocketException e) {
-				EduLog.error("UDP connection failed. See next exception.");
+				EduLog.errorLF("Server.networking.udpopenerror", port);
 				EduLog.passException(e);
 				stopServer();
 			}
@@ -148,7 +147,7 @@ public class Server {
 							packet.getLength());
 					inputBuffer.append(messages);
 				} catch (IOException e) {
-					EduLog.error("UDP connection to server closed. See next exception.");
+					EduLog.errorL("Server.networking.udpclose");
 					EduLog.passException(e);
 					stopServer();
 				}
@@ -184,7 +183,7 @@ public class Server {
 			ConnectionListener cl = new ConnectionListener();
 			cl.start();
 		} catch (IOException e) {
-			System.err.println(Localization.getString("Server.startuperror")); //$NON-NLS-1$
+			EduLog.errorL("Server.startuperror");
 			EduLog.passException(e);
 			System.exit(0);
 		}
@@ -352,14 +351,13 @@ public class Server {
 		 */
 		@Override
 		public void run() {
-			EduLog.info(Localization
-					.getStringF("Server.startedlistening", port));
+			EduLog.infoLF("Server.startedlistening", port);
+
 			while (running) {
 				Socket client = null;
 				try {
 					client = server.accept();
-					EduLog.info(Localization.getStringF("Server.newclient",
-							client.getInetAddress()));
+					EduLog.infoLF("Server.newclient", client.getInetAddress());
 					handleConnection(client);
 				} catch (IOException e) {
 					EduLog.passException(e);
@@ -416,8 +414,8 @@ public class Server {
 			mainFigure = game.getPlayerByOwnerId(clientId);
 			objectId = mainFigure.getId();
 		} catch (ObjectNotFoundException e) {
-			EduLog.error("Player of object id " + e.getObjectId()
-					+ " not found!");
+
+			EduLog.errorLF("Server.logic.playernotfound", e.getObjectId());
 			return;
 		}
 		removeClient(client);

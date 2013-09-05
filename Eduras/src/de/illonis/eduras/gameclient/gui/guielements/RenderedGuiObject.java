@@ -34,7 +34,7 @@ import de.illonis.eduras.logicabstraction.InformationProvider;
  */
 public abstract class RenderedGuiObject implements GameEventListener {
 
-	public final static Font DEFAULT_FONT = new Font("Arial", Font.PLAIN, 10);
+	public final static Font DEFAULT_FONT = new Font("Arial", Font.PLAIN, 12);
 	private UserInterface gui;
 	protected int screenX, screenY;
 	protected boolean visibleForSpectator;
