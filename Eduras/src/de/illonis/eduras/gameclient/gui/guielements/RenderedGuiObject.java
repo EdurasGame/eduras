@@ -1,5 +1,6 @@
 package de.illonis.eduras.gameclient.gui.guielements;
 
+import java.awt.Font;
 import java.awt.Graphics2D;
 import java.util.ArrayList;
 
@@ -32,9 +33,11 @@ import de.illonis.eduras.logicabstraction.InformationProvider;
  * 
  */
 public abstract class RenderedGuiObject implements GameEventListener {
+
+	public final static Font DEFAULT_FONT = new Font("Arial", Font.PLAIN, 10);
 	private UserInterface gui;
 	protected int screenX, screenY;
-	private boolean visibleForSpectator;
+	protected boolean visibleForSpectator;
 
 	/**
 	 * Creates a new {@link RenderedGuiObject} that is attached to given
