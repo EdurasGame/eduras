@@ -335,7 +335,7 @@ public final class EduLog {
 	 *            message.
 	 */
 	public static void warning(String s) {
-		log(Level.SEVERE, s);
+		log(Level.WARNING, s);
 	}
 
 	/**
