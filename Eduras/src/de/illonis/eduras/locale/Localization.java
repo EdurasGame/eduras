@@ -179,16 +179,21 @@ public final class Localization {
 	 * @return localized and formatted string.
 	 */
 	public static final String getStringF(String key, Object... args) {
-		try {
+		if (RESOURCES[currentLocaleNumber].containsKey(key)) {
 			String s = RESOURCES[currentLocaleNumber].getString(key);
 			return String.format(s, args);
-		} catch (MissingResourceException e) {
-			try {
-				String s = RESOURCES[0].getString(key);
-				return String.format(s, args);
-			} catch (MissingResourceException ex) {
-				return '!' + key + '!';
-			}
+		} else if (RESOURCES[0].containsKey(key)) {
+			String s = RESOURCES[0].getString(key);
+
+			// NOTE: need to hardcode this string to prevent recursive errors
+			// when this is not translated, too!
+			String error = "No translation to %s found for %s!";
+			EduLog.warning(String.format(error, RESOURCES[currentLocaleNumber]
+					.getLocale().toString(), key));
+
+			return String.format(s, args);
+		} else {
+			return '!' + key + '!';
 		}
 	}
 }
