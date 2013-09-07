@@ -187,12 +187,18 @@ public final class Localization {
 
 			// NOTE: need to hardcode this string to prevent recursive errors
 			// when this is not translated, too!
-			String error = "No translation to %s found for %s!";
-			EduLog.warning(String.format(error, RESOURCES[currentLocaleNumber]
-					.getLocale().toString(), key));
+			String warning = "No translation to %s found for %s!";
+			EduLog.warning(String.format(warning,
+					RESOURCES[currentLocaleNumber].getLocale().toString(), key));
 
 			return String.format(s, args);
 		} else {
+
+			// NOTE: need to hardcode this string to prevent recursive errors
+			// when this is not translated, too!
+			String error = "No translation to default language found for %s!";
+			EduLog.error(String.format(error, RESOURCES[currentLocaleNumber]
+					.getLocale().toString(), key));
 			return '!' + key + '!';
 		}
 	}
