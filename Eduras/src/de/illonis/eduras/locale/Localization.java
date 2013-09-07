@@ -187,9 +187,9 @@ public final class Localization {
 
 			// NOTE: need to hardcode this string to prevent recursive errors
 			// when this is not translated, too!
-			String warning = "No translation to %s found for %s!";
-			EduLog.warning(String.format(warning,
-					RESOURCES[currentLocaleNumber].getLocale().toString(), key));
+			// String warning = "No translation to %s found for %s!";
+			// EduLog.warning(String.format(warning,
+			// RESOURCES[currentLocaleNumber].getLocale().toString(), key));
 
 			return String.format(s, args);
 		} else {
