@@ -59,6 +59,7 @@ public class DataHolder {
 		private Color shapeDotColor = Color.BLACK;
 		private Color backgroundColor = Color.WHITE;
 		private Color hoverShapeDotColor = Color.BLUE;
+		private Color selectedShapeDotColor = Color.RED;
 
 		private Settings() {
 
@@ -102,6 +103,14 @@ public class DataHolder {
 
 		public void setShapeLineColor(Color shapeLineColor) {
 			this.shapeLineColor = shapeLineColor;
+		}
+
+		public Color getSelectedShapeDotColor() {
+			return selectedShapeDotColor;
+		}
+
+		public void setSelectedShapeDotColor(Color selectedShapeDotColor) {
+			this.selectedShapeDotColor = selectedShapeDotColor;
 		}
 	}
 

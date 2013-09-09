@@ -27,8 +27,9 @@ public class PanelInteractor extends MouseAdapter {
 	private final DrawPanel panel;
 	private InteractMode mode = InteractMode.DRAG_EDGE;
 	private InteractMode lastMode = InteractMode.NONE;
+	private Vertice selectedVertice;
 
-	enum InteractMode {
+	public enum InteractMode {
 		NONE, DRAG_EDGE, ZOOM, SCROLL, ADD_VERT, REM_VERT;
 	}
 
@@ -68,23 +69,42 @@ public class PanelInteractor extends MouseAdapter {
 	}
 
 	@Override
-	public void mousePressed(MouseEvent e) {
+	public void mouseClicked(MouseEvent e) {
 
+		switch (mode) {
+		case ADD_VERT:
+			GuiPoint p = new GuiPoint(clickPoint.x, clickPoint.y);
+			Vector2D v = panel.getCoordinateSystem().guiToCoordinate(p);
+			Vertice vert = new Vertice(v.getX(), v.getY());
+			data.getPolygon().addVertice(vert);
+			break;
+		case REM_VERT:
+			if (hoverVertice != null) {
+				data.getPolygon().removeVertice(hoverVertice);
+			}
+			break;
+		case NONE:
+			selectedVertice = hoverVertice;
+			panel.onVerticeSelected(selectedVertice);
+			break;
+		default:
+			break;
+		}
+
+	}
+
+	@Override
+	public void mousePressed(MouseEvent e) {
 		clickPoint = e.getPoint();
 		switch (e.getButton()) {
 		case MouseEvent.BUTTON1:
 			switch (mode) {
-			case ADD_VERT:
-				GuiPoint p = new GuiPoint(clickPoint.x, clickPoint.y);
-				Vector2D v = panel.getCoordinateSystem().guiToCoordinate(p);
-				Vertice vert = new Vertice(v.getX(), v.getY());
-				data.getPolygon().addVertice(vert);
-				break;
 			case REM_VERT:
-				if (hoverVertice != null) {
-					data.getPolygon().removeVertice(hoverVertice);
-				}
-
+			case NONE:
+			case ADD_VERT:
+				lastMode = mode;
+				mode = InteractMode.DRAG_EDGE;
+				break;
 			default:
 				break;
 			}
@@ -107,16 +127,27 @@ public class PanelInteractor extends MouseAdapter {
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
-		panel.setCursor(Cursor.getDefaultCursor());
-		switch (mode) {
-		case SCROLL:
-		case ZOOM:
-			mode = lastMode;
-			break;
+		switch (e.getButton()) {
+		case MouseEvent.BUTTON1:
+			switch (mode) {
+			case DRAG_EDGE:
+				mode = lastMode;
+				break;
+			}
 
-		default:
+			break;
+		case MouseEvent.BUTTON2:
+			if (mode == InteractMode.ZOOM)
+				mode = lastMode;
+			break;
+		case MouseEvent.BUTTON3:
+			if (mode == InteractMode.SCROLL)
+				mode = lastMode;
 			break;
 		}
+
+		panel.setCursor(Cursor.getDefaultCursor());
+
 	}
 
 	@Override
@@ -138,10 +169,12 @@ public class PanelInteractor extends MouseAdapter {
 		Point p = e.getPoint();
 		switch (mode) {
 		case DRAG_EDGE:
-			GuiPoint guiPoint = new GuiPoint(p.x, p.y);
-			Vector2D coordPoint = panel.getCoordinateSystem().guiToCoordinate(
-					guiPoint);
-			hoverVertice.update(coordPoint.getX(), coordPoint.getY());
+			if (hoverVertice != null) {
+				GuiPoint guiPoint = new GuiPoint(p.x, p.y);
+				Vector2D coordPoint = panel.getCoordinateSystem()
+						.guiToCoordinate(guiPoint);
+				hoverVertice.update(coordPoint.getX(), coordPoint.getY());
+			}
 			break;
 		case SCROLL:
 			int xDiff = e.getX() - clickPoint.x;

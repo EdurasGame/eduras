@@ -29,7 +29,7 @@ public class DrawPanel extends JPanel {
 
 	private CoordinateSystem coordinateSystem;
 	private final DataHolder data;
-	private Vertice hoverVertice;
+	private Vertice hoverVertice, selectedVertice;
 
 	public DrawPanel() {
 		this.data = DataHolder.getInstance();
@@ -68,6 +68,8 @@ public class DrawPanel extends JPanel {
 			p = coordinateSystem.coordinateToGui(vertice);
 			if (vertice == hoverVertice)
 				g2d.setColor(data.getSettings().getHoverShapeDotColor());
+			else if (vertice == selectedVertice)
+				g2d.setColor(data.getSettings().getSelectedShapeDotColor());
 			else
 				g2d.setColor(shapeDotColor);
 			p.draw(g2d);
@@ -110,6 +112,10 @@ public class DrawPanel extends JPanel {
 		setCursor(Cursor.getDefaultCursor());
 		hoverVertice = null;
 
+	}
+
+	public void onVerticeSelected(Vertice selectedVertice) {
+		this.selectedVertice = selectedVertice;
 	}
 
 }

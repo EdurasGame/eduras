@@ -64,7 +64,6 @@ public class CoordinateSystem implements Drawable {
 		int coordX = Math.round((guiX - origin.x) * zoom);
 		int coordY = Math.round((guiY - origin.y) * zoom);
 		Vector2D pos = new Vector2D(coordX, coordY);
-		pos.mult(1.0f / zoomFactor);
 		return pos;
 	}
 
