@@ -173,7 +173,9 @@ public class PanelInteractor extends MouseAdapter {
 				GuiPoint guiPoint = new GuiPoint(p.x, p.y);
 				Vector2D coordPoint = panel.getCoordinateSystem()
 						.guiToCoordinate(guiPoint);
-				hoverVertice.update(coordPoint.getX(), coordPoint.getY());
+				hoverVertice.moveTo(coordPoint.getX(), coordPoint.getY());
+				selectedVertice = hoverVertice;
+				panel.onVerticeSelected(selectedVertice);
 			}
 			break;
 		case SCROLL:

@@ -2,7 +2,6 @@ package de.illonis.eduras.shapecreator;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.LinkedList;
 
 /**
  * An editable polygon that can be changed dynamically.
@@ -27,20 +26,21 @@ public class EditablePolygon {
 		vertices.add(v);
 	}
 
-	protected void removeVertice(Vertice v) {
+	public void removeVertice(Vertice v) {
 		if (vertices.size() > 1) {
 			vertices.remove(v);
+			DataHolder.getInstance().notifyVerticesChanged();
 		}
 	}
 
-	protected void moveDownVertice(Vertice v) throws VerticeListException {
+	public void moveDownVertice(Vertice v) throws VerticeListException {
 		int index = vertices.indexOf(v);
 		if (index == vertices.size() - 1)
 			throw new VerticeListException("Cannot move vertice down.");
 		exchangeVertices(index, index + 1);
 	}
 
-	protected void moveUpVertice(Vertice v) throws VerticeListException {
+	public void moveUpVertice(Vertice v) throws VerticeListException {
 		int index = vertices.indexOf(v);
 		if (index == 0)
 			throw new VerticeListException("Cannot move vertice up.");
@@ -52,6 +52,7 @@ public class EditablePolygon {
 		Vertice second = vertices.get(secondIndex);
 		vertices.set(firstIndex, second);
 		vertices.set(secondIndex, first);
+		DataHolder.getInstance().notifyVerticesChanged();
 	}
 
 	protected Vertice findNearestVertice(Vertice searchPoint)
@@ -71,6 +72,6 @@ public class EditablePolygon {
 	}
 
 	public Collection<Vertice> getVertices() {
-		return new LinkedList<Vertice>(vertices);
+		return vertices;
 	}
 }

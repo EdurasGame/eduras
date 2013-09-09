@@ -16,5 +16,6 @@ public class Vertice extends Vector2D {
 
 	protected void moveTo(double newX, double newY) {
 		update(newX, newY);
+		DataHolder.getInstance().notifyVerticesChanged();
 	}
 }

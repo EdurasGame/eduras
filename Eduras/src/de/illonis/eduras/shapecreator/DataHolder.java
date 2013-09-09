@@ -2,6 +2,8 @@ package de.illonis.eduras.shapecreator;
 
 import java.awt.Color;
 
+import de.illonis.eduras.shapecreator.gui.RecordTableModel;
+
 /**
  * Contains all data of the shapecreator. This is a singleton.
  * 
@@ -11,6 +13,7 @@ import java.awt.Color;
 public class DataHolder {
 
 	private static DataHolder instance;
+	private RecordTableModel tableModel;
 
 	private final Settings settings;
 
@@ -47,6 +50,16 @@ public class DataHolder {
 		if (zoom <= 0.1f)
 			return;
 		this.zoom = zoom;
+	}
+
+	public void setVerticeTableModel(RecordTableModel tableModel) {
+		this.tableModel = tableModel;
+	}
+
+	public void notifyVerticesChanged() {
+		if (tableModel != null) {
+			tableModel.fireTableDataChanged();
+		}
 	}
 
 	public Settings getSettings() {
@@ -112,6 +125,10 @@ public class DataHolder {
 		public void setSelectedShapeDotColor(Color selectedShapeDotColor) {
 			this.selectedShapeDotColor = selectedShapeDotColor;
 		}
+	}
+
+	public void notifyVerticeSelected(Vertice selectedVertice) {
+		tableModel.selectVertice(selectedVertice);
 	}
 
 }
