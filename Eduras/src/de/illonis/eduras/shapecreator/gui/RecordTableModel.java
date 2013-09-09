@@ -68,6 +68,15 @@ public class RecordTableModel extends AbstractTableModel {
 		case 1:
 			value = record.getY();
 			break;
+		case 2:
+			value = "up";
+			break;
+		case 3:
+			value = "down";
+			break;
+		case 4:
+			value = "delete";
+			break;
 		}
 		return value;
 	}
