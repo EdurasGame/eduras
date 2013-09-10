@@ -213,8 +213,7 @@ public class PanelInteractor extends MouseAdapter implements PanelModifier {
 
 	@Override
 	public void selectVertice(Vertice vert) {
-		// TODO Auto-generated method stub
-
+		panel.onVerticeSelected(vert);
 	}
 
 	@Override
@@ -232,5 +231,10 @@ public class PanelInteractor extends MouseAdapter implements PanelModifier {
 	@Override
 	public void setShape(EditablePolygon polygon) {
 		data.loadPolygon(polygon);
+	}
+
+	@Override
+	public EditablePolygon getShape() {
+		return data.getPolygon();
 	}
 }

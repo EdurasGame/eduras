@@ -53,7 +53,7 @@ public class DataHolder {
 	}
 
 	public void setZoom(float zoom) {
-		if (zoom <= 0.1f)
+		if (zoom < 0.1f)
 			return;
 		this.zoom = zoom;
 	}

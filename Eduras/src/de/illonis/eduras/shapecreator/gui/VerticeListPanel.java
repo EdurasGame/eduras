@@ -28,6 +28,8 @@ import de.illonis.eduras.shapecreator.VerticeListException;
  */
 public class VerticeListPanel extends ScrollablePanel implements
 		ListSelectionListener {
+
+	private static final long serialVersionUID = 1L;
 	private final DataHolder data;
 	private JTable verticeList;
 
@@ -114,6 +116,9 @@ public class VerticeListPanel extends ScrollablePanel implements
 		scrollPanel
 				.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		add(scrollPanel, BorderLayout.CENTER);
+		verticeList.getColumnModel().getColumn(2).setPreferredWidth(30);
+		verticeList.getColumnModel().getColumn(3).setPreferredWidth(30);
+		verticeList.getColumnModel().getColumn(4).setPreferredWidth(30);
 	}
 
 	@Override

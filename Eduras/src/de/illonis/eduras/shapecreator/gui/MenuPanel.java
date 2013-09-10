@@ -19,11 +19,12 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import de.illonis.eduras.shapecreator.DataHolder;
 import de.illonis.eduras.shapecreator.MenuActionReactor.Axis;
 import de.illonis.eduras.shapecreator.MenuTriggerer;
+import de.illonis.eduras.shapecreator.ShapeFiler;
 import de.illonis.eduras.shapecreator.templates.TemplateNotFoundException;
 
 public class MenuPanel extends JMenuBar implements ActionListener {
 
-	public final static String FILE_EXT = "esh";
+	private static final long serialVersionUID = 1L;
 	private final MenuTriggerer triggerer;
 	private final TemplateSelector selector;
 	private final JFileChooser fileChooser;
@@ -40,7 +41,8 @@ public class MenuPanel extends JMenuBar implements ActionListener {
 		fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
 		fileChooser.setMultiSelectionEnabled(false);
 		FileNameExtensionFilter filter = new FileNameExtensionFilter(
-				"Eduras? shape file (*." + FILE_EXT + ")", FILE_EXT);
+				"Eduras? shape file (*." + ShapeFiler.FILE_EXT + ")",
+				ShapeFiler.FILE_EXT);
 		fileChooser.setFileFilter(filter);
 		fileChooser.setAcceptAllFileFilterUsed(false);
 		this.triggerer = triggerer;
@@ -195,7 +197,7 @@ public class MenuPanel extends JMenuBar implements ActionListener {
 		else if (source == mirrorItem)
 			triggerer.mirrorShape(Axis.HORIZONTAL);
 		else if (source == zoomCustomItem)
-			triggerer.setZoom(0.9f);
+			customZoom();
 		else if (source == zoomDefaultItem)
 			triggerer.setZoom(1.0f);
 		else if (source == zoomDefaultItem)
@@ -214,5 +216,21 @@ public class MenuPanel extends JMenuBar implements ActionListener {
 			triggerer.setZoom(DataHolder.getInstance().getZoom() - 0.5f);
 		else if (source == zoomIncreaseItem)
 			triggerer.setZoom(DataHolder.getInstance().getZoom() + 0.5f);
+	}
+
+	private void customZoom() {
+		String value = JOptionPane.showInputDialog(this,
+				"<html>Please enter a new zoom level.<br>"
+						+ "You can enter any value greater 0.1.<br> "
+						+ "Examples: 1, 3.5, 5, 10.03</html>",
+				"Change zoom level", JOptionPane.QUESTION_MESSAGE);
+		if (value == null)
+			return;
+		try {
+			float newZoom = Float.parseFloat(value);
+			triggerer.setZoom(newZoom);
+		} catch (NumberFormatException e) {
+			JOptionPane.showMessageDialog(this, "Invalid zoom value: " + value);
+		}
 	}
 }

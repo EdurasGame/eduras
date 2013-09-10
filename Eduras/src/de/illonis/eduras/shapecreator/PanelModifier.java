@@ -18,4 +18,6 @@ public interface PanelModifier {
 
 	void setShape(EditablePolygon polygon);
 
+	EditablePolygon getShape();
+
 }

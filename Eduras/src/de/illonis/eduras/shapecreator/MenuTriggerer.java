@@ -1,6 +1,10 @@
 package de.illonis.eduras.shapecreator;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+
+import javax.swing.JOptionPane;
 
 import de.illonis.eduras.shapecreator.ShapeCreator.FrameListener;
 import de.illonis.eduras.shapecreator.templates.TemplateNotFoundException;
@@ -54,14 +58,36 @@ public class MenuTriggerer implements MenuActionReactor {
 
 	@Override
 	public void importShape(File f) {
-		// TODO Auto-generated method stub
+		EditablePolygon polygon;
+		try {
+			polygon = ShapeFiler.loadShape(f);
+			panel.setShape(polygon);
+		} catch (FileNotFoundException e) {
+			JOptionPane.showMessageDialog(null,
+					"File not found: " + f.getAbsolutePath());
+		} catch (FileCorruptException e) {
+			JOptionPane.showMessageDialog(null, "File contains invalid data:"
+					+ f.getAbsolutePath());
+			e.printStackTrace();
+		} catch (IOException e) {
+			JOptionPane.showMessageDialog(
+					null,
+					"An error occured while reading file "
+							+ f.getAbsolutePath() + ": " + e.getMessage());
 
+			e.printStackTrace();
+		}
 	}
 
 	@Override
 	public void exportShape(File f) {
-		// TODO Auto-generated method stub
-
+		try {
+			ShapeFiler.saveShape(panel.getShape(), f);
+		} catch (IOException e) {
+			JOptionPane.showMessageDialog(null,
+					"Could not write to file: " + e.getMessage());
+			e.printStackTrace();
+		}
 	}
 
 	@Override
