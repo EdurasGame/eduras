@@ -41,22 +41,25 @@ public class ShapeCreator {
 		JPanel framePanel = (JPanel) frame.getContentPane();
 		PanelInteractor pi = new PanelInteractor(panel);
 
+		FrameListener frameListener = new FrameListener();
+		MenuTriggerer triggerer = new MenuTriggerer(frameListener, pi);
+
 		ToolPanel toolPanel = new ToolPanel(pi);
 		panel.addMouseListener(pi);
 		panel.addMouseMotionListener(pi);
 		panel.addMouseWheelListener(pi);
-		frame.setJMenuBar(new MenuPanel());
+		frame.setJMenuBar(new MenuPanel(triggerer));
 		framePanel.setLayout(new BorderLayout());
 		framePanel.add(toolPanel, BorderLayout.NORTH);
 		framePanel.add(panel, BorderLayout.CENTER);
 		framePanel.add(verticePanel, BorderLayout.WEST);
 		frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-		frame.addWindowListener(new FrameListener());
+		frame.addWindowListener(frameListener);
 	}
 
-	private class FrameListener extends WindowAdapter {
-		@Override
-		public void windowClosing(WindowEvent e) {
+	public class FrameListener extends WindowAdapter {
+
+		public void tryExit() {
 			int result = JOptionPane
 					.showConfirmDialog(
 							frame,
@@ -67,13 +70,18 @@ public class ShapeCreator {
 				frame.dispose();
 			}
 		}
+
+		@Override
+		public void windowClosing(WindowEvent e) {
+			tryExit();
+		}
 	}
 
 	private void showFrame() {
 		frame.pack();
 		frame.setLocationRelativeTo(null);
 		frame.setVisible(true);
-		data.loadPolygon();
+		data.loadPolygon(new EditablePolygon());
 		renderer = new Renderer(panel);
 		renderer.start();
 	}
@@ -81,7 +89,6 @@ public class ShapeCreator {
 	public static void main(String[] args) {
 		ShapeCreator creator = new ShapeCreator();
 		creator.showFrame();
-
 	}
 
 }

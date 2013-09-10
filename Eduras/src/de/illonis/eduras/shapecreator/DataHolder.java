@@ -16,6 +16,7 @@ public class DataHolder {
 	private static DataHolder instance;
 	private RecordTableModel tableModel;
 	private DrawPanel drawPanel;
+	private EditablePolygon polygon;
 
 	private final Settings settings;
 
@@ -32,11 +33,10 @@ public class DataHolder {
 		return instance;
 	}
 
-	public void loadPolygon() {
+	public void loadPolygon(EditablePolygon polygon) {
+		this.polygon = polygon;
 		tableModel.fireTableDataChanged();
 	}
-
-	private EditablePolygon polygon;
 
 	private DataHolder() {
 		instance = this;
@@ -137,9 +137,11 @@ public class DataHolder {
 		}
 	}
 
-	public void notifyVerticeSelected(Vertice selectedVertice) {
+	public void verticeSelectedOnGui(Vertice selectedVertice) {
 		tableModel.selectVertice(selectedVertice);
-		drawPanel.onVerticeSelected(selectedVertice);
 	}
 
+	public void verticeSelectedOnTable(Vertice selectedVertice) {
+		drawPanel.onVerticeSelected(selectedVertice);
+	}
 }

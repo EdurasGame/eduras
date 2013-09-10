@@ -123,7 +123,7 @@ public class VerticeListPanel extends ScrollablePanel implements
 					.getVertices());
 			int selection = verticeList.getSelectedRow();
 			if (selection >= 0)
-				data.notifyVerticeSelected(l.get(selection));
+				data.verticeSelectedOnTable(l.get(selection));
 		}
 	}
 }

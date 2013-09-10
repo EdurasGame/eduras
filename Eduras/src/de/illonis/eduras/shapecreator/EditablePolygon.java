@@ -3,6 +3,9 @@ package de.illonis.eduras.shapecreator;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import de.illonis.eduras.shapecreator.templates.TemplateManager;
+import de.illonis.eduras.shapecreator.templates.TemplateNotFoundException;
+
 /**
  * An editable polygon that can be changed dynamically.
  * 
@@ -11,18 +14,13 @@ import java.util.Collection;
  */
 public class EditablePolygon {
 
-	private final ArrayList<Vertice> vertices;
+	protected final ArrayList<Vertice> vertices;
 
 	protected EditablePolygon() {
 		vertices = new ArrayList<Vertice>();
-		vertices.add(new Vertice(-20, -40));
-		vertices.add(new Vertice(0, -60));
-		vertices.add(new Vertice(20, -40));
-		vertices.add(new Vertice(20, 0));
-		vertices.add(new Vertice(-20, 0));
 	}
 
-	protected void addVertice(Vertice v) {
+	public void addVertice(Vertice v) {
 		vertices.add(v);
 		DataHolder.getInstance().notifyVerticesChanged();
 	}
@@ -56,7 +54,7 @@ public class EditablePolygon {
 		DataHolder.getInstance().notifyVerticesChanged();
 	}
 
-	protected Vertice findNearestVertice(Vertice searchPoint)
+	public Vertice findNearestVertice(Vertice searchPoint)
 			throws NoVerticeFoundException {
 		if (vertices.size() == 0)
 			throw new NoVerticeFoundException();
@@ -70,6 +68,13 @@ public class EditablePolygon {
 			}
 		}
 		return result;
+	}
+
+	public void importTemplate(String templateName)
+			throws TemplateNotFoundException {
+		vertices.clear();
+		TemplateManager manager = TemplateManager.getInstance();
+		vertices.addAll(manager.getVertsOfTemplate(templateName));
 	}
 
 	public Collection<Vertice> getVertices() {

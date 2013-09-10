@@ -10,7 +10,7 @@ import de.illonis.eduras.math.Vector2D;
  */
 public class Vertice extends Vector2D {
 
-	protected Vertice(double x, double y) {
+	public Vertice(double x, double y) {
 		super(x, y);
 	}
 

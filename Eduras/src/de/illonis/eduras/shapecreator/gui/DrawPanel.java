@@ -117,7 +117,7 @@ public class DrawPanel extends JPanel {
 	}
 
 	public void selectVertice(Vertice v) {
-		data.notifyVerticeSelected(v);
+		data.verticeSelectedOnGui(v);
 		onVerticeSelected(v);
 	}
 

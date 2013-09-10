@@ -16,7 +16,7 @@ import de.illonis.eduras.shapecreator.gui.GuiPoint;
  * @author illonis
  * 
  */
-public class PanelInteractor extends MouseAdapter {
+public class PanelInteractor extends MouseAdapter implements PanelModifier {
 	private static final Cursor CURSOR_SCROLL = new Cursor(
 			Cursor.CROSSHAIR_CURSOR);
 	private static final Cursor CURSOR_ZOOM = new Cursor(
@@ -32,13 +32,14 @@ public class PanelInteractor extends MouseAdapter {
 		NONE, DRAG_EDGE, ZOOM, SCROLL, ADD_VERT, REM_VERT;
 	}
 
-	public void setMode(InteractMode mode) {
-		this.mode = mode;
-	}
-
 	public PanelInteractor(DrawPanel panel) {
 		this.panel = panel;
 		data = DataHolder.getInstance();
+	}
+
+	@Override
+	public void setMode(InteractMode mode) {
+		this.mode = mode;
 	}
 
 	@Override
@@ -197,5 +198,40 @@ public class PanelInteractor extends MouseAdapter {
 			break;
 		}
 
+	}
+
+	@Override
+	public void setZoom(float zoom) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void resetPanel() {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void selectVertice(Vertice vert) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public boolean undo() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean redo() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public void setShape(EditablePolygon polygon) {
+		data.loadPolygon(polygon);
 	}
 }
