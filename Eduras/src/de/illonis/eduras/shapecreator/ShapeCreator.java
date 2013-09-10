@@ -9,6 +9,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import de.illonis.eduras.shapecreator.gui.DrawPanel;
+import de.illonis.eduras.shapecreator.gui.MenuPanel;
 import de.illonis.eduras.shapecreator.gui.ToolPanel;
 import de.illonis.eduras.shapecreator.gui.VerticeListPanel;
 
@@ -44,6 +45,7 @@ public class ShapeCreator {
 		panel.addMouseListener(pi);
 		panel.addMouseMotionListener(pi);
 		panel.addMouseWheelListener(pi);
+		frame.setJMenuBar(new MenuPanel());
 		framePanel.setLayout(new BorderLayout());
 		framePanel.add(toolPanel, BorderLayout.NORTH);
 		framePanel.add(panel, BorderLayout.CENTER);
