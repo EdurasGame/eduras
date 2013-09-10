@@ -27,7 +27,6 @@ public class PanelInteractor extends MouseAdapter {
 	private final DrawPanel panel;
 	private InteractMode mode = InteractMode.DRAG_EDGE;
 	private InteractMode lastMode = InteractMode.NONE;
-	private Vertice selectedVertice;
 
 	public enum InteractMode {
 		NONE, DRAG_EDGE, ZOOM, SCROLL, ADD_VERT, REM_VERT;
@@ -84,8 +83,9 @@ public class PanelInteractor extends MouseAdapter {
 			}
 			break;
 		case NONE:
-			selectedVertice = hoverVertice;
-			panel.onVerticeSelected(selectedVertice);
+			if (hoverVertice != null) {
+				panel.selectVertice(hoverVertice);
+			}
 			break;
 		default:
 			break;
@@ -133,6 +133,8 @@ public class PanelInteractor extends MouseAdapter {
 			case DRAG_EDGE:
 				mode = lastMode;
 				break;
+			default:
+				break;
 			}
 
 			break;
@@ -174,8 +176,7 @@ public class PanelInteractor extends MouseAdapter {
 				Vector2D coordPoint = panel.getCoordinateSystem()
 						.guiToCoordinate(guiPoint);
 				hoverVertice.moveTo(coordPoint.getX(), coordPoint.getY());
-				selectedVertice = hoverVertice;
-				panel.onVerticeSelected(selectedVertice);
+				panel.selectVertice(hoverVertice);
 			}
 			break;
 		case SCROLL:

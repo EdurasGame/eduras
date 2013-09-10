@@ -4,9 +4,11 @@ import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.Icon;
 import javax.swing.JTable;
 import javax.swing.table.AbstractTableModel;
 
+import de.illonis.eduras.images.ImageFiler;
 import de.illonis.eduras.shapecreator.Vertice;
 
 public class RecordTableModel extends AbstractTableModel {
@@ -14,11 +16,16 @@ public class RecordTableModel extends AbstractTableModel {
 	private List<TableRecord> lstRecords;
 	private final static Color DEFAULT_BACKGROUND = Color.WHITE;
 	private final static Color SELECTED_BACKGROUND = Color.GRAY;
+	private final Icon upIcon, downIcon, deleteIcon;
 	private final JTable table;
 
 	public RecordTableModel(JTable table) {
 		this.table = table;
 		lstRecords = new ArrayList<TableRecord>();
+		upIcon = ImageFiler.loadIcon("shapecreator/icons/button_up.png");
+		downIcon = ImageFiler.loadIcon("shapecreator/icons/button_down.png");
+		deleteIcon = ImageFiler
+				.loadIcon("shapecreator/icons/button_delete.png");
 	}
 
 	public void add(TableRecord record) {
@@ -69,13 +76,13 @@ public class RecordTableModel extends AbstractTableModel {
 			value = record.getY();
 			break;
 		case 2:
-			value = "up";
+			value = upIcon;
 			break;
 		case 3:
-			value = "down";
+			value = downIcon;
 			break;
 		case 4:
-			value = "delete";
+			value = deleteIcon;
 			break;
 		}
 		return value;

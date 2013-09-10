@@ -111,11 +111,14 @@ public class DrawPanel extends JPanel {
 	public void onVerticeLeft() {
 		setCursor(Cursor.getDefaultCursor());
 		hoverVertice = null;
+	}
 
+	public void selectVertice(Vertice v) {
+		data.notifyVerticeSelected(v);
+		onVerticeSelected(v);
 	}
 
 	public void onVerticeSelected(Vertice selectedVertice) {
-		data.notifyVerticeSelected(selectedVertice);
 		this.selectedVertice = selectedVertice;
 	}
 

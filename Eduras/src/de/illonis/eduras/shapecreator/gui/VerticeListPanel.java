@@ -2,6 +2,7 @@ package de.illonis.eduras.shapecreator.gui;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
+import java.util.LinkedList;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
@@ -9,6 +10,8 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
 import de.illonis.eduras.shapecreator.DataHolder;
 import de.illonis.eduras.shapecreator.Vertice;
@@ -20,7 +23,7 @@ import de.illonis.eduras.shapecreator.VerticeListException;
  * @author illonis
  * 
  */
-public class VerticeListPanel extends JPanel {
+public class VerticeListPanel extends JPanel implements ListSelectionListener {
 	private final DataHolder data;
 	private JTable verticeList;
 
@@ -35,6 +38,7 @@ public class VerticeListPanel extends JPanel {
 		verticeList = new JTable();
 		final RecordTableModel m = new RecordTableModel(verticeList);
 		verticeList.setModel(m);
+		verticeList.getSelectionModel().addListSelectionListener(this);
 		for (Vertice v : data.getPolygon().getVertices()) {
 			m.add(new TableRecord(v));
 		}
@@ -105,4 +109,14 @@ public class VerticeListPanel extends JPanel {
 		add(scrollPanel);
 	}
 
+	@Override
+	public void valueChanged(ListSelectionEvent e) {
+		if (!e.getValueIsAdjusting()) {
+			LinkedList<Vertice> l = new LinkedList<Vertice>(data.getPolygon()
+					.getVertices());
+			int selection = verticeList.getSelectedRow();
+			if (selection >= 0)
+				data.notifyVerticeSelected(l.get(selection));
+		}
+	}
 }

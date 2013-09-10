@@ -35,6 +35,7 @@ public class ShapeCreator {
 		frame = new JFrame("Eduras? ShapeCreator");
 		data = DataHolder.getInstance();
 		panel = new DrawPanel();
+		data.setDrawPanel(panel);
 		VerticeListPanel verticePanel = new VerticeListPanel();
 		JPanel framePanel = (JPanel) frame.getContentPane();
 		PanelInteractor pi = new PanelInteractor(panel);

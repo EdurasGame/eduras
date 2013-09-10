@@ -2,6 +2,7 @@ package de.illonis.eduras.shapecreator;
 
 import java.awt.Color;
 
+import de.illonis.eduras.shapecreator.gui.DrawPanel;
 import de.illonis.eduras.shapecreator.gui.RecordTableModel;
 
 /**
@@ -14,6 +15,7 @@ public class DataHolder {
 
 	private static DataHolder instance;
 	private RecordTableModel tableModel;
+	private DrawPanel drawPanel;
 
 	private final Settings settings;
 
@@ -54,6 +56,10 @@ public class DataHolder {
 
 	public void setVerticeTableModel(RecordTableModel tableModel) {
 		this.tableModel = tableModel;
+	}
+	
+	public void setDrawPanel(DrawPanel drawPanel) {
+		this.drawPanel = drawPanel;
 	}
 
 	public void notifyVerticesChanged() {
@@ -129,6 +135,7 @@ public class DataHolder {
 
 	public void notifyVerticeSelected(Vertice selectedVertice) {
 		tableModel.selectVertice(selectedVertice);
+		drawPanel.onVerticeSelected(selectedVertice);
 	}
 
 }
