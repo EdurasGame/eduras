@@ -71,6 +71,7 @@ public class ShapeCreator {
 		frame.pack();
 		frame.setLocationRelativeTo(null);
 		frame.setVisible(true);
+		data.loadPolygon();
 		renderer = new Renderer(panel);
 		renderer.start();
 	}
@@ -78,6 +79,7 @@ public class ShapeCreator {
 	public static void main(String[] args) {
 		ShapeCreator creator = new ShapeCreator();
 		creator.showFrame();
+
 	}
 
 }

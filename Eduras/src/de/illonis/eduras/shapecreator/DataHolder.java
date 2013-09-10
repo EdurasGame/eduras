@@ -32,6 +32,10 @@ public class DataHolder {
 		return instance;
 	}
 
+	public void loadPolygon() {
+		tableModel.fireTableDataChanged();
+	}
+
 	private EditablePolygon polygon;
 
 	private DataHolder() {
@@ -57,7 +61,7 @@ public class DataHolder {
 	public void setVerticeTableModel(RecordTableModel tableModel) {
 		this.tableModel = tableModel;
 	}
-	
+
 	public void setDrawPanel(DrawPanel drawPanel) {
 		this.drawPanel = drawPanel;
 	}

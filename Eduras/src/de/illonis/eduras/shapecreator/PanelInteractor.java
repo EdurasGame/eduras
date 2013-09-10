@@ -67,27 +67,35 @@ public class PanelInteractor extends MouseAdapter {
 		hoverVertice = null;
 	}
 
+	private boolean trySelectHoverVert() {
+		if (hoverVertice != null) {
+			panel.selectVertice(hoverVertice);
+			return true;
+		}
+		return false;
+	}
+
 	@Override
 	public void mouseClicked(MouseEvent e) {
 
 		switch (mode) {
 		case ADD_VERT:
+			if (trySelectHoverVert())
+				break;
 			GuiPoint p = new GuiPoint(clickPoint.x, clickPoint.y);
 			Vector2D v = panel.getCoordinateSystem().guiToCoordinate(p);
 			Vertice vert = new Vertice(v.getX(), v.getY());
 			data.getPolygon().addVertice(vert);
+			panel.selectVertice(vert);
 			break;
 		case REM_VERT:
 			if (hoverVertice != null) {
 				data.getPolygon().removeVertice(hoverVertice);
 			}
 			break;
-		case NONE:
-			if (hoverVertice != null) {
-				panel.selectVertice(hoverVertice);
-			}
-			break;
+
 		default:
+			trySelectHoverVert();
 			break;
 		}
 

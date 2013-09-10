@@ -24,6 +24,7 @@ public class EditablePolygon {
 
 	protected void addVertice(Vertice v) {
 		vertices.add(v);
+		DataHolder.getInstance().notifyVerticesChanged();
 	}
 
 	public void removeVertice(Vertice v) {

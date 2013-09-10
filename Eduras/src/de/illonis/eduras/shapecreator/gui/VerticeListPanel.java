@@ -1,5 +1,7 @@
 package de.illonis.eduras.shapecreator.gui;
 
+import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.util.LinkedList;
@@ -12,6 +14,7 @@ import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.table.TableColumn;
 
 import de.illonis.eduras.shapecreator.DataHolder;
 import de.illonis.eduras.shapecreator.Vertice;
@@ -23,25 +26,28 @@ import de.illonis.eduras.shapecreator.VerticeListException;
  * @author illonis
  * 
  */
-public class VerticeListPanel extends JPanel implements ListSelectionListener {
+public class VerticeListPanel extends ScrollablePanel implements
+		ListSelectionListener {
 	private final DataHolder data;
 	private JTable verticeList;
 
 	public VerticeListPanel() {
 		data = DataHolder.getInstance();
-
+		setLayout(new BorderLayout());
 		buildGui();
 	}
 
 	private void buildGui() {
 
+		JPanel topPanel = new JPanel();
+
 		verticeList = new JTable();
+		TableColumn column = null;
+
 		final RecordTableModel m = new RecordTableModel(verticeList);
 		verticeList.setModel(m);
 		verticeList.getSelectionModel().addListSelectionListener(this);
-		for (Vertice v : data.getPolygon().getVertices()) {
-			m.add(new TableRecord(v));
-		}
+
 		Action up = new AbstractAction() {
 			public void actionPerformed(ActionEvent e) {
 				JTable table = (JTable) e.getSource();
@@ -104,9 +110,10 @@ public class VerticeListPanel extends JPanel implements ListSelectionListener {
 		verticeList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
 		JScrollPane scrollPanel = new JScrollPane(verticeList);
+		setPreferredSize(new Dimension(300, 0));
 		scrollPanel
 				.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-		add(scrollPanel);
+		add(scrollPanel, BorderLayout.CENTER);
 	}
 
 	@Override

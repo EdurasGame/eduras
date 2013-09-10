@@ -9,6 +9,7 @@ import javax.swing.JTable;
 import javax.swing.table.AbstractTableModel;
 
 import de.illonis.eduras.images.ImageFiler;
+import de.illonis.eduras.shapecreator.DataHolder;
 import de.illonis.eduras.shapecreator.Vertice;
 
 public class RecordTableModel extends AbstractTableModel {
@@ -26,6 +27,16 @@ public class RecordTableModel extends AbstractTableModel {
 		downIcon = ImageFiler.loadIcon("shapecreator/icons/button_down.png");
 		deleteIcon = ImageFiler
 				.loadIcon("shapecreator/icons/button_delete.png");
+	}
+
+	@Override
+	public void fireTableDataChanged() {
+		lstRecords.clear();
+		DataHolder data = DataHolder.getInstance();
+		for (Vertice v : data.getPolygon().getVertices()) {
+			lstRecords.add(new TableRecord(v));
+		}
+		super.fireTableDataChanged();
 	}
 
 	public void add(TableRecord record) {
