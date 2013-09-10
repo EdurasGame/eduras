@@ -48,7 +48,7 @@ public class ShapeCreator {
 		panel.addMouseListener(pi);
 		panel.addMouseMotionListener(pi);
 		panel.addMouseWheelListener(pi);
-		frame.setJMenuBar(new MenuPanel(triggerer));
+		frame.setJMenuBar(new MenuPanel(triggerer, frame));
 		framePanel.setLayout(new BorderLayout());
 		framePanel.add(toolPanel, BorderLayout.NORTH);
 		framePanel.add(panel, BorderLayout.CENTER);

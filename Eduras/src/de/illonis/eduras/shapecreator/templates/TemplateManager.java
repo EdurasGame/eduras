@@ -24,9 +24,11 @@ public class TemplateManager {
 
 	private void loadTemplates() {
 		registerTemplate(new HouseTemplate());
+		registerTemplate(new RectangleTemplate());
+		registerTemplate(new CircleTemplate());
 	}
 
-	private void registerTemplate(ShapeTemplate template) {
+	void registerTemplate(ShapeTemplate template) {
 		templates.put(template.getName(), template);
 	}
 

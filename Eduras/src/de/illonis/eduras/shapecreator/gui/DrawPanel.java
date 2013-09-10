@@ -95,14 +95,16 @@ public class DrawPanel extends JPanel {
 		}
 	}
 
+	public void centerOrigin() {
+		int w = getWidth();
+		int h = getHeight();
+		coordinateSystem.setOrigin(w / 2, h / 2);
+	}
+
 	private class ResizeMonitor extends ComponentAdapter {
 		@Override
 		public void componentResized(ComponentEvent e) {
-			int w = getWidth();
-			int h = getHeight();
-			coordinateSystem.setOrigin(w / 2, h / 2);
-			float factor = (float) w / DEFAULT_SIZE.width;
-			data.setZoom(factor);
+			centerOrigin();
 		}
 	}
 

@@ -202,14 +202,13 @@ public class PanelInteractor extends MouseAdapter implements PanelModifier {
 
 	@Override
 	public void setZoom(float zoom) {
-		// TODO Auto-generated method stub
-
+		data.setZoom(zoom);
 	}
 
 	@Override
 	public void resetPanel() {
-		// TODO Auto-generated method stub
-
+		data.setZoom(1.0f);
+		panel.centerOrigin();
 	}
 
 	@Override

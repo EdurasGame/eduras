@@ -7,6 +7,7 @@ import java.io.File;
 import java.io.IOException;
 
 import javax.swing.JFileChooser;
+import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
@@ -15,6 +16,7 @@ import javax.swing.JSeparator;
 import javax.swing.KeyStroke;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
+import de.illonis.eduras.shapecreator.DataHolder;
 import de.illonis.eduras.shapecreator.MenuActionReactor.Axis;
 import de.illonis.eduras.shapecreator.MenuTriggerer;
 import de.illonis.eduras.shapecreator.templates.TemplateNotFoundException;
@@ -23,14 +25,16 @@ public class MenuPanel extends JMenuBar implements ActionListener {
 
 	public final static String FILE_EXT = "esh";
 	private final MenuTriggerer triggerer;
+	private final TemplateSelector selector;
 	private final JFileChooser fileChooser;
 
 	private JMenuItem importItem, exportItem, newEmptyItem, newTemplateItem,
 			undoItem, redoItem, exitItem, rotateItem, mirrorItem,
 			resetViewItem, zoomDefaultItem, zoomTwoItem, zoomThreeItem,
-			zoomFourItem, zoomFiveItem, zoomHalfItem, zoomCustomItem;
+			zoomFourItem, zoomFiveItem, zoomHalfItem, zoomCustomItem,
+			zoomIncreaseItem, zoomDecreaseItem;
 
-	public MenuPanel(MenuTriggerer triggerer) {
+	public MenuPanel(MenuTriggerer triggerer, JFrame frame) {
 		super();
 		fileChooser = new JFileChooser();
 		fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
@@ -40,6 +44,7 @@ public class MenuPanel extends JMenuBar implements ActionListener {
 		fileChooser.setFileFilter(filter);
 		fileChooser.setAcceptAllFileFilterUsed(false);
 		this.triggerer = triggerer;
+		selector = new TemplateSelector(frame);
 		buildGui();
 	}
 
@@ -89,15 +94,20 @@ public class MenuPanel extends JMenuBar implements ActionListener {
 		resetViewItem = addItemToMenu("reset view", viewMenu);
 		zoomHalfItem = addItemToMenu("0.5x", zoomMenu);
 		zoomDefaultItem = addItemToMenu("1x (default)", KeyEvent.VK_1,
-				ActionEvent.SHIFT_MASK, zoomMenu);
-		zoomTwoItem = addItemToMenu("2x", KeyEvent.VK_2,
-				ActionEvent.SHIFT_MASK, zoomMenu);
+				ActionEvent.CTRL_MASK, zoomMenu);
+		zoomTwoItem = addItemToMenu("2x", KeyEvent.VK_2, ActionEvent.CTRL_MASK,
+				zoomMenu);
 		zoomThreeItem = addItemToMenu("3x", KeyEvent.VK_3,
-				ActionEvent.SHIFT_MASK, zoomMenu);
+				ActionEvent.CTRL_MASK, zoomMenu);
 		zoomFourItem = addItemToMenu("4x", KeyEvent.VK_4,
-				ActionEvent.SHIFT_MASK, zoomMenu);
+				ActionEvent.CTRL_MASK, zoomMenu);
 		zoomFiveItem = addItemToMenu("5x", KeyEvent.VK_5,
-				ActionEvent.SHIFT_MASK, zoomMenu);
+				ActionEvent.CTRL_MASK, zoomMenu);
+		zoomMenu.add(new JSeparator());
+		zoomIncreaseItem = addItemToMenu("increase (+0.5)", KeyEvent.VK_PLUS,
+				ActionEvent.CTRL_MASK, zoomMenu);
+		zoomDecreaseItem = addItemToMenu("decrease (-0.5)", KeyEvent.VK_MINUS,
+				ActionEvent.CTRL_MASK, zoomMenu);
 		zoomMenu.add(new JSeparator());
 		zoomCustomItem = addItemToMenu("custom...", KeyEvent.VK_Z, 0, zoomMenu);
 	}
@@ -146,18 +156,16 @@ public class MenuPanel extends JMenuBar implements ActionListener {
 	}
 
 	private void openTemplate() {
-		TemplateSelector selector = new TemplateSelector();
+
 		selector.showFrame();
 		if (selector.getAnswer()) {
-			System.out.println("ok");
 			try {
 				triggerer.newShape(selector.getSelectedTemplate());
 			} catch (TemplateNotFoundException e) {
-				// TODO Auto-generated catch block
+				JOptionPane.showMessageDialog(this,
+						"Template not found: " + e.getMessage());
 				e.printStackTrace();
 			}
-		} else {
-			System.out.println("abort");
 		}
 		selector.dispose();
 	}
@@ -165,7 +173,6 @@ public class MenuPanel extends JMenuBar implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		JMenuItem source = (JMenuItem) e.getSource();
-		System.out.println("Menu item pressed: " + source.getText());
 
 		if (source == exitItem)
 			triggerer.exit();
@@ -203,5 +210,9 @@ public class MenuPanel extends JMenuBar implements ActionListener {
 			triggerer.setZoom(5.0f);
 		else if (source == zoomHalfItem)
 			triggerer.setZoom(.5f);
+		else if (source == zoomDecreaseItem)
+			triggerer.setZoom(DataHolder.getInstance().getZoom() - 0.5f);
+		else if (source == zoomIncreaseItem)
+			triggerer.setZoom(DataHolder.getInstance().getZoom() + 0.5f);
 	}
 }
