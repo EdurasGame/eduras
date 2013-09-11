@@ -32,7 +32,7 @@ public class ToolPanel extends JPanel implements ActionListener {
 	private void buildToolbar() {
 		toolBar = new JToolBar();
 		bgroup = new ButtonGroup();
-		modeButtonDrag = createButton("select edges", "button_drag.png");
+		modeButtonDrag = createButton("select and drag", "button_drag.png");
 		modeButtonAdd = createButton("add vertices", "button_add.png");
 		modeButtonRemove = createButton("remove vertices", "button_remove.png");
 		modeButtonDrag.setSelected(true);

@@ -66,7 +66,7 @@ public class MenuPanel extends JMenuBar implements ActionListener {
 		newEmptyItem = addItemToMenu("Empty shape", KeyEvent.VK_N,
 				ActionEvent.CTRL_MASK, newItem);
 		fileMenu.add(new JSeparator());
-		newTemplateItem = addItemToMenu("from template...", KeyEvent.VK_N,
+		newTemplateItem = addItemToMenu("From template...", KeyEvent.VK_N,
 				ActionEvent.CTRL_MASK + ActionEvent.SHIFT_MASK, newItem);
 		openItem = addItemToMenu("Open...", KeyEvent.VK_O,
 				ActionEvent.CTRL_MASK, fileMenu);
@@ -79,24 +79,24 @@ public class MenuPanel extends JMenuBar implements ActionListener {
 		exitItem = addItemToMenu("Exit", KeyEvent.VK_Q, ActionEvent.CTRL_MASK,
 				fileMenu);
 
-		undoItem = addItemToMenu("undo", KeyEvent.VK_Z, ActionEvent.CTRL_MASK,
+		undoItem = addItemToMenu("Undo", KeyEvent.VK_Z, ActionEvent.CTRL_MASK,
 				editMenu);
-		undoItem = addItemToMenu("redo", KeyEvent.VK_Z, ActionEvent.CTRL_MASK
+		undoItem = addItemToMenu("Redo", KeyEvent.VK_Z, ActionEvent.CTRL_MASK
 				+ ActionEvent.SHIFT_MASK, editMenu);
 
-		rotateItem = addItemToMenu("rotate shape...", transformMenu);
-		JMenu mirrorMenu = new JMenu("mirror shape");
+		rotateItem = addItemToMenu("Rotate shape...", transformMenu);
+		JMenu mirrorMenu = new JMenu("Mirror shape");
 		transformMenu.add(mirrorMenu);
 
-		mirrorXItem = addItemToMenu("x-axis (vertical)", mirrorMenu);
-		mirrorYItem = addItemToMenu("y-axis (horizontal)", mirrorMenu);
+		mirrorXItem = addItemToMenu("X-axis (vertical)", mirrorMenu);
+		mirrorYItem = addItemToMenu("Y-axis (horizontal)", mirrorMenu);
 
-		JMenu zoomMenu = new JMenu("zoom");
+		JMenu zoomMenu = new JMenu("Zoom");
 		viewMenu.add(zoomMenu);
 
 		viewMenu.add(new JSeparator());
 
-		resetViewItem = addItemToMenu("reset view", viewMenu);
+		resetViewItem = addItemToMenu("Reset view", viewMenu);
 		zoomHalfItem = addItemToMenu("0.5x", zoomMenu);
 		zoomDefaultItem = addItemToMenu("1x (default)", KeyEvent.VK_1,
 				ActionEvent.CTRL_MASK, zoomMenu);
@@ -109,12 +109,12 @@ public class MenuPanel extends JMenuBar implements ActionListener {
 		zoomFiveItem = addItemToMenu("5x", KeyEvent.VK_5,
 				ActionEvent.CTRL_MASK, zoomMenu);
 		zoomMenu.add(new JSeparator());
-		zoomIncreaseItem = addItemToMenu("increase (+0.5)", KeyEvent.VK_PLUS,
+		zoomIncreaseItem = addItemToMenu("Increase (+0.5)", KeyEvent.VK_PLUS,
 				ActionEvent.CTRL_MASK, zoomMenu);
-		zoomDecreaseItem = addItemToMenu("decrease (-0.5)", KeyEvent.VK_MINUS,
+		zoomDecreaseItem = addItemToMenu("Decrease (-0.5)", KeyEvent.VK_MINUS,
 				ActionEvent.CTRL_MASK, zoomMenu);
 		zoomMenu.add(new JSeparator());
-		zoomCustomItem = addItemToMenu("custom...", KeyEvent.VK_Z, 0, zoomMenu);
+		zoomCustomItem = addItemToMenu("Custom...", KeyEvent.VK_Z, 0, zoomMenu);
 	}
 
 	private JMenuItem addItemToMenu(String label, JMenu menu) {
@@ -134,6 +134,9 @@ public class MenuPanel extends JMenuBar implements ActionListener {
 		int result = fileChooser.showDialog(frame, "Open");
 		if (result == JFileChooser.APPROVE_OPTION) {
 			File file = fileChooser.getSelectedFile();
+			if (!file.getAbsolutePath().endsWith("." + ShapeFiler.FILE_EXT))
+				file = new File(file.getAbsolutePath() + "."
+						+ ShapeFiler.FILE_EXT);
 			if (file.exists())
 				triggerer.importShape(file);
 			else

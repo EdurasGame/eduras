@@ -60,7 +60,7 @@ public class MenuTriggerer implements MenuActionReactor {
 	public void importShape(File f) {
 		EditablePolygon polygon;
 		try {
-			polygon = ShapeFiler.loadShape(f);
+			polygon = ShapeFiler.loadShape(f.toURI().toURL());
 			panel.setShape(polygon);
 		} catch (FileNotFoundException e) {
 			JOptionPane.showMessageDialog(null,
