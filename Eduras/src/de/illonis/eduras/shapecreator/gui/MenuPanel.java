@@ -4,7 +4,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.io.File;
-import java.io.IOException;
 
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
@@ -28,9 +27,10 @@ public class MenuPanel extends JMenuBar implements ActionListener {
 	private final MenuTriggerer triggerer;
 	private final TemplateSelector selector;
 	private final JFileChooser fileChooser;
+	private final JFrame frame;
 
-	private JMenuItem importItem, exportItem, newEmptyItem, newTemplateItem,
-			undoItem, redoItem, exitItem, rotateItem, mirrorItem,
+	private JMenuItem openItem, saveItem, newEmptyItem, newTemplateItem,
+			undoItem, redoItem, exitItem, rotateItem, mirrorXItem, mirrorYItem,
 			resetViewItem, zoomDefaultItem, zoomTwoItem, zoomThreeItem,
 			zoomFourItem, zoomFiveItem, zoomHalfItem, zoomCustomItem,
 			zoomIncreaseItem, zoomDecreaseItem;
@@ -47,6 +47,7 @@ public class MenuPanel extends JMenuBar implements ActionListener {
 		fileChooser.setAcceptAllFileFilterUsed(false);
 		this.triggerer = triggerer;
 		selector = new TemplateSelector(frame);
+		this.frame = frame;
 		buildGui();
 	}
 
@@ -67,15 +68,15 @@ public class MenuPanel extends JMenuBar implements ActionListener {
 		fileMenu.add(new JSeparator());
 		newTemplateItem = addItemToMenu("from template...", KeyEvent.VK_N,
 				ActionEvent.CTRL_MASK + ActionEvent.SHIFT_MASK, newItem);
-		importItem = addItemToMenu("Import...", KeyEvent.VK_I,
+		openItem = addItemToMenu("Open...", KeyEvent.VK_O,
 				ActionEvent.CTRL_MASK, fileMenu);
 
-		exportItem = addItemToMenu("Export...", KeyEvent.VK_E,
+		saveItem = addItemToMenu("Save...", KeyEvent.VK_S,
 				ActionEvent.CTRL_MASK, fileMenu);
 
 		fileMenu.add(new JSeparator());
 
-		exitItem = addItemToMenu("exit", KeyEvent.VK_Q, ActionEvent.CTRL_MASK,
+		exitItem = addItemToMenu("Exit", KeyEvent.VK_Q, ActionEvent.CTRL_MASK,
 				fileMenu);
 
 		undoItem = addItemToMenu("undo", KeyEvent.VK_Z, ActionEvent.CTRL_MASK,
@@ -83,10 +84,12 @@ public class MenuPanel extends JMenuBar implements ActionListener {
 		undoItem = addItemToMenu("redo", KeyEvent.VK_Z, ActionEvent.CTRL_MASK
 				+ ActionEvent.SHIFT_MASK, editMenu);
 
-		rotateItem = addItemToMenu("rotate shape...", KeyEvent.VK_R,
-				ActionEvent.CTRL_MASK, transformMenu);
-		mirrorItem = addItemToMenu("mirror shape...", KeyEvent.VK_M,
-				ActionEvent.CTRL_MASK, transformMenu);
+		rotateItem = addItemToMenu("rotate shape...", transformMenu);
+		JMenu mirrorMenu = new JMenu("mirror shape");
+		transformMenu.add(mirrorMenu);
+
+		mirrorXItem = addItemToMenu("x-axis (vertical)", mirrorMenu);
+		mirrorYItem = addItemToMenu("y-axis (horizontal)", mirrorMenu);
 
 		JMenu zoomMenu = new JMenu("zoom");
 		viewMenu.add(zoomMenu);
@@ -127,33 +130,34 @@ public class MenuPanel extends JMenuBar implements ActionListener {
 		return menuItem;
 	}
 
-	private void importShape() {
-		int result = fileChooser.showDialog(this, "Import");
+	private void openShape() {
+		int result = fileChooser.showDialog(frame, "Open");
 		if (result == JFileChooser.APPROVE_OPTION) {
 			File file = fileChooser.getSelectedFile();
 			if (file.exists())
 				triggerer.importShape(file);
 			else
-				JOptionPane.showMessageDialog(this,
+				JOptionPane.showMessageDialog(frame,
 						"File not found: " + file.getAbsolutePath());
 		}
 	}
 
-	private void exportShape() {
-		fileChooser.setApproveButtonText("Export");
-		int result = fileChooser.showDialog(this, "Export");
+	private void saveShape() {
+		int result = fileChooser.showDialog(frame, "Save");
 		if (result == JFileChooser.APPROVE_OPTION) {
 			File file = fileChooser.getSelectedFile();
-			try {
-				if (file.createNewFile() || file.canWrite())
-					triggerer.exportShape(file);
-			} catch (IOException e) {
-				e.printStackTrace();
-				JOptionPane.showMessageDialog(
-						this,
-						"Could not open file for writing: "
-								+ file.getAbsolutePath());
+			if (!file.getAbsolutePath().endsWith("." + ShapeFiler.FILE_EXT))
+				file = new File(file.getAbsolutePath() + "."
+						+ ShapeFiler.FILE_EXT);
+			if (file.exists()) {
+				int owResult = JOptionPane.showConfirmDialog(frame, "The file "
+						+ file.getAbsolutePath()
+						+ " already exists. Do you want to overwrite?",
+						"File exists", JOptionPane.YES_NO_OPTION);
+				if (owResult == JOptionPane.NO_OPTION)
+					return;
 			}
+			triggerer.exportShape(file);
 		}
 	}
 
@@ -164,7 +168,7 @@ public class MenuPanel extends JMenuBar implements ActionListener {
 			try {
 				triggerer.newShape(selector.getSelectedTemplate());
 			} catch (TemplateNotFoundException e) {
-				JOptionPane.showMessageDialog(this,
+				JOptionPane.showMessageDialog(frame,
 						"Template not found: " + e.getMessage());
 				e.printStackTrace();
 			}
@@ -184,18 +188,20 @@ public class MenuPanel extends JMenuBar implements ActionListener {
 			triggerer.undo();
 		else if (source == redoItem)
 			triggerer.redo();
-		else if (source == importItem)
-			importShape();
-		else if (source == exportItem)
-			exportShape();
+		else if (source == openItem)
+			openShape();
+		else if (source == saveItem)
+			saveShape();
 		else if (source == newTemplateItem)
 			openTemplate();
 		else if (source == resetViewItem)
 			triggerer.resetPanel();
 		else if (source == rotateItem)
 			triggerer.rotateShape(90);
-		else if (source == mirrorItem)
+		else if (source == mirrorXItem)
 			triggerer.mirrorShape(Axis.HORIZONTAL);
+		else if (source == mirrorYItem)
+			triggerer.mirrorShape(Axis.VERTICAL);
 		else if (source == zoomCustomItem)
 			customZoom();
 		else if (source == zoomDefaultItem)
@@ -219,7 +225,7 @@ public class MenuPanel extends JMenuBar implements ActionListener {
 	}
 
 	private void customZoom() {
-		String value = JOptionPane.showInputDialog(this,
+		String value = JOptionPane.showInputDialog(frame,
 				"<html>Please enter a new zoom level.<br>"
 						+ "You can enter any value greater 0.1.<br> "
 						+ "Examples: 1, 3.5, 5, 10.03</html>",
@@ -230,7 +236,8 @@ public class MenuPanel extends JMenuBar implements ActionListener {
 			float newZoom = Float.parseFloat(value);
 			triggerer.setZoom(newZoom);
 		} catch (NumberFormatException e) {
-			JOptionPane.showMessageDialog(this, "Invalid zoom value: " + value);
+			JOptionPane
+					.showMessageDialog(frame, "Invalid zoom value: " + value);
 		}
 	}
 }

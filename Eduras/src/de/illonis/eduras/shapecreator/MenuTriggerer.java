@@ -98,8 +98,14 @@ public class MenuTriggerer implements MenuActionReactor {
 
 	@Override
 	public void mirrorShape(Axis axis) {
-		// TODO Auto-generated method stub
-
+		for (Vertice v : panel.getShape().getVertices()) {
+			if (axis == Axis.VERTICAL) {
+				v.setX(-v.getX());
+			} else {
+				v.setY(-v.getY());
+			}
+		}
+		DataHolder.getInstance().notifyVerticesChanged();
 	}
 
 }

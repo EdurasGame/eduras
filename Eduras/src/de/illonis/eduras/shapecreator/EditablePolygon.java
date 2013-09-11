@@ -14,7 +14,7 @@ import de.illonis.eduras.shapecreator.templates.TemplateNotFoundException;
  */
 public class EditablePolygon {
 
-	protected final ArrayList<Vertice> vertices;
+	private final ArrayList<Vertice> vertices;
 
 	protected EditablePolygon() {
 		vertices = new ArrayList<Vertice>();

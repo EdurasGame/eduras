@@ -53,6 +53,6 @@ public class ShapeFiler {
 	public static void saveShape(EditablePolygon shape, File outputFile)
 			throws IOException {
 
+		outputFile.createNewFile();
 	}
-
 }
