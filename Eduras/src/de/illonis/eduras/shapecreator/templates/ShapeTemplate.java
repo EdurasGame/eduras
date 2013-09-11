@@ -4,6 +4,12 @@ import java.util.LinkedList;
 
 import de.illonis.eduras.shapecreator.Vertice;
 
+/**
+ * A template for editable shapes.
+ * 
+ * @author illonis
+ * 
+ */
 public abstract class ShapeTemplate {
 	private final LinkedList<Vertice> vertices;
 
@@ -11,6 +17,9 @@ public abstract class ShapeTemplate {
 		vertices = new LinkedList<Vertice>();
 	}
 
+	/**
+	 * @return name of the template.
+	 */
 	public abstract String getName();
 
 	protected final void addVertice(Vertice v) {

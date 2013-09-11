@@ -21,6 +21,12 @@ import de.illonis.eduras.shapecreator.MenuTriggerer;
 import de.illonis.eduras.shapecreator.ShapeFiler;
 import de.illonis.eduras.shapecreator.templates.TemplateNotFoundException;
 
+/**
+ * Represents the top menu and handles direct actions on that.
+ * 
+ * @author illonis
+ * 
+ */
 public class MenuPanel extends JMenuBar implements ActionListener {
 
 	private static final long serialVersionUID = 1L;
@@ -35,6 +41,14 @@ public class MenuPanel extends JMenuBar implements ActionListener {
 			zoomFourItem, zoomFiveItem, zoomHalfItem, zoomCustomItem,
 			zoomIncreaseItem, zoomDecreaseItem;
 
+	/**
+	 * Creates a new menu panel.
+	 * 
+	 * @param triggerer
+	 *            the triggerer that handles menu actions.
+	 * @param frame
+	 *            the parent frame.
+	 */
 	public MenuPanel(MenuTriggerer triggerer, JFrame frame) {
 		super();
 		fileChooser = new JFileChooser();
@@ -138,7 +152,7 @@ public class MenuPanel extends JMenuBar implements ActionListener {
 				file = new File(file.getAbsolutePath() + "."
 						+ ShapeFiler.FILE_EXT);
 			if (file.exists())
-				triggerer.importShape(file);
+				triggerer.openShape(file);
 			else
 				JOptionPane.showMessageDialog(frame,
 						"File not found: " + file.getAbsolutePath());
@@ -160,7 +174,7 @@ public class MenuPanel extends JMenuBar implements ActionListener {
 				if (owResult == JOptionPane.NO_OPTION)
 					return;
 			}
-			triggerer.exportShape(file);
+			triggerer.saveShape(file);
 		}
 	}
 

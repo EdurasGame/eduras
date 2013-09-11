@@ -10,13 +10,20 @@ import javax.swing.ListCellRenderer;
 
 import de.illonis.eduras.shapecreator.templates.ShapeTemplate;
 
+/**
+ * Renders the contents of the template list.
+ * 
+ * @author illonis
+ * 
+ */
 public class TemplateListRenderer extends JPanel implements
 		ListCellRenderer<ShapeTemplate> {
 
+	private static final long serialVersionUID = 1L;
 	private final static Color SELECTED_BG = new Color(194, 198, 255);
 	private final JLabel label;
 
-	public TemplateListRenderer() {
+	TemplateListRenderer() {
 		setOpaque(true);
 		label = new JLabel();
 		add(label);

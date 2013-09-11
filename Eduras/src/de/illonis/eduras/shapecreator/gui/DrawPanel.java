@@ -16,7 +16,7 @@ import de.illonis.eduras.shapecreator.DataHolder;
 import de.illonis.eduras.shapecreator.Vertice;
 
 /**
- * A drawing panel where user creates polygon on.
+ * A drawing panel where user creates and edits polygon on.
  * 
  * @author illonis
  * 
@@ -31,6 +31,9 @@ public class DrawPanel extends JPanel {
 	private final DataHolder data;
 	private Vertice hoverVertice, selectedVertice;
 
+	/**
+	 * Creates an new drawpanel.
+	 */
 	public DrawPanel() {
 		this.data = DataHolder.getInstance();
 		setPreferredSize(DEFAULT_SIZE);
@@ -38,6 +41,11 @@ public class DrawPanel extends JPanel {
 		addComponentListener(new ResizeMonitor());
 	}
 
+	/**
+	 * Retrieves the coordinate system that is currently active on this panel.
+	 * 
+	 * @return the used coordinate system.
+	 */
 	public CoordinateSystem getCoordinateSystem() {
 		return coordinateSystem;
 	}
@@ -95,6 +103,9 @@ public class DrawPanel extends JPanel {
 		}
 	}
 
+	/**
+	 * Repositions the origin to the center of this panel.
+	 */
 	public void centerOrigin() {
 		int w = getWidth();
 		int h = getHeight();
@@ -108,23 +119,44 @@ public class DrawPanel extends JPanel {
 		}
 	}
 
+	/**
+	 * Triggers that user's mouse is over a vertice.
+	 * 
+	 * @param vert
+	 *            the hovered vertice.
+	 */
 	public void onVerticeHover(Vertice vert) {
 		setCursor(MOVE_CURSOR);
 		hoverVertice = vert;
 	}
 
+	/**
+	 * Triggers that user's mouse is not above any vertice.
+	 */
 	public void onVerticeLeft() {
 		setCursor(Cursor.getDefaultCursor());
 		hoverVertice = null;
 	}
 
+	/**
+	 * Marks given vertice as selected.
+	 * 
+	 * @param v
+	 *            the selected vertice.
+	 */
 	public void selectVertice(Vertice v) {
 		data.verticeSelectedOnGui(v);
 		onVerticeSelected(v);
 	}
 
-	public void onVerticeSelected(Vertice selectedVertice) {
-		this.selectedVertice = selectedVertice;
+	/**
+	 * Selects given vertice.
+	 * 
+	 * @param vertice
+	 *            the selected vertice.
+	 */
+	public void onVerticeSelected(Vertice vertice) {
+		this.selectedVertice = vertice;
 	}
 
 }

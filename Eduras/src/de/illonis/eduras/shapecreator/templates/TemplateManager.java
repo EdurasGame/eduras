@@ -5,10 +5,21 @@ import java.util.LinkedList;
 
 import de.illonis.eduras.shapecreator.Vertice;
 
+/**
+ * Manages existing templates.
+ * 
+ * @author illonis
+ * 
+ */
 public class TemplateManager {
 
 	private static TemplateManager instance;
 
+	/**
+	 * Returns the instance of {@link TemplateManager}.
+	 * 
+	 * @return instance.
+	 */
 	public static TemplateManager getInstance() {
 		if (instance == null)
 			instance = new TemplateManager();
@@ -32,10 +43,22 @@ public class TemplateManager {
 		templates.put(template.getName(), template);
 	}
 
+	/**
+	 * @return a list copy of all templates.
+	 */
 	public LinkedList<ShapeTemplate> getTemplates() {
 		return new LinkedList<ShapeTemplate>(templates.values());
 	}
 
+	/**
+	 * Retrieves vertices from a template.
+	 * 
+	 * @param templateName
+	 *            the name of the used template.
+	 * @return the vertices of the template.
+	 * @throws TemplateNotFoundException
+	 *             if template was not found.
+	 */
 	public LinkedList<Vertice> getVertsOfTemplate(String templateName)
 			throws TemplateNotFoundException {
 		ShapeTemplate t = templates.get(templateName);

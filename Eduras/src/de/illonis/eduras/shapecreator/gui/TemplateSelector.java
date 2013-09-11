@@ -16,25 +16,41 @@ import javax.swing.JPanel;
 import de.illonis.eduras.shapecreator.templates.ShapeTemplate;
 import de.illonis.eduras.shapecreator.templates.TemplateManager;
 
+/**
+ * Provides a list to select a template.
+ * 
+ * @author illonis
+ * 
+ */
 public class TemplateSelector extends JDialog implements ActionListener {
 
+	private static final long serialVersionUID = 1L;
 	private JButton okButton, abortButton;
 	private boolean answer = false;
 	private String selectedTemplate = "";
 	private JList<ShapeTemplate> templateList;
 	private DefaultListModel<ShapeTemplate> model;
 
-	public TemplateSelector(JFrame parent) {
+	TemplateSelector(JFrame parent) {
 		super(parent);
 		setTitle("Template list");
 		setModal(true);
 		buildGui();
 	}
 
+	/**
+	 * Returns whether the user selected a template or not.
+	 * 
+	 * @return <b>true</b> if the user selected a template and pressed "open",
+	 *         <b>false</b> otherwise.
+	 */
 	public boolean getAnswer() {
 		return answer;
 	}
 
+	/**
+	 * @return the name of the selected template.
+	 */
 	public String getSelectedTemplate() {
 		return selectedTemplate;
 	}
@@ -68,10 +84,13 @@ public class TemplateSelector extends JDialog implements ActionListener {
 		panel.add(infoLabel, BorderLayout.NORTH);
 		panel.add(templateList, BorderLayout.CENTER);
 		panel.add(buttonPanel, BorderLayout.SOUTH);
+		setSize(200, 300);
 	}
 
+	/**
+	 * Shows the template selection dialog.
+	 */
 	public void showFrame() {
-		setSize(200, 300);
 		setLocationRelativeTo(null);
 		templateList.removeSelectionInterval(0, model.size());
 		setVisible(true);

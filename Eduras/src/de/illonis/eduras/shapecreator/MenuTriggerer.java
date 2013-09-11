@@ -9,12 +9,18 @@ import javax.swing.JOptionPane;
 import de.illonis.eduras.shapecreator.ShapeCreator.FrameListener;
 import de.illonis.eduras.shapecreator.templates.TemplateNotFoundException;
 
+/**
+ * Triggers actions from menu clicks.
+ * 
+ * @author illonis
+ * 
+ */
 public class MenuTriggerer implements MenuActionReactor {
 
 	private final FrameListener frameListener;
 	private final PanelModifier panel;
 
-	public MenuTriggerer(FrameListener listener, PanelModifier panel) {
+	MenuTriggerer(FrameListener listener, PanelModifier panel) {
 		this.frameListener = listener;
 		this.panel = panel;
 	}
@@ -57,7 +63,7 @@ public class MenuTriggerer implements MenuActionReactor {
 	}
 
 	@Override
-	public void importShape(File f) {
+	public void openShape(File f) {
 		EditablePolygon polygon;
 		try {
 			polygon = ShapeFiler.loadShape(f.toURI().toURL());
@@ -80,7 +86,7 @@ public class MenuTriggerer implements MenuActionReactor {
 	}
 
 	@Override
-	public void exportShape(File f) {
+	public void saveShape(File f) {
 		try {
 			ShapeFiler.saveShape(panel.getShape(), f);
 		} catch (IOException e) {
@@ -92,8 +98,7 @@ public class MenuTriggerer implements MenuActionReactor {
 
 	@Override
 	public void rotateShape(float angle) {
-		// TODO Auto-generated method stub
-
+		// TODO implement
 	}
 
 	@Override

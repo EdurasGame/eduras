@@ -28,11 +28,18 @@ public class PanelInteractor extends MouseAdapter implements PanelModifier {
 	private InteractMode mode = InteractMode.DRAG_EDGE;
 	private InteractMode lastMode = InteractMode.NONE;
 
+	/**
+	 * Describes the mode that is used to interact with the panel.
+	 * 
+	 * @author illonis
+	 * 
+	 */
+	@SuppressWarnings("javadoc")
 	public enum InteractMode {
 		NONE, DRAG_EDGE, ZOOM, SCROLL, ADD_VERT, REM_VERT;
 	}
 
-	public PanelInteractor(DrawPanel panel) {
+	PanelInteractor(DrawPanel panel) {
 		this.panel = panel;
 		data = DataHolder.getInstance();
 	}

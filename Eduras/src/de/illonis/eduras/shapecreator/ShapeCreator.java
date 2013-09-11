@@ -16,7 +16,9 @@ import de.illonis.eduras.shapecreator.gui.VerticeListPanel;
 /**
  * A visual shape creator that allows easy creation and editing of shapes. It
  * provides a visual preview while creating a shape and displays warnings on
- * mistakes.
+ * mistakes.<br>
+ * Simple shapes can be quickly created using templates.<br>
+ * Shapes can be saved or loaded from shapefiles.
  * 
  * @author illonis
  * 
@@ -27,8 +29,7 @@ public class ShapeCreator {
 	private DrawPanel panel;
 	private Renderer renderer;
 
-	public ShapeCreator() {
-
+	private ShapeCreator() {
 		buildGui();
 	}
 
@@ -57,7 +58,7 @@ public class ShapeCreator {
 		frame.addWindowListener(frameListener);
 	}
 
-	public class FrameListener extends WindowAdapter {
+	class FrameListener extends WindowAdapter {
 
 		public void tryExit() {
 			int result = JOptionPane
@@ -86,9 +87,14 @@ public class ShapeCreator {
 		renderer.start();
 	}
 
+	/**
+	 * Starts the Eduras? shape creator.
+	 * 
+	 * @param args
+	 *            <i>unused</i>
+	 */
 	public static void main(String[] args) {
 		ShapeCreator creator = new ShapeCreator();
 		creator.showFrame();
 	}
-
 }

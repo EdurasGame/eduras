@@ -1,5 +1,11 @@
 package de.illonis.eduras.shapecreator.templates;
 
+/**
+ * A template for a circle.
+ * 
+ * @author illonis
+ * 
+ */
 public class CircleTemplate extends ShapeTemplate {
 
 	@Override
@@ -7,6 +13,9 @@ public class CircleTemplate extends ShapeTemplate {
 		return "Circle";
 	}
 
+	/**
+	 * Creates a new template scheme.
+	 */
 	public CircleTemplate() {
 		int max = 15;
 		int radius = 30;

@@ -38,7 +38,6 @@ public class ButtonColumn extends AbstractCellEditor implements
 	private static final long serialVersionUID = 1L;
 	private JTable table;
 	private Action action;
-	private int mnemonic;
 	private Border originalBorder;
 	private Border focusBorder;
 
@@ -94,22 +93,6 @@ public class ButtonColumn extends AbstractCellEditor implements
 	public void setFocusBorder(Border focusBorder) {
 		this.focusBorder = focusBorder;
 		editButton.setBorder(focusBorder);
-	}
-
-	public int getMnemonic() {
-		return mnemonic;
-	}
-
-	/**
-	 * The mnemonic to activate the button when the cell has focus
-	 * 
-	 * @param mnemonic
-	 *            the mnemonic
-	 */
-	public void setMnemonic(int mnemonic) {
-		this.mnemonic = mnemonic;
-		renderButton.setMnemonic(mnemonic);
-		editButton.setMnemonic(mnemonic);
 	}
 
 	@Override

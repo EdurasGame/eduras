@@ -11,21 +11,31 @@ import javax.swing.JToolBar;
 import javax.swing.SwingConstants;
 
 import de.illonis.eduras.images.ImageFiler;
-import de.illonis.eduras.shapecreator.DataHolder;
 import de.illonis.eduras.shapecreator.PanelInteractor;
 import de.illonis.eduras.shapecreator.PanelInteractor.InteractMode;
 
+/**
+ * A panel that allows user to select the current editing mode.
+ * 
+ * @author illonis
+ * 
+ */
 public class ToolPanel extends JPanel implements ActionListener {
 
-	private final DataHolder data;
+	private static final long serialVersionUID = 1L;
 	private final PanelInteractor interactor;
 	private JToolBar toolBar;
 	private JToggleButton modeButtonDrag, modeButtonAdd, modeButtonRemove;
 	private ButtonGroup bgroup;
 
+	/**
+	 * Creates a new toolpanel.
+	 * 
+	 * @param panelInteractor
+	 *            the interactor that is called to trigger mode changes.
+	 */
 	public ToolPanel(PanelInteractor panelInteractor) {
 		this.interactor = panelInteractor;
-		data = DataHolder.getInstance();
 		buildToolbar();
 	}
 

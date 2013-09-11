@@ -10,6 +10,14 @@ import de.illonis.eduras.math.Vector2D;
  */
 public class Vertice extends Vector2D {
 
+	/**
+	 * Creates a new vertice with initial coordinates.
+	 * 
+	 * @param x
+	 *            the x-coordinate.
+	 * @param y
+	 *            the y-coordinate.
+	 */
 	public Vertice(double x, double y) {
 		super(x, y);
 	}

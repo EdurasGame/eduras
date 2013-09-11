@@ -1,6 +1,5 @@
 package de.illonis.eduras.shapecreator.gui;
 
-import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,15 +11,20 @@ import de.illonis.eduras.images.ImageFiler;
 import de.illonis.eduras.shapecreator.DataHolder;
 import de.illonis.eduras.shapecreator.Vertice;
 
+/**
+ * Handles the table data.
+ * 
+ * @author illonis
+ * 
+ */
 public class RecordTableModel extends AbstractTableModel {
 
+	private static final long serialVersionUID = 1L;
 	private List<TableRecord> lstRecords;
-	private final static Color DEFAULT_BACKGROUND = Color.WHITE;
-	private final static Color SELECTED_BACKGROUND = Color.GRAY;
 	private final Icon upIcon, downIcon, deleteIcon;
 	private final JTable table;
 
-	public RecordTableModel(JTable table) {
+	RecordTableModel(JTable table) {
 		this.table = table;
 		lstRecords = new ArrayList<TableRecord>();
 		upIcon = ImageFiler.loadIcon("shapecreator/icons/button_up.png");
@@ -39,11 +43,23 @@ public class RecordTableModel extends AbstractTableModel {
 		super.fireTableDataChanged();
 	}
 
+	/**
+	 * Adds a table record to the table's data.
+	 * 
+	 * @param record
+	 *            the new record.
+	 */
 	public void add(TableRecord record) {
 		lstRecords.add(record);
 		fireTableRowsInserted(lstRecords.size() - 1, lstRecords.size() - 1);
 	}
 
+	/**
+	 * Removes a record from table data.
+	 * 
+	 * @param record
+	 *            the record to remove.
+	 */
 	public void remove(TableRecord record) {
 		if (lstRecords.contains(record)) {
 			int index = lstRecords.indexOf(record);
@@ -51,6 +67,14 @@ public class RecordTableModel extends AbstractTableModel {
 		}
 	}
 
+	/**
+	 * Exchanges two given rows.
+	 * 
+	 * @param first
+	 *            first row index.
+	 * @param second
+	 *            second row index.
+	 */
 	public void exchange(int first, int second) {
 		TableRecord firstRecord = lstRecords.get(first);
 		TableRecord secondRecord = lstRecords.get(second);
@@ -60,6 +84,12 @@ public class RecordTableModel extends AbstractTableModel {
 
 	}
 
+	/**
+	 * Removes given row.
+	 * 
+	 * @param index
+	 *            the index of the row that should be removed.
+	 */
 	public void remove(int index) {
 		lstRecords.remove(index);
 		fireTableRowsDeleted(index, index);
@@ -99,6 +129,13 @@ public class RecordTableModel extends AbstractTableModel {
 		return value;
 	}
 
+	/**
+	 * Retrieves a vertice by row index.
+	 * 
+	 * @param row
+	 *            the row index.
+	 * @return the vertice that is represented by given row.
+	 */
 	public Vertice getVertice(int row) {
 		return lstRecords.get(row).getVertice();
 	}
@@ -131,6 +168,12 @@ public class RecordTableModel extends AbstractTableModel {
 		}
 	}
 
+	/**
+	 * Mark the row that contains given vertice as selected.
+	 * 
+	 * @param selectedVertice
+	 *            the vertice of row that should selected.
+	 */
 	public void selectVertice(Vertice selectedVertice) {
 		for (int i = 0; i < lstRecords.size(); i++) {
 			TableRecord record = lstRecords.get(i);
