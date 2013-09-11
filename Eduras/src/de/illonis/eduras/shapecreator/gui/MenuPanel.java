@@ -32,6 +32,7 @@ public class MenuPanel extends JMenuBar implements ActionListener {
 	private static final long serialVersionUID = 1L;
 	private final MenuTriggerer triggerer;
 	private final TemplateSelector selector;
+	private final RotationSelector rotationSelector;
 	private final JFileChooser fileChooser;
 	private final JFrame frame;
 
@@ -61,6 +62,7 @@ public class MenuPanel extends JMenuBar implements ActionListener {
 		fileChooser.setAcceptAllFileFilterUsed(false);
 		this.triggerer = triggerer;
 		selector = new TemplateSelector(frame);
+		rotationSelector = new RotationSelector(frame);
 		this.frame = frame;
 		buildGui();
 	}
@@ -193,6 +195,15 @@ public class MenuPanel extends JMenuBar implements ActionListener {
 		selector.dispose();
 	}
 
+	private void rotateShape() {
+		rotationSelector.showFrame();
+		if (rotationSelector.isAccepted()) {
+			int value = rotationSelector.getValue();
+			triggerer.rotateShape(value);
+		}
+		rotationSelector.dispose();
+	}
+
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		JMenuItem source = (JMenuItem) e.getSource();
@@ -214,7 +225,7 @@ public class MenuPanel extends JMenuBar implements ActionListener {
 		else if (source == resetViewItem)
 			triggerer.resetPanel();
 		else if (source == rotateItem)
-			triggerer.rotateShape(90);
+			rotateShape();
 		else if (source == mirrorXItem)
 			triggerer.mirrorShape(Axis.HORIZONTAL);
 		else if (source == mirrorYItem)

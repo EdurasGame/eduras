@@ -98,7 +98,11 @@ public class MenuTriggerer implements MenuActionReactor {
 
 	@Override
 	public void rotateShape(float angle) {
-		// TODO implement
+		if (angle % 360 == 0) {
+			return;
+		}
+		System.out.println("rotating shape by " + angle + " degree.");
+		// TODO: implement
 	}
 
 	@Override

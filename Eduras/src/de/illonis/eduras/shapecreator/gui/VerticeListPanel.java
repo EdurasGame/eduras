@@ -99,20 +99,21 @@ public class VerticeListPanel extends ScrollablePanel implements
 		};
 
 		ButtonColumn buttonColumn = new ButtonColumn(verticeList, up, 2);
-		verticeList.getColumn(verticeList.getColumnName(2)).setCellRenderer(
-				buttonColumn);
-		verticeList.getColumn(verticeList.getColumnName(2)).setCellEditor(
-				buttonColumn);
+		verticeList.getColumnModel().getColumn(2).setCellRenderer(buttonColumn);
+		verticeList.getColumnModel().getColumn(2).setCellEditor(buttonColumn);
 		ButtonColumn buttonColumn2 = new ButtonColumn(verticeList, down, 3);
-		verticeList.getColumn(verticeList.getColumnName(3)).setCellRenderer(
-				buttonColumn2);
-		verticeList.getColumn(verticeList.getColumnName(3)).setCellEditor(
-				buttonColumn2);
+		verticeList.getColumnModel().getColumn(3)
+				.setCellRenderer(buttonColumn2);
+		verticeList.getColumnModel().getColumn(3).setCellEditor(buttonColumn2);
 		ButtonColumn buttonColumn3 = new ButtonColumn(verticeList, delete, 4);
-		verticeList.getColumn(verticeList.getColumnName(4)).setCellRenderer(
-				buttonColumn3);
-		verticeList.getColumn(verticeList.getColumnName(4)).setCellEditor(
-				buttonColumn3);
+		verticeList.getColumnModel().getColumn(4)
+				.setCellRenderer(buttonColumn3);
+		verticeList.getColumnModel().getColumn(4).setCellEditor(buttonColumn3);
+		verticeList.getColumnModel().getColumn(0).setHeaderValue("X");
+		verticeList.getColumnModel().getColumn(1).setHeaderValue("Y");
+		verticeList.getColumnModel().getColumn(2).setHeaderValue("up");
+		verticeList.getColumnModel().getColumn(3).setHeaderValue("down");
+		verticeList.getColumnModel().getColumn(4).setHeaderValue("del");
 
 		data.setVerticeTableModel(m);
 		verticeList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
