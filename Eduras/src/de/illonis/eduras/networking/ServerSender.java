@@ -212,7 +212,7 @@ public class ServerSender extends Thread {
 				EduLog.warning("Message empty!!");
 				return;
 			}
-			EduLog.infoL("[SERVER] Sent all messages.");
+			EduLog.infoL("Server.networking.sendall");
 			sendTCPMessage(message);
 		} catch (BufferIsEmptyException e) {
 			// do nothing if there is no message.

@@ -70,6 +70,7 @@ public class GameClient implements GuiClickReactor, NetworkEventReactor,
 	 * Creates a new client and initializes all necessary components.
 	 */
 	public GameClient() {
+		// new LoggerGui().setVisible(true);
 		clickListeners = new LinkedList<ClickableGuiElementInterface>();
 		triggerers = new LinkedList<TooltipTriggerer>();
 		currentClickState = ClickState.DEFAULT;
