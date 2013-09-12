@@ -6,7 +6,6 @@ import de.illonis.eduras.gameobjects.ArtificialIntelligence;
 import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.math.Vector2D;
 import de.illonis.eduras.shapes.Circle;
-import de.illonis.eduras.units.Unit;
 
 /**
  * A missile that explodes on collision and spawns several
@@ -36,10 +35,7 @@ public class SplashMissile extends Missile {
 
 	@Override
 	public void onCollision(GameObject collidingObject) {
-		if (collidingObject.isUnit()) {
-			((Unit) collidingObject).damagedBy(getDamage(), getOwner());
-		}
-		removeSelf();
+		super.onCollision(collidingObject);
 		Vector2D speed[] = { new Vector2D(1, 1), new Vector2D(-1, 1),
 				new Vector2D(-1, -1), new Vector2D(1, -1) };
 		for (int i = 0; i < speed.length; i++) {
@@ -49,11 +45,6 @@ public class SplashMissile extends Missile {
 			getGame().getEventTriggerer().createMissile(
 					ObjectType.MISSILE_SPLASHED, getOwner(), pos, speed[i]);
 		}
-	}
-
-	@Override
-	public void onMapBoundsReached() {
-		removeSelf();
 	}
 
 	@Override

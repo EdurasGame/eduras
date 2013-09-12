@@ -1,9 +1,11 @@
 package de.illonis.eduras.items.weapons;
 
 import de.illonis.eduras.GameInformation;
+import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.gameobjects.MoveableGameObject;
 import de.illonis.eduras.math.Vector2D;
 import de.illonis.eduras.shapes.Circle;
+import de.illonis.eduras.units.Unit;
 
 /**
  * A missile is shot by a weapon.
@@ -107,6 +109,22 @@ public abstract class Missile extends MoveableGameObject {
 			if (rangeMoved > maxRange)
 				removeSelf();
 		}
+	}
+
+	@Override
+	public void onCollision(GameObject collidingObject) {
+		Relation relation = getGame().getGameSettings().getGameMode()
+				.getRelation(this, collidingObject);
+
+		if (relation == Relation.HOSTILE && collidingObject.isUnit()) {
+			((Unit) collidingObject).damagedBy(getDamage(), getOwner());
+		}
+		removeSelf();
+	}
+
+	@Override
+	public void onMapBoundsReached() {
+		removeSelf();
 	}
 
 }

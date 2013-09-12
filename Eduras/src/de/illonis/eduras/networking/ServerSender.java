@@ -91,6 +91,9 @@ public class ServerSender extends Thread {
 			} catch (IOException e) {
 				EduLog.passException(e);
 			}
+
+			EduLog.infoLF("Server.networking.msgsend", message,
+					serverClient.getClientId());
 		}
 	}
 
@@ -209,7 +212,7 @@ public class ServerSender extends Thread {
 				EduLog.warning("Message empty!!");
 				return;
 			}
-			EduLog.info("[SERVER] Sent all messages.");
+			EduLog.infoL("[SERVER] Sent all messages.");
 			sendTCPMessage(message);
 		} catch (BufferIsEmptyException e) {
 			// do nothing if there is no message.
@@ -227,7 +230,7 @@ public class ServerSender extends Thread {
 				return;
 			}
 			sendUDPMessage(message);
-			EduLog.info("Server.networking.sendall");
+			EduLog.infoL("Server.networking.sendall");
 		} catch (BufferIsEmptyException e) {
 			// do nothing if there is no message.
 		}

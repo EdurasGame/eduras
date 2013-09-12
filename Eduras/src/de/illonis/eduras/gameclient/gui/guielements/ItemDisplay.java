@@ -44,6 +44,7 @@ public class ItemDisplay extends ClickableGuiElement implements
 	public final static int WIDTH = BLOCKSIZE * 3 + 4 * ITEM_GAP;
 
 	private GuiItem itemSlots[];
+	private BasicStroke rectStroke = new BasicStroke(3);
 
 	/**
 	 * Creates a new item toolbar.
@@ -62,6 +63,7 @@ public class ItemDisplay extends ClickableGuiElement implements
 
 	@Override
 	public void render(Graphics2D g2d) {
+		g2d.setFont(DEFAULT_FONT);
 		g2d.setColor(Color.GRAY);
 		g2d.fillRect(screenX, screenY, WIDTH, HEIGHT);
 		for (GuiItem item : itemSlots) {
@@ -70,7 +72,7 @@ public class ItemDisplay extends ClickableGuiElement implements
 				g2d.setColor(Color.RED);
 			} else
 				g2d.setColor(Color.BLACK);
-			g2d.setStroke(new BasicStroke(3));
+			g2d.setStroke(rectStroke);
 			Rectangle itemRect = new Rectangle(item.getX() + screenX,
 					item.getY() + screenY, BLOCKSIZE, BLOCKSIZE);
 			g2d.draw(itemRect);
@@ -109,17 +111,18 @@ public class ItemDisplay extends ClickableGuiElement implements
 	/**
 	 * Indicates that an item has been clicked.
 	 * 
-	 * @param i
+	 * @param itemSlot
 	 *            item clicked.
 	 */
-	private void itemClicked(int i) {
+	private void itemClicked(int itemSlot) {
 
 		try {
-			if (getInfo().getPlayer().getInventory().isItemInSlot(i)) {
-				getClickReactor().itemClicked(i);
-				currentItem = i;
-				System.out.println("current: " + currentItem);
-			}
+			getInfo().getPlayer().getInventory().getItemBySlot(itemSlot);
+			getClickReactor().itemClicked(itemSlot);
+			currentItem = itemSlot;
+
+		} catch (ItemSlotIsEmptyException e) {
+			EduLog.info("Player tried to use empty item slot " + itemSlot + ".");
 		} catch (ObjectNotFoundException e) {
 			EduLog.passException(e);
 		}

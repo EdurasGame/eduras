@@ -6,13 +6,13 @@
 		<title>Glossary</title>
 	</articleinfo>
 	<section>
-	    <title>(jme) What's this?</title>
+	    <title>What's this?</title>
 	    <para>
 	        In this document important terms and acronyms are declared and described.
     	</para>
     </section>
     <section>
-        <title>(jme) Glossary</title>
+        <title>Glossary</title>
 	    <table>
 	        <title>Important terms and acronyms</title>
 	        <tgroup cols="2">

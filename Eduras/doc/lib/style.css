@@ -1,4 +1,4 @@
-@CHARSET "ISO-8859-1";
+@CHARSET "UTF-8";
 
 body
 {
@@ -119,4 +119,45 @@ table th
 table tr:hover
 {
 	background:#F0F0F0;
+}
+
+div.warning, div.note, div.important, div.tip
+{
+	position:relative;
+	border:2px solid black;
+	border-radius:5px;
+	width:500px;
+	min-height:70px;
+	padding:5px;
+	padding-left:80px;
+	margin-bottom:15px;
+}
+
+div.warning
+{
+	background:#FFFF00 url('images/warning.png') top 5px left 5px no-repeat;
+	border:2px solid orange;
+}
+
+div.important
+{
+	background:#FFC900 url('images/important.png') top 5px left 5px no-repeat;
+	border:2px solid red;
+}
+
+div.note
+{
+	background:#FFFFFF url('images/note.png') top 5px left 5px no-repeat;
+	border:2px solid silver;
+}
+
+div.warning h3, div.important h3, div.note h3, div.tip h3
+{
+	display:none;
+}
+
+.section div.warning p, .section div.important p, .section div.note p, .section div.tip p
+{
+	padding-top:3px;
+	width:480px;
 }

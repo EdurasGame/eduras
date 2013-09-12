@@ -7,6 +7,7 @@ import de.illonis.eduras.gameclient.TooltipHandler;
 import de.illonis.eduras.gameclient.TooltipTriggererNotifier;
 import de.illonis.eduras.gameclient.gui.guielements.GameModeBar;
 import de.illonis.eduras.gameclient.gui.guielements.ItemDisplay;
+import de.illonis.eduras.gameclient.gui.guielements.NotificationPanel;
 import de.illonis.eduras.gameclient.gui.guielements.PlayerStatBar;
 import de.illonis.eduras.gameclient.gui.guielements.RenderedGuiObject;
 import de.illonis.eduras.gameclient.gui.guielements.StatisticsWindow;
@@ -30,6 +31,7 @@ public class UserInterface implements GuiResizeListener, UserInputListener {
 	private TooltipTriggererNotifier tooltipNotifier;
 	private StatisticsWindow statWindow;
 	private boolean spectator;
+	private NotificationPanel notificationPanel;
 
 	/**
 	 * Creates the user interface. The tooltip handler will be set manually
@@ -60,6 +62,7 @@ public class UserInterface implements GuiResizeListener, UserInputListener {
 		new GameModeBar(this);
 		new PlayerStatBar(this);
 		new TimeFrame(this);
+		notificationPanel = new NotificationPanel(this);
 		statWindow = new StatisticsWindow(this);
 	}
 

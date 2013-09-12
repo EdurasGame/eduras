@@ -37,7 +37,7 @@ public class Inventory {
 	 * 
 	 * @return current gold amount.
 	 */
-	public int getGold() {
+	public int getCurrentMoney() {
 		return gold;
 	}
 
@@ -49,7 +49,7 @@ public class Inventory {
 	 *            amount to spend.
 	 * @return true if money was spent, false otherwise.
 	 */
-	public boolean spendGold(int amount) {
+	private boolean spendGold(int amount) {
 		int newv = gold - amount;
 		if (newv < 0)
 			return false;
@@ -60,26 +60,31 @@ public class Inventory {
 	}
 
 	/**
-	 * Sets given itemslot's item to given item.
+	 * Sets given itemslot's item to given item. This should only be called if
+	 * server sends this event.
 	 * 
 	 * @param slot
 	 *            item slot.
 	 * @param item
 	 *            new item in slot.
 	 */
-	public void setItemAt(int slot, Item item) {
+	public synchronized void setItemAt(int slot, Item item) {
 		itemSlots[slot].putItem(item);
 	}
 
 	/**
-	 * Checks if given slot holds an item.
+	 * Adds given amount of income to the inventory's money.
 	 * 
-	 * @param slot
-	 *            slot number.
-	 * @return true if slot has an item.
+	 * @param amount
+	 *            income amount.
+	 * 
+	 * @author illonis
 	 */
-	public boolean isItemInSlot(int slot) {
-		return itemSlots[slot].hasItem();
+	public synchronized void income(int amount) {
+		if (amount <= 0)
+			throw new IllegalArgumentException(
+					"Amount must not be zero or negative (was " + amount + ").");
+		gold += amount;
 	}
 
 	/**
@@ -103,7 +108,7 @@ public class Inventory {
 	 * @param amount
 	 *            amount to add.
 	 */
-	public synchronized void addGold(int amount) {
+	private synchronized void addGold(int amount) {
 		gold += amount;
 	}
 
@@ -136,7 +141,7 @@ public class Inventory {
 	 * 
 	 * @param item
 	 *            item to loot.
-	 * @return slot where inventory is put into.
+	 * @return slot where inventory was put into.
 	 * @throws InventoryIsFullException
 	 *             when inventory is full.
 	 */
@@ -302,6 +307,25 @@ public class Inventory {
 		} else {
 			itemSlots[itemSlot].removeItem();
 		}
+	}
+
+	/**
+	 * Throws the item at given slot away.
+	 * 
+	 * @param itemSlot
+	 *            the item slot that's item should be trashed.
+	 * @throws ItemSlotIsEmptyException
+	 *             if that slot was empty
+	 * 
+	 * @return the item that was in that slot.
+	 * 
+	 * @author illonis
+	 */
+	public synchronized Item trash(int itemSlot)
+			throws ItemSlotIsEmptyException {
+		Item item = itemSlots[itemSlot].getItem();
+		itemSlots[itemSlot].removeItem();
+		return item;
 	}
 
 	/**

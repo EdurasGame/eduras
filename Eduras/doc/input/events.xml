@@ -4,10 +4,22 @@
 <article>
 	<articleinfo>
 		<title>Events</title>
+		<author>
+			<firstname>Florian</firstname>
+			<surname>Mai</surname>
+		</author>
+		<author>
+			<firstname>Jannis</firstname>
+			<surname>Mell</surname>
+		</author>
+		<author>
+			<firstname>Jan</firstname>
+			<surname>Reese</surname>
+		</author>
 	</articleinfo>
 
 	<section>
-		<title>What's this about.</title>
+		<title>What's this about?</title>
 
 		<para>
 			This document describes the eventing mechanism and lists the
@@ -67,7 +79,7 @@
 
 
 	<section>
-		<title>Events</title>
+		<title>Event list</title>
 
 		<table frame="all">
 			<title>Server-Events</title>
@@ -205,6 +217,21 @@
 						<entry>190</entry>
 						<entry>Tells that the match ended and that the winner has got the passed id.</entry>
 						<entry>winnerId</entry>
+					</row>
+					<row>
+					    <entry>SET_TEAMS</entry>
+					    <entry>191</entry>
+					    <entry>Tells client which teams are playing.</entry>
+					    <entry>name#1</entry>
+					    <entry>color#1</entry>
+					    <entry>name#1...</entry>
+					</row>
+					<row>
+					    <entry>ADD_PLAYER_TO_TEAM</entry>
+					    <entry>192</entry>
+					    <entry>Adds a player to a team.</entry>
+					    <entry>ownerId</entry>
+					    <entry>teamcolor</entry>
 					</row>
 				</tbody>
 			</tgroup>

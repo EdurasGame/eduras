@@ -4,16 +4,27 @@
 <article>
 	<articleinfo>
 		<title>Game launcher, menu and matchmaking</title>
+		<author>
+			<firstname>Jannis</firstname>
+			<surname>Mell</surname>
+		</author>
 	</articleinfo>
 	<section>
-	    <title>(jme) General structure</title>
+		<title>What's this?</title>
+		<para>
+			This document contains some ideas on how the game community can be hold together
+			and thus provide teaming-features and user interaction.
+		</para>
+	</section>
+	<section>
+	    <title>General structure</title>
 	    <para>
 	        Users play the game with a game client. When client starts, it checkes for updates and then prompts user for login.
 	        The User can use the client to configure their preferences and profile, start matches with friends and spectate or review other matches.  
 	    </para>
 	</section>
 	<section>
-	    <title>(jme) Authentication</title>
+	    <title>Authentication</title>
 	    <para>
 	        Players need to authenticate to play the game. To login they need a unique username (account name) and a password.
 	        An authentication can be successful only when game client version matches server version.
@@ -24,27 +35,27 @@
         </para>
     </section>
     <section>
-        <title>(jme) Profiles</title>
+        <title>Profiles</title>
         <para>
             Each user has a user profile where he can select a profile picture and a displayname for custom games (in tournaments your account name is used always).
             In your profile you can see your results of recent matches and replay most recent matches.
         </para>
     </section>
     <section>
-        <title>(jme) Chatting</title>
+        <title>Chatting</title>
         <para>
             Chatting between users is also available while not playing. In order to find partners and group up this is a very useful feature.
             Chat partners are addressed by their account name.
         </para>
     </section>
     <section>
-        <title>(jme) Friendlist</title>
+        <title>Friendlist</title>
         <para>
             The friendlist allows users to see if their friends are online. You can add or remove friends. Opponent must accept an friend invitation to be your friend.
         </para>
     </section>
     <section>
-        <title>(jme) Creating a game</title>
+        <title>Creating a game</title>
         <para>
             To create a game, the user can use a game creation screen. There he can invite other people and configure some game-specific settings.
         </para>
@@ -117,7 +128,7 @@
         </table>
     </section>
     <section>
-	    <title>(jme) Settings</title>
+	    <title>Settings</title>
 	    <table>
             <title>Profile settings</title>
             <tgroup cols="3">

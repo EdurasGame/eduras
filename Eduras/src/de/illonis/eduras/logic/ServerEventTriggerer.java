@@ -1,11 +1,9 @@
 package de.illonis.eduras.logic;
 
-import java.awt.Rectangle;
-import java.awt.geom.Rectangle2D;
-import java.util.Random;
-
 import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.ObjectFactory.ObjectType;
+import de.illonis.eduras.Team;
+import de.illonis.eduras.events.AddPlayerToTeamEvent;
 import de.illonis.eduras.events.ClientRenameEvent;
 import de.illonis.eduras.events.DeathEvent;
 import de.illonis.eduras.events.GameEvent;
@@ -20,6 +18,8 @@ import de.illonis.eduras.events.SetItemSlotEvent;
 import de.illonis.eduras.events.SetOwnerEvent;
 import de.illonis.eduras.events.SetPolygonDataEvent;
 import de.illonis.eduras.events.SetRemainingTimeEvent;
+import de.illonis.eduras.events.SetTeamsEvent;
+import de.illonis.eduras.exceptions.GameModeNotSupportedByMapException;
 import de.illonis.eduras.exceptions.InvalidNameException;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
 import de.illonis.eduras.gamemodes.GameMode;
@@ -31,6 +31,7 @@ import de.illonis.eduras.items.Item;
 import de.illonis.eduras.items.Lootable;
 import de.illonis.eduras.items.weapons.Missile;
 import de.illonis.eduras.logger.EduLog;
+import de.illonis.eduras.maps.InitialObjectData;
 import de.illonis.eduras.maps.Map;
 import de.illonis.eduras.math.Vector2D;
 import de.illonis.eduras.networking.ServerSender;
@@ -222,12 +223,7 @@ public class ServerEventTriggerer implements EventTriggerer {
 	@Override
 	public void init() {
 
-		Map map = logic.getGame().getMap();
-
-		for (GameObject singleObject : map.getInitialObjects()) {
-			this.createObjectAt(singleObject.getType(),
-					singleObject.getPositionVector(), singleObject.getOwner());
-		}
+		changeMap(logic.getGame().getMap());
 
 	}
 
@@ -266,16 +262,14 @@ public class ServerEventTriggerer implements EventTriggerer {
 		// TODO: Fire a respawn event to client.
 		remaxHealth(player);
 
-		Random r = new Random();
-		Rectangle m = gameInfo.getMap().getBounds();
-		Rectangle2D.Double newBounds = new Rectangle2D.Double(0, 0,
-				player.getBoundingBox().width, player.getBoundingBox().height);
-		do {
-			newBounds.x = r.nextInt(m.width);
-			newBounds.y = r.nextInt(m.height);
-		} while (gameInfo.isObjectWithin(newBounds));
-		setPositionOfObject(player.getId(), new Vector2D(newBounds.getX(),
-				newBounds.getY()));
+		Vector2D spawnPosition = null;
+		try {
+			spawnPosition = gameInfo.getSpawnPointFor(player);
+		} catch (GameModeNotSupportedByMapException e) {
+			e.printStackTrace();
+		}
+
+		setPositionOfObject(player.getId(), spawnPosition);
 	}
 
 	@Override
@@ -337,10 +331,12 @@ public class ServerEventTriggerer implements EventTriggerer {
 
 		removeAllNonPlayers();
 
-		for (GameObject initialObject : map.getInitialObjects()) {
+		for (InitialObjectData initialObject : map.getInitialObjects()) {
 			createObjectAt(initialObject.getType(),
-					initialObject.getPositionVector(), initialObject.getOwner());
+					initialObject.getPosition(), -1);
 		}
+
+		gameInfo.getGameSettings().getGameMode().onGameStart();
 
 		for (PlayerMainFigure player : gameInfo.getPlayers()) {
 			respawnPlayer(player);
@@ -406,6 +402,7 @@ public class ServerEventTriggerer implements EventTriggerer {
 		int playerId = player.getOwner();
 
 		gameInfo.getGameSettings().getStats().setDeaths(playerId, 0);
+		gameInfo.getGameSettings().getStats().setKills(playerId, 0);
 
 		SetIntegerGameObjectAttributeEvent setdeaths = new SetIntegerGameObjectAttributeEvent(
 				GameEventNumber.SET_DEATHS, playerId, 0);
@@ -456,6 +453,37 @@ public class ServerEventTriggerer implements EventTriggerer {
 					polygonVertices);
 			sendEvents(event);
 		}
+	}
+
+	@Override
+	public void setTeams(Team... teams) {
+		gameInfo.clearTeams();
+		SetTeamsEvent event = new SetTeamsEvent();
+		for (Team team : teams) {
+			gameInfo.addTeam(team);
+			event.addTeam(team.getColor(), team.getName());
+		}
+		sendEvents(event);
+	}
+
+	@Override
+	public void addPlayerToTeam(int ownerId, Team team) {
+
+		PlayerMainFigure newPlayer;
+		try {
+			newPlayer = gameInfo.getPlayerByOwnerId(ownerId);
+		} catch (ObjectNotFoundException e) {
+			EduLog.passException(e);
+			return;
+		}
+
+		if (newPlayer.getTeam() != null)
+			newPlayer.getTeam().removePlayer(newPlayer);
+		team.addPlayer(newPlayer);
+
+		AddPlayerToTeamEvent event = new AddPlayerToTeamEvent(ownerId,
+				team.getColor());
+		sendEvents(event);
 	}
 
 }

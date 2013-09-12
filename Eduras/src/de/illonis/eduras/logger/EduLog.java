@@ -8,6 +8,8 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.logging.Level;
 
+import de.illonis.eduras.locale.Localization;
+
 /**
  * Provides logging features for Eduras?. Logging results are available via
  * different access methods. For available logging outputs, see {@link LogMode}.<br>
@@ -285,6 +287,44 @@ public final class EduLog {
 	}
 
 	/**
+	 * Adds given localized error message to log. A stacktrace is added to
+	 * message automatically.
+	 * 
+	 * @param localeKey
+	 *            the locale key. This method automatically uses this key to
+	 *            obtain the localized message.
+	 * @see #error(String)
+	 * @see #errorLF(String, Object...)
+	 * @see Localization#getString(String)
+	 * 
+	 * @author illonis
+	 */
+	public static void errorL(String localeKey) {
+		error(Localization.getString(localeKey));
+	}
+
+	/**
+	 * Adds given localized and parameterized error message to log. A stacktrace
+	 * is added to message automatically.
+	 * 
+	 * @param localeKey
+	 *            the locale key. This method automatically uses this key to
+	 *            obtain the localized message.
+	 * @param args
+	 *            formatting arguments (see
+	 *            {@link Localization#getStringF(String, Object...)}
+	 * 
+	 * @see #error(String)
+	 * @see #errorL(String)
+	 * @see Localization#getStringF(String, Object...)
+	 * 
+	 * @author illonis
+	 */
+	public static void errorLF(String localeKey, Object... args) {
+		error(Localization.getStringF(localeKey, args));
+	}
+
+	/**
 	 * Adds given warning message to log. A stacktrace is added to message
 	 * automatically.
 	 * 
@@ -295,7 +335,45 @@ public final class EduLog {
 	 *            message.
 	 */
 	public static void warning(String s) {
-		log(Level.SEVERE, s);
+		log(Level.WARNING, s);
+	}
+
+	/**
+	 * Adds given localized warning message to log. A stacktrace is added to
+	 * message automatically.
+	 * 
+	 * @param localeKey
+	 *            the locale key. This method automatically uses this key to
+	 *            obtain the localized message.
+	 * @see #warning(String)
+	 * @see #warningLF(String, Object...)
+	 * @see Localization#getString(String)
+	 * 
+	 * @author illonis
+	 */
+	public static void warningL(String localeKey) {
+		warning(Localization.getString(localeKey));
+	}
+
+	/**
+	 * Adds given localized and parameterized warning message to log. A
+	 * stacktrace is added to message automatically.
+	 * 
+	 * @param localeKey
+	 *            the locale key. This method automatically uses this key to
+	 *            obtain the localized message.
+	 * @param args
+	 *            formatting arguments (see
+	 *            {@link Localization#getStringF(String, Object...)}
+	 * 
+	 * @see #warning(String)
+	 * @see #warningL(String)
+	 * @see Localization#getStringF(String, Object...)
+	 * 
+	 * @author illonis
+	 */
+	public static void warningLF(String localeKey, Object... args) {
+		warning(Localization.getStringF(localeKey, args));
 	}
 
 	/**
@@ -310,6 +388,44 @@ public final class EduLog {
 	 */
 	public static void info(String s) {
 		log(Level.INFO, s);
+	}
+
+	/**
+	 * Adds given localized info message to log. A stacktrace is added to
+	 * message automatically.
+	 * 
+	 * @param localeKey
+	 *            the locale key. This method automatically uses this key to
+	 *            obtain the localized message.
+	 * @see #info(String)
+	 * @see #infoLF(String, Object...)
+	 * @see Localization#getString(String)
+	 * 
+	 * @author illonis
+	 */
+	public static void infoL(String localeKey) {
+		info(Localization.getString(localeKey));
+	}
+
+	/**
+	 * Adds given localized and parameterized info message to log. A stacktrace
+	 * is added to message automatically.
+	 * 
+	 * @param localeKey
+	 *            the locale key. This method automatically uses this key to
+	 *            obtain the localized message.
+	 * @param args
+	 *            formatting arguments (see
+	 *            {@link Localization#getStringF(String, Object...)}
+	 * 
+	 * @see #info(String)
+	 * @see #infoL(String)
+	 * @see Localization#getStringF(String, Object...)
+	 * 
+	 * @author illonis
+	 */
+	public static void infoLF(String localeKey, Object... args) {
+		info(Localization.getStringF(localeKey, args));
 	}
 
 	/**

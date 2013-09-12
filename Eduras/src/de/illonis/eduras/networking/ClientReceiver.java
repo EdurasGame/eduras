@@ -69,12 +69,13 @@ public class ClientReceiver extends Thread {
 			try {
 				String messages = messageReader.readLine();
 				if (messages != null) {
-					EduLog.info("Client.networking.msgreceive");
+					EduLog.infoLF("Client.networking.msgreceive", messages);
 					processMessages(messages);
 				}
 			} catch (IOException e) {
 				connectionAvailable = false;
 				EduLog.error("Client.networking.tcpclose");
+				EduLog.errorL("Client.networking.tcpclose");
 				EduLog.passException(e);
 				interrupt();
 				return;
@@ -106,7 +107,8 @@ public class ClientReceiver extends Thread {
 				udpSocket = new DatagramSocket(client.getPortNumber());
 			} catch (SocketException e) {
 				connectionAvailable = false;
-				EduLog.error("Client.networking.udpopenerror");
+				EduLog.errorLF("Client.networking.udpopenerror",
+						client.getPortNumber());
 				EduLog.passException(e);
 				interrupt();
 				return;
@@ -122,7 +124,7 @@ public class ClientReceiver extends Thread {
 					processMessages(messages);
 				} catch (IOException e) {
 					connectionAvailable = false;
-					EduLog.error("Client.networking.udpclose");
+					EduLog.errorL("Client.networking.udpclose");
 					EduLog.passException(e);
 					interrupt();
 				}

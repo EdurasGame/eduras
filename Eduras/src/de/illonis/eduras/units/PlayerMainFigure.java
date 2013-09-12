@@ -2,6 +2,7 @@ package de.illonis.eduras.units;
 
 import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.ObjectFactory.ObjectType;
+import de.illonis.eduras.Team;
 import de.illonis.eduras.exceptions.ShapeVerticesNotApplicableException;
 import de.illonis.eduras.gameobjects.ArtificialIntelligence;
 import de.illonis.eduras.gameobjects.GameObject;
@@ -19,6 +20,7 @@ import de.illonis.eduras.shapes.Triangle;
  */
 public class PlayerMainFigure extends Unit implements MovementControlable {
 	private String name;
+	private Team team;
 	private final Inventory inventory = new Inventory();
 
 	/**
@@ -106,6 +108,27 @@ public class PlayerMainFigure extends Unit implements MovementControlable {
 	}
 
 	/**
+	 * @return player's team.
+	 * 
+	 * @author illonis
+	 */
+	public Team getTeam() {
+		return team;
+	}
+
+	/**
+	 * Assigns player to given team.
+	 * 
+	 * @param team
+	 *            new team.
+	 * 
+	 * @author illonis
+	 */
+	public void setTeam(Team team) {
+		this.team = team;
+	}
+
+	/**
 	 * Returns name of player.
 	 * 
 	 * @return player's name.
@@ -124,12 +147,6 @@ public class PlayerMainFigure extends Unit implements MovementControlable {
 		this.name = name;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * de.illonis.eduras.GameObject#onCollision(de.illonis.eduras.GameObject)
-	 */
 	@Override
 	public void onCollision(GameObject collidingObject) {
 		// do nothing

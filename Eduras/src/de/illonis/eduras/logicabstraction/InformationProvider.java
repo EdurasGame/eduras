@@ -8,6 +8,7 @@ import java.util.Collection;
 import java.util.concurrent.ConcurrentHashMap;
 
 import de.illonis.eduras.Statistic;
+import de.illonis.eduras.Team;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
 import de.illonis.eduras.gamemodes.GameMode;
 import de.illonis.eduras.gameobjects.GameObject;
@@ -41,14 +42,9 @@ public class InformationProvider implements InfoInterface {
 		this.networkManager = networkManager;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see de.illonis.eduras.interfaces.InfoInterface#getMapBounds()
-	 */
 	@Override
 	public Rectangle getMapBounds() {
-		return logic.getGame().getMap().getBounds();
+		return new Rectangle(logic.getGame().getMap().getBounds());
 	}
 
 	/**
@@ -58,6 +54,17 @@ public class InformationProvider implements InfoInterface {
 	 */
 	public int getOwnerID() {
 		return networkManager.getClient().getOwnerId();
+	}
+
+	/**
+	 * Returns the name of the current map.
+	 * 
+	 * @return current's map name.
+	 * 
+	 * @author illonis
+	 */
+	public String getMapName() {
+		return logic.getGame().getMap().getName();
 	}
 
 	@Override
@@ -109,6 +116,11 @@ public class InformationProvider implements InfoInterface {
 	@Override
 	public long getRemainingTime() {
 		return logic.getGame().getGameSettings().getRemainingTime();
+	}
+
+	@Override
+	public Collection<Team> getTeams() {
+		return logic.getGame().getTeams();
 	}
 
 }

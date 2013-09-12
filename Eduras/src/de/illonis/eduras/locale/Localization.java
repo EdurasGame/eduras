@@ -19,7 +19,7 @@ import de.illonis.eduras.logger.EduLog;
  * 
  */
 public final class Localization {
-	private static final String BUNDLE_NAME = "de.illonis.eduras.locale.lang"; //$NON-NLS-1$
+	private static final String BUNDLE_NAME = "de.illonis.eduras.locale.lang";
 
 	/**
 	 * Contains all supported languages. First language is default language.
@@ -150,7 +150,11 @@ public final class Localization {
 		try {
 			return RESOURCES[currentLocaleNumber].getString(key);
 		} catch (MissingResourceException e) {
-			return '!' + key + '!';
+			try {
+				return RESOURCES[0].getString(key);
+			} catch (MissingResourceException ex) {
+				return '!' + key + '!';
+			}
 		}
 	}
 
@@ -175,10 +179,26 @@ public final class Localization {
 	 * @return localized and formatted string.
 	 */
 	public static final String getStringF(String key, Object... args) {
-		try {
+		if (RESOURCES[currentLocaleNumber].containsKey(key)) {
 			String s = RESOURCES[currentLocaleNumber].getString(key);
 			return String.format(s, args);
-		} catch (MissingResourceException e) {
+		} else if (RESOURCES[0].containsKey(key)) {
+			String s = RESOURCES[0].getString(key);
+
+			// NOTE: need to hardcode this string to prevent recursive errors
+			// when this is not translated, too!
+			String warning = "No translation to %s found for %s!";
+			EduLog.warning(String.format(warning,
+					RESOURCES[currentLocaleNumber].getLocale().toString(), key));
+
+			return String.format(s, args);
+		} else {
+
+			// NOTE: need to hardcode this string to prevent recursive errors
+			// when this is not translated, too!
+			String error = "No translation to default language found for %s!";
+			EduLog.error(String.format(error, RESOURCES[currentLocaleNumber]
+					.getLocale().toString(), key));
 			return '!' + key + '!';
 		}
 	}

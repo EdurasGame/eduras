@@ -19,6 +19,17 @@ import de.illonis.eduras.units.Unit;
  */
 public abstract class GameObject implements Comparable<GameObject> {
 
+	/**
+	 * Defines the kind of relation between two units.
+	 * 
+	 * @author illonis
+	 * 
+	 */
+	@SuppressWarnings("javadoc")
+	public enum Relation {
+		HOSTILE, ALLIED, NEUTRAL, IGNORE, ENVIRONMENT, UNKNOWN
+	}
+
 	private final GameInformation game;
 	private ObjectType type;
 

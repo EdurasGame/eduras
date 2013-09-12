@@ -1,6 +1,7 @@
 package de.illonis.eduras.logic;
 
 import de.illonis.eduras.ObjectFactory.ObjectType;
+import de.illonis.eduras.Team;
 import de.illonis.eduras.gamemodes.GameMode;
 import de.illonis.eduras.items.Item;
 import de.illonis.eduras.maps.Map;
@@ -204,6 +205,7 @@ public interface EventTriggerer {
 	 * Changes the gamemode to newMode.
 	 * 
 	 * @param newMode
+	 *            the new gamemode.
 	 */
 	void changeGameMode(GameMode newMode);
 
@@ -211,6 +213,29 @@ public interface EventTriggerer {
 	 * Remaxes the health of the unit.
 	 * 
 	 * @param unit
+	 *            the unit.
 	 */
 	void remaxHealth(Unit unit);
+
+	/**
+	 * Sets teams to given teams.
+	 * 
+	 * @param teams
+	 *            the new teams.
+	 * 
+	 * @author illonis
+	 */
+	void setTeams(Team... teams);
+
+	/**
+	 * Adds a player to given team.
+	 * 
+	 * @param ownerId
+	 *            owner id of player.
+	 * @param team
+	 *            team.
+	 * 
+	 * @author illonis
+	 */
+	void addPlayerToTeam(int ownerId, Team team);
 }

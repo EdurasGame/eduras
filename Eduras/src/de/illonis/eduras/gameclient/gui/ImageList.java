@@ -7,6 +7,7 @@ import java.util.HashMap;
 import de.illonis.eduras.ObjectFactory.ObjectType;
 import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.images.ImageFiler;
+import de.illonis.eduras.locale.Localization;
 import de.illonis.eduras.logger.EduLog;
 
 /**
@@ -25,8 +26,8 @@ public class ImageList {
 		try {
 			defaultImage = ImageFiler.load(DEF_IMAGE_FILE);
 		} catch (IllegalArgumentException | IOException e) {
-			EduLog.error("Default image for iconimages not found: "
-					+ DEF_IMAGE_FILE);
+			EduLog.error(Localization.getStringF(
+					"Client.errors.io.defaulticonimage", DEF_IMAGE_FILE));
 			defaultImage = new BufferedImage(30, 30, BufferedImage.TYPE_INT_RGB);
 		}
 	}
@@ -62,13 +63,15 @@ public class ImageList {
 	static void load() {
 		try {
 			BufferedImage i = ImageFiler.load("gui/icons/icon-weapon1.png");
-			images.put(ObjectType.ITEM_WEAPON_1, i);
+			images.put(ObjectType.ITEM_WEAPON_SIMPLE, i);
 			BufferedImage is = ImageFiler
 					.load("gui/icons/icon-weapon-sniper.png");
 			images.put(ObjectType.ITEM_WEAPON_SNIPER, is);
 			BufferedImage spl = ImageFiler
 					.load("gui/icons/icon-weapon-splash.png");
 			images.put(ObjectType.ITEM_WEAPON_SPLASH, spl);
+			BufferedImage sw = ImageFiler.load("gui/icons/icon-sword.png");
+			images.put(ObjectType.ITEM_WEAPON_SWORD, sw);
 			// TODO: load all :)
 		} catch (IOException e) {
 			e.printStackTrace();

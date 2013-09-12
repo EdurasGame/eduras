@@ -2,9 +2,14 @@ package de.illonis.eduras.gamemodes;
 
 import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.ObjectFactory.ObjectType;
+import de.illonis.eduras.Team;
+import de.illonis.eduras.Team.TeamColor;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
+import de.illonis.eduras.gameobjects.GameObject;
+import de.illonis.eduras.gameobjects.GameObject.Relation;
 import de.illonis.eduras.logger.EduLog;
 import de.illonis.eduras.logic.EventTriggerer;
+import de.illonis.eduras.maps.SpawnPosition.SpawnType;
 import de.illonis.eduras.units.PlayerMainFigure;
 import de.illonis.eduras.units.Unit;
 
@@ -16,7 +21,7 @@ import de.illonis.eduras.units.Unit;
  */
 public class Deathmatch implements GameMode {
 
-	private GameInformation gameInfo;
+	protected GameInformation gameInfo;
 
 	/**
 	 * Creates a new instance of deathmatch.
@@ -46,6 +51,7 @@ public class Deathmatch implements GameMode {
 				if (et != null)
 					gameInfo.getEventTriggerer().respawnPlayer(
 							(PlayerMainFigure) killedUnit);
+				// TODO: give player items here if game mode should do.
 				gameInfo.getGameSettings().getStats()
 						.addDeathForPlayer((PlayerMainFigure) killedUnit);
 			}
@@ -60,9 +66,11 @@ public class Deathmatch implements GameMode {
 
 	@Override
 	public void onTimeUp() {
-
-		gameInfo.getEventTriggerer().onMatchEnd();
-
+		try {
+			gameInfo.getEventTriggerer().onMatchEnd();
+		} catch (NullPointerException e) {
+			// FIXME: Client should never trigger this.
+		}
 	}
 
 	@Override
@@ -71,16 +79,45 @@ public class Deathmatch implements GameMode {
 		// simply create the player and respawn it somewhere
 		gameInfo.getEventTriggerer().createObject(ObjectType.PLAYER, ownerId);
 
+		PlayerMainFigure newPlayer;
 		try {
-			gameInfo.getEventTriggerer().respawnPlayer(
-					gameInfo.getPlayerByOwnerId(ownerId));
+			newPlayer = gameInfo.getPlayerByOwnerId(ownerId);
 		} catch (ObjectNotFoundException e) {
 			EduLog.passException(e);
+			return;
 		}
+
+		gameInfo.getEventTriggerer().addPlayerToTeam(ownerId,
+				gameInfo.getTeams().getFirst());
+		gameInfo.getEventTriggerer().respawnPlayer(newPlayer);
 
 		// and add it to the statistic
 		gameInfo.getGameSettings().getStats().addPlayerToStats(ownerId);
+	}
+
+	@Override
+	public void onGameStart() {
+		Team team = new Team("All Players", TeamColor.NEUTRAL);
+		gameInfo.getEventTriggerer().setTeams(team);
+		for (PlayerMainFigure player : gameInfo.getPlayers()) {
+			gameInfo.getEventTriggerer().addPlayerToTeam(player.getOwner(),
+					team);
+		}
 
 	}
 
+	@Override
+	public SpawnType getSpawnTypeForTeam(Team team) {
+		return SpawnType.ANY;
+	}
+
+	@Override
+	public GameModeNumber getNumber() {
+		return GameModeNumber.DEATHMATCH;
+	}
+
+	@Override
+	public Relation getRelation(GameObject a, GameObject b) {
+		return Relation.HOSTILE;
+	}
 }

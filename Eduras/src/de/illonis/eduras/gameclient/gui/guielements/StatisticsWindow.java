@@ -4,8 +4,8 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.util.Collection;
 
+import de.illonis.eduras.Team;
 import de.illonis.eduras.events.MatchEndEvent;
 import de.illonis.eduras.gameclient.gui.UserInterface;
 import de.illonis.eduras.images.ImageFiler;
@@ -29,7 +29,6 @@ public class StatisticsWindow extends RenderedGuiObject {
 	private final static long DISPLAY_TIME = 3000;
 
 	private BufferedImage artwork;
-	private Collection<PlayerMainFigure> players;
 	private int width, height;
 	private boolean visible;
 
@@ -76,6 +75,7 @@ public class StatisticsWindow extends RenderedGuiObject {
 		else
 			g2d.fillRect(screenX, screenY, width, height);
 
+		g2d.setFont(DEFAULT_FONT);
 		// header
 		g2d.setColor(COLOR_HEADER);
 		g2d.drawString("Player", screenX + COLUMN_X[0], screenY + PADDING_Y);
@@ -84,14 +84,24 @@ public class StatisticsWindow extends RenderedGuiObject {
 		// players
 		g2d.setColor(COLOR_TEXT);
 		int i = 1;
-		for (PlayerMainFigure p : players) {
-			drawPlayerRow(g2d, p, i);
-			i++;
+		for (Team team : getInfo().getTeams()) {
+			drawTeamRow(g2d, team, i++);
+			for (PlayerMainFigure p : team.getPlayers()) {
+				drawPlayerRow(g2d, p, i++);
+			}
 		}
+	}
+
+	private void drawTeamRow(Graphics2D g2d, Team team, int i) {
+		g2d.setColor(Color.WHITE);
+		g2d.drawString(team.getName(), screenX + COLUMN_X[0] - 50, screenY
+				+ PADDING_Y + i * LINEHEIGHT);
+
 	}
 
 	private void drawPlayerRow(Graphics2D g2d, PlayerMainFigure p, int i) {
 		// name
+		g2d.setColor(Color.YELLOW);
 		g2d.drawString(p.getName(), screenX + COLUMN_X[0], screenY + PADDING_Y
 				+ i * LINEHEIGHT);
 
@@ -109,11 +119,6 @@ public class StatisticsWindow extends RenderedGuiObject {
 		// change position so window is centered again
 		screenX = (newWidth - width) / 2;
 		screenY = (newHeight - height) / 2;
-	}
-
-	@Override
-	public void onPlayerInformationReceived() {
-		players = getInfo().getPlayers();
 	}
 
 	@Override
@@ -136,4 +141,8 @@ public class StatisticsWindow extends RenderedGuiObject {
 			setVisible(false);
 		}
 	};
+
+	@Override
+	public void onPlayerInformationReceived() {
+	}
 }

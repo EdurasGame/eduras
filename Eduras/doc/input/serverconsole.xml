@@ -4,9 +4,13 @@
 <article>
 	<articleinfo>
 		<title>Server console</title>
+		<author>
+			<firstname>Jannis</firstname>
+			<surname>Mell</surname>
+		</author>
 	</articleinfo>
 	<section>
-		<title>(jme) What is this?</title>
+		<title>What is this?</title>
 		<para>
 			The server console is a simple tool that lets hosts modify
 			server and game
@@ -21,7 +25,7 @@
 		</para>
 	</section>
 	<section>
-		<title>(jme) Available commands</title>
+		<title>Available commands</title>
 		<table frame="all">
 			<title>Server console commands</title>
 			<tgroup cols="5">
@@ -89,7 +93,7 @@
 		</table>
 	</section>
 	<section>
-		<title>(jme) Architecture</title>
+		<title>Architecture</title>
 		<para>
 		    The server console is a singleton that holds a list of commands
 		    and has access to a ConsoleEventTriggerer.
@@ -98,7 +102,7 @@
 
 	</section>
 	<section>
-		<title>(jme) How to implement new commands</title>
+		<title>How to implement new commands</title>
 		<para>
 		    Implemenenting a new console command is one of the easiest things you can do.
 		    Just follow these steps to complete the creation of a new command.

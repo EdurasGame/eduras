@@ -8,9 +8,21 @@
 	</description>
 
 	<property name="src" value="../src" />
+	<property name="libs" value="../lib" />
+	<property name="maps" value="../src/de/illonis/eduras/maps/data" />
 	<property name="build" value="../bin" />
 	<property name="jars" value="../output/jars" />
 	<property name="exclude" value="**/unittests/*" />
+
+	<path id="classpath">
+		<fileset dir="${libs}">
+			<include name="timingframework*.jar" />
+		</fileset>
+		<pathelement path="${build}" />
+	</path>
+
+	<!-- <manifestclasspath property="mf.classpath" jarfile="${destination}/@{name}.jar"> 
+		<classpath> <fileset dir="lib" includes="*.jar" /> </classpath> </manifestclasspath> -->
 
 	<target name="clean" description="Cleans output folders for class and jar files.">
 		<delete dir="${build}" />
@@ -20,14 +32,23 @@
 	<target name="compile" description="Compiles java classes.">
 		<mkdir dir="${build}" />
 		<javac srcdir="${src}" destdir="${build}" includeAntRuntime="false">
+			<classpath refid="classpath" />
 			<include name="**/*.java" />
 			<exclude name="${exclude}" />
 		</javac>
 	</target>
 
 	<target name="jar-client" depends="compile" description="Creates client-executable.">
-		<jar destfile="${jars}/EdurasClient.jar" basedir="${build}"
-			excludes="**/*.svg, **/unittests/**">
+
+		<jar destfile="${jars}/EdurasClient.jar" excludes="**/*.svg, **/unittests/**"
+			basedir="${build}">
+			<fileset dir="${src}">
+				<include name="**/*.png"></include>
+				<include name="**/*.gif"></include>
+				<include name="**/*.erm"></include>
+				<include name="**/*.properties"></include>
+			</fileset>
+			<zipgroupfileset dir="${libs}" includes="**/*.jar" />
 			<manifest>
 				<attribute name="Main-Class"
 					value="de.illonis.eduras.gameclient.EdurasClient" />
@@ -38,6 +59,10 @@
 	<target name="jar-server" depends="compile" description="Creates server-executable.">
 		<jar destfile="${jars}/EdurasServer.jar" basedir="${build}"
 			excludes="**/images/**, **/unittests/**">
+			<fileset dir="${src}">
+				<include name="**/*.erm"></include>
+				<include name="**/*.properties"></include>
+			</fileset>
 			<manifest>
 				<attribute name="Main-Class" value="de.illonis.eduras.Eduras" />
 			</manifest>

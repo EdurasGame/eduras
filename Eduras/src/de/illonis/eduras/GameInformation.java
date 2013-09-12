@@ -3,8 +3,12 @@ package de.illonis.eduras;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.Random;
 import java.util.concurrent.ConcurrentHashMap;
 
+import de.illonis.eduras.events.AddPlayerToTeamEvent;
 import de.illonis.eduras.events.ClientRenameEvent;
 import de.illonis.eduras.events.GameEvent;
 import de.illonis.eduras.events.GameEvent.GameEventNumber;
@@ -14,6 +18,8 @@ import de.illonis.eduras.events.SetBooleanGameObjectAttributeEvent;
 import de.illonis.eduras.events.SetGameModeEvent;
 import de.illonis.eduras.events.SetIntegerGameObjectAttributeEvent;
 import de.illonis.eduras.events.SetRemainingTimeEvent;
+import de.illonis.eduras.events.SetTeamsEvent;
+import de.illonis.eduras.exceptions.GameModeNotSupportedByMapException;
 import de.illonis.eduras.exceptions.InvalidNameException;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
 import de.illonis.eduras.gameobjects.GameObject;
@@ -21,6 +27,8 @@ import de.illonis.eduras.logger.EduLog;
 import de.illonis.eduras.logic.EventTriggerer;
 import de.illonis.eduras.maps.FunMap;
 import de.illonis.eduras.maps.Map;
+import de.illonis.eduras.maps.SpawnPosition;
+import de.illonis.eduras.maps.SpawnPosition.SpawnType;
 import de.illonis.eduras.math.Vector2D;
 import de.illonis.eduras.shapes.ObjectShape;
 import de.illonis.eduras.units.PlayerMainFigure;
@@ -32,11 +40,15 @@ import de.illonis.eduras.units.PlayerMainFigure;
  * 
  */
 public class GameInformation {
+	private static final Random RANDOM = new Random();
+
 	private final ConcurrentHashMap<Integer, GameObject> objects;
 	private final ConcurrentHashMap<Integer, PlayerMainFigure> players;
 	private Map map;
 	private EventTriggerer eventTriggerer;
 	private GameSettings gameSettings;
+	private final LinkedList<Team> teams;
+	private final HashMap<Team, SpawnType> spawnGroups;
 
 	/**
 	 * Creates a new game information object with emtpy object lists.
@@ -46,7 +58,8 @@ public class GameInformation {
 		players = new ConcurrentHashMap<Integer, PlayerMainFigure>();
 		map = new FunMap();
 		gameSettings = new GameSettings(this);
-
+		teams = new LinkedList<Team>();
+		spawnGroups = new HashMap<Team, SpawnType>();
 	}
 
 	/**
@@ -67,6 +80,37 @@ public class GameInformation {
 	 */
 	public Collection<PlayerMainFigure> getPlayers() {
 		return players.values();
+	}
+
+	/**
+	 * Returns all teams.
+	 * 
+	 * @return a copy of the list of all teams.
+	 * 
+	 * @author illonis
+	 */
+	public LinkedList<Team> getTeams() {
+		return new LinkedList<Team>(teams);
+	}
+
+	/**
+	 * Clears teamlist.
+	 */
+	public void clearTeams() {
+		teams.clear();
+		spawnGroups.clear();
+	}
+
+	/**
+	 * Adds a team to teamlist.
+	 * 
+	 * @param team
+	 *            the new team.
+	 */
+	public void addTeam(Team team) {
+		teams.add(team);
+		spawnGroups.put(team, getGameSettings().getGameMode()
+				.getSpawnTypeForTeam(team));
 	}
 
 	/**
@@ -291,6 +335,19 @@ public class GameInformation {
 			infos.add(setDeathsEvent);
 		}
 
+		SetTeamsEvent teamEvent = new SetTeamsEvent();
+		LinkedList<AddPlayerToTeamEvent> teamPlayerEvents = new LinkedList<AddPlayerToTeamEvent>();
+		for (Team team : getTeams()) {
+			teamEvent.addTeam(team.getColor(), team.getName());
+			for (PlayerMainFigure player : team.getPlayers()) {
+				teamPlayerEvents.add(new AddPlayerToTeamEvent(
+						player.getOwner(), team.getColor()));
+			}
+		}
+
+		infos.add(teamEvent);
+		infos.addAll(teamPlayerEvents);
+
 		return infos;
 	}
 
@@ -342,4 +399,47 @@ public class GameInformation {
 		return false;
 	}
 
+	/**
+	 * Returns the spawning position for given player. This may change upon each
+	 * call.
+	 * 
+	 * @param player
+	 *            the player that spawns.
+	 * @return the new spawning position.
+	 * @throws GameModeNotSupportedByMapException
+	 *             if current game does not support game mode.
+	 */
+	public Vector2D getSpawnPointFor(PlayerMainFigure player)
+			throws GameModeNotSupportedByMapException {
+
+		SpawnType spawnType = spawnGroups.get(player.getTeam());
+
+		LinkedList<SpawnPosition> availableSpawnings = new LinkedList<SpawnPosition>();
+
+		LinkedList<SpawnPosition> spawnAreas = new LinkedList<SpawnPosition>(
+				getMap().getSpawnAreas());
+		for (int i = 0; i < spawnAreas.size(); i++) {
+			SpawnPosition p = spawnAreas.get(i);
+			if (p.getTeaming() == spawnType)
+				availableSpawnings.add(p);
+		}
+
+		if (availableSpawnings.size() == 0)
+			throw new GameModeNotSupportedByMapException();
+
+		int area = RANDOM.nextInt(availableSpawnings.size());
+		SpawnPosition spawnPos = availableSpawnings.get(area);
+		Rectangle2D.Double boundings = new Rectangle2D.Double();
+		boundings.width = player.getBoundingBox().width;
+		boundings.height = player.getBoundingBox().height;
+
+		Vector2D newPos;
+		do {
+			newPos = spawnPos.getAPoint(player.getShape());
+			boundings.x = newPos.getX();
+			boundings.y = newPos.getY();
+		} while (isObjectWithin(boundings));
+
+		return new Vector2D(boundings.x, boundings.y);
+	}
 }

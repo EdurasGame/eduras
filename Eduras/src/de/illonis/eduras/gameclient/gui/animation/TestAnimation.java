@@ -3,6 +3,7 @@ package de.illonis.eduras.gameclient.gui.animation;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.RenderingHints;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -22,6 +23,8 @@ public class TestAnimation extends JPanel {
 	public void paint(Graphics g) {
 		super.paint(g);
 		Graphics2D g2d = (Graphics2D) g;
+		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+				RenderingHints.VALUE_ANTIALIAS_ON);
 
 		g.setColor(Color.BLUE);
 		for (int i = 0; i < stars.getStars().length; i++) {
@@ -40,7 +43,7 @@ public class TestAnimation extends JPanel {
 			public void run() {
 				while (true) {
 					try {
-						Thread.sleep(40);
+						Thread.sleep(30);
 					} catch (InterruptedException e) {
 						e.printStackTrace();
 					}
