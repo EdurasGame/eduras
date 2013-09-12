@@ -4,10 +4,10 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
+import java.net.InetAddress;
 import java.net.Socket;
 import java.net.SocketException;
 import java.util.HashMap;
-import java.util.logging.Level;
 
 import de.illonis.eduras.events.Event;
 import de.illonis.eduras.exceptions.BufferIsEmptyException;
@@ -60,17 +60,37 @@ public class ServerSender extends Thread {
 	}
 
 	/**
-	 * Sends a serialized message to all receivers.
+	 * Sends a serialized message to all receivers as TCP message.
 	 * 
 	 * @param message
 	 *            Message to send.
 	 */
-	private void sendMessage(String message) {
+	private void sendTCPMessage(String message) {
 		for (ServerClient serverClient : clients.values()) {
 			PrintWriter pw = serverClient.getOutputStream();
 			pw.println(message);
-			EduLog.log(Level.INFO, "Send message " + "'" + message
-					+ "' to client with id " + serverClient.getClientId());
+			EduLog.info("Server.networking.msgsend");
+		}
+	}
+
+	/**
+	 * Sends a serialized message to all receivers as UDP message.
+	 * 
+	 * @param message
+	 */
+	private void sendUDPMessage(String message) {
+		for (ServerClient serverClient : clients.values()) {
+			byte[] messageAsBytes = message.getBytes();
+			InetAddress clientaddress = serverClient.getSocket()
+					.getInetAddress();
+			int port = serverClient.getSocket().getPort();
+			DatagramPacket packet = new DatagramPacket(messageAsBytes,
+					messageAsBytes.length, clientaddress, port);
+			try {
+				udpSocket.send(packet);
+			} catch (IOException e) {
+				EduLog.passException(e);
+			}
 		}
 	}
 
@@ -90,17 +110,17 @@ public class ServerSender extends Thread {
 			PrintWriter pw = clients.get(clientId).getOutputStream();
 			pw.println(message);
 		} else {
-			ServerClient client = clients.get(clientId);
-			byte[] stringAsBytes = message.getBytes();
+			ServerClient serverClient = clients.get(clientId);
+			byte[] messageAsBytes = message.getBytes();
+			InetAddress clientaddress = serverClient.getSocket()
+					.getInetAddress();
+			int port = serverClient.getSocket().getPort();
+			DatagramPacket packet = new DatagramPacket(messageAsBytes,
+					messageAsBytes.length, clientaddress, port);
 			try {
-				DatagramPacket packet = new DatagramPacket(stringAsBytes,
-						stringAsBytes.length, client.getSocket()
-								.getRemoteSocketAddress());
 				udpSocket.send(packet);
 			} catch (IOException e) {
 				EduLog.passException(e);
-				server.stopServer();
-				return;
 			}
 
 		}
@@ -175,13 +195,13 @@ public class ServerSender extends Thread {
 	 * Retrieves all messages from outputBuffer and sends them to all clients.
 	 */
 	private void sendAllMessages() {
-		sendBufferContent(outputBufferTCP);
-		sendBufferContent(outputBufferUDP);
+		sendTCPBufferContent();
+		sendUDPBufferContent();
 	}
 
-	private void sendBufferContent(Buffer buffer) {
+	private void sendTCPBufferContent() {
 		try {
-			String[] s = buffer.getAll();
+			String[] s = outputBufferTCP.getAll();
 			String[] filtereds = NetworkOptimizer.filterObsoleteMessages(s);
 			String message = NetworkMessageSerializer.concatenate(filtereds);
 
@@ -190,7 +210,24 @@ public class ServerSender extends Thread {
 				return;
 			}
 			EduLog.info("[SERVER] Sent all messages.");
-			sendMessage(message);
+			sendTCPMessage(message);
+		} catch (BufferIsEmptyException e) {
+			// do nothing if there is no message.
+		}
+	}
+
+	private void sendUDPBufferContent() {
+		try {
+			String[] s = outputBufferTCP.getAll();
+			String[] filtereds = NetworkOptimizer.filterObsoleteMessages(s);
+			String message = NetworkMessageSerializer.concatenate(filtereds);
+
+			if (message.equals("")) {
+				EduLog.warning("Message empty!!");
+				return;
+			}
+			sendUDPMessage(message);
+			EduLog.info("Server.networking.sendall");
 		} catch (BufferIsEmptyException e) {
 			// do nothing if there is no message.
 		}
