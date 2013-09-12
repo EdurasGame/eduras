@@ -37,6 +37,7 @@ public class TemplateManager {
 		registerTemplate(new HouseTemplate());
 		registerTemplate(new RectangleTemplate());
 		registerTemplate(new CircleTemplate());
+		registerTemplate(new PacmanTemplate());
 	}
 
 	void registerTemplate(ShapeTemplate template) {
