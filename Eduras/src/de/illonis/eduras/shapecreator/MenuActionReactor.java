@@ -2,6 +2,7 @@ package de.illonis.eduras.shapecreator;
 
 import java.io.File;
 
+import de.illonis.eduras.shapecreator.PanelInteractor.InteractMode;
 import de.illonis.eduras.shapecreator.templates.TemplateNotFoundException;
 
 /**
@@ -97,5 +98,13 @@ public interface MenuActionReactor {
 	 *            the mirror axis.
 	 */
 	void mirrorShape(Axis axis);
+
+	/**
+	 * Sets the editing mode.
+	 * 
+	 * @param mode
+	 *            new mode.
+	 */
+	void setMode(InteractMode mode);
 
 }

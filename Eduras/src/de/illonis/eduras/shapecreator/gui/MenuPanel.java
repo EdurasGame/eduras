@@ -18,6 +18,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import de.illonis.eduras.shapecreator.DataHolder;
 import de.illonis.eduras.shapecreator.MenuActionReactor.Axis;
 import de.illonis.eduras.shapecreator.MenuTriggerer;
+import de.illonis.eduras.shapecreator.PanelInteractor.InteractMode;
 import de.illonis.eduras.shapecreator.ShapeFiler;
 import de.illonis.eduras.shapecreator.templates.TemplateNotFoundException;
 
@@ -40,7 +41,8 @@ public class MenuPanel extends JMenuBar implements ActionListener {
 			undoItem, redoItem, exitItem, rotateItem, mirrorXItem, mirrorYItem,
 			resetViewItem, zoomDefaultItem, zoomTwoItem, zoomThreeItem,
 			zoomFourItem, zoomFiveItem, zoomHalfItem, zoomCustomItem,
-			zoomIncreaseItem, zoomDecreaseItem;
+			zoomIncreaseItem, zoomDecreaseItem, preferencesItem,
+			modeSelectItem, modeAddItem, modeDeleteItem;
 
 	/**
 	 * Creates a new menu panel.
@@ -100,9 +102,21 @@ public class MenuPanel extends JMenuBar implements ActionListener {
 		undoItem = addItemToMenu("Redo", KeyEvent.VK_Z, ActionEvent.CTRL_MASK
 				+ ActionEvent.SHIFT_MASK, editMenu);
 
+		editMenu.add(new JSeparator());
+		preferencesItem = addItemToMenu("Preferences...", editMenu);
+
 		rotateItem = addItemToMenu("Rotate shape...", transformMenu);
 		JMenu mirrorMenu = new JMenu("Mirror shape");
 		transformMenu.add(mirrorMenu);
+
+		JMenu modeMenu = new JMenu("Mode");
+		modeSelectItem = addItemToMenu("Select and Drag", KeyEvent.VK_S, 0,
+				modeMenu);
+		modeAddItem = addItemToMenu("Add vertices", KeyEvent.VK_A, 0, modeMenu);
+		modeDeleteItem = addItemToMenu("Delete vertices", KeyEvent.VK_D, 0,
+				modeMenu);
+
+		add(modeMenu);
 
 		mirrorXItem = addItemToMenu("X-axis (vertical)", mirrorMenu);
 		mirrorYItem = addItemToMenu("Y-axis (horizontal)", mirrorMenu);
@@ -195,6 +209,10 @@ public class MenuPanel extends JMenuBar implements ActionListener {
 		selector.dispose();
 	}
 
+	private void showPreferences() {
+		// TODO implement
+	}
+
 	private void rotateShape() {
 		rotationSelector.showFrame();
 		if (rotationSelector.isAccepted()) {
@@ -250,6 +268,15 @@ public class MenuPanel extends JMenuBar implements ActionListener {
 			triggerer.setZoom(DataHolder.getInstance().getZoom() - 0.5f);
 		else if (source == zoomIncreaseItem)
 			triggerer.setZoom(DataHolder.getInstance().getZoom() + 0.5f);
+		else if (source == preferencesItem)
+			showPreferences();
+		else if (source == modeAddItem)
+			triggerer.setMode(InteractMode.ADD_VERT);
+		else if (source == modeSelectItem)
+			triggerer.setMode(InteractMode.NONE);
+		else if (source == modeDeleteItem)
+			triggerer.setMode(InteractMode.REM_VERT);
+
 	}
 
 	private void customZoom() {

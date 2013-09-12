@@ -43,9 +43,11 @@ public class ShapeCreator {
 		PanelInteractor pi = new PanelInteractor(panel);
 
 		FrameListener frameListener = new FrameListener();
-		MenuTriggerer triggerer = new MenuTriggerer(frameListener, pi);
 
 		ToolPanel toolPanel = new ToolPanel(pi);
+		MenuTriggerer triggerer = new MenuTriggerer(toolPanel, frameListener,
+				pi);
+
 		panel.addMouseListener(pi);
 		panel.addMouseMotionListener(pi);
 		panel.addMouseWheelListener(pi);

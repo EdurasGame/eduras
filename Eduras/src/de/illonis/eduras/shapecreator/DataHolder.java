@@ -4,6 +4,7 @@ import java.awt.Color;
 
 import de.illonis.eduras.shapecreator.gui.DrawPanel;
 import de.illonis.eduras.shapecreator.gui.RecordTableModel;
+import de.illonis.eduras.shapecreator.gui.ToolPanel;
 
 /**
  * Contains all data of the shapecreator. This is a singleton.
@@ -15,6 +16,7 @@ public class DataHolder {
 
 	private static DataHolder instance;
 	private RecordTableModel tableModel;
+	private ToolPanel toolPanel;
 	private DrawPanel drawPanel;
 	private EditablePolygon polygon;
 
@@ -96,6 +98,16 @@ public class DataHolder {
 	 */
 	public void setDrawPanel(DrawPanel drawPanel) {
 		this.drawPanel = drawPanel;
+	}
+
+	/**
+	 * Sets the toolpanel.
+	 * 
+	 * @param toolPanel
+	 *            tool panel.
+	 */
+	public void setToolPanel(ToolPanel toolPanel) {
+		this.toolPanel = toolPanel;
 	}
 
 	/**

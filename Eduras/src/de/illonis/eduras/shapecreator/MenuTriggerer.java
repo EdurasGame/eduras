@@ -6,7 +6,9 @@ import java.io.IOException;
 
 import javax.swing.JOptionPane;
 
+import de.illonis.eduras.shapecreator.PanelInteractor.InteractMode;
 import de.illonis.eduras.shapecreator.ShapeCreator.FrameListener;
+import de.illonis.eduras.shapecreator.gui.ToolPanel;
 import de.illonis.eduras.shapecreator.templates.TemplateNotFoundException;
 
 /**
@@ -19,10 +21,13 @@ public class MenuTriggerer implements MenuActionReactor {
 
 	private final FrameListener frameListener;
 	private final PanelModifier panel;
+	private final ToolPanel toolPanel;
 
-	MenuTriggerer(FrameListener listener, PanelModifier panel) {
+	MenuTriggerer(ToolPanel toolPanel, FrameListener listener,
+			PanelModifier panel) {
 		this.frameListener = listener;
 		this.panel = panel;
+		this.toolPanel = toolPanel;
 	}
 
 	@Override
@@ -115,6 +120,11 @@ public class MenuTriggerer implements MenuActionReactor {
 			}
 		}
 		DataHolder.getInstance().notifyVerticesChanged();
+	}
+
+	@Override
+	public void setMode(InteractMode mode) {
+		toolPanel.onModeSet(mode);
 	}
 
 }

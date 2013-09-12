@@ -42,9 +42,9 @@ public class ToolPanel extends JPanel implements ActionListener {
 	private void buildToolbar() {
 		toolBar = new JToolBar();
 		bgroup = new ButtonGroup();
-		modeButtonDrag = createButton("select and drag", "button_drag.png");
-		modeButtonAdd = createButton("add vertices", "button_add.png");
-		modeButtonRemove = createButton("remove vertices", "button_remove.png");
+		modeButtonDrag = createButton("Select and drag", "button_drag.png");
+		modeButtonAdd = createButton("Add vertices", "button_add.png");
+		modeButtonRemove = createButton("Delete vertices", "button_remove.png");
 		modeButtonDrag.setSelected(true);
 		add(toolBar);
 	}
@@ -72,5 +72,27 @@ public class ToolPanel extends JPanel implements ActionListener {
 			interactor.setMode(InteractMode.NONE);
 		else if (source == modeButtonRemove)
 			interactor.setMode(InteractMode.REM_VERT);
+	}
+
+	/**
+	 * Indicates a mode change.
+	 * 
+	 * @param mode
+	 *            new mode.
+	 */
+	public void onModeSet(InteractMode mode) {
+		switch (mode) {
+		case ADD_VERT:
+			modeButtonAdd.doClick();
+			break;
+		case NONE:
+			modeButtonDrag.doClick();
+			break;
+		case REM_VERT:
+			modeButtonRemove.doClick();
+			break;
+		default:
+			break;
+		}
 	}
 }

@@ -225,13 +225,13 @@ public class PanelInteractor extends MouseAdapter implements PanelModifier {
 
 	@Override
 	public boolean undo() {
-		// TODO Auto-generated method stub
+		// TODO implement.
 		return false;
 	}
 
 	@Override
 	public boolean redo() {
-		// TODO Auto-generated method stub
+		// TODO implement.
 		return false;
 	}
 
