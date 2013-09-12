@@ -71,7 +71,7 @@ public class Eduras {
 
 		ServerEventTriggerer eventTriggerer = new ServerEventTriggerer(logic);
 
-		eventTriggerer.setOutputBuffer(server.getOutputBuffer());
+		eventTriggerer.setServerSender(server.getServerSender());
 		gameInfo.setEventTriggerer(eventTriggerer);
 
 		server.setGame(logic.getGame());

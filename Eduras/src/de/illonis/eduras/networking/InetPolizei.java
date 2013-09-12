@@ -13,6 +13,12 @@ public class InetPolizei extends NetworkPolicy {
 
 	@Override
 	public PacketType determinePacketType(Event event) {
+		// if (event instanceof GameEvent) {
+		// GameEvent gameEvent = (GameEvent) event;
+		// if (gameEvent.getType() == GameEventNumber.SET_POS) {
+		// return PacketType.UDP;
+		// }
+		// }
 		return PacketType.TCP;
 	}
 

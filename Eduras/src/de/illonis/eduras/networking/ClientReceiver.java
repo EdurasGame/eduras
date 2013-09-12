@@ -74,6 +74,7 @@ public class ClientReceiver extends Thread {
 				}
 			} catch (IOException e) {
 				connectionAvailable = false;
+				EduLog.error("Client.networking.tcpclose");
 				EduLog.errorL("Client.networking.tcpclose");
 				EduLog.passException(e);
 				interrupt();
