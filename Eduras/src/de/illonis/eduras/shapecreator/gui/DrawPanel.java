@@ -1,5 +1,6 @@
 package de.illonis.eduras.shapecreator.gui;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Dimension;
@@ -68,6 +69,7 @@ public class DrawPanel extends JPanel {
 	private void paintVertices(Graphics2D g2d) {
 		Color shapeLineColor = data.getSettings().getShapeLineColor();
 		Color shapeDotColor = data.getSettings().getShapeDotColor();
+		Color shapeLastLineColor = data.getSettings().getShapeLastLineColor();
 
 		Collection<Vertice> vertices = data.getPolygon().getVertices();
 		boolean first = true;
@@ -88,6 +90,7 @@ public class DrawPanel extends JPanel {
 				firstVertice = vertice;
 				first = false;
 			} else {
+				g2d.setStroke(new BasicStroke(1.5f));
 				GuiPoint lastPoint = coordinateSystem.coordinateToGui(last);
 				g2d.setColor(shapeLineColor);
 				g2d.drawLine(lastPoint.x, lastPoint.y, p.x, p.y);
@@ -98,7 +101,7 @@ public class DrawPanel extends JPanel {
 			// connect last point with first one
 			GuiPoint firstPoint = coordinateSystem
 					.coordinateToGui(firstVertice);
-			g2d.setColor(shapeLineColor);
+			g2d.setColor(shapeLastLineColor);
 			g2d.drawLine(p.x, p.y, firstPoint.x, firstPoint.y);
 		}
 	}

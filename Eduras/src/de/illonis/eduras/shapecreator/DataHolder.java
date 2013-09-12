@@ -4,7 +4,6 @@ import java.awt.Color;
 
 import de.illonis.eduras.shapecreator.gui.DrawPanel;
 import de.illonis.eduras.shapecreator.gui.RecordTableModel;
-import de.illonis.eduras.shapecreator.gui.ToolPanel;
 
 /**
  * Contains all data of the shapecreator. This is a singleton.
@@ -16,7 +15,6 @@ public class DataHolder {
 
 	private static DataHolder instance;
 	private RecordTableModel tableModel;
-	private ToolPanel toolPanel;
 	private DrawPanel drawPanel;
 	private EditablePolygon polygon;
 
@@ -101,16 +99,6 @@ public class DataHolder {
 	}
 
 	/**
-	 * Sets the toolpanel.
-	 * 
-	 * @param toolPanel
-	 *            tool panel.
-	 */
-	public void setToolPanel(ToolPanel toolPanel) {
-		this.toolPanel = toolPanel;
-	}
-
-	/**
 	 * Notifies that vertice data has changed and updates table values.
 	 */
 	public void notifyVerticesChanged() {
@@ -139,6 +127,7 @@ public class DataHolder {
 		private Color backgroundColor = Color.WHITE;
 		private Color hoverShapeDotColor = Color.BLUE;
 		private Color selectedShapeDotColor = Color.RED;
+		private Color shapeLastLineColor = new Color(150, 150, 150);
 
 		private Settings() {
 		}
@@ -243,6 +232,23 @@ public class DataHolder {
 		 */
 		public void setSelectedShapeDotColor(Color selectedShapeDotColor) {
 			this.selectedShapeDotColor = selectedShapeDotColor;
+		}
+
+		/**
+		 * @return the color for line that connects first and last vertice.
+		 */
+		public Color getShapeLastLineColor() {
+			return shapeLastLineColor;
+		}
+
+		/**
+		 * Sets the color of the shape line connecting last and first vertice.
+		 * 
+		 * @param shapeLastLineColor
+		 *            the new color.
+		 */
+		public void setShapeLastLineColor(Color shapeLastLineColor) {
+			this.shapeLastLineColor = shapeLastLineColor;
 		}
 	}
 

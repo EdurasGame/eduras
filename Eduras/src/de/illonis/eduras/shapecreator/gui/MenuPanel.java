@@ -42,7 +42,8 @@ public class MenuPanel extends JMenuBar implements ActionListener {
 			resetViewItem, zoomDefaultItem, zoomTwoItem, zoomThreeItem,
 			zoomFourItem, zoomFiveItem, zoomHalfItem, zoomCustomItem,
 			zoomIncreaseItem, zoomDecreaseItem, preferencesItem,
-			modeSelectItem, modeAddItem, modeDeleteItem;
+			modeSelectItem, modeAddItem, modeDeleteItem, collisionCheckItem,
+			validateItem;
 
 	/**
 	 * Creates a new menu panel.
@@ -71,12 +72,22 @@ public class MenuPanel extends JMenuBar implements ActionListener {
 
 	private void buildGui() {
 		JMenu fileMenu = new JMenu("File");
+		fileMenu.setMnemonic(KeyEvent.VK_F);
 		add(fileMenu);
 		JMenu editMenu = new JMenu("Edit");
+		editMenu.setMnemonic(KeyEvent.VK_E);
 		add(editMenu);
 		JMenu transformMenu = new JMenu("Transform");
+		transformMenu.setMnemonic(KeyEvent.VK_S);
 		add(transformMenu);
+		JMenu modeMenu = new JMenu("Mode");
+		modeMenu.setMnemonic(KeyEvent.VK_M);
+		add(modeMenu);
+		JMenu testMenu = new JMenu("Test");
+		testMenu.setMnemonic(KeyEvent.VK_T);
+		add(testMenu);
 		JMenu viewMenu = new JMenu("View");
+		viewMenu.setMnemonic(KeyEvent.VK_V);
 		add(viewMenu);
 
 		JMenu newItem = new JMenu("New");
@@ -99,24 +110,25 @@ public class MenuPanel extends JMenuBar implements ActionListener {
 
 		undoItem = addItemToMenu("Undo", KeyEvent.VK_Z, ActionEvent.CTRL_MASK,
 				editMenu);
-		undoItem = addItemToMenu("Redo", KeyEvent.VK_Z, ActionEvent.CTRL_MASK
+		undoItem.setEnabled(false);
+		redoItem = addItemToMenu("Redo", KeyEvent.VK_Z, ActionEvent.CTRL_MASK
 				+ ActionEvent.SHIFT_MASK, editMenu);
+		redoItem.setEnabled(false);
 
 		editMenu.add(new JSeparator());
 		preferencesItem = addItemToMenu("Preferences...", editMenu);
+		preferencesItem.setEnabled(false);
 
 		rotateItem = addItemToMenu("Rotate shape...", transformMenu);
+		rotateItem.setEnabled(false);
 		JMenu mirrorMenu = new JMenu("Mirror shape");
 		transformMenu.add(mirrorMenu);
 
-		JMenu modeMenu = new JMenu("Mode");
 		modeSelectItem = addItemToMenu("Select and Drag", KeyEvent.VK_S, 0,
 				modeMenu);
 		modeAddItem = addItemToMenu("Add vertices", KeyEvent.VK_A, 0, modeMenu);
 		modeDeleteItem = addItemToMenu("Delete vertices", KeyEvent.VK_D, 0,
 				modeMenu);
-
-		add(modeMenu);
 
 		mirrorXItem = addItemToMenu("X-axis (vertical)", mirrorMenu);
 		mirrorYItem = addItemToMenu("Y-axis (horizontal)", mirrorMenu);
@@ -145,6 +157,13 @@ public class MenuPanel extends JMenuBar implements ActionListener {
 				ActionEvent.CTRL_MASK, zoomMenu);
 		zoomMenu.add(new JSeparator());
 		zoomCustomItem = addItemToMenu("Custom...", KeyEvent.VK_Z, 0, zoomMenu);
+
+		collisionCheckItem = addItemToMenu("Collision", KeyEvent.VK_C, 0,
+				testMenu);
+		collisionCheckItem.setEnabled(false);
+		testMenu.add(new JSeparator());
+		validateItem = addItemToMenu("Validate", KeyEvent.VK_V, 0, testMenu);
+		validateItem.setEnabled(false);
 	}
 
 	private JMenuItem addItemToMenu(String label, JMenu menu) {
@@ -276,7 +295,10 @@ public class MenuPanel extends JMenuBar implements ActionListener {
 			triggerer.setMode(InteractMode.NONE);
 		else if (source == modeDeleteItem)
 			triggerer.setMode(InteractMode.REM_VERT);
-
+		else if (source == validateItem)
+			System.out.println("validate");
+		else if (source == collisionCheckItem)
+			System.out.println("collision");
 	}
 
 	private void customZoom() {
