@@ -1,6 +1,3 @@
-/**
- * 
- */
 package de.illonis.eduras.shapes;
 
 import java.awt.geom.Rectangle2D;
