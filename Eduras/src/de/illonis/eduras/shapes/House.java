@@ -1,6 +1,8 @@
 package de.illonis.eduras.shapes;
 
-import de.illonis.eduras.math.Vector2D;
+import java.io.IOException;
+
+import de.illonis.eduras.shapecreator.FileCorruptException;
 
 /**
  * A basic house.
@@ -15,9 +17,17 @@ public class House extends Polygon {
 	 */
 	public House() {
 		super();
-		Vector2D vertices[] = { new Vector2D(-20, -40), new Vector2D(0, -60),
-				new Vector2D(20, -40), new Vector2D(20, 0),
-				new Vector2D(-20, 0) };
-		setVertices(vertices);
+		try {
+			loadFromFile("pacman.esh");
+		} catch (FileCorruptException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		/*
+		 * Vector2D vertices[] = { new Vector2D(-20, -40), new Vector2D(0, -60),
+		 * new Vector2D(20, -40), new Vector2D(20, 0), new Vector2D(-20, 0) };
+		 * setVertices(vertices);
+		 */
 	}
 }
