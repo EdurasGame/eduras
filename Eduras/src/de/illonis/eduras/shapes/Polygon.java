@@ -1,6 +1,7 @@
 package de.illonis.eduras.shapes;
 
 import java.awt.geom.Rectangle2D;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
@@ -10,6 +11,8 @@ import de.illonis.eduras.math.CollisionPoint;
 import de.illonis.eduras.math.Geometry;
 import de.illonis.eduras.math.Line;
 import de.illonis.eduras.math.Vector2D;
+import de.illonis.eduras.shapecreator.FileCorruptException;
+import de.illonis.eduras.shapes.data.ShapeParser;
 
 /**
  * 
@@ -44,6 +47,26 @@ public class Polygon extends ObjectShape {
 
 		this.vertices = vertices;
 
+	}
+
+	/**
+	 * Loads shapedata from file instead of setting it manually using the
+	 * {@link #setVertices(Vector2D[])} method.
+	 * 
+	 * @param shapeFileName
+	 *            the name of the shapefile. Must be located in the
+	 *            "shapes.data"-package.
+	 * @throws FileCorruptException
+	 *             if the shape file contains invalid data.
+	 * @throws IOException
+	 *             if there was an error reading the shape file.
+	 */
+	protected final void loadFromFile(String shapeFileName)
+			throws FileCorruptException, IOException {
+		LinkedList<Vector2D> shapeVerts = ShapeParser.readShape(getClass()
+				.getResource("data/" + shapeFileName));
+
+		setVertices(shapeVerts.toArray(new Vector2D[] {}));
 	}
 
 	/**
