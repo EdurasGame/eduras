@@ -123,17 +123,18 @@ public class Geometry {
 		// lines might be the same, so we must
 		// check for that.
 		// In any other case we can give a calculation for s and r.
-
-		if ((firstDirectionX == 0 && firstDirectionY == 0)
-				|| (secondDirectionX == 0 && secondDirectionY == 0)) {
-			try {
-				throw new Exception(
-						"There was a line given that was not correct.");
-			} catch (Exception e) {
-				e.printStackTrace();
-				return null;
-			}
-		}
+		// TODO: the following check does not work properly. However, it throws
+		// an exception at pacman.
+		// if ((firstDirectionX == 0 && firstDirectionY == 0)
+		// || (secondDirectionX == 0 && secondDirectionY == 0)) {
+		// try {
+		// throw new Exception(
+		// "There was a line given that was not correct.");
+		// } catch (Exception e) {
+		// e.printStackTrace();
+		// return null;
+		// }
+		// }
 
 		if (firstDirectionalVector.isLinearTo(secondDirectionalVector)) {
 
