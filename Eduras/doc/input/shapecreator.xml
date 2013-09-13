@@ -144,11 +144,22 @@
 30,-30.53
 -30,-30.53
 -30,30</programlisting>
-		<important>
+		<section>
+			<title>Using shapefiles for gameobjects</title>
 			<para>
-				Loading shape files into the game will be supported very soon.
+				Shape files can be loaded easily to reduce your coding work.
+				Similar to a programmed shape, you need to create a class that extends
+				<computeroutput>Polygon</computeroutput> class first.
 			</para>
-		</important>
+			<para>
+				Instead of creating a vertice array and calling
+				<computeroutput>setVertices(Vector2D[])</computeroutput> in the
+				constructor of your shape, you can just call
+				<computeroutput>loadFromFile(String)</computeroutput> with the name of
+				the shape file as argument. The shape file must be located in the
+				<computeroutput>shapes.data</computeroutput> package.
+			</para>
+		</section>
 	</section>
 	<section>
 		<title>Shape templates</title>
@@ -161,7 +172,7 @@
 			vertice count.
 		</para>
 		<section>
-			<title>Create a template</title>
+			<title>Creating a template</title>
 			<para>
 				<emphasis>coming soon...</emphasis>
 			</para>	
