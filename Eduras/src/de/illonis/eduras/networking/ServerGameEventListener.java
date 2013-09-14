@@ -49,7 +49,7 @@ public class ServerGameEventListener implements GameEventListener {
 
 		MovementEvent moveEvent;
 
-		moveEvent = new MovementEvent(GameEventNumber.SET_POS, o.getId());
+		moveEvent = new MovementEvent(GameEventNumber.SET_POS_UDP, o.getId());
 		moveEvent.setNewXPos(o.getXPosition());
 		moveEvent.setNewYPos(o.getYPosition());
 

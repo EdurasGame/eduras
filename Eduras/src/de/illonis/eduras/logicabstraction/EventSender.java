@@ -84,7 +84,7 @@ public class EventSender {
 		String msg = NetworkMessageSerializer.serialize(event);
 
 		client.sendMessage(msg, networkType);
-		if (gameEvent.getType() == GameEventNumber.SET_POS)
+		if (gameEvent.getType() == GameEventNumber.SET_POS_UDP)
 			logic.onGameEventAppeared(gameEvent);
 	}
 

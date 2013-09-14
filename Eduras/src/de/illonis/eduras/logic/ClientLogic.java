@@ -81,7 +81,7 @@ public class ClientLogic implements GameLogicInterface {
 
 			switch (event.getType()) {
 
-			case SET_POS:
+			case SET_POS_UDP:
 				MovementEvent moveEvent = (MovementEvent) event;
 				double newXPos = moveEvent.getNewXPos();
 				double newYPos = moveEvent.getNewYPos();

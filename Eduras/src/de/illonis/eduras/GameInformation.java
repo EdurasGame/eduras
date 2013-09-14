@@ -287,7 +287,7 @@ public class GameInformation {
 			infos.add(objectEvent);
 
 			// send position immediately
-			MovementEvent me = new MovementEvent(GameEventNumber.SET_POS,
+			MovementEvent me = new MovementEvent(GameEventNumber.SET_POS_UDP,
 					object.getId());
 			me.setNewXPos(object.getXPosition());
 			me.setNewYPos(object.getYPosition());

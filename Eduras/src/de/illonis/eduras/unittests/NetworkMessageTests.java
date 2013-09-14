@@ -31,7 +31,7 @@ public class NetworkMessageTests {
 	@Before
 	public void init() {
 		d = 13.314;
-		moveEvent = new MovementEvent(GameEventNumber.SET_POS, 23);
+		moveEvent = new MovementEvent(GameEventNumber.SET_POS_UDP, 23);
 		moveEvent.setNewXPos(d);
 		moveEvent.setNewYPos(2d);
 		objectEvent = new ObjectFactoryEvent(GameEventNumber.OBJECT_CREATE,

@@ -227,7 +227,7 @@ public class NetworkMessageDeserializer {
 		switch (typeNumber) {
 		case SETSPEED:
 		case SETSPEEDVECTOR:
-		case SET_POS:
+		case SET_POS_UDP:
 			gameEvent = handleMovementPositionEvent(msg, args, typeNumber);
 			break;
 		case DEATH:

@@ -48,7 +48,7 @@ public abstract class NetworkOptimizer {
 				continue;
 			}
 			switch (n) {
-			case SET_POS:
+			case SET_POS_UDP:
 				posEvents.put(key, string);
 				break;
 			case SETSPEED:
