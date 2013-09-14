@@ -221,7 +221,7 @@ public class ServerSender extends Thread {
 
 	private void sendUDPBufferContent() {
 		try {
-			String[] s = outputBufferTCP.getAll();
+			String[] s = outputBufferUDP.getAll();
 			String[] filtereds = NetworkOptimizer.filterObsoleteMessages(s);
 			String message = NetworkMessageSerializer.concatenate(filtereds);
 
