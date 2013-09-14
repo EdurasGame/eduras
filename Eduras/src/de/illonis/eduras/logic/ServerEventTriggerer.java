@@ -49,7 +49,7 @@ public class ServerEventTriggerer implements EventTriggerer {
 	private static int lastGameObjectId = 0;
 
 	private final GameLogicInterface logic;
-	private GameInformation gameInfo;
+	private final GameInformation gameInfo;
 
 	private ServerSender serverSender;
 
@@ -130,7 +130,8 @@ public class ServerEventTriggerer implements EventTriggerer {
 		GameObject o = gameInfo.findObjectById(id);
 		o.setXPosition(position.getX());
 		o.setYPosition(position.getY());
-		MovementEvent setPos = new MovementEvent(GameEventNumber.SET_POS_UDP, id);
+		MovementEvent setPos = new MovementEvent(GameEventNumber.SET_POS_TCP,
+				id);
 		setPos.setNewXPos(position.getX());
 		setPos.setNewYPos(position.getY());
 
@@ -199,7 +200,8 @@ public class ServerEventTriggerer implements EventTriggerer {
 
 	@Override
 	public void setPositionOfObject(int objectId, Vector2D newPosition) {
-		MovementEvent e = new MovementEvent(GameEventNumber.SET_POS_UDP, objectId);
+		MovementEvent e = new MovementEvent(GameEventNumber.SET_POS_UDP,
+				objectId);
 		e.setNewXPos(newPosition.getX());
 		e.setNewYPos(newPosition.getY());
 

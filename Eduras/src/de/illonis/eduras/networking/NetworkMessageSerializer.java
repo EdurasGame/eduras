@@ -148,6 +148,7 @@ public class NetworkMessageSerializer {
 		case SETSPEED:
 		case SETSPEEDVECTOR:
 		case SET_POS_UDP:
+		case SET_POS_TCP:
 			MovementEvent moveEvent = (MovementEvent) gameEvent;
 			serializedEvent = buildEventString(moveEvent,
 					moveEvent.getObjectId(), moveEvent.getNewXPos(),
