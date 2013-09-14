@@ -53,10 +53,10 @@ public class Eduras {
 			name = args[0];
 			if (args.length > 1) {
 				try {
-					port = Integer.parseInt(args[0]);
+					port = Integer.parseInt(args[1]);
 				} catch (NumberFormatException e) {
 					EduLog.error(Localization.getStringF(
-							"Server.invalidportarg", args[0]));
+							"Server.invalidportarg", args[1]));
 					return;
 				}
 			}
