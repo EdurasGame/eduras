@@ -34,6 +34,7 @@ import de.illonis.eduras.events.UserMovementEvent;
 import de.illonis.eduras.exceptions.GivenParametersDoNotFitToEventException;
 import de.illonis.eduras.exceptions.InvalidMessageFormatException;
 import de.illonis.eduras.exceptions.MessageNotSupportedException;
+import de.illonis.eduras.gameclient.UDPHiEvent;
 import de.illonis.eduras.logger.EduLog;
 import de.illonis.eduras.math.Vector2D;
 import de.illonis.eduras.networking.ServerClient.ClientRole;
@@ -175,6 +176,9 @@ public class NetworkMessageDeserializer {
 			break;
 		case GAME_READY:
 			networkEvent = new GameReadyEvent();
+			break;
+		case UDP_HI:
+			networkEvent = new UDPHiEvent(parseInt(args[1]));
 			break;
 		default:
 			// TODO: Maybe we should generalize NetworkEventNumber and
@@ -503,5 +507,34 @@ public class NetworkMessageDeserializer {
 	public static GameEventNumber extractGameEventNumber(String msg) {
 		return GameEvent.toGameEventNumber(parseInt(getArgumentFromMessage(msg,
 				0)));
+	}
+
+	/**
+	 * Checks whether the given network message contains an event of the given
+	 * type.
+	 * 
+	 * @param messages
+	 *            The network message to be checked for the event.
+	 * @param type
+	 *            The type of the event to be checked for.
+	 * @return Returns null if the event couldnt be found. Returns the first
+	 *         event of that type otherwise.
+	 */
+	public static Event containsEvent(String messages, int type) {
+		for (Event event : NetworkMessageDeserializer.deserialize(messages)) {
+			if (event instanceof NetworkEvent) {
+				NetworkEvent networkEvent = (NetworkEvent) event;
+				if (networkEvent.getType().getNumber() == type) {
+					return networkEvent;
+				}
+			}
+			if (event instanceof GameEvent) {
+				GameEvent gameEvent = (GameEvent) event;
+				if (gameEvent.getType().getNumber() == type) {
+					return gameEvent;
+				}
+			}
+		}
+		return null;
 	}
 }

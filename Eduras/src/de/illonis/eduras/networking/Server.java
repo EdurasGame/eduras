@@ -6,6 +6,7 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.SocketAddress;
 import java.net.SocketException;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -19,10 +20,12 @@ import de.illonis.eduras.events.GameEvent.GameEventNumber;
 import de.illonis.eduras.events.GameInfoRequest;
 import de.illonis.eduras.events.GameReadyEvent;
 import de.illonis.eduras.events.InitInformationEvent;
+import de.illonis.eduras.events.NetworkEvent.NetworkEventNumber;
 import de.illonis.eduras.events.ObjectFactoryEvent;
 import de.illonis.eduras.exceptions.InvalidNameException;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
 import de.illonis.eduras.exceptions.ServerNotReadyForStartException;
+import de.illonis.eduras.gameclient.UDPHiEvent;
 import de.illonis.eduras.interfaces.GameLogicInterface;
 import de.illonis.eduras.interfaces.NetworkEventListener;
 import de.illonis.eduras.logger.EduLog;
@@ -57,13 +60,14 @@ public class Server {
 	private final Buffer inputBuffer;
 	private final ServerSender serverSender;
 	private final HashMap<Integer, ServerTCPReceiver> serverTCPReceivers;
+	private final HashMap<Integer, SocketAddress> clientUDPAddresses;
 	private ServerDecoder serverLogic;
 	private GameInformation game;
 	private GameLogicInterface logic;
 	private final int port;
 	private boolean running = true;
 	private final String name;
-	private UDPMessageReceiver serverUDPReceiver;
+	private final UDPMessageReceiver serverUDPReceiver;
 
 	/**
 	 * Creates a new Server listening on default port.
@@ -109,6 +113,16 @@ public class Server {
 		serverSender = new ServerSender(this);
 		serverTCPReceivers = new HashMap<Integer, ServerTCPReceiver>();
 		serverUDPReceiver = new UDPMessageReceiver();
+		clientUDPAddresses = new HashMap<Integer, SocketAddress>();
+	}
+
+	/**
+	 * Returns a hashmap, that maps a client id to the clients UDP address.
+	 * 
+	 * @return The hashmap.
+	 */
+	public HashMap<Integer, SocketAddress> getClientUDPAddresses() {
+		return clientUDPAddresses;
 	}
 
 	/**
@@ -143,6 +157,13 @@ public class Server {
 					udpSocket.receive(packet);
 					String messages = new String(packet.getData(), 0,
 							packet.getLength());
+					UDPHiEvent udpHi = (UDPHiEvent) NetworkMessageDeserializer
+							.containsEvent(messages,
+									NetworkEventNumber.UDP_HI.getNumber());
+					if (udpHi != null) {
+						clientUDPAddresses.put(udpHi.getClient(),
+								packet.getSocketAddress());
+					}
 					inputBuffer.append(messages);
 				} catch (IOException e) {
 					EduLog.errorL("Server.networking.udpclose");

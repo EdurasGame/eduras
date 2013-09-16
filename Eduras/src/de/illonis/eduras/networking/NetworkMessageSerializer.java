@@ -25,6 +25,7 @@ import de.illonis.eduras.events.SetRemainingTimeEvent;
 import de.illonis.eduras.events.SetTeamsEvent;
 import de.illonis.eduras.events.UserMovementEvent;
 import de.illonis.eduras.exceptions.MessageNotSupportedException;
+import de.illonis.eduras.gameclient.UDPHiEvent;
 import de.illonis.eduras.math.Vector2D;
 
 /**
@@ -89,6 +90,10 @@ public class NetworkMessageSerializer {
 					.getTypeNum(), initEvent.getName(), initEvent.getClient());
 			break;
 		case GAME_READY:
+			break;
+		case UDP_HI:
+			UDPHiEvent udpHi = (UDPHiEvent) networkEvent;
+			serializedEvent += concatenateWithDel("#", udpHi.getClient());
 			break;
 		default:
 			break;

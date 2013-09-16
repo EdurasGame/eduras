@@ -6,6 +6,7 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.Socket;
+import java.net.SocketAddress;
 import java.net.SocketException;
 import java.util.HashMap;
 
@@ -34,7 +35,7 @@ public class ServerSender extends Thread {
 	private final Buffer outputBufferTCP;
 	private final Server server;
 	private boolean running;
-	private NetworkPolicy networkPolicy;
+	private final NetworkPolicy networkPolicy;
 
 	/**
 	 * Creates a new ServerSender that sends messages from given Buffer.
@@ -79,21 +80,18 @@ public class ServerSender extends Thread {
 	 * @param message
 	 */
 	private void sendUDPMessage(String message) {
-		for (ServerClient serverClient : clients.values()) {
+		for (SocketAddress clientAddress : server.getClientUDPAddresses()
+				.values()) {
 			byte[] messageAsBytes = message.getBytes();
-			InetAddress clientaddress = serverClient.getSocket()
-					.getInetAddress();
-			int port = serverClient.getSocket().getPort();
-			DatagramPacket packet = new DatagramPacket(messageAsBytes,
-					messageAsBytes.length, clientaddress, port);
 			try {
+				DatagramPacket packet = new DatagramPacket(messageAsBytes,
+						messageAsBytes.length, clientAddress);
 				udpSocket.send(packet);
 			} catch (IOException e) {
 				EduLog.passException(e);
 			}
 
-			EduLog.infoLF("Server.networking.msgsend", message,
-					serverClient.getClientId());
+			EduLog.info("Server.networking.msgsend");
 		}
 	}
 
