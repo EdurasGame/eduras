@@ -273,4 +273,11 @@ public class ClientFrame extends JFrame implements NetworkEventReactor,
 		userInterface.hideStatWindow();
 	}
 
+	@Override
+	public void onUDPReady(int clientId) {
+
+		// do nothing
+
+	}
+
 }

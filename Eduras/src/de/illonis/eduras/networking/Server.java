@@ -1,6 +1,5 @@
 package de.illonis.eduras.networking;
 
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
@@ -9,7 +8,6 @@ import java.net.Socket;
 import java.net.SocketAddress;
 import java.net.SocketException;
 import java.util.HashMap;
-import java.util.LinkedList;
 
 import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.ObjectFactory.ObjectType;
@@ -20,18 +18,18 @@ import de.illonis.eduras.events.GameEvent.GameEventNumber;
 import de.illonis.eduras.events.GameInfoRequest;
 import de.illonis.eduras.events.GameReadyEvent;
 import de.illonis.eduras.events.InitInformationEvent;
+import de.illonis.eduras.events.NetworkEvent;
 import de.illonis.eduras.events.NetworkEvent.NetworkEventNumber;
+import de.illonis.eduras.events.NetworkEventImpl;
 import de.illonis.eduras.events.ObjectFactoryEvent;
+import de.illonis.eduras.events.UDPHiEvent;
 import de.illonis.eduras.exceptions.InvalidNameException;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
 import de.illonis.eduras.exceptions.ServerNotReadyForStartException;
-import de.illonis.eduras.gameclient.UDPHiEvent;
 import de.illonis.eduras.interfaces.GameLogicInterface;
 import de.illonis.eduras.interfaces.NetworkEventListener;
 import de.illonis.eduras.logger.EduLog;
-import de.illonis.eduras.networking.ServerClient.ClientRole;
 import de.illonis.eduras.units.PlayerMainFigure;
-import de.illonis.eduras.utils.CollectionUtils;
 
 /**
  * A server that handles a game and its clients.
@@ -46,7 +44,7 @@ import de.illonis.eduras.utils.CollectionUtils;
  * 
  * @author illonis
  */
-public class Server {
+public class Server implements NetworkEventListener {
 
 	/**
 	 * Default port where server listens for new clients.
@@ -255,7 +253,7 @@ public class Server {
 	 * @throws IOException
 	 */
 	private void handleConnection(Socket clientSocket) throws IOException {
-		ServerClient client = serverSender.add(clientSocket);
+		final ServerClient client = serverSender.add(clientSocket);
 
 		// inform client about clientconnection.
 		ConnectionEstablishedEvent connectionEstablished = new ConnectionEstablishedEvent(
@@ -264,21 +262,27 @@ public class Server {
 		serverSender.sendEventToClient(connectionEstablished,
 				client.getClientId());
 
-		InitInformationEvent initInfo = getInitInfos(client);
+		client.setConnected(true);
+		ServerTCPReceiver sr = new ServerTCPReceiver(this,
+				serverSender.getClientById(client.getClientId()));
+		sr.start();
+		serverTCPReceivers.put(client.getClientId(), sr);
 
-		// extract role and name
-		if (initInfo.getRole() == ClientRole.PLAYER) {
-			logic.getGame().getGameSettings().getGameMode()
-					.onConnect(client.getClientId());
-
-			String playerName = initInfo.getName();
-			try {
-				logic.onGameEventAppeared(new ClientRenameEvent(client
-						.getClientId(), playerName));
-			} catch (InvalidNameException e) {
-				EduLog.passException(e);
-			}
-		}
+		/*
+		 * final class InitInformationReceiver extends Thread {
+		 * 
+		 * @Override public void run() {
+		 * 
+		 * // extract role and name if (initInfo.getRole() == ClientRole.PLAYER)
+		 * { logic.getGame().getGameSettings().getGameMode()
+		 * .onConnect(client.getClientId());
+		 * 
+		 * String playerName = initInfo.getName(); try {
+		 * logic.onGameEventAppeared(new ClientRenameEvent(client
+		 * .getClientId(), playerName)); } catch (InvalidNameException e) {
+		 * EduLog.passException(e); } } } } new
+		 * InitInformationReceiver().start();
+		 */
 
 	}
 
@@ -290,56 +294,28 @@ public class Server {
 	 *            The client to get information from.
 	 * @return Returns the client's role.
 	 */
-	private InitInformationEvent getInitInfos(ServerClient client) {
-		synchronized (client) {
-			// do init stuff
-			BufferedReader inputStream = client.getInputStream();
-
-			// wait for the client to pass information
-			InitInformationEvent initInfoEvent;
-			String initInformation;
-			Object obj = null;
-			try {
-
-				initInformation = inputStream.readLine();
-				LinkedList<Event> events = NetworkMessageDeserializer
-						.deserialize(initInformation);
-
-				obj = CollectionUtils.getElementOfClass(
-						InitInformationEvent.class, events);
-			} catch (IOException e1) {
-				EduLog.passException(e1);
-				return null;
-			}
-
-			if (obj != null) {
-				initInfoEvent = (InitInformationEvent) obj;
-			} else {
-				return null;
-			}
-
-			if (initInfoEvent.getRole() == ClientRole.PLAYER) {
-				ServerTCPReceiver sr = new ServerTCPReceiver(this, client);
-				sr.start();
-				serverTCPReceivers.put(client.getClientId(), sr);
-			}
-
-			// transfer information to client
-			GameInfoRequest gameInfos = new GameInfoRequest(
-					client.getClientId());
-			logic.onGameEventAppeared(gameInfos);
-
-			// inform client that the connectionprocess has finished
-			GameReadyEvent gameReady = new GameReadyEvent();
-			serverSender.sendEventToClient(gameReady, client.getClientId());
-
-			// wake up receiver
-			client.setConnected(true);
-			client.notify();
-			return initInfoEvent;
-		}
-
-	}
+	/*
+	 * private InitInformationEvent getInitInfos(ServerClient client) {
+	 * synchronized (client) { // do init stuff BufferedReader inputStream =
+	 * client.getInputStream();
+	 * 
+	 * // wait for the client to pass information InitInformationEvent
+	 * initInfoEvent; String initInformation; Object obj = null; try {
+	 * 
+	 * initInformation = inputStream.readLine(); LinkedList<Event> events =
+	 * NetworkMessageDeserializer .deserialize(initInformation);
+	 * 
+	 * obj = CollectionUtils.getElementOfClass( InitInformationEvent.class,
+	 * events); } catch (IOException e1) { EduLog.passException(e1); return
+	 * null; }
+	 * 
+	 * if (obj != null) { initInfoEvent = (InitInformationEvent) obj; } else {
+	 * return null; }
+	 * 
+	 * return initInfoEvent; }
+	 * 
+	 * }
+	 */
 
 	/**
 	 * A connection listener that listens for new connections and handles them.
@@ -517,4 +493,49 @@ public class Server {
 		return serverSender;
 	}
 
+	@Override
+	public void onNetworkEventAppeared(NetworkEvent event) {
+
+		switch (event.getType()) {
+		case UDP_HI:
+			if (serverSender.getClientById(event.getClient()).isUdpSetUp()) {
+				break;
+			}
+
+			serverSender.sendEventToClient(new NetworkEventImpl(
+					NetworkEventNumber.UDP_READY, event.getClient()), event
+					.getClient());
+			serverSender.getClientById(event.getClient()).setUdpSetUp(true);
+			break;
+		case INIT_INFORMATION:
+			InitInformationEvent initInfoEvent = (InitInformationEvent) event;
+
+			// transfer information to client
+			GameInfoRequest gameInfos = new GameInfoRequest(
+					initInfoEvent.getClient());
+			logic.onGameEventAppeared(gameInfos);
+
+			// inform client that the connectionprocess has finished
+			GameReadyEvent gameReady = new GameReadyEvent();
+			serverSender
+					.sendEventToClient(gameReady, initInfoEvent.getClient());
+
+			// extract role and name if (initInfo.getRole() ==
+			// ClientRole.PLAYER)
+			logic.getGame().getGameSettings().getGameMode()
+					.onConnect(initInfoEvent.getClient());
+
+			String playerName = initInfoEvent.getName();
+			try {
+				logic.onGameEventAppeared(new ClientRenameEvent(initInfoEvent
+						.getClient(), playerName));
+			} catch (InvalidNameException e) {
+				EduLog.passException(e);
+			}
+			break;
+		default:
+			break;
+		}
+
+	}
 }

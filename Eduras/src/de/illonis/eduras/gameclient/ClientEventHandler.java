@@ -15,7 +15,7 @@ import de.illonis.eduras.interfaces.NetworkEventListener;
  */
 public class ClientEventHandler implements NetworkEventListener {
 
-	private NetworkEventReactor reactor;
+	private final NetworkEventReactor reactor;
 
 	/**
 	 * Creates a new client event handler.
@@ -46,6 +46,9 @@ public class ClientEventHandler implements NetworkEventListener {
 			reactor.onDisconnect(qe.getClient());
 			break;
 		case NO_EVENT:
+			break;
+		case UDP_READY:
+			reactor.onUDPReady(event.getClient());
 			break;
 		default:
 			break;

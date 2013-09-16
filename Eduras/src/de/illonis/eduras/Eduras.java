@@ -8,9 +8,7 @@ import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.logging.Level;
 
-import de.illonis.eduras.events.NetworkEvent;
 import de.illonis.eduras.exceptions.ServerNotReadyForStartException;
-import de.illonis.eduras.interfaces.NetworkEventListener;
 import de.illonis.eduras.locale.Localization;
 import de.illonis.eduras.logger.EduLog;
 import de.illonis.eduras.logger.EduLog.LogMode;
@@ -75,12 +73,7 @@ public class Eduras {
 		gameInfo.setEventTriggerer(eventTriggerer);
 
 		server.setGame(logic.getGame());
-		server.setLogic(logic, new NetworkEventListener() {
-			@Override
-			public void onNetworkEventAppeared(NetworkEvent event) {
-				// do nothing
-			}
-		});
+		server.setLogic(logic, server);
 
 		eventTriggerer.changeMap(new FunMap());
 

@@ -15,6 +15,7 @@ import de.illonis.eduras.events.Event;
 import de.illonis.eduras.events.GameEvent.GameEventNumber;
 import de.illonis.eduras.events.InitInformationEvent;
 import de.illonis.eduras.events.ItemEvent;
+import de.illonis.eduras.events.UDPHiEvent;
 import de.illonis.eduras.exceptions.MessageNotSupportedException;
 import de.illonis.eduras.exceptions.WrongEventTypeException;
 import de.illonis.eduras.gameclient.gui.ClientFrame;
@@ -54,16 +55,22 @@ public class GameClient implements GuiClickReactor, NetworkEventReactor,
 	private ClientFrame frame;
 	private ClickState currentClickState;
 	private int currentItemSelected = -1;
-	private LinkedList<ClickableGuiElementInterface> clickListeners;
-	private LinkedList<TooltipTriggerer> triggerers;
+	private final LinkedList<ClickableGuiElementInterface> clickListeners;
+	private final LinkedList<TooltipTriggerer> triggerers;
 	private ServerSearcher searcher;
 	// private TooltipHandler tooltipHandler;
 
 	private String clientName;
 	private ClientRole role;
 
+	private ConnectionState connectionState;
+
 	private enum ClickState {
 		DEFAULT, ITEM_SELECTED;
+	}
+
+	private enum ConnectionState {
+		NOT_CONNECTED, CONNECTING, CONNECTION_ESTABLISHED, UDP_READY, GAME_READY;
 	}
 
 	/**
@@ -74,6 +81,7 @@ public class GameClient implements GuiClickReactor, NetworkEventReactor,
 		clickListeners = new LinkedList<ClickableGuiElementInterface>();
 		triggerers = new LinkedList<TooltipTriggerer>();
 		currentClickState = ClickState.DEFAULT;
+		connectionState = ConnectionState.NOT_CONNECTED;
 		loadTools();
 		startup();
 	}
@@ -141,6 +149,8 @@ public class GameClient implements GuiClickReactor, NetworkEventReactor,
 	@Override
 	public void onConnected(int clientId) {
 
+		this.connectionState = ConnectionState.CONNECTION_ESTABLISHED;
+
 		if (clientId != getOwnerID()) // only handle my connection
 			return;
 		EduLog.info("Connection to server established. OwnerId: "
@@ -149,14 +159,27 @@ public class GameClient implements GuiClickReactor, NetworkEventReactor,
 		keyHandler.addUserInputListener(frame);
 		frame.onConnected(clientId); // pass to gui
 
-		try {
-			sendEvent(new InitInformationEvent(role, clientName, clientId));
-		} catch (WrongEventTypeException e) {
-			EduLog.passException(e);
-		} catch (MessageNotSupportedException e) {
-			EduLog.passException(e);
+		final int finalClientId = clientId;
+
+		class UDPHiSender extends Thread {
+
+			@Override
+			public void run() {
+				while (connectionState != ConnectionState.GAME_READY) {
+					try {
+						sendEvent(new UDPHiEvent(finalClientId));
+						sleep(50);
+					} catch (WrongEventTypeException
+							| MessageNotSupportedException
+							| InterruptedException e) {
+						EduLog.passException(e);
+						break;
+					}
+				}
+			}
 		}
 
+		new UDPHiSender().start();
 	}
 
 	@Override
@@ -164,6 +187,7 @@ public class GameClient implements GuiClickReactor, NetworkEventReactor,
 		if (client == getOwnerID()) {
 			EduLog.warning("Connection lost");
 			frame.onConnectionLost(client);
+			connectionState = ConnectionState.NOT_CONNECTED;
 		} else {
 			// TODO: other client left
 		}
@@ -173,6 +197,7 @@ public class GameClient implements GuiClickReactor, NetworkEventReactor,
 	public void onDisconnect(int clientId) {
 		EduLog.info("Disconnected: " + clientId);
 		frame.onDisconnect(clientId);
+		connectionState = ConnectionState.NOT_CONNECTED;
 	}
 
 	/**
@@ -436,5 +461,15 @@ public class GameClient implements GuiClickReactor, NetworkEventReactor,
 		if (searcher == null)
 			return;
 		searcher.interrupt();
+	}
+
+	@Override
+	public void onUDPReady(int clientId) {
+		connectionState = ConnectionState.UDP_READY;
+		try {
+			sendEvent(new InitInformationEvent(role, clientName, clientId));
+		} catch (WrongEventTypeException | MessageNotSupportedException e) {
+			EduLog.passException(e);
+		}
 	}
 }

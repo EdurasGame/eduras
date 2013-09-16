@@ -46,15 +46,6 @@ public class ServerTCPReceiver extends Thread {
 
 	@Override
 	public void run() {
-		synchronized (client) {
-			if (!client.isConnected()) {
-				try {
-					client.wait();
-				} catch (InterruptedException e) {
-					// do nothing
-				}
-			}
-		}
 		waitForMessages();
 	}
 

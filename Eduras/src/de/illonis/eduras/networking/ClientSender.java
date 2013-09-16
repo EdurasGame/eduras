@@ -53,7 +53,6 @@ public class ClientSender {
 		try {
 			this.messageWriter = new PrintWriter(this.socket.getOutputStream(),
 					true);
-			udpSocket = new DatagramSocket();
 		} catch (IOException e) {
 			active = false;
 			EduLog.passException(e);
@@ -112,6 +111,17 @@ public class ClientSender {
 	 */
 	public void close() {
 		messageWriter.close();
+	}
+
+	/**
+	 * Sets the socket on which UDP messages are sent.
+	 * 
+	 * @param udpSocket2
+	 *            The socket to send UDP messages on.
+	 */
+	public void setUdpSocket(DatagramSocket udpSocket2) {
+		udpSocket = udpSocket2;
+
 	}
 
 }

@@ -19,6 +19,7 @@ public class ServerClient {
 	private final PrintWriter printWriter;
 	private final BufferedReader bufferedReader;
 	private boolean connected;
+	private boolean udpSetUp;
 
 	/**
 	 * Specifies the role of the client. If the client states to be spectator,
@@ -98,6 +99,7 @@ public class ServerClient {
 				socket.getInputStream()));
 
 		connected = false;
+		udpSetUp = false;
 
 	}
 
@@ -172,6 +174,27 @@ public class ServerClient {
 	 */
 	public void setConnected(boolean connected) {
 		this.connected = connected;
+	}
+
+	/**
+	 * Tells whether the initial UDP messages has been received from this
+	 * client.
+	 * 
+	 * @return True if yes.
+	 */
+	public boolean isUdpSetUp() {
+		return udpSetUp;
+	}
+
+	/**
+	 * Sets the udpSetUp flag.
+	 * 
+	 * @param b
+	 *            The new value.
+	 */
+	public void setUdpSetUp(boolean b) {
+		udpSetUp = b;
+
 	}
 
 }

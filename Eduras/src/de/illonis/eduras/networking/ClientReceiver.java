@@ -29,8 +29,10 @@ public class ClientReceiver extends Thread {
 	private boolean connectionAvailable = true;
 
 	private final Client client;
-	private Buffer inputBuffer;
+	private final Buffer inputBuffer;
 	private ClientParser p;
+
+	private DatagramSocket udpSocket;
 
 	/**
 	 * Retrieves messages from server.
@@ -55,6 +57,26 @@ public class ClientReceiver extends Thread {
 			EduLog.passException(e);
 		}
 
+		try {
+			udpSocket = new DatagramSocket(client.getPortNumber());
+		} catch (SocketException e) {
+			connectionAvailable = false;
+			EduLog.errorLF("Client.networking.udpopenerror",
+					client.getPortNumber());
+			EduLog.passException(e);
+			interrupt();
+			return;
+		}
+
+	}
+
+	/**
+	 * Returns the DatagramSocket the receiver receives udp messages on.
+	 * 
+	 * @return The DatagramSocket.
+	 */
+	public DatagramSocket getUdpSocket() {
+		return udpSocket;
 	}
 
 	@Override
@@ -102,17 +124,6 @@ public class ClientReceiver extends Thread {
 
 		@Override
 		public void run() {
-			DatagramSocket udpSocket = null;
-			try {
-				udpSocket = new DatagramSocket(client.getPortNumber());
-			} catch (SocketException e) {
-				connectionAvailable = false;
-				EduLog.errorLF("Client.networking.udpopenerror",
-						client.getPortNumber());
-				EduLog.passException(e);
-				interrupt();
-				return;
-			}
 
 			while (connectionAvailable) {
 				DatagramPacket packet = new DatagramPacket(

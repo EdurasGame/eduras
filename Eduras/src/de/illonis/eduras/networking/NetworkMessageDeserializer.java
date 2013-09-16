@@ -20,6 +20,7 @@ import de.illonis.eduras.events.MatchEndEvent;
 import de.illonis.eduras.events.MovementEvent;
 import de.illonis.eduras.events.NetworkEvent;
 import de.illonis.eduras.events.NetworkEvent.NetworkEventNumber;
+import de.illonis.eduras.events.NetworkEventImpl;
 import de.illonis.eduras.events.NoEvent;
 import de.illonis.eduras.events.ObjectFactoryEvent;
 import de.illonis.eduras.events.SetBooleanGameObjectAttributeEvent;
@@ -30,11 +31,11 @@ import de.illonis.eduras.events.SetOwnerEvent;
 import de.illonis.eduras.events.SetPolygonDataEvent;
 import de.illonis.eduras.events.SetRemainingTimeEvent;
 import de.illonis.eduras.events.SetTeamsEvent;
+import de.illonis.eduras.events.UDPHiEvent;
 import de.illonis.eduras.events.UserMovementEvent;
 import de.illonis.eduras.exceptions.GivenParametersDoNotFitToEventException;
 import de.illonis.eduras.exceptions.InvalidMessageFormatException;
 import de.illonis.eduras.exceptions.MessageNotSupportedException;
-import de.illonis.eduras.gameclient.UDPHiEvent;
 import de.illonis.eduras.logger.EduLog;
 import de.illonis.eduras.math.Vector2D;
 import de.illonis.eduras.networking.ServerClient.ClientRole;
@@ -179,6 +180,9 @@ public class NetworkMessageDeserializer {
 			break;
 		case UDP_HI:
 			networkEvent = new UDPHiEvent(parseInt(args[1]));
+			break;
+		case UDP_READY:
+			networkEvent = new NetworkEventImpl(typeNumber, parseInt(args[1]));
 			break;
 		default:
 			// TODO: Maybe we should generalize NetworkEventNumber and

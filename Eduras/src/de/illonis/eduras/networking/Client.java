@@ -68,6 +68,7 @@ public class Client {
 		receiver.setNetworkEventListener(networkEventListener);
 		receiver.start();
 		sender = new ClientSender(socket);
+		sender.setUdpSocket(receiver.getUdpSocket());
 
 		// createEchoSocket();
 	}
