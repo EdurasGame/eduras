@@ -366,6 +366,7 @@ public class Server implements NetworkEventListener {
 	void removeClient(ServerClient client) {
 		serverSender.remove(client);
 		serverTCPReceivers.get(client.getClientId()).stopRunning();
+		clientUDPAddresses.remove(client.getClientId());
 	}
 
 	/**
@@ -498,7 +499,8 @@ public class Server implements NetworkEventListener {
 
 		switch (event.getType()) {
 		case UDP_HI:
-			if (serverSender.getClientById(event.getClient()).isUdpSetUp()) {
+			ServerClient client = serverSender.getClientById(event.getClient());
+			if (client == null || client.isUdpSetUp()) {
 				break;
 			}
 

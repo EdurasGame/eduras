@@ -408,6 +408,7 @@ public class GameClient implements GuiClickReactor, NetworkEventReactor,
 
 	@Override
 	public void onGameReady() {
+		connectionState = ConnectionState.GAME_READY;
 		frame.onGameReady();
 	}
 
