@@ -34,6 +34,7 @@ import de.illonis.eduras.logger.EduLog;
 import de.illonis.eduras.maps.InitialObjectData;
 import de.illonis.eduras.maps.Map;
 import de.illonis.eduras.math.Vector2D;
+import de.illonis.eduras.networking.ClientSender.PacketType;
 import de.illonis.eduras.networking.ServerSender;
 import de.illonis.eduras.units.PlayerMainFigure;
 import de.illonis.eduras.units.Unit;
@@ -199,9 +200,24 @@ public class ServerEventTriggerer implements EventTriggerer {
 	}
 
 	@Override
-	public void setPositionOfObject(int objectId, Vector2D newPosition) {
-		MovementEvent e = new MovementEvent(GameEventNumber.SET_POS_UDP,
-				objectId);
+	public void maybeSetPositionOfObject(int objectId, Vector2D newPosition) {
+		setPositionOfObject(objectId, newPosition, PacketType.UDP);
+	}
+
+	@Override
+	public void guaranteeSetPositionOfObject(int objectId, Vector2D newPosition) {
+		setPositionOfObject(objectId, newPosition, PacketType.TCP);
+	}
+
+	private void setPositionOfObject(int objectId, Vector2D newPosition,
+			PacketType type) {
+		GameEventNumber eventNumber;
+		if (type == PacketType.TCP)
+			eventNumber = GameEventNumber.SET_POS_TCP;
+		else
+			eventNumber = GameEventNumber.SET_POS_UDP;
+
+		MovementEvent e = new MovementEvent(eventNumber, objectId);
 		e.setNewXPos(newPosition.getX());
 		e.setNewYPos(newPosition.getY());
 
@@ -271,7 +287,7 @@ public class ServerEventTriggerer implements EventTriggerer {
 			e.printStackTrace();
 		}
 
-		setPositionOfObject(player.getId(), spawnPosition);
+		guaranteeSetPositionOfObject(player.getId(), spawnPosition);
 	}
 
 	@Override

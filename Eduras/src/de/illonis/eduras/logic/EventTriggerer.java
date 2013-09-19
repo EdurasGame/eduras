@@ -119,14 +119,26 @@ public interface EventTriggerer {
 	void changeItemSlot(int slot, int player, Item newItem);
 
 	/**
-	 * Moves a specific object to a new position instantly.
+	 * Moves a specific object to a new position instantly. Does not guarantee
+	 * this event is reaches the clients.
 	 * 
 	 * @param objectId
 	 *            id of object to moved.
 	 * @param newPosition
 	 *            target position.
 	 */
-	void setPositionOfObject(int objectId, Vector2D newPosition);
+	void maybeSetPositionOfObject(int objectId, Vector2D newPosition);
+
+	/**
+	 * Moves a specific object to a new position instantly. Does guarantee the
+	 * event reaches the clients.
+	 * 
+	 * @param objectId
+	 *            id of object to moved.
+	 * @param newPosition
+	 *            target position.
+	 */
+	void guaranteeSetPositionOfObject(int objectId, Vector2D newPosition);
 
 	/**
 	 * You can implement this method if you need to do some setup.
