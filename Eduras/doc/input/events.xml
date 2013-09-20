@@ -45,11 +45,11 @@
 			by the server and events triggered by the client.
 		</para>
 		<para>
-			Furthermore, every event has got a unique id. The id must be
+			<emphasis role="strike">Furthermore, every event has got a unique id. The id must be
 			unique
-			looking at all events and not only for the same event type. The
-			convention is
-			that server events shall have ids from 101 to 199,
+			looking at all events and not only for the same event type.</emphasis> Every event has got an id.
+			Two distinct events shall have the same id if and only if they are treated equally by the game
+			logic on the receivers side. The convention is that server events shall have ids from 101 to 199,
 			client events from 1 to 99.
 		</para>
 
@@ -75,6 +75,19 @@
 			additional information
 			are seperated by '#'.
 		</para>
+		
+		<para>
+		    Due to bad performance when playing on the Internet, we had to increase
+		    the speed by using UDP transmission when appropiate. That is, every event
+		    will either be transmitted via TCP or UDP. The NetworkPolicy interface
+		    contains a function that determines whether an event shall use TCP or UDP.
+		    So, whenever you think of a new event, make sure you assign it the right
+		    type of transmission. As a general rule, since UDP provides only unreliable
+		    (but faster) transmission, events that are transmitted frequently and where
+		    a single event is negligible such as the SET_POS event, that is sent every 30ms
+		    to update your position, should use UDP. Events like OBJECT_CREATE, that are
+		    mandatory to be received by the client must use TCP.
+		</para>
 	</section>
 
 
@@ -83,10 +96,11 @@
 
 		<table frame="all">
 			<title>Server-Events</title>
-			<tgroup cols="6">
+			<tgroup cols="7">
 				<thead>
 					<row>
 						<entry>Event</entry>
+						<entry>Protocol</entry>
 						<entry>Id=arg0</entry>
 						<entry>Description</entry>
 						<entry>arg1</entry>
@@ -96,7 +110,19 @@
 				</thead>
 				<tbody>
 					<row>
-						<entry>SET_POS</entry>
+						<entry>SET_POS_UDP</entry>
+						<entry>UDP</entry>
+						<entry>101</entry>
+						<entry>Sets the position of an object to the given new values of
+							x- and y-position.
+						</entry>
+						<entry>objectId</entry>
+						<entry>newX</entry>
+						<entry>newY</entry>
+					</row>
+					<row>
+						<entry>SET_POS_TCP</entry>
+						<entry>TCP</entry>
 						<entry>101</entry>
 						<entry>Sets the position of an object to the given new values of
 							x- and y-position.
@@ -107,6 +133,7 @@
 					</row>
 					<row>
 						<entry>SET_OWNER</entry>
+						<entry>TCP</entry>
 						<entry>102</entry>
 						<entry>Sets the owner of an object to the given new owner.
 						</entry>
@@ -115,6 +142,7 @@
 					</row>
 					<row>
 						<entry>SET_VISIBLE</entry>
+						<entry>TCP</entry>
 						<entry>103</entry>
 						<entry>Sets the visible attribute of a gameobject.</entry>
 						<entry>objectId</entry>
@@ -123,6 +151,7 @@
 					</row>
 					<row>
 						<entry>SET_COLLIDABLE</entry>
+						<entry>TCP</entry>
 						<entry>104</entry>
 						<entry>Sets the collidable attribute of a gameobject.</entry>
 						<entry>objectId</entry>
@@ -131,6 +160,7 @@
 					</row>
 					<row>
 						<entry>SET_POLYGON_DATA</entry>
+						<entry>TCP</entry>
 						<entry>105</entry>
 						<entry>Sets polygon data of a dynamic polygon block.</entry>
 						<entry>objectId</entry>
@@ -139,6 +169,7 @@
 					</row>
 					<row>
 						<entry>OBJECT_CREATE</entry>
+						<entry>TCP</entry>
 						<entry>120</entry>
 						<entry>Tells that an object has been created.</entry>
 						<entry>objectId</entry>
@@ -147,6 +178,7 @@
 					</row>
 					<row>
 						<entry>OBJECT_REMOVE</entry>
+						<entry>TCP</entry>
 						<entry>121</entry>
 						<entry>Tells that an object has been removed.</entry>
 						<entry>objectId</entry>
@@ -155,6 +187,7 @@
 					</row>
 					<row>
 						<entry>SET_ITEM_SLOT</entry>
+						<entry>TCP</entry>
 						<entry>122</entry>
 						<entry>Sets the item 'slotNum' in player 'ownerID's inventory to new item 'objectId'.</entry>
 						<entry>ownerID</entry>
@@ -163,24 +196,28 @@
 					</row>
 					<row>
 					    <entry>ITEM_CD_START</entry>
+					    <entry>TCP</entry>
 					    <entry>123</entry>
 					    <entry>Indicates that an item cooldown has started.</entry>
 					    <entry>objectId</entry>
 					</row>
 					<row>
 					    <entry>ITEM_CD_FINISHED</entry>
+					    <entry>TCP</entry>
 					    <entry>124</entry>
 					    <entry>Indicates that an item cooldown has finished.</entry>
 					    <entry>objectId</entry>
 					</row>
 					<row>
 						<entry>DEATH</entry>
+						<entry>TCP</entry>
 						<entry>131</entry>
 						<entry>Indicates that a gameobject is dead.</entry>
 						<entry>objectId</entry>
 					</row>
 					<row>
 						<entry>SETHEALTH</entry>
+						<entry>TCP</entry>
 						<entry>132</entry>
 						<entry>Sets health of a gameobject to new value.</entry>
 						<entry>objectId</entry>
@@ -188,12 +225,14 @@
 					</row>
 					<row>
 					    <entry>SET_GAMEMODE</entry>
+					    <entry>TCP</entry>
 					    <entry>140</entry>
 					    <entry>Sets game mode to a new mode.</entry>
 					    <entry>newMode</entry>
 					</row>
 					<row>
 					    <entry>SET_KILLS</entry>
+					    <entry>TCP</entry>
 					    <entry>150</entry>
 					    <entry>Sets the kill count of a player.</entry>
 					    <entry>ownerId</entry>
@@ -201,6 +240,7 @@
 					</row>
 					<row>
 					    <entry>SET_DEATHS</entry>
+					    <entry>TCP</entry>
 					    <entry>151</entry>
 					    <entry>Sets the death count of a player.</entry>
 					    <entry>ownerId</entry>
@@ -208,18 +248,21 @@
 					</row>
 					<row>
 					    <entry>SET_REMAININGTIME</entry>
+					    <entry>TCP</entry>
 					    <entry>180</entry>
 					    <entry>Sets the remaininig time.</entry>
 					    <entry>remainingTime</entry>
 					</row>
 					<row>
 						<entry>MATCH_END</entry>
+						<entry>TCP</entry>
 						<entry>190</entry>
 						<entry>Tells that the match ended and that the winner has got the passed id.</entry>
 						<entry>winnerId</entry>
 					</row>
 					<row>
 					    <entry>SET_TEAMS</entry>
+					    <entry>TCP</entry>
 					    <entry>191</entry>
 					    <entry>Tells client which teams are playing.</entry>
 					    <entry>name#1</entry>
@@ -228,6 +271,7 @@
 					</row>
 					<row>
 					    <entry>ADD_PLAYER_TO_TEAM</entry>
+					    <entry>TCP</entry>
 					    <entry>192</entry>
 					    <entry>Adds a player to a team.</entry>
 					    <entry>ownerId</entry>
@@ -239,10 +283,11 @@
 
 		<table>
 			<title>Client-Events</title>
-			<tgroup cols="7">
+			<tgroup cols="8">
 				<thead>
 					<row>
 						<entry>Event</entry>
+						<entry>Protocol</entry>
 						<entry>Id=arg0</entry>
 						<entry>Description</entry>
 						<entry>arg1</entry>
@@ -255,6 +300,7 @@
 				<tbody>
 					<row>
 						<entry>INFORMATION_REQUEST</entry>
+						<entry>TCP</entry>
 						<entry>1</entry>
 						<entry>The client asks for all objects to build its game
 							information.
@@ -263,6 +309,7 @@
 					</row>
 					<row>
 						<entry>CLIENT_SETNAME</entry>
+						<entry>TCP</entry>
 						<entry>2</entry>
 						<entry>The user changed is username. Also used after connecting.
 						</entry>
@@ -271,6 +318,7 @@
 					</row>
 					<row>
 						<entry>MOVE_LEFT_PRESSED</entry>
+						<entry>TCP</entry>
 						<entry>10</entry>
 						<entry>The user triggered to move its character to the left.
 						</entry>
@@ -278,6 +326,7 @@
 					</row>
 					<row>
 						<entry>MOVE_RIGHT_PRESSED</entry>
+						<entry>TCP</entry>
 						<entry>11</entry>
 						<entry>The user triggered to move its character to the right.
 						</entry>
@@ -285,18 +334,21 @@
 					</row>
 					<row>
 						<entry>MOVE_UP_PRESSED</entry>
+						<entry>TCP</entry>
 						<entry>12</entry>
 						<entry>The user triggered to move its character upwards.</entry>
 						<entry>ownerId</entry>
 					</row>
 					<row>
 						<entry>MOVE_DOWN_PRESSED</entry>
+						<entry>TCP</entry>
 						<entry>13</entry>
 						<entry>The user triggered to move its character downwards.</entry>
 						<entry>ownerId</entry>
 					</row>
 					<row>
 						<entry>MOVE_LEFT_RELEASED</entry>
+						<entry>TCP</entry>
 						<entry>14</entry>
 						<entry>The user triggered to stop moving its character to the
 							left.
@@ -305,6 +357,7 @@
 					</row>
 					<row>
 						<entry>MOVE_RIGHT_RELEASED</entry>
+						<entry>TCP</entry>
 						<entry>15</entry>
 						<entry>The user triggered to stop moving its character to the
 							right.
@@ -313,6 +366,7 @@
 					</row>
 					<row>
 						<entry>MOVE_UP_RELEASED</entry>
+						<entry>TCP</entry>
 						<entry>16</entry>
 						<entry>The user triggered to stop moving its character upwards.
 						</entry>
@@ -320,6 +374,7 @@
 					</row>
 					<row>
 						<entry>MOVE_DOWN_RELEASED</entry>
+						<entry>TCP</entry>
 						<entry>17</entry>
 						<entry>The user triggered to stop moving its character downwards.
 						</entry>
@@ -327,6 +382,7 @@
 					</row>
 					<row>
 						<entry>SET_SPEEDVECTOR</entry>
+						<entry>TCP</entry>
 						<entry>18</entry>
 						<entry>Sets the speed vector of a gameobject to a new value.
 						</entry>
@@ -337,6 +393,7 @@
 					</row>
 					<row>
 						<entry>SET_SPEED</entry>
+						<entry>TCP</entry>
 						<entry>19</entry>
 						<entry>Sets absolute speed of a gameobject to a new value.
 						</entry>
@@ -346,6 +403,7 @@
 					</row>
 					<row>
 						<entry>ITEM_USE</entry>
+						<entry>TCP</entry>
 						<entry>30</entry>
 						<entry>The user triggered to use the item in his inventory slot 'slotNum' at the position (targetX,targetY).
 						</entry>
@@ -360,10 +418,11 @@
 
 		<table>
 			<title>Networking-Events</title>
-			<tgroup cols="6">
+			<tgroup cols="7">
 				<thead>
 					<row>
 						<entry>Event</entry>
+						<entry>Protocol</entry>
 						<entry>Id=arg0</entry>
 						<entry>Description</entry>
 						<entry>arg1</entry>
@@ -374,6 +433,7 @@
 				<tbody>
 					<row>
 						<entry>CONNECTION_ESTABLISHED</entry>
+						<entry>TCP</entry>
 						<entry>201</entry>
 						<entry>This event is sent to the client by the server if the
 							client connected successfully. The server assigns a clientId to
@@ -383,12 +443,14 @@
 					</row>
 					<row>
 						<entry>CONNECTION_ABORTED</entry>
+						<entry>TCP</entry>
 						<entry>202</entry>
 						<entry>This event is sent to all clients if a client disconnected. The client id of the disconnected client will be given.</entry>
 						<entry>clientId</entry>
 					</row>
 					<row>
 						<entry>INIT_INFORMATION</entry>
+						<entry>TCP</entry>
 						<entry>203</entry>
 						<entry>This event must be sent by the client to pass information the server needs for connection initialization.</entry>
 						<entry>clientRole</entry>
@@ -397,13 +459,32 @@
 					</row>
 					<row>
 						<entry>GAME_READY</entry>
+						<entry>TCP</entry>
 						<entry>204</entry>
 						<entry>This event is triggered locally on client to notify that all data has been loaded.</entry>
 					</row>
 					<row>
 						<entry>CONNECTION_QUIT</entry>
+						<entry>TCP</entry>
 						<entry>205</entry>
 						<entry>This event is sent from client when user closes client.</entry>
+						<entry>clientId</entry>
+					</row>
+					<row>
+						<entry>UDP_HI</entry>
+						<entry>UDP</entry>
+						<entry>206</entry>
+						<entry>This event is sent from the client to the server to annouce the client's
+						    UDP socket's address. The client should stop sending this message as soon as it
+						    receives the UDP_Ready message from the server.</entry>
+						<entry>clientId</entry>
+					</row>
+					<row>
+						<entry>UDP_READY</entry>
+						<entry>TCP</entry>
+						<entry>207</entry>
+						<entry>This event is sent from the server to the client when the server received
+						    the clients UDP_Hi message for the first time after it had connected.</entry>
 						<entry>clientId</entry>
 					</row>
 				</tbody>
