@@ -116,6 +116,41 @@
 	</section>
 	
 	<section>
+	    <title>(fma) Organization of network structure (proposal)</title>
+	    <para>
+	        In order to be able to reuse the server-client structure, it is designed as
+	        seen in the following figure.
+	    </para>
+	    <figure>
+            <title></title>
+            <mediaobject>
+                <imageobject>
+                    <imagedata fileref="images/network.jpg" format="JPG" />
+                </imageobject>
+            </mediaobject>
+        </figure>
+	    <para>
+	        The network is designed after the Observer Pattern, but clients are able to influence
+	        the server's state. Thus, there is one central server, to which clients can connect.
+	        From now on they will be kept up-to-date about the server's state. Server and clients
+	        communicate via so called events. Users of this server-client structure have to think of
+	        their own events and assign them appropriate (unique?) numbers and then either put
+	        the events arguments to an instance of the Event class or, as we recommend due to better
+	        clearity, inherit and extend the Event class to fit their needs. Furthermore, the user has
+	        to provide an EventHandler on the client- and server side each for the events to be processed.
+	        The user can also set a realization of the NetworkPolicy interface. This class determines for
+	        each Event whether it shall be transmitted via TCP or UDP. If such a NetworkPolicy is not set,
+	        every event is processed via TCP by default.
+	    </para>
+	    <para>
+	        The internal structure is probably not interesting to the user. Note that only one Event
+	        at a time is passed to the client's resp. server's EventHandler, so there is only one thread
+	        and you can be sure there is no inconsistencies.
+	    </para>
+	    
+	</section>
+	
+	<section>
 		
 		<title>(fma) An example</title>
 		
