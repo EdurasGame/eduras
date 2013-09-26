@@ -138,9 +138,11 @@
 	        	unit. The AI is able to react on unit's death, too. 
 	        </para>
 	        <para>
-	        	The <emphasis>UnitMover</emphasis> is responsible for handling asynchronous unit actions.
-	        	It holds a Runnable object that repeatedly updates unit's moving direction. To
-	        	receive the path information it uses a <emphasis>PathFinder</emphasis>.
+	        	The final <emphasis>UnitMover</emphasis> class is responsible for handling
+	        	asynchronous unit actions.
+	        	It holds a Runnable object that repeatedly updates unit's moving direction. It handles
+	        	the creation of new runnable instances and cares for thread concurrency.
+	        	To receive the path information it uses a <emphasis>PathFinder</emphasis>.
 	        </para>
 	        <para>
 	        	The <emphasis>PathFinder</emphasis> interface provides automatic pathfinding.
@@ -389,6 +391,11 @@ active = false;
 							</tbody>
 						</tgroup>
 					</table>
+				</listitem>
+				<listitem>
+					<para>
+						Implementation of <emphasis>UnitMover</emphasis> class.
+					</para>
 				</listitem>
 			</orderedlist>		
 		</section>
