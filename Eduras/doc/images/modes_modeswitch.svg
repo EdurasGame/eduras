@@ -1,0 +1,250 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="1242.9906"
+   height="220.43195"
+   id="svg2"
+   version="1.1"
+   inkscape:version="0.48.3.1 r9886"
+   sodipodi:docname="modes_modeswitch.svg"
+   inkscape:export-filename="/home/illonis/git/eduras/Eduras/doc/images/modes_modeswitch.png"
+   inkscape:export-xdpi="47.060001"
+   inkscape:export-ydpi="47.060001">
+  <defs
+     id="defs4" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="1.1345904"
+     inkscape:cx="1183.0376"
+     inkscape:cy="81.223819"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     inkscape:window-width="1280"
+     inkscape:window-height="744"
+     inkscape:window-x="0"
+     inkscape:window-y="24"
+     inkscape:window-maximized="1"
+     fit-margin-left="5"
+     fit-margin-right="5"
+     fit-margin-bottom="5"
+     fit-margin-top="5" />
+  <metadata
+     id="metadata7">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Ebene 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(-177.21429,-91.858809)">
+    <path
+       style="color:#000000;fill:#c9b3ff;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:7;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+       d="m 523.25903,263.79077 824.28447,0 18.5089,20.07563 -18.5089,19.92437 -824.28447,0 z"
+       id="rect3987-2"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="cccccc" />
+    <path
+       style="color:#000000;fill:#d4ffe2;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:7;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+       d="m 458.60925,220.93359 888.93425,0 19.1699,20.40645 -19.1699,19.59355 -888.93425,0 z"
+       id="rect3987"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="cccccc" />
+    <text
+       xml:space="preserve"
+       style="font-size:40px;font-style:normal;font-weight:normal;line-height:100%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
+       x="185.67224"
+       y="120.13882"
+       id="text2985"
+       sodipodi:linespacing="100%"><tspan
+         sodipodi:role="line"
+         id="tspan2987"
+         x="185.67224"
+         y="120.13882"
+         style="font-size:30px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:100%;font-family:Ubuntu;-inkscape-font-specification:Ubuntu">User switches to</tspan><tspan
+         sodipodi:role="line"
+         x="185.67224"
+         y="150.13882"
+         style="font-size:30px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:100%;font-family:Ubuntu;-inkscape-font-specification:Ubuntu"
+         id="tspan3832">build mode</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:40px;font-style:normal;font-weight:normal;line-height:100%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
+       x="866.229"
+       y="150.07881"
+       id="text2989"
+       sodipodi:linespacing="100%"><tspan
+         sodipodi:role="line"
+         id="tspan2991"
+         x="866.229"
+         y="150.07881"
+         style="font-size:30px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:100%;font-family:Ubuntu;-inkscape-font-specification:Ubuntu">User switches back</tspan></text>
+    <rect
+       style="color:#000000;fill:#00ff69;fill-opacity:1;stroke:none;stroke-width:10;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+       id="rect2993"
+       width="325.08774"
+       height="40"
+       x="188"
+       y="220.93359" />
+    <rect
+       style="color:#000000;fill:#0058a2;fill-opacity:1;stroke:none;stroke-width:10;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+       id="rect2993-7"
+       width="489.72726"
+       height="40"
+       x="188.57138"
+       y="263.79077" />
+    <text
+       xml:space="preserve"
+       style="font-size:25px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#ffffff;fill-opacity:1;stroke:none;font-family:Sans"
+       x="204.28572"
+       y="291.79077"
+       id="text3781"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan3783"
+         x="204.28572"
+         y="291.79077"
+         style="font-size:25px;font-style:normal;font-variant:normal;font-weight:300;font-stretch:normal;font-family:Ubuntu;-inkscape-font-specification:Ubuntu Light">minimum &quot;build mode&quot;-time</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:25px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
+       x="207.78288"
+       y="248.53285"
+       id="text3785"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan3787"
+         x="207.78288"
+         y="248.53285"
+         style="font-size:25px;font-style:normal;font-variant:normal;font-weight:300;font-stretch:normal;font-family:Ubuntu;-inkscape-font-specification:Ubuntu Light">switching cooldown</tspan></text>
+    <path
+       style="fill:none;stroke:#000000;stroke-width:7;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+       d="m 185.71429,303.79075 0,-91.42856 50.71429,-50.71429"
+       id="path3791"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="ccc" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:7;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+       d="m 676.69388,303.79075 0,-91.42856 50.71432,-50.71429"
+       id="path3791-7"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="ccc" />
+    <text
+       xml:space="preserve"
+       style="font-size:40px;font-style:normal;font-weight:normal;line-height:100%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
+       x="598.84473"
+       y="120.13882"
+       id="text2985-0"
+       sodipodi:linespacing="100%"><tspan
+         sodipodi:role="line"
+         x="598.84473"
+         y="120.13882"
+         style="font-size:30px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:100%;font-family:Ubuntu;-inkscape-font-specification:Ubuntu"
+         id="tspan3838">User can switch</tspan><tspan
+         sodipodi:role="line"
+         x="598.84473"
+         y="150.13882"
+         style="font-size:30px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:100%;font-family:Ubuntu;-inkscape-font-specification:Ubuntu"
+         id="tspan3842">from now on</tspan></text>
+    <rect
+       style="color:#000000;fill:#00ff69;fill-opacity:1;stroke:none;stroke-width:10;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+       id="rect2993-8"
+       width="325.08774"
+       height="40"
+       x="878.72546"
+       y="220.93359" />
+    <text
+       xml:space="preserve"
+       style="font-size:25px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
+       x="896.50836"
+       y="248.53285"
+       id="text3785-9"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan3787-1"
+         x="896.50836"
+         y="248.53285"
+         style="font-size:25px;font-style:normal;font-variant:normal;font-weight:300;font-stretch:normal;font-family:Ubuntu;-inkscape-font-specification:Ubuntu Light">switching cooldown</tspan></text>
+    <rect
+       style="color:#000000;fill:#0058a2;fill-opacity:1;stroke:none;stroke-width:10;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+       id="rect2993-7-4"
+       width="362.44803"
+       height="40"
+       x="878.72546"
+       y="263.79077" />
+    <text
+       xml:space="preserve"
+       style="font-size:25px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#ffffff;fill-opacity:1;stroke:none;font-family:Sans"
+       x="894.43976"
+       y="291.79077"
+       id="text3781-8"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan3783-0"
+         x="894.43976"
+         y="291.79077"
+         style="font-size:25px;font-style:normal;font-variant:normal;font-weight:300;font-stretch:normal;font-family:Ubuntu;-inkscape-font-specification:Ubuntu Light">minimum &quot;ego-mode&quot;-time</tspan></text>
+    <path
+       style="fill:none;stroke:#000000;stroke-width:7;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+       d="m 876.14562,303.79075 0,-91.42856 50.71432,-50.71429"
+       id="path3791-7-0"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="ccc" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:7;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+       d="m 1241.1634,303.79075 0,-91.42856 50.7143,-50.71429"
+       id="path3791-7-3"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="ccc" />
+    <text
+       xml:space="preserve"
+       style="font-size:40px;font-style:normal;font-weight:normal;line-height:100%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
+       x="1207.3142"
+       y="120.13881"
+       id="text2985-0-3"
+       sodipodi:linespacing="100%"><tspan
+         sodipodi:role="line"
+         x="1207.3142"
+         y="120.13881"
+         style="font-size:30px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:100%;font-family:Ubuntu;-inkscape-font-specification:Ubuntu"
+         id="tspan3838-2">User can switch</tspan><tspan
+         sodipodi:role="line"
+         x="1207.3142"
+         y="150.13881"
+         style="font-size:30px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:100%;font-family:Ubuntu;-inkscape-font-specification:Ubuntu"
+         id="tspan3842-1">from now on</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:27.40130234000000087px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#cccccc;fill-opacity:1;stroke:none;font-family:Sans"
+       x="1358.4589"
+       y="272.40723"
+       id="text4041"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan4043"
+         x="1358.4589"
+         y="272.40723"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#cccccc;font-family:Ubuntu;-inkscape-font-specification:Ubuntu">Time</tspan></text>
+  </g>
+</svg>
