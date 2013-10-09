@@ -88,8 +88,10 @@
 		<section>
 			<title>Design aspects</title>
 			<para>
-				To make the mode decision more important to the player,
-				the mode cannot be changed immediately. There is a cooldown
+				To make the mode decision more important to the player, (fma) in some
+				game modes or depending on the settings (/fma)
+				the mode cannot be changed immediately (fma) nor at any place (/fma). 
+				There is a cooldown
 				after changing mode that prevents the player from switching back
 				instantly.
 				In addition to that, each mode can have an individual minimum time.
@@ -103,9 +105,11 @@
 	            </mediaobject>
 	        </figure>
 			<para>
-				The mainfigures of players that switched to build mode
-				stays at it's position and thus is still vulnerable.
-				The player should care fore his mainfigure himself.
+				(fma) Depending on game settings (/fma) the mainfigures of players that 
+				switched to build mode
+				(fma) might (/fma) stay at its position and thus is still vulnerable.
+				The player should care for his mainfigure himself (fma)(or good communication
+				between teammembers is necessary :)) (/fma).
 				Due to the switching cooldown, this may be a tricky task that
 				leads players to switch to this mode only if they are in a safe
 				position.
@@ -113,6 +117,10 @@
 		</section>
 		<section>
 			<title>Artificial intelligence</title>
+			
+			<section>
+			    <title>Option 1</title>
+			
 			<para>
 				Units need to have to think for themselves in some way, therefore they
 				need some kind of AI.
@@ -148,6 +156,53 @@
 	        	The <emphasis>PathFinder</emphasis> interface provides automatic pathfinding.
 	        	The PathFinder interface is described detailled further below.
 	        </para>
+	        </section>
+	        <section>
+	            <title>(fma)Option 2</title>
+	            <para>
+	                Another option is to omit AI completely. That definitively sounds weird, but
+	                is also a new game experience as well. Omitting AI means, there is no process in
+	                the background that autonomously triggers units to move, shoot, use items or do
+	                anything else. Every action has to be triggered by the user explicitly. That would
+	                have the following consequences:
+	            </para>
+	            <itemizedlist>
+	                <listitem>
+	                    <para>
+	                		Less work: Since the required code of option 2 is a subset of the required code
+	                		of option 1, there is less to worry about. All we need then are the events
+	                		described later.
+	            		</para>
+	                </listitem>
+	                <listitem>
+	                    <para>
+	                        Less non-determinism: If we realized option 1, we would have to integrate some
+	                        kind of chance because units that always hit when they shoot are not very
+	                        much fun (in a shooter). By omitting that success would be caused by the players' skills rather
+	                        than fortune.
+	                    </para>
+	                </listitem>
+	                <listitem>
+	                    <para>
+	                        More challenging gameplay: The gameplay would be more challenging for players using
+	                        interactive mode. That can be used as one factor for balancing between interactive
+	                        and ego mode.
+	                    </para>
+	                </listitem>
+	            
+	            </itemizedlist>
+	        </section>
+	        
+	        <section>
+	            <title>
+	                (fma)Summary
+	            </title>
+	            <para>
+	                As the AI can be seen as an additional feature set on top of option 2, we should implement
+	                both options and make available to the user via different gamemodes/settings. What ever turns
+	                out to be more satisfactory to the user can be focused on later.
+	            </para>
+	        </section>
 	    </section>
 	</section>
 	<section>
@@ -203,7 +258,8 @@
 	        <para>
 		        The method <computeroutput>setTarget</computeroutput> should throw an
 		        exception if the target point is not reachable (because it's in a block
-		        or there is no way to reach the point).
+		        or there is no way to reach the point). (fma) In non-AI interactive mode
+		        the unit could simply stop whenever it collides with something. (/fma)
 		    </para>
 		    <para>
 		    	A very important aspect of pathfinding is that the generated path must
@@ -263,6 +319,9 @@ active = false;
 	                </imageobject>
 	            </mediaobject>
 	        </figure>
+	        <para>
+	            (fma) Well done! (/fma)
+	        </para>
 		</section>
 	</section>
 	<section>
