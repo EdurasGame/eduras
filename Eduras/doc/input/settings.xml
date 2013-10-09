@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE article PUBLIC "-//OASIS//DTD Simplified DocBook XML V1.0//EN"
+"http://www.oasis-open.org/docbook/xml/simple/1.0/sdocbook.dtd">
+<article>
+	<articleinfo>
+		<title>Settings</title>
+		<author>
+			<firstname>Florian</firstname>
+			<surname>Mai</surname>
+		</author>
+	</articleinfo>
+	<section>
+	    <title>What's this about?</title>
+	    
+	<para>
+	    Eduras is in a very early state and has not been tested very well yet. Many
+	    features are not even set up and thus there is big changes to come up in the
+	    next months and years. Especially balancing issues are going to pop up once
+	    there is more players that play Eduras more frequently. Furthermore it's
+	    desirable for the user to have power over as many settings as possible (in
+	    most cases) as he knows best how he gets the most fun out of it.
+	    To be prepared for taking those changes we should consider to centralize all
+	    those values that are likely to change.
+	</para>
+	</section>
+	
+	<section>
+	    <title>How can we do that?</title>
+	    <para>
+	        We can proceed similar to the resource dereferencing in Android applications.
+	        There is an R class that holds lots of identifiers for any resource you can
+	        think of. They are all static so you can reference it from everywhere. We can
+	        create such a class as well (with a more meaningful name), say S ;-), that holds
+	        all the values that should remain unchanged within a "match". For example, a weapon w's
+	   		basic cooldown is wc. Then S should have an attribute w_basic_cooldown holding the value
+	   		wc and w's actual cooldown is an attribute in the w class and is calculated by 
+	   		w_basic_cooldown +/-/* some powerup/item's effect. That w_basic_cooldown should not!
+	   		be 'final' since the user shall be able to modify these settings on the server
+	   		to find optimal/fairest settings.
+	   	</para>
+	</section>
+	<section>
+	    <title>What does that mean to me as a programmer?</title>
+	    <para>
+	    	You as a programmer should reflect carefully whether there is values in your
+	    	code that should better be extracted to the S class either for structural reasons or
+	    	for functional reasons or both. If you are not sure how to handle it, put it into the S
+	    	class. It is easier to switch the location of an S-class attribute than to find attributes
+	    	to be extracted from their classes.
+	    </para>
+	</section>
+</article>
