@@ -15,12 +15,14 @@
 		<title>What's this?</title>
 
 		<para>
-			This chapter concerns the composition of the game logic. We try
+			<emphasis role="strike">This chapter concerns the composition of the game logic. We try
 			to document
 			any part of that in here as long as it is not self
 			explanatory or easily understood reading
 			the javadoc documentation of
-			the corresponding classes.
+			the corresponding classes.</emphasis> This chapter shows and explains some of the architectural
+			aspects of the game logic. It rather addresses the abstract concepts than detailed information
+			on classes.
 		</para>
 
 	</section>
@@ -29,12 +31,12 @@
 		<title>The architecture</title>
 
 		<para>
-			The following figure shows most of the classes you will find in the
+			<emphasis role='strike'>The following figure shows most of the classes you will find in the
 			game logic. Note that some operations
 			or attributes might be left out
 			in the figure since they are not that important or unnecessary to
 			mention,
-			e.g. getter and setter methods.
+			e.g. getter and setter methods.</emphasis>Note that the following figure is out-of-date.
 			<informalfigure>
 				<graphic fileref="images/gamelogicclasses.jpg"></graphic>
 			</informalfigure>

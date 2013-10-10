@@ -380,7 +380,11 @@
 				this project.
 				Feel free to add anything that in your opinion should
 				be
-				mentioned in the documentation. After consultation with other
+				mentioned in the documentation.
+				You should carefully decide whether it is reasonable to document all the 
+				code you write in detail but rather show
+				what the basic concepts are since documenting everything in full detail may take more time than
+				reading the documentation saves. After consultation with other
 				developers involved in
 				the project, change parts of the documentation
 				to fit to new ideas, but
