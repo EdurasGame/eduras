@@ -80,6 +80,27 @@
 		</itemizedlist>
 	</section>
 	<section>
+	    <title>(fma) Features for release 0.1.1 (closed alpha)</title>
+	    <itemizedlist>
+	        <listitem>
+	            <para>
+	                 A launcher or something similar that keeps the user's game up-to-date
+	            </para>
+	        </listitem>
+	        <listitem>
+	            <para>
+	                A meta server that keeps track of all registered Eduras servers, so users
+	                can find online servers easily
+	            </para>
+	        </listitem>
+	        <listitem>
+	            <para>
+	                A public bugtracker on the Eduras website
+	            </para>
+	        </listitem>
+	    </itemizedlist>
+	</section>
+	<section>
 		<title>(fma) Features for release 0.2</title>
 		<itemizedlist>
 			<listitem>
