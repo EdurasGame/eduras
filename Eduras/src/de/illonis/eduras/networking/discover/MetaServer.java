@@ -22,7 +22,7 @@ import de.illonis.eduras.logger.EduLog;
 public class MetaServer extends Thread {
 
 	private boolean running = false;
-	private int port = ServerDiscoveryListener.SERVER_PORT;
+	private int port = ServerDiscoveryListener.META_SERVER_PORT;
 	private ServerSocket socket;
 
 	static final String META_SERVER_ANSWER = "EDURAS_META_SERVER_ANSWER";

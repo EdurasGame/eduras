@@ -27,6 +27,11 @@ public class ServerDiscoveryListener extends Thread {
 	public final static int SERVER_PORT = 9876;
 
 	/**
+	 * The port where the meta server listens on.
+	 */
+	public final static int META_SERVER_PORT = 9877;
+
+	/**
 	 * The port where discovery client receives answer on.
 	 */
 	public final static int CLIENT_PORT = 9875;
