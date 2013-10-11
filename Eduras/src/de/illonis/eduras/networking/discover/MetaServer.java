@@ -29,6 +29,21 @@ public class MetaServer extends Thread {
 	private LinkedList<InetAddress> registeredServers;
 
 	/**
+	 * The string that indicates a GET_SERVERS request.
+	 */
+	public static final String GET_SERVERS_REQUEST = "GET_SERVERS";
+
+	/**
+	 * The string that indicates a REGISTER request.
+	 */
+	public static final String REGISTER_REQUEST = "REGISTER";
+
+	/**
+	 * The string that indicates a DEREGISTER request.
+	 */
+	public static final String DEREGISTER_REQUEST = "DEREGISTER";
+
+	/**
 	 * Create a new Server that listens on the default port.
 	 * 
 	 * @throws IOException
@@ -118,7 +133,7 @@ public class MetaServer extends Thread {
 		}
 
 		private void handleMessage(String message) {
-			if (message.contains("GET_SERVERS")) {
+			if (message.contains(GET_SERVERS_REQUEST)) {
 				String ipsOfRegisteredServers = META_SERVER_ANSWER;
 				for (InetAddress singleServer : registeredServers) {
 					ipsOfRegisteredServers = ipsOfRegisteredServers + "#"
@@ -128,12 +143,12 @@ public class MetaServer extends Thread {
 				clientWriter.println(ipsOfRegisteredServers);
 			}
 
-			if (message.contains("REGISTER")) {
+			if (message.contains(REGISTER_REQUEST)) {
 				if (!registeredServers.contains(client.getInetAddress()))
 					registeredServers.add(client.getInetAddress());
 			}
 
-			if (message.contains("DEREGISTER")) {
+			if (message.contains(DEREGISTER_REQUEST)) {
 				registeredServers.remove(client.getInetAddress());
 			}
 		}
