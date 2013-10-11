@@ -25,6 +25,8 @@ public class ServerSearcher extends Thread {
 	private ServerFoundListener listener;
 	private PrintWriter metaServerWriter;
 	private MetaServerAnswerListener metaAnswerListener;
+	private Socket socketToMetaServer;
+
 	/**
 	 * Broadcast interval in milliseconds.
 	 */
@@ -125,17 +127,21 @@ public class ServerSearcher extends Thread {
 		// Open TCP connection to meta server
 		metaServerWriter = null;
 		try {
-			Socket socketToMetaServer = new Socket(METASERVER_ADDRESS,
-					ServerDiscoveryListener.META_SERVER_PORT);
+			socketToMetaServer = new Socket();
+			socketToMetaServer.connect(new InetSocketAddress(
+					METASERVER_ADDRESS,
+					ServerDiscoveryListener.META_SERVER_PORT), 1000);
 			metaServerWriter = new PrintWriter(
-					socketToMetaServer.getOutputStream());
+					socketToMetaServer.getOutputStream(), true);
 
-			new MetaServerAnswerListener(new BufferedReader(
-					new InputStreamReader(socketToMetaServer.getInputStream())))
-					.start();
+			metaAnswerListener = new MetaServerAnswerListener(
+					new BufferedReader(new InputStreamReader(
+							socketToMetaServer.getInputStream())));
+
+			metaAnswerListener.start();
 
 		} catch (IOException e) {
-			EduLog.passException(e);
+			EduLog.warning("Cannot connect to meta server.");
 			// if there's no internet connection, thats okay.
 		}
 
@@ -230,8 +236,16 @@ public class ServerSearcher extends Thread {
 	@Override
 	public void interrupt() {
 		c.close();
+		try {
+			if (socketToMetaServer != null)
+				socketToMetaServer.close();
+		} catch (IOException e) {
+			EduLog.passException(e);
+		}
+
 		handler.interrupt();
-		metaAnswerListener.interrupt();
+		if (metaAnswerListener != null)
+			metaAnswerListener.interrupt();
 		super.interrupt();
 	}
 

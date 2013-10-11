@@ -7,7 +7,6 @@ import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.Socket;
 import java.net.SocketException;
-import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.logging.Level;
@@ -106,7 +105,8 @@ public class Eduras {
 				server.getName(), port);
 		sdl.start();
 
-		registerAtMetaServer();
+		if (args.length > 2 && args[2].equals("-m"))
+			registerAtMetaServer();
 	}
 
 	private static void registerAtMetaServer() {
@@ -116,10 +116,8 @@ public class Eduras {
 					ServerDiscoveryListener.META_SERVER_PORT);
 			new PrintWriter(socket.getOutputStream(), true)
 					.println(MetaServer.REGISTER_REQUEST);
-		} catch (UnknownHostException e) {
-			EduLog.passException(e);
 		} catch (IOException e) {
-			EduLog.passException(e);
+			EduLog.warning("Cannot connect to meta server.");
 		}
 	}
 

@@ -8,6 +8,7 @@ import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.LinkedList;
+import java.util.logging.Level;
 
 import de.illonis.eduras.logger.EduLog;
 
@@ -53,6 +54,7 @@ public class MetaServer extends Thread {
 	}
 
 	private void init() throws IOException {
+		registeredServers = new LinkedList<InetAddress>();
 		socket = new ServerSocket(port);
 	}
 
@@ -124,7 +126,9 @@ public class MetaServer extends Thread {
 			while (running) {
 				try {
 					String message = messageReader.readLine();
-					handleMessage(message);
+					if (message != null) {
+						handleMessage(message);
+					}
 				} catch (IOException e) {
 					EduLog.passException(e);
 					return;
@@ -134,6 +138,9 @@ public class MetaServer extends Thread {
 
 		private void handleMessage(String message) {
 			if (message.contains(GET_SERVERS_REQUEST)) {
+				EduLog.info("Received a GET_SERVERS request from address "
+						+ client.getInetAddress().getHostAddress() + ".");
+
 				String ipsOfRegisteredServers = META_SERVER_ANSWER;
 				for (InetAddress singleServer : registeredServers) {
 					ipsOfRegisteredServers = ipsOfRegisteredServers + "#"
@@ -144,11 +151,17 @@ public class MetaServer extends Thread {
 			}
 
 			if (message.contains(REGISTER_REQUEST)) {
+				EduLog.info("Received a REGISTER request from address "
+						+ client.getInetAddress().getHostAddress() + ".");
+
 				if (!registeredServers.contains(client.getInetAddress()))
 					registeredServers.add(client.getInetAddress());
 			}
 
 			if (message.contains(DEREGISTER_REQUEST)) {
+				EduLog.info("Received a DEREGISTER request from address "
+						+ client.getInetAddress().getHostAddress() + ".");
+
 				registeredServers.remove(client.getInetAddress());
 			}
 		}
@@ -174,6 +187,8 @@ public class MetaServer extends Thread {
 			EduLog.passException(e);
 			return;
 		}
+
+		EduLog.setLogLimit(Level.ALL);
 
 		metaServer.start();
 	}
