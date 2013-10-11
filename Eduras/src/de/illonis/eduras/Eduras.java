@@ -1,9 +1,13 @@
 package de.illonis.eduras;
 
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.net.Inet4Address;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
+import java.net.Socket;
 import java.net.SocketException;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.logging.Level;
@@ -17,7 +21,9 @@ import de.illonis.eduras.logic.ServerEventTriggerer;
 import de.illonis.eduras.logic.ServerLogic;
 import de.illonis.eduras.maps.FunMap;
 import de.illonis.eduras.networking.Server;
+import de.illonis.eduras.networking.discover.MetaServer;
 import de.illonis.eduras.networking.discover.ServerDiscoveryListener;
+import de.illonis.eduras.networking.discover.ServerSearcher;
 import de.illonis.eduras.serverconsole.NoConsoleException;
 import de.illonis.eduras.serverconsole.ServerConsole;
 import de.illonis.eduras.serverconsole.commands.CommandInitializer;
@@ -100,6 +106,21 @@ public class Eduras {
 				server.getName(), port);
 		sdl.start();
 
+		registerAtMetaServer();
+	}
+
+	private static void registerAtMetaServer() {
+		Socket socket;
+		try {
+			socket = new Socket(ServerSearcher.METASERVER_ADDRESS,
+					ServerDiscoveryListener.META_SERVER_PORT);
+			new PrintWriter(socket.getOutputStream(), true)
+					.println(MetaServer.REGISTER_REQUEST);
+		} catch (UnknownHostException e) {
+			EduLog.passException(e);
+		} catch (IOException e) {
+			EduLog.passException(e);
+		}
 	}
 
 	/**

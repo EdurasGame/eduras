@@ -30,7 +30,10 @@ public class ServerSearcher extends Thread {
 	 */
 	public final static int BROADCAST_INTERVAL = 2000;
 
-	private final static String METASERVER_ADDRESS = "illonis.dyndns.org";
+	/**
+	 * The address of the meta server.
+	 */
+	public final static String METASERVER_ADDRESS = "illonis.dyndns.org";
 
 	/**
 	 * Creates a new server searcher. The listener must be applied later before
