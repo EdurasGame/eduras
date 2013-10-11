@@ -26,10 +26,61 @@
 		</para>
 
 	</section>
+	
+	<section>
+	    <title>Client and server logics</title>
+	    <section>
+	        <title>The story of the two logics</title>
+	    <para>
+	        When the project once started we were sure that we don't need a distinction between
+	        the logic on the client and the logic on the server, since both would actually do the same
+	        but with the client's logic being updated by the server's state frequently. That turned out
+	        to be non-sense. Starting with asynchronous object ids on client and server, more and more
+	        problems, mostly concerns of synchrony, arose. We added several interfaces that were called
+	        in different situations in the logic to work around the problems but preserve the architecture
+	        with the same logic on client and server. Some day we came to a point where we realized that
+	        our first approach was <empahsis>shit</empahsis>. That's why there are two different logics
+	        that mostly serve very different purposes.
+	    </para>
+	    </section>
+	    <section>
+	        <title>Client logic</title>
+	        <para>
+	            The client logic's main purpose is to store the state of the game and to calculate/predict the future's
+	            game state in advance in order to offer a more fluent game experience to the user. <emphasis>We
+	            need to verify that the user experience is actually improved by precalculating the future
+	            gamestate!</emphasis> The client's game state is then overwritten by the more accurate (and synchronous) game
+	            state that is calculated on the server. For now, the only thing that is precalculated is the object's
+	            new positions. Typical events that are processed by the client's logic are SET events (SET_POS,
+	            SET_HEALTH...). Look at the 'Events' document for a list of all events. You can add a GameEventListener
+	            to the client logic that serves as a callback called when certain events appear. For example the
+	            GUI implements such a Listener to react on game events, but you can think of other kinds of listeners
+	            as well (for example a listener that records statistics).
+	        </para>
+	        
+	    </section>
+	    
+	    <section>
+	        <title>Server logic</title>
+	        <para>
+	            The server logic is responsible for keeping the clients synchronous. Thus it creates objects (and
+	            sets their ids), recalculates health and other critical values and informs the clients about those.
+	            The ServerEventTriggerer is a class that provides several methods that not only change the state of
+	            the game but also inform the clients at the same time. 
+	            <emphasis>Whenever you want to change the state of the game, use one of the methods provided
+	            by the ServerEventListener or implement a new method in it so others can use those methods
+	            too!</emphasis> The server mostly processes input from the user. For example, if the user presses
+	            a key to use an item on the client, the client will send an event USE_ITEM to the server which then
+	            verifies whether the client is actually allowed to use it. <emphasis>We should consider to
+	            move this process partially or completely to the client or check whether that is possible at all.
+	            </emphasis>
+	        </para>
+	    </section>
+	</section>
 
 	<section>
 		<title>The architecture</title>
-
+		
 		<para>
 			<emphasis role='strike'>The following figure shows most of the classes you will find in the
 			game logic. Note that some operations
