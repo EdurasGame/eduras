@@ -19,9 +19,7 @@ import de.illonis.eduras.units.Unit;
  * @author Florian Mai <florian.ren.mai@googlemail.com>
  * 
  */
-public class Deathmatch implements GameMode {
-
-	protected GameInformation gameInfo;
+public class Deathmatch extends BasicGameMode {
 
 	/**
 	 * Creates a new instance of deathmatch.
@@ -29,7 +27,7 @@ public class Deathmatch implements GameMode {
 	 * @param gameInfo
 	 */
 	public Deathmatch(GameInformation gameInfo) {
-		this.gameInfo = gameInfo;
+		super(gameInfo);
 	}
 
 	@Override
@@ -75,6 +73,7 @@ public class Deathmatch implements GameMode {
 
 	@Override
 	public void onConnect(int ownerId) {
+		super.onConnect(ownerId);
 
 		// simply create the player and respawn it somewhere
 		gameInfo.getEventTriggerer().createObject(ObjectType.PLAYER, ownerId);

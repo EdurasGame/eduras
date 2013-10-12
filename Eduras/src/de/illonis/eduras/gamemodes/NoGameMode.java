@@ -17,9 +17,7 @@ import de.illonis.eduras.units.Unit;
  * @author Florian Mai <florian.ren.mai@googlemail.com>
  * 
  */
-public class NoGameMode implements GameMode {
-
-	private GameInformation gameInfo;
+public class NoGameMode extends BasicGameMode {
 
 	/**
 	 * Creates a new instance of this gamemode.
@@ -27,7 +25,7 @@ public class NoGameMode implements GameMode {
 	 * @param gameInfo
 	 */
 	public NoGameMode(GameInformation gameInfo) {
-		this.gameInfo = gameInfo;
+		super(gameInfo);
 	}
 
 	@Override
@@ -60,6 +58,8 @@ public class NoGameMode implements GameMode {
 
 	@Override
 	public void onConnect(int ownerId) {
+
+		super.onConnect(ownerId);
 
 		// simply create the player
 		gameInfo.getEventTriggerer().createObject(ObjectType.PLAYER, ownerId);

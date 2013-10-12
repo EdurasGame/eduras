@@ -60,6 +60,12 @@ public class TeamDeathmatch extends Deathmatch {
 	@Override
 	public void onConnect(int ownerId) {
 
+		// have to reimplement this unfortunately
+		if (gameInfo.getPlayers().size() >= gameInfo.getGameSettings()
+				.getMaxPlayers()) {
+			gameInfo.getEventTriggerer().kickPlayer(ownerId);
+		}
+
 		// simply create the player and respawn it somewhere
 		gameInfo.getEventTriggerer().createObject(ObjectType.PLAYER, ownerId);
 
