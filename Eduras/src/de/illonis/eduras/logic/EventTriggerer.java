@@ -250,4 +250,13 @@ public interface EventTriggerer {
 	 * @author illonis
 	 */
 	void addPlayerToTeam(int ownerId, Team team);
+
+	/**
+	 * Kicks the player with the given id from the server. Removes the client's
+	 * playermainfigure and closes the connection.
+	 * 
+	 * @param ownerId
+	 *            The player's id.
+	 */
+	void kickPlayer(int ownerId);
 }

@@ -15,6 +15,7 @@ public class GameSettings {
 	private GameMode gameMode;
 	private long roundTime;
 	private long remainingTime;
+	private int maxPlayers;
 	private Statistic stats;
 
 	/**
@@ -26,6 +27,7 @@ public class GameSettings {
 	 */
 	public GameSettings(GameInformation gameInfo) {
 
+		maxPlayers = 10;
 		roundTime = 300000;
 		gameMode = new TeamDeathmatch(gameInfo);
 		remainingTime = roundTime;
@@ -94,5 +96,23 @@ public class GameSettings {
 	 */
 	public GameMode getGameMode() {
 		return gameMode;
+	}
+
+	/**
+	 * Returns the maximum number of players.
+	 * 
+	 * @return The max number of players allowed on the server.
+	 */
+	public int getMaxPlayers() {
+		return maxPlayers;
+	}
+
+	/**
+	 * Sets the maximum number of players to newValue.
+	 * 
+	 * @param newValue
+	 */
+	public void setMaxPlayers(int newValue) {
+		maxPlayers = newValue;
 	}
 }

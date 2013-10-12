@@ -35,6 +35,7 @@ import de.illonis.eduras.maps.InitialObjectData;
 import de.illonis.eduras.maps.Map;
 import de.illonis.eduras.math.Vector2D;
 import de.illonis.eduras.networking.ClientSender.PacketType;
+import de.illonis.eduras.networking.Server;
 import de.illonis.eduras.networking.ServerSender;
 import de.illonis.eduras.units.PlayerMainFigure;
 import de.illonis.eduras.units.Unit;
@@ -504,4 +505,30 @@ public class ServerEventTriggerer implements EventTriggerer {
 		sendEvents(event);
 	}
 
+	// TODO: This is a dirty hack. Once we decided about whether and how to
+	// change the networking, we should consider putting a limit on how many
+	// players can join the server into the network part.
+	@Override
+	public void kickPlayer(int ownerId) {
+
+		int objectId = -1;
+		PlayerMainFigure mainFigure;
+		ObjectFactoryEvent gonePlayerEvent = new ObjectFactoryEvent(
+				GameEventNumber.OBJECT_REMOVE, ObjectType.PLAYER);
+
+		try {
+			mainFigure = gameInfo.getPlayerByOwnerId(ownerId);
+			objectId = mainFigure.getId();
+			gonePlayerEvent.setId(objectId);
+			logic.getObjectFactory().onObjectFactoryEventAppeared(
+					gonePlayerEvent);
+			sendEvents(gonePlayerEvent);
+		} catch (ObjectNotFoundException e) {
+			// if there is no mainfigure, this function is used to prevent
+			// someone to join the server
+		}
+
+		Server server = serverSender.getServer();
+		server.kickClient(server.getClientById(ownerId));
+	}
 }

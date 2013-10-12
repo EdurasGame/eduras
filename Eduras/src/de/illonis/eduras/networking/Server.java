@@ -363,7 +363,7 @@ public class Server implements NetworkEventListener {
 	 * @param client
 	 *            Client to remove.
 	 */
-	void removeClient(ServerClient client) {
+	public void kickClient(ServerClient client) {
 		serverSender.remove(client);
 		serverTCPReceivers.get(client.getClientId()).stopRunning();
 		clientUDPAddresses.remove(client.getClientId());
@@ -391,7 +391,7 @@ public class Server implements NetworkEventListener {
 				GameEventNumber.OBJECT_REMOVE, ObjectType.PLAYER);
 
 		int clientId = client.getClientId();
-		int objectId;
+		int objectId = -1;
 		PlayerMainFigure mainFigure;
 		try {
 			mainFigure = game.getPlayerByOwnerId(clientId);
@@ -401,7 +401,7 @@ public class Server implements NetworkEventListener {
 			EduLog.errorLF("Server.logic.playernotfound", e.getObjectId());
 			return;
 		}
-		removeClient(client);
+		kickClient(client);
 
 		try {
 			client.closeConnection();
