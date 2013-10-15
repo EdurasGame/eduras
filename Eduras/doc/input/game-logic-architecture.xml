@@ -39,7 +39,7 @@
 	        problems, mostly concerns of synchrony, arose. We added several interfaces that were called
 	        in different situations in the logic to work around the problems but preserve the architecture
 	        with the same logic on client and server. Some day we came to a point where we realized that
-	        our first approach was <empahsis>shit</empahsis>. That's why there are two different logics
+	        our first approach was <emphasis>shit</emphasis>. That's why there are two different logics
 	        that mostly serve very different purposes.
 	    </para>
 	    </section>
