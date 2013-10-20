@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE article PUBLIC "-//OASIS//DTD Simplified DocBook XML V1.0//EN"
+"http://www.oasis-open.org/docbook/xml/simple/1.0/sdocbook.dtd">
+<article>
+	<articleinfo>
+		<title>GameObjects: shapes and graphics</title>
+		<author>
+			<firstname>Jannis</firstname>
+			<surname>Mell</surname>
+		</author>
+	</articleinfo>
+	<section>
+		<title>What's this about?</title>
+		<para>
+			This chapter describes how to make your gameobject
+			visible on the map and how to configure rotation and
+			collision.
+		</para>
+		<para>
+			In addition to that, it will give you a more detailled
+			look at the game mechanics regarding shapes and graphics-
+			This will help you understanding why and how it works.
+		</para>
+	</section>
+	<section>
+		<title>Short summary</title>
+		<note>
+			<para>
+				This document contains a lot of ideas and things that
+				are not yet implemented and implementation will cause
+				a lot of changes.
+			</para>
+			<para>
+				It is still under heavy development and might be changed
+				often.
+			</para>
+		</note>
+		<para>
+			Until now, GameObjects have a single shape that is both,
+			their visual shape and their collision shape.
+			This update will elaborate gameobjects and make them
+			more complex and give them a visual update.  
+		</para>
+		<para>
+			GameObjects will have a layered shape structure that
+			allows several polygons of different colors to be
+			combined. As a new feature, collision shape and
+			visual shape can be different. Objects can be drawn
+			from an image, too.
+		</para>
+	</section>
+	<section>
+		<title>Nomenclature</title>
+		<itemizedlist>
+			<listitem>
+				<para>
+					<emphasis>shape</emphasis> - a collection of layers.
+				</para>
+			</listitem>
+			<listitem>
+				<para>
+					<emphasis>layer</emphasis> - The old single shape.
+				</para>
+			</listitem>
+			<listitem>
+				<para>
+					<emphasis>collision shape</emphasis> - actually a layer. It will not be merged
+					with other layers and is thus often called a shape.
+				</para>
+			</listitem>
+			<listitem>				
+				<para>
+					<emphasis>object</emphasis> - a GameObject
+				</para>
+			</listitem>
+		</itemizedlist>
+	</section>
+	<section>
+		<title>What is a shape used for and when is it used?</title>
+		<para>
+			A shape describes the look of a gameobject.
+			Every gameobject that is visible on screen has a
+			collision shape to determine it's collision (this might
+			be a <computeroutput>NoCollisionShape</computeroutput>
+			though). In addition to that, each object has a shape
+			that describes its default looking.
+		</para>
+		<para>
+			If the object
+			has an image attached, too, the image will show up and
+			the shape is not visible. In both cases, the collision
+			shape will be applied.
+		</para>
+	</section>		
+	<section>
+		<title>Shapes</title>
+		<para>
+			The "shape" of a gameobject is not only a shape but also
+			represented by additional information and parameters that
+			help the logic to determine the behaviour of that
+			object, for example rotation point, collision borders
+			and so on.
+		</para>
+		<para>
+			An object's shape is created dynamically from multiple
+			layers that are combined. The collision shape is either
+			a automatically computed one or a custom shape.
+		</para>
+		<figure>
+			<title>Layers of a shape</title>
+			<mediaobject>
+				<imageobject>
+					<imagedata fileref="images/shapelayers.png" format="PNG" />
+				</imageobject>
+			</mediaobject>
+		</figure>
+		<para>
+			At loading process, all shapes and their properties are loaded
+			from shape save files. To every GameObject class that
+			has shapes a <computeroutput>ShapeLayerProvider</computeroutput>
+			will be associated to. This provider holds preloaded data
+			and makes them accessible for each gameobject of that class.
+		</para>
+		<para>
+			There are several provider implementations available that
+			match all available kinds of
+			<computeroutput>ShapeRotation</computeroutput> and will precompute
+			rotated shapes.
+		</para>
+		<para>
+			Rotation is only done in four directions: NORTH (default), EAST,
+			SOUTH and WEST.
+			There are three ways to let the logic handle rotations:
+		</para>
+		<itemizedlist>
+			<listitem>
+				<para><emphasis>POINT</emphasis></para>
+				<para>Shapes are automatically rotated at a given
+				rotation point.</para>
+			</listitem>
+			<listitem>
+				<para><emphasis>NONE</emphasis></para>
+				<para>Shape is never rotated when object changes orientation</para>
+			</listitem>
+			<listitem>
+				<para><emphasis>CUSTOM</emphasis></para>
+				<para>There are different, manually created shapes provided
+				for each rotation</para>
+			</listitem>
+		</itemizedlist>
+		<para>
+			The first two types are rather self-declaring. The custom
+			rotation type requires the creator of the shape to declare
+			additional shape-layers for all rotation angles.
+		</para>
+		<note>
+			<para>
+				The ShapeCreator tool will warn you if your shape
+				causes problems when used.
+			</para>
+		</note>
+		<section>
+			<title>Shape layers</title>
+			<para>
+				A shape layer is a simple polygon with a fill color and
+				a border color.
+			</para>
+			<para>
+				The collision layer	does not have any color information
+				as it will never be visible.
+			</para>
+		</section>
+	</section>
+</article>
