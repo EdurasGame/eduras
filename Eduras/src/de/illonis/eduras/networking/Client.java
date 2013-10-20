@@ -2,7 +2,6 @@ package de.illonis.eduras.networking;
 
 import java.io.IOException;
 import java.net.InetAddress;
-import java.net.InetSocketAddress;
 import java.net.Socket;
 
 import de.illonis.eduras.events.ConnectionAbortedEvent;
@@ -27,6 +26,12 @@ public class Client {
 	 * Connection timeout when connecting to server (in ms).
 	 */
 	public final static int CONNECT_TIMEOUT = 10000;
+
+	/**
+	 * Specifies the port on which the client gets bound when connect() method
+	 * is called.
+	 */
+	public static int PORT = -1;
 
 	private Socket socket;
 
@@ -61,16 +66,15 @@ public class Client {
 	 */
 	public void connect(InetAddress addr, int port) throws IOException {
 		EduLog.info("[CLIENT] Connecting to " + addr.toString() + " at " + port);
-		socket = new Socket();
-		InetSocketAddress iaddr = new InetSocketAddress(addr, port);
-		socket.connect(iaddr, CONNECT_TIMEOUT);
+		if (PORT != -1)
+			socket = new Socket(addr, port, null, PORT);
+		else
+			socket = new Socket(addr, port);
 		receiver = new ClientReceiver(logic, socket, this);
 		receiver.setNetworkEventListener(networkEventListener);
 		receiver.start();
 		sender = new ClientSender(socket);
 		sender.setUdpSocket(receiver.getUdpSocket());
-
-		// createEchoSocket();
 	}
 
 	/**

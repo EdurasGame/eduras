@@ -27,6 +27,7 @@ import de.illonis.eduras.gameclient.gui.ClientFrame;
 import de.illonis.eduras.gameclient.gui.FullScreenClientFrame;
 import de.illonis.eduras.logger.EduLog;
 import de.illonis.eduras.logger.EduLog.LogMode;
+import de.illonis.eduras.networking.Client;
 
 /**
  * Eduras? Game client for end user.
@@ -40,11 +41,25 @@ public class EdurasClient {
 	 * Starts Eduras? client.
 	 * 
 	 * @param args
+	 *            First argument is considered to be the port to which the
+	 *            client is bound.
 	 */
 	public static void main(String[] args) {
 		// new LoggerGui().setVisible(true);
 		EduLog.setLogOutput(LogMode.CONSOLE);
 		EduLog.setLogLimit(Level.WARNING);
+
+		if (args.length > 0) {
+			try {
+				Client.PORT = Integer.parseInt(args[0]);
+				if (Client.PORT < 1024 || Client.PORT > 49151) {
+					throw new Exception();
+				}
+			} catch (Exception e) {
+				EduLog.error("Given port is not a valid value!");
+				return;
+			}
+		}
 
 		// Note that this is very bad coded due to testing ;)
 		buildChooserFrame();
