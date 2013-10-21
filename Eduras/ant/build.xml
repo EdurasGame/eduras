@@ -7,32 +7,50 @@
 		generates class-files and both, server and client jar-executable.
 	</description>
 
-	<property name="src" value="../src" />
-	<property name="libs" value="../lib" />
-	<property name="maps" value="../src/de/illonis/eduras/maps/data" />
-	<property name="build" value="../bin" />
-	<property name="jars" value="../output/jars" />
+	<property name="base" value="../" />
+	<property name="launcherbase" value="../../EdurasLauncher/" />
+	<property name="src" value="src" />
+	<property name="libs" value="lib" />
+	<property name="maps" value="src/de/illonis/eduras/maps/data" />
+	<property name="build" value="bin" />
+	<property name="jars" value="output/jars" />
 	<property name="exclude" value="**/unittests/*" />
 
 	<path id="classpath">
-		<fileset dir="${libs}">
+		<fileset dir="${base}${libs}">
 			<include name="timingframework*.jar" />
 		</fileset>
-		<pathelement path="${build}" />
+		<pathelement path="${base}${build}" />
+	</path>
+
+	<path id="launcher-classpath">
+		<pathelement path="${launcherbase}${build}" />
 	</path>
 
 	<!-- <manifestclasspath property="mf.classpath" jarfile="${destination}/@{name}.jar"> 
 		<classpath> <fileset dir="lib" includes="*.jar" /> </classpath> </manifestclasspath> -->
 
 	<target name="clean" description="Cleans output folders for class and jar files.">
-		<delete dir="${build}" />
-		<delete dir="${jars}" />
+		<delete dir="${base}${build}" />
+		<delete dir="${launcherbase}${build}" />
+		<delete dir="${base}${jars}" />
 	</target>
 
 	<target name="compile" description="Compiles java classes.">
-		<mkdir dir="${build}" />
-		<javac srcdir="${src}" destdir="${build}" includeAntRuntime="false">
+		<mkdir dir="${base}${build}" />
+		<javac srcdir="${base}${src}" destdir="${base}${build}"
+			includeAntRuntime="false">
 			<classpath refid="classpath" />
+			<include name="**/*.java" />
+			<exclude name="${exclude}" />
+		</javac>
+	</target>
+
+	<target name="compile-launcher" description="Compiles java classes.">
+		<mkdir dir="${launcherbase}${build}" />
+		<javac srcdir="${launcherbase}${src}" destdir="${launcherbase}${build}"
+			includeAntRuntime="false">
+			<classpath refid="launcher-classpath" />
 			<include name="**/*.java" />
 			<exclude name="${exclude}" />
 		</javac>
@@ -40,15 +58,15 @@
 
 	<target name="jar-client" depends="compile" description="Creates client-executable.">
 
-		<jar destfile="${jars}/EdurasClient.jar" excludes="**/*.svg, **/unittests/**"
-			basedir="${build}">
-			<fileset dir="${src}">
+		<jar destfile="${base}${jars}/eduras-client.jar" excludes="**/*.svg, **/unittests/**"
+			basedir="${base}${build}">
+			<fileset dir="${base}${src}">
 				<include name="**/*.png"></include>
 				<include name="**/*.gif"></include>
 				<include name="**/*.erm"></include>
 				<include name="**/*.properties"></include>
 			</fileset>
-			<zipgroupfileset dir="${libs}" includes="**/*.jar" />
+			<zipgroupfileset dir="${base}${libs}" includes="**/*.jar" />
 			<manifest>
 				<attribute name="Main-Class"
 					value="de.illonis.eduras.gameclient.EdurasClient" />
@@ -57,9 +75,9 @@
 	</target>
 
 	<target name="jar-server" depends="compile" description="Creates server-executable.">
-		<jar destfile="${jars}/EdurasServer.jar" basedir="${build}"
+		<jar destfile="${base}${jars}/eduras-server.jar" basedir="${base}${build}"
 			excludes="**/images/**, **/unittests/**">
-			<fileset dir="${src}">
+			<fileset dir="${base}${src}">
 				<include name="**/*.erm"></include>
 				<include name="**/*.properties"></include>
 			</fileset>
@@ -69,9 +87,37 @@
 		</jar>
 	</target>
 
-	<target name="jars" depends="jar-server,jar-client"
-		description="Creates server- and client-executable.">
-		<mkdir dir="${jars}" />
+	<target name="jar-launcher" depends="compile-launcher"
+		description="Creates launcher-executable">
+		<jar destfile="${base}${jars}/eduras.jar" excludes="**/*.svg, **/unittests/**"
+			basedir="${launcherbase}${build}">
+			<fileset dir="${launcherbase}${src}">
+				<include name="**/*.png"></include>
+			</fileset>
+			<manifest>
+				<attribute name="Main-Class"
+					value="de.illonis.eduras.launcher.EdurasLauncher" />
+			</manifest>
+		</jar>
+	</target>
+	
+	<target name="jar-installer" depends="compile-launcher"
+		description="Creates installer executable">
+		<jar destfile="${base}${jars}/eduras-setup.jar" excludes="**/*.svg, **/unittests/**"
+			basedir="${launcherbase}${build}">
+			<fileset dir="${launcherbase}${src}">
+				<include name="**/*.png"></include>
+			</fileset>
+			<manifest>
+				<attribute name="Main-Class"
+					value="de.illonis.eduras.launcher.installer.EdurasInstaller" />
+			</manifest>
+		</jar>
+	</target>
+
+	<target name="jars" depends="clean,jar-server,jar-client,jar-launcher,jar-installer"
+		description="Creates clean executables.">
+		<mkdir dir="${base}${jars}" />
 	</target>
 
 </project>
