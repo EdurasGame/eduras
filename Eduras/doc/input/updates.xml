@@ -43,6 +43,9 @@
 				<para>repair installation</para>
 			</listitem>
 			<listitem>
+				<para>different release-channels</para>
+			</listitem>	
+			<listitem>
 				<para>launcher self-updating</para>
 			</listitem>			
 		</itemizedlist>
@@ -52,12 +55,6 @@
 				<listitem>
 					<para>
 						Automate publishing of new releases
-					</para>
-				</listitem>
-				<listitem>
-					<para>
-						Support different builds (stable, beta, nightly).
-						The user will be able to switch	between builds within the launcher.
 					</para>
 				</listitem>
 			</itemizedlist>
@@ -86,6 +83,17 @@
                 </imageobject>
             </mediaobject>
 	    </figure>
+	    <section>
+	    	<title>Release channels</title>
+	    	<para>
+	    		Eduras supports multiple release channels that exist side by side.
+	    		The current release channels are
+	    		<computeroutput>STABLE, BETA, NIGHTLY</computeroutput> whereas
+				<computeroutput>BETA</computeroutput> is not maintained at the moment.
+				Users can switch between release channels using a dropdown menu
+				in the game launcher.
+			</para>	    	
+	    </section>
 	</section>
 	<section>
 		<title>Server structure</title>
@@ -97,11 +105,16 @@
 		<programlisting>update/
   |
   |-version.xml
+  |-beta.xml
+  |-nightly.xml
+  |-eduras-setup.jar
   |-lupdater.jar - the launcher updater 
   |-eduras.jar - the current launcher
-  \-files/
-    |-eduras-client-1.4.jar - gameclient versions
-    \-eduras-client-1.5.jar</programlisting>
+  |-files/
+  |  |-eduras-client-1.4.jar - gameclient versions
+  |  \-eduras-client-1.5.jar
+  \-nightly/
+     \-eduras-client.jar</programlisting>
 	</section>
 	<section>
 		<title>version.xml</title>
