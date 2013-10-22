@@ -1,7 +1,6 @@
 package de.illonis.eduras.networking.discover;
 
 import java.io.IOException;
-import java.net.BindException;
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;
 
@@ -23,26 +22,18 @@ public class ClientServerResponseHandler extends Thread {
 	 * Creates a new handler.
 	 * 
 	 * @param listener
+	 * @param c
 	 */
-	public ClientServerResponseHandler(ServerFoundListener listener) {
+	public ClientServerResponseHandler(ServerFoundListener listener,
+			DiscoveryChannel c) {
 		super("ClientServerResponseHandler");
+		this.c = c;
 		this.listener = listener;
 	}
 
 	@Override
 	public void run() {
 		try {
-			c = new DiscoveryChannel(false);
-
-			try {
-				c.bind(new InetSocketAddress(
-						ServerDiscoveryListener.CLIENT_PORT));
-			} catch (BindException e) {
-				EduLog.passException(e);
-				listener.onDiscoveryFailed();
-				c.close();
-				return;
-			}
 
 			Pair<SocketAddress, String> returnData = null;
 			int i = 0;

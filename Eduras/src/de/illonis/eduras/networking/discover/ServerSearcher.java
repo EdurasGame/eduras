@@ -118,9 +118,12 @@ public class ServerSearcher extends Thread {
 		try {
 			// Open a random port to send the package
 			c = new DiscoveryChannel(false);
+			c.bind(new InetSocketAddress(ServerDiscoveryListener.CLIENT_PORT));
 
-		} catch (IOException e) {
-			EduLog.passException(e);
+		} catch (IOException e2) {
+			EduLog.passException(e2);
+			listener.onDiscoveryFailed();
+			c.close();
 			return false;
 		}
 
@@ -145,7 +148,7 @@ public class ServerSearcher extends Thread {
 			// if there's no internet connection, thats okay.
 		}
 
-		handler = new ClientServerResponseHandler(listener);
+		handler = new ClientServerResponseHandler(listener, c);
 		handler.start();
 
 		try {

@@ -95,12 +95,11 @@ public class ServerDiscoveryListener extends Thread {
 				String message = returnData.getSecond();
 				// Packet received
 				EduLog.info("Discovery packet received from: "
-						+ isa.getAddress().getHostAddress() + ", Data: "
-						+ message);
+						+ isa.getAddress().getHostAddress() + ":"
+						+ isa.getPort() + ", Data: " + message);
 
 				// See if the packet holds the right command (message)
 				if (message.equals(ServerDiscoveryListener.REQUEST_MSG)) {
-					isa = new InetSocketAddress(isa.getAddress(), CLIENT_PORT);
 					// Send a response
 					channel.send(answer, isa);
 					EduLog.info("Sent packet to: "
