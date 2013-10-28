@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE article PUBLIC "-//OASIS//DTD Simplified DocBook XML V1.0//EN"
+"http://www.oasis-open.org/docbook/xml/simple/1.0/sdocbook.dtd">
+<article>
+	<articleinfo>
+		<title>Eventing Server</title>
+		<author>
+			<firstname>Florian</firstname>
+			<surname>Mai</surname>
+		</author>
+	</articleinfo>
+
+	<section>
+	    <title>What's this about?</title>
+	    <para>
+	        As the development of Eduras was proceeding we experienced more and more problems
+	        implementing new features that heavily rely on network mechanisms. It turned out
+	        that our network layer was not well defined and network and game logic modules were
+	        rather geared than encapsuled. This page describes what the Eventing Server, developed
+	        to address those issues, is intended to do, how it does that and how you can use it
+	        both in general and specifically for Eduras.
+	    </para>
+	</section>
+	<section>
+	    <title>Capabilities and Limits</title>
+	    <para>
+	        The Eventing Server is a stack that allows you to build up a client-server architecture
+	        without actually having to access the transport layer directly. Nevertheless it provides
+	        all the flexibility you need. You can transmit any information you may need. With that
+	        information you can do whatever you want. You can use both the UDP and TCP protocols.
+	        You will be informed of all events that happen on the network and are interesting to you.
+	        However, you will need a plan on how to represent the information, what to do with it,
+	        whether it's more useful to transmit it via TCP or UDP and how to react on network events.
+	    </para>
+	</section>
+	<section>
+	    <title>How to use</title>
+	    <para>Server and clients communicate via so called 'Events'. Events have a unique identifier and
+	    come with information provided by you. To create an Event use the Event(int eventNumber).
+	    If you want two Events to be processed differently you must assign them different numbers.
+	    To put information into the event use the putArgument(Object argument) method. Floats, Doubles,
+	    Strings, Integers, Longs and Booleans will be serialized automatically. For any other kind of
+	    object you will have to provide your own serialization. Once an Event arrives at either the
+	    client or the server the respective EventHandler is called to process your event. Your job
+	    is to define an EventHandler for the client and server (not necessarily the same) where you
+	    determine depending on the Event (make a switch over the event number) what to do. You can
+	    access the information contained in the event with the getArgument(int i) method. The
+	    arguments are placed in the same order as they had been put on the other side before.
+	    Whether Events are transmitted via TCP or UDP is determined by the NetworkPolicy. Inherit
+	    from this class and implement the determinePacketType(Event event) method. Make a switch
+	    over the event number and return depending on it either PacketType.UDP or PacketType.TCP.
+	    If you don't specify a NetworkPolicy the default behavior is that all Events are transmitted
+	    via TCP.
+	    </para>
+	    <section>
+	        <title>Client</title>
+	    <para>
+	        For the implementation of the client side the following classes are interesting to you
+	        (besides the already mentioned classes above):
+	        <itemizedlist>
+	            <listitem>
+	                ClientInterface: This will be your primary tool to manage a clients behavior. You
+	                use it to connect to and disconnect from a server and to configure the
+	                behavior when you receive Events or when some network action is taking place.
+	            </listitem>
+	            <listitem>
+	                ClientNetworkEventHandler: Implement this interface and set it on the Client
+	                in order to be informed of all network actions that take place and are interesting
+	                to the client.
+	            </listitem>
+	        </itemizedlist>
+	    </para>
+	    </section>
+	    <section>
+	        <title>Server</title>
+	        <para>
+	            For the implementation of the server side the following classes are interesting to you
+	        (besides the already mentioned classes above):
+	        <itemizedlist>
+	            <listitem>
+	                ServerInterface: This will be your primary tool to manage the server's behavior.
+	                You use it to start or stop listing to clients on a specific port, to kick clients
+	                and to manage the server's behavior when receiving Events or something happens on
+	                the network that is interesting to the server.
+	            </listitem>
+	            <listitem>
+	                ServerNetworkEventHandler: Implement this interface and set it on the Server
+	                in order to be informed of all network actions that take place and are interesting
+	                to the server.
+	            </listitem>
+	        </itemizedlist>
+	        </para>
+	    </section>
+	</section>
+	<section>
+	    <title>What's inside</title>
+	    <para>
+	        The inside of the Eventing Server looks like the following:
+	    </para>
+	    <figure>
+            <title></title>
+            <mediaobject>
+                <imageobject>
+                    <imagedata fileref="images/network.jpg" format="JPG" />
+                </imageobject>
+            </mediaobject>
+        </figure>
+	    <para>
+	        TODO: Update the above figure and describe what it says.
+	    </para>
+	</section>
+	<section>
+	    <title>Eventing Server in Eduras</title>
+	    <para>
+	        There are no big changes to be done in order to get Eduras running
+	    	with the Eventing Server as underlying layer. The former NetworkMessageSerializer and
+	    	-Deserializer must be rewritten such that they write to and read the Event's arguments
+	    	using the putArgument() and getArgument() method. This is then set as the EventHandler of
+	    	the EventingServer. Once a GameEvent is created, it can be passed to logic just as before.
+	    	GameEvents' method names can stay the
+	    	same so the logic will not have to be changed a lot. However, the methods body must be
+	    	rewritten such that they use getArgument(i) with the correct i. The handling of NetworkEvents
+	    	is replaced by direct callbacks. The callbacks bodys can mostly be adopted from the handling
+	    	of the former NetworkEvents. 
+	    </para>
+	</section>
+</article>
