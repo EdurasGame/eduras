@@ -50,3 +50,8 @@ Icon?
 ehthumbs.db
 Thumbs.db
 Thumbs.db/EventingServer
+
+# log files #
+#############
+logfile.txt*
+*.log
