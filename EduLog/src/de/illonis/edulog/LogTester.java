@@ -11,6 +11,7 @@ public class LogTester {
 	public static void main(String[] args) {
 		try {
 			EduLog.init();
+			EduLog.setConsoleLogLimit(Level.SEVERE);
 		} catch (IOException e) {
 			e.printStackTrace();
 			throw new RuntimeException("Problems with creating the log files");
