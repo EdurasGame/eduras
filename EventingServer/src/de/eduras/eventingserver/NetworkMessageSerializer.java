@@ -7,7 +7,8 @@ import de.eduras.eventingserver.exceptions.InvalidMessageFormatException;
 import de.eduras.eventingserver.exceptions.MessageNotSupportedException;
 
 class NetworkMessageSerializer {
-	public static String serializeEvent(Event event) {
+	public static String serializeEvent(Event event)
+			throws IllegalArgumentException {
 		String eventString = "##";
 		eventString += event.getEventNumber();
 
@@ -30,7 +31,16 @@ class NetworkMessageSerializer {
 				type += "I";
 			}
 
+			if (argument instanceof Long) {
+				type += "L";
+			}
+
 			if (argument instanceof String) {
+				if (((String) argument).contains("#")
+						|| ((String) argument).contains("&")) {
+					throw new IllegalArgumentException("String argument "
+							+ (String) argument + " contains # or &!");
+				}
 				type += "S";
 			}
 
@@ -65,16 +75,16 @@ class NetworkMessageSerializer {
 
 			// EduLog.info("message: " + msg);
 
-			Event ge;
+			Event event;
 			try {
-				ge = deserializeMessage(msg);
+				event = deserializeMessage(msg);
 			} catch (InvalidMessageFormatException
 					| GivenParametersDoNotFitToEventException
 					| MessageNotSupportedException e) {
 				e.printStackTrace();
 				continue;
 			}
-			events.add(ge);
+			events.add(event);
 
 		}
 
@@ -146,11 +156,16 @@ class NetworkMessageSerializer {
 			case 'D':
 				argumentAsObject = Double.parseDouble(objectStr);
 				break;
+			case 'L':
+				argumentAsObject = Long.parseLong(objectStr);
+				break;
 			default: // TODO: Call user specific handler if it's not a
 						// simple
 						// datatype.
 				break;
 			}
+			// TODO: if argument still null, throw an exception.
+
 			event.putArgument(argumentAsObject);
 		}
 		return event;

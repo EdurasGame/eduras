@@ -23,21 +23,21 @@ public class Client implements ClientInterface {
 
 	private Socket socket;
 
-	NetworkEventHandler networkEventHandler;
+	ClientNetworkEventHandler networkEventHandler;
 
-	private ClientSender sender;
-	private ClientReceiver receiver;
+	ClientSender sender;
+	ClientReceiver receiver;
 
 	private int clientId;
 	private NetworkPolicy networkPolicy;
 
 	EventHandler eventHandler;
-	private boolean connected;
+	boolean connected;
 
 	public Client() {
 		clientId = -1;
 		networkPolicy = new DefaultNetworkPolicy();
-		networkEventHandler = new DefaultNetworkEventHandler();
+		networkEventHandler = new DefaultClientNetworkEventHandler();
 		connected = false;
 	}
 
@@ -64,9 +64,14 @@ public class Client implements ClientInterface {
 			return false;
 		}
 		connected = true;
-		receiver = new ClientReceiver(socket, this);
+		try {
+			receiver = new ClientReceiver(socket, this);
+		} catch (ConnectionLostException e) {
+			e.printStackTrace();
+			networkEventHandler.onConnectionLost();
+		}
 		receiver.start();
-		sender = new ClientSender(socket);
+		sender = new ClientSender(socket, this);
 		sender.setUdpSocket(receiver.getUdpSocket());
 		return true;
 		// createEchoSocket();
@@ -108,18 +113,6 @@ public class Client implements ClientInterface {
 		return clientId;
 	}
 
-	/**
-	 * Sets the network event listener. This replaces any old listener.
-	 * 
-	 * @param listener
-	 *            the new listener.
-	 * 
-	 * @author illonis
-	 */
-	public void setNetworkEventListener(NetworkEventHandler listener) {
-		this.networkEventHandler = listener;
-	}
-
 	public void setNetworkPolicy(NetworkPolicy policy) {
 		this.networkPolicy = policy;
 	}
@@ -127,7 +120,7 @@ public class Client implements ClientInterface {
 	/**
 	 * Invokes connection lost action.
 	 */
-	public void connectionLost() {
+	void connectionLost() {
 		networkEventHandler.onConnectionLost();
 		receiver.interrupt();
 	}
@@ -141,7 +134,7 @@ public class Client implements ClientInterface {
 			return false;
 
 		if (networkEventHandler != null)
-			networkEventHandler.onDisconnect();
+			networkEventHandler.onDisconnected();
 
 		receiver.interrupt();
 
@@ -162,7 +155,7 @@ public class Client implements ClientInterface {
 	 * 
 	 * @return The number of the local port.
 	 */
-	public int getPortNumber() {
+	int getPortNumber() {
 		return socket.getLocalPort();
 	}
 
@@ -177,19 +170,26 @@ public class Client implements ClientInterface {
 	}
 
 	@Override
-	public boolean sendEvent(Event event) {
+	public boolean sendEvent(Event event) throws IllegalArgumentException {
 		String eventAsString = NetworkMessageSerializer.serializeEvent(event);
 		PacketType packetType = networkPolicy.determinePacketType(event);
 		try {
 			sender.sendMessage(eventAsString, packetType);
 		} catch (ConnectionLostException e) {
-			e.printStackTrace();
+			connectionLost();
 			return false;
 		}
 		return true;
 	}
 
+	@Override
 	public boolean isConnected() {
 		return connected;
+	}
+
+	@Override
+	public void setNetworkEventHandler(
+			ClientNetworkEventHandler networkEventHandler) {
+		this.networkEventHandler = networkEventHandler;
 	}
 }

@@ -34,6 +34,7 @@ public class Server implements ServerInterface {
 	final HashMap<Integer, ServerClient> clients;
 	boolean running;
 	InternalMessageHandler internalMessageHandler;
+	ServerNetworkEventHandler networkEventHandler;
 
 	/**
 	 * Creates a new server.
@@ -51,6 +52,7 @@ public class Server implements ServerInterface {
 		serverReceiver = new ServerReceiver(this);
 		clients = new HashMap<Integer, ServerClient>();
 		decoder = new ServerDecoder(serverReceiver.inputBuffer, this);
+		networkEventHandler = new DefaultServerNetworkEventHandler();
 	}
 
 	/**
@@ -70,19 +72,28 @@ public class Server implements ServerInterface {
 	private void handleConnection(Socket clientSocket) throws IOException {
 		final ServerClient client = addClient(clientSocket);
 
-		// inform client about clientconnection.
+		// inform client of successful connection.
 		try {
 			serverSender.sendMessageToClient(client.getClientId(),
-					InternalMessageHandler.CONNECTION_ESTABLISHED,
-					PacketType.TCP);
+					InternalMessageHandler
+							.createConnectionEstablishMessage(client
+									.getClientId()), PacketType.TCP);
 		} catch (NoSuchClientException e) {
 			// can not happen
 			e.printStackTrace();
 			return;
 		}
 
+		// inform other clients of client's connection.
+		serverSender.sendMessageToAll(InternalMessageHandler
+				.createClientConnectedMessage(client.getClientId()),
+				Event.PacketType.TCP);
+
 		client.setConnected(true);
 		serverReceiver.add(client);
+
+		// call networkhandler
+		networkEventHandler.onClientConnected(client.getClientId());
 	}
 
 	/**
@@ -129,25 +140,43 @@ public class Server implements ServerInterface {
 	 * @param client
 	 *            Client to remove.
 	 */
-	public void kickClient(ServerClient client) {
-		removeClient(client);
-		client.isConnected();
+	void kickClient(ServerClient client) {
+		handleClientDisconnect(client);
+
+		// inform clients
+		serverSender.sendMessageToAll(InternalMessageHandler
+				.createClientKickedMessage(client.getClientId()),
+				Event.PacketType.TCP);
 	}
 
 	/**
-	 * Removes a player from the logic if the correlating client disconnected.
+	 * Removes a client
 	 * 
 	 * @param client
 	 *            The client.
 	 */
-	public void handleClientDisconnect(ServerClient client) {
+	void handleClientDisconnect(ServerClient client) {
 
-		kickClient(client);
+		if (!client.isConnected()) {
+			return;
+		}
 
+		// interrupt client's activities correctly
+		removeClient(client);
+		client.setConnected(false);
 		try {
 			client.closeConnection();
 		} catch (IOException e) {
+			e.printStackTrace();
 		}
+
+		// inform clients
+		serverSender.sendMessageToAll(InternalMessageHandler
+				.createClientDisconnectedMessage(client.getClientId()),
+				Event.PacketType.TCP);
+
+		// inform callback
+		networkEventHandler.onClientDisconnected(client.getClientId());
 	}
 
 	/**
@@ -160,8 +189,7 @@ public class Server implements ServerInterface {
 	 * @author illonis
 	 * @throws NoSuchClientException
 	 */
-	public ServerClient getClientById(int clientId)
-			throws NoSuchClientException {
+	ServerClient getClientById(int clientId) throws NoSuchClientException {
 		ServerClient client = clients.get(clientId);
 		if (client == null)
 			throw new NoSuchClientException(clientId);
@@ -194,7 +222,6 @@ public class Server implements ServerInterface {
 		clients.put(clientId, serverClient);
 
 		return serverClient;
-
 	}
 
 	/**
@@ -256,8 +283,7 @@ public class Server implements ServerInterface {
 
 	@Override
 	public void setPolicy(NetworkPolicy policy) {
-		// TODO Auto-generated method stub
-
+		serverSender.networkPolicy = policy;
 	}
 
 	@Override
@@ -275,14 +301,20 @@ public class Server implements ServerInterface {
 
 	@Override
 	public LinkedList<Integer> getClients() {
-		// TODO Auto-generated method stub
-		return null;
+		return new LinkedList<Integer>(clients.keySet());
 	}
 
 	@Override
 	public boolean kickClient(int clientId) {
-		// TODO Auto-generated method stub
-		return false;
+		ServerClient client;
+		try {
+			client = getClientById(clientId);
+		} catch (NoSuchClientException e) {
+			e.printStackTrace();
+			return false;
+		}
+		kickClient(client);
+		return true;
 	}
 
 	@Override
@@ -292,8 +324,8 @@ public class Server implements ServerInterface {
 	}
 
 	@Override
-	public boolean setNetworkEventHandler(NetworkEventHandler handler) {
-		// TODO Auto-generated method stub
-		return false;
+	public boolean setNetworkEventHandler(ServerNetworkEventHandler handler) {
+		this.networkEventHandler = handler;
+		return true;
 	}
 }

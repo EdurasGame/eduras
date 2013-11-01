@@ -22,6 +22,9 @@ class ClientSender {
 	private boolean active;
 	private PrintWriter messageWriter = null;
 	private DatagramSocket udpSocket;
+	private Client client;
+
+	boolean isUDPSetUp = false;
 
 	/**
 	 * Creates a new ClientSender that sends messages via the given socket.
@@ -29,7 +32,7 @@ class ClientSender {
 	 * @param socket
 	 *            The socket to send messages via.
 	 */
-	public ClientSender(Socket socket) {
+	public ClientSender(Socket socket, Client client) {
 
 		this.socket = socket;
 		active = true;
@@ -42,6 +45,7 @@ class ClientSender {
 			e.printStackTrace();
 		}
 
+		this.client = client;
 	}
 
 	/**
@@ -103,9 +107,8 @@ class ClientSender {
 	 * @param udpSocket2
 	 *            The socket to send UDP messages on.
 	 */
-	public void setUdpSocket(DatagramSocket udpSocket2) {
+	void setUdpSocket(DatagramSocket udpSocket2) {
 		udpSocket = udpSocket2;
-
 	}
 
 }

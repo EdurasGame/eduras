@@ -34,8 +34,10 @@ public interface ClientInterface {
 	 * @param event
 	 *            The event to send.
 	 * @return Success flag.
+	 * @throws IllegalArgumentException
+	 *             thrown when an argument in the event is illegal.
 	 */
-	public boolean sendEvent(Event event);
+	public boolean sendEvent(Event event) throws IllegalArgumentException;
 
 	/**
 	 * Set the {@link EventHandler} that is called when an event arrives at the
@@ -45,4 +47,31 @@ public interface ClientInterface {
 	 *            The eventhandler to be called when an event arrives.
 	 */
 	public void setEventHandler(EventHandler eventHandler);
+
+	/**
+	 * Sets the network event listener. This replaces any old listener.
+	 * 
+	 * @param listener
+	 *            the new listener.
+	 * 
+	 * @author illonis
+	 */
+	public void setNetworkEventHandler(
+			ClientNetworkEventHandler networkEventHandler);
+
+	/**
+	 * Returns true, if the client is currently connected to a server and false
+	 * otherwise.
+	 * 
+	 * @return connected-flag
+	 */
+	public boolean isConnected();
+
+	/**
+	 * Sets the {@link NetworkPolicy} of the client.
+	 * 
+	 * @param policy
+	 *            The policy
+	 */
+	public void setNetworkPolicy(NetworkPolicy policy);
 }
