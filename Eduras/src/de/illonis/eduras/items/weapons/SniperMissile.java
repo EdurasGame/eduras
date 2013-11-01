@@ -5,7 +5,6 @@ package de.illonis.eduras.items.weapons;
 
 import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.ObjectFactory.ObjectType;
-import de.illonis.eduras.gameobjects.ArtificialIntelligence;
 import de.illonis.eduras.shapes.Circle;
 
 /**
@@ -29,12 +28,6 @@ public class SniperMissile extends Missile {
 		setObjectType(ObjectType.SNIPERMISSILE);
 		setShape(new Circle(1.5));
 		setSpeed(500);
-	}
-
-	@Override
-	public ArtificialIntelligence getAI() {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 }

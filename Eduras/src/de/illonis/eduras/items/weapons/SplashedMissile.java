@@ -2,7 +2,6 @@ package de.illonis.eduras.items.weapons;
 
 import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.ObjectFactory.ObjectType;
-import de.illonis.eduras.gameobjects.ArtificialIntelligence;
 import de.illonis.eduras.shapes.Circle;
 
 /**
@@ -28,12 +27,6 @@ public class SplashedMissile extends Missile {
 		setDamageRadius(1);
 		setShape(new Circle(3));
 		setSpeed(250);
-	}
-
-	@Override
-	public ArtificialIntelligence getAI() {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 }

@@ -8,7 +8,6 @@ import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.ObjectFactory.ObjectType;
 import de.illonis.eduras.Team;
 import de.illonis.eduras.exceptions.ShapeVerticesNotApplicableException;
-import de.illonis.eduras.gameobjects.ArtificialIntelligence;
 import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.interfaces.MovementControlable;
 import de.illonis.eduras.inventory.Inventory;
@@ -172,9 +171,4 @@ public class PlayerMainFigure extends Unit implements MovementControlable {
 	public void onMapBoundsReached() {
 	}
 
-	@Override
-	public ArtificialIntelligence getAI() {
-		// TODO Auto-generated method stub
-		return null;
-	}
 }
