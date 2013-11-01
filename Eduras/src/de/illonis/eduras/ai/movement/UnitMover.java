@@ -10,25 +10,54 @@ import de.illonis.eduras.math.Vector2D;
  * 
  */
 public class UnitMover {
+
+	private final static long MOTION_UPDATE_INTERVAL = 400;
 	private final PathFinder pathFinder;
-	private Runnable currentMotion;
-	private final MotionAIControllable motionTarget;
+	private Thread currentMotion;
+	private final MotionAIControllable motionUnit;
 
-	public UnitMover(MotionType motionType, MotionAIControllable motionTarget) {
-		pathFinder = PathFinderFactory.getFinderFor(motionType);
-		this.motionTarget = motionTarget;
+	UnitMover(MotionAIControllable motionTarget) {
+		pathFinder = PathFinderFactory.getFinderFor(motionTarget
+				.getMotionType());
+		this.motionUnit = motionTarget;
 	}
 
-	public void startMoving(Vector2D target) {
-
+	void startMoving(Vector2D target) {
+		pathFinder.setTarget(target);
+		if (!isActive()) {
+			currentMotion = new MoverThread();
+			currentMotion.start();
+		}
 	}
 
-	public void stopMovement() {
-
+	void stopMovement() {
+		currentMotion.interrupt();
 	}
 
-	public boolean isActive() {
-		return false;
+	boolean isActive() {
+		if (currentMotion == null)
+			return false;
+		return currentMotion.isAlive();
 	}
 
+	private class MoverThread extends Thread {
+
+		public MoverThread() {
+			super("MoverThread");
+		}
+
+		@Override
+		public void run() {
+			while (!pathFinder.hasReachedTarget()) {
+				pathFinder.setLocation(motionUnit.getPosition());
+				motionUnit.startMovingTo(pathFinder.getMovingDirection());
+				try {
+					Thread.sleep(MOTION_UPDATE_INTERVAL);
+				} catch (InterruptedException e) {
+					break;
+				}
+			}
+			motionUnit.stopMoving();
+		}
+	}
 }

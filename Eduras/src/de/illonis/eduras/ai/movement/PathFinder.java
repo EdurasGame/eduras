@@ -39,7 +39,8 @@ public interface PathFinder {
 
 	/**
 	 * Retrieves the current moving direction considering required waypoints,
-	 * detours and obstacles.
+	 * detours and obstacles. The moving direction directly heads to the next
+	 * waypoint.
 	 * 
 	 * @return the current moving direction.
 	 */
@@ -48,7 +49,8 @@ public interface PathFinder {
 	/**
 	 * Determines whether unit has reached its goal or should move on.
 	 * 
-	 * @return true if unit has reached target, false otherwise.
+	 * @return true if unit has reached target, false otherwise. If no target is
+	 *         specified, false is returned.
 	 */
 	boolean hasReachedTarget();
 

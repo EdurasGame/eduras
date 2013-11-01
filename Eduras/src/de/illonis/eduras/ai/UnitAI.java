@@ -1,12 +1,6 @@
 package de.illonis.eduras.ai;
 
-import de.illonis.eduras.gameobjects.ActiveGameObject;
+public interface UnitAI {
 
-public class UnitAI {
-
-	private ActiveGameObject gameObject;
-
-	public AIControllable getUnit() {
-		return gameObject;
-	}
+	public AIControllable getUnit();
 }
