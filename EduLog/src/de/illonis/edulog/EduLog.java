@@ -45,7 +45,6 @@ public final class EduLog {
 	 */
 	public static void init(String logFileName) throws IOException {
 		startTime = System.currentTimeMillis();
-		System.out.println("init with bundle");
 		Logger logger = Logger.getLogger("");
 		logger.setLevel(Level.ALL);
 		logger.setUseParentHandlers(false);
