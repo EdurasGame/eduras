@@ -10,76 +10,120 @@
 		</author>
 	</articleinfo>
 	<section>
-	    <title>EduLog</title>
-	    <section>
-	        <title>Overview</title>
+		<title>Overview</title>
+		<para>
+			EduLog is our custom logging tool. It is designed to help developers to
+			analyze and filter
+			console output. This includes error messages, info messages and much more.
+		</para>
+		<para>
+			EduLog is based on the Java built-in logging methods.
+		</para>
+		<note>
 		    <para>
-		        EduLog is our custom logging tool. It is designed to help developers to analyze and filter
-		        console output. This includes error messages, info messages and much more.
-		    </para>
-		    <para>
-		        A main benefit of EduLog is the opportunity to use other outputs than just console. There are
-		        also options to write log to file or view them on a graphical surface.
-		    </para>
-		    <figure>
-	            <title>An example output of EduLog's console output printing an error and an info.</title>
-	            <mediaobject>
-	                <imageobject>
-	                    <imagedata fileref="images/logger_console.png" format="PNG" />
-	                </imageobject>
-	            </mediaobject>
-	        </figure>
-	        <figure>
-	            <title>An example output of EduLog's gui output displaying messages filtered by class.</title>
-	            <mediaobject>
-	                <imageobject>
-	                    <imagedata fileref="images/logger_gui.png" format="PNG" />
-	                </imageobject>
-	            </mediaobject>
-	        </figure>
-        </section>
-        <section>
-            <title>From a programmer's point of view</title>
-            <para>
-                When coding, using EduLog is quite simple. Just don't use <computeroutput>System.out</computeroutput> anymore.
-                 Instead, use EduLog's builtin static methods that are quite easy to understand:
-            </para>
-            <itemizedlist>
-                <listitem>
-                    <para><emphasis>info(String s)</emphasis> used for info messages (e.g. listening on port x).</para>
-                </listitem>
+				EduLog is still in development. So feel free to report any issues or
+				feature requests.
+			</para>
+			<para>
+			    We are planning to create a log file analyzer to make reading logfiles easier.
+			</para>
+		</note>
+	</section>
+	<section>
+		<title>From a programmer's point of view</title>
+		<section>
+			<title>General setup</title>
+			<para>
+				To enable EduLog, it must be initialized once (preferred in the main
+				method).
+				To do so, just call the
+				<computeroutput>init()</computeroutput>
+				method of EduLog.
+				If you want to use a custom output file, add a parameter with the
+				filename.
+			</para>
+			<para>
+				You may change the default logging thresholds (WARNING). To do so,
+				call
+				<computeroutput>setBasicLogLimit, setConsoleLogLimit or
+					setFileLogLimit</computeroutput>
+				.
+				Note, that the basic log limit must be below both others to make them
+				apply.
+			</para>
+			<para>
+				Take a look at
+				<computeroutput>Eduras.java</computeroutput>
+				to view an example.
+			</para>
+		</section>
+		<section>
+			<title>Logging</title>
+			<para>
+				When coding, using EduLog is quite simple. Just don't use
+				<computeroutput>System.out</computeroutput>
+				anymore.
+				Instead, use EduLog's builtin static methods that are quite easy to
+				understand.
+			</para>
+			<para>
+				First, every class that uses logging requires a static call to retrieve
+				its logger:
+			</para>
+			<programlisting>private final static Logger L = EduLog.getLoggerFor(ObjectFactory.class.getName());</programlisting>
+			<para>
+				Replace
+				<computeroutput>ObjectFactory</computeroutput>
+				with the name of your class.
+			</para>
+			<para>
+				Then, you can use the
+				<computeroutput>L</computeroutput>
+				class to log:
+			</para>
+			<itemizedlist>
 				<listitem>
-				    <para><emphasis>warning(String s)</emphasis> used for warning messages (e.g. player already existing).</para>
+					<para>
+						<emphasis>info(String s)</emphasis>
+						used for info messages (e.g. listening on port x).
+					</para>
 				</listitem>
 				<listitem>
-				    <para><emphasis>error(String s)</emphasis> used for error messages (e.g. could not bind socket).</para>
+					<para>
+						<emphasis>warning(String s)</emphasis>
+						used for warning messages (e.g. player already existing).
+					</para>
 				</listitem>
 				<listitem>
-				    <para><emphasis>fine(String s)</emphasis> used for debug messages and other useless notifications.</para>
+					<para>
+						<emphasis>severe(String s)</emphasis>
+						used for error messages (e.g. could not bind socket).
+					</para>
 				</listitem>
 				<listitem>
-				    <para><emphasis>log(Level l, String s)</emphasis> used to specify the message level by yourself.</para>
+					<para>
+						<emphasis>fine(String s)</emphasis>
+						used for debug messages and other useless notifications.
+					</para>
 				</listitem>
 				<listitem>
-				    <para><emphasis>passException(Exception e)</emphasis> passes a thrown exception to logger. Used in catch-Blocks.</para>
+					<para>
+						<emphasis>log(Level l, String s, Throwable t)</emphasis>
+						used to append an exception to your message.
+						Use this in catch-blocks for example.
+					</para>
 				</listitem>
-            </itemizedlist>
-        </section>
-        <section>
-            <title>Debugging</title>
-            <para>
-                For debugging, nothing have to be initialized. Logging output is broadcasted to console and Gui by default.
-                You may change this programmatically on-the-fly using <computeroutput>setLogOutput(LogMode)</computeroutput>.
-                If you want to show up debug gui, just create an instance of <emphasis>LoggerGui</emphasis> and show it up.
-                For a more detailed view, please consider EduLog's JavaDoc.
-            </para>
-        </section>
-        <section>
-            <title>Development</title>
-            <para>
-                EduLog is still in development. So feel free to report any issues or feature requests. Please note that
-                logging to file is not yet available.
-            </para>
-        </section>
+			</itemizedlist>
+			<para>
+				To pass exceptions, use the last method. The following example
+				includes exception passing and also localization:
+			</para>
+			<programlisting>try {
+	server.start();
+} catch (ServerNotReadyForStartException e) {
+	L.log(Level.SEVERE, Localization.getStringF("Server.notready", e.getMessage()), e);
+	return;
+}</programlisting>
+		</section>
 	</section>
 </article>
