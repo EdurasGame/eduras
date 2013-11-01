@@ -1,6 +1,7 @@
 package de.illonis.eduras.gameobjects;
 
 import de.illonis.eduras.GameInformation;
+import de.illonis.eduras.ai.AIControllable;
 
 /**
  * An active game object is a gameobject that has Artificial Intelligence.
@@ -8,7 +9,8 @@ import de.illonis.eduras.GameInformation;
  * @author Florian Mai <florian.ren.mai@googlemail.com>
  * 
  */
-public abstract class ActiveGameObject extends GameObject {
+public abstract class ActiveGameObject extends GameObject implements
+		AIControllable {
 
 	/**
 	 * Create an active game object.
@@ -21,15 +23,5 @@ public abstract class ActiveGameObject extends GameObject {
 	public ActiveGameObject(GameInformation game, int id) {
 		super(game, id);
 	}
-
-	@Override
-	public abstract void onCollision(GameObject collidingObject);
-
-	/**
-	 * Returns a new instance of the object's AI.
-	 * 
-	 * @return The object's AI.
-	 */
-	public abstract ArtificialIntelligence getAI();
 
 }
