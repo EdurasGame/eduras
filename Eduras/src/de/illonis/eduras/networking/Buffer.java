@@ -2,9 +2,11 @@ package de.illonis.eduras.networking;
 
 import java.util.NoSuchElementException;
 import java.util.concurrent.LinkedBlockingQueue;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
+import de.illonis.edulog.EduLog;
 import de.illonis.eduras.exceptions.BufferIsEmptyException;
-import de.illonis.eduras.logger.EduLog;
 
 /**
  * A Buffer is a thread-safe linked list of Strings. Elements are returned in
@@ -14,6 +16,8 @@ import de.illonis.eduras.logger.EduLog;
  * 
  */
 public class Buffer {
+
+	private final static Logger L = EduLog.getLoggerFor(Buffer.class.getName());
 
 	/**
 	 * <b>Depreciated:</b> Do not use this object anymore as it can produce
@@ -77,7 +81,7 @@ public class Buffer {
 		try {
 			list.put(string);
 		} catch (InterruptedException e) {
-			EduLog.passException(e);
+			L.log(Level.WARNING, "interrupted", e);
 		}
 	}
 

@@ -8,7 +8,10 @@ import java.net.Socket;
 import java.net.SocketAddress;
 import java.net.SocketException;
 import java.util.HashMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
+import de.illonis.edulog.EduLog;
 import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.ObjectFactory.ObjectType;
 import de.illonis.eduras.events.ClientRenameEvent;
@@ -28,7 +31,7 @@ import de.illonis.eduras.exceptions.ObjectNotFoundException;
 import de.illonis.eduras.exceptions.ServerNotReadyForStartException;
 import de.illonis.eduras.interfaces.GameLogicInterface;
 import de.illonis.eduras.interfaces.NetworkEventListener;
-import de.illonis.eduras.logger.EduLog;
+import de.illonis.eduras.locale.Localization;
 import de.illonis.eduras.units.PlayerMainFigure;
 
 /**
@@ -45,6 +48,8 @@ import de.illonis.eduras.units.PlayerMainFigure;
  * @author illonis
  */
 public class Server implements NetworkEventListener {
+
+	private final static Logger L = EduLog.getLoggerFor(Server.class.getName());
 
 	/**
 	 * Default port where server listens for new clients.
@@ -143,8 +148,8 @@ public class Server implements NetworkEventListener {
 			try {
 				udpSocket = new DatagramSocket(port);
 			} catch (SocketException e) {
-				EduLog.errorLF("Server.networking.udpopenerror", port);
-				EduLog.passException(e);
+				L.log(Level.SEVERE, Localization.getStringF(
+						"Server.networking.udpopenerror", port), e);
 				stopServer();
 			}
 
@@ -164,8 +169,8 @@ public class Server implements NetworkEventListener {
 					}
 					inputBuffer.append(messages);
 				} catch (IOException e) {
-					EduLog.errorL("Server.networking.udpclose");
-					EduLog.passException(e);
+					L.log(Level.SEVERE, Localization
+							.getString("Server.networking.udpclose"), e);
 					stopServer();
 				}
 			}
@@ -200,8 +205,8 @@ public class Server implements NetworkEventListener {
 			ConnectionListener cl = new ConnectionListener();
 			cl.start();
 		} catch (IOException e) {
-			EduLog.errorL("Server.startuperror");
-			EduLog.passException(e);
+			L.log(Level.SEVERE, Localization.getString("Server.startuperror"),
+					e);
 			System.exit(0);
 		}
 
@@ -337,22 +342,23 @@ public class Server implements NetworkEventListener {
 		 */
 		@Override
 		public void run() {
-			EduLog.infoLF("Server.startedlistening", port);
+			L.info(Localization.getStringF("Server.startedlistening", port));
 
 			while (running) {
 				Socket client = null;
 				try {
 					client = server.accept();
-					EduLog.infoLF("Server.newclient", client.getInetAddress());
+					L.info(Localization.getStringF("Server.newclient",
+							client.getInetAddress()));
 					handleConnection(client);
 				} catch (IOException e) {
-					EduLog.passException(e);
+					L.log(Level.SEVERE, "error handling connection", e);
 				}
 			}
 			try {
 				server.close();
 			} catch (IOException e) {
-				EduLog.passException(e);
+				L.log(Level.SEVERE, "error closing server", e);
 			}
 		}
 	}
@@ -398,7 +404,8 @@ public class Server implements NetworkEventListener {
 			objectId = mainFigure.getId();
 		} catch (ObjectNotFoundException e) {
 
-			EduLog.errorLF("Server.logic.playernotfound", e.getObjectId());
+			L.severe(Localization.getStringF("Server.logic.playernotfound",
+					e.getObjectId()));
 			return;
 		}
 		kickClient(client);
@@ -406,7 +413,7 @@ public class Server implements NetworkEventListener {
 		try {
 			client.closeConnection();
 		} catch (IOException e) {
-			EduLog.passException(e);
+			L.log(Level.SEVERE, "error closing client", e);
 		}
 
 		gonePlayerEvent.setId(objectId);
@@ -532,7 +539,7 @@ public class Server implements NetworkEventListener {
 				logic.onGameEventAppeared(new ClientRenameEvent(initInfoEvent
 						.getClient(), playerName));
 			} catch (InvalidNameException e) {
-				EduLog.passException(e);
+				L.log(Level.SEVERE, "invalid client name", e);
 			}
 			break;
 		default:

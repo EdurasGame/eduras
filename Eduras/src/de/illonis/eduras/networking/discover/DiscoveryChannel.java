@@ -5,8 +5,10 @@ import java.net.SocketAddress;
 import java.net.StandardSocketOptions;
 import java.nio.ByteBuffer;
 import java.nio.channels.DatagramChannel;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
-import de.illonis.eduras.logger.EduLog;
+import de.illonis.edulog.EduLog;
 import de.illonis.eduras.utils.Pair;
 
 /**
@@ -17,6 +19,9 @@ import de.illonis.eduras.utils.Pair;
  * 
  */
 public class DiscoveryChannel {
+
+	private final static Logger L = EduLog.getLoggerFor(DiscoveryChannel.class
+			.getName());
 
 	/**
 	 * Size of buffer.
@@ -118,7 +123,7 @@ public class DiscoveryChannel {
 		try {
 			channel.close();
 		} catch (IOException e) {
-			EduLog.passException(e);
+			L.log(Level.WARNING, "channel closed", e);
 		}
 	}
 

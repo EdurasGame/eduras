@@ -1,5 +1,9 @@
 package de.illonis.eduras.gamemodes;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import de.illonis.edulog.EduLog;
 import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.ObjectFactory.ObjectType;
 import de.illonis.eduras.Team;
@@ -7,7 +11,6 @@ import de.illonis.eduras.Team.TeamColor;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
 import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.gameobjects.GameObject.Relation;
-import de.illonis.eduras.logger.EduLog;
 import de.illonis.eduras.maps.SpawnPosition.SpawnType;
 import de.illonis.eduras.units.PlayerMainFigure;
 
@@ -19,6 +22,8 @@ import de.illonis.eduras.units.PlayerMainFigure;
  */
 public class TeamDeathmatch extends Deathmatch {
 
+	private final static Logger L = EduLog.getLoggerFor(TeamDeathmatch.class
+			.getName());
 	private Team teamA;
 	private Team teamB;
 
@@ -73,7 +78,7 @@ public class TeamDeathmatch extends Deathmatch {
 		try {
 			newPlayer = gameInfo.getPlayerByOwnerId(ownerId);
 		} catch (ObjectNotFoundException e) {
-			EduLog.passException(e);
+			L.log(Level.SEVERE, "player not found", e);
 			return;
 		}
 
@@ -110,7 +115,7 @@ public class TeamDeathmatch extends Deathmatch {
 			playerA = gameInfo.getPlayerByOwnerId(a.getOwner());
 			playerB = gameInfo.getPlayerByOwnerId(b.getOwner());
 		} catch (ObjectNotFoundException e) {
-			EduLog.passException(e);
+			L.log(Level.SEVERE, "player not found", e);
 			return Relation.UNKNOWN;
 		}
 		if (playerA.getTeam().equals(playerB.getTeam())) {

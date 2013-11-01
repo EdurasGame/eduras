@@ -10,11 +10,11 @@ import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 
+import de.illonis.edulog.EduLog;
 import de.illonis.eduras.exceptions.ServerNotReadyForStartException;
 import de.illonis.eduras.locale.Localization;
-import de.illonis.eduras.logger.EduLog;
-import de.illonis.eduras.logger.EduLog.LogMode;
 import de.illonis.eduras.logic.ConsoleEventTriggerer;
 import de.illonis.eduras.logic.ServerEventTriggerer;
 import de.illonis.eduras.logic.ServerLogic;
@@ -34,6 +34,7 @@ import de.illonis.eduras.serverconsole.commands.CommandInitializer;
  * 
  */
 public class Eduras {
+	private final static Logger L = EduLog.getLoggerFor(Eduras.class.getName());
 
 	/**
 	 * Starts an Eduras? server.
@@ -46,9 +47,15 @@ public class Eduras {
 	 *            </ul>
 	 */
 	public static void main(String[] args) {
-		// new LoggerGui().setVisible(true);
-		EduLog.setLogOutput(LogMode.CONSOLE);
-		EduLog.setLogLimit(Level.WARNING);
+
+		try {
+			EduLog.init("server.log");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		EduLog.setBasicLogLimit(Level.INFO);
+		EduLog.setConsoleLogLimit(Level.INFO);
+
 		int port = Server.DEFAULT_PORT;
 		String name = Server.DEFAULT_NAME;
 
@@ -58,14 +65,14 @@ public class Eduras {
 				try {
 					port = Integer.parseInt(args[1]);
 				} catch (NumberFormatException e) {
-					EduLog.error(Localization.getStringF(
-							"Server.invalidportarg", args[1]));
+					L.severe(Localization.getStringF("Server.invalidportarg",
+							args[1]));
 					return;
 				}
 			}
 		}
 
-		EduLog.info(Localization.getString("Server.startstart"));
+		L.info(Localization.getString("Server.startstart"));
 
 		Server server = new Server(port, name);
 
@@ -85,8 +92,7 @@ public class Eduras {
 		try {
 			server.start();
 		} catch (ServerNotReadyForStartException e) {
-			EduLog.error(Localization.getStringF("Server.notready",
-					e.getMessage()));
+			L.severe(Localization.getStringF("Server.notready", e.getMessage()));
 			return;
 		}
 
@@ -97,8 +103,8 @@ public class Eduras {
 			CommandInitializer.initCommands();
 			ServerConsole.setEventTriggerer(new ConsoleEventTriggerer(
 					eventTriggerer, server));
-		} catch (NoConsoleException e1) {
-			EduLog.passException(e1);
+		} catch (NoConsoleException e) {
+			L.log(Level.WARNING, "Could not find console", e);
 		}
 
 		ServerDiscoveryListener sdl = new ServerDiscoveryListener(
@@ -117,7 +123,7 @@ public class Eduras {
 			new PrintWriter(socket.getOutputStream(), true)
 					.println(MetaServer.REGISTER_REQUEST);
 		} catch (IOException e) {
-			EduLog.warning("Cannot connect to meta server.");
+			L.warning("Cannot connect to meta server.");
 		}
 	}
 
@@ -144,8 +150,7 @@ public class Eduras {
 				}
 			}
 		} catch (SocketException e) {
-			EduLog.error(Localization.getString("Server.noaddresses"));
-			EduLog.passException(e);
+			L.log(Level.SEVERE, Localization.getString("Server.noaddresses"), e);
 			return;
 		}
 
@@ -155,6 +160,6 @@ public class Eduras {
 			b.append(inetAddress.toString().substring(1));
 			b.append(", ");
 		}
-		EduLog.info(b.toString());
+		L.info(b.toString());
 	}
 }

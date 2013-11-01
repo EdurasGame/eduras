@@ -1,5 +1,9 @@
 package de.illonis.eduras.gamemodes;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import de.illonis.edulog.EduLog;
 import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.ObjectFactory.ObjectType;
 import de.illonis.eduras.Team;
@@ -7,7 +11,6 @@ import de.illonis.eduras.Team.TeamColor;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
 import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.gameobjects.GameObject.Relation;
-import de.illonis.eduras.logger.EduLog;
 import de.illonis.eduras.logic.EventTriggerer;
 import de.illonis.eduras.maps.SpawnPosition.SpawnType;
 import de.illonis.eduras.units.PlayerMainFigure;
@@ -20,6 +23,9 @@ import de.illonis.eduras.units.Unit;
  * 
  */
 public class Deathmatch extends BasicGameMode {
+
+	private final static Logger L = EduLog.getLoggerFor(Deathmatch.class
+			.getName());
 
 	/**
 	 * Creates a new instance of deathmatch.
@@ -57,7 +63,7 @@ public class Deathmatch extends BasicGameMode {
 				return;
 			gameInfo.getGameSettings().getStats().addKillForPlayer(killer);
 		} catch (ObjectNotFoundException e) {
-			EduLog.passException(e);
+			L.log(Level.SEVERE, "player not found", e);
 		}
 
 	}
@@ -82,7 +88,7 @@ public class Deathmatch extends BasicGameMode {
 		try {
 			newPlayer = gameInfo.getPlayerByOwnerId(ownerId);
 		} catch (ObjectNotFoundException e) {
-			EduLog.passException(e);
+			L.log(Level.SEVERE, "player not found", e);
 			return;
 		}
 

@@ -4,8 +4,10 @@ import java.io.Console;
 import java.util.Formatter;
 import java.util.HashMap;
 import java.util.IllegalFormatException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
-import de.illonis.eduras.logger.EduLog;
+import de.illonis.edulog.EduLog;
 import de.illonis.eduras.logic.ConsoleEventTriggerer;
 import de.illonis.eduras.serverconsole.commands.ConsoleCommand;
 
@@ -24,6 +26,9 @@ import de.illonis.eduras.serverconsole.commands.ConsoleCommand;
  * 
  */
 public class ServerConsole implements Runnable {
+
+	private final static Logger L = EduLog.getLoggerFor(ServerConsole.class
+			.getName());
 
 	private final static String CMD_PROMPT = "eduras>";
 	private final static String HELP_COMMAND = "help";
@@ -46,7 +51,7 @@ public class ServerConsole implements Runnable {
 		try {
 			getInstance().triggerer = triggerer;
 		} catch (NoConsoleException e) {
-			EduLog.passException(e);
+			L.log(Level.SEVERE, "no console found", e);
 		}
 	}
 
@@ -152,7 +157,7 @@ public class ServerConsole implements Runnable {
 		try {
 			getInstance().commands.put(command.getCommand(), command);
 		} catch (NoConsoleException e) {
-			EduLog.passException(e);
+			L.log(Level.SEVERE, "error registering command", e);
 		}
 	}
 
@@ -195,7 +200,7 @@ public class ServerConsole implements Runnable {
 	private void parseCommand(String command) {
 		if (command.trim().isEmpty())
 			return;
-		EduLog.fine("Received command: " + command);
+		L.fine("Received command: " + command);
 
 		String[] args = command.split(" ");
 

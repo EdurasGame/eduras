@@ -7,10 +7,13 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.Socket;
 import java.net.SocketException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
+import de.illonis.edulog.EduLog;
 import de.illonis.eduras.interfaces.GameLogicInterface;
 import de.illonis.eduras.interfaces.NetworkEventListener;
-import de.illonis.eduras.logger.EduLog;
+import de.illonis.eduras.locale.Localization;
 
 /**
  * Receives incoming messages for the client.
@@ -19,6 +22,9 @@ import de.illonis.eduras.logger.EduLog;
  * 
  */
 public class ClientReceiver extends Thread {
+
+	private final static Logger L = EduLog.getLoggerFor(ClientReceiver.class
+			.getName());
 
 	private BufferedReader messageReader = null;
 
@@ -54,16 +60,16 @@ public class ClientReceiver extends Thread {
 			messageReader = new BufferedReader(new InputStreamReader(
 					socket.getInputStream()));
 		} catch (IOException e) {
-			EduLog.passException(e);
+			L.log(Level.SEVERE, "error reader init", e);
 		}
 
 		try {
 			udpSocket = new DatagramSocket(client.getPortNumber());
 		} catch (SocketException e) {
 			connectionAvailable = false;
-			EduLog.errorLF("Client.networking.udpopenerror",
-					client.getPortNumber());
-			EduLog.passException(e);
+			L.log(Level.SEVERE, Localization.getStringF(
+					"Client.networking.udpopenerror", client.getPortNumber()),
+					e);
 			interrupt();
 			return;
 		}
@@ -91,14 +97,14 @@ public class ClientReceiver extends Thread {
 			try {
 				String messages = messageReader.readLine();
 				if (messages != null) {
-					EduLog.infoLF("Client.networking.msgreceive", messages);
+					L.info(Localization.getStringF(
+							"Client.networking.msgreceive", messages));
 					processMessages(messages);
 				}
 			} catch (IOException e) {
 				connectionAvailable = false;
-				EduLog.error("Client.networking.tcpclose");
-				EduLog.errorL("Client.networking.tcpclose");
-				EduLog.passException(e);
+				L.log(Level.SEVERE,
+						Localization.getString("Client.networking.tcpclose"), e);
 				interrupt();
 				return;
 			}
@@ -135,8 +141,8 @@ public class ClientReceiver extends Thread {
 					processMessages(messages);
 				} catch (IOException e) {
 					connectionAvailable = false;
-					EduLog.errorL("Client.networking.udpclose");
-					EduLog.passException(e);
+					L.log(Level.SEVERE, Localization
+							.getString("Client.networking.udpclose"), e);
 					interrupt();
 				}
 			}

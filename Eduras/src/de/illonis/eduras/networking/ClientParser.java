@@ -1,14 +1,15 @@
 package de.illonis.eduras.networking;
 
 import java.util.LinkedList;
+import java.util.logging.Logger;
 
+import de.illonis.edulog.EduLog;
 import de.illonis.eduras.events.ConnectionEstablishedEvent;
 import de.illonis.eduras.events.Event;
 import de.illonis.eduras.events.GameEvent;
 import de.illonis.eduras.events.NetworkEvent;
 import de.illonis.eduras.interfaces.GameLogicInterface;
 import de.illonis.eduras.interfaces.NetworkEventListener;
-import de.illonis.eduras.logger.EduLog;
 
 /**
  * Processes messages that arrive at the client.
@@ -19,6 +20,9 @@ import de.illonis.eduras.logger.EduLog;
  *         the gamelogic or to the network listener.
  */
 public class ClientParser extends Thread {
+
+	private final static Logger L = EduLog.getLoggerFor(ClientParser.class
+			.getName());
 
 	Client client;
 	NetworkEventListener networkEventListener;
@@ -50,7 +54,7 @@ public class ClientParser extends Thread {
 
 	@Override
 	public void run() {
-		EduLog.info("[ClientParser] Started.");
+		L.info("[ClientParser] Started.");
 		readFromInputBuffer();
 	}
 
@@ -65,7 +69,7 @@ public class ClientParser extends Thread {
 				String s = inputBuffer.getNext();
 				decodeMessage(s);
 			} catch (InterruptedException e) {
-				EduLog.info("ClientParser interrupted.");
+				L.info("ClientParser interrupted.");
 				break;
 			}
 		}
@@ -82,7 +86,7 @@ public class ClientParser extends Thread {
 			return;
 		LinkedList<Event> deserializedMessages = NetworkMessageDeserializer
 				.deserialize(message);
-		EduLog.info("[ServerDecoder] Decoded " + deserializedMessages.size()
+		L.info("[ServerDecoder] Decoded " + deserializedMessages.size()
 				+ " messages from: " + message);
 		for (Event event : deserializedMessages)
 			if (event instanceof GameEvent) {
@@ -90,7 +94,7 @@ public class ClientParser extends Thread {
 			} else {
 				if (event instanceof ConnectionEstablishedEvent) {
 					ConnectionEstablishedEvent connectionEvent = (ConnectionEstablishedEvent) event;
-					EduLog.info("Received ConnectionEstablished event.");
+					L.info("Received ConnectionEstablished event.");
 					client.setOwnerId(connectionEvent.getClient());
 				}
 				networkEventListener

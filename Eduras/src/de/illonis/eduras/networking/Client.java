@@ -3,14 +3,16 @@ package de.illonis.eduras.networking;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.Socket;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
+import de.illonis.edulog.EduLog;
 import de.illonis.eduras.events.ConnectionAbortedEvent;
 import de.illonis.eduras.events.ConnectionQuitEvent;
 import de.illonis.eduras.events.NetworkEvent;
 import de.illonis.eduras.exceptions.ConnectionLostException;
 import de.illonis.eduras.interfaces.GameLogicInterface;
 import de.illonis.eduras.interfaces.NetworkEventListener;
-import de.illonis.eduras.logger.EduLog;
 import de.illonis.eduras.networking.ClientSender.PacketType;
 
 /**
@@ -21,6 +23,7 @@ import de.illonis.eduras.networking.ClientSender.PacketType;
  * 
  */
 public class Client {
+	private final static Logger L = EduLog.getLoggerFor(Client.class.getName());
 
 	/**
 	 * Connection timeout when connecting to server (in ms).
@@ -65,7 +68,7 @@ public class Client {
 	 *             when connection establishing failed.
 	 */
 	public void connect(InetAddress addr, int port) throws IOException {
-		EduLog.info("[CLIENT] Connecting to " + addr.toString() + " at " + port);
+		L.info("[CLIENT] Connecting to " + addr.toString() + " at " + port);
 		if (PORT != -1)
 			socket = new Socket(addr, port, null, PORT);
 		else
@@ -159,7 +162,8 @@ public class Client {
 			try {
 				socket.close();
 			} catch (IOException e) {
-				EduLog.passException(e);
+				L.log(Level.WARNING, "io", e);
+
 			}
 	}
 

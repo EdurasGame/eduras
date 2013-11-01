@@ -4,8 +4,9 @@
 package de.illonis.eduras.math;
 
 import java.util.LinkedList;
+import java.util.logging.Logger;
 
-import de.illonis.eduras.logger.EduLog;
+import de.illonis.edulog.EduLog;
 
 /**
  * A wrapper class for collision points which stores not only the point of
@@ -15,6 +16,9 @@ import de.illonis.eduras.logger.EduLog;
  * 
  */
 public class CollisionPoint {
+
+	private final static Logger L = EduLog.getLoggerFor(CollisionPoint.class
+			.getName());
 
 	private final Vector2D interceptPoint;
 	private final Vector2D distanceVector;
@@ -103,7 +107,7 @@ public class CollisionPoint {
 		double distanceVectorY = interceptPoint.getY() - line.getU().getY();
 		Vector2D distanceVector = new Vector2D(distanceVectorX, distanceVectorY);
 
-		EduLog.info("[LOGIC][TRIANGLE] Collision at " + interceptPoint.getX()
+		L.info("[LOGIC][TRIANGLE] Collision at " + interceptPoint.getX()
 				+ " , " + interceptPoint.getY());
 
 		CollisionPoint interception = new CollisionPoint(interceptPoint,

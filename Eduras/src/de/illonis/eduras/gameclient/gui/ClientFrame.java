@@ -8,14 +8,15 @@ import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.logging.Logger;
 
 import javax.swing.JFrame;
 
+import de.illonis.edulog.EduLog;
 import de.illonis.eduras.exceptions.InvalidValueEnteredException;
 import de.illonis.eduras.gameclient.GameClient;
 import de.illonis.eduras.gameclient.NetworkEventReactor;
 import de.illonis.eduras.gameclient.TooltipHandler;
-import de.illonis.eduras.logger.EduLog;
 import de.illonis.eduras.math.Vector2D;
 
 /**
@@ -26,6 +27,9 @@ import de.illonis.eduras.math.Vector2D;
  */
 public class ClientFrame extends JFrame implements NetworkEventReactor,
 		ActionListener, UserInputListener {
+
+	private final static Logger L = EduLog.getLoggerFor(ClientFrame.class
+			.getName());
 
 	private static final long serialVersionUID = 1L;
 	private CardLayout cardLayout;
@@ -160,7 +164,7 @@ public class ClientFrame extends JFrame implements NetworkEventReactor,
 		public void componentResized(ComponentEvent e) {
 			super.componentResized(e);
 
-			EduLog.fine("[GUI] Size changed. New size: " + getWidth() + ", "
+			L.fine("[GUI] Size changed. New size: " + getWidth() + ", "
 					+ getHeight());
 			notifyGuiSizeChanged();
 		}
@@ -177,7 +181,7 @@ public class ClientFrame extends JFrame implements NetworkEventReactor,
 	@Override
 	public void onConnectionLost(int clientId) {
 		if (clientId == client.getOwnerID()) {
-			EduLog.warning("Connection lost.");
+			L.warning("Connection lost.");
 			gamePanel.stopRendering();
 			cml.stop();
 			showProgress();

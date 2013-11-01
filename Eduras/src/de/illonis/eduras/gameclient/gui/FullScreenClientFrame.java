@@ -2,10 +2,11 @@ package de.illonis.eduras.gameclient.gui;
 
 import java.awt.DisplayMode;
 import java.awt.GraphicsDevice;
+import java.util.logging.Logger;
 
+import de.illonis.edulog.EduLog;
 import de.illonis.eduras.gameclient.GameClient;
 import de.illonis.eduras.locale.Localization;
-import de.illonis.eduras.logger.EduLog;
 
 /**
  * A full screen client frame.
@@ -14,6 +15,9 @@ import de.illonis.eduras.logger.EduLog;
  * 
  */
 public class FullScreenClientFrame extends ClientFrame {
+
+	private final static Logger L = EduLog
+			.getLoggerFor(FullScreenClientFrame.class.getName());
 
 	private static final long serialVersionUID = 1L;
 	private DisplayMode oldDisplayMode;
@@ -48,7 +52,7 @@ public class FullScreenClientFrame extends ClientFrame {
 
 			// validate();
 		} else {
-			EduLog.error(Localization.getString("Client.errors.nofullscreen"));
+			L.severe(Localization.getString("Client.errors.nofullscreen"));
 		}
 	}
 

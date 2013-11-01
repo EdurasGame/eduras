@@ -1,9 +1,11 @@
 package de.illonis.eduras.inventory;
 
+import java.util.logging.Logger;
+
+import de.illonis.edulog.EduLog;
 import de.illonis.eduras.ObjectFactory.ObjectType;
 import de.illonis.eduras.items.Item;
 import de.illonis.eduras.items.StackableItem;
-import de.illonis.eduras.logger.EduLog;
 
 /**
  * An inventory that holds items for a unit.
@@ -12,6 +14,9 @@ import de.illonis.eduras.logger.EduLog;
  * 
  */
 public class Inventory {
+
+	private final static Logger L = EduLog.getLoggerFor(Inventory.class
+			.getName());
 
 	/**
 	 * Maximum number of items that can be stored.
@@ -150,7 +155,7 @@ public class Inventory {
 		int target = findNextFreeInventorySlotForItem(item);
 		if (target == -1)
 			throw new InventoryIsFullException();
-		EduLog.info("putting item in " + target);
+		L.info("putting item in " + target);
 		itemSlots[target].putItem(item);
 		return target;
 	}

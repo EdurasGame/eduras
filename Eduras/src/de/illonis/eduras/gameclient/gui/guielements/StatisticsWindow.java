@@ -4,12 +4,14 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
+import de.illonis.edulog.EduLog;
 import de.illonis.eduras.Team;
 import de.illonis.eduras.events.MatchEndEvent;
 import de.illonis.eduras.gameclient.gui.UserInterface;
 import de.illonis.eduras.images.ImageFiler;
-import de.illonis.eduras.logger.EduLog;
 import de.illonis.eduras.units.PlayerMainFigure;
 
 /**
@@ -19,6 +21,9 @@ import de.illonis.eduras.units.PlayerMainFigure;
  * 
  */
 public class StatisticsWindow extends RenderedGuiObject {
+
+	private final static Logger L = EduLog.getLoggerFor(StatisticsWindow.class
+			.getName());
 
 	private final static Color COLOR_BG = new Color(0, 0, 0, 200);
 	private final static Color COLOR_TEXT = Color.WHITE;
@@ -48,7 +53,7 @@ public class StatisticsWindow extends RenderedGuiObject {
 		try {
 			artwork = ImageFiler.load("gui/artwork/statwindow.png");
 		} catch (IOException e) {
-			EduLog.passException(e);
+			L.log(Level.SEVERE, "error loading statwindow background", e);
 		}
 	}
 

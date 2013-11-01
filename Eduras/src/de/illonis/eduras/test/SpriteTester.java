@@ -3,12 +3,14 @@ package de.illonis.eduras.test;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.util.Random;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.swing.JFrame;
 
+import de.illonis.edulog.EduLog;
 import de.illonis.eduras.exceptions.ImageLoadingError;
 import de.illonis.eduras.images.SpriteSheet;
-import de.illonis.eduras.logger.EduLog;
 
 /**
  * This class tests SpriteSheets. It draws all sprites from a spritesheet on a
@@ -20,6 +22,9 @@ import de.illonis.eduras.logger.EduLog;
  * 
  */
 public class SpriteTester extends JFrame {
+
+	private final static Logger L = EduLog.getLoggerFor(SpriteTester.class
+			.getName());
 
 	private static final long serialVersionUID = 1L;
 	private final static int REFRESH_RATE = 1500;
@@ -39,7 +44,7 @@ public class SpriteTester extends JFrame {
 		try {
 			s = new SpriteSheet("testsprite.png", 30);
 		} catch (ImageLoadingError e) {
-			EduLog.passException(e);
+			L.log(Level.SEVERE, "error loading spritesheet", e);
 		}
 
 		img = new BufferedImage[s.getTileCount()];
@@ -86,7 +91,7 @@ public class SpriteTester extends JFrame {
 				try {
 					Thread.sleep(REFRESH_RATE);
 				} catch (InterruptedException e) {
-					EduLog.passException(e);
+					break;
 				}
 			}
 		}

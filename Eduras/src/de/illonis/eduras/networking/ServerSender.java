@@ -9,11 +9,14 @@ import java.net.Socket;
 import java.net.SocketAddress;
 import java.net.SocketException;
 import java.util.HashMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
+import de.illonis.edulog.EduLog;
 import de.illonis.eduras.events.Event;
 import de.illonis.eduras.exceptions.BufferIsEmptyException;
 import de.illonis.eduras.exceptions.MessageNotSupportedException;
-import de.illonis.eduras.logger.EduLog;
+import de.illonis.eduras.locale.Localization;
 import de.illonis.eduras.networking.ClientSender.PacketType;
 
 /**
@@ -23,6 +26,9 @@ import de.illonis.eduras.networking.ClientSender.PacketType;
  * 
  */
 public class ServerSender extends Thread {
+
+	private final static Logger L = EduLog.getLoggerFor(ServerSender.class
+			.getName());
 
 	/**
 	 * Message send interval
@@ -49,7 +55,7 @@ public class ServerSender extends Thread {
 		try {
 			this.udpSocket = new DatagramSocket();
 		} catch (SocketException e) {
-			EduLog.passException(e);
+			L.log(Level.SEVERE, "error initializing datagram", e);
 			server.stopServer();
 		}
 		this.setName("ServerSender");
@@ -70,7 +76,7 @@ public class ServerSender extends Thread {
 		for (ServerClient serverClient : clients.values()) {
 			PrintWriter pw = serverClient.getOutputStream();
 			pw.println(message);
-			EduLog.info("Server.networking.msgsend");
+			L.info("Server.networking.msgsend");
 		}
 	}
 
@@ -88,10 +94,10 @@ public class ServerSender extends Thread {
 						messageAsBytes.length, clientAddress);
 				udpSocket.send(packet);
 			} catch (IOException e) {
-				EduLog.passException(e);
+				L.log(Level.SEVERE, "error sending udp", e);
 			}
 
-			EduLog.info("Server.networking.msgsend");
+			L.info("Server.networking.msgsend");
 		}
 	}
 
@@ -121,7 +127,7 @@ public class ServerSender extends Thread {
 			try {
 				udpSocket.send(packet);
 			} catch (IOException e) {
-				EduLog.passException(e);
+				L.log(Level.SEVERE, "error sending udp", e);
 			}
 
 		}
@@ -187,7 +193,7 @@ public class ServerSender extends Thread {
 			try {
 				Thread.sleep(SEND_INTERVAL);
 			} catch (InterruptedException e) {
-				EduLog.passException(e);
+				break;
 			}
 		}
 	}
@@ -207,10 +213,10 @@ public class ServerSender extends Thread {
 			String message = NetworkMessageSerializer.concatenate(filtereds);
 
 			if (message.equals("")) {
-				EduLog.warning("Message empty!!");
+				L.warning("Message empty!!");
 				return;
 			}
-			EduLog.infoL("Server.networking.sendall");
+			L.info(Localization.getString("Server.networking.sendall"));
 			sendTCPMessage(message);
 		} catch (BufferIsEmptyException e) {
 			// do nothing if there is no message.
@@ -224,11 +230,11 @@ public class ServerSender extends Thread {
 			String message = NetworkMessageSerializer.concatenate(filtereds);
 
 			if (message.equals("")) {
-				EduLog.warning("Message empty!!");
+				L.warning("Message empty!!");
 				return;
 			}
 			sendUDPMessage(message);
-			EduLog.infoL("Server.networking.sendall");
+			L.info(Localization.getString("Server.networking.sendall"));
 		} catch (BufferIsEmptyException e) {
 			// do nothing if there is no message.
 		}
@@ -263,7 +269,7 @@ public class ServerSender extends Thread {
 		try {
 			eventAsString = NetworkMessageSerializer.serialize(event);
 		} catch (MessageNotSupportedException e) {
-			EduLog.passException(e);
+			L.log(Level.SEVERE, "error serializing message", e);
 			return;
 		}
 
@@ -289,7 +295,7 @@ public class ServerSender extends Thread {
 			PacketType packetType = networkPolicy.determinePacketType(event);
 			sendMessageToClient(clientId, eventAsString, packetType);
 		} catch (MessageNotSupportedException e) {
-			EduLog.passException(e);
+			L.log(Level.SEVERE, "error sending message to client", e);
 			return;
 		}
 	}

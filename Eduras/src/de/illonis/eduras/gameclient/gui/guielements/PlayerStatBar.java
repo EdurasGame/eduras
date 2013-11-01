@@ -2,11 +2,13 @@ package de.illonis.eduras.gameclient.gui.guielements;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
+import de.illonis.edulog.EduLog;
 import de.illonis.eduras.events.SetIntegerGameObjectAttributeEvent;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
 import de.illonis.eduras.gameclient.gui.UserInterface;
-import de.illonis.eduras.logger.EduLog;
 import de.illonis.eduras.units.PlayerMainFigure;
 
 /**
@@ -16,6 +18,8 @@ import de.illonis.eduras.units.PlayerMainFigure;
  * 
  */
 public class PlayerStatBar extends RenderedGuiObject {
+	private final static Logger L = EduLog.getLoggerFor(PlayerStatBar.class
+			.getName());
 
 	private final static int MAX_WIDTH = ItemDisplay.WIDTH;
 	private final static int HEIGHT = 20;
@@ -62,7 +66,7 @@ public class PlayerStatBar extends RenderedGuiObject {
 			health = player.getHealth();
 			recalculate();
 		} catch (ObjectNotFoundException e) {
-			EduLog.passException(e);
+			L.log(Level.SEVERE, "Player received not found", e);
 		}
 	}
 

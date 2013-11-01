@@ -3,9 +3,10 @@ package de.illonis.eduras.locale;
 import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
+import java.util.logging.Logger;
 
+import de.illonis.edulog.EduLog;
 import de.illonis.eduras.exceptions.LocaleNotFoundException;
-import de.illonis.eduras.logger.EduLog;
 
 /**
  * A localization class that provides features to use internationalized strings.
@@ -19,6 +20,9 @@ import de.illonis.eduras.logger.EduLog;
  * 
  */
 public final class Localization {
+
+	private final static Logger L = EduLog.getLoggerFor(Localization.class
+			.getName());
 	private static final String BUNDLE_NAME = "de.illonis.eduras.locale.lang";
 
 	/**
@@ -50,7 +54,7 @@ public final class Localization {
 			throws LocaleNotFoundException {
 		currentLocaleNumber = findIndexOf(locale);
 		currentLocale = locale;
-		EduLog.info("[LOCALE] Set to " + currentLocale.toString() + ".");
+		L.info("[LOCALE] Set to " + currentLocale.toString() + ".");
 	}
 
 	/**
@@ -197,7 +201,7 @@ public final class Localization {
 			// NOTE: need to hardcode this string to prevent recursive errors
 			// when this is not translated, too!
 			String error = "No translation to default language found for %s!";
-			EduLog.error(String.format(error, RESOURCES[currentLocaleNumber]
+			L.warning(String.format(error, RESOURCES[currentLocaleNumber]
 					.getLocale().toString(), key));
 			return '!' + key + '!';
 		}

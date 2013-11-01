@@ -3,12 +3,13 @@ package de.illonis.eduras.gameclient.gui;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.logging.Logger;
 
+import de.illonis.edulog.EduLog;
 import de.illonis.eduras.ObjectFactory.ObjectType;
 import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.images.ImageFiler;
 import de.illonis.eduras.locale.Localization;
-import de.illonis.eduras.logger.EduLog;
 
 /**
  * Loads and contains all images that can be drawn by renderer.
@@ -18,6 +19,9 @@ import de.illonis.eduras.logger.EduLog;
  */
 public class ImageList {
 
+	private final static Logger L = EduLog.getLoggerFor(ImageList.class
+			.getName());
+
 	private static final HashMap<ObjectType, BufferedImage> images = new HashMap<ObjectType, BufferedImage>();
 	private static final String DEF_IMAGE_FILE = "gui/icons/noicon.png";
 	private static BufferedImage defaultImage;
@@ -26,7 +30,7 @@ public class ImageList {
 		try {
 			defaultImage = ImageFiler.load(DEF_IMAGE_FILE);
 		} catch (IllegalArgumentException | IOException e) {
-			EduLog.error(Localization.getStringF(
+			L.severe(Localization.getStringF(
 					"Client.errors.io.defaulticonimage", DEF_IMAGE_FILE));
 			defaultImage = new BufferedImage(30, 30, BufferedImage.TYPE_INT_RGB);
 		}

@@ -1,5 +1,9 @@
 package de.illonis.eduras;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import de.illonis.edulog.EduLog;
 import de.illonis.eduras.events.GameEvent.GameEventNumber;
 import de.illonis.eduras.events.ObjectFactoryEvent;
 import de.illonis.eduras.events.SetGameObjectAttributeEvent;
@@ -19,7 +23,6 @@ import de.illonis.eduras.items.weapons.SplashWeapon;
 import de.illonis.eduras.items.weapons.SplashedMissile;
 import de.illonis.eduras.items.weapons.SwordMissile;
 import de.illonis.eduras.items.weapons.SwordWeapon;
-import de.illonis.eduras.logger.EduLog;
 import de.illonis.eduras.units.PlayerMainFigure;
 
 /**
@@ -30,6 +33,8 @@ import de.illonis.eduras.units.PlayerMainFigure;
  * 
  */
 public class ObjectFactory {
+	private final static Logger L = EduLog.getLoggerFor(ObjectFactory.class
+			.getName());
 
 	private final GameLogicInterface logic;
 
@@ -109,7 +114,8 @@ public class ObjectFactory {
 			if (event.hasId()) {
 				id = event.getId();
 			} else {
-				EduLog.passException(new DataMissingException("No id assigned!"));
+				L.log(Level.SEVERE, "Event has no id",
+						new DataMissingException("No id assigned!"));
 				return;
 			}
 
@@ -118,7 +124,7 @@ public class ObjectFactory {
 				go = new PlayerMainFigure(logic.getGame(), event.getOwner(), id);
 				logic.getGame().addPlayer((PlayerMainFigure) go);
 
-				EduLog.info("Player " + event.getOwner() + " created");
+				L.info("Player " + event.getOwner() + " created");
 				break;
 			case SIMPLEMISSILE:
 				go = new SimpleMissile(logic.getGame(), id);
@@ -130,7 +136,7 @@ public class ObjectFactory {
 				try {
 					go = new BiggerBlock(logic.getGame(), id);
 				} catch (ShapeVerticesNotApplicableException e) {
-					EduLog.passException(e);
+					L.log(Level.SEVERE, "shape vertices not applicable", e);
 					return;
 				}
 				break;
@@ -141,7 +147,7 @@ public class ObjectFactory {
 				try {
 					go = new BigBlock(logic.getGame(), id);
 				} catch (ShapeVerticesNotApplicableException e) {
-					EduLog.passException(e);
+					L.log(Level.SEVERE, "shape vertices not applicable", e);
 					return;
 				}
 				break;

@@ -1,5 +1,9 @@
 package de.illonis.eduras.units;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import de.illonis.edulog.EduLog;
 import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.ObjectFactory.ObjectType;
 import de.illonis.eduras.Team;
@@ -8,7 +12,6 @@ import de.illonis.eduras.gameobjects.ArtificialIntelligence;
 import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.interfaces.MovementControlable;
 import de.illonis.eduras.inventory.Inventory;
-import de.illonis.eduras.logger.EduLog;
 import de.illonis.eduras.math.Vector2D;
 import de.illonis.eduras.shapes.Triangle;
 
@@ -19,6 +22,10 @@ import de.illonis.eduras.shapes.Triangle;
  * 
  */
 public class PlayerMainFigure extends Unit implements MovementControlable {
+
+	private final static Logger L = EduLog.getLoggerFor(PlayerMainFigure.class
+			.getName());
+
 	private String name;
 	private Team team;
 	private final Inventory inventory = new Inventory();
@@ -52,8 +59,7 @@ public class PlayerMainFigure extends Unit implements MovementControlable {
 		try {
 			setShape(new Triangle(firstEdge, secondEdge, thirdEdge));
 		} catch (ShapeVerticesNotApplicableException e) {
-
-			EduLog.passException(e);
+			L.log(Level.SEVERE, "error setting player shape", e);
 		}
 	}
 
@@ -150,7 +156,7 @@ public class PlayerMainFigure extends Unit implements MovementControlable {
 	@Override
 	public void onCollision(GameObject collidingObject) {
 		// do nothing
-		EduLog.info("I JUST COLLIDED!");
+		L.fine("I JUST COLLIDED!");
 	}
 
 	/**

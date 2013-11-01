@@ -4,14 +4,16 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
+import de.illonis.edulog.EduLog;
 import de.illonis.eduras.events.GameEvent.GameEventNumber;
 import de.illonis.eduras.events.UserMovementEvent;
 import de.illonis.eduras.exceptions.KeyNotBoundException;
 import de.illonis.eduras.exceptions.MessageNotSupportedException;
 import de.illonis.eduras.exceptions.WrongEventTypeException;
 import de.illonis.eduras.gameclient.GameClient;
-import de.illonis.eduras.logger.EduLog;
 import de.illonis.eduras.logicabstraction.EventSender;
 import de.illonis.eduras.settings.KeyBindings.KeyBinding;
 import de.illonis.eduras.settings.Settings;
@@ -23,6 +25,9 @@ import de.illonis.eduras.settings.Settings;
  * 
  */
 public class InputKeyHandler extends KeyAdapter {
+
+	private final static Logger L = EduLog.getLoggerFor(InputKeyHandler.class
+			.getName());
 
 	private static final long KEY_INTERVAL = 20;
 	private LinkedList<UserInputListener> listeners;
@@ -180,14 +185,12 @@ public class InputKeyHandler extends KeyAdapter {
 
 		try {
 			eventSender.sendEvent(moveEvent);
-		} catch (WrongEventTypeException e1) {
-			EduLog.passException(e1);
-		} catch (MessageNotSupportedException e1) {
-			EduLog.passException(e1);
+		} catch (WrongEventTypeException | MessageNotSupportedException e) {
+			L.log(Level.SEVERE, "error sending message", e);
 		}
 
 		lastTimePressed = System.currentTimeMillis();
-		EduLog.fine("Bound key pressed: " + keyCode);
+		L.fine("Bound key pressed: " + keyCode);
 	}
 
 	private void keyReleased(int keyCode) {
@@ -235,10 +238,8 @@ public class InputKeyHandler extends KeyAdapter {
 
 		try {
 			eventSender.sendEvent(moveEvent);
-		} catch (WrongEventTypeException e1) {
-			EduLog.passException(e1);
-		} catch (MessageNotSupportedException e1) {
-			EduLog.passException(e1);
+		} catch (WrongEventTypeException | MessageNotSupportedException e) {
+			L.log(Level.SEVERE, "error sending message", e);
 		}
 	}
 

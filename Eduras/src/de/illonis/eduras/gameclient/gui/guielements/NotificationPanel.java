@@ -5,7 +5,10 @@ import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics2D;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
+import de.illonis.edulog.EduLog;
 import de.illonis.eduras.events.ClientRenameEvent;
 import de.illonis.eduras.events.DeathEvent;
 import de.illonis.eduras.events.SetItemSlotEvent;
@@ -14,7 +17,6 @@ import de.illonis.eduras.gameclient.gui.UserInterface;
 import de.illonis.eduras.inventory.ItemSlotIsEmptyException;
 import de.illonis.eduras.items.Item;
 import de.illonis.eduras.locale.Localization;
-import de.illonis.eduras.logger.EduLog;
 import de.illonis.eduras.units.PlayerMainFigure;
 
 /**
@@ -24,6 +26,9 @@ import de.illonis.eduras.units.PlayerMainFigure;
  * 
  */
 public class NotificationPanel extends RenderedGuiObject {
+
+	private final static Logger L = EduLog.getLoggerFor(NotificationPanel.class
+			.getName());
 
 	private final static Font NOTIFICATION_FONT = DEFAULT_FONT.deriveFont(16f)
 			.deriveFont(Font.BOLD);
@@ -105,7 +110,7 @@ public class NotificationPanel extends RenderedGuiObject {
 			addNotification(note);
 
 		} catch (ObjectNotFoundException e) {
-			EduLog.passException(e);
+			L.log(Level.SEVERE, "object not found", e);
 		}
 	}
 
@@ -123,7 +128,7 @@ public class NotificationPanel extends RenderedGuiObject {
 						name);
 			addNotification(note);
 		} catch (ObjectNotFoundException e) {
-			EduLog.passException(e);
+			L.log(Level.SEVERE, "object not found", e);
 		}
 
 	}
@@ -141,7 +146,7 @@ public class NotificationPanel extends RenderedGuiObject {
 			addNotification(note);
 		} catch (ItemSlotIsEmptyException i) {
 		} catch (ObjectNotFoundException e) {
-			EduLog.passException(e);
+			L.log(Level.SEVERE, "object not found", e);
 		}
 		super.onItemSlotChanged(event);
 	}

@@ -1,8 +1,10 @@
 package de.illonis.eduras.maps;
 
 import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
-import de.illonis.eduras.logger.EduLog;
+import de.illonis.edulog.EduLog;
 import de.illonis.eduras.maps.persistence.InvalidDataException;
 
 /**
@@ -12,6 +14,8 @@ import de.illonis.eduras.maps.persistence.InvalidDataException;
  * 
  */
 public class FunMap extends Map {
+
+	private final static Logger L = EduLog.getLoggerFor(FunMap.class.getName());
 
 	/**
 	 * Creates the map.
@@ -25,10 +29,8 @@ public class FunMap extends Map {
 	protected void buildMap() {
 		try {
 			loadFromFile("funmap.erm");
-		} catch (InvalidDataException e) {
-			EduLog.passException(e);
-		} catch (IOException e) {
-			EduLog.passException(e);
+		} catch (InvalidDataException | IOException e) {
+			L.log(Level.SEVERE, "error loading map", e);
 		}
 	}
 }

@@ -3,8 +3,10 @@ package de.illonis.eduras.networking.discover;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
-import de.illonis.eduras.logger.EduLog;
+import de.illonis.edulog.EduLog;
 import de.illonis.eduras.utils.Pair;
 
 /**
@@ -14,6 +16,9 @@ import de.illonis.eduras.utils.Pair;
  * 
  */
 public class ClientServerResponseHandler extends Thread {
+
+	private final static Logger L = EduLog
+			.getLoggerFor(ClientServerResponseHandler.class.getName());
 
 	private final ServerFoundListener listener;
 	private DiscoveryChannel c;
@@ -51,7 +56,7 @@ public class ClientServerResponseHandler extends Thread {
 
 				InetSocketAddress fsocket = (InetSocketAddress) returnData
 						.getFirst();
-				EduLog.info("[ServerSearcher] Got response from "
+				L.info("[ServerSearcher] Got response from "
 						+ fsocket.getAddress().getHostAddress());
 
 				String message = returnData.getSecond();
@@ -70,7 +75,7 @@ public class ClientServerResponseHandler extends Thread {
 				}
 			}
 		} catch (IOException e) {
-			EduLog.passException(e);
+			L.log(Level.SEVERE, "error finding server", e);
 		}
 	}
 

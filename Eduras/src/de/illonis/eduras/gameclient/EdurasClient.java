@@ -10,8 +10,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.io.IOException;
 import java.util.Vector;
-import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
@@ -23,10 +24,9 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.ListCellRenderer;
 
+import de.illonis.edulog.EduLog;
 import de.illonis.eduras.gameclient.gui.ClientFrame;
 import de.illonis.eduras.gameclient.gui.FullScreenClientFrame;
-import de.illonis.eduras.logger.EduLog;
-import de.illonis.eduras.logger.EduLog.LogMode;
 import de.illonis.eduras.networking.Client;
 
 /**
@@ -37,6 +37,9 @@ import de.illonis.eduras.networking.Client;
  */
 public class EdurasClient {
 
+	private final static Logger L = EduLog.getLoggerFor(EdurasClient.class
+			.getName());
+
 	/**
 	 * Starts Eduras? client.
 	 * 
@@ -46,8 +49,12 @@ public class EdurasClient {
 	 */
 	public static void main(String[] args) {
 		// new LoggerGui().setVisible(true);
-		EduLog.setLogOutput(LogMode.CONSOLE);
-		EduLog.setLogLimit(Level.WARNING);
+		try {
+			EduLog.init("client.log");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		// EduLog.setConsoleLogLimit(Level.OFF);
 
 		if (args.length > 0) {
 			try {
@@ -56,7 +63,7 @@ public class EdurasClient {
 					throw new Exception();
 				}
 			} catch (Exception e) {
-				EduLog.error("Given port is not a valid value!");
+				L.severe("Given port is not a valid value!");
 				return;
 			}
 		}

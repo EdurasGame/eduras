@@ -9,6 +9,8 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.net.SocketTimeoutException;
 import java.util.concurrent.ExecutionException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
@@ -18,8 +20,8 @@ import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.SwingWorker;
 
+import de.illonis.edulog.EduLog;
 import de.illonis.eduras.images.ImageFiler;
-import de.illonis.eduras.logger.EduLog;
 import de.illonis.eduras.logicabstraction.NetworkManager;
 import de.illonis.eduras.networking.Client;
 
@@ -30,6 +32,9 @@ import de.illonis.eduras.networking.Client;
  * 
  */
 public class ProgressPanel extends JPanel implements ActionListener {
+
+	private final static Logger L = EduLog.getLoggerFor(ProgressPanel.class
+			.getName());
 
 	private static final long serialVersionUID = 1L;
 	private JLabel text;
@@ -123,10 +128,8 @@ public class ProgressPanel extends JPanel implements ActionListener {
 	public boolean isOK() {
 		try {
 			return worker.get();
-		} catch (InterruptedException e) {
-			EduLog.passException(e);
-		} catch (ExecutionException e) {
-			EduLog.passException(e);
+		} catch (InterruptedException | ExecutionException e) {
+			L.log(Level.SEVERE, "could not get connect result", e);
 		}
 		return false;
 	}
@@ -141,12 +144,12 @@ public class ProgressPanel extends JPanel implements ActionListener {
 				errorMessage = "Connection timeout";
 			} catch (IOException e) {
 				errorMessage = e.getMessage();
-				EduLog.passException(e);
+				L.log(Level.SEVERE, "could not connect", e);
 			} finally {
 				try {
 					Thread.sleep(200);
 				} catch (InterruptedException e) {
-					EduLog.passException(e);
+					L.log(Level.WARNING, "interrupted", e);
 				}
 			}
 		}
@@ -195,7 +198,7 @@ public class ProgressPanel extends JPanel implements ActionListener {
 				try {
 					thread.join(1000);
 				} catch (InterruptedException e) {
-					EduLog.passException(e);
+					L.log(Level.WARNING, "interrupted", e);
 				}
 
 				if (thread.isAlive()) {

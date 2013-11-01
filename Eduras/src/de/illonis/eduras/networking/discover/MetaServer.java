@@ -9,8 +9,9 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.LinkedList;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 
-import de.illonis.eduras.logger.EduLog;
+import de.illonis.edulog.EduLog;
 
 /**
  * Eduras Servers can register and deregister at the meta server, so they are
@@ -21,6 +22,9 @@ import de.illonis.eduras.logger.EduLog;
  * 
  */
 public class MetaServer extends Thread {
+
+	private final static Logger L = EduLog.getLoggerFor(MetaServer.class
+			.getName());
 
 	private boolean running = false;
 	private int port = ServerDiscoveryListener.META_SERVER_PORT;
@@ -89,7 +93,7 @@ public class MetaServer extends Thread {
 				Socket newClient = socket.accept();
 				new MetaServerRequestHandler(newClient).start();
 			} catch (IOException e) {
-				EduLog.passException(e);
+				L.log(Level.WARNING, "error sending meta server request", e);
 				running = false;
 				continue;
 			}
@@ -98,7 +102,7 @@ public class MetaServer extends Thread {
 		try {
 			deinit();
 		} catch (IOException e) {
-			EduLog.passException(e);
+			L.log(Level.SEVERE, "error deinitializing", e);
 		}
 	}
 
@@ -119,7 +123,7 @@ public class MetaServer extends Thread {
 						client.getInputStream()));
 				clientWriter = new PrintWriter(client.getOutputStream(), true);
 			} catch (IOException e) {
-				EduLog.passException(e);
+				L.log(Level.SEVERE, "error sending to client", e);
 				return;
 			}
 
@@ -130,7 +134,7 @@ public class MetaServer extends Thread {
 						handleMessage(message);
 					}
 				} catch (IOException e) {
-					EduLog.passException(e);
+					L.log(Level.SEVERE, "error reading message", e);
 					return;
 				}
 			}
@@ -138,7 +142,7 @@ public class MetaServer extends Thread {
 
 		private void handleMessage(String message) {
 			if (message.contains(GET_SERVERS_REQUEST)) {
-				EduLog.info("Received a GET_SERVERS request from address "
+				L.info("Received a GET_SERVERS request from address "
 						+ client.getInetAddress().getHostAddress() + ".");
 
 				String ipsOfRegisteredServers = META_SERVER_ANSWER;
@@ -151,7 +155,7 @@ public class MetaServer extends Thread {
 			}
 
 			if (message.contains(REGISTER_REQUEST)) {
-				EduLog.info("Received a REGISTER request from address "
+				L.info("Received a REGISTER request from address "
 						+ client.getInetAddress().getHostAddress() + ".");
 
 				if (!registeredServers.contains(client.getInetAddress()))
@@ -159,7 +163,7 @@ public class MetaServer extends Thread {
 			}
 
 			if (message.contains(DEREGISTER_REQUEST)) {
-				EduLog.info("Received a DEREGISTER request from address "
+				L.info("Received a DEREGISTER request from address "
 						+ client.getInetAddress().getHostAddress() + ".");
 
 				registeredServers.remove(client.getInetAddress());
@@ -174,6 +178,17 @@ public class MetaServer extends Thread {
 	 *            1st argument: The port on which the meta server will listen.
 	 */
 	public static void main(String[] args) {
+		try {
+			EduLog.init("metaserver.log");
+		} catch (IOException e) {
+			e.printStackTrace();
+			throw new RuntimeException(
+					"error starting logging to metaserver.log");
+		}
+
+		EduLog.setBasicLogLimit(Level.ALL);
+		EduLog.setConsoleLogLimit(Level.ALL);
+		EduLog.setFileLogLimit(Level.ALL);
 		MetaServer metaServer;
 		try {
 			if (args.length > 0) {
@@ -184,11 +199,9 @@ public class MetaServer extends Thread {
 				metaServer = new MetaServer();
 			}
 		} catch (NumberFormatException | IOException e) {
-			EduLog.passException(e);
+			L.log(Level.SEVERE, "error starting metaserver", e);
 			return;
 		}
-
-		EduLog.setLogLimit(Level.ALL);
 
 		metaServer.start();
 	}

@@ -1,7 +1,10 @@
 package de.illonis.eduras.networking;
 
 import java.util.LinkedList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
+import de.illonis.edulog.EduLog;
 import de.illonis.eduras.ObjectFactory.ObjectType;
 import de.illonis.eduras.Team.TeamColor;
 import de.illonis.eduras.events.AddPlayerToTeamEvent;
@@ -36,7 +39,6 @@ import de.illonis.eduras.events.UserMovementEvent;
 import de.illonis.eduras.exceptions.GivenParametersDoNotFitToEventException;
 import de.illonis.eduras.exceptions.InvalidMessageFormatException;
 import de.illonis.eduras.exceptions.MessageNotSupportedException;
-import de.illonis.eduras.logger.EduLog;
 import de.illonis.eduras.math.Vector2D;
 import de.illonis.eduras.networking.ServerClient.ClientRole;
 
@@ -47,6 +49,9 @@ import de.illonis.eduras.networking.ServerClient.ClientRole;
  * 
  */
 public class NetworkMessageDeserializer {
+
+	private final static Logger L = EduLog
+			.getLoggerFor(NetworkMessageDeserializer.class.getName());
 
 	/**
 	 * (jme) Deserializes a string into a list of GameEvents.
@@ -63,7 +68,7 @@ public class NetworkMessageDeserializer {
 		LinkedList<Event> events = new LinkedList<Event>();
 		if (eventString.isEmpty())
 			return events;
-		EduLog.info("[DESERIALIZE] orig: " + eventString);
+		L.info("[DESERIALIZE] orig: " + eventString);
 		String[] messages;
 		messages = eventString.substring(2).split("##");
 
@@ -72,16 +77,14 @@ public class NetworkMessageDeserializer {
 			if (msg == null)
 				continue;
 
-			EduLog.info("message: " + msg);
+			L.info("message: " + msg);
 			try {
 				Event ge = deserializeMessage(msg);
 				events.add(ge);
-			} catch (InvalidMessageFormatException e) {
-				EduLog.passException(e);
-			} catch (GivenParametersDoNotFitToEventException e) {
-				EduLog.passException(e);
-			} catch (MessageNotSupportedException e) {
-				EduLog.passException(e);
+			} catch (InvalidMessageFormatException
+					| GivenParametersDoNotFitToEventException
+					| MessageNotSupportedException e) {
+				L.log(Level.SEVERE, "error deserializing message", e);
 			}
 		}
 

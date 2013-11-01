@@ -1,6 +1,8 @@
 package de.illonis.eduras.gameclient.gui;
 
-import de.illonis.eduras.logger.EduLog;
+import java.util.logging.Logger;
+
+import de.illonis.edulog.EduLog;
 
 /**
  * This thread does repeatedly call render methods of its renderer.
@@ -9,6 +11,9 @@ import de.illonis.eduras.logger.EduLog;
  * 
  */
 public class RenderThread implements Runnable {
+
+	private final static Logger L = EduLog.getLoggerFor(RenderThread.class
+			.getName());
 
 	private final static int DRAW_INTERVAL = 20;
 	private GameRenderer renderer;
@@ -37,10 +42,10 @@ public class RenderThread implements Runnable {
 			try {
 				Thread.sleep(DRAW_INTERVAL);
 			} catch (InterruptedException e) {
-				EduLog.passException(e);
+				break;
 			}
 		}
-		EduLog.info("RenderThread stopped.");
+		L.info("RenderThread stopped.");
 	}
 
 	/**

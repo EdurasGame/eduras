@@ -2,8 +2,11 @@ package de.illonis.eduras.networking;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
-import de.illonis.eduras.logger.EduLog;
+import de.illonis.edulog.EduLog;
+import de.illonis.eduras.locale.Localization;
 
 /**
  * The ServerReceiver receives messages from a client and pushes them to input
@@ -13,6 +16,9 @@ import de.illonis.eduras.logger.EduLog;
  * 
  */
 public class ServerTCPReceiver extends Thread {
+
+	private final static Logger L = EduLog.getLoggerFor(ServerTCPReceiver.class
+			.getName());
 
 	private final Buffer inputBuffer;
 	private final ServerClient client;
@@ -59,7 +65,8 @@ public class ServerTCPReceiver extends Thread {
 			while (client.isConnected()) {
 				String line = br.readLine();
 				if (line != null) {
-					EduLog.infoLF("Server.networking.msgreceive", line);
+					L.info(Localization.getStringF(
+							"Server.networking.msgreceive", line));
 					pushToInputBuffer(line);
 				} else {
 					throw new IOException("Received message was null");
@@ -67,8 +74,8 @@ public class ServerTCPReceiver extends Thread {
 
 			}
 		} catch (IOException e) {
-			EduLog.errorLF("Server.networking.clientbye", client.getClientId());
-			EduLog.passException(e);
+			L.log(Level.SEVERE, Localization.getStringF(
+					"Server.networking.clientbye", client.getClientId()), e);
 		} finally {
 			server.handleClientDisconnect(client);
 		}

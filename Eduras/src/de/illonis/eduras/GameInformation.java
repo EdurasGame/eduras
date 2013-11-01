@@ -7,7 +7,10 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Random;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
+import de.illonis.edulog.EduLog;
 import de.illonis.eduras.events.AddPlayerToTeamEvent;
 import de.illonis.eduras.events.ClientRenameEvent;
 import de.illonis.eduras.events.GameEvent;
@@ -23,7 +26,6 @@ import de.illonis.eduras.exceptions.GameModeNotSupportedByMapException;
 import de.illonis.eduras.exceptions.InvalidNameException;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
 import de.illonis.eduras.gameobjects.GameObject;
-import de.illonis.eduras.logger.EduLog;
 import de.illonis.eduras.logic.EventTriggerer;
 import de.illonis.eduras.maps.FunMap;
 import de.illonis.eduras.maps.Map;
@@ -40,6 +42,9 @@ import de.illonis.eduras.units.PlayerMainFigure;
  * 
  */
 public class GameInformation {
+	private final static Logger L = EduLog.getLoggerFor(GameInformation.class
+			.getName());
+
 	private static final Random RANDOM = new Random();
 
 	private final ConcurrentHashMap<Integer, GameObject> objects;
@@ -308,7 +313,7 @@ public class GameInformation {
 			try {
 				infos.add(new ClientRenameEvent(p.getOwner(), p.getName()));
 			} catch (InvalidNameException e) {
-				EduLog.passException(e);
+				L.log(Level.WARNING, e.getLocalizedMessage(), e);
 				continue;
 			}
 		}

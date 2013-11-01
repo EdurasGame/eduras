@@ -2,7 +2,9 @@ package de.illonis.eduras.logic;
 
 import java.util.ArrayList;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 
+import de.illonis.edulog.EduLog;
 import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.ObjectFactory;
 import de.illonis.eduras.events.ClientRenameEvent;
@@ -20,7 +22,6 @@ import de.illonis.eduras.items.Item;
 import de.illonis.eduras.items.ItemUseInformation;
 import de.illonis.eduras.items.Usable;
 import de.illonis.eduras.locale.Localization;
-import de.illonis.eduras.logger.EduLog;
 import de.illonis.eduras.units.PlayerMainFigure;
 
 /**
@@ -30,6 +31,8 @@ import de.illonis.eduras.units.PlayerMainFigure;
  * 
  */
 public class ServerLogic implements GameLogicInterface {
+	private final static Logger L = EduLog.getLoggerFor(ServerLogic.class
+			.getName());
 
 	private final GameInformation gameInfo;
 	private final ObjectFactory objectFactory;
@@ -54,7 +57,7 @@ public class ServerLogic implements GameLogicInterface {
 
 	@Override
 	public synchronized void onGameEventAppeared(GameEvent event) {
-		EduLog.info(Localization.getStringF("Client.networking.event", event
+		L.info(Localization.getStringF("Client.networking.event", event
 				.getType().toString()));
 
 		switch (event.getType()) {
@@ -82,12 +85,12 @@ public class ServerLogic implements GameLogicInterface {
 			try {
 				p = gameInfo.getPlayerByOwnerId(e.getOwner());
 			} catch (ObjectNotFoundException e1) {
-				EduLog.warning("There is no such player with the id"
+				L.warning("There is no such player with the id"
 						+ e1.getObjectId() + "(yet)!");
 				return;
 			}
 
-			EduLog.info("SETTING player found by owner " + e.getOwner()
+			L.info("SETTING player found by owner " + e.getOwner()
 					+ " to name: " + e.getName() + "  playerid=" + p.getId()
 					+ " playerowner=" + p.getOwner());
 			p.setName(e.getName());
@@ -100,7 +103,8 @@ public class ServerLogic implements GameLogicInterface {
 			handleItemEvent(itemEvent);
 			break;
 		default:
-			EduLog.errorLF("Server.networking.illegalevent", event.getClass());
+			L.severe(Localization.getStringF("Server.networking.illegalevent",
+					event.getClass()));
 			System.exit(1);
 			break;
 		}
@@ -118,7 +122,7 @@ public class ServerLogic implements GameLogicInterface {
 		try {
 			player = gameInfo.getPlayerByOwnerId(itemEvent.getOwner());
 		} catch (ObjectNotFoundException e) {
-			EduLog.passException(e);
+			L.log(Level.SEVERE, "player not found", e);
 			return;
 		}
 
@@ -127,7 +131,7 @@ public class ServerLogic implements GameLogicInterface {
 		try {
 			item = player.getInventory().getItemBySlot(itemEvent.getSlotNum());
 		} catch (ItemSlotIsEmptyException e) {
-			EduLog.log(Level.INFO, e.getMessage());
+			L.info(e.getMessage());
 			return;
 		}
 		ItemUseInformation useInfo = new ItemUseInformation(player,
@@ -164,7 +168,8 @@ public class ServerLogic implements GameLogicInterface {
 		try {
 			player = gameInfo.getPlayerByOwnerId(event.getOwner());
 		} catch (ObjectNotFoundException e) {
-			EduLog.warningLF("Server.logic.playernotfound", e.getObjectId());
+			L.warning(Localization.getStringF("Server.logic.playernotfound",
+					e.getObjectId()));
 			return;
 		}
 

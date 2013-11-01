@@ -3,12 +3,13 @@ package de.illonis.eduras.images;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.net.URL;
+import java.util.logging.Logger;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 
+import de.illonis.edulog.EduLog;
 import de.illonis.eduras.locale.Localization;
-import de.illonis.eduras.logger.EduLog;
 
 /**
  * Provides utility features to load or interact with images stored in game
@@ -18,6 +19,9 @@ import de.illonis.eduras.logger.EduLog;
  * 
  */
 public class ImageFiler {
+
+	private final static Logger L = EduLog.getLoggerFor(ImageFiler.class
+			.getName());
 
 	/**
 	 * Loads an image from internal filesystem and returns its
@@ -48,8 +52,8 @@ public class ImageFiler {
 		if (imgURL != null) {
 			return new ImageIcon(imgURL);
 		} else {
-			EduLog.error(Localization.getStringF(
-					"Client.errors.io.imagenotfound", path));
+			L.severe(Localization.getStringF("Client.errors.io.imagenotfound",
+					path));
 			return null;
 		}
 	}

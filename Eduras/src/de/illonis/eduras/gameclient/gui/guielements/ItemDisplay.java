@@ -7,7 +7,10 @@ import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.geom.Arc2D;
 import java.awt.image.BufferedImage;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
+import de.illonis.edulog.EduLog;
 import de.illonis.eduras.events.SetItemSlotEvent;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
 import de.illonis.eduras.gameclient.gui.ImageList;
@@ -16,7 +19,6 @@ import de.illonis.eduras.inventory.Inventory;
 import de.illonis.eduras.inventory.ItemSlotIsEmptyException;
 import de.illonis.eduras.items.Item;
 import de.illonis.eduras.items.Usable;
-import de.illonis.eduras.logger.EduLog;
 
 /**
  * Displays player items on user interface.
@@ -26,6 +28,9 @@ import de.illonis.eduras.logger.EduLog;
  */
 public class ItemDisplay extends ClickableGuiElement implements
 		TooltipTriggerer {
+
+	private final static Logger L = EduLog.getLoggerFor(ItemDisplay.class
+			.getName());
 
 	private final static int ITEM_GAP = 15;
 	private final static int BLOCKSIZE = 48;
@@ -100,7 +105,7 @@ public class ItemDisplay extends ClickableGuiElement implements
 	public boolean onClick(Point p) {
 		for (int i = 0; i < Inventory.MAX_CAPACITY; i++) {
 			if (itemSlots[i].getClickableRect().contains(p)) {
-				EduLog.info("User clicked on item " + i);
+				L.info("User clicked on item " + i);
 				itemClicked(i);
 				return true;
 			}
@@ -122,9 +127,9 @@ public class ItemDisplay extends ClickableGuiElement implements
 			currentItem = itemSlot;
 
 		} catch (ItemSlotIsEmptyException e) {
-			EduLog.info("Player tried to use empty item slot " + itemSlot + ".");
+			L.fine("Player tried to use empty item slot " + itemSlot + ".");
 		} catch (ObjectNotFoundException e) {
-			EduLog.passException(e);
+			L.log(Level.SEVERE, "Object not found", e);
 		}
 	}
 

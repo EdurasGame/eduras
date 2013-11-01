@@ -2,9 +2,10 @@ package de.illonis.eduras.networking;
 
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.logging.Logger;
 
+import de.illonis.edulog.EduLog;
 import de.illonis.eduras.events.GameEvent.GameEventNumber;
-import de.illonis.eduras.logger.EduLog;
 
 /**
  * Provides several tools to reduce network traffic.
@@ -13,6 +14,9 @@ import de.illonis.eduras.logger.EduLog;
  * 
  */
 public abstract class NetworkOptimizer {
+
+	private final static Logger L = EduLog.getLoggerFor(NetworkOptimizer.class
+			.getName());
 
 	/**
 	 * Removes obsolete messages from a message array.<br>
@@ -68,8 +72,8 @@ public abstract class NetworkOptimizer {
 		unfilterable.addAll(speedEvents.values());
 		unfilterable.addAll(speedvectorEvents.values());
 		int n = unfilteredMessages.length - unfilterable.size();
-		EduLog.info("[NETWORKOPTIMIZER] Filtered " + n
-				+ " obsolete messages (of " + unfilterable.size() + ")");
+		L.info("[NETWORKOPTIMIZER] Filtered " + n + " obsolete messages (of "
+				+ unfilterable.size() + ")");
 		return unfilterable.toArray(new String[0]);
 	}
 }

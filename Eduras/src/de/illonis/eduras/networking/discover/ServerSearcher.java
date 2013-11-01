@@ -10,8 +10,10 @@ import java.net.InterfaceAddress;
 import java.net.NetworkInterface;
 import java.net.Socket;
 import java.util.Enumeration;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
-import de.illonis.eduras.logger.EduLog;
+import de.illonis.edulog.EduLog;
 
 /**
  * Searches for servers in local network using UDP broadcasts.
@@ -20,6 +22,10 @@ import de.illonis.eduras.logger.EduLog;
  * 
  */
 public class ServerSearcher extends Thread {
+
+	private final static Logger L = EduLog.getLoggerFor(ServerSearcher.class
+			.getName());
+
 	private DiscoveryChannel c;
 	private ClientServerResponseHandler handler;
 	private ServerFoundListener listener;
@@ -76,7 +82,7 @@ public class ServerSearcher extends Thread {
 					ServerDiscoveryListener.SERVER_PORT);
 
 			c.send(ServerDiscoveryListener.REQUEST_MSG, target);
-			EduLog.info("[ServerSearcher] Sent request packet via 255.255.255.255.");
+			L.info("[ServerSearcher] Sent request packet via 255.255.255.255.");
 			// Broadcast the message over all the network interfaces
 			Enumeration<NetworkInterface> interfaces = NetworkInterface
 					.getNetworkInterfaces();
@@ -103,13 +109,13 @@ public class ServerSearcher extends Thread {
 				}
 			}
 		} catch (IOException e) {
-			EduLog.passException(e);
+			L.log(Level.SEVERE, "error sending request", e);
 		}
 	}
 
 	private void sendRequestTo(InetSocketAddress target) throws IOException {
 		c.send(ServerDiscoveryListener.REQUEST_MSG, target);
-		EduLog.info("[ServerSearcher] Sent request packet to "
+		L.info("[ServerSearcher] Sent request packet to "
 				+ target.getAddress().getHostAddress() + " .");
 
 	}
@@ -120,8 +126,8 @@ public class ServerSearcher extends Thread {
 			c = new DiscoveryChannel(false);
 			c.bind(new InetSocketAddress(ServerDiscoveryListener.CLIENT_PORT));
 
-		} catch (IOException e2) {
-			EduLog.passException(e2);
+		} catch (IOException e) {
+			L.log(Level.SEVERE, "error binding socket", e);
 			listener.onDiscoveryFailed();
 			c.close();
 			return false;
@@ -144,7 +150,7 @@ public class ServerSearcher extends Thread {
 			metaAnswerListener.start();
 
 		} catch (IOException e) {
-			EduLog.warning("Cannot connect to meta server.");
+			L.warning("Cannot connect to meta server.");
 			// if there's no internet connection, thats okay.
 		}
 
@@ -159,7 +165,7 @@ public class ServerSearcher extends Thread {
 				handler.wait();
 			}
 		} catch (InterruptedException e) {
-			EduLog.passException(e);
+			L.log(Level.WARNING, "interrupted waiting for response", e);
 			return false;
 		}
 		return true;
@@ -180,7 +186,7 @@ public class ServerSearcher extends Thread {
 					String answer = inputReader.readLine();
 					processAnswer(answer);
 				} catch (IOException e) {
-					EduLog.passException(e);
+					L.log(Level.SEVERE, "error reading answer", e);
 					return;
 				}
 			}
@@ -198,7 +204,7 @@ public class ServerSearcher extends Thread {
 						sendRequestTo(new InetSocketAddress(singleAddress,
 								ServerDiscoveryListener.SERVER_PORT));
 					} catch (IOException e) {
-						EduLog.passException(e);
+						L.log(Level.SEVERE, "error sending request", e);
 						continue;
 					}
 			}
@@ -243,7 +249,7 @@ public class ServerSearcher extends Thread {
 			if (socketToMetaServer != null)
 				socketToMetaServer.close();
 		} catch (IOException e) {
-			EduLog.passException(e);
+			L.log(Level.WARNING, "error closing socket", e);
 		}
 
 		handler.interrupt();

@@ -1,5 +1,9 @@
 package de.illonis.eduras.logic;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import de.illonis.edulog.EduLog;
 import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.ObjectFactory.ObjectType;
 import de.illonis.eduras.Team;
@@ -30,7 +34,6 @@ import de.illonis.eduras.inventory.InventoryIsFullException;
 import de.illonis.eduras.items.Item;
 import de.illonis.eduras.items.Lootable;
 import de.illonis.eduras.items.weapons.Missile;
-import de.illonis.eduras.logger.EduLog;
 import de.illonis.eduras.maps.InitialObjectData;
 import de.illonis.eduras.maps.Map;
 import de.illonis.eduras.math.Vector2D;
@@ -47,6 +50,9 @@ import de.illonis.eduras.units.Unit;
  * 
  */
 public class ServerEventTriggerer implements EventTriggerer {
+
+	private final static Logger L = EduLog
+			.getLoggerFor(ServerEventTriggerer.class.getName());
 
 	private static int lastGameObjectId = 0;
 
@@ -302,7 +308,7 @@ public class ServerEventTriggerer implements EventTriggerer {
 			logic.onGameEventAppeared(renameEvent);
 			sendEvents(renameEvent);
 		} catch (InvalidNameException e) {
-			EduLog.passException(e);
+			L.log(Level.WARNING, "invalid user name", e);
 			return;
 		}
 	}
@@ -388,7 +394,7 @@ public class ServerEventTriggerer implements EventTriggerer {
 					.setItemAt(e.getItemSlot(),
 							(Item) gameInfo.getObjects().get(e.getObjectId()));
 		} catch (ObjectNotFoundException ex) {
-			EduLog.passException(ex);
+			L.log(Level.SEVERE, "player not found", ex);
 		}
 		sendEvents(e);
 	}
@@ -492,7 +498,7 @@ public class ServerEventTriggerer implements EventTriggerer {
 		try {
 			newPlayer = gameInfo.getPlayerByOwnerId(ownerId);
 		} catch (ObjectNotFoundException e) {
-			EduLog.passException(e);
+			L.log(Level.SEVERE, "player not found", e);
 			return;
 		}
 

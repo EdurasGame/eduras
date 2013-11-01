@@ -8,9 +8,12 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.swing.JOptionPane;
 
+import de.illonis.edulog.EduLog;
 import de.illonis.eduras.events.Event;
 import de.illonis.eduras.events.GameEvent.GameEventNumber;
 import de.illonis.eduras.events.InitInformationEvent;
@@ -25,7 +28,6 @@ import de.illonis.eduras.gameclient.gui.guielements.ClickableGuiElementInterface
 import de.illonis.eduras.gameclient.gui.guielements.TooltipTriggerer;
 import de.illonis.eduras.inventory.Inventory;
 import de.illonis.eduras.locale.Localization;
-import de.illonis.eduras.logger.EduLog;
 import de.illonis.eduras.logicabstraction.EdurasInitializer;
 import de.illonis.eduras.logicabstraction.EventSender;
 import de.illonis.eduras.logicabstraction.InformationProvider;
@@ -44,6 +46,9 @@ import de.illonis.eduras.settings.Settings;
  */
 public class GameClient implements GuiClickReactor, NetworkEventReactor,
 		TooltipTriggererNotifier {
+
+	private final static Logger L = EduLog.getLoggerFor(GameClient.class
+			.getName());
 
 	private InformationProvider infoPro;
 	private EventSender eventSender;
@@ -153,7 +158,7 @@ public class GameClient implements GuiClickReactor, NetworkEventReactor,
 
 		if (clientId != getOwnerID()) // only handle my connection
 			return;
-		EduLog.info("Connection to server established. OwnerId: "
+		L.info("Connection to server established. OwnerId: "
 				+ infoPro.getOwnerID());
 		keyHandler = new InputKeyHandler(this, eventSender, settings);
 		keyHandler.addUserInputListener(frame);
@@ -172,7 +177,7 @@ public class GameClient implements GuiClickReactor, NetworkEventReactor,
 					} catch (WrongEventTypeException
 							| MessageNotSupportedException
 							| InterruptedException e) {
-						EduLog.passException(e);
+						L.log(Level.SEVERE, "Error sending UDP hi", e);
 						break;
 					}
 				}
@@ -185,7 +190,7 @@ public class GameClient implements GuiClickReactor, NetworkEventReactor,
 	@Override
 	public void onConnectionLost(int client) {
 		if (client == getOwnerID()) {
-			EduLog.warning("Connection lost");
+			L.warning("Connection lost");
 			frame.onConnectionLost(client);
 			connectionState = ConnectionState.NOT_CONNECTED;
 		} else {
@@ -195,7 +200,7 @@ public class GameClient implements GuiClickReactor, NetworkEventReactor,
 
 	@Override
 	public void onDisconnect(int clientId) {
-		EduLog.info("Disconnected: " + clientId);
+		L.info("Disconnected: " + clientId);
 		frame.onDisconnect(clientId);
 		connectionState = ConnectionState.NOT_CONNECTED;
 	}
@@ -225,10 +230,8 @@ public class GameClient implements GuiClickReactor, NetworkEventReactor,
 
 		try {
 			sendEvent(event);
-		} catch (WrongEventTypeException e) {
-			EduLog.passException(e);
-		} catch (MessageNotSupportedException e) {
-			EduLog.passException(e);
+		} catch (WrongEventTypeException | MessageNotSupportedException e) {
+			L.log(Level.WARNING, "error sending item used event", e);
 		}
 	}
 
@@ -259,7 +262,7 @@ public class GameClient implements GuiClickReactor, NetworkEventReactor,
 		@Override
 		public void mouseClicked(MouseEvent e) {
 			super.mouseClicked(e);
-			EduLog.info("Click at " + e.getX() + ", " + e.getY());
+			L.info("Click at " + e.getX() + ", " + e.getY());
 			Point p = e.getPoint();
 			switch (currentClickState) {
 			case ITEM_SELECTED:
@@ -470,7 +473,7 @@ public class GameClient implements GuiClickReactor, NetworkEventReactor,
 		try {
 			sendEvent(new InitInformationEvent(role, clientName, clientId));
 		} catch (WrongEventTypeException | MessageNotSupportedException e) {
-			EduLog.passException(e);
+			L.log(Level.SEVERE, "Error sending initinformation event", e);
 		}
 	}
 }

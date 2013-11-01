@@ -2,8 +2,9 @@ package de.illonis.eduras.maps;
 
 import java.awt.geom.Rectangle2D;
 import java.util.Random;
+import java.util.logging.Logger;
 
-import de.illonis.eduras.logger.EduLog;
+import de.illonis.edulog.EduLog;
 import de.illonis.eduras.math.Vector2D;
 import de.illonis.eduras.shapes.ObjectShape;
 
@@ -14,6 +15,9 @@ import de.illonis.eduras.shapes.ObjectShape;
  * 
  */
 public class SpawnPosition {
+
+	private final static Logger L = EduLog.getLoggerFor(SpawnPosition.class
+			.getName());
 
 	private final static Random RANDOM = new Random();
 
@@ -86,7 +90,7 @@ public class SpawnPosition {
 		double spawnY = RANDOM.nextDouble() * (maxY - minY) + minY;
 
 		if (spawnX < 0 || spawnY < 0) {
-			EduLog.warning("Spawning object is too big for this spawning Point!"
+			L.warning("Spawning object is too big for this spawning Point!"
 					+ "Size of Object: "
 					+ spawningShape.getBoundingBox().getBounds()
 					+ " Size of Area: " + area.getBounds());

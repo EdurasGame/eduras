@@ -4,8 +4,10 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
-import de.illonis.eduras.logger.EduLog;
+import de.illonis.edulog.EduLog;
 import de.illonis.eduras.utils.Pair;
 
 /**
@@ -15,6 +17,9 @@ import de.illonis.eduras.utils.Pair;
  * 
  */
 public class ServerDiscoveryListener extends Thread {
+
+	private final static Logger L = EduLog
+			.getLoggerFor(ServerDiscoveryListener.class.getName());
 	/*
 	 * Main idea of this code is from Michiel De Mey and has been modified to
 	 * fit to Eduras?. Source:
@@ -65,7 +70,7 @@ public class ServerDiscoveryListener extends Thread {
 
 	@Override
 	public void run() {
-		EduLog.info("ServerSearcher is starting to listen for UDP-Broadcasts on port "
+		L.info("ServerSearcher is starting to listen for UDP-Broadcasts on port "
 				+ SERVER_PORT + ".");
 
 		// prepare answer data:
@@ -94,7 +99,7 @@ public class ServerDiscoveryListener extends Thread {
 
 				String message = returnData.getSecond();
 				// Packet received
-				EduLog.info("Discovery packet received from: "
+				L.info("Discovery packet received from: "
 						+ isa.getAddress().getHostAddress() + ":"
 						+ isa.getPort() + ", Data: " + message);
 
@@ -102,14 +107,14 @@ public class ServerDiscoveryListener extends Thread {
 				if (message.equals(ServerDiscoveryListener.REQUEST_MSG)) {
 					// Send a response
 					channel.send(answer, isa);
-					EduLog.info("Sent packet to: "
+					L.info("Sent packet to: "
 							+ isa.getAddress().getHostAddress());
 				} else {
-					EduLog.warning("Received invalid broadcast message.");
+					L.warning("Received invalid broadcast message.");
 				}
 			}
 		} catch (IOException ex) {
-			EduLog.passException(ex);
+			L.log(Level.SEVERE, "error sending discovery", ex);
 		}
 	}
 }

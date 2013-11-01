@@ -6,9 +6,12 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetSocketAddress;
 import java.net.Socket;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
+import de.illonis.edulog.EduLog;
 import de.illonis.eduras.exceptions.ConnectionLostException;
-import de.illonis.eduras.logger.EduLog;
+import de.illonis.eduras.locale.Localization;
 
 /**
  * Sends messages/events to the server.
@@ -17,6 +20,8 @@ import de.illonis.eduras.logger.EduLog;
  * 
  */
 public class ClientSender {
+	private final static Logger L = EduLog.getLoggerFor(ClientSender.class
+			.getName());
 
 	private Socket socket = null;
 	private boolean active;
@@ -55,7 +60,7 @@ public class ClientSender {
 					true);
 		} catch (IOException e) {
 			active = false;
-			EduLog.passException(e);
+			L.log(Level.SEVERE, "error creating writer", e);
 		}
 
 	}
@@ -76,10 +81,11 @@ public class ClientSender {
 		if (active) {
 			switch (packetType) {
 			case TCP:
-				EduLog.info("[CLIENT] Sending message: " + message);
+				L.info("[CLIENT] Sending message: " + message);
 				messageWriter.println(message);
 				if (messageWriter.checkError()) {
-					EduLog.errorL("Client.networking.senderror");
+					L.severe(Localization
+							.getString("Client.networking.senderror"));
 					active = false;
 					close();
 					throw new ConnectionLostException();
@@ -94,7 +100,7 @@ public class ClientSender {
 					udpPacket = new DatagramPacket(data, data.length, address);
 					udpSocket.send(udpPacket);
 				} catch (IOException e) {
-					EduLog.passException(e);
+					L.log(Level.SEVERE, "error sending udp", e);
 					active = false;
 					close();
 					throw new ConnectionLostException();
