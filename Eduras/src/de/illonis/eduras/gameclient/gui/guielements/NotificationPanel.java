@@ -11,6 +11,7 @@ import java.util.logging.Logger;
 import de.illonis.edulog.EduLog;
 import de.illonis.eduras.events.ClientRenameEvent;
 import de.illonis.eduras.events.DeathEvent;
+import de.illonis.eduras.events.SetInteractModeEvent;
 import de.illonis.eduras.events.SetItemSlotEvent;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
 import de.illonis.eduras.gameclient.gui.UserInterface;
@@ -43,6 +44,10 @@ public class NotificationPanel extends RenderedGuiObject {
 	private long lastChanged = System.currentTimeMillis();
 	private static long DISPLAY_TIME = 3000;
 
+	/**
+	 * @param gui
+	 *            the gui.
+	 */
 	public NotificationPanel(UserInterface gui) {
 		super(gui);
 		currentMessage = "";
@@ -66,6 +71,13 @@ public class NotificationPanel extends RenderedGuiObject {
 		g2d.drawString(currentMessage, x, y);
 	}
 
+	/**
+	 * Adds a notification that is displayed after all previous messages have
+	 * been displayed.
+	 * 
+	 * @param message
+	 *            the message.
+	 */
 	public void addNotification(String message) {
 		notifications.add(message);
 	}
@@ -149,5 +161,12 @@ public class NotificationPanel extends RenderedGuiObject {
 			L.log(Level.SEVERE, "object not found", e);
 		}
 		super.onItemSlotChanged(event);
+	}
+
+	@Override
+	public void onInteractModeChanged(SetInteractModeEvent setModeEvent) {
+		if (setModeEvent.getOwner() != getInfo().getOwnerID())
+			return;
+		addNotification("entered " + setModeEvent.getNewMode());
 	}
 }

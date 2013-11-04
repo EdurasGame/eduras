@@ -12,8 +12,7 @@ import de.illonis.eduras.math.Vector2D;
  * @author illonis
  * 
  */
-public abstract class MoveableGameObject extends ActiveGameObject implements
-		Moveable {
+public abstract class MoveableGameObject extends GameObject implements Moveable {
 
 	/**
 	 * Directions of movement.

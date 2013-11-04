@@ -53,6 +53,7 @@ public class Eduras {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+
 		// EduLog.setBasicLogLimit(Level.WARNING);
 		// EduLog.setConsoleLogLimit(Level.WARNING);
 

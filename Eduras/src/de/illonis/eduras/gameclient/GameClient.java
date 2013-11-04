@@ -168,6 +168,10 @@ public class GameClient implements GuiClickReactor, NetworkEventReactor,
 
 		class UDPHiSender extends Thread {
 
+			public UDPHiSender() {
+				super("UDPHiSender");
+			}
+
 			@Override
 			public void run() {
 				while (connectionState != ConnectionState.GAME_READY) {

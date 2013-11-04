@@ -1,17 +1,22 @@
 package de.illonis.eduras.logic;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import de.illonis.edulog.EduLog;
 import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.ObjectFactory;
+import de.illonis.eduras.ai.movement.UnitNotControllableException;
 import de.illonis.eduras.events.ClientRenameEvent;
 import de.illonis.eduras.events.GameEvent;
 import de.illonis.eduras.events.GameEvent.GameEventNumber;
 import de.illonis.eduras.events.GameInfoRequest;
 import de.illonis.eduras.events.ItemEvent;
+import de.illonis.eduras.events.SendUnitsEvent;
+import de.illonis.eduras.events.SetInteractModeEvent;
+import de.illonis.eduras.events.SwitchInteractModeEvent;
 import de.illonis.eduras.events.UserMovementEvent;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
 import de.illonis.eduras.gameobjects.MoveableGameObject.Direction;
@@ -22,6 +27,7 @@ import de.illonis.eduras.items.Item;
 import de.illonis.eduras.items.ItemUseInformation;
 import de.illonis.eduras.items.Usable;
 import de.illonis.eduras.locale.Localization;
+import de.illonis.eduras.math.Vector2D;
 import de.illonis.eduras.units.PlayerMainFigure;
 
 /**
@@ -96,6 +102,41 @@ public class ServerLogic implements GameLogicInterface {
 			p.setName(e.getName());
 
 			getListener().onClientRename(e);
+
+			break;
+		case SEND_UNITS:
+			SendUnitsEvent sendEvent = (SendUnitsEvent) event;
+			Vector2D target = sendEvent.getTarget();
+			LinkedList<Integer> units = sendEvent.getUnits();
+			for (int i = 0; i < units.size(); i++) {
+				try {
+					getGame().getEventTriggerer()
+							.sendUnit(units.get(i), target);
+				} catch (ObjectNotFoundException | UnitNotControllableException e1) {
+					L.log(Level.SEVERE, "Error sending unit " + units.get(i)
+							+ " to position " + target, e1);
+				}
+			}
+			break;
+		case SWITCH_INTERACTMODE:
+			SwitchInteractModeEvent switchEvent = (SwitchInteractModeEvent) event;
+			PlayerMainFigure mf;
+			try {
+				mf = getGame().getPlayerByOwnerId(switchEvent.getOwner());
+			} catch (ObjectNotFoundException e1) {
+				L.log(Level.SEVERE,
+						"Got mode switch request from nonexisting player.", e1);
+				break;
+			}
+			if (mf.getCurrentMode() != switchEvent.getRequestedMode()
+					&& mf.getModeSwitchCooldown() <= 0) {
+				mf.setMode(switchEvent.getRequestedMode());
+				SetInteractModeEvent setModeEvent = new SetInteractModeEvent(
+						switchEvent.getOwner(), switchEvent.getRequestedMode());
+				getListener().onInteractModeChanged(setModeEvent);
+			} else {
+				L.info("Got an switch request but player is already in that mode or switching is not ready.");
+			}
 
 			break;
 		case ITEM_USE:

@@ -6,11 +6,13 @@ import java.util.logging.Logger;
 import de.illonis.edulog.EduLog;
 import de.illonis.eduras.events.GameEvent.GameEventNumber;
 import de.illonis.eduras.events.ObjectFactoryEvent;
+import de.illonis.eduras.events.SendUnitsEvent;
 import de.illonis.eduras.events.SetGameObjectAttributeEvent;
 import de.illonis.eduras.exceptions.DataMissingException;
 import de.illonis.eduras.exceptions.ShapeVerticesNotApplicableException;
 import de.illonis.eduras.gameobjects.BigBlock;
 import de.illonis.eduras.gameobjects.BiggerBlock;
+import de.illonis.eduras.gameobjects.Bird;
 import de.illonis.eduras.gameobjects.Building;
 import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.interfaces.GameLogicInterface;
@@ -23,6 +25,7 @@ import de.illonis.eduras.items.weapons.SplashWeapon;
 import de.illonis.eduras.items.weapons.SplashedMissile;
 import de.illonis.eduras.items.weapons.SwordMissile;
 import de.illonis.eduras.items.weapons.SwordWeapon;
+import de.illonis.eduras.math.Vector2D;
 import de.illonis.eduras.units.PlayerMainFigure;
 
 /**
@@ -50,7 +53,7 @@ public class ObjectFactory {
 				0), BIGBLOCK(5), SMALLCIRCLEDBLOCK(6), SNIPERMISSILE(7), ITEM_WEAPON_SNIPER(
 				8), BUILDING(9), BIGGERBLOCK(10), ITEM_WEAPON_SPLASH(11), MISSILE_SPLASH(
 				12), MISSILE_SPLASHED(13), DYNAMIC_POLYGON(14), ITEM_WEAPON_SWORD(
-				15), SWORDMISSILE(16);
+				15), SWORDMISSILE(16), BIRD(17);
 
 		private int number;
 
@@ -125,12 +128,16 @@ public class ObjectFactory {
 				logic.getGame().addPlayer((PlayerMainFigure) go);
 
 				L.info("Player " + event.getOwner() + " created");
+				testSpawnBird();
 				break;
 			case SIMPLEMISSILE:
 				go = new SimpleMissile(logic.getGame(), id);
 				break;
 			case BUILDING:
 				go = new Building(logic.getGame(), id);
+				break;
+			case BIRD:
+				go = new Bird(logic.getGame(), id);
 				break;
 			case BIGGERBLOCK:
 				try {
@@ -176,17 +183,16 @@ public class ObjectFactory {
 				return;
 			}
 
-			go.setId(id);
-			go.setOwner(owner);
-
-			if (go != null)
+			if (go != null) {
+				go.setId(id);
+				go.setOwner(owner);
 				logic.getGame().addObject(go);
-
-			try {
-				logic.getListener().onObjectCreation(event);
-			} catch (IllegalStateException e) {
-				// (jme) we need to catch it here because a listener is not
-				// assigned on initial map creation.
+				try {
+					logic.getListener().onObjectCreation(event);
+				} catch (IllegalStateException e) {
+					// (jme) we need to catch it here because a listener is not
+					// assigned on initial map creation.
+				}
 			}
 
 		}
@@ -201,7 +207,23 @@ public class ObjectFactory {
 			}
 			logic.getGame().removeObject(objectToRemove);
 			logic.getListener().onObjectRemove(event);
-
 		}
+	}
+
+	// a very hacky test method to spawn a bird when a player joins.
+	private void testSpawnBird() {
+		ObjectFactoryEvent birdEvent = new ObjectFactoryEvent(
+				GameEventNumber.OBJECT_CREATE, ObjectType.BIRD);
+		birdEvent.setId(999);
+
+		int w = logic.getGame().getMap().getWidth() / 2;
+		int h = logic.getGame().getMap().getHeight() / 2;
+		onObjectFactoryEventAppeared(birdEvent);
+
+		GameObject o = logic.getGame().findObjectById(999);
+		o.setPosition(w, h);
+
+		SendUnitsEvent sendEvent = new SendUnitsEvent(-1, new Vector2D(), 999);
+		logic.onGameEventAppeared(sendEvent);
 	}
 }

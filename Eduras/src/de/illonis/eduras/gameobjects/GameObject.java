@@ -5,6 +5,7 @@ import java.util.LinkedList;
 
 import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.ObjectFactory.ObjectType;
+import de.illonis.eduras.ai.AIControllable;
 import de.illonis.eduras.math.CollisionPoint;
 import de.illonis.eduras.math.Line;
 import de.illonis.eduras.math.Vector2D;
@@ -372,9 +373,20 @@ public abstract class GameObject implements Comparable<GameObject> {
 	}
 
 	/**
-	 * Triggers a remove of this object from gameobject list.
+	 * Triggers a remove of this object from gameobject list. If the gameobject
+	 * has an AI, that is discarded, too.
 	 */
 	protected final void removeSelf() {
+		if (this instanceof AIControllable) {
+			((AIControllable) this).getAI().discard();
+		}
 		getGame().getEventTriggerer().removeObject(getId());
+	}
+
+	@Override
+	public final boolean equals(Object obj) {
+		if (obj instanceof GameObject)
+			return this.equals((GameObject) obj);
+		return false;
 	}
 }

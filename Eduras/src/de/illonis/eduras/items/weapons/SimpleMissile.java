@@ -2,7 +2,6 @@ package de.illonis.eduras.items.weapons;
 
 import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.ObjectFactory.ObjectType;
-import de.illonis.eduras.gameobjects.ArtificialIntelligence;
 
 /**
  * @author Florian Mai <florian.ren.mai@googlemail.com>
@@ -25,12 +24,6 @@ public class SimpleMissile extends Missile {
 		setObjectType(ObjectType.SIMPLEMISSILE);
 		setSpeed(100);
 		setMaxRange(200);
-	}
-
-	@Override
-	public ArtificialIntelligence getAI() {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 }

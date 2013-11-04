@@ -20,6 +20,7 @@ import de.illonis.eduras.events.ObjectFactoryEvent;
 import de.illonis.eduras.events.SetBooleanGameObjectAttributeEvent;
 import de.illonis.eduras.events.SetGameModeEvent;
 import de.illonis.eduras.events.SetIntegerGameObjectAttributeEvent;
+import de.illonis.eduras.events.SetInteractModeEvent;
 import de.illonis.eduras.events.SetItemSlotEvent;
 import de.illonis.eduras.events.SetOwnerEvent;
 import de.illonis.eduras.events.SetPolygonDataEvent;
@@ -75,7 +76,7 @@ public class ClientLogic implements GameLogicInterface {
 
 	@Override
 	public void onGameEventAppeared(GameEvent event) {
-		L.info("[LOGIC] A game event appeared: " + event.getType().toString());
+		L.fine("[LOGIC] A game event appeared: " + event.getType().toString());
 
 		if (event instanceof ObjectFactoryEvent) {
 			objectFactory
@@ -121,6 +122,20 @@ public class ClientLogic implements GameLogicInterface {
 				} else {
 					L.warning("Given object id in SET_POLYGON_DATA event does not match a DynamicPolygonBlock, instead object is a "
 							+ gameObj.getClass().getName());
+				}
+				break;
+			case SET_INTERACTMODE:
+				SetInteractModeEvent interactEvent = (SetInteractModeEvent) event;
+				try {
+					PlayerMainFigure mf = gameInfo
+							.getPlayerByOwnerId(interactEvent.getOwner());
+
+					mf.setMode(interactEvent.getNewMode());
+					getListener().onInteractModeChanged(interactEvent);
+				} catch (ObjectNotFoundException e2) {
+					L.log(Level.SEVERE,
+							"Got an interaction mode set for a player that does not exist on this client.",
+							e2);
 				}
 				break;
 			case SETMAXHEALTH:

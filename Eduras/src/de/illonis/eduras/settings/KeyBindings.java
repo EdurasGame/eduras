@@ -31,7 +31,7 @@ public final class KeyBindings implements ResettableSetting {
 	 */
 	@SuppressWarnings("javadoc")
 	public enum KeyBinding {
-		MOVE_LEFT, MOVE_UP, MOVE_DOWN, MOVE_RIGHT, ITEM_1, ITEM_2, ITEM_3, ITEM_4, ITEM_5, ITEM_6, EXIT_CLIENT, SHOW_STATS;
+		MOVE_LEFT, MOVE_UP, MOVE_DOWN, MOVE_RIGHT, ITEM_1, ITEM_2, ITEM_3, ITEM_4, ITEM_5, ITEM_6, EXIT_CLIENT, SHOW_STATS, SWITCH_MODE;
 	}
 
 	@Override
@@ -46,6 +46,7 @@ public final class KeyBindings implements ResettableSetting {
 		setDefaultBinding(KeyBinding.ITEM_4, KeyEvent.VK_4);
 		setDefaultBinding(KeyBinding.ITEM_5, KeyEvent.VK_5);
 		setDefaultBinding(KeyBinding.ITEM_6, KeyEvent.VK_6);
+		setDefaultBinding(KeyBinding.SWITCH_MODE, KeyEvent.VK_M);
 		setDefaultBinding(KeyBinding.EXIT_CLIENT, KeyEvent.VK_ESCAPE);
 		setDefaultBinding(KeyBinding.SHOW_STATS, KeyEvent.VK_TAB);
 	}

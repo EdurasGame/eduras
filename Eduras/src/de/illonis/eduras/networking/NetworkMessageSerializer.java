@@ -15,14 +15,17 @@ import de.illonis.eduras.events.MatchEndEvent;
 import de.illonis.eduras.events.MovementEvent;
 import de.illonis.eduras.events.NetworkEvent;
 import de.illonis.eduras.events.ObjectFactoryEvent;
+import de.illonis.eduras.events.SendUnitsEvent;
 import de.illonis.eduras.events.SetBooleanGameObjectAttributeEvent;
 import de.illonis.eduras.events.SetGameModeEvent;
 import de.illonis.eduras.events.SetIntegerGameObjectAttributeEvent;
+import de.illonis.eduras.events.SetInteractModeEvent;
 import de.illonis.eduras.events.SetItemSlotEvent;
 import de.illonis.eduras.events.SetOwnerEvent;
 import de.illonis.eduras.events.SetPolygonDataEvent;
 import de.illonis.eduras.events.SetRemainingTimeEvent;
 import de.illonis.eduras.events.SetTeamsEvent;
+import de.illonis.eduras.events.SwitchInteractModeEvent;
 import de.illonis.eduras.events.UDPHiEvent;
 import de.illonis.eduras.events.UserMovementEvent;
 import de.illonis.eduras.exceptions.MessageNotSupportedException;
@@ -145,6 +148,14 @@ public class NetworkMessageSerializer {
 			ObjectFactoryEvent removeEvent = (ObjectFactoryEvent) gameEvent;
 			serializedEvent = buildEventString(removeEvent, removeEvent.getId());
 			break;
+		case SEND_UNITS:
+			SendUnitsEvent sendEvent = (SendUnitsEvent) gameEvent;
+			serializedEvent = buildEventString(sendEvent, sendEvent.getOwner(),
+					sendEvent.getTarget().getX(), sendEvent.getTarget().getY());
+			for (int i : sendEvent.getUnits()) {
+				serializedEvent += "#" + i;
+			}
+			break;
 		case SET_KILLS:
 		case SET_DEATHS:
 		case SETMAXHEALTH:
@@ -181,6 +192,17 @@ public class NetworkMessageSerializer {
 			serializedEvent = buildEventString(setAttributeEvent,
 					setAttributeEvent.getObjectId(),
 					setAttributeEvent.getNewValue());
+			break;
+		case SET_INTERACTMODE:
+			SetInteractModeEvent setIMode = (SetInteractModeEvent) gameEvent;
+			serializedEvent = buildEventString(setIMode, setIMode.getOwner(),
+					setIMode.getNewMode().toString());
+			break;
+		case SWITCH_INTERACTMODE:
+			SwitchInteractModeEvent switchIMode = (SwitchInteractModeEvent) gameEvent;
+			serializedEvent = buildEventString(switchIMode,
+					switchIMode.getOwner(), switchIMode.getRequestedMode()
+							.toString());
 			break;
 		case ITEM_CD_START:
 		case ITEM_CD_FINISHED:

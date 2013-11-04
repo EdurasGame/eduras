@@ -26,14 +26,17 @@ import de.illonis.eduras.events.NetworkEvent.NetworkEventNumber;
 import de.illonis.eduras.events.NetworkEventImpl;
 import de.illonis.eduras.events.NoEvent;
 import de.illonis.eduras.events.ObjectFactoryEvent;
+import de.illonis.eduras.events.SendUnitsEvent;
 import de.illonis.eduras.events.SetBooleanGameObjectAttributeEvent;
 import de.illonis.eduras.events.SetGameModeEvent;
 import de.illonis.eduras.events.SetIntegerGameObjectAttributeEvent;
+import de.illonis.eduras.events.SetInteractModeEvent;
 import de.illonis.eduras.events.SetItemSlotEvent;
 import de.illonis.eduras.events.SetOwnerEvent;
 import de.illonis.eduras.events.SetPolygonDataEvent;
 import de.illonis.eduras.events.SetRemainingTimeEvent;
 import de.illonis.eduras.events.SetTeamsEvent;
+import de.illonis.eduras.events.SwitchInteractModeEvent;
 import de.illonis.eduras.events.UDPHiEvent;
 import de.illonis.eduras.events.UserMovementEvent;
 import de.illonis.eduras.exceptions.GivenParametersDoNotFitToEventException;
@@ -41,6 +44,7 @@ import de.illonis.eduras.exceptions.InvalidMessageFormatException;
 import de.illonis.eduras.exceptions.MessageNotSupportedException;
 import de.illonis.eduras.math.Vector2D;
 import de.illonis.eduras.networking.ServerClient.ClientRole;
+import de.illonis.eduras.units.PlayerMainFigure.InteractMode;
 
 /**
  * Deserializes different NetworkMessages.
@@ -68,7 +72,7 @@ public class NetworkMessageDeserializer {
 		LinkedList<Event> events = new LinkedList<Event>();
 		if (eventString.isEmpty())
 			return events;
-		L.info("[DESERIALIZE] orig: " + eventString);
+		L.fine("[DESERIALIZE] orig: " + eventString);
 		String[] messages;
 		messages = eventString.substring(2).split("##");
 
@@ -77,7 +81,7 @@ public class NetworkMessageDeserializer {
 			if (msg == null)
 				continue;
 
-			L.info("message: " + msg);
+			L.fine("message: " + msg);
 			try {
 				Event ge = deserializeMessage(msg);
 				events.add(ge);
@@ -266,6 +270,14 @@ public class NetworkMessageDeserializer {
 		case SET_OWNER:
 			gameEvent = new SetOwnerEvent(parseInt(args[2]), parseInt(args[1]));
 			break;
+		case SET_INTERACTMODE:
+			InteractMode mode = InteractMode.valueOf(args[2]);
+			gameEvent = new SetInteractModeEvent(parseInt(args[1]), mode);
+			break;
+		case SWITCH_INTERACTMODE:
+			InteractMode mode2 = InteractMode.valueOf(args[2]);
+			gameEvent = new SwitchInteractModeEvent(parseInt(args[1]), mode2);
+			break;
 		case SET_VISIBLE:
 		case SET_COLLIDABLE:
 			gameEvent = new SetBooleanGameObjectAttributeEvent(typeNumber,
@@ -309,6 +321,16 @@ public class NetworkMessageDeserializer {
 				gameEvent = new NoEvent();
 			}
 
+			break;
+		case SEND_UNITS:
+			int[] units = new int[args.length - 4];
+			for (int i = 4; i < args.length; i++) {
+				units[i - 4] = parseInt(args[i]);
+			}
+			SendUnitsEvent sendEvent = new SendUnitsEvent(parseInt(args[1]),
+					new Vector2D(parseDouble(args[2]), parseDouble(args[3])),
+					units);
+			gameEvent = sendEvent;
 			break;
 		case SET_TEAMS:
 			if ((args.length + 1) % 2 != 0 || args.length == 1)
