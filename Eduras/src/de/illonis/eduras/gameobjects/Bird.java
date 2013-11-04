@@ -9,7 +9,7 @@ import de.illonis.eduras.math.Vector2D;
 import de.illonis.eduras.shapes.BirdShape;
 
 /**
- * A bird flying around.
+ * A simple flying bird.
  * 
  * @author illonis
  * 
@@ -33,7 +33,6 @@ public class Bird extends MoveableGameObject implements MotionAIControllable {
 		setShape(new BirdShape());
 		setPosition(80, 20);
 		setCollidable(false);
-
 	}
 
 	@Override

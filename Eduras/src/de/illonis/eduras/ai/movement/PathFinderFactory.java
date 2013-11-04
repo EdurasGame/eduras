@@ -6,7 +6,7 @@ package de.illonis.eduras.ai.movement;
  * @author illonis
  * 
  */
-public class PathFinderFactory {
+public final class PathFinderFactory {
 
 	/**
 	 * Returns a pathfinder that uses given motion type.

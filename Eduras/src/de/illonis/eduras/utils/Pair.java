@@ -1,7 +1,7 @@
 package de.illonis.eduras.utils;
 
 /**
- * A pair holding two objects of given type.
+ * A pair holding two objects of given types.
  * 
  * @author illonis
  * 
@@ -16,7 +16,7 @@ public class Pair<F, S> {
 	private final S second;
 
 	/**
-	 * Creates a new pair with given object.
+	 * Creates a new pair with given values.
 	 * 
 	 * @param first
 	 *            first object.
@@ -32,8 +32,6 @@ public class Pair<F, S> {
 	 * Returns first object.
 	 * 
 	 * @return the first object.
-	 * 
-	 * @author illonis
 	 */
 	public F getFirst() {
 		return first;
@@ -43,11 +41,8 @@ public class Pair<F, S> {
 	 * Returns second object.
 	 * 
 	 * @return the second object.
-	 * 
-	 * @author illonis
 	 */
 	public S getSecond() {
 		return second;
 	}
-
 }

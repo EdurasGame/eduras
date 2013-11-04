@@ -16,7 +16,6 @@ public class BirdShape extends Polygon {
 	 * Creates a new bird shape.
 	 */
 	public BirdShape() {
-		super();
 		try {
 			loadFromFile("bird.esh");
 		} catch (FileCorruptException e) {

@@ -9,7 +9,7 @@ import de.illonis.eduras.math.Vector2D;
  * @author illonis
  * 
  */
-public class UnitMover {
+public final class UnitMover {
 
 	private final static long MOTION_UPDATE_INTERVAL = 400;
 	private final PathFinder pathFinder;
