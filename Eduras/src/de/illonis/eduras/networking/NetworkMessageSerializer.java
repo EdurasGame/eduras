@@ -15,6 +15,7 @@ import de.illonis.eduras.events.MatchEndEvent;
 import de.illonis.eduras.events.MovementEvent;
 import de.illonis.eduras.events.NetworkEvent;
 import de.illonis.eduras.events.ObjectFactoryEvent;
+import de.illonis.eduras.events.SendUnitsEvent;
 import de.illonis.eduras.events.SetBooleanGameObjectAttributeEvent;
 import de.illonis.eduras.events.SetGameModeEvent;
 import de.illonis.eduras.events.SetIntegerGameObjectAttributeEvent;
@@ -146,6 +147,14 @@ public class NetworkMessageSerializer {
 		case OBJECT_REMOVE:
 			ObjectFactoryEvent removeEvent = (ObjectFactoryEvent) gameEvent;
 			serializedEvent = buildEventString(removeEvent, removeEvent.getId());
+			break;
+		case SEND_UNITS:
+			SendUnitsEvent sendEvent = (SendUnitsEvent) gameEvent;
+			serializedEvent = buildEventString(sendEvent, sendEvent.getOwner(),
+					sendEvent.getTarget().getX(), sendEvent.getTarget().getY());
+			for (int i : sendEvent.getUnits()) {
+				serializedEvent += "#" + i;
+			}
 			break;
 		case SET_KILLS:
 		case SET_DEATHS:

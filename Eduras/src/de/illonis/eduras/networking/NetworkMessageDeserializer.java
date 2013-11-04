@@ -26,6 +26,7 @@ import de.illonis.eduras.events.NetworkEvent.NetworkEventNumber;
 import de.illonis.eduras.events.NetworkEventImpl;
 import de.illonis.eduras.events.NoEvent;
 import de.illonis.eduras.events.ObjectFactoryEvent;
+import de.illonis.eduras.events.SendUnitsEvent;
 import de.illonis.eduras.events.SetBooleanGameObjectAttributeEvent;
 import de.illonis.eduras.events.SetGameModeEvent;
 import de.illonis.eduras.events.SetIntegerGameObjectAttributeEvent;
@@ -71,7 +72,7 @@ public class NetworkMessageDeserializer {
 		LinkedList<Event> events = new LinkedList<Event>();
 		if (eventString.isEmpty())
 			return events;
-		L.info("[DESERIALIZE] orig: " + eventString);
+		L.fine("[DESERIALIZE] orig: " + eventString);
 		String[] messages;
 		messages = eventString.substring(2).split("##");
 
@@ -80,7 +81,7 @@ public class NetworkMessageDeserializer {
 			if (msg == null)
 				continue;
 
-			L.info("message: " + msg);
+			L.fine("message: " + msg);
 			try {
 				Event ge = deserializeMessage(msg);
 				events.add(ge);
@@ -320,6 +321,16 @@ public class NetworkMessageDeserializer {
 				gameEvent = new NoEvent();
 			}
 
+			break;
+		case SEND_UNITS:
+			int[] units = new int[args.length - 4];
+			for (int i = 4; i < args.length; i++) {
+				units[i - 4] = parseInt(args[i]);
+			}
+			SendUnitsEvent sendEvent = new SendUnitsEvent(parseInt(args[1]),
+					new Vector2D(parseDouble(args[2]), parseDouble(args[3])),
+					units);
+			gameEvent = sendEvent;
 			break;
 		case SET_TEAMS:
 			if ((args.length + 1) % 2 != 0 || args.length == 1)
