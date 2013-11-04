@@ -231,6 +231,14 @@
 					    <entry>newMode</entry>
 					</row>
 					<row>
+						<entry>SET_INTERACTMODE</entry>
+						<entry>TCP</entry>
+						<entry>141</entry>
+						<entry>Sets interact mode of a player.</entry>
+						<entry>ownerId</entry>
+						<entry>newMode</entry>
+					</row>
+					<row>
 					    <entry>SET_KILLS</entry>
 					    <entry>TCP</entry>
 					    <entry>150</entry>
@@ -294,6 +302,7 @@
 						<entry>arg2</entry>
 						<entry>arg3</entry>
 						<entry>arg4</entry>
+						<entry>arg5</entry>
 					</row>
 				</thead>
 
@@ -411,6 +420,25 @@
 						<entry>ownerID</entry>
 						<entry>targetX</entry>
 						<entry>targetY</entry>
+					</row>
+					<row>
+						<entry>SWITCH_INTERACTMODE</entry>
+						<entry>TCP</entry>
+						<entry>40</entry>
+						<entry>Indicates that player wants to change interaction mode.</entry>
+						<entry>ownerId</entry>
+						<entry>newMode</entry>
+					</row>
+					<row>
+						<entry>SEND_UNITS</entry>
+						<entry>TCP</entry>
+						<entry>41</entry>
+						<entry>Sends one or multiple units to a given location</entry>
+						<entry>ownerId (commander)</entry>
+						<entry>targetX</entry>
+						<entry>targetY</entry>
+						<entry>unitId</entry>
+						<entry>(more unit ids...)</entry>
 					</row>
 				</tbody>
 			</tgroup>

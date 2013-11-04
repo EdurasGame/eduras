@@ -402,7 +402,7 @@ active = false;
 							<tbody>
 								<row>
 									<entry>SET_INTERACTMODE</entry>
-									<entry>140</entry>
+									<entry>141</entry>
 									<entry>Sets interact mode of a player.</entry>
 									<entry>ownerId</entry>
 									<entry>newMode</entry>
