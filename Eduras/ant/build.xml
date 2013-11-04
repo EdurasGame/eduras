@@ -19,6 +19,7 @@
 	<path id="classpath">
 		<fileset dir="${base}${libs}">
 			<include name="timingframework*.jar" />
+			<include name="edulog-2.jar" />
 		</fileset>
 		<pathelement path="${base}${build}" />
 	</path>
