@@ -2,6 +2,8 @@ package de.illonis.eduras.logic;
 
 import de.illonis.eduras.ObjectFactory.ObjectType;
 import de.illonis.eduras.Team;
+import de.illonis.eduras.ai.movement.UnitNotControllableException;
+import de.illonis.eduras.exceptions.ObjectNotFoundException;
 import de.illonis.eduras.gamemodes.GameMode;
 import de.illonis.eduras.items.Item;
 import de.illonis.eduras.maps.Map;
@@ -228,6 +230,22 @@ public interface EventTriggerer {
 	 *            the unit.
 	 */
 	void remaxHealth(Unit unit);
+
+	/**
+	 * Sends a unit to a given direction. This triggers the unit's AI to move
+	 * the unit to given location using its preferred way of motion.
+	 * 
+	 * @param objectId
+	 *            the object id of sent unit.
+	 * @param target
+	 *            the target location.
+	 * @throws ObjectNotFoundException
+	 *             if no gameobject with given id was found.
+	 * @throws UnitNotControllableException
+	 *             if that unit is not controllable regarding motion.
+	 */
+	void sendUnit(int objectId, Vector2D target)
+			throws ObjectNotFoundException, UnitNotControllableException;
 
 	/**
 	 * Sets teams to given teams.

@@ -5,7 +5,8 @@ import de.illonis.eduras.math.Vector2D;
 /**
  * Provides pathfinding methods that allow a unit to receive its current moving
  * direction and remaining distance. This interface is intended to be fully
- * independend on concrete units.
+ * independend on concrete units. To learn more details, look at the
+ * documentation on interaction modes.
  * 
  * @author illonis
  * 
