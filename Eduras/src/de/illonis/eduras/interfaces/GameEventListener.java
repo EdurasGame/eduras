@@ -10,6 +10,7 @@ import de.illonis.eduras.events.MatchEndEvent;
 import de.illonis.eduras.events.ObjectFactoryEvent;
 import de.illonis.eduras.events.SetGameObjectAttributeEvent;
 import de.illonis.eduras.events.SetIntegerGameObjectAttributeEvent;
+import de.illonis.eduras.events.SetInteractModeEvent;
 import de.illonis.eduras.events.SetItemSlotEvent;
 import de.illonis.eduras.events.SetOwnerEvent;
 import de.illonis.eduras.gamemodes.GameMode;
@@ -152,4 +153,12 @@ public interface GameEventListener {
 	 * @author illonis
 	 */
 	void onCooldownFinished(ItemEvent event);
+
+	/**
+	 * Called when interact mode of a player changed.
+	 * 
+	 * @param setModeEvent
+	 *            mode change event
+	 */
+	void onInteractModeChanged(SetInteractModeEvent setModeEvent);
 }

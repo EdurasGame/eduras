@@ -22,11 +22,41 @@ import de.illonis.eduras.shapes.Triangle;
  */
 public class PlayerMainFigure extends Unit implements MovementControlable {
 
+	/**
+	 * Interaction modes where players can be in.
+	 * 
+	 * @author illonis
+	 * 
+	 */
+	@SuppressWarnings("javadoc")
+	public enum InteractMode {
+
+		MODE_EGO(5000), MODE_STRATEGY(1000);
+
+		private final long coolDown; // in ms.
+
+		private InteractMode(long coolDown) {
+			this.coolDown = coolDown;
+		}
+
+		public long getCoolDown() {
+			return coolDown;
+		}
+
+		public InteractMode next() {
+			if (this == MODE_EGO)
+				return MODE_STRATEGY;
+			return MODE_EGO;
+		}
+	};
+
 	private final static Logger L = EduLog.getLoggerFor(PlayerMainFigure.class
 			.getName());
 
 	private String name;
 	private Team team;
+	private InteractMode currentMode;
+	private long lastModeSwitch;
 	private final Inventory inventory = new Inventory();
 
 	/**
@@ -48,6 +78,8 @@ public class PlayerMainFigure extends Unit implements MovementControlable {
 		setObjectType(ObjectType.PLAYER);
 		this.name = name;
 		setSpeed(50);
+		lastModeSwitch = 0;
+		currentMode = InteractMode.MODE_EGO;
 		setOwner(ownerId);
 
 		// get position
@@ -96,6 +128,37 @@ public class PlayerMainFigure extends Unit implements MovementControlable {
 			break;
 		}
 		getSpeedVector().setLength(getSpeed());
+	}
+
+	/**
+	 * Changes the interaction mode this player is in.
+	 * 
+	 * @param newMode
+	 *            the new mode.
+	 */
+	public void setMode(InteractMode newMode) {
+		currentMode = newMode;
+		lastModeSwitch = System.currentTimeMillis();
+	}
+
+	/**
+	 * Returns the interaction mode the player is currently in.
+	 * 
+	 * @return this player's interaction mode.
+	 */
+	public InteractMode getCurrentMode() {
+		return currentMode;
+	}
+
+	/**
+	 * Calculates the cooldown remaining until player can switch mode again.
+	 * 
+	 * @return the remaining cooldown in ms. This may be negative is there is no
+	 *         cooldown anymore.
+	 */
+	public long getModeSwitchCooldown() {
+		return (lastModeSwitch + currentMode.getCoolDown())
+				- System.currentTimeMillis();
 	}
 
 	@Override

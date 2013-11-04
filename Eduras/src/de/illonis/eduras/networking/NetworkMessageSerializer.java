@@ -18,11 +18,13 @@ import de.illonis.eduras.events.ObjectFactoryEvent;
 import de.illonis.eduras.events.SetBooleanGameObjectAttributeEvent;
 import de.illonis.eduras.events.SetGameModeEvent;
 import de.illonis.eduras.events.SetIntegerGameObjectAttributeEvent;
+import de.illonis.eduras.events.SetInteractModeEvent;
 import de.illonis.eduras.events.SetItemSlotEvent;
 import de.illonis.eduras.events.SetOwnerEvent;
 import de.illonis.eduras.events.SetPolygonDataEvent;
 import de.illonis.eduras.events.SetRemainingTimeEvent;
 import de.illonis.eduras.events.SetTeamsEvent;
+import de.illonis.eduras.events.SwitchInteractModeEvent;
 import de.illonis.eduras.events.UDPHiEvent;
 import de.illonis.eduras.events.UserMovementEvent;
 import de.illonis.eduras.exceptions.MessageNotSupportedException;
@@ -181,6 +183,17 @@ public class NetworkMessageSerializer {
 			serializedEvent = buildEventString(setAttributeEvent,
 					setAttributeEvent.getObjectId(),
 					setAttributeEvent.getNewValue());
+			break;
+		case SET_INTERACTMODE:
+			SetInteractModeEvent setIMode = (SetInteractModeEvent) gameEvent;
+			serializedEvent = buildEventString(setIMode, setIMode.getOwner(),
+					setIMode.getNewMode().toString());
+			break;
+		case SWITCH_INTERACTMODE:
+			SwitchInteractModeEvent switchIMode = (SwitchInteractModeEvent) gameEvent;
+			serializedEvent = buildEventString(switchIMode,
+					switchIMode.getOwner(), switchIMode.getRequestedMode()
+							.toString());
 			break;
 		case ITEM_CD_START:
 		case ITEM_CD_FINISHED:

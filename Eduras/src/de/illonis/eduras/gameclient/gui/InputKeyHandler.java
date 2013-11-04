@@ -9,9 +9,11 @@ import java.util.logging.Logger;
 
 import de.illonis.edulog.EduLog;
 import de.illonis.eduras.events.GameEvent.GameEventNumber;
+import de.illonis.eduras.events.SwitchInteractModeEvent;
 import de.illonis.eduras.events.UserMovementEvent;
 import de.illonis.eduras.exceptions.KeyNotBoundException;
 import de.illonis.eduras.exceptions.MessageNotSupportedException;
+import de.illonis.eduras.exceptions.ObjectNotFoundException;
 import de.illonis.eduras.exceptions.WrongEventTypeException;
 import de.illonis.eduras.gameclient.GameClient;
 import de.illonis.eduras.logicabstraction.EventSender;
@@ -175,6 +177,17 @@ public class InputKeyHandler extends KeyAdapter {
 		case SHOW_STATS:
 			promoter.showStatWindow();
 			return;
+		case SWITCH_MODE:
+			try {
+				eventSender.sendEvent(new SwitchInteractModeEvent(client
+						.getOwnerID(), client.getInformationProvider()
+						.getPlayer().getCurrentMode().next()));
+			} catch (WrongEventTypeException | MessageNotSupportedException
+					| ObjectNotFoundException e1) {
+				L.log(Level.SEVERE, "mode switch request could not be sent.",
+						e1);
+			}
+			return;
 		case EXIT_CLIENT:
 			client.getNetworkManager().notifyDisconnect();
 			return;
@@ -183,10 +196,12 @@ public class InputKeyHandler extends KeyAdapter {
 			return;
 		}
 
-		try {
-			eventSender.sendEvent(moveEvent);
-		} catch (WrongEventTypeException | MessageNotSupportedException e) {
-			L.log(Level.SEVERE, "error sending message", e);
+		if (moveEvent != null) {
+			try {
+				eventSender.sendEvent(moveEvent);
+			} catch (WrongEventTypeException | MessageNotSupportedException e) {
+				L.log(Level.SEVERE, "error sending message", e);
+			}
 		}
 
 		lastTimePressed = System.currentTimeMillis();
@@ -236,10 +251,12 @@ public class InputKeyHandler extends KeyAdapter {
 			return;
 		}
 
-		try {
-			eventSender.sendEvent(moveEvent);
-		} catch (WrongEventTypeException | MessageNotSupportedException e) {
-			L.log(Level.SEVERE, "error sending message", e);
+		if (moveEvent != null) {
+			try {
+				eventSender.sendEvent(moveEvent);
+			} catch (WrongEventTypeException | MessageNotSupportedException e) {
+				L.log(Level.SEVERE, "error sending message", e);
+			}
 		}
 	}
 

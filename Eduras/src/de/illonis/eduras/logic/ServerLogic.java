@@ -12,6 +12,8 @@ import de.illonis.eduras.events.GameEvent;
 import de.illonis.eduras.events.GameEvent.GameEventNumber;
 import de.illonis.eduras.events.GameInfoRequest;
 import de.illonis.eduras.events.ItemEvent;
+import de.illonis.eduras.events.SetInteractModeEvent;
+import de.illonis.eduras.events.SwitchInteractModeEvent;
 import de.illonis.eduras.events.UserMovementEvent;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
 import de.illonis.eduras.gameobjects.MoveableGameObject.Direction;
@@ -96,6 +98,27 @@ public class ServerLogic implements GameLogicInterface {
 			p.setName(e.getName());
 
 			getListener().onClientRename(e);
+
+			break;
+		case SWITCH_INTERACTMODE:
+			SwitchInteractModeEvent switchEvent = (SwitchInteractModeEvent) event;
+			PlayerMainFigure mf;
+			try {
+				mf = getGame().getPlayerByOwnerId(switchEvent.getOwner());
+			} catch (ObjectNotFoundException e1) {
+				L.log(Level.SEVERE,
+						"Got mode switch request from nonexisting player.", e1);
+				break;
+			}
+			if (mf.getCurrentMode() != switchEvent.getRequestedMode()
+					&& mf.getModeSwitchCooldown() <= 0) {
+				mf.setMode(switchEvent.getRequestedMode());
+				SetInteractModeEvent setModeEvent = new SetInteractModeEvent(
+						switchEvent.getOwner(), switchEvent.getRequestedMode());
+				getListener().onInteractModeChanged(setModeEvent);
+			} else {
+				L.info("Got an switch request but player is already in that mode or switching is not ready.");
+			}
 
 			break;
 		case ITEM_USE:

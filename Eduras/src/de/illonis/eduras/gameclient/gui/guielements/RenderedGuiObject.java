@@ -12,6 +12,7 @@ import de.illonis.eduras.events.MatchEndEvent;
 import de.illonis.eduras.events.ObjectFactoryEvent;
 import de.illonis.eduras.events.SetGameObjectAttributeEvent;
 import de.illonis.eduras.events.SetIntegerGameObjectAttributeEvent;
+import de.illonis.eduras.events.SetInteractModeEvent;
 import de.illonis.eduras.events.SetItemSlotEvent;
 import de.illonis.eduras.events.SetOwnerEvent;
 import de.illonis.eduras.gameclient.TooltipHandler;
@@ -191,6 +192,10 @@ public abstract class RenderedGuiObject implements GameEventListener {
 
 	@Override
 	public void onCooldownFinished(ItemEvent event) {
+	}
+
+	@Override
+	public void onInteractModeChanged(SetInteractModeEvent setModeEvent) {
 	}
 
 }
