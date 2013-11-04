@@ -313,6 +313,7 @@ public class GameClient implements GuiClickReactor, NetworkEventReactor,
 		if (result == JOptionPane.YES_OPTION) {
 			nwm.notifyDisconnect();
 			stopDiscovery();
+			System.exit(0);
 		}
 	}
 

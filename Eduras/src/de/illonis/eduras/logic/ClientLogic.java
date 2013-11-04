@@ -56,6 +56,7 @@ public class ClientLogic implements GameLogicInterface {
 	private final ObjectFactory objectFactory;
 	private final LogicGameWorker lgw;
 	private final ListenerHolder<GameEventListener> listenerHolder;
+	private Thread workerThread;
 
 	/**
 	 * Create ClientLogic instant.
@@ -69,9 +70,9 @@ public class ClientLogic implements GameLogicInterface {
 		objectFactory = new ObjectFactory(this);
 		listenerHolder = new ListenerHolder<GameEventListener>();
 		lgw = new LogicGameWorker(gameInfo, listenerHolder);
-		Thread gameWorker = new Thread(lgw);
-		gameWorker.setName("ClientLogicGameWorker");
-		gameWorker.start();
+		workerThread = new Thread(lgw);
+		workerThread.setName("ClientLogicGameWorker");
+		workerThread.start();
 	}
 
 	@Override
@@ -375,6 +376,11 @@ public class ClientLogic implements GameLogicInterface {
 	@Override
 	public void onShutdown() {
 		lgw.stop();
+		try {
+			workerThread.join();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 	}
 
 	@Override

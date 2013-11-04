@@ -200,7 +200,6 @@ public class ClientFrame extends JFrame implements NetworkEventReactor,
 			loginPanel.stopAnimation();
 			dispose();
 		}
-
 	}
 
 	@Override
