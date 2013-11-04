@@ -56,3 +56,4 @@ Thumbs.db/EventingServer
 logfile.txt*
 *.log
 *.lck
+*.log*
