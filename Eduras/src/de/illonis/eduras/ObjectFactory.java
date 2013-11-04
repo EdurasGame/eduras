@@ -6,6 +6,7 @@ import java.util.logging.Logger;
 import de.illonis.edulog.EduLog;
 import de.illonis.eduras.events.GameEvent.GameEventNumber;
 import de.illonis.eduras.events.ObjectFactoryEvent;
+import de.illonis.eduras.events.SendUnitsEvent;
 import de.illonis.eduras.events.SetGameObjectAttributeEvent;
 import de.illonis.eduras.exceptions.DataMissingException;
 import de.illonis.eduras.exceptions.ShapeVerticesNotApplicableException;
@@ -24,6 +25,7 @@ import de.illonis.eduras.items.weapons.SplashWeapon;
 import de.illonis.eduras.items.weapons.SplashedMissile;
 import de.illonis.eduras.items.weapons.SwordMissile;
 import de.illonis.eduras.items.weapons.SwordWeapon;
+import de.illonis.eduras.math.Vector2D;
 import de.illonis.eduras.units.PlayerMainFigure;
 
 /**
@@ -126,6 +128,7 @@ public class ObjectFactory {
 				logic.getGame().addPlayer((PlayerMainFigure) go);
 
 				L.info("Player " + event.getOwner() + " created");
+				testSpawnBird();
 				break;
 			case SIMPLEMISSILE:
 				go = new SimpleMissile(logic.getGame(), id);
@@ -205,5 +208,22 @@ public class ObjectFactory {
 			logic.getGame().removeObject(objectToRemove);
 			logic.getListener().onObjectRemove(event);
 		}
+	}
+
+	// a very hacky test method to spawn a bird when a player joins.
+	private void testSpawnBird() {
+		ObjectFactoryEvent birdEvent = new ObjectFactoryEvent(
+				GameEventNumber.OBJECT_CREATE, ObjectType.BIRD);
+		birdEvent.setId(999);
+
+		int w = logic.getGame().getMap().getWidth() / 2;
+		int h = logic.getGame().getMap().getHeight() / 2;
+		onObjectFactoryEventAppeared(birdEvent);
+
+		GameObject o = logic.getGame().findObjectById(999);
+		o.setPosition(w, h);
+
+		SendUnitsEvent sendEvent = new SendUnitsEvent(-1, new Vector2D(), 999);
+		logic.onGameEventAppeared(sendEvent);
 	}
 }

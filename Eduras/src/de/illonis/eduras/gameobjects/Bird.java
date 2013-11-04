@@ -42,7 +42,6 @@ public class Bird extends MoveableGameObject implements MotionAIControllable {
 
 	@Override
 	public void onMapBoundsReached() {
-		removeSelf();
 	}
 
 	@Override
@@ -62,7 +61,7 @@ public class Bird extends MoveableGameObject implements MotionAIControllable {
 
 	@Override
 	public MotionType getMotionType() {
-		return MotionType.FLYING;
+		return MotionType.RANDOM;
 	}
 
 	@Override

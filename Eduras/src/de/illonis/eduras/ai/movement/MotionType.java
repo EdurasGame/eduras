@@ -8,5 +8,5 @@ package de.illonis.eduras.ai.movement;
  */
 @SuppressWarnings("javadoc")
 public enum MotionType {
-	FOOT, FLYING, INSTANT, HOVER;
+	FOOT, FLYING, INSTANT, HOVER, RANDOM;
 }

@@ -17,6 +17,8 @@ public final class PathFinderFactory {
 	 */
 	static PathFinder getFinderFor(MotionType type) {
 		switch (type) {
+		case RANDOM:
+			return new RandomPathFinder();
 		case FLYING:
 		default:
 			return new DirectPathFinder();

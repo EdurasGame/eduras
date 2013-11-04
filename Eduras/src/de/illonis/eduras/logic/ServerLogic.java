@@ -113,7 +113,8 @@ public class ServerLogic implements GameLogicInterface {
 					getGame().getEventTriggerer()
 							.sendUnit(units.get(i), target);
 				} catch (ObjectNotFoundException | UnitNotControllableException e1) {
-					L.log(Level.SEVERE, "Error sending unit to position", e1);
+					L.log(Level.SEVERE, "Error sending unit " + units.get(i)
+							+ " to position " + target, e1);
 				}
 			}
 			break;
