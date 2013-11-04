@@ -4,6 +4,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import de.illonis.edulog.EduLog;
+import de.illonis.eduras.ai.movement.MovingUnitAI;
 import de.illonis.eduras.events.GameEvent.GameEventNumber;
 import de.illonis.eduras.events.ObjectFactoryEvent;
 import de.illonis.eduras.events.SetGameObjectAttributeEvent;
@@ -13,6 +14,7 @@ import de.illonis.eduras.gameobjects.BigBlock;
 import de.illonis.eduras.gameobjects.BiggerBlock;
 import de.illonis.eduras.gameobjects.Building;
 import de.illonis.eduras.gameobjects.GameObject;
+import de.illonis.eduras.gameobjects.Bird;
 import de.illonis.eduras.interfaces.GameLogicInterface;
 import de.illonis.eduras.items.weapons.SimpleMissile;
 import de.illonis.eduras.items.weapons.SimpleWeapon;
@@ -23,6 +25,7 @@ import de.illonis.eduras.items.weapons.SplashWeapon;
 import de.illonis.eduras.items.weapons.SplashedMissile;
 import de.illonis.eduras.items.weapons.SwordMissile;
 import de.illonis.eduras.items.weapons.SwordWeapon;
+import de.illonis.eduras.math.Vector2D;
 import de.illonis.eduras.units.PlayerMainFigure;
 
 /**
@@ -125,6 +128,10 @@ public class ObjectFactory {
 				logic.getGame().addPlayer((PlayerMainFigure) go);
 
 				L.info("Player " + event.getOwner() + " created");
+				Bird t = new Bird(logic.getGame(), id + 143);
+				logic.getGame().addObject(t);
+				MovingUnitAI ai = (MovingUnitAI) t.getAI();
+				ai.moveTo(new Vector2D(1000, 1000));
 				break;
 			case SIMPLEMISSILE:
 				go = new SimpleMissile(logic.getGame(), id);

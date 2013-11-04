@@ -37,8 +37,9 @@ public abstract class ObjectShape {
 	public Vector2D checkCollision(GameInformation game, GameObject thisObject,
 			Vector2D target) {
 
-		Vector2D result = target;
-
+		Vector2D result = new Vector2D(target);
+		if (!thisObject.isCollidable())
+			return result;
 		ConcurrentHashMap<Integer, GameObject> gameObjects = game.getObjects();
 
 		GameObject collisionObject = null;
@@ -58,7 +59,7 @@ public abstract class ObjectShape {
 		for (GameObject singleObject : gameObjects.values()) {
 
 			// skip comparing the object with itself
-			if (singleObject.equals(thisObject))
+			if (singleObject.equals(thisObject) || !singleObject.isCollidable())
 				continue;
 
 			CollisionPoint nearestCollision = CollisionPoint

@@ -53,8 +53,8 @@ public class Eduras {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		EduLog.setBasicLogLimit(Level.INFO);
-		EduLog.setConsoleLogLimit(Level.INFO);
+		// EduLog.setBasicLogLimit(Level.INFO);
+		// EduLog.setConsoleLogLimit(Level.INFO);
 
 		int port = Server.DEFAULT_PORT;
 		String name = Server.DEFAULT_NAME;
