@@ -69,14 +69,14 @@ public class ClientLogic implements GameLogicInterface {
 		objectFactory = new ObjectFactory(this);
 		listenerHolder = new ListenerHolder<GameEventListener>();
 		lgw = new LogicGameWorker(gameInfo, listenerHolder);
-		// Thread gameWorker = new Thread(lgw);
-		// gameWorker.setName("ClientLogicGameWorker");
-		// gameWorker.start();
+		Thread gameWorker = new Thread(lgw);
+		gameWorker.setName("ClientLogicGameWorker");
+		gameWorker.start();
 	}
 
 	@Override
 	public void onGameEventAppeared(GameEvent event) {
-		L.info("[LOGIC] A game event appeared: " + event.getType().toString());
+		L.fine("[LOGIC] A game event appeared: " + event.getType().toString());
 
 		if (event instanceof ObjectFactoryEvent) {
 			objectFactory
