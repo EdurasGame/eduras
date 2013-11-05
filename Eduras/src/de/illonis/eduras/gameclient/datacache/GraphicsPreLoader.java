@@ -8,8 +8,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import de.illonis.edulog.EduLog;
-import de.illonis.eduras.gameclient.AsyncLoadCompletedListener;
-import de.illonis.eduras.gameclient.AsyncLoader;
 import de.illonis.eduras.math.Vector2D;
 import de.illonis.eduras.shapecreator.FileCorruptException;
 import de.illonis.eduras.shapes.ObjectShape.ShapeType;
