@@ -2,7 +2,6 @@ package de.illonis.eduras.gameclient.gui;
 
 import java.util.ArrayList;
 
-import de.illonis.eduras.gameclient.GuiEventReactor;
 import de.illonis.eduras.gameclient.TooltipHandler;
 import de.illonis.eduras.gameclient.TooltipTriggererNotifier;
 import de.illonis.eduras.gameclient.gui.guielements.GameModeBar;
@@ -54,7 +53,7 @@ public class UserInterface implements GuiResizeListener, UserInputListener {
 		this.tooltipNotifier = tooltipNotifier;
 		createElements();
 		EventListenerGui elg = new EventListenerGui(infos, uiObjects);
-		infos.addEventListener(new GuiEventReactor(elg));
+		infos.addEventListener(elg);
 	}
 
 	private void createElements() {

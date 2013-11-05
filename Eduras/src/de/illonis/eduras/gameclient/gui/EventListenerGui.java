@@ -173,8 +173,11 @@ public class EventListenerGui implements GameEventListener {
 
 	@Override
 	public void onInteractModeChanged(SetInteractModeEvent setModeEvent) {
-		for (RenderedGuiObject obj : uiObjects) {
-			obj.onInteractModeChanged(setModeEvent);
+		if (setModeEvent.getOwner() == infos.getOwnerID()) {
+
+			for (RenderedGuiObject obj : uiObjects) {
+				obj.onInteractModeChanged(setModeEvent);
+			}
 		}
 
 	}
