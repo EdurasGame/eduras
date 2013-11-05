@@ -72,7 +72,7 @@ public class PlayerStatBar extends RenderedGuiObject {
 
 	@Override
 	public void onHealthChanged(SetIntegerGameObjectAttributeEvent event) {
-		if (event.getObjectId() == player.getId()) {
+		if (player != null && event.getObjectId() == player.getId()) {
 			health = event.getNewValue();
 			recalculate();
 		}
