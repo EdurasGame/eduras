@@ -13,18 +13,20 @@ import java.util.LinkedList;
  * @param <T>
  *            data type.
  */
-public abstract class AsyncLoader<T> implements Runnable {
+public abstract class AsyncLoader<T> {
 
 	private boolean finished;
 	private int progress;
 	private final LinkedList<AsyncLoadCompletedListener<T>> listeners;
 	private T data;
+	private Thread thread;
 
 	/**
 	 * Creates a new asynchronous data loader.
 	 */
 	public AsyncLoader() {
 		finished = false;
+		progress = 0;
 		listeners = new LinkedList<AsyncLoadCompletedListener<T>>();
 	}
 
@@ -33,9 +35,12 @@ public abstract class AsyncLoader<T> implements Runnable {
 	 * explicitly threaded.
 	 */
 	public final void startLoading() {
-		Thread t = new Thread(this);
-		t.setName("Async-Loader");
-		t.start();
+		if (finished)
+			throw new IllegalStateException(
+					"Loader has already finished loading.");
+		thread = new Thread(runner);
+		thread.setName("Async-Loader");
+		thread.start();
 	}
 
 	/**
@@ -53,7 +58,7 @@ public abstract class AsyncLoader<T> implements Runnable {
 	 * 
 	 * @return loading progress (percentage).
 	 */
-	public int getProgress() {
+	public final int getProgress() {
 		return progress;
 	}
 
@@ -66,6 +71,9 @@ public abstract class AsyncLoader<T> implements Runnable {
 	 *            Will be adjusted otherwise.
 	 */
 	protected final void setProgress(int progress) {
+		if (progress < this.progress)
+			throw new IllegalArgumentException(
+					"new progress must be greater than current progress.");
 		if (progress > 100)
 			progress = 100;
 		if (progress < 0)
@@ -73,9 +81,11 @@ public abstract class AsyncLoader<T> implements Runnable {
 
 		if (progress == 100 && this.progress < 100) {
 			finished = true;
+			this.progress = progress;
 			notifyListeners();
+		} else {
+			this.progress = progress;
 		}
-		this.progress = progress;
 	}
 
 	/**
@@ -92,14 +102,16 @@ public abstract class AsyncLoader<T> implements Runnable {
 	 * @param data
 	 *            data.
 	 */
-	protected void setData(T data) {
+	protected final void setData(T data) {
 		this.data = data;
 	}
 
 	/**
 	 * Aborts loading data.
 	 */
-	public abstract void abortLoading();
+	public void abortLoading() {
+		thread.interrupt();
+	}
 
 	/**
 	 * Returns data that were loaded by this loader.
@@ -145,10 +157,12 @@ public abstract class AsyncLoader<T> implements Runnable {
 		}
 	}
 
-	@Override
-	public final void run() {
-		setProgress(0);
-		loadAsync();
-		setProgress(100);
-	}
+	private final Runnable runner = new Runnable() {
+
+		@Override
+		public void run() {
+			loadAsync();
+			setProgress(100);
+		}
+	};
 }

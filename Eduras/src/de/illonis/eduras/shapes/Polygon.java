@@ -63,10 +63,10 @@ public class Polygon extends ObjectShape {
 	 */
 	protected final void loadFromFile(String shapeFileName)
 			throws FileCorruptException, IOException {
-		LinkedList<Vector2D> shapeVerts = ShapeParser.readShape(getClass()
-				.getResource("data/" + shapeFileName));
+		Vector2D[] shapeVerts = ShapeParser.readShape(getClass().getResource(
+				"data/" + shapeFileName));
 
-		setVertices(shapeVerts.toArray(new Vector2D[] {}));
+		setVertices(shapeVerts);
 	}
 
 	/**

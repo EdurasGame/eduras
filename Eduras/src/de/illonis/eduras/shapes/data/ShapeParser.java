@@ -39,14 +39,15 @@ public class ShapeParser {
 	 * @throws IOException
 	 *             if an I/O error occurs while reading the file.
 	 */
-	public static LinkedList<Vector2D> readShape(URL inputFile)
+	public static Vector2D[] readShape(URL inputFile)
 			throws FileCorruptException, IOException {
 
 		EditablePolygon poly = ShapeFiler.loadShape(inputFile);
+
 		LinkedList<Vector2D> vertices = new LinkedList<Vector2D>();
 		for (Vertice vertice : poly.getVertices()) {
 			vertices.add(new Vector2D(vertice.getX(), vertice.getY()));
 		}
-		return vertices;
+		return vertices.toArray(new Vector2D[] {});
 	}
 }

@@ -23,6 +23,17 @@ import de.illonis.eduras.math.Vector2D;
 public abstract class ObjectShape {
 
 	/**
+	 * All types of shapes.
+	 * 
+	 * @author illonis
+	 * 
+	 */
+	@SuppressWarnings("javadoc")
+	public enum ShapeType {
+		BIRD, HOUSE, SWORD, TRIANGLE;
+	}
+
+	/**
 	 * Checks if there is will be a collision if the object tries to move from
 	 * its current position to the target position.
 	 * 
