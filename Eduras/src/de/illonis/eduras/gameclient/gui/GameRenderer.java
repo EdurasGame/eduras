@@ -18,8 +18,8 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
 import de.illonis.eduras.gameclient.TooltipHandler;
-import de.illonis.eduras.gameclient.gui.guielements.ItemTooltip;
-import de.illonis.eduras.gameclient.gui.guielements.RenderedGuiObject;
+import de.illonis.eduras.gameclient.gui.hud.ItemTooltip;
+import de.illonis.eduras.gameclient.gui.hud.RenderedGuiObject;
 import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.items.Item;
 import de.illonis.eduras.logicabstraction.InformationProvider;

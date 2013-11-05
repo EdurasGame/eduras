@@ -1,4 +1,4 @@
-package de.illonis.eduras.gameclient.gui.guielements;
+package de.illonis.eduras.gameclient.gui.hud;
 
 import java.awt.Font;
 import java.awt.Graphics2D;

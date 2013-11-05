@@ -1,4 +1,4 @@
-package de.illonis.eduras.gameclient.gui.guielements;
+package de.illonis.eduras.gameclient.gui.hud;
 
 import de.illonis.eduras.gameclient.gui.GuiClickReactor;
 import de.illonis.eduras.gameclient.gui.UserInterface;

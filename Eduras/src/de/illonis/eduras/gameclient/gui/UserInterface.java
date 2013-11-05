@@ -4,14 +4,14 @@ import java.util.ArrayList;
 
 import de.illonis.eduras.gameclient.TooltipHandler;
 import de.illonis.eduras.gameclient.TooltipTriggererNotifier;
-import de.illonis.eduras.gameclient.gui.guielements.GameModeBar;
-import de.illonis.eduras.gameclient.gui.guielements.ItemDisplay;
-import de.illonis.eduras.gameclient.gui.guielements.NotificationPanel;
-import de.illonis.eduras.gameclient.gui.guielements.PlayerStatBar;
-import de.illonis.eduras.gameclient.gui.guielements.RenderedGuiObject;
-import de.illonis.eduras.gameclient.gui.guielements.StatisticsWindow;
-import de.illonis.eduras.gameclient.gui.guielements.TimeFrame;
-import de.illonis.eduras.gameclient.gui.guielements.TooltipTriggerer;
+import de.illonis.eduras.gameclient.gui.hud.GameModeBar;
+import de.illonis.eduras.gameclient.gui.hud.ItemDisplay;
+import de.illonis.eduras.gameclient.gui.hud.NotificationPanel;
+import de.illonis.eduras.gameclient.gui.hud.PlayerStatBar;
+import de.illonis.eduras.gameclient.gui.hud.RenderedGuiObject;
+import de.illonis.eduras.gameclient.gui.hud.StatisticsWindow;
+import de.illonis.eduras.gameclient.gui.hud.TimeFrame;
+import de.illonis.eduras.gameclient.gui.hud.TooltipTriggerer;
 import de.illonis.eduras.logicabstraction.InformationProvider;
 import de.illonis.eduras.networking.ServerClient.ClientRole;
 

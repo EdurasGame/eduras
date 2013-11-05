@@ -1,6 +1,6 @@
 package de.illonis.eduras.gameclient;
 
-import de.illonis.eduras.gameclient.gui.guielements.TooltipTriggerer;
+import de.illonis.eduras.gameclient.gui.hud.TooltipTriggerer;
 
 /**
  * Manages and notifies tooltip triggerers.
