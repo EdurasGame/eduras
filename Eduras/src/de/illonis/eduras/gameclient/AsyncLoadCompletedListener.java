@@ -1,20 +1,17 @@
 package de.illonis.eduras.gameclient;
 
+import java.beans.PropertyChangeListener;
+
 /**
  * Listens to a {@link AsyncLoader}.
  * 
  * @author illonis
- * @param <T>
- *            Type of data being loaded.
  * 
  */
-public interface AsyncLoadCompletedListener<T> {
+public interface AsyncLoadCompletedListener extends PropertyChangeListener {
 
 	/**
 	 * Indicates that data have been loaded.
-	 * 
-	 * @param data
-	 *            data that have been loaded.
 	 */
-	void onDataLoaded(T data);
+	void onDataLoaded();
 }

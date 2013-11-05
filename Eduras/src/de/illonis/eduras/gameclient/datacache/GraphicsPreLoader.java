@@ -8,6 +8,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import de.illonis.edulog.EduLog;
+import de.illonis.eduras.gameclient.AsyncLoadCompletedListener;
 import de.illonis.eduras.gameclient.AsyncLoader;
 import de.illonis.eduras.math.Vector2D;
 import de.illonis.eduras.shapecreator.FileCorruptException;
@@ -27,11 +28,12 @@ public class GraphicsPreLoader extends AsyncLoader<Void> {
 	private final static Logger L = EduLog.getLoggerFor(GraphicsPreLoader.class
 			.getName());
 
-	@Override
-	protected void loadAsync() {
-		loadShapes();
-		loadGraphics();
-		setProgress(100);
+	/**
+	 * @param listener
+	 *            the listener.
+	 */
+	public GraphicsPreLoader(AsyncLoadCompletedListener listener) {
+		super(listener);
 	}
 
 	private void loadShapes() {
@@ -60,6 +62,15 @@ public class GraphicsPreLoader extends AsyncLoader<Void> {
 	private void loadGraphics() {
 		// TODO implement
 		setProgress(99);
+	}
+
+	@Override
+	protected Void doInBackground() throws Exception {
+		loadShapes();
+		setProgress(50);
+		loadGraphics();
+		setProgress(100);
+		return null;
 	}
 
 }
