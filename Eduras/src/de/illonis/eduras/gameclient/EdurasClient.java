@@ -48,13 +48,11 @@ public class EdurasClient {
 	 *            client is bound.
 	 */
 	public static void main(String[] args) {
-		// new LoggerGui().setVisible(true);
 		try {
 			EduLog.init("client.log");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		// EduLog.setConsoleLogLimit(Level.OFF);
 
 		if (args.length > 0) {
 			try {
@@ -70,8 +68,6 @@ public class EdurasClient {
 
 		// Note that this is very bad coded due to testing ;)
 		buildChooserFrame();
-
-		// EduLog.setTrackDetail(3);
 	}
 
 	protected static void startWindowed() {
