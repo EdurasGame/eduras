@@ -150,7 +150,7 @@ public class ServerSearcher extends Thread {
 			metaAnswerListener.start();
 
 		} catch (IOException e) {
-			L.warning("Cannot connect to meta server.");
+			L.log(Level.WARNING, "Cannot connect to meta server.", e);
 			// if there's no internet connection, thats okay.
 		}
 

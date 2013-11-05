@@ -68,11 +68,11 @@ public class GameCamera extends Rectangle {
 
 				int newX = x + moveStep(xDiff);
 				int newY = y + moveStep(yDiff);
-				GameCamera.super.setLocation(newX, newY);
+				setLocation(newX, newY);
 				try {
 					Thread.sleep(20);
 				} catch (InterruptedException e) {
-					return;
+					break;
 				}
 			}
 		}
