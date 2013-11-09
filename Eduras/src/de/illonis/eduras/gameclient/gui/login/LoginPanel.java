@@ -1,4 +1,4 @@
-package de.illonis.eduras.gameclient.gui;
+package de.illonis.eduras.gameclient.gui.login;
 
 import java.awt.Component;
 import java.awt.event.ActionEvent;
@@ -9,7 +9,8 @@ import java.net.UnknownHostException;
 import javax.swing.DefaultListModel;
 
 import de.illonis.eduras.gameclient.LoginData;
-import de.illonis.eduras.gameclient.LoginStepLogic;
+import de.illonis.eduras.gameclient.LoginPanelReactor;
+import de.illonis.eduras.gameclient.gui.ClientGuiStepLogic;
 import de.illonis.eduras.locale.Localization;
 import de.illonis.eduras.networking.ServerClient.ClientRole;
 import de.illonis.eduras.networking.discover.ServerFoundListener;
@@ -21,8 +22,8 @@ import de.illonis.eduras.networking.discover.ServerInfo;
  * @author illonis
  * 
  */
-public final class LoginPanel extends LoginStepLogic implements ActionListener,
-		ServerFoundListener {
+public final class LoginPanel extends ClientGuiStepLogic implements
+		ActionListener, ServerFoundListener {
 
 	private final LoginGui gui;
 	private final LoginPanelReactor reactor;
@@ -100,7 +101,7 @@ public final class LoginPanel extends LoginStepLogic implements ActionListener,
 	}
 
 	@Override
-	protected Component getGui() {
+	public Component getGui() {
 		return gui;
 	}
 }

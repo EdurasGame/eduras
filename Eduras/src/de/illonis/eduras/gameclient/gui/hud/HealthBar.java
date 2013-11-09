@@ -3,7 +3,7 @@ package de.illonis.eduras.gameclient.gui.hud;
 import java.awt.Color;
 import java.awt.Graphics2D;
 
-import de.illonis.eduras.gameclient.gui.GameCamera;
+import de.illonis.eduras.gameclient.gui.game.GameCamera;
 import de.illonis.eduras.units.Unit;
 
 /**

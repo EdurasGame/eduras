@@ -1,12 +1,12 @@
-package de.illonis.eduras.gameclient.gui;
+package de.illonis.eduras.gameclient.gui.progress;
 
 import java.awt.Component;
 import java.beans.PropertyChangeEvent;
 
 import de.illonis.eduras.gameclient.LoadingPanelReactor;
-import de.illonis.eduras.gameclient.LoginStepLogic;
 import de.illonis.eduras.gameclient.datacache.AsyncLoadCompletedListener;
 import de.illonis.eduras.gameclient.datacache.GraphicsPreLoader;
+import de.illonis.eduras.gameclient.gui.ClientGuiStepLogic;
 
 /**
  * Displays login progress. Also shows errors occuring while connecting.
@@ -14,7 +14,7 @@ import de.illonis.eduras.gameclient.datacache.GraphicsPreLoader;
  * @author illonis
  * 
  */
-public class LoadingPanel extends LoginStepLogic implements
+public class LoadingPanel extends ClientGuiStepLogic implements
 		AsyncLoadCompletedListener {
 
 	private final LoadingGui gui;
@@ -67,7 +67,7 @@ public class LoadingPanel extends LoginStepLogic implements
 	}
 
 	@Override
-	protected Component getGui() {
+	public Component getGui() {
 		return gui;
 	}
 

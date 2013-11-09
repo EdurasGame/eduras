@@ -1,4 +1,4 @@
-package de.illonis.eduras.gameclient.gui;
+package de.illonis.eduras.gameclient.gui.game;
 
 /**
  * Does need notification when size of gui has changed.

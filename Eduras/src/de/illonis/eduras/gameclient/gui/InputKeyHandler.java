@@ -9,6 +9,9 @@ import java.util.logging.Logger;
 
 import de.illonis.edulog.EduLog;
 import de.illonis.eduras.exceptions.KeyNotBoundException;
+import de.illonis.eduras.gameclient.gui.game.GamePanel;
+import de.illonis.eduras.gameclient.gui.game.GamePanelReactor;
+import de.illonis.eduras.gameclient.gui.game.UserInputListener;
 import de.illonis.eduras.gameobjects.MoveableGameObject.Direction;
 import de.illonis.eduras.logicabstraction.EdurasInitializer;
 import de.illonis.eduras.settings.KeyBindings.KeyBinding;

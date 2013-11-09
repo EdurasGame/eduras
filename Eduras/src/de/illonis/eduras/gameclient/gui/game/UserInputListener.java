@@ -1,4 +1,4 @@
-package de.illonis.eduras.gameclient.gui;
+package de.illonis.eduras.gameclient.gui.game;
 
 /**
  * Listens for user input (e.g. key presses).

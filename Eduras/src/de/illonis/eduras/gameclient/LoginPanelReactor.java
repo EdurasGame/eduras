@@ -1,6 +1,5 @@
-package de.illonis.eduras.gameclient.gui;
+package de.illonis.eduras.gameclient;
 
-import de.illonis.eduras.gameclient.LoginData;
 
 /**
  * Reacts on login panel's actions.

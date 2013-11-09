@@ -1,4 +1,4 @@
-package de.illonis.eduras.gameclient;
+package de.illonis.eduras.gameclient.gui;
 
 import java.awt.Component;
 
@@ -6,13 +6,13 @@ import javax.swing.JOptionPane;
 
 import de.illonis.eduras.locale.Localization;
 
-public abstract class LoginStepLogic {
+public abstract class ClientGuiStepLogic {
 
 	public abstract void onShown();
 
 	public abstract void onHidden();
 
-	protected abstract Component getGui();
+	public abstract Component getGui();
 
 	protected final void showError(String message, String title) {
 		JOptionPane.showMessageDialog(getGui(), message, title,

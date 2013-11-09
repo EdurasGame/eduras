@@ -1,4 +1,4 @@
-package de.illonis.eduras.gameclient.gui;
+package de.illonis.eduras.gameclient.gui.progress;
 
 import java.awt.Component;
 import java.awt.event.ActionEvent;
@@ -13,7 +13,8 @@ import javax.swing.SwingWorker;
 
 import de.illonis.edulog.EduLog;
 import de.illonis.eduras.gameclient.ConnectionEstablisher;
-import de.illonis.eduras.gameclient.LoginStepLogic;
+import de.illonis.eduras.gameclient.ProgressPanelReactor;
+import de.illonis.eduras.gameclient.gui.ClientGuiStepLogic;
 import de.illonis.eduras.networking.Client;
 
 /**
@@ -22,8 +23,8 @@ import de.illonis.eduras.networking.Client;
  * @author illonis
  * 
  */
-public class ProgressPanel extends LoginStepLogic implements ActionListener,
-		PropertyChangeListener {
+public class ProgressPanel extends ClientGuiStepLogic implements
+		ActionListener, PropertyChangeListener {
 
 	private final static Logger L = EduLog.getLoggerFor(ProgressPanel.class
 			.getName());
@@ -106,7 +107,7 @@ public class ProgressPanel extends LoginStepLogic implements ActionListener,
 	}
 
 	@Override
-	protected Component getGui() {
+	public Component getGui() {
 		return gui;
 	}
 
@@ -154,7 +155,7 @@ public class ProgressPanel extends LoginStepLogic implements ActionListener,
 		}
 	}
 
-	void setEstablishThread(ConnectionEstablisher establisher) {
+	public void setEstablishThread(ConnectionEstablisher establisher) {
 		this.establisher = establisher;
 	}
 }

@@ -1,4 +1,4 @@
-package de.illonis.eduras.gameclient.gui;
+package de.illonis.eduras.gameclient.gui.game;
 
 import de.illonis.eduras.gameclient.gui.hud.TooltipTriggerer;
 

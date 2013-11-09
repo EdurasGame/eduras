@@ -1,4 +1,4 @@
-package de.illonis.eduras.gameclient.gui;
+package de.illonis.eduras.gameclient.gui.game;
 
 import java.awt.Component;
 import java.awt.MouseInfo;
@@ -14,7 +14,9 @@ import java.util.logging.Logger;
 
 import de.illonis.edulog.EduLog;
 import de.illonis.eduras.gameclient.GuiEventListener;
-import de.illonis.eduras.gameclient.LoginStepLogic;
+import de.illonis.eduras.gameclient.gui.CameraMouseListener;
+import de.illonis.eduras.gameclient.gui.ClientGuiStepLogic;
+import de.illonis.eduras.gameclient.gui.InputKeyHandler;
 import de.illonis.eduras.gameclient.gui.hud.ClickableGuiElementInterface;
 import de.illonis.eduras.gameclient.gui.hud.TooltipTriggerer;
 import de.illonis.eduras.gameclient.gui.hud.UserInterface;
@@ -30,7 +32,7 @@ import de.illonis.eduras.math.Vector2D;
  * @author illonis
  * 
  */
-public class GamePanel extends LoginStepLogic implements GuiClickReactor,
+public class GamePanel extends ClientGuiStepLogic implements GuiClickReactor,
 		TooltipTriggererNotifier, UserInputListener {
 
 	private final static Logger L = EduLog.getLoggerFor(GamePanel.class
@@ -217,7 +219,7 @@ public class GamePanel extends LoginStepLogic implements GuiClickReactor,
 	}
 
 	@Override
-	protected Component getGui() {
+	public Component getGui() {
 		return gui;
 	}
 

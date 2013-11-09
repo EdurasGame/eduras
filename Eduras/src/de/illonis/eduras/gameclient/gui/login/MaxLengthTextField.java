@@ -1,4 +1,5 @@
-package de.illonis.eduras.gameclient.gui;
+package de.illonis.eduras.gameclient.gui.login;
+
 
 /**
  * A single-line textfield that has a maximum input length. If more chars are

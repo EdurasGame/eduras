@@ -1,4 +1,4 @@
-package de.illonis.eduras.gameclient.gui;
+package de.illonis.eduras.gameclient.gui.login;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -26,6 +26,7 @@ import javax.swing.event.ListSelectionListener;
 import javax.swing.text.BadLocationException;
 
 import de.illonis.eduras.gameclient.gui.animation.LoginAnimation;
+import de.illonis.eduras.gameclient.gui.progress.ServerListRenderer;
 import de.illonis.eduras.images.ImageFiler;
 import de.illonis.eduras.networking.ServerClient.ClientRole;
 import de.illonis.eduras.networking.discover.ServerInfo;

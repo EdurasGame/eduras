@@ -3,11 +3,11 @@ package de.illonis.eduras.gameclient.gui.hud;
 import java.util.ArrayList;
 
 import de.illonis.eduras.gameclient.gui.EventListenerGui;
-import de.illonis.eduras.gameclient.gui.GuiClickReactor;
-import de.illonis.eduras.gameclient.gui.GuiResizeListener;
-import de.illonis.eduras.gameclient.gui.TooltipHandler;
-import de.illonis.eduras.gameclient.gui.TooltipTriggererNotifier;
-import de.illonis.eduras.gameclient.gui.UserInputListener;
+import de.illonis.eduras.gameclient.gui.game.GuiClickReactor;
+import de.illonis.eduras.gameclient.gui.game.GuiResizeListener;
+import de.illonis.eduras.gameclient.gui.game.TooltipHandler;
+import de.illonis.eduras.gameclient.gui.game.TooltipTriggererNotifier;
+import de.illonis.eduras.gameclient.gui.game.UserInputListener;
 import de.illonis.eduras.logicabstraction.InformationProvider;
 import de.illonis.eduras.networking.ServerClient.ClientRole;
 

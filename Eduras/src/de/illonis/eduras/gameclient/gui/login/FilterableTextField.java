@@ -1,4 +1,4 @@
-package de.illonis.eduras.gameclient.gui;
+package de.illonis.eduras.gameclient.gui.login;
 
 import javax.swing.JTextField;
 import javax.swing.text.AttributeSet;

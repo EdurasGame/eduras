@@ -13,6 +13,10 @@ import de.illonis.eduras.gameclient.ConnectionEstablisher;
 import de.illonis.eduras.gameclient.GameClient;
 import de.illonis.eduras.gameclient.GuiEventListener;
 import de.illonis.eduras.gameclient.NetworkEventReactor;
+import de.illonis.eduras.gameclient.gui.game.GamePanel;
+import de.illonis.eduras.gameclient.gui.login.LoginPanel;
+import de.illonis.eduras.gameclient.gui.progress.LoadingPanel;
+import de.illonis.eduras.gameclient.gui.progress.ProgressPanel;
 
 /**
  * game panel and all other gui things.

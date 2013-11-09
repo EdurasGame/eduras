@@ -1,6 +1,6 @@
 package de.illonis.eduras.gameclient.gui.hud;
 
-import de.illonis.eduras.gameclient.gui.GuiClickReactor;
+import de.illonis.eduras.gameclient.gui.game.GuiClickReactor;
 
 /**
  * A gui element that is clickable. All clickable elements can trigger events on

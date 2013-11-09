@@ -1,4 +1,4 @@
-package de.illonis.eduras.gameclient.gui;
+package de.illonis.eduras.gameclient.gui.login;
 
 import java.text.NumberFormat;
 import java.text.ParsePosition;
