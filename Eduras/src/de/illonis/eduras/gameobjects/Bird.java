@@ -6,7 +6,8 @@ import de.illonis.eduras.ai.movement.MotionAIControllable;
 import de.illonis.eduras.ai.movement.MotionType;
 import de.illonis.eduras.ai.movement.MovingUnitAI;
 import de.illonis.eduras.math.Vector2D;
-import de.illonis.eduras.shapes.BirdShape;
+import de.illonis.eduras.shapes.ObjectShape.ShapeType;
+import de.illonis.eduras.shapes.ShapeFactory;
 
 /**
  * A simple flying bird.
@@ -30,7 +31,7 @@ public class Bird extends MoveableGameObject implements MotionAIControllable {
 		super(game, id);
 		ai = new MovingUnitAI(this);
 		setSpeed(40);
-		setShape(new BirdShape());
+		setShape(ShapeFactory.createShape(ShapeType.BIRD));
 		setPosition(80, 20);
 		setCollidable(false);
 	}

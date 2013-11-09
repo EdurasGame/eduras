@@ -1,6 +1,7 @@
 package de.illonis.eduras.gameclient.datacache;
 
 import java.io.IOException;
+import java.net.URL;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -41,16 +42,10 @@ public class GraphicsPreLoader extends AsyncLoader<Void> {
 		int n = shapeInfo.size();
 		int i = 0;
 		while (it.hasNext()) {
+			Map.Entry<ShapeType, String> pair = it.next();
+			URL u = ShapeParser.class.getResource(pair.getValue());
 			try {
-				// make it least a while.
-				Thread.sleep(1500);
-			} catch (InterruptedException e) {
-
-			}
-			Map.Entry<ShapeType, String> pair = (it.next());
-			try {
-				Vector2D[] verts = ShapeParser.readShape(ShapeParser.class
-						.getResource("data/" + pair.getValue()));
+				Vector2D[] verts = ShapeParser.readShape(u);
 				ImageCache.addShape(pair.getKey(), verts);
 			} catch (FileCorruptException | IOException e) {
 				L.log(Level.SEVERE, "Shapefile not found: " + pair.getValue(),
@@ -59,9 +54,8 @@ public class GraphicsPreLoader extends AsyncLoader<Void> {
 			i++;
 			// shapes represent the first half of loading, graphics the other
 			int progress = (int) Math.floor((double) i / n) * 50;
-			System.out.println("prog: " + progress);
 			setProgress(progress);
-			it.remove(); // avoids a ConcurrentModificationException
+			// it.remove(); // avoids a ConcurrentModificationException
 		}
 	}
 
