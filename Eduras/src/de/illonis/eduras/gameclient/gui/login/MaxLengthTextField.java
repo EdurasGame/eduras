@@ -1,6 +1,5 @@
 package de.illonis.eduras.gameclient.gui.login;
 
-
 /**
  * A single-line textfield that has a maximum input length. If more chars are
  * typed or pasted, they will be ignored.
@@ -19,8 +18,7 @@ public class MaxLengthTextField extends FilterableTextField {
 	 * @param maxLength
 	 *            maximum input length.
 	 */
-	public MaxLengthTextField(int maxLength) {
-		super();
+	MaxLengthTextField(int maxLength) {
 		this.maxLength = maxLength;
 	}
 

@@ -11,7 +11,6 @@ import de.illonis.eduras.events.UserMovementEvent;
 import de.illonis.eduras.exceptions.MessageNotSupportedException;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
 import de.illonis.eduras.exceptions.WrongEventTypeException;
-import de.illonis.eduras.gameclient.gui.game.GamePanelReactor;
 import de.illonis.eduras.gameobjects.MoveableGameObject.Direction;
 import de.illonis.eduras.logicabstraction.EdurasInitializer;
 import de.illonis.eduras.math.Vector2D;

@@ -49,7 +49,7 @@ public class GameRenderer implements TooltipHandler {
 	private Graphics2D bothGraphics = null;
 	private final ConcurrentHashMap<Integer, GameObject> objs;
 	private RenderThread rendererThread;
-	private GameGui target;
+	private GamePanel target;
 	private ItemTooltip tooltip;
 	private double scale;
 	private boolean tooltipShown = false;
@@ -406,7 +406,7 @@ public class GameRenderer implements TooltipHandler {
 	 * @param guiPanel
 	 *            target game panel.
 	 */
-	void setTarget(GameGui guiPanel) {
+	void setTarget(GamePanel guiPanel) {
 		this.target = guiPanel;
 	}
 

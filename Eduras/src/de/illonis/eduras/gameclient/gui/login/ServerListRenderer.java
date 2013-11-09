@@ -1,4 +1,4 @@
-package de.illonis.eduras.gameclient.gui.progress;
+package de.illonis.eduras.gameclient.gui.login;
 
 import java.awt.Color;
 import java.awt.Component;
@@ -22,12 +22,12 @@ public class ServerListRenderer extends JPanel implements
 
 	private static final long serialVersionUID = 1L;
 
-	JLabel[] lbl = new JLabel[3];
+	private final JLabel[] lbl = new JLabel[3];
 
 	/**
 	 * Creates a new list renderer.
 	 */
-	public ServerListRenderer() {
+	ServerListRenderer() {
 		setLayout(new GridLayout(0, 3, 15, 0));
 		lbl[0] = new JLabel("", JLabel.RIGHT);
 		add(lbl[0]);

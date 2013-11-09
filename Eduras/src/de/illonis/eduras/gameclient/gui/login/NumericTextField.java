@@ -20,7 +20,7 @@ public class NumericTextField extends MaxLengthTextField {
 	 * @param maxLength
 	 *            maximum length.
 	 */
-	public NumericTextField(int maxLength) {
+	NumericTextField(int maxLength) {
 		super(maxLength);
 	}
 
@@ -36,7 +36,7 @@ public class NumericTextField extends MaxLengthTextField {
 	 * 
 	 * @return value.
 	 */
-	public int getValue() {
+	int getValue() {
 		if (getText().isEmpty())
 			return 0;
 		return Integer.parseInt(getText());
@@ -49,7 +49,7 @@ public class NumericTextField extends MaxLengthTextField {
 	 *            string to test.
 	 * @return true if string is numeric, false otherwise.
 	 */
-	public static boolean isNumeric(String str) {
+	public final static boolean isNumeric(String str) {
 		NumberFormat formatter = NumberFormat.getInstance();
 		ParsePosition pos = new ParsePosition(0);
 		formatter.parse(str, pos);

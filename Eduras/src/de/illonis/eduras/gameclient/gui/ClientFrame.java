@@ -13,10 +13,10 @@ import de.illonis.eduras.gameclient.ConnectionEstablisher;
 import de.illonis.eduras.gameclient.GameClient;
 import de.illonis.eduras.gameclient.GuiEventListener;
 import de.illonis.eduras.gameclient.NetworkEventReactor;
-import de.illonis.eduras.gameclient.gui.game.GamePanel;
-import de.illonis.eduras.gameclient.gui.login.LoginPanel;
-import de.illonis.eduras.gameclient.gui.progress.LoadingPanel;
-import de.illonis.eduras.gameclient.gui.progress.ProgressPanel;
+import de.illonis.eduras.gameclient.gui.game.GamePanelLogic;
+import de.illonis.eduras.gameclient.gui.login.LoginPanelLogic;
+import de.illonis.eduras.gameclient.gui.progress.LoadingPanelLogic;
+import de.illonis.eduras.gameclient.gui.progress.ProgressPanelLogic;
 
 /**
  * game panel and all other gui things.
@@ -31,10 +31,10 @@ public class ClientFrame extends JFrame implements NetworkEventReactor {
 
 	private static final long serialVersionUID = 1L;
 	private final CardLayout cardLayout;
-	private final LoginPanel loginPanel;
-	private final ProgressPanel progressPanel;
-	private final GamePanel gamePanel;
-	private final LoadingPanel loadingPanel;
+	private final LoginPanelLogic loginPanel;
+	private final ProgressPanelLogic progressPanel;
+	private final GamePanelLogic gamePanel;
+	private final LoadingPanelLogic loadingPanel;
 
 	private final static String LOGINPANEL = "Login Card";
 	private final static String CONNECTPANEL = "Connect Card";
@@ -73,10 +73,10 @@ public class ClientFrame extends JFrame implements NetworkEventReactor {
 		});
 		cardLayout = new CardLayout();
 		setLayout(cardLayout);
-		loginPanel = new LoginPanel(guiEventListener);
-		progressPanel = new ProgressPanel(guiEventListener);
-		loadingPanel = new LoadingPanel(guiEventListener);
-		gamePanel = new GamePanel(guiEventListener);
+		loginPanel = new LoginPanelLogic(guiEventListener);
+		progressPanel = new ProgressPanelLogic(guiEventListener);
+		loadingPanel = new LoadingPanelLogic(guiEventListener);
+		gamePanel = new GamePanelLogic(guiEventListener);
 
 		getContentPane().add(loginPanel.getGui(), LOGINPANEL);
 		getContentPane().add(progressPanel.getGui(), CONNECTPANEL);

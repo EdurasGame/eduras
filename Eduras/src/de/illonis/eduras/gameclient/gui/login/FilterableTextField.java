@@ -20,7 +20,7 @@ public class FilterableTextField extends JTextField {
 	/**
 	 * Creates a filterable text field.
 	 */
-	public FilterableTextField() {
+	FilterableTextField() {
 		setDocument(new FilterDocument());
 	}
 

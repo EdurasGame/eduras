@@ -1,4 +1,4 @@
-package de.illonis.eduras.gameclient.gui.game;
+package de.illonis.eduras.gameclient;
 
 import de.illonis.eduras.gameobjects.MoveableGameObject.Direction;
 import de.illonis.eduras.math.Vector2D;

@@ -16,7 +16,7 @@ public class RenderThread implements Runnable {
 			.getName());
 
 	private final static int DRAW_INTERVAL = 20;
-	private GameRenderer renderer;
+	private final GameRenderer renderer;
 	private boolean running;
 
 	/**

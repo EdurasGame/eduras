@@ -1,78 +1,36 @@
 package de.illonis.eduras.gameclient.gui.progress;
 
-import java.awt.Component;
-import java.beans.PropertyChangeEvent;
+import java.awt.BorderLayout;
 
-import de.illonis.eduras.gameclient.LoadingPanelReactor;
-import de.illonis.eduras.gameclient.datacache.AsyncLoadCompletedListener;
-import de.illonis.eduras.gameclient.datacache.GraphicsPreLoader;
-import de.illonis.eduras.gameclient.gui.ClientGuiStepLogic;
+import javax.swing.BorderFactory;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JProgressBar;
+import javax.swing.SwingConstants;
 
-/**
- * Displays login progress. Also shows errors occuring while connecting.
- * 
- * @author illonis
- * 
- */
-public class LoadingPanel extends ClientGuiStepLogic implements
-		AsyncLoadCompletedListener {
+public class LoadingPanel extends JPanel {
+	private static final long serialVersionUID = 1L;
 
-	private final LoadingGui gui;
-	private final LoadingPanelReactor reactor;
-	private GraphicsPreLoader preloader;
+	private JLabel text;
+	private JProgressBar progressBar;
 
-	/**
-	 * Creates the progress panel
-	 * 
-	 * @param reactor
-	 *            the reactor on panel's actions.
-	 * 
-	 */
-	public LoadingPanel(LoadingPanelReactor reactor) {
-		this.reactor = reactor;
-		this.gui = new LoadingGui();
+	LoadingPanel() {
+		super(new BorderLayout());
+		text = new JLabel();
+		text.setHorizontalTextPosition(SwingConstants.CENTER);
+		text.setVerticalTextPosition(SwingConstants.BOTTOM);
+		text.setAlignmentX(CENTER_ALIGNMENT);
+		text.setHorizontalAlignment(JLabel.CENTER);
+		text.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+		text.setText("Loading graphics...");
+		progressBar = new JProgressBar();
+
+		add(text, BorderLayout.CENTER);
+		add(progressBar, BorderLayout.SOUTH);
 	}
 
-	private void terminateLoader() {
-		if (preloader != null && !preloader.isDone()) {
-			preloader.removePropertyChangeListener(this);
-			preloader.cancel(true);
-		}
+	public void setProgress(int progress) {
+		progressBar.setValue(progress);
 	}
 
-	@Override
-	public void onShown() {
-		terminateLoader();
-		startLoading();
-	}
-
-	private void startLoading() {
-		preloader = new GraphicsPreLoader(this);
-		preloader.execute();
-	}
-
-	@Override
-	public void propertyChange(PropertyChangeEvent evt) {
-		if (evt.getPropertyName().equals("progress")) {
-			int nv = (int) evt.getNewValue();
-			if (nv >= 0) {
-				gui.setProgress(nv);
-			}
-		}
-	}
-
-	@Override
-	public void onHidden() {
-		terminateLoader();
-	}
-
-	@Override
-	public Component getGui() {
-		return gui;
-	}
-
-	@Override
-	public void onDataLoaded() {
-		reactor.onLoadingFinished();
-	}
 }

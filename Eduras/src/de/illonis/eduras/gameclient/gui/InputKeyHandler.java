@@ -9,8 +9,8 @@ import java.util.logging.Logger;
 
 import de.illonis.edulog.EduLog;
 import de.illonis.eduras.exceptions.KeyNotBoundException;
-import de.illonis.eduras.gameclient.gui.game.GamePanel;
-import de.illonis.eduras.gameclient.gui.game.GamePanelReactor;
+import de.illonis.eduras.gameclient.GamePanelReactor;
+import de.illonis.eduras.gameclient.gui.game.GamePanelLogic;
 import de.illonis.eduras.gameclient.gui.game.UserInputListener;
 import de.illonis.eduras.gameobjects.MoveableGameObject.Direction;
 import de.illonis.eduras.logicabstraction.EdurasInitializer;
@@ -42,7 +42,7 @@ public class InputKeyHandler extends KeyAdapter {
 	private long lastTimePressed;
 
 	private Settings settings;
-	private final GamePanel client;
+	private final GamePanelLogic client;
 
 	/**
 	 * Creates a new input key handler.
@@ -52,7 +52,7 @@ public class InputKeyHandler extends KeyAdapter {
 	 * @param reactor
 	 *            the reactor that passes actions to server.
 	 */
-	public InputKeyHandler(GamePanel client, GamePanelReactor reactor) {
+	public InputKeyHandler(GamePanelLogic client, GamePanelReactor reactor) {
 		promoter = new ListenerPromoter();
 		listeners = new LinkedList<UserInputListener>();
 		this.settings = EdurasInitializer.getInstance().getSettings();

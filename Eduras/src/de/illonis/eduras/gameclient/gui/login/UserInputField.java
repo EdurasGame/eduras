@@ -9,7 +9,7 @@ import java.util.regex.Pattern;
  * 
  */
 public class UserInputField extends FilterableTextField {
-	private static final long serialVersionUID = 1L;
+	private final static long serialVersionUID = 1L;
 	private final static String pattern = "[a-zA-Z0-9-]*";
 
 	@Override
