@@ -56,7 +56,7 @@ public class GraphicsPreLoader extends AsyncLoader<Void> {
 			}
 			i++;
 			// shapes represent the first half of loading, graphics the other
-			int progress = (int) Math.floor((double) i / n) * 50;
+			int progress = (int) Math.floor((double) i / n * 50);
 			setProgress(progress);
 			// it.remove(); // avoids a ConcurrentModificationException
 		}
@@ -78,7 +78,9 @@ public class GraphicsPreLoader extends AsyncLoader<Void> {
 						e);
 			}
 			i++;
-			int progress = (int) Math.floor((double) i / n) * 50 + 50;
+
+			int progress = (int) Math.floor((double) i / n * 50) + 50;
+			System.out.println(progress);
 			setProgress(progress);
 		}
 	}
