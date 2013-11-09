@@ -21,6 +21,14 @@ public final class CacheInfo {
 		shapes.put(ShapeType.BIRD, "bird.esh");
 
 		objectImages = new HashMap<ObjectType, String>();
+		objectImages.put(ObjectType.ITEM_WEAPON_SIMPLE,
+				"gui/icons/icon-weapon1.png");
+		objectImages.put(ObjectType.ITEM_WEAPON_SNIPER,
+				"gui/icons/icon-weapon-sniper.png");
+		objectImages.put(ObjectType.ITEM_WEAPON_SPLASH,
+				"gui/icons/icon-weapon-splash.png");
+		objectImages.put(ObjectType.ITEM_WEAPON_SWORD,
+				"gui/icons/icon-sword.png");
 	}
 
 	/**

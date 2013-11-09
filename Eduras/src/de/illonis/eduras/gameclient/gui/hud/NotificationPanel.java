@@ -14,7 +14,6 @@ import de.illonis.eduras.events.DeathEvent;
 import de.illonis.eduras.events.SetInteractModeEvent;
 import de.illonis.eduras.events.SetItemSlotEvent;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
-import de.illonis.eduras.gameclient.gui.UserInterface;
 import de.illonis.eduras.inventory.ItemSlotIsEmptyException;
 import de.illonis.eduras.items.Item;
 import de.illonis.eduras.locale.Localization;

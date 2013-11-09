@@ -17,7 +17,6 @@ import de.illonis.eduras.events.SetItemSlotEvent;
 import de.illonis.eduras.events.SetOwnerEvent;
 import de.illonis.eduras.gameclient.gui.GuiClickReactor;
 import de.illonis.eduras.gameclient.gui.TooltipHandler;
-import de.illonis.eduras.gameclient.gui.UserInterface;
 import de.illonis.eduras.gamemodes.GameMode;
 import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.interfaces.GameEventListener;

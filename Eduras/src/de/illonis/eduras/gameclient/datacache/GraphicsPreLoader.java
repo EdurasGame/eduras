@@ -1,5 +1,6 @@
 package de.illonis.eduras.gameclient.datacache;
 
+import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.net.URL;
 import java.util.HashMap;
@@ -9,6 +10,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import de.illonis.edulog.EduLog;
+import de.illonis.eduras.ObjectFactory.ObjectType;
+import de.illonis.eduras.images.ImageFiler;
 import de.illonis.eduras.math.Vector2D;
 import de.illonis.eduras.shapecreator.FileCorruptException;
 import de.illonis.eduras.shapes.ObjectShape.ShapeType;
@@ -60,8 +63,24 @@ public class GraphicsPreLoader extends AsyncLoader<Void> {
 	}
 
 	private void loadGraphics() {
-		// TODO implement
-		setProgress(99);
+		HashMap<ObjectType, String> shapeInfo = CacheInfo.getAllObjectImages();
+		Iterator<Map.Entry<ObjectType, String>> it = shapeInfo.entrySet()
+				.iterator();
+		int n = shapeInfo.size();
+		int i = 0;
+		while (it.hasNext()) {
+			Map.Entry<ObjectType, String> pair = it.next();
+			try {
+				BufferedImage image = ImageFiler.load(pair.getValue());
+				ImageCache.addImage(pair.getKey(), image);
+			} catch (IllegalArgumentException | IOException e) {
+				L.log(Level.SEVERE, "Imagefile not found: " + pair.getValue(),
+						e);
+			}
+			i++;
+			int progress = (int) Math.floor((double) i / n) * 50 + 50;
+			setProgress(progress);
+		}
 	}
 
 	@Override

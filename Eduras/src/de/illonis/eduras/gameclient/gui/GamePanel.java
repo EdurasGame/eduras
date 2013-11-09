@@ -17,6 +17,7 @@ import de.illonis.eduras.gameclient.GuiEventListener;
 import de.illonis.eduras.gameclient.LoginStepLogic;
 import de.illonis.eduras.gameclient.gui.hud.ClickableGuiElementInterface;
 import de.illonis.eduras.gameclient.gui.hud.TooltipTriggerer;
+import de.illonis.eduras.gameclient.gui.hud.UserInterface;
 import de.illonis.eduras.inventory.Inventory;
 import de.illonis.eduras.logicabstraction.EdurasInitializer;
 import de.illonis.eduras.logicabstraction.InformationProvider;

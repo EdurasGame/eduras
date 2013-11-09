@@ -13,8 +13,8 @@ import java.util.logging.Logger;
 import de.illonis.edulog.EduLog;
 import de.illonis.eduras.events.SetItemSlotEvent;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
-import de.illonis.eduras.gameclient.gui.ImageList;
-import de.illonis.eduras.gameclient.gui.UserInterface;
+import de.illonis.eduras.gameclient.datacache.CacheException;
+import de.illonis.eduras.gameclient.datacache.ImageCache;
 import de.illonis.eduras.inventory.Inventory;
 import de.illonis.eduras.inventory.ItemSlotIsEmptyException;
 import de.illonis.eduras.items.Item;
@@ -155,7 +155,15 @@ public class ItemDisplay extends ClickableGuiElement implements
 			itemSlots[slot].setItemImage(null);
 		} else {
 			String newName = newItem.getName();
-			itemSlots[slot].setItemImage(ImageList.getImageFor(newItem));
+			try {
+				BufferedImage image = ImageCache.getObjectImage(newItem
+						.getType());
+				itemSlots[slot].setItemImage(image);
+			} catch (CacheException e) {
+				itemSlots[slot].setItemImage(null);
+				L.log(Level.SEVERE,
+						"Missing cache image for: " + newItem.getType(), e);
+			}
 
 			itemSlots[slot].setItem(newItem);
 			itemSlots[slot].setName(newName);

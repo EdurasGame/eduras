@@ -1,15 +1,13 @@
-package de.illonis.eduras.gameclient.gui;
+package de.illonis.eduras.gameclient.gui.hud;
 
 import java.util.ArrayList;
 
-import de.illonis.eduras.gameclient.gui.hud.GameModeBar;
-import de.illonis.eduras.gameclient.gui.hud.ItemDisplay;
-import de.illonis.eduras.gameclient.gui.hud.NotificationPanel;
-import de.illonis.eduras.gameclient.gui.hud.PlayerStatBar;
-import de.illonis.eduras.gameclient.gui.hud.RenderedGuiObject;
-import de.illonis.eduras.gameclient.gui.hud.StatisticsWindow;
-import de.illonis.eduras.gameclient.gui.hud.TimeFrame;
-import de.illonis.eduras.gameclient.gui.hud.TooltipTriggerer;
+import de.illonis.eduras.gameclient.gui.EventListenerGui;
+import de.illonis.eduras.gameclient.gui.GuiClickReactor;
+import de.illonis.eduras.gameclient.gui.GuiResizeListener;
+import de.illonis.eduras.gameclient.gui.TooltipHandler;
+import de.illonis.eduras.gameclient.gui.TooltipTriggererNotifier;
+import de.illonis.eduras.gameclient.gui.UserInputListener;
 import de.illonis.eduras.logicabstraction.InformationProvider;
 import de.illonis.eduras.networking.ServerClient.ClientRole;
 
@@ -41,7 +39,7 @@ public class UserInterface implements GuiResizeListener, UserInputListener {
 	 * @param clickReactor
 	 *            click reactor.
 	 */
-	UserInterface(InformationProvider infos,
+	public UserInterface(InformationProvider infos,
 			TooltipTriggererNotifier tooltipNotifier,
 			GuiClickReactor clickReactor) {
 		this.uiObjects = new ArrayList<RenderedGuiObject>();
@@ -72,7 +70,7 @@ public class UserInterface implements GuiResizeListener, UserInputListener {
 		return infos;
 	}
 
-	ArrayList<RenderedGuiObject> getUiObjects() {
+	public ArrayList<RenderedGuiObject> getUiObjects() {
 		return uiObjects;
 	}
 
@@ -130,7 +128,7 @@ public class UserInterface implements GuiResizeListener, UserInputListener {
 	 * @param h
 	 *            new tooltip handler.
 	 */
-	void setTooltipHandler(TooltipHandler h) {
+	public void setTooltipHandler(TooltipHandler h) {
 		this.tooltipHandler = h;
 	}
 

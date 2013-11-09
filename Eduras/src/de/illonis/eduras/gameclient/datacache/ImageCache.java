@@ -18,7 +18,7 @@ import de.illonis.eduras.shapes.ObjectShape.ShapeType;
 public final class ImageCache {
 
 	private final static HashMap<ShapeType, Vector2D[]> shapeData = new HashMap<ShapeType, Vector2D[]>();
-	private final static HashMap<ObjectType, BufferedImage> objectImageData = new HashMap<ObjectType, BufferedImage>();
+	private final static HashMap<ObjectType, BufferedImage> objectImages = new HashMap<ObjectType, BufferedImage>();
 	private final static HashMap<String, ImageIcon> imageData = new HashMap<String, ImageIcon>();
 
 	static void addShape(ShapeType shapeType, Vector2D[] verts) {
@@ -26,7 +26,7 @@ public final class ImageCache {
 	}
 
 	static void addImage(ObjectType objectType, BufferedImage image) {
-		objectImageData.put(objectType, image);
+		objectImages.put(objectType, image);
 	}
 
 	static void addImageIcon(String key, ImageIcon icon) {
@@ -60,7 +60,7 @@ public final class ImageCache {
 	 */
 	public static BufferedImage getObjectImage(ObjectType type)
 			throws CacheException {
-		BufferedImage image = objectImageData.get(type);
+		BufferedImage image = objectImages.get(type);
 		if (image == null)
 			throw new CacheException("No cached image found for " + type);
 		return image;

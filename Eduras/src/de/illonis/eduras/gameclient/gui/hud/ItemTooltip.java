@@ -3,9 +3,12 @@ package de.illonis.eduras.gameclient.gui.hud;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
-import de.illonis.eduras.gameclient.gui.ImageList;
-import de.illonis.eduras.gameclient.gui.UserInterface;
+import de.illonis.edulog.EduLog;
+import de.illonis.eduras.gameclient.datacache.CacheException;
+import de.illonis.eduras.gameclient.datacache.ImageCache;
 import de.illonis.eduras.items.Item;
 
 /**
@@ -15,6 +18,9 @@ import de.illonis.eduras.items.Item;
  * 
  */
 public class ItemTooltip extends Tooltip {
+
+	private final static Logger L = EduLog.getLoggerFor(ItemTooltip.class
+			.getName());
 
 	private Item item;
 
@@ -44,9 +50,15 @@ public class ItemTooltip extends Tooltip {
 		g2d.drawString(item.getType().toString(), screenX + 8, screenY + 40);
 		g2d.drawString("id: " + item.getId(), screenX + 8, screenY + 70);
 		g2d.drawString("owner: " + item.getOwner(), screenX + 8, screenY + 90);
-		BufferedImage img = ImageList.getImageFor(item);
-		g2d.drawImage(img, screenX + width - img.getWidth() - 2, screenY + 2,
-				null);
+		BufferedImage img;
+		try {
+			img = ImageCache.getObjectImage(item.getType());
+			g2d.drawImage(img, screenX + width - img.getWidth() - 2,
+					screenY + 2, null);
+		} catch (CacheException e) {
+			L.log(Level.SEVERE,
+					"Could not find cache image for " + item.getType(), e);
+		}
 	}
 
 	@Override

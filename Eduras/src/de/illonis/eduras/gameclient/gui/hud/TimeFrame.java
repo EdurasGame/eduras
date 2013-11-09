@@ -4,7 +4,6 @@ import java.awt.Color;
 import java.awt.FontMetrics;
 import java.awt.Graphics2D;
 
-import de.illonis.eduras.gameclient.gui.UserInterface;
 
 /**
  * A time frame that shows remaining time.

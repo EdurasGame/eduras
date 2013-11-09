@@ -8,7 +8,6 @@ import java.util.logging.Logger;
 import de.illonis.edulog.EduLog;
 import de.illonis.eduras.events.SetIntegerGameObjectAttributeEvent;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
-import de.illonis.eduras.gameclient.gui.UserInterface;
 import de.illonis.eduras.units.PlayerMainFigure;
 
 /**

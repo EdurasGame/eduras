@@ -10,7 +10,6 @@ import java.util.logging.Logger;
 import de.illonis.edulog.EduLog;
 import de.illonis.eduras.Team;
 import de.illonis.eduras.events.MatchEndEvent;
-import de.illonis.eduras.gameclient.gui.UserInterface;
 import de.illonis.eduras.images.ImageFiler;
 import de.illonis.eduras.units.PlayerMainFigure;
 

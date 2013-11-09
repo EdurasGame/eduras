@@ -5,7 +5,6 @@ import java.awt.Graphics2D;
 import java.awt.Point;
 
 import de.illonis.eduras.gameclient.gui.GameRenderer;
-import de.illonis.eduras.gameclient.gui.UserInterface;
 
 /**
  * Shows detailed information depending on mouse position. Only one tooltip will

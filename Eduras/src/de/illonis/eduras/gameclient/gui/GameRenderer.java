@@ -17,8 +17,10 @@ import java.util.LinkedList;
 import java.util.concurrent.ConcurrentHashMap;
 
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
+import de.illonis.eduras.gameclient.gui.hud.HealthBar;
 import de.illonis.eduras.gameclient.gui.hud.ItemTooltip;
 import de.illonis.eduras.gameclient.gui.hud.RenderedGuiObject;
+import de.illonis.eduras.gameclient.gui.hud.UserInterface;
 import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.items.Item;
 import de.illonis.eduras.logicabstraction.InformationProvider;
@@ -69,7 +71,6 @@ public class GameRenderer implements TooltipHandler {
 	 */
 	public GameRenderer(GameCamera camera, UserInterface gui,
 			InformationProvider info) {
-		ImageList.load(); // TODO: asynchronously
 		this.uiObjects = gui.getUiObjects();
 		this.camera = camera;
 		scale = 1;
@@ -243,9 +244,8 @@ public class GameRenderer implements TooltipHandler {
 			// draw only if in current view point
 			if (d.getBoundingBox().intersects(camera)) {
 				// TODO: distinguish between object images and icon images
-				if (hasImage(d)) {
-					drawImageOf(d);
-				} // draw shape of gameObject instead if object has shape
+				// drawImageOf(d);
+				// draw shape of gameObject instead if object has shape
 
 				if (d.getShape() != null) {
 					drawShapeOf(d);
@@ -294,18 +294,6 @@ public class GameRenderer implements TooltipHandler {
 		// TODO: use scale
 		HealthBar.calculateFor(unit);
 		HealthBar.draw(mapGraphics, camera);
-	}
-
-	/**
-	 * Checks if renderer has an image that is associated to given
-	 * {@link GameObject}, so it can be drawn.
-	 * 
-	 * @param obj
-	 *            game object to test.
-	 * @return true if gameobject has an image, false otherwise.
-	 */
-	private boolean hasImage(GameObject obj) {
-		return ImageList.hasImageFor(obj);
 	}
 
 	/**

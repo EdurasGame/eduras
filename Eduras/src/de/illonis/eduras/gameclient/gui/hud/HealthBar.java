@@ -1,8 +1,9 @@
-package de.illonis.eduras.gameclient.gui;
+package de.illonis.eduras.gameclient.gui.hud;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
 
+import de.illonis.eduras.gameclient.gui.GameCamera;
 import de.illonis.eduras.units.Unit;
 
 /**
@@ -36,7 +37,7 @@ public class HealthBar {
 	 * @param unit
 	 *            unit that's health should be shown.
 	 */
-	protected static void calculateFor(Unit unit) {
+	public static void calculateFor(Unit unit) {
 		int maxHealth = unit.getMaxHealth();
 		int health = unit.getHealth();
 
@@ -64,7 +65,7 @@ public class HealthBar {
 	 * @param camera
 	 *            camera offset.
 	 */
-	protected static void draw(Graphics2D g2d, GameCamera camera) {
+	public static void draw(Graphics2D g2d, GameCamera camera) {
 		g2d.setColor(Color.black);
 		g2d.fillRect(instance.x - camera.x, instance.y - camera.y,
 				HEALTHBAR_WIDTH, HEALTHBAR_HEIGHT);
