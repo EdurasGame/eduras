@@ -1,6 +1,7 @@
 package de.illonis.eduras.gameclient.datacache;
 
 import java.awt.image.BufferedImage;
+import java.beans.PropertyChangeEvent;
 import java.io.IOException;
 import java.net.URL;
 import java.util.HashMap;
@@ -25,7 +26,7 @@ import de.illonis.eduras.shapes.data.ShapeParser;
  * @author illonis
  * 
  */
-public class GraphicsPreLoader extends AsyncLoader<Void> {
+public final class GraphicsPreLoader extends AsyncLoader<Void> {
 
 	private final static Logger L = EduLog.getLoggerFor(GraphicsPreLoader.class
 			.getName());
@@ -36,6 +37,27 @@ public class GraphicsPreLoader extends AsyncLoader<Void> {
 	 */
 	public GraphicsPreLoader(AsyncLoadCompletedListener listener) {
 		super(listener);
+	}
+
+	private GraphicsPreLoader() {
+		this(new AsyncLoadCompletedListener() {
+
+			@Override
+			public void propertyChange(PropertyChangeEvent evt) {
+			}
+
+			@Override
+			public void onDataLoaded() {
+			}
+		});
+	}
+
+	/**
+	 * Backdoor for server to load only shapes. Loads shapes synchonous.
+	 */
+	public static void preLoadShapes() {
+		GraphicsPreLoader p = new GraphicsPreLoader();
+		p.loadShapes();
 	}
 
 	private void loadShapes() {
@@ -80,7 +102,6 @@ public class GraphicsPreLoader extends AsyncLoader<Void> {
 			i++;
 
 			int progress = (int) Math.floor((double) i / n * 50) + 50;
-			System.out.println(progress);
 			setProgress(progress);
 		}
 	}

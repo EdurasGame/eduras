@@ -156,7 +156,6 @@ public class ClientFrame extends JFrame implements NetworkEventReactor {
 	 * Shows login panel.
 	 */
 	public void showLogin() {
-		System.out.println("show login");
 		cardLayout.show(getContentPane(), LOGINPANEL);
 		client.startDiscovery(loginPanel);
 		loginPanel.onShown();

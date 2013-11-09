@@ -14,6 +14,7 @@ import java.util.logging.Logger;
 
 import de.illonis.edulog.EduLog;
 import de.illonis.eduras.exceptions.ServerNotReadyForStartException;
+import de.illonis.eduras.gameclient.datacache.GraphicsPreLoader;
 import de.illonis.eduras.locale.Localization;
 import de.illonis.eduras.logic.ConsoleEventTriggerer;
 import de.illonis.eduras.logic.ServerEventTriggerer;
@@ -74,6 +75,10 @@ public class Eduras {
 		}
 
 		L.info(Localization.getString("Server.startstart"));
+
+		L.info("Preloading shapes...");
+		GraphicsPreLoader.preLoadShapes();
+		L.info("Shape caching finished.");
 
 		Server server = new Server(port, name);
 
