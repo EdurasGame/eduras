@@ -50,6 +50,7 @@ public class ServerSender extends Thread {
 	 *            Target server.
 	 */
 	public ServerSender(Server server) {
+		super("ServerSender");
 		this.outputBufferUDP = new Buffer();
 		this.outputBufferTCP = new Buffer();
 		try {
@@ -58,7 +59,6 @@ public class ServerSender extends Thread {
 			L.log(Level.SEVERE, "error initializing datagram", e);
 			server.stopServer();
 		}
-		this.setName("ServerSender");
 		clients = new HashMap<Integer, ServerClient>();
 		this.server = server;
 		running = true;

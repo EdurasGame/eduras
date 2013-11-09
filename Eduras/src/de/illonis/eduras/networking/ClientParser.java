@@ -45,7 +45,7 @@ public class ClientParser extends Thread {
 	 */
 	public ClientParser(GameLogicInterface logic, Buffer inputBuffer,
 			NetworkEventListener networkEventListener, Client client) {
-		setName("ClientParser");
+		super("ClientParser");
 		this.client = client;
 		this.logic = logic;
 		this.inputBuffer = inputBuffer;

@@ -34,8 +34,8 @@ public class ServerTCPReceiver extends Thread {
 	 *            Client that's inputstream should be used.
 	 */
 	public ServerTCPReceiver(Server server, ServerClient client) {
+		super("ServerTCPReceiver (Client " + client.getClientId() + ")");
 		this.server = server;
-		setName("ServerTCPReceiver (Client " + client.getClientId() + ")");
 		this.inputBuffer = server.getInputBuffer();
 		this.client = client;
 	}

@@ -44,22 +44,13 @@ public class ServerSearcher extends Thread {
 	public final static String METASERVER_ADDRESS = "illonis.dyndns.org";
 
 	/**
-	 * Creates a new server searcher. The listener must be applied later before
-	 * starting.
-	 */
-	public ServerSearcher() {
-		super("ServerSearcher");
-	}
-
-	/**
 	 * Creates a new server searcher.
 	 * 
 	 * @param answerListener
 	 *            the listener object that receives the found servers.
 	 */
 	public ServerSearcher(ServerFoundListener answerListener) {
-		this();
-		setName(getClass().getName());
+		super("ServerSearcher");
 		this.listener = answerListener;
 	}
 

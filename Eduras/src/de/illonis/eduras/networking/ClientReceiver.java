@@ -51,7 +51,7 @@ public class ClientReceiver extends Thread {
 	 *            The associated client.
 	 */
 	public ClientReceiver(GameLogicInterface logic, Socket socket, Client client) {
-
+		super("ClientReceiver");
 		this.client = client;
 		this.logic = logic;
 		inputBuffer = new Buffer();
@@ -125,6 +125,10 @@ public class ClientReceiver extends Thread {
 	 * 
 	 */
 	class UDPMessageReceiver extends Thread {
+
+		public UDPMessageReceiver() {
+			super("UDPMessageReceiver");
+		}
 
 		private static final int MAX_UDP_SIZE = 1024;
 
