@@ -60,8 +60,8 @@ public final class ListenerHolder<T> {
 	 *             if no listener attached.
 	 */
 	public T getListener() throws IllegalStateException {
-		if (listener == null)
-			throw new IllegalStateException("No listener attached.");
+		// if (listener == null)
+		// throw new IllegalStateException("No listener attached.");
 		return listener;
 	}
 

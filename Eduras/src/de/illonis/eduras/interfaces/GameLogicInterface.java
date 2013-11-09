@@ -46,12 +46,14 @@ public interface GameLogicInterface {
 	 */
 	public GameEventListener getListener();
 
+	public void startWorker();
+
 	/**
-	 * Indicates shutdown of server/client.
+	 * Indicates shutdown of server/client and stops the gameworker.
 	 * 
 	 * @author illonis
 	 */
-	public void onShutdown();
+	public void stopWorker();
 
 	/**
 	 * Returns object factory.

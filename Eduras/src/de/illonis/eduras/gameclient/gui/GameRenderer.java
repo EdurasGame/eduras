@@ -17,7 +17,6 @@ import java.util.LinkedList;
 import java.util.concurrent.ConcurrentHashMap;
 
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
-import de.illonis.eduras.gameclient.TooltipHandler;
 import de.illonis.eduras.gameclient.gui.hud.ItemTooltip;
 import de.illonis.eduras.gameclient.gui.hud.RenderedGuiObject;
 import de.illonis.eduras.gameobjects.GameObject;
@@ -48,7 +47,7 @@ public class GameRenderer implements TooltipHandler {
 	private Graphics2D bothGraphics = null;
 	private final ConcurrentHashMap<Integer, GameObject> objs;
 	private RenderThread rendererThread;
-	private GamePanel target;
+	private GameGui target;
 	private ItemTooltip tooltip;
 	private double scale;
 	private boolean tooltipShown = false;
@@ -416,11 +415,11 @@ public class GameRenderer implements TooltipHandler {
 	/**
 	 * Sets drawing target of renderer.
 	 * 
-	 * @param gamePanel
+	 * @param guiPanel
 	 *            target game panel.
 	 */
-	void setTarget(GamePanel gamePanel) {
-		this.target = gamePanel;
+	void setTarget(GameGui guiPanel) {
+		this.target = guiPanel;
 	}
 
 	/**

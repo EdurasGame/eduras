@@ -8,15 +8,9 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import de.illonis.edulog.EduLog;
-import de.illonis.eduras.events.GameEvent.GameEventNumber;
-import de.illonis.eduras.events.SwitchInteractModeEvent;
-import de.illonis.eduras.events.UserMovementEvent;
 import de.illonis.eduras.exceptions.KeyNotBoundException;
-import de.illonis.eduras.exceptions.MessageNotSupportedException;
-import de.illonis.eduras.exceptions.ObjectNotFoundException;
-import de.illonis.eduras.exceptions.WrongEventTypeException;
-import de.illonis.eduras.gameclient.GameClient;
-import de.illonis.eduras.logicabstraction.EventSender;
+import de.illonis.eduras.gameobjects.MoveableGameObject.Direction;
+import de.illonis.eduras.logicabstraction.EdurasInitializer;
 import de.illonis.eduras.settings.KeyBindings.KeyBinding;
 import de.illonis.eduras.settings.Settings;
 
@@ -35,7 +29,7 @@ public class InputKeyHandler extends KeyAdapter {
 	private LinkedList<UserInputListener> listeners;
 	private ListenerPromoter promoter;
 
-	private EventSender eventSender;
+	private GamePanelReactor reactor;
 
 	/**
 	 * Used to support linux os. If a key is hold down on a linux system, it
@@ -45,26 +39,23 @@ public class InputKeyHandler extends KeyAdapter {
 	private long lastTimePressed;
 
 	private Settings settings;
-	private final GameClient client;
+	private final GamePanel client;
 
 	/**
 	 * Creates a new input key handler.
 	 * 
 	 * @param client
 	 *            associated client.
-	 * @param sender
-	 *            associated event sender.
-	 * @param settings
-	 *            associated user settings.
+	 * @param reactor
+	 *            the reactor that passes actions to server.
 	 */
-	public InputKeyHandler(GameClient client, EventSender sender,
-			Settings settings) {
+	public InputKeyHandler(GamePanel client, GamePanelReactor reactor) {
 		promoter = new ListenerPromoter();
 		listeners = new LinkedList<UserInputListener>();
-		this.settings = settings;
+		this.settings = EdurasInitializer.getInstance().getSettings();
 		pressedButtons = new HashMap<Integer, Boolean>();
 
-		this.eventSender = sender;
+		this.reactor = reactor;
 
 		lastTimePressed = System.currentTimeMillis();
 
@@ -129,8 +120,6 @@ public class InputKeyHandler extends KeyAdapter {
 		if (lastTimePressed < KEY_INTERVAL)
 			return;
 
-		UserMovementEvent moveEvent = null;
-
 		KeyBinding binding;
 		try {
 			binding = settings.getKeyBindings().getBindingOf(keyCode);
@@ -141,67 +130,47 @@ public class InputKeyHandler extends KeyAdapter {
 
 		switch (binding) {
 		case MOVE_UP:
-			moveEvent = new UserMovementEvent(GameEventNumber.MOVE_UP_PRESSED,
-					client.getOwnerID());
+			reactor.onStartMovement(Direction.TOP);
 			break;
 		case MOVE_LEFT:
-			moveEvent = new UserMovementEvent(
-					GameEventNumber.MOVE_LEFT_PRESSED, client.getOwnerID());
+			reactor.onStartMovement(Direction.LEFT);
 			break;
 		case MOVE_DOWN:
-			moveEvent = new UserMovementEvent(
-					GameEventNumber.MOVE_DOWN_PRESSED, client.getOwnerID());
+			reactor.onStartMovement(Direction.BOTTOM);
 			break;
 		case MOVE_RIGHT:
-			moveEvent = new UserMovementEvent(
-					GameEventNumber.MOVE_RIGHT_PRESSED, client.getOwnerID());
+			reactor.onStartMovement(Direction.RIGHT);
 			break;
 		case ITEM_1:
 			client.itemUsed(0);
-			return;
+			break;
 		case ITEM_2:
 			client.itemUsed(1);
-			return;
+			break;
 		case ITEM_3:
 			client.itemUsed(2);
-			return;
+			break;
 		case ITEM_4:
 			client.itemUsed(3);
-			return;
+			break;
 		case ITEM_5:
 			client.itemUsed(4);
-			return;
+			break;
 		case ITEM_6:
 			client.itemUsed(5);
-			return;
+			break;
 		case SHOW_STATS:
 			promoter.showStatWindow();
-			return;
+			break;
 		case SWITCH_MODE:
-			try {
-				eventSender.sendEvent(new SwitchInteractModeEvent(client
-						.getOwnerID(), client.getInformationProvider()
-						.getPlayer().getCurrentMode().next()));
-			} catch (WrongEventTypeException | MessageNotSupportedException
-					| ObjectNotFoundException e1) {
-				L.log(Level.SEVERE, "mode switch request could not be sent.",
-						e1);
-			}
-			return;
+			reactor.onModeSwitch();
+			break;
 		case EXIT_CLIENT:
-			client.getNetworkManager().notifyDisconnect();
-			return;
+			reactor.onGameQuit();
+			break;
 
 		default:
-			return;
-		}
-
-		if (moveEvent != null) {
-			try {
-				eventSender.sendEvent(moveEvent);
-			} catch (WrongEventTypeException | MessageNotSupportedException e) {
-				L.log(Level.SEVERE, "error sending message", e);
-			}
+			break;
 		}
 
 		lastTimePressed = System.currentTimeMillis();
@@ -215,7 +184,6 @@ public class InputKeyHandler extends KeyAdapter {
 
 		if (lastTimePressed < KEY_INTERVAL)
 			return;
-		UserMovementEvent moveEvent = null;
 
 		// release button
 		pressedButtons.put(keyCode, false);
@@ -224,39 +192,29 @@ public class InputKeyHandler extends KeyAdapter {
 		try {
 			binding = settings.getKeyBindings().getBindingOf(keyCode);
 		} catch (KeyNotBoundException ex) {
+			L.log(Level.SEVERE, "Key is bound but receiving binding failed: "
+					+ keyCode, ex);
 			return;
 		}
 
 		switch (binding) {
 		case MOVE_UP:
-			moveEvent = new UserMovementEvent(GameEventNumber.MOVE_UP_RELEASED,
-					client.getOwnerID());
+			reactor.onStopMovement(Direction.TOP);
 			break;
 		case MOVE_LEFT:
-			moveEvent = new UserMovementEvent(
-					GameEventNumber.MOVE_LEFT_RELEASED, client.getOwnerID());
+			reactor.onStopMovement(Direction.LEFT);
 			break;
 		case MOVE_DOWN:
-			moveEvent = new UserMovementEvent(
-					GameEventNumber.MOVE_DOWN_RELEASED, client.getOwnerID());
+			reactor.onStopMovement(Direction.BOTTOM);
 			break;
 		case MOVE_RIGHT:
-			moveEvent = new UserMovementEvent(
-					GameEventNumber.MOVE_RIGHT_RELEASED, client.getOwnerID());
+			reactor.onStopMovement(Direction.RIGHT);
 			break;
 		case SHOW_STATS:
 			promoter.hideStatWindow();
-			return;
+			break;
 		default:
-			return;
-		}
-
-		if (moveEvent != null) {
-			try {
-				eventSender.sendEvent(moveEvent);
-			} catch (WrongEventTypeException | MessageNotSupportedException e) {
-				L.log(Level.SEVERE, "error sending message", e);
-			}
+			break;
 		}
 	}
 
@@ -285,6 +243,5 @@ public class InputKeyHandler extends KeyAdapter {
 				listener.hideStatWindow();
 			}
 		}
-
 	}
 }

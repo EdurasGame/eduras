@@ -78,6 +78,7 @@ public class Client {
 		receiver.start();
 		sender = new ClientSender(socket);
 		sender.setUdpSocket(receiver.getUdpSocket());
+		logic.startWorker();
 	}
 
 	/**
@@ -157,13 +158,12 @@ public class Client {
 
 		if (receiver != null)
 			receiver.interrupt();
-		logic.onShutdown();
+		logic.stopWorker();
 		if (socket != null)
 			try {
 				socket.close();
 			} catch (IOException e) {
 				L.log(Level.WARNING, "io", e);
-
 			}
 	}
 

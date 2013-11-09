@@ -1,13 +1,5 @@
 package de.illonis.eduras.gameclient;
 
-import java.awt.Component;
-import java.awt.MouseInfo;
-import java.awt.Point;
-import java.awt.PointerInfo;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -15,28 +7,19 @@ import javax.swing.JOptionPane;
 
 import de.illonis.edulog.EduLog;
 import de.illonis.eduras.events.Event;
-import de.illonis.eduras.events.GameEvent.GameEventNumber;
 import de.illonis.eduras.events.InitInformationEvent;
-import de.illonis.eduras.events.ItemEvent;
 import de.illonis.eduras.events.UDPHiEvent;
 import de.illonis.eduras.exceptions.MessageNotSupportedException;
 import de.illonis.eduras.exceptions.WrongEventTypeException;
 import de.illonis.eduras.gameclient.gui.ClientFrame;
-import de.illonis.eduras.gameclient.gui.GuiClickReactor;
-import de.illonis.eduras.gameclient.gui.InputKeyHandler;
-import de.illonis.eduras.gameclient.gui.hud.ClickableGuiElementInterface;
-import de.illonis.eduras.gameclient.gui.hud.TooltipTriggerer;
-import de.illonis.eduras.inventory.Inventory;
 import de.illonis.eduras.locale.Localization;
 import de.illonis.eduras.logicabstraction.EdurasInitializer;
 import de.illonis.eduras.logicabstraction.EventSender;
 import de.illonis.eduras.logicabstraction.InformationProvider;
 import de.illonis.eduras.logicabstraction.NetworkManager;
-import de.illonis.eduras.math.Vector2D;
 import de.illonis.eduras.networking.ServerClient.ClientRole;
 import de.illonis.eduras.networking.discover.ServerFoundListener;
 import de.illonis.eduras.networking.discover.ServerSearcher;
-import de.illonis.eduras.settings.Settings;
 
 /**
  * Represents a full game client that handles both, network management and gui.
@@ -44,8 +27,7 @@ import de.illonis.eduras.settings.Settings;
  * @author illonis
  * 
  */
-public class GameClient implements GuiClickReactor, NetworkEventReactor,
-		TooltipTriggererNotifier {
+public class GameClient implements NetworkEventReactor {
 
 	private final static Logger L = EduLog.getLoggerFor(GameClient.class
 			.getName());
@@ -55,24 +37,15 @@ public class GameClient implements GuiClickReactor, NetworkEventReactor,
 	private NetworkManager nwm;
 	private EdurasInitializer initializer;
 	private ClientEventHandler eventHandler;
-	private Settings settings;
-	private InputKeyHandler keyHandler;
 	private ClientFrame frame;
-	private ClickState currentClickState;
-	private int currentItemSelected = -1;
-	private final LinkedList<ClickableGuiElementInterface> clickListeners;
-	private final LinkedList<TooltipTriggerer> triggerers;
 	private ServerSearcher searcher;
+
 	// private TooltipHandler tooltipHandler;
 
 	private String clientName;
 	private ClientRole role;
 
 	private ConnectionState connectionState;
-
-	private enum ClickState {
-		DEFAULT, ITEM_SELECTED;
-	}
 
 	private enum ConnectionState {
 		NOT_CONNECTED, CONNECTING, CONNECTION_ESTABLISHED, UDP_READY, GAME_READY;
@@ -83,12 +56,9 @@ public class GameClient implements GuiClickReactor, NetworkEventReactor,
 	 */
 	public GameClient() {
 		// new LoggerGui().setVisible(true);
-		clickListeners = new LinkedList<ClickableGuiElementInterface>();
-		triggerers = new LinkedList<TooltipTriggerer>();
-		currentClickState = ClickState.DEFAULT;
+
 		connectionState = ConnectionState.NOT_CONNECTED;
 		loadTools();
-		startup();
 	}
 
 	/**
@@ -105,33 +75,7 @@ public class GameClient implements GuiClickReactor, NetworkEventReactor,
 	 * Initializes and shows up gui.
 	 */
 	void startGui() {
-		frame.initUserInterface();
 		frame.setVisible(true);
-	}
-
-	/**
-	 * Adds mouse listeners to given component, usually the game panel.
-	 * 
-	 * @param c
-	 *            listeners will be added to this component.
-	 */
-	public void addMouseListenersTo(Component c) {
-		ClickListener cl = new ClickListener();
-		c.addMouseListener(cl);
-		c.addMouseMotionListener(cl);
-	}
-
-	/**
-	 * Calculates current mouse position in gamePanel
-	 * 
-	 * @return mouse position.
-	 */
-	private Point getCurrentMousePos() {
-		PointerInfo pi = MouseInfo.getPointerInfo();
-		Point mp = pi.getLocation();
-		Point pos = frame.getLocationOnScreen();
-		Point p = new Point(mp.x - pos.x, mp.y - pos.y);
-		return p;
 	}
 
 	private void loadTools() {
@@ -144,24 +88,14 @@ public class GameClient implements GuiClickReactor, NetworkEventReactor,
 		nwm.setNetworkEventListener(eventHandler);
 	}
 
-	/**
-	 * Loads settings.
-	 */
-	private void startup() {
-		settings = initializer.getSettings();
-	}
-
 	@Override
 	public void onConnected(int clientId) {
-
-		this.connectionState = ConnectionState.CONNECTION_ESTABLISHED;
-
 		if (clientId != getOwnerID()) // only handle my connection
 			return;
+		this.connectionState = ConnectionState.CONNECTION_ESTABLISHED;
+
 		L.info("Connection to server established. OwnerId: "
 				+ infoPro.getOwnerID());
-		keyHandler = new InputKeyHandler(this, eventSender, settings);
-		keyHandler.addUserInputListener(frame);
 		frame.onConnected(clientId); // pass to gui
 
 		final int finalClientId = clientId;
@@ -210,98 +144,6 @@ public class GameClient implements GuiClickReactor, NetworkEventReactor,
 	}
 
 	/**
-	 * Triggers item used events.
-	 * 
-	 * @param i
-	 *            item slot.
-	 */
-	public void itemUsed(int i) {
-		itemUsed(i, new Vector2D(getCurrentMousePos()));
-	}
-
-	/**
-	 * Sends an item use event to server.
-	 * 
-	 * @param i
-	 *            item slot.
-	 * @param target
-	 *            target position
-	 */
-	void itemUsed(int i, Vector2D target) {
-		ItemEvent event = new ItemEvent(GameEventNumber.ITEM_USE,
-				infoPro.getOwnerID(), i);
-		event.setTarget(frame.computeGuiPointToGameCoordinate(target));
-
-		try {
-			sendEvent(event);
-		} catch (WrongEventTypeException | MessageNotSupportedException e) {
-			L.log(Level.WARNING, "error sending item used event", e);
-		}
-	}
-
-	/**
-	 * Listens for click on gui and passes them to gui elements. Additionally
-	 * looks for mouse position to handle tooltips.
-	 * 
-	 * @author illonis
-	 * 
-	 */
-	private class ClickListener extends MouseAdapter {
-
-		@Override
-		public void mouseMoved(MouseEvent e) {
-			frame.getTooltipHandler().hideTooltip();
-			Point p = e.getPoint();
-			// TODO : notify only elements that are in area.
-
-			for (TooltipTriggerer t : triggerers) {
-				if (t.getTriggerArea().contains(p)) {
-					t.onMouseOver(p);
-
-					break;
-				}
-			}
-		}
-
-		@Override
-		public void mouseClicked(MouseEvent e) {
-			super.mouseClicked(e);
-			L.info("Click at " + e.getX() + ", " + e.getY());
-			Point p = e.getPoint();
-			switch (currentClickState) {
-			case ITEM_SELECTED:
-				if (currentItemSelected != -1)
-					itemUsed(currentItemSelected, new Vector2D(p));
-			case DEFAULT:
-				// TODO: Notify only elements that are really clicked.
-				for (Iterator<ClickableGuiElementInterface> iterator = clickListeners
-						.iterator(); iterator.hasNext();) {
-					ClickableGuiElementInterface reactor = iterator.next();
-					if (reactor.onClick(p))
-						return;
-				}
-				inGameClick(p);
-				break;
-			default:
-				break;
-
-			}
-		}
-	}
-
-	/**
-	 * Indicates a click into game world.<br>
-	 * Note that position information is gui-relative and has to be computed to
-	 * game coordinates.
-	 * 
-	 * @param p
-	 *            click position in gui.
-	 */
-	private void inGameClick(Point p) {
-		// TODO: implement
-	}
-
-	/**
 	 * Indicates that user tried to exit, e.g. when he closes the frame.
 	 */
 	public void tryExit() {
@@ -311,9 +153,10 @@ public class GameClient implements GuiClickReactor, NetworkEventReactor,
 				JOptionPane.YES_NO_OPTION);
 
 		if (result == JOptionPane.YES_OPTION) {
-			nwm.notifyDisconnect();
-			stopDiscovery();
-			System.exit(0);
+			if (nwm.isConnected())
+				nwm.disconnect();
+			else
+				frame.onExit();
 		}
 	}
 
@@ -342,26 +185,6 @@ public class GameClient implements GuiClickReactor, NetworkEventReactor,
 	}
 
 	/**
-	 * Returns information provider.
-	 * 
-	 * @return information provider.
-	 */
-	public InformationProvider getInformationProvider() {
-		return infoPro;
-	}
-
-	@Override
-	public void itemClicked(int i) {
-		if (i >= 0 && i < Inventory.MAX_CAPACITY) {
-			currentItemSelected = i;
-			currentClickState = ClickState.ITEM_SELECTED;
-		} else {
-			currentClickState = ClickState.DEFAULT;
-			currentItemSelected = -1;
-		}
-	}
-
-	/**
 	 * Sets client name to given name.
 	 * 
 	 * @param clientName
@@ -369,26 +192,6 @@ public class GameClient implements GuiClickReactor, NetworkEventReactor,
 	 */
 	public void setClientName(String clientName) {
 		this.clientName = clientName;
-	}
-
-	@Override
-	public void addClickableGuiElement(ClickableGuiElementInterface elem) {
-		clickListeners.add(elem);
-	}
-
-	@Override
-	public void removeClickableGuiElement(ClickableGuiElementInterface elem) {
-		clickListeners.remove(elem);
-	}
-
-	/**
-	 * Adds key handler to given component.
-	 * 
-	 * @param c
-	 *            component to that key handler should be assigned.
-	 */
-	public void addKeyHandlerTo(Component c) {
-		c.addKeyListener(keyHandler);
 	}
 
 	@Override
@@ -402,16 +205,6 @@ public class GameClient implements GuiClickReactor, NetworkEventReactor,
 	 */
 	public int getOwnerID() {
 		return infoPro.getOwnerID();
-	}
-
-	@Override
-	public void registerTooltipTriggerer(TooltipTriggerer elem) {
-		triggerers.add(elem);
-	}
-
-	@Override
-	public void removeTooltipTriggerer(TooltipTriggerer elem) {
-		triggerers.remove(elem);
 	}
 
 	@Override
@@ -432,14 +225,6 @@ public class GameClient implements GuiClickReactor, NetworkEventReactor,
 	}
 
 	/**
-	 * Indicates that client frame's focus is lost.
-	 */
-	public void onFocusLost() {
-		if (keyHandler != null)
-			keyHandler.releaseAllKeys();
-	}
-
-	/**
 	 * Sets the role of the client.
 	 * 
 	 * @param role
@@ -449,7 +234,11 @@ public class GameClient implements GuiClickReactor, NetworkEventReactor,
 	 */
 	public void setRole(ClientRole role) {
 		this.role = role;
+		// TODO set role for gui.
+	}
 
+	ClientFrame getFrame() {
+		return frame;
 	}
 
 	/**
@@ -481,4 +270,5 @@ public class GameClient implements GuiClickReactor, NetworkEventReactor,
 			L.log(Level.SEVERE, "Error sending initinformation event", e);
 		}
 	}
+
 }

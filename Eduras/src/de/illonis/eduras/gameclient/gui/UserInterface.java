@@ -2,8 +2,6 @@ package de.illonis.eduras.gameclient.gui;
 
 import java.util.ArrayList;
 
-import de.illonis.eduras.gameclient.TooltipHandler;
-import de.illonis.eduras.gameclient.TooltipTriggererNotifier;
 import de.illonis.eduras.gameclient.gui.hud.GameModeBar;
 import de.illonis.eduras.gameclient.gui.hud.ItemDisplay;
 import de.illonis.eduras.gameclient.gui.hud.NotificationPanel;

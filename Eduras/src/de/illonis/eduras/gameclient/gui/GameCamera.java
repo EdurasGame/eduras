@@ -13,7 +13,7 @@ public class GameCamera extends Rectangle {
 	private static final long serialVersionUID = 1L;
 	private double scale;
 	private int targetX, targetY;
-	private boolean running = true;
+	private boolean running;
 
 	GameCamera() {
 		super();
@@ -21,6 +21,10 @@ public class GameCamera extends Rectangle {
 		targetX = 0;
 		targetY = 0;
 		scale = 1;
+	}
+
+	void startMoving() {
+		running = true;
 		Thread t = new Thread(cameraMover);
 		t.setName("CameraMover");
 		t.start();

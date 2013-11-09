@@ -15,7 +15,7 @@ import de.illonis.eduras.shapes.data.ShapeParser;
 
 /**
  * Prefetches graphics and shapes and loads them into cache.<br>
- * This loaded does not return any data because loaded values are written to
+ * This loader does not return any data because loaded values are written to
  * {@link ImageCache}.
  * 
  * @author illonis
@@ -41,6 +41,12 @@ public class GraphicsPreLoader extends AsyncLoader<Void> {
 		int n = shapeInfo.size();
 		int i = 0;
 		while (it.hasNext()) {
+			try {
+				// make it least a while.
+				Thread.sleep(1500);
+			} catch (InterruptedException e) {
+
+			}
 			Map.Entry<ShapeType, String> pair = (it.next());
 			try {
 				Vector2D[] verts = ShapeParser.readShape(ShapeParser.class
@@ -52,7 +58,9 @@ public class GraphicsPreLoader extends AsyncLoader<Void> {
 			}
 			i++;
 			// shapes represent the first half of loading, graphics the other
-			setProgress((int) Math.floor((double) i / n) * 50);
+			int progress = (int) Math.floor((double) i / n) * 50;
+			System.out.println("prog: " + progress);
+			setProgress(progress);
 			it.remove(); // avoids a ConcurrentModificationException
 		}
 	}

@@ -42,7 +42,7 @@ public class ServerLogic implements GameLogicInterface {
 
 	private final GameInformation gameInfo;
 	private final ObjectFactory objectFactory;
-	private final LogicGameWorker lgw;
+	private LogicGameWorker lgw;
 	private final ListenerHolder<GameEventListener> listenerHolder;
 
 	/**
@@ -54,11 +54,8 @@ public class ServerLogic implements GameLogicInterface {
 	public ServerLogic(GameInformation g) {
 		listenerHolder = new ListenerHolder<GameEventListener>();
 		this.gameInfo = g;
+		startWorker();
 		objectFactory = new ObjectFactory(this);
-		lgw = new LogicGameWorker(gameInfo, listenerHolder);
-		Thread gameWorker = new Thread(lgw);
-		gameWorker.setName("ServerLogicGameWorker");
-		gameWorker.start();
 	}
 
 	@Override
@@ -260,13 +257,21 @@ public class ServerLogic implements GameLogicInterface {
 	}
 
 	@Override
-	public void onShutdown() {
+	public void stopWorker() {
 		lgw.stop();
 	}
 
 	@Override
 	public ObjectFactory getObjectFactory() {
 		return objectFactory;
+	}
+
+	@Override
+	public void startWorker() {
+		lgw = new LogicGameWorker(gameInfo, listenerHolder);
+		Thread gameWorker = new Thread(lgw);
+		gameWorker.setName("ServerLogicGameWorker");
+		gameWorker.start();
 	}
 
 }
