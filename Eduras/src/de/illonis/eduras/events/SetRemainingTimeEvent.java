@@ -19,6 +19,7 @@ public class SetRemainingTimeEvent extends GameEvent {
 	public SetRemainingTimeEvent(long remainingTime) {
 		super(GameEventNumber.SET_REMAININGTIME);
 		this.remainingTime = remainingTime;
+		putArgument(remainingTime);
 	}
 
 	/**

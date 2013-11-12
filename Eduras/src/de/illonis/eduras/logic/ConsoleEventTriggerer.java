@@ -2,6 +2,7 @@ package de.illonis.eduras.logic;
 
 import java.util.Collection;
 
+import de.eduras.eventingserver.ServerInterface;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
 import de.illonis.eduras.gamemodes.Deathmatch;
 import de.illonis.eduras.gamemodes.GameMode;
@@ -11,7 +12,6 @@ import de.illonis.eduras.maps.FunMap;
 import de.illonis.eduras.maps.ManyBlocks;
 import de.illonis.eduras.maps.Map;
 import de.illonis.eduras.maps.SimpleMap;
-import de.illonis.eduras.networking.Server;
 import de.illonis.eduras.units.PlayerMainFigure;
 
 /**
@@ -23,7 +23,7 @@ import de.illonis.eduras.units.PlayerMainFigure;
 public class ConsoleEventTriggerer {
 
 	private ServerEventTriggerer triggerer;
-	private Server server;
+	private ServerInterface server;
 
 	/**
 	 * Creates a new ConsoleEventTriggerer that uses the information and
@@ -35,7 +35,7 @@ public class ConsoleEventTriggerer {
 	 *            the server.
 	 */
 	public ConsoleEventTriggerer(ServerEventTriggerer serverTriggerer,
-			Server server) {
+			ServerInterface server) {
 		this.triggerer = serverTriggerer;
 		this.server = server;
 	}
@@ -65,7 +65,7 @@ public class ConsoleEventTriggerer {
 			return false;
 		}
 
-		server.handleClientDisconnect(server.getClientById(ownerId));
+		triggerer.kickPlayer(ownerId);
 
 		return true;
 	}
@@ -166,6 +166,6 @@ public class ConsoleEventTriggerer {
 	 * messages or clients anymore.
 	 */
 	public void shutDown() {
-		server.stopServer();
+		server.stop();
 	}
 }

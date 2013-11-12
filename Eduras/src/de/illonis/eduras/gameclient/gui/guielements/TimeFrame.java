@@ -38,8 +38,9 @@ public class TimeFrame extends RenderedGuiObject {
 		g2d.setColor(Color.LIGHT_GRAY);
 		g2d.fillRect(screenX, screenY, WIDTH, HEIGHT);
 		g2d.setColor(Color.BLACK);
-		g2d.drawString(getRemainingTimeString(), screenX + WIDTH - textWidth
-				- 5, screenY + 20);
+		if (timeString != null)
+			g2d.drawString(timeString, screenX + WIDTH - textWidth - 5,
+					screenY + 20);
 	}
 
 	private String getRemainingTimeString() {
@@ -56,5 +57,11 @@ public class TimeFrame extends RenderedGuiObject {
 
 	@Override
 	public void onPlayerInformationReceived() {
+	}
+
+	@Override
+	public void onGameReady() {
+		// TODO Auto-generated method stub
+
 	}
 }

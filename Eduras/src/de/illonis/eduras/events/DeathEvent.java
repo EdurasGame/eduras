@@ -22,6 +22,9 @@ public class DeathEvent extends GameEvent {
 		super(GameEventNumber.DEATH);
 		this.killed = killed;
 		this.killerOwner = killerOwner;
+
+		putArgument(killed);
+		putArgument(killerOwner);
 	}
 
 	/**

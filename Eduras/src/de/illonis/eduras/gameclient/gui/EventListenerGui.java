@@ -178,4 +178,10 @@ public class EventListenerGui implements GameEventListener {
 		}
 
 	}
+
+	@Override
+	public void onGameReady() {
+		// TODO Auto-generated method stub
+
+	}
 }

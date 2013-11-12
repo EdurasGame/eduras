@@ -3,6 +3,9 @@
  */
 package de.illonis.eduras.events;
 
+import de.eduras.eventingserver.exceptions.TooFewArgumentsExceptions;
+import de.illonis.eduras.networking.EventParser;
+
 /**
  * Event for any movement to any direction.
  * 
@@ -64,4 +67,38 @@ public class MovementEvent extends ObjectEvent {
 		newYPos = val;
 	}
 
+	@Override
+	public Object getArgument(int i) throws TooFewArgumentsExceptions {
+		switch (getEventNumber()) {
+		case EventParser.SET_POS_TCP:
+		case EventParser.SET_POS_UDP:
+			switch (i) {
+			case 0:
+				return getObjectId();
+			case 1:
+				return newXPos;
+			case 2:
+				return newYPos;
+			default:
+				throw new TooFewArgumentsExceptions(i, 3);
+			}
+		default:
+			if (i == 0) {
+				return getObjectId();
+			} else {
+				throw new TooFewArgumentsExceptions(i, 1);
+			}
+		}
+	}
+
+	@Override
+	public int getNumberOfArguments() {
+		switch (getType()) {
+		case SET_POS_TCP:
+		case SET_POS_UDP:
+			return 3;
+		default:
+			return 1;
+		}
+	}
 }

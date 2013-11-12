@@ -1,6 +1,6 @@
 package de.illonis.eduras.events;
 
-import de.illonis.eduras.networking.ServerClient.ClientRole;
+import de.illonis.eduras.networking.ClientRole;
 
 /**
  * This class wraps information that have to be sent to the server on connection
@@ -9,10 +9,11 @@ import de.illonis.eduras.networking.ServerClient.ClientRole;
  * @author Florian Mai <florian.ren.mai@googlemail.com>
  * 
  */
-public class InitInformationEvent extends NetworkEvent {
+public class InitInformationEvent extends GameEvent {
 
 	private ClientRole role;
 	private String name;
+	private int clientId;
 
 	/**
 	 * Creates a new InitInformationEvent with the clientrole info and the
@@ -26,10 +27,15 @@ public class InitInformationEvent extends NetworkEvent {
 	 *            the id of the client.
 	 */
 	public InitInformationEvent(ClientRole role, String name, int clientId) {
-		super(NetworkEventNumber.INIT_INFORMATION, clientId);
+		super(GameEventNumber.INIT_INFORMATION);
 
+		this.clientId = clientId;
 		this.role = role;
 		this.name = name;
+
+		putArgument(role.toString());
+		putArgument(name);
+		putArgument(clientId);
 
 	}
 
@@ -49,6 +55,10 @@ public class InitInformationEvent extends NetworkEvent {
 	 */
 	public String getName() {
 		return name;
+	}
+
+	public int getClientId() {
+		return clientId;
 	}
 
 }

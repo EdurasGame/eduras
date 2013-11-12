@@ -13,11 +13,13 @@ import de.illonis.eduras.events.ClientRenameEvent;
 import de.illonis.eduras.events.GameEvent;
 import de.illonis.eduras.events.GameEvent.GameEventNumber;
 import de.illonis.eduras.events.GameInfoRequest;
+import de.illonis.eduras.events.InitInformationEvent;
 import de.illonis.eduras.events.ItemEvent;
 import de.illonis.eduras.events.SendUnitsEvent;
 import de.illonis.eduras.events.SetInteractModeEvent;
 import de.illonis.eduras.events.SwitchInteractModeEvent;
 import de.illonis.eduras.events.UserMovementEvent;
+import de.illonis.eduras.exceptions.InvalidNameException;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
 import de.illonis.eduras.gameobjects.MoveableGameObject.Direction;
 import de.illonis.eduras.interfaces.GameEventListener;
@@ -81,7 +83,7 @@ public class ServerLogic implements GameLogicInterface {
 		case INFORMATION_REQUEST:
 			ArrayList<GameEvent> infos = gameInfo.getAllInfosAsEvent();
 
-			getListener().onInformationRequested(infos,
+			gameInfo.getEventTriggerer().onInformationRequested(infos,
 					((GameInfoRequest) event).getRequester());
 
 			break;
@@ -101,7 +103,8 @@ public class ServerLogic implements GameLogicInterface {
 					+ " playerowner=" + p.getOwner());
 			p.setName(e.getName());
 
-			getListener().onClientRename(e);
+			getGame().getEventTriggerer().renamePlayer(e.getOwner(),
+					e.getName());
 
 			break;
 		case SEND_UNITS:
@@ -142,6 +145,27 @@ public class ServerLogic implements GameLogicInterface {
 		case ITEM_USE:
 			ItemEvent itemEvent = (ItemEvent) event;
 			handleItemEvent(itemEvent);
+			break;
+		case INIT_INFORMATION:
+			InitInformationEvent initInfoEvent = (InitInformationEvent) event;
+
+			// transfer information to client
+			GameInfoRequest gameInfos = new GameInfoRequest(
+					initInfoEvent.getClientId());
+			onGameEventAppeared(gameInfos);
+
+			// extract role and name if (initInfo.getRole() ==
+			// ClientRole.PLAYER)
+			getGame().getGameSettings().getGameMode()
+					.onConnect(initInfoEvent.getClientId());
+
+			String playerName = initInfoEvent.getName();
+			try {
+				onGameEventAppeared(new ClientRenameEvent(
+						initInfoEvent.getClientId(), playerName));
+			} catch (InvalidNameException e1) {
+				L.log(Level.SEVERE, "invalid client name", e1);
+			}
 			break;
 		default:
 			L.severe(Localization.getStringF("Server.networking.illegalevent",
@@ -186,7 +210,7 @@ public class ServerLogic implements GameLogicInterface {
 						GameEventNumber.ITEM_CD_START, itemEvent.getOwner(),
 						itemEvent.getSlotNum());
 
-				getListener().onCooldownStarted(cooldownEvent);
+				gameInfo.getEventTriggerer().onCooldownStarted(cooldownEvent);
 
 			}
 			break;

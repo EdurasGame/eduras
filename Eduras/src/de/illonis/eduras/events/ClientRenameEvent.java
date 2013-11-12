@@ -30,6 +30,7 @@ public class ClientRenameEvent extends OwnerGameEvent {
 		}
 
 		this.name = newName;
+		putArgument(newName);
 	}
 
 	/**

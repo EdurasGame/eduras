@@ -22,6 +22,7 @@ public class MatchEndEvent extends GameEvent {
 	public MatchEndEvent(int winnerId) {
 		super(GameEventNumber.MATCH_END);
 		this.winnerId = winnerId;
+		putArgument(winnerId);
 	}
 
 	/**

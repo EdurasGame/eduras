@@ -6,12 +6,12 @@ package de.illonis.eduras.events;
  * @author illonis
  * 
  */
-public class GameReadyEvent extends NetworkEvent {
+public class GameReadyEvent extends GameEvent {
 
 	/**
 	 * Creates a new GameReadyEvent.
 	 */
 	public GameReadyEvent() {
-		super(NetworkEventNumber.GAME_READY, -1);
+		super(GameEventNumber.GAME_READY);
 	}
 }

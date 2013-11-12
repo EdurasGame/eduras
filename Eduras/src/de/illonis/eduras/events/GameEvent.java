@@ -1,5 +1,7 @@
 package de.illonis.eduras.events;
 
+import de.eduras.eventingserver.Event;
+
 /**
  * Super class for all events. Contains an enum for every existing event.
  * 
@@ -29,7 +31,7 @@ public abstract class GameEvent extends Event {
 				133), MATCH_END(190), NO_EVENT(99), MISSILE_LAUNCH(301), LOOT_ITEM_EVENT(
 				302), SET_GAMEMODE(140), SET_INTERACTMODE(141), SET_KILLS(150), SET_DEATHS(
 				151), SET_REMAININGTIME(180), SET_TEAMS(191), ADD_PLAYER_TO_TEAM(
-				192), SET_POS_TCP(106);
+				192), SET_POS_TCP(106), INIT_INFORMATION(203), GAME_READY(204);
 		private int number;
 
 		GameEventNumber(int num) {
@@ -54,6 +56,7 @@ public abstract class GameEvent extends Event {
 	 *            The type of the new GameEvent instance.
 	 */
 	public GameEvent(GameEventNumber type) {
+		super(type.number);
 		this.type = type;
 	}
 

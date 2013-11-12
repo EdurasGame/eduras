@@ -28,6 +28,7 @@ import de.illonis.eduras.interfaces.GameEventListener;
 public class GuiEventReactor implements GameEventListener {
 
 	private final EventListenerGui ui;
+	private final NetworkEventReactor networkEventReactor;
 
 	/**
 	 * Creates a new reactor.
@@ -35,7 +36,9 @@ public class GuiEventReactor implements GameEventListener {
 	 * @param ui
 	 *            associated user interface event listener.
 	 */
-	public GuiEventReactor(EventListenerGui ui) {
+	public GuiEventReactor(EventListenerGui ui,
+			NetworkEventReactor networkEventReactor) {
+		this.networkEventReactor = networkEventReactor;
 		this.ui = ui;
 	}
 
@@ -123,5 +126,10 @@ public class GuiEventReactor implements GameEventListener {
 			ui.onInteractModeChanged(setModeEvent);
 		}
 
+	}
+
+	@Override
+	public void onGameReady() {
+		networkEventReactor.onGameReady();
 	}
 }

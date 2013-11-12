@@ -102,7 +102,7 @@ public class ClientFrame extends JFrame implements NetworkEventReactor,
 	 */
 	public void initUserInterface() {
 		userInterface = new UserInterface(client.getInformationProvider(),
-				client, client);
+				client, client, this);
 		gamePanel.initRenderer(camera, userInterface,
 				client.getInformationProvider());
 	}
@@ -274,13 +274,6 @@ public class ClientFrame extends JFrame implements NetworkEventReactor,
 	@Override
 	public void hideStatWindow() {
 		userInterface.hideStatWindow();
-	}
-
-	@Override
-	public void onUDPReady(int clientId) {
-
-		// do nothing
-
 	}
 
 }

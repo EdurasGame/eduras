@@ -169,4 +169,9 @@ public class NotificationPanel extends RenderedGuiObject {
 			return;
 		addNotification("entered " + setModeEvent.getNewMode());
 	}
+
+	@Override
+	public void onGameReady() {
+
+	}
 }

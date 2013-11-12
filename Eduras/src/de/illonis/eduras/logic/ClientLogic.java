@@ -284,6 +284,9 @@ public class ClientLogic implements GameLogicInterface {
 				long remainingTime = remainingTimeEvent.getRemainingTime();
 				gameInfo.getGameSettings().changeTime(remainingTime);
 				break;
+			case GAME_READY:
+				getListener().onGameReady();
+				break;
 			default:
 				break;
 			}

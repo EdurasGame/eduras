@@ -23,6 +23,8 @@ public abstract class ObjectEvent extends GameEvent {
 	public ObjectEvent(GameEventNumber type, int id) {
 		super(type);
 		this.objectId = id;
+
+		putArgument(id);
 	}
 
 	/**

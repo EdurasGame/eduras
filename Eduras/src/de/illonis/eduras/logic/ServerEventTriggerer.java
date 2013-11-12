@@ -1,8 +1,14 @@
 package de.illonis.eduras.logic;
 
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import de.eduras.eventingserver.Event;
+import de.eduras.eventingserver.Event.PacketType;
+import de.eduras.eventingserver.ServerInterface;
+import de.eduras.eventingserver.exceptions.TooFewArgumentsExceptions;
+import de.eduras.eventingserver.test.NoSuchClientException;
 import de.illonis.edulog.EduLog;
 import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.ObjectFactory.ObjectType;
@@ -15,11 +21,14 @@ import de.illonis.eduras.events.ClientRenameEvent;
 import de.illonis.eduras.events.DeathEvent;
 import de.illonis.eduras.events.GameEvent;
 import de.illonis.eduras.events.GameEvent.GameEventNumber;
+import de.illonis.eduras.events.GameReadyEvent;
+import de.illonis.eduras.events.ItemEvent;
 import de.illonis.eduras.events.MatchEndEvent;
 import de.illonis.eduras.events.MovementEvent;
 import de.illonis.eduras.events.ObjectFactoryEvent;
 import de.illonis.eduras.events.SetBooleanGameObjectAttributeEvent;
 import de.illonis.eduras.events.SetGameModeEvent;
+import de.illonis.eduras.events.SetGameObjectAttributeEvent;
 import de.illonis.eduras.events.SetIntegerGameObjectAttributeEvent;
 import de.illonis.eduras.events.SetItemSlotEvent;
 import de.illonis.eduras.events.SetOwnerEvent;
@@ -40,9 +49,6 @@ import de.illonis.eduras.items.weapons.Missile;
 import de.illonis.eduras.maps.InitialObjectData;
 import de.illonis.eduras.maps.Map;
 import de.illonis.eduras.math.Vector2D;
-import de.illonis.eduras.networking.ClientSender.PacketType;
-import de.illonis.eduras.networking.Server;
-import de.illonis.eduras.networking.ServerSender;
 import de.illonis.eduras.units.PlayerMainFigure;
 import de.illonis.eduras.units.Unit;
 
@@ -61,8 +67,7 @@ public class ServerEventTriggerer implements EventTriggerer {
 
 	private final GameLogicInterface logic;
 	private final GameInformation gameInfo;
-
-	private ServerSender serverSender;
+	private final ServerInterface server;
 
 	/**
 	 * Initializes a new {@link ServerEventTriggerer}.
@@ -70,8 +75,9 @@ public class ServerEventTriggerer implements EventTriggerer {
 	 * @param logic
 	 *            the logic used.
 	 */
-	public ServerEventTriggerer(GameLogicInterface logic) {
+	public ServerEventTriggerer(GameLogicInterface logic, ServerInterface server) {
 		this.logic = logic;
+		this.server = server;
 		this.gameInfo = logic.getGame();
 	}
 
@@ -103,6 +109,23 @@ public class ServerEventTriggerer implements EventTriggerer {
 
 	}
 
+	private void sendEventToAll(Event event) {
+		try {
+			server.sendEventToAll(event);
+		} catch (IllegalArgumentException | TooFewArgumentsExceptions e) {
+			L.warning("ServerEventTriggerer: " + e.getMessage());
+		}
+	}
+
+	private void sendEventToClient(Event event, int client) {
+		try {
+			server.sendEventToClient(event, client);
+		} catch (IllegalArgumentException | NoSuchClientException
+				| TooFewArgumentsExceptions e) {
+			L.warning("ServerEventTriggerer: " + e.getMessage());
+		}
+	}
+
 	@Override
 	public void sendUnit(int objectId, Vector2D target)
 			throws ObjectNotFoundException, UnitNotControllableException {
@@ -124,6 +147,7 @@ public class ServerEventTriggerer implements EventTriggerer {
 				GameEventNumber.OBJECT_REMOVE, ObjectType.NO_OBJECT);
 		event.setId(objectId);
 		logic.getObjectFactory().onObjectFactoryEventAppeared(event);
+		sendEvents(event);
 	}
 
 	@Override
@@ -265,16 +289,6 @@ public class ServerEventTriggerer implements EventTriggerer {
 
 	}
 
-	/**
-	 * Sets the server sender.
-	 * 
-	 * @param sender
-	 *            The sender.
-	 */
-	public void setServerSender(ServerSender sender) {
-		this.serverSender = sender;
-	}
-
 	@Override
 	public void setHealth(int id, int newHealth) {
 		GameObject object = gameInfo.findObjectById(id);
@@ -317,8 +331,8 @@ public class ServerEventTriggerer implements EventTriggerer {
 			ClientRenameEvent renameEvent = new ClientRenameEvent(ownerId,
 					newName);
 			// TODO: check if this call causes recursion due to repeated sending
-			// by logic.
-			logic.onGameEventAppeared(renameEvent);
+			// by logic (fma) It does!!? (/fma)
+			// logic.onGameEventAppeared(renameEvent);
 			sendEvents(renameEvent);
 		} catch (InvalidNameException e) {
 			L.log(Level.WARNING, "invalid user name", e);
@@ -470,7 +484,7 @@ public class ServerEventTriggerer implements EventTriggerer {
 	 */
 	private void sendEvents(GameEvent... events) {
 		for (GameEvent gameEvent : events) {
-			serverSender.sendEventToAll(gameEvent);
+			sendEventToAll(gameEvent);
 		}
 	}
 
@@ -547,7 +561,52 @@ public class ServerEventTriggerer implements EventTriggerer {
 			// someone to join the server
 		}
 
-		Server server = serverSender.getServer();
-		server.kickClient(server.getClientById(ownerId));
+		server.kickClient(ownerId);
 	}
+
+	@Override
+	public void onInformationRequested(ArrayList<GameEvent> infos, int owner) {
+		try {
+			for (GameEvent event : infos) {
+
+				sendEventToClient(event, owner);
+
+			}
+			sendEventToClient(new GameReadyEvent(), owner);
+		} catch (IllegalArgumentException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	@Override
+	public void onCooldownStarted(ItemEvent event) {
+		sendEventToAll(event);
+
+	}
+
+	@Override
+	public void onObjectStateChanged(SetGameObjectAttributeEvent<?> event) {
+		sendEventToAll(event);
+
+	}
+
+	@Override
+	public void onObjectCreation(ObjectFactoryEvent event) {
+		sendEventToAll(event);
+
+	}
+
+	@Override
+	public void onNewObjectPosition(GameObject o) {
+
+		MovementEvent moveEvent;
+
+		moveEvent = new MovementEvent(GameEventNumber.SET_POS_UDP, o.getId());
+		moveEvent.setNewXPos(o.getXPosition());
+		moveEvent.setNewYPos(o.getYPosition());
+
+		sendEventToAll(moveEvent);
+	}
+
 }

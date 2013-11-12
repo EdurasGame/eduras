@@ -18,6 +18,8 @@ public class SetGameModeEvent extends GameEvent {
 	public SetGameModeEvent(String newMode) {
 		super(GameEventNumber.SET_GAMEMODE);
 		this.newMode = newMode;
+
+		putArgument(newMode);
 	}
 
 	/**

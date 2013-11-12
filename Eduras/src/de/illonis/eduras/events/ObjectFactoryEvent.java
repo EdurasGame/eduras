@@ -1,5 +1,10 @@
 package de.illonis.eduras.events;
 
+import java.util.logging.Logger;
+
+import de.eduras.eventingserver.exceptions.TooFewArgumentsExceptions;
+import de.illonis.edulog.EduLog;
+import de.illonis.eduras.EdurasServer;
 import de.illonis.eduras.ObjectFactory.ObjectType;
 
 /**
@@ -11,6 +16,9 @@ import de.illonis.eduras.ObjectFactory.ObjectType;
  * 
  */
 public class ObjectFactoryEvent extends OwnerGameEvent {
+
+	private final static Logger L = EduLog.getLoggerFor(EdurasServer.class
+			.getName());
 
 	private ObjectType objectType;
 	private int id;
@@ -88,4 +96,43 @@ public class ObjectFactoryEvent extends OwnerGameEvent {
 		return id >= 0;
 	}
 
+	@Override
+	public Object getArgument(int i) throws TooFewArgumentsExceptions {
+		switch (getType()) {
+		case OBJECT_CREATE:
+			switch (i) {
+			case 0:
+				return getId();
+			case 1:
+				return getOwner();
+			case 2:
+				return objectType.getNumber();
+			default:
+				throw new TooFewArgumentsExceptions(i, 2);
+			}
+		case OBJECT_REMOVE:
+			switch (i) {
+			case 0:
+				return getId();
+			default:
+				throw new TooFewArgumentsExceptions(i, 0);
+			}
+		default:
+			L.warning("There is an invalid event in ObjectFactoryEvent: "
+					+ getType().getNumber());
+			return null;
+		}
+	}
+
+	@Override
+	public int getNumberOfArguments() {
+		switch (getType()) {
+		case OBJECT_CREATE:
+			return 3;
+		case OBJECT_REMOVE:
+			return 1;
+		default:
+			return 0;
+		}
+	}
 }

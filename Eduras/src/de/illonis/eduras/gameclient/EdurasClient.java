@@ -27,7 +27,6 @@ import javax.swing.ListCellRenderer;
 import de.illonis.edulog.EduLog;
 import de.illonis.eduras.gameclient.gui.ClientFrame;
 import de.illonis.eduras.gameclient.gui.FullScreenClientFrame;
-import de.illonis.eduras.networking.Client;
 
 /**
  * Eduras? Game client for end user.
@@ -39,6 +38,10 @@ public class EdurasClient {
 
 	private final static Logger L = EduLog.getLoggerFor(EdurasClient.class
 			.getName());
+
+	public static final int CONNECT_TIMEOUT = 10000;
+
+	private static int PORT = 4386;
 
 	/**
 	 * Starts Eduras? client.
@@ -56,8 +59,8 @@ public class EdurasClient {
 
 		if (args.length > 0) {
 			try {
-				Client.PORT = Integer.parseInt(args[0]);
-				if (Client.PORT < 1024 || Client.PORT > 49151) {
+				PORT = Integer.parseInt(args[0]);
+				if (PORT < 1024 || PORT > 49151) {
 					throw new Exception();
 				}
 			} catch (Exception e) {

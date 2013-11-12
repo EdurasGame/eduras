@@ -12,14 +12,17 @@ import java.util.Enumeration;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import de.eduras.eventingserver.Server;
+import de.eduras.eventingserver.ServerInterface;
 import de.illonis.edulog.EduLog;
-import de.illonis.eduras.exceptions.ServerNotReadyForStartException;
 import de.illonis.eduras.locale.Localization;
 import de.illonis.eduras.logic.ConsoleEventTriggerer;
 import de.illonis.eduras.logic.ServerEventTriggerer;
 import de.illonis.eduras.logic.ServerLogic;
 import de.illonis.eduras.maps.FunMap;
-import de.illonis.eduras.networking.Server;
+import de.illonis.eduras.networking.EventParser;
+import de.illonis.eduras.networking.InetPolizei;
+import de.illonis.eduras.networking.ServerNetworker;
 import de.illonis.eduras.networking.discover.MetaServer;
 import de.illonis.eduras.networking.discover.ServerDiscoveryListener;
 import de.illonis.eduras.networking.discover.ServerSearcher;
@@ -33,8 +36,12 @@ import de.illonis.eduras.serverconsole.commands.CommandInitializer;
  * @author illonis
  * 
  */
-public class Eduras {
-	private final static Logger L = EduLog.getLoggerFor(Eduras.class.getName());
+public class EdurasServer {
+
+	private final static int DEFAULT_PORT = 4387;
+	private final static String DEFAULT_NAME = "Eduras Server";
+	private final static Logger L = EduLog.getLoggerFor(EdurasServer.class
+			.getName());
 
 	/**
 	 * Starts an Eduras? server.
@@ -57,8 +64,8 @@ public class Eduras {
 		// EduLog.setBasicLogLimit(Level.WARNING);
 		// EduLog.setConsoleLogLimit(Level.WARNING);
 
-		int port = Server.DEFAULT_PORT;
-		String name = Server.DEFAULT_NAME;
+		int port = DEFAULT_PORT;
+		String name = DEFAULT_NAME;
 
 		if (args.length > 0) {
 			name = args[0];
@@ -75,27 +82,23 @@ public class Eduras {
 
 		L.info(Localization.getString("Server.startstart"));
 
-		Server server = new Server(port, name);
+		ServerInterface server = new Server();
 
 		GameInformation gameInfo = new GameInformation();
 		ServerLogic logic = new ServerLogic(gameInfo);
 
-		ServerEventTriggerer eventTriggerer = new ServerEventTriggerer(logic);
+		ServerEventTriggerer eventTriggerer = new ServerEventTriggerer(logic,
+				server);
 
-		eventTriggerer.setServerSender(server.getServerSender());
 		gameInfo.setEventTriggerer(eventTriggerer);
 
-		server.setGame(logic.getGame());
-		server.setLogic(logic, server);
+		server.setEventHandler(new EventParser(logic));
+		server.setNetworkEventHandler(new ServerNetworker());
+		server.setPolicy(new InetPolizei());
 
 		eventTriggerer.changeMap(new FunMap());
 
-		try {
-			server.start();
-		} catch (ServerNotReadyForStartException e) {
-			L.severe(Localization.getStringF("Server.notready", e.getMessage()));
-			return;
-		}
+		server.start(name, port);
 
 		getInterfaces();
 

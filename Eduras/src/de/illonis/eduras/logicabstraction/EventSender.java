@@ -3,18 +3,20 @@
  */
 package de.illonis.eduras.logicabstraction;
 
-import de.illonis.eduras.events.Event;
+import java.util.logging.Logger;
+
+import de.eduras.eventingserver.ClientInterface;
+import de.eduras.eventingserver.Event;
+import de.eduras.eventingserver.exceptions.TooFewArgumentsExceptions;
+import de.illonis.edulog.EduLog;
 import de.illonis.eduras.events.GameEvent;
 import de.illonis.eduras.events.GameEvent.GameEventNumber;
-import de.illonis.eduras.events.NetworkEvent;
 import de.illonis.eduras.exceptions.MessageNotSupportedException;
 import de.illonis.eduras.exceptions.WrongEventTypeException;
 import de.illonis.eduras.interfaces.GameLogicInterface;
-import de.illonis.eduras.networking.Client;
-import de.illonis.eduras.networking.ClientSender.PacketType;
+import de.illonis.eduras.logic.ServerEventTriggerer;
+import de.illonis.eduras.networking.EventParser;
 import de.illonis.eduras.networking.InetPolizei;
-import de.illonis.eduras.networking.NetworkMessageSerializer;
-import de.illonis.eduras.networking.NetworkPolicy;
 
 /**
  * This class provides a connection between GUI and logic for sending events, on
@@ -27,8 +29,11 @@ import de.illonis.eduras.networking.NetworkPolicy;
  */
 public class EventSender {
 
-	Client client;
+	ClientInterface client;
 	GameLogicInterface logic;
+
+	private final static Logger L = EduLog
+			.getLoggerFor(ServerEventTriggerer.class.getName());
 
 	/**
 	 * Creates an EventSender that uses the given client to forward events via
@@ -39,9 +44,13 @@ public class EventSender {
 	 * @param logic
 	 *            The logic to use.
 	 */
-	EventSender(Client client, GameLogicInterface logic) {
+	EventSender(ClientInterface client, GameLogicInterface logic) {
 
 		this.client = client;
+		client.setEventHandler(new EventParser(logic));
+
+		// TODO: Replace inet polizei with something better!
+		client.setNetworkPolicy(new InetPolizei());
 		this.logic = logic;
 	}
 
@@ -62,44 +71,19 @@ public class EventSender {
 	public void sendEvent(Event event) throws WrongEventTypeException,
 			MessageNotSupportedException {
 
-		// TODO: Think of a rearragement of the event to make it fit better to a
-		// distinction of events.
-
-		// TODO: Replace inet polizei with something better!
-		NetworkPolicy policy = new InetPolizei();
-		PacketType networkType = policy.determinePacketType(event);
-
-		if (event instanceof NetworkEvent) {
-			NetworkEvent networkEvent = (NetworkEvent) event;
-			sendNetworkEvent(networkEvent, networkType);
-			return;
-		}
-
 		GameEvent gameEvent = (GameEvent) event;
 
-		if (!(gameEvent.getType().getNumber() < 100)) {
+		if (!(gameEvent.getType().getNumber() < 100 || gameEvent.getType()
+				.getNumber() > 200)) {
 			throw new WrongEventTypeException(gameEvent);
 		}
 
-		String msg = NetworkMessageSerializer.serialize(event);
-
-		client.sendMessage(msg, networkType);
+		try {
+			client.sendEvent(gameEvent);
+		} catch (IllegalArgumentException | TooFewArgumentsExceptions e) {
+			L.warning("EventSender: " + e.getMessage());
+		}
 		if (gameEvent.getType() == GameEventNumber.SET_POS_UDP)
 			logic.onGameEventAppeared(gameEvent);
-	}
-
-	/**
-	 * Sends a networkevent.
-	 * 
-	 * @param event
-	 *            The event o send.
-	 * @param type
-	 * @throws MessageNotSupportedException
-	 */
-	private void sendNetworkEvent(NetworkEvent event, PacketType type)
-			throws MessageNotSupportedException {
-		String msg = NetworkMessageSerializer.serialize(event);
-
-		client.sendMessage(msg, type);
 	}
 }

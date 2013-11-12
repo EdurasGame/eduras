@@ -91,4 +91,9 @@ public class PlayerStatBar extends RenderedGuiObject {
 		barWidth = (int) Math.round(percent * MAX_WIDTH);
 	}
 
+	@Override
+	public void onGameReady() {
+
+	}
+
 }

@@ -150,4 +150,10 @@ public class StatisticsWindow extends RenderedGuiObject {
 	@Override
 	public void onPlayerInformationReceived() {
 	}
+
+	@Override
+	public void onGameReady() {
+		// TODO Auto-generated method stub
+
+	}
 }

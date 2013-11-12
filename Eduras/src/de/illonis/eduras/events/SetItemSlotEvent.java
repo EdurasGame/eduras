@@ -45,4 +45,22 @@ public class SetItemSlotEvent extends ObjectEvent {
 		return itemSlot;
 	}
 
+	@Override
+	public Object getArgument(int i) {
+		switch (i) {
+		case 0:
+			return owner;
+		case 1:
+			return getObjectId();
+		case 2:
+			return itemSlot;
+		}
+		return i;
+	}
+
+	@Override
+	public int getNumberOfArguments() {
+		return 3;
+	}
+
 }

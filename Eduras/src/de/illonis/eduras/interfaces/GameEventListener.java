@@ -161,4 +161,6 @@ public interface GameEventListener {
 	 *            mode change event
 	 */
 	void onInteractModeChanged(SetInteractModeEvent setModeEvent);
+
+	void onGameReady();
 }

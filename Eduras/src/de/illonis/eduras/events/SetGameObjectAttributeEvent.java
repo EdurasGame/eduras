@@ -26,6 +26,8 @@ public abstract class SetGameObjectAttributeEvent<T> extends ObjectEvent {
 			T newValue) {
 		super(type, objectId);
 		this.newValue = newValue;
+
+		putArgument(newValue);
 	}
 
 	/**
@@ -36,4 +38,5 @@ public abstract class SetGameObjectAttributeEvent<T> extends ObjectEvent {
 	public final T getNewValue() {
 		return newValue;
 	}
+
 }

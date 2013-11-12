@@ -144,7 +144,7 @@ public class LogicGameWorker implements Runnable {
 					((MoveableGameObject) o).onMove(delta);
 					if (listenerHolder.hasListener())
 						listenerHolder.getListener().onNewObjectPosition(o);
-
+					gameInformation.getEventTriggerer().onNewObjectPosition(o);
 				}
 			}
 		}

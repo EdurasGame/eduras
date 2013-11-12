@@ -6,9 +6,10 @@ package de.illonis.eduras.logicabstraction;
 import java.io.IOException;
 import java.net.InetAddress;
 
+import de.eduras.eventingserver.Client;
+import de.eduras.eventingserver.ClientInterface;
+import de.eduras.eventingserver.ClientNetworkEventHandler;
 import de.illonis.eduras.interfaces.GameLogicInterface;
-import de.illonis.eduras.interfaces.NetworkEventListener;
-import de.illonis.eduras.networking.Client;
 
 /**
  * This class provides a connection between the GUI and the network.
@@ -18,7 +19,7 @@ import de.illonis.eduras.networking.Client;
  */
 public class NetworkManager {
 
-	Client client;
+	ClientInterface client;
 
 	/**
 	 * Creates a new NetworkManager with the given logic.
@@ -28,7 +29,7 @@ public class NetworkManager {
 	 * 
 	 */
 	NetworkManager(GameLogicInterface logic) {
-		client = new Client(logic);
+		client = new Client();
 	}
 
 	/**
@@ -42,21 +43,25 @@ public class NetworkManager {
 	 *             when connection establishing or initialization failed.
 	 */
 	public void connect(InetAddress addr, int port) throws IOException {
-		client.connect(addr, port);
+		client.connect(addr.getHostAddress(), port);
 	}
 
-	Client getClient() {
+	ClientInterface getClient() {
 		return client;
+	}
+
+	public int getClientId() {
+		return client.getClientId();
 	}
 
 	/**
 	 * Determines where NetworkEvents are forwarded to.
 	 * 
-	 * @param listener
+	 * @param handler
 	 *            The listener to forward NetworkEvents to.
 	 */
-	public void setNetworkEventListener(NetworkEventListener listener) {
-		client.setNetworkEventListener(listener);
+	public void setNetworkEventHandler(ClientNetworkEventHandler handler) {
+		client.setNetworkEventHandler(handler);
 	}
 
 	/**

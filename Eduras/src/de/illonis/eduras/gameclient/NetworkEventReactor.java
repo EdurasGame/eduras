@@ -47,12 +47,4 @@ public interface NetworkEventReactor {
 	 */
 	void onGameReady();
 
-	/**
-	 * Indicates that the server successfully received the initial UDP message
-	 * from the client.
-	 * 
-	 * @param clientId
-	 *            The id of the client.
-	 */
-	void onUDPReady(int clientId);
 }

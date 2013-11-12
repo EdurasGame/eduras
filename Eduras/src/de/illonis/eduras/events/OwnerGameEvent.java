@@ -32,6 +32,7 @@ public class OwnerGameEvent extends GameEvent {
 	public OwnerGameEvent(GameEventNumber type, int owner) {
 		super(type);
 		this.owner = owner;
+		putArgument(owner);
 	}
 
 	/**
@@ -51,5 +52,6 @@ public class OwnerGameEvent extends GameEvent {
 	 */
 	public final void setOwner(int owner) {
 		this.owner = owner;
+		putArgument(owner);
 	}
 }

@@ -33,7 +33,7 @@ import de.illonis.eduras.exceptions.InvalidValueEnteredException;
 import de.illonis.eduras.gameclient.gui.animation.LoginAnimation;
 import de.illonis.eduras.images.ImageFiler;
 import de.illonis.eduras.locale.Localization;
-import de.illonis.eduras.networking.ServerClient.ClientRole;
+import de.illonis.eduras.networking.ClientRole;
 import de.illonis.eduras.networking.discover.ServerFoundListener;
 import de.illonis.eduras.networking.discover.ServerInfo;
 

@@ -1,10 +1,17 @@
 package de.illonis.eduras.logic;
 
+import java.util.ArrayList;
+
 import de.illonis.eduras.ObjectFactory.ObjectType;
 import de.illonis.eduras.Team;
 import de.illonis.eduras.ai.movement.UnitNotControllableException;
+import de.illonis.eduras.events.GameEvent;
+import de.illonis.eduras.events.ItemEvent;
+import de.illonis.eduras.events.ObjectFactoryEvent;
+import de.illonis.eduras.events.SetGameObjectAttributeEvent;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
 import de.illonis.eduras.gamemodes.GameMode;
+import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.items.Item;
 import de.illonis.eduras.maps.Map;
 import de.illonis.eduras.math.Vector2D;
@@ -277,4 +284,15 @@ public interface EventTriggerer {
 	 *            The player's id.
 	 */
 	void kickPlayer(int ownerId);
+
+	public void onInformationRequested(ArrayList<GameEvent> infos, int owner);
+
+	public void onCooldownStarted(ItemEvent event);
+
+	public void onObjectStateChanged(SetGameObjectAttributeEvent<?> event);
+
+	public void onObjectCreation(ObjectFactoryEvent event);
+
+	public void onNewObjectPosition(GameObject o);
+
 }

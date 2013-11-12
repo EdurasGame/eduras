@@ -53,7 +53,7 @@ public class InformationProvider implements InfoInterface {
 	 * @return owner id.
 	 */
 	public int getOwnerID() {
-		return networkManager.getClient().getOwnerId();
+		return networkManager.getClient().getClientId();
 	}
 
 	/**

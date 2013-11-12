@@ -59,4 +59,5 @@ public interface GameLogicInterface {
 	 * @return object factory.
 	 */
 	public ObjectFactory getObjectFactory();
+
 }

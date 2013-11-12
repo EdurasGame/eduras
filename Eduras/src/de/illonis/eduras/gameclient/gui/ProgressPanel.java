@@ -20,10 +20,11 @@ import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.SwingWorker;
 
+import de.eduras.eventingserver.Client;
 import de.illonis.edulog.EduLog;
+import de.illonis.eduras.gameclient.EdurasClient;
 import de.illonis.eduras.images.ImageFiler;
 import de.illonis.eduras.logicabstraction.NetworkManager;
-import de.illonis.eduras.networking.Client;
 
 /**
  * Displays login progress. Also shows errors occuring while connecting.
@@ -170,7 +171,7 @@ public class ProgressPanel extends JPanel implements ActionListener {
 	 * Resets message.
 	 */
 	void reset() {
-		updateTimeMessage(Client.CONNECT_TIMEOUT / 1000);
+		updateTimeMessage(EdurasClient.CONNECT_TIMEOUT / 1000);
 		text.setIcon(icon);
 	}
 

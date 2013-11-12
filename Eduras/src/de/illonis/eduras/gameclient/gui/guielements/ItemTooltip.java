@@ -69,4 +69,9 @@ public class ItemTooltip extends Tooltip {
 		this.item = item;
 	}
 
+	@Override
+	public void onGameReady() {
+
+	}
+
 }

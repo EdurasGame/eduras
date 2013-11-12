@@ -23,6 +23,8 @@ public class GameInfoRequest extends GameEvent {
 	public GameInfoRequest(int requester) {
 		super(GameEventNumber.INFORMATION_REQUEST);
 		this.requester = requester;
+
+		putArgument(requester);
 	}
 
 	/**

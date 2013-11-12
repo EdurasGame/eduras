@@ -13,12 +13,11 @@ import java.util.logging.Logger;
 
 import javax.swing.JOptionPane;
 
+import de.eduras.eventingserver.Event;
 import de.illonis.edulog.EduLog;
-import de.illonis.eduras.events.Event;
 import de.illonis.eduras.events.GameEvent.GameEventNumber;
 import de.illonis.eduras.events.InitInformationEvent;
 import de.illonis.eduras.events.ItemEvent;
-import de.illonis.eduras.events.UDPHiEvent;
 import de.illonis.eduras.exceptions.MessageNotSupportedException;
 import de.illonis.eduras.exceptions.WrongEventTypeException;
 import de.illonis.eduras.gameclient.gui.ClientFrame;
@@ -33,7 +32,7 @@ import de.illonis.eduras.logicabstraction.EventSender;
 import de.illonis.eduras.logicabstraction.InformationProvider;
 import de.illonis.eduras.logicabstraction.NetworkManager;
 import de.illonis.eduras.math.Vector2D;
-import de.illonis.eduras.networking.ServerClient.ClientRole;
+import de.illonis.eduras.networking.ClientRole;
 import de.illonis.eduras.networking.discover.ServerFoundListener;
 import de.illonis.eduras.networking.discover.ServerSearcher;
 import de.illonis.eduras.settings.Settings;
@@ -68,14 +67,8 @@ public class GameClient implements GuiClickReactor, NetworkEventReactor,
 	private String clientName;
 	private ClientRole role;
 
-	private ConnectionState connectionState;
-
 	private enum ClickState {
 		DEFAULT, ITEM_SELECTED;
-	}
-
-	private enum ConnectionState {
-		NOT_CONNECTED, CONNECTING, CONNECTION_ESTABLISHED, UDP_READY, GAME_READY;
 	}
 
 	/**
@@ -86,7 +79,6 @@ public class GameClient implements GuiClickReactor, NetworkEventReactor,
 		clickListeners = new LinkedList<ClickableGuiElementInterface>();
 		triggerers = new LinkedList<TooltipTriggerer>();
 		currentClickState = ClickState.DEFAULT;
-		connectionState = ConnectionState.NOT_CONNECTED;
 		loadTools();
 		startup();
 	}
@@ -141,7 +133,7 @@ public class GameClient implements GuiClickReactor, NetworkEventReactor,
 		eventHandler = new ClientEventHandler(this);
 
 		nwm = initializer.getNetworkManager();
-		nwm.setNetworkEventListener(eventHandler);
+		nwm.setNetworkEventHandler(eventHandler);
 	}
 
 	/**
@@ -154,8 +146,6 @@ public class GameClient implements GuiClickReactor, NetworkEventReactor,
 	@Override
 	public void onConnected(int clientId) {
 
-		this.connectionState = ConnectionState.CONNECTION_ESTABLISHED;
-
 		if (clientId != getOwnerID()) // only handle my connection
 			return;
 		L.info("Connection to server established. OwnerId: "
@@ -164,31 +154,11 @@ public class GameClient implements GuiClickReactor, NetworkEventReactor,
 		keyHandler.addUserInputListener(frame);
 		frame.onConnected(clientId); // pass to gui
 
-		final int finalClientId = clientId;
-
-		class UDPHiSender extends Thread {
-
-			public UDPHiSender() {
-				super("UDPHiSender");
-			}
-
-			@Override
-			public void run() {
-				while (connectionState != ConnectionState.GAME_READY) {
-					try {
-						sendEvent(new UDPHiEvent(finalClientId));
-						sleep(50);
-					} catch (WrongEventTypeException
-							| MessageNotSupportedException
-							| InterruptedException e) {
-						L.log(Level.SEVERE, "Error sending UDP hi", e);
-						break;
-					}
-				}
-			}
+		try {
+			sendEvent(new InitInformationEvent(role, clientName, clientId));
+		} catch (WrongEventTypeException | MessageNotSupportedException e) {
+			L.log(Level.SEVERE, "Error sending initinformation event", e);
 		}
-
-		new UDPHiSender().start();
 	}
 
 	@Override
@@ -196,7 +166,6 @@ public class GameClient implements GuiClickReactor, NetworkEventReactor,
 		if (client == getOwnerID()) {
 			L.warning("Connection lost");
 			frame.onConnectionLost(client);
-			connectionState = ConnectionState.NOT_CONNECTED;
 		} else {
 			// TODO: other client left
 		}
@@ -206,7 +175,6 @@ public class GameClient implements GuiClickReactor, NetworkEventReactor,
 	public void onDisconnect(int clientId) {
 		L.info("Disconnected: " + clientId);
 		frame.onDisconnect(clientId);
-		connectionState = ConnectionState.NOT_CONNECTED;
 	}
 
 	/**
@@ -416,7 +384,6 @@ public class GameClient implements GuiClickReactor, NetworkEventReactor,
 
 	@Override
 	public void onGameReady() {
-		connectionState = ConnectionState.GAME_READY;
 		frame.onGameReady();
 	}
 
@@ -472,13 +439,4 @@ public class GameClient implements GuiClickReactor, NetworkEventReactor,
 		searcher.interrupt();
 	}
 
-	@Override
-	public void onUDPReady(int clientId) {
-		connectionState = ConnectionState.UDP_READY;
-		try {
-			sendEvent(new InitInformationEvent(role, clientName, clientId));
-		} catch (WrongEventTypeException | MessageNotSupportedException e) {
-			L.log(Level.SEVERE, "Error sending initinformation event", e);
-		}
-	}
 }

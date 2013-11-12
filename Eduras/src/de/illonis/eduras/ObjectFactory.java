@@ -92,7 +92,7 @@ public class ObjectFactory {
 	 *            {@link SetGameObjectAttributeEvent} that occured.
 	 */
 	public void onObjectAttributeChanged(SetGameObjectAttributeEvent<?> event) {
-		logic.getListener().onObjectStateChanged(event);
+		logic.getGame().getEventTriggerer().onObjectStateChanged(event);
 	}
 
 	/**
@@ -188,6 +188,7 @@ public class ObjectFactory {
 				go.setOwner(owner);
 				logic.getGame().addObject(go);
 				try {
+					logic.getGame().getEventTriggerer().onObjectCreation(event);
 					logic.getListener().onObjectCreation(event);
 				} catch (IllegalStateException e) {
 					// (jme) we need to catch it here because a listener is not
@@ -206,7 +207,6 @@ public class ObjectFactory {
 				mainFigure.getTeam().removePlayer(mainFigure);
 			}
 			logic.getGame().removeObject(objectToRemove);
-			logic.getListener().onObjectRemove(event);
 		}
 	}
 

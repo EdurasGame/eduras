@@ -3,7 +3,6 @@
  */
 package de.illonis.eduras.events;
 
-
 /**
  * Set the owner of an object to a new value.
  * 
@@ -37,5 +36,20 @@ public class SetOwnerEvent extends OwnerGameEvent {
 	 */
 	public int getObjectId() {
 		return objectId;
+	}
+
+	@Override
+	public Object getArgument(int i) {
+		switch (i) {
+		case 0:
+			return getOwner();
+		default:
+			return objectId;
+		}
+	}
+
+	@Override
+	public int getNumberOfArguments() {
+		return 2;
 	}
 }

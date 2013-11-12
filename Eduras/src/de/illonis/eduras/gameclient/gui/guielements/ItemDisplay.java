@@ -273,4 +273,10 @@ public class ItemDisplay extends ClickableGuiElement implements
 	public Rectangle getTriggerArea() {
 		return new Rectangle(screenX, screenY, WIDTH, HEIGHT);
 	}
+
+	@Override
+	public void onGameReady() {
+		// TODO Auto-generated method stub
+
+	}
 }

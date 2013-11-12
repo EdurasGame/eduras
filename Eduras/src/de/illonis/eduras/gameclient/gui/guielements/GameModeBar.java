@@ -51,4 +51,10 @@ public class GameModeBar extends RenderedGuiObject {
 		mode = newMode.getName();
 	}
 
+	@Override
+	public void onGameReady() {
+		// TODO Auto-generated method stub
+
+	}
+
 }

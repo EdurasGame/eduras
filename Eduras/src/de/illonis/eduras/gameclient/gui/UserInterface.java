@@ -3,6 +3,7 @@ package de.illonis.eduras.gameclient.gui;
 import java.util.ArrayList;
 
 import de.illonis.eduras.gameclient.GuiEventReactor;
+import de.illonis.eduras.gameclient.NetworkEventReactor;
 import de.illonis.eduras.gameclient.TooltipHandler;
 import de.illonis.eduras.gameclient.TooltipTriggererNotifier;
 import de.illonis.eduras.gameclient.gui.guielements.GameModeBar;
@@ -14,7 +15,7 @@ import de.illonis.eduras.gameclient.gui.guielements.StatisticsWindow;
 import de.illonis.eduras.gameclient.gui.guielements.TimeFrame;
 import de.illonis.eduras.gameclient.gui.guielements.TooltipTriggerer;
 import de.illonis.eduras.logicabstraction.InformationProvider;
-import de.illonis.eduras.networking.ServerClient.ClientRole;
+import de.illonis.eduras.networking.ClientRole;
 
 /**
  * Holds all user interface elements and listens for game events and notifies
@@ -46,7 +47,8 @@ public class UserInterface implements GuiResizeListener, UserInputListener {
 	 */
 	UserInterface(InformationProvider infos,
 			TooltipTriggererNotifier tooltipNotifier,
-			GuiClickReactor clickReactor) {
+			GuiClickReactor clickReactor,
+			NetworkEventReactor networkEventReactor) {
 		this.uiObjects = new ArrayList<RenderedGuiObject>();
 		this.infos = infos;
 		spectator = false;
@@ -54,7 +56,7 @@ public class UserInterface implements GuiResizeListener, UserInputListener {
 		this.tooltipNotifier = tooltipNotifier;
 		createElements();
 		EventListenerGui elg = new EventListenerGui(infos, uiObjects);
-		infos.addEventListener(new GuiEventReactor(elg));
+		infos.addEventListener(new GuiEventReactor(elg, networkEventReactor));
 	}
 
 	private void createElements() {
