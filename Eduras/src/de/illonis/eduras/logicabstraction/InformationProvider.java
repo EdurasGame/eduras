@@ -83,7 +83,7 @@ public class InformationProvider implements InfoInterface {
 	 * @param listener
 	 *            The listener.
 	 */
-	public void addEventListener(GameEventListener listener) {
+	public void setGameEventListener(GameEventListener listener) {
 		logic.setGameEventListener(listener);
 	}
 

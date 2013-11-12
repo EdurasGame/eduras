@@ -53,7 +53,7 @@ public class GameRenderer implements TooltipHandler {
 	private ItemTooltip tooltip;
 	private double scale;
 	private boolean tooltipShown = false;
-	private ArrayList<RenderedGuiObject> uiObjects = new ArrayList<RenderedGuiObject>();
+	private LinkedList<RenderedGuiObject> uiObjects;
 	private final static int DEFAULT_WIDTH = 484;
 	private final static int DEFAULT_HEIGHT = 462;
 	private final InformationProvider info;

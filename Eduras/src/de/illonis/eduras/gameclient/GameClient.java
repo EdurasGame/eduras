@@ -5,6 +5,7 @@ import java.util.logging.Logger;
 
 import javax.swing.JOptionPane;
 
+import de.eduras.eventingserver.ClientNetworkEventHandler;
 import de.eduras.eventingserver.Event;
 import de.illonis.edulog.EduLog;
 import de.illonis.eduras.events.GameEvent.GameEventNumber;
@@ -14,6 +15,7 @@ import de.illonis.eduras.events.ItemEvent;
 import de.illonis.eduras.exceptions.MessageNotSupportedException;
 import de.illonis.eduras.exceptions.WrongEventTypeException;
 import de.illonis.eduras.gameclient.gui.ClientFrame;
+import de.illonis.eduras.gameclient.gui.HudNotifier;
 import de.illonis.eduras.locale.Localization;
 import de.illonis.eduras.logicabstraction.EdurasInitializer;
 import de.illonis.eduras.logicabstraction.EventSender;
@@ -30,7 +32,7 @@ import de.illonis.eduras.networking.discover.ServerSearcher;
  * @author illonis
  * 
  */
-public class GameClient implements NetworkEventReactor {
+public class GameClient {
 
 	private final static Logger L = EduLog.getLoggerFor(GameClient.class
 			.getName());
@@ -39,19 +41,20 @@ public class GameClient implements NetworkEventReactor {
 	private EventSender eventSender;
 	private NetworkManager nwm;
 	private EdurasInitializer initializer;
-	private ClientEventHandler eventHandler;
+	private ClientNetworkEventListener eventHandler;
 	private ClientFrame frame;
 	private ServerSearcher searcher;
+	private HudNotifier hudNotifier;
 
 	// private TooltipHandler tooltipHandler;
 
 	private String clientName;
 	private ClientRole role;
 
-
 	private enum ClickState {
 		DEFAULT, ITEM_SELECTED;
 	}
+
 	/**
 	 * Creates a new client and initializes all necessary components.
 	 */
@@ -67,6 +70,7 @@ public class GameClient implements NetworkEventReactor {
 	 */
 	void useFrame(ClientFrame clientFrame) {
 		this.frame = clientFrame;
+		clientFrame.setHudNotifier(hudNotifier);
 	}
 
 	/**
@@ -80,20 +84,22 @@ public class GameClient implements NetworkEventReactor {
 		initializer = EdurasInitializer.getInstance();
 		eventSender = initializer.getEventSender();
 		infoPro = initializer.getInformationProvider();
-		eventHandler = new ClientEventHandler(this);
-
+		eventHandler = new ClientNetworkEventListener(this);
+		hudNotifier = new HudNotifier();
+		ClientGameEventListener cge = new ClientGameEventListener(this,
+				hudNotifier);
+		infoPro.setGameEventListener(cge);
 		nwm = initializer.getNetworkManager();
 		nwm.setNetworkEventHandler(eventHandler);
 	}
 
-	@Override
-	public void onConnected(int clientId) {
+	public void onClientConnected(int clientId) {
 		if (clientId != getOwnerID()) // only handle my connection
 			return;
 		System.out.println("i connected");
 		L.info("Connection to server established. OwnerId: "
 				+ infoPro.getOwnerID());
-		frame.onConnected(clientId); // pass to gui
+		frame.onClientConnected(clientId); // pass to gui
 
 		try {
 			sendEvent(new InitInformationEvent(role, clientName, clientId));
@@ -102,20 +108,18 @@ public class GameClient implements NetworkEventReactor {
 		}
 	}
 
-	@Override
-	public void onConnectionLost(int client) {
-		if (client == getOwnerID()) {
+	public void onClientConnectionLost(int clientId) {
+		if (clientId == getOwnerID()) {
 			L.warning("Connection lost");
-			frame.onConnectionLost(client);
+			frame.onClientConnectionLost(clientId);
 		} else {
 			// TODO: other client left
 		}
 	}
 
-	@Override
-	public void onDisconnect(int clientId) {
-		L.info("Disconnected: " + clientId);
-		frame.onDisconnect(clientId);
+	public void onClientDisconnect(int clientId) {
+		L.info("Client disconnected: " + clientId);
+		frame.onClientDisconnect(clientId);
 	}
 
 	/**
@@ -169,10 +173,6 @@ public class GameClient implements NetworkEventReactor {
 		this.clientName = clientName;
 	}
 
-	@Override
-	public void onPlayerReceived() {
-	}
-
 	/**
 	 * Returns owner id of client.
 	 * 
@@ -180,12 +180,6 @@ public class GameClient implements NetworkEventReactor {
 	 */
 	public int getOwnerID() {
 		return infoPro.getOwnerID();
-	}
-
-	@Override
-	public void onGameReady() {
-		System.out.println("gc game ready");
-		frame.onGameReady();
 	}
 
 	/**

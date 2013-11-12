@@ -1,7 +1,9 @@
 package de.illonis.eduras.gameclient;
 
 import java.util.ArrayList;
+import java.util.logging.Logger;
 
+import de.illonis.edulog.EduLog;
 import de.illonis.eduras.ObjectFactory.ObjectType;
 import de.illonis.eduras.events.ClientRenameEvent;
 import de.illonis.eduras.events.DeathEvent;
@@ -14,7 +16,7 @@ import de.illonis.eduras.events.SetIntegerGameObjectAttributeEvent;
 import de.illonis.eduras.events.SetInteractModeEvent;
 import de.illonis.eduras.events.SetItemSlotEvent;
 import de.illonis.eduras.events.SetOwnerEvent;
-import de.illonis.eduras.gameclient.gui.EventListenerGui;
+import de.illonis.eduras.gameclient.gui.HudNotifier;
 import de.illonis.eduras.gamemodes.GameMode;
 import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.interfaces.GameEventListener;
@@ -25,10 +27,14 @@ import de.illonis.eduras.interfaces.GameEventListener;
  * @author illonis
  * 
  */
-public class GuiEventReactor implements GameEventListener {
+public class ClientGameEventListener implements GameEventListener {
 
-	private final EventListenerGui ui;
-	private final NetworkEventReactor networkEventReactor;
+	private final static Logger L = EduLog
+			.getLoggerFor(ClientGameEventListener.class.getName());
+
+	private final HudNotifier ui;
+	private final GameClient client;
+	private boolean wasReady = false;
 
 	/**
 	 * Creates a new reactor.
@@ -36,9 +42,8 @@ public class GuiEventReactor implements GameEventListener {
 	 * @param ui
 	 *            associated user interface event listener.
 	 */
-	public GuiEventReactor(EventListenerGui ui,
-			NetworkEventReactor networkEventReactor) {
-		this.networkEventReactor = networkEventReactor;
+	public ClientGameEventListener(GameClient client, HudNotifier ui) {
+		this.client = client;
 		this.ui = ui;
 	}
 
@@ -55,7 +60,7 @@ public class GuiEventReactor implements GameEventListener {
 	@Override
 	public void onObjectCreation(ObjectFactoryEvent event) {
 		// if our player was created, player data is there.
-		if (event.getOwner() == ui.getInfos().getOwnerID()
+		if (event.getOwner() == client.getOwnerID()
 				&& event.getObjectType() == ObjectType.PLAYER)
 			ui.onPlayerReceived();
 	}
@@ -77,7 +82,6 @@ public class GuiEventReactor implements GameEventListener {
 
 	@Override
 	public void onOwnerChanged(SetOwnerEvent event) {
-
 		ui.onOwnerChanged(event);
 	}
 
@@ -122,19 +126,17 @@ public class GuiEventReactor implements GameEventListener {
 
 	@Override
 	public void onInteractModeChanged(SetInteractModeEvent setModeEvent) {
-		if (setModeEvent.getOwner() == ui.getInfos().getOwnerID()) {
-			ui.onInteractModeChanged(setModeEvent);
-		}
-
+		ui.onInteractModeChanged(setModeEvent);
 	}
 
 	@Override
 	public void onGameReady() {
-		System.out.println("ger ready");
-		Exception e = new Exception();
+		if (wasReady) {
+			L.severe("Received onGameReady a second time!");
+			return;
+		}
+		wasReady = true;
+		client.getFrame().startAndShowGame();
 		ui.onGameReady();
-		e.fillInStackTrace();
-		e.printStackTrace();
-		networkEventReactor.onGameReady();
 	}
 }

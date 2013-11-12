@@ -13,9 +13,10 @@ import java.util.LinkedList;
 import java.util.logging.Logger;
 
 import de.illonis.edulog.EduLog;
-import de.illonis.eduras.gameclient.GuiEventListener;
+import de.illonis.eduras.gameclient.GuiInternalEventListener;
 import de.illonis.eduras.gameclient.gui.CameraMouseListener;
 import de.illonis.eduras.gameclient.gui.ClientGuiStepLogic;
+import de.illonis.eduras.gameclient.gui.HudNotifier;
 import de.illonis.eduras.gameclient.gui.InputKeyHandler;
 import de.illonis.eduras.gameclient.gui.hud.ClickableGuiElementInterface;
 import de.illonis.eduras.gameclient.gui.hud.TooltipTriggerer;
@@ -32,8 +33,8 @@ import de.illonis.eduras.math.Vector2D;
  * @author illonis
  * 
  */
-public class GamePanelLogic extends ClientGuiStepLogic implements GuiClickReactor,
-		TooltipTriggererNotifier, UserInputListener {
+public class GamePanelLogic extends ClientGuiStepLogic implements
+		GuiClickReactor, TooltipTriggererNotifier, UserInputListener {
 
 	private final static Logger L = EduLog.getLoggerFor(GamePanelLogic.class
 			.getName());
@@ -42,7 +43,7 @@ public class GamePanelLogic extends ClientGuiStepLogic implements GuiClickReacto
 	private final GameCamera camera;
 	private final CameraMouseListener cml;
 	private final GamePanel gui;
-	private final GuiEventListener reactor;
+	private final GuiInternalEventListener reactor;
 	private InputKeyHandler keyHandler;
 	private final ResizeMonitor resizeMonitor;
 
@@ -65,7 +66,7 @@ public class GamePanelLogic extends ClientGuiStepLogic implements GuiClickReacto
 	 * @param listener
 	 *            the listener.
 	 */
-	public GamePanelLogic(GuiEventListener listener) {
+	public GamePanelLogic(GuiInternalEventListener listener) {
 		gui = new GamePanel();
 		this.reactor = listener;
 
@@ -82,8 +83,8 @@ public class GamePanelLogic extends ClientGuiStepLogic implements GuiClickReacto
 		cl = new ClickListener();
 	}
 
-	private void initUserInterface() {
-		userInterface = new UserInterface(infoPro, this, this);
+	private void initUserInterface(HudNotifier hudNotifier) {
+		userInterface = new UserInterface(infoPro, this, this, hudNotifier);
 		renderer = new GameRenderer(camera, userInterface, infoPro);
 		renderer.setTarget(gui);
 	}
@@ -170,7 +171,6 @@ public class GamePanelLogic extends ClientGuiStepLogic implements GuiClickReacto
 		gui.addComponentListener(resizeMonitor);
 		gui.addMouseMotionListener(cml);
 		gui.addMouseListener(cml);
-		initUserInterface();
 		startRendering();
 		notifyGuiSizeChanged();
 		gui.addKeyListener(keyHandler);
@@ -348,5 +348,10 @@ public class GamePanelLogic extends ClientGuiStepLogic implements GuiClickReacto
 	public void onFocusLost() {
 		if (keyHandler != null)
 			keyHandler.releaseAllKeys();
+	}
+
+	public void setHudNotifier(HudNotifier hudNotifier) {
+		initUserInterface(hudNotifier);
+
 	}
 }

@@ -11,8 +11,7 @@ import javax.swing.JOptionPane;
 import de.illonis.edulog.EduLog;
 import de.illonis.eduras.gameclient.ConnectionEstablisher;
 import de.illonis.eduras.gameclient.GameClient;
-import de.illonis.eduras.gameclient.GuiEventListener;
-import de.illonis.eduras.gameclient.NetworkEventReactor;
+import de.illonis.eduras.gameclient.GuiInternalEventListener;
 import de.illonis.eduras.gameclient.gui.game.GamePanelLogic;
 import de.illonis.eduras.gameclient.gui.login.LoginPanelLogic;
 import de.illonis.eduras.gameclient.gui.progress.LoadingPanelLogic;
@@ -24,7 +23,7 @@ import de.illonis.eduras.gameclient.gui.progress.ProgressPanelLogic;
  * @author illonis
  * 
  */
-public class ClientFrame extends JFrame implements NetworkEventReactor {
+public class ClientFrame extends JFrame {
 
 	private final static Logger L = EduLog.getLoggerFor(ClientFrame.class
 			.getName());
@@ -41,7 +40,7 @@ public class ClientFrame extends JFrame implements NetworkEventReactor {
 	private final static String LOADINGPANEL = "Loading Card";
 	private final static String GAMEPANEL = "Game Card";
 	protected final GameClient client;
-	private final GuiEventListener guiEventListener;
+	private final GuiInternalEventListener guiEventListener;
 
 	/**
 	 * Creates a new clientframe.
@@ -53,7 +52,7 @@ public class ClientFrame extends JFrame implements NetworkEventReactor {
 		super("Eduras? Client");
 		this.client = client;
 
-		guiEventListener = new GuiEventListener(client);
+		guiEventListener = new GuiInternalEventListener(client);
 		setSize(500, 500);
 		setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
 		setLocationRelativeTo(null);
@@ -85,20 +84,20 @@ public class ClientFrame extends JFrame implements NetworkEventReactor {
 		showLogin();
 	}
 
-	@Override
-	public void onConnected(int clientId) {
+	public void onClientConnected(int clientId) {
 		if (client.getOwnerID() == clientId) {
 			setTitle("Eduras? Client #" + clientId + " ("
 					+ client.getClientName() + ")");
 		}
 	}
 
-	@Override
-	public void onConnectionLost(int clientId) {
+	public void onClientConnectionLost(int clientId) {
 		if (clientId == client.getOwnerID()) {
 			L.warning("Connection lost.");
 			stopGame(true);
 			setTitle("Eduras? Client");
+		} else {
+			// TODO: show message to user
 		}
 	}
 
@@ -110,19 +109,17 @@ public class ClientFrame extends JFrame implements NetworkEventReactor {
 		showLogin();
 	}
 
-	@Override
-	public void onDisconnect(int clientId) {
+	public void onClientDisconnect(int clientId) {
 		if (clientId == client.getOwnerID()) {
 			stopGame(false);
 		}
 	}
 
-	@Override
-	public void onGameReady() {
+	public void startAndShowGame() {
 		hideProgress();
 		showLoading();
 	}
-	
+
 	/**
 	 * Triggered when data preloading has finished.
 	 */
@@ -144,11 +141,6 @@ public class ClientFrame extends JFrame implements NetworkEventReactor {
 	 */
 	public void hideLoading() {
 		loadingPanel.onHidden();
-	}
-
-	@Override
-	public void onPlayerReceived() {
-		// nothing to do here because object factory notices guinotifier.
 	}
 
 	/**
@@ -211,6 +203,10 @@ public class ClientFrame extends JFrame implements NetworkEventReactor {
 		setTitle("Eduras? Client");
 		gamePanel.onHidden();
 
+	}
+
+	public void setHudNotifier(HudNotifier hudNotifier) {
+		gamePanel.setHudNotifier(hudNotifier);
 	}
 
 }

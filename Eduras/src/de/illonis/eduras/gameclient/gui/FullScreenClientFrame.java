@@ -55,11 +55,12 @@ public class FullScreenClientFrame extends ClientFrame {
 			L.severe(Localization.getString("Client.errors.nofullscreen"));
 		}
 	}
-
+	
 	@Override
-	public void onDisconnect(int clientId) {
+	public void onClientDisconnect(int clientId) {
 		if (clientId == client.getOwnerID())
 			device.setDisplayMode(oldDisplayMode);
-		super.onDisconnect(clientId);
+		super.onClientDisconnect(clientId);
 	}
+
 }

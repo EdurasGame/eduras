@@ -1,8 +1,8 @@
 package de.illonis.eduras.gameclient.gui;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 
-import de.illonis.eduras.EdurasServer;
 import de.illonis.eduras.events.ClientRenameEvent;
 import de.illonis.eduras.events.DeathEvent;
 import de.illonis.eduras.events.GameEvent;
@@ -18,6 +18,7 @@ import de.illonis.eduras.gameclient.gui.hud.RenderedGuiObject;
 import de.illonis.eduras.gamemodes.GameMode;
 import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.interfaces.GameEventListener;
+import de.illonis.eduras.logicabstraction.EdurasInitializer;
 import de.illonis.eduras.logicabstraction.InformationProvider;
 
 /**
@@ -27,23 +28,21 @@ import de.illonis.eduras.logicabstraction.InformationProvider;
  * @author illonis
  * 
  */
-public class EventListenerGui implements GameEventListener {
+public class HudNotifier implements GameEventListener {
 
-	private ArrayList<RenderedGuiObject> uiObjects;
-	private InformationProvider infos;
+	private final LinkedList<RenderedGuiObject> uiObjects;
 
 	/**
-	 * Creates a new {@link EventListenerGui}.
+	 * Creates a new {@link HudNotifier}.
 	 * 
-	 * @param infos
-	 *            game information to use.
-	 * @param uiObjects
-	 *            rendered ui objects.
 	 */
-	public EventListenerGui(InformationProvider infos,
-			ArrayList<RenderedGuiObject> uiObjects) {
-		this.infos = infos;
-		this.uiObjects = uiObjects;
+	public HudNotifier() {
+		this.uiObjects = new LinkedList<RenderedGuiObject>();
+	}
+
+	public void setUiObjects(LinkedList<RenderedGuiObject> objects) {
+		this.uiObjects.clear();
+		this.uiObjects.addAll(objects);
 	}
 
 	@Override
@@ -140,17 +139,6 @@ public class EventListenerGui implements GameEventListener {
 		}
 	}
 
-	/***
-	 * Returns game information.
-	 * 
-	 * @return game information.
-	 * 
-	 * @author illonis
-	 */
-	public InformationProvider getInfos() {
-		return infos;
-	}
-
 	@Override
 	public void onDeath(DeathEvent event) {
 		for (RenderedGuiObject obj : uiObjects) {
@@ -174,18 +162,12 @@ public class EventListenerGui implements GameEventListener {
 
 	@Override
 	public void onInteractModeChanged(SetInteractModeEvent setModeEvent) {
-		if (setModeEvent.getOwner() == infos.getOwnerID()) {
-
-			for (RenderedGuiObject obj : uiObjects) {
-				obj.onInteractModeChanged(setModeEvent);
-			}
+		for (RenderedGuiObject obj : uiObjects) {
+			obj.onInteractModeChanged(setModeEvent);
 		}
-
 	}
 
 	@Override
 	public void onGameReady() {
-		// TODO Auto-generated method stub
-
 	}
 }

@@ -1,8 +1,8 @@
 package de.illonis.eduras.gameclient.gui.hud;
 
-import java.util.ArrayList;
+import java.util.LinkedList;
 
-import de.illonis.eduras.gameclient.gui.EventListenerGui;
+import de.illonis.eduras.gameclient.gui.HudNotifier;
 import de.illonis.eduras.gameclient.gui.game.GuiClickReactor;
 import de.illonis.eduras.gameclient.gui.game.GuiResizeListener;
 import de.illonis.eduras.gameclient.gui.game.TooltipHandler;
@@ -19,7 +19,7 @@ import de.illonis.eduras.networking.ClientRole;
  * 
  */
 public class UserInterface implements GuiResizeListener, UserInputListener {
-	private ArrayList<RenderedGuiObject> uiObjects;
+	private LinkedList<RenderedGuiObject> uiObjects;
 	private InformationProvider infos;
 	private GuiClickReactor reactor;
 	private TooltipHandler tooltipHandler;
@@ -38,18 +38,18 @@ public class UserInterface implements GuiResizeListener, UserInputListener {
 	 *            tooltip notifier.
 	 * @param clickReactor
 	 *            click reactor.
+	 * @param hudNotifier the hud notifier.
 	 */
 	public UserInterface(InformationProvider infos,
 			TooltipTriggererNotifier tooltipNotifier,
-			GuiClickReactor clickReactor) {
-		this.uiObjects = new ArrayList<RenderedGuiObject>();
+			GuiClickReactor clickReactor, HudNotifier hudNotifier) {
+		this.uiObjects = new LinkedList<RenderedGuiObject>();
 		this.infos = infos;
 		spectator = false;
 		this.reactor = clickReactor;
 		this.tooltipNotifier = tooltipNotifier;
 		createElements();
-		EventListenerGui elg = new EventListenerGui(infos, uiObjects);
-		infos.addEventListener(elg);
+		hudNotifier.setUiObjects(this.uiObjects);
 	}
 
 	private void createElements() {
@@ -70,7 +70,7 @@ public class UserInterface implements GuiResizeListener, UserInputListener {
 		return infos;
 	}
 
-	public ArrayList<RenderedGuiObject> getUiObjects() {
+	public LinkedList<RenderedGuiObject> getUiObjects() {
 		return uiObjects;
 	}
 

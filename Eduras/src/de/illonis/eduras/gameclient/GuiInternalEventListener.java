@@ -22,10 +22,10 @@ import de.illonis.eduras.units.PlayerMainFigure.InteractMode;
  * @author illonis
  * 
  */
-public class GuiEventListener implements LoginPanelReactor,
+public class GuiInternalEventListener implements LoginPanelReactor,
 		ProgressPanelReactor, GamePanelReactor, LoadingPanelReactor {
 
-	private final static Logger L = EduLog.getLoggerFor(GuiEventListener.class
+	private final static Logger L = EduLog.getLoggerFor(GuiInternalEventListener.class
 			.getName());
 	private final GameClient client;
 	private ConnectionEstablisher establisher;
@@ -34,7 +34,7 @@ public class GuiEventListener implements LoginPanelReactor,
 	 * @param client
 	 *            the client that is managed.
 	 */
-	public GuiEventListener(GameClient client) {
+	public GuiInternalEventListener(GameClient client) {
 		this.client = client;
 	}
 
