@@ -46,6 +46,7 @@ public class GamePanelLogic extends ClientGuiStepLogic implements
 	private final GuiInternalEventListener reactor;
 	private InputKeyHandler keyHandler;
 	private final ResizeMonitor resizeMonitor;
+	private HudNotifier hudNotifier;
 
 	private final LinkedList<ClickableGuiElementInterface> clickListeners;
 	private final LinkedList<TooltipTriggerer> triggerers;
@@ -83,7 +84,7 @@ public class GamePanelLogic extends ClientGuiStepLogic implements
 		cl = new ClickListener();
 	}
 
-	private void initUserInterface(HudNotifier hudNotifier) {
+	private void initUserInterface() {
 		userInterface = new UserInterface(infoPro, this, this, hudNotifier);
 		renderer = new GameRenderer(camera, userInterface, infoPro);
 		renderer.setTarget(gui);
@@ -167,7 +168,7 @@ public class GamePanelLogic extends ClientGuiStepLogic implements
 		camera.reset();
 		camera.startMoving();
 		// TODO: start worker.
-
+		initUserInterface();
 		gui.addComponentListener(resizeMonitor);
 		gui.addMouseMotionListener(cml);
 		gui.addMouseListener(cml);
@@ -351,7 +352,6 @@ public class GamePanelLogic extends ClientGuiStepLogic implements
 	}
 
 	public void setHudNotifier(HudNotifier hudNotifier) {
-		initUserInterface(hudNotifier);
-
+		this.hudNotifier = hudNotifier;
 	}
 }

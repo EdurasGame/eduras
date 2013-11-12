@@ -5,13 +5,9 @@ import java.util.logging.Logger;
 
 import javax.swing.JOptionPane;
 
-import de.eduras.eventingserver.ClientNetworkEventHandler;
 import de.eduras.eventingserver.Event;
 import de.illonis.edulog.EduLog;
-import de.illonis.eduras.events.GameEvent.GameEventNumber;
 import de.illonis.eduras.events.InitInformationEvent;
-
-import de.illonis.eduras.events.ItemEvent;
 import de.illonis.eduras.exceptions.MessageNotSupportedException;
 import de.illonis.eduras.exceptions.WrongEventTypeException;
 import de.illonis.eduras.gameclient.gui.ClientFrame;
@@ -21,7 +17,6 @@ import de.illonis.eduras.logicabstraction.EdurasInitializer;
 import de.illonis.eduras.logicabstraction.EventSender;
 import de.illonis.eduras.logicabstraction.InformationProvider;
 import de.illonis.eduras.logicabstraction.NetworkManager;
-import de.illonis.eduras.math.Vector2D;
 import de.illonis.eduras.networking.ClientRole;
 import de.illonis.eduras.networking.discover.ServerFoundListener;
 import de.illonis.eduras.networking.discover.ServerSearcher;
@@ -96,7 +91,6 @@ public class GameClient {
 	public void onClientConnected(int clientId) {
 		if (clientId != getOwnerID()) // only handle my connection
 			return;
-		System.out.println("i connected");
 		L.info("Connection to server established. OwnerId: "
 				+ infoPro.getOwnerID());
 		frame.onClientConnected(clientId); // pass to gui
