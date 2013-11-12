@@ -19,6 +19,7 @@
 	<path id="classpath">
 		<fileset dir="${base}${libs}">
 			<include name="timingframework*.jar" />
+			<include name="eventingserver.jar" />
 			<include name="edulog-2.jar" />
 		</fileset>
 		<pathelement path="${base}${build}" />
@@ -83,7 +84,7 @@
 				<include name="**/*.properties"></include>
 			</fileset>
 			<manifest>
-				<attribute name="Main-Class" value="de.illonis.eduras.Eduras" />
+				<attribute name="Main-Class" value="de.illonis.eduras.EdurasServer" />
 			</manifest>
 		</jar>
 	</target>
