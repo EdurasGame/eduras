@@ -227,6 +227,7 @@ public class ClientFrame extends JFrame implements NetworkEventReactor,
 
 	@Override
 	public void onGameReady() {
+		System.out.println("frame on game ready");
 		gamePanel.startRendering();
 		camera.reset();
 

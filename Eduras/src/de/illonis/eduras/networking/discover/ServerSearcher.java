@@ -251,8 +251,8 @@ public class ServerSearcher extends Thread {
 		} catch (IOException e) {
 			L.log(Level.WARNING, "error closing socket", e);
 		}
-
-		handler.interrupt();
+		if (handler != null)
+			handler.interrupt();
 		if (metaAnswerListener != null)
 			metaAnswerListener.interrupt();
 		super.interrupt();

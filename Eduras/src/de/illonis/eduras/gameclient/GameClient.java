@@ -145,9 +145,9 @@ public class GameClient implements GuiClickReactor, NetworkEventReactor,
 
 	@Override
 	public void onConnected(int clientId) {
-
 		if (clientId != getOwnerID()) // only handle my connection
 			return;
+		System.out.println("i connected");
 		L.info("Connection to server established. OwnerId: "
 				+ infoPro.getOwnerID());
 		keyHandler = new InputKeyHandler(this, eventSender, settings);
@@ -384,6 +384,7 @@ public class GameClient implements GuiClickReactor, NetworkEventReactor,
 
 	@Override
 	public void onGameReady() {
+		System.out.println("gc game ready");
 		frame.onGameReady();
 	}
 

@@ -351,6 +351,8 @@ public class ClientLogic implements GameLogicInterface {
 			SetBooleanGameObjectAttributeEvent event) {
 
 		GameObject object = getGame().findObjectById(event.getObjectId());
+		if (object == null) return;
+		//FIXME: fix null objects.
 
 		switch (event.getType()) {
 		case SET_VISIBLE:
