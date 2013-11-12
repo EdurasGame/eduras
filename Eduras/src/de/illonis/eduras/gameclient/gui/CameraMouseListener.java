@@ -5,6 +5,7 @@ import java.awt.event.MouseEvent;
 import java.util.logging.Logger;
 
 import de.illonis.edulog.EduLog;
+import de.illonis.eduras.gameclient.gui.game.GameCamera;
 
 /**
  * Listens for mouse movement on gui to trigger camera movement.

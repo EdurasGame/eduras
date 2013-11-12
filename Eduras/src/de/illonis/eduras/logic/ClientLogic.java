@@ -1,5 +1,6 @@
 package de.illonis.eduras.logic;
 
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -19,6 +20,7 @@ import de.illonis.eduras.events.MovementEvent;
 import de.illonis.eduras.events.ObjectFactoryEvent;
 import de.illonis.eduras.events.SetBooleanGameObjectAttributeEvent;
 import de.illonis.eduras.events.SetGameModeEvent;
+import de.illonis.eduras.events.SetGameObjectAttributeEvent;
 import de.illonis.eduras.events.SetIntegerGameObjectAttributeEvent;
 import de.illonis.eduras.events.SetInteractModeEvent;
 import de.illonis.eduras.events.SetItemSlotEvent;
@@ -54,7 +56,7 @@ public class ClientLogic implements GameLogicInterface {
 
 	private final GameInformation gameInfo;
 	private final ObjectFactory objectFactory;
-	private final LogicGameWorker lgw;
+	private LogicGameWorker lgw;
 	private final ListenerHolder<GameEventListener> listenerHolder;
 	private Thread workerThread;
 
@@ -69,10 +71,7 @@ public class ClientLogic implements GameLogicInterface {
 		this.gameInfo = g;
 		objectFactory = new ObjectFactory(this);
 		listenerHolder = new ListenerHolder<GameEventListener>();
-		lgw = new LogicGameWorker(gameInfo, listenerHolder);
-		workerThread = new Thread(lgw);
-		workerThread.setName("ClientLogicGameWorker");
-		workerThread.start();
+
 	}
 
 	@Override
@@ -375,11 +374,122 @@ public class ClientLogic implements GameLogicInterface {
 
 	@Override
 	public GameEventListener getListener() {
-		return listenerHolder.getListener();
+		GameEventListener l = listenerHolder.getListener();
+		if (l == null)
+			return new GameEventListener() {
+
+				@Override
+				public void onOwnerChanged(SetOwnerEvent event) {
+					// TODO Auto-generated method stub
+
+				}
+
+				@Override
+				public void onObjectStateChanged(
+						SetGameObjectAttributeEvent<?> event) {
+					// TODO Auto-generated method stub
+
+				}
+
+				@Override
+				public void onObjectRemove(ObjectFactoryEvent event) {
+					// TODO Auto-generated method stub
+
+				}
+
+				@Override
+				public void onObjectCreation(ObjectFactoryEvent event) {
+					// TODO Auto-generated method stub
+
+				}
+
+				@Override
+				public void onNewObjectPosition(GameObject object) {
+					// TODO Auto-generated method stub
+
+				}
+
+				@Override
+				public void onMaxHealthChanged(
+						SetIntegerGameObjectAttributeEvent event) {
+					// TODO Auto-generated method stub
+
+				}
+
+				@Override
+				public void onMatchEnd(MatchEndEvent event) {
+					// TODO Auto-generated method stub
+
+				}
+
+				@Override
+				public void onItemSlotChanged(SetItemSlotEvent event) {
+					// TODO Auto-generated method stub
+
+				}
+
+				@Override
+				public void onInteractModeChanged(
+						SetInteractModeEvent setModeEvent) {
+					// TODO Auto-generated method stub
+
+				}
+
+				@Override
+				public void onInformationRequested(ArrayList<GameEvent> infos,
+						int targetOwner) {
+					// TODO Auto-generated method stub
+
+				}
+
+				@Override
+				public void onHealthChanged(
+						SetIntegerGameObjectAttributeEvent event) {
+					// TODO Auto-generated method stub
+
+				}
+
+				@Override
+				public void onGameModeChanged(GameMode newGameMode) {
+					// TODO Auto-generated method stub
+
+				}
+
+				@Override
+				public void onDeath(DeathEvent event) {
+					// TODO Auto-generated method stub
+
+				}
+
+				@Override
+				public void onCooldownStarted(ItemEvent event) {
+					// TODO Auto-generated method stub
+
+				}
+
+				@Override
+				public void onCooldownFinished(ItemEvent event) {
+					// TODO Auto-generated method stub
+
+				}
+
+				@Override
+				public void onClientRename(ClientRenameEvent event) {
+					// TODO Auto-generated method stub
+
+				}
+
+				@Override
+				public void onGameReady() {
+					// TODO Auto-generated method stub
+					
+				}
+			};
+		return l;
 	}
 
 	@Override
-	public void onShutdown() {
+	public void stopWorker() {
 		lgw.stop();
 		try {
 			workerThread.join();
@@ -396,6 +506,14 @@ public class ClientLogic implements GameLogicInterface {
 	@Override
 	public void setGameEventListener(GameEventListener listener) {
 		listenerHolder.setListener(listener);
+	}
+
+	@Override
+	public void startWorker() {
+		lgw = new LogicGameWorker(gameInfo, listenerHolder);
+		workerThread = new Thread(lgw);
+		workerThread.setName("ClientLogicGameWorker");
+		workerThread.start();
 	}
 
 }

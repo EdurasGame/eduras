@@ -34,7 +34,7 @@ public final class ShapeFactory {
 			String shapeFile = CacheInfo.getShapeFileName(shapeType);
 			try {
 				Vector2D[] verts = ShapeParser.readShape(ShapeParser.class
-						.getResource("data/" + shapeFile));
+						.getResource(shapeFile));
 				return verts;
 			} catch (FileCorruptException | IOException e1) {
 				L.log(Level.SEVERE, "Error loading shape " + shapeType

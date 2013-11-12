@@ -132,7 +132,7 @@ public class GuiEventReactor implements GameEventListener {
 	public void onGameReady() {
 		System.out.println("ger ready");
 		Exception e = new Exception();
-		ui.onGameReady()
+		ui.onGameReady();
 		e.fillInStackTrace();
 		e.printStackTrace();
 		networkEventReactor.onGameReady();

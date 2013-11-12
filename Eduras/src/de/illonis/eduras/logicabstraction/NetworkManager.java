@@ -18,8 +18,8 @@ import de.illonis.eduras.interfaces.GameLogicInterface;
  * 
  */
 public class NetworkManager {
-
 	ClientInterface client;
+
 
 	/**
 	 * Creates a new NetworkManager with the given logic.
@@ -29,6 +29,7 @@ public class NetworkManager {
 	 * 
 	 */
 	NetworkManager(GameLogicInterface logic) {
+
 		client = new Client();
 	}
 
@@ -43,7 +44,9 @@ public class NetworkManager {
 	 *             when connection establishing or initialization failed.
 	 */
 	public void connect(InetAddress addr, int port) throws IOException {
+
 		client.connect(addr.getHostAddress(), port);
+
 	}
 
 	ClientInterface getClient() {
@@ -71,8 +74,12 @@ public class NetworkManager {
 	 * 
 	 * @author illonis
 	 */
-	public void notifyDisconnect() {
+	public void disconnect() {
 		client.disconnect();
+	}
+
+	public boolean isConnected() {
+		return client.isConnected();
 	}
 
 	/**

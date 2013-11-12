@@ -151,6 +151,7 @@ public final class Localization {
 	 * @return localized string.
 	 */
 	public static final String getString(String key) {
+		// TODO: throw warnings like in getStringF.
 		try {
 			return RESOURCES[currentLocaleNumber].getString(key);
 		} catch (MissingResourceException e) {
@@ -191,9 +192,9 @@ public final class Localization {
 
 			// NOTE: need to hardcode this string to prevent recursive errors
 			// when this is not translated, too!
-			// String warning = "No translation to %s found for %s!";
-			// EduLog.warning(String.format(warning,
-			// RESOURCES[currentLocaleNumber].getLocale().toString(), key));
+			String warning = "No translation to %s found for %s!";
+			L.info(String.format(warning, RESOURCES[currentLocaleNumber]
+					.getLocale().toString(), key));
 
 			return String.format(s, args);
 		} else {
@@ -201,8 +202,7 @@ public final class Localization {
 			// NOTE: need to hardcode this string to prevent recursive errors
 			// when this is not translated, too!
 			String error = "No translation to default language found for %s!";
-			L.warning(String.format(error, RESOURCES[currentLocaleNumber]
-					.getLocale().toString(), key));
+			L.warning(String.format(error, key));
 			return '!' + key + '!';
 		}
 	}

@@ -190,7 +190,7 @@ public class ObjectFactory {
 				try {
 					logic.getGame().getEventTriggerer().onObjectCreation(event);
 					logic.getListener().onObjectCreation(event);
-				} catch (IllegalStateException e) {
+				} catch (NullPointerException | IllegalStateException e) {
 					// (jme) we need to catch it here because a listener is not
 					// assigned on initial map creation.
 				}

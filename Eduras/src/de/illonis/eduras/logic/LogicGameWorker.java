@@ -46,11 +46,6 @@ public class LogicGameWorker implements Runnable {
 		this.listenerHolder = listenerHolder;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.lang.Runnable#run()
-	 */
 	@Override
 	public void run() {
 		running = true;

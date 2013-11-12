@@ -54,6 +54,7 @@ public class MetaServer extends Thread {
 	 * @throws IOException
 	 */
 	public MetaServer() throws IOException {
+		super("MetaServer");
 		init();
 	}
 
@@ -112,6 +113,7 @@ public class MetaServer extends Thread {
 		private PrintWriter clientWriter;
 
 		public MetaServerRequestHandler(Socket newClient) {
+			super("MetaServerRequestHandler");
 			this.client = newClient;
 		}
 
