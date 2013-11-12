@@ -8,6 +8,12 @@ import java.util.logging.Logger;
 import de.illonis.edulog.EduLog;
 import de.illonis.eduras.logicabstraction.NetworkManager;
 
+/**
+ * Allows asynchronous connection establishing.
+ * 
+ * @author illonis
+ * 
+ */
 public class ConnectionEstablisher extends Thread {
 
 	private final static Logger L = EduLog
@@ -17,7 +23,7 @@ public class ConnectionEstablisher extends Thread {
 	private final LoginData data;
 	private String errorMessage;
 
-	public ConnectionEstablisher(LoginData data, NetworkManager nwm) {
+	ConnectionEstablisher(LoginData data, NetworkManager nwm) {
 		super("ConnectionEstablisher");
 		this.nwm = nwm;
 		this.data = data;
@@ -42,6 +48,9 @@ public class ConnectionEstablisher extends Thread {
 		}
 	}
 
+	/**
+	 * @return the error message if an error occured while connecting.
+	 */
 	public String getErrorMessage() {
 		return errorMessage;
 	}

@@ -123,16 +123,25 @@ public class ClientFrame extends JFrame implements NetworkEventReactor {
 		showLoading();
 	}
 
+	/**
+	 * Triggered when data preloading has finished.
+	 */
 	public void onDataReady() {
 		hideLoading();
 		showGame();
 	}
 
+	/**
+	 * shows loading panel.
+	 */
 	public void showLoading() {
 		cardLayout.show(getContentPane(), LOADINGPANEL);
 		loadingPanel.onShown();
 	}
 
+	/**
+	 * hides loading panel.
+	 */
 	public void hideLoading() {
 		loadingPanel.onHidden();
 	}
@@ -147,6 +156,9 @@ public class ClientFrame extends JFrame implements NetworkEventReactor {
 		// do nothing
 	}
 
+	/**
+	 * shows login panel.
+	 */
 	public void hideLogin() {
 		loginPanel.onHidden();
 		client.stopDiscovery();
@@ -181,10 +193,16 @@ public class ClientFrame extends JFrame implements NetworkEventReactor {
 		gamePanel.onShown();
 	}
 
+	/**
+	 * hides progress panel.
+	 */
 	public void hideProgress() {
 		progressPanel.onHidden();
 	}
 
+	/**
+	 * Terminates the client.
+	 */
 	public void onExit() {
 		hideGame();
 		hideLoading();

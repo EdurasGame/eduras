@@ -4,6 +4,12 @@ import java.awt.Color;
 
 import javax.swing.JPanel;
 
+/**
+ * The panel where the game is drawn on.
+ * 
+ * @author illonis
+ * 
+ */
 public class GamePanel extends JPanel {
 
 	private static final long serialVersionUID = 1L;

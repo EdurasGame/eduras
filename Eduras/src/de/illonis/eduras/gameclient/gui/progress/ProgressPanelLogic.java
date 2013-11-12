@@ -18,7 +18,7 @@ import de.illonis.eduras.gameclient.gui.ClientGuiStepLogic;
 import de.illonis.eduras.networking.Client;
 
 /**
- * Displays login progress. Also shows errors occuring while connecting.
+ * Handles logical interaction with the progress panel.
  * 
  * @author illonis
  * 
@@ -26,8 +26,8 @@ import de.illonis.eduras.networking.Client;
 public class ProgressPanelLogic extends ClientGuiStepLogic implements
 		ActionListener, PropertyChangeListener {
 
-	private final static Logger L = EduLog.getLoggerFor(ProgressPanelLogic.class
-			.getName());
+	private final static Logger L = EduLog
+			.getLoggerFor(ProgressPanelLogic.class.getName());
 
 	private final ProgressPanel gui;
 	private final ProgressPanelReactor reactor;
@@ -155,6 +155,12 @@ public class ProgressPanelLogic extends ClientGuiStepLogic implements
 		}
 	}
 
+	/**
+	 * Sets the thread that establishes connection in order to wait for it.
+	 * 
+	 * @param establisher
+	 *            the thread establishing connection.
+	 */
 	public void setEstablishThread(ConnectionEstablisher establisher) {
 		this.establisher = establisher;
 	}

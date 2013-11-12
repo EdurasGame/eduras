@@ -13,6 +13,12 @@ import javax.swing.SwingConstants;
 import de.illonis.eduras.images.ImageFiler;
 import de.illonis.eduras.networking.Client;
 
+/**
+ * Displays a load indicator while connecting.
+ * 
+ * @author illonis
+ * 
+ */
 public class ProgressPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
 

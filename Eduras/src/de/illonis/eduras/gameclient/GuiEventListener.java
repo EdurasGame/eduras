@@ -16,6 +16,12 @@ import de.illonis.eduras.logicabstraction.EdurasInitializer;
 import de.illonis.eduras.math.Vector2D;
 import de.illonis.eduras.units.PlayerMainFigure.InteractMode;
 
+/**
+ * Handles events from login panels and gui and performs the appropriate action.
+ * 
+ * @author illonis
+ * 
+ */
 public class GuiEventListener implements LoginPanelReactor,
 		ProgressPanelReactor, GamePanelReactor, LoadingPanelReactor {
 
@@ -24,6 +30,10 @@ public class GuiEventListener implements LoginPanelReactor,
 	private final GameClient client;
 	private ConnectionEstablisher establisher;
 
+	/**
+	 * @param client
+	 *            the client that is managed.
+	 */
 	public GuiEventListener(GameClient client) {
 		this.client = client;
 	}

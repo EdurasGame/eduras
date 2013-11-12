@@ -8,6 +8,12 @@ import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import javax.swing.SwingConstants;
 
+/**
+ * Displays a loading bar while prefetching the graphics.
+ * 
+ * @author illonis
+ * 
+ */
 public class LoadingPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
 
@@ -29,7 +35,7 @@ public class LoadingPanel extends JPanel {
 		add(progressBar, BorderLayout.SOUTH);
 	}
 
-	public void setProgress(int progress) {
+	void setProgress(int progress) {
 		progressBar.setValue(progress);
 	}
 

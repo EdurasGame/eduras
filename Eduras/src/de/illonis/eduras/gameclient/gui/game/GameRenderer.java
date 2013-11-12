@@ -33,7 +33,7 @@ import de.illonis.eduras.units.PlayerMainFigure;
 import de.illonis.eduras.units.Unit;
 
 /**
- * GameRenderer renders the buffered image for gamepanel.
+ * Renders the game graphics onto the gamepanel.
  * 
  * @author illonis
  * 
