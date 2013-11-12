@@ -10,8 +10,11 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.swing.ImageIcon;
+
 import de.illonis.edulog.EduLog;
 import de.illonis.eduras.ObjectFactory.ObjectType;
+import de.illonis.eduras.gameclient.datacache.CacheInfo.ImageKey;
 import de.illonis.eduras.images.ImageFiler;
 import de.illonis.eduras.math.Vector2D;
 import de.illonis.eduras.shapecreator.FileCorruptException;
@@ -58,6 +61,53 @@ public final class GraphicsPreLoader extends AsyncLoader<Void> {
 	public static void preLoadShapes() {
 		GraphicsPreLoader p = new GraphicsPreLoader();
 		p.loadShapes();
+		p.loadGraphics();
+		p.loadIcons();
+		p.loadGuiGraphics();
+	}
+
+	private void loadIcons() {
+		HashMap<ImageKey, String> shapeInfo = CacheInfo.getAllImageIcons();
+		Iterator<Map.Entry<ImageKey, String>> it = shapeInfo.entrySet()
+				.iterator();
+		int n = shapeInfo.size();
+		int i = 0;
+		while (it.hasNext()) {
+			Map.Entry<ImageKey, String> pair = it.next();
+			try {
+				ImageIcon image = ImageFiler.loadIcon(pair.getValue());
+				ImageCache.addImageIcon(pair.getKey(), image);
+			} catch (IllegalArgumentException e) {
+				L.log(Level.SEVERE,
+						"Guiimagefile not found: " + pair.getValue(), e);
+			}
+			i++;
+
+			int progress = (int) Math.floor((double) i / n * 25) + 50;
+			setProgress(progress);
+		}
+	}
+
+	private void loadGuiGraphics() {
+		HashMap<ImageKey, String> shapeInfo = CacheInfo.getAllGuiImages();
+		Iterator<Map.Entry<ImageKey, String>> it = shapeInfo.entrySet()
+				.iterator();
+		int n = shapeInfo.size();
+		int i = 0;
+		while (it.hasNext()) {
+			Map.Entry<ImageKey, String> pair = it.next();
+			try {
+				BufferedImage image = ImageFiler.load(pair.getValue());
+				ImageCache.addGuiImage(pair.getKey(), image);
+			} catch (IllegalArgumentException | IOException e) {
+				L.log(Level.SEVERE,
+						"Guiimagefile not found: " + pair.getValue(), e);
+			}
+			i++;
+
+			int progress = (int) Math.floor((double) i / n * 25) + 75;
+			setProgress(progress);
+		}
 	}
 
 	private void loadShapes() {
@@ -78,7 +128,7 @@ public final class GraphicsPreLoader extends AsyncLoader<Void> {
 			}
 			i++;
 			// shapes represent the first half of loading, graphics the other
-			int progress = (int) Math.floor((double) i / n * 50);
+			int progress = (int) Math.floor((double) i / n * 25);
 			setProgress(progress);
 			// it.remove(); // avoids a ConcurrentModificationException
 		}
@@ -101,7 +151,7 @@ public final class GraphicsPreLoader extends AsyncLoader<Void> {
 			}
 			i++;
 
-			int progress = (int) Math.floor((double) i / n * 50) + 50;
+			int progress = (int) Math.floor((double) i / n * 25) + 25;
 			setProgress(progress);
 		}
 	}
@@ -109,8 +159,12 @@ public final class GraphicsPreLoader extends AsyncLoader<Void> {
 	@Override
 	protected Void doInBackground() throws Exception {
 		loadShapes();
-		setProgress(50);
+		setProgress(25);
 		loadGraphics();
+		setProgress(50);
+		loadIcons();
+		setProgress(75);
+		loadGuiGraphics();
 		setProgress(100);
 		return null;
 	}

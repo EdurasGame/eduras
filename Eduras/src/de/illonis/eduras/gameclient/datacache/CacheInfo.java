@@ -14,8 +14,22 @@ import de.illonis.eduras.shapes.ObjectShape.ShapeType;
  */
 public final class CacheInfo {
 
+	/**
+	 * Keys for identifying cached images.
+	 * 
+	 * @author illonis
+	 * 
+	 */
+	@SuppressWarnings("javadoc")
+	public enum ImageKey {
+		STATISTICS_BG;
+	}
+
 	private final static HashMap<ShapeType, String> shapes;
 	private final static HashMap<ObjectType, String> objectImages;
+	private final static HashMap<ImageKey, String> guiImages;
+	private final static HashMap<ImageKey, String> imageIcons;
+
 	static {
 		shapes = new HashMap<ShapeType, String>();
 		shapes.put(ShapeType.BIRD, "bird.esh");
@@ -29,6 +43,11 @@ public final class CacheInfo {
 				"gui/icons/icon-weapon-splash.png");
 		objectImages.put(ObjectType.ITEM_WEAPON_SWORD,
 				"gui/icons/icon-sword.png");
+
+		guiImages = new HashMap<ImageKey, String>();
+		guiImages.put(ImageKey.STATISTICS_BG, "gui/artwork/statwindow.png");
+
+		imageIcons = new HashMap<ImageKey, String>();
 	}
 
 	/**
@@ -53,11 +72,41 @@ public final class CacheInfo {
 		return objectImages.get(type);
 	}
 
+	/**
+	 * Retrieves the filename of an imageicon with given key.
+	 * 
+	 * @param key
+	 *            key for that image
+	 * @return the file name.
+	 */
+	public static String getIconFile(ImageKey key) {
+		return imageIcons.get(key);
+	}
+
+	/**
+	 * Retrieves the filename of a gui image with given key.
+	 * 
+	 * @param key
+	 *            key for that image
+	 * @return the file name.
+	 */
+	public static String getGuiImageFile(ImageKey key) {
+		return guiImages.get(key);
+	}
+
 	static HashMap<ShapeType, String> getAllShapes() {
 		return new HashMap<ShapeType, String>(shapes);
 	}
 
 	static HashMap<ObjectType, String> getAllObjectImages() {
 		return new HashMap<ObjectType, String>(objectImages);
+	}
+
+	static HashMap<ImageKey, String> getAllGuiImages() {
+		return new HashMap<ImageKey, String>(guiImages);
+	}
+
+	static HashMap<ImageKey, String> getAllImageIcons() {
+		return new HashMap<ImageKey, String>(imageIcons);
 	}
 }

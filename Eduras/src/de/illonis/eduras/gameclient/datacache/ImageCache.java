@@ -6,6 +6,7 @@ import java.util.HashMap;
 import javax.swing.ImageIcon;
 
 import de.illonis.eduras.ObjectFactory.ObjectType;
+import de.illonis.eduras.gameclient.datacache.CacheInfo.ImageKey;
 import de.illonis.eduras.math.Vector2D;
 import de.illonis.eduras.shapes.ObjectShape.ShapeType;
 
@@ -19,7 +20,8 @@ public final class ImageCache {
 
 	private final static HashMap<ShapeType, Vector2D[]> shapeData = new HashMap<ShapeType, Vector2D[]>();
 	private final static HashMap<ObjectType, BufferedImage> objectImages = new HashMap<ObjectType, BufferedImage>();
-	private final static HashMap<String, ImageIcon> imageData = new HashMap<String, ImageIcon>();
+	private final static HashMap<ImageKey, BufferedImage> guiImages = new HashMap<ImageKey, BufferedImage>();
+	private final static HashMap<ImageKey, ImageIcon> imageIcons = new HashMap<ImageKey, ImageIcon>();
 
 	static void addShape(ShapeType shapeType, Vector2D[] verts) {
 		shapeData.put(shapeType, verts);
@@ -29,8 +31,12 @@ public final class ImageCache {
 		objectImages.put(objectType, image);
 	}
 
-	static void addImageIcon(String key, ImageIcon icon) {
-		imageData.put(key, icon);
+	static void addImageIcon(ImageKey key, ImageIcon icon) {
+		imageIcons.put(key, icon);
+	}
+
+	static void addGuiImage(ImageKey key, BufferedImage image) {
+		guiImages.put(key, image);
 	}
 
 	/**
@@ -67,6 +73,22 @@ public final class ImageCache {
 	}
 
 	/**
+	 * Retrieves a gui-image by given key.
+	 * 
+	 * @param key
+	 *            the key for that image.
+	 * @return the cached image.
+	 * @throws CacheException
+	 *             if imagedata for that object are not cached.
+	 */
+	public static BufferedImage getGuiImage(ImageKey key) throws CacheException {
+		BufferedImage image = guiImages.get(key);
+		if (image == null)
+			throw new CacheException("No cached image found for " + key);
+		return image;
+	}
+
+	/**
 	 * Retrieves an icon by given key.
 	 * 
 	 * @param key
@@ -75,8 +97,8 @@ public final class ImageCache {
 	 * @throws CacheException
 	 *             if imagedata for that key are not cached.
 	 */
-	public static ImageIcon getImageIcon(String key) throws CacheException {
-		ImageIcon icon = imageData.get(key);
+	public static ImageIcon getImageIcon(ImageKey key) throws CacheException {
+		ImageIcon icon = imageIcons.get(key);
 		if (icon == null)
 			throw new CacheException("No cached image found for " + key);
 		return icon;

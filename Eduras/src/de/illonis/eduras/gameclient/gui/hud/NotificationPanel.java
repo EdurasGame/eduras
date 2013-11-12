@@ -49,6 +49,7 @@ public class NotificationPanel extends RenderedGuiObject {
 	 */
 	public NotificationPanel(UserInterface gui) {
 		super(gui);
+		setVisibleForSpectator(true);
 		currentMessage = "";
 		notifications = new ConcurrentLinkedQueue<String>();
 	}

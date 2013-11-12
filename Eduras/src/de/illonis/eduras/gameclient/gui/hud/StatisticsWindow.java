@@ -3,14 +3,15 @@ package de.illonis.eduras.gameclient.gui.hud;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import de.illonis.edulog.EduLog;
 import de.illonis.eduras.Team;
 import de.illonis.eduras.events.MatchEndEvent;
-import de.illonis.eduras.images.ImageFiler;
+import de.illonis.eduras.gameclient.datacache.CacheException;
+import de.illonis.eduras.gameclient.datacache.CacheInfo.ImageKey;
+import de.illonis.eduras.gameclient.datacache.ImageCache;
 import de.illonis.eduras.units.PlayerMainFigure;
 
 /**
@@ -50,8 +51,8 @@ public class StatisticsWindow extends RenderedGuiObject {
 		width = 400;
 		height = 300;
 		try {
-			artwork = ImageFiler.load("gui/artwork/statwindow.png");
-		} catch (IOException e) {
+			artwork = ImageCache.getGuiImage(ImageKey.STATISTICS_BG);
+		} catch (CacheException e) {
 			L.log(Level.SEVERE, "error loading statwindow background", e);
 		}
 	}
