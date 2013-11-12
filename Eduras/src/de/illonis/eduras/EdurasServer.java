@@ -15,6 +15,7 @@ import java.util.logging.Logger;
 import de.eduras.eventingserver.Server;
 import de.eduras.eventingserver.ServerInterface;
 import de.illonis.edulog.EduLog;
+import de.illonis.eduras.gameclient.datacache.GraphicsPreLoader;
 import de.illonis.eduras.locale.Localization;
 import de.illonis.eduras.logic.ConsoleEventTriggerer;
 import de.illonis.eduras.logic.ServerEventTriggerer;
@@ -31,7 +32,7 @@ import de.illonis.eduras.serverconsole.ServerConsole;
 import de.illonis.eduras.serverconsole.commands.CommandInitializer;
 
 /**
- * Used to start eduras?-server via main method.
+ * The eduras server main executable.
  * 
  * @author illonis
  * 
@@ -79,6 +80,10 @@ public class EdurasServer {
 				}
 			}
 		}
+
+		L.info("Caching shapes...");
+		GraphicsPreLoader.preLoadShapes();
+		L.info("Caching shapes done.");
 
 		L.info(Localization.getString("Server.startstart"));
 
