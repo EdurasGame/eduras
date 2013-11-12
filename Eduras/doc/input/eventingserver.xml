@@ -112,8 +112,8 @@
 	<section>
 	    <title>Eventing Server in Eduras</title>
 	    <para>
-	        There are no big changes to be done in order to get Eduras running
-	    	with the Eventing Server as underlying layer. The former NetworkMessageSerializer and
+	        <emphasis role="strike">There are no big changes to be done in order to get Eduras running
+	    	with the Eventing Server as underlaying layer. The former NetworkMessageSerializer and
 	    	-Deserializer must be rewritten such that they write to and read the Event's arguments
 	    	using the putArgument() and getArgument() method. This is then set as the EventHandler of
 	    	the EventingServer. Once a GameEvent is created, it can be passed to logic just as before.
@@ -121,7 +121,128 @@
 	    	same so the logic will not have to be changed a lot. However, the methods body must be
 	    	rewritten such that they use getArgument(i) with the correct i. The handling of NetworkEvents
 	    	is replaced by direct callbacks. The callbacks bodys can mostly be adopted from the handling
-	    	of the former NetworkEvents. 
+	    	of the former NetworkEvents. </emphasis>
+	    	The former Event system was transformed as follows: All GameEvents inherit from eventingserver.Event
+	    	and the old Event class was deleted. The NetworkEvent class was deleted too as it has become
+	    	obsolete due to the internal events that were introduced in the EventingServer. The handler's that
+	    	had handled those NetworkEvents were replaced by handlers that do the same but are called when
+	    	the events appear internally. The InitInformation and GameReady events are specific to Eduras, so
+	    	they were made GameEvents.
+	    	All Events (or types of events) have a unique number which identifies them.
+	    	(it's basically the same as the GameEventNumber but a real integer so you can generalize it)
+	    	Every event gets its semantics through the arguments it's containing. Consider two differenct Eventtypes of which you
+	    	know that the Event with #1 has two arguments that are strings and Event with #2 has 3 arguments that
+	    	are a string, a double and an integer. The set up for the events would look like this:
+	    	
+	    	To set up and handle your events properly, there is basically two approaches:
+	    	
+	    	1. You can simple put your arguments in the same order as they are deserialized with the putArgument()
+	    	method. Consider the following code:
+	    	<programlisting>
+	    	String stringArg1 = "something"; // the string you wanna pass via the event
+	    	String stringArg2 = "somethingElse"; // another string you wanna pass
+	    	Event aStringEvent = new Event(1); // create an event that is identified by the number 1
+	    	aStringEvent.putArgument(stringArg1); // put your strings as arguments into the event
+	    	aStringEvent.putArgument(stringArg2);
+	    	client.sendEvent(aStringEvent); // send the event ; must not necessarily be a client, can be the server as well
+	    	
+	    	Event anotherEvent = new Event(2);
+	    	String myString = "lol";
+	    	double myDouble = 101.101;
+	    	int myInteger = 101;
+	    	anotherEvent.putArgumet(myString);
+	    	anotherEvent.putArgumet(myDouble);
+			anotherEvent.putArgumet(myInteger);
+			server.sendEvent(anotherEvent);
+			</programlisting>
+	    	2. Another way is to inherit from the Event class and overwrite the getArgument(i) and getNumberOfArguments() methods.
+	    	Consider the following code:
+	    	
+	    	<programlisting>
+	    	
+	    	class SexEvent extends Event {
+	    		private int penisLength;
+	    		private double numberOfSpermsPerCentimeter;
+	    		
+	    		private String pussyName;
+	    		private Boolean isWet;
+	    		
+	    		private static final int FRAU = 42;
+	    		private static final int MANN = 23;
+	    		
+	    		// some constructors
+	    		...
+	    		// some methods
+	    		...
+	    		
+	    		public Object getArgument(int i) {
+	    			switch(getEventNumber()) {
+	    			case MANN:
+	    					switch(i) {
+	    					case 0: return penisLength;
+	    					case 1: return numberOfSpermsPerCentimeter;
+	    					}
+	    			case FRAU:
+	    					switch(i) {
+	    					case 0: return pussyName;
+	    					case 1: return isWet;
+	    					}
+	    			}
+	    		}
+	    		
+	    		public int getNumberOfArguments() {
+	    			switch(getEventNumber()) {
+	    			case MANN: return 2;
+	    			//case FRAU: return 3; // this could lead to errors, as there are only 2 arguments!
+	    			case FRAU: return 2;
+	    			}
+	    		}
+	    	}
+	    	</programlisting>
+	    	During serializing, the internal methods will use an Events' getArgument and getNumberOfArguments methods.
+	    	If you do not overwrite them, they simply consist of reading a list that had been filled with putArgument()
+	    	before and giving back the list's length respectivly.
+	    	As you can see you can give your code more structure through inheriting from Event and giving
+	    	your inheriting classes meaningful names. Furthermore, you can wrap several distinct events in
+	 		one class when you overwrite the methods as seen above. The Eduras code uses that mechanism in the
+	 		MovementEvents, ItemEvents and ObjectFactoryEvents for example.
+	 		
+	 		All your events will be deserialized to basic events. You can access the arguments with the getArgument() method
+	 		then in the same order as you put it.
+	    	
+	    	<programlisting>
+	    	
+	    	...
+	    	switch(event.getEventNumber()) {
+	    	case 1: 
+	    		String stringArg1 = (String) event.getArgument(0);
+	    		String stringArg2 = (String) event.getArgument(1);
+	    		doSomething(stringArg1, stringArg2);
+	    		break;
+	    	case 2:
+	    		String myString = (String) event.getArgument(0);
+	    		double myDouble = (Double) event.getArgument(1);
+	    		int myInteger = (Integer) event.getArgument(2);
+	    		doSomethingElse(myString,myDouble,myInteger);
+	    	}
+	    	...
+	    	</programlisting>
+	    	To preserve your event hierarchy structure, you could then do something like this:
+	    	
+	    	<programlisting>
+	    	private void doSomething(String str1, String str2) {
+	    		MyStringEvent myStringEvent = new MyStringEvent(str1, str2);
+	    		
+	    		... // further processing
+	    	}
+	    	
+	    	private void doSomethingElse(String str, double d, int i) {
+	    		new OtherEvent(str,d,i).processMe();
+	    	}
+	    	
+	    	...
+	    	
+	    	</programlisting>
 	    </para>
 	</section>
 </article>
