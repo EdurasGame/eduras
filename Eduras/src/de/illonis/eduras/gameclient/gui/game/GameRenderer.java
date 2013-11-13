@@ -11,7 +11,6 @@ import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.awt.Transparency;
 import java.awt.image.BufferedImage;
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.concurrent.ConcurrentHashMap;
@@ -277,6 +276,7 @@ public class GameRenderer implements TooltipHandler {
 	 * @param obj
 	 *            object to draw image for.
 	 */
+	@SuppressWarnings("unused")
 	private void drawImageOf(GameObject obj) {
 		// TODO: implement (use scale!)
 	}

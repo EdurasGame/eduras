@@ -92,7 +92,7 @@ public class ObjectFactory {
 	 *            {@link SetGameObjectAttributeEvent} that occured.
 	 */
 	public void onObjectAttributeChanged(SetGameObjectAttributeEvent<?> event) {
-		logic.getGame().getEventTriggerer().onObjectStateChanged(event);
+		logic.getGame().getEventTriggerer().notifyGameObjectStateChanged(event);
 	}
 
 	/**
@@ -188,7 +188,7 @@ public class ObjectFactory {
 				go.setOwner(owner);
 				logic.getGame().addObject(go);
 				try {
-					logic.getGame().getEventTriggerer().onObjectCreation(event);
+					logic.getGame().getEventTriggerer().notifyObjectCreated(event);
 					logic.getListener().onObjectCreation(event);
 				} catch (NullPointerException | IllegalStateException e) {
 					// (jme) we need to catch it here because a listener is not

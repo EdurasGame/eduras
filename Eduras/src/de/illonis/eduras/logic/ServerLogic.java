@@ -80,7 +80,7 @@ public class ServerLogic implements GameLogicInterface {
 		case INFORMATION_REQUEST:
 			ArrayList<GameEvent> infos = gameInfo.getAllInfosAsEvent();
 
-			gameInfo.getEventTriggerer().onInformationRequested(infos,
+			gameInfo.getEventTriggerer().sendRequestedInfos(infos,
 					((GameInfoRequest) event).getRequester());
 
 			break;
@@ -207,7 +207,7 @@ public class ServerLogic implements GameLogicInterface {
 						GameEventNumber.ITEM_CD_START, itemEvent.getOwner(),
 						itemEvent.getSlotNum());
 
-				gameInfo.getEventTriggerer().onCooldownStarted(cooldownEvent);
+				gameInfo.getEventTriggerer().notifyCooldownStarted(cooldownEvent);
 
 			}
 			break;

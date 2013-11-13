@@ -38,7 +38,8 @@ public class UserInterface implements GuiResizeListener, UserInputListener {
 	 *            tooltip notifier.
 	 * @param clickReactor
 	 *            click reactor.
-	 * @param hudNotifier the hud notifier.
+	 * @param hudNotifier
+	 *            the hud notifier.
 	 */
 	public UserInterface(InformationProvider infos,
 			TooltipTriggererNotifier tooltipNotifier,
@@ -70,6 +71,11 @@ public class UserInterface implements GuiResizeListener, UserInputListener {
 		return infos;
 	}
 
+	/**
+	 * Returns the UI object of the user interface.
+	 * 
+	 * @return The UI objects in a list.
+	 */
 	public LinkedList<RenderedGuiObject> getUiObjects() {
 		return uiObjects;
 	}

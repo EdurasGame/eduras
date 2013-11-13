@@ -20,7 +20,6 @@ import de.illonis.eduras.interfaces.GameLogicInterface;
 public class NetworkManager {
 	ClientInterface client;
 
-
 	/**
 	 * Creates a new NetworkManager with the given logic.
 	 * 
@@ -53,6 +52,11 @@ public class NetworkManager {
 		return client;
 	}
 
+	/**
+	 * Returns the client's id.
+	 * 
+	 * @return The client's id.
+	 */
 	public int getClientId() {
 		return client.getClientId();
 	}
@@ -78,6 +82,11 @@ public class NetworkManager {
 		client.disconnect();
 	}
 
+	/**
+	 * Indicates whether the client is currently connected to a server.
+	 * 
+	 * @return true, if the client is connected, false otherwise.
+	 */
 	public boolean isConnected() {
 		return client.isConnected();
 	}

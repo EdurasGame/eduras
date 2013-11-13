@@ -4,6 +4,7 @@ import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.ObjectFactory;
 import de.illonis.eduras.events.GameEvent;
 import de.illonis.eduras.events.GameEvent.GameEventNumber;
+import de.illonis.eduras.logic.LogicGameWorker;
 
 /**
  * Interface for a game logic. A class handling the game logic should implement
@@ -46,6 +47,9 @@ public interface GameLogicInterface {
 	 */
 	public GameEventListener getListener();
 
+	/**
+	 * Starts the {@link LogicGameWorker}.
+	 */
 	public void startWorker();
 
 	/**

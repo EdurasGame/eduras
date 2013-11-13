@@ -162,5 +162,9 @@ public interface GameEventListener {
 	 */
 	void onInteractModeChanged(SetInteractModeEvent setModeEvent);
 
+	/**
+	 * Called when all initial information has been exchanged and the client is
+	 * ready to go.
+	 */
 	void onGameReady();
 }

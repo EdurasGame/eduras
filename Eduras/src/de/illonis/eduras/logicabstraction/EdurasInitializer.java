@@ -212,33 +212,33 @@ public class EdurasInitializer {
 			}
 
 			@Override
-			public void onInformationRequested(ArrayList<GameEvent> infos,
+			public void sendRequestedInfos(ArrayList<GameEvent> infos,
 					int owner) {
 				// TODO Auto-generated method stub
 
 			}
 
 			@Override
-			public void onCooldownStarted(ItemEvent event) {
+			public void notifyCooldownStarted(ItemEvent event) {
 				// TODO Auto-generated method stub
 
 			}
 
 			@Override
-			public void onObjectStateChanged(
+			public void notifyGameObjectStateChanged(
 					SetGameObjectAttributeEvent<?> event) {
 				// TODO Auto-generated method stub
 
 			}
 
 			@Override
-			public void onObjectCreation(ObjectFactoryEvent event) {
+			public void notifyObjectCreated(ObjectFactoryEvent event) {
 				// TODO Auto-generated method stub
 
 			}
 
 			@Override
-			public void onNewObjectPosition(GameObject o) {
+			public void notifyNewObjectPosition(GameObject o) {
 				// TODO Auto-generated method stub
 
 			}

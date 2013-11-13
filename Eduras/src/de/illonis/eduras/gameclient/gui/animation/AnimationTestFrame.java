@@ -6,6 +6,7 @@ import org.jdesktop.core.animation.timing.Animator;
 import org.jdesktop.core.animation.timing.TimingSource;
 import org.jdesktop.swing.animation.timing.sources.SwingTimerTimingSource;
 
+@SuppressWarnings("serial")
 public class AnimationTestFrame extends JFrame {
 	LoginAnimation p;
 

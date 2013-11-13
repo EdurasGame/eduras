@@ -7,8 +7,22 @@ import de.illonis.eduras.items.ItemUseInformation;
 import de.illonis.eduras.math.Vector2D;
 import de.illonis.eduras.shapes.Circle;
 
+/**
+ * The spawn weapon is a short-range weapon with small cooldown and damage.
+ * 
+ * @author Florian Mai <florian.ren.mai@googlemail.com>
+ * 
+ */
 public class SwordWeapon extends Weapon {
 
+	/**
+	 * Create a new SwordWeapon.
+	 * 
+	 * @param gi
+	 *            The game info context.
+	 * @param id
+	 *            The object id this sword is assigned.
+	 */
 	public SwordWeapon(GameInformation gi, int id) {
 
 		super(ObjectType.ITEM_WEAPON_SWORD, gi, id);

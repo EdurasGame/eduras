@@ -57,6 +57,11 @@ public class InitInformationEvent extends GameEvent {
 		return name;
 	}
 
+	/**
+	 * Returns the id of the client the initial information belong to.
+	 * 
+	 * @return The client's id.
+	 */
 	public int getClientId() {
 		return clientId;
 	}

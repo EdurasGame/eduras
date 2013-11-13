@@ -39,6 +39,9 @@ public class EdurasClient {
 	private final static Logger L = EduLog.getLoggerFor(EdurasClient.class
 			.getName());
 
+	/**
+	 * Indicates how long an Eduras client tries to connect to a server.
+	 */
 	public static final int CONNECT_TIMEOUT = 10000;
 
 	private static int PORT = 4386;

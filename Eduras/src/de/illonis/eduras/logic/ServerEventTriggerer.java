@@ -74,6 +74,8 @@ public class ServerEventTriggerer implements EventTriggerer {
 	 * 
 	 * @param logic
 	 *            the logic used.
+	 * @param server
+	 *            The server that will be used to send events.
 	 */
 	public ServerEventTriggerer(GameLogicInterface logic, ServerInterface server) {
 		this.logic = logic;
@@ -565,7 +567,7 @@ public class ServerEventTriggerer implements EventTriggerer {
 	}
 
 	@Override
-	public void onInformationRequested(ArrayList<GameEvent> infos, int owner) {
+	public void sendRequestedInfos(ArrayList<GameEvent> infos, int owner) {
 		try {
 			for (GameEvent event : infos) {
 
@@ -580,25 +582,26 @@ public class ServerEventTriggerer implements EventTriggerer {
 	}
 
 	@Override
-	public void onCooldownStarted(ItemEvent event) {
+	public void notifyCooldownStarted(ItemEvent event) {
 		sendEventToAll(event);
 
 	}
 
 	@Override
-	public void onObjectStateChanged(SetGameObjectAttributeEvent<?> event) {
+	public void notifyGameObjectStateChanged(
+			SetGameObjectAttributeEvent<?> event) {
 		sendEventToAll(event);
 
 	}
 
 	@Override
-	public void onObjectCreation(ObjectFactoryEvent event) {
+	public void notifyObjectCreated(ObjectFactoryEvent event) {
 		sendEventToAll(event);
 
 	}
 
 	@Override
-	public void onNewObjectPosition(GameObject o) {
+	public void notifyNewObjectPosition(GameObject o) {
 
 		MovementEvent moveEvent;
 

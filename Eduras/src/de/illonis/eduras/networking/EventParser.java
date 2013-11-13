@@ -35,6 +35,14 @@ import de.illonis.eduras.interfaces.GameLogicInterface;
 import de.illonis.eduras.math.Vector2D;
 import de.illonis.eduras.units.PlayerMainFigure.InteractMode;
 
+/**
+ * This class serves as a bridge between the network and the logic. Events'
+ * arguments are read, put into GameEvents and passed to the game logic.
+ * 
+ * @author Florian Mai <florian.ren.mai@googlemail.com>
+ * 
+ */
+@SuppressWarnings("javadoc")
 public class EventParser implements EventHandler {
 
 	private final static Logger L = EduLog.getLoggerFor(EventParser.class
@@ -86,6 +94,13 @@ public class EventParser implements EventHandler {
 
 	private final GameLogicInterface logic;
 
+	/**
+	 * Create a new EventParser that passes the GameEvent it parses to the given
+	 * logic.
+	 * 
+	 * @param logic
+	 *            The logic to pass the GameEvents to.
+	 */
 	public EventParser(GameLogicInterface logic) {
 		this.logic = logic;
 	}

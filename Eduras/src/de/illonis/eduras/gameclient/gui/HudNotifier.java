@@ -18,8 +18,6 @@ import de.illonis.eduras.gameclient.gui.hud.RenderedGuiObject;
 import de.illonis.eduras.gamemodes.GameMode;
 import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.interfaces.GameEventListener;
-import de.illonis.eduras.logicabstraction.EdurasInitializer;
-import de.illonis.eduras.logicabstraction.InformationProvider;
 
 /**
  * The eventlistener that listens for new events and passes them to gui

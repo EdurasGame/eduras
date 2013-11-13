@@ -6,7 +6,22 @@ import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.shapes.Sword;
 import de.illonis.eduras.units.Unit;
 
+/**
+ * This is the missile fired by {@link SwordWeapon}. It has a fancy sword-like
+ * shape.
+ * 
+ * @author Florian Mai <florian.ren.mai@googlemail.com>
+ * 
+ */
 public class SwordMissile extends Missile {
+	/**
+	 * Create a new missile.
+	 * 
+	 * @param game
+	 *            The game info context.
+	 * @param id
+	 *            The id the missile is assigned to.
+	 */
 	public SwordMissile(GameInformation game, int id) {
 		super(game, id);
 		setDamage(2);

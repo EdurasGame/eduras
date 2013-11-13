@@ -285,14 +285,50 @@ public interface EventTriggerer {
 	 */
 	void kickPlayer(int ownerId);
 
-	public void onInformationRequested(ArrayList<GameEvent> infos, int owner);
+	/**
+	 * Sends all events in the given list to the client with the given id.
+	 * 
+	 * @param infos
+	 * @param id
+	 *            The client's id.
+	 */
+	public void sendRequestedInfos(ArrayList<GameEvent> infos, int id);
 
-	public void onCooldownStarted(ItemEvent event);
+	// TODO: Shouldn't we send this information only to the client that is
+	// affected by this event?
+	/**
+	 * 
+	 * Notify all clients that a cooldown has started.
+	 * 
+	 * @param event
+	 *            The event that indicates that the cooldown has started.
+	 */
+	public void notifyCooldownStarted(ItemEvent event);
 
-	public void onObjectStateChanged(SetGameObjectAttributeEvent<?> event);
+	/**
+	 * Notify all clients that an object's state has changed.
+	 * 
+	 * @param event
+	 *            The event that indicate what has changed.
+	 */
+	public void notifyGameObjectStateChanged(
+			SetGameObjectAttributeEvent<?> event);
 
-	public void onObjectCreation(ObjectFactoryEvent event);
+	/**
+	 * Notify all clients that an object has been created.
+	 * 
+	 * @param event
+	 *            The event that indicates what has been created.
+	 */
+	public void notifyObjectCreated(ObjectFactoryEvent event);
 
-	public void onNewObjectPosition(GameObject o);
+	/**
+	 * Notifies all clients that an object is on a new position.
+	 * 
+	 * @param o
+	 *            The object that has changed position (with already updated
+	 *            position).
+	 */
+	public void notifyNewObjectPosition(GameObject o);
 
 }

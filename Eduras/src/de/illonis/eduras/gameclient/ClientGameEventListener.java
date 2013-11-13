@@ -39,6 +39,8 @@ public class ClientGameEventListener implements GameEventListener {
 	/**
 	 * Creates a new reactor.
 	 * 
+	 * @param client
+	 *            associated client
 	 * @param ui
 	 *            associated user interface event listener.
 	 */
