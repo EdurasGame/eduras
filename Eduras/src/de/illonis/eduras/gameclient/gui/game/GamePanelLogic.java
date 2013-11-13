@@ -167,7 +167,7 @@ public class GamePanelLogic extends ClientGuiStepLogic implements
 	public void onShown() {
 		camera.reset();
 		camera.startMoving();
-		// TODO: start worker.
+		EdurasInitializer.getInstance().startLogicWorker();
 		initUserInterface();
 		gui.addComponentListener(resizeMonitor);
 		gui.addMouseMotionListener(cml);
@@ -179,10 +179,12 @@ public class GamePanelLogic extends ClientGuiStepLogic implements
 		gui.requestFocusInWindow();
 		gui.addMouseListener(cl);
 		gui.addMouseMotionListener(cl);
+		hudNotifier.onGameReady();
 	}
 
 	@Override
 	public void onHidden() {
+		EdurasInitializer.getInstance().stopLogicWorker();
 		gui.removeMouseListener(cl);
 		gui.removeMouseMotionListener(cl);
 		gui.removeMouseMotionListener(cml);
@@ -351,6 +353,12 @@ public class GamePanelLogic extends ClientGuiStepLogic implements
 			keyHandler.releaseAllKeys();
 	}
 
+	/**
+	 * Sets the hud notifier that notifies hud.
+	 * 
+	 * @param hudNotifier
+	 *            the hud notifier.
+	 */
 	public void setHudNotifier(HudNotifier hudNotifier) {
 		this.hudNotifier = hudNotifier;
 	}

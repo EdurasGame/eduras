@@ -24,6 +24,7 @@ public class GameModeBar extends RenderedGuiObject {
 		super(gui);
 		setVisibleForSpectator(true);
 		mode = "unknown game mode";
+		mode = gui.getInfos().getGameMode().getName();
 		screenX = 30;
 		screenY = 0;
 	}
@@ -47,6 +48,8 @@ public class GameModeBar extends RenderedGuiObject {
 
 	@Override
 	public void onGameModeChanged(GameMode newMode) {
+		System.out.println("gamemode bar to: " + newMode);
+
 		mode = newMode.getName();
 	}
 

@@ -28,7 +28,7 @@ import de.illonis.eduras.interfaces.GameEventListener;
  */
 public class HudNotifier implements GameEventListener {
 
-	private final LinkedList<RenderedGuiObject> uiObjects;
+	private LinkedList<RenderedGuiObject> uiObjects;
 
 	/**
 	 * Creates a new {@link HudNotifier}.
@@ -38,9 +38,15 @@ public class HudNotifier implements GameEventListener {
 		this.uiObjects = new LinkedList<RenderedGuiObject>();
 	}
 
+	/**
+	 * Sets the hud objects that should be notified by events.
+	 * 
+	 * @param objects
+	 *            a list of gui objects that should be notified.
+	 */
 	public void setUiObjects(LinkedList<RenderedGuiObject> objects) {
-		this.uiObjects.clear();
-		this.uiObjects.addAll(objects);
+		System.out.println("Set ui objects");
+		this.uiObjects = objects;
 	}
 
 	@Override

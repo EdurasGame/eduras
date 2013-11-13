@@ -1,6 +1,3 @@
-/**
- * 
- */
 package de.illonis.eduras.logicabstraction;
 
 import java.util.ArrayList;
@@ -18,6 +15,7 @@ import de.illonis.eduras.events.SetGameObjectAttributeEvent;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
 import de.illonis.eduras.gamemodes.GameMode;
 import de.illonis.eduras.gameobjects.GameObject;
+import de.illonis.eduras.interfaces.GameLogicInterface;
 import de.illonis.eduras.items.Item;
 import de.illonis.eduras.logic.ClientLogic;
 import de.illonis.eduras.logic.EventTriggerer;
@@ -36,11 +34,12 @@ import de.illonis.eduras.units.Unit;
  */
 public class EdurasInitializer {
 
-	NetworkManager networkManager;
-	EventSender eventSender;
-	InformationProvider informationProvider;
-	Settings settings;
-	static EdurasInitializer instance;
+	private final NetworkManager networkManager;
+	private final EventSender eventSender;
+	private final InformationProvider informationProvider;
+	private final Settings settings;
+	private final GameLogicInterface logic;
+	private static EdurasInitializer instance;
 
 	private EdurasInitializer() {
 		instance = this;
@@ -50,7 +49,7 @@ public class EdurasInitializer {
 		// the server.
 		game.getGameSettings().changeGameMode(new ClientGameMode());
 
-		ClientLogic logic = new ClientLogic(game);
+		logic = new ClientLogic(game);
 
 		game.setEventTriggerer(new EventTriggerer() {
 
@@ -212,8 +211,7 @@ public class EdurasInitializer {
 			}
 
 			@Override
-			public void sendRequestedInfos(ArrayList<GameEvent> infos,
-					int owner) {
+			public void sendRequestedInfos(ArrayList<GameEvent> infos, int owner) {
 				// TODO Auto-generated method stub
 
 			}
@@ -303,5 +301,19 @@ public class EdurasInitializer {
 	 */
 	public Settings getSettings() {
 		return settings;
+	}
+
+	/**
+	 * Starts the logic game worker.
+	 */
+	public void startLogicWorker() {
+		logic.startWorker();
+	}
+
+	/**
+	 * Stops the logic game worker.
+	 */
+	public void stopLogicWorker() {
+		logic.stopWorker();
 	}
 }

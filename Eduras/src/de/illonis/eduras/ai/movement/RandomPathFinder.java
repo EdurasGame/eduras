@@ -23,7 +23,7 @@ public final class RandomPathFinder implements PathFinder {
 	private Vector2D[] waypoints;
 	private final static Random r = new Random();
 
-	public RandomPathFinder() {
+	RandomPathFinder() {
 		waypoints = new Vector2D[10];
 		for (int i = 0; i < waypoints.length; i++) {
 			int xneg = (r.nextBoolean()) ? 1 : -1;

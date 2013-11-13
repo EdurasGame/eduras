@@ -40,7 +40,6 @@ public class ClientFrame extends JFrame {
 	private final static String LOADINGPANEL = "Loading Card";
 	private final static String GAMEPANEL = "Game Card";
 	protected final GameClient client;
-	private final GuiInternalEventListener guiEventListener;
 
 	/**
 	 * Creates a new clientframe.
@@ -52,7 +51,6 @@ public class ClientFrame extends JFrame {
 		super("Eduras? Client");
 		this.client = client;
 
-		guiEventListener = new GuiInternalEventListener(client);
 		setSize(500, 500);
 		setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
 		setLocationRelativeTo(null);
@@ -72,6 +70,9 @@ public class ClientFrame extends JFrame {
 		});
 		cardLayout = new CardLayout();
 		setLayout(cardLayout);
+		GuiInternalEventListener guiEventListener = new GuiInternalEventListener(
+				client);
+
 		loginPanel = new LoginPanelLogic(guiEventListener);
 		progressPanel = new ProgressPanelLogic(guiEventListener);
 		loadingPanel = new LoadingPanelLogic(guiEventListener);
@@ -84,6 +85,12 @@ public class ClientFrame extends JFrame {
 		showLogin();
 	}
 
+	/**
+	 * Indicates that a client connected to the game.
+	 * 
+	 * @param clientId
+	 *            the id of the connected client.
+	 */
 	public void onClientConnected(int clientId) {
 		if (client.getOwnerID() == clientId) {
 			setTitle("Eduras? Client #" + clientId + " ("
@@ -91,6 +98,12 @@ public class ClientFrame extends JFrame {
 		}
 	}
 
+	/**
+	 * Indicates that a client lost connection.
+	 * 
+	 * @param clientId
+	 *            the id of the client that lost connection.
+	 */
 	public void onClientConnectionLost(int clientId) {
 		if (clientId == client.getOwnerID()) {
 			L.warning("Connection lost.");
@@ -109,12 +122,22 @@ public class ClientFrame extends JFrame {
 		showLogin();
 	}
 
+	/**
+	 * Indicates that a client disconnected from the game.
+	 * 
+	 * @param clientId
+	 *            the disconnected client.
+	 */
 	public void onClientDisconnect(int clientId) {
 		if (clientId == client.getOwnerID()) {
 			stopGame(false);
 		}
 	}
 
+	/**
+	 * Indicates that the game is ready to start and data should be preloaded
+	 * now.
+	 */
 	public void startAndShowGame() {
 		hideProgress();
 		showLoading();
@@ -205,6 +228,12 @@ public class ClientFrame extends JFrame {
 
 	}
 
+	/**
+	 * Sets the hud notifier.
+	 * 
+	 * @param hudNotifier
+	 *            the hud notifier.
+	 */
 	public void setHudNotifier(HudNotifier hudNotifier) {
 		gamePanel.setHudNotifier(hudNotifier);
 	}
