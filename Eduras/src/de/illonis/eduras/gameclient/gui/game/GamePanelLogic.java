@@ -167,7 +167,7 @@ public class GamePanelLogic extends ClientGuiStepLogic implements
 	public void onShown() {
 		camera.reset();
 		camera.startMoving();
-		// TODO: start worker.
+		EdurasInitializer.getInstance().startLogicWorker();
 		initUserInterface();
 		gui.addComponentListener(resizeMonitor);
 		gui.addMouseMotionListener(cml);
@@ -183,6 +183,7 @@ public class GamePanelLogic extends ClientGuiStepLogic implements
 
 	@Override
 	public void onHidden() {
+		EdurasInitializer.getInstance().stopLogicWorker();
 		gui.removeMouseListener(cl);
 		gui.removeMouseMotionListener(cl);
 		gui.removeMouseMotionListener(cml);

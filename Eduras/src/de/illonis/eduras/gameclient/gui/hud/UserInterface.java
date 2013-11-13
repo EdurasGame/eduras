@@ -19,7 +19,7 @@ import de.illonis.eduras.networking.ClientRole;
  * 
  */
 public class UserInterface implements GuiResizeListener, UserInputListener {
-	private LinkedList<RenderedGuiObject> uiObjects;
+	private final LinkedList<RenderedGuiObject> uiObjects;
 	private InformationProvider infos;
 	private GuiClickReactor reactor;
 	private TooltipHandler tooltipHandler;
