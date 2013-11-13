@@ -179,6 +179,7 @@ public class GamePanelLogic extends ClientGuiStepLogic implements
 		gui.requestFocusInWindow();
 		gui.addMouseListener(cl);
 		gui.addMouseMotionListener(cl);
+		hudNotifier.onGameReady();
 	}
 
 	@Override
@@ -352,6 +353,12 @@ public class GamePanelLogic extends ClientGuiStepLogic implements
 			keyHandler.releaseAllKeys();
 	}
 
+	/**
+	 * Sets the hud notifier that notifies hud.
+	 * 
+	 * @param hudNotifier
+	 *            the hud notifier.
+	 */
 	public void setHudNotifier(HudNotifier hudNotifier) {
 		this.hudNotifier = hudNotifier;
 	}

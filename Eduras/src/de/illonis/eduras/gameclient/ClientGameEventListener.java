@@ -140,6 +140,7 @@ public class ClientGameEventListener implements GameEventListener {
 		}
 		wasReady = true;
 		client.getFrame().startAndShowGame();
-		ui.onGameReady();
+		// Do not notify hud as it is not yet initialized. It will be notified
+		// later on.
 	}
 }
