@@ -45,6 +45,7 @@ public class HudNotifier implements GameEventListener {
 	 *            a list of gui objects that should be notified.
 	 */
 	public void setUiObjects(LinkedList<RenderedGuiObject> objects) {
+		System.out.println("Set ui objects");
 		this.uiObjects = objects;
 	}
 

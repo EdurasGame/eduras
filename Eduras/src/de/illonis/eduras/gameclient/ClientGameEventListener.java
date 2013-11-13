@@ -103,6 +103,7 @@ public class ClientGameEventListener implements GameEventListener {
 
 	@Override
 	public void onGameModeChanged(GameMode newGameMode) {
+		System.out.println("gamemode changed to: " + newGameMode);
 		ui.onGameModeChanged(newGameMode);
 	}
 
