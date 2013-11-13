@@ -1,7 +1,9 @@
 package de.illonis.eduras.events;
 
 import java.util.HashMap;
+import java.util.LinkedList;
 
+import de.eduras.eventingserver.exceptions.TooFewArgumentsExceptions;
 import de.illonis.eduras.Team.TeamColor;
 
 /**
@@ -59,6 +61,25 @@ public class SetTeamsEvent extends GameEvent {
 	 */
 	public HashMap<TeamColor, String> getTeamList() {
 		return teamList;
+	}
+
+	@Override
+	public Object getArgument(int i) throws TooFewArgumentsExceptions {
+		if (i > teamList.size() * 2) {
+			throw new TooFewArgumentsExceptions(i, teamList.size() * 2);
+		}
+		LinkedList<TeamColor> hashMapAsList = new LinkedList<TeamColor>(
+				teamList.keySet());
+		if (i % 2 == 0) {
+			return hashMapAsList.get(i / 2).toString();
+		} else {
+			return teamList.get(hashMapAsList.get(i / 2));
+		}
+	}
+
+	@Override
+	public int getNumberOfArguments() {
+		return teamList.size() * 2;
 	}
 
 }

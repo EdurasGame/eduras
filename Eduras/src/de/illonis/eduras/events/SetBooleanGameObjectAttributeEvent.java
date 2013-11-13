@@ -22,7 +22,6 @@ public class SetBooleanGameObjectAttributeEvent extends
 	public SetBooleanGameObjectAttributeEvent(GameEventNumber type,
 			int objectId, boolean val) {
 		super(type, objectId, val);
-		putArgument(val);
 	}
 
 }

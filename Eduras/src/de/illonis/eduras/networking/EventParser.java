@@ -292,7 +292,7 @@ public class EventParser implements EventHandler {
 				break;
 			case SET_TEAMS:
 				SetTeamsEvent setTeamsEvent = new SetTeamsEvent();
-				for (int i = 0; i < numberOfArgs; i++) {
+				for (int i = 0; i < numberOfArgs; i = i + 2) {
 					setTeamsEvent.addTeam(
 							TeamColor.valueOf((String) event.getArgument(i)),
 							(String) event.getArgument(i + 1));
