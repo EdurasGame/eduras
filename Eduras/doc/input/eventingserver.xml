@@ -160,15 +160,15 @@
 	    	
 	    	<programlisting>
 	    	
-	    	class SexEvent extends Event {
-	    		private int penisLength;
-	    		private double numberOfSpermsPerCentimeter;
+	    	class FruitEvent extends Event {
+	    		private int cucumberLength;
+	    		private double numberOfWaterDripsPerCentimeter;
 	    		
-	    		private String pussyName;
-	    		private Boolean isWet;
+	    		private String peachName;
+	    		private Boolean isJuicy;
 	    		
-	    		private static final int FRAU = 42;
-	    		private static final int MANN = 23;
+	    		private static final int PEACH = 42;
+	    		private static final int CUCUMBER = 23;
 	    		
 	    		// some constructors
 	    		...
@@ -177,24 +177,24 @@
 	    		
 	    		public Object getArgument(int i) {
 	    			switch(getEventNumber()) {
-	    			case MANN:
+	    			case CUCUMBER:
 	    					switch(i) {
-	    					case 0: return penisLength;
-	    					case 1: return numberOfSpermsPerCentimeter;
+	    					case 0: return cucumberLength;
+	    					case 1: return numberOfWaterDripsPerCentimeter;
 	    					}
-	    			case FRAU:
+	    			case PEACH:
 	    					switch(i) {
-	    					case 0: return pussyName;
-	    					case 1: return isWet;
+	    					case 0: return peachName;
+	    					case 1: return isJuicy;
 	    					}
 	    			}
 	    		}
 	    		
 	    		public int getNumberOfArguments() {
 	    			switch(getEventNumber()) {
-	    			case MANN: return 2;
-	    			//case FRAU: return 3; // this could lead to errors, as there are only 2 arguments!
-	    			case FRAU: return 2;
+	    			case CUCUMBER: return 2;
+	    			//case PEACH: return 3; // this could lead to errors, as there are only 2 arguments!
+	    			case PEACH: return 2;
 	    			}
 	    		}
 	    	}
