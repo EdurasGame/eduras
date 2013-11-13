@@ -40,7 +40,6 @@ public class ClientFrame extends JFrame {
 	private final static String LOADINGPANEL = "Loading Card";
 	private final static String GAMEPANEL = "Game Card";
 	protected final GameClient client;
-	private final GuiInternalEventListener guiEventListener;
 
 	/**
 	 * Creates a new clientframe.
@@ -52,7 +51,6 @@ public class ClientFrame extends JFrame {
 		super("Eduras? Client");
 		this.client = client;
 
-		guiEventListener = new GuiInternalEventListener(client);
 		setSize(500, 500);
 		setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
 		setLocationRelativeTo(null);
@@ -72,6 +70,9 @@ public class ClientFrame extends JFrame {
 		});
 		cardLayout = new CardLayout();
 		setLayout(cardLayout);
+		GuiInternalEventListener guiEventListener = new GuiInternalEventListener(
+				client);
+
 		loginPanel = new LoginPanelLogic(guiEventListener);
 		progressPanel = new ProgressPanelLogic(guiEventListener);
 		loadingPanel = new LoadingPanelLogic(guiEventListener);
