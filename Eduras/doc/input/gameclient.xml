@@ -11,71 +11,178 @@
 	</articleinfo>
 
 	<section>
-
-		<title>What is game client?</title>
+		<note>
+			<para>
+				This chapter describes the whole Eduras? GameClient and
+				not only the
+				class
+				<computeroutput>GameClient</computeroutput>
+				.
+			</para>
+		</note>
+		<title>What is the game client?</title>
 		<para>
-			The game client handles all end-user related things. It
-			organizes
-			client-frame and networkmanager.
-			After initialized by
-			EdurasClient, it builds the connection between gui
-			and logic on client
-			side.
-			In addition to mouse-related events, it also manages game camera
-			and
-			network events and passes them to gui.
-			In the other direction, it
-			reacts on user-interaction on gui and sends
-			events to server.
+			The game client represents the end-point on end-users side.
+			It is
+			the only component required by a player and includes
+			libraries and
+			tools to connect to and play Eduras?.
 		</para>
 	</section>
 	<section>
-	    <title>Architecture</title>
-	    <para>
-	        The client architecture is currently under heavy development.
-	        It became clear that logic and GUI were not as isolated as they should be.
-	    </para>
-	    <para>
-	        In the following scheme you can see the current draft status
-	        Note that this structure is not yet realized in code.
-	    </para>
-	    <figure>
-			<title>Planned client architecture</title>
+		<title>Architecture</title>
+		<para>
+			<emphasis role="strikethrough">The client architecture is currently under
+				heavy development.
+				It became clear that logic and GUI were not as
+				isolated as they should
+				be.
+			</emphasis>
+			The game client itself is separated into four components:
+		</para>
+		<itemizedlist>
+			<listitem>
+				<para>
+					<emphasis>Graphical surface</emphasis>
+					- Contains all frames, panels, etc.
+				</para>
+			</listitem>
+			<listitem>
+				<para>
+					<emphasis>GUI logic</emphasis>
+					- contains methods to interact with graphical surface in a logical
+					way.
+				</para>
+			</listitem>
+			<listitem>
+				<para>
+					<emphasis>Client logic</emphasis>
+					- contains logical elements to connect network and user interface.
+				</para>
+			</listitem>
+			<listitem>
+				<para>
+					<emphasis>Network stack</emphasis>
+					- handles network connections and communication (see Eventing
+					Server document).
+				</para>
+			</listitem>
+		</itemizedlist>
+		<para>
+			The following scheme roughly illustrates the client architecture
+			and is described below.
+		</para>
+		<figure>
+			<title>Client architecture</title>
 			<mediaobject>
 				<imageobject>
-					<imagedata fileref="images/client-architecture.png" format="PNG" />
+					<imagedata fileref="images/gameclient-arch.png" format="PNG" />
 				</imageobject>
 			</mediaobject>
 		</figure>
+		<para>
+			There might come up more changes later on but this seems to be
+			the
+			final version for this time.
+		</para>
+		<section>
+			<title>Client frame</title>
+			<para>
+				The client frame is separated into four parts that represent
+				the four
+				steps required to display a game. Every step has a logic and
+				a gui part.
+			</para>
+			<orderedlist>
+				<listitem>
+					<para>
+						<emphasis>login panel</emphasis>
+					</para>
+					<para>
+						Displays an input mask to the user allowing him to enter his
+						credentials
+						and select a server.
+					</para>
+				</listitem>
+				<listitem>
+					<para>
+						<emphasis>Connecting progress</emphasis>
+						(ProgressPanel)
+					</para>
+					<para>
+						This handles connection establishing and displays a loading
+						indicator.
+					</para>
+				</listitem>
+				<listitem>
+					<para>
+						<emphasis>loading graphics</emphasis>
+						(LoadingPanel)
+					</para>
+					<para>
+						Precaches all graphics and shapes for the game and displays a
+						progress bar.
+					</para>
+				</listitem>
+				<listitem>
+					<para>
+						<emphasis>game display (GamePanel)</emphasis>
+					</para>
+					<para>
+						Displays the actual game.
+					</para>
+				</listitem>
+			</orderedlist>
+			<para>
+				The frame controls the display of those components but each
+				component
+				does its own thing. Via the
+				<computeroutput>GuiInternalEventListener</computeroutput>
+				actions can
+				be triggered to notify the client on state changes or to
+				trigger
+				network events.
+			</para>
+		</section>
 	</section>
 	<section>
 		<title>Game client startup</title>
 		<para>
-			The following graph shows a startup-sequence of game client.
-			This does
-			not contain all special
-			actions other classes perform, but
-			rather gives a quick overview how
-			initialization is done.
+			The essence of the client is obviously the game panel. When it is
+			shown up, all client logic parts like
+			<computeroutput>LogicGameWorker</computeroutput>
+			and
+			<computeroutput>GameRenderer</computeroutput>
+			are started.
+			To keep CPU utilization low, they are stopped when user
+			leaves game.
 		</para>
-		<figure>
-			<title>Startup of game client</title>
-			<mediaobject>
-				<imageobject>
-					<imagedata fileref="images/client_startup.png" format="PNG" />
-				</imageobject>
-			</mediaobject>
-		</figure>
+		<para>
+		    The mechanisms for server discovery are initiated on startup
+		    and interrupted once the game starts until game is left.
+		</para>
 	</section>
 	<section>
-		<title>Gui</title>
+		<title>GUI</title>
 		<section>
 			<title>Rendering process</title>
 			<para>
-				Understanding rendering process is not very easy. The following scheme
-				makes logic control flow more understandable.
-				The render thread calls render-method periodically. This makes calls
-				on every gui elements, map and game objects.
+				Understanding rendering process is
+				<emphasis role="strike">not very
+					easy</emphasis>
+				quite simple. The following
+				scheme
+				makes the rendering workflow even
+				more understandable.
+			</para>
+			<para>
+				The
+				<computeroutput>GameRenderer</computeroutput>
+				renders the game periodically. This results in draw-calls
+				on every
+				gui element as wall as analizes gameobjects
+				to draw their shapes and
+				images.
 			</para>
 			<figure>
 				<title>Rendering loop explained</title>
@@ -97,34 +204,48 @@
 		<section>
 			<title>Gui scaling</title>
 			<para>
-			    Gui scaling is currently done in a very simple way. We might have a
-			    detailed look at this once it comes to render images. This scaling
-			    method might stretch them.
+				Gui scaling is currently done in a very simple way. We might
+				have a
+				detailed look at this once it comes to render images. This
+				scaling
+				method might stretch them.
 			</para>
 			<para>
-				The graphic below describes the scaling process roughly. The following steps are taken:
+				The graphic below describes the scaling process roughly. The
+				following steps are taken:
 			</para>
 			<orderedlist>
-			    <listitem>
-			        <para>
-			            At first, the map and its objects are rendered as normal. The scaling process
-			            is <ulink url="http://docs.oracle.com/javase/1.4.2/docs/api/java/awt/Graphics2D.html#scale%28double,%20double%29">
-			            done implicitly</ulink> while creating the graphics object.
-			        </para>
-			    </listitem>
-			    <listitem>
-			        <para>
-			            Secondly, all interface elements like minimap and inventory are drawn onto a separate
-			            graphics object. 
-			        </para>
-			    </listitem>
-			    <listitem>
-			        <para>
-			            In the last step, the interface graphics from step 2 are drawn onto the scaled
-			            map at current camera position. The result is presented to user by being drawn
-			            onto the client frame.
-			        </para>
-			    </listitem>
+				<listitem>
+					<para>
+						At first, the map and its objects are rendered as normal. The
+						scaling process
+						is
+						<ulink
+							url="http://docs.oracle.com/javase/1.4.2/docs/api/java/awt/Graphics2D.html#scale%28double,%20double%29">
+							done implicitly
+						</ulink>
+						while creating the graphics object.
+					</para>
+				</listitem>
+				<listitem>
+					<para>
+						Secondly, all interface elements like minimap and inventory
+						are drawn onto
+						a separate
+						graphics object.
+					</para>
+				</listitem>
+				<listitem>
+					<para>
+						In the last step, the interface graphics from step 2 are
+						drawn onto
+						the scaled
+						map at current camera position. The result is
+						presented to user by
+						being drawn
+						onto the client frame.
+					</para>
+				</listitem>
 			</orderedlist>
 			<figure>
 				<title>Gui scaling flow</title>
