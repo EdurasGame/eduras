@@ -34,7 +34,8 @@ public class ClientNetworkEventListener implements ClientNetworkEventHandler {
 	}
 
 	@Override
-	public void onClientKicked(int id) {
+	public void onClientKicked(int id, String reason) {
+		// TODO: Process the reason!
 		reactor.onClientDisconnect(id);
 	}
 
@@ -46,5 +47,10 @@ public class ClientNetworkEventListener implements ClientNetworkEventHandler {
 	@Override
 	public void onDisconnected() {
 		onClientDisconnected(reactor.getOwnerID());
+	}
+
+	@Override
+	public void onServerIsFull() {
+		// TODO: Show a message box on the GUI or something.
 	}
 }
