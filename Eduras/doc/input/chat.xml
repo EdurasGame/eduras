@@ -1,0 +1,242 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE article PUBLIC "-//OASIS//DTD Simplified DocBook XML V1.0//EN"
+"http://www.oasis-open.org/docbook/xml/simple/1.0/sdocbook.dtd">
+<article>
+	<articleinfo>
+		<title>Chat</title>
+		<author>
+			<firstname>Florian</firstname>
+			<surname>Mai</surname>
+		</author>
+	</articleinfo>
+	<section>
+	    <title>What's this about?</title>
+	    <para>
+	        Being able to communicate with other users is critical to a social application and an online multiplayer game and especially Eduras is such an application.
+	        A chat is the most common, most popular and easiest to implement way of communication. Sooner or later users will want to talk to others before playing,
+	        while playing and after playing. They will want both to participate in public chat discussions and have private conversations within their own groups.
+	        To address all these requirements this document discusses the needs of a chat application.
+	    </para>
+	</section>
+	<section>
+	    <title>Features</title>
+	    <para>
+	        A chat application that fits Eduras' needs will need to provide the following features:
+	    </para>
+	    <itemizedlist>
+	        <listitem>
+	            <para>
+	                Set a user's name dynamically.
+	            </para>
+	        </listitem>
+	        <listitem>
+	            <para>
+	                Create new chatrooms (both private and public rooms)
+	            </para>
+	        </listitem>
+	        <listitem>
+	            <para>
+	                Join and participate multiple chatrooms at once
+	            </para>
+	        </listitem>
+	        <listitem>
+	            <para>
+	                Invite other users to private and public chatrooms.
+	            </para>
+	        </listitem>
+	        <listitem>
+	            <para>
+	                Get information about other users in the same chatroom.
+	            </para>
+	        </listitem>
+	    </itemizedlist>
+	</section>
+	<section>
+	    <title>API</title>
+	    <para>
+	        The chat application will use the Eventing Server with the following Events:
+	    </para>
+	    <table frame="all">
+			<title>Server-Events</title>
+			<tgroup cols="7">
+				<thead>
+					<row>
+						<entry>Event</entry>
+						<entry>Id=arg0</entry>
+						<entry>Description</entry>
+						<entry>arg1</entry>
+						<entry>arg2</entry>
+						<entry>arg3</entry>
+						<entry>arg4</entry>
+					</row>
+				</thead>
+				<tbody>
+					<row>
+					    <entry>NEW_MESSAGE</entry>
+					    <entry>1</entry>
+					    <entry>Indicates that a new message has been send. The message will be shown to all users who are in the chatroom where the message was sent.</entry>
+					    <entry>Id of sending user</entry>
+					    <entry>Id of room</entry>
+					    <entry>Message</entry>
+					</row>
+					<row>
+					    <entry>NAME_CHANGED</entry>
+					    <entry>2</entry>
+					    <entry>Indicates that a user changed its name. Will be shown to every user that is in a channel in which the name changing user is too.</entry>
+					    <entry>id of name changing user</entry>
+					    <entry>new name</entry>
+					</row>
+					<row>
+					    <entry>INVITE_TO_ROOM</entry>
+					    <entry>3</entry>
+					    <entry>Indicates that someone invited you to a chatroom</entry>
+					    <entry>Id of inviting user</entry>
+					    <entry>Id of room the user was invited to</entry>
+					</row>
+					<row>
+					    <entry>CONFIRM_ROOM_CREATE</entry>
+					    <entry>4</entry>
+					    <entry>Indicates that a user has successfully created a room.</entry>
+					    <entry>Name of the newly created room.</entry>
+					    <entry>The id of the new room.</entry>
+					</row>
+					<row>
+					    <entry>CONFIRM_ROOM_JOIN</entry>
+					    <entry>5</entry>
+					    <entry>Indicates that a user has successfully joined a room.</entry>
+					    <entry>Id of the room.</entry>
+					</row>
+					<row>
+					    <entry>GIVE_USER_INFORMATION</entry>
+					    <entry>6</entry>
+					    <entry>Gives information about the user with the given id</entry>
+					    <entry>Id of the user that information are given about.</entry>
+					    <entry>some information (need to elaborate)</entry>
+					</row>
+					<row>
+					    <entry>GIVE_ROOM_INFORMATION</entry>
+					    <entry>7</entry>
+					    <entry>Gives information about room with the given id.</entry>
+					    <entry>Id of the room that information are given about.</entry>
+					    <entry>some information (need to elaborate)</entry>
+					</row>
+					<row>
+					    <entry>SHOW_ROOMS</entry>
+					    <entry>8</entry>
+					    <entry>Lists all available public chatrooms</entry>
+					    <entry>room 1</entry>
+					    <entry>name of room 1</entry>
+					    <entry> ... other rooms</entry>
+					</row>
+					<row>
+					    <entry>SHOW_USERS</entry>
+					    <entry>9</entry>
+					    <entry>Lists all available users in a room.</entry>
+					    <entry>The room's id</entry>
+					    <entry>user 1</entry>
+					    <entry>name of user 1</entry>
+					    <entry>.. other users</entry>
+					</row>
+					<row>
+					    <entry>USER_JOINED_ROOM</entry>
+					    <entry>10</entry>
+					    <entry>Indicates that the user with the given id joined the room.
+					        Will be send to all users in that room.</entry>
+					    <entry>The id of the user that joined.</entry>
+					    <entry>The id of the room the user joined.</entry>
+					</row>
+				</tbody>
+			</tgroup>
+		</table>
+		<table frame="all">
+			<title>Client-Events</title>
+			<tgroup cols="7">
+				<thead>
+					<row>
+						<entry>Event</entry>
+						<entry>Id=arg0</entry>
+						<entry>Description</entry>
+						<entry>arg1</entry>
+						<entry>arg2</entry>
+						<entry>arg3</entry>
+					</row>
+				</thead>
+				<tbody>
+					<row>
+					    <entry>SEND_MESSAGE</entry>
+					    <entry>20</entry>
+					    <entry>Notify the server that the user wants to send a message in a chatroom</entry>
+					    <entry>id of user who is sending the message</entry>
+					    <entry>id of the room in which the message is sent.</entry>
+					    <entry>message</entry>
+					</row>
+					<row>
+					    <entry>SET_NAME</entry>
+					    <entry>21</entry>
+					    <entry>Notify the server that the user wants to change its name</entry>
+					    <entry>id of user who wants to change its name</entry>
+					    <entry>new name</entry>
+					</row>
+					<row>
+					    <entry>CREATE_ROOM</entry>
+					    <entry>22</entry>
+					    <entry>Indicates that the user wants to create a new room.
+					        If a room with the given name already exists, it won't be created.</entry>
+					    <entry>id of the user</entry>
+					    <entry>name of the room that shall be created</entry>
+					</row>
+					<row>
+					    <entry>JOIN_ROOM</entry>
+					    <entry>23</entry>
+					    <entry>Indicates that the user wants to join a room.</entry>
+					    <entry>Id of the user who wants to join a room</entry>
+					    <entry>id of the room the user would like to join</entry>
+					</row>
+					<row>
+					    <entry>INVITE_USER</entry>
+					    <entry>24</entry>
+					    <entry>Indicates that the user wants to invite another user to its room.
+					        The server has to decide whether the client is eligible to send an invite.</entry>
+					    <entry>The id of the inviting user.</entry>
+					    <entry>Id of the invited user.</entry>
+					    <entry>Id of the room</entry>
+					</row>
+					<row>
+					    <entry>VIEW_ROOMS</entry>
+					    <entry>25</entry>
+					    <entry>Send a request to view all available rooms</entry>
+					    <entry>the requester's id</entry>
+					</row>
+					<row>
+					    <entry>VIEW_USERS_IN_ROOM</entry>
+					    <entry>26</entry>
+					    <entry>Sends a request to view all users in a room</entry>
+					    <entry>the requester's id</entry>
+					    <entry>the room</entry>
+					</row>
+					<row>
+					    <entry>ACCEPT_INVITE</entry>
+					    <entry>27</entry>
+					    <entry>Indicates that the user would like to accept an invite</entry>
+					    <entry>The accepting user's id.</entry>
+					    <entry>The id of the room it was invited to join.</entry>
+					</row>
+					<row>
+					    <entry>VIEW_USER_INFORMATION</entry>
+					    <entry>28</entry>
+					    <entry>Sends a request to view information about a user</entry>
+					    <entry>The requester's id.</entry>
+					    <entry>id of the user the requester would like to get information about.</entry>
+					</row>
+					<row>
+					    <entry>VIEW_ROOM_INFORMATION</entry>
+					    <entry>29</entry>
+					    <entry>Sends a request to view information about a room</entry>
+					    <entry>Requester's id</entry>
+					    <entry>Id of the room to view information about.</entry>
+					</row>
+				</tbody>
+			</tgroup>
+		</table>
+	</section>
+</article>
