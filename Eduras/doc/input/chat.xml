@@ -19,6 +19,18 @@
 	    </para>
 	</section>
 	<section>
+	    <title>(jme) Risks and challenges</title>
+	    <para>
+	    	To provide an authentic chat system, it must be ensured that communication is
+	    	encrypted as well as users can not pretend they are someone else.
+	        This leads to a complete friend system being required.
+	    </para>
+	    <para>
+	        In addition to that, we might think of how the user can use the chat system
+	        while actually playing.
+	    </para>
+	</section>
+	<section>
 	    <title>Features</title>
 	    <para>
 	        A chat application that fits Eduras' needs will need to provide the following features:
@@ -49,10 +61,20 @@
 	                Get information about other users in the same chatroom.
 	            </para>
 	        </listitem>
+	        <listitem>
+	            <para>
+	                (jme) A friend system that allows keeping tracks of your
+	                friends and being notified when someone goes online.(/jme)
+	            </para>
+	        </listitem>
 	    </itemizedlist>
 	</section>
 	<section>
 	    <title>API</title>
+	    <para>
+	        (jme) We might elaborate whether some events should get a timestamp attached
+	        in order to preserve the same chat message times on both clients. (/jme)
+	    </para>
 	    <para>
 	        The chat application will use the Eventing Server with the following Events:
 	    </para>
@@ -145,6 +167,48 @@
 					    <entry>The id of the user that joined.</entry>
 					    <entry>The id of the room the user joined.</entry>
 					</row>
+					<row>
+					    <entry>(jme) USER_LEFT_ROOM</entry>
+					    <entry>11</entry>
+					    <entry>Indicates that the user with the given id left the room.
+					        Will be send to all users in that room.</entry>
+					    <entry>The id of the user that left.</entry>
+					    <entry>The id of the room the user left.</entry>
+					</row>
+					<row>
+					    <entry>(jme) FRIEND_ONLINE</entry>
+					    <entry>12</entry>
+					    <entry>Indicates that a friend went online</entry>
+					    <entry>The id of the friend.</entry>
+					</row>
+					<row>
+					    <entry>(jme) FRIEND_OFFLINE</entry>
+					    <entry>13</entry>
+					    <entry>Indicates that a friend is now offline</entry>
+					    <entry>The id of the friend.</entry>
+					</row>
+					<row>
+					    <entry>(jme) NEW_FRIENDREQUEST</entry>
+					    <entry>14</entry>
+					    <entry>Indicates that a user sent a friendrequest.</entry>
+					    <entry>The id of the requesting user.</entry>
+					    <entry>The id of the user that is requested to be friend.</entry>
+					    <entry>An optional message that is send to the user.</entry>
+					</row>
+					<row>
+					    <entry>(jme) SET_FRIENDS</entry>
+					    <entry>15</entry>
+					    <entry>Sets two users as friends (as result of an accepted friend request).</entry>
+					    <entry>The id of the first user.</entry>
+					    <entry>The id of the second user.</entry>
+					</row>
+					<row>
+					    <entry>(jme) SET_NOFRIENDS</entry>
+					    <entry>16</entry>
+					    <entry>Sets two users as no longer friends.</entry>
+					    <entry>The id of the first user.</entry>
+					    <entry>The id of the second user.</entry>
+					</row>
 				</tbody>
 			</tgroup>
 		</table>
@@ -235,6 +299,30 @@
 					    <entry>Requester's id</entry>
 					    <entry>Id of the room to view information about.</entry>
 					</row>
+					<row>
+					    <entry>(jme) SEND_FRIENDREQUEST</entry>
+					    <entry>30</entry>
+					    <entry>Sends a request to add the user with given id as friend.</entry>
+					    <entry>The id of the requesting user.</entry>
+					    <entry>The id of the user that should be added.</entry>
+					    <entry>An optional message that is send to the user.</entry>
+					</row>
+					<row>
+					    <entry>(jme) ACCEPT_FRIENDREQUEST</entry>
+					    <entry>31</entry>
+					    <entry>Answers a friend request.</entry>
+					    <entry>The id of the answering user.</entry>
+					    <entry>The id of the user that should be confirmed.</entry>
+					    <entry>ACCEPT/DECLINE</entry>
+					</row>
+					<row>
+					    <entry>(jme) REMOVE_FRIEND</entry>
+					    <entry>32</entry>
+					    <entry>Sends a request to remove the user with given id as friend.</entry>
+					    <entry>The id of the removing user.</entry>
+					    <entry>The id of the user being removed</entry>
+					</row>
+					
 				</tbody>
 			</tgroup>
 		</table>
