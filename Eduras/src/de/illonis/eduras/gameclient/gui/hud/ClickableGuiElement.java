@@ -20,6 +20,6 @@ public abstract class ClickableGuiElement extends RenderedGuiObject implements
 	 */
 	protected ClickableGuiElement(UserInterface gui) {
 		super(gui);
-		getClickReactor().addClickableGuiElement(this);
+		getMouseHandler().addClickableGuiElement(this);
 	}
 }

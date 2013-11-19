@@ -46,10 +46,6 @@ public class GameClient {
 	private String clientName;
 	private ClientRole role;
 
-	private enum ClickState {
-		DEFAULT, ITEM_SELECTED;
-	}
-
 	/**
 	 * Creates a new client and initializes all necessary components.
 	 */

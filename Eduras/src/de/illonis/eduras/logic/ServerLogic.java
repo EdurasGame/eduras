@@ -16,7 +16,6 @@ import de.illonis.eduras.events.GameInfoRequest;
 import de.illonis.eduras.events.InitInformationEvent;
 import de.illonis.eduras.events.ItemEvent;
 import de.illonis.eduras.events.SendUnitsEvent;
-import de.illonis.eduras.events.SetInteractModeEvent;
 import de.illonis.eduras.events.SwitchInteractModeEvent;
 import de.illonis.eduras.events.UserMovementEvent;
 import de.illonis.eduras.exceptions.InvalidNameException;
@@ -131,9 +130,8 @@ public class ServerLogic implements GameLogicInterface {
 			if (mf.getCurrentMode() != switchEvent.getRequestedMode()
 					&& mf.getModeSwitchCooldown() <= 0) {
 				mf.setMode(switchEvent.getRequestedMode());
-				SetInteractModeEvent setModeEvent = new SetInteractModeEvent(
+				getGame().getEventTriggerer().changeInteractMode(
 						switchEvent.getOwner(), switchEvent.getRequestedMode());
-				getListener().onInteractModeChanged(setModeEvent);
 			} else {
 				L.info("Got an switch request but player is already in that mode or switching is not ready.");
 			}
@@ -207,7 +205,8 @@ public class ServerLogic implements GameLogicInterface {
 						GameEventNumber.ITEM_CD_START, itemEvent.getOwner(),
 						itemEvent.getSlotNum());
 
-				gameInfo.getEventTriggerer().notifyCooldownStarted(cooldownEvent);
+				gameInfo.getEventTriggerer().notifyCooldownStarted(
+						cooldownEvent);
 
 			}
 			break;

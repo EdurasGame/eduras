@@ -90,7 +90,7 @@ public abstract class RenderedGuiObject implements GameEventListener {
 	 * 
 	 * @return attached click reactor.
 	 */
-	protected final GuiClickReactor getClickReactor() {
+	protected final GuiClickReactor getMouseHandler() {
 		return gui.getClickReactor();
 	}
 

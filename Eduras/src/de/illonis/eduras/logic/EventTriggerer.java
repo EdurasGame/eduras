@@ -16,6 +16,7 @@ import de.illonis.eduras.items.Item;
 import de.illonis.eduras.maps.Map;
 import de.illonis.eduras.math.Vector2D;
 import de.illonis.eduras.units.PlayerMainFigure;
+import de.illonis.eduras.units.PlayerMainFigure.InteractMode;
 import de.illonis.eduras.units.Unit;
 
 /**
@@ -229,6 +230,16 @@ public interface EventTriggerer {
 	 *            the new gamemode.
 	 */
 	void changeGameMode(GameMode newMode);
+
+	/**
+	 * Changes the interaction mode for a player.
+	 * 
+	 * @param ownerId
+	 *            the owner id of the player.
+	 * @param newMode
+	 *            the new mode for that player.
+	 */
+	void changeInteractMode(int ownerId, InteractMode newMode);
 
 	/**
 	 * Remaxes the health of the unit.

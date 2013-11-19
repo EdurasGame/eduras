@@ -30,6 +30,7 @@ import de.illonis.eduras.events.SetBooleanGameObjectAttributeEvent;
 import de.illonis.eduras.events.SetGameModeEvent;
 import de.illonis.eduras.events.SetGameObjectAttributeEvent;
 import de.illonis.eduras.events.SetIntegerGameObjectAttributeEvent;
+import de.illonis.eduras.events.SetInteractModeEvent;
 import de.illonis.eduras.events.SetItemSlotEvent;
 import de.illonis.eduras.events.SetOwnerEvent;
 import de.illonis.eduras.events.SetPolygonDataEvent;
@@ -50,6 +51,7 @@ import de.illonis.eduras.maps.InitialObjectData;
 import de.illonis.eduras.maps.Map;
 import de.illonis.eduras.math.Vector2D;
 import de.illonis.eduras.units.PlayerMainFigure;
+import de.illonis.eduras.units.PlayerMainFigure.InteractMode;
 import de.illonis.eduras.units.Unit;
 
 /**
@@ -610,6 +612,12 @@ public class ServerEventTriggerer implements EventTriggerer {
 		moveEvent.setNewYPos(o.getYPosition());
 
 		sendEventToAll(moveEvent);
+	}
+
+	@Override
+	public void changeInteractMode(int ownerId, InteractMode newMode) {
+		SetInteractModeEvent event = new SetInteractModeEvent(ownerId, newMode);
+		sendEventToClient(event, ownerId);
 	}
 
 }

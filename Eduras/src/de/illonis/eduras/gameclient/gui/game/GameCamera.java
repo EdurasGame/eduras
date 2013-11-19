@@ -14,6 +14,7 @@ public class GameCamera extends Rectangle {
 	private double scale;
 	private int targetX, targetY;
 	private boolean running;
+	private Thread cameraThread;
 
 	GameCamera() {
 		super();
@@ -23,11 +24,13 @@ public class GameCamera extends Rectangle {
 		scale = 1;
 	}
 
-	void startMoving() {
+	synchronized void startMoving() {
+		if (running)
+			return;
 		running = true;
-		Thread t = new Thread(cameraMover);
-		t.setName("CameraMover");
-		t.start();
+		cameraThread = new Thread(cameraMover);
+		cameraThread.setName("CameraMover");
+		cameraThread.start();
 	}
 
 	void setScale(double scale) {
@@ -98,7 +101,7 @@ public class GameCamera extends Rectangle {
 	/**
 	 * Stops automatic camera movement.
 	 */
-	public void stopMoving() {
+	public synchronized void stopMoving() {
 		running = false;
 	}
 

@@ -123,7 +123,7 @@ public class ItemDisplay extends ClickableGuiElement implements
 
 		try {
 			getInfo().getPlayer().getInventory().getItemBySlot(itemSlot);
-			getClickReactor().itemClicked(itemSlot);
+			getMouseHandler().itemClicked(itemSlot);
 			currentItem = itemSlot;
 
 		} catch (ItemSlotIsEmptyException e) {
@@ -274,11 +274,16 @@ public class ItemDisplay extends ClickableGuiElement implements
 
 	@Override
 	public Rectangle getBounds() {
-		return null;
+		return getTriggerArea();
 	}
 
 	@Override
 	public Rectangle getTriggerArea() {
 		return new Rectangle(screenX, screenY, WIDTH, HEIGHT);
+	}
+
+	@Override
+	public boolean isActive() {
+		return true;
 	}
 }

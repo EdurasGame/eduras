@@ -23,6 +23,7 @@ import de.illonis.eduras.maps.Map;
 import de.illonis.eduras.math.Vector2D;
 import de.illonis.eduras.settings.Settings;
 import de.illonis.eduras.units.PlayerMainFigure;
+import de.illonis.eduras.units.PlayerMainFigure.InteractMode;
 import de.illonis.eduras.units.Unit;
 
 /**
@@ -237,6 +238,12 @@ public class EdurasInitializer {
 
 			@Override
 			public void notifyNewObjectPosition(GameObject o) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void changeInteractMode(int ownerId, InteractMode newMode) {
 				// TODO Auto-generated method stub
 
 			}

@@ -145,22 +145,22 @@ public class InputKeyHandler extends KeyAdapter {
 			reactor.onStartMovement(Direction.RIGHT);
 			break;
 		case ITEM_1:
-			client.itemUsed(0);
+			reactor.onItemUse(0, client.getCurrentMousePos());
 			break;
 		case ITEM_2:
-			client.itemUsed(1);
+			reactor.onItemUse(1, client.getCurrentMousePos());
 			break;
 		case ITEM_3:
-			client.itemUsed(2);
+			reactor.onItemUse(2, client.getCurrentMousePos());
 			break;
 		case ITEM_4:
-			client.itemUsed(3);
+			reactor.onItemUse(3, client.getCurrentMousePos());
 			break;
 		case ITEM_5:
-			client.itemUsed(4);
+			reactor.onItemUse(4, client.getCurrentMousePos());
 			break;
 		case ITEM_6:
-			client.itemUsed(5);
+			reactor.onItemUse(5, client.getCurrentMousePos());
 			break;
 		case SHOW_STATS:
 			promoter.showStatWindow();

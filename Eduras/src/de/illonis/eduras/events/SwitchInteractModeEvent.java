@@ -21,6 +21,7 @@ public class SwitchInteractModeEvent extends OwnerGameEvent {
 	public SwitchInteractModeEvent(int playerOwnerId, InteractMode requestedMode) {
 		super(GameEventNumber.SWITCH_INTERACTMODE, playerOwnerId);
 		this.requestedMode = requestedMode;
+		putArgument(requestedMode.toString());
 	}
 
 	/**

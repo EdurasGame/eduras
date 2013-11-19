@@ -23,6 +23,7 @@ public class SetInteractModeEvent extends OwnerGameEvent {
 	public SetInteractModeEvent(int playerOwnerId, InteractMode newMode) {
 		super(GameEventNumber.SET_INTERACTMODE, playerOwnerId);
 		this.newMode = newMode;
+		putArgument(newMode.toString());
 	}
 
 	/**
