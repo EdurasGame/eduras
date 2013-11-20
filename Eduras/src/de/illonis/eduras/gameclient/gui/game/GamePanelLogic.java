@@ -9,6 +9,7 @@ import java.awt.event.ComponentEvent;
 import java.util.logging.Logger;
 
 import de.illonis.edulog.EduLog;
+import de.illonis.eduras.gameclient.ClientData;
 import de.illonis.eduras.gameclient.GuiInternalEventListener;
 import de.illonis.eduras.gameclient.gui.CameraMouseListener;
 import de.illonis.eduras.gameclient.gui.ClientGuiStepLogic;
@@ -44,6 +45,7 @@ public class GamePanelLogic extends ClientGuiStepLogic implements
 	private UserInterface userInterface;
 	private final InformationProvider infoPro;
 	private ClickState currentClickState;
+	private final ClientData data;
 
 	/**
 	 * The current click state of mouse. this is depending on interaction mode.
@@ -61,8 +63,12 @@ public class GamePanelLogic extends ClientGuiStepLogic implements
 	 * 
 	 * @param listener
 	 *            the listener.
+	 * @param clientData
+	 *            client data object.
 	 */
-	public GamePanelLogic(GuiInternalEventListener listener) {
+	public GamePanelLogic(GuiInternalEventListener listener,
+			ClientData clientData) {
+		this.data = clientData;
 		gui = new GamePanel();
 		currentClickState = ClickState.DEFAULT;
 		this.reactor = listener;
@@ -93,7 +99,7 @@ public class GamePanelLogic extends ClientGuiStepLogic implements
 	private void initUserInterface() {
 		userInterface = new UserInterface(infoPro, mouseHandler, mouseHandler,
 				hudNotifier);
-		renderer = new GameRenderer(camera, userInterface, infoPro);
+		renderer = new GameRenderer(camera, userInterface, infoPro, data);
 		renderer.setTarget(gui);
 	}
 

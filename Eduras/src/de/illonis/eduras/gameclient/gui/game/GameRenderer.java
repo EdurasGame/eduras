@@ -18,6 +18,7 @@ import java.util.LinkedList;
 import java.util.concurrent.ConcurrentHashMap;
 
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
+import de.illonis.eduras.gameclient.ClientData;
 import de.illonis.eduras.gameclient.gui.hud.HealthBar;
 import de.illonis.eduras.gameclient.gui.hud.ItemTooltip;
 import de.illonis.eduras.gameclient.gui.hud.RenderedGuiObject;
@@ -59,6 +60,7 @@ public class GameRenderer implements TooltipHandler {
 	private final static int DEFAULT_WIDTH = 484;
 	private final static int DEFAULT_HEIGHT = 462;
 	private final InformationProvider info;
+	private final ClientData data;
 
 	/**
 	 * Creates a new renderer.
@@ -70,10 +72,13 @@ public class GameRenderer implements TooltipHandler {
 	 *            reactor that handles gui events.
 	 * @param info
 	 *            game-information that contains objects to render.
+	 * @param data
+	 *            client data object.
 	 */
 	public GameRenderer(GameCamera camera, UserInterface gui,
-			InformationProvider info) {
+			InformationProvider info, ClientData data) {
 		this.uiObjects = gui.getUiObjects();
+		this.data = data;
 		this.camera = camera;
 		scale = 1;
 		objs = info.getGameObjects();
@@ -239,7 +244,7 @@ public class GameRenderer implements TooltipHandler {
 	 */
 	private synchronized void drawObjects() {
 
-		mapGraphics.setColor(Color.yellow);
+		mapGraphics.setColor(Color.YELLOW);
 
 		for (Iterator<GameObject> iterator = objs.values().iterator(); iterator
 				.hasNext();) {
@@ -253,6 +258,12 @@ public class GameRenderer implements TooltipHandler {
 				// TODO: distinguish between object images and icon images
 				// drawImageOf(d);
 				// draw shape of gameObject instead if object has shape
+
+				if (isSelected(d)) {
+					mapGraphics.setColor(Color.RED);
+				} else {
+					mapGraphics.setColor(Color.YELLOW);
+				}
 
 				if (d.getShape() != null) {
 					drawShapeOf(d);
@@ -276,6 +287,10 @@ public class GameRenderer implements TooltipHandler {
 			}
 		}
 
+	}
+
+	private boolean isSelected(GameObject object) {
+		return data.getSelectedUnits().contains(object.getId());
 	}
 
 	/**

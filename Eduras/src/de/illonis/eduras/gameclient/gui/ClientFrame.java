@@ -76,7 +76,7 @@ public class ClientFrame extends JFrame {
 		loginPanel = new LoginPanelLogic(guiEventListener);
 		progressPanel = new ProgressPanelLogic(guiEventListener);
 		loadingPanel = new LoadingPanelLogic(guiEventListener);
-		gamePanel = new GamePanelLogic(guiEventListener);
+		gamePanel = new GamePanelLogic(guiEventListener, client.getData());
 
 		getContentPane().add(loginPanel.getGui(), LOGINPANEL);
 		getContentPane().add(progressPanel.getGui(), CONNECTPANEL);

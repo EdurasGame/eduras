@@ -47,13 +47,15 @@ public class SendUnitsEvent extends OwnerGameEvent {
 	@Override
 	public Object getArgument(int i) throws TooFewArgumentsExceptions {
 		if (i == 0)
-			return target.getX();
+			return super.getArgument(i);
 		if (i == 1)
+			return target.getX();
+		if (i == 2)
 			return target.getY();
 		if (i >= getNumberOfArguments()) {
 			throw new TooFewArgumentsExceptions(i, getNumberOfArguments());
 		}
-		return units.get(i - 2);
+		return units.get(i - 3);
 	}
 
 	@Override

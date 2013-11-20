@@ -30,7 +30,6 @@ public class BuildModeMouseAdapter extends GuiMouseAdapter {
 
 		if (e.getButton() == MouseEvent.BUTTON3) {
 			getListener().sendSelectedUnits(clickGamePoint);
-			System.out.println("right click in build mode");
 		} else if (e.getButton() == MouseEvent.BUTTON1) {
 			getListener().selectOrDeselectAt(clickGamePoint);
 		}
@@ -82,7 +81,9 @@ public class BuildModeMouseAdapter extends GuiMouseAdapter {
 
 	@Override
 	public void mouseDragged(MouseEvent e) {
+		if (e.getButton() == MouseEvent.BUTTON1) {
 
+		}
 	}
 
 }
