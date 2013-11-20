@@ -316,9 +316,12 @@ public class EventParser implements EventHandler {
 						.getArgument(0)));
 				break;
 			case SET_SPEEDVECTOR:
-				logic.onGameEventAppeared(new SetIntegerGameObjectAttributeEvent(
-						GameEventNumber.SETSPEEDVECTOR, (Integer) event
-								.getArgument(0), (Integer) event.getArgument(1)));
+				MovementEvent movementEvent = new MovementEvent(
+						GameEventNumber.SETSPEEDVECTOR,
+						(Integer) event.getArgument(0));
+				movementEvent.setNewXPos((Double) event.getArgument(1));
+				movementEvent.setNewYPos((Double) event.getArgument(2));
+				logic.onGameEventAppeared(movementEvent);
 				break;
 			default:
 				L.warning("Cannot handle event with event number "

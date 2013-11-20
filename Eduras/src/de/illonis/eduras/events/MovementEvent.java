@@ -72,6 +72,7 @@ public class MovementEvent extends ObjectEvent {
 		switch (getEventNumber()) {
 		case EventParser.SET_POS_TCP:
 		case EventParser.SET_POS_UDP:
+		case EventParser.SET_SPEEDVECTOR:
 			switch (i) {
 			case 0:
 				return getObjectId();
@@ -96,6 +97,7 @@ public class MovementEvent extends ObjectEvent {
 		switch (getType()) {
 		case SET_POS_TCP:
 		case SET_POS_UDP:
+		case SETSPEEDVECTOR:
 			return 3;
 		default:
 			return 1;
