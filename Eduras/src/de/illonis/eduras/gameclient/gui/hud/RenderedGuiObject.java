@@ -3,6 +3,7 @@ package de.illonis.eduras.gameclient.gui.hud;
 import java.awt.Font;
 import java.awt.Graphics2D;
 import java.util.ArrayList;
+import java.util.LinkedList;
 
 import de.illonis.eduras.events.ClientRenameEvent;
 import de.illonis.eduras.events.DeathEvent;
@@ -21,6 +22,7 @@ import de.illonis.eduras.gamemodes.GameMode;
 import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.interfaces.GameEventListener;
 import de.illonis.eduras.logicabstraction.InformationProvider;
+import de.illonis.eduras.units.PlayerMainFigure.InteractMode;
 
 /**
  * An element that is part of the gui and is shown to end user (that means it is
@@ -41,6 +43,7 @@ public abstract class RenderedGuiObject implements GameEventListener {
 	private UserInterface gui;
 	protected int screenX, screenY;
 	protected boolean visibleForSpectator;
+	private final LinkedList<InteractMode> enabledModes;
 
 	/**
 	 * Creates a new {@link RenderedGuiObject} that is attached to given
@@ -53,6 +56,7 @@ public abstract class RenderedGuiObject implements GameEventListener {
 	protected RenderedGuiObject(UserInterface gui) {
 		this.gui = gui;
 		visibleForSpectator = false;
+		enabledModes = new LinkedList<InteractMode>();
 		screenX = screenY = 0;
 		gui.addElement(this);
 	}
@@ -72,7 +76,7 @@ public abstract class RenderedGuiObject implements GameEventListener {
 	 * @param visibleForSpectator
 	 *            true if visible to spectators, false otherwise.
 	 */
-	protected void setVisibleForSpectator(boolean visibleForSpectator) {
+	protected final void setVisibleForSpectator(boolean visibleForSpectator) {
 		this.visibleForSpectator = visibleForSpectator;
 	}
 
@@ -106,8 +110,36 @@ public abstract class RenderedGuiObject implements GameEventListener {
 	 * 
 	 * @return game information.
 	 */
-	protected InformationProvider getInfo() {
+	protected final InformationProvider getInfo() {
 		return gui.getInfos();
+	}
+
+	/**
+	 * Sets the interact modes in that this element is active and visible.
+	 * 
+	 * @param interactModes
+	 *            one or more interact modes where this element should be active
+	 *            in.
+	 */
+	protected final void setActiveInteractModes(InteractMode... interactModes) {
+		enabledModes.clear();
+		for (int i = 0; i < interactModes.length; i++) {
+			enabledModes.add(interactModes[i]);
+		}
+	}
+
+	/**
+	 * Checks whether this hud object is enabled (aka visible) in given
+	 * interaction mode. A disabled object will neither receive events nor be
+	 * displayed.
+	 * 
+	 * @param interactMode
+	 *            the interaction mode to check for.
+	 * @return true if this element is enabled for given {@link InteractMode},
+	 *         false otherwise.
+	 */
+	public final boolean isEnabledIn(InteractMode interactMode) {
+		return enabledModes.contains(interactMode);
 	}
 
 	/**
@@ -199,9 +231,9 @@ public abstract class RenderedGuiObject implements GameEventListener {
 	@Override
 	public void onInteractModeChanged(SetInteractModeEvent setModeEvent) {
 	}
-	
+
 	@Override
-	public void onGameReady() {		
+	public void onGameReady() {
 	}
 
 }

@@ -31,7 +31,9 @@ public interface ClickableGuiElementInterface {
 	Rectangle getBounds();
 
 	/**
-	 * Returns whether this element is active and reacts on clicks or not.
+	 * Returns whether this element is active and reacts on clicks or not.<br>
+	 * A gui element may be inactive if there are unavailabilities regarding
+	 * cooldowns or whatever.
 	 * 
 	 * @return true if this element is active, false otherwise.
 	 */
