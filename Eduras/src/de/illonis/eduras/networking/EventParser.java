@@ -168,7 +168,7 @@ public class EventParser implements EventHandler {
 				break;
 			case SET_SPEED:
 				logic.onGameEventAppeared(new SetIntegerGameObjectAttributeEvent(
-						GameEventNumber.SETSPEED, (Integer) event
+						GameEventNumber.SET_SPEED, (Integer) event
 								.getArgument(0), (Integer) event.getArgument(1)));
 				break;
 			case ITEM_USE:
@@ -269,7 +269,7 @@ public class EventParser implements EventHandler {
 				break;
 			case SET_HEALTH:
 				logic.onGameEventAppeared(new SetIntegerGameObjectAttributeEvent(
-						GameEventNumber.SETHEALTH, (Integer) event
+						GameEventNumber.SET_HEALTH, (Integer) event
 								.getArgument(0), (Integer) event.getArgument(1)));
 				break;
 			case SET_KILLS:
@@ -317,7 +317,7 @@ public class EventParser implements EventHandler {
 				break;
 			case SET_SPEEDVECTOR:
 				MovementEvent movementEvent = new MovementEvent(
-						GameEventNumber.SETSPEEDVECTOR,
+						GameEventNumber.SET_SPEEDVECTOR,
 						(Integer) event.getArgument(0));
 				movementEvent.setNewXPos((Double) event.getArgument(1));
 				movementEvent.setNewYPos((Double) event.getArgument(2));

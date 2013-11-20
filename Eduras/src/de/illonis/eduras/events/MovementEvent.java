@@ -97,7 +97,7 @@ public class MovementEvent extends ObjectEvent {
 		switch (getType()) {
 		case SET_POS_TCP:
 		case SET_POS_UDP:
-		case SETSPEEDVECTOR:
+		case SET_SPEEDVECTOR:
 			return 3;
 		default:
 			return 1;

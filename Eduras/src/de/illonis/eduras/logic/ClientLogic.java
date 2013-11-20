@@ -98,7 +98,7 @@ public class ClientLogic implements GameLogicInterface {
 				getListener().onNewObjectPosition(o);
 
 				break;
-			case SETHEALTH:
+			case SET_HEALTH:
 				SetIntegerGameObjectAttributeEvent healthEvent = (SetIntegerGameObjectAttributeEvent) event;
 				GameObject obj = gameInfo.findObjectById(healthEvent
 						.getObjectId());
@@ -138,7 +138,7 @@ public class ClientLogic implements GameLogicInterface {
 							e2);
 				}
 				break;
-			case SETMAXHEALTH:
+			case SET_MAXHEALTH:
 				SetIntegerGameObjectAttributeEvent mhealthEvent = (SetIntegerGameObjectAttributeEvent) event;
 				GameObject gobj = gameInfo.findObjectById(mhealthEvent
 						.getObjectId());

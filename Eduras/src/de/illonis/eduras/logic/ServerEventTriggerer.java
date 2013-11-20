@@ -104,7 +104,7 @@ public class ServerEventTriggerer implements EventTriggerer {
 		Missile o = (Missile) gameInfo.findObjectById(missileId);
 
 		o.setSpeedVector(speedVector);
-		MovementEvent me = new MovementEvent(GameEventNumber.SETSPEEDVECTOR,
+		MovementEvent me = new MovementEvent(GameEventNumber.SET_SPEEDVECTOR,
 				missileId);
 		me.setNewXPos(speedVector.getX());
 		me.setNewYPos(speedVector.getY());
@@ -304,7 +304,7 @@ public class ServerEventTriggerer implements EventTriggerer {
 
 			// announce to network
 			SetIntegerGameObjectAttributeEvent event = new SetIntegerGameObjectAttributeEvent(
-					GameEventNumber.SETHEALTH, id, newHealth);
+					GameEventNumber.SET_HEALTH, id, newHealth);
 			sendEvents(event);
 		}
 	}
