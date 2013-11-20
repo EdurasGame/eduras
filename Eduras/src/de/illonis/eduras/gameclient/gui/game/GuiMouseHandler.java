@@ -23,7 +23,7 @@ import de.illonis.eduras.units.PlayerMainFigure;
  * @author illonis
  * 
  */
-public class GuiMouseHandler extends GuiMouseAdapter implements
+public final class GuiMouseHandler extends GuiMouseAdapter implements
 		TooltipTriggererNotifier {
 
 	private final static Logger L = EduLog.getLoggerFor(GuiMouseHandler.class
@@ -88,6 +88,7 @@ public class GuiMouseHandler extends GuiMouseAdapter implements
 				if (nextReactor.onClick(p))
 					return;
 		}
+
 		PlayerMainFigure player;
 		try {
 			player = infoPro.getPlayer();

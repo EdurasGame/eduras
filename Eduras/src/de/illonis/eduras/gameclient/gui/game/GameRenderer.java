@@ -396,7 +396,7 @@ public class GameRenderer implements TooltipHandler {
 	 * @author illonis
 	 */
 	void startRendering() {
-		rendererThread = new RenderThread(this);
+		rendererThread = new RenderThread(this, gui.getFPSListener());
 		Thread t = new Thread(rendererThread);
 		t.setName("RendererThread");
 		t.start();

@@ -1,5 +1,6 @@
 package de.illonis.eduras;
 
+import java.util.LinkedList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -188,7 +189,8 @@ public class ObjectFactory {
 				go.setOwner(owner);
 				logic.getGame().addObject(go);
 				try {
-					logic.getGame().getEventTriggerer().notifyObjectCreated(event);
+					logic.getGame().getEventTriggerer()
+							.notifyObjectCreated(event);
 					logic.getListener().onObjectCreation(event);
 				} catch (NullPointerException | IllegalStateException e) {
 					// (jme) we need to catch it here because a listener is not
@@ -222,8 +224,9 @@ public class ObjectFactory {
 
 		GameObject o = logic.getGame().findObjectById(999);
 		o.setPosition(w, h);
-
-		SendUnitsEvent sendEvent = new SendUnitsEvent(-1, new Vector2D(), 999);
+		LinkedList<Integer> units = new LinkedList<Integer>();
+		units.add(999);
+		SendUnitsEvent sendEvent = new SendUnitsEvent(-1, new Vector2D(), units);
 		logic.onGameEventAppeared(sendEvent);
 	}
 }

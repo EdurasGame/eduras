@@ -430,7 +430,8 @@ public class GameInformation {
 		}
 
 		if (availableSpawnings.size() == 0)
-			throw new GameModeNotSupportedByMapException();
+			throw new GameModeNotSupportedByMapException(getGameSettings()
+					.getGameMode(), getMap());
 
 		int area = RANDOM.nextInt(availableSpawnings.size());
 		SpawnPosition spawnPos = availableSpawnings.get(area);

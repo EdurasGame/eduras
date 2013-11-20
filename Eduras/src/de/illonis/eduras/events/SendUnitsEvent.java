@@ -2,6 +2,7 @@ package de.illonis.eduras.events;
 
 import java.util.LinkedList;
 
+import de.eduras.eventingserver.exceptions.TooFewArgumentsExceptions;
 import de.illonis.eduras.math.Vector2D;
 
 /**
@@ -22,13 +23,11 @@ public class SendUnitsEvent extends OwnerGameEvent {
 	 * @param units
 	 *            one or multiple unit ids.
 	 */
-	public SendUnitsEvent(int playerId, Vector2D target, int... units) {
+	public SendUnitsEvent(int playerId, Vector2D target,
+			LinkedList<Integer> units) {
 		super(GameEventNumber.SEND_UNITS, playerId);
 		this.target = new Vector2D(target);
-		this.units = new LinkedList<Integer>();
-		for (int i : units) {
-			this.units.add(i);
-		}
+		this.units = new LinkedList<Integer>(units);
 	}
 
 	/**
@@ -43,6 +42,23 @@ public class SendUnitsEvent extends OwnerGameEvent {
 	 */
 	public LinkedList<Integer> getUnits() {
 		return units;
+	}
+
+	@Override
+	public Object getArgument(int i) throws TooFewArgumentsExceptions {
+		if (i == 0)
+			return target.getX();
+		if (i == 1)
+			return target.getY();
+		if (i >= getNumberOfArguments()) {
+			throw new TooFewArgumentsExceptions(i, getNumberOfArguments());
+		}
+		return units.get(i - 2);
+	}
+
+	@Override
+	public int getNumberOfArguments() {
+		return units.size() + 2;
 	}
 
 }

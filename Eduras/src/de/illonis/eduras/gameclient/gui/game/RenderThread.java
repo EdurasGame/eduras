@@ -10,14 +10,16 @@ import de.illonis.edulog.EduLog;
  * @author illonis
  * 
  */
-public class RenderThread implements Runnable {
+public final class RenderThread implements Runnable {
 
 	private final static Logger L = EduLog.getLoggerFor(RenderThread.class
 			.getName());
 
 	private final static int DRAW_INTERVAL = 20;
 	private final GameRenderer renderer;
+	private final FPSListener listener;
 	private boolean running;
+	private int fps;
 
 	/**
 	 * Creates a new {@link RenderThread} that calls given {@link GameRenderer}.
@@ -25,20 +27,41 @@ public class RenderThread implements Runnable {
 	 * @param renderer
 	 *            renderer to repeatedly call.
 	 */
-	RenderThread(GameRenderer renderer) {
+	RenderThread(GameRenderer renderer, FPSListener listener) {
 		this.renderer = renderer;
+		this.listener = listener;
+		fps = 0;
+	}
+
+	/**
+	 * @return the current fps.
+	 */
+	public int getFps() {
+		return fps;
 	}
 
 	@Override
 	public void run() {
 		running = true;
+		int frames = 0;
+		long renderTime;
+		long lastTime = System.currentTimeMillis();
 		while (running) {
 			// BufferStrategy bs = panel.getBufferStrategy();
 			// if (bs == null) {
 			// panel.createBufferStrategy(3);
 			// }
+			frames++;
+
 			renderer.render();
 			renderer.paintGame();
+			renderTime = System.currentTimeMillis();
+			if (renderTime > lastTime + 1000) {
+				fps = ((int) (renderTime - lastTime)) / 1000 * frames;
+				listener.setFPS(fps);
+				lastTime = renderTime;
+				frames = 0;
+			}
 			try {
 				Thread.sleep(DRAW_INTERVAL);
 			} catch (InterruptedException e) {

@@ -1,18 +1,24 @@
 package de.illonis.eduras.gameclient;
 
+import java.awt.geom.Rectangle2D;
+import java.util.LinkedList;
+import java.util.Map.Entry;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import de.illonis.edulog.EduLog;
 import de.illonis.eduras.events.GameEvent.GameEventNumber;
 import de.illonis.eduras.events.ItemEvent;
+import de.illonis.eduras.events.SendUnitsEvent;
 import de.illonis.eduras.events.SwitchInteractModeEvent;
 import de.illonis.eduras.events.UserMovementEvent;
 import de.illonis.eduras.exceptions.MessageNotSupportedException;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
 import de.illonis.eduras.exceptions.WrongEventTypeException;
+import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.gameobjects.MoveableGameObject.Direction;
 import de.illonis.eduras.logicabstraction.EdurasInitializer;
+import de.illonis.eduras.logicabstraction.InformationProvider;
 import de.illonis.eduras.math.Vector2D;
 import de.illonis.eduras.units.PlayerMainFigure.InteractMode;
 
@@ -25,10 +31,11 @@ import de.illonis.eduras.units.PlayerMainFigure.InteractMode;
 public class GuiInternalEventListener implements LoginPanelReactor,
 		ProgressPanelReactor, GamePanelReactor, LoadingPanelReactor {
 
-	private final static Logger L = EduLog.getLoggerFor(GuiInternalEventListener.class
-			.getName());
+	private final static Logger L = EduLog
+			.getLoggerFor(GuiInternalEventListener.class.getName());
 	private final GameClient client;
 	private ConnectionEstablisher establisher;
+	private final InformationProvider infoPro;
 
 	/**
 	 * @param client
@@ -36,6 +43,7 @@ public class GuiInternalEventListener implements LoginPanelReactor,
 	 */
 	public GuiInternalEventListener(GameClient client) {
 		this.client = client;
+		infoPro = EdurasInitializer.getInstance().getInformationProvider();
 	}
 
 	@Override
@@ -149,13 +157,56 @@ public class GuiInternalEventListener implements LoginPanelReactor,
 			client.sendEvent(new SwitchInteractModeEvent(client.getOwnerID(),
 					nextMode));
 		} catch (WrongEventTypeException | MessageNotSupportedException
-				| ObjectNotFoundException e1) {
-			L.log(Level.SEVERE, "mode switch request could not be sent.", e1);
+				| ObjectNotFoundException e) {
+			L.log(Level.SEVERE, "mode switch request could not be sent.", e);
 		}
 	}
 
 	@Override
 	public void onLoadingFinished() {
 		client.getFrame().onDataReady();
+	}
+
+	@Override
+	public void onUnitsSelected(Rectangle2D.Double area) {
+		LinkedList<Integer> ids = new LinkedList<Integer>();
+		for (Entry<Integer, GameObject> obj : infoPro.getGameObjects()
+				.entrySet()) {
+			GameObject o = obj.getValue();
+			if (o.isUnit() && o.isVisible()
+					&& o.getBoundingBox().intersects(area)) {
+				ids.add(obj.getKey());
+			}
+		}
+		client.getData().setSelectedUnits(ids);
+
+	}
+
+	@Override
+	public void selectOrDeselectAt(Vector2D point) {
+		for (Entry<Integer, GameObject> obj : infoPro.getGameObjects()
+				.entrySet()) {
+			GameObject o = obj.getValue();
+			if (o.isUnit() && o.isVisible()
+					&& o.getBoundingBox().contains(point.toPoint())) {
+				client.getData().setSelectedUnit(obj.getKey());
+				return;
+			}
+		}
+		client.getData().clearSelectedUnits();
+	}
+
+	@Override
+	public void sendSelectedUnits(Vector2D target) {
+		LinkedList<Integer> units = client.getData().getSelectedUnits();
+		if (units.isEmpty())
+			return;
+		SendUnitsEvent sendEvent = new SendUnitsEvent(client.getOwnerID(),
+				target, units);
+		try {
+			client.sendEvent(sendEvent);
+		} catch (WrongEventTypeException | MessageNotSupportedException e) {
+			L.log(Level.SEVERE, "Error sending sendunits event", e);
+		}
 	}
 }

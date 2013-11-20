@@ -40,6 +40,7 @@ public class GameClient {
 	private ClientFrame frame;
 	private ServerSearcher searcher;
 	private HudNotifier hudNotifier;
+	private final ClientData data;
 
 	// private TooltipHandler tooltipHandler;
 
@@ -50,6 +51,7 @@ public class GameClient {
 	 * Creates a new client and initializes all necessary components.
 	 */
 	public GameClient() {
+		data = new ClientData();
 		loadTools();
 	}
 
@@ -84,6 +86,12 @@ public class GameClient {
 		nwm.setNetworkEventHandler(eventHandler);
 	}
 
+	/**
+	 * Handles connection of this client.
+	 * 
+	 * @param clientId
+	 *            the connected client.
+	 */
 	public void onClientConnected(int clientId) {
 		if (clientId != getOwnerID()) // only handle my connection
 			return;
@@ -98,6 +106,12 @@ public class GameClient {
 		}
 	}
 
+	/**
+	 * Handles disconnect of a client.
+	 * 
+	 * @param clientId
+	 *            the client that lost connection.
+	 */
 	public void onClientConnectionLost(int clientId) {
 		if (clientId == getOwnerID()) {
 			L.warning("Connection lost");
@@ -107,6 +121,12 @@ public class GameClient {
 		}
 	}
 
+	/**
+	 * Handles disconnect of a client.
+	 * 
+	 * @param clientId
+	 *            the client that disconnected.
+	 */
 	public void onClientDisconnect(int clientId) {
 		L.info("Client disconnected: " + clientId);
 		frame.onClientDisconnect(clientId);
@@ -218,6 +238,13 @@ public class GameClient {
 		if (searcher == null)
 			return;
 		searcher.interrupt();
+	}
+
+	/**
+	 * @return the client data.
+	 */
+	public ClientData getData() {
+		return data;
 	}
 
 }

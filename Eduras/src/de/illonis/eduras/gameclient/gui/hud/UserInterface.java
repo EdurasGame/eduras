@@ -3,6 +3,7 @@ package de.illonis.eduras.gameclient.gui.hud;
 import java.util.LinkedList;
 
 import de.illonis.eduras.gameclient.gui.HudNotifier;
+import de.illonis.eduras.gameclient.gui.game.FPSListener;
 import de.illonis.eduras.gameclient.gui.game.GuiClickReactor;
 import de.illonis.eduras.gameclient.gui.game.GuiResizeListener;
 import de.illonis.eduras.gameclient.gui.game.TooltipHandler;
@@ -25,6 +26,7 @@ public class UserInterface implements GuiResizeListener, UserInputListener {
 	private TooltipHandler tooltipHandler;
 	private TooltipTriggererNotifier tooltipNotifier;
 	private StatisticsWindow statWindow;
+	private FPSDisplay fpsDisplay;
 	private boolean spectator;
 	private NotificationPanel notificationPanel;
 
@@ -58,6 +60,7 @@ public class UserInterface implements GuiResizeListener, UserInputListener {
 		new GameModeBar(this);
 		new PlayerStatBar(this);
 		new TimeFrame(this);
+		fpsDisplay = new FPSDisplay(this);
 		notificationPanel = new NotificationPanel(this);
 		statWindow = new StatisticsWindow(this);
 	}
@@ -173,6 +176,13 @@ public class UserInterface implements GuiResizeListener, UserInputListener {
 					removeGuiElement(o);
 			}
 		}
+	}
+
+	/**
+	 * @return the element that listens for fps.
+	 */
+	public FPSListener getFPSListener() {
+		return fpsDisplay;
 	}
 
 }

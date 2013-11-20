@@ -5,13 +5,19 @@ import java.awt.event.MouseAdapter;
 import de.illonis.eduras.gameclient.GuiInternalEventListener;
 import de.illonis.eduras.gameclient.gui.hud.ClickableGuiElementInterface;
 
+/**
+ * A mouse adapter that can listen to mouse events and performs the appropriate
+ * action.
+ * 
+ * @author illonis
+ * 
+ */
 public abstract class GuiMouseAdapter extends MouseAdapter implements
 		GuiClickReactor {
 	private final GamePanelLogic panelLogic;
 	private final GuiInternalEventListener listener;
 
-	public GuiMouseAdapter(GamePanelLogic panelLogic,
-			GuiInternalEventListener listener) {
+	GuiMouseAdapter(GamePanelLogic panelLogic, GuiInternalEventListener listener) {
 		this.panelLogic = panelLogic;
 		this.listener = listener;
 		// TODO Auto-generated constructor stub

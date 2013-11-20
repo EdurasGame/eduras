@@ -1,5 +1,6 @@
 package de.illonis.eduras.networking;
 
+import java.util.LinkedList;
 import java.util.logging.Logger;
 
 import de.eduras.eventingserver.Event;
@@ -190,9 +191,9 @@ public class EventParser implements EventHandler {
 				Vector2D target = new Vector2D((Double) event.getArgument(1),
 						(Double) event.getArgument(2));
 
-				int[] unitIds = new int[numberOfArgs - 3];
+				LinkedList<Integer> unitIds = new LinkedList<Integer>();
 				for (int i = 3; i < numberOfArgs; i++) {
-					unitIds[i - 3] = (Integer) event.getArgument(i);
+					unitIds.add((Integer) event.getArgument(i));
 				}
 
 				logic.onGameEventAppeared(new SendUnitsEvent((Integer) event

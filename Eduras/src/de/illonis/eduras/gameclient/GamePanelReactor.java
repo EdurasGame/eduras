@@ -1,5 +1,7 @@
 package de.illonis.eduras.gameclient;
 
+import java.awt.geom.Rectangle2D;
+
 import de.illonis.eduras.gameobjects.MoveableGameObject.Direction;
 import de.illonis.eduras.math.Vector2D;
 import de.illonis.eduras.units.PlayerMainFigure;
@@ -40,6 +42,14 @@ public interface GamePanelReactor {
 	void onStopMovement(Direction direction);
 
 	/**
+	 * Triggers that player dragged a rectangle to select multiple units.
+	 * 
+	 * @param area
+	 *            the rectangle that has been drawn.
+	 */
+	void onUnitsSelected(Rectangle2D.Double area);
+
+	/**
 	 * Triggers users wish of quitting the game.
 	 */
 	void onGameQuit();
@@ -48,4 +58,22 @@ public interface GamePanelReactor {
 	 * Indicates a mode switch.
 	 */
 	void onModeSwitch();
+
+	/**
+	 * Indicates a simple click at given position. This should either select a
+	 * single unit (if any is at that point) or remove selection.
+	 * 
+	 * @param point
+	 *            the point where user clicked.
+	 */
+	void selectOrDeselectAt(Vector2D point);
+
+	/**
+	 * Indicates to trigger a send units event to server with currently selected
+	 * units and given target.
+	 * 
+	 * @param target
+	 *            the target location.
+	 */
+	void sendSelectedUnits(Vector2D target);
 }

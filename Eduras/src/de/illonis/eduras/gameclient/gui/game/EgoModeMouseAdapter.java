@@ -6,12 +6,19 @@ import de.illonis.eduras.gameclient.GuiInternalEventListener;
 import de.illonis.eduras.gameclient.gui.game.GamePanelLogic.ClickState;
 import de.illonis.eduras.inventory.Inventory;
 import de.illonis.eduras.math.Vector2D;
+import de.illonis.eduras.units.PlayerMainFigure.InteractMode;
 
+/**
+ * Handles mouse events in the ego mode ({@link InteractMode#MODE_EGO}).
+ * 
+ * @author illonis
+ * 
+ */
 public class EgoModeMouseAdapter extends GuiMouseAdapter {
 
 	private int currentItemSelected = -1;
 
-	public EgoModeMouseAdapter(GamePanelLogic logic,
+	protected EgoModeMouseAdapter(GamePanelLogic logic,
 			GuiInternalEventListener reactor) {
 		super(logic, reactor);
 

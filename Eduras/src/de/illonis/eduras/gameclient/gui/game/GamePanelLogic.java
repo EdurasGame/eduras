@@ -45,8 +45,15 @@ public class GamePanelLogic extends ClientGuiStepLogic implements
 	private final InformationProvider infoPro;
 	private ClickState currentClickState;
 
+	/**
+	 * The current click state of mouse. this is depending on interaction mode.
+	 * 
+	 * @author illonis
+	 * 
+	 */
+	@SuppressWarnings("javadoc")
 	public enum ClickState {
-		DEFAULT, ITEM_SELECTED;
+		DEFAULT, ITEM_SELECTED, UNITSELECT_DRAGGING;
 	}
 
 	/**
@@ -57,7 +64,6 @@ public class GamePanelLogic extends ClientGuiStepLogic implements
 	 */
 	public GamePanelLogic(GuiInternalEventListener listener) {
 		gui = new GamePanel();
-
 		currentClickState = ClickState.DEFAULT;
 		this.reactor = listener;
 		infoPro = EdurasInitializer.getInstance().getInformationProvider();
@@ -69,10 +75,17 @@ public class GamePanelLogic extends ClientGuiStepLogic implements
 		cml = new CameraMouseListener(camera);
 	}
 
+	/**
+	 * @return the current click state.
+	 */
 	public ClickState getClickState() {
 		return currentClickState;
 	}
 
+	/**
+	 * @param state
+	 *            the new click state.
+	 */
 	public void setClickState(ClickState state) {
 		currentClickState = state;
 	}
