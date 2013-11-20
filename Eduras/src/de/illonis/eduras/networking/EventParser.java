@@ -23,6 +23,7 @@ import de.illonis.eduras.events.SendUnitsEvent;
 import de.illonis.eduras.events.SetBooleanGameObjectAttributeEvent;
 import de.illonis.eduras.events.SetGameModeEvent;
 import de.illonis.eduras.events.SetIntegerGameObjectAttributeEvent;
+import de.illonis.eduras.events.SetInteractModeEvent;
 import de.illonis.eduras.events.SetItemSlotEvent;
 import de.illonis.eduras.events.SetOwnerEvent;
 import de.illonis.eduras.events.SetPolygonDataEvent;
@@ -322,6 +323,11 @@ public class EventParser implements EventHandler {
 				movementEvent.setNewXPos((Double) event.getArgument(1));
 				movementEvent.setNewYPos((Double) event.getArgument(2));
 				logic.onGameEventAppeared(movementEvent);
+				break;
+			case SET_INTERACTMODE:
+				logic.onGameEventAppeared(new SetInteractModeEvent(
+						(Integer) event.getArgument(0), InteractMode
+								.valueOf((String) event.getArgument(1))));
 				break;
 			default:
 				L.warning("Cannot handle event with event number "
