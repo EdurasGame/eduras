@@ -15,7 +15,7 @@ public final class RenderThread implements Runnable {
 	private final static Logger L = EduLog.getLoggerFor(RenderThread.class
 			.getName());
 
-	private final static int DRAW_INTERVAL = 20;
+	private final static int DRAW_INTERVAL = 1;
 	private final GameRenderer renderer;
 	private final FPSListener listener;
 	private boolean running;
@@ -56,6 +56,7 @@ public final class RenderThread implements Runnable {
 			renderer.render();
 			renderer.paintGame();
 			renderTime = System.currentTimeMillis();
+
 			if (renderTime > lastTime + 1000) {
 				fps = ((int) (renderTime - lastTime)) / 1000 * frames;
 				listener.setFPS(fps);

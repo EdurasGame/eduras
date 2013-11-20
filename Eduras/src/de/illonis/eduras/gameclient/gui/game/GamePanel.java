@@ -1,8 +1,7 @@
 package de.illonis.eduras.gameclient.gui.game;
 
+import java.awt.Canvas;
 import java.awt.Color;
-
-import javax.swing.JPanel;
 
 /**
  * The panel where the game is drawn on.
@@ -10,7 +9,7 @@ import javax.swing.JPanel;
  * @author illonis
  * 
  */
-public class GamePanel extends JPanel {
+public class GamePanel extends Canvas {
 
 	private static final long serialVersionUID = 1L;
 
@@ -18,6 +17,7 @@ public class GamePanel extends JPanel {
 		setFocusable(true);
 		setFocusTraversalKeysEnabled(false);
 		setBackground(Color.black);
-		setDoubleBuffered(true);
+		// setDoubleBuffered(true);
+		setIgnoreRepaint(true);
 	}
 }

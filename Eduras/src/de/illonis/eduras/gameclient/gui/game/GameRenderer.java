@@ -2,6 +2,7 @@ package de.illonis.eduras.gameclient.gui.game;
 
 import java.awt.AlphaComposite;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Graphics2D;
 import java.awt.GraphicsConfiguration;
 import java.awt.GraphicsDevice;
@@ -10,12 +11,11 @@ import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.awt.Transparency;
+import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.concurrent.ConcurrentHashMap;
-
-import javax.swing.JPanel;
 
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
 import de.illonis.eduras.gameclient.gui.hud.HealthBar;
@@ -50,7 +50,8 @@ public class GameRenderer implements TooltipHandler {
 	private Graphics2D bothGraphics = null;
 	private final ConcurrentHashMap<Integer, GameObject> objs;
 	private RenderThread rendererThread;
-	private JPanel target;
+	private Component target;
+	private BufferStrategy buffer;
 	private ItemTooltip tooltip;
 	private double scale;
 	private boolean tooltipShown = false;
@@ -207,13 +208,18 @@ public class GameRenderer implements TooltipHandler {
 	 * 
 	 */
 	public void paintGame() {
-		if ((target != null) && (mapImage != null) && guiImage != null
+		if ((buffer != null) && (mapImage != null) && guiImage != null
 				&& (displayImage != null)) {
 
-			Graphics2D g2d = (Graphics2D) target.getGraphics();
+			Graphics2D g2d = (Graphics2D) buffer.getDrawGraphics();
 			bothGraphics.drawImage(mapImage, 0, 0, null);
 			bothGraphics.drawImage(guiImage, 0, 0, null);
 			g2d.drawImage(displayImage, 0, 0, null);
+			if (!buffer.contentsLost()) {
+				buffer.show();
+			}
+			if (g2d != null)
+				g2d.dispose();
 		}
 	}
 
@@ -409,7 +415,9 @@ public class GameRenderer implements TooltipHandler {
 	 *            target game panel.
 	 */
 	void setTarget(GamePanel guiPanel) {
-		this.target = guiPanel;
+		guiPanel.createBufferStrategy(2);
+		target = guiPanel;
+		buffer = guiPanel.getBufferStrategy();
 	}
 
 	/**
