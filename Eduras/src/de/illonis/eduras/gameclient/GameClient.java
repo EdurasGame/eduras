@@ -150,6 +150,17 @@ public class GameClient {
 	}
 
 	/**
+	 * Handles a full server and returns to login screen.
+	 */
+	public void onServerIsFull() {
+		frame.hideProgress();
+		frame.showLogin();
+		JOptionPane.showMessageDialog(frame,
+				Localization.getString("Client.serverfull"), "Server full",
+				JOptionPane.ERROR_MESSAGE);
+	}
+
+	/**
 	 * Returns network manager.
 	 * 
 	 * @return network manager.

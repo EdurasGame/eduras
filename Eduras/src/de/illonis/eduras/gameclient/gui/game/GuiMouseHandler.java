@@ -14,11 +14,12 @@ import de.illonis.eduras.gameclient.gui.hud.ClickableGuiElementInterface;
 import de.illonis.eduras.gameclient.gui.hud.TooltipTriggerer;
 import de.illonis.eduras.logicabstraction.EdurasInitializer;
 import de.illonis.eduras.logicabstraction.InformationProvider;
-import de.illonis.eduras.math.Vector2D;
 import de.illonis.eduras.units.PlayerMainFigure;
 
 /**
- * Handles mouse clicks and mouse movement in the gui.
+ * Handles mouse clicks and mouse movement in the gui.<br>
+ * This handler passes events - if not consumed by user interface - to the
+ * mousehandler that is responsible for players current interaction mode.
  * 
  * @author illonis
  * 
@@ -106,23 +107,6 @@ public final class GuiMouseHandler extends GuiMouseAdapter implements
 		default:
 			break;
 		}
-
-	}
-
-	/**
-	 * Indicates a click into game world.<br>
-	 * Note that position information is gui-relative and has to be computed to
-	 * game coordinates.
-	 * 
-	 * @param p
-	 *            click position in gui.
-	 */
-	private void inGameClick(Point p) {
-		Vector2D gamePoint = getPanelLogic().computeGuiPointToGameCoordinate(
-				new Vector2D(p));
-
-		System.out.println("ingameclick. gui: " + p + ", game: " + gamePoint);
-		// TODO: implement
 	}
 
 	@Override
