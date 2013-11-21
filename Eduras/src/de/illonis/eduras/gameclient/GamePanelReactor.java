@@ -76,4 +76,5 @@ public interface GamePanelReactor {
 	 *            the target location.
 	 */
 	void sendSelectedUnits(Vector2D target);
+
 }

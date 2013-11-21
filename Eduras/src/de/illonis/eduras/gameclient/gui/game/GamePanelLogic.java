@@ -15,6 +15,7 @@ import de.illonis.eduras.gameclient.gui.CameraMouseListener;
 import de.illonis.eduras.gameclient.gui.ClientGuiStepLogic;
 import de.illonis.eduras.gameclient.gui.HudNotifier;
 import de.illonis.eduras.gameclient.gui.InputKeyHandler;
+import de.illonis.eduras.gameclient.gui.hud.DragSelectionRectangle;
 import de.illonis.eduras.gameclient.gui.hud.UserInterface;
 import de.illonis.eduras.logicabstraction.EdurasInitializer;
 import de.illonis.eduras.logicabstraction.InformationProvider;
@@ -260,5 +261,9 @@ public class GamePanelLogic extends ClientGuiStepLogic implements
 	 */
 	public void setHudNotifier(HudNotifier hudNotifier) {
 		this.hudNotifier = hudNotifier;
+	}
+
+	public DragSelectionRectangle getDragRect() {
+		return userInterface.getDragRect();
 	}
 }

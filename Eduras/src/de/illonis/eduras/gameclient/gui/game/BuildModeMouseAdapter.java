@@ -1,6 +1,7 @@
 package de.illonis.eduras.gameclient.gui.game;
 
 import java.awt.Point;
+import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Rectangle2D;
 
@@ -63,11 +64,25 @@ public class BuildModeMouseAdapter extends GuiMouseAdapter {
 					new Vector2D(e.getPoint()));
 			Rectangle2D.Double r = calculateDragRect(start, end);
 			getListener().onUnitsSelected(r);
+			getPanelLogic().getDragRect().clear();
 		}
 	}
 
+	private Rectangle calculateDrawRect(Point first, Point second) {
+		if (first.x == second.x || first.y == second.y)
+			return new Rectangle(first.x, first.y, 0, 0);
+
+		int topLeftX = Math.min(first.x, second.x);
+		int topLeftY = Math.min(first.y, second.y);
+		int bottomRightX = Math.max(first.x, second.x);
+		int bottomRightY = Math.max(first.y, second.y);
+
+		return new Rectangle(topLeftX, topLeftY, bottomRightX - topLeftX,
+				bottomRightY - topLeftY);
+	}
+
 	private Rectangle2D.Double calculateDragRect(Vector2D first, Vector2D second) {
-		if (first.getX() == second.getX() || first.getX() == second.getY())
+		if (first.getX() == second.getX() || first.getY() == second.getY())
 			return new Rectangle2D.Double(first.getX(), first.getY(), 0, 0);
 
 		double topLeftX = Math.min(first.getX(), second.getX());
@@ -81,8 +96,11 @@ public class BuildModeMouseAdapter extends GuiMouseAdapter {
 
 	@Override
 	public void mouseDragged(MouseEvent e) {
-		if (e.getButton() == MouseEvent.BUTTON1) {
-
+		if (getPanelLogic().getClickState() == ClickState.UNITSELECT_DRAGGING) {
+			Point first = startPoint;
+			Point second = e.getPoint();
+			getPanelLogic().getDragRect().setRectangle(
+					calculateDrawRect(first, second));
 		}
 	}
 

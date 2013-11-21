@@ -27,6 +27,7 @@ public class UserInterface implements GuiResizeListener, UserInputListener {
 	private TooltipTriggererNotifier tooltipNotifier;
 	private StatisticsWindow statWindow;
 	private FPSDisplay fpsDisplay;
+	private DragSelectionRectangle dragRect;
 	private boolean spectator;
 	private NotificationPanel notificationPanel;
 
@@ -62,6 +63,7 @@ public class UserInterface implements GuiResizeListener, UserInputListener {
 		new TimeFrame(this);
 		fpsDisplay = new FPSDisplay(this);
 		notificationPanel = new NotificationPanel(this);
+		dragRect = new DragSelectionRectangle(this);
 		statWindow = new StatisticsWindow(this);
 	}
 
@@ -183,6 +185,10 @@ public class UserInterface implements GuiResizeListener, UserInputListener {
 	 */
 	public FPSListener getFPSListener() {
 		return fpsDisplay;
+	}
+
+	public DragSelectionRectangle getDragRect() {
+		return dragRect;
 	}
 
 }

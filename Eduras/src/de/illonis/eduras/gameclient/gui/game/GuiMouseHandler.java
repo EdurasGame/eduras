@@ -158,6 +158,7 @@ public final class GuiMouseHandler extends GuiMouseAdapter implements
 
 	@Override
 	public void mouseDragged(MouseEvent e) {
+
 		PlayerMainFigure player;
 		try {
 			player = infoPro.getPlayer();
