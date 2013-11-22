@@ -53,4 +53,9 @@ public class ClientNetworkEventListener implements ClientNetworkEventHandler {
 	public void onServerIsFull() {
 		// TODO: Show a message box on the GUI or something.
 	}
+
+	@Override
+	public void onPingReceived(long latency) {
+		// TODO: Notify PingDisplay on the GUI.
+	}
 }

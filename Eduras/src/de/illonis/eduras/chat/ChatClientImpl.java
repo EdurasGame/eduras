@@ -60,6 +60,12 @@ class ChatClientImpl implements ChatClient {
 				// TODO Auto-generated method stub
 
 			}
+
+			@Override
+			public void onPingReceived(long latency) {
+				// TODO Auto-generated method stub
+
+			}
 		});
 	}
 

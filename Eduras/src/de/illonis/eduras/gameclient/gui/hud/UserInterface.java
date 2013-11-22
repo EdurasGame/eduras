@@ -30,6 +30,7 @@ public class UserInterface implements GuiResizeListener, UserInputListener {
 	private DragSelectionRectangle dragRect;
 	private boolean spectator;
 	private NotificationPanel notificationPanel;
+	private PingDisplay pingDisplay;
 
 	/**
 	 * Creates the user interface. The tooltip handler will be set manually
@@ -62,6 +63,7 @@ public class UserInterface implements GuiResizeListener, UserInputListener {
 		new PlayerStatBar(this);
 		new TimeFrame(this);
 		fpsDisplay = new FPSDisplay(this);
+		pingDisplay = new PingDisplay(this);
 		notificationPanel = new NotificationPanel(this);
 		dragRect = new DragSelectionRectangle(this);
 		statWindow = new StatisticsWindow(this);
