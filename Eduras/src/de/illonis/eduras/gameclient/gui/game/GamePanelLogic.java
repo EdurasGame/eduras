@@ -263,7 +263,17 @@ public class GamePanelLogic extends ClientGuiStepLogic implements
 		this.hudNotifier = hudNotifier;
 	}
 
-	public DragSelectionRectangle getDragRect() {
+	DragSelectionRectangle getDragRect() {
 		return userInterface.getDragRect();
+	}
+
+	/**
+	 * Shows a notification to the user in gamepanel.
+	 * 
+	 * @param msg
+	 *            the message.
+	 */
+	public void showNotification(String msg) {
+		userInterface.showNotification(msg);
 	}
 }

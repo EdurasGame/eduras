@@ -238,4 +238,14 @@ public class ClientFrame extends JFrame {
 		gamePanel.setHudNotifier(hudNotifier);
 	}
 
+	/**
+	 * Shows a notification.
+	 * 
+	 * @param msg
+	 *            the message.
+	 */
+	public void notification(String msg) {
+		gamePanel.showNotification(msg);
+	}
+
 }

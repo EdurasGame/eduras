@@ -35,8 +35,7 @@ public class ClientNetworkEventListener implements ClientNetworkEventHandler {
 
 	@Override
 	public void onClientKicked(int id, String reason) {
-		// TODO: Process the reason!
-		reactor.onClientDisconnect(id);
+		reactor.onClientKicked(id, reason);
 	}
 
 	@Override

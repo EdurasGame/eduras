@@ -122,6 +122,24 @@ public class GameClient {
 	}
 
 	/**
+	 * @param clientId
+	 *            the client that has been kicked.
+	 * @param reason
+	 *            the reason.
+	 */
+	public void onClientKicked(int clientId, String reason) {
+		if (clientId == getOwnerID()) {
+			frame.onClientConnectionLost(clientId);
+			JOptionPane.showMessageDialog(frame,
+					"You have been kicked from the server:\n" + reason,
+					"Kicked from server", JOptionPane.ERROR_MESSAGE);
+		} else {
+			frame.notification("Client " + clientId
+					+ " has been kicked. Reason: " + reason);
+		}
+	}
+
+	/**
 	 * Handles disconnect of a client.
 	 * 
 	 * @param clientId
