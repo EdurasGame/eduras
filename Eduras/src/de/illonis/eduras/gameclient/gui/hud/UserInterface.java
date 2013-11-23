@@ -189,8 +189,19 @@ public class UserInterface implements GuiResizeListener, UserInputListener {
 		return fpsDisplay;
 	}
 
+	/**
+	 * @return the selection rectangle.
+	 */
 	public DragSelectionRectangle getDragRect() {
 		return dragRect;
+	}
+
+	/**
+	 * @param message
+	 *            the message.
+	 */
+	public void showNotification(String message) {
+		notificationPanel.addNotification(message);
 	}
 
 }
