@@ -260,6 +260,7 @@
 					    <entry>Indicates that the user would like to accept an invite</entry>
 					    <entry>The accepting user's id.</entry>
 					    <entry>The id of the room it was invited to join.</entry>
+					    <entry>The id of the user who invited to join.</entry>
 					</row>
 					<row>
 					    <entry>(jme) SEND_FRIENDREQUEST</entry>

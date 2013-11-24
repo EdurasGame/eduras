@@ -11,6 +11,8 @@ import java.util.LinkedList;
  */
 public class ChatRoom {
 
+	static int lastId = 0;
+
 	private String name;
 	private LinkedList<ChatUser> usersInTheRoom;
 	private int roomId;

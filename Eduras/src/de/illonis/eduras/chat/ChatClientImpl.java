@@ -163,6 +163,7 @@ class ChatClientImpl implements ChatClient {
 		Event acceptInviteEvent = new Event(Chat.ACCEPT_INVITE);
 		acceptInviteEvent.putArgument(client.getClientId());
 		acceptInviteEvent.putArgument(invite.getRoom().getRoomId());
+		acceptInviteEvent.putArgument(invite.getInvitingUser());
 
 		client.sendEvent(acceptInviteEvent);
 	}

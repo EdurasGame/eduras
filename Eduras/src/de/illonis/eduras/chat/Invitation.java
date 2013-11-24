@@ -45,4 +45,16 @@ public class Invitation {
 		return invitedUser;
 	}
 
+	@Override
+	public boolean equals(Object other) {
+		if (other instanceof Invitation) {
+			Invitation otherInvitation = (Invitation) other;
+			if (otherInvitation.getInvitedUser().equals(invitedUser)
+					&& otherInvitation.getInvitingUser().equals(invitingUser)
+					&& otherInvitation.getRoom().equals(room)) {
+				return true;
+			}
+		}
+		return false;
+	}
 }

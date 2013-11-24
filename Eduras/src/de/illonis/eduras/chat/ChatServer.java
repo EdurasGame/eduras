@@ -37,15 +37,17 @@ public interface ChatServer {
 	 * of if they are in a room or not.
 	 * 
 	 * @return The users
+	 * @throws NotConnectedException
 	 */
-	public Collection<ChatUser> getUsers();
+	public Collection<ChatUser> getUsers() throws NotConnectedException;
 
 	/**
 	 * Returns all rooms that are currently open regardless of visibility.
 	 * 
 	 * @return A collection of all rooms.
+	 * @throws NotConnectedException
 	 */
-	public Collection<ChatRoom> getRooms();
+	public Collection<ChatRoom> getRooms() throws NotConnectedException;
 
 	/**
 	 * Disconnects the given user from the server, that is, it will leave all
@@ -54,10 +56,11 @@ public interface ChatServer {
 	 * 
 	 * @param user
 	 *            The user to disconnect.
-	 * @return Success flag, returns false if for example the user is not
-	 *         connected anymore.
+	 * @throws NotConnectedException
+	 * @throws NoSuchUserException
 	 */
-	public boolean disconnectUser(ChatUser user);
+	public void disconnectUser(ChatUser user) throws NotConnectedException,
+			NoSuchUserException;
 
 	/**
 	 * Creates a chat room. Note that this is different to a user creating a
@@ -68,8 +71,11 @@ public interface ChatServer {
 	 * @param isPublic
 	 *            Indicates whether the room will be public or not.
 	 * @return Returns the chat room that was created.
+	 * @throws NotConnectedException
+	 * @throws IllegalArgumentException
 	 */
-	public ChatRoom createRoom(String name, boolean isPublic);
+	public ChatRoom createRoom(String name, boolean isPublic)
+			throws IllegalArgumentException, NotConnectedException;
 
 	/**
 	 * Adds the given user to the given room. Both the user and all the users in
@@ -79,8 +85,13 @@ public interface ChatServer {
 	 *            The room to add the user to.
 	 * @param user
 	 *            The user to add to the room.
+	 * @throws NotConnectedException
+	 * @throws NoSuchUserException
+	 * @throws NoSuchRoomException
 	 */
-	public void addUserToRoom(ChatUser user, ChatRoom room);
+	public void addUserToRoom(ChatUser user, ChatRoom room)
+			throws NotConnectedException, NoSuchUserException,
+			NoSuchRoomException;
 
 	/**
 	 * Removes the given user from the given room. Both the respective user and
@@ -90,8 +101,13 @@ public interface ChatServer {
 	 *            The user to remove from the given room.
 	 * @param room
 	 *            The room to remove the user from.
+	 * @throws NotConnectedException
+	 * @throws NoSuchUserException
+	 * @throws NoSuchRoomException
 	 */
-	public void removeUserFromRoom(ChatUser user, ChatRoom room);
+	public void removeUserFromRoom(ChatUser user, ChatRoom room)
+			throws NotConnectedException, NoSuchUserException,
+			NoSuchRoomException;
 
 	/**
 	 * Removes all users in the given room from the room first and then deletes
@@ -99,8 +115,9 @@ public interface ChatServer {
 	 * 
 	 * @param room
 	 *            The room to remove.
+	 * @throws NoSuchRoomException
 	 */
-	public void removeRoom(ChatRoom room);
+	public void removeRoom(ChatRoom room) throws NoSuchRoomException;
 
 	/**
 	 * Creates a server.
