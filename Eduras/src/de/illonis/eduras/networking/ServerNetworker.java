@@ -4,16 +4,16 @@ import de.eduras.eventingserver.ServerNetworkEventHandler;
 
 public class ServerNetworker implements ServerNetworkEventHandler {
 
-	@Override
-	public void onClientConnected(int arg0) {
-		// TODO Auto-generated method stub
-
+	public ServerNetworker() {
 	}
 
 	@Override
-	public void onClientDisconnected(int arg0) {
-		// TODO Auto-generated method stub
+	public void onClientConnected(int clientId) {
+	}
 
+	@Override
+	public void onClientDisconnected(int clientId) {
+		// TODO Auto-generated method stub
 	}
 
 }

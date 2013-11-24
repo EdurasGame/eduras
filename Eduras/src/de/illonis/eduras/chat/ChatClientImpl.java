@@ -11,6 +11,12 @@ import de.eduras.eventingserver.exceptions.TooFewArgumentsExceptions;
 import de.illonis.edulog.EduLog;
 import de.illonis.eduras.EdurasServer;
 
+/**
+ * Implementation of {@link ChatClient}.
+ * 
+ * @author Florian Mai <florian.ren.mai@googlemail.com>
+ * 
+ */
 public class ChatClientImpl implements ChatClient {
 
 	private final static Logger L = EduLog.getLoggerFor(EdurasServer.class
@@ -24,6 +30,9 @@ public class ChatClientImpl implements ChatClient {
 	LinkedList<ChatRoom> allRooms;
 	LinkedList<ChatUser> allUsers;
 
+	/**
+	 * Create a new instance of the ChatClient.
+	 */
 	public ChatClientImpl() {
 		client = new Client();
 		client.setEventHandler(new ChatEventHandlerClient(this));

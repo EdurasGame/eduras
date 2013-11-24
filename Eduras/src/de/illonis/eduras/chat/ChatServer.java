@@ -125,4 +125,12 @@ public interface ChatServer {
 	 * @return The created server
 	 */
 	public ChatServer create();
+
+	/**
+	 * Set the {@link ChatServerActivityListener}.
+	 * 
+	 * @param listener
+	 */
+	public void setChatServerActivityListener(
+			ChatServerActivityListener listener);
 }

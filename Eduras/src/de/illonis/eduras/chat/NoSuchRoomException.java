@@ -1,6 +1,6 @@
 package de.illonis.eduras.chat;
 
-class NoSuchRoomException extends Exception {
+public class NoSuchRoomException extends Exception {
 	/**
 	 * 
 	 */

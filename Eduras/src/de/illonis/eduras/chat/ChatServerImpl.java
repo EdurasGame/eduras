@@ -7,10 +7,17 @@ import java.util.logging.Logger;
 import de.eduras.eventingserver.Event;
 import de.eduras.eventingserver.Server;
 import de.eduras.eventingserver.ServerInterface;
+import de.eduras.eventingserver.ServerNetworkEventHandler;
 import de.eduras.eventingserver.exceptions.TooFewArgumentsExceptions;
 import de.illonis.edulog.EduLog;
 import de.illonis.eduras.EdurasServer;
 
+/**
+ * Implementation of {@link ChatServer}.
+ * 
+ * @author Florian Mai <florian.ren.mai@googlemail.com>
+ * 
+ */
 public class ChatServerImpl implements ChatServer {
 
 	private final static Logger L = EduLog.getLoggerFor(EdurasServer.class
@@ -21,11 +28,60 @@ public class ChatServerImpl implements ChatServer {
 	LinkedList<ChatUser> users;
 	LinkedList<ChatRoom> rooms;
 	LinkedList<Invitation> currentInvitations;
+	ChatServerActivityListener listener;
 
-	ChatServerImpl() {
+	/**
+	 * Creates a new instance of {@link ChatServer}.
+	 */
+	public ChatServerImpl() {
 		server = new Server();
 		users = new LinkedList<ChatUser>();
 		rooms = new LinkedList<ChatRoom>();
+		listener = new ChatServerActivityListener() {
+
+			@Override
+			public void onUserDisconnected(ChatUser user) {
+				L.info("User " + user.getNickName() + " disconnected.");
+			}
+
+			@Override
+			public void onUserConnected(ChatUser user) {
+				L.info("User " + user.getNickName() + " connected.");
+			}
+		};
+
+		server.setNetworkEventHandler(new ServerNetworkEventHandler() {
+
+			@Override
+			public void onClientDisconnected(int clientId) {
+				ChatUser removedUser;
+				try {
+					removedUser = findUserById(clientId);
+
+					disconnectUser(removedUser);
+
+					listener.onUserDisconnected(removedUser);
+				} catch (NoSuchUserException | NotConnectedException e) {
+					L.warning(e.getMessage());
+				}
+
+			}
+
+			@Override
+			public void onClientConnected(int clientId) {
+				ChatUser newChatUser = new ChatUser(clientId, "Unknown");
+				users.add(newChatUser);
+
+				Event newUserEvent = new Event(Chat.USER_CREATED);
+				newUserEvent.putArgument(clientId);
+				try {
+					server.sendEventToAll(newUserEvent);
+					listener.onUserConnected(newChatUser);
+				} catch (IllegalArgumentException | TooFewArgumentsExceptions e) {
+					L.warning(e.getMessage());
+				}
+			}
+		});
 	}
 
 	@Override
@@ -220,5 +276,12 @@ public class ChatServerImpl implements ChatServer {
 				return false;
 			}
 		}
+	}
+
+	@Override
+	public void setChatServerActivityListener(
+			ChatServerActivityListener listener) {
+		this.listener = listener;
+
 	}
 }

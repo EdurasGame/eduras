@@ -1,6 +1,6 @@
 package de.illonis.eduras.chat;
 
-class NoSuchUserException extends Exception {
+public class NoSuchUserException extends Exception {
 	/**
 	 * 
 	 */
