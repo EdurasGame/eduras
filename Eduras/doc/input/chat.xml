@@ -116,11 +116,12 @@
 					    <entry>Id of room the user was invited to</entry>
 					</row>
 					<row>
-					    <entry>CONFIRM_ROOM_CREATE</entry>
+					    <entry>ROOM_CREATE</entry>
 					    <entry>4</entry>
 					    <entry>Indicates that a user has successfully created a room.</entry>
 					    <entry>Name of the newly created room.</entry>
 					    <entry>The id of the new room.</entry>
+					    <entry>Flag indicating whether the room is public or not.</entry>
 					</row>
 					<row>
 					    <entry>CONFIRM_ROOM_JOIN</entry>
@@ -129,41 +130,28 @@
 					    <entry>Id of the room.</entry>
 					</row>
 					<row>
-					    <entry>GIVE_USER_INFORMATION</entry>
+					    <entry>USER_CREATED</entry>
 					    <entry>6</entry>
-					    <entry>Gives information about the user with the given id</entry>
-					    <entry>Id of the user that information are given about.</entry>
-					    <entry>some information (need to elaborate)</entry>
+					    <entry>Indicates that a user has been created.</entry>
+					    <entry>Id of the newly created user.</entry>
 					</row>
 					<row>
-					    <entry>GIVE_ROOM_INFORMATION</entry>
+					    <entry>USER_REMOVED</entry>
 					    <entry>7</entry>
-					    <entry>Gives information about room with the given id.</entry>
-					    <entry>Id of the room that information are given about.</entry>
-					    <entry>some information (need to elaborate)</entry>
+					    <entry>Indicates that a user has been removed from the server.</entry>
+					    <entry>Id of the user who has been removed</entry>
 					</row>
 					<row>
-					    <entry>SHOW_ROOMS</entry>
+					    <entry>ROOM_REMOVED</entry>
 					    <entry>8</entry>
-					    <entry>Lists all available public chatrooms</entry>
-					    <entry>room 1</entry>
-					    <entry>name of room 1</entry>
-					    <entry> ... other rooms</entry>
-					</row>
-					<row>
-					    <entry>SHOW_USERS</entry>
-					    <entry>9</entry>
-					    <entry>Lists all available users in a room.</entry>
-					    <entry>The room's id</entry>
-					    <entry>user 1</entry>
-					    <entry>name of user 1</entry>
-					    <entry>.. other users</entry>
+					    <entry>Indicates that a room has been removed from the server.</entry>
+					    <entry>Id of the room which has been removed</entry>
 					</row>
 					<row>
 					    <entry>USER_JOINED_ROOM</entry>
 					    <entry>10</entry>
 					    <entry>Indicates that the user with the given id joined the room.
-					        Will be send to all users in that room.</entry>
+					        Will be send to all users.</entry>
 					    <entry>The id of the user that joined.</entry>
 					    <entry>The id of the room the user joined.</entry>
 					</row>
@@ -266,38 +254,11 @@
 					    <entry>Id of the room</entry>
 					</row>
 					<row>
-					    <entry>VIEW_ROOMS</entry>
-					    <entry>25</entry>
-					    <entry>Send a request to view all available rooms</entry>
-					    <entry>the requester's id</entry>
-					</row>
-					<row>
-					    <entry>VIEW_USERS_IN_ROOM</entry>
-					    <entry>26</entry>
-					    <entry>Sends a request to view all users in a room</entry>
-					    <entry>the requester's id</entry>
-					    <entry>the room</entry>
-					</row>
-					<row>
 					    <entry>ACCEPT_INVITE</entry>
 					    <entry>27</entry>
 					    <entry>Indicates that the user would like to accept an invite</entry>
 					    <entry>The accepting user's id.</entry>
 					    <entry>The id of the room it was invited to join.</entry>
-					</row>
-					<row>
-					    <entry>VIEW_USER_INFORMATION</entry>
-					    <entry>28</entry>
-					    <entry>Sends a request to view information about a user</entry>
-					    <entry>The requester's id.</entry>
-					    <entry>id of the user the requester would like to get information about.</entry>
-					</row>
-					<row>
-					    <entry>VIEW_ROOM_INFORMATION</entry>
-					    <entry>29</entry>
-					    <entry>Sends a request to view information about a room</entry>
-					    <entry>Requester's id</entry>
-					    <entry>Id of the room to view information about.</entry>
 					</row>
 					<row>
 					    <entry>(jme) SEND_FRIENDREQUEST</entry>
@@ -322,7 +283,6 @@
 					    <entry>The id of the removing user.</entry>
 					    <entry>The id of the user being removed</entry>
 					</row>
-					
 				</tbody>
 			</tgroup>
 		</table>
