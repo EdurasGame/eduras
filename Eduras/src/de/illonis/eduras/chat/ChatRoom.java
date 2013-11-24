@@ -1,7 +1,14 @@
 package de.illonis.eduras.chat;
 
+import java.util.Collection;
 import java.util.LinkedList;
 
+/**
+ * This class wraps the information about a chat room.
+ * 
+ * @author Florian Mai <florian.ren.mai@googlemail.com>
+ * 
+ */
 public class ChatRoom {
 
 	private String name;
@@ -15,14 +22,25 @@ public class ChatRoom {
 		this.isPublic = isPublic;
 	}
 
-	public int getRoomId() {
+	int getRoomId() {
 		return roomId;
 	}
 
+	/**
+	 * Tells whether the given user is in the room.
+	 * 
+	 * @param user
+	 * @return True if the user is in the room, false otherwise
+	 */
 	public boolean containsUser(ChatUser user) {
 		return usersInTheRoom.contains(user);
 	}
 
+	/**
+	 * Returns the room's name.
+	 * 
+	 * @return The room's name.
+	 */
 	public String getName() {
 		return name;
 	}
@@ -31,8 +49,23 @@ public class ChatRoom {
 		this.isPublic = isPublic;
 	}
 
-	boolean isPublic() {
+	/**
+	 * Tells whether the room is public or not.
+	 * 
+	 * @return True if the room is public, false otherwise.
+	 */
+	public boolean isPublic() {
 		return isPublic;
+	}
+
+	/**
+	 * Returns all the users in the room.
+	 * 
+	 * @return A collection of users in the room.
+	 */
+	@SuppressWarnings("unchecked")
+	public Collection<ChatUser> getUsersInRoom() {
+		return (LinkedList<ChatUser>) usersInTheRoom.clone();
 	}
 
 	ChatUser findUserById(int id) {

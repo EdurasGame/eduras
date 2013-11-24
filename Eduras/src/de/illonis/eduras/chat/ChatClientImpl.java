@@ -202,12 +202,12 @@ class ChatClientImpl implements ChatClient {
 		throw new NoSuchUserException(invitingUserId);
 	}
 
-	void removeUser(ChatUser user) {
-		allUsers.remove(user);
-		user.removeSelf();
+	void removeUser(ChatUser userToRemove) {
+		allUsers.remove(userToRemove);
+		userToRemove.removeSelf();
 	}
 
-	public void removeRoom(ChatRoom room) {
+	void removeRoom(ChatRoom room) {
 		allRooms.remove(room);
 		visibleChatRooms.remove(room);
 		room.removeSelf();

@@ -25,10 +25,15 @@ public class ChatUser {
 		return other instanceof ChatUser && ((ChatUser) other).getId() == id;
 	}
 
-	public int getId() {
+	int getId() {
 		return id;
 	}
 
+	/**
+	 * Returns the user's nickname
+	 * 
+	 * @return The nickname
+	 */
 	public String getNickName() {
 		return nickName;
 	}
@@ -37,6 +42,11 @@ public class ChatUser {
 		nickName = name;
 	}
 
+	/**
+	 * Returns a collection of the rooms the user is in.
+	 * 
+	 * @return The rooms the user is in.
+	 */
 	@SuppressWarnings("unchecked")
 	public LinkedList<ChatRoom> getOccupiedRooms() {
 		return (LinkedList<ChatRoom>) usersRooms.clone();
