@@ -1,54 +1,82 @@
 package de.illonis.eduras.chat;
 
 import java.util.Collection;
+import java.util.LinkedList;
 
-public class ChatServerImpl implements ChatServer {
+import de.eduras.eventingserver.Server;
+import de.eduras.eventingserver.ServerInterface;
+
+class ChatServerImpl implements ChatServer {
+
+	final ServerInterface server;
+	private boolean running;
+	LinkedList<ChatUser> users;
+	LinkedList<ChatRoom> rooms;
+
+	ChatServerImpl() {
+		server = new Server();
+		users = new LinkedList<ChatUser>();
+		rooms = new LinkedList<ChatRoom>();
+	}
 
 	@Override
 	public boolean start(int port) {
-		// TODO Auto-generated method stub
-		return false;
+		return server.start("MyChatServer", port);
 	}
 
 	@Override
 	public void stop() {
-		// TODO Auto-generated method stub
-
+		server.stop();
 	}
 
 	@Override
 	public boolean isRunning() {
-		// TODO Auto-generated method stub
-		return false;
+		return running;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public Collection<ChatUser> getUsers() {
-		// TODO Auto-generated method stub
-		return null;
+		return (LinkedList<ChatUser>) users.clone();
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public Collection<ChatRoom> getRooms() {
-		// TODO Auto-generated method stub
-		return null;
+		return (LinkedList<ChatRoom>) rooms.clone();
 	}
 
 	@Override
 	public boolean disconnectUser(ChatUser user) {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
-	public boolean kickUserFromRoom(ChatUser user, ChatRoom room) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public ChatRoom createRoom(String name) {
+	public ChatRoom createRoom(String name, boolean isPublic) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public ChatServer create() {
+		return new ChatServerImpl();
+	}
+
+	@Override
+	public void addUserToRoom(ChatUser user, ChatRoom room) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void removeUserFromRoom(ChatUser user, ChatRoom room) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void removeRoom(ChatRoom room) {
+		// TODO Auto-generated method stub
+
 	}
 }

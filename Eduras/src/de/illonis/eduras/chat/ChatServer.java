@@ -60,22 +60,52 @@ public interface ChatServer {
 	public boolean disconnectUser(ChatUser user);
 
 	/**
-	 * Removes the given user from the given room.
-	 * 
-	 * @param user
-	 * @param room
-	 * @return Successe flag, might be false when for example the given user is
-	 *         not in the given room.
-	 */
-	public boolean kickUserFromRoom(ChatUser user, ChatRoom room);
-
-	/**
 	 * Creates a chat room. Note that this is different to a user creating a
 	 * room.
 	 * 
 	 * @param name
 	 *            Name of the room to create.
+	 * @param isPublic
+	 *            Indicates whether the room will be public or not.
 	 * @return Returns the chat room that was created.
 	 */
-	public ChatRoom createRoom(String name);
+	public ChatRoom createRoom(String name, boolean isPublic);
+
+	/**
+	 * Adds the given user to the given room. Both the user and all the users in
+	 * the given room will be informed.
+	 * 
+	 * @param room
+	 *            The room to add the user to.
+	 * @param user
+	 *            The user to add to the room.
+	 */
+	public void addUserToRoom(ChatUser user, ChatRoom room);
+
+	/**
+	 * Removes the given user from the given room. Both the respective user and
+	 * all the users in the given room will be informed.
+	 * 
+	 * @param user
+	 *            The user to remove from the given room.
+	 * @param room
+	 *            The room to remove the user from.
+	 */
+	public void removeUserFromRoom(ChatUser user, ChatRoom room);
+
+	/**
+	 * Removes all users in the given room from the room first and then deletes
+	 * the room itself. The respective users will be informed.
+	 * 
+	 * @param room
+	 *            The room to remove.
+	 */
+	public void removeRoom(ChatRoom room);
+
+	/**
+	 * Creates a server.
+	 * 
+	 * @return The created server
+	 */
+	public ChatServer create();
 }
