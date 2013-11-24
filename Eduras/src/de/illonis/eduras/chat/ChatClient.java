@@ -2,6 +2,8 @@ package de.illonis.eduras.chat;
 
 import java.util.Collection;
 
+import de.eduras.eventingserver.exceptions.TooFewArgumentsExceptions;
+
 /**
  * This defines the API of a chat client.
  * 
@@ -18,8 +20,13 @@ public interface ChatClient {
 	 *            The message to post.
 	 * @param chatRoom
 	 *            The chat room to post the message in.
+	 * @throws UserNotInRoomException
+	 * @throws NotConnectedException
+	 * @throws IllegalArgumentException
 	 */
-	public void postChatMessage(String message, ChatRoom chatRoom);
+	public void postChatMessage(String message, ChatRoom chatRoom)
+			throws UserNotInRoomException, IllegalArgumentException,
+			NotConnectedException;
 
 	/**
 	 * Set's the users name globally. All other clients will be informed through
@@ -27,8 +34,11 @@ public interface ChatClient {
 	 * 
 	 * @param newName
 	 *            The name
+	 * @throws NotConnectedException
+	 * @throws IllegalArgumentException
 	 */
-	public void setName(String newName);
+	public void setName(String newName) throws IllegalArgumentException,
+			NotConnectedException;
 
 	/**
 	 * Invite a user to the indicated room. Can only be called if you are in the
@@ -38,8 +48,13 @@ public interface ChatClient {
 	 *            The user to invite.
 	 * @param chatRoom
 	 *            The chat room to invite the user to.
+	 * @throws UserNotInRoomException
+	 * @throws NotConnectedException
+	 * @throws IllegalArgumentException
 	 */
-	public void inviteUserToRoom(ChatUser user, ChatRoom chatRoom);
+	public void inviteUserToRoom(ChatUser user, ChatRoom chatRoom)
+			throws UserNotInRoomException, IllegalArgumentException,
+			NotConnectedException;
 
 	/**
 	 * Returns a collection of all rooms that are visible to the current client
@@ -55,8 +70,13 @@ public interface ChatClient {
 	 * 
 	 * @param invitation
 	 *            The invitation to accept.
+	 * @throws TooFewArgumentsExceptions
+	 * @throws IllegalArgumentException
+	 * @throws NotConnectedException
 	 */
-	public void acceptInvite(Invite invitation);
+	public void acceptInvite(Invitation invitation)
+			throws IllegalArgumentException, TooFewArgumentsExceptions,
+			NotConnectedException;
 
 	/**
 	 * Set the {@link ChatActivityListener} on the ChatClient.
@@ -73,5 +93,12 @@ public interface ChatClient {
 	 * @param port
 	 */
 	public void connect(String hostname, int port);
+
+	/**
+	 * Returns the respective user.
+	 * 
+	 * @return The user
+	 */
+	public ChatUser getUser();
 
 }

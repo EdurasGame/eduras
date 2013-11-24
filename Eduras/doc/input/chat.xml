@@ -236,6 +236,7 @@
 					        If a room with the given name already exists, it won't be created.</entry>
 					    <entry>id of the user</entry>
 					    <entry>name of the room that shall be created</entry>
+					    <entry>Flag indicating whether the room shall be public or not.</entry>
 					</row>
 					<row>
 					    <entry>JOIN_ROOM</entry>

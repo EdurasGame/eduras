@@ -29,7 +29,7 @@ public interface ChatActivityListener {
 	 * 
 	 * @param invitation
 	 */
-	void onInviteReceived(Invite invitation);
+	void onInviteReceived(Invitation invitation);
 
 	/**
 	 * Gets called when the client has joined a chat room.
@@ -49,4 +49,15 @@ public interface ChatActivityListener {
 	 *            The user which joined the chat room.
 	 */
 	void onUserJoinedRoom(ChatRoom chatRoom, ChatUser user);
+
+	/**
+	 * Is called when the client successfully connected to the server and can
+	 * start sending Events.
+	 */
+	void onConnectionEstablished();
+
+	/**
+	 * Is called when the client's connection got aborted for some reason.
+	 */
+	void onConnectionAborted();
 }

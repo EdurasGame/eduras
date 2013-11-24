@@ -20,7 +20,6 @@ class ChatEventHandlerServer implements EventHandler {
 		case Chat.SET_NAME:
 			break;
 		case Chat.CREATE_ROOM:
-
 			break;
 		case Chat.JOIN_ROOM:
 
@@ -28,20 +27,7 @@ class ChatEventHandlerServer implements EventHandler {
 		case Chat.INVITE_USER:
 
 			break;
-		case Chat.VIEW_ROOMS:
-
-			break;
-		case Chat.VIEWS_USERS_IN_ROOM:
-
-			break;
 		case Chat.ACCEPT_INVITE:
-
-			break;
-		case Chat.VIEW_USER_INFORMATION:
-
-			break;
-		case Chat.VIEW_ROOM_INFORMATION:
-
 			break;
 		}
 	}
