@@ -11,7 +11,7 @@ import de.eduras.eventingserver.exceptions.TooFewArgumentsExceptions;
 import de.illonis.edulog.EduLog;
 import de.illonis.eduras.EdurasServer;
 
-class ChatServerImpl implements ChatServer {
+public class ChatServerImpl implements ChatServer {
 
 	private final static Logger L = EduLog.getLoggerFor(EdurasServer.class
 			.getName());
