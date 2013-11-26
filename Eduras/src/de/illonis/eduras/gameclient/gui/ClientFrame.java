@@ -85,6 +85,10 @@ public class ClientFrame extends JFrame {
 		showLogin();
 	}
 
+	public GamePanelLogic getGamePanel() {
+		return gamePanel;
+	}
+
 	/**
 	 * Indicates that a client connected to the game.
 	 * 

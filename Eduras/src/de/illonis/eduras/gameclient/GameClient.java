@@ -7,6 +7,8 @@ import javax.swing.JOptionPane;
 
 import de.eduras.eventingserver.Event;
 import de.illonis.edulog.EduLog;
+import de.illonis.eduras.chat.ChatClientImpl;
+import de.illonis.eduras.chat.NotConnectedException;
 import de.illonis.eduras.events.InitInformationEvent;
 import de.illonis.eduras.exceptions.MessageNotSupportedException;
 import de.illonis.eduras.exceptions.WrongEventTypeException;
@@ -86,6 +88,20 @@ public class GameClient {
 		nwm.setNetworkEventHandler(eventHandler);
 	}
 
+	private void initChat() {
+		ChatClientImpl chat = new ChatClientImpl();
+		chat.setChatActivityListener(new ClientChatReceiver(frame
+				.getGamePanel(), chat));
+		frame.getGamePanel().setChat(chat);
+		chat.connect("localhost", 4387);
+		// TODO: use real server address here.
+		try {
+			chat.setName(clientName);
+		} catch (NotConnectedException e) {
+			L.log(Level.SEVERE, "Could not set my chat name.", e);
+		}
+	}
+
 	/**
 	 * Handles connection of this client.
 	 * 
@@ -95,6 +111,7 @@ public class GameClient {
 	public void onClientConnected(int clientId) {
 		if (clientId != getOwnerID()) // only handle my connection
 			return;
+		initChat();
 		L.info("Connection to server established. OwnerId: "
 				+ infoPro.getOwnerID());
 		frame.onClientConnected(clientId); // pass to gui

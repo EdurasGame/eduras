@@ -9,6 +9,7 @@ import java.awt.event.ComponentEvent;
 import java.util.logging.Logger;
 
 import de.illonis.edulog.EduLog;
+import de.illonis.eduras.chat.ChatClientImpl;
 import de.illonis.eduras.gameclient.ClientData;
 import de.illonis.eduras.gameclient.GuiInternalEventListener;
 import de.illonis.eduras.gameclient.gui.CameraMouseListener;
@@ -275,5 +276,10 @@ public class GamePanelLogic extends ClientGuiStepLogic implements
 	 */
 	public void showNotification(String msg) {
 		userInterface.showNotification(msg);
+	}
+
+	public void setChat(ChatClientImpl chat) {
+		// TODO Auto-generated method stub
+
 	}
 }
