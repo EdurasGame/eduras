@@ -108,6 +108,7 @@ public class EdurasServer {
 		server.setEventHandler(new EventParser(logic));
 
 		final ChatServer chatServer = new ChatServerImpl();
+		chatServer.start(port + 1);
 		try {
 			final ChatRoom matchChatRoom = chatServer.createRoom("MatchChat",
 					true);
@@ -134,10 +135,10 @@ public class EdurasServer {
 							}
 						}
 					});
-			chatServer.start(port + 1);
+
 		} catch (IllegalArgumentException | NotConnectedException e) {
-			L.warning(e.getMessage());
-			L.info("An error appeared. Chat will not be working.");
+			L.log(Level.SEVERE, "An error appeared. Chat will not be working.",
+					e);
 		}
 
 		server.setNetworkEventHandler(new ServerNetworkEventHandler() {
