@@ -51,9 +51,9 @@ public class ChatClientImpl implements ChatClient {
 			public void onClientConnected(int clientId) {
 
 				if (clientId == client.getClientId()) {
-					chatActivityListener.onConnectionEstablished();
-					user = new ChatUser(client.getClientId(), "Unknown");
 					connected = true;
+					user = new ChatUser(client.getClientId(), "Unknown");
+					chatActivityListener.onConnectionEstablished();
 				}
 
 				// other user's connection are handled seperately
