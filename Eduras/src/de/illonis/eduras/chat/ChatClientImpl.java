@@ -26,9 +26,9 @@ public class ChatClientImpl implements ChatClient {
 	private ChatUser user;
 	private boolean connected;
 	ChatActivityListener chatActivityListener;
-	LinkedList<ChatRoom> visibleChatRooms;
-	LinkedList<ChatRoom> allRooms;
-	LinkedList<ChatUser> allUsers;
+	final LinkedList<ChatRoom> visibleChatRooms = new LinkedList<ChatRoom>();
+	final LinkedList<ChatRoom> allRooms = new LinkedList<ChatRoom>();
+	final LinkedList<ChatUser> allUsers = new LinkedList<ChatUser>();
 
 	/**
 	 * Create a new instance of the ChatClient.
