@@ -8,7 +8,6 @@ import javax.swing.JOptionPane;
 import de.eduras.eventingserver.Event;
 import de.illonis.edulog.EduLog;
 import de.illonis.eduras.chat.ChatClientImpl;
-import de.illonis.eduras.chat.NotConnectedException;
 import de.illonis.eduras.events.InitInformationEvent;
 import de.illonis.eduras.exceptions.MessageNotSupportedException;
 import de.illonis.eduras.exceptions.WrongEventTypeException;
@@ -91,16 +90,11 @@ public class GameClient {
 	private void initChat() {
 		ChatClientImpl chat = new ChatClientImpl();
 		chat.setChatActivityListener(new ClientChatReceiver(frame
-				.getGamePanel(), chat));
+				.getGamePanel(), chat, clientName));
 		frame.getGamePanel().setChat(chat);
 		// InetAddress serverAddr = nwm.getServerAddress();
 		// TODO: use this
 		chat.connect("localhost", 4387);
-		try {
-			chat.setName(clientName);
-		} catch (NotConnectedException e) {
-			L.log(Level.SEVERE, "Could not set my chat name.", e);
-		}
 	}
 
 	/**
