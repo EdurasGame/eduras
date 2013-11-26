@@ -1,9 +1,7 @@
 package de.illonis.eduras.chat;
 
 public class NoSuchRoomException extends Exception {
-	/**
-	 * 
-	 */
+
 	private static final long serialVersionUID = 1L;
 
 	NoSuchRoomException(int idOfMissingRoom) {

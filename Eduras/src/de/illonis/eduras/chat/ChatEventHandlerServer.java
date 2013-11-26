@@ -1,5 +1,6 @@
 package de.illonis.eduras.chat;
 
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import de.eduras.eventingserver.Event;
@@ -7,12 +8,11 @@ import de.eduras.eventingserver.EventHandler;
 import de.eduras.eventingserver.exceptions.TooFewArgumentsExceptions;
 import de.eduras.eventingserver.test.NoSuchClientException;
 import de.illonis.edulog.EduLog;
-import de.illonis.eduras.EdurasServer;
 
 class ChatEventHandlerServer implements EventHandler {
 
-	private final static Logger L = EduLog.getLoggerFor(EdurasServer.class
-			.getName());
+	private final static Logger L = EduLog
+			.getLoggerFor(ChatEventHandlerServer.class.getName());
 
 	ChatServerImpl chatServer;
 
@@ -41,7 +41,7 @@ class ChatEventHandlerServer implements EventHandler {
 						chatServer.server.sendEventToAll(newMessageEvent);
 					}
 				} catch (NoSuchRoomException e) {
-					L.warning(e.getMessage());
+					L.log(Level.WARNING, "error processing sent message", e);
 				}
 				break;
 			}
@@ -58,7 +58,7 @@ class ChatEventHandlerServer implements EventHandler {
 					nameChangedEvent.putArgument(newName);
 					chatServer.server.sendEventToAll(nameChangedEvent);
 				} catch (NoSuchUserException e) {
-					L.warning(e.getMessage());
+					L.log(Level.WARNING, "error processing set name event", e);
 				}
 
 				break;
@@ -72,7 +72,8 @@ class ChatEventHandlerServer implements EventHandler {
 				try {
 					chatServer.createRoom(nameOfRoom, isPublic);
 				} catch (IllegalArgumentException | NotConnectedException e) {
-					L.warning(e.getMessage());
+					L.log(Level.WARNING, "error processing create room event",
+							e);
 				}
 				break;
 			}
@@ -97,7 +98,7 @@ class ChatEventHandlerServer implements EventHandler {
 				} catch (NoSuchUserException | NoSuchRoomException
 						| NotConnectedException | IllegalArgumentException
 						| NoSuchClientException e) {
-					L.warning(e.getMessage());
+					L.log(Level.WARNING, "error processing join room event", e);
 				}
 
 				break;
@@ -124,7 +125,8 @@ class ChatEventHandlerServer implements EventHandler {
 							invitedUserId);
 				} catch (NoSuchUserException | NoSuchRoomException
 						| IllegalArgumentException | NoSuchClientException e) {
-					L.warning(e.getMessage());
+					L.log(Level.WARNING, "error processing invite user event",
+							e);
 				}
 				break;
 			}
@@ -149,13 +151,14 @@ class ChatEventHandlerServer implements EventHandler {
 					}
 				} catch (NoSuchUserException | NoSuchRoomException
 						| IllegalArgumentException | NotConnectedException e) {
-					L.warning(e.getMessage());
+					L.log(Level.WARNING,
+							"error processing accept invite event", e);
 				}
 				break;
 			}
 			}
 		} catch (TooFewArgumentsExceptions e) {
-			L.warning(e.getMessage());
+			L.log(Level.WARNING, "error processing event", e);
 		}
 	}
 }

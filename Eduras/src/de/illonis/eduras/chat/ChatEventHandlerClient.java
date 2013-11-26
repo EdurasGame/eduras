@@ -1,17 +1,17 @@
 package de.illonis.eduras.chat;
 
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import de.eduras.eventingserver.Event;
 import de.eduras.eventingserver.EventHandler;
 import de.eduras.eventingserver.exceptions.TooFewArgumentsExceptions;
 import de.illonis.edulog.EduLog;
-import de.illonis.eduras.EdurasServer;
 
 class ChatEventHandlerClient implements EventHandler {
 
-	private final static Logger L = EduLog.getLoggerFor(EdurasServer.class
-			.getName());
+	private final static Logger L = EduLog
+			.getLoggerFor(ChatEventHandlerClient.class.getName());
 
 	private ChatClientImpl chatClient;
 
@@ -34,7 +34,7 @@ class ChatEventHandlerClient implements EventHandler {
 				try {
 					room = chatClient.getUser().getRoomById(roomId);
 				} catch (NoSuchRoomException e) {
-					L.warning(e.getMessage());
+					L.log(Level.WARNING, "Error sending message.", e);
 					return;
 				}
 				ChatUser user = room.findUserById(sendingUser);
@@ -50,7 +50,7 @@ class ChatEventHandlerClient implements EventHandler {
 					user.setNickName(newName);
 					chatClient.chatActivityListener.onNameChanged(user);
 				} catch (UserNotInRoomException e) {
-					L.warning(e.getMessage());
+					L.log(Level.WARNING, "Error changing name.", e);
 				}
 				break;
 			}
@@ -67,7 +67,7 @@ class ChatEventHandlerClient implements EventHandler {
 					chatClient.chatActivityListener
 							.onInviteReceived(invitation);
 				} catch (NoSuchRoomException | NoSuchUserException e) {
-					L.warning(e.getMessage());
+					L.log(Level.WARNING, "Error inviting user to room.", e);
 				}
 				break;
 			}
@@ -89,7 +89,7 @@ class ChatEventHandlerClient implements EventHandler {
 					chatRoom = chatClient.findRoomById(roomId);
 					chatClient.chatActivityListener.onYouJoined(chatRoom);
 				} catch (NoSuchRoomException e) {
-					L.warning(e.getMessage());
+					L.log(Level.WARNING, "Error confirming room join.", e);
 				}
 				break;
 			}
@@ -104,7 +104,7 @@ class ChatEventHandlerClient implements EventHandler {
 					ChatUser user = chatClient.findUserById(userId);
 					chatClient.removeUser(user);
 				} catch (NoSuchUserException e) {
-					L.warning(e.getMessage());
+					L.log(Level.WARNING, "Error removing user.", e);
 				}
 				break;
 			}
@@ -115,7 +115,7 @@ class ChatEventHandlerClient implements EventHandler {
 					room = chatClient.findRoomById(roomId);
 					chatClient.removeRoom(room);
 				} catch (NoSuchRoomException e) {
-					L.warning(e.getMessage());
+					L.log(Level.WARNING, "Error removing room.", e);
 				}
 				break;
 			}
@@ -128,7 +128,7 @@ class ChatEventHandlerClient implements EventHandler {
 					user.addToRoom(room);
 					room.addUser(user);
 				} catch (NoSuchRoomException | NoSuchUserException e) {
-					L.warning(e.getMessage());
+					L.log(Level.WARNING, "Error joining room.", e);
 				}
 				break;
 			}
@@ -141,13 +141,13 @@ class ChatEventHandlerClient implements EventHandler {
 					user.removeFromRoom(room);
 					room.removeUser(user);
 				} catch (NoSuchRoomException | NoSuchUserException e) {
-					L.warning(e.getMessage());
+					L.log(Level.WARNING, "Error leaving room.", e);
 				}
 				break;
 			}
 
 		} catch (TooFewArgumentsExceptions e) {
-			L.warning(e.getMessage());
+			L.log(Level.WARNING, "Too few arguments", e);
 		}
 
 	}

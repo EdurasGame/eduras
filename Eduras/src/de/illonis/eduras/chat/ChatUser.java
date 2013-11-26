@@ -47,9 +47,8 @@ public class ChatUser {
 	 * 
 	 * @return The rooms the user is in.
 	 */
-	@SuppressWarnings("unchecked")
 	public LinkedList<ChatRoom> getOccupiedRooms() {
-		return (LinkedList<ChatRoom>) usersRooms.clone();
+		return new LinkedList<ChatRoom>(usersRooms);
 	}
 
 	/**

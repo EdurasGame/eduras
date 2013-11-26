@@ -2,6 +2,7 @@ package de.illonis.eduras.chat;
 
 import java.util.Collection;
 import java.util.LinkedList;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import de.eduras.eventingserver.Event;
@@ -10,7 +11,6 @@ import de.eduras.eventingserver.ServerInterface;
 import de.eduras.eventingserver.ServerNetworkEventHandler;
 import de.eduras.eventingserver.exceptions.TooFewArgumentsExceptions;
 import de.illonis.edulog.EduLog;
-import de.illonis.eduras.EdurasServer;
 
 /**
  * Implementation of {@link ChatServer}.
@@ -20,7 +20,7 @@ import de.illonis.eduras.EdurasServer;
  */
 public class ChatServerImpl implements ChatServer {
 
-	private final static Logger L = EduLog.getLoggerFor(EdurasServer.class
+	private final static Logger L = EduLog.getLoggerFor(ChatServerImpl.class
 			.getName());
 
 	final ServerInterface server;
@@ -51,6 +51,8 @@ public class ChatServerImpl implements ChatServer {
 		};
 
 		server.setNetworkEventHandler(new ServerNetworkEventHandler() {
+			private final Logger L = EduLog
+					.getLoggerFor(ServerNetworkEventHandler.class.getName());
 
 			@Override
 			public void onClientDisconnected(int clientId) {
@@ -62,7 +64,7 @@ public class ChatServerImpl implements ChatServer {
 
 					listener.onUserDisconnected(removedUser);
 				} catch (NoSuchUserException | NotConnectedException e) {
-					L.warning(e.getMessage());
+					L.log(Level.WARNING, "error while user disconnected", e);
 				}
 
 			}
@@ -78,7 +80,7 @@ public class ChatServerImpl implements ChatServer {
 					server.sendEventToAll(newUserEvent);
 					listener.onUserConnected(newChatUser);
 				} catch (IllegalArgumentException | TooFewArgumentsExceptions e) {
-					L.warning(e.getMessage());
+					L.log(Level.WARNING, "error while user connected", e);
 				}
 			}
 		});
@@ -86,6 +88,7 @@ public class ChatServerImpl implements ChatServer {
 
 	@Override
 	public boolean start(int port) {
+		System.out.println("starting chat on  port " + port);
 		running = server.start("MyChatServer", port);
 		return running;
 	}
@@ -130,7 +133,7 @@ public class ChatServerImpl implements ChatServer {
 		try {
 			server.sendEventToAll(userRemovedEvent);
 		} catch (IllegalArgumentException | TooFewArgumentsExceptions e) {
-			L.warning(e.getMessage());
+			L.log(Level.WARNING, "error while disconnecting a user", e);
 		}
 	}
 
@@ -158,7 +161,7 @@ public class ChatServerImpl implements ChatServer {
 		try {
 			server.sendEventToAll(createRoomEvent);
 		} catch (TooFewArgumentsExceptions e) {
-			L.warning(e.getMessage());
+			L.log(Level.WARNING, "error creating room", e);
 			return null;
 		}
 		return newRoom;
@@ -187,7 +190,7 @@ public class ChatServerImpl implements ChatServer {
 		try {
 			server.sendEventToAll(userJoinedRoomEvent);
 		} catch (IllegalArgumentException | TooFewArgumentsExceptions e) {
-			L.warning(e.getMessage());
+			L.log(Level.WARNING, "error adding user to room", e);
 		}
 	}
 
@@ -209,7 +212,7 @@ public class ChatServerImpl implements ChatServer {
 		try {
 			server.sendEventToAll(userLeftRoomEvent);
 		} catch (IllegalArgumentException | TooFewArgumentsExceptions e) {
-			L.warning(e.getMessage());
+			L.log(Level.WARNING, "error removing user from room", e);
 		}
 	}
 
@@ -225,7 +228,7 @@ public class ChatServerImpl implements ChatServer {
 		try {
 			server.sendEventToAll(removeRoomEvent);
 		} catch (IllegalArgumentException | TooFewArgumentsExceptions e) {
-			L.warning(e.getMessage());
+			L.log(Level.WARNING, "error removing room", e);
 		}
 	}
 

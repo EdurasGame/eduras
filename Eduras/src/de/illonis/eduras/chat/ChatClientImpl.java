@@ -1,6 +1,7 @@
 package de.illonis.eduras.chat;
 
 import java.util.LinkedList;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import de.eduras.eventingserver.Client;
@@ -9,7 +10,6 @@ import de.eduras.eventingserver.ClientNetworkEventHandler;
 import de.eduras.eventingserver.Event;
 import de.eduras.eventingserver.exceptions.TooFewArgumentsExceptions;
 import de.illonis.edulog.EduLog;
-import de.illonis.eduras.EdurasServer;
 
 /**
  * Implementation of {@link ChatClient}.
@@ -19,7 +19,7 @@ import de.illonis.eduras.EdurasServer;
  */
 public class ChatClientImpl implements ChatClient {
 
-	private final static Logger L = EduLog.getLoggerFor(EdurasServer.class
+	private final static Logger L = EduLog.getLoggerFor(ChatClientImpl.class
 			.getName());
 
 	private ClientInterface client;
@@ -108,7 +108,7 @@ public class ChatClientImpl implements ChatClient {
 		try {
 			client.sendEvent(sendMessageEvent);
 		} catch (TooFewArgumentsExceptions e) {
-			L.warning(e.getMessage());
+			L.log(Level.WARNING, "error posting chat message", e);
 		}
 	}
 
@@ -130,7 +130,7 @@ public class ChatClientImpl implements ChatClient {
 		try {
 			client.sendEvent(setNameEvent);
 		} catch (TooFewArgumentsExceptions e) {
-			L.warning(e.getMessage());
+			L.log(Level.WARNING, "error setting name", e);
 		}
 	}
 
@@ -153,14 +153,13 @@ public class ChatClientImpl implements ChatClient {
 		try {
 			client.sendEvent(inviteUserToRoomEvent);
 		} catch (TooFewArgumentsExceptions e) {
-			L.warning(e.getMessage());
+			L.log(Level.WARNING, "error inviting user to room.", e);
 		}
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public LinkedList<ChatRoom> getRooms() {
-		return (LinkedList<ChatRoom>) visibleChatRooms.clone();
+		return new LinkedList<ChatRoom>(visibleChatRooms);
 	}
 
 	@Override
