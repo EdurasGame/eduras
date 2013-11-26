@@ -93,8 +93,9 @@ public class GameClient {
 		chat.setChatActivityListener(new ClientChatReceiver(frame
 				.getGamePanel(), chat));
 		frame.getGamePanel().setChat(chat);
-
-		chat.connect(nwm.getServerAddress().toString(), 4387);
+		// InetAddress serverAddr = nwm.getServerAddress();
+		// TODO: use this
+		chat.connect("localhost", 4387);
 		try {
 			chat.setName(clientName);
 		} catch (NotConnectedException e) {
@@ -114,6 +115,7 @@ public class GameClient {
 		initChat();
 		L.info("Connection to server established. OwnerId: "
 				+ infoPro.getOwnerID());
+		nwm.ping();
 		frame.onClientConnected(clientId); // pass to gui
 
 		try {
