@@ -53,6 +53,13 @@ public class NetworkManager {
 	}
 
 	/**
+	 * @return the address of connected server.
+	 */
+	public InetAddress getServerAddress() {
+		return client.getServerAddress();
+	}
+
+	/**
 	 * Returns the client's id.
 	 * 
 	 * @return The client's id.

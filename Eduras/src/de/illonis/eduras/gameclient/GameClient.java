@@ -93,8 +93,8 @@ public class GameClient {
 		chat.setChatActivityListener(new ClientChatReceiver(frame
 				.getGamePanel(), chat));
 		frame.getGamePanel().setChat(chat);
-		chat.connect("localhost", 4387);
-		// TODO: use real server address here.
+
+		chat.connect(nwm.getServerAddress().toString(), 4387);
 		try {
 			chat.setName(clientName);
 		} catch (NotConnectedException e) {
