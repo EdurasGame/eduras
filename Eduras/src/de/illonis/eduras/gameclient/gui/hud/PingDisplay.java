@@ -5,7 +5,7 @@ import java.awt.Graphics2D;
 
 public class PingDisplay extends RenderedGuiObject implements PingListener {
 
-	private final static int WIDTH = 50;
+	private final static int WIDTH = 70;
 	private final static int HEIGHT = 20;
 	private String latency;
 

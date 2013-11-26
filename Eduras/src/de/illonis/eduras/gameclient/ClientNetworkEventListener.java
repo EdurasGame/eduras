@@ -55,6 +55,7 @@ public class ClientNetworkEventListener implements ClientNetworkEventHandler {
 
 	@Override
 	public void onPingReceived(long latency) {
+		System.out.println("ping: " + latency);
 		// TODO: Notify PingDisplay on the GUI.
 	}
 }

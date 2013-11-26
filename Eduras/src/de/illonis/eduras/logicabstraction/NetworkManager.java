@@ -108,4 +108,11 @@ public class NetworkManager {
 	public void notifyConnectionClosed() {
 
 	}
+
+	/**
+	 * pings the server.
+	 */
+	public void ping() {
+		client.ping();
+	}
 }
