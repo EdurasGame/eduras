@@ -6,10 +6,15 @@ import java.awt.Point;
 import java.awt.PointerInfo;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
+import java.awt.event.KeyEvent;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import de.illonis.edulog.EduLog;
 import de.illonis.eduras.chat.ChatClientImpl;
+import de.illonis.eduras.chat.NotConnectedException;
+import de.illonis.eduras.chat.UserNotInRoomException;
+import de.illonis.eduras.gameclient.ChatCache;
 import de.illonis.eduras.gameclient.ClientData;
 import de.illonis.eduras.gameclient.GuiInternalEventListener;
 import de.illonis.eduras.gameclient.gui.CameraMouseListener;
@@ -48,6 +53,8 @@ public class GamePanelLogic extends ClientGuiStepLogic implements
 	private final InformationProvider infoPro;
 	private ClickState currentClickState;
 	private final ClientData data;
+	private ChatClientImpl chat;
+	private ChatCache cache;
 
 	/**
 	 * The current click state of mouse. this is depending on interaction mode.
@@ -278,8 +285,42 @@ public class GamePanelLogic extends ClientGuiStepLogic implements
 		userInterface.showNotification(msg);
 	}
 
-	public void setChat(ChatClientImpl chat) {
-		// TODO Auto-generated method stub
+	public void setChat(ChatClientImpl chat, ChatCache cache) {
+		this.chat = chat;
+		this.cache = cache;
+	}
 
+	public void setPing(long latency) {
+		userInterface.getPingListener().setPING(latency);
+	}
+
+	@Override
+	public void onChatEnter() {
+		if (cache.isWriting())
+			sendChat();
+		else
+			cache.startWriting();
+	}
+
+	private void sendChat() {
+		String message = cache.sendInput();
+		if (!message.isEmpty())
+			try {
+				chat.postChatMessage(message, cache.getCurrentRoom());
+			} catch (IllegalArgumentException | UserNotInRoomException
+					| NotConnectedException e) {
+				L.log(Level.SEVERE, "Error sending chat message", e);
+			}
+	}
+
+	@Override
+	public boolean abortChat() {
+		boolean writing = cache.isWriting();
+		cache.stopWriting();
+		return writing;
+	}
+
+	public void onKeyType(KeyEvent e) {
+		cache.write(e.getKeyChar());
 	}
 }

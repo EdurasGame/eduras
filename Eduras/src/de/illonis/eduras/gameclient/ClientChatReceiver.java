@@ -14,35 +14,43 @@ import de.illonis.eduras.chat.Invitation;
 import de.illonis.eduras.chat.NotConnectedException;
 import de.illonis.eduras.gameclient.gui.game.GamePanelLogic;
 
+/**
+ * Handles incoming chat events on client side.
+ * 
+ * @author illonis
+ * 
+ */
 public class ClientChatReceiver implements ChatActivityListener {
 
 	private final static Logger L = EduLog
 			.getLoggerFor(ClientChatReceiver.class.getName());
 
 	private final GamePanelLogic panelLogic;
+	private final ChatCache cache;
 	private final ChatClient chat;
 	private String clientName;
 
-	public ClientChatReceiver(GamePanelLogic panelLogic, ChatClient chat,
-			String clientName) {
+	ClientChatReceiver(GamePanelLogic panelLogic, ChatClient chat,
+			String clientName, ChatCache cache) {
 		this.panelLogic = panelLogic;
 		this.chat = chat;
+		this.cache = cache;
 		this.clientName = clientName;
 	}
 
 	@Override
 	public void onNewMessage(ChatMessage message) {
+		cache.pushMessage(message);
 		System.out.println("new chatmessage: ["
 				+ message.getPostingUser().getNickName() + "] "
 				+ message.getMessage());
-		// TODO Auto-generated method stub
 
 	}
 
 	@Override
 	public void onNameChanged(ChatUser user) {
+		cache.pushUser(user);
 		System.out.println("name changed: " + user.getNickName());
-
 	}
 
 	@Override
@@ -50,22 +58,21 @@ public class ClientChatReceiver implements ChatActivityListener {
 		System.out.println("Received invitation from "
 				+ invitation.getInvitingUser() + " to "
 				+ invitation.getInvitedUser());
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override
 	public void onYouJoined(ChatRoom chatRoom) {
+		cache.setCurrentRoom(chatRoom);
 		System.out.println("joined " + chatRoom.getName());
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override
 	public void onUserJoinedRoom(ChatRoom chatRoom, ChatUser user) {
+		cache.pushUser(user);
+		cache.pushSystemMessage("User joined room: " + user.getNickName(),
+				chatRoom);
 		System.out
 				.println(user.getNickName() + " joined " + chatRoom.getName());
-		// TODO Auto-generated method stub
 
 	}
 
@@ -77,8 +84,13 @@ public class ClientChatReceiver implements ChatActivityListener {
 			L.log(Level.SEVERE, "Could not set my chat name.", e);
 		}
 		System.out.println("chat established");
+
+		cache.setSelf(chat.getUser());
 		LinkedList<ChatRoom> rooms = new LinkedList<ChatRoom>(chat.getRooms());
-		// TODO: Join room.
+		for (ChatRoom chatRoom : rooms) {
+			cache.pushRoom(chatRoom);
+		}
+		// TODO: Join room (how?)
 
 	}
 

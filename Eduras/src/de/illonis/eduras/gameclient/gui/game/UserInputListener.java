@@ -22,4 +22,8 @@ public interface UserInputListener {
 	 */
 	void hideStatWindow();
 
+	void onChatEnter();
+
+	boolean abortChat();
+
 }

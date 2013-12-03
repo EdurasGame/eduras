@@ -89,9 +89,10 @@ public class GameClient {
 
 	private void initChat() {
 		ChatClientImpl chat = new ChatClientImpl();
+		ChatCache cache = new ChatCache();
 		chat.setChatActivityListener(new ClientChatReceiver(frame
-				.getGamePanel(), chat, clientName));
-		frame.getGamePanel().setChat(chat);
+				.getGamePanel(), chat, clientName, cache));
+		frame.getGamePanel().setChat(chat, cache);
 		// InetAddress serverAddr = nwm.getServerAddress();
 		// TODO: use this
 		chat.connect("localhost", 4387);
@@ -287,6 +288,10 @@ public class GameClient {
 	 */
 	public ClientData getData() {
 		return data;
+	}
+
+	void setPing(long latency) {
+		frame.getGamePanel().setPing(latency);
 	}
 
 }

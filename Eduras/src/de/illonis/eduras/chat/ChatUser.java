@@ -25,7 +25,7 @@ public class ChatUser {
 		return other instanceof ChatUser && ((ChatUser) other).getId() == id;
 	}
 
-	int getId() {
+	public int getId() {
 		return id;
 	}
 

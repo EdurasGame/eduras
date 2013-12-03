@@ -190,6 +190,13 @@ public class UserInterface implements GuiResizeListener, UserInputListener {
 	}
 
 	/**
+	 * @return the element that listens for ping.
+	 */
+	public PingListener getPingListener() {
+		return pingDisplay;
+	}
+
+	/**
 	 * @return the selection rectangle.
 	 */
 	public DragSelectionRectangle getDragRect() {
@@ -204,4 +211,12 @@ public class UserInterface implements GuiResizeListener, UserInputListener {
 		notificationPanel.addNotification(message);
 	}
 
+	@Override
+	public void onChatEnter() {
+	}
+
+	@Override
+	public boolean abortChat() {
+		return false;
+	}
 }
