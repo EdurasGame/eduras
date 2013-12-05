@@ -7,6 +7,12 @@ import de.illonis.eduras.chat.ChatMessage;
 import de.illonis.eduras.chat.ChatRoom;
 import de.illonis.eduras.chat.ChatUser;
 
+/**
+ * A local chat cache for client that is accessed by network and gui.
+ * 
+ * @author illonis
+ * 
+ */
 public class ChatCache {
 
 	private final LinkedList<ChatMessage> messages;
@@ -52,13 +58,14 @@ public class ChatCache {
 		input = new StringBuilder();
 		users = new HashMap<Integer, ChatUser>();
 		writing = false;
-		if (!getSelfUser().getOccupiedRooms().isEmpty())
-			currentRoom = getSelfUser().getOccupiedRooms().getFirst();
+
 	}
 
 	public void setSelf(ChatUser user) {
 		self = user.getId();
 		pushUser(user);
+		if (!getSelfUser().getOccupiedRooms().isEmpty())
+			currentRoom = getSelfUser().getOccupiedRooms().getFirst();
 	}
 
 	public boolean isWriting() {
@@ -89,6 +96,7 @@ public class ChatCache {
 
 	public void pushUser(ChatUser user) {
 		users.put(user.getId(), user);
+
 	}
 
 	public void pushRoom(ChatRoom chatRoom) {

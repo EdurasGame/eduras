@@ -2,13 +2,10 @@ package de.illonis.eduras.gameclient.gui;
 
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
-import javax.xml.bind.DatatypeConverter;
 
 import de.illonis.edulog.EduLog;
 import de.illonis.eduras.exceptions.KeyNotBoundException;
@@ -240,12 +237,7 @@ public class InputKeyHandler extends KeyAdapter {
 
 	@Override
 	public void keyTyped(KeyEvent e) {
-		System.out.println("key typed: " + e.getKeyChar());
 		client.onKeyType(e);
-	}
-
-	private String toBase64(String s) throws UnsupportedEncodingException {
-		return DatatypeConverter.printBase64Binary(s.getBytes("UTF-8"));
 	}
 
 	private class ListenerPromoter implements UserInputListener {

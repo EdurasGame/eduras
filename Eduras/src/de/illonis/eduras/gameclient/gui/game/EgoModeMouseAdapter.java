@@ -50,7 +50,6 @@ public class EgoModeMouseAdapter extends GuiMouseAdapter {
 	 *            target position
 	 */
 	void itemUsed(int i, Vector2D target) {
-		System.out.println("item use");
 		getListener().onItemUse(i,
 				getPanelLogic().computeGuiPointToGameCoordinate(target));
 	}

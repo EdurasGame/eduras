@@ -291,7 +291,8 @@ public class GamePanelLogic extends ClientGuiStepLogic implements
 	}
 
 	public void setPing(long latency) {
-		userInterface.getPingListener().setPING(latency);
+		if (userInterface != null)
+			userInterface.getPingListener().setPING(latency);
 	}
 
 	@Override
