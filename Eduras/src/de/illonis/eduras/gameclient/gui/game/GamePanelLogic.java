@@ -107,7 +107,7 @@ public class GamePanelLogic extends ClientGuiStepLogic implements
 
 	private void initUserInterface() {
 		userInterface = new UserInterface(infoPro, mouseHandler, mouseHandler,
-				hudNotifier);
+				hudNotifier, cache);
 		renderer = new GameRenderer(camera, userInterface, infoPro, data);
 		renderer.setTarget(gui);
 	}
@@ -322,6 +322,9 @@ public class GamePanelLogic extends ClientGuiStepLogic implements
 	}
 
 	public void onKeyType(KeyEvent e) {
-		cache.write(e.getKeyChar());
+		if (cache.isWriting()) {
+			e.consume();
+			cache.write(e);
+		}
 	}
 }

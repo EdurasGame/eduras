@@ -43,6 +43,7 @@ public class InputKeyHandler extends KeyAdapter {
 
 	private Settings settings;
 	private final GamePanelLogic client;
+	private int currentKey = KeyEvent.VK_UNDEFINED;
 
 	/**
 	 * Creates a new input key handler.
@@ -99,22 +100,34 @@ public class InputKeyHandler extends KeyAdapter {
 		for (java.util.Map.Entry<Integer, Boolean> button : pressedButtons
 				.entrySet()) {
 			if (button.getValue()) {
-				keyReleased(button.getKey());
+				if (!settings.getKeyBindings().isBound(button.getKey()))
+					return;
+				// release button
+				pressedButtons.put(button.getKey(), false);
 			}
 		}
 	}
 
-	/**
-	 * Handles key press of given key. This includes changing press state and
-	 * sending event to server.
-	 * 
-	 * @param keyCode
-	 *            key code of pressed key.
-	 */
-	private void keyPressed(int keyCode) {
-		// don't handle other keys
-		if (!settings.getKeyBindings().isBound(keyCode))
+	@Override
+	public void keyPressed(KeyEvent e) {
+
+		if (e.getKeyCode() != settings.getKeyBindings().getKey(KeyBinding.CHAT)
+				&& e.getKeyCode() != settings.getKeyBindings().getKey(
+						KeyBinding.EXIT_CLIENT))
+			client.onKeyType(e);
+
+		if (e.isConsumed()) {
+			currentKey = e.getKeyCode();
 			return;
+		}
+
+		int keyCode = e.getKeyCode();
+		KeyBinding binding;
+		try {
+			binding = settings.getKeyBindings().getBindingOf(keyCode);
+		} catch (KeyNotBoundException ex) {
+			return;
+		}
 
 		// if already pressed, do not send a new event
 		if (justPressed(keyCode))
@@ -123,12 +136,6 @@ public class InputKeyHandler extends KeyAdapter {
 		if (lastTimePressed < KEY_INTERVAL)
 			return;
 
-		KeyBinding binding;
-		try {
-			binding = settings.getKeyBindings().getBindingOf(keyCode);
-		} catch (KeyNotBoundException ex) {
-			return;
-		}
 		pressedButtons.put(keyCode, true);
 
 		switch (binding) {
@@ -184,7 +191,15 @@ public class InputKeyHandler extends KeyAdapter {
 		L.fine("Bound key pressed: " + keyCode);
 	}
 
-	private void keyReleased(int keyCode) {
+	@Override
+	public void keyReleased(KeyEvent e) {
+
+		int keyCode = e.getKeyCode();
+
+		if (e.getKeyCode() == currentKey) {
+			currentKey = KeyEvent.VK_UNDEFINED;
+			return;
+		}
 		// don't handle other keys
 		if (!settings.getKeyBindings().isBound(keyCode))
 			return;
@@ -223,21 +238,6 @@ public class InputKeyHandler extends KeyAdapter {
 		default:
 			break;
 		}
-	}
-
-	@Override
-	public void keyPressed(KeyEvent e) {
-		keyPressed(e.getKeyCode());
-	}
-
-	@Override
-	public void keyReleased(KeyEvent e) {
-		keyReleased(e.getKeyCode());
-	}
-
-	@Override
-	public void keyTyped(KeyEvent e) {
-		client.onKeyType(e);
 	}
 
 	private class ListenerPromoter implements UserInputListener {

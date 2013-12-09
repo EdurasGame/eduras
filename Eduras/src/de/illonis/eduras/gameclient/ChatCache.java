@@ -1,5 +1,6 @@
 package de.illonis.eduras.gameclient;
 
+import java.awt.event.KeyEvent;
 import java.util.HashMap;
 import java.util.LinkedList;
 
@@ -26,9 +27,13 @@ public class ChatCache {
 		return users.get(self);
 	}
 
-	public void write(char letter) {
-		input.append(letter);
-		startWriting();
+	public void write(KeyEvent letter) {
+		if (letter.getKeyCode() == KeyEvent.VK_BACK_SPACE) {
+			input.deleteCharAt(input.length() - 1);
+		} else {
+			input.append(letter.getKeyChar());
+			startWriting();
+		}
 	}
 
 	public void deleteChar() {
@@ -58,7 +63,6 @@ public class ChatCache {
 		input = new StringBuilder();
 		users = new HashMap<Integer, ChatUser>();
 		writing = false;
-
 	}
 
 	public void setSelf(ChatUser user) {
@@ -77,6 +81,8 @@ public class ChatCache {
 	}
 
 	public String getRoomName() {
+		if (currentRoom == null)
+			return "";
 		return currentRoom.getName();
 	}
 
@@ -101,7 +107,6 @@ public class ChatCache {
 
 	public void pushRoom(ChatRoom chatRoom) {
 		// TODO Auto-generated method stub
-
 	}
 
 	public String popMessage() {
@@ -109,6 +114,7 @@ public class ChatCache {
 	}
 
 	public void startWriting() {
+		System.out.println("start");
 		writing = true;
 	}
 

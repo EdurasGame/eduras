@@ -29,8 +29,10 @@ public class ChatDisplay extends RenderedGuiObject {
 	public void render(Graphics2D g2d) {
 		g2d.setColor(BACKGROUND);
 		g2d.fillRect(screenX, screenY, WIDTH, HEIGHT);
-		g2d.drawString(data.getRoomName() + " - " + data.popMessage(), screenX,
-				screenY + 50);
+		g2d.setColor(Color.WHITE);
+		g2d.drawString("Room: " + data.getRoomName(), screenX, screenY + 20);
+		g2d.drawString(data.popMessage(), screenX, screenY + 50);
+		g2d.drawString(data.getInput(), screenX, screenY + 80);
 	}
 
 	@Override

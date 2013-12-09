@@ -2,6 +2,7 @@ package de.illonis.eduras.gameclient.gui.hud;
 
 import java.util.LinkedList;
 
+import de.illonis.eduras.gameclient.ChatCache;
 import de.illonis.eduras.gameclient.gui.HudNotifier;
 import de.illonis.eduras.gameclient.gui.game.FPSListener;
 import de.illonis.eduras.gameclient.gui.game.GuiClickReactor;
@@ -31,6 +32,7 @@ public class UserInterface implements GuiResizeListener, UserInputListener {
 	private boolean spectator;
 	private NotificationPanel notificationPanel;
 	private PingDisplay pingDisplay;
+	private final ChatCache cache;
 
 	/**
 	 * Creates the user interface. The tooltip handler will be set manually
@@ -44,17 +46,22 @@ public class UserInterface implements GuiResizeListener, UserInputListener {
 	 *            click reactor.
 	 * @param hudNotifier
 	 *            the hud notifier.
+	 * @param cache
+	 *            the chat cache object.
 	 */
 	public UserInterface(InformationProvider infos,
 			TooltipTriggererNotifier tooltipNotifier,
-			GuiClickReactor clickReactor, HudNotifier hudNotifier) {
+			GuiClickReactor clickReactor, HudNotifier hudNotifier,
+			ChatCache cache) {
 		this.uiObjects = new LinkedList<RenderedGuiObject>();
 		this.infos = infos;
 		spectator = false;
 		this.reactor = clickReactor;
 		this.tooltipNotifier = tooltipNotifier;
+		this.cache = cache;
 		createElements();
 		hudNotifier.setUiObjects(this.uiObjects);
+
 	}
 
 	private void createElements() {
@@ -67,6 +74,7 @@ public class UserInterface implements GuiResizeListener, UserInputListener {
 		notificationPanel = new NotificationPanel(this);
 		dragRect = new DragSelectionRectangle(this);
 		statWindow = new StatisticsWindow(this);
+		new ChatDisplay(cache, this);
 	}
 
 	/**
