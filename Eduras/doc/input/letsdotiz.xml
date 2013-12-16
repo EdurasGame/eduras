@@ -1,0 +1,526 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE article PUBLIC "-//OASIS//DTD Simplified DocBook XML V1.0//EN"
+"http://www.oasis-open.org/docbook/xml/simple/1.0/sdocbook.dtd">
+<article>
+	<articleinfo>
+		<title>Letz do this!</title>
+		<author>
+			<firstname>Florian</firstname>
+			<surname>Mai</surname>
+		</author>
+	</articleinfo>
+	<section>
+		<title>Introduction</title>
+		<para>
+			We have been working on this project for over a year now,
+			sometimes
+			more focused and sometimes less.
+			You can say that we have
+			achieved a lot, if you take into account that
+			we have not used any
+			engines, frameworks and libraries
+			besides the core Java libraries.
+			Anyways, to get the whole project go
+			seriously, to realize an
+			innovative, exiting, enjoyable,
+			attracting game experience, we would
+			need to work on it full time. As illonis
+			and Ren are going to graduate
+			with bachelor's in September 2014, it
+			is a good occasion to start
+			working fulltime in fall 2014.
+		</para>
+		<section>
+			<title>How are we going to finance working full time??</title>
+			<para>
+				Good question! As we should not risk starving or becoming
+				homeless due
+				to a lack of money in our wallet, we would need to get
+				some money from somewhere. The idea is to raise money on a
+				crowdfunding
+				platform like kickstarter or indiegogo. I think about
+				30.000 Euro would be sufficient to keep two developers alive and
+				finance
+				additional hard- and software we would need to purchase.
+				Any
+				extra money can of course be invested to involve externals or hire
+				further developers/specialists to speed up and improve the
+				development. Unfortunately, I have no idea of the likelihood of
+				raising so much money. But I think it's worth the try.
+			</para>
+		</section>
+		<section>
+			<title>Why would someone invest in Eduras??</title>
+			<para>
+				Good question! I believe there are some critical factors we have to
+				focus on to maximize money we can raise from other people.
+				<itemizedlist>
+					<listitem>
+						Quality: Very important is to be able to present a
+						prototype of Eduras
+						that shows where the journey is going,
+						what is
+						special about Eduras and why it's worth to wait for and invest
+						in
+						it.
+					</listitem>
+					<listitem>
+						Quantity: No matter how good an Eduras prototype is: If
+						nobody knows about
+						it, nobody can spend money on it. We have
+						to make
+						sure that as many people as possible become aware that
+						Eduras is
+						out there and ready to go.
+					</listitem>
+					<listitem>
+						Vision: We need a precise idea of what we want to make in
+						the future and
+						present it in an exciting way.
+					</listitem>
+				</itemizedlist>
+			</para>
+		</section>
+	</section>
+	<section>
+		<title>Realization</title>
+		<section>
+			<title>Timeline</title>
+			<itemizedlist>
+				<listitem>
+					01.01.2014 - Ingame chat, launcher/installer, UDP hole
+					punching,
+					bugtracker/forum
+				</listitem>
+				<listitem>
+					01.03.2014 - Rotating, rocket launcher, mines, assault
+					rifle, flexible
+					settings, ammunition, graphical distinction of
+					objects, remote console
+				</listitem>
+				<listitem>
+					07.03.2014 - Start of closed beta, fix of major
+					performance bottlenecks
+				</listitem>
+				<listitem>
+					13.03.2014 - Test event for deathmatch with closed beta
+					participants.
+				</listitem>
+				<listitem>
+					14.03.2014 - interactive mode spots, neutral bases,
+					resources, vision
+				</listitem>
+				<listitem>
+					21.03.2014 - interactive-mode HUD, unit factory, spell
+					factory, tech factory
+				</listitem>
+				<listitem>
+					01.04.2014 - heal-spell, star-unit, observer-unit,
+					bomb-units, vision spell,
+					tech-upgrades for units, spells, resources
+				</listitem>
+				<listitem>
+					07.04.2014 - conquer mode, map for conquer mode
+				</listitem>
+				<listitem>
+					10.04.2014 - Test event for conquer-mode with closed beta
+					participants.
+				</listitem>
+				<listitem>
+					07.05.2014 - two more maps for conquer-mode, one map for
+					deathmatch
+				</listitem>
+				<listitem>
+					08.05.2014 - test event for new maps
+				</listitem>
+				<listitem>
+					01.06.2014 - spectator mode and spectator-bot server
+				</listitem>
+				<listitem>
+					01.06.2014 - start of main test phase with weekly test
+					events / fix bugs and
+					take feedback into account
+				</listitem>
+				<listitem>
+					15.08.2014 - end of main test phase / Eduras prototype
+					should be more or less
+					final
+				</listitem>
+				<listitem>
+					01.08.2014 - start advertising Eduras and Eduras
+					tournament
+				</listitem>
+				<listitem>
+					01.09.2014 - Start of crowdfunding campaign / make Eduras
+					prototype pulic
+				</listitem>
+				<listitem>
+					06.9. to 08.09.2014 - Eduras tournament
+				</listitem>
+				<listitem>
+					15.10.2014 - End of crowdfunding campaign
+				</listitem>
+			</itemizedlist>
+		</section>
+		<section>
+			<title>General approach to implementing tasks</title>
+			<para>
+				No matter what you do, you should always have on mind that
+				we're
+				implementing a prototype. If Eduras should really
+				become a
+				serious project next fall, we will have to rethink everything
+				anyways because I believe that due to our small
+				experience in game
+				development many things will have to be started over. That
+				means, for
+				now, we should not focus on
+				perfect software architecture but rather
+				use dirty hacks if it's needed and
+				speeds things up in the scope of
+				our
+				limited time
+				window. For example, don't write documentation unless
+				it's really critical in order to work with it. Consider
+				that most
+				likely no further developers will join our team
+				until next year.
+			</para>
+		</section>
+		<section>
+			<title>Features to implement for prototype</title>
+			<para>The timeline seen above indicates what features to implement.
+				Let me explain them more precisely here.</para>
+			<para>The ingame chat, launcher and bug tracker are already there,
+				but not all of them are working properly. The launcher / installer
+				needs to be
+				fixed with windows, the ingame chat has to be integrated
+				and fixed too.
+				The bug tracker should be made accessible on
+				the Eduras
+				website protected by an authentication mechanism (which is
+				basically
+				there already, too). The UDP hole punching is
+				implemented, but
+				doesn't
+				work with some routers, we need to figure that out. We
+				should
+				get
+				these issues solved before we
+				start something new, because they
+				are
+				critical to potential beta
+				testers.
+			</para>
+			<para>
+				Rotation means the main figure's front should look towards the
+				direction of the
+				mouse pointer. Hitboxes should rotate
+				simultaneously. Furthermore, missiles should be
+				released at the tip
+				of the
+				figure's front (maybe a designated vertex)
+				instead of
+				arbitrarily
+				"somewhere in front" of the
+				figure.
+			</para>
+			<para>
+
+			</para>
+			<para>The rocket launcher's missiles are relativly slow. When they
+				collide, they explode and make great damage not only to the
+				hit
+				target but also to objects in a certain area of effect.
+			</para>
+			<para>
+				Mines are like rocket launcher missiles, but they dont move.
+			</para>
+			<para>
+				An assault rifle is a weapon with very low damage, but
+				infinitly high
+				speed and low cooldown.
+			</para>
+			<para>
+				Flexible settings means what is discussed in the 'Settings'
+				document.
+			</para>
+			<para>
+				Ammunition is of course what you think it is. When you shoot,
+				your ammo
+				decreases, when you collect a weapon, the ammo
+				for that
+				weapon increases by some number.
+			</para>
+			<para>
+				It might be necessary to make objects better distinguishable
+				from each
+				other, for example weapons and missiles. We can do
+				that in a
+				very simple way by designing different shapes for weapons and
+				assign
+				them different colors. Don't spend to much
+				time on real animations as
+				we don't have it and it's not that critical
+				to the game experience.
+			</para>
+			<para>
+				The conquer-mode will basically be what is described in the
+				'gameplay'
+				document.
+			</para>
+			<para>
+				Interactive mode spots are small designated areas where a
+				player can switch
+				from ego-mode to interactive-mode.
+				It is usually in
+				or close to a neutral base (or even the same). A
+				neutral base is a
+				designated area. If a player
+				of your team stays in there for a
+				certain amount of time without any
+				player from another team coming in
+				this area during
+				that time, your team takes over control of that
+				base.
+			</para>
+			<para>
+				Each team has a shared 'resource' pool. There is only one
+				resource and
+				everything you do in interactive-mode you have
+				to pay for
+				with that resource. The resource pool increases over time.
+				The more
+				bases you control, the faster it grows.
+				Additionally, for every
+				player of the opponent's team that you kill, you gain
+				some extra
+				amount of resources.
+			</para>
+			<para>
+				As players in interactive mode can scroll through the map
+				freely and
+				for this gamemode it is essential that you don't
+				know what
+				your opponent is doing, we need to implement some kind of
+				vision. As
+				a first approach, we can implement that
+				every unit your team controls
+				and every main figure provides vision in a
+				circle around the unit as
+				you know it from common
+				RTS games.
+			</para>
+			<para>
+				When a player is in interactive mode, he should have an
+				RTS-like
+				interface. That interface should show the current amount
+				of
+				resources, a mini-map to navigate through the map faster and
+				a list
+				of all the actions the player can perform in interactive mode. So
+				there should be a
+				tab for spells, unit production and tech upgrades
+				each. There should be a shortcut for each
+				action the player can
+				perform. The unit factory is a physical object on the map where
+				newly
+				built units pop out. Tech and spell factory are meta terms for
+				however you want to implement it. Also, the user should be able
+				to
+				assign hotkeys to groups of units or single objects dynamically.
+			</para>
+			<para>
+				When using the heal spell, the user has to click an area in the
+				map and
+				all units in your team which
+				are in that area are healed by
+				some amount. Through tech upgrades you
+				can increase the radius and
+				effectivness
+				of the heal spell. The vision spell provides vision for
+				a few seconds in the
+				area the user
+				clicks on on the map. Through
+				tech
+				upgrades you can increase the duration and range of the vision
+				spell. Observer units are small, very fast and
+				cost extensive units
+				that only provide vision but cannot do anything
+				else. Bomb units are
+				like rocket missiles, but you
+				can control where they go. Star units
+				are weak units, that can shoot.
+				They don't shoot automatically, so
+				the user has to
+				trigger that manually. The units will shoot towards
+				the point the user
+				clicks on.
+			</para>
+			<para>
+				In the prototype's spectator mode the spectator should be able
+				to
+				scroll freely as well as to follow a particular user. Furthermore
+				the spectator shall be shown all the statistics that are available.
+				To pull away all the traffic from the game server and thus avoid
+				lags
+				for the player, we will implement a spectator-bot-client, that
+				connects
+				to a game server as a spectator and forwards all the
+				information
+				to real spectators which connect to the spectator bot
+				instead of to the
+				game server.
+			</para>
+		</section>
+		<section>
+			<title>Test events and test phase</title>
+			<para>
+				The beta test phase will start in March after we will have
+				fixed
+				most things
+				that prevent a fluid and easy game experience and
+				all the
+				enviroment for testers is up and running. At that point of
+				time, the
+				performance should have been made good enough to enjoy the
+				game
+				without too much
+				frustration due to lags or errors. We will run
+				game
+				servers 24/7 then so
+				testers can play whenever they want.
+				Furthermore, we will have
+				designated test events where we invite 10 -
+				15 people to play at the
+				same time to watch the performance when
+				there is big traffic. We can invite our friends as
+				beta
+				testers , I'm
+				sure we will find enough among them, who like to
+				play video games ;).
+				They can give feedback directly
+				to us or via the provided forum and
+				bug trackers. We will encourage
+				them to be as honest as possible and
+				not care about our feelings. In
+				June we will have a designated test
+				phase that lasts about two
+				months. By that date, all implementation
+				should be finished. From
+				then on, we will focus on fixing bugs and
+				change/modify/add/remove
+				whatever results from the feedback we get
+				from our testers. That might involve
+				balancing and even adding more
+				weapons, units and spells if it turns out that
+				the current
+				functionality is not convenient enough. To address all the possible issues
+				that might arise the test phase is as long as it is. After the test
+				phase the
+				prototype should be more or less final. That doesn't mean
+				that we don't fix
+				bugs if we still find some.
+			</para>
+		</section>
+		<section>
+			<title>Advertising Eduras</title>
+			<para>
+				I believe it is really important to advertise your crowdfunding
+				project very much in order for the people to
+				spend money on it. I
+				believe that we have to make some kind of a show out
+				of the whole
+				process. I have seen
+				many projects whose basic idea was great but
+				it was presented
+				poorly. These project did not reach their
+				goal. And I
+				have seen projects that were rather boring but advertised
+				like hell.
+				These projects did not only
+				reach their goal but also exceeded it by
+				far.
+			</para>
+			<para>
+				While we will not have spent much money on the Eduras project
+				to this
+				point of time, I think it will be necessary to
+				invest some money now. The
+				idea is to have an Eduras tournament with an
+				attractive amount of
+				prize money. The tournament
+				would take place just a few days after
+				the release of the prototype. Due
+				to the fact that nobody can
+				practise much because of the little time
+				anyone can win and this
+				will
+				attract many people to participate in the tournament. Furthermore,
+				people will experience the game and its idea under competitive
+				conditions.
+				To grab as much attention as possible, we can stream the
+				whole tournament
+				on a weekend and make a show out of it. On the
+				stream we can advertise Eduras
+				and the crowdfunding project very
+				efficently as people directly see and hear what
+				the project is about.
+			</para>
+			<para>
+				Of course, before that we have to ensure that people are aware of the
+				event. I think mass spams on social network
+				and gaming websites will do the trick to point people to what we have
+				to offer. The gaming community is very good at
+				informing themselves and others, I believe.
+			</para>
+			<para>
+				More important will be what we have to offer besides the tournament. We
+				not only have to provide a lot of information but also
+				present them in a rousing way. Maybe we should look for some professional
+				help if this is not too expensive. A whole month from
+				01.08 to 01.09 is scheduled time to figure that out.
+			</para>
+		</section>
+	</section>
+	<section>
+		<title>Chances and Risks</title>
+		<section>
+			<title>Risks</title>
+			<para>
+				illonis and Ren are graduating in the end of September 2014. It's
+				realistic, that they will not focus on their bachelor's thesis
+				as much as they could and thus might get a worse grade than they could
+				achieve under normal circumstances. But it's also true
+				that if they continue studying for master's degree anyways, no one will
+				give a shit on what grade they had in their bachelors degree.
+				Another risk is that they might lose money. If the goal given in the
+				crowdfunding campaign is not reached, they won't get anything
+				in return to the effort made before. I think the total expenses will
+				be about 2500 Euro, depending on how much we spend on prize money.
+				We will need to rent several more servers to run Eduras on for a
+				month which are about 80 Euro each. Additionally, we might need to
+				hire
+				some professionals to some marketing or legal (?) stuff for maybe about
+				500-1000 Euro. I don't know how to make a more precise estimate.
+			</para>
+		</section>
+		<section>
+			<title>Chances</title>
+			<para>
+				illonis and Ren are graduating in the end of September 2014. It is THE best
+				occasion to start something own. If they don't reach the goal,
+				they can simply keep on studying as nothing has happened but have made
+				another experience. If they reach the goal but however things get
+				screwed up later, they will have made A LOT of new experiences and
+				can simply continue studying afterwards. But if things actually work
+				out we will not only have got EVEN MORE EXPERIENCE but also made a
+				dream come true.
+			</para>
+		</section>
+		<section>
+			<title>Summary</title>
+			<para>Besides some money we have nothing at all to lose.</para>
+		</section>
+	</section>
+</article>
