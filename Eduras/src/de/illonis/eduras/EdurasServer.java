@@ -51,6 +51,7 @@ public class EdurasServer {
 	private final static String DEFAULT_NAME = "Eduras Server";
 	private final static Logger L = EduLog.getLoggerFor(EdurasServer.class
 			.getName());
+	private static final Level DEFAULT_LOGLIMIT = Level.WARNING;
 
 	/**
 	 * Starts an Eduras? server.
@@ -70,24 +71,49 @@ public class EdurasServer {
 			e.printStackTrace();
 		}
 
-		// EduLog.setBasicLogLimit(Level.WARNING);
-		// EduLog.setConsoleLogLimit(Level.WARNING);
+		// arguments are of form <parametername>=<parametervalue>
+		String[][] parametersWithValues = new String[args.length][2];
 
+		for (int i = 0; i < args.length; i++) {
+			parametersWithValues[i] = args[i].split("=");
+		}
+
+		// read arguments
+		Level logLimit = DEFAULT_LOGLIMIT;
 		int port = DEFAULT_PORT;
 		String name = DEFAULT_NAME;
+		boolean registerAtMetaserver = false;
+		for (int i = 0; i < args.length; i++) {
 
-		if (args.length > 0) {
-			name = args[0];
-			if (args.length > 1) {
+			String parameterName = parametersWithValues[i][0];
+			String parameterValue = parametersWithValues[i][1];
+
+			if (parameterName.equalsIgnoreCase("port")) {
 				try {
-					port = Integer.parseInt(args[1]);
+					port = Integer.parseInt(parameterValue);
 				} catch (NumberFormatException e) {
 					L.severe(Localization.getStringF("Server.invalidportarg",
-							args[1]));
+							parameterValue));
 					return;
 				}
+				continue;
+			}
+
+			if (parameterName.equalsIgnoreCase("name")) {
+				name = parameterValue;
+			}
+
+			if (parameterName.equalsIgnoreCase("registeratmetaserver")) {
+				registerAtMetaserver = Boolean.parseBoolean(parameterValue);
+			}
+
+			if (parameterName.equalsIgnoreCase("loglimit")) {
+				logLimit = Level.parse(parameterValue);
 			}
 		}
+
+		EduLog.setBasicLogLimit(logLimit);
+		EduLog.setConsoleLogLimit(logLimit);
 
 		L.info("Caching shapes...");
 		GraphicsPreLoader.preLoadShapes();
@@ -178,7 +204,7 @@ public class EdurasServer {
 				server.getName(), port);
 		sdl.start();
 
-		if (args.length > 2 && args[2].equals("-m"))
+		if (registerAtMetaserver)
 			registerAtMetaServer();
 	}
 
