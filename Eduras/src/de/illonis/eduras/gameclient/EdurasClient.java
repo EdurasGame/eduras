@@ -12,6 +12,7 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.io.IOException;
 import java.util.Vector;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.swing.ButtonGroup;
@@ -44,6 +45,8 @@ public class EdurasClient {
 	 */
 	public static final int CONNECT_TIMEOUT = 10000;
 
+	private static final Level DEFAULT_LOGLIMIT = Level.WARNING;
+
 	private static int PORT = 4386;
 
 	/**
@@ -60,17 +63,39 @@ public class EdurasClient {
 			e.printStackTrace();
 		}
 
-		if (args.length > 0) {
-			try {
-				PORT = Integer.parseInt(args[0]);
-				if (PORT < 1024 || PORT > 49151) {
-					throw new Exception();
+		// arguments are of form <parametername>=<parametervalue>
+		String[][] parametersWithValues = new String[args.length][2];
+
+		for (int i = 0; i < args.length; i++) {
+			parametersWithValues[i] = args[i].split("=");
+		}
+
+		// read arguments
+		Level logLimit = DEFAULT_LOGLIMIT;
+		for (int i = 0; i < args.length; i++) {
+
+			String parameterName = parametersWithValues[i][0];
+			String parameterValue = parametersWithValues[i][1];
+
+			if (parameterName.equalsIgnoreCase("port")) {
+				try {
+					PORT = Integer.parseInt(parameterValue);
+					if (PORT < 1024 || PORT > 49151) {
+						throw new Exception();
+					}
+				} catch (Exception e) {
+					L.severe("Given port is not a valid value!");
+					return;
 				}
-			} catch (Exception e) {
-				L.severe("Given port is not a valid value!");
-				return;
+				continue;
+			}
+
+			if (parameterName.equalsIgnoreCase("loglimit")) {
+				logLimit = Level.parse(parameterValue);
 			}
 		}
+		EduLog.setBasicLogLimit(logLimit);
+		EduLog.setConsoleLogLimit(logLimit);
 
 		// Note that this is very bad coded due to testing ;)
 		buildChooserFrame();
