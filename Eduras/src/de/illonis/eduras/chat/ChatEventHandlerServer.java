@@ -29,6 +29,10 @@ class ChatEventHandlerServer implements EventHandler {
 				int idOfRoom = (Integer) event.getArgument(1);
 				String message = (String) event.getArgument(2);
 
+				L.info("Got the following message from client: "
+						+ idOfSendingUser + " in chatroom " + idOfRoom + ": "
+						+ message);
+
 				ChatRoom chatRoom;
 				try {
 					chatRoom = chatServer.getRoomById(idOfRoom);
@@ -43,11 +47,14 @@ class ChatEventHandlerServer implements EventHandler {
 				} catch (NoSuchRoomException e) {
 					L.log(Level.WARNING, "error processing sent message", e);
 				}
+
 				break;
 			}
 			case Chat.SET_NAME: {
 				int userId = (Integer) event.getArgument(0);
 				String newName = (String) event.getArgument(1);
+
+				L.info("User #" + userId + " changes his name to " + newName);
 
 				try {
 					ChatUser user = chatServer.findUserById(userId);
@@ -88,9 +95,8 @@ class ChatEventHandlerServer implements EventHandler {
 
 					if (room.isPublic() && !room.containsUser(user)) {
 						chatServer.addUserToRoom(user, room);
-						Event confirmRoomJoinEvent = new Event(
-								Chat.CONFIRM_ROOM_JOIN);
-						event.putArgument(roomId);
+						Event confirmRoomJoinEvent = ChatServerImpl
+								.createYouJoinedRoomEvent(room);
 						chatServer.server.sendEventToClient(
 								confirmRoomJoinEvent, userId);
 					}

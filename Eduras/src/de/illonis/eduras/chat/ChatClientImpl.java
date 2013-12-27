@@ -91,6 +91,10 @@ public class ChatClientImpl implements ChatClient {
 			NotConnectedException {
 		checkConnection();
 
+		if (chatRoom == null) {
+			throw new IllegalArgumentException("ChatRoom is null!");
+		}
+
 		if (!chatRoom.containsUser(user)) {
 			throw new UserNotInRoomException(user, chatRoom);
 		}

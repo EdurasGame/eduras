@@ -51,6 +51,8 @@ public class ChatServerImpl implements ChatServer {
 			}
 		};
 
+		server.setEventHandler(new ChatEventHandlerServer(this));
+
 		server.setNetworkEventHandler(new ServerNetworkEventHandler() {
 			private final Logger L = EduLog
 					.getLoggerFor(ServerNetworkEventHandler.class.getName());
@@ -281,6 +283,20 @@ public class ChatServerImpl implements ChatServer {
 		} catch (IllegalArgumentException | TooFewArgumentsExceptions e) {
 			L.log(Level.WARNING, "error adding user to room", e);
 		}
+
+		Event youJoinedRoomEvent = createYouJoinedRoomEvent(roomToAddTo);
+		try {
+			server.sendEventToClient(youJoinedRoomEvent, userToAdd.getId());
+		} catch (IllegalArgumentException | NoSuchClientException
+				| TooFewArgumentsExceptions e) {
+			L.log(Level.WARNING, "error adding user to room", e);
+		}
+	}
+
+	static Event createYouJoinedRoomEvent(ChatRoom roomToAddTo) {
+		Event confirmRoomJoinEvent = new Event(Chat.CONFIRM_ROOM_JOIN);
+		confirmRoomJoinEvent.putArgument(roomToAddTo.getRoomId());
+		return confirmRoomJoinEvent;
 	}
 
 	@Override
