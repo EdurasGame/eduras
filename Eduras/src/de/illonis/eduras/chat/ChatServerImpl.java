@@ -10,6 +10,7 @@ import de.eduras.eventingserver.Server;
 import de.eduras.eventingserver.ServerInterface;
 import de.eduras.eventingserver.ServerNetworkEventHandler;
 import de.eduras.eventingserver.exceptions.TooFewArgumentsExceptions;
+import de.eduras.eventingserver.test.NoSuchClientException;
 import de.illonis.edulog.EduLog;
 
 /**
@@ -71,19 +72,102 @@ public class ChatServerImpl implements ChatServer {
 
 			@Override
 			public void onClientConnected(int clientId) {
+				L.info("New client connected with id " + clientId);
 				ChatUser newChatUser = new ChatUser(clientId, "Unknown");
-				users.add(newChatUser);
 
-				Event newUserEvent = new Event(Chat.USER_CREATED);
-				newUserEvent.putArgument(clientId);
+				Event newUserEvent = createUserCreatedEvent(newChatUser);
 				try {
+					sendChatServerState(newChatUser);
+					users.add(newChatUser);
 					server.sendEventToAll(newUserEvent);
-					listener.onUserConnected(newChatUser);
 				} catch (IllegalArgumentException | TooFewArgumentsExceptions e) {
 					L.log(Level.WARNING, "error while user connected", e);
+					return;
+				}
+
+				// notify the connected client that he has connected
+				// successfully and tell him his chatuser id.
+
+				// actually, it seems like chatuser id = client id
+				// however, it's okay to do it this way in case we wanna
+				// seperate chatuser id from client id
+				Event youConnectedEvent = new Event(Chat.YOU_CONNECTED);
+				youConnectedEvent.putArgument(clientId);
+
+				try {
+					server.sendEventToClient(youConnectedEvent, clientId);
+					listener.onUserConnected(newChatUser);
+				} catch (IllegalArgumentException | NoSuchClientException
+						| TooFewArgumentsExceptions e) {
+					L.log(Level.WARNING, "error while user connected", e);
+					return;
 				}
 			}
 		});
+	}
+
+	private Event createUserCreatedEvent(ChatUser newChatUser) {
+		Event newUserEvent = new Event(Chat.USER_CREATED);
+		newUserEvent.putArgument(newChatUser.getId());
+		return newUserEvent;
+	}
+
+	private void sendChatServerState(ChatUser newChatUser) {
+
+		int userId = newChatUser.getId();
+
+		for (ChatRoom room : rooms) {
+			Event roomCreatedEvent = createRoomCreatedEvent(room);
+
+			try {
+				server.sendEventToClient(roomCreatedEvent, userId);
+			} catch (IllegalArgumentException | TooFewArgumentsExceptions
+					| NoSuchClientException e) {
+				L.log(Level.SEVERE,
+						"An exception occured trying to send room_created event.",
+						e);
+				continue;
+			}
+		}
+
+		for (ChatUser chatUser : users) {
+			Event userCreatedEvent = createUserCreatedEvent(chatUser);
+			Event setUserNameEvent = createSetUserNameEvent(chatUser);
+
+			try {
+				server.sendEventToClient(userCreatedEvent, userId);
+				server.sendEventToClient(setUserNameEvent, userId);
+			} catch (IllegalArgumentException | TooFewArgumentsExceptions
+					| NoSuchClientException e) {
+				L.log(Level.SEVERE,
+						"An exception occured trying to send user_created or set_name event.",
+						e);
+				continue;
+			}
+
+			for (ChatRoom aRoomTheUserIsIn : chatUser.getOccupiedRooms()) {
+				Event userJoinedRoomEvent = createUserJoinedRoomEvent(chatUser,
+						aRoomTheUserIsIn);
+				try {
+					server.sendEventToClient(userJoinedRoomEvent, userId);
+				} catch (IllegalArgumentException | NoSuchClientException
+						| TooFewArgumentsExceptions e) {
+					L.log(Level.SEVERE,
+							"An exception occured trying to send user_joined event.",
+							e);
+					continue;
+				}
+			}
+		}
+
+	}
+
+	private Event createUserJoinedRoomEvent(ChatUser userToAdd,
+			ChatRoom roomToAddTo) {
+		Event userJoinedRoomEvent = new Event(Chat.USER_JOINED_ROOM);
+		userJoinedRoomEvent.putArgument(userToAdd.getId());
+		userJoinedRoomEvent.putArgument(roomToAddTo.getRoomId());
+		return userJoinedRoomEvent;
 	}
 
 	@Override
@@ -154,10 +238,8 @@ public class ChatServerImpl implements ChatServer {
 		ChatRoom.lastId++;
 		rooms.add(newRoom);
 
-		Event createRoomEvent = new Event(Chat.ROOM_CREATED);
-		createRoomEvent.putArgument(newRoom.getName());
-		createRoomEvent.putArgument(newRoom.getRoomId());
-		createRoomEvent.putArgument(newRoom.isPublic());
+		Event createRoomEvent = createRoomCreatedEvent(newRoom);
+
 		try {
 			server.sendEventToAll(createRoomEvent);
 		} catch (TooFewArgumentsExceptions e) {
@@ -165,6 +247,14 @@ public class ChatServerImpl implements ChatServer {
 			return null;
 		}
 		return newRoom;
+	}
+
+	private Event createRoomCreatedEvent(ChatRoom room) {
+		Event createRoomEvent = new Event(Chat.ROOM_CREATED);
+		createRoomEvent.putArgument(room.getName());
+		createRoomEvent.putArgument(room.getRoomId());
+		createRoomEvent.putArgument(room.isPublic());
+		return createRoomEvent;
 	}
 
 	@Override
@@ -184,9 +274,8 @@ public class ChatServerImpl implements ChatServer {
 		userToAdd.addToRoom(roomToAddTo);
 		roomToAddTo.addUser(userToAdd);
 
-		Event userJoinedRoomEvent = new Event(Chat.USER_JOINED_ROOM);
-		userJoinedRoomEvent.putArgument(userToAdd.getId());
-		userJoinedRoomEvent.putArgument(roomToAddTo.getRoomId());
+		Event userJoinedRoomEvent = createUserJoinedRoomEvent(userToAdd,
+				roomToAddTo);
 		try {
 			server.sendEventToAll(userJoinedRoomEvent);
 		} catch (IllegalArgumentException | TooFewArgumentsExceptions e) {
@@ -286,5 +375,12 @@ public class ChatServerImpl implements ChatServer {
 			ChatServerActivityListener listener) {
 		this.listener = listener;
 
+	}
+
+	static Event createSetUserNameEvent(ChatUser user) {
+		Event nameChangedEvent = new Event(Chat.NAME_CHANGED);
+		nameChangedEvent.putArgument(user.getId());
+		nameChangedEvent.putArgument(user.getNickName());
+		return nameChangedEvent;
 	}
 }

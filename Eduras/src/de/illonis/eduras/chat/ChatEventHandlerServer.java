@@ -53,9 +53,8 @@ class ChatEventHandlerServer implements EventHandler {
 					ChatUser user = chatServer.findUserById(userId);
 					user.setNickName(newName);
 
-					Event nameChangedEvent = new Event(Chat.NAME_CHANGED);
-					nameChangedEvent.putArgument(userId);
-					nameChangedEvent.putArgument(newName);
+					Event nameChangedEvent = ChatServerImpl
+							.createSetUserNameEvent(user);
 					chatServer.server.sendEventToAll(nameChangedEvent);
 				} catch (NoSuchUserException e) {
 					L.log(Level.WARNING, "error processing set name event", e);

@@ -24,7 +24,7 @@ public class ChatClientImpl implements ChatClient {
 
 	private ClientInterface client;
 	private ChatUser user;
-	private boolean connected;
+	boolean connected;
 	ChatActivityListener chatActivityListener;
 	final LinkedList<ChatRoom> visibleChatRooms = new LinkedList<ChatRoom>();
 	final LinkedList<ChatRoom> allRooms = new LinkedList<ChatRoom>();
@@ -50,13 +50,7 @@ public class ChatClientImpl implements ChatClient {
 			@Override
 			public void onClientConnected(int clientId) {
 
-				if (clientId == client.getClientId()) {
-					connected = true;
-					user = new ChatUser(client.getClientId(), "Unknown");
-					chatActivityListener.onConnectionEstablished();
-				}
-
-				// other user's connection are handled seperately
+				// handled in user_create message
 
 			}
 
@@ -67,6 +61,7 @@ public class ChatClientImpl implements ChatClient {
 
 			@Override
 			public void onDisconnected() {
+				L.info("You disconnected from chat.");
 				connected = false;
 				chatActivityListener.onConnectionAborted();
 			}
@@ -220,5 +215,9 @@ public class ChatClientImpl implements ChatClient {
 		allRooms.remove(room);
 		visibleChatRooms.remove(room);
 		room.removeSelf();
+	}
+
+	protected void setUser(ChatUser me) {
+		user = me;
 	}
 }

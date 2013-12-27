@@ -22,6 +22,8 @@ public class ChatRoom {
 		this.name = name;
 		this.roomId = id;
 		this.isPublic = isPublic;
+
+		usersInTheRoom = new LinkedList<ChatUser>();
 	}
 
 	int getRoomId() {
@@ -87,5 +89,11 @@ public class ChatRoom {
 
 	void addUser(ChatUser user) {
 		usersInTheRoom.add(user);
+	}
+
+	@Override
+	public boolean equals(Object other) {
+		return (other instanceof ChatRoom)
+				&& ((ChatRoom) other).getRoomId() == roomId;
 	}
 }
