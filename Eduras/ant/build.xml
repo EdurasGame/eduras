@@ -83,6 +83,7 @@
 				<include name="**/*.erm"></include>
 				<include name="**/*.properties"></include>
 			</fileset>
+			<zipgroupfileset dir="${base}${libs}" includes="**/*.jar" />
 			<manifest>
 				<attribute name="Main-Class" value="de.illonis.eduras.EdurasServer" />
 			</manifest>
