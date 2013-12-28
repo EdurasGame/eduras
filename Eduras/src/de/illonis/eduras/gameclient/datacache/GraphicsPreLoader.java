@@ -61,9 +61,6 @@ public final class GraphicsPreLoader extends AsyncLoader<Void> {
 	public static void preLoadShapes() {
 		GraphicsPreLoader p = new GraphicsPreLoader();
 		p.loadShapes();
-		p.loadGraphics();
-		p.loadIcons();
-		p.loadGuiGraphics();
 	}
 
 	private void loadIcons() {
