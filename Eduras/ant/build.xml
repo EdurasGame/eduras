@@ -79,7 +79,7 @@
 
 	<target name="jar-server" depends="compile" description="Creates server-executable.">
 		<jar destfile="${base}${jars}/eduras-server.jar" basedir="${base}${build}"
-			excludes="**/images/**, **/unittests/**">
+			excludes="**/unittests/**">
 			<fileset dir="${base}${src}">
 				<include name="**/*.erm"></include>
 				<include name="**/*.esh"></include>
