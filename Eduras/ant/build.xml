@@ -66,6 +66,7 @@
 				<include name="**/*.png"></include>
 				<include name="**/*.gif"></include>
 				<include name="**/*.erm"></include>
+				<include name="**/*.esh"></include>
 				<include name="**/*.properties"></include>
 			</fileset>
 			<zipgroupfileset dir="${base}${libs}" includes="**/*.jar" />
@@ -81,6 +82,7 @@
 			excludes="**/images/**, **/unittests/**">
 			<fileset dir="${base}${src}">
 				<include name="**/*.erm"></include>
+				<include name="**/*.esh"></include>
 				<include name="**/*.properties"></include>
 			</fileset>
 			<zipgroupfileset dir="${base}${libs}" includes="**/*.jar" />
