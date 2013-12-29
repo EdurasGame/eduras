@@ -28,25 +28,31 @@ public class ChatDisplay extends RenderedGuiObject {
 
 	@Override
 	public void render(Graphics2D g2d) {
+		g2d.setFont(DEFAULT_FONT);
 		g2d.setColor(BACKGROUND);
 		g2d.fillRect(screenX, screenY, WIDTH, HEIGHT);
 		g2d.setColor(Color.WHITE);
 		g2d.drawString("Room: " + data.getRoomName(), screenX + WIDTH - 130,
 				screenY + 20);
 		ChatMessage msg;
-		int i = 30;
-		int n = 0;
-		while (n < 8 && null != (msg = data.popMessage())) {
-			g2d.drawString(
-					msg.getPostingUser().getNickName() + ": "
-							+ msg.getMessage(), screenX + 5, screenY + HEIGHT
-							- i);
-			i += 15;
-			n++;
-		}
+		int i = 10;
 		if (data.isWriting())
+			i = 25;
+
+		while (i < HEIGHT - 15 && null != (msg = data.popMessage())) {
+			if (msg.isSystemMessage())
+				g2d.setColor(Color.YELLOW);
+			else
+				g2d.setColor(Color.WHITE);
+			g2d.drawString(msg.toChatWindowString(), screenX + 5, screenY
+					+ HEIGHT - i);
+			i += 15;
+		}
+		if (data.isWriting()) {
+			g2d.setColor(Color.WHITE);
 			g2d.drawString(data.getInput() + "_", screenX + 5, screenY + HEIGHT
 					- 10);
+		}
 		data.resetPop();
 	}
 

@@ -25,7 +25,7 @@ public class ChatMessage {
 	 * 
 	 * @return the user
 	 */
-	public ChatUser getPostingUser() {
+	public final ChatUser getPostingUser() {
 		return postingUser;
 	}
 
@@ -34,7 +34,7 @@ public class ChatMessage {
 	 * 
 	 * @return the room
 	 */
-	public ChatRoom getRoomPostedIn() {
+	public final ChatRoom getRoomPostedIn() {
 		return roomPostedIn;
 	}
 
@@ -43,8 +43,22 @@ public class ChatMessage {
 	 * 
 	 * @return The message
 	 */
-	public String getMessage() {
+	public final String getMessage() {
 		return message;
 	}
 
+	/**
+	 * @return a string representation of this message containing name of
+	 *         sending user.
+	 */
+	public String toChatWindowString() {
+		return getPostingUser().getNickName() + ": " + getMessage();
+	}
+
+	/**
+	 * @return true if this is a system message, false otherwise.
+	 */
+	public boolean isSystemMessage() {
+		return false;
+	}
 }

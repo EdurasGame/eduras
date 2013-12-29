@@ -41,10 +41,6 @@ public class ClientChatReceiver implements ChatActivityListener {
 	@Override
 	public void onNewMessage(ChatMessage message) {
 		cache.pushMessage(message);
-		System.out.println("new chatmessage: ["
-				+ message.getPostingUser().getNickName() + "] "
-				+ message.getMessage());
-
 	}
 
 	@Override
@@ -63,17 +59,13 @@ public class ClientChatReceiver implements ChatActivityListener {
 	@Override
 	public void onYouJoined(ChatRoom chatRoom) {
 		cache.setCurrentRoom(chatRoom);
-		System.out.println("joined " + chatRoom.getName());
+		cache.pushSystemMessage("You joined " + chatRoom.getName());
 	}
 
 	@Override
 	public void onUserJoinedRoom(ChatRoom chatRoom, ChatUser user) {
 		cache.pushUser(user);
-		cache.pushSystemMessage("User joined room: " + user.getNickName(),
-				chatRoom);
-		System.out
-				.println(user.getNickName() + " joined " + chatRoom.getName());
-
+		cache.pushSystemMessage("User joined: " + user.getNickName(), chatRoom);
 	}
 
 	@Override
@@ -83,7 +75,7 @@ public class ClientChatReceiver implements ChatActivityListener {
 		} catch (NotConnectedException e) {
 			L.log(Level.SEVERE, "Could not set my chat name.", e);
 		}
-		System.out.println("chat established");
+		cache.pushSystemMessage("Chat established.");
 
 		cache.setSelf(chat.getUser());
 		LinkedList<ChatRoom> rooms = new LinkedList<ChatRoom>(chat.getRooms());
@@ -91,14 +83,10 @@ public class ClientChatReceiver implements ChatActivityListener {
 			cache.pushRoom(chatRoom);
 		}
 		// TODO: Join room (how?)
-
 	}
 
 	@Override
 	public void onConnectionAborted() {
-		System.out.println("chat aborted");
-		// TODO Auto-generated method stub
-
+		cache.pushSystemMessage("Chat connection terminated.");
 	}
-
 }
