@@ -21,6 +21,7 @@ public class ChatCache {
 	private final HashMap<Integer, ChatUser> users;
 	private ChatRoom currentRoom;
 	private StringBuilder input;
+	private int n = 1;
 	private boolean writing;
 
 	private ChatUser getSelfUser() {
@@ -30,7 +31,7 @@ public class ChatCache {
 	public void write(KeyEvent letter) {
 		if (letter.getKeyCode() == KeyEvent.VK_BACK_SPACE) {
 			input.deleteCharAt(input.length() - 1);
-		} else {
+		} else if (letter.getKeyChar() != KeyEvent.CHAR_UNDEFINED) {
 			input.append(letter.getKeyChar());
 			startWriting();
 		}
@@ -43,6 +44,8 @@ public class ChatCache {
 
 	public String sendInput() {
 		String text = input.toString();
+		// prevent send errors due to messages separated by #
+		text = text.replace('#', ' ');
 		writing = false;
 		stopWriting();
 		return text;
@@ -91,8 +94,7 @@ public class ChatCache {
 	}
 
 	public void pushSystemMessage(String string, ChatRoom chatRoom) {
-		// TODO Auto-generated method stub
-
+		// TODO: implement
 	}
 
 	public void setCurrentRoom(ChatRoom chatRoom) {
@@ -102,24 +104,38 @@ public class ChatCache {
 
 	public void pushUser(ChatUser user) {
 		users.put(user.getId(), user);
-
 	}
 
 	public void pushRoom(ChatRoom chatRoom) {
 		// TODO Auto-generated method stub
 	}
 
-	public String popMessage() {
-		return messages.size() + " messages";
+	/**
+	 * Returns most recent non popped chat messages.<br>
+	 * When called in a loop, this method will return all received chat messages
+	 * in inversed order call-by-call. When no message is remaining, <b>null</b>
+	 * is returned.<br>
+	 * This method does not touch the original message list.<br>
+	 * To reset pop-counter (to read messages again), call {@link #resetPop()}.
+	 * 
+	 * @return the recent chat message not yet popped.
+	 */
+	public ChatMessage popMessage() {
+		int i = messages.size() - n++;
+		if (i < 0)
+			return null;
+		return messages.get(i);
+	}
+
+	public void resetPop() {
+		n = 1;
 	}
 
 	public void startWriting() {
-		System.out.println("start");
 		writing = true;
 	}
 
 	public ChatRoom getCurrentRoom() {
 		return currentRoom;
 	}
-
 }
