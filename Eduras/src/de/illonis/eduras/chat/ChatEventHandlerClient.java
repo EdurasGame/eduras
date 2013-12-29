@@ -40,18 +40,24 @@ class ChatEventHandlerClient implements EventHandler {
 				ChatUser user = room.findUserById(sendingUser);
 				chatClient.chatActivityListener.onNewMessage(new ChatMessage(
 						user, room, message));
+
+				L.finest("Received message " + message + " by user "
+						+ user.getNickName() + " in room " + room.getName()
+						+ ".");
 				break;
 			}
 			case Chat.NAME_CHANGED: {
 				int userId = (Integer) event.getArgument(0);
 				String newName = (String) event.getArgument(1);
 				try {
-					ChatUser user = chatClient.getUser().findUser(userId);
+					ChatUser user = chatClient.findUserById(userId);
 					user.setNickName(newName);
 					chatClient.chatActivityListener.onNameChanged(user);
-				} catch (UserNotInRoomException e) {
+				} catch (NoSuchUserException e) {
 					L.log(Level.WARNING, "Error changing name.", e);
 				}
+				L.fine("User with id " + userId + " changed his name to "
+						+ newName);
 				break;
 			}
 			case Chat.INVITE_TO_ROOM: {
@@ -80,6 +86,9 @@ class ChatEventHandlerClient implements EventHandler {
 				if (isPublic) {
 					chatClient.visibleChatRooms.add(newRoom);
 				}
+				L.info("New room " + roomName + " with id " + roomId
+						+ " created. The room "
+						+ (isPublic ? "is public" : "is not public."));
 				break;
 			}
 			case Chat.CONFIRM_ROOM_JOIN: {
@@ -96,6 +105,32 @@ class ChatEventHandlerClient implements EventHandler {
 			case Chat.USER_CREATED: {
 				int userId = (Integer) event.getArgument(0);
 				chatClient.allUsers.add(new ChatUser(userId, "Unknown"));
+
+				if (chatClient.getUser() != null
+						&& userId == chatClient.getUser().getId()) {
+					L.log(Level.WARNING,
+							"Got a USER_CREATED message with the id of own user. That shouldn't happen, but instead be done via a YOU_CONNECTED message.");
+				}
+
+				L.info("User was created with id " + userId);
+				break;
+			}
+			case Chat.YOU_CONNECTED: {
+				int userId = (Integer) event.getArgument(0);
+
+				ChatUser me;
+				try {
+					me = chatClient.findUserById(userId);
+				} catch (NoSuchUserException e) {
+					L.severe("Couldn't find an own user when received you connected message.");
+					return;
+				}
+
+				chatClient.setUser(me);
+				chatClient.connected = true;
+				chatClient.chatActivityListener.onConnectionEstablished();
+				L.info("You connected to the chat.");
+
 				break;
 			}
 			case Chat.USER_REMOVED: {

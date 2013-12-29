@@ -66,6 +66,7 @@
 				<include name="**/*.png"></include>
 				<include name="**/*.gif"></include>
 				<include name="**/*.erm"></include>
+				<include name="**/*.esh"></include>
 				<include name="**/*.properties"></include>
 			</fileset>
 			<zipgroupfileset dir="${base}${libs}" includes="**/*.jar" />
@@ -78,11 +79,13 @@
 
 	<target name="jar-server" depends="compile" description="Creates server-executable.">
 		<jar destfile="${base}${jars}/eduras-server.jar" basedir="${base}${build}"
-			excludes="**/images/**, **/unittests/**">
+			excludes="**/unittests/**">
 			<fileset dir="${base}${src}">
 				<include name="**/*.erm"></include>
+				<include name="**/*.esh"></include>
 				<include name="**/*.properties"></include>
 			</fileset>
+			<zipgroupfileset dir="${base}${libs}" includes="**/*.jar" />
 			<manifest>
 				<attribute name="Main-Class" value="de.illonis.eduras.EdurasServer" />
 			</manifest>

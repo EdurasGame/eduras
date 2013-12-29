@@ -51,8 +51,8 @@ public class Server implements ServerInterface {
 		running = false;
 		port = -1;
 		name = "Unknown";
-		serverSender = new ServerSender(this);
 		serverReceiver = new ServerReceiver(this);
+		serverSender = new ServerSender(this);
 		clients = new HashMap<Integer, ServerClient>();
 		decoder = new ServerDecoder(serverReceiver.inputBuffer, this);
 		networkEventHandler = new DefaultServerNetworkEventHandler();
@@ -242,6 +242,7 @@ public class Server implements ServerInterface {
 
 		ServerClient serverClient = new ServerClient(clientId, client);
 		clients.put(clientId, serverClient);
+		serverSender.addClient(serverClient);
 
 		return serverClient;
 	}
@@ -274,6 +275,7 @@ public class Server implements ServerInterface {
 	 */
 	void removeClient(ServerClient client) {
 		clients.remove(client.getClientId());
+		serverSender.removeClient(client.getClientId());
 	}
 
 	@Override

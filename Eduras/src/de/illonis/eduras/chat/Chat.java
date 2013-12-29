@@ -14,6 +14,7 @@ public abstract class Chat {
 	public static final int ROOM_REMOVED = 8;
 	public static final int USER_JOINED_ROOM = 10;
 	public static final int USER_LEFT_ROOM = 11;
+	public static final int YOU_CONNECTED = 12;
 
 	// client events
 	public static final int SEND_MESSAGE = 20;

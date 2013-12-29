@@ -22,7 +22,7 @@ public class ChatUser {
 
 	@Override
 	public boolean equals(Object other) {
-		return other instanceof ChatUser && ((ChatUser) other).getId() == id;
+		return (other instanceof ChatUser) && ((ChatUser) other).getId() == id;
 	}
 
 	public int getId() {
