@@ -6,6 +6,7 @@ import de.illonis.eduras.ai.movement.MotionAIControllable;
 import de.illonis.eduras.ai.movement.MotionType;
 import de.illonis.eduras.ai.movement.MovingUnitAI;
 import de.illonis.eduras.math.Vector2D;
+import de.illonis.eduras.settings.S;
 import de.illonis.eduras.shapes.ObjectShape.ShapeType;
 import de.illonis.eduras.shapes.ShapeFactory;
 
@@ -30,10 +31,10 @@ public class Bird extends MoveableGameObject implements MotionAIControllable {
 	public Bird(GameInformation game, int id) {
 		super(game, id);
 		ai = new MovingUnitAI(this);
-		setSpeed(40);
+		setSpeed(S.go_bird_speed);
 		setShape(ShapeFactory.createShape(ShapeType.BIRD));
 		setPosition(80, 20);
-		setCollidable(false);
+		setCollidable(S.go_bird_collidable);
 	}
 
 	@Override

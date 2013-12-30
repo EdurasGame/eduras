@@ -8,6 +8,7 @@ import de.illonis.eduras.items.Item;
 import de.illonis.eduras.items.ItemUseInformation;
 import de.illonis.eduras.items.Lootable;
 import de.illonis.eduras.items.Usable;
+import de.illonis.eduras.settings.S;
 import de.illonis.eduras.units.PlayerMainFigure;
 
 /**
@@ -22,7 +23,7 @@ public abstract class Weapon extends Item implements Lootable, Usable {
 	private long cooldown = 0;
 	protected long defaultCooldown = 0;
 	private Missile missile;
-	protected long respawnTime = 5000;
+	protected long respawnTime = S.go_weapon_respawntime_default;
 	private long respawnTimeRemaining = 0;
 
 	/**

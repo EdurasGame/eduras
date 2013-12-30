@@ -8,6 +8,7 @@ import de.illonis.eduras.ObjectFactory.ObjectType;
 import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.items.ItemUseInformation;
 import de.illonis.eduras.math.Vector2D;
+import de.illonis.eduras.settings.S;
 import de.illonis.eduras.shapes.Circle;
 
 /**
@@ -30,8 +31,8 @@ public class SimpleWeapon extends Weapon {
 		// TODO: Need to get away the missile prototypes.
 		setMissile(null);
 		setName("SimpleWeapon");
-		setShape(new Circle(10));
-		defaultCooldown = 300;
+		setShape(new Circle(S.go_simpleweapon_shape_radius));
+		defaultCooldown = S.go_simpleweapon_cooldown;
 	}
 
 	@Override

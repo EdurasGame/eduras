@@ -2,6 +2,7 @@ package de.illonis.eduras.items.weapons;
 
 import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.ObjectFactory.ObjectType;
+import de.illonis.eduras.settings.S;
 
 /**
  * @author Florian Mai <florian.ren.mai@googlemail.com>
@@ -19,11 +20,11 @@ public class SimpleMissile extends Missile {
 	 */
 	public SimpleMissile(GameInformation game, int id) {
 		super(game, id);
-		setDamage(5);
-		setDamageRadius(5);
+		setDamage(S.go_simplemissile_damage);
+		setDamageRadius(S.go_simplemissile_damage_radius);
 		setObjectType(ObjectType.SIMPLEMISSILE);
-		setSpeed(100);
-		setMaxRange(200);
+		setSpeed(S.go_simplemissile_speed);
+		setMaxRange(S.go_simplemissile_maxrange);
 	}
 
 }

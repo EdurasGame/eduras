@@ -5,6 +5,7 @@ import de.illonis.eduras.ObjectFactory.ObjectType;
 import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.items.ItemUseInformation;
 import de.illonis.eduras.math.Vector2D;
+import de.illonis.eduras.settings.S;
 import de.illonis.eduras.shapes.Circle;
 
 /**
@@ -26,8 +27,8 @@ public class SniperWeapon extends Weapon {
 		super(ObjectType.ITEM_WEAPON_SNIPER, gi, id);
 		setMissile(null);
 		setName("Sniper");
-		setShape(new Circle(5));
-		defaultCooldown = 1050;
+		setShape(new Circle(S.go_sniperweapon_shape_radius));
+		defaultCooldown = S.go_sniperweapon_cooldown;
 	}
 
 	@Override

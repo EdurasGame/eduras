@@ -5,6 +5,7 @@ package de.illonis.eduras.items.weapons;
 
 import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.ObjectFactory.ObjectType;
+import de.illonis.eduras.settings.S;
 import de.illonis.eduras.shapes.Circle;
 
 /**
@@ -23,11 +24,11 @@ public class SniperMissile extends Missile {
 	 */
 	public SniperMissile(GameInformation game, int id) {
 		super(game, id);
-		setDamage(16);
-		setDamageRadius(1.5);
+		setDamage(S.go_snipermissile_damage);
+		setDamageRadius(S.go_snipermissile_damageradius);
 		setObjectType(ObjectType.SNIPERMISSILE);
-		setShape(new Circle(1.5));
-		setSpeed(500);
+		setShape(new Circle(S.go_snipermissile_shape_radius));
+		setSpeed(S.go_snipermissile_speed);
 	}
 
 }

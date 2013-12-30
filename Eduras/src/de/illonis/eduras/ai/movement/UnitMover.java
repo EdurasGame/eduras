@@ -1,6 +1,7 @@
 package de.illonis.eduras.ai.movement;
 
 import de.illonis.eduras.math.Vector2D;
+import de.illonis.eduras.settings.S;
 
 /**
  * Allows commanding of a unit and keeps track of pathfinder and motion of a
@@ -11,7 +12,6 @@ import de.illonis.eduras.math.Vector2D;
  */
 public final class UnitMover {
 
-	private final static long MOTION_UPDATE_INTERVAL = 400;
 	private final PathFinder pathFinder;
 	private Thread currentMotion;
 	private final MotionAIControllable motionUnit;
@@ -52,7 +52,7 @@ public final class UnitMover {
 				pathFinder.setLocation(motionUnit.getPosition());
 				motionUnit.startMovingTo(pathFinder.getMovingDirection());
 				try {
-					Thread.sleep(MOTION_UPDATE_INTERVAL);
+					Thread.sleep(S.ai_motion_update_interval);
 				} catch (InterruptedException e) {
 					break;
 				}

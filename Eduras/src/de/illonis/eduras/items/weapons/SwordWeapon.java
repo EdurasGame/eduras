@@ -5,6 +5,7 @@ import de.illonis.eduras.ObjectFactory.ObjectType;
 import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.items.ItemUseInformation;
 import de.illonis.eduras.math.Vector2D;
+import de.illonis.eduras.settings.S;
 import de.illonis.eduras.shapes.Circle;
 
 /**
@@ -28,8 +29,8 @@ public class SwordWeapon extends Weapon {
 		super(ObjectType.ITEM_WEAPON_SWORD, gi, id);
 		setMissile(null);
 		setName("Sword");
-		setShape(new Circle(7));
-		defaultCooldown = 100;
+		setShape(new Circle(S.go_swordweapon_shape_radius));
+		defaultCooldown = S.go_swordweapon_cooldown;
 	}
 
 	@Override

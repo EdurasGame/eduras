@@ -12,6 +12,7 @@ import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.interfaces.MovementControlable;
 import de.illonis.eduras.inventory.Inventory;
 import de.illonis.eduras.math.Vector2D;
+import de.illonis.eduras.settings.S;
 import de.illonis.eduras.shapes.Triangle;
 
 /**
@@ -74,10 +75,10 @@ public class PlayerMainFigure extends Unit implements MovementControlable {
 	 */
 	public PlayerMainFigure(GameInformation game, int ownerId, String name,
 			int id) {
-		super(game, 30, id);
+		super(game, S.player_maxhealth_default, id);
 		setObjectType(ObjectType.PLAYER);
 		this.name = name;
-		setSpeed(50);
+		setSpeed(S.player_speed_default);
 		lastModeSwitch = 0;
 		currentMode = InteractMode.MODE_EGO;
 		setOwner(ownerId);

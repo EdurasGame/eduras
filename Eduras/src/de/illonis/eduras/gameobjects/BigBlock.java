@@ -3,6 +3,7 @@ package de.illonis.eduras.gameobjects;
 import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.ObjectFactory.ObjectType;
 import de.illonis.eduras.exceptions.ShapeVerticesNotApplicableException;
+import de.illonis.eduras.settings.S;
 
 /**
  * This is a special block... a big one.
@@ -12,8 +13,8 @@ import de.illonis.eduras.exceptions.ShapeVerticesNotApplicableException;
  */
 public class BigBlock extends Block {
 
-	private static final int WIDTH = 20;
-	private static final int HEIGHT = 20;
+	private static final int WIDTH = S.go_big_block_width;
+	private static final int HEIGHT = S.go_big_block_height;
 
 	/**
 	 * Creates a BigBlock at the given position and id in the context of the

@@ -4,6 +4,7 @@ import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.gameobjects.MoveableGameObject;
 import de.illonis.eduras.math.Vector2D;
+import de.illonis.eduras.settings.S;
 import de.illonis.eduras.shapes.Circle;
 import de.illonis.eduras.units.Unit;
 
@@ -32,7 +33,7 @@ public abstract class Missile extends MoveableGameObject {
 	public Missile(GameInformation game, int id) {
 		super(game, id);
 		rangeMoved = 0;
-		setShape(new Circle(5));
+		setShape(new Circle(S.go_missile_radius));
 	}
 
 	/**

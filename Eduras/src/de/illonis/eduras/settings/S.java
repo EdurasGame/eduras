@@ -32,6 +32,88 @@ public final class S {
 	private static float myFloat = 42.42f;
 	private static double myDouble = 42.4242;
 
+	// real values
+	public static double ai_target_reached_distance = 10;
+	public static long ai_motion_update_interval = 400;
+
+	public static int go_big_block_width = 20;
+
+	public static int go_big_block_height = 20;
+
+	public static int go_bigger_block_width = 40;
+
+	public static int go_bigger_block_height = 40;
+
+	public static double go_bird_speed = 40;
+
+	public static boolean go_bird_collidable = false;
+
+	public static int player_max_item_capacity = 6;
+
+	public static double go_missile_radius = 5;
+
+	public static int go_simplemissile_damage = 5;
+
+	public static double go_simplemissile_damage_radius = 5;
+
+	public static double go_simplemissile_speed = 100;
+
+	public static double go_simplemissile_maxrange = 200;
+
+	public static double go_simpleweapon_shape_radius = 10;
+
+	public static long go_simpleweapon_cooldown = 300;
+
+	public static int go_snipermissile_damage = 16;
+
+	public static double go_snipermissile_damageradius = 1.5;
+
+	public static double go_snipermissile_shape_radius = 1.5;
+
+	public static double go_snipermissile_speed = 500;
+
+	public static double go_sniperweapon_shape_radius = 5;
+
+	public static long go_sniperweapon_cooldown = 1050;
+
+	public static int go_splashedmissile_damage = 3;
+
+	public static double go_splashedmissile_damageradius = 1;
+
+	public static double go_splashedmissile_shape_radius = 3;
+
+	public static double go_splashedmissile_speed = 250;
+
+	public static int go_splashmissile_damage = 7;
+
+	public static double go_splashmissile_damageradius = 1;
+
+	public static double go_splashmissile_shape_radius = 5;
+
+	public static double go_splashmissile_speed = 250;
+
+	public static double go_splashweapon_shape_radius = 7;
+
+	public static long go_splashweapon_cooldown = 900;
+
+	public static int go_swordmissile_damage = 2;
+
+	public static double go_swordmissile_damageradius = 1;
+
+	public static double go_swordmissile_speed = 100;
+
+	public static double go_swordmissile_maxrange = 10;
+
+	public static double go_swordweapon_shape_radius = 7;
+
+	public static long go_swordweapon_cooldown = 100;
+
+	public static long go_weapon_respawntime_default = 5000;
+
+	public static int player_maxhealth_default = 30;
+
+	public static double player_speed_default = 50;
+
 	/**
 	 * Reads values from the file and writes them to the S classes attributes.
 	 * 

@@ -6,6 +6,7 @@ import de.illonis.edulog.EduLog;
 import de.illonis.eduras.ObjectFactory.ObjectType;
 import de.illonis.eduras.items.Item;
 import de.illonis.eduras.items.StackableItem;
+import de.illonis.eduras.settings.S;
 
 /**
  * An inventory that holds items for a unit.
@@ -21,7 +22,7 @@ public class Inventory {
 	/**
 	 * Maximum number of items that can be stored.
 	 */
-	public final static int MAX_CAPACITY = 6;
+	public final static int MAX_CAPACITY = S.player_max_item_capacity;
 
 	private int gold;
 	private final ItemSlot[] itemSlots;

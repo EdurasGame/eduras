@@ -1,6 +1,7 @@
 package de.illonis.eduras.ai.movement;
 
 import de.illonis.eduras.math.Vector2D;
+import de.illonis.eduras.settings.S;
 
 /**
  * A pathfinder that ignores other objects and calculates a direct way.<br>
@@ -36,7 +37,7 @@ public class DirectPathFinder implements PathFinder {
 
 	@Override
 	public boolean hasReachedTarget() {
-		return getDistance() < 10;
+		return getDistance() < S.ai_target_reached_distance;
 	}
 
 	@Override

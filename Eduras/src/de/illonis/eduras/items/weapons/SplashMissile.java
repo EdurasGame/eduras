@@ -4,6 +4,7 @@ import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.ObjectFactory.ObjectType;
 import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.math.Vector2D;
+import de.illonis.eduras.settings.S;
 import de.illonis.eduras.shapes.Circle;
 
 /**
@@ -26,10 +27,10 @@ public class SplashMissile extends Missile {
 	public SplashMissile(GameInformation game, int id) {
 		super(game, id);
 		setObjectType(ObjectType.MISSILE_SPLASH);
-		setDamage(7);
-		setDamageRadius(1);
-		setShape(new Circle(5));
-		setSpeed(250);
+		setDamage(S.go_splashmissile_damage);
+		setDamageRadius(S.go_splashmissile_damageradius);
+		setShape(new Circle(S.go_splashmissile_shape_radius));
+		setSpeed(S.go_splashmissile_speed);
 	}
 
 	@Override
@@ -39,7 +40,7 @@ public class SplashMissile extends Missile {
 				new Vector2D(-1, -1), new Vector2D(1, -1) };
 		for (int i = 0; i < speed.length; i++) {
 			Vector2D pos = getPositionVector().copy();
-			speed[i].mult(10);
+			speed[i].mult(S.go_splashmissile_shape_radius * 2);
 			pos.add(speed[i]);
 			getGame().getEventTriggerer().createMissile(
 					ObjectType.MISSILE_SPLASHED, getOwner(), pos, speed[i]);
