@@ -37,7 +37,7 @@
 # User specific stuff #
 ######################
 org.eclipse.jdt.core.prefs
-.classpath
+#.classpath
 
 # OS generated files #
 ######################
