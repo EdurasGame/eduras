@@ -36,6 +36,7 @@ public class ItemDisplay extends ClickableGuiElement implements
 	private final static int BLOCKSIZE = 48;
 	private int currentItem = -1;
 	private final static Color COLOR_SEMITRANSPARENT = new Color(0, 0, 0, 120);
+	private static final Color TRANSLUCENT = new Color(0, 0, 0, 0);
 
 	// top, right, bottom, left
 	private final static int OUTER_GAP[] = { 20, 5, 10, 15 };
@@ -69,14 +70,18 @@ public class ItemDisplay extends ClickableGuiElement implements
 	@Override
 	public void render(Graphics2D g2d) {
 		g2d.setFont(DEFAULT_FONT);
-		g2d.setColor(Color.GRAY);
+		// g2d.setColor(Color.GRAY);
+		g2d.setColor(TRANSLUCENT); // translucent
 		g2d.fillRect(screenX, screenY, WIDTH, HEIGHT);
 		for (GuiItem item : itemSlots) {
 			// TODO: make nicer
 			if (item.getSlotId() == currentItem) {
-				g2d.setColor(Color.RED);
-			} else
-				g2d.setColor(Color.BLACK);
+				// g2d.setColor(Color.RED);
+				g2d.setColor(Color.YELLOW);
+			} else {
+				// g2d.setColor(Color.BLACK);
+				g2d.setColor(Color.WHITE);
+			}
 			g2d.setStroke(rectStroke);
 			Rectangle itemRect = new Rectangle(item.getX() + screenX,
 					item.getY() + screenY, BLOCKSIZE, BLOCKSIZE);

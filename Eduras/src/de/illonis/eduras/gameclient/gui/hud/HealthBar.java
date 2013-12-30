@@ -15,6 +15,8 @@ import de.illonis.eduras.units.Unit;
  */
 public class HealthBar {
 
+	private static final Color TRANSLUCENT = new Color(0, 0, 0, 0);
+
 	private final static HealthBar instance = new HealthBar();
 	private final static int HEALTHBAR_WIDTH = 50;
 	private final static int HEALTHBAR_HEIGHT = 5;
@@ -41,7 +43,7 @@ public class HealthBar {
 		int maxHealth = unit.getMaxHealth();
 		int health = unit.getHealth();
 
-		instance.w = (int) Math.round((double) ((double) health / maxHealth)
+		instance.w = (int) Math.round((double) health / maxHealth
 				* HEALTHBAR_WIDTH);
 
 		double overlength = (HEALTHBAR_WIDTH - unit.getBoundingBox().getWidth()) / 2;
@@ -66,7 +68,8 @@ public class HealthBar {
 	 *            camera offset.
 	 */
 	public static void draw(Graphics2D g2d, GameCamera camera) {
-		g2d.setColor(Color.black);
+		// g2d.setColor(Color.black);
+		g2d.setColor(TRANSLUCENT); // translucent
 		g2d.fillRect(instance.x - camera.x, instance.y - camera.y,
 				HEALTHBAR_WIDTH, HEALTHBAR_HEIGHT);
 		g2d.setColor(Color.yellow);

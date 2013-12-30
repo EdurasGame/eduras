@@ -4,7 +4,6 @@ import java.awt.Color;
 import java.awt.FontMetrics;
 import java.awt.Graphics2D;
 
-
 /**
  * A time frame that shows remaining time.
  * 
@@ -14,6 +13,7 @@ import java.awt.Graphics2D;
 public class TimeFrame extends RenderedGuiObject {
 	private final static int WIDTH = 40;
 	private final static int HEIGHT = 30;
+	private static final Color TRANSLUCENT = new Color(0, 0, 0, 0);
 
 	/**
 	 * Creates a new time frame.
@@ -34,9 +34,11 @@ public class TimeFrame extends RenderedGuiObject {
 		String timeString = getRemainingTimeString();
 		FontMetrics fm = g2d.getFontMetrics();
 		int textWidth = fm.stringWidth(timeString);
-		g2d.setColor(Color.LIGHT_GRAY);
+		// g2d.setColor(Color.LIGHT_GRAY);
+		g2d.setColor(TRANSLUCENT);
 		g2d.fillRect(screenX, screenY, WIDTH, HEIGHT);
-		g2d.setColor(Color.BLACK);
+		// g2d.setColor(Color.BLACK);
+		g2d.setColor(Color.WHITE);
 		g2d.drawString(getRemainingTimeString(), screenX + WIDTH - textWidth
 				- 5, screenY + 20);
 	}

@@ -13,6 +13,8 @@ import de.illonis.eduras.gameclient.gui.game.FPSListener;
  */
 public class FPSDisplay extends RenderedGuiObject implements FPSListener {
 
+	private static final Color TRANSLUCENT = new Color(0, 0, 0, 0);
+
 	private final static int WIDTH = 50;
 	private final static int HEIGHT = 20;
 	private String fps;
@@ -26,7 +28,8 @@ public class FPSDisplay extends RenderedGuiObject implements FPSListener {
 
 	@Override
 	public void render(Graphics2D g2d) {
-		g2d.setColor(Color.GRAY);
+		// g2d.setColor(Color.GRAY);
+		g2d.setColor(TRANSLUCENT); // transparent
 		g2d.fillRect(screenX, screenY, WIDTH, HEIGHT);
 		g2d.setFont(DEFAULT_FONT);
 		g2d.setColor(Color.WHITE);

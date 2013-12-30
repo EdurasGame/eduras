@@ -14,6 +14,8 @@ import de.illonis.eduras.gamemodes.GameMode;
 public class GameModeBar extends RenderedGuiObject {
 	private String mode;
 
+	private static final Color TRANSLUCENT = new Color(0, 0, 0, 0);
+
 	/**
 	 * Creates the game stat bar.
 	 * 
@@ -31,9 +33,10 @@ public class GameModeBar extends RenderedGuiObject {
 
 	@Override
 	public void render(Graphics2D g2d) {
-		g2d.setColor(Color.GRAY);
+		g2d.setColor(TRANSLUCENT);
 		g2d.fillRect(screenX, screenY, 200, 30);
-		g2d.setColor(Color.BLACK);
+		// g2d.setColor(Color.BLACK);
+		g2d.setColor(Color.WHITE);
 		g2d.drawString(mode, screenX + 20, screenY + 20);
 	}
 
