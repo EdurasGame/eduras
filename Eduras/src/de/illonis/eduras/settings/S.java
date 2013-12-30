@@ -12,6 +12,7 @@ import java.util.logging.Logger;
 
 import de.illonis.edulog.EduLog;
 import de.illonis.eduras.EdurasServer;
+import de.illonis.eduras.unittests.GeometryUtilsTests;
 
 /**
  * This class holds all flexible settings.
@@ -25,12 +26,12 @@ public final class S {
 			.getName());
 
 	// these are testvalues only
-	private static boolean myBoolean = false;
-	private static int myInt = 42;
-	private static long myLong = 23;
-	private static String myString = "fourtytwo";
-	private static float myFloat = 42.42f;
-	private static double myDouble = 42.4242;
+	public static boolean myBoolean = false;
+	public static int myInt = 42;
+	public static long myLong = 23;
+	public static String myString = "fourtytwo";
+	public static float myFloat = 42.42f;
+	public static double myDouble = 42.4242;
 
 	// real values
 	public static double ai_target_reached_distance = 10;
@@ -234,6 +235,11 @@ public final class S {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+
+		for (Field field : S.class.getFields()) {
+			System.out.println(field.getName());
+		}
+
 		System.out.println("Myboolean vorher: " + myBoolean);
 		System.out.println("MyLong vorher: " + myLong);
 		System.out.println("MyInt vorher: " + myInt);
@@ -241,8 +247,8 @@ public final class S {
 		System.out.println("MyDouble vorher: " + myDouble);
 		System.out.println("MyFloat vorher: " + myFloat);
 
-		loadSettings(new File(
-				"D:\\Reposses\\eduras\\Eduras\\src\\de\\illonis\\eduras\\unittests\\testsettingfile"));
+		loadSettings(new File(GeometryUtilsTests.class.getResource(
+				"testsettingfile").getPath()));
 
 		System.out.println("MyBoolean nachher: " + myBoolean);
 		System.out.println("MyLong nachher: " + myLong);
