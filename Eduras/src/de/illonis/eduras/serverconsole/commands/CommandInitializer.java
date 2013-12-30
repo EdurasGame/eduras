@@ -23,5 +23,6 @@ public class CommandInitializer {
 		ServerConsole.registerCommand(new GameModeChangeCommand());
 		ServerConsole.registerCommand(new MapChangeCommand());
 		ServerConsole.registerCommand(new RestartRoundCommand());
+		ServerConsole.registerCommand(new LoadSettingsCommand());
 	}
 }

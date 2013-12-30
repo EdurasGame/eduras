@@ -1,0 +1,12 @@
+go_snipermissile_speed=1000
+go_bird_speed=80
+go_simplemissile_speed=200
+go_splashedmissile_speed=500
+go_splashmissile_speed=500
+go_swordmissile_speed=200
+player_speed_default=100
+go_swordweapon_cooldown=50
+go_splashweapon_cooldown=450
+go_sniperweapon_cooldown=525
+go_splashweapon_cooldown=450
+go_simpleweapon_cooldown=150

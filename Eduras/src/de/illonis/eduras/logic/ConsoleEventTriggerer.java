@@ -1,5 +1,6 @@
 package de.illonis.eduras.logic;
 
+import java.io.File;
 import java.util.Collection;
 
 import de.eduras.eventingserver.ServerInterface;
@@ -12,6 +13,7 @@ import de.illonis.eduras.maps.FunMap;
 import de.illonis.eduras.maps.ManyBlocks;
 import de.illonis.eduras.maps.Map;
 import de.illonis.eduras.maps.SimpleMap;
+import de.illonis.eduras.settings.S;
 import de.illonis.eduras.units.PlayerMainFigure;
 
 /**
@@ -167,5 +169,25 @@ public class ConsoleEventTriggerer {
 	 */
 	public void shutDown() {
 		server.stop();
+	}
+
+	/**
+	 * Loads the file at the given path, parses it and calls
+	 * {@link #restartRound()}.
+	 * 
+	 * @param path
+	 *            The path to the file to load.
+	 * @throws IllegalArgumentException
+	 *             Thrown if there is no file at the given path.
+	 */
+	public void loadSettings(String path) throws IllegalArgumentException {
+		File settingsFile = new File(path);
+		if (!settingsFile.exists()) {
+			throw new IllegalArgumentException("File at path " + path
+					+ " doesnt exist.");
+		}
+
+		S.loadSettings(settingsFile);
+		restartRound();
 	}
 }
