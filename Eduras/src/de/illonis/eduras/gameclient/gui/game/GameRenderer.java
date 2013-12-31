@@ -17,6 +17,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.concurrent.ConcurrentHashMap;
 
+import de.illonis.eduras.Team.TeamColor;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
 import de.illonis.eduras.gameclient.ClientData;
 import de.illonis.eduras.gameclient.gui.hud.HealthBar;
@@ -178,7 +179,7 @@ public class GameRenderer implements TooltipHandler {
 	}
 
 	private synchronized void clear(int width, int height) {
-		mapGraphics.setColor(Color.black);
+		mapGraphics.setColor(Color.GRAY);
 		mapGraphics.fillRect(0, 0, width, height);
 		bothGraphics.setColor(Color.black);
 		bothGraphics.fillRect(0, 0, width, height);
@@ -235,7 +236,7 @@ public class GameRenderer implements TooltipHandler {
 		Rectangle r = new Rectangle(info.getMapBounds());
 		r.x -= camera.x;
 		r.y -= camera.y;
-		mapGraphics.setColor(Color.BLUE);
+		mapGraphics.setColor(Color.BLACK);
 		mapGraphics.fill(r);
 	}
 
@@ -349,8 +350,56 @@ public class GameRenderer implements TooltipHandler {
 
 		int radius = (int) objectShape.getRadius();
 
-		mapGraphics.drawOval(d.getDrawX() - radius - camera.x, d.getDrawY()
-				- radius - camera.y, 2 * radius, 2 * radius);
+		int xPos = d.getDrawX() - radius - camera.x;
+		int yPos = d.getDrawY() - radius - camera.y;
+
+		// mapGraphics.setColor(Color.WHITE);
+		// mapGraphics.drawOval(d.getDrawX() - radius - camera.x, d.getDrawY()
+		// - radius - camera.y, 2 * radius, 2 * radius);
+		Color objectColor = getColorForObject(d);
+		mapGraphics.setColor(objectColor);
+		mapGraphics.fillOval(xPos, yPos, 2 * radius, 2 * radius);
+	}
+
+	private Color getColorForObject(GameObject d) {
+		switch (d.getType()) {
+		case BIGBLOCK:
+		case BIGGERBLOCK:
+		case BUILDING:
+		case DYNAMIC_POLYGON:
+		case SMALLCIRCLEDBLOCK:
+			return Color.GRAY;
+		case PLAYER:
+			if (((PlayerMainFigure) d).getTeam().getColor() == TeamColor.BLUE) {
+				return Color.BLUE;
+			} else {
+				return Color.RED;
+			}
+		case BIRD:
+			return new Color(0.4231f, 0.6361f, 0.995f, 0.4f);
+		case ITEM_WEAPON_SIMPLE:
+			return Color.ORANGE;
+		case ITEM_WEAPON_SNIPER:
+			return Color.MAGENTA;
+		case ITEM_WEAPON_SPLASH:
+			return Color.GREEN;
+		case ITEM_WEAPON_SWORD:
+			return Color.CYAN;
+		case MISSILE_SPLASH:
+			return Color.GREEN;
+		case MISSILE_SPLASHED:
+			return Color.GREEN;
+		case SIMPLEMISSILE:
+			return Color.ORANGE;
+		case SNIPERMISSILE:
+			return Color.MAGENTA;
+		case SWORDMISSILE:
+			return Color.CYAN;
+		case YELLOWCIRCLE:
+			return Color.YELLOW;
+		default:
+			return Color.WHITE;
+		}
 	}
 
 	/**
@@ -369,15 +418,18 @@ public class GameRenderer implements TooltipHandler {
 		int[] yPositions = new int[vCount];
 
 		for (int j = 0; j < vCount; j++) {
-			xPositions[j] = (int) vertices.get(j).getX();
-			yPositions[j] = (int) vertices.get(j).getY();
+			xPositions[j] = (int) vertices.get(j).getX() - camera.x;
+			yPositions[j] = (int) vertices.get(j).getY() - camera.y;
 		}
 
-		for (int j = 0; j < vCount; j++) {
-			mapGraphics.drawLine(xPositions[j] - camera.x, yPositions[j]
-					- camera.y, xPositions[(j + 1) % vCount] - camera.x,
-					yPositions[(j + 1) % vCount] - camera.y);
-		}
+		// for (int j = 0; j < vCount; j++) {
+		// mapGraphics.drawLine(xPositions[j] - camera.x, yPositions[j]
+		// - camera.y, xPositions[(j + 1) % vCount] - camera.x,
+		// yPositions[(j + 1) % vCount] - camera.y);
+		// }
+
+		mapGraphics.setColor(getColorForObject(object));
+		mapGraphics.fillPolygon(xPositions, yPositions, vCount);
 	}
 
 	@Override
