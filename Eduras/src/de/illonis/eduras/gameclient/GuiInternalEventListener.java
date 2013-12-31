@@ -20,6 +20,7 @@ import de.illonis.eduras.gameobjects.MoveableGameObject.Direction;
 import de.illonis.eduras.logicabstraction.EdurasInitializer;
 import de.illonis.eduras.logicabstraction.InformationProvider;
 import de.illonis.eduras.math.Vector2D;
+import de.illonis.eduras.units.PlayerMainFigure;
 import de.illonis.eduras.units.PlayerMainFigure.InteractMode;
 
 /**
@@ -208,5 +209,18 @@ public class GuiInternalEventListener implements LoginPanelReactor,
 		} catch (WrongEventTypeException | MessageNotSupportedException e) {
 			L.log(Level.SEVERE, "Error sending sendunits event", e);
 		}
+	}
+
+	public void onViewingDirectionChanged(Vector2D viewingPoint) {
+		PlayerMainFigure player;
+		try {
+			player = infoPro.getPlayer();
+		} catch (ObjectNotFoundException e) {
+			L.log(Level.SEVERE, "Cannot find player main figure :(", e);
+			return;
+		}
+		viewingPoint.subtract(player.getPositionVector());
+		double angle = viewingPoint.getAngleToXAxis();
+		player.setRotation(angle);
 	}
 }
