@@ -350,8 +350,9 @@ public class ClientLogic implements GameLogicInterface {
 			SetBooleanGameObjectAttributeEvent event) {
 
 		GameObject object = getGame().findObjectById(event.getObjectId());
-		if (object == null) return;
-		//FIXME: fix null objects.
+		if (object == null)
+			return;
+		// FIXME: fix null objects.
 
 		switch (event.getType()) {
 		case SET_VISIBLE:
@@ -482,7 +483,7 @@ public class ClientLogic implements GameLogicInterface {
 				@Override
 				public void onGameReady() {
 					// TODO Auto-generated method stub
-					
+
 				}
 			};
 		return l;
@@ -490,6 +491,8 @@ public class ClientLogic implements GameLogicInterface {
 
 	@Override
 	public void stopWorker() {
+		if (null == lgw)
+			return;
 		lgw.stop();
 		try {
 			workerThread.join();
