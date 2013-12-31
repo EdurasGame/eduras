@@ -41,7 +41,7 @@ public abstract class GameObject implements Comparable<GameObject> {
 	private int id;
 	private int owner = -1;
 
-	private double rotation = 0;
+	private double rotation = 90;
 
 	private double xPosition, yPosition;
 

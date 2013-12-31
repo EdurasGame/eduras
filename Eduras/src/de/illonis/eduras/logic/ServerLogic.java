@@ -176,7 +176,6 @@ public class ServerLogic implements GameLogicInterface {
 			}
 
 			gameObject.setRotation(setRotationEvent.getNewValue());
-			gameInfo.getEventTriggerer().setRotation(gameObject);
 			break;
 		default:
 			L.severe(Localization.getStringF("Server.networking.illegalevent",

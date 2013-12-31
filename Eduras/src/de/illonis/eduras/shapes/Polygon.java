@@ -132,7 +132,9 @@ public class Polygon extends ObjectShape {
 		LinkedList<Vector2D> absoluteVertices = new LinkedList<Vector2D>();
 
 		for (Vector2D singleRelativeVertex : relativeVertices) {
-			singleRelativeVertex.rotate(object.getRotation());
+			Vector2D singleRelativeVertexCopy = new Vector2D(
+					singleRelativeVertex);
+			singleRelativeVertexCopy.rotate(object.getRotation());
 
 			double absXPos = singleRelativeVertex.getX() + objectXPos;
 			double absYPos = singleRelativeVertex.getY() + objectYPos;
