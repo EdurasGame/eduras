@@ -115,6 +115,8 @@ public final class S {
 
 	public static double player_speed_default = 50;
 
+	public static int go_splashmissile_splinters = 10;
+
 	/**
 	 * Reads values from the file and writes them to the S classes attributes.
 	 * 

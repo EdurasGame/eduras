@@ -36,8 +36,38 @@ public class SplashMissile extends Missile {
 	@Override
 	public void onCollision(GameObject collidingObject) {
 		super.onCollision(collidingObject);
-		Vector2D speed[] = { new Vector2D(1, 1), new Vector2D(-1, 1),
-				new Vector2D(-1, -1), new Vector2D(1, -1) };
+
+		int numberOfSplinters = S.go_splashmissile_splinters;
+
+		double circumferenceOfSplittering = 1;
+
+		Vector2D speed[] = new Vector2D[numberOfSplinters];
+		double degreeSteps = 2 * Math.PI / numberOfSplinters;
+		for (int i = 0; i < numberOfSplinters; i++) {
+			double currentDegree = i * degreeSteps;
+			double x = Math.cos(currentDegree) * circumferenceOfSplittering;
+			double y;
+			if (x == circumferenceOfSplittering
+					|| x == -circumferenceOfSplittering) {
+				y = 0;
+			} else {
+				if (x == 0) {
+					y = circumferenceOfSplittering;
+				} else {
+					y = Math.sqrt(Math.pow(circumferenceOfSplittering, 2)
+							- Math.pow(x, 2));
+				}
+			}
+
+			if (currentDegree >= Math.PI) {
+				y = -y;
+			}
+
+			speed[i] = new Vector2D(x, y);
+		}
+
+		// Vector2D speed[] = { new Vector2D(1, 1), new Vector2D(-1, 1),
+		// new Vector2D(-1, -1), new Vector2D(1, -1) };
 		for (int i = 0; i < speed.length; i++) {
 			Vector2D pos = getPositionVector().copy();
 			speed[i].mult(S.go_splashmissile_shape_radius * 2);
@@ -46,5 +76,4 @@ public class SplashMissile extends Missile {
 					ObjectType.MISSILE_SPLASHED, getOwner(), pos, speed[i]);
 		}
 	}
-
 }
