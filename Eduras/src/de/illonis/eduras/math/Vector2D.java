@@ -402,4 +402,37 @@ public class Vector2D {
 
 		return this.getY() * r == vec.getY();
 	}
+
+	/**
+	 * Calculates the angle between this vector and the given other vector.
+	 * 
+	 * @param other
+	 *            The other vector.
+	 * @return The angle in degrees.
+	 * @throws IllegalArgumentException
+	 *             Thrown if either of the two vectors is a null-vector.
+	 */
+	public double getAngleBetween(Vector2D other)
+			throws IllegalArgumentException {
+		if (this.isNull() || other.isNull()) {
+			throw new IllegalArgumentException(toString() + " or "
+					+ other.toString() + " is a null-vector.");
+		}
+		double dotProduct = x * other.x + y * other.y;
+		double myLength = getLength();
+		double othersLength = other.getLength();
+		double cosOfAngle = dotProduct / (myLength * othersLength);
+		return Math.cosh(cosOfAngle);
+	}
+
+	/**
+	 * Calculates this vectors angle to the x-axis.
+	 * 
+	 * @return Returns the angle.
+	 * @throws IllegalArgumentException
+	 *             if this vector is a nullvector.
+	 */
+	public double getAngleToXAxis() throws IllegalArgumentException {
+		return getAngleBetween(new Vector2D(1, 0));
+	}
 }
