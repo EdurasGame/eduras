@@ -16,10 +16,12 @@ import de.illonis.eduras.events.GameInfoRequest;
 import de.illonis.eduras.events.InitInformationEvent;
 import de.illonis.eduras.events.ItemEvent;
 import de.illonis.eduras.events.SendUnitsEvent;
+import de.illonis.eduras.events.SetGameObjectAttributeEvent;
 import de.illonis.eduras.events.SwitchInteractModeEvent;
 import de.illonis.eduras.events.UserMovementEvent;
 import de.illonis.eduras.exceptions.InvalidNameException;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
+import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.gameobjects.MoveableGameObject.Direction;
 import de.illonis.eduras.interfaces.GameEventListener;
 import de.illonis.eduras.interfaces.GameLogicInterface;
@@ -161,6 +163,20 @@ public class ServerLogic implements GameLogicInterface {
 			} catch (InvalidNameException e1) {
 				L.log(Level.SEVERE, "invalid client name", e1);
 			}
+			break;
+		case SET_ROTATION:
+			if (!(event instanceof SetGameObjectAttributeEvent<?>)) {
+				break;
+			}
+			SetGameObjectAttributeEvent<Double> setRotationEvent = (SetGameObjectAttributeEvent<Double>) event;
+			GameObject gameObject = gameInfo.findObjectById(setRotationEvent
+					.getObjectId());
+			if (gameObject == null) {
+				break;
+			}
+
+			gameObject.setRotation(setRotationEvent.getNewValue());
+			gameInfo.getEventTriggerer().setRotation(gameObject);
 			break;
 		default:
 			L.severe(Localization.getStringF("Server.networking.illegalevent",

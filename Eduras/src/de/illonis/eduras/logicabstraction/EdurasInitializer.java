@@ -1,18 +1,26 @@
 package de.illonis.eduras.logicabstraction;
 
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import de.eduras.eventingserver.ClientInterface;
+import de.illonis.edulog.EduLog;
 import de.illonis.eduras.ClientGameMode;
+import de.illonis.eduras.EdurasServer;
 import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.ObjectFactory.ObjectType;
 import de.illonis.eduras.Team;
 import de.illonis.eduras.ai.movement.UnitNotControllableException;
 import de.illonis.eduras.events.GameEvent;
+import de.illonis.eduras.events.GameEvent.GameEventNumber;
 import de.illonis.eduras.events.ItemEvent;
 import de.illonis.eduras.events.ObjectFactoryEvent;
+import de.illonis.eduras.events.SetDoubleGameObjectAttributeEvent;
 import de.illonis.eduras.events.SetGameObjectAttributeEvent;
+import de.illonis.eduras.exceptions.MessageNotSupportedException;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
+import de.illonis.eduras.exceptions.WrongEventTypeException;
 import de.illonis.eduras.gamemodes.GameMode;
 import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.interfaces.GameLogicInterface;
@@ -41,6 +49,9 @@ public class EdurasInitializer {
 	private final Settings settings;
 	private final GameLogicInterface logic;
 	private static EdurasInitializer instance;
+
+	private final static Logger L = EduLog.getLoggerFor(EdurasServer.class
+			.getName());
 
 	private EdurasInitializer() {
 		instance = this;
@@ -246,6 +257,26 @@ public class EdurasInitializer {
 			public void changeInteractMode(int ownerId, InteractMode newMode) {
 				// TODO Auto-generated method stub
 
+			}
+
+			@Override
+			public void setRotation(GameObject gameObject) {
+				// every client only wants to advertise its own rotation
+				// TODO: Think about that... do you really wanna advertise you
+				// units' rotation? Isn't that managed by the server? Maybe you
+				// should check for your playermainfigures objectid.
+				if (gameObject.getOwner() != networkManager.getClientId()) {
+					return;
+				}
+
+				SetDoubleGameObjectAttributeEvent setRotationEvent = new SetDoubleGameObjectAttributeEvent(
+						GameEventNumber.SET_ROTATION, gameObject.getId(),
+						gameObject.getRotation());
+				try {
+					eventSender.sendEvent(setRotationEvent);
+				} catch (WrongEventTypeException | MessageNotSupportedException e) {
+					L.log(Level.SEVERE, "Cannot send setRotationEvent.", e);
+				}
 			}
 
 		});

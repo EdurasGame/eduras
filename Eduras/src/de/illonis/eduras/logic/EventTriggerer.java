@@ -342,4 +342,12 @@ public interface EventTriggerer {
 	 */
 	public void notifyNewObjectPosition(GameObject o);
 
+	/**
+	 * Informs the clients of the gameobjects current rotation.
+	 * 
+	 * @param gameObject
+	 *            The object that changed the rotation angle.
+	 */
+	public void setRotation(GameObject gameObject);
+
 }

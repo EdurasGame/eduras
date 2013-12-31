@@ -400,4 +400,14 @@ public abstract class GameObject implements Comparable<GameObject> {
 	public double getRotation() {
 		return rotation;
 	}
+
+	/**
+	 * Sets this game object's rotation angle to the given new value.
+	 * 
+	 * @param newValue
+	 *            The new value.
+	 */
+	public void setRotation(Double newValue) {
+		rotation = newValue;
+	}
 }

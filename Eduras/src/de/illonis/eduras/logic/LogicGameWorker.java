@@ -1,5 +1,7 @@
 package de.illonis.eduras.logic;
 
+import java.util.HashMap;
+
 import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.events.GameEvent.GameEventNumber;
 import de.illonis.eduras.events.SetBooleanGameObjectAttributeEvent;
@@ -8,6 +10,7 @@ import de.illonis.eduras.gameobjects.MoveableGameObject;
 import de.illonis.eduras.interfaces.GameEventListener;
 import de.illonis.eduras.items.Lootable;
 import de.illonis.eduras.items.Usable;
+import de.illonis.eduras.settings.S;
 
 /**
  * This class is responsible for updating the current game information triggered
@@ -29,6 +32,7 @@ public class LogicGameWorker implements Runnable {
 
 	private final GameInformation gameInformation;
 	private ListenerHolder<? extends GameEventListener> listenerHolder;
+	private static final HashMap<Integer, Double> oldRotation = new HashMap<Integer, Double>();
 
 	private long lastUpdate;
 
@@ -139,9 +143,27 @@ public class LogicGameWorker implements Runnable {
 					((MoveableGameObject) o).onMove(delta);
 					if (listenerHolder.hasListener())
 						listenerHolder.getListener().onNewObjectPosition(o);
-					gameInformation.getEventTriggerer().notifyNewObjectPosition(o);
+					gameInformation.getEventTriggerer()
+							.notifyNewObjectPosition(o);
+				}
+
+				if (hasRotated(o)) {
+					gameInformation.getEventTriggerer().setRotation(o);
 				}
 			}
 		}
+	}
+
+	private boolean hasRotated(GameObject o) {
+		if (!oldRotation.containsKey(o.getId())) {
+			oldRotation.put(o.getId(), o.getRotation());
+			return true;
+		}
+
+		if (Math.abs(oldRotation.get(o.getId()) - o.getRotation()) > S.sv_performance_rotationdelta_minimum) {
+			oldRotation.put(o.getId(), o.getRotation());
+			return true;
+		}
+		return false;
 	}
 }

@@ -23,6 +23,7 @@ import de.illonis.eduras.events.ObjectFactoryEvent;
 import de.illonis.eduras.events.SendUnitsEvent;
 import de.illonis.eduras.events.SetBooleanGameObjectAttributeEvent;
 import de.illonis.eduras.events.SetGameModeEvent;
+import de.illonis.eduras.events.SetGameObjectAttributeEvent;
 import de.illonis.eduras.events.SetIntegerGameObjectAttributeEvent;
 import de.illonis.eduras.events.SetInteractModeEvent;
 import de.illonis.eduras.events.SetItemSlotEvent;
@@ -66,6 +67,9 @@ public class EventParser implements EventHandler {
 	public static final int ITEM_USE = 30;
 	public static final int SWITCH_INTERACTMODE = 40;
 	public static final int SEND_UNITS = 41;
+
+	// client and server events
+	public static final int SET_ROTATION = 80;
 
 	// server events
 	public static final int SET_POS_UDP = 101;
@@ -172,6 +176,12 @@ public class EventParser implements EventHandler {
 				logic.onGameEventAppeared(new SetIntegerGameObjectAttributeEvent(
 						GameEventNumber.SET_SPEED, (Integer) event
 								.getArgument(0), (Integer) event.getArgument(1)));
+				break;
+			case SET_ROTATION:
+				logic.onGameEventAppeared(new SetGameObjectAttributeEvent<Double>(
+						GameEventNumber.SET_ROTATION, (Integer) event
+								.getArgument(0), (Double) event.getArgument(1)) {
+				});
 				break;
 			case ITEM_USE:
 				ItemEvent itemEvent = new ItemEvent(GameEventNumber.ITEM_USE,

@@ -1,6 +1,7 @@
 package de.illonis.eduras.logic;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -620,4 +621,35 @@ public class ServerEventTriggerer implements EventTriggerer {
 		sendEventToClient(event, ownerId);
 	}
 
+	@Override
+	public void setRotation(GameObject gameObject) {
+
+		Event setRotationEvent = new SetGameObjectAttributeEvent<Double>(
+				GameEventNumber.SET_ROTATION, gameObject.getId(),
+				gameObject.getRotation()) {
+		};
+		sendEventToAllExcept(setRotationEvent, gameObject.getOwner());
+	}
+
+	// TODO: This might be useful later too, extract it to the eventingserver!
+	private void sendEventToAllExcept(Event setRotationEvent, Integer... ids) {
+		LinkedList<Integer> clients = server.getClients();
+
+		for (Integer anId : ids) {
+			if (clients.contains(anId)) {
+				clients.remove(clients.indexOf(anId));
+			}
+		}
+
+		for (Integer anId : clients) {
+			try {
+				server.sendEventToClient(setRotationEvent, anId);
+			} catch (IllegalArgumentException | NoSuchClientException
+					| TooFewArgumentsExceptions e) {
+				L.log(Level.SEVERE,
+						"An error occured trying to send a setRotate event.", e);
+				continue;
+			}
+		}
+	}
 }

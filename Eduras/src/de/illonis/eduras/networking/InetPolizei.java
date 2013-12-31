@@ -16,7 +16,8 @@ public class InetPolizei extends NetworkPolicy {
 
 	@Override
 	public PacketType determinePacketType(Event event) {
-		if (event.getEventNumber() == EventParser.SET_POS_UDP) {
+		if (event.getEventNumber() == EventParser.SET_POS_UDP
+				|| event.getEventNumber() == EventParser.SET_ROTATION) {
 			return PacketType.UDP;
 		} else {
 			return PacketType.TCP;

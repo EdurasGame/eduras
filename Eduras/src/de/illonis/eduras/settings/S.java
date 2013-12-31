@@ -117,6 +117,8 @@ public final class S {
 
 	public static int go_splashmissile_splinters = 10;
 
+	public static double sv_performance_rotationdelta_minimum = 5;
+
 	/**
 	 * Reads values from the file and writes them to the S classes attributes.
 	 * 

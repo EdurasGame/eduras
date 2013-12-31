@@ -124,6 +124,18 @@ public class ClientLogic implements GameLogicInterface {
 							+ gameObj.getClass().getName());
 				}
 				break;
+			case SET_ROTATION:
+				if (!(event instanceof SetGameObjectAttributeEvent<?>)) {
+					break;
+				}
+				SetGameObjectAttributeEvent<Double> setRotationEvent = (SetGameObjectAttributeEvent<Double>) event;
+				GameObject gameObject = gameInfo
+						.findObjectById(setRotationEvent.getObjectId());
+				if (gameObject == null) {
+					break;
+				}
+				gameObject.setRotation(setRotationEvent.getNewValue());
+				break;
 			case SET_INTERACTMODE:
 				SetInteractModeEvent interactEvent = (SetInteractModeEvent) event;
 				try {
@@ -350,8 +362,9 @@ public class ClientLogic implements GameLogicInterface {
 			SetBooleanGameObjectAttributeEvent event) {
 
 		GameObject object = getGame().findObjectById(event.getObjectId());
-		if (object == null) return;
-		//FIXME: fix null objects.
+		if (object == null)
+			return;
+		// FIXME: fix null objects.
 
 		switch (event.getType()) {
 		case SET_VISIBLE:
@@ -482,7 +495,7 @@ public class ClientLogic implements GameLogicInterface {
 				@Override
 				public void onGameReady() {
 					// TODO Auto-generated method stub
-					
+
 				}
 			};
 		return l;
