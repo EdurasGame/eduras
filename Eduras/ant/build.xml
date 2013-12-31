@@ -21,6 +21,7 @@
 			<include name="timingframework*.jar" />
 			<include name="eventingserver.jar" />
 			<include name="edulog-2.jar" />
+			<include name="junit-4.11.jar" />
 		</fileset>
 		<pathelement path="${base}${build}" />
 	</path>
