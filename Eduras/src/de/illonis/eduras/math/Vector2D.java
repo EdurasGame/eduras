@@ -422,7 +422,7 @@ public class Vector2D {
 		double myLength = getLength();
 		double othersLength = other.getLength();
 		double cosOfAngle = dotProduct / (myLength * othersLength);
-		return Math.cosh(cosOfAngle);
+		return Geometry.toDegree(Math.cosh(cosOfAngle));
 	}
 
 	/**
