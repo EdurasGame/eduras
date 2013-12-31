@@ -41,6 +41,8 @@ public abstract class GameObject implements Comparable<GameObject> {
 	private int id;
 	private int owner = -1;
 
+	private double rotation = 0;
+
 	private double xPosition, yPosition;
 
 	/**
@@ -388,5 +390,14 @@ public abstract class GameObject implements Comparable<GameObject> {
 		if (obj instanceof GameObject)
 			return this.equals((GameObject) obj);
 		return false;
+	}
+
+	/**
+	 * Returns the angle this object is rotated by.
+	 * 
+	 * @return The angle in degrees.
+	 */
+	public double getRotation() {
+		return rotation;
 	}
 }
