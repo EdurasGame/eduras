@@ -104,12 +104,14 @@
        x="179.68106"
        y="317.60373" />
     <rect
-       style="fill:#a58ce9;stroke:#000000;stroke-width:8;stroke-linecap:round;stroke-linejoin:bevel;stroke-miterlimit:4;stroke-dasharray:none;fill-opacity:1"
+       style="fill:#a48ce9;stroke:#000000;stroke-width:8;stroke-linecap:round;stroke-linejoin:bevel;stroke-miterlimit:4;stroke-dasharray:none;fill-opacity:1"
        id="rect2985"
        width="137.14285"
        height="137.14285"
        x="184.33797"
-       y="322.26065" />
+       y="322.26065"
+       inkscape:export-xdpi="29.77"
+       inkscape:export-ydpi="29.77" />
   </g>
   <g
      inkscape:groupmode="layer"
