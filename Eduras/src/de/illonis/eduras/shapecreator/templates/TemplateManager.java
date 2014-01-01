@@ -40,13 +40,6 @@ public class TemplateManager {
 		registerTemplate(new PacmanTemplate());
 	}
 
-	/**
-	 * @return the default template.
-	 */
-	public ShapeTemplate getDefaultTemplate() {
-		return templates.get("House");
-	}
-
 	void registerTemplate(ShapeTemplate template) {
 		templates.put(template.getName(), template);
 	}

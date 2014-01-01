@@ -105,7 +105,7 @@ public class ShapeCreator {
 		frame.setExtendedState(frame.getExtendedState() | JFrame.MAXIMIZED_BOTH);
 		EditablePolygon startPoly = new EditablePolygon();
 		try {
-			startPoly.importTemplate("House");
+			startPoly.importTemplate("Rectangle");
 		} catch (TemplateNotFoundException e) {
 		}
 		data.loadPolygon(startPoly);
