@@ -19,6 +19,14 @@ public interface PanelModifier {
 	void setZoom(float zoom);
 
 	/**
+	 * Modifies the zoom of the panel.
+	 * 
+	 * @param modifier
+	 *            zoom increment.
+	 */
+	void modZoom(float modifier);
+
+	/**
 	 * Resets panel: Resets zoom to default value and puts origin in window
 	 * center.
 	 */

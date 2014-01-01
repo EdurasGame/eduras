@@ -169,14 +169,13 @@ public class PanelInteractor extends MouseAdapter implements PanelModifier {
 	@Override
 	public void mouseWheelMoved(MouseWheelEvent e) {
 		panel.setCursor(CURSOR_ZOOM);
-		float zoom = data.getZoom();
+		float zoom = panel.getCoordinateSystem().getZoom();
 
 		if (e.getWheelRotation() < 0) {
-			data.setZoom(zoom + .1f);
+			panel.getCoordinateSystem().setZoom(zoom + .1f);
 		} else {
-			data.setZoom(zoom - .1f);
+			panel.getCoordinateSystem().setZoom(zoom - .1f);
 		}
-
 	}
 
 	@Override
@@ -190,6 +189,7 @@ public class PanelInteractor extends MouseAdapter implements PanelModifier {
 				Vector2D coordPoint = panel.getCoordinateSystem()
 						.guiToCoordinate(guiPoint);
 				hoverVertice.moveTo(coordPoint.getX(), coordPoint.getY());
+				data.notifyVerticesChanged();
 				panel.selectVertice(hoverVertice);
 			}
 			break;
@@ -205,9 +205,10 @@ public class PanelInteractor extends MouseAdapter implements PanelModifier {
 			double dx = newPoint.getX() - oldPoint.getX();
 			double dy = newPoint.getY() - oldPoint.getY();
 			Vector2D diffVector = new Vector2D(dx, dy);
-			for (Vector2D v : getShape().getVertices()) {
+			for (Vertice v : getShape().getVertices()) {
 				v.add(diffVector);
 			}
+			data.notifyVerticesChanged();
 			clickPoint = guiPoint;
 			break;
 		case SCALE_SHAPE:
@@ -227,6 +228,7 @@ public class PanelInteractor extends MouseAdapter implements PanelModifier {
 			for (Vertice v : getShape().getVertices()) {
 				v.mult(multipler);
 			}
+			data.notifyVerticesChanged();
 			clickPoint = point;
 			break;
 		case SCROLL:
@@ -243,12 +245,18 @@ public class PanelInteractor extends MouseAdapter implements PanelModifier {
 
 	@Override
 	public void setZoom(float zoom) {
-		data.setZoom(zoom);
+		panel.getCoordinateSystem().setZoom(zoom);
+	}
+
+	@Override
+	public void modZoom(float modifier) {
+		panel.getCoordinateSystem().setZoom(
+				panel.getCoordinateSystem().getZoom() + modifier);
 	}
 
 	@Override
 	public void resetPanel() {
-		data.setZoom(1.0f);
+		panel.getCoordinateSystem().setZoom(1.0f);
 		panel.centerOrigin();
 	}
 
