@@ -74,8 +74,23 @@
 		</jar>
 	</target>
 
-	<target name="jars"
-		depends="clean,jar-server,jar-client"
+	<target name="jar-shapecreator" depends="compile"
+		description="Creates shapecreator tool executable.">
+		<jar destfile="${jars}/eduras-shapecreator.jar" basedir="${base}${build}"
+			excludes="**/unittests/**">
+			<fileset dir="${base}${src}">
+				<include name="**/*.png"></include>
+				<include name="**/*.properties"></include>
+			</fileset>
+			<zipgroupfileset dir="${base}${libs}" includes="edulog*.jar" />
+			<manifest>
+				<attribute name="Main-Class"
+					value="de.illonis.eduras.shapecreator.ShapeCreator" />
+			</manifest>
+		</jar>
+	</target>
+
+	<target name="jars" depends="clean,jar-server,jar-client, jar-shapecreator"
 		description="Creates clean executables.">
 	</target>
 

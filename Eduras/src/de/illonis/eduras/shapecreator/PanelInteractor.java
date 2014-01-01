@@ -219,7 +219,6 @@ public class PanelInteractor extends MouseAdapter implements PanelModifier {
 			double d2 = GuiPoint.distance(point2.x, point2.y, origin.x,
 					origin.y);
 
-			System.out.println(d1 + " - " + d2);
 			double multipler = 1;
 			if (d1 < d2) {
 				multipler = 0.9;
