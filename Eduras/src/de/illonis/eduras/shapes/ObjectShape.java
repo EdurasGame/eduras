@@ -30,7 +30,7 @@ public abstract class ObjectShape {
 	 */
 	@SuppressWarnings("javadoc")
 	public enum ShapeType {
-		BIRD, HOUSE, SWORD, TRIANGLE;
+		BIRD, HOUSE, SWORD, TRIANGLE, ROCKET;
 	}
 
 	/**

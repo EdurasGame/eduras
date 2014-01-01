@@ -33,6 +33,7 @@ public final class CacheInfo {
 	static {
 		shapes = new HashMap<ShapeType, String>();
 		shapes.put(ShapeType.BIRD, "bird.esh");
+		shapes.put(ShapeType.ROCKET, "rocket.esh");
 
 		objectImages = new HashMap<ObjectType, String>();
 		objectImages.put(ObjectType.ITEM_WEAPON_SIMPLE,
@@ -43,6 +44,8 @@ public final class CacheInfo {
 				"gui/icons/icon-weapon-splash.png");
 		objectImages.put(ObjectType.ITEM_WEAPON_SWORD,
 				"gui/icons/icon-sword.png");
+		objectImages.put(ObjectType.ROCKETLAUNCHER,
+				"gui/icons/icon-rocketlauncher.png");
 
 		guiImages = new HashMap<ImageKey, String>();
 		guiImages.put(ImageKey.STATISTICS_BG, "gui/artwork/statwindow.png");
