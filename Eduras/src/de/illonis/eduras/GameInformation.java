@@ -189,6 +189,28 @@ public class GameInformation {
 	}
 
 	/**
+	 * Returns a list of all gameobjects that are in range of a given position.
+	 * 
+	 * @param point
+	 *            the location to search at.
+	 * @param radius
+	 *            the search radius.
+	 * @return a list of nearby objects.
+	 */
+	public LinkedList<GameObject> findObjectsInDistance(Vector2D point,
+			double radius) {
+		// TODO: improve (using position is rather incorrect due to object's
+		// dimensions)
+		LinkedList<GameObject> objs = new LinkedList<GameObject>();
+		for (GameObject object : objects.values()) {
+			if (point.calculateDistance(object.getPositionVector()) <= radius) {
+				objs.add(object);
+			}
+		}
+		return objs;
+	}
+
+	/**
 	 * Removes the first occurrence of the specified game object from gameobject
 	 * list, if it is present. If the list does not contain the element, it is
 	 * unchanged. More formally, removes the element with the lowest index
