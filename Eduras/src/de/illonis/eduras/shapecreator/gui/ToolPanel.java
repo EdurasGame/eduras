@@ -25,7 +25,8 @@ public class ToolPanel extends JPanel implements ActionListener {
 	private static final long serialVersionUID = 1L;
 	private final PanelInteractor interactor;
 	private JToolBar toolBar;
-	private JToggleButton modeButtonDrag, modeButtonAdd, modeButtonRemove;
+	private JToggleButton modeButtonDrag, modeButtonDragShape,
+			modeButtonScaleShape, modeButtonAdd, modeButtonRemove;
 	private ButtonGroup bgroup;
 
 	/**
@@ -43,6 +44,8 @@ public class ToolPanel extends JPanel implements ActionListener {
 		toolBar = new JToolBar();
 		bgroup = new ButtonGroup();
 		modeButtonDrag = createButton("Select and drag", "button_drag.png");
+		modeButtonDragShape = createButton("Drag shape", "button_dragshape.png");
+		modeButtonScaleShape = createButton("Scale shape", "button_scale.png");
 		modeButtonAdd = createButton("Add vertices", "button_add.png");
 		modeButtonRemove = createButton("Delete vertices", "button_remove.png");
 		modeButtonDrag.setSelected(true);
@@ -72,6 +75,10 @@ public class ToolPanel extends JPanel implements ActionListener {
 			interactor.setMode(InteractMode.NONE);
 		else if (source == modeButtonRemove)
 			interactor.setMode(InteractMode.REM_VERT);
+		else if (source == modeButtonDragShape)
+			interactor.setMode(InteractMode.DRAG_SHAPE);
+		else if (source == modeButtonScaleShape)
+			interactor.setMode(InteractMode.SCALE_SHAPE);
 	}
 
 	/**
@@ -90,6 +97,12 @@ public class ToolPanel extends JPanel implements ActionListener {
 			break;
 		case REM_VERT:
 			modeButtonRemove.doClick();
+			break;
+		case DRAG_SHAPE:
+			modeButtonDragShape.doClick();
+			break;
+		case SCALE_SHAPE:
+			modeButtonScaleShape.doClick();
 			break;
 		default:
 			break;

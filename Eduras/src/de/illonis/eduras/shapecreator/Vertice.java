@@ -26,4 +26,10 @@ public class Vertice extends Vector2D {
 		update(newX, newY);
 		DataHolder.getInstance().notifyVerticesChanged();
 	}
+
+	@Override
+	public void mult(double multipler) {
+		super.mult(multipler);
+		DataHolder.getInstance().notifyVerticesChanged();
+	}
 }
