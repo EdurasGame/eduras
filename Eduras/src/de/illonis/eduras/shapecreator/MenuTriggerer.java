@@ -127,4 +127,8 @@ public class MenuTriggerer implements MenuActionReactor {
 		toolPanel.onModeSet(mode);
 	}
 
+	@Override
+	public void modZoom(float modifier) {
+		panel.modZoom(modifier);
+	}
 }

@@ -17,10 +17,10 @@ public class HouseTemplate extends ShapeTemplate {
 	 * Creates a house scheme.
 	 */
 	public HouseTemplate() {
-		addVertice(-20, -40);
-		addVertice(0, -60);
-		addVertice(20, -40);
-		addVertice(20, 0);
-		addVertice(-20, 0);
+		addVertice(-20, -15);
+		addVertice(0, -35);
+		addVertice(20, -15);
+		addVertice(20, 25);
+		addVertice(-20, 25);
 	}
 }

@@ -63,7 +63,7 @@ public class LoginAnimation extends JPanel implements ComponentListener {
 			circles.add(c);
 			animator.addTarget(c);
 		}
-		animator.start();
+		animator.restart();
 	}
 
 	/**
@@ -71,6 +71,7 @@ public class LoginAnimation extends JPanel implements ComponentListener {
 	 */
 	public void stop() {
 		animator.stop();
+
 	}
 
 	private class Circle implements TimingTarget {
@@ -142,7 +143,6 @@ public class LoginAnimation extends JPanel implements ComponentListener {
 
 			alpha = 1 - (float) ((double) (oldY - y) / ANIM_HEIGHT);
 			repaint();
-
 		}
 	}
 
@@ -166,7 +166,8 @@ public class LoginAnimation extends JPanel implements ComponentListener {
 
 	@Override
 	public void componentResized(ComponentEvent e) {
-		animator.restart();
+		if (animator.isRunning())
+			animator.restart();
 	}
 
 	@Override

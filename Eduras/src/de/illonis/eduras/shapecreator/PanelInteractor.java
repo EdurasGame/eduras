@@ -36,7 +36,7 @@ public class PanelInteractor extends MouseAdapter implements PanelModifier {
 	 */
 	@SuppressWarnings("javadoc")
 	public enum InteractMode {
-		NONE, DRAG_EDGE, ZOOM, SCROLL, ADD_VERT, REM_VERT;
+		NONE, DRAG_EDGE, ZOOM, SCROLL, ADD_VERT, REM_VERT, DRAG_SHAPE, SCALE_SHAPE;
 	}
 
 	PanelInteractor(DrawPanel panel) {
@@ -163,22 +163,19 @@ public class PanelInteractor extends MouseAdapter implements PanelModifier {
 				mode = lastMode;
 			break;
 		}
-
 		panel.setCursor(Cursor.getDefaultCursor());
-
 	}
 
 	@Override
 	public void mouseWheelMoved(MouseWheelEvent e) {
 		panel.setCursor(CURSOR_ZOOM);
-		float zoom = data.getZoom();
+		float zoom = panel.getCoordinateSystem().getZoom();
 
 		if (e.getWheelRotation() < 0) {
-			data.setZoom(zoom + .1f);
+			panel.getCoordinateSystem().setZoom(zoom + .1f);
 		} else {
-			data.setZoom(zoom - .1f);
+			panel.getCoordinateSystem().setZoom(zoom - .1f);
 		}
-
 	}
 
 	@Override
@@ -192,8 +189,46 @@ public class PanelInteractor extends MouseAdapter implements PanelModifier {
 				Vector2D coordPoint = panel.getCoordinateSystem()
 						.guiToCoordinate(guiPoint);
 				hoverVertice.moveTo(coordPoint.getX(), coordPoint.getY());
+				data.notifyVerticesChanged();
 				panel.selectVertice(hoverVertice);
 			}
+			break;
+		case DRAG_SHAPE:
+			GuiPoint guiPoint = new GuiPoint(p.x, p.y);
+			GuiPoint formerPoint = new GuiPoint(clickPoint.x, clickPoint.y);
+
+			Vector2D oldPoint = panel.getCoordinateSystem().guiToCoordinate(
+					formerPoint);
+
+			Vector2D newPoint = panel.getCoordinateSystem().guiToCoordinate(
+					guiPoint);
+			double dx = newPoint.getX() - oldPoint.getX();
+			double dy = newPoint.getY() - oldPoint.getY();
+			Vector2D diffVector = new Vector2D(dx, dy);
+			for (Vertice v : getShape().getVertices()) {
+				v.add(diffVector);
+			}
+			data.notifyVerticesChanged();
+			clickPoint = guiPoint;
+			break;
+		case SCALE_SHAPE:
+			GuiPoint point = new GuiPoint(p.x, p.y);
+			GuiPoint point2 = new GuiPoint(clickPoint.x, clickPoint.y);
+			GuiPoint origin = panel.getCoordinateSystem().getOrigin();
+			double d1 = GuiPoint.distance(point.x, point.y, origin.x, origin.y);
+			double d2 = GuiPoint.distance(point2.x, point2.y, origin.x,
+					origin.y);
+
+			double multipler = 1;
+			if (d1 < d2) {
+				multipler = 0.9;
+			} else
+				multipler = 1.1;
+			for (Vertice v : getShape().getVertices()) {
+				v.mult(multipler);
+			}
+			data.notifyVerticesChanged();
+			clickPoint = point;
 			break;
 		case SCROLL:
 			int xDiff = e.getX() - clickPoint.x;
@@ -209,12 +244,18 @@ public class PanelInteractor extends MouseAdapter implements PanelModifier {
 
 	@Override
 	public void setZoom(float zoom) {
-		data.setZoom(zoom);
+		panel.getCoordinateSystem().setZoom(zoom);
+	}
+
+	@Override
+	public void modZoom(float modifier) {
+		panel.getCoordinateSystem().setZoom(
+				panel.getCoordinateSystem().getZoom() + modifier);
 	}
 
 	@Override
 	public void resetPanel() {
-		data.setZoom(1.0f);
+		panel.getCoordinateSystem().setZoom(1.0f);
 		panel.centerOrigin();
 	}
 

@@ -4,14 +4,19 @@ import java.awt.BorderLayout;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
+import javax.swing.BorderFactory;
+import javax.swing.BoxLayout;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import de.illonis.eduras.shapecreator.gui.DrawPanel;
 import de.illonis.eduras.shapecreator.gui.MenuPanel;
+import de.illonis.eduras.shapecreator.gui.PreviewPanel;
 import de.illonis.eduras.shapecreator.gui.ToolPanel;
 import de.illonis.eduras.shapecreator.gui.VerticeListPanel;
+import de.illonis.eduras.shapecreator.templates.TemplateNotFoundException;
 
 /**
  * A visual shape creator that allows easy creation and editing of shapes. It
@@ -27,7 +32,8 @@ public class ShapeCreator {
 	private JFrame frame;
 	private DataHolder data;
 	private DrawPanel panel;
-	private Renderer renderer;
+	private Renderer renderer, renderer2;
+	private PreviewPanel previewPanel;
 
 	private ShapeCreator() {
 		buildGui();
@@ -48,6 +54,16 @@ public class ShapeCreator {
 		MenuTriggerer triggerer = new MenuTriggerer(toolPanel, frameListener,
 				pi);
 
+		JPanel rightPanel = new JPanel();
+		BoxLayout layout = new BoxLayout(rightPanel, BoxLayout.PAGE_AXIS);
+		rightPanel.setLayout(layout);
+		rightPanel.setBorder(BorderFactory.createEmptyBorder(0, 5, 0, 5));
+		JLabel label = new JLabel("1:1 Preview");
+		label.setAlignmentX(JLabel.CENTER_ALIGNMENT);
+		rightPanel.add(label);
+		previewPanel = new PreviewPanel();
+		rightPanel.add(previewPanel);
+
 		panel.addMouseListener(pi);
 		panel.addMouseMotionListener(pi);
 		panel.addMouseWheelListener(pi);
@@ -55,6 +71,7 @@ public class ShapeCreator {
 		framePanel.setLayout(new BorderLayout());
 		framePanel.add(toolPanel, BorderLayout.NORTH);
 		framePanel.add(panel, BorderLayout.CENTER);
+		framePanel.add(rightPanel, BorderLayout.EAST);
 		framePanel.add(verticePanel, BorderLayout.WEST);
 		frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		frame.addWindowListener(frameListener);
@@ -70,6 +87,7 @@ public class ShapeCreator {
 							"Exiting", JOptionPane.YES_NO_OPTION);
 			if (result == JOptionPane.YES_OPTION) {
 				renderer.interrupt();
+				renderer2.interrupt();
 				frame.dispose();
 			}
 		}
@@ -84,9 +102,17 @@ public class ShapeCreator {
 		frame.pack();
 		frame.setLocationRelativeTo(null);
 		frame.setVisible(true);
-		data.loadPolygon(new EditablePolygon());
+		frame.setExtendedState(frame.getExtendedState() | JFrame.MAXIMIZED_BOTH);
+		EditablePolygon startPoly = new EditablePolygon();
+		try {
+			startPoly.importTemplate("Rectangle");
+		} catch (TemplateNotFoundException e) {
+		}
+		data.loadPolygon(startPoly);
 		renderer = new Renderer(panel);
 		renderer.start();
+		renderer2 = new Renderer(previewPanel);
+		renderer2.start();
 	}
 
 	/**

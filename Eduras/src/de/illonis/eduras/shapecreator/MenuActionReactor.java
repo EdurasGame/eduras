@@ -48,6 +48,14 @@ public interface MenuActionReactor {
 	void setZoom(float factor);
 
 	/**
+	 * Modifies zoom by given value.
+	 * 
+	 * @param modifier
+	 *            modifier.
+	 */
+	void modZoom(float modifier);
+
+	/**
 	 * Resets the panel to default view.
 	 */
 	void resetPanel();

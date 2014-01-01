@@ -17,6 +17,8 @@ import de.illonis.eduras.gameobjects.Bird;
 import de.illonis.eduras.gameobjects.Building;
 import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.interfaces.GameLogicInterface;
+import de.illonis.eduras.items.weapons.RocketLauncher;
+import de.illonis.eduras.items.weapons.RocketMissile;
 import de.illonis.eduras.items.weapons.SimpleMissile;
 import de.illonis.eduras.items.weapons.SimpleWeapon;
 import de.illonis.eduras.items.weapons.SniperMissile;
@@ -54,7 +56,8 @@ public class ObjectFactory {
 				0), BIGBLOCK(5), SMALLCIRCLEDBLOCK(6), SNIPERMISSILE(7), ITEM_WEAPON_SNIPER(
 				8), BUILDING(9), BIGGERBLOCK(10), ITEM_WEAPON_SPLASH(11), MISSILE_SPLASH(
 				12), MISSILE_SPLASHED(13), DYNAMIC_POLYGON(14), ITEM_WEAPON_SWORD(
-				15), SWORDMISSILE(16), BIRD(17);
+				15), SWORDMISSILE(16), BIRD(17), ROCKETLAUNCHER(18), ROCKET_MISSILE(
+				19);
 
 		private int number;
 
@@ -179,6 +182,12 @@ public class ObjectFactory {
 				break;
 			case ITEM_WEAPON_SWORD:
 				go = new SwordWeapon(logic.getGame(), id);
+				break;
+			case ROCKETLAUNCHER:
+				go = new RocketLauncher(logic.getGame(), id);
+				break;
+			case ROCKET_MISSILE:
+				go = new RocketMissile(logic.getGame(), id);
 				break;
 			default:
 				return;

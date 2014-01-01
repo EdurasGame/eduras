@@ -16,12 +16,14 @@ import de.illonis.eduras.shapecreator.DataHolder;
 public class CoordinateSystem implements Drawable {
 
 	private final GuiPoint origin;
+	private float zoomFactor;
 
 	/**
 	 * Creates a new coordinate system.
 	 */
 	public CoordinateSystem() {
 		origin = new GuiPoint(0, 0);
+		zoomFactor = 1f;
 	}
 
 	/**
@@ -57,7 +59,6 @@ public class CoordinateSystem implements Drawable {
 	 * @author illonis
 	 */
 	public Vector2D guiToCoordinate(GuiPoint point) {
-		float zoomFactor = DataHolder.getInstance().getZoom();
 		int guiX = point.x;
 		int guiY = point.y;
 		float zoom = 1.0f / zoomFactor;
@@ -77,7 +78,6 @@ public class CoordinateSystem implements Drawable {
 	 * @author illonis
 	 */
 	public GuiPoint coordinateToGui(Vector2D point) {
-		float zoomFactor = DataHolder.getInstance().getZoom();
 		int coordX = (int) Math.round(point.getX() * zoomFactor);
 		int coordY = (int) Math.round(point.getY() * zoomFactor);
 
@@ -88,10 +88,21 @@ public class CoordinateSystem implements Drawable {
 		return pos;
 	}
 
+	/**
+	 * Sets the zoom to a new value.
+	 * 
+	 * @param zoom
+	 *            new zoom value.
+	 */
+	public void setZoom(float zoom) {
+		if (zoom < 0.1f)
+			return;
+		this.zoomFactor = zoom;
+	}
+
 	@Override
 	public void draw(Graphics2D g) {
 		g.setColor(DataHolder.getInstance().getSettings().getGridColor());
-		float zoomFactor = DataHolder.getInstance().getZoom();
 
 		// horizontal line
 		g.drawLine(0, origin.y, g.getClipBounds().width, origin.y);
@@ -119,5 +130,9 @@ public class CoordinateSystem implements Drawable {
 		// origin
 		g.drawOval(origin.x - GuiPoint.SIZE / 2, origin.y - GuiPoint.SIZE / 2,
 				GuiPoint.SIZE, GuiPoint.SIZE);
+	}
+
+	public float getZoom() {
+		return zoomFactor;
 	}
 }

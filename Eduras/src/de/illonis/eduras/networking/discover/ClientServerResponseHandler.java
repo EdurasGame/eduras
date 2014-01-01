@@ -74,6 +74,7 @@ public class ClientServerResponseHandler extends Thread {
 					}
 				}
 			}
+			c.close();
 		} catch (IOException e) {
 			L.log(Level.SEVERE, "error finding server", e);
 		}

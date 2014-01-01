@@ -15,7 +15,6 @@ import javax.swing.JSeparator;
 import javax.swing.KeyStroke;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
-import de.illonis.eduras.shapecreator.DataHolder;
 import de.illonis.eduras.shapecreator.MenuActionReactor.Axis;
 import de.illonis.eduras.shapecreator.MenuTriggerer;
 import de.illonis.eduras.shapecreator.PanelInteractor.InteractMode;
@@ -42,8 +41,8 @@ public class MenuPanel extends JMenuBar implements ActionListener {
 			resetViewItem, zoomDefaultItem, zoomTwoItem, zoomThreeItem,
 			zoomFourItem, zoomFiveItem, zoomHalfItem, zoomCustomItem,
 			zoomIncreaseItem, zoomDecreaseItem, preferencesItem,
-			modeSelectItem, modeAddItem, modeDeleteItem, collisionCheckItem,
-			validateItem;
+			modeSelectItem, modeAddItem, modeDeleteItem, modeDragItem,
+			modeScaleItem, collisionCheckItem, validateItem;
 
 	/**
 	 * Creates a new menu panel.
@@ -126,6 +125,8 @@ public class MenuPanel extends JMenuBar implements ActionListener {
 
 		modeSelectItem = addItemToMenu("Select and Drag", KeyEvent.VK_S, 0,
 				modeMenu);
+		modeDragItem = addItemToMenu("Drag shape", modeMenu);
+		modeScaleItem = addItemToMenu("Scale shape", modeMenu);
 		modeAddItem = addItemToMenu("Add vertices", KeyEvent.VK_A, 0, modeMenu);
 		modeDeleteItem = addItemToMenu("Delete vertices", KeyEvent.VK_D, 0,
 				modeMenu);
@@ -284,9 +285,10 @@ public class MenuPanel extends JMenuBar implements ActionListener {
 		else if (source == zoomHalfItem)
 			triggerer.setZoom(.5f);
 		else if (source == zoomDecreaseItem)
-			triggerer.setZoom(DataHolder.getInstance().getZoom() - 0.5f);
+
+			triggerer.modZoom(-0.5f);
 		else if (source == zoomIncreaseItem)
-			triggerer.setZoom(DataHolder.getInstance().getZoom() + 0.5f);
+			triggerer.modZoom(+0.5f);
 		else if (source == preferencesItem)
 			showPreferences();
 		else if (source == modeAddItem)
@@ -295,6 +297,10 @@ public class MenuPanel extends JMenuBar implements ActionListener {
 			triggerer.setMode(InteractMode.NONE);
 		else if (source == modeDeleteItem)
 			triggerer.setMode(InteractMode.REM_VERT);
+		else if (source == modeDragItem)
+			triggerer.setMode(InteractMode.DRAG_SHAPE);
+		else if (source == modeScaleItem)
+			triggerer.setMode(InteractMode.SCALE_SHAPE);
 		else if (source == validateItem)
 			System.out.println("validate");
 		else if (source == collisionCheckItem)

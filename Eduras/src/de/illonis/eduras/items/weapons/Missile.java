@@ -1,5 +1,7 @@
 package de.illonis.eduras.items.weapons;
 
+import java.util.LinkedList;
+
 import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.gameobjects.MoveableGameObject;
@@ -120,6 +122,24 @@ public abstract class Missile extends MoveableGameObject {
 		if (relation == Relation.HOSTILE && collidingObject.isUnit()) {
 			((Unit) collidingObject).damagedBy(getDamage(), getOwner());
 		}
+
+		if (getDamageRadius() > 1.5) {
+			LinkedList<GameObject> nearObjects = getGame()
+					.findObjectsInDistance(getPositionVector(),
+							getDamageRadius());
+			for (GameObject nearObject : nearObjects) {
+				// do not handle collided object twice.
+				if (nearObject.equals(collidingObject))
+					continue;
+				Relation nearRelation = getGame().getGameSettings().getGameMode()
+						.getRelation(this, nearObject);
+
+				if (nearRelation == Relation.HOSTILE && nearObject.isUnit()) {
+					((Unit) nearObject).damagedBy(getDamage(), getOwner());
+				}
+			}
+		}
+		// TODO: use damage radius
 		removeSelf();
 	}
 

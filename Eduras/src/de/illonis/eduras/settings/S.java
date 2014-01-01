@@ -67,7 +67,7 @@ public final class S {
 
 	public static int go_snipermissile_damage = 16;
 
-	public static double go_snipermissile_damageradius = 1.5;
+	public static double go_snipermissile_damageradius = 1;
 
 	public static double go_snipermissile_shape_radius = 1.5;
 
@@ -118,6 +118,16 @@ public final class S {
 	public static int go_splashmissile_splinters = 10;
 
 	public static double sv_performance_rotationdelta_minimum = 5;
+
+	public static long go_rocketlauncher_cooldown = 3000;
+
+	public static double go_rocketmissile_damageradius = 100;
+
+	public static int go_rocketmissile_damage = 12;
+
+	public static double go_rocketmissile_speed = 150;
+
+	public static double go_rocketmissile_maxrange = 400;
 
 	/**
 	 * Reads values from the file and writes them to the S classes attributes.

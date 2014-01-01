@@ -503,6 +503,8 @@ public class ClientLogic implements GameLogicInterface {
 
 	@Override
 	public void stopWorker() {
+		if (null == lgw)
+			return;
 		lgw.stop();
 		try {
 			workerThread.join();

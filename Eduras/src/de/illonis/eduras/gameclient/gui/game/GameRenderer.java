@@ -370,7 +370,8 @@ public class GameRenderer implements TooltipHandler {
 		case SMALLCIRCLEDBLOCK:
 			return Color.GRAY;
 		case PLAYER:
-			if (((PlayerMainFigure) d).getTeam().getColor() == TeamColor.BLUE) {
+			PlayerMainFigure p = (PlayerMainFigure) d;
+			if (p.getTeam() == null || p.getTeam().getColor() == TeamColor.BLUE) {
 				return Color.BLUE;
 			} else {
 				return Color.RED;

@@ -20,8 +20,6 @@ public class DataHolder {
 
 	private final Settings settings;
 
-	private float zoom = 1.0f;
-
 	/**
 	 * @return the data holder instance.
 	 * 
@@ -57,25 +55,6 @@ public class DataHolder {
 	 */
 	public EditablePolygon getPolygon() {
 		return polygon;
-	}
-
-	/**
-	 * @return current zoom value.
-	 */
-	public float getZoom() {
-		return zoom;
-	}
-
-	/**
-	 * Sets the zoom to a new value.
-	 * 
-	 * @param zoom
-	 *            new zoom value.
-	 */
-	public void setZoom(float zoom) {
-		if (zoom < 0.1f)
-			return;
-		this.zoom = zoom;
 	}
 
 	/**

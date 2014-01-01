@@ -1,6 +1,6 @@
 package de.illonis.eduras.shapecreator;
 
-import de.illonis.eduras.shapecreator.gui.DrawPanel;
+import java.awt.Component;
 
 /**
  * Renders the drawpanel.
@@ -9,9 +9,9 @@ import de.illonis.eduras.shapecreator.gui.DrawPanel;
  * 
  */
 public class Renderer extends Thread {
-	private final DrawPanel panel;
+	private final Component panel;
 
-	protected Renderer(DrawPanel panel) {
+	protected Renderer(Component panel) {
 		super("Renderer");
 		this.panel = panel;
 	}
