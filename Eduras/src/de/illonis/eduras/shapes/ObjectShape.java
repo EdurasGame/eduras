@@ -61,6 +61,8 @@ public abstract class ObjectShape {
 
 		Vector2D[] movementPoints = getBorderPoints();
 
+		Vector2D.rotateAll(movementPoints, thisObject.getRotation());
+
 		LinkedList<Line> lines = Geometry.getLinesBetweenShapePositions(
 				movementPoints, positionVector, target);
 

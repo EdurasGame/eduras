@@ -435,4 +435,16 @@ public class Vector2D {
 	public double getAngleToXAxis() throws IllegalArgumentException {
 		return getAngleBetween(new Vector2D(1, 0));
 	}
+
+	/**
+	 * Rotate every {@link Vector2D} given in the array by the given angle.
+	 * 
+	 * @param vectorsToRotate
+	 * @param rotation
+	 */
+	public static void rotateAll(Vector2D[] vectorsToRotate, double rotation) {
+		for (int i = 0; i < vectorsToRotate.length; i++) {
+			vectorsToRotate[i].rotate(rotation);
+		}
+	}
 }
