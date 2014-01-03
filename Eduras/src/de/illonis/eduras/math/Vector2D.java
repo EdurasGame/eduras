@@ -422,7 +422,19 @@ public class Vector2D {
 		double myLength = getLength();
 		double othersLength = other.getLength();
 		double cosOfAngle = dotProduct / (myLength * othersLength);
-		return Geometry.toDegree(Math.cosh(cosOfAngle));
+		double angle = Geometry.toDegree(Math.acos(cosOfAngle));
+
+		if (x * other.y + other.x * y > 0) {
+			if (angle >= 180) {
+				angle = 360 - angle;
+			}
+		} else {
+			if (angle < 180) {
+				angle = 360 - angle;
+			}
+		}
+
+		return angle;
 	}
 
 	/**

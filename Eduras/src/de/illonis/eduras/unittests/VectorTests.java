@@ -54,6 +54,18 @@ public class VectorTests {
 		assertEquals(check, copy);
 	}
 
+	@Test
+	public void angles() {
+		Vector2D posYAxis = new Vector2D(0, 1);
+		Vector2D negYAxis = new Vector2D(0.1, 1);
+
+		assertTrue(Math.abs(posYAxis.getAngleToXAxis() - 90) < 0.0001);
+
+		assertTrue(Math.abs(posYAxis.getAngleBetween(negYAxis)) - 180 < 1);
+
+		assertTrue(Math.abs(new Vector2D(-1, 0).getAngleToXAxis() - 180) < 0.00001);
+	}
+
 	/**
 	 * Tests the {@link de.illonis.eduras.math.Vector2D#mult(double) mult()}
 	 * method of a Vector2D.

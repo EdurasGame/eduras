@@ -45,7 +45,7 @@ public class Geometry {
 	 * @return value in degree.
 	 */
 	public static double toDegree(double radian) {
-		return radian * (180 / Math.PI);
+		return (radian * (180 / Math.PI)) % 360;
 	}
 
 	/**
