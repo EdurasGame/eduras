@@ -84,8 +84,8 @@ public class PlayerMainFigure extends Unit implements MovementControlable {
 		setOwner(ownerId);
 
 		// get position
-		Vector2D firstEdge = new Vector2D(0, 25);
-		Vector2D secondEdge = new Vector2D(10, -10);
+		Vector2D firstEdge = new Vector2D(25, 0);
+		Vector2D secondEdge = new Vector2D(-10, 10);
 		Vector2D thirdEdge = new Vector2D(-10, -10);
 
 		try {
