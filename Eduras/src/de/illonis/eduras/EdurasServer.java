@@ -28,6 +28,7 @@ import de.illonis.eduras.gameclient.datacache.GraphicsPreLoader;
 import de.illonis.eduras.locale.Localization;
 import de.illonis.eduras.logic.ConsoleEventTriggerer;
 import de.illonis.eduras.logic.ServerEventTriggerer;
+import de.illonis.eduras.logic.ServerGameEventListener;
 import de.illonis.eduras.logic.ServerLogic;
 import de.illonis.eduras.maps.FunMap;
 import de.illonis.eduras.networking.EventParser;
@@ -126,6 +127,7 @@ public class EdurasServer {
 		GameInformation gameInfo = new GameInformation();
 		ServerLogic logic = new ServerLogic(gameInfo);
 
+		logic.setGameEventListener(new ServerGameEventListener(server));
 		ServerEventTriggerer eventTriggerer = new ServerEventTriggerer(logic,
 				server);
 
