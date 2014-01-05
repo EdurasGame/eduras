@@ -209,6 +209,14 @@
 					    <entry>objectId</entry>
 					</row>
 					<row>
+					    <entry>SET_AMMU</entry>
+					    <entry>TCP</entry>
+					    <entry>125</entry>
+					    <entry>Sets ammunition of a weapon</entry>
+					    <entry>objectId</entry>
+					    <entry>newValue</entry>
+					</row>
+					<row>
 						<entry>DEATH</entry>
 						<entry>TCP</entry>
 						<entry>131</entry>
