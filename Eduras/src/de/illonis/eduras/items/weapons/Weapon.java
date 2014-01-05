@@ -85,6 +85,21 @@ public abstract class Weapon extends Item implements Lootable, Usable {
 	}
 
 	/**
+	 * @return maximum ammunition.
+	 */
+	public int getMaxAmmunition() {
+		return maxAmmunition;
+	}
+
+	/**
+	 * @param currentAmmunition
+	 *            the new amount.
+	 */
+	public void setCurrentAmmunition(int currentAmmunition) {
+		this.currentAmmunition = currentAmmunition;
+	}
+
+	/**
 	 * Sets the ammunition-type of this weapon to infinite. This means this
 	 * weapon's magazine never gets empty.
 	 */

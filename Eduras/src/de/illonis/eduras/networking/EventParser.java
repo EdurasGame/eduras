@@ -21,6 +21,7 @@ import de.illonis.eduras.events.MatchEndEvent;
 import de.illonis.eduras.events.MovementEvent;
 import de.illonis.eduras.events.ObjectFactoryEvent;
 import de.illonis.eduras.events.SendUnitsEvent;
+import de.illonis.eduras.events.SetAmmunitionEvent;
 import de.illonis.eduras.events.SetBooleanGameObjectAttributeEvent;
 import de.illonis.eduras.events.SetGameModeEvent;
 import de.illonis.eduras.events.SetGameObjectAttributeEvent;
@@ -83,6 +84,7 @@ public class EventParser implements EventHandler {
 	public static final int SET_ITEM_SLOT = 122;
 	public static final int ITEM_CD_START = 123;
 	public static final int ITEM_CD_FINISHED = 124;
+	public static final int SET_AMMU = 125;
 	public static final int DEATH = 131;
 	public static final int SET_HEALTH = 132;
 	public static final int SET_GAMEMODE = 140;
@@ -322,6 +324,10 @@ public class EventParser implements EventHandler {
 				logic.onGameEventAppeared(new InitInformationEvent(ClientRole
 						.valueOf((String) event.getArgument(0)), (String) event
 						.getArgument(1), (Integer) event.getArgument(2)));
+				break;
+			case SET_AMMU:
+				logic.onGameEventAppeared(new SetAmmunitionEvent((int) event
+						.getArgument(0), (int) event.getArgument(1)));
 				break;
 			case SET_GAMEMODE:
 				logic.onGameEventAppeared(new SetGameModeEvent((String) event

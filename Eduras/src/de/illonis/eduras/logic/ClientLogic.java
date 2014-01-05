@@ -18,6 +18,7 @@ import de.illonis.eduras.events.ItemEvent;
 import de.illonis.eduras.events.MatchEndEvent;
 import de.illonis.eduras.events.MovementEvent;
 import de.illonis.eduras.events.ObjectFactoryEvent;
+import de.illonis.eduras.events.SetAmmunitionEvent;
 import de.illonis.eduras.events.SetBooleanGameObjectAttributeEvent;
 import de.illonis.eduras.events.SetGameModeEvent;
 import de.illonis.eduras.events.SetGameObjectAttributeEvent;
@@ -124,6 +125,17 @@ public class ClientLogic implements GameLogicInterface {
 					L.warning("Given object id in SET_POLYGON_DATA event does not match a DynamicPolygonBlock, instead object is a "
 							+ gameObj.getClass().getName());
 				}
+				break;
+			case SET_AMMU:
+				SetAmmunitionEvent setAmmuEvent = (SetAmmunitionEvent) event;
+				GameObject weapon = gameInfo.findObjectById(setAmmuEvent
+						.getObjectId());
+				if (weapon == null || !(weapon instanceof Weapon)) {
+					break;
+				}
+				Weapon w = (Weapon) weapon;
+				w.setCurrentAmmunition(setAmmuEvent.getNewValue());
+				System.out.println(setAmmuEvent.getNewValue());
 				break;
 			case SET_ROTATION:
 				if (!(event instanceof SetGameObjectAttributeEvent<?>)) {

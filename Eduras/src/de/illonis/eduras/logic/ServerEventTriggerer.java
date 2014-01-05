@@ -27,6 +27,7 @@ import de.illonis.eduras.events.ItemEvent;
 import de.illonis.eduras.events.MatchEndEvent;
 import de.illonis.eduras.events.MovementEvent;
 import de.illonis.eduras.events.ObjectFactoryEvent;
+import de.illonis.eduras.events.SetAmmunitionEvent;
 import de.illonis.eduras.events.SetBooleanGameObjectAttributeEvent;
 import de.illonis.eduras.events.SetGameModeEvent;
 import de.illonis.eduras.events.SetGameObjectAttributeEvent;
@@ -214,9 +215,13 @@ public class ServerEventTriggerer implements EventTriggerer {
 							.hasItemOfType(i.getType())) {
 				Item item = gameInfo.getPlayerByObjectId(playerId)
 						.getInventory().getItemOfType(i.getType());
-				if (item instanceof Weapon)
-					((Weapon) item).refill();
-				// TODO: send refill event to client.
+				if (item instanceof Weapon) {
+					Weapon weapon = (Weapon) item;
+					weapon.refill();
+					SetAmmunitionEvent ammuEvent = new SetAmmunitionEvent(
+							weapon.getId(), weapon.getCurrentAmmunition());
+					sendEvents(ammuEvent);
+				}
 				return;
 			}
 		} catch (ObjectNotFoundException e) {
