@@ -452,7 +452,11 @@ public class Vector2D {
 	 * Rotate every {@link Vector2D} given in the array by the given angle.
 	 * 
 	 * @param vectorsToRotate
+	 *            a list of vectors that will be rotated.
 	 * @param rotation
+	 *            rotation angle in degrees.
+	 * 
+	 * @see #rotate(double)
 	 */
 	public static void rotateAll(Vector2D[] vectorsToRotate, double rotation) {
 		for (int i = 0; i < vectorsToRotate.length; i++) {
