@@ -48,6 +48,7 @@ import de.illonis.eduras.inventory.InventoryIsFullException;
 import de.illonis.eduras.items.Item;
 import de.illonis.eduras.items.Lootable;
 import de.illonis.eduras.items.weapons.Missile;
+import de.illonis.eduras.items.weapons.Weapon;
 import de.illonis.eduras.maps.InitialObjectData;
 import de.illonis.eduras.maps.Map;
 import de.illonis.eduras.math.Vector2D;
@@ -211,10 +212,15 @@ public class ServerEventTriggerer implements EventTriggerer {
 			if (i.isUnique()
 					&& gameInfo.getPlayerByObjectId(playerId).getInventory()
 							.hasItemOfType(i.getType())) {
+				Item item = gameInfo.getPlayerByObjectId(playerId)
+						.getInventory().getItemOfType(i.getType());
+				if (item instanceof Weapon)
+					((Weapon) item).refill();
+				// TODO: send refill event to client.
 				return;
 			}
 		} catch (ObjectNotFoundException e) {
-			e.printStackTrace();
+			L.log(Level.SEVERE, "Could not find looted object.", e);
 		}
 		int newObjId = createObject(i.getType(), playerId);
 		int itemSlot;

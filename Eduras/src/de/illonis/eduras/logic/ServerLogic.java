@@ -215,14 +215,14 @@ public class ServerLogic implements GameLogicInterface {
 		switch (itemEvent.getType()) {
 		case ITEM_USE:
 			if (item.isUsable() && !((Usable) item).hasCooldown()) {
-				((Usable) item).use(useInfo);
-				ItemEvent cooldownEvent = new ItemEvent(
-						GameEventNumber.ITEM_CD_START, itemEvent.getOwner(),
-						itemEvent.getSlotNum());
+				if (((Usable) item).use(useInfo)) {
+					ItemEvent cooldownEvent = new ItemEvent(
+							GameEventNumber.ITEM_CD_START,
+							itemEvent.getOwner(), itemEvent.getSlotNum());
 
-				gameInfo.getEventTriggerer().notifyCooldownStarted(
-						cooldownEvent);
-
+					gameInfo.getEventTriggerer().notifyCooldownStarted(
+							cooldownEvent);
+				}
 			}
 			break;
 		default:

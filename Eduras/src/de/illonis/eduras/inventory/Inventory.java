@@ -169,7 +169,7 @@ public class Inventory {
 	 *            item type to search for.
 	 * @return index of item with given type or -1.
 	 */
-	private int getItemOfType(ObjectType type) {
+	private int findItemSlotOfType(ObjectType type) {
 		return getItemOfTypeBetween(type, 0, MAX_CAPACITY);
 	}
 
@@ -197,8 +197,26 @@ public class Inventory {
 	 * @return true if an item of this type exists, false otherwise.
 	 */
 	public boolean hasItemOfType(ObjectType itemType) {
-		int pos = getItemOfType(itemType);
+		int pos = findItemSlotOfType(itemType);
 		return pos != -1;
+	}
+
+	/**
+	 * @param itemType
+	 *            the item type.
+	 * @return item of given type in inventory.
+	 * @see #hasItemOfType(ObjectType)
+	 */
+	public Item getItemOfType(ObjectType itemType) {
+		int slot = findItemSlotOfType(itemType);
+		if (slot >= 0) {
+			try {
+				return getItemBySlot(slot);
+			} catch (ItemSlotIsEmptyException e) {
+				// should never occur here.
+			}
+		}
+		return null;
 	}
 
 	/**

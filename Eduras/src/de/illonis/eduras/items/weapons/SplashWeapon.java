@@ -28,6 +28,7 @@ public class SplashWeapon extends Weapon {
 		setName("SplashWeapon");
 		setShape(new Circle(S.go_splashweapon_shape_radius));
 		defaultCooldown = S.go_splashweapon_cooldown;
+		setAmmunitionLimited(2, 5);
 	}
 
 	@Override

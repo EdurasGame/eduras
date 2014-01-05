@@ -109,10 +109,12 @@ public abstract class StackableItem extends Item implements Consumable {
 	}
 
 	@Override
-	public final void use(ItemUseInformation info) {
+	public final boolean use(ItemUseInformation info) {
 		if (takeFromStack()) {
 			consumeAction();
+			return true;
 		}
+		return false;
 	}
 
 	/**

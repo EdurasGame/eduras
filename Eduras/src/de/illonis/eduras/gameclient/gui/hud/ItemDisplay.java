@@ -19,6 +19,7 @@ import de.illonis.eduras.inventory.Inventory;
 import de.illonis.eduras.inventory.ItemSlotIsEmptyException;
 import de.illonis.eduras.items.Item;
 import de.illonis.eduras.items.Usable;
+import de.illonis.eduras.items.weapons.Weapon;
 
 /**
  * Displays player items on user interface.
@@ -88,6 +89,12 @@ public class ItemDisplay extends ClickableGuiElement implements
 			g2d.draw(itemRect);
 			g2d.drawString("#" + (item.getSlotId() + 1), item.getX() + screenX
 					+ BLOCKSIZE / 4, item.getY() + screenY - 2);
+
+			if (item.isWeapon()) {
+				int ammo = item.getWeaponAmmu();
+				g2d.drawString("#" + ammo, item.getX() + screenX + BLOCKSIZE
+						/ 4 + 20, item.getY() + screenY - 2);
+			}
 			if (item.hasImage())
 				g2d.drawImage(item.getItemImage(), item.getX() + screenX,
 						item.getY() + screenY, null);
@@ -211,6 +218,17 @@ public class ItemDisplay extends ClickableGuiElement implements
 
 		void setItemImage(BufferedImage image) {
 			this.itemImage = image;
+		}
+
+		public boolean isWeapon() {
+			return (item instanceof Weapon);
+		}
+
+		public int getWeaponAmmu() {
+			if (isWeapon()) {
+				return ((Weapon) item).getCurrentAmmunition();
+			}
+			return 0;
 		}
 
 		long getCooldown() {

@@ -15,8 +15,9 @@ public interface Usable {
 	 *            usage information.
 	 * 
 	 * @author illonis
+	 * @return true if usage was successful, false if usage failed.
 	 */
-	public void use(ItemUseInformation info);
+	public boolean use(ItemUseInformation info);
 
 	/**
 	 * Starts cooldown. This should be called on every use.

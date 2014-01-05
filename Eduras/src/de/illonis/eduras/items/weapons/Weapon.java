@@ -18,6 +18,15 @@ import de.illonis.eduras.units.PlayerMainFigure;
  * 
  */
 public abstract class Weapon extends Item implements Lootable, Usable {
+
+	protected enum AmmunitionLimit {
+		INFINITE, CAPPED;
+	}
+
+	private AmmunitionLimit ammuType = AmmunitionLimit.INFINITE;
+	private int currentAmmunition = 0;
+	private int fillAmmunitionAmount = 0;
+	private int maxAmmunition = -1;
 	private long cooldown = 0;
 	protected long defaultCooldown = 0;
 	protected long respawnTime = S.go_weapon_respawntime_default;
@@ -63,16 +72,68 @@ public abstract class Weapon extends Item implements Lootable, Usable {
 	}
 
 	@Override
-	public final void use(ItemUseInformation info) {
+	public final boolean use(ItemUseInformation info) {
 		if (!hasCooldown()) {
-			startCooldown();
-			doIfReady(info);
+			if (hasAmmo()) {
+				startCooldown();
+				currentAmmunition--;
+				doIfReady(info);
+				return true;
+			}
 		}
+		return false;
+	}
+
+	/**
+	 * Sets the ammunition-type of this weapon to infinite. This means this
+	 * weapon's magazine never gets empty.
+	 */
+	protected final void setAmmunitionInfinite() {
+		ammuType = AmmunitionLimit.INFINITE;
+	}
+
+	/**
+	 * @return true if remaining ammunition is >0 or weapon has infinite
+	 *         ammunition.
+	 */
+	public boolean hasAmmo() {
+		return ammuType == AmmunitionLimit.INFINITE || currentAmmunition > 0;
+	}
+
+	/**
+	 * Indicates that this weapon has limited ammunition.
+	 * 
+	 * @param fillAmount
+	 *            the amount to fill up on every fill (and start value).
+	 * @param maxAmount
+	 *            the maximum of ammunition this weapon can have.
+	 */
+	protected final void setAmmunitionLimited(int fillAmount, int maxAmount) {
+		ammuType = AmmunitionLimit.CAPPED;
+		fillAmmunitionAmount = fillAmount;
+		maxAmmunition = maxAmount;
+		currentAmmunition = fillAmmunitionAmount;
+	}
+
+	/**
+	 * Refills the ammunition of this weapon.<br>
+	 * On each call, the ammunition is increased by {@link #currentAmmunition}
+	 * until the maximum {@link #maxAmmunition} is reached.<br>
+	 * <i>Has no effect on weapons with infinite ammunition.</i>
+	 */
+	public synchronized void refill() {
+		if (ammuType == AmmunitionLimit.INFINITE)
+			return;
+		currentAmmunition += fillAmmunitionAmount;
+		if (currentAmmunition > maxAmmunition)
+			currentAmmunition = maxAmmunition;
 	}
 
 	/**
 	 * Performs given action if weapon is ready. If weapon is not ready, no
-	 * action will performed.
+	 * action will performed.<br>
+	 * <i>Note:</i> The ammunition amount has already been decreased before this
+	 * method is called.
 	 * 
 	 * @param info
 	 *            item use information.
@@ -92,6 +153,16 @@ public abstract class Weapon extends Item implements Lootable, Usable {
 	@Override
 	public long getRespawnTimeRemaining() {
 		return respawnTimeRemaining;
+	}
+
+	/**
+	 * @return the current amount of ammunition or -1 if weapon has infinite
+	 *         ammunition.
+	 */
+	public int getCurrentAmmunition() {
+		if (ammuType == AmmunitionLimit.INFINITE)
+			return -1;
+		return currentAmmunition;
 	}
 
 	@Override
@@ -150,5 +221,14 @@ public abstract class Weapon extends Item implements Lootable, Usable {
 
 		getGame().getEventTriggerer().createMissile(missileType, getOwner(),
 				position, speedVector);
+	}
+
+	/**
+	 * Reduces ammunitiion by one if not infinite.
+	 */
+	public void reduceAmmo() {
+		if (ammuType == AmmunitionLimit.INFINITE)
+			return;
+		currentAmmunition--;
 	}
 }

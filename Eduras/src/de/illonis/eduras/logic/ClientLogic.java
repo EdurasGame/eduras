@@ -40,6 +40,7 @@ import de.illonis.eduras.interfaces.GameLogicInterface;
 import de.illonis.eduras.inventory.ItemSlotIsEmptyException;
 import de.illonis.eduras.items.Item;
 import de.illonis.eduras.items.Usable;
+import de.illonis.eduras.items.weapons.Weapon;
 import de.illonis.eduras.units.PlayerMainFigure;
 import de.illonis.eduras.units.Unit;
 
@@ -335,6 +336,9 @@ public class ClientLogic implements GameLogicInterface {
 		case ITEM_CD_START:
 			if (item.isUsable())
 				((Usable) item).startCooldown();
+			if (item instanceof Weapon) {
+				((Weapon) item).reduceAmmo();
+			}
 			getListener().onCooldownStarted(cooldownEvent);
 
 			break;
