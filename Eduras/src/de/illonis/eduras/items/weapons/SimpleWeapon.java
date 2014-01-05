@@ -1,6 +1,3 @@
-/**
- * 
- */
 package de.illonis.eduras.items.weapons;
 
 import de.illonis.eduras.GameInformation;
@@ -26,10 +23,7 @@ public class SimpleWeapon extends Weapon {
 	 *            id of weapon
 	 */
 	public SimpleWeapon(GameInformation gi, int id) {
-
 		super(ObjectType.ITEM_WEAPON_SIMPLE, gi, id);
-		// TODO: Need to get away the missile prototypes.
-		setMissile(null);
 		setName("SimpleWeapon");
 		setShape(new Circle(S.go_simpleweapon_shape_radius));
 		defaultCooldown = S.go_simpleweapon_cooldown;

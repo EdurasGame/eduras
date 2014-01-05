@@ -2,7 +2,6 @@ package de.illonis.eduras.items.weapons;
 
 import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.ObjectFactory.ObjectType;
-import de.illonis.eduras.exceptions.NoAmmunitionException;
 import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.items.Item;
 import de.illonis.eduras.items.ItemUseInformation;
@@ -18,11 +17,8 @@ import de.illonis.eduras.units.PlayerMainFigure;
  * 
  */
 public abstract class Weapon extends Item implements Lootable, Usable {
-	// TODO: remove that missile stuff. Weapons do not hold any missiles.
-	private final int damage = 0;
 	private long cooldown = 0;
 	protected long defaultCooldown = 0;
-	private Missile missile;
 	protected long respawnTime = S.go_weapon_respawntime_default;
 	private long respawnTimeRemaining = 0;
 
@@ -38,54 +34,6 @@ public abstract class Weapon extends Item implements Lootable, Usable {
 	 */
 	public Weapon(ObjectType type, GameInformation gi, int id) {
 		super(type, gi, id);
-	}
-
-	/**
-	 * Returns missile prototype.
-	 * 
-	 * @return missile prototype.
-	 */
-	public Missile getMissilePrototype() {
-		return missile;
-	}
-
-	/**
-	 * Sets missile to use as prototype.
-	 * 
-	 * @param missile
-	 *            new missile prototype.
-	 */
-	void setMissile(Missile missile) {
-		this.missile = missile;
-	}
-
-	/**
-	 * Returns damage that is dealt by this weapon.
-	 * 
-	 * @return weapon damage.
-	 */
-	public int getDamage() {
-		return damage;
-	}
-
-	/**
-	 * Returns speed of missile used by this weapon. This is the speed of
-	 * missile prototype.
-	 * 
-	 * @return missile speed.
-	 */
-	public double getMissileSpeed() {
-		return missile.getSpeed();
-	}
-
-	/**
-	 * Sets missile speed of default missile.
-	 * 
-	 * @param missileSpeed
-	 *            new missile speed.
-	 */
-	public void setMissileSpeed(double missileSpeed) {
-		missile.setSpeed(missileSpeed);
 	}
 
 	@Override
@@ -132,22 +80,7 @@ public abstract class Weapon extends Item implements Lootable, Usable {
 
 	@Override
 	public boolean hasCooldown() {
-		if (cooldown > 0)
-			return true;
-		else
-			return false;
-	}
-
-	/**
-	 * Spawns a missile that is used by this weapon. Use this method for
-	 * shooting. It creates a new missile that is identical to missile
-	 * prototype.
-	 * 
-	 * @return duplicate of missile prototype.
-	 * @throws NoAmmunitionException
-	 */
-	public Missile getAMissile() throws NoAmmunitionException {
-		return null;
+		return (cooldown > 0);
 	}
 
 	@Override
@@ -184,7 +117,5 @@ public abstract class Weapon extends Item implements Lootable, Usable {
 
 		PlayerMainFigure player = (PlayerMainFigure) collidingObject;
 		getGame().getEventTriggerer().lootItem(getId(), player.getId());
-
 	}
-
 }

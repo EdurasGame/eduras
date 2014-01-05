@@ -27,7 +27,6 @@ public class RocketLauncher extends Weapon {
 	 */
 	public RocketLauncher(GameInformation infos, int id) {
 		super(ObjectType.ROCKETLAUNCHER, infos, id);
-		setMissile(null);
 		setName("Rocket Launcher");
 
 		// TODO: make a shape

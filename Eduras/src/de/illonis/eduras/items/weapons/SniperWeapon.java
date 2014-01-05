@@ -23,9 +23,7 @@ public class SniperWeapon extends Weapon {
 	 *            weapon id
 	 */
 	public SniperWeapon(GameInformation gi, int id) {
-
 		super(ObjectType.ITEM_WEAPON_SNIPER, gi, id);
-		setMissile(null);
 		setName("Sniper");
 		setShape(new Circle(S.go_sniperweapon_shape_radius));
 		defaultCooldown = S.go_sniperweapon_cooldown;

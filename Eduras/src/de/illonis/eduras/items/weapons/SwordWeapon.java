@@ -25,9 +25,7 @@ public class SwordWeapon extends Weapon {
 	 *            The object id this sword is assigned.
 	 */
 	public SwordWeapon(GameInformation gi, int id) {
-
 		super(ObjectType.ITEM_WEAPON_SWORD, gi, id);
-		setMissile(null);
 		setName("Sword");
 		setShape(new Circle(S.go_swordweapon_shape_radius));
 		defaultCooldown = S.go_swordweapon_cooldown;
@@ -54,7 +52,6 @@ public class SwordWeapon extends Weapon {
 
 		getGame().getEventTriggerer().createMissile(ObjectType.SWORDMISSILE,
 				getOwner(), position, speedVector);
-
 	}
 
 }

@@ -27,7 +27,6 @@ public class SplashWeapon extends Weapon {
 	 */
 	public SplashWeapon(GameInformation infos, int id) {
 		super(ObjectType.ITEM_WEAPON_SPLASH, infos, id);
-		setMissile(null);
 		setName("SplashWeapon");
 		setShape(new Circle(S.go_splashweapon_shape_radius));
 		defaultCooldown = S.go_splashweapon_cooldown;
