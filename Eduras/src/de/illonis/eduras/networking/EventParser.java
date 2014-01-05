@@ -46,59 +46,10 @@ import de.illonis.eduras.units.PlayerMainFigure.InteractMode;
  * @author Florian Mai <florian.ren.mai@googlemail.com>
  * 
  */
-@SuppressWarnings("javadoc")
 public class EventParser implements EventHandler {
 
 	private final static Logger L = EduLog.getLoggerFor(EventParser.class
 			.getName());
-
-	// client events
-	public static final int INFORMATION_REQUEST = 1;
-	public static final int CLIENT_SETNAME = 2;
-	public static final int MOVE_LEFT_PRESSED = 10;
-	public static final int MOVE_RIGHT_PRESSED = 11;
-	public static final int MOVE_UP_PRESSED = 12;
-	public static final int MOVE_DOWN_PRESSED = 13;
-	public static final int MOVE_LEFT_RELEASED = 14;
-	public static final int MOVE_RIGHT_RELEASED = 15;
-	public static final int MOVE_UP_RELEASED = 16;
-	public static final int MOVE_DOWN_RELEASED = 17;
-	public static final int SET_SPEEDVECTOR = 18;
-	public static final int SET_SPEED = 19;
-	public static final int ITEM_USE = 30;
-	public static final int SWITCH_INTERACTMODE = 40;
-	public static final int SEND_UNITS = 41;
-
-	// client and server events
-	public static final int SET_ROTATION = 80;
-
-	// server events
-	public static final int SET_POS_UDP = 101;
-	public static final int SET_OWNER = 102;
-	public static final int SET_VISIBLE = 103;
-	public static final int SET_COLLIDABLE = 104;
-	public static final int SET_POLYGON_DATA = 105;
-	public static final int SET_POS_TCP = 106;
-	public static final int OBJECT_CREATE = 120;
-	public static final int OBJECT_REMOVE = 121;
-	public static final int SET_ITEM_SLOT = 122;
-	public static final int ITEM_CD_START = 123;
-	public static final int ITEM_CD_FINISHED = 124;
-	public static final int SET_AMMU = 125;
-	public static final int DEATH = 131;
-	public static final int SET_HEALTH = 132;
-	public static final int SET_GAMEMODE = 140;
-	public static final int SET_INTERACTMODE = 141;
-	public static final int SET_KILLS = 150;
-	public static final int SET_DEATHS = 151;
-	public static final int SET_REMAININGTIME = 180;
-	public static final int MATCH_END = 190;
-	public static final int SET_TEAMS = 191;
-	public static final int ADD_PLAYER_TO_TEAM = 192;
-
-	// network events
-	public static final int INIT_INFORMATION = 203;
-	public static final int GAME_READY = 204;
 
 	private final GameLogicInterface logic;
 
@@ -118,8 +69,11 @@ public class EventParser implements EventHandler {
 		int eventNumber = event.getEventNumber();
 		int numberOfArgs = event.getNumberOfArguments();
 
+		GameEventNumber gameEventNumber = GameEventNumber
+				.getByNumber(eventNumber);
+
 		try {
-			switch (eventNumber) {
+			switch (gameEventNumber) {
 			case INFORMATION_REQUEST:
 
 				logic.onGameEventAppeared(new GameInfoRequest((Integer) event

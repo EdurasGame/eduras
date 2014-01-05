@@ -5,7 +5,6 @@ package de.illonis.eduras.events;
 
 import de.eduras.eventingserver.exceptions.TooFewArgumentsExceptions;
 import de.illonis.eduras.math.Vector2D;
-import de.illonis.eduras.networking.EventParser;
 
 /**
  * Used as a wrapper for item events like use_item_pressed and _released. An
@@ -116,16 +115,16 @@ public class ItemEvent extends OwnerGameEvent {
 
 	@Override
 	public Object getArgument(int i) throws TooFewArgumentsExceptions {
-		switch (getEventNumber()) {
-		case EventParser.ITEM_CD_FINISHED:
-		case EventParser.ITEM_CD_START:
+		switch (getType()) {
+		case ITEM_CD_FINISHED:
+		case ITEM_CD_START:
 			if (i == 0)
 				return getOwner();
 			if (i == 1)
 				return slotNum;
 			else
 				throw new TooFewArgumentsExceptions(i, 0);
-		case EventParser.ITEM_USE:
+		case ITEM_USE:
 			switch (i) {
 			case 0:
 				return slotNum;
