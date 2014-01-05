@@ -7,6 +7,7 @@ import de.illonis.eduras.items.Item;
 import de.illonis.eduras.items.ItemUseInformation;
 import de.illonis.eduras.items.Lootable;
 import de.illonis.eduras.items.Usable;
+import de.illonis.eduras.math.Vector2D;
 import de.illonis.eduras.settings.S;
 import de.illonis.eduras.units.PlayerMainFigure;
 
@@ -117,5 +118,37 @@ public abstract class Weapon extends Item implements Lootable, Usable {
 
 		PlayerMainFigure player = (PlayerMainFigure) collidingObject;
 		getGame().getEventTriggerer().lootItem(getId(), player.getId());
+	}
+
+	/**
+	 * Spawns ("shoots") a missile of given objecttype.
+	 * 
+	 * @param missileType
+	 *            the type of missile.
+	 * @param info
+	 *            the use-information provided by
+	 *            {@link #doIfReady(ItemUseInformation)} method.
+	 */
+	protected final void shootMissile(ObjectType missileType,
+			ItemUseInformation info) {
+		// (jme) Spawn position will be calculated in a simplified way. We use
+		// diagonal's length of shooting player to move missile away from him.
+
+		Vector2D target = info.getTarget();
+		GameObject triggeringObject = info.getTriggeringObject();
+
+		Vector2D position = triggeringObject.getPositionVector();
+
+		Vector2D speedVector = new Vector2D(target);
+		speedVector.subtract(position);
+
+		Vector2D diag = new Vector2D(triggeringObject.getBoundingBox()
+				.getWidth(), triggeringObject.getBoundingBox().getHeight());
+		Vector2D copy = speedVector.copy();
+		copy.setLength(diag.getLength());
+		position.add(copy);
+
+		getGame().getEventTriggerer().createMissile(missileType, getOwner(),
+				position, speedVector);
 	}
 }
