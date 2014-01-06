@@ -55,7 +55,7 @@ public abstract class ObjectShape {
 
 		GameObject collisionObject = null;
 
-		Vector2D positionVector = thisObject.toPositionVector();
+		Vector2D positionVector = thisObject.getPositionVector();
 
 		// calculate border points to use for collision calculation
 

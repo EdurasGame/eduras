@@ -244,16 +244,6 @@ public abstract class GameObject implements Comparable<GameObject> {
 		this.shape = shape;
 	}
 
-	/**
-	 * Returns a vector that points from origin to the position of the
-	 * GameObject.
-	 * 
-	 * @return The position vector.
-	 */
-	public Vector2D toPositionVector() {
-		return new Vector2D(xPosition, yPosition);
-	}
-
 	@Override
 	public int compareTo(GameObject o) {
 		if (getId() == o.getId())

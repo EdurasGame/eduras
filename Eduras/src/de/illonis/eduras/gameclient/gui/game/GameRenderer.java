@@ -129,13 +129,14 @@ public class GameRenderer implements TooltipHandler {
 		adjustCamera();
 		drawMap();
 		drawObjects();
-		drawGui();
 		drawAnimations();
+		drawGui();
 	}
 
 	private void drawAnimations() {
-		for (Animation animation : data.getAnimations()) {
-			animation.draw(mapGraphics);
+		for (int i = 0; i < data.getAnimations().size(); i++) {
+			Animation animation = data.getAnimations().get(i);
+			animation.draw(mapGraphics, -camera.x, -camera.y);
 		}
 	}
 

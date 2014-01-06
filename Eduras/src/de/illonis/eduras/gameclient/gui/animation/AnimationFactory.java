@@ -47,10 +47,12 @@ public final class AnimationFactory {
 	 *            the client data. Active animations will be stored here.
 	 */
 	public static void init(ClientData clientData) {
-		AnimationFactory.data = clientData;
+		data = clientData;
 		timingSource = new SwingTimerTimingSource();
 		Animator.setDefaultTimingSource(timingSource);
 		timingSource.init();
+		System.out.println("init animation factory");
+
 	}
 
 	/**
@@ -72,6 +74,9 @@ public final class AnimationFactory {
 	 */
 	public static void runAt(AnimationNumber animationNumber,
 			Vector2D mapPosition) {
+		// do not run animations on server side (it won't work either)
+		if (data == null)
+			return;
 		try {
 			Animation animation = createAnimation(animationNumber, mapPosition);
 			data.addAnimation(animation);

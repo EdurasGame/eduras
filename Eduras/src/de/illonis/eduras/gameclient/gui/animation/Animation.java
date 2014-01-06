@@ -54,14 +54,20 @@ public abstract class Animation implements TimingTarget {
 	}
 
 	/**
-	 * Draws the animation onto given graphics target if it is running.
+	 * Draws the animation onto given graphics target if it is running.<br>
+	 * To draw game-relative, add <b>cameraX</b> and <b>cameraY</b> to your
+	 * drawing coordinates, otherwise you will paint HUD-relative.
 	 * 
 	 * @param g2d
 	 *            target graphics
+	 * @param cameraX
+	 *            the x-offset of the camera.
+	 * @param cameraY
+	 *            the y-offset of the camera.
 	 */
-	public final void draw(Graphics2D g2d) {
+	public final void draw(Graphics2D g2d, int cameraX, int cameraY) {
 		if (running)
-			drawAnimation(g2d);
+			drawAnimation(g2d, cameraX, cameraY);
 	}
 
 	/**
@@ -70,7 +76,8 @@ public abstract class Animation implements TimingTarget {
 	 * @param g2d
 	 *            target graphics object.
 	 */
-	protected abstract void drawAnimation(Graphics2D g2d);
+	protected abstract void drawAnimation(Graphics2D g2d, int cameraX,
+			int cameraY);
 
 	@Override
 	public void begin(Animator source) {
