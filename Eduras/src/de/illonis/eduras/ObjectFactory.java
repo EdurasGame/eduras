@@ -31,6 +31,7 @@ import de.illonis.eduras.items.weapons.SplashedMissile;
 import de.illonis.eduras.items.weapons.SwordMissile;
 import de.illonis.eduras.items.weapons.SwordWeapon;
 import de.illonis.eduras.math.Vector2D;
+import de.illonis.eduras.settings.S;
 import de.illonis.eduras.units.PlayerMainFigure;
 
 /**
@@ -215,13 +216,18 @@ public class ObjectFactory {
 			int id = event.getId();
 
 			GameObject objectToRemove = logic.getGame().getObjects().get(id);
+			if (objectToRemove == null)
+				return;
 			if (objectToRemove instanceof PlayerMainFigure) {
 				PlayerMainFigure mainFigure = (PlayerMainFigure) objectToRemove;
 				mainFigure.getTeam().removePlayer(mainFigure);
 			}
+
+			// rocket splash animation
 			if (objectToRemove.getType() == ObjectType.ROCKET_MISSILE) {
 				AnimationFactory.runAt(AnimationNumber.ROCKET_SPLASH,
-						objectToRemove.getPositionVector());
+						objectToRemove.getPositionVector(),
+						S.go_rocketmissile_damageradius);
 			}
 			logic.getGame().removeObject(objectToRemove);
 		}

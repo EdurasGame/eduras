@@ -97,6 +97,8 @@ public final class AnimationFactory {
 		switch (number) {
 		case DEMO:
 			return new DemoAnimation(position);
+		case ROCKET_SPLASH:
+			return new RocketSplashAnimation(position);
 		default:
 			throw new AnimationNotFoundException(number);
 		}
