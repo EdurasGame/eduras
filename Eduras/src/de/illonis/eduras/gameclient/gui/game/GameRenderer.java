@@ -20,6 +20,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import de.illonis.eduras.Team.TeamColor;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
 import de.illonis.eduras.gameclient.ClientData;
+import de.illonis.eduras.gameclient.gui.animation.Animation;
 import de.illonis.eduras.gameclient.gui.hud.HealthBar;
 import de.illonis.eduras.gameclient.gui.hud.ItemTooltip;
 import de.illonis.eduras.gameclient.gui.hud.RenderedGuiObject;
@@ -129,6 +130,13 @@ public class GameRenderer implements TooltipHandler {
 		drawMap();
 		drawObjects();
 		drawGui();
+		drawAnimations();
+	}
+
+	private void drawAnimations() {
+		for (Animation animation : data.getAnimations()) {
+			animation.draw(mapGraphics);
+		}
 	}
 
 	private void adjustCamera() {

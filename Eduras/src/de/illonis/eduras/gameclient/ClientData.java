@@ -2,6 +2,7 @@ package de.illonis.eduras.gameclient;
 
 import java.util.LinkedList;
 
+import de.illonis.eduras.gameclient.gui.animation.Animation;
 import de.illonis.eduras.logicabstraction.InformationProvider;
 
 /**
@@ -14,9 +15,11 @@ import de.illonis.eduras.logicabstraction.InformationProvider;
  */
 public final class ClientData {
 	private final LinkedList<Integer> selectedUnits;
+	private final LinkedList<Animation> animations;
 
 	ClientData() {
 		selectedUnits = new LinkedList<Integer>();
+		animations = new LinkedList<Animation>();
 	}
 
 	/**
@@ -24,6 +27,7 @@ public final class ClientData {
 	 */
 	public void reset() {
 		clearSelectedUnits();
+		clearAnimations();
 	}
 
 	/**
@@ -62,6 +66,40 @@ public final class ClientData {
 	public void setSelectedUnit(int unitId) {
 		clearSelectedUnits();
 		selectedUnits.add(unitId);
+	}
+
+	/**
+	 * Adds an animation to data so it will be rendered when running.
+	 * 
+	 * @param anim
+	 *            the animation.
+	 */
+	public void addAnimation(Animation anim) {
+		animations.add(anim);
+	}
+
+	/**
+	 * @return the list of active animations.
+	 */
+	public LinkedList<Animation> getAnimations() {
+		return animations;
+	}
+
+	/**
+	 * Removes an ended animation.
+	 * 
+	 * @param animation
+	 *            the animation to remove.
+	 */
+	public void removeAnimation(Animation animation) {
+		animations.remove(animation);
+	}
+
+	/**
+	 * Removes all animations.
+	 */
+	public void clearAnimations() {
+		animations.clear();
 	}
 
 }

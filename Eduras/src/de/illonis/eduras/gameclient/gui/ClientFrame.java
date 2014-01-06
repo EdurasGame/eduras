@@ -12,6 +12,7 @@ import de.illonis.edulog.EduLog;
 import de.illonis.eduras.gameclient.ConnectionEstablisher;
 import de.illonis.eduras.gameclient.GameClient;
 import de.illonis.eduras.gameclient.GuiInternalEventListener;
+import de.illonis.eduras.gameclient.gui.animation.AnimationFactory;
 import de.illonis.eduras.gameclient.gui.game.GamePanelLogic;
 import de.illonis.eduras.gameclient.gui.login.LoginPanelLogic;
 import de.illonis.eduras.gameclient.gui.progress.LoadingPanelLogic;
@@ -85,6 +86,9 @@ public class ClientFrame extends JFrame {
 		showLogin();
 	}
 
+	/**
+	 * @return the game panel.
+	 */
 	public GamePanelLogic getGamePanel() {
 		return gamePanel;
 	}
@@ -204,6 +208,7 @@ public class ClientFrame extends JFrame {
 	 */
 	public void showGame() {
 		cardLayout.show(getContentPane(), GAMEPANEL);
+		AnimationFactory.init(client.getData());
 		gamePanel.onShown();
 	}
 
@@ -229,7 +234,7 @@ public class ClientFrame extends JFrame {
 	private void hideGame() {
 		setTitle("Eduras? Client");
 		gamePanel.onHidden();
-
+		AnimationFactory.dispose();
 	}
 
 	/**

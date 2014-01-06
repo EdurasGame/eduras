@@ -9,7 +9,7 @@ import de.illonis.eduras.math.Vector2D;
  * @author illonis
  * 
  */
-public class StarsAnimation extends Animation {
+public class StarsAnimation implements Runnable {
 
 	/**
 	 * Number of axis that stars will fly on from center.
