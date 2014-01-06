@@ -38,7 +38,6 @@ public class RocketSplashAnimation extends Animation {
 		x = (int) (position.getX() - currentRadius);
 		y = (int) (position.getY() - currentRadius);
 		dim = (int) (2 * currentRadius);
-
 	}
 
 	@Override
