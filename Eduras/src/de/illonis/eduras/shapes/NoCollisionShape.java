@@ -19,7 +19,7 @@ import de.illonis.eduras.math.Vector2D;
 public final class NoCollisionShape extends ObjectShape {
 
 	@Override
-	public Vector2D checkCollision(GameInformation game, GameObject thisObject,
+	public Vector2D checkCollisionOnMove(GameInformation game, GameObject thisObject,
 			Vector2D target) {
 		return target;
 	}

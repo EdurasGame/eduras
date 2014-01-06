@@ -45,8 +45,8 @@ public abstract class ObjectShape {
 	 *            The target position
 	 * @return Returns the position of the object after the move.
 	 */
-	public Vector2D checkCollision(GameInformation game, GameObject thisObject,
-			Vector2D target) {
+	public Vector2D checkCollisionOnMove(GameInformation game,
+			GameObject thisObject, Vector2D target) {
 
 		Vector2D result = new Vector2D(target);
 		if (!thisObject.isCollidable())
@@ -115,6 +115,25 @@ public abstract class ObjectShape {
 		// calculate the new position after a collision
 
 		return result;
+	}
+
+	/**
+	 * Checks if there will be a collision if the given object tries to rotate
+	 * to the given absolute angle.
+	 * 
+	 * @param gameInfo
+	 *            The game info.
+	 * @param thisObject
+	 *            The game object that tries to rotate to the given angle.
+	 * @param rotationAngle
+	 *            The angle the game object tries to rotate to.
+	 * @return Returns the absolute rotation angle of the game object after the
+	 *         rotation.
+	 */
+	public double checkCollisionOnRotation(GameInformation gameInfo,
+			GameObject thisObject, double rotationAngle) {
+		// TODO: Implement!
+		return rotationAngle;
 	}
 
 	/**

@@ -41,7 +41,7 @@ public abstract class GameObject implements Comparable<GameObject> {
 	private int id;
 	private int owner = -1;
 
-	private double rotation = 0;
+	protected double rotation = 0;
 
 	private double xPosition, yPosition;
 
@@ -398,6 +398,10 @@ public abstract class GameObject implements Comparable<GameObject> {
 	 *            The new value.
 	 */
 	public void setRotation(Double newValue) {
-		rotation = newValue;
+		if (this instanceof MoveableGameObject) {
+			((MoveableGameObject) this).onRotate(newValue);
+		} else {
+			rotation = newValue;
+		}
 	}
 }

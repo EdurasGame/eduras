@@ -172,7 +172,7 @@ public class GameInformation {
 	@Deprecated
 	public Vector2D checkCollision(GameObject gameObject, Vector2D target) {
 		ObjectShape shape = gameObject.getShape();
-		Vector2D result = shape.checkCollision(this, gameObject, target);
+		Vector2D result = shape.checkCollisionOnMove(this, gameObject, target);
 		return result;
 	}
 

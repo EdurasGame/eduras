@@ -18,6 +18,14 @@ public interface Moveable {
 	void onMove(long delta);
 
 	/**
+	 * This method is called when an object rotates.
+	 * 
+	 * @param rotationAngle
+	 *            The absolute angle an object tries to rotate to.
+	 */
+	void onRotate(double rotationAngle);
+
+	/**
 	 * Indicate that object leaves map with current move.
 	 */
 	void onMapBoundsReached();

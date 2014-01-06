@@ -115,11 +115,18 @@ public abstract class MoveableGameObject extends GameObject implements Moveable 
 
 		Vector2D targetPos;
 		try {
-			targetPos = this.checkCollision(new Vector2D(targetX, targetY));
+			targetPos = this
+					.checkCollisionOnMove(new Vector2D(targetX, targetY));
 			setPosition(targetPos.getX(), targetPos.getY());
 		} catch (MapBorderReachedException e) {
 			onMapBoundsReached();
 		}
+	}
+
+	@Override
+	public void onRotate(double rotationAngle) {
+		rotationAngle = checkCollisionOnRotation(rotationAngle);
+		rotation = rotationAngle;
 	}
 
 	/**
@@ -133,15 +140,28 @@ public abstract class MoveableGameObject extends GameObject implements Moveable 
 	 * @throws MapBorderReachedException
 	 *             if object reached map border.
 	 */
-	public Vector2D checkCollision(Vector2D target)
+	public Vector2D checkCollisionOnMove(Vector2D target)
 			throws MapBorderReachedException {
 		if (!getGame().getMap().contains(target)) {
 			throw new MapBorderReachedException();
 		}
 
-		Vector2D collisionPoint = this.getShape().checkCollision(getGame(),
-				this, target);
+		Vector2D collisionPoint = this.getShape().checkCollisionOnMove(
+				getGame(), this, target);
 
 		return collisionPoint;
+	}
+
+	/**
+	 * Check if the game object will collide trying to rotate to the given
+	 * angle.
+	 * 
+	 * @param targetRotationAngle
+	 *            The absolute target angle the object tries to rotate to.
+	 * @return Returns the angle of the gameobject after the rotation.
+	 */
+	public double checkCollisionOnRotation(double targetRotationAngle) {
+		// TODO: Implement !
+		return targetRotationAngle;
 	}
 }
