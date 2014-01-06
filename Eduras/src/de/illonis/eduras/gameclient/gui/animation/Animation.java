@@ -98,4 +98,12 @@ public abstract class Animation implements TimingTarget {
 	public void repeat(Animator source) {
 	}
 
+	/**
+	 * Passes a list of parameters to this animation to customize it. This will
+	 * be called before Animator is created.
+	 * 
+	 * @param params
+	 *            a list of parameters.
+	 */
+	public abstract void addParams(Object[] params);
 }

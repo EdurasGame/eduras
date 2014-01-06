@@ -19,9 +19,14 @@ public class DemoAnimation extends Animation {
 
 	DemoAnimation(Vector2D mapPosition) {
 		super("Test animation", 5000, mapPosition);
-		xPos = (int) mapPosition.getX();
-		yPos = (int) mapPosition.getY();
-		System.out.println("anim at " + mapPosition);
+
+	}
+
+	@Override
+	public void begin(Animator source) {
+		xPos = (int) position.getX();
+		yPos = (int) position.getY();
+		super.begin(source);
 	}
 
 	@Override
@@ -33,5 +38,10 @@ public class DemoAnimation extends Animation {
 	public void drawAnimation(Graphics2D g2d, int cameraX, int cameraY) {
 		g2d.setColor(Color.CYAN);
 		g2d.fillRect(xPos + cameraX, yPos + cameraY, 30, 30);
+	}
+
+	@Override
+	public void addParams(Object[] params) {
+		// no parameters used.
 	}
 }

@@ -32,7 +32,7 @@ public final class AnimationFactory {
 	 */
 	@SuppressWarnings("javadoc")
 	public enum AnimationNumber {
-		DEMO;
+		DEMO, ROCKET_SPLASH;
 	}
 
 	private AnimationFactory() {
@@ -71,14 +71,19 @@ public final class AnimationFactory {
 	 *            the animation to run.
 	 * @param mapPosition
 	 *            the position in the world to run that animation at.
+	 * @param params
+	 *            optional list of parameters that will be passed to the
+	 *            animation.
 	 */
 	public static void runAt(AnimationNumber animationNumber,
-			Vector2D mapPosition) {
+			Vector2D mapPosition, Object... params) {
 		// do not run animations on server side (it won't work either)
 		if (data == null)
 			return;
 		try {
 			Animation animation = createAnimation(animationNumber, mapPosition);
+			if (params.length > 0)
+				animation.addParams(params);
 			data.addAnimation(animation);
 			animation.getAnimator().start();
 		} catch (AnimationNotFoundException e) {

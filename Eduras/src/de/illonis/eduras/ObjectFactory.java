@@ -11,6 +11,8 @@ import de.illonis.eduras.events.SendUnitsEvent;
 import de.illonis.eduras.events.SetGameObjectAttributeEvent;
 import de.illonis.eduras.exceptions.DataMissingException;
 import de.illonis.eduras.exceptions.ShapeVerticesNotApplicableException;
+import de.illonis.eduras.gameclient.gui.animation.AnimationFactory;
+import de.illonis.eduras.gameclient.gui.animation.AnimationFactory.AnimationNumber;
 import de.illonis.eduras.gameobjects.BigBlock;
 import de.illonis.eduras.gameobjects.BiggerBlock;
 import de.illonis.eduras.gameobjects.Bird;
@@ -216,6 +218,10 @@ public class ObjectFactory {
 			if (objectToRemove instanceof PlayerMainFigure) {
 				PlayerMainFigure mainFigure = (PlayerMainFigure) objectToRemove;
 				mainFigure.getTeam().removePlayer(mainFigure);
+			}
+			if (objectToRemove.getType() == ObjectType.ROCKET_MISSILE) {
+				AnimationFactory.runAt(AnimationNumber.ROCKET_SPLASH,
+						objectToRemove.getPositionVector());
 			}
 			logic.getGame().removeObject(objectToRemove);
 		}
