@@ -161,7 +161,7 @@ public abstract class MoveableGameObject extends GameObject implements Moveable 
 	 * @return Returns the angle of the gameobject after the rotation.
 	 */
 	public double checkCollisionOnRotation(double targetRotationAngle) {
-		// TODO: Implement !
-		return targetRotationAngle;
+		return this.getShape().checkCollisionOnRotation(getGame(), this,
+				targetRotationAngle);
 	}
 }

@@ -368,4 +368,21 @@ public class Geometry {
 
 		return result;
 	}
+
+	/**
+	 * Calculates a {@link Circle} by a given center point and a point on the
+	 * circle. Neither of the given points is modified.
+	 * 
+	 * @param centerPoint
+	 *            The center point.
+	 * @param pointOnCircle
+	 *            The point on the circle.
+	 * @return Returns the circle that was calculated with the given points.
+	 */
+	public static Circle getCircleByCenterAndPointOnCircle(
+			Vector2D centerPoint, Vector2D pointOnCircle) {
+		Vector2D diffVector = pointOnCircle.copy();
+		diffVector.subtract(centerPoint);
+		return new Circle(diffVector.getLength());
+	}
 }

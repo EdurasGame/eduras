@@ -4,6 +4,7 @@ import java.awt.geom.Rectangle2D;
 import java.awt.geom.Rectangle2D.Double;
 import java.util.LinkedList;
 
+import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.math.CollisionPoint;
 import de.illonis.eduras.math.Geometry;
@@ -239,5 +240,14 @@ public class Circle extends ObjectShape {
 	@Override
 	public ObjectShape getScaled(double scale) {
 		return new Circle(radius * scale);
+	}
+
+	@Override
+	public double checkCollisionOnRotation(GameInformation gameInfo,
+			GameObject thisObject, double rotationAngle) {
+		// if there was a collision in the rotation, there would have been a
+		// collision before that already. thus, we can assume a circle can
+		// always rotate
+		return rotationAngle;
 	}
 }

@@ -130,11 +130,8 @@ public abstract class ObjectShape {
 	 * @return Returns the absolute rotation angle of the game object after the
 	 *         rotation.
 	 */
-	public double checkCollisionOnRotation(GameInformation gameInfo,
-			GameObject thisObject, double rotationAngle) {
-		// TODO: Implement!
-		return rotationAngle;
-	}
+	public abstract double checkCollisionOnRotation(GameInformation gameInfo,
+			GameObject thisObject, double rotationAngle);
 
 	/**
 	 * Returns border points of this shape.

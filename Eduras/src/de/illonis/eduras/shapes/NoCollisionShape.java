@@ -19,8 +19,8 @@ import de.illonis.eduras.math.Vector2D;
 public final class NoCollisionShape extends ObjectShape {
 
 	@Override
-	public Vector2D checkCollisionOnMove(GameInformation game, GameObject thisObject,
-			Vector2D target) {
+	public Vector2D checkCollisionOnMove(GameInformation game,
+			GameObject thisObject, Vector2D target) {
 		return target;
 	}
 
@@ -48,5 +48,11 @@ public final class NoCollisionShape extends ObjectShape {
 	@Override
 	public ObjectShape getScaled(double scale) {
 		return this;
+	}
+
+	@Override
+	public double checkCollisionOnRotation(GameInformation gameInfo,
+			GameObject thisObject, double rotationAngle) {
+		return rotationAngle;
 	}
 }

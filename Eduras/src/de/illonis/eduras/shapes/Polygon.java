@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
+import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.math.BasicMath;
 import de.illonis.eduras.math.CollisionPoint;
@@ -226,5 +227,19 @@ public class Polygon extends ObjectShape {
 			return p.getVertices().equals(getVertices());
 		} else
 			return super.equals(obj);
+	}
+
+	@Override
+	public double checkCollisionOnRotation(GameInformation gameInfo,
+			GameObject thisObject, double rotationAngle) {
+		// LinkedList<Circle> rotationCircles = new LinkedList<Circle>();
+		//
+		// for ()
+		//
+		// for (GameObject anotherGameObject : gameInfo.getObjects().values()) {
+		// if ()
+		// }
+
+		return rotationAngle;
 	}
 }
