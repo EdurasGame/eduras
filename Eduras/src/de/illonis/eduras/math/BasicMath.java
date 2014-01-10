@@ -134,4 +134,26 @@ public class BasicMath {
 	public static boolean isInBetweenModulo(double a, double b, double c, int n) {
 		return ((b - a) % n) + ((c - b) % n) <= (c - a) % n;
 	}
+
+	/**
+	 * Returns a where (a - x) mod n= min{ (b - x) mod n | b in angles}, that
+	 * is, it returns the number in nums that is closest to x regarding mod n.
+	 * 
+	 * @param x
+	 * @param nums
+	 * @param n
+	 * @return a where (a - x) mod n= min{ (b - x) mod n | b in angles}
+	 */
+	public static double findClosestNumberModulo(double x, double[] nums, int n) {
+		double currClosest = nums[0];
+		double currClosestDistance = (nums[0] - x) % n;
+		for (int i = 1; i < nums.length; i++) {
+			double currDistance = (nums[i] - x) % n;
+			if (currDistance < currClosestDistance) {
+				currClosestDistance = currDistance;
+				currClosest = nums[i];
+			}
+		}
+		return currClosest;
+	}
 }

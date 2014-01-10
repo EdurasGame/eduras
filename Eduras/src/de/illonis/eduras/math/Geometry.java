@@ -2,7 +2,9 @@ package de.illonis.eduras.math;
 
 import java.util.LinkedList;
 
+import de.illonis.eduras.exceptions.PointNotOnCircleException;
 import de.illonis.eduras.shapes.Circle;
+import de.illonis.eduras.utils.Pair;
 
 /**
  * A math class that provides useful functions that are used in two-dimensional
@@ -12,6 +14,8 @@ import de.illonis.eduras.shapes.Circle;
  * 
  */
 public class Geometry {
+
+	private static final double BOUNDARY = 0.001;
 
 	/**
 	 * Return length of a hypotenuse in a right-angled triangle.
@@ -384,5 +388,59 @@ public class Geometry {
 		Vector2D diffVector = pointOnCircle.copy();
 		diffVector.subtract(centerPoint);
 		return new Circle(diffVector.getLength());
+	}
+
+	/**
+	 * Calculates the intercept points of two {@link Circle}s. The given circles
+	 * and {@link Vector2D}s are not modified.
+	 * 
+	 * @param circleOne
+	 * @param centerOfCircleOne
+	 * @param circleTwo
+	 * @param centerOfCircleTwo
+	 * 
+	 * 
+	 * @return Returns a pair with both intercept points, if there are any, or
+	 *         null if there are no interceptions.
+	 */
+	public static Pair<Vector2D, Vector2D> getInterceptPointsOfCircles(
+			Circle circleOne, Vector2D centerOfCircleOne, Circle circleTwo,
+			Vector2D centerOfCircleTwo) {
+		double distance = centerOfCircleOne
+				.calculateDistance(centerOfCircleTwo);
+		if (circleOne.getRadius() + circleTwo.getRadius() < distance) {
+			return null;
+		}
+
+		// TODO: implement this...
+		// http://mathworld.wolfram.com/Circle-CircleIntersection.html
+
+		return null;
+	}
+
+	/**
+	 * Calculates the angle between the given point on the circle and the point
+	 * which is at position (x,0) relative to the center point, where x is some
+	 * positive number.
+	 * 
+	 * @param circle
+	 *            The circle we are talking about.
+	 * @param centerPoint
+	 *            The circle's center point.
+	 * @param pointOnCircle
+	 *            The point whose angle we wanna calculate.
+	 * @return Returns the calculated angle.
+	 * @throws PointNotOnCircleException
+	 *             Thrown if the given point is not on the circle.
+	 */
+	public static double getAngleForPointOnCirlce(Circle circle,
+			Vector2D centerPoint, Vector2D pointOnCircle)
+			throws PointNotOnCircleException {
+
+		if (Math.abs(pointOnCircle.calculateDistance(centerPoint)
+				- circle.getRadius()) > BOUNDARY) {
+			throw new PointNotOnCircleException(circle, pointOnCircle);
+		}
+		return pointOnCircle.getAngleToXAxis();
 	}
 }

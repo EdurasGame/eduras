@@ -276,7 +276,8 @@ public class Vector2D {
 
 	/**
 	 * Assumes the calling and the passed vector to be position vectors and
-	 * calculates the distance between the points behind.
+	 * calculates the distance between the points behind. This vector and the
+	 * given vector are not modified.
 	 * 
 	 * @param vec
 	 *            target vector.
@@ -462,5 +463,18 @@ public class Vector2D {
 		for (int i = 0; i < vectorsToRotate.length; i++) {
 			vectorsToRotate[i].rotate(rotation);
 		}
+	}
+
+	/**
+	 * Returns the vector (other - this). Neither other nor this are mutated.
+	 * 
+	 * @param other
+	 * @return otherCopy after otherCopy.subtract(thisCopy);
+	 */
+	public Vector2D getDistanceVectorTo(Vector2D other) {
+		Vector2D otherCopy = other.copy();
+		Vector2D thisCopy = copy();
+		otherCopy.subtract(thisCopy);
+		return otherCopy;
 	}
 }
