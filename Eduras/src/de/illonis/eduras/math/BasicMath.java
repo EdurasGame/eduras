@@ -120,4 +120,18 @@ public class BasicMath {
 	public static double avg(double x, double y) {
 		return (x + y) / 2;
 	}
+
+	/**
+	 * Tells whether b is in between a and c for a natural number n. We say a <
+	 * b < c if ((b - a) mod n) + ((c - b) mod n) <= (c - a) mod n
+	 * 
+	 * @param a
+	 * @param b
+	 * @param c
+	 * @param n
+	 * @return Returns true if a < b < c.
+	 */
+	public static boolean isInBetweenModulo(double a, double b, double c, int n) {
+		return ((b - a) % n) + ((c - b) % n) <= (c - a) % n;
+	}
 }
