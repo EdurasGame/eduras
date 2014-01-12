@@ -183,7 +183,7 @@ public class Vector2D {
 	 *            angle in degrees.
 	 */
 	public void rotate(double degrees) {
-		degrees = degrees % 360;
+		degrees = BasicMath.calcModulo(degrees, 360);
 
 		if (degrees == 0)
 			return;

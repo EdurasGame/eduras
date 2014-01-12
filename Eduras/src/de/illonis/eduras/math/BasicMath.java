@@ -163,9 +163,9 @@ public class BasicMath {
 	 */
 	public static double findClosestNumberModulo(double x, double[] nums, int n) {
 		double currClosest = nums[0];
-		double currClosestDistance = (nums[0] - x) % n;
+		double currClosestDistance = calcModulo(nums[0] - x, n);
 		for (int i = 1; i < nums.length; i++) {
-			double currDistance = (nums[i] - x) % n;
+			double currDistance = calcModulo(nums[i] - x, n);
 			if (currDistance < currClosestDistance) {
 				currClosestDistance = currDistance;
 				currClosest = nums[i];

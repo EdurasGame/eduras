@@ -258,8 +258,8 @@ public class Polygon extends ObjectShape {
 		// angle is 0, abs(targetAngle - currAngle) must be > 180. Then we can
 		// decide by the distance's sign whether we have to turn right or left.
 		boolean turnLeft;
-		double distance = (targetRotationAngle % 360)
-				- (thisObject.getRotation() % 360);
+		double distance = BasicMath.calcModulo(targetRotationAngle, 360)
+				- BasicMath.calcModulo(thisObject.getRotation(), 360);
 		if (Math.abs(distance) > 180) {
 			if (distance > 0) {
 				turnLeft = true;
