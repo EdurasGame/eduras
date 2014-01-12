@@ -341,7 +341,7 @@ public class Geometry {
 				/ (BasicMath.square(v1) + BasicMath.square(v2));
 
 		// there is a solution if the pq formula's radiant is >= 0.
-		// check wether there is a solution:
+		// check whether there is a solution:
 
 		double pqRadian = BasicMath.square(p / 2) - q;
 
@@ -437,8 +437,9 @@ public class Geometry {
 			Vector2D centerPoint, Vector2D pointOnCircle)
 			throws PointNotOnCircleException {
 
-		if (Math.abs(pointOnCircle.calculateDistance(centerPoint)
-				- circle.getRadius()) > BOUNDARY) {
+		double distance = pointOnCircle.calculateDistance(centerPoint);
+
+		if (Math.abs(distance - circle.getRadius()) > BOUNDARY) {
 			throw new PointNotOnCircleException(circle, pointOnCircle);
 		}
 		return pointOnCircle.getAngleToXAxis();
