@@ -15,6 +15,9 @@ import de.illonis.eduras.math.BasicMath;
  */
 public class MathUtilsTest {
 
+	/**
+	 * Tests {@link BasicMath}.isInBetweenModulo().
+	 */
 	@Test
 	public void testInBetweenModulo() {
 		assertTrue(BasicMath.isInBetweenModulo(1, 2, 3, 4));
@@ -28,5 +31,20 @@ public class MathUtilsTest {
 		assertFalse(BasicMath.isInBetweenModulo(42.25, 2, 2.5, 40));
 		assertFalse(BasicMath.isInBetweenModulo(1, 0, 1, 2));
 		assertFalse(BasicMath.isInBetweenModulo(0, 3, 2.5, 4));
+	}
+
+	/**
+	 * Tests {@link BasicMath}.findClosestNumberModulo.
+	 */
+	@Test
+	public void testClosestNumberModulo() {
+		assertTrue(BasicMath.findClosestNumberModuloArray(6.,
+				new double[] { 1. }, 2) == 1);
+		assertTrue(BasicMath.findClosestNumberModuloArray(6., new double[] {
+				0.9, 4 }, 7) == 0.9);
+		assertTrue(BasicMath.findClosestNumberModuloArray(0, new double[] { 0,
+				0, 42 }, 42) == 0);
+		assertTrue(BasicMath.findClosestNumberModuloArray(3.5, new double[] {
+				3.4, 3.61 }, 2) == 1.4);
 	}
 }

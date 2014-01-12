@@ -104,4 +104,6 @@ public class GeometryUtilsTests {
 		assertTrue(interceptPoints[0].equals(expectedResult2)
 				|| interceptPoints[1].equals(expectedResult2));
 	}
+
+	// public void g
 }

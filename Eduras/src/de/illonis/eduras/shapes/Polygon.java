@@ -362,8 +362,9 @@ public class Polygon extends ObjectShape {
 				angles[i] = posVector.getDistanceVectorTo(
 						interceptPoints.get(i)).getAngleToXAxis();
 			}
-			double closestCollisionAngle = BasicMath.findClosestNumberModulo(
-					thisObject.getRotation(), angles, 360);
+			double closestCollisionAngle = BasicMath
+					.findClosestNumberModuloArray(thisObject.getRotation(),
+							angles, 360);
 			return closestCollisionAngle;
 		}
 	}

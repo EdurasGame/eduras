@@ -153,24 +153,53 @@ public class BasicMath {
 	}
 
 	/**
-	 * Returns a where (a - x) mod n= min{ (b - x) mod n | b in angles}, that
-	 * is, it returns the number in nums that is closest to x regarding mod n.
+	 * Returns a where (a - x) mod n= min{ (b - x) mod n | b = c mod n, c in
+	 * angles}, that is, it returns the number in nums that is closest to x
+	 * regarding mod n.
 	 * 
 	 * @param x
 	 * @param nums
 	 * @param n
-	 * @return a where (a - x) mod n= min{ (b - x) mod n | b in angles}
+	 * @return a where (a - x) mod n= min{ (b - x) mod n | b = c mod n, c in
+	 *         angles}
 	 */
-	public static double findClosestNumberModulo(double x, double[] nums, int n) {
+	public static double findClosestNumberModuloArray(double x, double[] nums,
+			int n) {
+
+		x = calcModulo(x, n);
+		for (int i = 0; i < nums.length; i++) {
+			nums[i] = calcModulo(nums[i], n);
+		}
+
 		double currClosest = nums[0];
-		double currClosestDistance = calcModulo(nums[0] - x, n);
+		double currClosestDistance = findShortestDistanceModulo(x, nums[0], n);
 		for (int i = 1; i < nums.length; i++) {
-			double currDistance = calcModulo(nums[i] - x, n);
+			double currDistance = findShortestDistanceModulo(x, nums[i], n);
 			if (currDistance < currClosestDistance) {
 				currClosestDistance = currDistance;
 				currClosest = nums[i];
 			}
 		}
 		return currClosest;
+	}
+
+	/**
+	 * Calculates the shortest distance between x and y in the modulo n body.
+	 * 
+	 * @param x
+	 * @param y
+	 * @param n
+	 * @return Shortest distance between x and y
+	 * 
+	 */
+	public static double findShortestDistanceModulo(double x, double y, int n) {
+		x = calcModulo(x, n);
+		y = calcModulo(y, n);
+
+		if (x > y) {
+			return min(x - y, calcModulo(y - x, n));
+		} else {
+			return min(y - x, calcModulo(y - x, n));
+		}
 	}
 }
