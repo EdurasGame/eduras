@@ -15,7 +15,7 @@ import de.illonis.eduras.utils.Pair;
  */
 public class Geometry {
 
-	private static final double BOUNDARY = 0.001;
+	private static final double BOUNDARY = 0.25;
 
 	/**
 	 * Return length of a hypotenuse in a right-angled triangle.
@@ -433,7 +433,7 @@ public class Geometry {
 	 * @throws PointNotOnCircleException
 	 *             Thrown if the given point is not on the circle.
 	 */
-	public static double getAngleForPointOnCirlce(Circle circle,
+	public static double getAngleForPointOnCircle(Circle circle,
 			Vector2D centerPoint, Vector2D pointOnCircle)
 			throws PointNotOnCircleException {
 
@@ -444,4 +444,5 @@ public class Geometry {
 		}
 		return pointOnCircle.getAngleToXAxis();
 	}
+
 }

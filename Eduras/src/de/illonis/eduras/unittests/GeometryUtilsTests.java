@@ -9,6 +9,7 @@ import java.util.LinkedList;
 
 import org.junit.Test;
 
+import de.illonis.eduras.exceptions.PointNotOnCircleException;
 import de.illonis.eduras.math.Geometry;
 import de.illonis.eduras.math.Line;
 import de.illonis.eduras.math.Vector2D;
@@ -105,5 +106,56 @@ public class GeometryUtilsTests {
 				|| interceptPoints[1].equals(expectedResult2));
 	}
 
-	// public void g
+	/**
+	 * Tests the
+	 * {@link de.illonis.eduras.math.Geometry#getAngleForPointOnCircle(Circle, Vector2D, Vector2D)}
+	 * method.
+	 */
+	@Test
+	public void testGetAngleForPointOnCirlce() {
+		Vector2D nullVector = new Vector2D(0, 0);
+
+		Circle circle1 = new Circle(5);
+		Vector2D point1onCircle1 = new Vector2D(5, 0);
+		Vector2D point2onCircle1 = new Vector2D(0, 5);
+		Vector2D point3onCircle1 = new Vector2D(-5, 0);
+		Vector2D point4onCircle1 = new Vector2D(0, -5);
+
+		try {
+			assertTrue(0. == Geometry.getAngleForPointOnCircle(circle1,
+					nullVector, point1onCircle1));
+			assertTrue(90. == Geometry.getAngleForPointOnCircle(circle1,
+					nullVector, point2onCircle1));
+			assertTrue(180. == Geometry.getAngleForPointOnCircle(circle1,
+					nullVector, point3onCircle1));
+			assertTrue(270. == Geometry.getAngleForPointOnCircle(circle1,
+					nullVector, point4onCircle1));
+			assertTrue(45. == Geometry.getAngleForPointOnCircle(circle1,
+					nullVector, new Vector2D(Math.sqrt(12), Math.sqrt(12))));
+			assertTrue(135. == Geometry.getAngleForPointOnCircle(circle1,
+					nullVector, new Vector2D(-Math.sqrt(12), Math.sqrt(12))));
+			assertTrue(225. == Geometry.getAngleForPointOnCircle(circle1,
+					nullVector, new Vector2D(-Math.sqrt(12), -Math.sqrt(12))));
+			assertTrue(315. == Geometry.getAngleForPointOnCircle(circle1,
+					nullVector, new Vector2D(Math.sqrt(12), -Math.sqrt(12))));
+		} catch (PointNotOnCircleException e) {
+			assertTrue(false);
+		}
+
+		try {
+			Geometry.getAngleForPointOnCircle(circle1, nullVector,
+					new Vector2D(6, 1));
+			assertTrue(false);
+		} catch (PointNotOnCircleException e) {
+
+		}
+
+		try {
+			Geometry.getAngleForPointOnCircle(circle1, nullVector,
+					new Vector2D(0, 0));
+			assertTrue(false);
+		} catch (PointNotOnCircleException e) {
+
+		}
+	}
 }

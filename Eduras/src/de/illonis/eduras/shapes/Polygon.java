@@ -330,7 +330,7 @@ public class Polygon extends ObjectShape {
 				for (Vector2D anInterceptPoint : copyOfInterceptPoints) {
 
 					try {
-						double angle = Geometry.getAngleForPointOnCirlce(
+						double angle = Geometry.getAngleForPointOnCircle(
 								aRotationCircle, posVector, anInterceptPoint);
 						if (!((turnLeft && BasicMath.isInBetweenModulo(
 								targetRotationAngle, angle,

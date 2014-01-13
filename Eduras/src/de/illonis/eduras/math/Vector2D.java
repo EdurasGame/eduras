@@ -435,7 +435,7 @@ public class Vector2D {
 			}
 		}
 
-		return angle;
+		return BasicMath.calcModulo(angle, 360);
 	}
 
 	/**
