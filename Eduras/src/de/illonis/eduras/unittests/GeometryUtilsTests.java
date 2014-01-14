@@ -100,10 +100,50 @@ public class GeometryUtilsTests {
 		Vector2D expectedResult1 = new Vector2D(-1, 0);
 		Vector2D expectedResult2 = new Vector2D(1, 0);
 
-		assertTrue(interceptPoints[0].equals(expectedResult1)
-				|| interceptPoints[1].equals(expectedResult1));
-		assertTrue(interceptPoints[0].equals(expectedResult2)
-				|| interceptPoints[1].equals(expectedResult2));
+		checkResult(expectedResult1, expectedResult2, interceptPoints);
+
+		interceptPoints = Geometry.getCircleLineSegmentInterceptPoints(circle,
+				nullVector, new Line(new Vector2D(0, 2), new Vector2D(0, -2)));
+
+		expectedResult1 = new Vector2D(0, 1);
+		expectedResult2 = new Vector2D(0, -1);
+
+		checkResult(expectedResult1, expectedResult2, interceptPoints);
+
+		interceptPoints = Geometry.getCircleLineSegmentInterceptPoints(circle,
+				nullVector, new Line(new Vector2D(1, 1), new Vector2D(-1, -1)));
+
+		expectedResult1 = new Vector2D(Math.sqrt(0.5), Math.sqrt(0.5));
+		expectedResult2 = new Vector2D(-Math.sqrt(0.5), -Math.sqrt(0.5));
+
+		checkResult(expectedResult1, expectedResult2, interceptPoints);
+
+		interceptPoints = Geometry.getCircleLineSegmentInterceptPoints(circle,
+				nullVector, new Line(new Vector2D(-1, 1), new Vector2D(1, -1)));
+
+		expectedResult1 = new Vector2D(Math.sqrt(0.5), -Math.sqrt(0.5));
+		expectedResult2 = new Vector2D(-Math.sqrt(0.5), Math.sqrt(0.5));
+
+		checkResult(expectedResult1, expectedResult2, interceptPoints);
+
+		// only one intercept point
+		interceptPoints = Geometry.getCircleLineSegmentInterceptPoints(circle,
+				nullVector, new Line(new Vector2D(-1, 1), new Vector2D(1, 1)));
+
+		expectedResult1 = new Vector2D(0, 1);
+
+		checkResult(expectedResult1, expectedResult1, interceptPoints);
+
+		// check for circle not einheitskreis! :D
+		// TODO:
+	}
+
+	private void checkResult(Vector2D expected1, Vector2D expected2,
+			Vector2D[] intercepts) {
+		assertTrue(intercepts[0].equals(expected1)
+				|| intercepts[1].equals(expected1));
+		assertTrue(intercepts[0].equals(expected2)
+				|| intercepts[1].equals(expected2));
 	}
 
 	/**
