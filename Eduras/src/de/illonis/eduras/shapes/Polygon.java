@@ -240,17 +240,15 @@ public class Polygon extends ObjectShape {
 	@Override
 	public double checkCollisionOnRotation(GameInformation gameInfo,
 			GameObject thisObject, double targetRotationAngle) {
-		LinkedList<Circle> rotationCircles = new LinkedList<Circle>();
 
 		if (!thisObject.isCollidable()) {
 			return targetRotationAngle;
 		}
 
+		double rotationDiff = targetRotationAngle - thisObject.getRotation();
+
 		Vector2D posVector = thisObject.getPositionVector();
-		for (Vector2D vertex : getAbsoluteVertices(thisObject)) {
-			rotationCircles.add(Geometry.getCircleByCenterAndPointOnCircle(
-					posVector, vertex));
-		}
+		LinkedList<Vector2D> thisObjectAbsoluteVertices = getAbsoluteVertices(thisObject);
 
 		// for the following calculation imagine a circle. In order to get to
 		// the target angle, you have to rotate at most by 180 degrees, either
@@ -258,8 +256,8 @@ public class Polygon extends ObjectShape {
 		// angle is 0, abs(targetAngle - currAngle) must be > 180. Then we can
 		// decide by the distance's sign whether we have to turn right or left.
 		boolean turnLeft;
-		double distance = BasicMath.calcModulo(targetRotationAngle, 360)
-				- BasicMath.calcModulo(thisObject.getRotation(), 360);
+		double distance = BasicMath.findShortestDistanceModulo(
+				targetRotationAngle, thisObject.getRotation(), 360);
 		if (Math.abs(distance) > 180) {
 			if (distance > 0) {
 				turnLeft = true;
@@ -278,11 +276,15 @@ public class Polygon extends ObjectShape {
 		for (GameObject anotherGameObject : gameInfo.getObjects().values()) {
 			if (anotherGameObject.equals(thisObject)
 					|| !anotherGameObject.isCollidable()) {
-				return targetRotationAngle;
+				continue;
 			}
 
 			LinkedList<Vector2D> interceptPointsWithGameObject = new LinkedList<Vector2D>();
-			for (Circle aRotationCircle : rotationCircles) {
+			for (Vector2D anAbsoluteVertex : thisObjectAbsoluteVertices) {
+				Circle aRotationCircle = Geometry
+						.getCircleByCenterAndPointOnCircle(posVector,
+								anAbsoluteVertex);
+
 				if (anotherGameObject.getShape() instanceof Circle) {
 					Pair<Vector2D, Vector2D> circleIntercepts = Geometry
 							.getInterceptPointsOfCircles(
@@ -332,12 +334,19 @@ public class Polygon extends ObjectShape {
 					try {
 						double angle = Geometry.getAngleForPointOnCircle(
 								aRotationCircle, posVector, anInterceptPoint);
+						double currentAngleOfVertex = Geometry
+								.getAngleForPointOnCircle(aRotationCircle,
+										posVector, anAbsoluteVertex);
 						if (!((turnLeft && BasicMath.isInBetweenModulo(
-								targetRotationAngle, angle,
-								thisObject.getRotation(), 360)) || !turnLeft
+								BasicMath.calcModulo(currentAngleOfVertex
+										+ rotationDiff, 360), angle,
+								currentAngleOfVertex, 360)) || !turnLeft
 								&& BasicMath.isInBetweenModulo(
-										thisObject.getRotation(), angle,
-										targetRotationAngle, 360))) {
+										currentAngleOfVertex, angle, BasicMath
+												.calcModulo(
+														currentAngleOfVertex
+																+ rotationDiff,
+														360), 360))) {
 							interceptPointsWithGameObject
 									.remove(anInterceptPoint);
 						}
@@ -355,6 +364,7 @@ public class Polygon extends ObjectShape {
 			return targetRotationAngle;
 		} else {
 
+			// return thisObject.getRotation();
 			// Find the point that comes first when rotating (where the angle
 			// interceptpointAngle - currAngle is smallest)
 			double[] angles = new double[interceptPoints.size()];
