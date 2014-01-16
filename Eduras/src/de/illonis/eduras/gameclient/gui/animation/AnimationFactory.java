@@ -59,7 +59,8 @@ public final class AnimationFactory {
 	 * Cleans up timing framework.
 	 */
 	public static void dispose() {
-		data.clearAnimations();
+		if (data != null)
+			data.clearAnimations();
 		if (timingSource != null)
 			timingSource.dispose();
 	}
