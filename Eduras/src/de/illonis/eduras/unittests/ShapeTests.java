@@ -69,7 +69,7 @@ public class ShapeTests {
 		PlayerMainFigure thisObject = new PlayerMainFigure(gameInfo, 3,
 				"Testobject", 2);
 
-		thisObject.setPosition(50, 30);
+		thisObject.setPosition(50, 29);
 
 		gameInfo.addObject(thisObject);
 		gameInfo.addObject(otherObject);

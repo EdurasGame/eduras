@@ -260,15 +260,15 @@ public class Polygon extends ObjectShape {
 				targetRotationAngle, thisObject.getRotation(), 360);
 		if (Math.abs(distance) > 180) {
 			if (distance > 0) {
-				turnLeft = true;
-			} else {
 				turnLeft = false;
+			} else {
+				turnLeft = true;
 			}
 		} else {
 			if (distance > 0) {
-				turnLeft = false;
-			} else {
 				turnLeft = true;
+			} else {
+				turnLeft = false;
 			}
 		}
 
@@ -312,6 +312,7 @@ public class Polygon extends ObjectShape {
 								if (polygonInterceptPoints[i] != null) {
 									interceptPointsWithGameObject
 											.add(polygonInterceptPoints[i]);
+									// if(polygonInterceptPoints[i] == 40.)
 								}
 							}
 						}
@@ -331,6 +332,11 @@ public class Polygon extends ObjectShape {
 						interceptPointsWithGameObject);
 				for (Vector2D anInterceptPoint : copyOfInterceptPoints) {
 
+					if (anInterceptPoint.getX() == 40.
+							&& anInterceptPoint.getY() == 40) {
+						System.out.println("letmeknow");
+					}
+
 					try {
 						double angle = Geometry.getAngleForPointOnCircle(
 								aRotationCircle, posVector, anInterceptPoint);
@@ -338,14 +344,15 @@ public class Polygon extends ObjectShape {
 								.getAngleForPointOnCircle(aRotationCircle,
 										posVector, anAbsoluteVertex);
 						if (!((turnLeft && BasicMath.isInBetweenModulo(
+								currentAngleOfVertex,
+								angle,
 								BasicMath.calcModulo(currentAngleOfVertex
-										+ rotationDiff, 360), angle,
-								currentAngleOfVertex, 360)) || !turnLeft
-								&& BasicMath.isInBetweenModulo(
-										currentAngleOfVertex, angle, BasicMath
-												.calcModulo(
-														currentAngleOfVertex
-																+ rotationDiff,
+										+ rotationDiff, 360), 360)) || !turnLeft
+								&& BasicMath
+										.isInBetweenModulo(currentAngleOfVertex
+												+ rotationDiff, angle,
+												BasicMath.calcModulo(
+														currentAngleOfVertex,
 														360), 360))) {
 							interceptPointsWithGameObject
 									.remove(anInterceptPoint);
@@ -364,18 +371,20 @@ public class Polygon extends ObjectShape {
 			return targetRotationAngle;
 		} else {
 
-			// return thisObject.getRotation();
-			// Find the point that comes first when rotating (where the angle
-			// interceptpointAngle - currAngle is smallest)
-			double[] angles = new double[interceptPoints.size()];
-			for (int i = 0; i < interceptPoints.size(); i++) {
-				angles[i] = posVector.getDistanceVectorTo(
-						interceptPoints.get(i)).getAngleToXAxis();
-			}
-			double closestCollisionAngle = BasicMath
-					.findClosestNumberModuloArray(thisObject.getRotation(),
-							angles, 360);
-			return closestCollisionAngle;
+			return thisObject.getRotation();
+			// // Find the point that comes first when rotating (where the angle
+			// // interceptpointAngle - currAngle is smallest)
+			// double[] angles = new double[interceptPoints.size()];
+			// for (int i = 0; i < interceptPoints.size(); i++) {
+			// angles[i] = posVector.getDistanceVectorTo(
+			// interceptPoints.get(i)).getAngleToXAxis();
+			// }
+			// double closestCollisionAngle = BasicMath
+			// .findClosestNumberModuloArray(thisObject.getRotation(),
+			// angles, 360);
+			//
+			// return BasicMath.findMiddleOfPointsModulo(closestCollisionAngle,
+			// thisObject.getRotation(), 360);
 		}
 	}
 }

@@ -202,4 +202,18 @@ public class BasicMath {
 			return min(y - x, calcModulo(y - x, n));
 		}
 	}
+
+	/**
+	 * Calculate mean value of a and b modulo n.
+	 * 
+	 * @param a
+	 * @param b
+	 * @param n
+	 * @return Mean value of a and b modulo n.
+	 */
+	public static double findMiddleOfPointsModulo(double a, double b, int n) {
+		double meanVal = calcModulo(((a + b) / 2), n);
+		assert (isInBetweenModulo(a, meanVal, b, n));
+		return meanVal;
+	}
 }
