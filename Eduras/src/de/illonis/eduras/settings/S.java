@@ -163,6 +163,24 @@ public final class S {
 
 	public static int go_simpleweapon_maxammo = 200;
 
+	public static double go_assaultrifle_shape_size = 5;
+
+	public static long go_assaultrifle_cooldown = 200;
+
+	public static int go_assaultrifle_fillamount = 50;
+
+	public static int go_assaultrifle_maxammo = 250;
+
+	public static int go_assaultmissile_damage = 2;
+
+	public static double go_assaultmissile_speed = 2000;
+
+	public static double go_assaultmissile_maxrange = 4000;
+
+	public static double go_assaultmissile_shape_size = 1;
+
+	public static double go_assaultmissile_damageradius = 3;
+
 	/**
 	 * Reads values from the file and writes them to the S classes attributes.
 	 * 

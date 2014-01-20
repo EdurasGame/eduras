@@ -27,7 +27,6 @@ public class RocketLauncher extends Weapon {
 		super(ObjectType.ROCKETLAUNCHER, infos, id);
 		setName("Rocket Launcher");
 
-		// TODO: make a shape
 		setShape(ShapeFactory.createShape(ShapeType.ROCKET));
 		defaultCooldown = S.go_rocketlauncher_cooldown;
 		setAmmunitionLimited(S.go_rocketlauncher_fillamount,

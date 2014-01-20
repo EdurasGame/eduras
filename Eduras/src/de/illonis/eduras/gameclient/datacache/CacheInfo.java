@@ -50,6 +50,8 @@ public final class CacheInfo {
 		objectImages.put(ObjectType.ROCKET_MISSILE,
 				"gui/icons/icon-rocketlauncher.png");
 		objectImages.put(ObjectType.MINELAUNCHER, "gui/icons/icon-mine.png");
+		objectImages.put(ObjectType.ASSAULTRIFLE,
+				"gui/icons/icon-assaultrifle.png");
 
 		guiImages = new HashMap<ImageKey, String>();
 		guiImages.put(ImageKey.STATISTICS_BG, "gui/artwork/statwindow.png");

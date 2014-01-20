@@ -408,6 +408,9 @@ public class GameRenderer implements TooltipHandler {
 		case MINELAUNCHER:
 		case MINE_MISSILE:
 			return Color.YELLOW;
+		case ASSAULT_MISSILE:
+		case ASSAULTRIFLE:
+			return Color.PINK;
 		default:
 			return Color.WHITE;
 		}
