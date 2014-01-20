@@ -29,6 +29,8 @@ public class MineWeapon extends Weapon {
 
 		setShape(ShapeFactory.createShape(ShapeType.STAR));
 		defaultCooldown = S.go_mineweapon_cooldown;
+		setAmmunitionLimited(S.go_mineweapon_fillamount,
+				S.go_mineweapon_maxammo);
 	}
 
 	@Override

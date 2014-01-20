@@ -143,6 +143,26 @@ public final class S {
 
 	public static double go_minemissile_shape_size = 2;
 
+	public static int go_splashweapon_fillamount = 5;
+
+	public static int go_splashweapon_maxammo = 50;
+
+	public static int go_sniperweapon_fillamount = 5;
+
+	public static int go_sniperweapon_maxammo = 20;
+
+	public static int go_rocketlauncher_fillamount = 6;
+
+	public static int go_rocketlauncher_maxammo = 60;
+
+	public static int go_mineweapon_fillamount = 3;
+
+	public static int go_mineweapon_maxammo = 30;
+
+	public static int go_simpleweapon_fillamount = 25;
+
+	public static int go_simpleweapon_maxammo = 200;
+
 	/**
 	 * Reads values from the file and writes them to the S classes attributes.
 	 * 

@@ -25,6 +25,8 @@ public class SimpleWeapon extends Weapon {
 		setName("SimpleWeapon");
 		setShape(new Circle(S.go_simpleweapon_shape_radius));
 		defaultCooldown = S.go_simpleweapon_cooldown;
+		setAmmunitionLimited(S.go_simpleweapon_fillamount,
+				S.go_simpleweapon_maxammo);
 	}
 
 	@Override
