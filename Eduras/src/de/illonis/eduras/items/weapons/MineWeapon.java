@@ -4,7 +4,8 @@ import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.ObjectFactory.ObjectType;
 import de.illonis.eduras.items.ItemUseInformation;
 import de.illonis.eduras.settings.S;
-import de.illonis.eduras.shapes.Circle;
+import de.illonis.eduras.shapes.ObjectShape.ShapeType;
+import de.illonis.eduras.shapes.ShapeFactory;
 
 /**
  * Describes the behavior and properties of a mine weapon.
@@ -26,7 +27,7 @@ public class MineWeapon extends Weapon {
 		super(ObjectType.MINELAUNCHER, gameInformation, id);
 		setName("Mine Launcher");
 
-		setShape(new Circle(S.go_mineweapon_size));
+		setShape(ShapeFactory.createShape(ShapeType.STAR));
 		defaultCooldown = S.go_mineweapon_cooldown;
 	}
 
