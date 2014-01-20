@@ -232,7 +232,10 @@ public class ObjectFactory {
 			}
 
 			// rocket splash animation
-			if (objectToRemove.getType() == ObjectType.ROCKET_MISSILE) {
+			if (objectToRemove.getType() == ObjectType.ROCKET_MISSILE
+					|| objectToRemove.getType() == ObjectType.MINE_MISSILE) {
+				// meeh, this violates the rule to strictly seperate GUI from
+				// logic. We should call a handler here.
 				AnimationFactory.runAt(AnimationNumber.ROCKET_SPLASH,
 						objectToRemove.getPositionVector(),
 						S.go_rocketmissile_damageradius);
