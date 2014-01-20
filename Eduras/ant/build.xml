@@ -76,7 +76,7 @@
 
 	<target name="jar-shapecreator" depends="compile"
 		description="Creates shapecreator tool executable.">
-		<jar destfile="${jars}/eduras-shapecreator.jar" basedir="${base}${build}"
+		<jar destfile="${jars}/tools/shapecreator.jar" basedir="${base}${build}"
 			excludes="**/unittests/**">
 			<fileset dir="${base}${src}">
 				<include name="**/*.png"></include>
