@@ -15,7 +15,7 @@ import de.illonis.eduras.utils.Pair;
  */
 public class Geometry {
 
-	private static final double BOUNDARY = 0.25;
+	private static final double BOUNDARY = 1;
 
 	/**
 	 * Return length of a hypotenuse in a right-angled triangle.

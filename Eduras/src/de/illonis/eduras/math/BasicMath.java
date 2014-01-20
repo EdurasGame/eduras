@@ -153,8 +153,8 @@ public class BasicMath {
 	}
 
 	/**
-	 * Returns a where (a - x) mod n= min{ (b - x) mod n | b = c mod n, c in
-	 * angles}, that is, it returns the number in nums that is closest to x
+	 * Returns index of a where (a - x) mod n= min{ (b - x) mod n | b = c mod n,
+	 * c in angles}, that is, it returns the number in nums that is closest to x
 	 * regarding mod n.
 	 * 
 	 * @param x
@@ -162,25 +162,30 @@ public class BasicMath {
 	 * @param n
 	 * @return a where (a - x) mod n= min{ (b - x) mod n | b = c mod n, c in
 	 *         angles}
+	 * @throws IllegalArgumentException
 	 */
-	public static double findClosestNumberModuloArray(double x, double[] nums,
-			int n) {
+	public static int findClosestNumberModuloArray(double x, double[] nums,
+			int n) throws IllegalArgumentException {
+
+		if (nums.length <= 0) {
+			throw new IllegalArgumentException("The given array is empty.");
+		}
 
 		x = calcModulo(x, n);
 		for (int i = 0; i < nums.length; i++) {
 			nums[i] = calcModulo(nums[i], n);
 		}
 
-		double currClosest = nums[0];
+		int indexOfClosestNumber = 0;
 		double currClosestDistance = findShortestDistanceModulo(x, nums[0], n);
 		for (int i = 1; i < nums.length; i++) {
 			double currDistance = findShortestDistanceModulo(x, nums[i], n);
 			if (currDistance < currClosestDistance) {
 				currClosestDistance = currDistance;
-				currClosest = nums[i];
+				indexOfClosestNumber = i;
 			}
 		}
-		return currClosest;
+		return indexOfClosestNumber;
 	}
 
 	/**

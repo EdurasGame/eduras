@@ -3,6 +3,7 @@ package de.illonis.eduras.shapes;
 import java.awt.geom.Rectangle2D;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.LinkedList;
 import java.util.logging.Logger;
 
@@ -248,143 +249,214 @@ public class Polygon extends ObjectShape {
 		double rotationDiff = targetRotationAngle - thisObject.getRotation();
 
 		Vector2D posVector = thisObject.getPositionVector();
-		LinkedList<Vector2D> thisObjectAbsoluteVertices = getAbsoluteVertices(thisObject);
 
-		// for the following calculation imagine a circle. In order to get to
-		// the target angle, you have to rotate at most by 180 degrees, either
-		// left or right. If the shortest rotation passes the point where the
-		// angle is 0, abs(targetAngle - currAngle) must be > 180. Then we can
-		// decide by the distance's sign whether we have to turn right or left.
-		boolean turnLeft;
 		double distance = BasicMath.findShortestDistanceModulo(
 				targetRotationAngle, thisObject.getRotation(), 360);
-		if (Math.abs(distance) > 180) {
-			if (distance > 0) {
-				turnLeft = false;
-			} else {
-				turnLeft = true;
-			}
-		} else {
-			if (distance > 0) {
-				turnLeft = true;
-			} else {
-				turnLeft = false;
-			}
-		}
+		boolean turnLeft = doesTurnLeft(distance);
 
 		LinkedList<Vector2D> interceptPoints = new LinkedList<Vector2D>();
 		for (GameObject anotherGameObject : gameInfo.getObjects().values()) {
-			if (anotherGameObject.equals(thisObject)
-					|| !anotherGameObject.isCollidable()) {
-				continue;
-			}
-
-			LinkedList<Vector2D> interceptPointsWithGameObject = new LinkedList<Vector2D>();
-			for (Vector2D anAbsoluteVertex : thisObjectAbsoluteVertices) {
-				Circle aRotationCircle = Geometry
-						.getCircleByCenterAndPointOnCircle(posVector,
-								anAbsoluteVertex);
-
-				if (anotherGameObject.getShape() instanceof Circle) {
-					Pair<Vector2D, Vector2D> circleIntercepts = Geometry
-							.getInterceptPointsOfCircles(
-									(Circle) anotherGameObject.getShape(),
-									anotherGameObject.getPositionVector(),
-									aRotationCircle,
-									thisObject.getPositionVector());
-					if (circleIntercepts != null) {
-						interceptPointsWithGameObject.add(circleIntercepts
-								.getFirst());
-						interceptPointsWithGameObject.add(circleIntercepts
-								.getSecond());
-					}
-				} else {
-					if (anotherGameObject.getShape() instanceof Polygon) {
-						Polygon othersShape = (Polygon) anotherGameObject
-								.getShape();
-						for (Line anotherObjectsBorderLine : othersShape
-								.getBorderLines(anotherGameObject)) {
-							Vector2D[] polygonInterceptPoints = Geometry
-									.getCircleLineSegmentInterceptPoints(
-											aRotationCircle, posVector,
-											anotherObjectsBorderLine);
-							for (int i = 0; i < polygonInterceptPoints.length; i++) {
-								if (polygonInterceptPoints[i] != null) {
-									interceptPointsWithGameObject
-											.add(polygonInterceptPoints[i]);
-									// if(polygonInterceptPoints[i] == 40.)
-								}
-							}
-						}
-					} else {
-						L.severe("Can't calculate collision with objectshape "
-								+ anotherGameObject.getShape().getClass()
-										.getSimpleName());
-						break;
-					}
-
-				}
-
-				// Remove all intercept points, that are not on the circle
-				// between
-				// target angle and current angle
-				LinkedList<Vector2D> copyOfInterceptPoints = new LinkedList<Vector2D>(
-						interceptPointsWithGameObject);
-				for (Vector2D anInterceptPoint : copyOfInterceptPoints) {
-
-					if (anInterceptPoint.getX() == 40.
-							&& anInterceptPoint.getY() == 40) {
-						System.out.println("letmeknow");
-					}
-
-					try {
-						double angle = Geometry.getAngleForPointOnCircle(
-								aRotationCircle, posVector, anInterceptPoint);
-						double currentAngleOfVertex = Geometry
-								.getAngleForPointOnCircle(aRotationCircle,
-										posVector, anAbsoluteVertex);
-						if (!((turnLeft && BasicMath.isInBetweenModulo(
-								currentAngleOfVertex,
-								angle,
-								BasicMath.calcModulo(currentAngleOfVertex
-										+ rotationDiff, 360), 360)) || !turnLeft
-								&& BasicMath
-										.isInBetweenModulo(currentAngleOfVertex
-												+ rotationDiff, angle,
-												BasicMath.calcModulo(
-														currentAngleOfVertex,
-														360), 360))) {
-							interceptPointsWithGameObject
-									.remove(anInterceptPoint);
-						}
-					} catch (PointNotOnCircleException e) {
-						L.warning("There is a point that is not on the circle, which shouldn't appear from previous calculation.");
-						interceptPointsWithGameObject.remove(anInterceptPoint);
-					}
-				}
-
-				interceptPoints.addAll(interceptPointsWithGameObject);
-			}
+			interceptPoints.addAll(calculateInterceptPointsWithObject(
+					anotherGameObject, thisObject, turnLeft, rotationDiff));
 		}
 
 		if (interceptPoints.isEmpty()) {
 			return targetRotationAngle;
 		} else {
 
-			return thisObject.getRotation();
-			// // Find the point that comes first when rotating (where the angle
-			// // interceptpointAngle - currAngle is smallest)
-			// double[] angles = new double[interceptPoints.size()];
+			// return thisObject.getRotation();
+			// Find the point that comes first when rotating (where the angle
+			// interceptpointAngle - currAngle is smallest)
+			// LinkedList<Double> angles = new LinkedList<Double>();
 			// for (int i = 0; i < interceptPoints.size(); i++) {
-			// angles[i] = posVector.getDistanceVectorTo(
-			// interceptPoints.get(i)).getAngleToXAxis();
+			// angles.add(posVector
+			// .getDistanceVectorTo(interceptPoints.get(i))
+			// .getAngleToXAxis());
 			// }
-			// double closestCollisionAngle = BasicMath
-			// .findClosestNumberModuloArray(thisObject.getRotation(),
-			// angles, 360);
+			double[] angles = new double[interceptPoints.size()];
+			for (int i = 0; i < interceptPoints.size(); i++) {
+				angles[i] = posVector.getDistanceVectorTo(
+						interceptPoints.get(i)).getAngleToXAxis();
+			}
+
+			double closestCollisionAngle = angles[BasicMath
+					.findClosestNumberModuloArray(targetRotationAngle, angles,
+							360)];
+
+			// boolean closestAngleFound = false;
+			// while (!closestAngleFound) {
+			// double[] anglesCopy = new double[angles.size()];
+			// for (int i = 0; i < angles.size(); i++) {
+			// anglesCopy[i] = angles.get(i);
+			// }
 			//
-			// return BasicMath.findMiddleOfPointsModulo(closestCollisionAngle,
+			// int indexOfCloesest;
+			// try {
+			// indexOfCloesest = BasicMath.findClosestNumberModuloArray(
+			// thisObject.getRotation(), anglesCopy, 360);
+			// } catch (IllegalArgumentException e) {
+			// // here, non of the given points is a valid point, so return
+			// return thisObject.getRotation();
+			// }
+			// closestCollisionAngle = anglesCopy[BasicMath
+			// .findClosestNumberModuloArray(thisObject.getRotation(),
+			// anglesCopy, 360)];
+			//
+			// if (turnLeft
+			// && !BasicMath
+			// .isInBetweenModulo(thisObject.getRotation(),
+			// closestCollisionAngle,
+			// targetRotationAngle, 360)) {
+			// angles.remove(indexOfCloesest);
+			// continue;
+			// } else {
+			// if (!turnLeft
+			// && !BasicMath.isInBetweenModulo(
+			// targetRotationAngle, closestCollisionAngle,
+			// thisObject.getRotation(), 360)) {
+			// angles.remove(indexOfCloesest);
+			// continue;
+			// }
+			// }
+			//
+			// closestAngleFound = true;
+			// }
+
+			// stop a bit before the first collision
+			if (turnLeft) {
+				return BasicMath.calcModulo(closestCollisionAngle - 5, 360);
+			} else {
+				return BasicMath.calcModulo(closestCollisionAngle + 5, 360);
+			}
+
+			// return BasicMath.findMiddleOfPointsModulo(closCollisionAngle,
 			// thisObject.getRotation(), 360);
+		}
+	}
+
+	private Collection<? extends Vector2D> calculateInterceptPointsWithObject(
+			GameObject anotherGameObject, GameObject thisObject,
+			boolean turnLeft, double rotationDiff) {
+		Vector2D posVector = thisObject.getPositionVector();
+		LinkedList<Vector2D> thisObjectAbsoluteVertices = getAbsoluteVertices(thisObject);
+
+		LinkedList<Vector2D> interceptPointsWithGameObject = new LinkedList<Vector2D>();
+
+		if (anotherGameObject.equals(thisObject)
+				|| !anotherGameObject.isCollidable()) {
+			return interceptPointsWithGameObject;
+		}
+
+		for (Vector2D anAbsoluteVertex : thisObjectAbsoluteVertices) {
+			Circle aRotationCircle = Geometry
+					.getCircleByCenterAndPointOnCircle(posVector,
+							anAbsoluteVertex);
+
+			// circle, forget about this at the moment, as only polygon is
+			// implemented so far
+			if (anotherGameObject.getShape() instanceof Circle) {
+				Pair<Vector2D, Vector2D> circleIntercepts = Geometry
+						.getInterceptPointsOfCircles(
+								(Circle) anotherGameObject.getShape(),
+								anotherGameObject.getPositionVector(),
+								aRotationCircle, thisObject.getPositionVector());
+				if (circleIntercepts != null) {
+					interceptPointsWithGameObject.add(circleIntercepts
+							.getFirst());
+					interceptPointsWithGameObject.add(circleIntercepts
+							.getSecond());
+				}
+			}
+			// polygon
+			else {
+				if (anotherGameObject.getShape() instanceof Polygon) {
+					Polygon othersShape = (Polygon) anotherGameObject
+							.getShape();
+					for (Line anotherObjectsBorderLine : othersShape
+							.getBorderLines(anotherGameObject)) {
+						Vector2D[] polygonInterceptPoints = Geometry
+								.getCircleLineSegmentInterceptPoints(
+										aRotationCircle, posVector,
+										anotherObjectsBorderLine);
+						for (int i = 0; i < polygonInterceptPoints.length; i++) {
+							if (polygonInterceptPoints[i] != null) {
+								interceptPointsWithGameObject
+										.add(polygonInterceptPoints[i]);
+							}
+						}
+					}
+				} else {
+					L.severe("Can't calculate collision with objectshape "
+							+ anotherGameObject.getShape().getClass()
+									.getSimpleName());
+					break;
+				}
+
+			}
+
+			// Remove all intercept points, that are not on the circle
+			// between
+			// target angle and current angle
+			double currentAngleOfVertex;
+			try {
+				currentAngleOfVertex = Geometry.getAngleForPointOnCircle(
+						aRotationCircle, posVector, anAbsoluteVertex);
+			} catch (PointNotOnCircleException e1) {
+				L.severe("Point we used to create the circle is not on circle!");
+				continue;
+			}
+
+			// make copy to avoid concurrentmodificationexception
+			LinkedList<Vector2D> copyOfInterceptPoints = new LinkedList<Vector2D>(
+					interceptPointsWithGameObject);
+			for (Vector2D anInterceptPoint : copyOfInterceptPoints) {
+
+				try {
+					double angle = Geometry.getAngleForPointOnCircle(
+							aRotationCircle, posVector, anInterceptPoint);
+					// if we turn left, the angle 'increases' modulo 360. so we
+					// need to check if it's between current- and target angle
+					// if we turn right, the angle 'decreases modulo 360'. so we
+					// have to check if it's between target- and current angle
+					if (!((turnLeft && BasicMath.isInBetweenModulo(
+							currentAngleOfVertex,
+							angle,
+							BasicMath.calcModulo(currentAngleOfVertex
+									+ rotationDiff, 360), 360)) || !turnLeft
+							&& BasicMath.isInBetweenModulo(
+									BasicMath.calcModulo(currentAngleOfVertex
+											+ rotationDiff, 360), angle,
+									currentAngleOfVertex, 360))) {
+						interceptPointsWithGameObject.remove(anInterceptPoint);
+					}
+				} catch (PointNotOnCircleException e) {
+					L.warning("There is a point that is not on the circle, which shouldn't appear from previous calculation.");
+					interceptPointsWithGameObject.remove(anInterceptPoint);
+				}
+			}
+		}
+
+		return interceptPointsWithGameObject;
+	}
+
+	private boolean doesTurnLeft(double distance) {
+		// for the following calculation imagine a circle. In order to get to
+		// the target angle, you have to rotate at most by 180 degrees, either
+		// left or right. If the shortest rotation passes the point where the
+		// angle is 0, abs(targetAngle - currAngle) must be > 180. Then we can
+		// decide by the distance's sign whether we have to turn right or left.
+		if (Math.abs(distance) > 180) {
+			if (distance > 0) {
+				return false;
+			} else {
+				return true;
+			}
+		} else {
+			if (distance > 0) {
+				return true;
+			} else {
+				return false;
+			}
 		}
 	}
 }
