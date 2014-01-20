@@ -129,6 +129,20 @@ public final class S {
 
 	public static double go_rocketmissile_maxrange = 400;
 
+	public static double go_mineweapon_size = 5;
+
+	public static long go_mineweapon_cooldown = 500;
+
+	public static int go_minemissile_damage = 6;
+
+	public static double go_minemissile_damageradius = 50;
+
+	public static double go_minemissile_speed = 0;
+
+	public static double go_minemissile_maxrange = 1;
+
+	public static double go_minemissile_shape_size = 2;
+
 	/**
 	 * Reads values from the file and writes them to the S classes attributes.
 	 * 
