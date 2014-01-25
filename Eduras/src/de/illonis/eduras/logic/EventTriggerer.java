@@ -306,7 +306,7 @@ public interface EventTriggerer {
 	public void sendRequestedInfos(ArrayList<GameEvent> infos, int id);
 
 	// TODO: Shouldn't we send this information only to the client that is
-	// affected by this event?
+	// affected by this event? (jme) yes (/jme)
 	/**
 	 * 
 	 * Notify all clients that a cooldown has started.

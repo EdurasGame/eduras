@@ -346,10 +346,7 @@ public class ServerEventTriggerer implements EventTriggerer {
 		try {
 			ClientRenameEvent renameEvent = new ClientRenameEvent(ownerId,
 					newName);
-			// TODO: check if this call causes recursion due to repeated sending
-			// by logic (fma) It does!!? (/fma)
-			// logic.onGameEventAppeared(renameEvent);
-			sendEvents(renameEvent);
+			sendEventToAll(renameEvent);
 		} catch (InvalidNameException e) {
 			L.log(Level.WARNING, "invalid user name", e);
 			return;
@@ -584,9 +581,7 @@ public class ServerEventTriggerer implements EventTriggerer {
 	public void sendRequestedInfos(ArrayList<GameEvent> infos, int owner) {
 		try {
 			for (GameEvent event : infos) {
-
 				sendEventToClient(event, owner);
-
 			}
 			sendEventToClient(new GameReadyEvent(), owner);
 		} catch (IllegalArgumentException e) {

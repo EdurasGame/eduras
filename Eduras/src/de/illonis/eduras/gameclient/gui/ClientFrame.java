@@ -135,10 +135,12 @@ public class ClientFrame extends JFrame {
 	 * 
 	 * @param clientId
 	 *            the disconnected client.
+	 * @param wantsExit
+	 *            true when player wanted to exit the game, false otherwise.
 	 */
-	public void onClientDisconnect(int clientId) {
+	public void onClientDisconnect(int clientId, boolean wantsExit) {
 		if (clientId == client.getOwnerID()) {
-			stopGame(false);
+			stopGame(!wantsExit);
 		}
 	}
 

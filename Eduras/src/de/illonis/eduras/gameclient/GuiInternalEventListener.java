@@ -146,7 +146,7 @@ public class GuiInternalEventListener implements LoginPanelReactor,
 
 	@Override
 	public void onGameQuit() {
-		client.getNetworkManager().disconnect();
+		client.tryExit();
 	}
 
 	@Override
