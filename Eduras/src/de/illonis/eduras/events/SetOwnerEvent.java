@@ -11,7 +11,7 @@ package de.illonis.eduras.events;
  */
 public class SetOwnerEvent extends OwnerGameEvent {
 
-	private int objectId = -1;
+	private final int objectId;
 
 	/**
 	 * Creates a new SetOwnerEvent. The owner of the object that belongs to the
@@ -25,8 +25,8 @@ public class SetOwnerEvent extends OwnerGameEvent {
 	public SetOwnerEvent(int ownerId, int objectId) {
 
 		super(GameEventNumber.SET_OWNER, ownerId);
-
 		this.objectId = objectId;
+		putArgument(objectId);
 	}
 
 	/**
@@ -38,18 +38,4 @@ public class SetOwnerEvent extends OwnerGameEvent {
 		return objectId;
 	}
 
-	@Override
-	public Object getArgument(int i) {
-		switch (i) {
-		case 0:
-			return getOwner();
-		default:
-			return objectId;
-		}
-	}
-
-	@Override
-	public int getNumberOfArguments() {
-		return 2;
-	}
 }

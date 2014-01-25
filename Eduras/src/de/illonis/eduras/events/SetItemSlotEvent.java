@@ -8,8 +8,8 @@ package de.illonis.eduras.events;
  */
 public class SetItemSlotEvent extends ObjectEvent {
 
-	private int owner;
-	private int itemSlot;
+	private final int owner;
+	private final int itemSlot;
 
 	/**
 	 * Creates a new itemslot event.
@@ -25,6 +25,8 @@ public class SetItemSlotEvent extends ObjectEvent {
 		super(GameEventNumber.SET_ITEM_SLOT, objectId);
 		this.owner = owner;
 		this.itemSlot = itemSlot;
+		putArgument(owner);
+		putArgument(itemSlot);
 	}
 
 	/**
@@ -44,23 +46,4 @@ public class SetItemSlotEvent extends ObjectEvent {
 	public int getItemSlot() {
 		return itemSlot;
 	}
-
-	@Override
-	public Object getArgument(int i) {
-		switch (i) {
-		case 0:
-			return owner;
-		case 1:
-			return getObjectId();
-		case 2:
-			return itemSlot;
-		}
-		return i;
-	}
-
-	@Override
-	public int getNumberOfArguments() {
-		return 3;
-	}
-
 }

@@ -8,7 +8,7 @@ package de.illonis.eduras.events;
  */
 public class SetRemainingTimeEvent extends GameEvent {
 
-	private long remainingTime;
+	private final long remainingTime;
 
 	/**
 	 * Creates a new SetRemainingTimeEvent.

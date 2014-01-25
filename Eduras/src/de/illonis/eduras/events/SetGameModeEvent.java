@@ -7,7 +7,7 @@ package de.illonis.eduras.events;
  * 
  */
 public class SetGameModeEvent extends GameEvent {
-	private String newMode;
+	private final String newMode;
 
 	/**
 	 * Creates a new {@link SetGameModeEvent} event.
