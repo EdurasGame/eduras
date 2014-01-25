@@ -32,31 +32,27 @@ public class LoginAnimation extends JPanel implements ComponentListener {
 	private final static int ANIM_HEIGHT = 70;
 	private final static double LIMIT = 0.01;
 	private final static Random r = new Random();
+	private TimingSource ts = new SwingTimerTimingSource();
 
 	/**
 	 * Creates a new animation panel.
 	 */
 	public LoginAnimation() {
 		super();
-		final TimingSource ts = new SwingTimerTimingSource();
 		Animator.setDefaultTimingSource(ts);
-		ts.init();
 		setBackground(null);
-
 		addComponentListener(this);
-
 		animator = new Animator.Builder().setDebugName("LoginAnimation")
 				.setRepeatCount(Animator.INFINITE)
 				.setDuration(1000, TimeUnit.MILLISECONDS)
 				.setRepeatBehavior(RepeatBehavior.LOOP).build();
-
 	}
 
 	/**
 	 * Starts animation.
 	 */
 	public void start() {
-
+		ts.init();
 		circles = new LinkedList<Circle>();
 		for (int x = 0; x < 2000; x++) {
 			Circle c = new Circle();
@@ -71,7 +67,7 @@ public class LoginAnimation extends JPanel implements ComponentListener {
 	 */
 	public void stop() {
 		animator.stop();
-
+		ts.dispose();
 	}
 
 	private class Circle implements TimingTarget {

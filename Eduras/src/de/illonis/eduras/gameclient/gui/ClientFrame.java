@@ -123,11 +123,11 @@ public class ClientFrame extends JFrame {
 	}
 
 	private void stopGame(boolean gracefully) {
+		hideGame();
+		showLogin();
 		if (gracefully)
 			JOptionPane.showMessageDialog(this, "Connection to server lost",
 					"Connection lost", JOptionPane.ERROR_MESSAGE);
-		gamePanel.onHidden();
-		showLogin();
 	}
 
 	/**
