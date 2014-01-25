@@ -89,32 +89,6 @@ public abstract class GameEvent extends Event {
 	}
 
 	/**
-	 * Maps a GameEventNumber to a new instance of the representing
-	 * implementation of the event.
-	 * 
-	 * @param num
-	 *            The GameEventNumber to create a new instance of.
-	 * @return The GameEvent instance
-	 * @throws GivenParametersDoNotFitToEventException
-	 */
-
-	/*
-	 * public static GameEvent gameEventNumberToGameEvent(GameEventNumber num)
-	 * throws GivenParametersDoNotFitToEventException {
-	 * 
-	 * GameEvent result = null;
-	 * 
-	 * switch (num) { case MOVE_DOWN: return new
-	 * MovementEvent(GameEventNumber.MOVE_DOWN, -1); case MOVE_LEFT: return new
-	 * MovementEvent(GameEventNumber.MOVE_LEFT, -1); case SET_POS: return new
-	 * MovementEvent(GameEventNumber.SET_POS, -1); case MOVE_RIGHT: return new
-	 * MovementEvent(GameEventNumber.MOVE_RIGHT, -1); case MOVE_UP: return new
-	 * MovementEvent(GameEventNumber.MOVE_UP, -1); default: break; }
-	 * 
-	 * return result; }
-	 */
-
-	/**
 	 * Maps a number to its GameEventNumber representation. Returns NO_EVENT if
 	 * the number cannot be mapped to a GameEventNumber.<br>
 	 * (jme): simplified

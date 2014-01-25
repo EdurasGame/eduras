@@ -1,6 +1,3 @@
-/**
- * 
- */
 package de.illonis.eduras.events;
 
 import de.eduras.eventingserver.exceptions.TooFewArgumentsExceptions;
@@ -81,13 +78,13 @@ public class MovementEvent extends ObjectEvent {
 			case 2:
 				return newYPos;
 			default:
-				throw new TooFewArgumentsExceptions(i, 3);
+				throw new TooFewArgumentsExceptions(i, 2);
 			}
 		default:
 			if (i == 0) {
 				return getObjectId();
 			} else {
-				throw new TooFewArgumentsExceptions(i, 1);
+				throw new TooFewArgumentsExceptions(i, 0);
 			}
 		}
 	}

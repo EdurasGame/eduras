@@ -308,8 +308,8 @@ public class GameInformation {
 
 		for (GameObject object : objects.values()) {
 			ObjectFactoryEvent objectEvent = new ObjectFactoryEvent(
-					GameEventNumber.OBJECT_CREATE, object.getType());
-			objectEvent.setOwner(object.getOwner());
+					GameEventNumber.OBJECT_CREATE, object.getType(),
+					object.getOwner());
 			objectEvent.setId(object.getId());
 			infos.add(objectEvent);
 

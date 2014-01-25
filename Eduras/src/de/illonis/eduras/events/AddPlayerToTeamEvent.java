@@ -10,7 +10,7 @@ import de.illonis.eduras.Team.TeamColor;
  */
 public class AddPlayerToTeamEvent extends OwnerGameEvent {
 
-	private TeamColor teamColor;
+	private final TeamColor teamColor;
 
 	/**
 	 * Creates a new event with given data.
@@ -23,7 +23,6 @@ public class AddPlayerToTeamEvent extends OwnerGameEvent {
 	public AddPlayerToTeamEvent(int ownerId, TeamColor color) {
 		super(GameEventNumber.ADD_PLAYER_TO_TEAM, ownerId);
 		this.teamColor = color;
-
 		putArgument(color.toString());
 	}
 

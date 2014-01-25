@@ -256,7 +256,7 @@ public class ObjectFactory {
 	// a very hacky test method to spawn a bird when a player joins.
 	private void testSpawnBird() {
 		ObjectFactoryEvent birdEvent = new ObjectFactoryEvent(
-				GameEventNumber.OBJECT_CREATE, ObjectType.BIRD);
+				GameEventNumber.OBJECT_CREATE, ObjectType.BIRD, -1);
 		birdEvent.setId(999);
 
 		int w = logic.getGame().getMap().getWidth() / 2;

@@ -11,9 +11,9 @@ import de.illonis.eduras.networking.ClientRole;
  */
 public class InitInformationEvent extends GameEvent {
 
-	private ClientRole role;
-	private String name;
-	private int clientId;
+	private final ClientRole role;
+	private final String name;
+	private final int clientId;
 
 	/**
 	 * Creates a new InitInformationEvent with the clientrole info and the

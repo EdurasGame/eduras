@@ -33,9 +33,12 @@ public class ObjectFactoryEvent extends OwnerGameEvent {
 	 *            is
 	 *            {@link de.illonis.eduras.events.GameEvent.GameEventNumber#OBJECT_REMOVE}
 	 *            .
+	 * @param ownerId
+	 *            the owner of the object.
 	 */
-	public ObjectFactoryEvent(GameEventNumber eventType, ObjectType objectType) {
-		super(eventType);
+	public ObjectFactoryEvent(GameEventNumber eventType, ObjectType objectType,
+			int ownerId) {
+		super(eventType, ownerId);
 		this.objectType = objectType;
 		id = -1;
 	}

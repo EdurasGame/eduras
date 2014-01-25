@@ -10,7 +10,7 @@ package de.illonis.eduras.events;
  */
 public class MatchEndEvent extends GameEvent {
 
-	int winnerId = -1;
+	private final int winnerId;
 
 	/**
 	 * Creates a MatchEndEvent telling that the party with the id 'winnerId' has

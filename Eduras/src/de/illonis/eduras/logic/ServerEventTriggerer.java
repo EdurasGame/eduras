@@ -151,7 +151,7 @@ public class ServerEventTriggerer implements EventTriggerer {
 	@Override
 	public void removeObject(int objectId) {
 		ObjectFactoryEvent event = new ObjectFactoryEvent(
-				GameEventNumber.OBJECT_REMOVE, ObjectType.NO_OBJECT);
+				GameEventNumber.OBJECT_REMOVE, ObjectType.NO_OBJECT, 0);
 		event.setId(objectId);
 		logic.getObjectFactory().onObjectFactoryEventAppeared(event);
 		sendEvents(event);
@@ -160,9 +160,8 @@ public class ServerEventTriggerer implements EventTriggerer {
 	@Override
 	public int createObject(ObjectType object, int owner) {
 		ObjectFactoryEvent newObjectEvent = new ObjectFactoryEvent(
-				GameEventNumber.OBJECT_CREATE, object);
+				GameEventNumber.OBJECT_CREATE, object, owner);
 		newObjectEvent.setId(getNextId());
-		newObjectEvent.setOwner(owner);
 		logic.getObjectFactory().onObjectFactoryEventAppeared(newObjectEvent);
 
 		return newObjectEvent.getId();
@@ -172,10 +171,9 @@ public class ServerEventTriggerer implements EventTriggerer {
 	public int createObjectAt(ObjectType object, Vector2D position, int owner) {
 
 		ObjectFactoryEvent newObjectEvent = new ObjectFactoryEvent(
-				GameEventNumber.OBJECT_CREATE, object);
+				GameEventNumber.OBJECT_CREATE, object, owner);
 		int id = getNextId();
 		newObjectEvent.setId(id);
-		newObjectEvent.setOwner(owner);
 
 		logic.getObjectFactory().onObjectFactoryEventAppeared(newObjectEvent);
 
@@ -378,7 +376,6 @@ public class ServerEventTriggerer implements EventTriggerer {
 	@Override
 	public void setRemainingTime(long remainingTime) {
 		// TODO Auto-generated method stub
-
 	}
 
 	@Override
@@ -560,7 +557,7 @@ public class ServerEventTriggerer implements EventTriggerer {
 		int objectId = -1;
 		PlayerMainFigure mainFigure;
 		ObjectFactoryEvent gonePlayerEvent = new ObjectFactoryEvent(
-				GameEventNumber.OBJECT_REMOVE, ObjectType.PLAYER);
+				GameEventNumber.OBJECT_REMOVE, ObjectType.PLAYER, 0);
 
 		try {
 			mainFigure = gameInfo.getPlayerByOwnerId(ownerId);
