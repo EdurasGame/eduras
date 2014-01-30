@@ -42,6 +42,7 @@ public class GameClient {
 	private ServerSearcher searcher;
 	private HudNotifier hudNotifier;
 	private final ClientData data;
+	private boolean wantsExit = false;
 
 	// private TooltipHandler tooltipHandler;
 
@@ -107,12 +108,14 @@ public class GameClient {
 	public void onClientConnected(int clientId) {
 		if (clientId != getOwnerID()) // only handle my connection
 			return;
+		wantsExit = false;
 		initChat();
 		L.info("Connection to server established. OwnerId: "
 				+ infoPro.getOwnerID());
 		nwm.ping();
 		frame.onClientConnected(clientId); // pass to gui
 
+		// FIXME: why this???
 		try {
 			sendEvent(new InitInformationEvent(role, clientName, clientId));
 		} catch (WrongEventTypeException | MessageNotSupportedException e) {
@@ -128,8 +131,12 @@ public class GameClient {
 	 */
 	public void onClientConnectionLost(int clientId) {
 		if (clientId == getOwnerID()) {
-			L.warning("Connection lost");
-			frame.onClientConnectionLost(clientId);
+			if (wantsExit) {
+				frame.onClientDisconnect(clientId, wantsExit);
+			} else {
+				L.warning("Connection lost");
+				frame.onClientConnectionLost(clientId);
+			}
 		} else {
 			// TODO: other client left
 		}
@@ -161,19 +168,19 @@ public class GameClient {
 	 */
 	public void onClientDisconnect(int clientId) {
 		L.info("Client disconnected: " + clientId);
-		frame.onClientDisconnect(clientId);
+		frame.onClientDisconnect(clientId, wantsExit);
 	}
 
 	/**
-	 * Indicates that user tried to exit, e.g. when he closes the frame.
+	 * Indicates that user tries to exit, e.g. when he closes the frame.
 	 */
 	public void tryExit() {
 
 		int result = JOptionPane.showConfirmDialog(frame,
 				Localization.getString("Client.exitconfirm"), "Exiting",
 				JOptionPane.YES_NO_OPTION);
-
 		if (result == JOptionPane.YES_OPTION) {
+			wantsExit = true;
 			if (nwm.isConnected())
 				nwm.disconnect();
 			else

@@ -7,8 +7,8 @@ package de.illonis.eduras.events;
  * 
  */
 public class DeathEvent extends GameEvent {
-	int killerOwner;
-	int killed;
+	private final int killerOwner;
+	private final int killed;
 
 	/**
 	 * Creates a new death event.

@@ -157,6 +157,7 @@ public class ServerSearcher extends Thread {
 			}
 		} catch (InterruptedException e) {
 			L.log(Level.WARNING, "interrupted waiting for response", e);
+			interrupt();
 			return false;
 		}
 		return true;
@@ -218,6 +219,7 @@ public class ServerSearcher extends Thread {
 			try {
 				Thread.sleep(BROADCAST_INTERVAL);
 			} catch (InterruptedException e) {
+				interrupt();
 				break;
 			}
 		}

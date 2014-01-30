@@ -1,9 +1,8 @@
-/**
- * 
- */
 package de.illonis.eduras.events;
 
 /**
+ * Indicates a loot of an item.
+ * 
  * @author Florian Mai <florian.ren.mai@googlemail.com>
  * 
  */
@@ -21,6 +20,7 @@ public class LootItemEvent extends ObjectEvent {
 	public LootItemEvent(int objectId, int playerId) {
 		super(GameEventNumber.LOOT_ITEM_EVENT, objectId);
 		this.playerId = playerId;
+		putArgument(this.playerId);
 	}
 
 	/**

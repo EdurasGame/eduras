@@ -94,9 +94,8 @@
 		description="Creates clean executables.">
 	</target>
 
-	<target name="deploy" depends="jars" description="Creates launcher and installers.">
+<!--	<target name="deploy" depends="jars" description="Creates launcher and installers.">
 		<ant antfile="${base}../EdurasLauncher/build.xml"
 			useNativeBasedir="true" inheritAll="false" />
-	</target>
-
+	</target> -->
 </project> 

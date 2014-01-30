@@ -151,7 +151,7 @@ public class ServerEventTriggerer implements EventTriggerer {
 	@Override
 	public void removeObject(int objectId) {
 		ObjectFactoryEvent event = new ObjectFactoryEvent(
-				GameEventNumber.OBJECT_REMOVE, ObjectType.NO_OBJECT);
+				GameEventNumber.OBJECT_REMOVE, ObjectType.NO_OBJECT, 0);
 		event.setId(objectId);
 		logic.getObjectFactory().onObjectFactoryEventAppeared(event);
 		sendEvents(event);
@@ -160,9 +160,8 @@ public class ServerEventTriggerer implements EventTriggerer {
 	@Override
 	public int createObject(ObjectType object, int owner) {
 		ObjectFactoryEvent newObjectEvent = new ObjectFactoryEvent(
-				GameEventNumber.OBJECT_CREATE, object);
+				GameEventNumber.OBJECT_CREATE, object, owner);
 		newObjectEvent.setId(getNextId());
-		newObjectEvent.setOwner(owner);
 		logic.getObjectFactory().onObjectFactoryEventAppeared(newObjectEvent);
 
 		return newObjectEvent.getId();
@@ -172,10 +171,9 @@ public class ServerEventTriggerer implements EventTriggerer {
 	public int createObjectAt(ObjectType object, Vector2D position, int owner) {
 
 		ObjectFactoryEvent newObjectEvent = new ObjectFactoryEvent(
-				GameEventNumber.OBJECT_CREATE, object);
+				GameEventNumber.OBJECT_CREATE, object, owner);
 		int id = getNextId();
 		newObjectEvent.setId(id);
-		newObjectEvent.setOwner(owner);
 
 		logic.getObjectFactory().onObjectFactoryEventAppeared(newObjectEvent);
 
@@ -346,10 +344,7 @@ public class ServerEventTriggerer implements EventTriggerer {
 		try {
 			ClientRenameEvent renameEvent = new ClientRenameEvent(ownerId,
 					newName);
-			// TODO: check if this call causes recursion due to repeated sending
-			// by logic (fma) It does!!? (/fma)
-			// logic.onGameEventAppeared(renameEvent);
-			sendEvents(renameEvent);
+			sendEventToAll(renameEvent);
 		} catch (InvalidNameException e) {
 			L.log(Level.WARNING, "invalid user name", e);
 			return;
@@ -381,7 +376,6 @@ public class ServerEventTriggerer implements EventTriggerer {
 	@Override
 	public void setRemainingTime(long remainingTime) {
 		// TODO Auto-generated method stub
-
 	}
 
 	@Override
@@ -563,7 +557,7 @@ public class ServerEventTriggerer implements EventTriggerer {
 		int objectId = -1;
 		PlayerMainFigure mainFigure;
 		ObjectFactoryEvent gonePlayerEvent = new ObjectFactoryEvent(
-				GameEventNumber.OBJECT_REMOVE, ObjectType.PLAYER);
+				GameEventNumber.OBJECT_REMOVE, ObjectType.PLAYER, 0);
 
 		try {
 			mainFigure = gameInfo.getPlayerByOwnerId(ownerId);
@@ -584,9 +578,7 @@ public class ServerEventTriggerer implements EventTriggerer {
 	public void sendRequestedInfos(ArrayList<GameEvent> infos, int owner) {
 		try {
 			for (GameEvent event : infos) {
-
 				sendEventToClient(event, owner);
-
 			}
 			sendEventToClient(new GameReadyEvent(), owner);
 		} catch (IllegalArgumentException e) {

@@ -25,6 +25,8 @@ public class SniperWeapon extends Weapon {
 		setName("Sniper");
 		setShape(new Circle(S.go_sniperweapon_shape_radius));
 		defaultCooldown = S.go_sniperweapon_cooldown;
+		setAmmunitionLimited(S.go_sniperweapon_fillamount,
+				S.go_sniperweapon_maxammo);
 	}
 
 	@Override

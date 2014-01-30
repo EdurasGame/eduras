@@ -47,7 +47,7 @@ public class GameRenderer implements TooltipHandler {
 	private BufferedImage guiImage = null;
 	private BufferedImage displayImage = null;
 	private final GameCamera camera;
-	private UserInterface gui;
+	private final UserInterface gui;
 	private Graphics2D mapGraphics = null;
 	private Graphics2D guiGraphics = null;
 	private Graphics2D bothGraphics = null;
@@ -58,7 +58,7 @@ public class GameRenderer implements TooltipHandler {
 	private ItemTooltip tooltip;
 	private double scale;
 	private boolean tooltipShown = false;
-	private LinkedList<RenderedGuiObject> uiObjects;
+	private final LinkedList<RenderedGuiObject> uiObjects;
 	private final static int DEFAULT_WIDTH = 484;
 	private final static int DEFAULT_HEIGHT = 462;
 	private final InformationProvider info;
@@ -405,8 +405,12 @@ public class GameRenderer implements TooltipHandler {
 			return Color.MAGENTA;
 		case SWORDMISSILE:
 			return Color.CYAN;
-		case YELLOWCIRCLE:
+		case MINELAUNCHER:
+		case MINE_MISSILE:
 			return Color.YELLOW;
+		case ASSAULT_MISSILE:
+		case ASSAULTRIFLE:
+			return Color.PINK;
 		default:
 			return Color.WHITE;
 		}

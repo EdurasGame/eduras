@@ -129,6 +129,58 @@ public final class S {
 
 	public static double go_rocketmissile_maxrange = 400;
 
+	public static double go_mineweapon_size = 5;
+
+	public static long go_mineweapon_cooldown = 500;
+
+	public static int go_minemissile_damage = 6;
+
+	public static double go_minemissile_damageradius = 50;
+
+	public static double go_minemissile_speed = 0;
+
+	public static double go_minemissile_maxrange = 1;
+
+	public static double go_minemissile_shape_size = 2;
+
+	public static int go_splashweapon_fillamount = 5;
+
+	public static int go_splashweapon_maxammo = 50;
+
+	public static int go_sniperweapon_fillamount = 5;
+
+	public static int go_sniperweapon_maxammo = 20;
+
+	public static int go_rocketlauncher_fillamount = 6;
+
+	public static int go_rocketlauncher_maxammo = 60;
+
+	public static int go_mineweapon_fillamount = 3;
+
+	public static int go_mineweapon_maxammo = 30;
+
+	public static int go_simpleweapon_fillamount = 25;
+
+	public static int go_simpleweapon_maxammo = 200;
+
+	public static double go_assaultrifle_shape_size = 5;
+
+	public static long go_assaultrifle_cooldown = 200;
+
+	public static int go_assaultrifle_fillamount = 50;
+
+	public static int go_assaultrifle_maxammo = 250;
+
+	public static int go_assaultmissile_damage = 2;
+
+	public static double go_assaultmissile_speed = 2000;
+
+	public static double go_assaultmissile_maxrange = 4000;
+
+	public static double go_assaultmissile_shape_size = 1;
+
+	public static double go_assaultmissile_damageradius = 3;
+
 	/**
 	 * Reads values from the file and writes them to the S classes attributes.
 	 * 

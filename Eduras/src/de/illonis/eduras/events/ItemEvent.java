@@ -1,6 +1,3 @@
-/**
- * 
- */
 package de.illonis.eduras.events;
 
 import de.eduras.eventingserver.exceptions.TooFewArgumentsExceptions;
@@ -30,11 +27,8 @@ public class ItemEvent extends OwnerGameEvent {
 	 *            The id of the owner this item belongs to.
 	 */
 	public ItemEvent(GameEventNumber eventType, int ownerId) {
-
 		super(eventType, ownerId);
-
 		target = new Vector2D();
-
 	}
 
 	/**
@@ -51,7 +45,6 @@ public class ItemEvent extends OwnerGameEvent {
 	public ItemEvent(GameEventNumber eventType, int ownerId, int slot) {
 		this(eventType, ownerId);
 		setSlotNum(slot);
-
 	}
 
 	/**
@@ -123,7 +116,7 @@ public class ItemEvent extends OwnerGameEvent {
 			if (i == 1)
 				return slotNum;
 			else
-				throw new TooFewArgumentsExceptions(i, 0);
+				throw new TooFewArgumentsExceptions(i, 1);
 		case ITEM_USE:
 			switch (i) {
 			case 0:
@@ -134,9 +127,13 @@ public class ItemEvent extends OwnerGameEvent {
 				return target.getX();
 			case 3:
 				return target.getY();
+			default:
+				throw new TooFewArgumentsExceptions(i, 3);
 			}
+		default:
+			throw new IllegalStateException(
+					"This ItemEvent has no valid event number.");
 		}
-		throw new TooFewArgumentsExceptions(i, 3);
 
 	}
 

@@ -86,8 +86,8 @@ public final class LoginPanelLogic extends ClientGuiStepLogic implements
 	@Override
 	public void onDiscoveryFailed() {
 		serverData.clear();
-		showLocalizedError("client.discovery.failed",
-				"client.discovery.failed.title");
+		serverData.addElement(new ServerInfo("<Discovery failed>", InetAddress
+				.getLoopbackAddress(), 0));
 	}
 
 	@Override

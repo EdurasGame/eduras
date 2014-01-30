@@ -123,11 +123,11 @@ public class ClientFrame extends JFrame {
 	}
 
 	private void stopGame(boolean gracefully) {
+		hideGame();
+		showLogin();
 		if (gracefully)
 			JOptionPane.showMessageDialog(this, "Connection to server lost",
 					"Connection lost", JOptionPane.ERROR_MESSAGE);
-		gamePanel.onHidden();
-		showLogin();
 	}
 
 	/**
@@ -135,10 +135,12 @@ public class ClientFrame extends JFrame {
 	 * 
 	 * @param clientId
 	 *            the disconnected client.
+	 * @param wantsExit
+	 *            true when player wanted to exit the game, false otherwise.
 	 */
-	public void onClientDisconnect(int clientId) {
+	public void onClientDisconnect(int clientId, boolean wantsExit) {
 		if (clientId == client.getOwnerID()) {
-			stopGame(false);
+			stopGame(!wantsExit);
 		}
 	}
 

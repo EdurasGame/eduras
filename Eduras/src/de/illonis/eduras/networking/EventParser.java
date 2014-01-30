@@ -205,20 +205,20 @@ public class EventParser implements EventHandler {
 				ObjectFactoryEvent objectCreateEvent = new ObjectFactoryEvent(
 						GameEventNumber.OBJECT_CREATE,
 						ObjectType.getObjectTypeByNumber((Integer) event
-								.getArgument(2)));
+								.getArgument(2)),
+						(Integer) event.getArgument(1));
 				objectCreateEvent.setId((Integer) event.getArgument(0));
-				objectCreateEvent.setOwner((Integer) event.getArgument(1));
 				logic.onGameEventAppeared(objectCreateEvent);
 				break;
 			case OBJECT_REMOVE:
 				ObjectFactoryEvent objectRemoveEvent = new ObjectFactoryEvent(
-						GameEventNumber.OBJECT_REMOVE, ObjectType.NO_OBJECT);
+						GameEventNumber.OBJECT_REMOVE, ObjectType.NO_OBJECT, -1);
 				objectRemoveEvent.setId((Integer) event.getArgument(0));
 				logic.onGameEventAppeared(objectRemoveEvent);
 				break;
 			case SET_ITEM_SLOT:
 				logic.onGameEventAppeared(new SetItemSlotEvent((Integer) event
-						.getArgument(1), (Integer) event.getArgument(0),
+						.getArgument(0), (Integer) event.getArgument(1),
 						(Integer) event.getArgument(2)));
 				break;
 			case ITEM_CD_START:

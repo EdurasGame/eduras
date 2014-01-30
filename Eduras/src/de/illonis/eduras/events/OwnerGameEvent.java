@@ -9,17 +9,7 @@ package de.illonis.eduras.events;
  */
 public class OwnerGameEvent extends GameEvent {
 
-	private int owner;
-
-	/**
-	 * Creates a new gameevent with given number and unset owner.
-	 * 
-	 * @param type
-	 *            game event number.
-	 */
-	public OwnerGameEvent(GameEventNumber type) {
-		this(type, -1);
-	}
+	private final int owner;
 
 	/**
 	 * Creates a new Gameevent with given number and owner.
@@ -42,16 +32,5 @@ public class OwnerGameEvent extends GameEvent {
 	 */
 	public final int getOwner() {
 		return owner;
-	}
-
-	/**
-	 * Sets the ownerId of the related object.
-	 * 
-	 * @param owner
-	 *            the ownerId to set.
-	 */
-	public final void setOwner(int owner) {
-		this.owner = owner;
-		putArgument(owner);
 	}
 }

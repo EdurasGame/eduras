@@ -19,6 +19,10 @@ import de.illonis.eduras.gameobjects.Bird;
 import de.illonis.eduras.gameobjects.Building;
 import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.interfaces.GameLogicInterface;
+import de.illonis.eduras.items.weapons.AssaultMissile;
+import de.illonis.eduras.items.weapons.AssaultRifle;
+import de.illonis.eduras.items.weapons.MineMissile;
+import de.illonis.eduras.items.weapons.MineWeapon;
 import de.illonis.eduras.items.weapons.RocketLauncher;
 import de.illonis.eduras.items.weapons.RocketMissile;
 import de.illonis.eduras.items.weapons.SimpleMissile;
@@ -60,7 +64,8 @@ public class ObjectFactory {
 				8), BUILDING(9), BIGGERBLOCK(10), ITEM_WEAPON_SPLASH(11), MISSILE_SPLASH(
 				12), MISSILE_SPLASHED(13), DYNAMIC_POLYGON(14), ITEM_WEAPON_SWORD(
 				15), SWORDMISSILE(16), BIRD(17), ROCKETLAUNCHER(18), ROCKET_MISSILE(
-				19);
+				19), MINELAUNCHER(20), MINE_MISSILE(21), ASSAULTRIFLE(22), ASSAULT_MISSILE(
+				23);
 
 		private int number;
 
@@ -192,6 +197,18 @@ public class ObjectFactory {
 			case ROCKET_MISSILE:
 				go = new RocketMissile(logic.getGame(), id);
 				break;
+			case MINELAUNCHER:
+				go = new MineWeapon(logic.getGame(), id);
+				break;
+			case MINE_MISSILE:
+				go = new MineMissile(logic.getGame(), id);
+				break;
+			case ASSAULTRIFLE:
+				go = new AssaultRifle(logic.getGame(), id);
+				break;
+			case ASSAULT_MISSILE:
+				go = new AssaultMissile(logic.getGame(), id);
+				break;
 			default:
 				return;
 			}
@@ -224,7 +241,10 @@ public class ObjectFactory {
 			}
 
 			// rocket splash animation
-			if (objectToRemove.getType() == ObjectType.ROCKET_MISSILE) {
+			if (objectToRemove.getType() == ObjectType.ROCKET_MISSILE
+					|| objectToRemove.getType() == ObjectType.MINE_MISSILE) {
+				// meeh, this violates the rule to strictly seperate GUI from
+				// logic. We should call a handler here.
 				AnimationFactory.runAt(AnimationNumber.ROCKET_SPLASH,
 						objectToRemove.getPositionVector(),
 						S.go_rocketmissile_damageradius);
@@ -236,7 +256,7 @@ public class ObjectFactory {
 	// a very hacky test method to spawn a bird when a player joins.
 	private void testSpawnBird() {
 		ObjectFactoryEvent birdEvent = new ObjectFactoryEvent(
-				GameEventNumber.OBJECT_CREATE, ObjectType.BIRD);
+				GameEventNumber.OBJECT_CREATE, ObjectType.BIRD, -1);
 		birdEvent.setId(999);
 
 		int w = logic.getGame().getMap().getWidth() / 2;
