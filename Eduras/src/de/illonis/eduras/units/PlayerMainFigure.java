@@ -1,19 +1,17 @@
 package de.illonis.eduras.units;
 
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import de.illonis.edulog.EduLog;
 import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.ObjectFactory.ObjectType;
 import de.illonis.eduras.Team;
-import de.illonis.eduras.exceptions.ShapeVerticesNotApplicableException;
 import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.interfaces.MovementControlable;
 import de.illonis.eduras.inventory.Inventory;
 import de.illonis.eduras.math.Vector2D;
 import de.illonis.eduras.settings.S;
-import de.illonis.eduras.shapes.Triangle;
+import de.illonis.eduras.shapes.Circle;
 
 /**
  * This class represents a player.
@@ -84,15 +82,17 @@ public class PlayerMainFigure extends Unit implements MovementControlable {
 		setOwner(ownerId);
 
 		// get position
-		Vector2D firstEdge = new Vector2D(25, 0);
-		Vector2D secondEdge = new Vector2D(-10, 10);
-		Vector2D thirdEdge = new Vector2D(-10, -10);
+		// Vector2D firstEdge = new Vector2D(25, 0);
+		// Vector2D secondEdge = new Vector2D(-10, 10);
+		// Vector2D thirdEdge = new Vector2D(-10, -10);
 
-		try {
-			setShape(new Triangle(firstEdge, secondEdge, thirdEdge));
-		} catch (ShapeVerticesNotApplicableException e) {
-			L.log(Level.SEVERE, "error setting player shape", e);
-		}
+		setShape(new Circle(9));
+
+		// try {
+		// // setShape(new Triangle(firstEdge, secondEdge, thirdEdge));
+		// } catch (ShapeVerticesNotApplicableException e) {
+		// L.log(Level.SEVERE, "error setting player shape", e);
+		// }
 	}
 
 	/**
