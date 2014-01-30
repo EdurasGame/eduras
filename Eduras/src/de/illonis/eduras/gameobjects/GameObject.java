@@ -398,10 +398,10 @@ public abstract class GameObject implements Comparable<GameObject> {
 	 *            The new value.
 	 */
 	public void setRotation(Double newValue) {
-		if (this instanceof MoveableGameObject) {
-			((MoveableGameObject) this).onRotate(newValue);
-		} else {
-			rotation = newValue;
-		}
+		// if (this instanceof MoveableGameObject) {
+		// ((MoveableGameObject) this).onRotate(newValue);
+		// } else {
+		rotation = newValue;
+		// }
 	}
 }
