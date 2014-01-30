@@ -47,7 +47,7 @@ org.eclipse.jdt.core.prefs
 .Spotlight-V100
 .Trashes
 Icon?
-ehthumbs.db
+thumbs.db
 Thumbs.db
 Thumbs.db/EventingServer
 
@@ -57,3 +57,9 @@ logfile.txt*
 *.log
 *.lck
 *.log*
+
+# outsourced repos
+EdurasLauncher/
+EduLog/
+EventingServer/
+www/
