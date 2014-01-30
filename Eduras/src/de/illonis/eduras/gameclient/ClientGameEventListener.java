@@ -34,7 +34,6 @@ public class ClientGameEventListener implements GameEventListener {
 
 	private final HudNotifier ui;
 	private final GameClient client;
-	private boolean wasReady = false;
 
 	/**
 	 * Creates a new reactor.
@@ -134,11 +133,6 @@ public class ClientGameEventListener implements GameEventListener {
 
 	@Override
 	public void onGameReady() {
-		if (wasReady) {
-			L.severe("Received onGameReady a second time!");
-			return;
-		}
-		wasReady = true;
 		client.getFrame().startAndShowGame();
 		// Do not notify hud as it is not yet initialized. It will be notified
 		// later on.

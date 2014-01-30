@@ -271,6 +271,7 @@ public class EventParser implements EventHandler {
 				logic.onGameEventAppeared(new AddPlayerToTeamEvent(
 						(Integer) event.getArgument(0), TeamColor
 								.valueOf((String) event.getArgument(1))));
+				break;
 			case GAME_READY:
 				logic.onGameEventAppeared(new GameReadyEvent());
 				break;
