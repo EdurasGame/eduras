@@ -29,6 +29,7 @@ import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.items.Item;
 import de.illonis.eduras.logicabstraction.InformationProvider;
 import de.illonis.eduras.math.BasicMath;
+import de.illonis.eduras.math.Geometry;
 import de.illonis.eduras.math.Vector2D;
 import de.illonis.eduras.shapes.Circle;
 import de.illonis.eduras.shapes.ObjectShape;
@@ -344,7 +345,41 @@ public class GameRenderer implements TooltipHandler {
 
 		} else if (objectShape instanceof Circle) {
 			drawCircle((Circle) objectShape, obj);
+
+			if (obj instanceof PlayerMainFigure) {
+				drawFace(obj, (Circle) objectShape);
+			}
 		}
+	}
+
+	private void drawFace(GameObject obj, Circle shape) {
+		int noseRadius = 3;
+		Vector2D nose = Geometry.getPointAtAngleOnCircle(shape,
+				obj.getPositionVector(), obj.getRotation());
+
+		mapGraphics.setColor(Color.yellow);
+		mapGraphics.fillOval((int) nose.getX() - noseRadius - camera.x,
+				(int) nose.getY() - noseRadius - camera.y, 2 * noseRadius,
+				2 * noseRadius);
+
+		Vector2D eyeRotator = obj.getPositionVector().getDistanceVectorTo(nose);
+		eyeRotator.rotate(-35);
+		eyeRotator.mult(0.5);
+
+		int eyeRadius = 2;
+		Vector2D leftEye = obj.getPositionVector().copy();
+		leftEye.add(eyeRotator);
+		mapGraphics.fillOval((int) (leftEye.getX()) - eyeRadius - camera.x,
+				(int) (leftEye.getY()) - eyeRadius - camera.y, 2 * eyeRadius,
+				2 * eyeRadius);
+
+		Vector2D rightEye = obj.getPositionVector().copy();
+		eyeRotator.rotate(70);
+		rightEye.add(eyeRotator);
+		mapGraphics.fillOval((int) (rightEye.getX()) - eyeRadius - camera.x,
+				(int) (rightEye.getY()) - eyeRadius - camera.y, 2 * eyeRadius,
+				2 * eyeRadius);
+
 	}
 
 	/**
