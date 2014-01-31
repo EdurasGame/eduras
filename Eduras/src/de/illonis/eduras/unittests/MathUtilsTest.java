@@ -1,5 +1,6 @@
 package de.illonis.eduras.unittests;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
@@ -38,13 +39,19 @@ public class MathUtilsTest {
 	 */
 	@Test
 	public void testClosestNumberModulo() {
-		assertTrue(BasicMath.findClosestNumberModuloArray(6.,
-				new double[] { 1. }, 2) == 1);
-		assertTrue(BasicMath.findClosestNumberModuloArray(6., new double[] {
-				0.9, 4 }, 7) == 0.9);
-		assertTrue(BasicMath.findClosestNumberModuloArray(0, new double[] { 0,
-				0, 42 }, 42) == 0);
-		assertTrue(BasicMath.findClosestNumberModuloArray(3.5, new double[] {
-				3.4, 3.61 }, 2) == 1.4);
+		assertEquals(1, BasicMath.findClosestNumberModuloArray(6.,
+				new double[] { 1. }, 2), 0.001);
+		assertEquals(
+				0.9,
+				BasicMath.findClosestNumberModuloArray(6., new double[] { 0.9,
+						4 }, 7), 0.001);
+		assertEquals(
+				0,
+				BasicMath.findClosestNumberModuloArray(0, new double[] { 0, 0,
+						42 }, 42), 0.001);
+		assertEquals(
+				1.4,
+				BasicMath.findClosestNumberModuloArray(3.5, new double[] { 3.4,
+						3.61 }, 2), 0.001);
 	}
 }
