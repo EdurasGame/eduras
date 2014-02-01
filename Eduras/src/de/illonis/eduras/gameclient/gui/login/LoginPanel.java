@@ -204,8 +204,10 @@ class LoginPanel extends JPanel {
 			if (e.getValueIsAdjusting())
 				return;
 			ServerInfo info = serverList.getSelectedValue();
-			hostInput.setText(info.getUrl().getHostAddress());
-			portInput.setText(info.getPort() + "");
+			if (info != null) {
+				hostInput.setText(info.getUrl().getHostAddress());
+				portInput.setText(info.getPort() + "");
+			}
 		}
 	}
 
