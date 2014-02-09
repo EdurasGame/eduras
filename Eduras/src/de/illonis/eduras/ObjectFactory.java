@@ -17,6 +17,7 @@ import de.illonis.eduras.gameobjects.BigBlock;
 import de.illonis.eduras.gameobjects.BiggerBlock;
 import de.illonis.eduras.gameobjects.Bird;
 import de.illonis.eduras.gameobjects.Building;
+import de.illonis.eduras.gameobjects.DynamicPolygonBlock;
 import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.interfaces.GameLogicInterface;
 import de.illonis.eduras.items.weapons.AssaultMissile;
@@ -208,6 +209,9 @@ public class ObjectFactory {
 				break;
 			case ASSAULT_MISSILE:
 				go = new AssaultMissile(logic.getGame(), id);
+				break;
+			case DYNAMIC_POLYGON:
+				go = new DynamicPolygonBlock(logic.getGame(), id);
 				break;
 			default:
 				return;

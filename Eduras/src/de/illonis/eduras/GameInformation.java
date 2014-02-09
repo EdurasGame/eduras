@@ -11,6 +11,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import de.illonis.edulog.EduLog;
+import de.illonis.eduras.ObjectFactory.ObjectType;
 import de.illonis.eduras.events.AddPlayerToTeamEvent;
 import de.illonis.eduras.events.ClientRenameEvent;
 import de.illonis.eduras.events.GameEvent;
@@ -20,6 +21,7 @@ import de.illonis.eduras.events.ObjectFactoryEvent;
 import de.illonis.eduras.events.SetBooleanGameObjectAttributeEvent;
 import de.illonis.eduras.events.SetGameModeEvent;
 import de.illonis.eduras.events.SetIntegerGameObjectAttributeEvent;
+import de.illonis.eduras.events.SetPolygonDataEvent;
 import de.illonis.eduras.events.SetRemainingTimeEvent;
 import de.illonis.eduras.events.SetTeamsEvent;
 import de.illonis.eduras.exceptions.GameModeNotSupportedByMapException;
@@ -33,6 +35,7 @@ import de.illonis.eduras.maps.SpawnPosition;
 import de.illonis.eduras.maps.SpawnPosition.SpawnType;
 import de.illonis.eduras.math.Vector2D;
 import de.illonis.eduras.shapes.ObjectShape;
+import de.illonis.eduras.shapes.Polygon;
 import de.illonis.eduras.units.PlayerMainFigure;
 
 /**
@@ -312,6 +315,13 @@ public class GameInformation {
 					object.getOwner());
 			objectEvent.setId(object.getId());
 			infos.add(objectEvent);
+
+			if (object.getType() == ObjectType.DYNAMIC_POLYGON) {
+				SetPolygonDataEvent polygonData = new SetPolygonDataEvent(
+						object.getId(),
+						((Polygon) object.getShape()).getVerticesAsArray());
+				infos.add(polygonData);
+			}
 
 			// send position immediately
 			MovementEvent me = new MovementEvent(GameEventNumber.SET_POS_TCP,

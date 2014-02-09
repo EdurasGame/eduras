@@ -190,9 +190,10 @@ public class EventParser implements EventHandler {
 								.getArgument(0), (Boolean) event.getArgument(1)));
 				break;
 			case SET_POLYGON_DATA:
-				Vector2D[] vertices = new Vector2D[numberOfArgs];
+				int numberOfVertices = (numberOfArgs - 1) / 2;
+				Vector2D[] vertices = new Vector2D[numberOfVertices];
 
-				for (int i = 0; i < numberOfArgs; i++) {
+				for (int i = 0; i < numberOfVertices; i++) {
 					Vector2D vertex = new Vector2D(
 							(Double) event.getArgument(2 * i + 1),
 							(Double) event.getArgument(2 * i + 2));

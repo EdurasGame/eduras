@@ -24,6 +24,11 @@ public class SetPolygonDataEvent extends ObjectEvent {
 	public SetPolygonDataEvent(int objectId, Vector2D[] vertices) {
 		super(GameEventNumber.SET_POLYGON_DATA, objectId);
 		this.vertices = vertices;
+
+		for (int i = 0; i < vertices.length; i++) {
+			putArgument(vertices[i].getX());
+			putArgument(vertices[i].getY());
+		}
 	}
 
 	/**
