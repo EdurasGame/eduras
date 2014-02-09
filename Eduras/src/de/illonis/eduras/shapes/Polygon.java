@@ -192,12 +192,20 @@ public class Polygon extends ObjectShape {
 			yValues.add(vertex.getY());
 		}
 
-		double maxX = BasicMath.max(xValues.toArray(new Double[1]));
-		double maxY = BasicMath.max(yValues.toArray(new Double[1]));
+		double maxX = 0;
+		double maxY = 0;
+		double minX = 0;
+		double minY = 0;
 
-		double minX = BasicMath.min(xValues.toArray(new Double[1]));
-		double minY = BasicMath.min(yValues.toArray(new Double[1]));
+		try {
+			maxX = BasicMath.max(xValues.toArray(new Double[0]));
+			maxY = BasicMath.max(yValues.toArray(new Double[0]));
 
+			minX = BasicMath.min(xValues.toArray(new Double[0]));
+			minY = BasicMath.min(yValues.toArray(new Double[0]));
+		} catch (NullPointerException e) {
+			return new Rectangle2D.Double(0, 0, 0, 0);
+		}
 		return new Rectangle2D.Double(minX, minY, maxX - minX, maxY - minY);
 	}
 
