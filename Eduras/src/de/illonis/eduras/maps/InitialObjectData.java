@@ -12,6 +12,7 @@ import de.illonis.eduras.math.Vector2D;
 public class InitialObjectData {
 	private final ObjectType type;
 	private final double x, y;
+	private final Vector2D[] polygonShapeVertices;
 
 	/**
 	 * Creates a new dataset holding given information for a new object.
@@ -27,6 +28,25 @@ public class InitialObjectData {
 		this.type = type;
 		this.x = xPos;
 		this.y = yPos;
+		polygonShapeVertices = null;
+	}
+
+	/**
+	 * Creates a new dataset holding given information for a new dynamic polygon
+	 * object.
+	 * 
+	 * @param xPos
+	 *            the x-coordinate of the new object.
+	 * @param yPos
+	 *            the y-coordinate of the new object.
+	 * @param vertices
+	 *            the vertices of the dynamic polygon.
+	 */
+	public InitialObjectData(double xPos, double yPos, Vector2D[] vertices) {
+		this.type = ObjectType.DYNAMIC_POLYGON;
+		this.x = xPos;
+		this.y = yPos;
+		polygonShapeVertices = vertices;
 	}
 
 	/**
@@ -34,6 +54,16 @@ public class InitialObjectData {
 	 */
 	public ObjectType getType() {
 		return type;
+	}
+
+	/**
+	 * Returns the vertices associated with this object. Will be null if the
+	 * type of this object is not DYNAMIC_POLYGON.
+	 * 
+	 * @return The associated vertices
+	 */
+	public Vector2D[] getPolygonVertices() {
+		return polygonShapeVertices;
 	}
 
 	/**

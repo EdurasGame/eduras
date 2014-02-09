@@ -410,7 +410,6 @@ public class GameRenderer implements TooltipHandler {
 		case BIGBLOCK:
 		case BIGGERBLOCK:
 		case BUILDING:
-		case DYNAMIC_POLYGON:
 		case SMALLCIRCLEDBLOCK:
 			return Color.GRAY;
 		case PLAYER:
@@ -446,6 +445,8 @@ public class GameRenderer implements TooltipHandler {
 		case ASSAULT_MISSILE:
 		case ASSAULTRIFLE:
 			return Color.PINK;
+		case DYNAMIC_POLYGON:
+			return new Color(0, 0, 0, 0);
 		default:
 			return Color.WHITE;
 		}

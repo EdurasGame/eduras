@@ -116,8 +116,12 @@ public class ClientLogic implements GameLogicInterface {
 				SetPolygonDataEvent polyEvent = (SetPolygonDataEvent) event;
 				GameObject gameObj = gameInfo.findObjectById(polyEvent
 						.getObjectId());
-				if (gameObj == null)
+				if (gameObj == null) {
+					L.warning("Received polygon data for object with id "
+							+ polyEvent.getObjectId()
+							+ " which couldn't be found.");
 					break;
+				}
 				if (gameObj instanceof DynamicPolygonBlock) {
 					((DynamicPolygonBlock) gameObj)
 							.setPolygonVertices(polyEvent.getVertices());

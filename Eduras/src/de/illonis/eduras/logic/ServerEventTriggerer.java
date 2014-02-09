@@ -394,8 +394,14 @@ public class ServerEventTriggerer implements EventTriggerer {
 		removeAllNonPlayers();
 
 		for (InitialObjectData initialObject : map.getInitialObjects()) {
-			createObjectAt(initialObject.getType(),
-					initialObject.getPosition(), -1);
+
+			if (initialObject.getType() == ObjectType.DYNAMIC_POLYGON) {
+				createDynamicPolygonAt(initialObject.getPolygonVertices(),
+						initialObject.getPosition(), -1);
+			} else {
+				createObjectAt(initialObject.getType(),
+						initialObject.getPosition(), -1);
+			}
 		}
 
 		gameInfo.getGameSettings().getGameMode().onGameStart();

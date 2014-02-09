@@ -58,9 +58,21 @@ public abstract class Map {
 		this.author = author;
 		created = new Date();
 		initialObjects = new LinkedList<InitialObjectData>();
+		addBoundsObject();
 		supportedGameModes = new LinkedList<GameModeNumber>();
 		spawnPositions = new LinkedList<SpawnPosition>();
 		buildMap();
+	}
+
+	private void addBoundsObject() {
+		Vector2D[] mapBoundsShape = new Vector2D[4];
+		mapBoundsShape[0] = new Vector2D(0, 0);
+		mapBoundsShape[1] = new Vector2D(width, 0);
+		mapBoundsShape[2] = new Vector2D(width, height);
+		mapBoundsShape[3] = new Vector2D(0, height);
+		InitialObjectData boundsData = new InitialObjectData(0, 0,
+				mapBoundsShape);
+		addObject(boundsData);
 	}
 
 	/**
