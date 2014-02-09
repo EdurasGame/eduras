@@ -60,6 +60,13 @@ public class NetworkManager {
 	}
 
 	/**
+	 * @return the port of the server this client is connected to.
+	 */
+	public int getPort() {
+		return client.getRemotePortNumber();
+	}
+
+	/**
 	 * Returns the client's id.
 	 * 
 	 * @return The client's id.

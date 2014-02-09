@@ -94,9 +94,7 @@ public class GameClient {
 		chat.setChatActivityListener(new ClientChatReceiver(frame
 				.getGamePanel(), chat, clientName, cache));
 		frame.getGamePanel().setChat(chat, cache);
-		// InetAddress serverAddr = nwm.getServerAddress();
-		// TODO: use this
-		chat.connect("localhost", 4388);
+		chat.connect(nwm.getServerAddress().getHostAddress(), nwm.getPort() + 1);
 	}
 
 	/**
