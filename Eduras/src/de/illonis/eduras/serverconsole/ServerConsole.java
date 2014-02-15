@@ -1,6 +1,6 @@
 package de.illonis.eduras.serverconsole;
 
-import java.io.Console;
+import java.io.UnsupportedEncodingException;
 import java.util.Formatter;
 import java.util.HashMap;
 import java.util.IllegalFormatException;
@@ -34,11 +34,11 @@ public class ServerConsole implements Runnable {
 	private final static String HELP_COMMAND = "help";
 	private final static String HELP_DESCRIPTION = "Prints all available commands";
 	private static ServerConsole instance;
+	private ConsoleInterface console;
 	private Thread thread;
 	private ConsoleEventTriggerer triggerer;
 
 	private final HashMap<String, ConsoleCommand> commands;
-	private final Console console;
 	private boolean running = false;
 
 	/**
@@ -54,6 +54,10 @@ public class ServerConsole implements Runnable {
 			L.log(Level.SEVERE, "no console found", e);
 		}
 	}
+	
+	void setConsole(ConsoleInterface console) {
+		this.console = console;
+	}
 
 	/**
 	 * Creates a new console that can be accessed to.
@@ -64,7 +68,15 @@ public class ServerConsole implements Runnable {
 	private ServerConsole() throws NoConsoleException {
 		if (!exists())
 			throw new NoConsoleException();
-		console = System.console();
+		//console = new CommandLine();
+		// hacky ;)
+		try {
+			RemoteConsoleServer rcs = new RemoteConsoleServer(this, "abc");
+			rcs.start();
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		commands = new HashMap<String, ConsoleCommand>();
 		// init help command
 		commands.put(HELP_COMMAND, new ConsoleCommand(HELP_COMMAND,
@@ -112,7 +124,8 @@ public class ServerConsole implements Runnable {
 	 * @return true if a console exists.
 	 */
 	public static boolean exists() {
-		return (System.console() != null);
+		return true;
+	//	return (System.console() != null);
 	}
 
 	private static ServerConsole getInstance() throws NoConsoleException {
@@ -249,7 +262,7 @@ public class ServerConsole implements Runnable {
 	 */
 	public void printlnf(String s, Object... args) {
 		if (exists()) {
-			System.out.printf(s + "\n", args);
+			console.writef(s + "\n", args);
 		}
 	}
 
@@ -261,7 +274,7 @@ public class ServerConsole implements Runnable {
 	 */
 	public void println(String text) {
 		if (exists())
-			System.out.println(text);
+			console.writeLine(text);
 	}
 
 	/**

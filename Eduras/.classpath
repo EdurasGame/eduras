@@ -14,5 +14,6 @@
 			<attribute name="javadoc_location" value="jar:platform:/resource/Eduras/lib/docs/timingframework-swing-doc.zip!/"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="lib" path="lib/eduras-remote.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
