@@ -39,19 +39,19 @@ public class MathUtilsTest {
 	 */
 	@Test
 	public void testClosestNumberModulo() {
-		assertEquals(1, BasicMath.findClosestNumberModuloArray(6.,
-				new double[] { 1. }, 2), 0.001);
+		assertEquals(0, BasicMath.findClosestNumberModuloArray(6.,
+				new double[] { 1. }, 2));
 		assertEquals(
-				0.9,
-				BasicMath.findClosestNumberModuloArray(6., new double[] { 0.9,
-						4 }, 7), 0.001);
+				1,
+				BasicMath.findClosestNumberModuloArray(6., new double[] { 4,
+						0.9 }, 7));
 		assertEquals(
 				0,
 				BasicMath.findClosestNumberModuloArray(0, new double[] { 0, 0,
-						42 }, 42), 0.001);
+						42 }, 42));
 		assertEquals(
-				1.4,
-				BasicMath.findClosestNumberModuloArray(3.5, new double[] { 3.4,
-						3.61 }, 2), 0.001);
+				2,
+				BasicMath.findClosestNumberModuloArray(3.5, new double[] {
+						3.35, 2, 3.4, 3.61 }, 2));
 	}
 }
