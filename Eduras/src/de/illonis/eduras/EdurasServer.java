@@ -83,6 +83,7 @@ public class EdurasServer {
 		Level logLimit = DEFAULT_LOGLIMIT;
 		int port = DEFAULT_PORT;
 		String name = DEFAULT_NAME;
+		boolean consoleOn = true;
 		boolean registerAtMetaserver = false;
 		for (int i = 0; i < args.length; i++) {
 
@@ -110,6 +111,10 @@ public class EdurasServer {
 
 			if (parameterName.equalsIgnoreCase("loglimit")) {
 				logLimit = Level.parse(parameterValue);
+			}
+
+			if (parameterName.equalsIgnoreCase("console")) {
+				consoleOn = Boolean.parseBoolean(parameterValue);
 			}
 		}
 
@@ -193,13 +198,15 @@ public class EdurasServer {
 
 		getInterfaces();
 
-		try {
-			ServerConsole.start();
-			CommandInitializer.initCommands();
-			ServerConsole.setEventTriggerer(new ConsoleEventTriggerer(
-					eventTriggerer, server));
-		} catch (NoConsoleException e) {
-			L.log(Level.WARNING, "Could not find console", e);
+		if (consoleOn) {
+			try {
+				ServerConsole.start();
+				CommandInitializer.initCommands();
+				ServerConsole.setEventTriggerer(new ConsoleEventTriggerer(
+						eventTriggerer, server));
+			} catch (NoConsoleException e) {
+				L.log(Level.WARNING, "Could not find console", e);
+			}
 		}
 
 		ServerDiscoveryListener sdl = new ServerDiscoveryListener(
