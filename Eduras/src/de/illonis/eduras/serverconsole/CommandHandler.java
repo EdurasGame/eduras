@@ -23,6 +23,6 @@ public interface CommandHandler {
 	 * @param triggerer
 	 *            the triggerer where events can be called.
 	 */
-	void onCommand(String[] args, ServerConsole console,
+	void onCommand(String[] args, ConsolePrinter console,
 			ConsoleEventTriggerer triggerer);
 }

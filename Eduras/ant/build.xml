@@ -19,6 +19,7 @@
 		<fileset dir="${base}${libs}">
 			<include name="timingframework*.jar" />
 			<include name="eventingserver.jar" />
+			<include name="eduras-remote.jar" />
 			<include name="edulog-2.jar" />
 			<include name="junit-4.11.jar" />
 		</fileset>
