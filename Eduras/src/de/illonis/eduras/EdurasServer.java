@@ -83,7 +83,7 @@ public class EdurasServer {
 		Level logLimit = DEFAULT_LOGLIMIT;
 		int port = DEFAULT_PORT;
 		String name = DEFAULT_NAME;
-		boolean consoleOn = true;
+		boolean consoleOn = false;
 		boolean registerAtMetaserver = false;
 		for (int i = 0; i < args.length; i++) {
 
