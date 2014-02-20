@@ -186,6 +186,10 @@ public class ServerConsole implements Runnable {
 		String command;
 		while (running) {
 			command = console.readLine(CMD_PROMPT);
+			if (command == null) {
+				L.warning("End of stream reached in console. Closing console.");
+				return;
+			}
 			parseCommand(command);
 		}
 	}
