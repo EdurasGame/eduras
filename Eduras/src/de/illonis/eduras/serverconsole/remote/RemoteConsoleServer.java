@@ -6,33 +6,45 @@ import java.util.HashMap;
 import de.eduras.remote.EncryptedRemoteServer;
 import de.illonis.eduras.logic.ConsoleEventTriggerer;
 import de.illonis.eduras.serverconsole.CommandInput;
+import de.illonis.eduras.serverconsole.CommandParser;
 import de.illonis.eduras.serverconsole.InvalidCommandException;
-import de.illonis.eduras.serverconsole.ServerConsole;
 
+/**
+ * A remote server accepting clients that use server console.
+ * 
+ * @author illonis
+ * 
+ */
 public class RemoteConsoleServer extends EncryptedRemoteServer {
 
-	private final static String PROMPT = "eduras-remote>";
 	private final static String EXIT_COMMAND = "exit";
-	private int lastClient = 0;
 	private final HashMap<Integer, VirtualClientConsole> consoles;
 	private final ConsoleEventTriggerer triggerer;
-	private final ServerConsole console;
+	private final CommandParser parser;
 
 	String buffer;
 
-	public RemoteConsoleServer(ServerConsole c,
+	/**
+	 * @param parser
+	 *            the parser that parses commands.
+	 * @param triggerer
+	 *            the triggerer that performs command actions.
+	 * @param password
+	 *            the password used for authentication.
+	 * @throws UnsupportedEncodingException
+	 *             if UTF-8 is not supported.
+	 */
+	public RemoteConsoleServer(CommandParser parser,
 			ConsoleEventTriggerer triggerer, String password)
 			throws UnsupportedEncodingException {
 		super(password);
-		this.console = c;
+		this.parser = parser;
 		this.triggerer = triggerer;
 		consoles = new HashMap<Integer, VirtualClientConsole>();
 	}
 
 	void addClient(int clientId) {
-		System.out.println("addclient" + clientId);
-		consoles.put(clientId, new VirtualClientConsole(clientId, this,
-				triggerer));
+		consoles.put(clientId, new VirtualClientConsole(clientId, this));
 	}
 
 	void removeClient(int clientId) {
@@ -41,7 +53,6 @@ public class RemoteConsoleServer extends EncryptedRemoteServer {
 
 	@Override
 	public void onCommand(int client, String command) {
-		System.out.println("received " + command + " from client " + client);
 		VirtualClientConsole clientConsole = consoles.get(client);
 
 		if (command.equals(EXIT_COMMAND)) {
@@ -49,7 +60,7 @@ public class RemoteConsoleServer extends EncryptedRemoteServer {
 			removeClient(client);
 		}
 		try {
-			CommandInput input = console.parseCommand(command);
+			CommandInput input = parser.parseCommand(command);
 			input.getCommand().onCommand(input.getArgs(), clientConsole,
 					triggerer);
 		} catch (InvalidCommandException e) {

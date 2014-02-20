@@ -1,28 +1,29 @@
 package de.illonis.eduras.serverconsole.remote;
 
 import de.eduras.remote.RemoteException;
-import de.illonis.eduras.logic.ConsoleEventTriggerer;
 import de.illonis.eduras.serverconsole.ConsolePrinter;
 
+/**
+ * Represents a client console on server side.
+ * 
+ * @author illonis
+ * 
+ */
 public class VirtualClientConsole implements ConsolePrinter {
-	private final ConsoleEventTriggerer triggerer;
 	private final RemoteConsoleServer remoteConsoleServer;
-	private final int id;
+	private final int clientId;
 
-	public VirtualClientConsole(int id,
-			RemoteConsoleServer remoteConsoleServer,
-			ConsoleEventTriggerer triggerer) {
-		this.id = id;
-		this.triggerer = triggerer;
+	VirtualClientConsole(int id, RemoteConsoleServer remoteConsoleServer) {
+		this.clientId = id;
 		this.remoteConsoleServer = remoteConsoleServer;
 	}
 
 	@Override
 	public void println(String line) {
 		try {
-			remoteConsoleServer.answer(id, line);
+			remoteConsoleServer.answer(clientId, line);
 		} catch (RemoteException e) {
-			remoteConsoleServer.removeClient(id);
+			remoteConsoleServer.removeClient(clientId);
 		}
 	}
 

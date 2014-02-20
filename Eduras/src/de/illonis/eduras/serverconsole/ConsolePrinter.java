@@ -5,12 +5,18 @@ import java.util.IllegalFormatException;
 
 import de.illonis.edulog.EduLog;
 
+/**
+ * A printer can handle output print.
+ * 
+ * @author illonis
+ * 
+ */
 public interface ConsolePrinter {
 
 	/**
 	 * Prints given text line to console.
 	 * 
-	 * @param text
+	 * @param line
 	 *            text to print.
 	 */
 	void println(String line);
@@ -23,7 +29,7 @@ public interface ConsolePrinter {
 	 * 
 	 * @see Formatter
 	 * 
-	 * @param s
+	 * @param line
 	 *            A (format) string that should be printed.
 	 * 
 	 * @param args

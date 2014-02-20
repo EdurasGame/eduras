@@ -12,13 +12,23 @@ import de.illonis.eduras.serverconsole.remote.EdurasRemoteNetworkEventHandler;
 import de.illonis.eduras.serverconsole.remote.RemoteConsoleServer;
 
 /**
- * Provides a command line interface on server to make administrator able to run
- * some commands at runtime.<br>
- * Command line cannot be left unless a command is registerd that calls
- * {@link ServerConsole#stopCommandPrompt()}.<br>
- * By default, a <code>help</code>-command is implemented that echoes a list of
+ * Handles both server consoles, remote and local.<br>
+ * Server consoles allow an administrator to run commands on the server at
+ * runtime.
+ * <ul>
+ * <li><b>local</b> - A local command line can be started using
+ * {@link #startCommandPrompt()} and does not require local authentication.</li>
+ * <li><b>remote</b> - A remote server that listens for remote clients is
+ * started by {@link #startRemoteServer(int, String)}. Remote clients have to
+ * authenticate using a server password before they can run commands.</li>
+ * </ul>
+ * By default, a <code>help</code>-command is implemented that prints a list of
  * available commands. You can override this command by registering a new
- * command with the same command name.<br>
+ * command with the same command name using
+ * {@link #registerCommand(ConsoleCommand)}.<br>
+ * Commands available from beginning are delared in
+ * {@link CommandInitializer#initCommands(ServerConsole)}.<br>
+ * <br>
  * <i>Note that this feature is not available when debugging/running in
  * eclipse.</i>
  * 
@@ -37,6 +47,7 @@ public class ServerConsole implements Runnable {
 	private final ConsoleEventTriggerer triggerer;
 	private RemoteConsoleServer rcs;
 	private SystemConsole console;
+	private final CommandParser commandParser;
 
 	private final HashMap<String, ConsoleCommand> commands;
 	private boolean running = false;
@@ -51,6 +62,8 @@ public class ServerConsole implements Runnable {
 		this.triggerer = triggerer;
 
 		commands = new HashMap<String, ConsoleCommand>();
+		commandParser = new CommandParser(commands);
+
 		// init help command
 		commands.put(HELP_COMMAND, new ConsoleCommand(HELP_COMMAND,
 				HELP_DESCRIPTION) {
@@ -74,7 +87,7 @@ public class ServerConsole implements Runnable {
 	 */
 	public void startCommandPrompt() throws NoConsoleException {
 		if (!running) {
-			console = new SystemConsole(triggerer);
+			console = new SystemConsole();
 			runMeAsync();
 		}
 	}
@@ -91,7 +104,8 @@ public class ServerConsole implements Runnable {
 	 */
 	public void startRemoteServer(int port, String remotePassword) {
 		try {
-			rcs = new RemoteConsoleServer(this, triggerer, remotePassword);
+			rcs = new RemoteConsoleServer(commandParser, triggerer,
+					remotePassword);
 			rcs.setNetworkEventHandler(new EdurasRemoteNetworkEventHandler(rcs));
 			rcs.start(port);
 		} catch (UnsupportedEncodingException e) {
@@ -168,51 +182,11 @@ public class ServerConsole implements Runnable {
 				return;
 			}
 			try {
-				CommandInput input = parseCommand(command);
+				CommandInput input = commandParser.parseCommand(command);
 				input.getCommand().onCommand(input.getArgs(), console,
 						triggerer);
 			} catch (InvalidCommandException e) {
 				console.println(e.getMessage());
-			}
-		}
-	}
-
-	/**
-	 * Parses a command line input. Checks, if a command exists and has a valid
-	 * number of arguments given, then executes it.
-	 * 
-	 * @param command
-	 *            command to parse.
-	 * @return the parsed command and arguments.
-	 * @throws InvalidCommandException
-	 */
-	public CommandInput parseCommand(String command)
-			throws InvalidCommandException {
-		if (command.trim().isEmpty())
-			throw new InvalidCommandException("Please provide a command.");
-		L.fine("Received command: " + command);
-
-		String[] args = command.split(" ");
-
-		ConsoleCommand cmd = commands.get(args[0]);
-		if (cmd == null) {
-			throw new InvalidCommandException("Command not found: " + command);
-		} else {
-			if (cmd.argumentCountMatches(args.length - 1)) {
-				return new CommandInput(cmd, args);
-			} else {
-				if (cmd.getMinimumArguments() == cmd.getMaximumArguments()) {
-					throw new InvalidCommandException(
-							String.format(
-									"Invalid number of arguments given. Command '%s' requires exactly %d arguments.",
-									args[0], cmd.getMaximumArguments()));
-				} else {
-					throw new InvalidCommandException(
-							String.format(
-									"Invalid number of arguments given. Command '%s' requires at least %d arguments, to a a maximum of %d arguments.",
-									args[0], cmd.getMinimumArguments(),
-									cmd.getMaximumArguments()));
-				}
 			}
 		}
 	}

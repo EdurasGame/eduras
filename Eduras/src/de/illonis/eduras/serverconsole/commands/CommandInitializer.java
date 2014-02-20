@@ -12,8 +12,8 @@ public class CommandInitializer {
 
 	/**
 	 * Initializes default console commands.<br>
-	 * A secondary call will result in resetting commands to default action if
-	 * they have been overwritten.
+	 * A second call will result in resetting commands to default action if they
+	 * have been overwritten.
 	 * 
 	 * @param console
 	 *            the console to register commands at.

@@ -2,15 +2,22 @@ package de.illonis.eduras.serverconsole;
 
 import java.io.Console;
 
-import de.illonis.eduras.logic.ConsoleEventTriggerer;
-
+/**
+ * Represents the System Console {@link System#console()}.
+ * 
+ * @author illonis
+ * 
+ */
 public final class SystemConsole implements ConsoleInterface {
 	private final Console console;
-	private final ConsoleEventTriggerer triggerer;
 
-	public SystemConsole(ConsoleEventTriggerer triggerer)
-			throws NoConsoleException {
-		this.triggerer = triggerer;
+	/**
+	 * @param triggerer
+	 *            event triggerer.
+	 * @throws NoConsoleException
+	 *             when there is no command prompt available.
+	 */
+	SystemConsole() throws NoConsoleException {
 		console = System.console();
 		if (console == null)
 			throw new NoConsoleException();
