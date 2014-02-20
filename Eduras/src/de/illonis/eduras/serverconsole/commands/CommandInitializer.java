@@ -14,15 +14,18 @@ public class CommandInitializer {
 	 * Initializes default console commands.<br>
 	 * A secondary call will result in resetting commands to default action if
 	 * they have been overwritten.
+	 * 
+	 * @param console
+	 *            the console to register commands at.
 	 */
-	public static void initCommands() {
-		ServerConsole.registerCommand(new KickPlayerCommand());
-		ServerConsole.registerCommand(new ListPlayersCommand());
-		ServerConsole.registerCommand(new RespawnCommand());
-		ServerConsole.registerCommand(new ShutdownCommand());
-		ServerConsole.registerCommand(new GameModeChangeCommand());
-		ServerConsole.registerCommand(new MapChangeCommand());
-		ServerConsole.registerCommand(new RestartRoundCommand());
-		ServerConsole.registerCommand(new LoadSettingsCommand());
+	public static void initCommands(ServerConsole console) {
+		console.registerCommand(new KickPlayerCommand());
+		console.registerCommand(new ListPlayersCommand());
+		console.registerCommand(new RespawnCommand());
+		console.registerCommand(new ShutdownCommand());
+		console.registerCommand(new GameModeChangeCommand());
+		console.registerCommand(new MapChangeCommand());
+		console.registerCommand(new RestartRoundCommand());
+		console.registerCommand(new LoadSettingsCommand());
 	}
 }

@@ -15,6 +15,7 @@ import java.util.logging.Logger;
 import de.eduras.eventingserver.Server;
 import de.eduras.eventingserver.ServerInterface;
 import de.eduras.eventingserver.ServerNetworkEventHandler;
+import de.eduras.remote.EncryptedRemoteServer;
 import de.illonis.edulog.EduLog;
 import de.illonis.eduras.chat.ChatRoom;
 import de.illonis.eduras.chat.ChatServer;
@@ -38,7 +39,6 @@ import de.illonis.eduras.networking.discover.ServerDiscoveryListener;
 import de.illonis.eduras.networking.discover.ServerSearcher;
 import de.illonis.eduras.serverconsole.NoConsoleException;
 import de.illonis.eduras.serverconsole.ServerConsole;
-import de.illonis.eduras.serverconsole.commands.CommandInitializer;
 
 /**
  * The eduras server main executable.
@@ -192,15 +192,18 @@ public class EdurasServer {
 		server.start(name, port);
 
 		getInterfaces();
+		ServerConsole console = new ServerConsole(new ConsoleEventTriggerer(
+				eventTriggerer, server));
 
 		try {
-			ServerConsole.start();
-			CommandInitializer.initCommands();
-			ServerConsole.setEventTriggerer(new ConsoleEventTriggerer(
-					eventTriggerer, server));
+			console.startCommandPrompt();
 		} catch (NoConsoleException e) {
 			L.log(Level.WARNING, "Could not find console", e);
 		}
+
+		// TODO: use command line argument for remote server port.
+		console.startRemoteServer(
+				EncryptedRemoteServer.DEFAULT_REMOTE_SERVER_PORT, "password");
 
 		ServerDiscoveryListener sdl = new ServerDiscoveryListener(
 				server.getName(), port);

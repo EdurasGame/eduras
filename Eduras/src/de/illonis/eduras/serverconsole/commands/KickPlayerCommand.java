@@ -1,7 +1,7 @@
 package de.illonis.eduras.serverconsole.commands;
 
 import de.illonis.eduras.logic.ConsoleEventTriggerer;
-import de.illonis.eduras.serverconsole.ServerConsole;
+import de.illonis.eduras.serverconsole.ConsolePrinter;
 
 /**
  * A command that kicks a specific player from server.
@@ -18,7 +18,7 @@ public class KickPlayerCommand extends ConsoleCommand {
 	}
 
 	@Override
-	public void onCommand(String[] args, ServerConsole console,
+	public void onCommand(String[] args, ConsolePrinter console,
 			ConsoleEventTriggerer triggerer) {
 		int player;
 		try {

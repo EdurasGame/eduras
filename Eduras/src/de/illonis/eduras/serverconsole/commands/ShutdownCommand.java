@@ -1,8 +1,7 @@
 package de.illonis.eduras.serverconsole.commands;
 
 import de.illonis.eduras.logic.ConsoleEventTriggerer;
-import de.illonis.eduras.serverconsole.NoConsoleException;
-import de.illonis.eduras.serverconsole.ServerConsole;
+import de.illonis.eduras.serverconsole.ConsolePrinter;
 
 /**
  * A shutdown command that shutdowns server.
@@ -21,13 +20,9 @@ public class ShutdownCommand extends ConsoleCommand {
 	}
 
 	@Override
-	public void onCommand(String[] args, ServerConsole console,
+	public void onCommand(String[] args, ConsolePrinter console,
 			ConsoleEventTriggerer triggerer) {
 		console.println("Shutting server down...");
-		try {
-			ServerConsole.stop();
-		} catch (NoConsoleException e) {
-		}
 		triggerer.shutDown();
 	}
 }

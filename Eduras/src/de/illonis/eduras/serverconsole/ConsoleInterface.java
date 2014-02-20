@@ -1,12 +1,8 @@
 package de.illonis.eduras.serverconsole;
 
-public interface ConsoleInterface {
-
-	void writeLine(String line);
-	
-	void writef(String str, Object[] args);
+public interface ConsoleInterface extends ConsolePrinter {
 
 	String readLine();
-	
+
 	String readLine(String prompt);
 }
