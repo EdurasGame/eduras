@@ -22,6 +22,7 @@
 			<include name="eduras-remote.jar" />
 			<include name="edulog-2.jar" />
 			<include name="junit-4.11.jar" />
+			<include name="json.jar" />
 		</fileset>
 		<pathelement path="${base}${build}" />
 	</path>
