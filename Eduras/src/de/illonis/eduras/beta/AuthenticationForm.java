@@ -21,6 +21,8 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 
 import de.illonis.eduras.gameclient.gui.login.UserInputField;
 import de.illonis.eduras.images.ImageFiler;
@@ -39,13 +41,15 @@ public class AuthenticationForm implements ActionListener {
 	private final ImageIcon loadIcon;
 	private ImageIcon logo;
 	private final Image originalLogo;
-	private final AuthGuiHandler handler;
+	private final BetaAuthenticator handler;
 	private JLabel logoLabel;
 	private JButton loginButton;
 	private final Dimension originalLogoDimension;
+	private final DocumentListener docListener;
 
-	AuthenticationForm(AuthGuiHandler handler) {
+	AuthenticationForm(BetaAuthenticator handler) {
 		this.handler = handler;
+		docListener = new DocListener();
 		loginFrame = new JDialog((Window) null);
 		loginFrame.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 		loginFrame.setModalityType(ModalityType.TOOLKIT_MODAL);
@@ -83,8 +87,9 @@ public class AuthenticationForm implements ActionListener {
 				"Your username/password combination is invalid.",
 				"Login failed", JOptionPane.ERROR_MESSAGE);
 		usernameInput.setEnabled(true);
+		usernameInput.setText("");
 		passwordInput.setEnabled(true);
-		loginButton.setEnabled(true);
+		passwordInput.setText("");
 	}
 
 	private void initGui() {
@@ -96,7 +101,12 @@ public class AuthenticationForm implements ActionListener {
 
 		JPanel authForm = new JPanel(new GridBagLayout());
 		usernameInput = new UserInputField();
+		usernameInput.addActionListener(this);
+		usernameInput.getDocument().addDocumentListener(docListener);
+
 		passwordInput = new JPasswordField();
+		passwordInput.addActionListener(this);
+		passwordInput.getDocument().addDocumentListener(docListener);
 
 		GridBagConstraints c = new GridBagConstraints();
 		c.gridx = 0;
@@ -133,6 +143,7 @@ public class AuthenticationForm implements ActionListener {
 		c.gridy = 3;
 		loginButton = new JButton("Login");
 		loginButton.addActionListener(this);
+		loginButton.setEnabled(false);
 		authForm.add(loginButton, c);
 		content.add(authForm, BorderLayout.SOUTH);
 	}
@@ -206,5 +217,35 @@ public class AuthenticationForm implements ActionListener {
 		}
 
 		return new Dimension(new_width, new_height);
+	}
+
+	private class DocListener implements DocumentListener {
+
+		@Override
+		public void insertUpdate(DocumentEvent e) {
+			checkInputValid();
+		}
+
+		@Override
+		public void removeUpdate(DocumentEvent e) {
+			checkInputValid();
+		}
+
+		@Override
+		public void changedUpdate(DocumentEvent e) {
+			checkInputValid();
+		}
+
+		private void checkInputValid() {
+			java.awt.EventQueue.invokeLater(new Runnable() {
+				@Override
+				public void run() {
+					loginButton.setEnabled(isValidPassword(passwordInput
+							.getPassword())
+							&& isValidUsername(usernameInput.getText()));
+				}
+			});
+		}
+
 	}
 }

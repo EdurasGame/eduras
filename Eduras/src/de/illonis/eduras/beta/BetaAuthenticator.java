@@ -6,34 +6,47 @@ import java.util.concurrent.ExecutionException;
 
 import javax.swing.SwingWorker;
 
-public class BetaAuthenticator implements AuthGuiHandler {
+/**
+ * Provides beta authentication.
+ * 
+ * @author illonis
+ * 
+ */
+public class BetaAuthenticator {
 
 	private final AuthenticationForm frame;
 	private AuthenticationWorker worker;
 	private boolean result;
+	private int retriesLeft;
 
+	/**
+	 * Creates a new authenticator.
+	 */
 	public BetaAuthenticator() {
 		frame = new AuthenticationForm(this);
 		result = false;
+		retriesLeft = 0;
 	}
 
-	public static void main(String[] args) {
-		BetaAuthenticator auth = new BetaAuthenticator();
-		System.out.println(auth.authenticate());
-	}
-
-	public boolean authenticate() {
+	/**
+	 * Authenticates the user by prompting an authentication dialog. This method
+	 * blocks until user was authenticated successfully.
+	 * 
+	 * @param maxRetries
+	 *            maximum number of retries until false is returned. 0 for no
+	 *            retries.
+	 * 
+	 * @return true if user is authenticated successfully, false otherwise.
+	 */
+	public boolean authenticate(int maxRetries) {
+		if (maxRetries < 0)
+			maxRetries = 0;
+		retriesLeft = maxRetries;
 		frame.show();
-		System.out.println("hidden");
 		return result;
 	}
 
 	class AuthListener implements PropertyChangeListener {
-		private final AuthenticationForm frame;
-
-		public AuthListener(AuthenticationForm frame) {
-			this.frame = frame;
-		}
 
 		@Override
 		public void propertyChange(PropertyChangeEvent event) {
@@ -49,22 +62,21 @@ public class BetaAuthenticator implements AuthGuiHandler {
 				onResult(result);
 			}
 		}
-
 	}
 
 	private void onResult(boolean success) {
-		if (success)
+		if (success || retriesLeft <= 0)
 			frame.hide();
-		else
+		else {
+			retriesLeft--;
 			frame.onLoginFailed();
+		}
 	}
 
-	@Override
-	public void authenticate(String username, char[] password) {
+	void authenticate(String username, char[] password) {
 		frame.onLoginStart();
 		worker = new AuthenticationWorker(username, password.toString());
-		worker.addPropertyChangeListener(new AuthListener(frame));
+		worker.addPropertyChangeListener(new AuthListener());
 		worker.execute();
 	}
-
 }
