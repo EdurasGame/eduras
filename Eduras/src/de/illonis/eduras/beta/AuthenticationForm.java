@@ -72,6 +72,7 @@ public class AuthenticationForm implements ActionListener {
 
 	void hide() {
 		loginFrame.setVisible(false);
+		loginFrame.dispose();
 	}
 
 	void onLoginStart() {

@@ -31,7 +31,7 @@ public class AuthenticationWorker extends SwingWorker<Boolean, Void> {
 	private final static String USERNAME_FIELD = "user";
 	private final static String PASSWORD_FIELD = "password";
 	private final static String CHANNEL_FIELD = "rel";
-	private final static String CHANNEL_VALUE = "be1ta";
+	private final static String CHANNEL_VALUE = "bewta";
 
 	private final String username;
 	private final String password;
@@ -43,6 +43,7 @@ public class AuthenticationWorker extends SwingWorker<Boolean, Void> {
 
 	@Override
 	protected Boolean doInBackground() throws Exception {
+		Thread.currentThread().setName("AuthenticationWorker");
 		HashMap<String, String> data = new HashMap<String, String>();
 		data.put(USERNAME_FIELD, username);
 		data.put(PASSWORD_FIELD, password);

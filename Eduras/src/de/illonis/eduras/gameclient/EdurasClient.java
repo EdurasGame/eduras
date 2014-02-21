@@ -26,6 +26,7 @@ import javax.swing.JRadioButton;
 import javax.swing.ListCellRenderer;
 
 import de.illonis.edulog.EduLog;
+import de.illonis.eduras.beta.BetaAuthenticator;
 import de.illonis.eduras.gameclient.gui.ClientFrame;
 import de.illonis.eduras.gameclient.gui.FullScreenClientFrame;
 
@@ -98,7 +99,12 @@ public class EdurasClient {
 		EduLog.setConsoleLogLimit(logLimit);
 
 		// Note that this is very bad coded due to testing ;)
-		buildChooserFrame();
+		// buildChooserFrame();
+
+		BetaAuthenticator authenticator = new BetaAuthenticator();
+		if (authenticator.authenticate(3)) {
+			startWindowed();
+		}
 	}
 
 	protected static void startWindowed() {
