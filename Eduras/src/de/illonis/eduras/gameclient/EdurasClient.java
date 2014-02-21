@@ -71,6 +71,9 @@ public class EdurasClient {
 			parametersWithValues[i] = args[i].split("=");
 		}
 
+		String betaUser = "";
+		String betaPassword = "";
+
 		// read arguments
 		Level logLimit = DEFAULT_LOGLIMIT;
 		for (int i = 0; i < args.length; i++) {
@@ -88,10 +91,11 @@ public class EdurasClient {
 					L.severe("Given port is not a valid value!");
 					return;
 				}
-				continue;
-			}
-
-			if (parameterName.equalsIgnoreCase("loglimit")) {
+			} else if (parameterName.equalsIgnoreCase("betaUser")) {
+				betaUser = parameterValue;
+			} else if (parameterName.equalsIgnoreCase("betaPassword")) {
+				betaPassword = parameterValue;
+			} else if (parameterName.equalsIgnoreCase("loglimit")) {
 				logLimit = Level.parse(parameterValue);
 			}
 		}
@@ -102,7 +106,7 @@ public class EdurasClient {
 		// buildChooserFrame();
 
 		BetaAuthenticator authenticator = new BetaAuthenticator();
-		if (authenticator.authenticate(3)) {
+		if (authenticator.authenticate(3, betaUser, betaPassword)) {
 			startWindowed();
 		}
 	}

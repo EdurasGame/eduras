@@ -30,21 +30,6 @@ public class BetaAuthenticator {
 	}
 
 	/**
-	 * Creates a new authenticator that initially tries to authenticate with
-	 * given credentials.
-	 * 
-	 * @param username
-	 *            the username.
-	 * @param password
-	 *            the password.
-	 */
-	public BetaAuthenticator(String username, String password) {
-		frame = new AuthenticationForm(this);
-		result = false;
-		attemptsLeft = 0;
-	}
-
-	/**
 	 * Authenticates the user by prompting an authentication dialog. This method
 	 * blocks until user was authenticated successfully.
 	 * 
@@ -55,9 +40,33 @@ public class BetaAuthenticator {
 	 * @return true if user is authenticated successfully, false otherwise.
 	 */
 	public boolean authenticate(int numAttempts) {
+		return authenticate(numAttempts, "", "");
+	}
+
+	/**
+	 * Authenticates the user with given credentials. If credentials are
+	 * invalid, the user is prompted to enter new one. This method blocks until
+	 * user was authenticated successfully.
+	 * 
+	 * @param numAttempts
+	 *            maximum number of authentication attempts until false is
+	 *            returned. 0 for no retries.
+	 * @param username
+	 *            the initial username.
+	 * @param password
+	 *            the initial password.
+	 * 
+	 * @return true if user is authenticated successfully, false otherwise.
+	 */
+	public boolean authenticate(int numAttempts, String username,
+			String password) {
 		if (numAttempts <= 0)
 			numAttempts = 1;
 		attemptsLeft = numAttempts;
+		if (!username.isEmpty() && !password.isEmpty()) {
+			if (frame.prefill(username, password))
+				authenticate(username, password.toCharArray());
+		}
 		frame.show();
 		return result;
 	}

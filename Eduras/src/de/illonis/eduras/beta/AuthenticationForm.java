@@ -35,6 +35,15 @@ import de.illonis.eduras.images.ImageFiler;
  */
 public class AuthenticationForm implements ActionListener {
 
+	/**
+	 * minimum length of a username.
+	 */
+	public final static int USERNAME_MINIMUM_LENGTH = 3;
+	/**
+	 * minimum length of a password.
+	 */
+	public final static int PASSWORD_MINIMUM_LENGTH = 6;
+
 	private final JDialog loginFrame;
 	private UserInputField usernameInput;
 	private JPasswordField passwordInput;
@@ -46,6 +55,7 @@ public class AuthenticationForm implements ActionListener {
 	private JButton loginButton;
 	private final Dimension originalLogoDimension;
 	private final DocumentListener docListener;
+	private boolean authenticating;
 
 	AuthenticationForm(BetaAuthenticator handler) {
 		this.handler = handler;
@@ -61,6 +71,7 @@ public class AuthenticationForm implements ActionListener {
 		originalLogo = logo.getImage();
 		loadIcon = ImageFiler.loadIcon("gui/login/ajax-loader.gif");
 		loginFrame.setSize(450, 350);
+		authenticating = false;
 		initGui();
 	}
 
@@ -76,6 +87,7 @@ public class AuthenticationForm implements ActionListener {
 	}
 
 	void onLoginStart() {
+		authenticating = true;
 		usernameInput.setEnabled(false);
 		passwordInput.setEnabled(false);
 		loginButton.setEnabled(false);
@@ -83,6 +95,7 @@ public class AuthenticationForm implements ActionListener {
 	}
 
 	void onLoginFailed() {
+		authenticating = false;
 		logoLabel.setIcon(logo);
 		JOptionPane.showMessageDialog(loginFrame,
 				"Your username/password combination is invalid.",
@@ -167,17 +180,19 @@ public class AuthenticationForm implements ActionListener {
 	}
 
 	private boolean isValidPassword(char[] password) {
-		return password.length > 5;
+		return password.length >= PASSWORD_MINIMUM_LENGTH;
 	}
 
 	private boolean isValidUsername(String username) {
-		return username.length() >= 3;
+		return username.length() >= USERNAME_MINIMUM_LENGTH;
 	}
 
 	private class LogoResizer extends ComponentAdapter {
 
 		@Override
 		public void componentResized(ComponentEvent e) {
+			if (authenticating)
+				return;
 			Dimension targetDim = new Dimension(logoLabel.getWidth(),
 					logoLabel.getHeight());
 			Dimension scaledDim = getScaledDimension(originalLogoDimension,
@@ -224,29 +239,48 @@ public class AuthenticationForm implements ActionListener {
 
 		@Override
 		public void insertUpdate(DocumentEvent e) {
-			checkInputValid();
+			verifyInput();
 		}
 
 		@Override
 		public void removeUpdate(DocumentEvent e) {
-			checkInputValid();
+			verifyInput();
 		}
 
 		@Override
 		public void changedUpdate(DocumentEvent e) {
-			checkInputValid();
+			verifyInput();
 		}
 
-		private void checkInputValid() {
+		private void verifyInput() {
 			java.awt.EventQueue.invokeLater(new Runnable() {
 				@Override
 				public void run() {
-					loginButton.setEnabled(isValidPassword(passwordInput
-							.getPassword())
-							&& isValidUsername(usernameInput.getText()));
+					loginButton.setEnabled(isInputValid());
 				}
 			});
 		}
 
+	}
+
+	private boolean isInputValid() {
+		return isValidPassword(passwordInput.getPassword())
+				&& isValidUsername(usernameInput.getText());
+	}
+
+	/**
+	 * Prefills credentials with given values and tests if they are formally
+	 * valid.
+	 * 
+	 * @param username
+	 *            the username.
+	 * @param password
+	 *            the password.
+	 * @return true if credentials are formally valid, false otherwise.
+	 */
+	boolean prefill(String username, String password) {
+		usernameInput.setText(username);
+		passwordInput.setText(password);
+		return isInputValid();
 	}
 }
