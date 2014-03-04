@@ -1,15 +1,18 @@
 package de.illonis.eduras.gameclient.gui.hud;
 
 import java.util.LinkedList;
+import java.util.TimerTask;
 
 import de.illonis.eduras.gameclient.ChatCache;
 import de.illonis.eduras.gameclient.gui.HudNotifier;
+import de.illonis.eduras.gameclient.gui.TimedTasksHolderGUI;
 import de.illonis.eduras.gameclient.gui.game.FPSListener;
 import de.illonis.eduras.gameclient.gui.game.GuiClickReactor;
 import de.illonis.eduras.gameclient.gui.game.GuiResizeListener;
 import de.illonis.eduras.gameclient.gui.game.TooltipHandler;
 import de.illonis.eduras.gameclient.gui.game.TooltipTriggererNotifier;
 import de.illonis.eduras.gameclient.gui.game.UserInputListener;
+import de.illonis.eduras.logicabstraction.EdurasInitializer;
 import de.illonis.eduras.logicabstraction.InformationProvider;
 import de.illonis.eduras.networking.ClientRole;
 
@@ -21,6 +24,9 @@ import de.illonis.eduras.networking.ClientRole;
  * 
  */
 public class UserInterface implements GuiResizeListener, UserInputListener {
+
+	private static final long PING_TIME = 2000;
+
 	private final LinkedList<RenderedGuiObject> uiObjects;
 	private InformationProvider infos;
 	private GuiClickReactor reactor;
@@ -62,6 +68,14 @@ public class UserInterface implements GuiResizeListener, UserInputListener {
 		createElements();
 		hudNotifier.setUiObjects(this.uiObjects);
 
+		TimerTask pingRequester = new TimerTask() {
+
+			@Override
+			public void run() {
+				EdurasInitializer.getInstance().getNetworkManager().ping();
+			}
+		};
+		TimedTasksHolderGUI.getInstance().addTask(pingRequester, PING_TIME);
 	}
 
 	private void createElements() {

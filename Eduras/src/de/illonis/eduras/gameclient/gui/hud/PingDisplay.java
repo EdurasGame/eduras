@@ -3,6 +3,12 @@ package de.illonis.eduras.gameclient.gui.hud;
 import java.awt.Color;
 import java.awt.Graphics2D;
 
+/**
+ * Displays current latency on top right of screen.
+ * 
+ * @author Florian Mai <florian.ren.mai@googlemail.com>
+ * 
+ */
 public class PingDisplay extends RenderedGuiObject implements PingListener {
 
 	private final static int WIDTH = 70;
