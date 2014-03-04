@@ -26,6 +26,7 @@ import javax.swing.JRadioButton;
 import javax.swing.ListCellRenderer;
 
 import de.illonis.edulog.EduLog;
+import de.illonis.eduras.beta.BetaAuthenticator;
 import de.illonis.eduras.gameclient.gui.ClientFrame;
 import de.illonis.eduras.gameclient.gui.FullScreenClientFrame;
 
@@ -70,6 +71,9 @@ public class EdurasClient {
 			parametersWithValues[i] = args[i].split("=");
 		}
 
+		String betaUser = "";
+		String betaPassword = "";
+
 		// read arguments
 		Level logLimit = DEFAULT_LOGLIMIT;
 		for (int i = 0; i < args.length; i++) {
@@ -87,10 +91,11 @@ public class EdurasClient {
 					L.severe("Given port is not a valid value!");
 					return;
 				}
-				continue;
-			}
-
-			if (parameterName.equalsIgnoreCase("loglimit")) {
+			} else if (parameterName.equalsIgnoreCase("betaUser")) {
+				betaUser = parameterValue;
+			} else if (parameterName.equalsIgnoreCase("betaPassword")) {
+				betaPassword = parameterValue;
+			} else if (parameterName.equalsIgnoreCase("loglimit")) {
 				logLimit = Level.parse(parameterValue);
 			}
 		}
@@ -98,7 +103,12 @@ public class EdurasClient {
 		EduLog.setConsoleLogLimit(logLimit);
 
 		// Note that this is very bad coded due to testing ;)
-		buildChooserFrame();
+		// buildChooserFrame();
+
+		BetaAuthenticator authenticator = new BetaAuthenticator();
+		if (authenticator.authenticate(3, betaUser, betaPassword)) {
+			startWindowed();
+		}
 	}
 
 	protected static void startWindowed() {
