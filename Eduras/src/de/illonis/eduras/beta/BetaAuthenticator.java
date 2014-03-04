@@ -103,7 +103,7 @@ public class BetaAuthenticator {
 
 	void authenticate(String username, char[] password) {
 		frame.onLoginStart();
-		worker = new AuthenticationWorker(username, password.toString());
+		worker = new AuthenticationWorker(username, new String(password));
 		worker.addPropertyChangeListener(new AuthListener());
 		worker.execute();
 	}
