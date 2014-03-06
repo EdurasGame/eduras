@@ -67,7 +67,7 @@ public class EdurasServer {
 	public static void main(String[] args) {
 
 		try {
-			EduLog.init("server.log");
+			EduLog.init("server.log", 2097152);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

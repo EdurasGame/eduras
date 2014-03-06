@@ -59,7 +59,7 @@ public class EdurasClient {
 	 */
 	public static void main(String[] args) {
 		try {
-			EduLog.init("client.log");
+			EduLog.init("client.log", 2097152);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -101,6 +101,7 @@ public class EdurasClient {
 		}
 		EduLog.setBasicLogLimit(logLimit);
 		EduLog.setConsoleLogLimit(logLimit);
+		EduLog.setFileLogLimit(logLimit);
 
 		// Note that this is very bad coded due to testing ;)
 		// buildChooserFrame();
