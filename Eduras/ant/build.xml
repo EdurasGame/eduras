@@ -60,6 +60,18 @@
 			</manifest>
 		</jar>
 	</target>
+	
+	<target name="jar-remoteclient" depends="compile" description="Creates remoteclient-executable.">
+
+		<jar destfile="${jars}/eduras-remoteclient.jar" excludes="**/*.svg, **/unittests/**"
+			basedir="${base}${build}">
+			<zipgroupfileset dir="${base}${libs}" includes="**/*.jar" />
+			<manifest>
+				<attribute name="Main-Class"
+					value="de.illonis.eduras.serverconsole.remote.EdurasRemoteConsoleClient" />
+			</manifest>
+		</jar>
+	</target>
 
 	<target name="jar-server" depends="compile" description="Creates server-executable.">
 		<jar destfile="${jars}/eduras-server.jar" basedir="${base}${build}"
@@ -92,7 +104,7 @@
 		</jar>
 	</target>
 
-	<target name="jars" depends="clean,jar-server,jar-client, jar-shapecreator"
+	<target name="jars" depends="clean,jar-server,jar-client, jar-remoteclient, jar-shapecreator"
 		description="Creates clean executables.">
 	</target>
 
