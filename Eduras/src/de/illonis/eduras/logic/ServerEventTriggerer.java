@@ -582,8 +582,8 @@ public class ServerEventTriggerer implements EventTriggerer {
 			}
 			sendEventToClient(new GameReadyEvent(), owner);
 		} catch (IllegalArgumentException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			L.log(Level.SEVERE,
+					"Something went wrong when sending the requested infos.", e);
 		}
 	}
 
