@@ -554,6 +554,12 @@ public class ServerEventTriggerer implements EventTriggerer {
 	@Override
 	public void kickPlayer(int ownerId) {
 
+		removePlayer(ownerId);
+		server.kickClient(ownerId);
+	}
+
+	@Override
+	public void removePlayer(int ownerId) {
 		int objectId = -1;
 		PlayerMainFigure mainFigure;
 		ObjectFactoryEvent gonePlayerEvent = new ObjectFactoryEvent(
@@ -570,8 +576,6 @@ public class ServerEventTriggerer implements EventTriggerer {
 			// if there is no mainfigure, this function is used to prevent
 			// someone to join the server
 		}
-
-		server.kickClient(ownerId);
 	}
 
 	@Override

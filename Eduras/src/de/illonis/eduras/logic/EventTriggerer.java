@@ -297,6 +297,15 @@ public interface EventTriggerer {
 	void kickPlayer(int ownerId);
 
 	/**
+	 * Removes the {@link PlayerMainFigure} with the given ownerid from the
+	 * server.
+	 * 
+	 * @param ownerId
+	 *            The player's ownerId.
+	 */
+	void removePlayer(int ownerId);
+
+	/**
 	 * Sends all events in the given list to the client with the given id.
 	 * 
 	 * @param infos
