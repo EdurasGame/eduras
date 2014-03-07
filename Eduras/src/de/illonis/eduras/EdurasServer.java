@@ -16,7 +16,6 @@ import java.util.logging.Logger;
 
 import de.eduras.eventingserver.Server;
 import de.eduras.eventingserver.ServerInterface;
-import de.eduras.eventingserver.ServerNetworkEventHandler;
 import de.eduras.remote.EncryptedRemoteServer;
 import de.illonis.edulog.EduLog;
 import de.illonis.eduras.chat.ChatRoom;
@@ -36,6 +35,7 @@ import de.illonis.eduras.logic.ServerLogic;
 import de.illonis.eduras.maps.FunMap;
 import de.illonis.eduras.networking.EventParser;
 import de.illonis.eduras.networking.InetPolizei;
+import de.illonis.eduras.networking.ServerNetworker;
 import de.illonis.eduras.networking.discover.MetaServer;
 import de.illonis.eduras.networking.discover.ServerDiscoveryListener;
 import de.illonis.eduras.networking.discover.ServerSearcher;
@@ -178,22 +178,7 @@ public class EdurasServer {
 					e);
 		}
 
-		server.setNetworkEventHandler(new ServerNetworkEventHandler() {
-
-			@Override
-			public void onClientDisconnected(int clientId) {
-				L.info("User with id #" + clientId
-						+ " disconnected from Eduras Server.");
-
-			}
-
-			@Override
-			public void onClientConnected(int clientId) {
-				L.info("User with id #" + clientId
-						+ " connected to Eduras Server.");
-
-			}
-		});
+		server.setNetworkEventHandler(new ServerNetworker(gameInfo));
 		server.setPolicy(new InetPolizei());
 
 		eventTriggerer.changeMap(new FunMap());
