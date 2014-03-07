@@ -104,6 +104,6 @@ public class RotationSelector extends JDialog implements ActionListener,
 	public void stateChanged(ChangeEvent e) {
 		JSlider source = (JSlider) e.getSource();
 		int value = source.getValue();
-		okButton.setText("Rotate (" + value + "°)");
+		okButton.setText("Rotate (" + value + "\u00B0)");
 	}
 }
