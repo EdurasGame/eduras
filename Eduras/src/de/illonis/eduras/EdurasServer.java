@@ -7,7 +7,9 @@ import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.Socket;
 import java.net.SocketException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Enumeration;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -66,8 +68,10 @@ public class EdurasServer {
 	 */
 	public static void main(String[] args) {
 
+		SimpleDateFormat simpleDate = new SimpleDateFormat("y-M-d-H-m-s");
+
 		try {
-			EduLog.init("server.log", 2097152);
+			EduLog.init(simpleDate.format(new Date()) + "-server.log", 2097152);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

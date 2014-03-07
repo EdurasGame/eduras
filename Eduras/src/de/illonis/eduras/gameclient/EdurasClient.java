@@ -11,6 +11,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -58,8 +60,11 @@ public class EdurasClient {
 	 *            client is bound.
 	 */
 	public static void main(String[] args) {
+
+		SimpleDateFormat simpleDate = new SimpleDateFormat("y-M-d-H-m-s");
+
 		try {
-			EduLog.init("client.log", 2097152);
+			EduLog.init(simpleDate.format(new Date()) + "-client.log", 2097152);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
