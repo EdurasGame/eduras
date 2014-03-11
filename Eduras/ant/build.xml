@@ -103,8 +103,24 @@
 			</manifest>
 		</jar>
 	</target>
+	
+	<target name="jar-metaserver" depends="compile"
+		description="Creates metaserver executable.">
+		<jar destfile="${jars}/tools/metaserver.jar" basedir="${base}${build}"
+			excludes="**/unittests/**">
+			<fileset dir="${base}${src}">
+				<include name="**/*.png"></include>
+				<include name="**/*.properties"></include>
+			</fileset>
+			<zipgroupfileset dir="${base}${libs}" includes="edulog*.jar" />
+			<manifest>
+				<attribute name="Main-Class"
+					value="de.illonis.eduras.networking.MetaServer" />
+			</manifest>
+		</jar>
+	</target>
 
-	<target name="jars" depends="clean,jar-server,jar-client, jar-remoteclient, jar-shapecreator"
+	<target name="jars" depends="clean,jar-server,jar-client, jar-remoteclient, jar-shapecreator, jar-metaserver"
 		description="Creates clean executables.">
 	</target>
 
