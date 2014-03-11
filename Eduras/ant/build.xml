@@ -115,7 +115,7 @@
 			<zipgroupfileset dir="${base}${libs}" includes="edulog*.jar" />
 			<manifest>
 				<attribute name="Main-Class"
-					value="de.illonis.eduras.networking.MetaServer" />
+					value="de.illonis.eduras.networking.discover.MetaServer" />
 			</manifest>
 		</jar>
 	</target>
