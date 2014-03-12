@@ -41,7 +41,7 @@ public class ServerSearcher extends Thread {
 	/**
 	 * The address of the meta server.
 	 */
-	public final static String METASERVER_ADDRESS = "illonis.dyndns.org";
+	public final static String METASERVER_ADDRESS = "ren-mai.net";
 
 	/**
 	 * Creates a new server searcher.
