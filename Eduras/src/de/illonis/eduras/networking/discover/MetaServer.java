@@ -132,6 +132,7 @@ public class MetaServer extends Thread {
 				try {
 					String message = messageReader.readLine();
 					if (message != null) {
+						L.finest("Received message: " + message);
 						handleMessage(message);
 					}
 				} catch (IOException e) {
@@ -161,9 +162,10 @@ public class MetaServer extends Thread {
 						+ client.getInetAddress().getHostAddress() + ":"
 						+ client.getPort() + ".");
 
-				if (!registeredServers.contains(client.getInetAddress()))
+				if (!registeredServers.contains(client.getInetAddress()
+						.getHostAddress() + ":" + client.getPort()))
 					registeredServers.add(client.getInetAddress()
-							.getHostAddress() + client.getPort());
+							.getHostAddress() + ":" + client.getPort());
 			}
 
 			if (message.contains(DEREGISTER_REQUEST)) {
@@ -171,7 +173,7 @@ public class MetaServer extends Thread {
 						+ client.getInetAddress().getHostAddress() + ".");
 
 				registeredServers.remove(client.getInetAddress()
-						.getHostAddress() + client.getPort());
+						.getHostAddress() + ":" + client.getPort());
 			}
 		}
 	}
