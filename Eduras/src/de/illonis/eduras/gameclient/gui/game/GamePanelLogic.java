@@ -110,6 +110,7 @@ public class GamePanelLogic extends ClientGuiStepLogic implements
 		userInterface = new UserInterface(infoPro, mouseHandler, mouseHandler,
 				hudNotifier, cache);
 		renderer = new GameRenderer(camera, userInterface, infoPro, data);
+		userInterface.setRenderer(renderer);
 		renderer.setTarget(gui);
 	}
 
@@ -296,6 +297,14 @@ public class GamePanelLogic extends ClientGuiStepLogic implements
 		userInterface.showNotification(msg);
 	}
 
+	/**
+	 * Assigns the chat to the logic.
+	 * 
+	 * @param chat
+	 *            the chat implementation.
+	 * @param cache
+	 *            the cache object.
+	 */
 	public void setChat(ChatClientImpl chat, ChatCache cache) {
 		this.chat = chat;
 		this.cache = cache;
@@ -338,6 +347,12 @@ public class GamePanelLogic extends ClientGuiStepLogic implements
 		return writing;
 	}
 
+	/**
+	 * Handles key input for chat.
+	 * 
+	 * @param e
+	 *            the key event.
+	 */
 	public void onKeyType(KeyEvent e) {
 		if (cache.isWriting()) {
 			e.consume();

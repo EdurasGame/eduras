@@ -1,5 +1,6 @@
 package de.illonis.eduras.gameclient.gui.hud;
 
+import java.awt.image.BufferedImage;
 import java.util.LinkedList;
 import java.util.TimerTask;
 
@@ -7,6 +8,7 @@ import de.illonis.eduras.gameclient.ChatCache;
 import de.illonis.eduras.gameclient.gui.HudNotifier;
 import de.illonis.eduras.gameclient.gui.TimedTasksHolderGUI;
 import de.illonis.eduras.gameclient.gui.game.FPSListener;
+import de.illonis.eduras.gameclient.gui.game.GameRenderer;
 import de.illonis.eduras.gameclient.gui.game.GuiClickReactor;
 import de.illonis.eduras.gameclient.gui.game.GuiResizeListener;
 import de.illonis.eduras.gameclient.gui.game.TooltipHandler;
@@ -39,6 +41,7 @@ public class UserInterface implements GuiResizeListener, UserInputListener {
 	private NotificationPanel notificationPanel;
 	private PingDisplay pingDisplay;
 	private final ChatCache cache;
+	private GameRenderer renderer;
 
 	/**
 	 * Creates the user interface. The tooltip handler will be set manually
@@ -78,6 +81,13 @@ public class UserInterface implements GuiResizeListener, UserInputListener {
 		TimedTasksHolderGUI.getInstance().addTask(pingRequester, PING_TIME);
 	}
 
+	/**
+	 * @return the gamePanel.
+	 */
+	public BufferedImage getScreenshot() {
+		return renderer.getScreenshot();
+	}
+
 	private void createElements() {
 		new ItemDisplay(this);
 		new GameModeBar(this);
@@ -89,6 +99,7 @@ public class UserInterface implements GuiResizeListener, UserInputListener {
 		dragRect = new DragSelectionRectangle(this);
 		statWindow = new StatisticsWindow(this);
 		new ChatDisplay(cache, this);
+		new BugReportButton(this);
 	}
 
 	/**
@@ -240,5 +251,15 @@ public class UserInterface implements GuiResizeListener, UserInputListener {
 	@Override
 	public boolean abortChat() {
 		return false;
+	}
+
+	/**
+	 * Sets the game renderer.
+	 * 
+	 * @param renderer
+	 *            the renderer.
+	 */
+	public void setRenderer(GameRenderer renderer) {
+		this.renderer = renderer;
 	}
 }
