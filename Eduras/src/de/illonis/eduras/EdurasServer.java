@@ -217,7 +217,7 @@ public class EdurasServer {
 			new PrintWriter(socket.getOutputStream(), true)
 					.println(MetaServer.REGISTER_REQUEST);
 		} catch (IOException e) {
-			L.warning("Cannot connect to meta server.");
+			L.log(Level.WARNING, "Cannot connect to meta server.", e);
 		}
 	}
 
