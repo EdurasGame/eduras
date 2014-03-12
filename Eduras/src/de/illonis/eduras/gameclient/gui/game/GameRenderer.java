@@ -303,7 +303,8 @@ public class GameRenderer implements TooltipHandler {
 
 			// draw only if in current view point
 			if (d.getBoundingBox().intersects(camera)) {
-				if ((S.vision_neutral_always && d.getOwner() == -1)
+				if (S.vision_disabled
+						|| (S.vision_neutral_always && d.getOwner() == -1)
 						|| visionArea.intersects(d.getBoundingBox())) {
 
 					// TODO: distinguish between object images and icon images

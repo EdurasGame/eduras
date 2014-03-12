@@ -14,6 +14,7 @@ import de.illonis.eduras.interfaces.GameEventListener;
 import de.illonis.eduras.items.Usable;
 import de.illonis.eduras.math.Line;
 import de.illonis.eduras.math.Vector2D;
+import de.illonis.eduras.settings.S;
 import de.illonis.eduras.units.PlayerMainFigure;
 
 /**
@@ -57,6 +58,8 @@ public class ClientLogicGameWorker extends LogicGameWorker {
 	}
 
 	private void updateVision() {
+		if (S.vision_disabled)
+			return;
 
 		// TODO: improve the following by storing objects for teams directly.
 
