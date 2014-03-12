@@ -4,7 +4,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.LinkedList;
@@ -31,7 +30,7 @@ public class MetaServer extends Thread {
 	private ServerSocket socket;
 
 	static final String META_SERVER_ANSWER = "EDURAS_META_SERVER_ANSWER";
-	private LinkedList<InetAddress> registeredServers;
+	private LinkedList<String> registeredServers;
 
 	/**
 	 * The string that indicates a GET_SERVERS request.
@@ -59,7 +58,7 @@ public class MetaServer extends Thread {
 	}
 
 	private void init() throws IOException {
-		registeredServers = new LinkedList<InetAddress>();
+		registeredServers = new LinkedList<String>();
 		socket = new ServerSocket(port);
 	}
 
@@ -148,9 +147,10 @@ public class MetaServer extends Thread {
 						+ client.getInetAddress().getHostAddress() + ".");
 
 				String ipsOfRegisteredServers = META_SERVER_ANSWER;
-				for (InetAddress singleServer : registeredServers) {
+				for (String singleServer : registeredServers) {
 					ipsOfRegisteredServers = ipsOfRegisteredServers + "#"
-							+ singleServer.getHostAddress();
+							+ singleServer.split(":")[0] + "#"
+							+ singleServer.split(":")[1];
 				}
 
 				clientWriter.println(ipsOfRegisteredServers);
@@ -158,17 +158,20 @@ public class MetaServer extends Thread {
 
 			if (message.contains(REGISTER_REQUEST)) {
 				L.info("Received a REGISTER request from address "
-						+ client.getInetAddress().getHostAddress() + ".");
+						+ client.getInetAddress().getHostAddress() + ":"
+						+ client.getPort() + ".");
 
 				if (!registeredServers.contains(client.getInetAddress()))
-					registeredServers.add(client.getInetAddress());
+					registeredServers.add(client.getInetAddress()
+							.getHostAddress() + client.getPort());
 			}
 
 			if (message.contains(DEREGISTER_REQUEST)) {
 				L.info("Received a DEREGISTER request from address "
 						+ client.getInetAddress().getHostAddress() + ".");
 
-				registeredServers.remove(client.getInetAddress());
+				registeredServers.remove(client.getInetAddress()
+						.getHostAddress() + client.getPort());
 			}
 		}
 	}

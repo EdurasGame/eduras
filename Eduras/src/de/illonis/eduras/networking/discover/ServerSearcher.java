@@ -190,11 +190,13 @@ public class ServerSearcher extends Thread {
 
 			String[] ipAddresses = answer.split("#");
 
-			for (String singleAddress : ipAddresses) {
+			int i = 0;
+			for (i = 0; i < ipAddresses.length / 2; i++) {
+				String singleAddress = ipAddresses[i * 2];
 				if (!singleAddress.equals(MetaServer.META_SERVER_ANSWER))
 					try {
 						sendRequestTo(new InetSocketAddress(singleAddress,
-								ServerDiscoveryListener.SERVER_PORT));
+								Integer.parseInt(ipAddresses[i * 2 + 1])));
 					} catch (IOException e) {
 						L.log(Level.SEVERE, "error sending request", e);
 						continue;
