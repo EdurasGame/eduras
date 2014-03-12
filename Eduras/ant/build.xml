@@ -109,7 +109,6 @@
 		<jar destfile="${jars}/tools/metaserver.jar" basedir="${base}${build}"
 			excludes="**/unittests/**">
 			<fileset dir="${base}${src}">
-				<include name="**/*.png"></include>
 				<include name="**/*.properties"></include>
 			</fileset>
 			<zipgroupfileset dir="${base}${libs}" includes="edulog*.jar" />
