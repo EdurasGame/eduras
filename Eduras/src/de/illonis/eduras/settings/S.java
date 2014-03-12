@@ -181,6 +181,8 @@ public final class S {
 
 	public static double go_assaultmissile_damageradius = 3;
 
+	public static boolean vision_neutral_always = true;
+
 	/**
 	 * Reads values from the file and writes them to the S classes attributes.
 	 * 

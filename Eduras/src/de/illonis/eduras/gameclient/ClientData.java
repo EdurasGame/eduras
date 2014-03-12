@@ -16,10 +16,15 @@ import de.illonis.eduras.logicabstraction.InformationProvider;
 public final class ClientData {
 	private final LinkedList<Integer> selectedUnits;
 	private final LinkedList<Animation> animations;
+	private final VisionInformation visionInfo;
 
-	ClientData() {
+	/**
+	 * Creates a new storage.
+	 */
+	public ClientData() {
 		selectedUnits = new LinkedList<Integer>();
 		animations = new LinkedList<Animation>();
+		visionInfo = new VisionInformation();
 	}
 
 	/**
@@ -100,6 +105,13 @@ public final class ClientData {
 	 */
 	public void clearAnimations() {
 		animations.clear();
+	}
+
+	/**
+	 * @return vision information.
+	 */
+	public VisionInformation getVisionInfo() {
+		return visionInfo;
 	}
 
 }

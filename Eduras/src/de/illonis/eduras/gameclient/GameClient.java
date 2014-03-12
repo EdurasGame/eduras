@@ -41,7 +41,6 @@ public class GameClient {
 	private ClientFrame frame;
 	private ServerSearcher searcher;
 	private HudNotifier hudNotifier;
-	private final ClientData data;
 	private boolean wantsExit = false;
 
 	// private TooltipHandler tooltipHandler;
@@ -53,7 +52,6 @@ public class GameClient {
 	 * Creates a new client and initializes all necessary components.
 	 */
 	public GameClient() {
-		data = new ClientData();
 		loadTools();
 	}
 
@@ -292,7 +290,7 @@ public class GameClient {
 	 * @return the client data.
 	 */
 	public ClientData getData() {
-		return data;
+		return infoPro.getClientData();
 	}
 
 	void setPing(long latency) {

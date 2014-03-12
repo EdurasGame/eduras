@@ -11,15 +11,22 @@ import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.awt.Transparency;
+import java.awt.geom.AffineTransform;
+import java.awt.geom.Area;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
+import de.illonis.edulog.EduLog;
+import de.illonis.eduras.Team;
 import de.illonis.eduras.Team.TeamColor;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
 import de.illonis.eduras.gameclient.ClientData;
+import de.illonis.eduras.gameclient.VisionInformation;
 import de.illonis.eduras.gameclient.gui.animation.Animation;
 import de.illonis.eduras.gameclient.gui.hud.HealthBar;
 import de.illonis.eduras.gameclient.gui.hud.ItemTooltip;
@@ -31,6 +38,7 @@ import de.illonis.eduras.logicabstraction.InformationProvider;
 import de.illonis.eduras.math.BasicMath;
 import de.illonis.eduras.math.Geometry;
 import de.illonis.eduras.math.Vector2D;
+import de.illonis.eduras.settings.S;
 import de.illonis.eduras.shapes.Circle;
 import de.illonis.eduras.shapes.ObjectShape;
 import de.illonis.eduras.shapes.Polygon;
@@ -45,6 +53,9 @@ import de.illonis.eduras.utils.ImageTools;
  * 
  */
 public class GameRenderer implements TooltipHandler {
+
+	private final Logger L = EduLog.getLoggerFor(GameRenderer.class.getName());
+
 	private BufferedImage mapImage = null;
 	private BufferedImage guiImage = null;
 	private BufferedImage displayImage = null;
@@ -267,6 +278,22 @@ public class GameRenderer implements TooltipHandler {
 
 		mapGraphics.setColor(Color.YELLOW);
 
+		PlayerMainFigure myPlayer;
+
+		try {
+			myPlayer = info.getPlayer();
+		} catch (ObjectNotFoundException e) {
+			L.log(Level.SEVERE,
+					"Could not find playerMainFigure while rendering.", e);
+			return;
+		}
+		Team playerTeam = myPlayer.getTeam();
+		VisionInformation vinfo = info.getClientData().getVisionInfo();
+		Area visionArea;
+		synchronized (vinfo) {
+			visionArea = vinfo.getVisionForTeam(playerTeam);
+		}
+
 		for (Iterator<GameObject> iterator = objs.values().iterator(); iterator
 				.hasNext();) {
 			GameObject d = iterator.next();
@@ -276,37 +303,48 @@ public class GameRenderer implements TooltipHandler {
 
 			// draw only if in current view point
 			if (d.getBoundingBox().intersects(camera)) {
-				// TODO: distinguish between object images and icon images
-				// drawImageOf(d);
-				// draw shape of gameObject instead if object has shape
+				if ((S.vision_neutral_always && d.getOwner() == -1)
+						|| visionArea.intersects(d.getBoundingBox())) {
 
-				if (isSelected(d)) {
-					mapGraphics.setColor(Color.RED);
-				} else {
-					mapGraphics.setColor(Color.YELLOW);
+					// TODO: distinguish between object images and icon images
+					// drawImageOf(d);
+					// draw shape of gameObject instead if object has shape
+
+					if (isSelected(d)) {
+						mapGraphics.setColor(Color.RED);
+					} else {
+						mapGraphics.setColor(Color.YELLOW);
+					}
+
+					if (d.getShape() != null) {
+						drawShapeOf(d);
+					}
+
+					if (d.isUnit()) {
+						drawHealthBarFor((Unit) d);
+					}
+
+					if (d instanceof PlayerMainFigure) {
+						PlayerMainFigure player = (PlayerMainFigure) d;
+						mapGraphics.drawString(player.getName(),
+								player.getDrawX() - camera.x, player.getDrawY()
+										- camera.y);
+					}
+
+					// draws unit id next to unit for testing purpose
+					/*
+					 * dbg.drawString(d.getId() + "", d.getDrawX() - camera.x,
+					 * d.getDrawY() - camera.y - 15);
+					 */
 				}
-
-				if (d.getShape() != null) {
-					drawShapeOf(d);
-				}
-
-				if (d.isUnit()) {
-					drawHealthBarFor((Unit) d);
-				}
-
-				if (d instanceof PlayerMainFigure) {
-					PlayerMainFigure player = (PlayerMainFigure) d;
-					mapGraphics.drawString(player.getName(), player.getDrawX()
-							- camera.x, player.getDrawY() - camera.y);
-				}
-
-				// draws unit id next to unit for testing purpose
-				/*
-				 * dbg.drawString(d.getId() + "", d.getDrawX() - camera.x,
-				 * d.getDrawY() - camera.y - 15);
-				 */
 			}
 		}
+		Area a = new Area(visionArea);
+		AffineTransform af = new AffineTransform();
+		af.translate(-camera.x, -camera.y);
+		a.transform(af);
+		mapGraphics.setColor(Color.WHITE);
+		mapGraphics.draw(a);
 
 	}
 

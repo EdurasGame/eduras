@@ -10,6 +10,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import de.illonis.eduras.Statistic;
 import de.illonis.eduras.Team;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
+import de.illonis.eduras.gameclient.ClientData;
 import de.illonis.eduras.gamemodes.GameMode;
 import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.maps.Map;
@@ -47,6 +48,11 @@ public interface InfoInterface {
 	 * @return The game objects as a hashmap.
 	 */
 	public ConcurrentHashMap<Integer, GameObject> getGameObjects();
+	
+	/**
+	 * @return client data.
+	 */
+	public ClientData getClientData();
 
 	/**
 	 * Returns a list of all players online.

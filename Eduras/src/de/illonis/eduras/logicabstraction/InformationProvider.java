@@ -10,6 +10,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import de.illonis.eduras.Statistic;
 import de.illonis.eduras.Team;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
+import de.illonis.eduras.gameclient.ClientData;
 import de.illonis.eduras.gamemodes.GameMode;
 import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.interfaces.GameEventListener;
@@ -26,7 +27,6 @@ import de.illonis.eduras.units.PlayerMainFigure;
  * 
  */
 public class InformationProvider implements InfoInterface {
-
 	private final GameLogicInterface logic;
 	private final NetworkManager networkManager;
 
@@ -121,6 +121,11 @@ public class InformationProvider implements InfoInterface {
 	@Override
 	public Collection<Team> getTeams() {
 		return logic.getGame().getTeams();
+	}
+
+	@Override
+	public ClientData getClientData() {
+		return logic.getGame().getClientData();
 	}
 
 }

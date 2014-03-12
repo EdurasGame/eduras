@@ -37,7 +37,7 @@ public abstract class GameObject implements Comparable<GameObject> {
 	private ObjectShape shape;
 	private boolean collidable = true;
 	private boolean visible = true;
-	private double visionRange = 100;
+	private double visionRange = 200;
 	private double visionAngle = 90;
 	private boolean isVisionBlocking = false;
 
