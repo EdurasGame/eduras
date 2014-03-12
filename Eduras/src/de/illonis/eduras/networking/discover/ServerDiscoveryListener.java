@@ -50,6 +50,8 @@ public class ServerDiscoveryListener extends Thread {
 	 */
 	public final static String ANSWER_MSG = "EDURAS_SERVER_ANSWER";
 
+	private final int CONNECT_ATTEMPTS = 10;
+
 	private final String name;
 	private final int port;
 
@@ -118,13 +120,18 @@ public class ServerDiscoveryListener extends Thread {
 					channel.bind(listenAddress);
 				} catch (IOException | AlreadyBoundException ex) {
 					cntAttempts++;
-					L.log(Level.WARNING, "Error binding to port " + myPort
+
+					if (cntAttempts > CONNECT_ATTEMPTS) {
+						L.warning("Could not connect after 10 attempts. Will not support discovery.");
+						return;
+					}
+
+					L.log(Level.INFO, "Error binding to port " + myPort
 							+ " after try " + cntAttempts, ex);
 					try {
 						sleep(1000);
 					} catch (InterruptedException e) {
 						L.log(Level.WARNING, "Cannot sleep!?", e);
-						continue;
 					}
 					continue;
 				}
