@@ -29,6 +29,7 @@ import de.illonis.eduras.events.MovementEvent;
 import de.illonis.eduras.events.ObjectFactoryEvent;
 import de.illonis.eduras.events.SetAmmunitionEvent;
 import de.illonis.eduras.events.SetBooleanGameObjectAttributeEvent;
+import de.illonis.eduras.events.SetDoubleGameObjectAttributeEvent;
 import de.illonis.eduras.events.SetGameModeEvent;
 import de.illonis.eduras.events.SetGameObjectAttributeEvent;
 import de.illonis.eduras.events.SetIntegerGameObjectAttributeEvent;
@@ -631,7 +632,7 @@ public class ServerEventTriggerer implements EventTriggerer {
 	@Override
 	public void setRotation(GameObject gameObject) {
 
-		Event setRotationEvent = new SetGameObjectAttributeEvent<Double>(
+		Event setRotationEvent = new SetDoubleGameObjectAttributeEvent(
 				GameEventNumber.SET_ROTATION, gameObject.getId(),
 				gameObject.getRotation()) {
 		};
