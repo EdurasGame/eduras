@@ -36,6 +36,7 @@ import de.illonis.eduras.shapes.ObjectShape;
 import de.illonis.eduras.shapes.Polygon;
 import de.illonis.eduras.units.PlayerMainFigure;
 import de.illonis.eduras.units.Unit;
+import de.illonis.eduras.utils.ImageTools;
 
 /**
  * Renders the game graphics onto the gamepanel.
@@ -89,6 +90,15 @@ public class GameRenderer implements TooltipHandler {
 		this.gui = gui;
 		RendererTooltipHandler h = new RendererTooltipHandler(this);
 		gui.setTooltipHandler(h);
+	}
+
+	/**
+	 * Creates a screenshot.
+	 * 
+	 * @return a screenshot.
+	 */
+	public BufferedImage getScreenshot() {
+		return ImageTools.deepCopy(displayImage);
 	}
 
 	/**
