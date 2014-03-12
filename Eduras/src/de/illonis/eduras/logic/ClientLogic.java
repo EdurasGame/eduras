@@ -569,7 +569,7 @@ public class ClientLogic implements GameLogicInterface {
 
 	@Override
 	public void startWorker() {
-		lgw = new LogicGameWorker(gameInfo, listenerHolder);
+		lgw = new ClientLogicGameWorker(gameInfo, listenerHolder);
 		workerThread = new Thread(lgw);
 		workerThread.setName("ClientLogicGameWorker");
 		workerThread.start();

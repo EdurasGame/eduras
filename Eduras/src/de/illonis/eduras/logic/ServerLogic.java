@@ -16,7 +16,7 @@ import de.illonis.eduras.events.GameInfoRequest;
 import de.illonis.eduras.events.InitInformationEvent;
 import de.illonis.eduras.events.ItemEvent;
 import de.illonis.eduras.events.SendUnitsEvent;
-import de.illonis.eduras.events.SetGameObjectAttributeEvent;
+import de.illonis.eduras.events.SetDoubleGameObjectAttributeEvent;
 import de.illonis.eduras.events.SwitchInteractModeEvent;
 import de.illonis.eduras.events.UserMovementEvent;
 import de.illonis.eduras.exceptions.InvalidNameException;
@@ -165,10 +165,10 @@ public class ServerLogic implements GameLogicInterface {
 			}
 			break;
 		case SET_ROTATION:
-			if (!(event instanceof SetGameObjectAttributeEvent<?>)) {
+			if (!(event instanceof SetDoubleGameObjectAttributeEvent)) {
 				break;
 			}
-			SetGameObjectAttributeEvent<Double> setRotationEvent = (SetGameObjectAttributeEvent<Double>) event;
+			SetDoubleGameObjectAttributeEvent setRotationEvent = (SetDoubleGameObjectAttributeEvent) event;
 			GameObject gameObject = gameInfo.findObjectById(setRotationEvent
 					.getObjectId());
 			if (gameObject == null) {
@@ -306,7 +306,7 @@ public class ServerLogic implements GameLogicInterface {
 
 	@Override
 	public void startWorker() {
-		lgw = new LogicGameWorker(gameInfo, listenerHolder);
+		lgw = new ServerLogicGameWorker(gameInfo, listenerHolder);
 		Thread gameWorker = new Thread(lgw);
 		gameWorker.setName("ServerLogicGameWorker");
 		gameWorker.start();
