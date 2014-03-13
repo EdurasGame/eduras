@@ -11,6 +11,7 @@ import java.awt.GraphicsEnvironment;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.RenderingHints;
+import java.awt.Toolkit;
 import java.awt.Transparency;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Area;
@@ -257,6 +258,7 @@ public class GameRenderer implements TooltipHandler {
 			if (!buffer.contentsLost()) {
 				buffer.show();
 			}
+			Toolkit.getDefaultToolkit().sync();
 
 		}
 	}
@@ -356,7 +358,7 @@ public class GameRenderer implements TooltipHandler {
 			mapGraphics.setStroke(new BasicStroke(1f));
 			mapGraphics.setColor(new Color(0, 0, 0, 0.6f));
 			mapGraphics.fill(map);
-			mapGraphics.setColor(Color.BLACK);
+			mapGraphics.setColor(Color.WHITE);
 			mapGraphics.draw(map);
 		}
 	}
@@ -592,7 +594,7 @@ public class GameRenderer implements TooltipHandler {
 	 *            target game panel.
 	 */
 	void setTarget(GamePanel guiPanel) {
-		guiPanel.createBufferStrategy(2);
+		guiPanel.createBufferStrategy(4);
 		target = guiPanel;
 		buffer = guiPanel.getBufferStrategy();
 	}
