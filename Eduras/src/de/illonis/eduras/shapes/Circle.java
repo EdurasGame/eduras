@@ -21,6 +21,7 @@ public class Circle extends ObjectShape {
 
 	private static final int COLLISION_ACCURACY = 20;
 	private double radius = 0;
+	private final Rectangle2D.Double boundingBox;
 
 	/**
 	 * A circle shape is determined by its radius.
@@ -30,6 +31,7 @@ public class Circle extends ObjectShape {
 	 */
 	public Circle(double radius) {
 		this.radius = radius;
+		boundingBox = new Rectangle2D.Double(0, 0, 2 * radius, 2 * radius);
 	}
 
 	/**
@@ -223,7 +225,7 @@ public class Circle extends ObjectShape {
 
 	@Override
 	public Double getBoundingBox() {
-		return new Rectangle2D.Double(0, 0, 2 * radius, 2 * radius);
+		return boundingBox;
 	}
 
 	/*
