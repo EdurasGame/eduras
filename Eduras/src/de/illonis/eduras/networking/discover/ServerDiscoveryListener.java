@@ -107,7 +107,7 @@ public class ServerDiscoveryListener extends Thread {
 		@Override
 		public void run() {
 			answer = "##" + ServerDiscoveryListener.ANSWER_MSG + "#" + name
-					+ "#" + port;
+					+ "#" + port + "##";
 
 			// Keep a socket open to listen to all the UDP traffic that is
 			// destined for this port
@@ -118,7 +118,7 @@ public class ServerDiscoveryListener extends Thread {
 				try {
 					channel = new DiscoveryChannel(true);
 					InetSocketAddress listenAddress = new InetSocketAddress(
-							InetAddress.getByName("0.0.0.0"), myPort);
+							InetAddress.getLocalHost(), myPort);
 					channel.bind(listenAddress);
 				} catch (IOException | AlreadyBoundException ex) {
 					cntAttempts++;
