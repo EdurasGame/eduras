@@ -253,11 +253,11 @@ public class GameRenderer implements TooltipHandler {
 			bothGraphics.drawImage(mapImage, 0, 0, null);
 			bothGraphics.drawImage(guiImage, 0, 0, null);
 			g2d.drawImage(displayImage, 0, 0, null);
+			g2d.dispose();
 			if (!buffer.contentsLost()) {
 				buffer.show();
 			}
-			if (g2d != null)
-				g2d.dispose();
+
 		}
 	}
 
@@ -330,7 +330,7 @@ public class GameRenderer implements TooltipHandler {
 
 					if (d instanceof PlayerMainFigure) {
 						PlayerMainFigure player = (PlayerMainFigure) d;
-						guiGraphics.drawString(player.getName(),
+						mapGraphics.drawString(player.getName(),
 								player.getDrawX() - camera.x, player.getDrawY()
 										- camera.y);
 					}
@@ -388,7 +388,7 @@ public class GameRenderer implements TooltipHandler {
 			return;
 		// TODO: use scale
 		HealthBar.calculateFor(unit);
-		HealthBar.draw(guiGraphics, camera);
+		HealthBar.draw(mapGraphics, camera);
 	}
 
 	/**
