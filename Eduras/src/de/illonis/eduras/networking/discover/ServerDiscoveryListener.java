@@ -187,7 +187,8 @@ public class ServerDiscoveryListener extends Thread {
 				L.fine("Sent packet to: " + isa.getAddress().getHostAddress()
 						+ ":" + isa.getPort() + ". Message: " + answer);
 			} else {
-				L.warning("Received invalid broadcast message: aSingleMessage");
+				L.warning("Received invalid broadcast message:"
+						+ aSingleMessage);
 			}
 
 		}
