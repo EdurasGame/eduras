@@ -107,7 +107,8 @@ public class ServerSearcher extends Thread {
 	private void sendRequestTo(InetSocketAddress target) throws IOException {
 		c.send(ServerDiscoveryListener.REQUEST_MSG, target);
 		L.info("[ServerSearcher] Sent request packet to "
-				+ target.getAddress().getHostAddress() + " .");
+				+ target.getAddress().getHostAddress() + ":" + target.getPort()
+				+ ".");
 
 	}
 
@@ -192,13 +193,12 @@ public class ServerSearcher extends Thread {
 
 			String[] ipAddresses = answer.split("#");
 
-			int i = 0;
-			for (i = 0; i < ipAddresses.length / 2; i++) {
-				String singleAddress = ipAddresses[i * 2];
+			for (int i = 1; i < ipAddresses.length; i = i + 2) {
+				String singleAddress = ipAddresses[i];
 				if (!singleAddress.equals(MetaServer.META_SERVER_ANSWER))
 					try {
 						sendRequestTo(new InetSocketAddress(singleAddress,
-								Integer.parseInt(ipAddresses[i * 2 + 1])));
+								Integer.parseInt(ipAddresses[i + 1]) + 2));
 					} catch (IOException e) {
 						L.log(Level.SEVERE, "error sending request", e);
 						continue;

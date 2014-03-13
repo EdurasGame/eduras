@@ -162,8 +162,9 @@ public class ServerDiscoveryListener extends Thread {
 					if (message.equals(ServerDiscoveryListener.REQUEST_MSG)) {
 						// Send a response
 						channel.send(answer, isa);
-						L.info("Sent packet to: "
-								+ isa.getAddress().getHostAddress());
+						L.fine("Sent packet to: "
+								+ isa.getAddress().getHostAddress() + ":"
+								+ isa.getPort() + ". Message: " + answer);
 					} else {
 						L.warning("Received invalid broadcast message.");
 					}

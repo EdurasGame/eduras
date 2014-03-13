@@ -61,6 +61,8 @@ public class ClientServerResponseHandler extends Thread {
 
 				String message = returnData.getSecond();
 
+				L.fine("[ServerSearcher] Response is: " + message);
+
 				if (message.contains(ServerDiscoveryListener.ANSWER_MSG)) {
 					String[] msgparts = message.split("#");
 
