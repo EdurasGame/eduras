@@ -206,16 +206,16 @@ public class EdurasServer {
 		sdl.start();
 
 		if (registerAtMetaserver)
-			registerAtMetaServer();
+			registerAtMetaServer(port);
 	}
 
-	private static void registerAtMetaServer() {
+	private static void registerAtMetaServer(int portToRegister) {
 		Socket socket;
 		try {
 			socket = new Socket(ServerSearcher.METASERVER_ADDRESS,
 					ServerDiscoveryListener.META_SERVER_PORT);
 			new PrintWriter(socket.getOutputStream(), true)
-					.println(MetaServer.REGISTER_REQUEST);
+					.println(MetaServer.REGISTER_REQUEST + "#" + portToRegister);
 		} catch (IOException e) {
 			L.log(Level.WARNING, "Cannot connect to meta server.", e);
 		}

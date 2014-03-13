@@ -162,18 +162,23 @@ public class MetaServer extends Thread {
 						+ client.getInetAddress().getHostAddress() + ":"
 						+ client.getPort() + ".");
 
-				if (!registeredServers.contains(client.getInetAddress()
-						.getHostAddress() + ":" + client.getPort()))
-					registeredServers.add(client.getInetAddress()
-							.getHostAddress() + ":" + client.getPort());
+				String portString = message.split("#")[1];
+				String clientAddress = client.getInetAddress().getHostAddress()
+						+ ":" + portString;
+
+				if (!registeredServers.contains(clientAddress))
+					registeredServers.add(clientAddress);
 			}
 
 			if (message.contains(DEREGISTER_REQUEST)) {
 				L.info("Received a DEREGISTER request from address "
 						+ client.getInetAddress().getHostAddress() + ".");
 
-				registeredServers.remove(client.getInetAddress()
-						.getHostAddress() + ":" + client.getPort());
+				String portString = message.split("#")[1];
+				String clientAddress = client.getInetAddress().getHostAddress()
+						+ ":" + portString;
+
+				registeredServers.remove(clientAddress);
 			}
 		}
 	}

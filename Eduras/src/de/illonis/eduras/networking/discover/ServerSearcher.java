@@ -188,6 +188,8 @@ public class ServerSearcher extends Thread {
 			if (!answer.contains(MetaServer.META_SERVER_ANSWER))
 				return;
 
+			L.fine("Received metaserver answer: " + answer);
+
 			String[] ipAddresses = answer.split("#");
 
 			int i = 0;
