@@ -291,8 +291,10 @@ public class GameRenderer implements TooltipHandler {
 		Team playerTeam = myPlayer.getTeam();
 		VisionInformation vinfo = info.getClientData().getVisionInfo();
 		Area visionArea;
+		Area visionMask;
 		synchronized (vinfo) {
 			visionArea = vinfo.getVisionForTeam(playerTeam);
+			visionMask = vinfo.getVisionMask();
 		}
 
 		for (Iterator<GameObject> iterator = objs.values().iterator(); iterator
@@ -328,7 +330,7 @@ public class GameRenderer implements TooltipHandler {
 
 					if (d instanceof PlayerMainFigure) {
 						PlayerMainFigure player = (PlayerMainFigure) d;
-						mapGraphics.drawString(player.getName(),
+						guiGraphics.drawString(player.getName(),
 								player.getDrawX() - camera.x, player.getDrawY()
 										- camera.y);
 					}
@@ -342,14 +344,21 @@ public class GameRenderer implements TooltipHandler {
 			}
 		}
 
-		Area a = new Area(visionArea);
-		AffineTransform af = new AffineTransform();
-		af.translate(-camera.x, -camera.y);
-		a.transform(af);
-		mapGraphics.setStroke(new BasicStroke(1f));
-		mapGraphics.setColor(Color.WHITE);
-		mapGraphics.draw(a);
+		if (!S.vision_disabled) {
+			AffineTransform af = new AffineTransform();
+			af.translate(-camera.x, -camera.y);
 
+			Area map = new Area(camera);
+			map.subtract(visionMask);
+
+			map.transform(af);
+
+			mapGraphics.setStroke(new BasicStroke(1f));
+			mapGraphics.setColor(new Color(0, 0, 0, 0.6f));
+			mapGraphics.fill(map);
+			mapGraphics.setColor(Color.BLACK);
+			mapGraphics.draw(map);
+		}
 	}
 
 	private boolean isSelected(GameObject object) {
@@ -379,7 +388,7 @@ public class GameRenderer implements TooltipHandler {
 			return;
 		// TODO: use scale
 		HealthBar.calculateFor(unit);
-		HealthBar.draw(mapGraphics, camera);
+		HealthBar.draw(guiGraphics, camera);
 	}
 
 	/**
