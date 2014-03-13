@@ -50,6 +50,8 @@ public class ServerDiscoveryListener extends Thread {
 	 */
 	public final static String ANSWER_MSG = "EDURAS_SERVER_ANSWER";
 
+	public static String answer = "";
+
 	private final int CONNECT_ATTEMPTS = 10;
 
 	private final String name;
@@ -104,7 +106,7 @@ public class ServerDiscoveryListener extends Thread {
 
 		@Override
 		public void run() {
-			String answer = ServerDiscoveryListener.ANSWER_MSG + "#" + name
+			answer = "##" + ServerDiscoveryListener.ANSWER_MSG + "#" + name
 					+ "#" + port;
 
 			// Keep a socket open to listen to all the UDP traffic that is
@@ -158,19 +160,34 @@ public class ServerDiscoveryListener extends Thread {
 							+ isa.getAddress().getHostAddress() + ":"
 							+ isa.getPort() + ", Data: " + message);
 
-					// See if the packet holds the right command (message)
-					if (message.equals(ServerDiscoveryListener.REQUEST_MSG)) {
-						// Send a response
-						channel.send(answer, isa);
-						L.fine("Sent packet to: "
-								+ isa.getAddress().getHostAddress() + ":"
-								+ isa.getPort() + ". Message: " + answer);
-					} else {
-						L.warning("Received invalid broadcast message.");
+					String[] singleMessages = message.split("##");
+
+					for (String aSingleMessage : singleMessages) {
+						parseAndAnswerMessage(aSingleMessage, isa);
 					}
+
 				} catch (IOException e) {
 					L.log(Level.SEVERE, "Error in discovery", e);
 				}
+			}
+
+		}
+
+		private void parseAndAnswerMessage(String aSingleMessage,
+				InetSocketAddress isa) {
+			// See if the packet holds the right command (message)
+			if (aSingleMessage.equals(ServerDiscoveryListener.REQUEST_MSG)) {
+				// Send a response
+				try {
+					channel.send(answer, isa);
+				} catch (IOException e) {
+					L.log(Level.WARNING, "Error in discovery", e);
+					return;
+				}
+				L.fine("Sent packet to: " + isa.getAddress().getHostAddress()
+						+ ":" + isa.getPort() + ". Message: " + answer);
+			} else {
+				L.warning("Received invalid broadcast message: aSingleMessage");
 			}
 
 		}

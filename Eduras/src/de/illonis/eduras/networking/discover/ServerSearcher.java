@@ -105,7 +105,7 @@ public class ServerSearcher extends Thread {
 	}
 
 	private void sendRequestTo(InetSocketAddress target) throws IOException {
-		c.send(ServerDiscoveryListener.REQUEST_MSG, target);
+		c.send("##" + ServerDiscoveryListener.REQUEST_MSG, target);
 		L.info("[ServerSearcher] Sent request packet to "
 				+ target.getAddress().getHostAddress() + ":" + target.getPort()
 				+ ".");
