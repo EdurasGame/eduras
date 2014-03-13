@@ -22,7 +22,7 @@ public abstract class SetGameObjectAttributeEvent<T> extends ObjectEvent {
 	 * @param newValue
 	 *            attribute's new value.
 	 */
-	public SetGameObjectAttributeEvent(GameEventNumber type, int objectId,
+	protected SetGameObjectAttributeEvent(GameEventNumber type, int objectId,
 			T newValue) {
 		super(type, objectId);
 		this.newValue = newValue;

@@ -1,5 +1,6 @@
 package de.illonis.eduras;
 
+import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -25,6 +26,7 @@ import de.illonis.eduras.events.SetTeamsEvent;
 import de.illonis.eduras.exceptions.GameModeNotSupportedByMapException;
 import de.illonis.eduras.exceptions.InvalidNameException;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
+import de.illonis.eduras.gameclient.ClientData;
 import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.logic.EventTriggerer;
 import de.illonis.eduras.maps.FunMap;
@@ -46,6 +48,7 @@ public class GameInformation {
 			.getName());
 
 	private static final Random RANDOM = new Random();
+	private final ClientData clientData;
 
 	private final ConcurrentHashMap<Integer, GameObject> objects;
 	private final ConcurrentHashMap<Integer, PlayerMainFigure> players;
@@ -59,12 +62,20 @@ public class GameInformation {
 	 * Creates a new game information object with emtpy object lists.
 	 */
 	public GameInformation() {
+		clientData = new ClientData();
 		objects = new ConcurrentHashMap<Integer, GameObject>();
 		players = new ConcurrentHashMap<Integer, PlayerMainFigure>();
 		map = new FunMap();
 		gameSettings = new GameSettings(this);
 		teams = new LinkedList<Team>();
 		spawnGroups = new HashMap<Team, SpawnType>();
+	}
+
+	/**
+	 * @return the client data.
+	 */
+	public ClientData getClientData() {
+		return clientData;
 	}
 
 	/**
@@ -208,6 +219,26 @@ public class GameInformation {
 			}
 		}
 		return objs;
+	}
+
+	/**
+	 * Checks whether given point is in any object's bounding box.
+	 * 
+	 * @param point
+	 *            the location to check.
+	 * @param ignore
+	 *            a gameobject to ignore while testing (can be null).
+	 * @return true if there is an object, false otherwise.
+	 */
+	public boolean isObjectAt(Vector2D point, GameObject ignore) {
+		Point2D.Double p = point.toPoint();
+		for (GameObject object : objects.values()) {
+			if (object.equals(ignore))
+				continue;
+			if (object.getBoundingBox().contains(p))
+				return true;
+		}
+		return false;
 	}
 
 	/**

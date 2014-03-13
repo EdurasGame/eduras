@@ -20,6 +20,7 @@ import de.illonis.eduras.events.MovementEvent;
 import de.illonis.eduras.events.ObjectFactoryEvent;
 import de.illonis.eduras.events.SetAmmunitionEvent;
 import de.illonis.eduras.events.SetBooleanGameObjectAttributeEvent;
+import de.illonis.eduras.events.SetDoubleGameObjectAttributeEvent;
 import de.illonis.eduras.events.SetGameModeEvent;
 import de.illonis.eduras.events.SetGameObjectAttributeEvent;
 import de.illonis.eduras.events.SetIntegerGameObjectAttributeEvent;
@@ -137,11 +138,35 @@ public class ClientLogic implements GameLogicInterface {
 				w.setCurrentAmmunition(setAmmuEvent.getNewValue());
 				System.out.println(setAmmuEvent.getNewValue());
 				break;
+			case SET_VISION_ANGLE:
+				if (!(event instanceof SetGameObjectAttributeEvent<?>)) {
+					break;
+				}
+				SetDoubleGameObjectAttributeEvent setAngleEvent = (SetDoubleGameObjectAttributeEvent) event;
+				GameObject angleGameObject = gameInfo
+						.findObjectById(setAngleEvent.getObjectId());
+				if (angleGameObject == null) {
+					break;
+				}
+				angleGameObject.setVisionAngle(setAngleEvent.getNewValue());
+				break;
+			case SET_VISION_RANGE:
+				if (!(event instanceof SetGameObjectAttributeEvent<?>)) {
+					break;
+				}
+				SetDoubleGameObjectAttributeEvent setRangeEvent = (SetDoubleGameObjectAttributeEvent) event;
+				GameObject rangeGameObject = gameInfo
+						.findObjectById(setRangeEvent.getObjectId());
+				if (rangeGameObject == null) {
+					break;
+				}
+				rangeGameObject.setVisionAngle(setRangeEvent.getNewValue());
+				break;
 			case SET_ROTATION:
 				if (!(event instanceof SetGameObjectAttributeEvent<?>)) {
 					break;
 				}
-				SetGameObjectAttributeEvent<Double> setRotationEvent = (SetGameObjectAttributeEvent<Double>) event;
+				SetDoubleGameObjectAttributeEvent setRotationEvent = (SetDoubleGameObjectAttributeEvent) event;
 				GameObject gameObject = gameInfo
 						.findObjectById(setRotationEvent.getObjectId());
 				if (gameObject == null) {
@@ -237,6 +262,7 @@ public class ClientLogic implements GameLogicInterface {
 				ItemEvent itemEvent = (ItemEvent) event;
 				handleItemEvent(itemEvent);
 				break;
+			case SET_VISION_BLOCKING:
 			case SET_COLLIDABLE:
 			case SET_VISIBLE:
 				handleObjectAttributeEvent((SetBooleanGameObjectAttributeEvent) event);
@@ -389,6 +415,8 @@ public class ClientLogic implements GameLogicInterface {
 		case SET_COLLIDABLE:
 			object.setCollidable(event.getNewValue());
 			break;
+		case SET_VISION_BLOCKING:
+			object.setVisionBlocking(event.getNewValue());
 		default:
 		}
 
@@ -541,7 +569,7 @@ public class ClientLogic implements GameLogicInterface {
 
 	@Override
 	public void startWorker() {
-		lgw = new LogicGameWorker(gameInfo, listenerHolder);
+		lgw = new ClientLogicGameWorker(gameInfo, listenerHolder);
 		workerThread = new Thread(lgw);
 		workerThread.setName("ClientLogicGameWorker");
 		workerThread.start();
