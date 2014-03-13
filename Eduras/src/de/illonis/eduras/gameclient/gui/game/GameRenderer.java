@@ -18,7 +18,7 @@ import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 import java.util.Iterator;
 import java.util.LinkedList;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -65,7 +65,7 @@ public class GameRenderer implements TooltipHandler {
 	private Graphics2D mapGraphics = null;
 	private Graphics2D guiGraphics = null;
 	private Graphics2D bothGraphics = null;
-	private final ConcurrentHashMap<Integer, GameObject> objs;
+	private final Map<Integer, GameObject> objs;
 	private RenderThread rendererThread;
 	private Component target;
 	private BufferStrategy buffer;

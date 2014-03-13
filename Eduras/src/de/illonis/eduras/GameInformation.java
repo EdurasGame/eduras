@@ -50,8 +50,8 @@ public class GameInformation {
 	private static final Random RANDOM = new Random();
 	private final ClientData clientData;
 
-	private final ConcurrentHashMap<Integer, GameObject> objects;
-	private final ConcurrentHashMap<Integer, PlayerMainFigure> players;
+	private final java.util.Map<Integer, GameObject> objects;
+	private final java.util.Map<Integer, PlayerMainFigure> players;
 	private Map map;
 	private EventTriggerer eventTriggerer;
 	private GameSettings gameSettings;
@@ -165,7 +165,7 @@ public class GameInformation {
 	 * 
 	 * @return game object list.
 	 */
-	public ConcurrentHashMap<Integer, GameObject> getObjects() {
+	public java.util.Map<Integer, GameObject> getObjects() {
 		return objects;
 	}
 
