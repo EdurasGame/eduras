@@ -80,10 +80,6 @@ public class ClientServerResponseHandler extends Thread {
 			String[] msgparts = singleMessage.split("#");
 
 			// handle server
-
-			if (msgparts[1].equals("JANNIS")) {
-				System.out.println("DIESDAS");
-			}
 			try {
 				int port = Integer.parseInt(msgparts[2]);
 				ServerInfo info = new ServerInfo(msgparts[1],
