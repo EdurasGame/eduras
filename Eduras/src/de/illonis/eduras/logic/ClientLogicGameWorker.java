@@ -85,14 +85,19 @@ public class ClientLogicGameWorker extends LogicGameWorker {
 		VisionInformation vinfo = gameInformation.getClientData()
 				.getVisionInfo();
 
+		HashMap<Team, Area> teamVision = new HashMap<Team, Area>();
+
+		for (Entry<Team, LinkedList<GameObject>> objList : objects.entrySet()) {
+			Area visionArea = new Area();
+			for (GameObject obj : objList.getValue())
+				visionArea.add(getVisionShapeFor(obj));
+			teamVision.put(objList.getKey(), visionArea);
+		}
+
 		synchronized (vinfo) {
 			vinfo.clear();
-			for (Entry<Team, LinkedList<GameObject>> objList : objects
-					.entrySet()) {
-				Area visionArea = new Area();
-				for (GameObject obj : objList.getValue())
-					visionArea.add(getVisionShapeFor(obj));
-				vinfo.setAreaForTeam(objList.getKey(), visionArea);
+			for (Entry<Team, Area> vision : teamVision.entrySet()) {
+				vinfo.setAreaForTeam(vision.getKey(), vision.getValue());
 			}
 		}
 

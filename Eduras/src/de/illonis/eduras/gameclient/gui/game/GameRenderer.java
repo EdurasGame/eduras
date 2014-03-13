@@ -1,6 +1,7 @@
 package de.illonis.eduras.gameclient.gui.game;
 
 import java.awt.AlphaComposite;
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Graphics2D;
@@ -340,10 +341,12 @@ public class GameRenderer implements TooltipHandler {
 				}
 			}
 		}
+
 		Area a = new Area(visionArea);
 		AffineTransform af = new AffineTransform();
 		af.translate(-camera.x, -camera.y);
 		a.transform(af);
+		mapGraphics.setStroke(new BasicStroke(1f));
 		mapGraphics.setColor(Color.WHITE);
 		mapGraphics.draw(a);
 
