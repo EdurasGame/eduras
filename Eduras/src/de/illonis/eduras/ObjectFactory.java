@@ -141,78 +141,79 @@ public class ObjectFactory {
 
 			switch (event.getObjectType()) {
 			case PLAYER:
-				go = new PlayerMainFigure(logic.getGame(), event.getOwner(), id);
+				go = new PlayerMainFigure(logic.getGame(), timingSource,
+						event.getOwner(), id);
 				logic.getGame().addPlayer((PlayerMainFigure) go);
 
 				L.info("Player " + event.getOwner() + " created");
 				testSpawnBird();
 				break;
 			case SIMPLEMISSILE:
-				go = new SimpleMissile(logic.getGame(), id);
+				go = new SimpleMissile(logic.getGame(), timingSource, id);
 				break;
 			case BUILDING:
-				go = new Building(logic.getGame(), id);
+				go = new Building(logic.getGame(), timingSource, id);
 				break;
 			case BIRD:
-				go = new Bird(logic.getGame(), id);
+				go = new Bird(logic.getGame(), timingSource, id);
 				break;
 			case BIGGERBLOCK:
 				try {
-					go = new BiggerBlock(logic.getGame(), id);
+					go = new BiggerBlock(logic.getGame(), timingSource, id);
 				} catch (ShapeVerticesNotApplicableException e) {
 					L.log(Level.SEVERE, "shape vertices not applicable", e);
 					return;
 				}
 				break;
 			case ITEM_WEAPON_SIMPLE:
-				go = new SimpleWeapon(logic.getGame(), id);
+				go = new SimpleWeapon(logic.getGame(), timingSource, id);
 				break;
 			case BIGBLOCK:
 				try {
-					go = new BigBlock(logic.getGame(), id);
+					go = new BigBlock(logic.getGame(), timingSource, id);
 				} catch (ShapeVerticesNotApplicableException e) {
 					L.log(Level.SEVERE, "shape vertices not applicable", e);
 					return;
 				}
 				break;
 			case SNIPERMISSILE:
-				go = new SniperMissile(logic.getGame(), id);
+				go = new SniperMissile(logic.getGame(), timingSource, id);
 				break;
 			case MISSILE_SPLASH:
-				go = new SplashMissile(logic.getGame(), id);
+				go = new SplashMissile(logic.getGame(), timingSource, id);
 				break;
 			case MISSILE_SPLASHED:
-				go = new SplashedMissile(logic.getGame(), id);
+				go = new SplashedMissile(logic.getGame(), timingSource, id);
 				break;
 			case SWORDMISSILE:
-				go = new SwordMissile(logic.getGame(), id);
+				go = new SwordMissile(logic.getGame(), timingSource, id);
 				break;
 			case ITEM_WEAPON_SPLASH:
-				go = new SplashWeapon(logic.getGame(), id);
+				go = new SplashWeapon(logic.getGame(), timingSource, id);
 				break;
 			case ITEM_WEAPON_SNIPER:
-				go = new SniperWeapon(logic.getGame(), id);
+				go = new SniperWeapon(logic.getGame(), timingSource, id);
 				break;
 			case ITEM_WEAPON_SWORD:
-				go = new SwordWeapon(logic.getGame(), id);
+				go = new SwordWeapon(logic.getGame(), timingSource, id);
 				break;
 			case ROCKETLAUNCHER:
-				go = new RocketLauncher(logic.getGame(), id);
+				go = new RocketLauncher(logic.getGame(), timingSource, id);
 				break;
 			case ROCKET_MISSILE:
-				go = new RocketMissile(logic.getGame(), id);
+				go = new RocketMissile(logic.getGame(), timingSource, id);
 				break;
 			case MINELAUNCHER:
-				go = new MineWeapon(logic.getGame(), id);
+				go = new MineWeapon(logic.getGame(), timingSource, id);
 				break;
 			case MINE_MISSILE:
-				go = new MineMissile(logic.getGame(), id);
+				go = new MineMissile(logic.getGame(), timingSource, id);
 				break;
 			case ASSAULTRIFLE:
-				go = new AssaultRifle(logic.getGame(), id);
+				go = new AssaultRifle(logic.getGame(), timingSource, id);
 				break;
 			case ASSAULT_MISSILE:
-				go = new AssaultMissile(logic.getGame(), id);
+				go = new AssaultMissile(logic.getGame(), timingSource, id);
 				break;
 			default:
 				return;

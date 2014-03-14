@@ -33,6 +33,7 @@ public abstract class GameObject implements Comparable<GameObject> {
 	}
 
 	private final GameInformation game;
+	private final TimingSource timingSource;
 	private ObjectType type;
 
 	private ObjectShape shape;
@@ -56,12 +57,15 @@ public abstract class GameObject implements Comparable<GameObject> {
 	 * 
 	 * @param game
 	 *            game that contains this object.
+	 * @param timingSource
+	 *            the timing source used for timed events.
 	 * @param id
 	 *            the object id.
 	 */
-	public GameObject(GameInformation game, int id) {
+	public GameObject(GameInformation game, TimingSource timingSource, int id) {
 		this.game = game;
 		this.id = id;
+		this.timingSource = timingSource;
 		setObjectType(ObjectType.NO_OBJECT);
 	}
 
@@ -86,6 +90,10 @@ public abstract class GameObject implements Comparable<GameObject> {
 	 */
 	public void setOwner(int owner) {
 		this.owner = owner;
+	}
+
+	protected TimingSource getTimingSource() {
+		return timingSource;
 	}
 
 	/**

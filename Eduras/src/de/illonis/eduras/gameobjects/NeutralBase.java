@@ -29,13 +29,16 @@ public class NeutralBase extends TriggerArea {
 	/**
 	 * @param game
 	 *            game info.
+	 * @param timingSource
+	 *            the timing source.
 	 * @param id
 	 *            object id.
 	 * @param mult
 	 *            multiplcator for resource generation amount.
 	 */
-	public NeutralBase(GameInformation game, int id, int mult) {
-		super(game, id);
+	public NeutralBase(GameInformation game, TimingSource timingSource, int id,
+			int mult) {
+		super(game, timingSource, id);
 		currentOwnerTeam = null;
 		currentProgressingTeam = null;
 		resourceGenerateAmount = S.neutralbase_resource_baseamount * mult;

@@ -25,11 +25,13 @@ public class Bird extends MoveableGameObject implements MotionAIControllable {
 	 * 
 	 * @param game
 	 *            game information.
+	 * @param timingSource
+	 *            the timing source.
 	 * @param id
 	 *            object id.
 	 */
-	public Bird(GameInformation game, int id) {
-		super(game, id);
+	public Bird(GameInformation game, TimingSource timingSource, int id) {
+		super(game, timingSource, id);
 		ai = new MovingUnitAI(this);
 		setSpeed(S.go_bird_speed);
 		setShape(ShapeFactory.createShape(ShapeType.BIRD));

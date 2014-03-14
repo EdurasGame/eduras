@@ -32,11 +32,13 @@ public abstract class TriggerArea extends GameObject implements
 	/**
 	 * @param game
 	 *            game information.
+	 * @param timingSource
+	 *            the timing source.
 	 * @param id
 	 *            object id.
 	 */
-	public TriggerArea(GameInformation game, int id) {
-		super(game, id);
+	public TriggerArea(GameInformation game, TimingSource timingSource, int id) {
+		super(game, timingSource, id);
 		setObjectType(ObjectType.TRIGGER_AREA);
 		presentObjects = new TreeSet<GameObject>(new GameObjectIdComparator());
 	}

@@ -27,7 +27,7 @@ public class PolygonTests {
 	 */
 	@Before
 	public void init() {
-		polyBlock = new DynamicPolygonBlock(null, 0);
+		polyBlock = new DynamicPolygonBlock(null, null, 0);
 	}
 
 	/**

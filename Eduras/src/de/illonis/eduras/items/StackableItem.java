@@ -2,6 +2,7 @@ package de.illonis.eduras.items;
 
 import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.ObjectFactory.ObjectType;
+import de.illonis.eduras.gameobjects.TimingSource;
 
 /**
  * An item that is stackable. Stackable means you can hold multiple of this item
@@ -23,11 +24,14 @@ public abstract class StackableItem extends Item implements Consumable {
 	 *            item type.
 	 * @param gi
 	 *            game information.
+	 * @param timingSource
+	 *            the timing source.
 	 * @param id
 	 *            item object id.
 	 */
-	public StackableItem(ObjectType type, GameInformation gi, int id) {
-		super(type, gi, id);
+	public StackableItem(ObjectType type, GameInformation gi,
+			TimingSource timingSource, int id) {
+		super(type, timingSource, gi, id);
 		setMaxStackSize(5);
 	}
 

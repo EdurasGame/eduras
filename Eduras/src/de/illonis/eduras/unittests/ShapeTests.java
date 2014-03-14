@@ -32,7 +32,7 @@ public class ShapeTests {
 	@Test
 	public void getAbsoluteVertices() {
 		PlayerMainFigure player = new PlayerMainFigure(new GameInformation(),
-				0, 0);
+				null, 0, 0);
 		player.setPosition(5, 5);
 
 		if (player.getShape() instanceof Polygon) {
@@ -59,14 +59,13 @@ public class ShapeTests {
 		GameInformation gameInfo = new GameInformation();
 		BigBlock otherObject = null;
 		try {
-			otherObject = new BigBlock(gameInfo, 1);
+			otherObject = new BigBlock(gameInfo, null, 1);
 		} catch (ShapeVerticesNotApplicableException e) {
-			// TODO Auto-generated catch block
 			assertTrue(false);
 		}
 		otherObject.setPosition(50, 50);
 
-		PlayerMainFigure thisObject = new PlayerMainFigure(gameInfo, 3,
+		PlayerMainFigure thisObject = new PlayerMainFigure(gameInfo, null, 3,
 				"Testobject", 2);
 
 		thisObject.setPosition(50, 29);

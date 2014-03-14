@@ -24,6 +24,8 @@ public abstract class Block extends GameObject {
 	 * 
 	 * @param game
 	 *            The game information.
+	 * @param timingSource
+	 *            the timing source.
 	 * @param xPos
 	 *            The x position of the block.
 	 * @param yPos
@@ -37,9 +39,10 @@ public abstract class Block extends GameObject {
 	 * @throws ShapeVerticesNotApplicableException
 	 *             Thrown if the given position values do not apply.
 	 */
-	public Block(GameInformation game, double xPos, double yPos, double width,
-			double height, int id) throws ShapeVerticesNotApplicableException {
-		super(game, id);
+	public Block(GameInformation game, TimingSource timingSource, double xPos,
+			double yPos, double width, double height, int id)
+			throws ShapeVerticesNotApplicableException {
+		super(game, timingSource, id);
 
 		this.width = width;
 		this.height = height;
@@ -54,6 +57,8 @@ public abstract class Block extends GameObject {
 	 * 
 	 * @param game
 	 *            The game information.
+	 * @param timingSource
+	 *            the timing source.
 	 * @param width
 	 *            the width of the block.
 	 * @param height
@@ -63,9 +68,9 @@ public abstract class Block extends GameObject {
 	 * @throws ShapeVerticesNotApplicableException
 	 *             Thrown if the given position values do not apply.
 	 */
-	public Block(GameInformation game, double width, double height, int id)
-			throws ShapeVerticesNotApplicableException {
-		super(game, id);
+	public Block(GameInformation game, TimingSource timingSource, double width,
+			double height, int id) throws ShapeVerticesNotApplicableException {
+		super(game, timingSource, id);
 
 		this.width = width;
 		this.height = height;

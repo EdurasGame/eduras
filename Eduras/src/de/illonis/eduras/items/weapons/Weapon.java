@@ -3,6 +3,7 @@ package de.illonis.eduras.items.weapons;
 import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.ObjectFactory.ObjectType;
 import de.illonis.eduras.gameobjects.GameObject;
+import de.illonis.eduras.gameobjects.TimingSource;
 import de.illonis.eduras.items.Item;
 import de.illonis.eduras.items.ItemUseInformation;
 import de.illonis.eduras.items.Lootable;
@@ -39,11 +40,14 @@ public abstract class Weapon extends Item implements Lootable, Usable {
 	 *            the objecttype of the weapon.
 	 * @param gi
 	 *            The gameinformation context
+	 * @param timingSource
+	 *            the timing source.
 	 * @param id
 	 *            The id of the new weapon.
 	 */
-	public Weapon(ObjectType type, GameInformation gi, int id) {
-		super(type, gi, id);
+	public Weapon(ObjectType type, GameInformation gi,
+			TimingSource timingSource, int id) {
+		super(type, timingSource, gi, id);
 	}
 
 	@Override

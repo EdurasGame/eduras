@@ -4,6 +4,7 @@ import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.ObjectFactory.ObjectType;
 import de.illonis.eduras.events.GameEvent.GameEventNumber;
 import de.illonis.eduras.events.SetBooleanGameObjectAttributeEvent;
+import de.illonis.eduras.gameobjects.TimingSource;
 import de.illonis.eduras.settings.S;
 import de.illonis.eduras.shapes.Circle;
 
@@ -19,10 +20,11 @@ public class MineMissile extends Missile {
 	 * Create a new MineMissile.
 	 * 
 	 * @param game
+	 * @param timingSource 
 	 * @param id
 	 */
-	public MineMissile(GameInformation game, int id) {
-		super(game, id);
+	public MineMissile(GameInformation game, TimingSource timingSource, int id) {
+		super(game, timingSource, id);
 		setDamage(S.go_minemissile_damage);
 		setDamageRadius(S.go_minemissile_damageradius);
 		setObjectType(ObjectType.MINE_MISSILE);

@@ -3,6 +3,7 @@ package de.illonis.eduras.items.weapons;
 import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.ObjectFactory.ObjectType;
 import de.illonis.eduras.gameobjects.GameObject;
+import de.illonis.eduras.gameobjects.TimingSource;
 import de.illonis.eduras.settings.S;
 import de.illonis.eduras.shapes.Sword;
 import de.illonis.eduras.units.Unit;
@@ -23,8 +24,8 @@ public class SwordMissile extends Missile {
 	 * @param id
 	 *            The id the missile is assigned to.
 	 */
-	public SwordMissile(GameInformation game, int id) {
-		super(game, id);
+	public SwordMissile(GameInformation game, TimingSource timingSource, int id) {
+		super(game, timingSource, id);
 		setDamage(S.go_swordmissile_damage);
 		setDamageRadius(S.go_swordmissile_damageradius);
 		setObjectType(ObjectType.SWORDMISSILE);

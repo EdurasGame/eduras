@@ -1,6 +1,3 @@
-/**
- * 
- */
 package de.illonis.eduras.gameobjects;
 
 import de.illonis.eduras.GameInformation;
@@ -32,6 +29,8 @@ public abstract class CircledBlock extends GameObject {
 	 * 
 	 * @param game
 	 *            the game information.
+	 * @param timingSource
+	 *            the timing source.
 	 * 
 	 * @param radius
 	 *            The radius of the circled block.
@@ -41,10 +40,10 @@ public abstract class CircledBlock extends GameObject {
 	 *            The y-component of the position.
 	 * @param id
 	 */
-	public CircledBlock(GameInformation game, double radius, double posX,
-			double posY, int id) {
+	public CircledBlock(GameInformation game, TimingSource timingSource,
+			double radius, double posX, double posY, int id) {
 
-		super(game, id);
+		super(game, timingSource, id);
 
 		setPosition(posX, posY);
 		setShape(new Circle(radius));
