@@ -31,6 +31,7 @@ import javax.swing.JRadioButton;
 import javax.swing.ListCellRenderer;
 
 import de.illonis.edulog.EduLog;
+import de.illonis.eduras.SysOutCatcher;
 import de.illonis.eduras.beta.BetaAuthenticator;
 import de.illonis.eduras.gameclient.gui.ClientFrame;
 import de.illonis.eduras.gameclient.gui.FullScreenClientFrame;
@@ -64,7 +65,7 @@ public class EdurasClient {
 	 *            client is bound.
 	 */
 	public static void main(String[] args) {
-
+		SysOutCatcher.startCatching();
 		SimpleDateFormat simpleDate = new SimpleDateFormat("y-M-d-H-m-s");
 
 		try {

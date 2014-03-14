@@ -67,7 +67,7 @@ public class EdurasServer {
 	 *            </ul>
 	 */
 	public static void main(String[] args) {
-
+		SysOutCatcher.startCatching();
 		SimpleDateFormat simpleDate = new SimpleDateFormat("y-M-d-H-m-s");
 
 		try {
