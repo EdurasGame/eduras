@@ -17,7 +17,6 @@ public class GamePanel extends Canvas {
 		setFocusable(true);
 		setFocusTraversalKeysEnabled(false);
 		setBackground(Color.black);
-		// setDoubleBuffered(true);
 		setIgnoreRepaint(true);
 	}
 }

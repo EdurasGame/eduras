@@ -4,6 +4,7 @@ import java.util.LinkedList;
 
 import de.illonis.eduras.exceptions.PointNotOnCircleException;
 import de.illonis.eduras.shapes.Circle;
+import de.illonis.eduras.shapes.ObjectShape;
 import de.illonis.eduras.utils.Pair;
 
 /**
@@ -416,6 +417,14 @@ public class Geometry {
 		// http://mathworld.wolfram.com/Circle-CircleIntersection.html
 
 		return null;
+	}
+
+	public static double getDistanceToShape(Vector2D point, ObjectShape shape) {
+
+		LinkedList<Line> lines = Geometry.getRelativeBorderLines(shape
+				.getBorderPoints());
+
+		return 0;
 	}
 
 	/**
