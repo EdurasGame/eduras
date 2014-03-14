@@ -42,7 +42,7 @@ public class BugReporter extends SwingWorker<String, Void> {
 	protected String doInBackground() throws Exception {
 		try {
 			sendReport();
-		} catch(IOException e) {
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		return message;
@@ -85,10 +85,10 @@ public class BugReporter extends SwingWorker<String, Void> {
 
 		String url = LOG_BASE_URL + "?user="
 				+ URLEncoder.encode(report.getReportingUser(), "UTF-8") + "&";
-		
+
 		url += "screen=" + screenLength + "&";
 		url += "log=" + logLength;
-		
+
 		HttpURLConnection httpUrlConnection = (HttpURLConnection) new URL(url)
 				.openConnection();
 		httpUrlConnection.setDoOutput(true);
@@ -117,7 +117,6 @@ public class BugReporter extends SwingWorker<String, Void> {
 		os.write(report.getText().getBytes("UTF-8"));
 		os.flush();
 		os.close();
-		System.out.println(url);
 		BufferedReader in = new BufferedReader(new InputStreamReader(
 				httpUrlConnection.getInputStream()));
 
@@ -127,7 +126,8 @@ public class BugReporter extends SwingWorker<String, Void> {
 			msg += s;
 		}
 		in.close();
-		message = "<html>Your report has been sent. Thank You!<br><br>" + msg + "</html>";
+		message = "<html>Your report has been sent. Thank You!<br><br>" + msg
+				+ "</html>";
 	}
 
 	@Override

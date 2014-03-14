@@ -2,7 +2,9 @@ package de.illonis.eduras.gameclient.gui.hud;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.util.logging.Logger;
 
+import de.illonis.edulog.EduLog;
 import de.illonis.eduras.gamemodes.GameMode;
 
 /**
@@ -12,6 +14,8 @@ import de.illonis.eduras.gamemodes.GameMode;
  * 
  */
 public class GameModeBar extends RenderedGuiObject {
+	private final static Logger L = EduLog.getLoggerFor("GameModeBar");
+
 	private String mode;
 
 	private static final Color TRANSLUCENT = new Color(0, 0, 0, 0);
@@ -51,7 +55,7 @@ public class GameModeBar extends RenderedGuiObject {
 
 	@Override
 	public void onGameModeChanged(GameMode newMode) {
-		System.out.println("gamemode bar to: " + newMode);
+		L.info("gamemode bar to: " + newMode);
 
 		mode = newMode.getName();
 	}

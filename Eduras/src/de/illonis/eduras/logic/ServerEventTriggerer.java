@@ -448,9 +448,6 @@ public class ServerEventTriggerer implements EventTriggerer {
 			if (!(oldObject instanceof PlayerMainFigure))
 				removeObject(oldObject.getId());
 		}
-		if (gameInfo.getObjects().values().size() > 1) {
-			System.out.println("LOl");
-		}
 	}
 
 	@Override

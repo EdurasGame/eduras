@@ -30,7 +30,6 @@ import de.illonis.eduras.exceptions.GameModeNotSupportedByMapException;
 import de.illonis.eduras.exceptions.InvalidNameException;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
 import de.illonis.eduras.gameclient.ClientData;
-import de.illonis.eduras.gameobjects.DynamicPolygonObject;
 import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.logic.EventTriggerer;
 import de.illonis.eduras.maps.FunMap;
@@ -518,8 +517,9 @@ public class GameInformation {
 				boundings.x = newPos.getX();
 				boundings.y = newPos.getY();
 
-				if (i > 1000000) {
-					System.out.println("Cannot find a spawn point");
+				if (i > 100000) {
+					L.severe("Cannot find a spawn point!");
+					break;
 				}
 			} while (isObjectWithinExceptMap(boundings));
 		} catch (IllegalArgumentException e) {
@@ -533,21 +533,9 @@ public class GameInformation {
 		LinkedList<GameObject> objectsWithoutMap = new LinkedList<GameObject>(
 				objects.values());
 
-		for (GameObject o : objectsWithoutMap) {
-			if (o instanceof DynamicPolygonObject) {
-				System.out.println("Letmeknow");
-			}
-		}
-
 		if (!objectsWithoutMap.remove(map.getBoundsObject())) {
 			throw new IllegalArgumentException(
 					"Didn't find map-bounds-object in objects!");
-		}
-
-		for (GameObject o : objectsWithoutMap) {
-			if (o instanceof DynamicPolygonObject) {
-				System.out.println("Letmeknow");
-			}
 		}
 
 		return isAnyOfObjectsWithinBounds(boundings, objectsWithoutMap);

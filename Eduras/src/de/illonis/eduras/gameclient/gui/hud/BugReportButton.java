@@ -4,7 +4,9 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Rectangle;
+import java.util.logging.Logger;
 
+import de.illonis.edulog.EduLog;
 import de.illonis.eduras.gameclient.bugreport.BugReportFrame;
 import de.illonis.eduras.units.PlayerMainFigure.InteractMode;
 
@@ -16,10 +18,12 @@ import de.illonis.eduras.units.PlayerMainFigure.InteractMode;
  */
 public class BugReportButton extends ClickableGuiElement {
 
+	private final static Logger L = EduLog.getLoggerFor("BugReportButton");
+
 	private final static String buttonText = "Report bug";
 	private final int width;
 	private final int height;
-	private Rectangle bounds;
+	private final Rectangle bounds;
 	private final UserInterface gui;
 
 	protected BugReportButton(UserInterface gui) {
@@ -28,7 +32,8 @@ public class BugReportButton extends ClickableGuiElement {
 		width = 80;
 		height = 20;
 		bounds = new Rectangle(screenX, screenY, width, height);
-		setActiveInteractModes(InteractMode.MODE_EGO, InteractMode.MODE_STRATEGY);
+		setActiveInteractModes(InteractMode.MODE_EGO,
+				InteractMode.MODE_STRATEGY);
 	}
 
 	@Override
@@ -38,7 +43,7 @@ public class BugReportButton extends ClickableGuiElement {
 	}
 
 	private void openBugWindow() {
-		System.out.println("open bug");
+		L.info("open bug");
 		new BugReportFrame().show(gui);
 	}
 

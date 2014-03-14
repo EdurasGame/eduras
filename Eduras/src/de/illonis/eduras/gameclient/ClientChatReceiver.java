@@ -28,7 +28,7 @@ public class ClientChatReceiver implements ChatActivityListener {
 	private final GamePanelLogic panelLogic;
 	private final ChatCache cache;
 	private final ChatClient chat;
-	private String clientName;
+	private final String clientName;
 
 	ClientChatReceiver(GamePanelLogic panelLogic, ChatClient chat,
 			String clientName, ChatCache cache) {
@@ -46,14 +46,13 @@ public class ClientChatReceiver implements ChatActivityListener {
 	@Override
 	public void onNameChanged(ChatUser user) {
 		cache.pushUser(user);
-		System.out.println("name changed: " + user.getNickName());
+		L.info("Chat name changed: " + user.getNickName());
 	}
 
 	@Override
 	public void onInviteReceived(Invitation invitation) {
-		System.out.println("Received invitation from "
-				+ invitation.getInvitingUser() + " to "
-				+ invitation.getInvitedUser());
+		L.info("Received invitation from " + invitation.getInvitingUser()
+				+ " to " + invitation.getInvitedUser());
 	}
 
 	@Override

@@ -140,7 +140,6 @@ public class ClientLogic implements GameLogicInterface {
 				}
 				Weapon w = (Weapon) weapon;
 				w.setCurrentAmmunition(setAmmuEvent.getNewValue());
-				System.out.println(setAmmuEvent.getNewValue());
 				break;
 			case SET_VISION_ANGLE:
 				if (!(event instanceof SetGameObjectAttributeEvent<?>)) {

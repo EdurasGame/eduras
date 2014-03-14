@@ -51,7 +51,7 @@ public final class AnimationFactory {
 		timingSource = new SwingTimerTimingSource();
 		Animator.setDefaultTimingSource(timingSource);
 		timingSource.init();
-		System.out.println("init animation factory");
+		L.info("init animation factory");
 
 	}
 

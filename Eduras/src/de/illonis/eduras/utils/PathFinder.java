@@ -32,7 +32,6 @@ public class PathFinder {
 			} else {
 				URL url = ClassLoader.getSystemClassLoader().getResource(".");
 				if (url != null) {
-					System.out.println(url);
 					URL parent = new URL(url, "../");
 					return parent;
 				} else {
