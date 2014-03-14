@@ -1,17 +1,20 @@
 package de.illonis.eduras.logic;
 
 import java.awt.geom.Area;
-import java.util.HashMap;
 import java.util.LinkedList;
-import java.util.Map.Entry;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
+import de.illonis.edulog.EduLog;
 import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.Team;
+import de.illonis.eduras.exceptions.ObjectNotFoundException;
 import de.illonis.eduras.gameclient.VisionInformation;
 import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.gameobjects.MoveableGameObject;
 import de.illonis.eduras.interfaces.GameEventListener;
 import de.illonis.eduras.items.Usable;
+import de.illonis.eduras.logicabstraction.EdurasInitializer;
 import de.illonis.eduras.math.Line;
 import de.illonis.eduras.math.Vector2D;
 import de.illonis.eduras.settings.S;
@@ -24,6 +27,9 @@ import de.illonis.eduras.units.PlayerMainFigure;
  * 
  */
 public class ClientLogicGameWorker extends LogicGameWorker {
+
+	private final static Logger L = EduLog
+			.getLoggerFor(ClientLogicGameWorker.class.getName());
 
 	private final static double ROTATION_STEP_RESOLUTION = 1;
 	private final static double ROTATION_DIST_RESOLUTION = 10;
@@ -63,47 +69,57 @@ public class ClientLogicGameWorker extends LogicGameWorker {
 
 		// TODO: improve the following by storing objects for teams directly.
 
-		// sort objects by their team to separate vision for each team.
-		HashMap<Team, LinkedList<GameObject>> objects = new HashMap<Team, LinkedList<GameObject>>();
-		HashMap<Integer, Team> teamOwners = new HashMap<Integer, Team>();
-
-		for (Team team : gameInformation.getTeams()) {
-			LinkedList<GameObject> teamobjects = new LinkedList<GameObject>();
-			objects.put(team, teamobjects);
-			for (PlayerMainFigure player : team.getPlayers()) {
-				teamOwners.put(player.getOwner(), team);
-			}
+		int playerOwner = EdurasInitializer.getInstance()
+				.getInformationProvider().getOwnerID();
+		PlayerMainFigure player;
+		try {
+			player = gameInformation.getPlayerByOwnerId(playerOwner);
+		} catch (ObjectNotFoundException e) {
+			L.log(Level.SEVERE, "Player has no mainfigure.", e);
+			return;
 		}
+
+		Team team = player.getTeam();
+
+		LinkedList<Integer> teamOwners = new LinkedList<Integer>();
+		LinkedList<GameObject> teamObjects = new LinkedList<GameObject>();
+
+		for (PlayerMainFigure teamPlayer : team.getPlayers()) {
+			teamOwners.add(teamPlayer.getOwner());
+		}
+
 		for (GameObject o : gameInformation.getObjects().values()) {
 			if (o.getOwner() == -1)
 				continue;
-			Team t = teamOwners.get(o.getOwner());
-			if (t != null)
-				objects.get(t).add(o);
+			if (teamOwners.contains(o.getOwner())) {
+				teamObjects.add(o);
+			}
 		}
+		Area visionArea = new Area();
+
+		LinkedList<GameObject> nearby = new LinkedList<GameObject>();
+
+		for (GameObject gameObject : teamObjects) {
+			visionArea.add(getVisionShapeFor(gameObject, nearby));
+		}
+
+		Area visionMask = new Area(visionArea);
+		for (GameObject nearObject : nearby) {
+			visionMask.add(new Area(nearObject.getBoundingBox()));
+		}
+		visionMask.add(new Area(player.getBoundingBox()));
 
 		VisionInformation vinfo = gameInformation.getClientData()
 				.getVisionInfo();
-
-		HashMap<Team, Area> teamVision = new HashMap<Team, Area>();
-
-		for (Entry<Team, LinkedList<GameObject>> objList : objects.entrySet()) {
-			Area visionArea = new Area();
-			for (GameObject obj : objList.getValue())
-				visionArea.add(getVisionShapeFor(obj));
-			teamVision.put(objList.getKey(), visionArea);
-		}
-
 		synchronized (vinfo) {
 			vinfo.clear();
-			for (Entry<Team, Area> vision : teamVision.entrySet()) {
-				vinfo.setAreaForTeam(vision.getKey(), vision.getValue());
-			}
+			vinfo.setAreaForTeam(team, visionArea);
+			vinfo.setMask(visionMask);
 		}
 
 	}
 
-	private Area getVisionShapeFor(GameObject obj) {
+	private Area getVisionShapeFor(GameObject obj, LinkedList<GameObject> nearby) {
 		LinkedList<Vector2D> polyEdges = new LinkedList<Vector2D>();
 
 		final double angle = obj.getVisionAngle();
@@ -130,8 +146,13 @@ public class ClientLogicGameWorker extends LogicGameWorker {
 			Vector2D p = null;
 			while (distance < radius) {
 				p = l.getPointAt(ROTATION_DIST_RESOLUTION * j);
-				if (gameInformation.isObjectAt(p, obj)) {
-					break;
+				LinkedList<GameObject> objs = gameInformation
+						.findObjectsInDistance(p, ROTATION_DIST_RESOLUTION);
+				if (objs.size() > 0) {
+					if (objs.size() > 1 || !objs.getFirst().equals(obj)) {
+						nearby.addAll(objs);
+						break;
+					}
 				}
 				j++;
 				distance = p.calculateDistance(u);
@@ -148,5 +169,4 @@ public class ClientLogicGameWorker extends LogicGameWorker {
 		poly.addPoint((int) Math.round(u.getX()), (int) Math.round(u.getY()));
 		return new Area(poly);
 	}
-
 }
