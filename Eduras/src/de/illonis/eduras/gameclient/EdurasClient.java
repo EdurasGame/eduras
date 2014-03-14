@@ -10,7 +10,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.beans.PropertyEditor;
+import java.beans.PropertyEditorManager;
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Vector;
@@ -31,6 +34,7 @@ import de.illonis.edulog.EduLog;
 import de.illonis.eduras.beta.BetaAuthenticator;
 import de.illonis.eduras.gameclient.gui.ClientFrame;
 import de.illonis.eduras.gameclient.gui.FullScreenClientFrame;
+import de.illonis.eduras.settings.S;
 
 /**
  * Eduras? Game client for end user.
@@ -79,6 +83,8 @@ public class EdurasClient {
 		String betaUser = "";
 		String betaPassword = "";
 
+		final String sClassName = S.class.getSimpleName();
+
 		// read arguments
 		Level logLimit = DEFAULT_LOGLIMIT;
 		for (int i = 0; i < args.length; i++) {
@@ -102,6 +108,20 @@ public class EdurasClient {
 				betaPassword = parameterValue;
 			} else if (parameterName.equalsIgnoreCase("loglimit")) {
 				logLimit = Level.parse(parameterValue);
+			} else if (parameterName.startsWith(sClassName + ".")) {
+				try {
+					Field f = S.class.getField(parameterName
+							.substring(sClassName.length() + 1));
+					Class<?> targetClass = f.getType();
+					Object value = convert(targetClass, parameterValue);
+					f.set(null, value);
+					L.log(Level.INFO, "Set S." + f.getName() + " to " + value);
+				} catch (NoSuchFieldException | SecurityException
+						| IllegalArgumentException | IllegalAccessException e) {
+					L.log(Level.WARNING,
+							"Failed to set S field from command line, argument: "
+									+ parameterName + "=" + parameterValue, e);
+				}
 			}
 		}
 		EduLog.setBasicLogLimit(logLimit);
@@ -115,6 +135,12 @@ public class EdurasClient {
 		if (authenticator.authenticate(3, betaUser, betaPassword)) {
 			startWindowed();
 		}
+	}
+
+	private static Object convert(Class<?> targetType, String text) {
+		PropertyEditor editor = PropertyEditorManager.findEditor(targetType);
+		editor.setAsText(text);
+		return editor.getValue();
 	}
 
 	protected static void startWindowed() {

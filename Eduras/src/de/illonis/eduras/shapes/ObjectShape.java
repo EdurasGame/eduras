@@ -1,11 +1,8 @@
-/**
- * 
- */
 package de.illonis.eduras.shapes;
 
 import java.awt.geom.Rectangle2D;
 import java.util.LinkedList;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.Map;
 
 import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.gameobjects.GameObject;
@@ -51,7 +48,7 @@ public abstract class ObjectShape {
 		Vector2D result = new Vector2D(target);
 		if (!thisObject.isCollidable())
 			return result;
-		ConcurrentHashMap<Integer, GameObject> gameObjects = game.getObjects();
+		Map<Integer, GameObject> gameObjects = game.getObjects();
 
 		GameObject collisionObject = null;
 

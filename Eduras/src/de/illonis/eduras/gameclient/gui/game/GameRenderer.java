@@ -11,6 +11,7 @@ import java.awt.GraphicsEnvironment;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.RenderingHints;
+import java.awt.Toolkit;
 import java.awt.Transparency;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Area;
@@ -18,7 +19,7 @@ import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 import java.util.Iterator;
 import java.util.LinkedList;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -64,7 +65,7 @@ public class GameRenderer implements TooltipHandler {
 	private Graphics2D mapGraphics = null;
 	private Graphics2D guiGraphics = null;
 	private Graphics2D bothGraphics = null;
-	private final ConcurrentHashMap<Integer, GameObject> objs;
+	private final Map<Integer, GameObject> objs;
 	private RenderThread rendererThread;
 	private Component target;
 	private BufferStrategy buffer;
@@ -252,11 +253,12 @@ public class GameRenderer implements TooltipHandler {
 			bothGraphics.drawImage(mapImage, 0, 0, null);
 			bothGraphics.drawImage(guiImage, 0, 0, null);
 			g2d.drawImage(displayImage, 0, 0, null);
+			g2d.dispose();
 			if (!buffer.contentsLost()) {
 				buffer.show();
 			}
-			if (g2d != null)
-				g2d.dispose();
+			Toolkit.getDefaultToolkit().sync();
+
 		}
 	}
 
@@ -290,8 +292,10 @@ public class GameRenderer implements TooltipHandler {
 		Team playerTeam = myPlayer.getTeam();
 		VisionInformation vinfo = info.getClientData().getVisionInfo();
 		Area visionArea;
+		Area visionMask;
 		synchronized (vinfo) {
 			visionArea = vinfo.getVisionForTeam(playerTeam);
+			visionMask = vinfo.getVisionMask();
 		}
 
 		for (Iterator<GameObject> iterator = objs.values().iterator(); iterator
@@ -341,14 +345,21 @@ public class GameRenderer implements TooltipHandler {
 			}
 		}
 
-		Area a = new Area(visionArea);
-		AffineTransform af = new AffineTransform();
-		af.translate(-camera.x, -camera.y);
-		a.transform(af);
-		mapGraphics.setStroke(new BasicStroke(1f));
-		mapGraphics.setColor(Color.WHITE);
-		mapGraphics.draw(a);
+		if (!S.vision_disabled) {
+			AffineTransform af = new AffineTransform();
+			af.translate(-camera.x, -camera.y);
 
+			Area map = new Area(camera);
+			map.subtract(visionMask);
+
+			map.transform(af);
+
+			mapGraphics.setStroke(new BasicStroke(1f));
+			mapGraphics.setColor(new Color(0, 0, 0, 0.6f));
+			mapGraphics.fill(map);
+			mapGraphics.setColor(Color.WHITE);
+			mapGraphics.draw(map);
+		}
 	}
 
 	private boolean isSelected(GameObject object) {

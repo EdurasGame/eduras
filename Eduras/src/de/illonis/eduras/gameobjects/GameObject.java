@@ -41,6 +41,7 @@ public abstract class GameObject implements Comparable<GameObject> {
 	private double visionRange = 200;
 	private double visionAngle = 90;
 	private boolean isVisionBlocking = false;
+	private int zLayer = 1;
 
 	private int id;
 	private int owner = -1;
@@ -250,9 +251,9 @@ public abstract class GameObject implements Comparable<GameObject> {
 
 	@Override
 	public int compareTo(GameObject o) {
-		if (getId() == o.getId())
+		if (zLayer == o.zLayer)
 			return 0;
-		else if (getId() > o.getId())
+		else if (zLayer > o.zLayer)
 			return 1;
 		else
 			return -1;

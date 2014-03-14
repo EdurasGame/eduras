@@ -30,6 +30,8 @@ import de.illonis.eduras.utils.Pair;
  */
 public class Polygon extends ObjectShape {
 
+	private Rectangle2D.Double boundingBox;
+
 	private final static Logger L = EduLog.getLoggerFor(EdurasServer.class
 			.getName());
 
@@ -45,7 +47,7 @@ public class Polygon extends ObjectShape {
 	 * Creates a polygon with no vertices.
 	 */
 	public Polygon() {
-		this.vertices = new Vector2D[0];
+		this(new Vector2D[0]);
 	}
 
 	/**
@@ -54,9 +56,7 @@ public class Polygon extends ObjectShape {
 	 * @param vertices
 	 */
 	public Polygon(Vector2D[] vertices) {
-
-		this.vertices = vertices;
-
+		setVertices(vertices);
 	}
 
 	/**
@@ -80,13 +80,15 @@ public class Polygon extends ObjectShape {
 	}
 
 	/**
-	 * Set the array of vertices of this polygon to the given array.
+	 * Set the array of vertices of this polygon to the given array and
+	 * recalculates the boundingbox.
 	 * 
 	 * @param vertices
 	 *            The array to set the vertices of this polygon to.
 	 */
 	public void setVertices(Vector2D[] vertices) {
 		this.vertices = vertices;
+		calculateBoundingBox();
 	}
 
 	/**
@@ -184,7 +186,15 @@ public class Polygon extends ObjectShape {
 	}
 
 	@Override
-	public Rectangle2D.Double getBoundingBox() {
+	public final Rectangle2D.Double getBoundingBox() {
+		return boundingBox;
+	}
+
+	private void calculateBoundingBox() {
+		if (vertices.length == 0) {
+			boundingBox = new Rectangle2D.Double();
+			return;
+		}
 		ArrayList<Double> xValues = new ArrayList<Double>();
 		ArrayList<Double> yValues = new ArrayList<Double>();
 		for (Vector2D vertex : vertices) {
@@ -197,8 +207,8 @@ public class Polygon extends ObjectShape {
 
 		double minX = BasicMath.min(xValues.toArray(new Double[1]));
 		double minY = BasicMath.min(yValues.toArray(new Double[1]));
-
-		return new Rectangle2D.Double(minX, minY, maxX - minX, maxY - minY);
+		boundingBox = new Rectangle2D.Double(minX, minY, maxX - minX, maxY
+				- minY);
 	}
 
 	@Override
