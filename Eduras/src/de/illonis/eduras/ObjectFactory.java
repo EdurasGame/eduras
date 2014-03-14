@@ -120,7 +120,7 @@ public class ObjectFactory {
 	 *            object factory event with object id attached.
 	 */
 	public void onObjectFactoryEventAppeared(ObjectFactoryEvent event) {
-
+		System.out.println(" got event: " + event.getType());
 		GameObject go = null;
 		if (event.getType() == GameEventNumber.OBJECT_CREATE) {
 

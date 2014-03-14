@@ -104,6 +104,8 @@ public class GameClient {
 	public void onClientConnected(int clientId) {
 		if (clientId != getOwnerID()) // only handle my connection
 			return;
+		System.out.println("connected");
+		EdurasInitializer.getInstance().startLogicWorker();
 		wantsExit = false;
 		initChat();
 		L.info("Connection to server established. OwnerId: "

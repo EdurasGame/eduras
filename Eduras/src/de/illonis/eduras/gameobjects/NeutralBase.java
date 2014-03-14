@@ -26,6 +26,14 @@ public class NeutralBase extends TriggerArea {
 
 	private int resourceGenerateAmount;
 
+	/**
+	 * @param game
+	 *            game info.
+	 * @param id
+	 *            object id.
+	 * @param mult
+	 *            multiplcator for resource generation amount.
+	 */
 	public NeutralBase(GameInformation game, int id, int mult) {
 		super(game, id);
 		currentOwnerTeam = null;
@@ -35,14 +43,25 @@ public class NeutralBase extends TriggerArea {
 		// TODO: register at serverlogicgameworker
 	}
 
+	/**
+	 * @return the progress of the current progressing team [0,100]
+	 * 
+	 * @see #getCurrentProgressingTeam()
+	 */
 	public int getProgress() {
 		return progress;
 	}
 
+	/**
+	 * @return the id of the current owning team.
+	 */
 	public Team getCurrentOwnerTeam() {
 		return currentOwnerTeam;
 	}
 
+	/**
+	 * @return the team that currently gets progress in claiming this base.
+	 */
 	public Team getCurrentProgressingTeam() {
 		return currentProgressingTeam;
 	}

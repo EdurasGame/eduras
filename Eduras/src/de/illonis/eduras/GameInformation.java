@@ -200,6 +200,17 @@ public class GameInformation {
 	}
 
 	/**
+	 * Returns team with given id. If no object is found, null is returned.
+	 * 
+	 * @param teamId
+	 *            id to search for.
+	 * @return team with given id.
+	 */
+	public Team findTeamById(int teamId) {
+		return teams.get(teamId);
+	}
+
+	/**
 	 * Returns a list of all gameobjects that are in range of a given position.
 	 * 
 	 * @param point

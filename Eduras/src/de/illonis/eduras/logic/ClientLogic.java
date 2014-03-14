@@ -57,7 +57,7 @@ public class ClientLogic implements GameLogicInterface {
 			.getName());
 
 	private final GameInformation gameInfo;
-	private final ObjectFactory objectFactory;
+	private ObjectFactory objectFactory;
 	private LogicGameWorker lgw;
 	private final ListenerHolder<GameEventListener> listenerHolder;
 	private Thread workerThread;
@@ -570,6 +570,7 @@ public class ClientLogic implements GameLogicInterface {
 		workerThread = new Thread(lgw);
 		workerThread.setName("ClientLogicGameWorker");
 		workerThread.start();
+		System.out.println("start worker");
 	}
 
 }
