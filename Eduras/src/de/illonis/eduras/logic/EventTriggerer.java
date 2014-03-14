@@ -1,6 +1,7 @@
 package de.illonis.eduras.logic;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import de.illonis.eduras.ObjectFactory.ObjectType;
 import de.illonis.eduras.Team;
@@ -273,7 +274,7 @@ public interface EventTriggerer {
 	 * 
 	 * @author illonis
 	 */
-	void setTeams(Team... teams);
+	void setTeams(List<Team> teams);
 
 	/**
 	 * Adds a player to given team.

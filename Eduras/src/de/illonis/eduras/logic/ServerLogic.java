@@ -58,7 +58,7 @@ public class ServerLogic implements GameLogicInterface {
 		listenerHolder = new ListenerHolder<GameEventListener>();
 		this.gameInfo = g;
 		startWorker();
-		objectFactory = new ObjectFactory(this);
+		objectFactory = new ObjectFactory(this, lgw);
 	}
 
 	@Override

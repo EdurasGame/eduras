@@ -2,6 +2,7 @@ package de.illonis.eduras.logic;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -519,12 +520,12 @@ public class ServerEventTriggerer implements EventTriggerer {
 	}
 
 	@Override
-	public void setTeams(Team... teams) {
+	public void setTeams(List<Team> teams) {
 		gameInfo.clearTeams();
 		SetTeamsEvent event = new SetTeamsEvent();
 		for (Team team : teams) {
 			gameInfo.addTeam(team);
-			event.addTeam(team.getColor(), team.getName());
+			event.addTeam(team);
 		}
 		sendEvents(event);
 	}
@@ -545,7 +546,7 @@ public class ServerEventTriggerer implements EventTriggerer {
 		team.addPlayer(newPlayer);
 
 		AddPlayerToTeamEvent event = new AddPlayerToTeamEvent(ownerId,
-				team.getColor());
+				team.getTeamId());
 		sendEvents(event);
 	}
 

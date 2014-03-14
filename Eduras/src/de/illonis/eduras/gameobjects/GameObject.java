@@ -1,6 +1,7 @@
 package de.illonis.eduras.gameobjects;
 
 import java.awt.geom.Rectangle2D;
+import java.util.Comparator;
 import java.util.LinkedList;
 
 import de.illonis.eduras.GameInformation;
@@ -458,5 +459,26 @@ public abstract class GameObject implements Comparable<GameObject> {
 		// } else {
 		rotation = newValue;
 		// }
+	}
+
+	/**
+	 * Compares {@link GameObject}s by their {@link GameObject#id}.
+	 * 
+	 * @author illonis
+	 * 
+	 */
+	public static class GameObjectIdComparator implements
+			Comparator<GameObject> {
+
+		@Override
+		public int compare(GameObject lhs, GameObject rhs) {
+			if (lhs.getId() == rhs.getId())
+				return 0;
+			else if (lhs.getId() > rhs.getId())
+				return 1;
+			else
+				return -1;
+		}
+
 	}
 }

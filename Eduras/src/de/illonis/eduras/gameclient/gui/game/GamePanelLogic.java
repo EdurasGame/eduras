@@ -51,7 +51,7 @@ public class GamePanelLogic extends ClientGuiStepLogic implements
 	private HudNotifier hudNotifier;
 	private final GuiMouseHandler mouseHandler;
 	private UserInterface userInterface;
-	private final InformationProvider infoPro;
+	private InformationProvider infoPro;
 	private ClickState currentClickState;
 	private final ClientData data;
 	private ChatClientImpl chat;

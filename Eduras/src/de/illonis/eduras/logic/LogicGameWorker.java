@@ -1,9 +1,13 @@
 package de.illonis.eduras.logic;
 
 import java.util.HashMap;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.gameobjects.GameObject;
+import de.illonis.eduras.gameobjects.TimedEventHandler;
+import de.illonis.eduras.gameobjects.TimingSource;
 import de.illonis.eduras.interfaces.GameEventListener;
 import de.illonis.eduras.settings.S;
 
@@ -14,7 +18,7 @@ import de.illonis.eduras.settings.S;
  * @author Florian Mai <florian.ren.mai@googlemail.com>
  * 
  */
-public abstract class LogicGameWorker implements Runnable {
+public abstract class LogicGameWorker implements Runnable, TimingSource {
 
 	/**
 	 * Tells how much time shall be between two updates in nanoseconds.
@@ -28,6 +32,7 @@ public abstract class LogicGameWorker implements Runnable {
 	protected final GameInformation gameInformation;
 	protected final ListenerHolder<? extends GameEventListener> listenerHolder;
 	private final HashMap<Integer, Double> oldRotation;
+	private final Map<TimedEventHandler, Long> timingTargets;
 
 	private long lastUpdate;
 
@@ -45,6 +50,7 @@ public abstract class LogicGameWorker implements Runnable {
 		this.listenerHolder = listenerHolder;
 		oldRotation = new HashMap<Integer, Double>();
 		lastUpdate = 0;
+		timingTargets = new HashMap<TimedEventHandler, Long>();
 	}
 
 	@Override
@@ -75,7 +81,7 @@ public abstract class LogicGameWorker implements Runnable {
 					gameInformation.getGameSettings().changeTime(
 							gameRemainingTime - delta);
 				}
-
+				notifyTimingTargets(delta);
 				gameUpdate(delta);
 			}
 			afterTime = System.nanoTime();
@@ -98,6 +104,23 @@ public abstract class LogicGameWorker implements Runnable {
 			}
 			beforeTime = System.nanoTime();
 		}
+	}
+
+	private void notifyTimingTargets(long delta) {
+		for (Entry<TimedEventHandler, Long> element : timingTargets.entrySet()) {
+			long value = element.getValue();
+			value += delta;
+			if (value > element.getKey().getInterval()) {
+				element.getKey().onIntervalElapsed(value);
+				value = 0L;
+			}
+			element.setValue(value);
+		}
+	}
+
+	@Override
+	public final boolean isRunning() {
+		return running;
 	}
 
 	/**
@@ -128,5 +151,16 @@ public abstract class LogicGameWorker implements Runnable {
 			return true;
 		}
 		return false;
+	}
+
+	@Override
+	public final void addTimedEventHandler(TimedEventHandler eventHandler) {
+		timingTargets.put(eventHandler, 0L);
+
+	}
+
+	@Override
+	public final void removeTimedEventHandler(TimedEventHandler eventHandler) {
+		timingTargets.remove(eventHandler);
 	}
 }

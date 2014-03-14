@@ -1,5 +1,6 @@
 package de.illonis.eduras;
 
+import java.awt.Color;
 import java.util.LinkedList;
 
 import de.illonis.eduras.units.PlayerMainFigure;
@@ -12,19 +13,19 @@ import de.illonis.eduras.units.PlayerMainFigure;
  */
 public class Team {
 
-	/**
-	 * The team color identifies a team. There should never exist two teams with
-	 * the same color at once. If you compare teams, they are compared by color.
-	 * 
-	 */
-	@SuppressWarnings("javadoc")
-	public enum TeamColor {
-		RED, BLUE, NEUTRAL;
-	}
+	private static int nextTeamId = 0;
 
-	private TeamColor color;
+	private int teamId;
+	private Color color;
 	private String name;
 	private final LinkedList<PlayerMainFigure> players;
+
+	/**
+	 * @return the next free id for a new team.
+	 */
+	public static synchronized int getNextTeamId() {
+		return nextTeamId++;
+	}
 
 	/**
 	 * Creates a new team.
@@ -32,13 +33,41 @@ public class Team {
 	 * @param name
 	 *            the name of the team.
 	 * 
-	 * @param color
-	 *            the color of the team.
+	 * @param teamId
+	 *            the id of the team.
 	 */
-	public Team(String name, TeamColor color) {
-		this.color = color;
+	public Team(String name, int teamId) {
+		this(name, teamId, Color.BLUE);
+	}
+
+	/**
+	 * @param name
+	 *            the name of the team.
+	 * @param teamId
+	 *            the id of the team.
+	 * @param color
+	 *            the team color.
+	 */
+	public Team(String name, int teamId, Color color) {
+		this.teamId = teamId;
 		this.name = name;
 		players = new LinkedList<PlayerMainFigure>();
+		this.color = color;
+	}
+
+	/**
+	 * @return the id of this team.
+	 */
+	public int getTeamId() {
+		return teamId;
+	}
+
+	/**
+	 * @param color
+	 *            the color of this team.
+	 */
+	public void setColor(Color color) {
+		this.color = color;
 	}
 
 	/**
@@ -75,7 +104,7 @@ public class Team {
 	 * 
 	 * @author illonis
 	 */
-	public TeamColor getColor() {
+	public Color getColor() {
 		return color;
 	}
 
@@ -101,9 +130,8 @@ public class Team {
 	public boolean equals(Object obj) {
 		if (obj instanceof Team) {
 			Team other = (Team) obj;
-			return getColor().equals(other.getColor());
+			return getTeamId() == other.getTeamId();
 		}
 		return super.equals(obj);
 	}
-
 }

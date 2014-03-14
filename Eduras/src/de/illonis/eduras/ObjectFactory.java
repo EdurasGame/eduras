@@ -18,6 +18,7 @@ import de.illonis.eduras.gameobjects.BiggerBlock;
 import de.illonis.eduras.gameobjects.Bird;
 import de.illonis.eduras.gameobjects.Building;
 import de.illonis.eduras.gameobjects.GameObject;
+import de.illonis.eduras.gameobjects.TimingSource;
 import de.illonis.eduras.interfaces.GameLogicInterface;
 import de.illonis.eduras.items.weapons.AssaultMissile;
 import de.illonis.eduras.items.weapons.AssaultRifle;
@@ -50,6 +51,7 @@ public class ObjectFactory {
 			.getName());
 
 	private final GameLogicInterface logic;
+	private final TimingSource timingSource;
 
 	/**
 	 * Collection of object types that can be created by {@link ObjectFactory}.
@@ -65,7 +67,7 @@ public class ObjectFactory {
 				12), MISSILE_SPLASHED(13), DYNAMIC_POLYGON(14), ITEM_WEAPON_SWORD(
 				15), SWORDMISSILE(16), BIRD(17), ROCKETLAUNCHER(18), ROCKET_MISSILE(
 				19), MINELAUNCHER(20), MINE_MISSILE(21), ASSAULTRIFLE(22), ASSAULT_MISSILE(
-				23);
+				23), TRIGGER_AREA(24);
 
 		private int number;
 
@@ -92,9 +94,12 @@ public class ObjectFactory {
 	 * 
 	 * @param logic
 	 *            game object factory is assigned to.
+	 * @param source
+	 *            a timing source that will be attached to created objects.
 	 */
-	public ObjectFactory(GameLogicInterface logic) {
+	public ObjectFactory(GameLogicInterface logic, TimingSource source) {
 		this.logic = logic;
+		this.timingSource = source;
 	}
 
 	/**

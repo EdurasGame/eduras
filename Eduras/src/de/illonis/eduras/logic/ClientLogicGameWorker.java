@@ -3,6 +3,7 @@ package de.illonis.eduras.logic;
 import java.awt.geom.Area;
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.Map;
 import java.util.Map.Entry;
 
 import de.illonis.eduras.GameInformation;
@@ -10,6 +11,7 @@ import de.illonis.eduras.Team;
 import de.illonis.eduras.gameclient.VisionInformation;
 import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.gameobjects.MoveableGameObject;
+import de.illonis.eduras.gameobjects.TimedEventHandler;
 import de.illonis.eduras.interfaces.GameEventListener;
 import de.illonis.eduras.items.Usable;
 import de.illonis.eduras.math.Line;

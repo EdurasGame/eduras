@@ -396,10 +396,10 @@ public class GameInformation {
 		SetTeamsEvent teamEvent = new SetTeamsEvent();
 		LinkedList<AddPlayerToTeamEvent> teamPlayerEvents = new LinkedList<AddPlayerToTeamEvent>();
 		for (Team team : getTeams()) {
-			teamEvent.addTeam(team.getColor(), team.getName());
+			teamEvent.addTeam(team);
 			for (PlayerMainFigure player : team.getPlayers()) {
 				teamPlayerEvents.add(new AddPlayerToTeamEvent(
-						player.getOwner(), team.getColor()));
+						player.getOwner(), team.getTeamId()));
 			}
 		}
 
@@ -478,7 +478,7 @@ public class GameInformation {
 				getMap().getSpawnAreas());
 		for (int i = 0; i < spawnAreas.size(); i++) {
 			SpawnPosition p = spawnAreas.get(i);
-			if (p.getTeaming() == spawnType)
+			if (p.getTeaming() == spawnType || p.getTeaming() == SpawnType.ANY)
 				availableSpawnings.add(p);
 		}
 

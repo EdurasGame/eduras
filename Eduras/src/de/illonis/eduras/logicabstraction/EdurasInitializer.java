@@ -1,6 +1,7 @@
 package de.illonis.eduras.logicabstraction;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -205,7 +206,7 @@ public class EdurasInitializer {
 			}
 
 			@Override
-			public void setTeams(Team... teams) {
+			public void setTeams(List<Team> teams) {
 				// TODO Auto-generated method stub
 
 			}

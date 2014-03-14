@@ -8,7 +8,6 @@ import de.illonis.edulog.EduLog;
 import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.ObjectFactory;
 import de.illonis.eduras.Team;
-import de.illonis.eduras.Team.TeamColor;
 import de.illonis.eduras.events.AddPlayerToTeamEvent;
 import de.illonis.eduras.events.ClientRenameEvent;
 import de.illonis.eduras.events.DeathEvent;
@@ -72,7 +71,7 @@ public class ClientLogic implements GameLogicInterface {
 	 */
 	public ClientLogic(GameInformation g) {
 		this.gameInfo = g;
-		objectFactory = new ObjectFactory(this);
+		objectFactory = new ObjectFactory(this, lgw);
 		listenerHolder = new ListenerHolder<GameEventListener>();
 
 	}
@@ -203,16 +202,14 @@ public class ClientLogic implements GameLogicInterface {
 			case SET_TEAMS:
 				SetTeamsEvent teamEvent = (SetTeamsEvent) event;
 				gameInfo.clearTeams();
-				for (TeamColor color : teamEvent.getTeamList().keySet()) {
-					String name = teamEvent.getTeamList().get(color);
-					Team t = new Team(name, color);
+				for (Team t : teamEvent.getTeamList()) {
 					gameInfo.addTeam(t);
 				}
 				break;
 			case ADD_PLAYER_TO_TEAM:
 				AddPlayerToTeamEvent pteEvent = (AddPlayerToTeamEvent) event;
 				for (Team t : gameInfo.getTeams()) {
-					if (t.getColor() == pteEvent.getTeamColor()) {
+					if (t.getTeamId() == pteEvent.getTeam()) {
 						PlayerMainFigure player;
 						try {
 							player = gameInfo.getPlayerByOwnerId(pteEvent
