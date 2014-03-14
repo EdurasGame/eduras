@@ -1,10 +1,10 @@
 package de.illonis.eduras.events;
 
-import de.illonis.eduras.gameobjects.DynamicPolygonBlock;
+import de.illonis.eduras.gameobjects.DynamicPolygonObject;
 import de.illonis.eduras.math.Vector2D;
 
 /**
- * Event that indicates a polygon data change on a {@link DynamicPolygonBlock}.
+ * Event that indicates a polygon data change on a {@link DynamicPolygonObject}.
  * 
  * @author illonis
  * 

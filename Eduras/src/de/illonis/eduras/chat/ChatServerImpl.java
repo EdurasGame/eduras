@@ -174,7 +174,6 @@ public class ChatServerImpl implements ChatServer {
 
 	@Override
 	public boolean start(int port) {
-		System.out.println("starting chat on  port " + port);
 		running = server.start("MyChatServer", port);
 		return running;
 	}

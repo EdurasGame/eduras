@@ -43,7 +43,28 @@ public class InitialObjectData {
 	 *            the vertices of the dynamic polygon.
 	 */
 	public InitialObjectData(double xPos, double yPos, Vector2D[] vertices) {
-		this.type = ObjectType.DYNAMIC_POLYGON;
+		this.type = ObjectType.DYNAMIC_POLYGON_BLOCK;
+		this.x = xPos;
+		this.y = yPos;
+		polygonShapeVertices = vertices;
+	}
+
+	/**
+	 * Creates a new dataset holding given information for a object of any type
+	 * that has a polygon shape.
+	 * 
+	 * @param type
+	 *            the type of the new object.
+	 * @param xPos
+	 *            the x-coordinate of the new object.
+	 * @param yPos
+	 *            the y-coordinate of the new object.
+	 * @param vertices
+	 *            the vertices of the dynamic polygon.
+	 */
+	public InitialObjectData(ObjectType type, double xPos, double yPos,
+			Vector2D[] vertices) {
+		this.type = type;
 		this.x = xPos;
 		this.y = yPos;
 		polygonShapeVertices = vertices;

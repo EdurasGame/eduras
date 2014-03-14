@@ -11,6 +11,7 @@ import java.util.LinkedList;
 
 import de.illonis.eduras.ObjectFactory.ObjectType;
 import de.illonis.eduras.gamemodes.GameMode.GameModeNumber;
+import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.maps.SpawnPosition.SpawnType;
 import de.illonis.eduras.maps.persistence.InvalidDataException;
 import de.illonis.eduras.maps.persistence.MapParser;
@@ -38,6 +39,7 @@ public abstract class Map {
 	private final LinkedList<InitialObjectData> initialObjects;
 	private final LinkedList<GameModeNumber> supportedGameModes;
 	private final LinkedList<SpawnPosition> spawnPositions;
+	private GameObject boundsObject;
 
 	/**
 	 * Creates a new map with the given name and size.
@@ -70,9 +72,11 @@ public abstract class Map {
 		mapBoundsShape[1] = new Vector2D(width, 0);
 		mapBoundsShape[2] = new Vector2D(width, height);
 		mapBoundsShape[3] = new Vector2D(0, height);
-		InitialObjectData boundsData = new InitialObjectData(0, 0,
-				mapBoundsShape);
+		InitialObjectData boundsData = new InitialObjectData(
+				ObjectType.MAPBOUNDS, 0, 0, mapBoundsShape);
 		addObject(boundsData);
+
+		boundsObject = null;
 	}
 
 	/**
@@ -271,6 +275,7 @@ public abstract class Map {
 			throws InvalidDataException, IOException {
 		Map map = MapParser.readMap(getClass().getResource(
 				"data/" + mapFileName));
+		initialObjects.clear();
 		initialObjects.addAll(map.getInitialObjects());
 		spawnPositions.addAll(map.getSpawnAreas());
 		supportedGameModes.addAll(map.getSupportedGameModes());
@@ -307,4 +312,22 @@ public abstract class Map {
 	 * Initializes and loads all map data.
 	 */
 	protected abstract void buildMap();
+
+	/**
+	 * Returns the bounds object if set already, null otherwise.
+	 * 
+	 * @return boundsobject
+	 */
+	public GameObject getBoundsObject() {
+		return boundsObject;
+	}
+
+	/**
+	 * Sets the bounds object of this map.
+	 * 
+	 * @param boundsObject
+	 */
+	public void setBoundsObject(GameObject boundsObject) {
+		this.boundsObject = boundsObject;
+	}
 }

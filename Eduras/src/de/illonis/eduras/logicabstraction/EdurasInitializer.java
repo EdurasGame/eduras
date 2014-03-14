@@ -79,13 +79,6 @@ public class EdurasInitializer {
 			}
 
 			@Override
-			public void createDynamicPolygonAt(Vector2D[] polygonVertices,
-					Vector2D position, int owner) {
-				// TODO Auto-generated method stub
-
-			}
-
-			@Override
 			public int createObjectAt(ObjectType object, Vector2D position,
 					int owner) {
 				// TODO Auto-generated method stub
@@ -281,6 +274,25 @@ public class EdurasInitializer {
 
 			@Override
 			public void removePlayer(int ownerId) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void setVisibility(int objectId, boolean newVal) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void setCollidability(int objectId, boolean newVal) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void createDynamicPolygonObjectAt(ObjectType type,
+					Vector2D[] polygonVertices, Vector2D position, int owner) {
 				// TODO Auto-generated method stub
 
 			}

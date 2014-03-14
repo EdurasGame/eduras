@@ -35,7 +35,7 @@ import de.illonis.eduras.gamemodes.Deathmatch;
 import de.illonis.eduras.gamemodes.GameMode;
 import de.illonis.eduras.gamemodes.NoGameMode;
 import de.illonis.eduras.gamemodes.TeamDeathmatch;
-import de.illonis.eduras.gameobjects.DynamicPolygonBlock;
+import de.illonis.eduras.gameobjects.DynamicPolygonObject;
 import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.interfaces.GameEventListener;
 import de.illonis.eduras.interfaces.GameLogicInterface;
@@ -123,8 +123,8 @@ public class ClientLogic implements GameLogicInterface {
 							+ " which couldn't be found.");
 					break;
 				}
-				if (gameObj instanceof DynamicPolygonBlock) {
-					((DynamicPolygonBlock) gameObj)
+				if (gameObj instanceof DynamicPolygonObject) {
+					((DynamicPolygonObject) gameObj)
 							.setPolygonVertices(polyEvent.getVertices());
 				} else {
 					L.warning("Given object id in SET_POLYGON_DATA event does not match a DynamicPolygonBlock, instead object is a "

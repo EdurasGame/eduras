@@ -12,25 +12,29 @@ import de.illonis.eduras.shapes.Polygon;
  * @author illonis
  * 
  */
-public class DynamicPolygonBlock extends GameObject {
+public class DynamicPolygonObject extends GameObject {
 
 	/**
 	 * Creates a new polygon block with an empty polygon shape.
 	 * 
+	 * @param type
+	 *            The type of the dynamic polygon
 	 * @param game
 	 *            game information.
 	 * @param id
 	 *            object id.
 	 */
-	public DynamicPolygonBlock(GameInformation game, int id) {
+	public DynamicPolygonObject(ObjectType type, GameInformation game, int id) {
 		super(game, id);
-		setObjectType(ObjectType.DYNAMIC_POLYGON);
+		setObjectType(type);
 		setShape(new Polygon());
 	}
 
 	/**
 	 * Creates a new polygon block with initial shape data.
 	 * 
+	 * @param type
+	 *            The type of the polygon object.
 	 * @param game
 	 *            game information.
 	 * @param id
@@ -39,10 +43,11 @@ public class DynamicPolygonBlock extends GameObject {
 	 *            vertices of polygon
 	 * 
 	 * @see Polygon#setVertices(Vector2D[])
-	 * @see #DynamicPolygonBlock(GameInformation, int)
+	 * @see #DynamicPolygonObject(ObjectType, GameInformation, int)
 	 */
-	public DynamicPolygonBlock(GameInformation game, int id, Vector2D[] vertices) {
-		this(game, id);
+	public DynamicPolygonObject(ObjectType type, GameInformation game, int id,
+			Vector2D[] vertices) {
+		this(type, game, id);
 		setPolygonVertices(vertices);
 	}
 

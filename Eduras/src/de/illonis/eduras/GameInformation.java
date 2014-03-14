@@ -2,6 +2,7 @@ package de.illonis.eduras;
 
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
+import java.awt.geom.Rectangle2D.Double;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -29,6 +30,7 @@ import de.illonis.eduras.exceptions.GameModeNotSupportedByMapException;
 import de.illonis.eduras.exceptions.InvalidNameException;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
 import de.illonis.eduras.gameclient.ClientData;
+import de.illonis.eduras.gameobjects.DynamicPolygonObject;
 import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.logic.EventTriggerer;
 import de.illonis.eduras.maps.FunMap;
@@ -347,7 +349,7 @@ public class GameInformation {
 			objectEvent.setId(object.getId());
 			infos.add(objectEvent);
 
-			if (object.getType() == ObjectType.DYNAMIC_POLYGON) {
+			if (object.getType() == ObjectType.DYNAMIC_POLYGON_BLOCK) {
 				SetPolygonDataEvent polygonData = new SetPolygonDataEvent(
 						object.getId(),
 						((Polygon) object.getShape()).getVerticesAsArray());
@@ -460,7 +462,12 @@ public class GameInformation {
 	 * @author illonis
 	 */
 	public boolean isObjectWithin(Rectangle2D bounds) {
-		for (GameObject o : objects.values()) {
+		return isAnyOfObjectsWithinBounds(bounds, objects.values());
+	}
+
+	private boolean isAnyOfObjectsWithinBounds(Rectangle2D bounds,
+			Collection<GameObject> gameObjects) {
+		for (GameObject o : gameObjects) {
 			if (o.getBoundingBox().intersects(bounds))
 				return true;
 		}
@@ -503,12 +510,46 @@ public class GameInformation {
 		boundings.height = player.getBoundingBox().height;
 
 		Vector2D newPos;
-		do {
-			newPos = spawnPos.getAPoint(player.getShape());
-			boundings.x = newPos.getX();
-			boundings.y = newPos.getY();
-		} while (isObjectWithin(boundings));
+		try {
+			int i = 0;
+			do {
+				i++;
+				newPos = spawnPos.getAPoint(player.getShape());
+				boundings.x = newPos.getX();
+				boundings.y = newPos.getY();
+
+				if (i > 1000000) {
+					System.out.println("Cannot find a spawn point");
+				}
+			} while (isObjectWithinExceptMap(boundings));
+		} catch (IllegalArgumentException e) {
+			L.log(Level.SEVERE, e.getMessage(), e);
+		}
 
 		return new Vector2D(boundings.x, boundings.y);
+	}
+
+	private boolean isObjectWithinExceptMap(Double boundings) {
+		LinkedList<GameObject> objectsWithoutMap = new LinkedList<GameObject>(
+				objects.values());
+
+		for (GameObject o : objectsWithoutMap) {
+			if (o instanceof DynamicPolygonObject) {
+				System.out.println("Letmeknow");
+			}
+		}
+
+		if (!objectsWithoutMap.remove(map.getBoundsObject())) {
+			throw new IllegalArgumentException(
+					"Didn't find map-bounds-object in objects!");
+		}
+
+		for (GameObject o : objectsWithoutMap) {
+			if (o instanceof DynamicPolygonObject) {
+				System.out.println("Letmeknow");
+			}
+		}
+
+		return isAnyOfObjectsWithinBounds(boundings, objectsWithoutMap);
 	}
 }

@@ -5,20 +5,21 @@ import static org.junit.Assert.assertTrue;
 import org.junit.Before;
 import org.junit.Test;
 
-import de.illonis.eduras.gameobjects.DynamicPolygonBlock;
+import de.illonis.eduras.ObjectFactory.ObjectType;
+import de.illonis.eduras.gameobjects.DynamicPolygonObject;
 import de.illonis.eduras.math.Vector2D;
 import de.illonis.eduras.shapes.ObjectShape;
 import de.illonis.eduras.shapes.Polygon;
 
 /**
- * Test the {@link DynamicPolygonBlock} behaviour.
+ * Test the {@link DynamicPolygonObject} behaviour.
  * 
  * @author illonis
  * 
  */
 public class PolygonTests {
 
-	private DynamicPolygonBlock polyBlock;
+	private DynamicPolygonObject polyBlock;
 
 	/**
 	 * Init process
@@ -27,7 +28,8 @@ public class PolygonTests {
 	 */
 	@Before
 	public void init() {
-		polyBlock = new DynamicPolygonBlock(null, 0);
+		polyBlock = new DynamicPolygonObject(ObjectType.DYNAMIC_POLYGON_BLOCK,
+				null, 0);
 	}
 
 	/**

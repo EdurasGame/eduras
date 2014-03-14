@@ -43,7 +43,7 @@ import de.illonis.eduras.exceptions.GameModeNotSupportedByMapException;
 import de.illonis.eduras.exceptions.InvalidNameException;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
 import de.illonis.eduras.gamemodes.GameMode;
-import de.illonis.eduras.gameobjects.DynamicPolygonBlock;
+import de.illonis.eduras.gameobjects.DynamicPolygonObject;
 import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.interfaces.GameLogicInterface;
 import de.illonis.eduras.inventory.InventoryIsFullException;
@@ -189,6 +189,16 @@ public class ServerEventTriggerer implements EventTriggerer {
 		sendEvents(newObjectEvent, setPos);
 		return newObjectEvent.getId();
 
+	}
+
+	@Override
+	public void setVisibility(int objectId, boolean newVal) {
+		GameObject object = gameInfo.findObjectById(objectId);
+
+		SetBooleanGameObjectAttributeEvent setVisibleEvent = new SetBooleanGameObjectAttributeEvent(
+				GameEventNumber.SET_VISIBLE, objectId, newVal);
+		object.setVisible(newVal);
+		sendEvents(setVisibleEvent);
 	}
 
 	@Override
@@ -396,13 +406,29 @@ public class ServerEventTriggerer implements EventTriggerer {
 
 		for (InitialObjectData initialObject : map.getInitialObjects()) {
 
-			if (initialObject.getType() == ObjectType.DYNAMIC_POLYGON) {
-				createDynamicPolygonAt(initialObject.getPolygonVertices(),
+			if (initialObject.getType() == ObjectType.DYNAMIC_POLYGON_BLOCK
+					|| initialObject.getType() == ObjectType.MAPBOUNDS) {
+				createDynamicPolygonObjectAt(initialObject.getType(),
+						initialObject.getPolygonVertices(),
 						initialObject.getPosition(), -1);
 			} else {
 				createObjectAt(initialObject.getType(),
 						initialObject.getPosition(), -1);
 			}
+		}
+
+		// find bounds map object and fail if you cannot find it
+		boolean mapBoundsFound = false;
+		for (GameObject o : gameInfo.getObjects().values()) {
+			if (o.getType() == ObjectType.MAPBOUNDS) {
+				mapBoundsFound = true;
+				gameInfo.getMap().setBoundsObject(o);
+				setVisibility(o.getId(), false);
+				break;
+			}
+		}
+		if (!mapBoundsFound) {
+			L.severe("Cannot find the map bounds!");
 		}
 
 		gameInfo.getGameSettings().getGameMode().onGameStart();
@@ -421,6 +447,9 @@ public class ServerEventTriggerer implements EventTriggerer {
 		for (GameObject oldObject : gameInfo.getObjects().values()) {
 			if (!(oldObject instanceof PlayerMainFigure))
 				removeObject(oldObject.getId());
+		}
+		if (gameInfo.getObjects().values().size() > 1) {
+			System.out.println("LOl");
 		}
 	}
 
@@ -506,17 +535,17 @@ public class ServerEventTriggerer implements EventTriggerer {
 	}
 
 	@Override
-	public void createDynamicPolygonAt(Vector2D[] polygonVertices,
-			Vector2D position, int owner) {
-		int objId = createObjectAt(ObjectType.DYNAMIC_POLYGON, position, owner);
+	public void createDynamicPolygonObjectAt(ObjectType type,
+			Vector2D[] polygonVertices, Vector2D position, int owner) {
+		int objId = createObjectAt(type, position, owner);
 		setPolygonData(objId, polygonVertices);
 	}
 
 	@Override
 	public void setPolygonData(int objectId, Vector2D[] polygonVertices) {
 		GameObject object = gameInfo.findObjectById(objectId);
-		if (object instanceof DynamicPolygonBlock) {
-			DynamicPolygonBlock block = (DynamicPolygonBlock) object;
+		if (object instanceof DynamicPolygonObject) {
+			DynamicPolygonObject block = (DynamicPolygonObject) object;
 			block.setPolygonVertices(polygonVertices);
 			SetPolygonDataEvent event = new SetPolygonDataEvent(objectId,
 					polygonVertices);
@@ -665,5 +694,15 @@ public class ServerEventTriggerer implements EventTriggerer {
 				continue;
 			}
 		}
+	}
+
+	@Override
+	public void setCollidability(int objectId, boolean newVal) {
+		GameObject object = gameInfo.findObjectById(objectId);
+
+		SetBooleanGameObjectAttributeEvent setCollidableEvent = new SetBooleanGameObjectAttributeEvent(
+				GameEventNumber.SET_COLLIDABLE, objectId, newVal);
+		object.setCollidable(newVal);
+		sendEvents(setCollidableEvent);
 	}
 }

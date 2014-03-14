@@ -54,6 +54,8 @@ public interface EventTriggerer {
 	/**
 	 * Creates a dynamic polygon.
 	 * 
+	 * @param type
+	 *            The type of the dynamic polygon.
 	 * @param polygonVertices
 	 *            vertices of polygon.
 	 * @param position
@@ -63,8 +65,8 @@ public interface EventTriggerer {
 	 * 
 	 * @author illonis
 	 */
-	void createDynamicPolygonAt(Vector2D[] polygonVertices, Vector2D position,
-			int owner);
+	void createDynamicPolygonObjectAt(ObjectType type,
+			Vector2D[] polygonVertices, Vector2D position, int owner);
 
 	/**
 	 * Creates an object at given position.
@@ -76,7 +78,7 @@ public interface EventTriggerer {
 	 * @param owner
 	 *            owner id of new object.
 	 * @return the id of the created object.
-	 * @see #createDynamicPolygonAt(Vector2D[], Vector2D, int)
+	 * @see #createDynamicPolygonObjectAt(ObjectType, Vector2D[], Vector2D, int)
 	 */
 	public int createObjectAt(ObjectType object, Vector2D position, int owner);
 
@@ -87,7 +89,7 @@ public interface EventTriggerer {
 	 *            object id of polygon.
 	 * @param polygonVertices
 	 *            new vertices of polygon.
-	 * @see #createDynamicPolygonAt(Vector2D[], Vector2D, int)
+	 * @see #createDynamicPolygonObjectAt(ObjectType, Vector2D[], Vector2D, int)
 	 * 
 	 * @author illonis
 	 */
@@ -358,5 +360,25 @@ public interface EventTriggerer {
 	 *            The object that changed the rotation angle.
 	 */
 	public void setRotation(GameObject gameObject);
+
+	/**
+	 * Set the visibility of the given object.
+	 * 
+	 * @param objectId
+	 *            The identifier of the object.
+	 * @param newVal
+	 *            The new value of the visibility.
+	 */
+	public void setVisibility(int objectId, boolean newVal);
+
+	/**
+	 * Set the collidability of the given object.
+	 * 
+	 * @param objectId
+	 *            The identifier of the object.
+	 * @param newVal
+	 *            The new value of the collidability.
+	 */
+	public void setCollidability(int objectId, boolean newVal);
 
 }

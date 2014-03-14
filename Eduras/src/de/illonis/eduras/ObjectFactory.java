@@ -17,7 +17,7 @@ import de.illonis.eduras.gameobjects.BigBlock;
 import de.illonis.eduras.gameobjects.BiggerBlock;
 import de.illonis.eduras.gameobjects.Bird;
 import de.illonis.eduras.gameobjects.Building;
-import de.illonis.eduras.gameobjects.DynamicPolygonBlock;
+import de.illonis.eduras.gameobjects.DynamicPolygonObject;
 import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.interfaces.GameLogicInterface;
 import de.illonis.eduras.items.weapons.AssaultMissile;
@@ -63,10 +63,10 @@ public class ObjectFactory {
 		PLAYER(1), YELLOWCIRCLE(2), SIMPLEMISSILE(3), ITEM_WEAPON_SIMPLE(4), NO_OBJECT(
 				0), BIGBLOCK(5), SMALLCIRCLEDBLOCK(6), SNIPERMISSILE(7), ITEM_WEAPON_SNIPER(
 				8), BUILDING(9), BIGGERBLOCK(10), ITEM_WEAPON_SPLASH(11), MISSILE_SPLASH(
-				12), MISSILE_SPLASHED(13), DYNAMIC_POLYGON(14), ITEM_WEAPON_SWORD(
+				12), MISSILE_SPLASHED(13), DYNAMIC_POLYGON_BLOCK(14), ITEM_WEAPON_SWORD(
 				15), SWORDMISSILE(16), BIRD(17), ROCKETLAUNCHER(18), ROCKET_MISSILE(
 				19), MINELAUNCHER(20), MINE_MISSILE(21), ASSAULTRIFLE(22), ASSAULT_MISSILE(
-				23);
+				23), MAPBOUNDS(24);
 
 		private int number;
 
@@ -210,8 +210,13 @@ public class ObjectFactory {
 			case ASSAULT_MISSILE:
 				go = new AssaultMissile(logic.getGame(), id);
 				break;
-			case DYNAMIC_POLYGON:
-				go = new DynamicPolygonBlock(logic.getGame(), id);
+			case DYNAMIC_POLYGON_BLOCK:
+				go = new DynamicPolygonObject(ObjectType.DYNAMIC_POLYGON_BLOCK,
+						logic.getGame(), id);
+				break;
+			case MAPBOUNDS:
+				go = new DynamicPolygonObject(ObjectType.MAPBOUNDS,
+						logic.getGame(), id);
 				break;
 			default:
 				return;
