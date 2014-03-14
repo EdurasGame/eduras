@@ -230,9 +230,11 @@ public class GameInformation {
 	 *            a gameobject to ignore while testing (can be null).
 	 * @return true if there is an object, false otherwise.
 	 */
-	public boolean isObjectAt(Vector2D point, GameObject ignore) {
+	public boolean isVisionBlockingObjectAt(Vector2D point, GameObject ignore) {
 		Point2D.Double p = point.toPoint();
 		for (GameObject object : objects.values()) {
+			if (!object.isVisionBlocking())
+				continue;
 			if (object.equals(ignore))
 				continue;
 			if (object.getBoundingBox().contains(p))

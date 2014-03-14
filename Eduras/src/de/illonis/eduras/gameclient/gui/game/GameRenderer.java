@@ -594,7 +594,7 @@ public class GameRenderer implements TooltipHandler {
 	 *            target game panel.
 	 */
 	void setTarget(GamePanel guiPanel) {
-		guiPanel.createBufferStrategy(4);
+		guiPanel.createBufferStrategy(2);
 		target = guiPanel;
 		buffer = guiPanel.getBufferStrategy();
 	}
