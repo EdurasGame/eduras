@@ -19,8 +19,10 @@
 		<fileset dir="${base}${libs}">
 			<include name="timingframework*.jar" />
 			<include name="eventingserver.jar" />
+			<include name="eduras-remote.jar" />
 			<include name="edulog-2.jar" />
 			<include name="junit-4.11.jar" />
+			<include name="json.jar" />
 		</fileset>
 		<pathelement path="${base}${build}" />
 	</path>
@@ -58,6 +60,18 @@
 			</manifest>
 		</jar>
 	</target>
+	
+	<target name="jar-remoteclient" depends="compile" description="Creates remoteclient-executable.">
+
+		<jar destfile="${jars}/eduras-remoteclient.jar" excludes="**/*.svg, **/unittests/**"
+			basedir="${base}${build}">
+			<zipgroupfileset dir="${base}${libs}" includes="**/*.jar" />
+			<manifest>
+				<attribute name="Main-Class"
+					value="de.illonis.eduras.serverconsole.remote.EdurasRemoteConsoleClient" />
+			</manifest>
+		</jar>
+	</target>
 
 	<target name="jar-server" depends="compile" description="Creates server-executable.">
 		<jar destfile="${jars}/eduras-server.jar" basedir="${base}${build}"
@@ -89,8 +103,23 @@
 			</manifest>
 		</jar>
 	</target>
+	
+	<target name="jar-metaserver" depends="compile"
+		description="Creates metaserver executable.">
+		<jar destfile="${jars}/tools/metaserver.jar" basedir="${base}${build}"
+			excludes="**/unittests/**">
+			<fileset dir="${base}${src}">
+				<include name="**/*.properties"></include>
+			</fileset>
+			<zipgroupfileset dir="${base}${libs}" includes="edulog*.jar" />
+			<manifest>
+				<attribute name="Main-Class"
+					value="de.illonis.eduras.networking.discover.MetaServer" />
+			</manifest>
+		</jar>
+	</target>
 
-	<target name="jars" depends="clean,jar-server,jar-client, jar-shapecreator"
+	<target name="jars" depends="clean,jar-server,jar-client, jar-remoteclient, jar-shapecreator, jar-metaserver"
 		description="Creates clean executables.">
 	</target>
 

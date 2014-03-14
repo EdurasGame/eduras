@@ -279,6 +279,12 @@ public class EdurasInitializer {
 				}
 			}
 
+			@Override
+			public void removePlayer(int ownerId) {
+				// TODO Auto-generated method stub
+
+			}
+
 		});
 
 		networkManager = new NetworkManager(logic);

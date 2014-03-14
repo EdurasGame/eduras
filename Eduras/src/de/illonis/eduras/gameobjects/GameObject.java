@@ -37,6 +37,9 @@ public abstract class GameObject implements Comparable<GameObject> {
 	private ObjectShape shape;
 	private boolean collidable = true;
 	private boolean visible = true;
+	private double visionRange = 200;
+	private double visionAngle = 90;
+	private boolean isVisionBlocking = false;
 
 	private int id;
 	private int owner = -1;
@@ -335,6 +338,58 @@ public abstract class GameObject implements Comparable<GameObject> {
 	 */
 	public void setVisible(boolean visible) {
 		this.visible = visible;
+	}
+
+	/**
+	 * @return the vision radius in degree.
+	 */
+	public double getVisionAngle() {
+		return visionAngle;
+	}
+
+	/**
+	 * @return the vision range.
+	 */
+	public double getVisionRange() {
+		return visionRange;
+	}
+
+	/**
+	 * Sets the vision angle of this object.
+	 * 
+	 * @param visionAngle
+	 *            angle in degree.
+	 */
+	public void setVisionAngle(double visionAngle) {
+		this.visionAngle = visionAngle;
+	}
+
+	/**
+	 * Sets the vision radius of this object.
+	 * 
+	 * @param visionRange
+	 *            new vision range.
+	 */
+	public void setVisionRange(double visionRange) {
+		this.visionRange = visionRange;
+	}
+
+	/**
+	 * @return true if this object blocks others' vision.
+	 */
+	public boolean isVisionBlocking() {
+		return isVisionBlocking;
+	}
+
+	/**
+	 * Sets vision blocking state. If true, this object blocks vision from other
+	 * objects.
+	 * 
+	 * @param isVisionBlocking
+	 *            new value.
+	 */
+	public void setVisionBlocking(boolean isVisionBlocking) {
+		this.isVisionBlocking = isVisionBlocking;
 	}
 
 	/**

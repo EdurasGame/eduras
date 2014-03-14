@@ -61,23 +61,34 @@ public class ClientServerResponseHandler extends Thread {
 
 				String message = returnData.getSecond();
 
-				if (message.contains(ServerDiscoveryListener.ANSWER_MSG)) {
-					String[] msgparts = message.split("#");
+				L.fine("[ServerSearcher] Response is: " + message);
 
-					// handle server
-					try {
-						int port = Integer.parseInt(msgparts[2]);
-						ServerInfo info = new ServerInfo(msgparts[1],
-								fsocket.getAddress(), port);
-						listener.onServerFound(info);
-					} catch (NumberFormatException ne) {
-					}
+				for (String singleMessage : message.split("##")) {
+					parseAndProcessMessage(singleMessage, fsocket);
 				}
+
 			}
 			c.close();
 		} catch (IOException e) {
 			L.log(Level.SEVERE, "error finding server", e);
 		}
+	}
+
+	private void parseAndProcessMessage(String singleMessage,
+			InetSocketAddress fsocket) {
+		if (singleMessage.contains(ServerDiscoveryListener.ANSWER_MSG)) {
+			String[] msgparts = singleMessage.split("#");
+
+			// handle server
+			try {
+				int port = Integer.parseInt(msgparts[2]);
+				ServerInfo info = new ServerInfo(msgparts[1],
+						fsocket.getAddress(), port);
+				listener.onServerFound(info);
+			} catch (NumberFormatException ne) {
+			}
+		}
+
 	}
 
 	@Override

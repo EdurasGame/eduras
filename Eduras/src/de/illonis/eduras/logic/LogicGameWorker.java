@@ -3,13 +3,8 @@ package de.illonis.eduras.logic;
 import java.util.HashMap;
 
 import de.illonis.eduras.GameInformation;
-import de.illonis.eduras.events.GameEvent.GameEventNumber;
-import de.illonis.eduras.events.SetBooleanGameObjectAttributeEvent;
 import de.illonis.eduras.gameobjects.GameObject;
-import de.illonis.eduras.gameobjects.MoveableGameObject;
 import de.illonis.eduras.interfaces.GameEventListener;
-import de.illonis.eduras.items.Lootable;
-import de.illonis.eduras.items.Usable;
 import de.illonis.eduras.settings.S;
 
 /**
@@ -19,7 +14,7 @@ import de.illonis.eduras.settings.S;
  * @author Florian Mai <florian.ren.mai@googlemail.com>
  * 
  */
-public class LogicGameWorker implements Runnable {
+public abstract class LogicGameWorker implements Runnable {
 
 	/**
 	 * Tells how much time shall be between two updates in nanoseconds.
@@ -30,9 +25,9 @@ public class LogicGameWorker implements Runnable {
 
 	private boolean running = false;
 
-	private final GameInformation gameInformation;
-	private ListenerHolder<? extends GameEventListener> listenerHolder;
-	private static final HashMap<Integer, Double> oldRotation = new HashMap<Integer, Double>();
+	protected final GameInformation gameInformation;
+	protected final ListenerHolder<? extends GameEventListener> listenerHolder;
+	private final HashMap<Integer, Double> oldRotation;
 
 	private long lastUpdate;
 
@@ -44,10 +39,12 @@ public class LogicGameWorker implements Runnable {
 	 * @param listenerHolder
 	 *            a placeholder for later attached listener.
 	 */
-	public LogicGameWorker(GameInformation gameInfo,
+	protected LogicGameWorker(GameInformation gameInfo,
 			ListenerHolder<? extends GameEventListener> listenerHolder) {
 		this.gameInformation = gameInfo;
 		this.listenerHolder = listenerHolder;
+		oldRotation = new HashMap<Integer, Double>();
+		lastUpdate = 0;
 	}
 
 	@Override
@@ -61,7 +58,26 @@ public class LogicGameWorker implements Runnable {
 		beforeTime = System.nanoTime();
 
 		while (running) {
-			gameUpdate();
+			if (lastUpdate <= 0)
+				lastUpdate = System.nanoTime();
+			// delta in milliseconds
+			long delta = (System.nanoTime() - lastUpdate) / 1000000L;
+			if (delta > 0) {
+				lastUpdate = System.nanoTime();
+
+				// check game settings
+				long gameRemainingTime = gameInformation.getGameSettings()
+						.getRemainingTime();
+
+				if (gameRemainingTime <= 0) {
+					gameInformation.getGameSettings().getGameMode().onTimeUp();
+				} else {
+					gameInformation.getGameSettings().changeTime(
+							gameRemainingTime - delta);
+				}
+
+				gameUpdate(delta);
+			}
 			afterTime = System.nanoTime();
 			timeDiff = afterTime - beforeTime;
 
@@ -87,7 +103,7 @@ public class LogicGameWorker implements Runnable {
 	/**
 	 * Stops LogicGameWorker.
 	 */
-	public void stop() {
+	public final void stop() {
 		running = false;
 	}
 
@@ -95,66 +111,13 @@ public class LogicGameWorker implements Runnable {
 	 * Lets all moveable objects move relative to the time passed. Resetts the
 	 * GameSettings' remaining time.
 	 * 
+	 * @param delta
+	 *            the time elapsed since last update in ms.
+	 * 
 	 */
-	private synchronized void gameUpdate() {
+	protected abstract void gameUpdate(long delta);
 
-		if (lastUpdate <= 0)
-			lastUpdate = System.nanoTime();
-		// delta in milliseconds
-		long delta = (System.nanoTime() - lastUpdate) / 1000000L;
-		if (delta == 0)
-			return;
-		lastUpdate = System.nanoTime();
-
-		// check game settings
-		long gameRemainingTime = gameInformation.getGameSettings()
-				.getRemainingTime();
-
-		if (gameRemainingTime <= 0) {
-			gameInformation.getGameSettings().getGameMode().onTimeUp();
-		} else {
-			gameInformation.getGameSettings().changeTime(
-					gameRemainingTime - delta);
-		}
-
-		for (GameObject o : gameInformation.getObjects().values()) {
-			if (o instanceof Usable) {
-				((Usable) o).reduceCooldown(delta);
-			}
-			if (o instanceof Lootable) {
-
-				boolean rs = ((Lootable) o).reduceRespawnRemaining(delta);
-				if (rs) {
-					SetBooleanGameObjectAttributeEvent sc = new SetBooleanGameObjectAttributeEvent(
-							GameEventNumber.SET_COLLIDABLE, o.getId(), true);
-					SetBooleanGameObjectAttributeEvent sv = new SetBooleanGameObjectAttributeEvent(
-							GameEventNumber.SET_VISIBLE, o.getId(), true);
-					o.setCollidable(true);
-					o.setVisible(true);
-					if (listenerHolder.hasListener()) {
-						listenerHolder.getListener().onObjectStateChanged(sv);
-						listenerHolder.getListener().onObjectStateChanged(sc);
-
-					}
-				}
-			}
-			if (o instanceof MoveableGameObject) {
-				if (!((MoveableGameObject) o).getSpeedVector().isNull()) {
-					((MoveableGameObject) o).onMove(delta);
-					if (listenerHolder.hasListener())
-						listenerHolder.getListener().onNewObjectPosition(o);
-					gameInformation.getEventTriggerer()
-							.notifyNewObjectPosition(o);
-				}
-
-				if (hasRotated(o)) {
-					gameInformation.getEventTriggerer().setRotation(o);
-				}
-			}
-		}
-	}
-
-	private boolean hasRotated(GameObject o) {
+	protected final boolean hasRotated(GameObject o) {
 		if (!oldRotation.containsKey(o.getId())) {
 			oldRotation.put(o.getId(), o.getRotation());
 			return true;

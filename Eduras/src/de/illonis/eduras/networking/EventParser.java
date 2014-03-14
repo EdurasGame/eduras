@@ -23,8 +23,8 @@ import de.illonis.eduras.events.ObjectFactoryEvent;
 import de.illonis.eduras.events.SendUnitsEvent;
 import de.illonis.eduras.events.SetAmmunitionEvent;
 import de.illonis.eduras.events.SetBooleanGameObjectAttributeEvent;
+import de.illonis.eduras.events.SetDoubleGameObjectAttributeEvent;
 import de.illonis.eduras.events.SetGameModeEvent;
-import de.illonis.eduras.events.SetGameObjectAttributeEvent;
 import de.illonis.eduras.events.SetIntegerGameObjectAttributeEvent;
 import de.illonis.eduras.events.SetInteractModeEvent;
 import de.illonis.eduras.events.SetItemSlotEvent;
@@ -134,10 +134,9 @@ public class EventParser implements EventHandler {
 								.getArgument(0), (Integer) event.getArgument(1)));
 				break;
 			case SET_ROTATION:
-				logic.onGameEventAppeared(new SetGameObjectAttributeEvent<Double>(
+				logic.onGameEventAppeared(new SetDoubleGameObjectAttributeEvent(
 						GameEventNumber.SET_ROTATION, (Integer) event
-								.getArgument(0), (Double) event.getArgument(1)) {
-				});
+								.getArgument(0), (Double) event.getArgument(1)));
 				break;
 			case ITEM_USE:
 				ItemEvent itemEvent = new ItemEvent(GameEventNumber.ITEM_USE,

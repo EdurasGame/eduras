@@ -3,7 +3,7 @@ package de.illonis.eduras.serverconsole.commands;
 import java.util.Collection;
 
 import de.illonis.eduras.logic.ConsoleEventTriggerer;
-import de.illonis.eduras.serverconsole.ServerConsole;
+import de.illonis.eduras.serverconsole.ConsolePrinter;
 import de.illonis.eduras.units.PlayerMainFigure;
 
 /**
@@ -23,7 +23,7 @@ public class ListPlayersCommand extends ConsoleCommand {
 	}
 
 	@Override
-	public void onCommand(String[] args, ServerConsole console,
+	public void onCommand(String[] args, ConsolePrinter console,
 			ConsoleEventTriggerer triggerer) {
 		Collection<PlayerMainFigure> players = triggerer.getPlayers();
 		if (players.isEmpty())

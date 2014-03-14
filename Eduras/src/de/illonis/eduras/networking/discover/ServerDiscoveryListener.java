@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;
+import java.nio.channels.AlreadyBoundException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -49,6 +50,10 @@ public class ServerDiscoveryListener extends Thread {
 	 */
 	public final static String ANSWER_MSG = "EDURAS_SERVER_ANSWER";
 
+	public static String answer = "";
+
+	private final int CONNECT_ATTEMPTS = 10;
+
 	private final String name;
 	private final int port;
 
@@ -73,48 +78,119 @@ public class ServerDiscoveryListener extends Thread {
 		L.info("ServerSearcher is starting to listen for UDP-Broadcasts on port "
 				+ SERVER_PORT + ".");
 
-		// prepare answer data:
-		String answer = ServerDiscoveryListener.ANSWER_MSG + "#" + name + "#"
-				+ port;
+		// listen on both the UDP port for LAN and metaserver
+		ServerDiscoveryListenerForAPort metaServerListener = new ServerDiscoveryListenerForAPort(
+				port + 2);
+		ServerDiscoveryListenerForAPort lanListener = new ServerDiscoveryListenerForAPort(
+				SERVER_PORT);
+
+		metaServerListener.start();
+		lanListener.start();
 
 		try {
+			metaServerListener.join();
+			lanListener.join();
+		} catch (InterruptedException e) {
+			L.log(Level.SEVERE,
+					"Interrupted while waiting on discovery listener threads.",
+					e);
+		}
+	}
+
+	class ServerDiscoveryListenerForAPort extends Thread {
+		private int myPort;
+
+		public ServerDiscoveryListenerForAPort(int portToListen) {
+			myPort = portToListen;
+		}
+
+		@Override
+		public void run() {
+			answer = "##" + ServerDiscoveryListener.ANSWER_MSG + "#" + name
+					+ "#" + port + "##";
+
 			// Keep a socket open to listen to all the UDP traffic that is
 			// destined for this port
-			channel = new DiscoveryChannel(true);
+			L.info("Initializing DiscoveryListening on port " + myPort);
+			boolean bound = false;
+			int cntAttempts = 0;
+			while (!bound) {
+				try {
+					channel = new DiscoveryChannel(true);
+					InetSocketAddress listenAddress = new InetSocketAddress(
+							InetAddress.getLocalHost(), myPort);
+					channel.bind(listenAddress);
+				} catch (IOException | AlreadyBoundException ex) {
+					cntAttempts++;
 
-			InetSocketAddress listenAddress = new InetSocketAddress(
-					InetAddress.getByName("0.0.0.0"), SERVER_PORT);
-			channel.bind(listenAddress);
+					if (cntAttempts > CONNECT_ATTEMPTS) {
+						L.warning("Could not connect after 10 attempts. Will not support discovery.");
+						return;
+					}
+
+					L.log(Level.INFO, "Error binding to port " + myPort
+							+ " after try " + cntAttempts, ex);
+					try {
+						sleep(1000);
+					} catch (InterruptedException e) {
+						L.log(Level.WARNING, "Cannot sleep!?", e);
+					}
+					continue;
+				}
+				bound = true;
+				L.info("Successfully initialized DiscoveryListening on port "
+						+ myPort);
+			}
 
 			Pair<SocketAddress, String> returnData = null;
 
 			while (true) {
 				// Receive a packet
-				returnData = channel.receive();
-				if (returnData == null)
-					continue;
+				try {
+					returnData = channel.receive();
+					if (returnData == null)
+						continue;
 
-				InetSocketAddress isa = (InetSocketAddress) returnData
-						.getFirst();
+					InetSocketAddress isa = (InetSocketAddress) returnData
+							.getFirst();
 
-				String message = returnData.getSecond();
-				// Packet received
-				L.info("Discovery packet received from: "
-						+ isa.getAddress().getHostAddress() + ":"
-						+ isa.getPort() + ", Data: " + message);
+					String message = returnData.getSecond();
+					// Packet received
+					L.info("Discovery packet received from: "
+							+ isa.getAddress().getHostAddress() + ":"
+							+ isa.getPort() + ", Data: " + message);
 
-				// See if the packet holds the right command (message)
-				if (message.equals(ServerDiscoveryListener.REQUEST_MSG)) {
-					// Send a response
-					channel.send(answer, isa);
-					L.info("Sent packet to: "
-							+ isa.getAddress().getHostAddress());
-				} else {
-					L.warning("Received invalid broadcast message.");
+					String[] singleMessages = message.split("##");
+
+					for (String aSingleMessage : singleMessages) {
+						parseAndAnswerMessage(aSingleMessage, isa);
+					}
+
+				} catch (IOException e) {
+					L.log(Level.SEVERE, "Error in discovery", e);
 				}
 			}
-		} catch (IOException ex) {
-			L.log(Level.SEVERE, "error sending discovery", ex);
+
+		}
+
+		private void parseAndAnswerMessage(String aSingleMessage,
+				InetSocketAddress isa) {
+			// See if the packet holds the right command (message)
+			if (aSingleMessage.equals(ServerDiscoveryListener.REQUEST_MSG)) {
+				// Send a response
+				try {
+					channel.send(answer, isa);
+				} catch (IOException e) {
+					L.log(Level.WARNING, "Error in discovery", e);
+					return;
+				}
+				L.fine("Sent packet to: " + isa.getAddress().getHostAddress()
+						+ ":" + isa.getPort() + ". Message: " + answer);
+			} else {
+				L.warning("Received invalid broadcast message:"
+						+ aSingleMessage);
+			}
+
 		}
 	}
 }

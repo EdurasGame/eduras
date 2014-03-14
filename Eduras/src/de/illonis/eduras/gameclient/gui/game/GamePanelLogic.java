@@ -21,6 +21,7 @@ import de.illonis.eduras.gameclient.gui.CameraMouseListener;
 import de.illonis.eduras.gameclient.gui.ClientGuiStepLogic;
 import de.illonis.eduras.gameclient.gui.HudNotifier;
 import de.illonis.eduras.gameclient.gui.InputKeyHandler;
+import de.illonis.eduras.gameclient.gui.TimedTasksHolderGUI;
 import de.illonis.eduras.gameclient.gui.hud.DragSelectionRectangle;
 import de.illonis.eduras.gameclient.gui.hud.UserInterface;
 import de.illonis.eduras.logicabstraction.EdurasInitializer;
@@ -109,6 +110,7 @@ public class GamePanelLogic extends ClientGuiStepLogic implements
 		userInterface = new UserInterface(infoPro, mouseHandler, mouseHandler,
 				hudNotifier, cache);
 		renderer = new GameRenderer(camera, userInterface, infoPro, data);
+		userInterface.setRenderer(renderer);
 		renderer.setTarget(gui);
 	}
 
@@ -148,11 +150,20 @@ public class GamePanelLogic extends ClientGuiStepLogic implements
 		gui.addMouseMotionListener(cml);
 		gui.addMouseListener(cml);
 		startRendering();
+		doTimedTasks();
 		notifyGuiSizeChanged();
 		gui.addKeyListener(keyHandler);
 		gui.requestFocus();
 		gui.requestFocusInWindow();
 		hudNotifier.onGameReady();
+	}
+
+	private void doTimedTasks() {
+		TimedTasksHolderGUI.getInstance().execute();
+	}
+
+	private void stopTimedTasks() {
+		TimedTasksHolderGUI.getInstance().cancel();
 	}
 
 	@Override
@@ -167,6 +178,7 @@ public class GamePanelLogic extends ClientGuiStepLogic implements
 		camera.stopMoving();
 		cml.stop();
 		stopRendering();
+		stopTimedTasks();
 	}
 
 	/**
@@ -285,11 +297,25 @@ public class GamePanelLogic extends ClientGuiStepLogic implements
 		userInterface.showNotification(msg);
 	}
 
+	/**
+	 * Assigns the chat to the logic.
+	 * 
+	 * @param chat
+	 *            the chat implementation.
+	 * @param cache
+	 *            the cache object.
+	 */
 	public void setChat(ChatClientImpl chat, ChatCache cache) {
 		this.chat = chat;
 		this.cache = cache;
 	}
 
+	/**
+	 * Called when new information about current ping arrived.
+	 * 
+	 * @param latency
+	 *            new ping
+	 */
 	public void setPing(long latency) {
 		if (userInterface != null)
 			userInterface.getPingListener().setPING(latency);
@@ -321,6 +347,12 @@ public class GamePanelLogic extends ClientGuiStepLogic implements
 		return writing;
 	}
 
+	/**
+	 * Handles key input for chat.
+	 * 
+	 * @param e
+	 *            the key event.
+	 */
 	public void onKeyType(KeyEvent e) {
 		if (cache.isWriting()) {
 			e.consume();

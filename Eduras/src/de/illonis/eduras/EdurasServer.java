@@ -7,14 +7,16 @@ import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.Socket;
 import java.net.SocketException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Enumeration;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import de.eduras.eventingserver.Server;
 import de.eduras.eventingserver.ServerInterface;
-import de.eduras.eventingserver.ServerNetworkEventHandler;
+import de.eduras.remote.EncryptedRemoteServer;
 import de.illonis.edulog.EduLog;
 import de.illonis.eduras.chat.ChatRoom;
 import de.illonis.eduras.chat.ChatServer;
@@ -33,12 +35,12 @@ import de.illonis.eduras.logic.ServerLogic;
 import de.illonis.eduras.maps.FunMap;
 import de.illonis.eduras.networking.EventParser;
 import de.illonis.eduras.networking.InetPolizei;
+import de.illonis.eduras.networking.ServerNetworker;
 import de.illonis.eduras.networking.discover.MetaServer;
 import de.illonis.eduras.networking.discover.ServerDiscoveryListener;
 import de.illonis.eduras.networking.discover.ServerSearcher;
 import de.illonis.eduras.serverconsole.NoConsoleException;
 import de.illonis.eduras.serverconsole.ServerConsole;
-import de.illonis.eduras.serverconsole.commands.CommandInitializer;
 
 /**
  * The eduras server main executable.
@@ -66,8 +68,10 @@ public class EdurasServer {
 	 */
 	public static void main(String[] args) {
 
+		SimpleDateFormat simpleDate = new SimpleDateFormat("y-M-d-H-m-s");
+
 		try {
-			EduLog.init("server.log");
+			EduLog.init(simpleDate.format(new Date()) + "-server.log", 2097152);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -83,6 +87,7 @@ public class EdurasServer {
 		Level logLimit = DEFAULT_LOGLIMIT;
 		int port = DEFAULT_PORT;
 		String name = DEFAULT_NAME;
+		boolean consoleOn = false;
 		boolean registerAtMetaserver = false;
 		for (int i = 0; i < args.length; i++) {
 
@@ -110,6 +115,10 @@ public class EdurasServer {
 
 			if (parameterName.equalsIgnoreCase("loglimit")) {
 				logLimit = Level.parse(parameterValue);
+			}
+
+			if (parameterName.equalsIgnoreCase("console")) {
+				consoleOn = Boolean.parseBoolean(parameterValue);
 			}
 		}
 
@@ -169,22 +178,7 @@ public class EdurasServer {
 					e);
 		}
 
-		server.setNetworkEventHandler(new ServerNetworkEventHandler() {
-
-			@Override
-			public void onClientDisconnected(int clientId) {
-				L.info("User with id #" + clientId
-						+ " disconnected from Eduras Server.");
-
-			}
-
-			@Override
-			public void onClientConnected(int clientId) {
-				L.info("User with id #" + clientId
-						+ " connected to Eduras Server.");
-
-			}
-		});
+		server.setNetworkEventHandler(new ServerNetworker(gameInfo));
 		server.setPolicy(new InetPolizei());
 
 		eventTriggerer.changeMap(new FunMap());
@@ -192,33 +186,38 @@ public class EdurasServer {
 		server.start(name, port);
 
 		getInterfaces();
+		ServerConsole console = new ServerConsole(new ConsoleEventTriggerer(
+				eventTriggerer, server));
 
-		try {
-			ServerConsole.start();
-			CommandInitializer.initCommands();
-			ServerConsole.setEventTriggerer(new ConsoleEventTriggerer(
-					eventTriggerer, server));
-		} catch (NoConsoleException e) {
-			L.log(Level.WARNING, "Could not find console", e);
+		if (consoleOn) {
+			try {
+				console.startCommandPrompt();
+			} catch (NoConsoleException e) {
+				L.log(Level.WARNING, "Could not find console", e);
+			}
 		}
+
+		// TODO: use command line argument for remote server port.
+		console.startRemoteServer(
+				EncryptedRemoteServer.DEFAULT_REMOTE_SERVER_PORT, "password");
 
 		ServerDiscoveryListener sdl = new ServerDiscoveryListener(
 				server.getName(), port);
 		sdl.start();
 
 		if (registerAtMetaserver)
-			registerAtMetaServer();
+			registerAtMetaServer(port);
 	}
 
-	private static void registerAtMetaServer() {
+	private static void registerAtMetaServer(int portToRegister) {
 		Socket socket;
 		try {
 			socket = new Socket(ServerSearcher.METASERVER_ADDRESS,
 					ServerDiscoveryListener.META_SERVER_PORT);
 			new PrintWriter(socket.getOutputStream(), true)
-					.println(MetaServer.REGISTER_REQUEST);
+					.println(MetaServer.REGISTER_REQUEST + "#" + portToRegister);
 		} catch (IOException e) {
-			L.warning("Cannot connect to meta server.");
+			L.log(Level.WARNING, "Cannot connect to meta server.", e);
 		}
 	}
 

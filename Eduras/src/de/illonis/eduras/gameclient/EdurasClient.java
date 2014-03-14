@@ -11,6 +11,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -26,6 +28,7 @@ import javax.swing.JRadioButton;
 import javax.swing.ListCellRenderer;
 
 import de.illonis.edulog.EduLog;
+import de.illonis.eduras.beta.BetaAuthenticator;
 import de.illonis.eduras.gameclient.gui.ClientFrame;
 import de.illonis.eduras.gameclient.gui.FullScreenClientFrame;
 
@@ -57,8 +60,11 @@ public class EdurasClient {
 	 *            client is bound.
 	 */
 	public static void main(String[] args) {
+
+		SimpleDateFormat simpleDate = new SimpleDateFormat("y-M-d-H-m-s");
+
 		try {
-			EduLog.init("client.log");
+			EduLog.init(simpleDate.format(new Date()) + "-client.log", 2097152);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -69,6 +75,9 @@ public class EdurasClient {
 		for (int i = 0; i < args.length; i++) {
 			parametersWithValues[i] = args[i].split("=");
 		}
+
+		String betaUser = "";
+		String betaPassword = "";
 
 		// read arguments
 		Level logLimit = DEFAULT_LOGLIMIT;
@@ -87,18 +96,25 @@ public class EdurasClient {
 					L.severe("Given port is not a valid value!");
 					return;
 				}
-				continue;
-			}
-
-			if (parameterName.equalsIgnoreCase("loglimit")) {
+			} else if (parameterName.equalsIgnoreCase("betaUser")) {
+				betaUser = parameterValue;
+			} else if (parameterName.equalsIgnoreCase("betaPassword")) {
+				betaPassword = parameterValue;
+			} else if (parameterName.equalsIgnoreCase("loglimit")) {
 				logLimit = Level.parse(parameterValue);
 			}
 		}
 		EduLog.setBasicLogLimit(logLimit);
 		EduLog.setConsoleLogLimit(logLimit);
+		EduLog.setFileLogLimit(logLimit);
 
 		// Note that this is very bad coded due to testing ;)
-		buildChooserFrame();
+		// buildChooserFrame();
+
+		BetaAuthenticator authenticator = new BetaAuthenticator();
+		if (authenticator.authenticate(3, betaUser, betaPassword)) {
+			startWindowed();
+		}
 	}
 
 	protected static void startWindowed() {

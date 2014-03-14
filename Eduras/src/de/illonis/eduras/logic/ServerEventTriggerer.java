@@ -29,6 +29,7 @@ import de.illonis.eduras.events.MovementEvent;
 import de.illonis.eduras.events.ObjectFactoryEvent;
 import de.illonis.eduras.events.SetAmmunitionEvent;
 import de.illonis.eduras.events.SetBooleanGameObjectAttributeEvent;
+import de.illonis.eduras.events.SetDoubleGameObjectAttributeEvent;
 import de.illonis.eduras.events.SetGameModeEvent;
 import de.illonis.eduras.events.SetGameObjectAttributeEvent;
 import de.illonis.eduras.events.SetIntegerGameObjectAttributeEvent;
@@ -560,6 +561,12 @@ public class ServerEventTriggerer implements EventTriggerer {
 	@Override
 	public void kickPlayer(int ownerId) {
 
+		removePlayer(ownerId);
+		server.kickClient(ownerId);
+	}
+
+	@Override
+	public void removePlayer(int ownerId) {
 		int objectId = -1;
 		PlayerMainFigure mainFigure;
 		ObjectFactoryEvent gonePlayerEvent = new ObjectFactoryEvent(
@@ -576,8 +583,6 @@ public class ServerEventTriggerer implements EventTriggerer {
 			// if there is no mainfigure, this function is used to prevent
 			// someone to join the server
 		}
-
-		server.kickClient(ownerId);
 	}
 
 	@Override
@@ -588,8 +593,8 @@ public class ServerEventTriggerer implements EventTriggerer {
 			}
 			sendEventToClient(new GameReadyEvent(), owner);
 		} catch (IllegalArgumentException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			L.log(Level.SEVERE,
+					"Something went wrong when sending the requested infos.", e);
 		}
 	}
 
@@ -633,7 +638,7 @@ public class ServerEventTriggerer implements EventTriggerer {
 	@Override
 	public void setRotation(GameObject gameObject) {
 
-		Event setRotationEvent = new SetGameObjectAttributeEvent<Double>(
+		Event setRotationEvent = new SetDoubleGameObjectAttributeEvent(
 				GameEventNumber.SET_ROTATION, gameObject.getId(),
 				gameObject.getRotation()) {
 		};

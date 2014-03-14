@@ -41,7 +41,7 @@ public class ServerSearcher extends Thread {
 	/**
 	 * The address of the meta server.
 	 */
-	public final static String METASERVER_ADDRESS = "illonis.dyndns.org";
+	public final static String METASERVER_ADDRESS = "ren-mai.net";
 
 	/**
 	 * Creates a new server searcher.
@@ -105,9 +105,10 @@ public class ServerSearcher extends Thread {
 	}
 
 	private void sendRequestTo(InetSocketAddress target) throws IOException {
-		c.send(ServerDiscoveryListener.REQUEST_MSG, target);
-		L.info("[ServerSearcher] Sent request packet to "
-				+ target.getAddress().getHostAddress() + " .");
+		c.send("##" + ServerDiscoveryListener.REQUEST_MSG + "##", target);
+		L.fine("[ServerSearcher] Sent request packet to "
+				+ target.getAddress().getHostAddress() + ":" + target.getPort()
+				+ ".");
 
 	}
 
@@ -188,13 +189,16 @@ public class ServerSearcher extends Thread {
 			if (!answer.contains(MetaServer.META_SERVER_ANSWER))
 				return;
 
+			L.fine("Received metaserver answer: " + answer);
+
 			String[] ipAddresses = answer.split("#");
 
-			for (String singleAddress : ipAddresses) {
+			for (int i = 1; i < ipAddresses.length; i = i + 2) {
+				String singleAddress = ipAddresses[i];
 				if (!singleAddress.equals(MetaServer.META_SERVER_ANSWER))
 					try {
 						sendRequestTo(new InetSocketAddress(singleAddress,
-								ServerDiscoveryListener.SERVER_PORT));
+								Integer.parseInt(ipAddresses[i + 1]) + 2));
 					} catch (IOException e) {
 						L.log(Level.SEVERE, "error sending request", e);
 						continue;
