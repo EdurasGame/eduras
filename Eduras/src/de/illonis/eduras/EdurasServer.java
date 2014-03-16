@@ -1,11 +1,9 @@
 package de.illonis.eduras;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.net.Inet4Address;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
-import java.net.Socket;
 import java.net.SocketException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -14,8 +12,13 @@ import java.util.Enumeration;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import de.eduras.eventingserver.Client;
+import de.eduras.eventingserver.ClientInterface;
+import de.eduras.eventingserver.ClientNetworkEventHandler;
+import de.eduras.eventingserver.Event;
 import de.eduras.eventingserver.Server;
 import de.eduras.eventingserver.ServerInterface;
+import de.eduras.eventingserver.exceptions.TooFewArgumentsExceptions;
 import de.eduras.remote.EncryptedRemoteServer;
 import de.illonis.edulog.EduLog;
 import de.illonis.eduras.chat.ChatRoom;
@@ -206,18 +209,64 @@ public class EdurasServer {
 		sdl.start();
 
 		if (registerAtMetaserver)
-			registerAtMetaServer(port);
+			registerAtMetaServer(server.getName(), "localhost", port);
 	}
 
-	private static void registerAtMetaServer(int portToRegister) {
-		Socket socket;
+	private static void registerAtMetaServer(String nameOfServer,
+			String ipOfServer, int portOfServer) {
+		L.info("Registering at meta server.");
+		ClientInterface metaServerClient = new Client();
+		metaServerClient
+				.setNetworkEventHandler(new ClientNetworkEventHandler() {
+
+					@Override
+					public void onClientDisconnected(int clientId) {
+						// don't care
+					}
+
+					@Override
+					public void onClientConnected(int clientId) {
+						// don't care
+					}
+
+					@Override
+					public void onServerIsFull() {
+						// shouldn't appear
+					}
+
+					@Override
+					public void onPingReceived(long latency) {
+						// don't care
+					}
+
+					@Override
+					public void onDisconnected() {
+						L.info("Disconnected from MetaServer.");
+					}
+
+					@Override
+					public void onConnectionLost() {
+						L.warning("Lost connection to MetaServer.");
+					}
+
+					@Override
+					public void onClientKicked(int clientId, String reason) {
+						// don't care
+					}
+				});
+		metaServerClient.connect(ServerSearcher.METASERVER_ADDRESS,
+				ServerDiscoveryListener.META_SERVER_PORT);
+
+		Event registerEvent = new Event(MetaServer.REGISTER_REQUEST);
+		registerEvent.putArgument(metaServerClient.getClientId());
+		registerEvent.putArgument(nameOfServer);
+		registerEvent.putArgument(ipOfServer);
+		registerEvent.putArgument(portOfServer);
 		try {
-			socket = new Socket(ServerSearcher.METASERVER_ADDRESS,
-					ServerDiscoveryListener.META_SERVER_PORT);
-			new PrintWriter(socket.getOutputStream(), true)
-					.println(MetaServer.REGISTER_REQUEST + "#" + portToRegister);
-		} catch (IOException e) {
-			L.log(Level.WARNING, "Cannot connect to meta server.", e);
+			metaServerClient.sendEvent(registerEvent);
+		} catch (IllegalArgumentException | TooFewArgumentsExceptions e) {
+			L.log(Level.WARNING, "Cannot register at metaserver.", e);
+			return;
 		}
 	}
 

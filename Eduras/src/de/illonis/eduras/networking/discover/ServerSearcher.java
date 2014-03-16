@@ -1,18 +1,21 @@
 package de.illonis.eduras.networking.discover;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.InterfaceAddress;
 import java.net.NetworkInterface;
-import java.net.Socket;
+import java.net.UnknownHostException;
 import java.util.Enumeration;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import de.eduras.eventingserver.Client;
+import de.eduras.eventingserver.ClientInterface;
+import de.eduras.eventingserver.ClientNetworkEventHandler;
+import de.eduras.eventingserver.Event;
+import de.eduras.eventingserver.EventHandler;
+import de.eduras.eventingserver.exceptions.TooFewArgumentsExceptions;
 import de.illonis.edulog.EduLog;
 
 /**
@@ -29,9 +32,7 @@ public class ServerSearcher extends Thread {
 	private DiscoveryChannel c;
 	private ClientServerResponseHandler handler;
 	private ServerFoundListener listener;
-	private PrintWriter metaServerWriter;
-	private MetaServerAnswerListener metaAnswerListener;
-	private Socket socketToMetaServer;
+	private MetaServerRequester metaserverRequester;
 
 	/**
 	 * Broadcast interval in milliseconds.
@@ -41,7 +42,7 @@ public class ServerSearcher extends Thread {
 	/**
 	 * The address of the meta server.
 	 */
-	public final static String METASERVER_ADDRESS = "ren-mai.net";
+	public final static String METASERVER_ADDRESS = "localhost";
 
 	/**
 	 * Creates a new server searcher.
@@ -126,25 +127,8 @@ public class ServerSearcher extends Thread {
 		}
 
 		// Open TCP connection to meta server
-		metaServerWriter = null;
-		try {
-			socketToMetaServer = new Socket();
-			socketToMetaServer.connect(new InetSocketAddress(
-					METASERVER_ADDRESS,
-					ServerDiscoveryListener.META_SERVER_PORT), 1000);
-			metaServerWriter = new PrintWriter(
-					socketToMetaServer.getOutputStream(), true);
-
-			metaAnswerListener = new MetaServerAnswerListener(
-					new BufferedReader(new InputStreamReader(
-							socketToMetaServer.getInputStream())));
-
-			metaAnswerListener.start();
-
-		} catch (IOException e) {
-			L.log(Level.WARNING, "Cannot connect to meta server.", e);
-			// if there's no internet connection, thats okay.
-		}
+		L.info("Connecting to MetaServer.");
+		metaserverRequester = new MetaServerRequester();
 
 		handler = new ClientServerResponseHandler(listener, c);
 		handler.start();
@@ -164,45 +148,108 @@ public class ServerSearcher extends Thread {
 		return true;
 	}
 
-	class MetaServerAnswerListener extends Thread {
+	class MetaServerRequester implements ClientNetworkEventHandler,
+			EventHandler {
 
-		private BufferedReader inputReader;
+		private final ClientInterface client;
 
-		public MetaServerAnswerListener(BufferedReader input) {
-			inputReader = input;
+		public MetaServerRequester() {
+			client = new Client();
+			client.setNetworkEventHandler(MetaServerRequester.this);
+			client.setEventHandler(MetaServerRequester.this);
+			client.connect(METASERVER_ADDRESS,
+					ServerDiscoveryListener.META_SERVER_PORT);
 		}
 
 		@Override
-		public void run() {
-			while (true) {
+		public void onClientDisconnected(int clientId) {
+			// don't care
+		}
+
+		@Override
+		public void onClientConnected(int clientId) {
+			// don't care
+		}
+
+		@Override
+		public void handleEvent(Event event) {
+			switch (event.getEventNumber()) {
+			case MetaServer.GET_SERVERS_RESPONSE: {
+				L.fine("Received metaserver answer.");
+				int numberOfEdurasServers;
 				try {
-					String answer = inputReader.readLine();
-					processAnswer(answer);
-				} catch (IOException e) {
-					L.log(Level.SEVERE, "error reading answer", e);
+					numberOfEdurasServers = (Integer) event.getArgument(0);
+
+					for (int i = 1; i < numberOfEdurasServers * 3; i = i + 3) {
+						String nameOfEdurasServer = (String) event
+								.getArgument(i);
+						String ipOfEdurasServer = (String) event
+								.getArgument(i + 1);
+						int portOfEdurasServer = (Integer) event
+								.getArgument(i + 2);
+
+						try {
+							ServerInfo serverInfo = new ServerInfo(
+									nameOfEdurasServer,
+									InetAddress.getByName(ipOfEdurasServer),
+									portOfEdurasServer);
+							listener.onServerFound(serverInfo);
+						} catch (UnknownHostException e) {
+							L.log(Level.WARNING,
+									"Cannot generate InetAddress out of IP "
+											+ ipOfEdurasServer, e);
+							continue;
+						}
+					}
+
+				} catch (TooFewArgumentsExceptions e1) {
+					L.log(Level.WARNING,
+							"Error accessing arguments of GET_SERVERS_RESPONSE",
+							e1);
 					return;
 				}
 			}
+				break;
+			}
+
 		}
 
-		private void processAnswer(String answer) {
-			if (!answer.contains(MetaServer.META_SERVER_ANSWER))
-				return;
+		@Override
+		public void onConnectionLost() {
+			L.warning("Lost connection to MetaServer");
+		}
 
-			L.fine("Received metaserver answer: " + answer);
+		@Override
+		public void onDisconnected() {
+			L.warning("Disconnected from MetaServer");
+		}
 
-			String[] ipAddresses = answer.split("#");
+		@Override
+		public void onClientKicked(int clientId, String reason) {
+			// doesn't appear
+		}
 
-			for (int i = 1; i < ipAddresses.length; i = i + 2) {
-				String singleAddress = ipAddresses[i];
-				if (!singleAddress.equals(MetaServer.META_SERVER_ANSWER))
-					try {
-						sendRequestTo(new InetSocketAddress(singleAddress,
-								Integer.parseInt(ipAddresses[i + 1]) + 2));
-					} catch (IOException e) {
-						L.log(Level.SEVERE, "error sending request", e);
-						continue;
-					}
+		@Override
+		public void onServerIsFull() {
+			// doesn't appear
+		}
+
+		@Override
+		public void onPingReceived(long latency) {
+			// doesn't appear
+		}
+
+		public void stopServer() {
+			client.disconnect();
+		}
+
+		public void request() {
+			Event requestEvent = new Event(MetaServer.GET_SERVERS_REQUEST);
+			try {
+				requestEvent.putArgument(client.getClientId());
+				client.sendEvent(requestEvent);
+			} catch (IllegalArgumentException | TooFewArgumentsExceptions e) {
+				L.log(Level.WARNING, "Error on sending GET_SERVERS_REQUEST.", e);
 			}
 		}
 	}
@@ -232,27 +279,20 @@ public class ServerSearcher extends Thread {
 	}
 
 	private void sendMetaServerRequest() {
-		if (metaServerWriter == null) {
+		if (metaserverRequester == null) {
 			return;
 		}
 
-		metaServerWriter.println(MetaServer.GET_SERVERS_REQUEST);
+		metaserverRequester.request();
 	}
 
 	@Override
 	public void interrupt() {
 		c.close();
-		try {
-			if (socketToMetaServer != null)
-				socketToMetaServer.close();
-		} catch (IOException e) {
-			L.log(Level.WARNING, "error closing socket", e);
-		}
 		if (handler != null)
 			handler.interrupt();
-		if (metaAnswerListener != null)
-			metaAnswerListener.interrupt();
+		if (metaserverRequester != null)
+			metaserverRequester.stopServer();
 		super.interrupt();
 	}
-
 }

@@ -78,17 +78,13 @@ public class ServerDiscoveryListener extends Thread {
 		L.info("ServerSearcher is starting to listen for UDP-Broadcasts on port "
 				+ SERVER_PORT + ".");
 
-		// listen on both the UDP port for LAN and metaserver
-		ServerDiscoveryListenerForAPort metaServerListener = new ServerDiscoveryListenerForAPort(
-				port + 2);
+		// listen on the UDP port for LAN
 		ServerDiscoveryListenerForAPort lanListener = new ServerDiscoveryListenerForAPort(
 				SERVER_PORT);
 
-		metaServerListener.start();
 		lanListener.start();
 
 		try {
-			metaServerListener.join();
 			lanListener.join();
 		} catch (InterruptedException e) {
 			L.log(Level.SEVERE,
@@ -98,7 +94,7 @@ public class ServerDiscoveryListener extends Thread {
 	}
 
 	class ServerDiscoveryListenerForAPort extends Thread {
-		private int myPort;
+		private final int myPort;
 
 		public ServerDiscoveryListenerForAPort(int portToListen) {
 			myPort = portToListen;

@@ -1,15 +1,20 @@
 package de.illonis.eduras.networking.discover;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
-import java.net.ServerSocket;
-import java.net.Socket;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import de.eduras.eventingserver.Event;
+import de.eduras.eventingserver.EventHandler;
+import de.eduras.eventingserver.Server;
+import de.eduras.eventingserver.ServerInterface;
+import de.eduras.eventingserver.ServerNetworkEventHandler;
+import de.eduras.eventingserver.exceptions.TooFewArgumentsExceptions;
+import de.eduras.eventingserver.test.NoSuchClientException;
 import de.illonis.edulog.EduLog;
 
 /**
@@ -20,32 +25,49 @@ import de.illonis.edulog.EduLog;
  * @author Florian Mai <florian.ren.mai@googlemail.com>
  * 
  */
-public class MetaServer extends Thread {
+public class MetaServer {
 
 	private final static Logger L = EduLog.getLoggerFor(MetaServer.class
 			.getName());
 
-	private boolean running = false;
 	private int port = ServerDiscoveryListener.META_SERVER_PORT;
-	private ServerSocket socket;
+	private ServerInterface server;
 
-	static final String META_SERVER_ANSWER = "EDURAS_META_SERVER_ANSWER";
-	private LinkedList<String> registeredServers;
-
-	/**
-	 * The string that indicates a GET_SERVERS request.
-	 */
-	public static final String GET_SERVERS_REQUEST = "GET_SERVERS";
+	private LinkedList<Integer> registeredServers;
+	private HashMap<Integer, ServerInfo> serverInfos;
 
 	/**
-	 * The string that indicates a REGISTER request.
+	 * The event that indicates that the client requests the servers registered
+	 * at the meta server.
+	 * 
+	 * #arg 0: clientId
 	 */
-	public static final String REGISTER_REQUEST = "REGISTER";
+	public static final int GET_SERVERS_REQUEST = 1;
 
 	/**
-	 * The string that indicates a DEREGISTER request.
+	 * The event that indicates that an Eduras server wants to register at the
+	 * meta server.
+	 * 
+	 * #arg 0: ServerID #arg 1: ServerName #arg 2: ServerIP #arg 3: ServerPort
 	 */
-	public static final String DEREGISTER_REQUEST = "DEREGISTER";
+	public static final int REGISTER_REQUEST = 2;
+
+	/**
+	 * The event that indicates that an Eduras server wants to deregister at the
+	 * meta server.
+	 * 
+	 * #arg 0: ServerID
+	 */
+	public static final int DEREGISTER_REQUEST = 3;
+
+	/**
+	 * The event that gives information about available EdurasServers to a
+	 * client.
+	 * 
+	 * #arg 0: number of servers #arg 1: name of server 1 #arg 2: ip of server 1
+	 * #arg 3: port of server 1 #arg 4: name of server 2 ... and so on.
+	 */
+	public static final int GET_SERVERS_RESPONSE = 4;
 
 	/**
 	 * Create a new Server that listens on the default port.
@@ -53,17 +75,23 @@ public class MetaServer extends Thread {
 	 * @throws IOException
 	 */
 	public MetaServer() throws IOException {
-		super("MetaServer");
 		init();
 	}
 
 	private void init() throws IOException {
-		registeredServers = new LinkedList<String>();
-		socket = new ServerSocket(port);
+		registeredServers = new LinkedList<Integer>();
+		serverInfos = new HashMap<Integer, ServerInfo>();
+		server = new Server();
+
+		MetaServerRequestHandler requestHandler = new MetaServerRequestHandler();
+		server.setEventHandler(requestHandler);
+		server.setNetworkEventHandler(requestHandler);
+		server.start("Eduras-Metaserver", port);
+
 	}
 
 	private void deinit() throws IOException {
-		socket.close();
+		server.stop();
 	}
 
 	/**
@@ -82,104 +110,129 @@ public class MetaServer extends Thread {
 	 * responding to clientrequests.
 	 */
 	public void stopMetaServer() {
-		running = false;
+		server.stop();
 	}
 
-	@Override
-	public void run() {
-		running = true;
-		while (running) {
-			try {
-				Socket newClient = socket.accept();
-				new MetaServerRequestHandler(newClient).start();
-			} catch (IOException e) {
-				L.log(Level.WARNING, "error sending meta server request", e);
-				running = false;
-				continue;
+	class MetaServerRequestHandler implements ServerNetworkEventHandler,
+			EventHandler {
+
+		@Override
+		public void onClientDisconnected(int clientId) {
+			if (registeredServers.contains(clientId)) {
+				L.info("A registered Eduras server closed the connection and thus is deregistered.");
+				registeredServers.remove(clientId);
+				serverInfos.remove(clientId);
 			}
-		}
-
-		try {
-			deinit();
-		} catch (IOException e) {
-			L.log(Level.SEVERE, "error deinitializing", e);
-		}
-	}
-
-	class MetaServerRequestHandler extends Thread {
-
-		private Socket client;
-		private PrintWriter clientWriter;
-
-		public MetaServerRequestHandler(Socket newClient) {
-			super("MetaServerRequestHandler");
-			this.client = newClient;
 		}
 
 		@Override
-		public void run() {
-			BufferedReader messageReader = null;
-			try {
-				messageReader = new BufferedReader(new InputStreamReader(
-						client.getInputStream()));
-				clientWriter = new PrintWriter(client.getOutputStream(), true);
-			} catch (IOException e) {
-				L.log(Level.SEVERE, "error sending to client", e);
-				return;
-			}
-
-			while (running) {
-				try {
-					String message = messageReader.readLine();
-					if (message != null) {
-						L.finest("Received message: " + message);
-						handleMessage(message);
-					}
-				} catch (IOException e) {
-					L.log(Level.SEVERE, "error reading message", e);
-					return;
-				}
-			}
+		public void onClientConnected(int clientId) {
+			L.info("Client " + clientId + " connected.");
 		}
 
-		private void handleMessage(String message) {
-			if (message.contains(GET_SERVERS_REQUEST)) {
-				L.info("Received a GET_SERVERS request from address "
-						+ client.getInetAddress().getHostAddress() + ".");
-
-				String ipsOfRegisteredServers = META_SERVER_ANSWER;
-				for (String singleServer : registeredServers) {
-					ipsOfRegisteredServers = ipsOfRegisteredServers + "#"
-							+ singleServer.split(":")[0] + "#"
-							+ singleServer.split(":")[1];
+		@Override
+		public void handleEvent(Event event) {
+			L.fine("Received event #" + event.getEventNumber());
+			switch (event.getEventNumber()) {
+			case GET_SERVERS_REQUEST: {
+				try {
+					L.info("Received a GET_SERVERS request from client "
+							+ event.getArgument(0));
+				} catch (TooFewArgumentsExceptions e) {
+					L.log(Level.WARNING,
+							"Error when receiving GET_SERVERS_REQUEST", e);
 				}
 
-				clientWriter.println(ipsOfRegisteredServers);
+				Event metaserverAnswer = new Event(GET_SERVERS_RESPONSE);
+				metaserverAnswer.putArgument(registeredServers.size());
+
+				for (Integer singleServerId : registeredServers) {
+					ServerInfo serverInfoForEdurasServer = serverInfos
+							.get(singleServerId);
+
+					metaserverAnswer.putArgument(serverInfoForEdurasServer
+							.getName());
+					metaserverAnswer.putArgument(serverInfoForEdurasServer
+							.getUrl().getHostAddress());
+					metaserverAnswer.putArgument(serverInfoForEdurasServer
+							.getPort());
+				}
+
+				try {
+					server.sendEventToClient(metaserverAnswer,
+							(int) event.getArgument(0));
+				} catch (IllegalArgumentException | NoSuchClientException
+						| TooFewArgumentsExceptions e) {
+					L.log(Level.WARNING,
+							"Error when trying to send an GET_SERVERS_RESPONSE event from metaserver to client.",
+							e);
+				}
+
+				break;
+			}
+			case REGISTER_REQUEST: {
+
+				int clientId;
+				String serverName = "";
+				String ipOfEdurasServer = "";
+				int portOfEdurasServer = 0;
+				try {
+					clientId = (Integer) event.getArgument(0);
+					serverName = (String) event.getArgument(1);
+					ipOfEdurasServer = (String) event.getArgument(2);
+					portOfEdurasServer = (Integer) event.getArgument(3);
+				} catch (TooFewArgumentsExceptions e) {
+					L.log(Level.WARNING,
+							"Error when accessing arguments of REGISTER_REQUEST",
+							e);
+					return;
+				}
+
+				L.info("Received a REGISTER request from Eduras server "
+						+ serverName + " at IP " + ipOfEdurasServer + ":"
+						+ portOfEdurasServer);
+
+				// only add this if not registered yet
+				if (!registeredServers.contains(clientId)) {
+					registeredServers.add(clientId);
+
+				}
+				// whenever you receive a new REGISTER event, update the
+				// information
+				try {
+					serverInfos.put(clientId, new ServerInfo(serverName,
+							InetAddress.getByName(ipOfEdurasServer),
+							portOfEdurasServer));
+				} catch (UnknownHostException e) {
+					L.log(Level.WARNING,
+							"Error generating InetAddress from ip of registering eduras server. IP: "
+									+ ipOfEdurasServer, e);
+				}
+
+				break;
+			}
+			case DEREGISTER_REQUEST: {
+				int serverId;
+				try {
+					serverId = (Integer) event.getArgument(0);
+				} catch (TooFewArgumentsExceptions e) {
+					L.log(Level.WARNING,
+							"Error accessing arguments of DEREGISTER_REQUEST",
+							e);
+					return;
+				}
+				L.info("Received a DEREGISTER request from client " + serverId);
+
+				if (registeredServers.contains(serverId)) {
+					registeredServers.remove(serverId);
+					serverInfos.remove(serverId);
+				}
+
+				break;
 			}
 
-			if (message.contains(REGISTER_REQUEST)) {
-				L.info("Received a REGISTER request from address "
-						+ client.getInetAddress().getHostAddress() + ":"
-						+ client.getPort() + ".");
-
-				String portString = message.split("#")[1];
-				String clientAddress = client.getInetAddress().getHostAddress()
-						+ ":" + portString;
-
-				if (!registeredServers.contains(clientAddress))
-					registeredServers.add(clientAddress);
 			}
 
-			if (message.contains(DEREGISTER_REQUEST)) {
-				L.info("Received a DEREGISTER request from address "
-						+ client.getInetAddress().getHostAddress() + ".");
-
-				String portString = message.split("#")[1];
-				String clientAddress = client.getInetAddress().getHostAddress()
-						+ ":" + portString;
-
-				registeredServers.remove(clientAddress);
-			}
 		}
 	}
 
@@ -214,7 +267,5 @@ public class MetaServer extends Thread {
 			L.log(Level.SEVERE, "error starting metaserver", e);
 			return;
 		}
-
-		metaServer.start();
 	}
 }
