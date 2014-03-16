@@ -114,7 +114,7 @@ public class ServerDiscoveryListener extends Thread {
 				try {
 					channel = new DiscoveryChannel(true);
 					InetSocketAddress listenAddress = new InetSocketAddress(
-							InetAddress.getLocalHost(), myPort);
+							InetAddress.getByName("0.0.0.0"), myPort);
 					channel.bind(listenAddress);
 				} catch (IOException | AlreadyBoundException ex) {
 					cntAttempts++;
