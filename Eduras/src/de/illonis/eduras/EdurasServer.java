@@ -257,6 +257,10 @@ public class EdurasServer {
 		metaServerClient.connect(ServerSearcher.METASERVER_ADDRESS,
 				ServerDiscoveryListener.META_SERVER_PORT);
 
+		if (!metaServerClient.isConnected()) {
+			L.warning("Could not connect to MetaServer. This server won't be discoverable via Internet.");
+		}
+
 		Event registerEvent = new Event(MetaServer.REGISTER_REQUEST);
 		registerEvent.putArgument(metaServerClient.getClientId());
 		registerEvent.putArgument(nameOfServer);

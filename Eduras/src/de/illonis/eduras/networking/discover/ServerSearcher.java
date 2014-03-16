@@ -17,6 +17,7 @@ import de.eduras.eventingserver.Event;
 import de.eduras.eventingserver.EventHandler;
 import de.eduras.eventingserver.exceptions.TooFewArgumentsExceptions;
 import de.illonis.edulog.EduLog;
+import de.illonis.eduras.chat.NotConnectedException;
 
 /**
  * Searches for servers in local network using UDP broadcasts.
@@ -128,7 +129,13 @@ public class ServerSearcher extends Thread {
 
 		// Open TCP connection to meta server
 		L.info("Connecting to MetaServer.");
-		metaserverRequester = new MetaServerRequester();
+		try {
+			metaserverRequester = new MetaServerRequester();
+		} catch (NotConnectedException e1) {
+			L.log(Level.WARNING,
+					"Cannot connect to MetaServer. Discovery via Internet won't work.",
+					e1);
+		}
 
 		handler = new ClientServerResponseHandler(listener, c);
 		handler.start();
@@ -153,12 +160,17 @@ public class ServerSearcher extends Thread {
 
 		private final ClientInterface client;
 
-		public MetaServerRequester() {
+		public MetaServerRequester() throws NotConnectedException {
 			client = new Client();
 			client.setNetworkEventHandler(MetaServerRequester.this);
 			client.setEventHandler(MetaServerRequester.this);
 			client.connect(METASERVER_ADDRESS,
 					ServerDiscoveryListener.META_SERVER_PORT);
+
+			if (!client.isConnected()) {
+				throw new NotConnectedException();
+			}
+
 		}
 
 		@Override
@@ -266,7 +278,10 @@ public class ServerSearcher extends Thread {
 
 		while (true) {
 			sendDiscoverBroadcast();
-			sendMetaServerRequest();
+
+			if (metaserverRequester != null) {
+				sendMetaServerRequest();
+			}
 			try {
 				Thread.sleep(BROADCAST_INTERVAL);
 			} catch (InterruptedException e) {
