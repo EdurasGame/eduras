@@ -111,7 +111,7 @@
 			<fileset dir="${base}${src}">
 				<include name="**/*.properties"></include>
 			</fileset>
-			<zipgroupfileset dir="${base}${libs}" includes="edulog*.jar" />
+			<zipgroupfileset dir="${base}${libs}" includes="edulog*.jar, eventingserver.jar" />
 			<manifest>
 				<attribute name="Main-Class"
 					value="de.illonis.eduras.networking.discover.MetaServer" />
