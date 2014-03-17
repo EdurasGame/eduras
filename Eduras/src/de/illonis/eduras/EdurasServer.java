@@ -92,6 +92,7 @@ public class EdurasServer {
 		String name = DEFAULT_NAME;
 		boolean consoleOn = false;
 		boolean registerAtMetaserver = false;
+		String serverHostAddress = "";
 		for (int i = 0; i < args.length; i++) {
 
 			String parameterName = parametersWithValues[i][0];
@@ -106,6 +107,10 @@ public class EdurasServer {
 					return;
 				}
 				continue;
+			}
+
+			if (parameterName.equalsIgnoreCase("serverhostaddress")) {
+				serverHostAddress = parameterValue;
 			}
 
 			if (parameterName.equalsIgnoreCase("name")) {
@@ -208,8 +213,14 @@ public class EdurasServer {
 				server.getName(), port);
 		sdl.start();
 
-		if (registerAtMetaserver)
-			registerAtMetaServer(server.getName(), "localhost", port);
+		if (registerAtMetaserver) {
+			if (!serverHostAddress.equals("")) {
+				registerAtMetaServer(server.getName(), serverHostAddress, port);
+			} else {
+				L.warning("No IP was specified under which the Eduras server is supposed to register itself at the meta server.");
+				return;
+			}
+		}
 	}
 
 	private static void registerAtMetaServer(String nameOfServer,
