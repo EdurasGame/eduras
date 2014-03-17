@@ -12,7 +12,6 @@ import java.util.logging.Logger;
 
 import de.illonis.edulog.EduLog;
 import de.illonis.eduras.EdurasServer;
-import de.illonis.eduras.unittests.GeometryUtilsTests;
 
 /**
  * This class holds all flexible settings.
@@ -25,16 +24,9 @@ public final class S {
 	private final static Logger L = EduLog.getLoggerFor(EdurasServer.class
 			.getName());
 
-	// these are testvalues only
-	public static boolean myBoolean = false;
-	public static int myInt = 42;
-	public static long myLong = 23;
-	public static String myString = "fourtytwo";
-	public static float myFloat = 42.42f;
-	public static double myDouble = 42.4242;
-
 	// real values
 	public static double ai_target_reached_distance = 10;
+
 	public static long ai_motion_update_interval = 400;
 
 	public static int go_big_block_width = 20;
@@ -182,7 +174,7 @@ public final class S {
 	public static double go_assaultmissile_damageradius = 3;
 
 	public static boolean vision_neutral_always = true;
-	
+
 	public static boolean vision_disabled = true;
 
 	/**
@@ -294,37 +286,4 @@ public final class S {
 		return readSettings;
 	}
 
-	/**
-	 * Tests the S class' fileloader.
-	 * 
-	 * @param args
-	 */
-	public static void main(String[] args) {
-		try {
-			EduLog.init("test.log");
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
-		for (Field field : S.class.getFields()) {
-			System.out.println(field.getName());
-		}
-
-		System.out.println("Myboolean vorher: " + myBoolean);
-		System.out.println("MyLong vorher: " + myLong);
-		System.out.println("MyInt vorher: " + myInt);
-		System.out.println("MyString vorher: " + myString);
-		System.out.println("MyDouble vorher: " + myDouble);
-		System.out.println("MyFloat vorher: " + myFloat);
-
-		loadSettings(new File(GeometryUtilsTests.class.getResource(
-				"testsettingfile").getPath()));
-
-		System.out.println("MyBoolean nachher: " + myBoolean);
-		System.out.println("MyLong nachher: " + myLong);
-		System.out.println("MyInt nachher: " + myInt);
-		System.out.println("MyString nachher: " + myString);
-		System.out.println("MyDouble nachher: " + myDouble);
-		System.out.println("MyFloat nachher: " + myFloat);
-	}
 }
