@@ -15,6 +15,7 @@ import java.awt.Toolkit;
 import java.awt.Transparency;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Area;
+import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 import java.util.Iterator;
@@ -411,6 +412,13 @@ public class GameRenderer implements TooltipHandler {
 			if (obj instanceof PlayerMainFigure) {
 				drawFace(obj, (Circle) objectShape);
 			}
+		}
+		if (S.debug_render_boundingboxes) {
+			mapGraphics.setColor(Color.YELLOW);
+			Rectangle2D.Double r = obj.getBoundingBox();
+			r.x -= camera.x;
+			r.y -= camera.y;
+			mapGraphics.draw(r);
 		}
 	}
 

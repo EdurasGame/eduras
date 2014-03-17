@@ -189,6 +189,8 @@ public final class S {
 
 	public static int neutralbase_resource_baseamount = 1;
 
+	public static boolean debug_render_boundingboxes = false;
+
 	/**
 	 * Reads values from the file and writes them to the S classes attributes.
 	 * 
