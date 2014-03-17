@@ -80,6 +80,7 @@ public class ClientLogicGameWorker extends LogicGameWorker {
 		}
 
 		Team team = player.getTeam();
+		if (team == null) return;
 
 		LinkedList<Integer> teamOwners = new LinkedList<Integer>();
 		LinkedList<GameObject> teamObjects = new LinkedList<GameObject>();
