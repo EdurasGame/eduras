@@ -3,8 +3,9 @@ package de.illonis.eduras.networking.discover;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
-import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -33,8 +34,9 @@ public class MetaServer {
 	private int port = ServerDiscoveryListener.META_SERVER_PORT;
 	private ServerInterface server;
 
-	private LinkedList<Integer> registeredServers;
-	private HashMap<Integer, ServerInfo> serverInfos;
+	private ConcurrentLinkedQueue<Integer> registeredServers;
+	private ConcurrentHashMap<Integer, ServerInfo> serverInfos;
+	private ConcurrentHashMap<Integer, Long> serverLeases;
 
 	/**
 	 * The event that indicates that the client requests the servers registered
@@ -69,6 +71,8 @@ public class MetaServer {
 	 */
 	public static final int GET_SERVERS_RESPONSE = 4;
 
+	private static final long LEASE_TIME = 30000;
+
 	/**
 	 * Create a new Server that listens on the default port.
 	 * 
@@ -79,8 +83,9 @@ public class MetaServer {
 	}
 
 	private void init() throws IOException {
-		registeredServers = new LinkedList<Integer>();
-		serverInfos = new HashMap<Integer, ServerInfo>();
+		registeredServers = new ConcurrentLinkedQueue<Integer>();
+		serverInfos = new ConcurrentHashMap<Integer, ServerInfo>();
+		serverLeases = new ConcurrentHashMap<Integer, Long>();
 		server = new Server();
 
 		MetaServerRequestHandler requestHandler = new MetaServerRequestHandler();
@@ -88,6 +93,7 @@ public class MetaServer {
 		server.setNetworkEventHandler(requestHandler);
 		server.start("Eduras-Metaserver", port);
 
+		new ServerRegistryLeaseChecker().start();
 	}
 
 	private void deinit() throws IOException {
@@ -111,6 +117,12 @@ public class MetaServer {
 	 */
 	public void stopMetaServer() {
 		server.stop();
+	}
+
+	private void removeServer(int id) {
+		registeredServers.remove(id);
+		serverInfos.remove(id);
+		serverLeases.remove(id);
 	}
 
 	class MetaServerRequestHandler implements ServerNetworkEventHandler,
@@ -203,6 +215,8 @@ public class MetaServer {
 					serverInfos.put(clientId, new ServerInfo(serverName,
 							InetAddress.getByName(ipOfEdurasServer),
 							portOfEdurasServer));
+					L.fine("Renewing lease of server with id #" + clientId);
+					serverLeases.put(clientId, System.currentTimeMillis());
 				} catch (UnknownHostException e) {
 					L.log(Level.WARNING,
 							"Error generating InetAddress from ip of registering eduras server. IP: "
@@ -224,8 +238,7 @@ public class MetaServer {
 				L.info("Received a DEREGISTER request from client " + serverId);
 
 				if (registeredServers.contains(serverId)) {
-					registeredServers.remove(serverId);
-					serverInfos.remove(serverId);
+					removeServer(serverId);
 				}
 
 				break;
@@ -233,6 +246,37 @@ public class MetaServer {
 
 			}
 
+		}
+	}
+
+	class ServerRegistryLeaseChecker extends Thread {
+
+		@Override
+		public void run() {
+			LinkedList<Integer> serversToRemove = new LinkedList<Integer>();
+			while (!interrupted()) {
+				serversToRemove.clear();
+
+				for (Integer singleServer : registeredServers) {
+					if (System.currentTimeMillis()
+							- serverLeases.get(singleServer) > LEASE_TIME) {
+						serversToRemove.add(singleServer);
+					}
+				}
+
+				for (Integer singleServer : serversToRemove) {
+					L.info("Lease of server with id #" + singleServer
+							+ " expired.");
+					removeServer(singleServer);
+				}
+
+				try {
+					sleep(10000);
+				} catch (InterruptedException e) {
+					L.log(Level.WARNING,
+							"Cannot sleep in ServerRegistryLeaseChecker!", e);
+				}
+			}
 		}
 	}
 
