@@ -5,10 +5,12 @@ import java.net.Inet4Address;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.SocketException;
+import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -44,6 +46,7 @@ import de.illonis.eduras.networking.discover.ServerDiscoveryListener;
 import de.illonis.eduras.networking.discover.ServerSearcher;
 import de.illonis.eduras.serverconsole.NoConsoleException;
 import de.illonis.eduras.serverconsole.ServerConsole;
+import de.illonis.eduras.utils.WebFetcher;
 
 /**
  * The eduras server main executable.
@@ -214,12 +217,20 @@ public class EdurasServer {
 		sdl.start();
 
 		if (registerAtMetaserver) {
-			if (!serverHostAddress.equals("")) {
-				new MetaServerRegisterer(name, serverHostAddress, port).start();
-			} else {
-				L.warning("No IP was specified under which the Eduras server is supposed to register itself at the meta server.");
-				return;
+			if (serverHostAddress.equals("")) {
+				L.info("No IP was specified under which the Eduras server is supposed to register itself at the meta server.");
+				try {
+					L.info("Trying to fetch WAN-IP...");
+					serverHostAddress = WebFetcher.get(new URL(
+							"http://www.icanhazip.com"),
+							new HashMap<String, String>());
+					L.info("WAN-IP is " + serverHostAddress);
+				} catch (IOException e) {
+					L.log(Level.WARNING, "Cannot fetch IP for server.", e);
+				}
+
 			}
+			new MetaServerRegisterer(name, serverHostAddress, port).start();
 		}
 	}
 
