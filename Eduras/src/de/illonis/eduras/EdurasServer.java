@@ -215,7 +215,7 @@ public class EdurasServer {
 
 		if (registerAtMetaserver) {
 			if (!serverHostAddress.equals("")) {
-				registerAtMetaServer(server.getName(), serverHostAddress, port);
+				new MetaServerRegisterer(name, serverHostAddress, port).start();
 			} else {
 				L.warning("No IP was specified under which the Eduras server is supposed to register itself at the meta server.");
 				return;
@@ -223,10 +223,59 @@ public class EdurasServer {
 		}
 	}
 
-	private static void registerAtMetaServer(String nameOfServer,
-			String ipOfServer, int portOfServer) {
-		L.info("Registering at meta server.");
-		ClientInterface metaServerClient = new Client();
+	/**
+	 * Lists all IPv4 addresses server is reachable at.
+	 */
+	public static void getInterfaces() {
+
+		ArrayList<InetAddress> addresses = new ArrayList<InetAddress>();
+		try {
+			Enumeration<NetworkInterface> e = NetworkInterface
+					.getNetworkInterfaces();
+
+			while (e.hasMoreElements()) {
+
+				NetworkInterface ni = e.nextElement();
+
+				Enumeration<InetAddress> e2 = ni.getInetAddresses();
+
+				while (e2.hasMoreElements()) {
+					InetAddress ip = e2.nextElement();
+					if (ip instanceof Inet4Address)
+						addresses.add(ip);
+				}
+			}
+		} catch (SocketException e) {
+			L.log(Level.SEVERE, Localization.getString("Server.noaddresses"), e);
+			return;
+		}
+
+		StringBuilder b = new StringBuilder(
+				Localization.getString("Server.reachable") + " ");
+		for (InetAddress inetAddress : addresses) {
+			b.append(inetAddress.toString().substring(1));
+			b.append(", ");
+		}
+		L.info(b.toString());
+	}
+}
+
+class MetaServerRegisterer extends Thread {
+
+	private final static Logger L = EduLog
+			.getLoggerFor(MetaServerRegisterer.class.getName());
+
+	private final String name;
+	private final String ip;
+	private final int port;
+	private final ClientInterface metaServerClient;
+
+	public MetaServerRegisterer(String name, String ip, int port) {
+		this.name = name;
+		this.ip = ip;
+		this.port = port;
+
+		metaServerClient = new Client();
 		metaServerClient
 				.setNetworkEventHandler(new ClientNetworkEventHandler() {
 
@@ -271,6 +320,23 @@ public class EdurasServer {
 		if (!metaServerClient.isConnected()) {
 			L.warning("Could not connect to MetaServer. This server won't be discoverable via Internet.");
 		}
+	}
+
+	@Override
+	public void run() {
+		while (!interrupted()) {
+			registerAtMetaServer(name, ip, port);
+			try {
+				sleep(15000);
+			} catch (InterruptedException e) {
+				L.log(Level.WARNING, "Cannot sleep in MetaServerRegisterer.", e);
+			}
+		}
+	}
+
+	private void registerAtMetaServer(String nameOfServer, String ipOfServer,
+			int portOfServer) {
+		L.info("Registering at meta server.");
 
 		Event registerEvent = new Event(MetaServer.REGISTER_REQUEST);
 		registerEvent.putArgument(metaServerClient.getClientId());
@@ -283,41 +349,5 @@ public class EdurasServer {
 			L.log(Level.WARNING, "Cannot register at metaserver.", e);
 			return;
 		}
-	}
-
-	/**
-	 * Lists all IPv4 addresses server is reachable at.
-	 */
-	public static void getInterfaces() {
-
-		ArrayList<InetAddress> addresses = new ArrayList<InetAddress>();
-		try {
-			Enumeration<NetworkInterface> e = NetworkInterface
-					.getNetworkInterfaces();
-
-			while (e.hasMoreElements()) {
-
-				NetworkInterface ni = e.nextElement();
-
-				Enumeration<InetAddress> e2 = ni.getInetAddresses();
-
-				while (e2.hasMoreElements()) {
-					InetAddress ip = e2.nextElement();
-					if (ip instanceof Inet4Address)
-						addresses.add(ip);
-				}
-			}
-		} catch (SocketException e) {
-			L.log(Level.SEVERE, Localization.getString("Server.noaddresses"), e);
-			return;
-		}
-
-		StringBuilder b = new StringBuilder(
-				Localization.getString("Server.reachable") + " ");
-		for (InetAddress inetAddress : addresses) {
-			b.append(inetAddress.toString().substring(1));
-			b.append(", ");
-		}
-		L.info(b.toString());
 	}
 }
