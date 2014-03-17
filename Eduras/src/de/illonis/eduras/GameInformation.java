@@ -55,7 +55,7 @@ public class GameInformation {
 	private Map map;
 	private EventTriggerer eventTriggerer;
 	private GameSettings gameSettings;
-	private final LinkedList<Team> teams;
+	private final HashMap<Integer, Team> teams;
 	private final HashMap<Team, SpawnType> spawnGroups;
 
 	/**
@@ -67,7 +67,7 @@ public class GameInformation {
 		players = new ConcurrentHashMap<Integer, PlayerMainFigure>();
 		map = new FunMap();
 		gameSettings = new GameSettings(this);
-		teams = new LinkedList<Team>();
+		teams = new HashMap<Integer, Team>();
 		spawnGroups = new HashMap<Team, SpawnType>();
 	}
 
@@ -105,8 +105,8 @@ public class GameInformation {
 	 * 
 	 * @author illonis
 	 */
-	public LinkedList<Team> getTeams() {
-		return new LinkedList<Team>(teams);
+	public Collection<Team> getTeams() {
+		return new LinkedList<Team>(teams.values());
 	}
 
 	/**
@@ -124,7 +124,7 @@ public class GameInformation {
 	 *            the new team.
 	 */
 	public void addTeam(Team team) {
-		teams.add(team);
+		teams.put(team.getTeamId(), team);
 		spawnGroups.put(team, getGameSettings().getGameMode()
 				.getSpawnTypeForTeam(team));
 	}

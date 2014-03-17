@@ -92,8 +92,10 @@ public class Deathmatch extends BasicGameMode {
 			return;
 		}
 
-		gameInfo.getEventTriggerer().addPlayerToTeam(ownerId,
-				gameInfo.getTeams().getFirst());
+		Team t = new Team(newPlayer.getName(), Team.getNextTeamId());
+		gameInfo.addTeam(t);
+		gameInfo.getEventTriggerer().setTeams(gameInfo.getTeams());
+		gameInfo.getEventTriggerer().addPlayerToTeam(newPlayer.getOwner(), t);
 		gameInfo.getEventTriggerer().respawnPlayer(newPlayer);
 
 		// and add it to the statistic

@@ -208,20 +208,26 @@ public class ClientLogic implements GameLogicInterface {
 				break;
 			case ADD_PLAYER_TO_TEAM:
 				AddPlayerToTeamEvent pteEvent = (AddPlayerToTeamEvent) event;
-				for (Team t : gameInfo.getTeams()) {
-					if (t.getTeamId() == pteEvent.getTeam()) {
-						PlayerMainFigure player;
-						try {
-							player = gameInfo.getPlayerByOwnerId(pteEvent
-									.getOwner());
-						} catch (ObjectNotFoundException e1) {
-							return;
-						}
-						if (player.getTeam() != null)
-							player.getTeam().removePlayer(player);
-						t.addPlayer(player);
-					}
+				Team team = gameInfo.findTeamById(pteEvent.getTeam());
+				if (team == null) {
+					L.severe("Could not find a team with id "
+							+ pteEvent.getTeam()
+							+ " while adding player with ownerid "
+							+ pteEvent.getOwner() + ".");
+					break;
 				}
+				PlayerMainFigure player;
+				try {
+					player = gameInfo.getPlayerByOwnerId(pteEvent.getOwner());
+				} catch (ObjectNotFoundException e) {
+					L.log(Level.SEVERE, "Could not find player with ownerid "
+							+ pteEvent.getOwner(), e);
+					return;
+				}
+				if (player.getTeam() != null)
+					player.getTeam().removePlayer(player);
+				System.out.println("adding player " + player.getOwner() + " to team " + team.getTeamId());
+				team.addPlayer(player);
 				break;
 			case DEATH:
 				DeathEvent de = (DeathEvent) event;

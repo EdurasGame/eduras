@@ -1,8 +1,8 @@
 package de.illonis.eduras.logic;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -520,7 +520,7 @@ public class ServerEventTriggerer implements EventTriggerer {
 	}
 
 	@Override
-	public void setTeams(List<Team> teams) {
+	public void setTeams(Collection<Team> teams) {
 		gameInfo.clearTeams();
 		SetTeamsEvent event = new SetTeamsEvent();
 		for (Team team : teams) {
