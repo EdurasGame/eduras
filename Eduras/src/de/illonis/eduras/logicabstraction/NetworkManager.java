@@ -44,7 +44,12 @@ public class NetworkManager {
 	 */
 	public void connect(InetAddress addr, int port) throws IOException {
 
-		client.connect(addr.getHostAddress(), port);
+		// TODO: The IOException should be thrown in the connect method of
+		// EventingServer.
+		if (!client.connect(addr.getHostAddress(), port)) {
+			throw new IOException("Cannot connect to server "
+					+ addr.getHostAddress() + ":" + port);
+		}
 
 	}
 

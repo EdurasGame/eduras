@@ -147,8 +147,10 @@ public class ProgressPanelLogic extends ClientGuiStepLogic implements
 		@Override
 		public void done() {
 			try {
-				if (!get())
+				if (!get()) {
 					showError(establisher.getErrorMessage(), "Error");
+					reactor.abort();
+				}
 			} catch (InterruptedException | ExecutionException e) {
 				L.log(Level.WARNING, "Error showing error message (lol).", e);
 			}
