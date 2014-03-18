@@ -327,8 +327,9 @@ class MetaServerRegisterer extends Thread {
 
 					@Override
 					public void onConnectionEstablished(int clientId) {
-						// TODO Auto-generated method stub
-
+						synchronized (MetaServerRegisterer.this) {
+							MetaServerRegisterer.this.notify();
+						}
 					}
 				});
 		metaServerClient.connect(ServerSearcher.METASERVER_ADDRESS,
@@ -341,6 +342,16 @@ class MetaServerRegisterer extends Thread {
 
 	@Override
 	public void run() {
+		// wait till client is connected.
+		synchronized (this) {
+			try {
+				this.wait();
+			} catch (InterruptedException e) {
+				L.log(Level.WARNING,
+						"Interrupted while waiting for notification.", e);
+			}
+		}
+
 		while (!interrupted()) {
 			registerAtMetaServer(name, ip, port);
 			try {

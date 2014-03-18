@@ -43,7 +43,7 @@ public class ServerSearcher extends Thread {
 	/**
 	 * The address of the meta server.
 	 */
-	public final static String METASERVER_ADDRESS = "ren-mai.net";
+	public final static String METASERVER_ADDRESS = "localhost";
 
 	/**
 	 * Creates a new server searcher.
@@ -159,11 +159,13 @@ public class ServerSearcher extends Thread {
 			EventHandler {
 
 		private final ClientInterface client;
+		private boolean connectionEstablished;
 
 		public MetaServerRequester() throws NotConnectedException {
 			client = new Client();
 			client.setNetworkEventHandler(MetaServerRequester.this);
 			client.setEventHandler(MetaServerRequester.this);
+			connectionEstablished = false;
 			client.connect(METASERVER_ADDRESS,
 					ServerDiscoveryListener.META_SERVER_PORT);
 
@@ -267,8 +269,11 @@ public class ServerSearcher extends Thread {
 
 		@Override
 		public void onConnectionEstablished(int clientId) {
-			// TODO Auto-generated method stub
+			connectionEstablished = true;
+		}
 
+		public boolean isConnected() {
+			return connectionEstablished;
 		}
 	}
 
@@ -285,7 +290,8 @@ public class ServerSearcher extends Thread {
 		while (true) {
 			sendDiscoverBroadcast();
 
-			if (metaserverRequester != null) {
+			if (metaserverRequester != null
+					&& metaserverRequester.isConnected()) {
 				sendMetaServerRequest();
 			}
 			try {
