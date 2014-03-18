@@ -264,6 +264,12 @@ public class ServerSearcher extends Thread {
 				L.log(Level.WARNING, "Error on sending GET_SERVERS_REQUEST.", e);
 			}
 		}
+
+		@Override
+		public void onConnectionEstablished(int clientId) {
+			// TODO Auto-generated method stub
+
+		}
 	}
 
 	@Override

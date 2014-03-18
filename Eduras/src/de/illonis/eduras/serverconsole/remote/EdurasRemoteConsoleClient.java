@@ -124,4 +124,9 @@ public class EdurasRemoteConsoleClient extends EncryptedRemoteClient {
 		}
 		sendCommand(command);
 	}
+
+	@Override
+	public void onConnectionEstablished(int clientId) {
+		frame.appendOutput("Connection established.");
+	}
 }

@@ -22,7 +22,7 @@ public class ChatClientImpl implements ChatClient {
 	private final static Logger L = EduLog.getLoggerFor(ChatClientImpl.class
 			.getName());
 
-	private ClientInterface client;
+	private final ClientInterface client;
 	private ChatUser user;
 	boolean connected;
 	ChatActivityListener chatActivityListener;
@@ -80,6 +80,12 @@ public class ChatClientImpl implements ChatClient {
 			@Override
 			public void onPingReceived(long latency) {
 				// not gonna happen
+
+			}
+
+			@Override
+			public void onConnectionEstablished(int clientId) {
+				// handled by own chat's own message
 
 			}
 		});

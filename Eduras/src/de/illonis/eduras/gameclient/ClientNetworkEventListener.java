@@ -25,7 +25,7 @@ public class ClientNetworkEventListener implements ClientNetworkEventHandler {
 
 	@Override
 	public void onClientConnected(int id) {
-		reactor.onClientConnected(id);
+		// do nothing, handled seperately
 	}
 
 	@Override
@@ -56,5 +56,10 @@ public class ClientNetworkEventListener implements ClientNetworkEventHandler {
 	@Override
 	public void onPingReceived(long latency) {
 		reactor.setPing(latency);
+	}
+
+	@Override
+	public void onConnectionEstablished(int clientId) {
+		reactor.onConnectionEstablished();
 	}
 }

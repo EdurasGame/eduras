@@ -96,30 +96,6 @@ public class GameClient {
 	}
 
 	/**
-	 * Handles connection of this client.
-	 * 
-	 * @param clientId
-	 *            the connected client.
-	 */
-	public void onClientConnected(int clientId) {
-		if (clientId != getOwnerID()) // only handle my connection
-			return;
-		wantsExit = false;
-		initChat();
-		L.info("Connection to server established. OwnerId: "
-				+ infoPro.getOwnerID());
-		nwm.ping();
-		frame.onClientConnected(clientId); // pass to gui
-
-		// FIXME: why this???
-		try {
-			sendEvent(new InitInformationEvent(role, clientName, clientId));
-		} catch (WrongEventTypeException | MessageNotSupportedException e) {
-			L.log(Level.SEVERE, "Error sending initinformation event", e);
-		}
-	}
-
-	/**
 	 * Handles disconnect of a client.
 	 * 
 	 * @param clientId
@@ -295,6 +271,27 @@ public class GameClient {
 
 	void setPing(long latency) {
 		frame.getGamePanel().setPing(latency);
+	}
+
+	/**
+	 * Handles connection of this client.
+	 */
+	public void onConnectionEstablished() {
+		int clientId = infoPro.getOwnerID();
+
+		wantsExit = false;
+		initChat();
+		L.info("Connection to server established. OwnerId: "
+				+ infoPro.getOwnerID());
+		nwm.ping();
+		frame.onClientConnected(clientId); // pass to gui
+
+		// FIXME: why this???
+		try {
+			sendEvent(new InitInformationEvent(role, clientName, clientId));
+		} catch (WrongEventTypeException | MessageNotSupportedException e) {
+			L.log(Level.SEVERE, "Error sending initinformation event", e);
+		}
 	}
 
 }

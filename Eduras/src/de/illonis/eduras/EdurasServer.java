@@ -324,6 +324,12 @@ class MetaServerRegisterer extends Thread {
 					public void onClientKicked(int clientId, String reason) {
 						// don't care
 					}
+
+					@Override
+					public void onConnectionEstablished(int clientId) {
+						// TODO Auto-generated method stub
+
+					}
 				});
 		metaServerClient.connect(ServerSearcher.METASERVER_ADDRESS,
 				ServerDiscoveryListener.META_SERVER_PORT);
