@@ -2,6 +2,7 @@ package de.illonis.eduras.serverconsole;
 
 import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import de.illonis.edulog.EduLog;
@@ -109,7 +110,7 @@ public class ServerConsole implements Runnable {
 			rcs.setNetworkEventHandler(new EdurasRemoteNetworkEventHandler(rcs));
 			rcs.start(port);
 		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
+			L.log(Level.SEVERE, "Encoding not supported.", e);
 		}
 	}
 

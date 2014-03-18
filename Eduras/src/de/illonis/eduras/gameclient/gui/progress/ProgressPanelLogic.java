@@ -150,7 +150,7 @@ public class ProgressPanelLogic extends ClientGuiStepLogic implements
 				if (!get())
 					showError(establisher.getErrorMessage(), "Error");
 			} catch (InterruptedException | ExecutionException e) {
-				e.printStackTrace();
+				L.log(Level.WARNING, "Error showing error message (lol).", e);
 			}
 		}
 	}

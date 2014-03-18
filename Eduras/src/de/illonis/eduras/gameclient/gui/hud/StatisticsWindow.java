@@ -34,7 +34,7 @@ public class StatisticsWindow extends RenderedGuiObject {
 	private final static long DISPLAY_TIME = 3000;
 
 	private BufferedImage artwork;
-	private int width, height;
+	private final int width, height;
 	private boolean visible;
 
 	/**
@@ -135,13 +135,14 @@ public class StatisticsWindow extends RenderedGuiObject {
 		super.onMatchEnd(event);
 	}
 
-	private Runnable delayedHider = new Runnable() {
+	private final Runnable delayedHider = new Runnable() {
 		@Override
 		public void run() {
 			try {
 				Thread.sleep(DISPLAY_TIME);
 			} catch (InterruptedException e) {
-				e.printStackTrace();
+				L.log(Level.SEVERE, "Interrupted when sleeping in delayHider.",
+						e);
 			}
 			setVisible(false);
 		}

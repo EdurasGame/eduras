@@ -3,9 +3,13 @@ package de.illonis.eduras.beta;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.concurrent.ExecutionException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.swing.JOptionPane;
 import javax.swing.SwingWorker;
+
+import de.illonis.edulog.EduLog;
 
 /**
  * Provides beta authentication.
@@ -14,6 +18,9 @@ import javax.swing.SwingWorker;
  * 
  */
 public class BetaAuthenticator {
+
+	private final static Logger L = EduLog.getLoggerFor(BetaAuthenticator.class
+			.getName());
 
 	private final AuthenticationForm frame;
 	private AuthenticationWorker worker;
@@ -81,7 +88,8 @@ public class BetaAuthenticator {
 				try {
 					result = worker.get();
 				} catch (InterruptedException | ExecutionException e) {
-					e.printStackTrace();
+					L.log(Level.WARNING, "Error getting beta authentication.",
+							e);
 					result = false;
 				}
 				onResult(result);

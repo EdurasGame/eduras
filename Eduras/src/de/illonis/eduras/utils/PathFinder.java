@@ -7,6 +7,10 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLDecoder;
 import java.security.CodeSource;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import de.illonis.edulog.EduLog;
 
 /**
  * Simplifies resource locating.
@@ -15,6 +19,9 @@ import java.security.CodeSource;
  * 
  */
 public class PathFinder {
+
+	private final static Logger L = EduLog.getLoggerFor(PathFinder.class
+			.getName());
 
 	/**
 	 * Retrieves the path where the programm jar is located.
@@ -58,9 +65,9 @@ public class PathFinder {
 			URI uri = new URL(PathFinder.getBaseDir(), fileName).toURI();
 			return uri;
 		} catch (MalformedURLException e) {
-			e.printStackTrace();
+			L.log(Level.SEVERE, "Malformed URL!", e);
 		} catch (URISyntaxException e) {
-			e.printStackTrace();
+			L.log(Level.SEVERE, "URISyntaxException", e);
 		}
 		return null;
 	}

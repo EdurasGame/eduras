@@ -367,7 +367,7 @@ public class ClientLogic implements GameLogicInterface {
 		try {
 			item = player.getInventory().getItemBySlot(itemEvent.getSlotNum());
 		} catch (ItemSlotIsEmptyException e) {
-			L.warning(e.getMessage());
+			L.info(e.getMessage());
 			return;
 		}
 		ItemEvent cooldownEvent = new ItemEvent(GameEventNumber.ITEM_CD_START,
@@ -556,7 +556,7 @@ public class ClientLogic implements GameLogicInterface {
 		try {
 			workerThread.join();
 		} catch (InterruptedException e) {
-			e.printStackTrace();
+			L.log(Level.SEVERE, "Got interrupted waiting for worker thread.", e);
 		}
 	}
 

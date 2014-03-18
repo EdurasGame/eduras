@@ -4,6 +4,8 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -15,8 +17,12 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
 import de.eduras.remote.RemoteException;
+import de.illonis.edulog.EduLog;
 
 public class RemoteConsoleClientFrame implements ActionListener {
+
+	private final static Logger L = EduLog
+			.getLoggerFor(RemoteConsoleClientFrame.class.getName());
 
 	private JFrame frame;
 	private JTextArea consoleOutput;
@@ -75,7 +81,7 @@ public class RemoteConsoleClientFrame implements ActionListener {
 		try {
 			client.onCommand(command);
 		} catch (RemoteException e) {
-			e.printStackTrace();
+			L.log(Level.WARNING, "Received remote exception.", e);
 		}
 	}
 

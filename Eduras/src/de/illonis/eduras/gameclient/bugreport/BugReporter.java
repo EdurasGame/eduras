@@ -13,10 +13,13 @@ import java.net.URI;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.concurrent.ExecutionException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.imageio.ImageIO;
 import javax.swing.SwingWorker;
 
+import de.illonis.edulog.EduLog;
 import de.illonis.eduras.utils.PathFinder;
 
 /**
@@ -26,6 +29,9 @@ import de.illonis.eduras.utils.PathFinder;
  * 
  */
 public class BugReporter extends SwingWorker<String, Void> {
+
+	private final static Logger L = EduLog.getLoggerFor(BugReporter.class
+			.getName());
 
 	private final static String LOG_BASE_URL = "http://illonis.dyndns.org/pstatus/bugupload.php";
 	private final BugReportFrame frame;
@@ -43,7 +49,7 @@ public class BugReporter extends SwingWorker<String, Void> {
 		try {
 			sendReport();
 		} catch (IOException e) {
-			e.printStackTrace();
+
 		}
 		return message;
 	}
@@ -67,7 +73,7 @@ public class BugReporter extends SwingWorker<String, Void> {
 				screenLength = screenFile.length();
 			} catch (IOException e) {
 				message = "Could not save image: " + e.getMessage();
-				e.printStackTrace();
+				L.log(Level.SEVERE, "Error saving the image.", e);
 				return;
 			}
 		}

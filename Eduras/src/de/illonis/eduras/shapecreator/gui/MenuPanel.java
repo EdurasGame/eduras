@@ -4,6 +4,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.io.File;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
@@ -15,6 +17,8 @@ import javax.swing.JSeparator;
 import javax.swing.KeyStroke;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
+import de.illonis.edulog.EduLog;
+import de.illonis.eduras.EdurasServer;
 import de.illonis.eduras.shapecreator.MenuActionReactor.Axis;
 import de.illonis.eduras.shapecreator.MenuTriggerer;
 import de.illonis.eduras.shapecreator.PanelInteractor.InteractMode;
@@ -28,6 +32,9 @@ import de.illonis.eduras.shapecreator.templates.TemplateNotFoundException;
  * 
  */
 public class MenuPanel extends JMenuBar implements ActionListener {
+
+	private final static Logger L = EduLog.getLoggerFor(EdurasServer.class
+			.getName());
 
 	private static final long serialVersionUID = 1L;
 	private final MenuTriggerer triggerer;
@@ -223,7 +230,7 @@ public class MenuPanel extends JMenuBar implements ActionListener {
 			} catch (TemplateNotFoundException e) {
 				JOptionPane.showMessageDialog(frame,
 						"Template not found: " + e.getMessage());
-				e.printStackTrace();
+				L.log(Level.SEVERE, "Cannot find template.", e);
 			}
 		}
 		selector.dispose();

@@ -233,7 +233,7 @@ public class ServerSearcher extends Thread {
 
 		@Override
 		public void onDisconnected() {
-			L.warning("Disconnected from MetaServer");
+			L.info("Disconnected from MetaServer");
 		}
 
 		@Override

@@ -343,7 +343,9 @@ public class ServerEventTriggerer implements EventTriggerer {
 		try {
 			spawnPosition = gameInfo.getSpawnPointFor(player);
 		} catch (GameModeNotSupportedByMapException e) {
-			e.printStackTrace();
+			L.log(Level.SEVERE,
+					"Cannot respawn because map doesn't support the game mode.",
+					e);
 		}
 
 		guaranteeSetPositionOfObject(player.getId(), spawnPosition);

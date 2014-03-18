@@ -29,7 +29,7 @@ public final class ShapeFactory {
 		try {
 			return ImageCache.getShapeData(shapeType);
 		} catch (CacheException e) {
-			L.log(Level.WARNING, "Error retreiving shape " + shapeType
+			L.log(Level.WARNING, "Error retrieving shape " + shapeType
 					+ " from cache, loading directly", e);
 			String shapeFile = CacheInfo.getShapeFileName(shapeType);
 			try {

@@ -8,6 +8,8 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionListener;
 import java.util.Random;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -25,6 +27,7 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.text.BadLocationException;
 
+import de.illonis.edulog.EduLog;
 import de.illonis.eduras.gameclient.gui.animation.LoginAnimation;
 import de.illonis.eduras.images.ImageFiler;
 import de.illonis.eduras.networking.ClientRole;
@@ -32,14 +35,17 @@ import de.illonis.eduras.networking.discover.ServerInfo;
 
 class LoginPanel extends JPanel {
 
+	private final static Logger L = EduLog.getLoggerFor(LoginPanel.class
+			.getName());
+
 	private static final long serialVersionUID = 1L;
 
-	private JButton connectButton;
-	private JTextField userInput, hostInput;
-	private NumericTextField portInput;
-	private JComboBox<ClientRole> roleSelect;
-	private JList<ServerInfo> serverList;
-	private LoginAnimation titlePanel;
+	private final JButton connectButton;
+	private final JTextField userInput, hostInput;
+	private final NumericTextField portInput;
+	private final JComboBox<ClientRole> roleSelect;
+	private final JList<ServerInfo> serverList;
+	private final LoginAnimation titlePanel;
 
 	LoginPanel(ListModel<ServerInfo> serverData, ActionListener listener) {
 		super(new BorderLayout());
@@ -177,7 +183,7 @@ class LoginPanel extends JPanel {
 						.getText(0, e.getDocument().getLength()).trim()
 						.length() > 2);
 			} catch (BadLocationException e1) {
-				e1.printStackTrace();
+				L.log(Level.SEVERE, "Error enabling connect button.", e1);
 			}
 		}
 

@@ -3,9 +3,12 @@ package de.illonis.eduras.shapecreator;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.swing.JOptionPane;
 
+import de.illonis.edulog.EduLog;
 import de.illonis.eduras.shapecreator.PanelInteractor.InteractMode;
 import de.illonis.eduras.shapecreator.ShapeCreator.FrameListener;
 import de.illonis.eduras.shapecreator.gui.ToolPanel;
@@ -18,6 +21,9 @@ import de.illonis.eduras.shapecreator.templates.TemplateNotFoundException;
  * 
  */
 public class MenuTriggerer implements MenuActionReactor {
+
+	private final static Logger L = EduLog.getLoggerFor(MenuTriggerer.class
+			.getName());
 
 	private final FrameListener frameListener;
 	private final PanelModifier panel;
@@ -79,14 +85,13 @@ public class MenuTriggerer implements MenuActionReactor {
 		} catch (FileCorruptException e) {
 			JOptionPane.showMessageDialog(null, "File contains invalid data:"
 					+ f.getAbsolutePath());
-			e.printStackTrace();
+			L.log(Level.WARNING, "File contains invalid data.", e);
 		} catch (IOException e) {
 			JOptionPane.showMessageDialog(
 					null,
 					"An error occured while reading file "
 							+ f.getAbsolutePath() + ": " + e.getMessage());
-
-			e.printStackTrace();
+			L.log(Level.SEVERE, "Error reading the file.", e);
 		}
 	}
 
@@ -97,7 +102,7 @@ public class MenuTriggerer implements MenuActionReactor {
 		} catch (IOException e) {
 			JOptionPane.showMessageDialog(null,
 					"Could not write to file: " + e.getMessage());
-			e.printStackTrace();
+			L.log(Level.SEVERE, "Error writing to file.", e);
 		}
 	}
 

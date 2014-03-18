@@ -1,7 +1,6 @@
 package de.illonis.eduras.serverconsole.remote;
 
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.net.InetAddress;
@@ -19,9 +18,12 @@ import de.illonis.edulog.EduLog;
 
 public class EdurasRemoteConsoleClient extends EncryptedRemoteClient {
 
-	private boolean authenticated;
+	private final static Logger L = EduLog
+			.getLoggerFor(EdurasRemoteConsoleClient.class.getName());
+
+	private final boolean authenticated;
 	private final BufferedReader console;
-	private RemoteConsoleClientFrame frame;
+	private final RemoteConsoleClientFrame frame;
 
 	public EdurasRemoteConsoleClient() {
 		authenticated = false;
@@ -67,7 +69,7 @@ public class EdurasRemoteConsoleClient extends EncryptedRemoteClient {
 		} catch (UnknownHostException | NumberFormatException e) {
 			JOptionPane.showMessageDialog(null, "Invalid address entered.",
 					"Error", JOptionPane.ERROR_MESSAGE);
-			e.printStackTrace();
+			L.log(Level.WARNING, "Invalid address entered.", e);
 		}
 
 	}
@@ -116,11 +118,10 @@ public class EdurasRemoteConsoleClient extends EncryptedRemoteClient {
 			try {
 				command = EncryptionService.oneWayEncrypt(command);
 			} catch (UnsupportedEncodingException e) {
-				e.printStackTrace();
+				L.log(Level.SEVERE, "Encryption not supported.", e);
 				return;
 			}
 		}
 		sendCommand(command);
 	}
-
 }

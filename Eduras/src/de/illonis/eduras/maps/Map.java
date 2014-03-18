@@ -8,7 +8,10 @@ import java.text.SimpleDateFormat;
 import java.util.Collection;
 import java.util.Date;
 import java.util.LinkedList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
+import de.illonis.edulog.EduLog;
 import de.illonis.eduras.ObjectFactory.ObjectType;
 import de.illonis.eduras.gamemodes.GameMode.GameModeNumber;
 import de.illonis.eduras.gameobjects.GameObject;
@@ -24,6 +27,8 @@ import de.illonis.eduras.math.Vector2D;
  * 
  */
 public abstract class Map {
+
+	private final static Logger L = EduLog.getLoggerFor(Map.class.getName());
 
 	/**
 	 * The date format used for date conversion.
@@ -137,7 +142,7 @@ public abstract class Map {
 		try {
 			setCreated(DATE_FORMAT.parse(created));
 		} catch (ParseException e) {
-			e.printStackTrace();
+			L.log(Level.SEVERE, "Cannot parse the created-date string.", e);
 		}
 	}
 

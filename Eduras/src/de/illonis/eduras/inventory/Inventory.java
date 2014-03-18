@@ -1,5 +1,6 @@
 package de.illonis.eduras.inventory;
 
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import de.illonis.edulog.EduLog;
@@ -269,7 +270,9 @@ public class Inventory {
 							break;
 						}
 					} catch (ItemSlotIsEmptyException e) {
-						e.printStackTrace();
+						L.log(Level.WARNING,
+								"Accessed empty item slot finding a free slot.",
+								e);
 					}
 				}
 
