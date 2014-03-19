@@ -10,6 +10,7 @@
 	<property name="base" value="../" />
 	<property name="src" value="src" />
 	<property name="libs" value="lib" />
+	<property name="ant" value="ant" />
 	<property name="maps" value="src/de/illonis/eduras/maps/data" />
 	<property name="build" value="bin" />
 	<property name="jars" value="${base}../dist/jars" />
@@ -42,7 +43,7 @@
 		</javac>
 	</target>
 
-	<target name="jar-client" depends="compile" description="Creates client-executable.">
+	<target name="jar-client" depends="compile, current-commit" description="Creates client-executable.">
 
 		<jar destfile="${jars}/eduras-client.jar" excludes="**/*.svg, **/unittests/**"
 			basedir="${base}${build}">
@@ -53,6 +54,7 @@
 				<include name="**/*.esh"></include>
 				<include name="**/*.properties"></include>
 			</fileset>
+			<fileset file="version"/>
 			<zipgroupfileset dir="${base}${libs}" includes="**/*.jar" />
 			<manifest>
 				<attribute name="Main-Class"
@@ -73,7 +75,7 @@
 		</jar>
 	</target>
 
-	<target name="jar-server" depends="compile" description="Creates server-executable.">
+	<target name="jar-server" depends="compile, current-commit" description="Creates server-executable.">
 		<jar destfile="${jars}/eduras-server.jar" basedir="${base}${build}"
 			excludes="**/unittests/**">
 			<fileset dir="${base}${src}">
@@ -81,6 +83,7 @@
 				<include name="**/*.esh"></include>
 				<include name="**/*.properties"></include>
 			</fileset>
+			<fileset file="version"/>
 			<zipgroupfileset dir="${base}${libs}" includes="**/*.jar" />
 			<manifest>
 				<attribute name="Main-Class" value="de.illonis.eduras.EdurasServer" />
@@ -121,6 +124,15 @@
 
 	<target name="jars" depends="clean,jar-server,jar-client, jar-remoteclient, jar-shapecreator, jar-metaserver"
 		description="Creates clean executables.">
+	</target>
+	
+	<target name="current-commit"
+		description="Determines the current commit and writes it to a file.">
+		<exec executable="git" outputproperty="git.revision">
+			<arg value="rev-parse" />
+			<arg value="HEAD" />
+		</exec>
+		<echo file="version">${git.revision}</echo>
 	</target>
 
 <!--	<target name="deploy" depends="jars" description="Creates launcher and installers.">
