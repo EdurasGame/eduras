@@ -18,7 +18,6 @@ import javax.swing.KeyStroke;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import de.illonis.edulog.EduLog;
-import de.illonis.eduras.EdurasServer;
 import de.illonis.eduras.shapecreator.MenuActionReactor.Axis;
 import de.illonis.eduras.shapecreator.MenuTriggerer;
 import de.illonis.eduras.shapecreator.PanelInteractor.InteractMode;
@@ -33,7 +32,7 @@ import de.illonis.eduras.shapecreator.templates.TemplateNotFoundException;
  */
 public class MenuPanel extends JMenuBar implements ActionListener {
 
-	private final static Logger L = EduLog.getLoggerFor(EdurasServer.class
+	private final static Logger L = EduLog.getLoggerFor(MenuPanel.class
 			.getName());
 
 	private static final long serialVersionUID = 1L;
