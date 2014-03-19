@@ -30,7 +30,7 @@ public class GameCamera extends Rectangle {
 		running = true;
 		cameraThread = new Thread(cameraMover);
 		cameraThread.setName("CameraMover");
-		cameraThread.start();
+	//	cameraThread.start();
 	}
 
 	void setScale(double scale) {
@@ -48,8 +48,8 @@ public class GameCamera extends Rectangle {
 
 	@Override
 	public void setLocation(int x, int y) {
-		targetX = x;
-		targetY = y;
+		this.x = x;
+		this.y = y;
 	}
 
 	/**
@@ -90,7 +90,7 @@ public class GameCamera extends Rectangle {
 			int negative = (diff >= 0) ? 1 : -1;
 			int abs = Math.abs(diff);
 			if (abs > 100)
-				return negative * 10;
+				return negative * (abs);
 			else if (abs > 50)
 				return negative * 7;
 			else
