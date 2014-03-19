@@ -36,34 +36,34 @@ public final class KeyBindings implements ResettableSetting {
 
 	@Override
 	public void loadDefaults() {
-		setDefaultBinding(KeyBinding.MOVE_LEFT, KeyEvent.VK_A);
-		setDefaultBinding(KeyBinding.MOVE_RIGHT, KeyEvent.VK_D);
-		setDefaultBinding(KeyBinding.MOVE_DOWN, KeyEvent.VK_S);
-		setDefaultBinding(KeyBinding.MOVE_UP, KeyEvent.VK_W);
-		setDefaultBinding(KeyBinding.ITEM_1, KeyEvent.VK_1);
-		setDefaultBinding(KeyBinding.ITEM_2, KeyEvent.VK_2);
-		setDefaultBinding(KeyBinding.ITEM_3, KeyEvent.VK_3);
-		setDefaultBinding(KeyBinding.ITEM_4, KeyEvent.VK_4);
-		setDefaultBinding(KeyBinding.ITEM_5, KeyEvent.VK_5);
-		setDefaultBinding(KeyBinding.ITEM_6, KeyEvent.VK_6);
-		setDefaultBinding(KeyBinding.CHAT, KeyEvent.VK_ENTER);
-		setDefaultBinding(KeyBinding.SWITCH_MODE, KeyEvent.VK_M);
-		setDefaultBinding(KeyBinding.EXIT_CLIENT, KeyEvent.VK_ESCAPE);
-		setDefaultBinding(KeyBinding.SHOW_STATS, KeyEvent.VK_TAB);
+		setKeyBinding(KeyBinding.MOVE_LEFT, KeyEvent.VK_A);
+		setKeyBinding(KeyBinding.MOVE_RIGHT, KeyEvent.VK_D);
+		setKeyBinding(KeyBinding.MOVE_DOWN, KeyEvent.VK_S);
+		setKeyBinding(KeyBinding.MOVE_UP, KeyEvent.VK_W);
+		setKeyBinding(KeyBinding.ITEM_1, KeyEvent.VK_1);
+		setKeyBinding(KeyBinding.ITEM_2, KeyEvent.VK_2);
+		setKeyBinding(KeyBinding.ITEM_3, KeyEvent.VK_3);
+		setKeyBinding(KeyBinding.ITEM_4, KeyEvent.VK_4);
+		setKeyBinding(KeyBinding.ITEM_5, KeyEvent.VK_5);
+		setKeyBinding(KeyBinding.ITEM_6, KeyEvent.VK_6);
+		setKeyBinding(KeyBinding.CHAT, KeyEvent.VK_ENTER);
+		setKeyBinding(KeyBinding.SWITCH_MODE, KeyEvent.VK_M);
+		setKeyBinding(KeyBinding.EXIT_CLIENT, KeyEvent.VK_ESCAPE);
+		setKeyBinding(KeyBinding.SHOW_STATS, KeyEvent.VK_TAB);
 	}
 
 	/**
-	 * Sets the default key binding for a specified binding.<br>
-	 * Use {@link KeyEvent#VK_UNDEFINED} to set default key to <i>None</i>. This
-	 * will overwrite any existing default key for this binding as each binding
+	 * Sets the key binding for a specified binding.<br>
+	 * Use {@link KeyEvent#VK_UNDEFINED} to set key to <i>None</i>. This
+	 * will overwrite any existing key for this binding as each binding
 	 * can only have one key assigned.
 	 * 
 	 * @param binding
 	 *            binding to set.
 	 * @param key
-	 *            new default key, {@link KeyEvent#VK_UNDEFINED} for none.
+	 *            new key, {@link KeyEvent#VK_UNDEFINED} for none.
 	 */
-	private void setDefaultBinding(KeyBinding binding, int key) {
+	private void setKeyBinding(KeyBinding binding, int key) {
 		keys.put(key, binding);
 	}
 
@@ -99,7 +99,7 @@ public final class KeyBindings implements ResettableSetting {
 			throw new KeyNotBoundException(key);
 		}
 	}
-
+	
 	/**
 	 * Checks whether given binding has a key assigned.
 	 * 
