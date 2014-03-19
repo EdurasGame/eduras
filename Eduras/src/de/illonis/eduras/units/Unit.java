@@ -1,6 +1,7 @@
 package de.illonis.eduras.units;
 
 import de.illonis.eduras.GameInformation;
+import de.illonis.eduras.Team;
 import de.illonis.eduras.gameobjects.MoveableGameObject;
 import de.illonis.eduras.gameobjects.TimingSource;
 
@@ -14,6 +15,7 @@ import de.illonis.eduras.gameobjects.TimingSource;
 public abstract class Unit extends MoveableGameObject {
 
 	private int health, maxHealth;
+	private Team team;
 
 	/**
 	 * Creates a new unit with given maximum health. It's health is equal to
@@ -34,6 +36,23 @@ public abstract class Unit extends MoveableGameObject {
 		if (maxHealth <= 0)
 			maxHealth = 1;
 		this.health = this.maxHealth = maxHealth;
+	}
+
+	/**
+	 * @return unit's team.
+	 */
+	public Team getTeam() {
+		return team;
+	}
+
+	/**
+	 * Assigns unit to given team.
+	 * 
+	 * @param team
+	 *            new team.
+	 */
+	public void setTeam(Team team) {
+		this.team = team;
 	}
 
 	/**

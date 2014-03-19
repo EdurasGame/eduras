@@ -5,7 +5,6 @@ import java.util.logging.Logger;
 import de.illonis.edulog.EduLog;
 import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.ObjectFactory.ObjectType;
-import de.illonis.eduras.Team;
 import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.gameobjects.TimingSource;
 import de.illonis.eduras.interfaces.MovementControlable;
@@ -54,7 +53,6 @@ public class PlayerMainFigure extends Unit implements MovementControlable {
 			.getName());
 
 	private String name;
-	private Team team;
 	private InteractMode currentMode;
 	private long lastModeSwitch;
 	private final Inventory inventory = new Inventory();
@@ -180,27 +178,6 @@ public class PlayerMainFigure extends Unit implements MovementControlable {
 	@Override
 	public void stopMoving() {
 		setSpeedVector(new Vector2D());
-	}
-
-	/**
-	 * @return player's team.
-	 * 
-	 * @author illonis
-	 */
-	public Team getTeam() {
-		return team;
-	}
-
-	/**
-	 * Assigns player to given team.
-	 * 
-	 * @param team
-	 *            new team.
-	 * 
-	 * @author illonis
-	 */
-	public void setTeam(Team team) {
-		this.team = team;
 	}
 
 	/**
