@@ -1,6 +1,7 @@
 package de.illonis.eduras.gameobjects;
 
 import java.awt.geom.Rectangle2D;
+import java.util.LinkedList;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.logging.Logger;
@@ -70,14 +71,20 @@ public abstract class TriggerArea extends GameObject implements
 		// System.out.println("[AREA] elapsed");
 		Rectangle2D.Double thisBounds = getBoundingBox();
 
+		LinkedList<GameObject> leavingObjects = new LinkedList<GameObject>();
 		for (GameObject obj : presentObjects) {
 			synchronized (obj) {
 				if (!obj.getBoundingBox().intersects(thisBounds)) {
-					presentObjects.remove(obj);
+					leavingObjects.add(obj);
 					onObjectLeft(obj);
 				}
 			}
 		}
+
+		for (GameObject obj : leavingObjects) {
+			presentObjects.remove(obj);
+		}
+
 		intervalElapsed(delta);
 	}
 
