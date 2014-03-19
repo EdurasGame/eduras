@@ -16,8 +16,6 @@ import de.illonis.eduras.units.PlayerMainFigure.InteractMode;
  */
 public class EgoModeMouseAdapter extends GuiMouseAdapter {
 
-	private int currentItemSelected = -1;
-
 	protected EgoModeMouseAdapter(GamePanelLogic logic,
 			GuiInternalEventListener reactor) {
 		super(logic, reactor);
@@ -26,10 +24,14 @@ public class EgoModeMouseAdapter extends GuiMouseAdapter {
 
 	private void egoModeClick(MouseEvent e) {
 		ClickState currentClickState = getPanelLogic().getClickState();
+		int currentItemSelected = getPanelLogic().getClientData()
+				.getCurrentItemSelected();
+
 		switch (currentClickState) {
 		case ITEM_SELECTED:
 			if (currentItemSelected != -1)
 				itemUsed(currentItemSelected, new Vector2D(e.getPoint()));
+			break;
 		case DEFAULT:
 			// TODO: Notify only elements that are really clicked.
 
@@ -57,11 +59,10 @@ public class EgoModeMouseAdapter extends GuiMouseAdapter {
 	@Override
 	public void itemClicked(int i) {
 		if (i >= 0 && i < Inventory.MAX_CAPACITY) {
-			currentItemSelected = i;
-			getPanelLogic().setClickState(ClickState.ITEM_SELECTED);
+			getPanelLogic().selectItem(i);
 		} else {
 			getPanelLogic().setClickState(ClickState.DEFAULT);
-			currentItemSelected = -1;
+			getPanelLogic().getClientData().setCurrentItemSelected(-1);
 		}
 	}
 

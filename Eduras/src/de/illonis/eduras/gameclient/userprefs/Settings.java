@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import java.util.HashMap;
 import java.util.Scanner;
 
 import de.illonis.eduras.gameclient.userprefs.KeyBindings.KeyBinding;
@@ -26,8 +27,9 @@ public class Settings implements ResettableSetting {
 
 	private final static String PREF_FILE_NAME = "userprefs.dat";
 
-	private KeyBindings keyBindings;
+	private final KeyBindings keyBindings;
 	private final File settingsFile;
+	private final HashMap<String, Boolean> booleanSettings;
 
 	/**
 	 * Creates new settings. This should be called only once each runtime and be
@@ -39,6 +41,7 @@ public class Settings implements ResettableSetting {
 	public Settings() {
 		settingsFile = new File(PathFinder.findFile(PREF_FILE_NAME));
 		keyBindings = new KeyBindings();
+		booleanSettings = new HashMap<String, Boolean>();
 		loadDefaults();
 	}
 
@@ -90,5 +93,28 @@ public class Settings implements ResettableSetting {
 	@Override
 	public void loadDefaults() {
 		keyBindings.loadDefaults();
+		loadBooleanDefaults();
+	}
+
+	private void loadBooleanDefaults() {
+		booleanSettings.put("chooseOnPress", true);
+	}
+
+	/**
+	 * Returns the boolean setting stored under the given name.
+	 * 
+	 * @param settingName
+	 *            The name of the setting.
+	 * @return The value of the setting stored under the given name.
+	 * @throws IllegalArgumentException
+	 *             Thrown if the setting name doesn't exist.
+	 */
+	public boolean getBooleanSetting(String settingName)
+			throws IllegalArgumentException {
+		if (booleanSettings.containsKey(settingName)) {
+			return booleanSettings.get(settingName);
+		}
+		throw new IllegalArgumentException("There is no setting named "
+				+ settingName);
 	}
 }

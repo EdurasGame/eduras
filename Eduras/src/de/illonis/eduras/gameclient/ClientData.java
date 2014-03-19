@@ -17,11 +17,13 @@ public final class ClientData {
 	private final LinkedList<Integer> selectedUnits;
 	private final LinkedList<Animation> animations;
 	private final VisionInformation visionInfo;
+	private int currentItemSelected;
 
 	/**
 	 * Creates a new storage.
 	 */
 	public ClientData() {
+		currentItemSelected = -1;
 		selectedUnits = new LinkedList<Integer>();
 		animations = new LinkedList<Animation>();
 		visionInfo = new VisionInformation();
@@ -71,6 +73,24 @@ public final class ClientData {
 	public void setSelectedUnit(int unitId) {
 		clearSelectedUnits();
 		selectedUnits.add(unitId);
+	}
+
+	/**
+	 * Returns the currently selected item's slot number.
+	 * 
+	 * @return slotnumber
+	 */
+	public int getCurrentItemSelected() {
+		return currentItemSelected;
+	}
+
+	/**
+	 * Sets the currently selected item's slot number.
+	 * 
+	 * @param currentItemSelected
+	 */
+	public void setCurrentItemSelected(int currentItemSelected) {
+		this.currentItemSelected = currentItemSelected;
 	}
 
 	/**

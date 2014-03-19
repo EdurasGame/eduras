@@ -46,12 +46,12 @@ public class GamePanelLogic extends ClientGuiStepLogic implements
 	private final CameraMouseListener cml;
 	private final GamePanel gui;
 	private final GuiInternalEventListener reactor;
-	private InputKeyHandler keyHandler;
+	private final InputKeyHandler keyHandler;
 	private final ResizeMonitor resizeMonitor;
 	private HudNotifier hudNotifier;
 	private final GuiMouseHandler mouseHandler;
 	private UserInterface userInterface;
-	private InformationProvider infoPro;
+	private final InformationProvider infoPro;
 	private ClickState currentClickState;
 	private final ClientData data;
 	private ChatClientImpl chat;
@@ -294,8 +294,8 @@ public class GamePanelLogic extends ClientGuiStepLogic implements
 	 *            the message.
 	 */
 	public void showNotification(String msg) {
-			userInterface.showNotification(msg);
-		}
+		userInterface.showNotification(msg);
+	}
 
 	/**
 	 * Assigns the chat to the logic.
@@ -358,5 +358,25 @@ public class GamePanelLogic extends ClientGuiStepLogic implements
 			e.consume();
 			cache.write(e);
 		}
+	}
+
+	/**
+	 * Returns the {@link ClientData}.
+	 * 
+	 * @return clientdata
+	 */
+	public ClientData getClientData() {
+		return data;
+	}
+
+	/**
+	 * Sets the item of the given slot number as selected.
+	 * 
+	 * @param i
+	 */
+	public void selectItem(int i) {
+		data.setCurrentItemSelected(i);
+		currentClickState = ClickState.ITEM_SELECTED;
+		// TODO: How to notify the ItemDisplay?
 	}
 }

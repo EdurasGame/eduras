@@ -29,10 +29,10 @@ public class InputKeyHandler extends KeyAdapter {
 			.getName());
 
 	private static final long KEY_INTERVAL = 20;
-	private LinkedList<UserInputListener> listeners;
-	private ListenerPromoter promoter;
+	private final LinkedList<UserInputListener> listeners;
+	private final ListenerPromoter promoter;
 
-	private GamePanelReactor reactor;
+	private final GamePanelReactor reactor;
 
 	/**
 	 * Used to support linux os. If a key is hold down on a linux system, it
@@ -41,7 +41,7 @@ public class InputKeyHandler extends KeyAdapter {
 	private final HashMap<Integer, Boolean> pressedButtons;
 	private long lastTimePressed;
 
-	private Settings settings;
+	private final Settings settings;
 	private final GamePanelLogic client;
 	private int currentKey = KeyEvent.VK_UNDEFINED;
 
@@ -152,22 +152,46 @@ public class InputKeyHandler extends KeyAdapter {
 			reactor.onStartMovement(Direction.RIGHT);
 			break;
 		case ITEM_1:
-			reactor.onItemUse(0, client.getCurrentMousePos());
+			if (settings.getBooleanSetting("chooseOnPress")) {
+				client.selectItem(0);
+			} else {
+				reactor.onItemUse(0, client.getCurrentMousePos());
+			}
 			break;
 		case ITEM_2:
-			reactor.onItemUse(1, client.getCurrentMousePos());
+			if (settings.getBooleanSetting("chooseOnPress")) {
+				client.selectItem(1);
+			} else {
+				reactor.onItemUse(1, client.getCurrentMousePos());
+			}
 			break;
 		case ITEM_3:
-			reactor.onItemUse(2, client.getCurrentMousePos());
+			if (settings.getBooleanSetting("chooseOnPress")) {
+				client.selectItem(2);
+			} else {
+				reactor.onItemUse(2, client.getCurrentMousePos());
+			}
 			break;
 		case ITEM_4:
-			reactor.onItemUse(3, client.getCurrentMousePos());
+			if (settings.getBooleanSetting("chooseOnPress")) {
+				client.selectItem(3);
+			} else {
+				reactor.onItemUse(3, client.getCurrentMousePos());
+			}
 			break;
 		case ITEM_5:
-			reactor.onItemUse(4, client.getCurrentMousePos());
+			if (settings.getBooleanSetting("chooseOnPress")) {
+				client.selectItem(4);
+			} else {
+				reactor.onItemUse(4, client.getCurrentMousePos());
+			}
 			break;
 		case ITEM_6:
-			reactor.onItemUse(5, client.getCurrentMousePos());
+			if (settings.getBooleanSetting("chooseOnPress")) {
+				client.selectItem(5);
+			} else {
+				reactor.onItemUse(5, client.getCurrentMousePos());
+			}
 			break;
 		case SHOW_STATS:
 			promoter.showStatWindow();
