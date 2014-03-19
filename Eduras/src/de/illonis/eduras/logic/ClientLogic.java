@@ -555,6 +555,8 @@ public class ClientLogic implements GameLogicInterface {
 		if (null == lgw)
 			return;
 		lgw.stop();
+		if (null == workerThread)
+			return;
 		try {
 			workerThread.join();
 		} catch (InterruptedException e) {

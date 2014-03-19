@@ -1,5 +1,6 @@
 package de.illonis.eduras.logicabstraction;
 
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.logging.Level;
@@ -22,6 +23,7 @@ import de.illonis.eduras.events.SetGameObjectAttributeEvent;
 import de.illonis.eduras.exceptions.MessageNotSupportedException;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
 import de.illonis.eduras.exceptions.WrongEventTypeException;
+import de.illonis.eduras.gameclient.userprefs.Settings;
 import de.illonis.eduras.gamemodes.GameMode;
 import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.interfaces.GameLogicInterface;
@@ -30,7 +32,6 @@ import de.illonis.eduras.logic.ClientLogic;
 import de.illonis.eduras.logic.EventTriggerer;
 import de.illonis.eduras.maps.Map;
 import de.illonis.eduras.math.Vector2D;
-import de.illonis.eduras.settings.Settings;
 import de.illonis.eduras.units.PlayerMainFigure;
 import de.illonis.eduras.units.PlayerMainFigure.InteractMode;
 import de.illonis.eduras.units.Unit;
@@ -305,6 +306,11 @@ public class EdurasInitializer {
 		ClientInterface client = networkManager.getClient();
 
 		settings = new Settings();
+		try {
+			settings.load();
+		} catch (FileNotFoundException e) {
+			L.log(Level.WARNING, "Could not load user preferences.", e);
+		}
 
 		eventSender = new EventSender(client, logic);
 
