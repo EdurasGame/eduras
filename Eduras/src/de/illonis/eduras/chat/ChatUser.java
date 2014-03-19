@@ -11,7 +11,7 @@ import java.util.LinkedList;
 public class ChatUser {
 
 	private final int id;
-	private LinkedList<ChatRoom> usersRooms;
+	private final LinkedList<ChatRoom> usersRooms;
 	private String nickName;
 
 	ChatUser(int id, String name) {
@@ -25,6 +25,11 @@ public class ChatUser {
 		return (other instanceof ChatUser) && ((ChatUser) other).getId() == id;
 	}
 
+	/**
+	 * Returns the {@link ChatUser}'s id.
+	 * 
+	 * @return The id.
+	 */
 	public int getId() {
 		return id;
 	}

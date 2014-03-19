@@ -421,6 +421,7 @@ public class Geometry {
 
 	public static double getDistanceToShape(Vector2D point, ObjectShape shape) {
 
+		// TODO: Implement this...
 		LinkedList<Line> lines = Geometry.getRelativeBorderLines(shape
 				.getBorderPoints());
 

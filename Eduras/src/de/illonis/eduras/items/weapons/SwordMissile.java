@@ -21,6 +21,8 @@ public class SwordMissile extends Missile {
 	 * 
 	 * @param game
 	 *            The game info context.
+	 * @param timingSource
+	 *            the timing source.
 	 * @param id
 	 *            The id the missile is assigned to.
 	 */

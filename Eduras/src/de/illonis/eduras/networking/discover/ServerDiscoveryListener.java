@@ -50,7 +50,7 @@ public class ServerDiscoveryListener extends Thread {
 	 */
 	public final static String ANSWER_MSG = "EDURAS_SERVER_ANSWER";
 
-	public static String answer = "";
+	private static String answer = "";
 
 	private final int CONNECT_ATTEMPTS = 10;
 
