@@ -11,16 +11,11 @@ import org.newdawn.slick.geom.Rectangle;
 public class GameCamera extends Rectangle {
 
 	private static final long serialVersionUID = 1L;
-	private float scale;
+
 
 	GameCamera() {
 		super(0, 0, 10, 10);
 		reset();
-		scale = 1;
-	}
-
-	void setScale(float scale) {
-		this.scale = scale;
 	}
 
 	/**
@@ -41,6 +36,6 @@ public class GameCamera extends Rectangle {
 	 *            y coordinate of new center.
 	 */
 	void centerAt(float newX, float newY) {
-		setLocation(newX - (width / scale) / 2, newY - (height / scale) / 2);
+		setLocation(newX - width / 2, newY - height / 2);
 	}
 }

@@ -50,14 +50,15 @@ public class GameRenderer implements TooltipHandler {
 	private final Logger L = EduLog.getLoggerFor(GameRenderer.class.getName());
 
 	private final GameCamera camera;
+	private final GameCamera viewPort;
 	private final UserInterface gui;
 	private final Map<Integer, GameObject> objs;
 	private ItemTooltip tooltip;
 	private float scale;
 	private boolean tooltipShown = false;
 	private final LinkedList<RenderedGuiObject> uiObjects;
-	private final static int DEFAULT_WIDTH = 484;
-	private final static int DEFAULT_HEIGHT = 462;
+	private final static int DEFAULT_WIDTH = 500;
+	private final static int DEFAULT_HEIGHT = 500;
 	private final InformationProvider info;
 	private final ClientData data;
 
@@ -77,6 +78,8 @@ public class GameRenderer implements TooltipHandler {
 	public GameRenderer(GameCamera camera, UserInterface gui,
 			InformationProvider info, ClientData data) {
 		this.uiObjects = gui.getUiObjects();
+		viewPort = new GameCamera();
+		viewPort.setBounds(0, 0, DEFAULT_WIDTH, DEFAULT_HEIGHT);
 		this.data = data;
 		this.camera = camera;
 		scale = 1;
@@ -123,19 +126,31 @@ public class GameRenderer implements TooltipHandler {
 	 * @param container
 	 *            the gamecontainer.
 	 * @param g
-	 *            the target graphics.
+	 *            the target graphics.s
 	 */
 	public void render(GameContainer container, Graphics g) {
 		int width = container.getWidth();
 		int height = container.getHeight();
+		float newScale = calculateScale(width, height);
+
 		clear(g, width, height);
-		camera.setSize(container.getWidth(), container.getHeight());
+
+		if (newScale != 1.0f) {
+			g.scale(newScale, newScale);
+		}
+
+		if (scale != newScale) {
+			viewPort.setSize(width, height);
+		}
+
+		scale = newScale;
 		adjustCamera();
-		g.translate(-camera.getX(), -camera.getY());
+		g.translate(-viewPort.getX() / scale, -viewPort.getY() / scale);
 		drawMap(g);
 		drawObjects(g);
 		drawAnimations(g);
-		g.translate(camera.getX(), camera.getY());
+		g.translate(viewPort.getX() / scale, viewPort.getY() / scale);
+		g.scale(1 / scale, 1 / scale);
 
 		drawGui(g);
 	}
@@ -150,7 +165,9 @@ public class GameRenderer implements TooltipHandler {
 	private void adjustCamera() {
 		try {
 			PlayerMainFigure p = getClientPlayer();
-			camera.centerAt(p.getXPosition(), p.getYPosition());
+			Vector2f c = p.getPositionVector();
+			camera.centerAt(c.x, c.y);
+			viewPort.centerAt(c.x * scale, c.y * scale);
 		} catch (ObjectNotFoundException e) {
 			// EduLog.passException(e);
 		}
