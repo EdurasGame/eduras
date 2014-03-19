@@ -194,19 +194,21 @@ public class ServerSearcher extends Thread {
 				try {
 					numberOfEdurasServers = (Integer) event.getArgument(0);
 
-					for (int i = 1; i < numberOfEdurasServers * 3; i = i + 3) {
+					for (int i = 1; i < numberOfEdurasServers * 4; i = i + 4) {
 						String nameOfEdurasServer = (String) event
 								.getArgument(i);
 						String ipOfEdurasServer = (String) event
 								.getArgument(i + 1);
 						int portOfEdurasServer = (Integer) event
 								.getArgument(i + 2);
+						String versionOfEdurasServer = (String) event
+								.getArgument(i + 3);
 
 						try {
 							ServerInfo serverInfo = new ServerInfo(
 									nameOfEdurasServer,
 									InetAddress.getByName(ipOfEdurasServer),
-									portOfEdurasServer);
+									portOfEdurasServer, versionOfEdurasServer);
 							listener.onServerFound(serverInfo);
 						} catch (UnknownHostException e) {
 							L.log(Level.WARNING,

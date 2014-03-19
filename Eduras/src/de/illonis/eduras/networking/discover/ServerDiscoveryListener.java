@@ -9,6 +9,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import de.illonis.edulog.EduLog;
+import de.illonis.eduras.EdurasVersion;
 import de.illonis.eduras.utils.Pair;
 
 /**
@@ -103,7 +104,7 @@ public class ServerDiscoveryListener extends Thread {
 		@Override
 		public void run() {
 			answer = "##" + ServerDiscoveryListener.ANSWER_MSG + "#" + name
-					+ "#" + port + "##";
+					+ "#" + port + "#" + EdurasVersion.getVersion() + "##";
 
 			// Keep a socket open to listen to all the UDP traffic that is
 			// destined for this port

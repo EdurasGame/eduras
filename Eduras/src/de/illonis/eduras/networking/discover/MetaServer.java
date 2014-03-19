@@ -168,6 +168,8 @@ public class MetaServer {
 							.getUrl().getHostAddress());
 					metaserverAnswer.putArgument(serverInfoForEdurasServer
 							.getPort());
+					metaserverAnswer.putArgument(serverInfoForEdurasServer
+							.getVersion());
 				}
 
 				try {
@@ -183,16 +185,17 @@ public class MetaServer {
 				break;
 			}
 			case REGISTER_REQUEST: {
-
 				int clientId;
 				String serverName = "";
 				String ipOfEdurasServer = "";
 				int portOfEdurasServer = 0;
+				String versionOfEdurasServer = "";
 				try {
 					clientId = (Integer) event.getArgument(0);
 					serverName = (String) event.getArgument(1);
 					ipOfEdurasServer = (String) event.getArgument(2);
 					portOfEdurasServer = (Integer) event.getArgument(3);
+					versionOfEdurasServer = (String) event.getArgument(4);
 				} catch (TooFewArgumentsExceptions e) {
 					L.log(Level.WARNING,
 							"Error when accessing arguments of REGISTER_REQUEST",
@@ -214,7 +217,7 @@ public class MetaServer {
 				try {
 					serverInfos.put(clientId, new ServerInfo(serverName,
 							InetAddress.getByName(ipOfEdurasServer),
-							portOfEdurasServer));
+							portOfEdurasServer, versionOfEdurasServer));
 					L.fine("Renewing lease of server with id #" + clientId);
 					serverLeases.put(clientId, System.currentTimeMillis());
 				} catch (UnknownHostException e) {

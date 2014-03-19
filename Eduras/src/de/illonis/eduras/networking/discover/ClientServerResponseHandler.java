@@ -21,7 +21,7 @@ public class ClientServerResponseHandler extends Thread {
 			.getLoggerFor(ClientServerResponseHandler.class.getName());
 
 	private final ServerFoundListener listener;
-	private DiscoveryChannel c;
+	private final DiscoveryChannel c;
 
 	/**
 	 * Creates a new handler.
@@ -83,7 +83,7 @@ public class ClientServerResponseHandler extends Thread {
 			try {
 				int port = Integer.parseInt(msgparts[2]);
 				ServerInfo info = new ServerInfo(msgparts[1],
-						fsocket.getAddress(), port);
+						fsocket.getAddress(), port, msgparts[3]);
 				listener.onServerFound(info);
 			} catch (NumberFormatException ne) {
 			}

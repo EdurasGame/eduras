@@ -5,9 +5,12 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.util.logging.Logger;
 
 import javax.swing.DefaultListModel;
 
+import de.illonis.edulog.EduLog;
+import de.illonis.eduras.EdurasVersion;
 import de.illonis.eduras.gameclient.LoginData;
 import de.illonis.eduras.gameclient.LoginPanelReactor;
 import de.illonis.eduras.gameclient.gui.ClientGuiStepLogic;
@@ -25,6 +28,9 @@ import de.illonis.eduras.networking.discover.ServerInfo;
  */
 public final class LoginPanelLogic extends ClientGuiStepLogic implements
 		ActionListener, ServerFoundListener {
+
+	private final static Logger L = EduLog.getLoggerFor(LoginPanelLogic.class
+			.getName());
 
 	private final LoginPanel gui;
 	private final LoginPanelReactor reactor;
@@ -90,15 +96,20 @@ public final class LoginPanelLogic extends ClientGuiStepLogic implements
 
 	@Override
 	public void onServerFound(ServerInfo info) {
-		if (!serverData.contains(info))
+		if (!serverData.contains(info) && versionsMatch(info.getVersion())) {
 			serverData.addElement(info);
+		}
+	}
+
+	private boolean versionsMatch(String version) {
+		return version.equalsIgnoreCase(EdurasVersion.getVersion());
 	}
 
 	@Override
 	public void onDiscoveryFailed() {
 		serverData.clear();
 		serverData.addElement(new ServerInfo("<Discovery failed>", InetAddress
-				.getLoopbackAddress(), 0));
+				.getLoopbackAddress(), 0, "none"));
 	}
 
 	@Override

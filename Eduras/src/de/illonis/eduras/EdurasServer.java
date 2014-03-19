@@ -279,12 +279,14 @@ class MetaServerRegisterer extends Thread {
 	private final String name;
 	private final String ip;
 	private final int port;
+	private final String version;
 	private final ClientInterface metaServerClient;
 
 	public MetaServerRegisterer(String name, String ip, int port) {
 		this.name = name;
 		this.ip = ip;
 		this.port = port;
+		this.version = EdurasVersion.getVersion();
 
 		metaServerClient = new Client();
 		metaServerClient
@@ -353,7 +355,7 @@ class MetaServerRegisterer extends Thread {
 		}
 
 		while (!interrupted()) {
-			registerAtMetaServer(name, ip, port);
+			registerAtMetaServer(name, ip, port, version);
 			try {
 				sleep(15000);
 			} catch (InterruptedException e) {
@@ -363,7 +365,7 @@ class MetaServerRegisterer extends Thread {
 	}
 
 	private void registerAtMetaServer(String nameOfServer, String ipOfServer,
-			int portOfServer) {
+			int portOfServer, String versionOfServer) {
 		L.info("Registering at meta server.");
 
 		Event registerEvent = new Event(MetaServer.REGISTER_REQUEST);
@@ -371,6 +373,7 @@ class MetaServerRegisterer extends Thread {
 		registerEvent.putArgument(nameOfServer);
 		registerEvent.putArgument(ipOfServer);
 		registerEvent.putArgument(portOfServer);
+		registerEvent.putArgument(versionOfServer);
 		try {
 			metaServerClient.sendEvent(registerEvent);
 		} catch (IllegalArgumentException | TooFewArgumentsExceptions e) {

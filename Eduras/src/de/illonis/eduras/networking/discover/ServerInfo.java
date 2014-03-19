@@ -14,6 +14,7 @@ public class ServerInfo {
 	private final int port;
 	private final String name;
 	private final InetAddress url;
+	private final String version;
 
 	/**
 	 * Creates a new serverinfo object.
@@ -24,11 +25,15 @@ public class ServerInfo {
 	 *            url of server.
 	 * @param port
 	 *            port of server.
+	 * @param version
+	 *            version the server is running on
 	 */
-	public ServerInfo(final String name, final InetAddress url, final int port) {
+	public ServerInfo(final String name, final InetAddress url, final int port,
+			final String version) {
 		this.name = name;
 		this.url = url;
 		this.port = port;
+		this.version = version;
 	}
 
 	/**
@@ -36,6 +41,15 @@ public class ServerInfo {
 	 */
 	public String getName() {
 		return name;
+	}
+
+	/**
+	 * Returns the server's version (hash of most recent commit).
+	 * 
+	 * @return version
+	 */
+	public String getVersion() {
+		return version;
 	}
 
 	/**
