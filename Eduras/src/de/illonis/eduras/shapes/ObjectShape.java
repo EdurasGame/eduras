@@ -3,6 +3,7 @@ package de.illonis.eduras.shapes;
 import java.awt.geom.Rectangle2D;
 import java.util.LinkedList;
 import java.util.Map;
+import java.util.TreeSet;
 
 import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.gameobjects.GameObject;
@@ -46,11 +47,10 @@ public abstract class ObjectShape {
 			GameObject thisObject, Vector2D target) {
 
 		Vector2D result = new Vector2D(target);
-		if (!thisObject.isCollidable())
-			return result;
 		Map<Integer, GameObject> gameObjects = game.getObjects();
 
 		GameObject collisionObject = null;
+		GameObject touchObject = null;
 
 		Vector2D positionVector = thisObject.getPositionVector();
 
@@ -62,6 +62,8 @@ public abstract class ObjectShape {
 
 		LinkedList<Line> lines = Geometry.getLinesBetweenShapePositions(
 				movementPoints, positionVector, target);
+		TreeSet<GameObject> touchedObjects = new TreeSet<GameObject>(
+				new GameObject.GameObjectIdComparator());
 
 		LinkedList<CollisionPoint> collisions = new LinkedList<CollisionPoint>();
 
@@ -69,7 +71,7 @@ public abstract class ObjectShape {
 		for (GameObject singleObject : gameObjects.values()) {
 
 			// skip comparing the object with itself
-			if (singleObject.equals(thisObject) || !singleObject.isCollidable())
+			if (singleObject.equals(thisObject))
 				continue;
 
 			CollisionPoint nearestCollision = CollisionPoint
@@ -80,10 +82,23 @@ public abstract class ObjectShape {
 				continue;
 			}
 
-			// remember the gameObject that had a collision
-			collisionObject = singleObject;
+			if (thisObject.isCollidable() && singleObject.isCollidable()) {
+				// remember the gameObject that had a collision
+				collisionObject = singleObject;
+			} else {
+				touchedObjects.add(singleObject);
+			}
 
 			collisions.add(nearestCollision);
+		}
+		
+		for (GameObject touchedObject : touchedObjects) {
+			touchedObject.onTouch(thisObject);
+			thisObject.onTouch(touchedObject);
+		}
+		
+		if (!thisObject.isCollidable()) {
+			return result;
 		}
 
 		// Figure out which collision is the nearest
@@ -108,6 +123,8 @@ public abstract class ObjectShape {
 			targetResult.add(resultingCollisionPoint.getDistanceVector());
 			result = targetResult;
 		}
+
+		
 
 		// calculate the new position after a collision
 

@@ -294,21 +294,40 @@ public abstract class GameObject implements Comparable<GameObject> {
 	 * @return bounding box.
 	 */
 	public Rectangle2D.Double getBoundingBox() {
-
+		// FIXME: Here is assumed that shape's center equals object's position.
 		Rectangle2D.Double r = getShape().getBoundingBox();
 		r.x = getDrawX() - getShape().getBoundingBox().getWidth() / 2;
 		r.y = getDrawY() - getShape().getBoundingBox().getHeight() / 2;
-
 		return r;
 	}
 
 	/**
-	 * This method is called when an object collides with this object.
+	 * This method is called when an object collides with this object.<br>
+	 * Note that this method is not called, when this object is not collidable.
+	 * Use {@link #onTouch(GameObject)} to receive non-colliding overlapping
+	 * events.
 	 * 
 	 * @param collidingObject
 	 *            The object colliding with this object.
+	 * 
+	 * @see #isCollidable()
+	 * @see #onTouch(GameObject)
 	 */
 	public abstract void onCollision(GameObject collidingObject);
+
+	/**
+	 * This method is called when an object touches this object.<br>
+	 * A <i>touch</i> occurs when two objects overlap and at least one of them
+	 * is non-collding.<br>
+	 * This means, whenever a non-collidable object would collide if it was
+	 * collidable, this method is called instead of
+	 * {@link #onCollision(GameObject)}.
+	 * 
+	 * @param touchingObject
+	 *            the object touching this object.
+	 */
+	public void onTouch(GameObject touchingObject) {
+	}
 
 	/**
 	 * Returns wether this object is collidable or not.
@@ -412,12 +431,7 @@ public abstract class GameObject implements Comparable<GameObject> {
 	 *         if there is no collision.
 	 */
 	public LinkedList<CollisionPoint> isIntersected(LinkedList<Line> lines) {
-
-		if (this.isCollidable()) {
-			return this.getShape().isIntersected(lines, this);
-		}
-
-		return new LinkedList<CollisionPoint>();
+		return this.getShape().isIntersected(lines, this);
 	}
 
 	/**
