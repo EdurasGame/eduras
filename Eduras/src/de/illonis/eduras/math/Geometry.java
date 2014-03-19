@@ -28,6 +28,15 @@ public class Geometry {
 		return Math.sqrt(BasicMath.square(a) + BasicMath.square(b));
 	}
 
+	/**
+	 * Tests whether two shapes collide.
+	 * 
+	 * @param a
+	 *            first shape
+	 * @param b
+	 *            second shape
+	 * @return true if given shapes collide.
+	 */
 	public static boolean shapeCollides(Shape a, Shape b) {
 		return a.intersects(b) || a.contains(b) || b.contains(a);
 	}

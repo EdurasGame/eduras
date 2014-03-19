@@ -4,12 +4,10 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Map;
-import java.util.logging.Logger;
 
 import org.newdawn.slick.geom.Shape;
 import org.newdawn.slick.geom.Vector2f;
 
-import de.illonis.edulog.EduLog;
 import de.illonis.eduras.ObjectFactory.ObjectType;
 import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.gameobjects.MoveableGameObject;
@@ -21,11 +19,6 @@ import de.illonis.eduras.gameobjects.MoveableGameObject;
  * 
  */
 public class SimpleGeometry implements ShapeGeometry {
-	private final static Logger L = EduLog.getLoggerFor(SimpleGeometry.class
-			.getName());
-
-	private final static float STEP = 0.1f;
-	private final static float TRESHOLD = 0.01f;
 
 	private final Map<Integer, GameObject> objects;
 
