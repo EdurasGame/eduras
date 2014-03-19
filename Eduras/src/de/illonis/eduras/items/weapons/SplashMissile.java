@@ -22,6 +22,8 @@ public class SplashMissile extends Missile {
 	 * 
 	 * @param game
 	 *            game infos.
+	 * @param timingSource
+	 *            the timing source.
 	 * @param id
 	 *            object id.
 	 */

@@ -17,6 +17,8 @@ public class SniperMissile extends Missile {
 	 * 
 	 * @param game
 	 *            game context
+	 * @param timingSource
+	 *            the timing source.
 	 * @param id
 	 *            id of the new missile
 	 */
