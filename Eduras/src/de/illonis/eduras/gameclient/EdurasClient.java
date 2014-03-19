@@ -65,7 +65,7 @@ public class EdurasClient {
 	 *            client is bound.
 	 */
 	public static void main(String[] args) {
-		SysOutCatcher.startCatching();
+		
 		SimpleDateFormat simpleDate = new SimpleDateFormat("y-M-d-H-m-s");
 
 		try {
@@ -128,6 +128,7 @@ public class EdurasClient {
 		EduLog.setBasicLogLimit(logLimit);
 		EduLog.setConsoleLogLimit(logLimit);
 		EduLog.setFileLogLimit(logLimit);
+		SysOutCatcher.startCatching();
 
 		// Note that this is very bad coded due to testing ;)
 		// buildChooserFrame();

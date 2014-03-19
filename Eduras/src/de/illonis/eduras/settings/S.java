@@ -442,6 +442,8 @@ public final class S {
 	 * Tells whether vision is disabled or not.
 	 */
 	public static boolean vision_disabled = true;
+	
+	public static boolean exit_on_sysout = true;
 
 	public static long neutralbase_resource_interval = 1000;
 
