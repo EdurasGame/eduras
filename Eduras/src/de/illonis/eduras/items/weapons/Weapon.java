@@ -226,10 +226,10 @@ public abstract class Weapon extends Item implements Lootable, Usable {
 		// (jme) Spawn position will be calculated in a simplified way. We use
 		// diagonal's length of shooting player to move missile away from him.
 
-		Vector2df target = info.getTarget();
+		Vector2f target = info.getTarget();
 		GameObject triggeringObject = info.getTriggeringObject();
 
-		Vector2df position = triggeringObject.getPositionVector();
+		Vector2df position = new Vector2df(triggeringObject.getShape().getCenter());
 
 		Vector2df speedVector = new Vector2df(target);
 		speedVector.sub(position);

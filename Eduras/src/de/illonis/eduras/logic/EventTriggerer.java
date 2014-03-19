@@ -3,6 +3,8 @@ package de.illonis.eduras.logic;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import org.newdawn.slick.geom.Vector2f;
+
 import de.illonis.eduras.ObjectFactory.ObjectType;
 import de.illonis.eduras.Statistic.StatsProperty;
 import de.illonis.eduras.Team;
@@ -81,7 +83,8 @@ public interface EventTriggerer {
 	 * @param owner
 	 *            owner id of new object.
 	 * @return the id of the created object.
-	 * @see #createDynamicPolygonObjectAt(ObjectType, Vector2df[], Vector2df, int)
+	 * @see #createDynamicPolygonObjectAt(ObjectType, Vector2df[], Vector2df,
+	 *      int)
 	 */
 	public int createObjectAt(ObjectType object, Vector2df position, int owner);
 
@@ -92,7 +95,8 @@ public interface EventTriggerer {
 	 *            object id of polygon.
 	 * @param polygonVector2dfs
 	 *            new vertices of polygon.
-	 * @see #createDynamicPolygonObjectAt(ObjectType, Vector2df[], Vector2df, int)
+	 * @see #createDynamicPolygonObjectAt(ObjectType, Vector2df[], Vector2df,
+	 *      int)
 	 * 
 	 * @author illonis
 	 */
@@ -267,7 +271,7 @@ public interface EventTriggerer {
 	 * @throws UnitNotControllableException
 	 *             if that unit is not controllable regarding motion.
 	 */
-	void sendUnit(int objectId, Vector2df target)
+	void sendUnit(int objectId, Vector2f target)
 			throws ObjectNotFoundException, UnitNotControllableException;
 
 	/**

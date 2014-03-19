@@ -1,15 +1,14 @@
 package de.illonis.eduras.gameclient.gui.game;
 
 import java.awt.Component;
-import java.awt.MouseInfo;
 import java.awt.Point;
-import java.awt.PointerInfo;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.newdawn.slick.SlickException;
+import org.newdawn.slick.geom.Vector2f;
 
 import de.illonis.edulog.EduLog;
 import de.illonis.eduras.chat.ChatClientImpl;
@@ -29,7 +28,6 @@ import de.illonis.eduras.gameclient.gui.hud.UserInterface;
 import de.illonis.eduras.logic.LogicGameWorker;
 import de.illonis.eduras.logicabstraction.EdurasInitializer;
 import de.illonis.eduras.logicabstraction.InformationProvider;
-import de.illonis.eduras.math.Vector2df;
 
 /**
  * A panel that represents the gameworld. All world objects and user interface
@@ -235,11 +233,13 @@ public class GamePanelLogic extends ClientGuiStepLogic implements
 	 *            point to convert.
 	 * @return game-coordinate point.
 	 */
-	public Vector2df computeGuiPointToGameCoordinate(Vector2df v) {
+	public Vector2f computeGuiPointToGameCoordinate(Vector2f v) {
 		float scale = getCurrentScale();
-		Vector2df vec = new Vector2df(v);
-		vec.x += camera.getX() * scale;
-		vec.y += camera.getY() * scale;
+		Vector2f vec = new Vector2f(v);
+		vec.x += renderer.getViewport().getX();
+		vec.y += renderer.getViewport().getY();
+		//vec.x /= gui.getContainer().getWidth();
+		//vec.y /= gui.getContainer().getHeight();
 		vec.scale(1 / scale);
 		return vec;
 	}
@@ -249,12 +249,8 @@ public class GamePanelLogic extends ClientGuiStepLogic implements
 	 * 
 	 * @return mouse position computed to ingame point.
 	 */
-	public Vector2df getCurrentMousePos() {
-		PointerInfo pi = MouseInfo.getPointerInfo();
-		Point mp = pi.getLocation();
-		Point pos = getLocationOnScreen();
-		Vector2df p = new Vector2df(mp.x - pos.x, mp.y - pos.y);
-		return computeGuiPointToGameCoordinate(p);
+	public Vector2f getCurrentMousePos() {
+		return computeGuiPointToGameCoordinate(gui.getMousePos());
 	}
 
 	private Point getLocationOnScreen() {

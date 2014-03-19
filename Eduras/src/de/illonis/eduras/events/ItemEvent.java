@@ -1,7 +1,8 @@
 package de.illonis.eduras.events;
 
+import org.newdawn.slick.geom.Vector2f;
+
 import de.eduras.eventingserver.exceptions.TooFewArgumentsExceptions;
-import de.illonis.eduras.math.Vector2df;
 
 /**
  * Used as a wrapper for item events like use_item_pressed and _released. An
@@ -16,7 +17,7 @@ import de.illonis.eduras.math.Vector2df;
 public class ItemEvent extends OwnerGameEvent {
 
 	private int slotNum = -1;
-	private Vector2df target;
+	private Vector2f target;
 
 	/**
 	 * Create a new ItemEvent of the given type.
@@ -28,7 +29,7 @@ public class ItemEvent extends OwnerGameEvent {
 	 */
 	public ItemEvent(GameEventNumber eventType, int ownerId) {
 		super(eventType, ownerId);
-		target = new Vector2df();
+		target = new Vector2f();
 	}
 
 	/**
@@ -73,7 +74,7 @@ public class ItemEvent extends OwnerGameEvent {
 	 * @param target
 	 *            The target position.
 	 */
-	public void setTarget(Vector2df target) {
+	public void setTarget(Vector2f target) {
 		this.target = target;
 	}
 
@@ -82,7 +83,7 @@ public class ItemEvent extends OwnerGameEvent {
 	 * 
 	 * @return The target.
 	 */
-	public Vector2df getTarget() {
+	public Vector2f getTarget() {
 		return target;
 	}
 

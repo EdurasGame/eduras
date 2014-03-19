@@ -9,7 +9,6 @@ import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.exceptions.MapBorderReachedException;
 import de.illonis.eduras.interfaces.Moveable;
 import de.illonis.eduras.math.ShapeGeometry;
-import de.illonis.eduras.math.Vector2df;
 
 /**
  * A moveable gameobject. It differs from {@link GameObject} because it has a
@@ -100,7 +99,7 @@ public abstract class MoveableGameObject extends GameObject implements Moveable 
 	 * @param speedVector
 	 *            new speed vector
 	 */
-	public void setSpeedVector(Vector2df speedVector) {
+	public void setSpeedVector(Vector2f speedVector) {
 		currentSpeedX = speedVector.x;
 		currentSpeedY = speedVector.y;
 	}

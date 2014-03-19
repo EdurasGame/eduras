@@ -2,6 +2,8 @@ package de.illonis.eduras.ai.movement;
 
 import java.util.Random;
 
+import org.newdawn.slick.geom.Vector2f;
+
 import de.illonis.eduras.math.Vector2df;
 
 /**
@@ -20,11 +22,11 @@ public final class RandomPathFinder implements PathFinder {
 	private long lastChange = 0;
 	private int lastIndex = 0;
 
-	private Vector2df[] waypoints;
+	private Vector2f[] waypoints;
 	private final static Random r = new Random();
 
 	RandomPathFinder() {
-		waypoints = new Vector2df[10];
+		waypoints = new Vector2f[10];
 		for (int i = 0; i < waypoints.length; i++) {
 			int xneg = (r.nextBoolean()) ? 1 : -1;
 			int yneg = (r.nextBoolean()) ? 1 : -1;
@@ -36,20 +38,20 @@ public final class RandomPathFinder implements PathFinder {
 	}
 
 	@Override
-	public Vector2df[] getWayPoints() {
+	public Vector2f[] getWayPoints() {
 		return waypoints;
 	}
 
 	@Override
-	public void setLocation(Vector2df location) {
+	public void setLocation(Vector2f location) {
 	}
 
 	@Override
-	public void setTarget(Vector2df target) {
+	public void setTarget(Vector2f target) {
 	}
 
 	@Override
-	public Vector2df getMovingDirection() {
+	public Vector2f getMovingDirection() {
 		if (System.currentTimeMillis() - lastChange > 3000) {
 			lastChange = System.currentTimeMillis();
 			lastIndex = r.nextInt(10);

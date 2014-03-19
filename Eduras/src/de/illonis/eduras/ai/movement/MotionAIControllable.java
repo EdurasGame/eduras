@@ -1,7 +1,8 @@
 package de.illonis.eduras.ai.movement;
 
+import org.newdawn.slick.geom.Vector2f;
+
 import de.illonis.eduras.ai.AIControllable;
-import de.illonis.eduras.math.Vector2df;
 
 /**
  * A motion controllable entity.
@@ -18,7 +19,7 @@ public interface MotionAIControllable extends AIControllable {
 	 * @param direction
 	 *            target direction.
 	 */
-	void startMovingTo(Vector2df direction);
+	void startMovingTo(Vector2f direction);
 
 	/**
 	 * Stops moving this entity.
@@ -28,7 +29,7 @@ public interface MotionAIControllable extends AIControllable {
 	/**
 	 * @return current position of this entity.
 	 */
-	Vector2df getPosition();
+	Vector2f getPosition();
 
 	/**
 	 * @return the motion type of this entity.

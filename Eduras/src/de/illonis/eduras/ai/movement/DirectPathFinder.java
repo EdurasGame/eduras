@@ -1,5 +1,7 @@
 package de.illonis.eduras.ai.movement;
 
+import org.newdawn.slick.geom.Vector2f;
+
 import de.illonis.eduras.math.Vector2df;
 import de.illonis.eduras.settings.S;
 
@@ -12,10 +14,10 @@ import de.illonis.eduras.settings.S;
  */
 public class DirectPathFinder implements PathFinder {
 
-	private Vector2df target = new Vector2df(0, 0), location = new Vector2df(0,
-			0);
-	private Vector2df[] waypoints;
-	private Vector2df direction;
+	private Vector2f target = new Vector2f(0, 0),
+			location = new Vector2f(0, 0);
+	private Vector2f[] waypoints;
+	private Vector2f direction;
 
 	private void recalculateDirection() {
 		direction = new Vector2df(target);
@@ -23,14 +25,14 @@ public class DirectPathFinder implements PathFinder {
 	}
 
 	@Override
-	public void setTarget(Vector2df target) {
+	public void setTarget(Vector2f target) {
 		this.target = target;
-		waypoints = new Vector2df[] { target };
+		waypoints = new Vector2f[] { target };
 		recalculateDirection();
 	}
 
 	@Override
-	public void setLocation(Vector2df location) {
+	public void setLocation(Vector2f location) {
 		this.location = location;
 		recalculateDirection();
 	}
@@ -41,12 +43,12 @@ public class DirectPathFinder implements PathFinder {
 	}
 
 	@Override
-	public Vector2df[] getWayPoints() {
+	public Vector2f[] getWayPoints() {
 		return waypoints;
 	}
 
 	@Override
-	public Vector2df getMovingDirection() {
+	public Vector2f getMovingDirection() {
 		return direction;
 	}
 

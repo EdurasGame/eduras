@@ -5,6 +5,8 @@ import java.util.TimerTask;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.newdawn.slick.geom.Vector2f;
+
 import de.illonis.edulog.EduLog;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
 import de.illonis.eduras.gameclient.GuiInternalEventListener;
@@ -97,7 +99,7 @@ public class EgoModeMouseAdapter extends GuiMouseAdapter {
 	 *            tells if the given target is already a gamecoordinate
 	 */
 
-	void itemUsed(int i, Vector2df target, boolean isGameCoordinate) {
+	void itemUsed(int i, Vector2f target, boolean isGameCoordinate) {
 		if (!isGameCoordinate) {
 			getListener().onItemUse(i,
 					getPanelLogic().computeGuiPointToGameCoordinate(target));
@@ -124,7 +126,7 @@ public class EgoModeMouseAdapter extends GuiMouseAdapter {
 	private void egoModeMove(int oldx, int oldy, int newx, int newy) {
 		getListener().onViewingDirectionChanged(
 				getPanelLogic().computeGuiPointToGameCoordinate(
-						new Vector2df(newx, newy)));
+						new Vector2f(newx, newy)));
 	}
 
 	@Override

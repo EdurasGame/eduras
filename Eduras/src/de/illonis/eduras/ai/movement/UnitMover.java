@@ -1,6 +1,7 @@
 package de.illonis.eduras.ai.movement;
 
-import de.illonis.eduras.math.Vector2df;
+import org.newdawn.slick.geom.Vector2f;
+
 import de.illonis.eduras.settings.S;
 
 /**
@@ -22,7 +23,7 @@ public final class UnitMover {
 		this.motionUnit = motionTarget;
 	}
 
-	void startMoving(Vector2df target) {
+	void startMoving(Vector2f target) {
 		pathFinder.setTarget(target);
 		if (!isActive()) {
 			currentMotion = new MoverThread();

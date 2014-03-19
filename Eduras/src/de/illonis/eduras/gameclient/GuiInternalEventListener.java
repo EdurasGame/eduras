@@ -7,6 +7,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.newdawn.slick.geom.Rectangle;
+import org.newdawn.slick.geom.Vector2f;
 
 import de.illonis.edulog.EduLog;
 import de.illonis.eduras.events.GameEvent.GameEventNumber;
@@ -71,7 +72,7 @@ public class GuiInternalEventListener implements LoginPanelReactor,
 	}
 
 	@Override
-	public void onItemUse(int slotId, Vector2df target) {
+	public void onItemUse(int slotId, Vector2f target) {
 		ItemEvent event = new ItemEvent(GameEventNumber.ITEM_USE,
 				client.getOwnerID(), slotId);
 		event.setTarget(target);
@@ -187,13 +188,12 @@ public class GuiInternalEventListener implements LoginPanelReactor,
 	}
 
 	@Override
-	public void selectOrDeselectAt(Vector2df point) {
+	public void selectOrDeselectAt(Vector2f point) {
 		for (Entry<Integer, GameObject> obj : infoPro.getGameObjects()
 				.entrySet()) {
 			GameObject o = obj.getValue();
-			Vector2df f = new Vector2df((float) point.getX(),
-					(float) point.getY());
-			if (o.isUnit() && o.isVisible() && o.getShape().contains(f.x, f.y)) {
+			if (o.isUnit() && o.isVisible()
+					&& o.getShape().contains(point.x, point.y)) {
 				client.getData().setSelectedUnit(obj.getKey());
 				return;
 			}
@@ -202,7 +202,7 @@ public class GuiInternalEventListener implements LoginPanelReactor,
 	}
 
 	@Override
-	public void sendSelectedUnits(Vector2df target) {
+	public void sendSelectedUnits(Vector2f target) {
 		LinkedList<Integer> units = new LinkedList<Integer>(client.getData()
 				.getSelectedUnits());
 		if (units.isEmpty())
@@ -216,7 +216,7 @@ public class GuiInternalEventListener implements LoginPanelReactor,
 		}
 	}
 
-	public void onViewingDirectionChanged(Vector2df viewingPoint) {
+	public void onViewingDirectionChanged(Vector2f viewingPoint) {
 		PlayerMainFigure player;
 		try {
 			player = infoPro.getPlayer();
@@ -224,8 +224,10 @@ public class GuiInternalEventListener implements LoginPanelReactor,
 			L.log(Level.SEVERE, "Cannot find player main figure :(", e);
 			return;
 		}
-		viewingPoint.sub(player.getPositionVector());
-		float angle = viewingPoint.getAngleToXAxis();
+		Vector2f center = new Vector2f(player.getShape().getCenter()).sub(player.getPositionVector());
+		Vector2df vPoint = new Vector2df(viewingPoint.sub(player
+				.getPositionVector()).sub(center));
+		float angle = vPoint.getAngleToXAxis();
 		player.setRotation(angle);
 	}
 }

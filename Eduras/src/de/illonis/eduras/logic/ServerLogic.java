@@ -5,6 +5,8 @@ import java.util.LinkedList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.newdawn.slick.geom.Vector2f;
+
 import de.illonis.edulog.EduLog;
 import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.ObjectFactory;
@@ -30,7 +32,6 @@ import de.illonis.eduras.items.Item;
 import de.illonis.eduras.items.ItemUseInformation;
 import de.illonis.eduras.items.Usable;
 import de.illonis.eduras.locale.Localization;
-import de.illonis.eduras.math.Vector2df;
 import de.illonis.eduras.units.PlayerMainFigure;
 
 /**
@@ -107,7 +108,7 @@ public class ServerLogic implements GameLogicInterface {
 			break;
 		case SEND_UNITS:
 			SendUnitsEvent sendEvent = (SendUnitsEvent) event;
-			Vector2df target = sendEvent.getTarget();
+			Vector2f target = sendEvent.getTarget();
 			LinkedList<Integer> units = sendEvent.getUnits();
 			for (int i = 0; i < units.size(); i++) {
 				try {

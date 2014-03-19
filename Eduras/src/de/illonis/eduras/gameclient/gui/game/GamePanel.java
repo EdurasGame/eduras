@@ -4,6 +4,7 @@ import java.awt.Color;
 
 import org.newdawn.slick.CanvasGameContainer;
 import org.newdawn.slick.SlickException;
+import org.newdawn.slick.geom.Vector2f;
 
 import de.illonis.eduras.gameclient.SlickGame;
 import de.illonis.eduras.logic.LogicGameWorker;
@@ -40,6 +41,11 @@ public class GamePanel extends CanvasGameContainer {
 			throws SlickException {
 		((SlickGame) game).setWorker(worker, renderer);
 		super.start();
+	}
+
+	public Vector2f getMousePos() {
+		return new Vector2f(getContainer().getInput().getMouseX(),
+				getContainer().getInput().getMouseY());
 	}
 
 	/**

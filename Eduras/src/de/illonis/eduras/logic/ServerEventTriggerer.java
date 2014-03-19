@@ -143,7 +143,7 @@ public class ServerEventTriggerer implements EventTriggerer {
 	}
 
 	@Override
-	public void sendUnit(int objectId, Vector2df target)
+	public void sendUnit(int objectId, Vector2f target)
 			throws ObjectNotFoundException, UnitNotControllableException {
 		GameObject gameObject = gameInfo.findObjectById(objectId);
 		if (gameObject == null) {

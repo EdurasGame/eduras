@@ -3,8 +3,9 @@
  */
 package de.illonis.eduras.items;
 
+import org.newdawn.slick.geom.Vector2f;
+
 import de.illonis.eduras.gameobjects.GameObject;
-import de.illonis.eduras.math.Vector2df;
 
 /**
  * A wrapper class for information needed to process an item use.
@@ -15,7 +16,7 @@ import de.illonis.eduras.math.Vector2df;
 
 public class ItemUseInformation {
 	private final GameObject triggeringObject;
-	private final Vector2df target;
+	private final Vector2f target;
 
 	/**
 	 * Create new ItemUseInformation containing the given information.
@@ -25,7 +26,7 @@ public class ItemUseInformation {
 	 * @param target
 	 *            The target where to use the item.
 	 */
-	public ItemUseInformation(GameObject triggeringObject, Vector2df target) {
+	public ItemUseInformation(GameObject triggeringObject, Vector2f target) {
 		this.triggeringObject = triggeringObject;
 		this.target = target;
 	}
@@ -44,7 +45,7 @@ public class ItemUseInformation {
 	 * 
 	 * @return The target.
 	 */
-	public Vector2df getTarget() {
+	public Vector2f getTarget() {
 		return target;
 	}
 

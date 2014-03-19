@@ -1,5 +1,7 @@
 package de.illonis.eduras.gameobjects;
 
+import org.newdawn.slick.geom.Vector2f;
+
 import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.ai.UnitAI;
 import de.illonis.eduras.ai.movement.MotionAIControllable;
@@ -43,9 +45,9 @@ public class Bird extends MoveableGameObject implements MotionAIControllable {
 	public UnitAI getAI() {
 		return ai;
 	}
-	
+
 	@Override
-	public void startMovingTo(Vector2df direction) {
+	public void startMovingTo(Vector2f direction) {
 		setSpeedVector(direction);
 	}
 
@@ -55,7 +57,7 @@ public class Bird extends MoveableGameObject implements MotionAIControllable {
 	}
 
 	@Override
-	public Vector2df getPosition() {
+	public Vector2f getPosition() {
 		return getPositionVector();
 	}
 

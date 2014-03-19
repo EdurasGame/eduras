@@ -89,6 +89,10 @@ public class GameRenderer implements TooltipHandler {
 		RendererTooltipHandler h = new RendererTooltipHandler(this);
 		gui.setTooltipHandler(h);
 	}
+	
+	public Rectangle getViewport() {
+		return viewPort;
+	}
 
 	/**
 	 * Creates a screenshot.
@@ -126,7 +130,7 @@ public class GameRenderer implements TooltipHandler {
 	 * @param container
 	 *            the gamecontainer.
 	 * @param g
-	 *            the target graphics.s
+	 *            the target graphics.
 	 */
 	public void render(GameContainer container, Graphics g) {
 		int width = container.getWidth();

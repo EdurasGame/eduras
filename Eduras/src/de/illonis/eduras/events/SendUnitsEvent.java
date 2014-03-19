@@ -2,8 +2,9 @@ package de.illonis.eduras.events;
 
 import java.util.LinkedList;
 
+import org.newdawn.slick.geom.Vector2f;
+
 import de.eduras.eventingserver.exceptions.TooFewArgumentsExceptions;
-import de.illonis.eduras.math.Vector2df;
 
 /**
  * Event that describes a unit sending command.
@@ -12,7 +13,7 @@ import de.illonis.eduras.math.Vector2df;
  * 
  */
 public class SendUnitsEvent extends OwnerGameEvent {
-	private final Vector2df target;
+	private final Vector2f target;
 	private final LinkedList<Integer> units;
 
 	/**
@@ -23,17 +24,17 @@ public class SendUnitsEvent extends OwnerGameEvent {
 	 * @param units
 	 *            one or multiple unit ids.
 	 */
-	public SendUnitsEvent(int playerId, Vector2df target,
+	public SendUnitsEvent(int playerId, Vector2f target,
 			LinkedList<Integer> units) {
 		super(GameEventNumber.SEND_UNITS, playerId);
-		this.target = new Vector2df(target);
+		this.target = new Vector2f(target);
 		this.units = new LinkedList<Integer>(units);
 	}
 
 	/**
 	 * @return the target location.
 	 */
-	public Vector2df getTarget() {
+	public Vector2f getTarget() {
 		return target;
 	}
 

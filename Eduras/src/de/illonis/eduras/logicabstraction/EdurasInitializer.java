@@ -6,6 +6,8 @@ import java.util.Collection;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.newdawn.slick.geom.Vector2f;
+
 import de.eduras.eventingserver.ClientInterface;
 import de.illonis.edulog.EduLog;
 import de.illonis.eduras.ClientGameMode;
@@ -91,7 +93,8 @@ public class EdurasInitializer {
 			}
 
 			@Override
-			public void setPolygonData(int objectId, Vector2df[] polygonVector2dfs) {
+			public void setPolygonData(int objectId,
+					Vector2df[] polygonVector2dfs) {
 				// TODO Auto-generated method stub
 
 			}
@@ -195,7 +198,7 @@ public class EdurasInitializer {
 			}
 
 			@Override
-			public void sendUnit(int objectId, Vector2df target)
+			public void sendUnit(int objectId, Vector2f target)
 					throws ObjectNotFoundException,
 					UnitNotControllableException {
 				// TODO Auto-generated method stub

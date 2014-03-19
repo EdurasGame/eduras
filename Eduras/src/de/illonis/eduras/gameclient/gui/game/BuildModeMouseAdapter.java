@@ -5,10 +5,10 @@ import java.awt.event.MouseEvent;
 import java.awt.geom.Rectangle2D;
 
 import org.newdawn.slick.geom.Rectangle;
+import org.newdawn.slick.geom.Vector2f;
 
 import de.illonis.eduras.gameclient.GuiInternalEventListener;
 import de.illonis.eduras.gameclient.gui.game.GamePanelLogic.ClickState;
-import de.illonis.eduras.math.Vector2df;
 import de.illonis.eduras.units.PlayerMainFigure.InteractMode;
 
 /**
@@ -27,8 +27,8 @@ public class BuildModeMouseAdapter extends GuiMouseAdapter {
 	}
 
 	private void buildModeClick(int button, int x, int y, int clickCount) {
-		Vector2df clickGamePoint = getPanelLogic()
-				.computeGuiPointToGameCoordinate(new Vector2df(x, y));
+		Vector2f clickGamePoint = getPanelLogic()
+				.computeGuiPointToGameCoordinate(new Vector2f(x, y));
 
 		if (button == MouseEvent.BUTTON3) {
 			getListener().sendSelectedUnits(clickGamePoint);
@@ -54,8 +54,7 @@ public class BuildModeMouseAdapter extends GuiMouseAdapter {
 				bottomRightY - topLeftY);
 	}
 
-	private Rectangle2D.Double calculateDragRect(Vector2df first,
-			Vector2df second) {
+	private Rectangle2D.Double calculateDragRect(Vector2f first, Vector2f second) {
 		if (first.getX() == second.getX() || first.getY() == second.getY())
 			return new Rectangle2D.Double(first.getX(), first.getY(), 0, 0);
 
@@ -100,10 +99,10 @@ public class BuildModeMouseAdapter extends GuiMouseAdapter {
 		if (button == MouseEvent.BUTTON1) {
 			getPanelLogic().setClickState(ClickState.DEFAULT);
 
-			Vector2df start = getPanelLogic().computeGuiPointToGameCoordinate(
-					new Vector2df(startPoint));
-			Vector2df end = getPanelLogic().computeGuiPointToGameCoordinate(
-					new Vector2df(x, y));
+			Vector2f start = getPanelLogic().computeGuiPointToGameCoordinate(
+					new Vector2f(startPoint.x, startPoint.y));
+			Vector2f end = getPanelLogic().computeGuiPointToGameCoordinate(
+					new Vector2f(x, y));
 			Rectangle2D.Double r = calculateDragRect(start, end);
 			getListener().onUnitsSelected(r);
 			getPanelLogic().getDragRect().clear();
