@@ -10,10 +10,13 @@ import java.util.logging.Logger;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 import de.illonis.edulog.EduLog;
 import de.illonis.eduras.gameclient.userprefs.KeyBindings;
@@ -35,9 +38,9 @@ public class SettingsWindow extends JDialog {
 	private static final long serialVersionUID = 1L;
 
 	private final Settings settings;
-	private JPanel bindingframe, settingsPanel;
-	private NewKeyReader nkr;
-	private JButton resetButton;
+	private final JPanel bindingframe, settingsPanel;
+	private final NewKeyReader nkr;
+	private final JButton resetButton;
 
 	/**
 	 * Creates a new settings window.
@@ -57,7 +60,8 @@ public class SettingsWindow extends JDialog {
 		settingsPanel.setLayout(new BoxLayout(settingsPanel,
 				BoxLayout.PAGE_AXIS));
 
-		resetButton = new JButton(Localization.getString("Client.preferences.resetall"));
+		resetButton = new JButton(
+				Localization.getString("Client.preferences.resetall"));
 		resetButton.addActionListener(new ActionListener() {
 
 			@Override
@@ -69,7 +73,8 @@ public class SettingsWindow extends JDialog {
 		settingsPanel.add(resetButton);
 		getContentPane().add(sp, BorderLayout.CENTER);
 		setSize(new Dimension(400, 500));
-		JButton exitButton = new JButton(Localization.getString("Client.preferences.saveandclose"));
+		JButton exitButton = new JButton(
+				Localization.getString("Client.preferences.saveandclose"));
 		exitButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -89,15 +94,22 @@ public class SettingsWindow extends JDialog {
 
 	private void builddisplay() {
 		bindingframe.removeAll();
-		bindingframe.add(new JLabel(Localization.getString("Client.preferences.keybindings")));
+		bindingframe.add(new JLabel(Localization
+				.getString("Client.preferences.keybindings")));
 		final KeyBindings keyBindings = settings.getKeyBindings();
 
 		for (final KeyBinding kb : KeyBinding.values()) {
 			String desc = keyBindings.getDescription(kb);
 			String key = keyBindings.getBindingString(kb);
-			JLabel l = new JLabel("<html><br>" + desc
-					+ "<br><i>" + Localization.getString("Client.preferences.currentassigned") + ":</i> " + key);
-			JButton b = new JButton(Localization.getString("Client.preferences.reset"));
+			JLabel l = new JLabel(
+					"<html><br>"
+							+ desc
+							+ "<br><i>"
+							+ Localization
+									.getString("Client.preferences.currentassigned")
+							+ ":</i> " + key);
+			JButton b = new JButton(
+					Localization.getString("Client.preferences.reset"));
 			b.addActionListener(new ActionListener() {
 
 				@Override
@@ -106,7 +118,8 @@ public class SettingsWindow extends JDialog {
 					builddisplay();
 				}
 			});
-			JButton s = new JButton(Localization.getString("Client.preferences.assign"));
+			JButton s = new JButton(
+					Localization.getString("Client.preferences.assign"));
 			s.addActionListener(new ActionListener() {
 
 				@Override
@@ -120,8 +133,36 @@ public class SettingsWindow extends JDialog {
 			bindingframe.add(s);
 			bindingframe.add(b);
 		}
-		bindingframe.revalidate();
 
+		bindingframe.add(new JLabel(Localization
+				.getString("Client.preferences.gameinterface")));
+
+		for (final String booleanOption : settings.getAllBooleanSettings()) {
+			final boolean currentValue = settings
+					.getBooleanSetting(booleanOption);
+
+			JLabel settingLabel = new JLabel(
+					"<html><br>"
+							+ "<br><i>"
+							+ Localization
+									.getString("Client.preferences.booleanOption_"
+											+ booleanOption) + ":</i> ");
+
+			JCheckBox booleanOptionCheckBox = new JCheckBox(booleanOption,
+					currentValue);
+			booleanOptionCheckBox.addChangeListener(new ChangeListener() {
+
+				@Override
+				public void stateChanged(ChangeEvent e) {
+					settings.setBooleanOption(booleanOption, !currentValue);
+				}
+			});
+
+			bindingframe.add(settingLabel);
+			bindingframe.add(booleanOptionCheckBox);
+		}
+
+		bindingframe.revalidate();
 		repaint();
 	}
 }

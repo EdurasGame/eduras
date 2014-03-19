@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Scanner;
 
@@ -54,6 +55,10 @@ public class Settings implements ResettableSetting {
 		return keyBindings;
 	}
 
+	private enum SettingsType {
+		KEYBINDINGS, BOOLEANSETTINGS, NONE
+	}
+
 	/**
 	 * Loads settings that were saved in a previous session.
 	 * 
@@ -61,14 +66,36 @@ public class Settings implements ResettableSetting {
 	 *             if no settings file was found.
 	 */
 	public void load() throws FileNotFoundException {
+		SettingsType type = SettingsType.NONE;
+
 		Scanner scanner = new Scanner(settingsFile, ENCODING.name());
 		while (scanner.hasNextLine()) {
 			String line = scanner.nextLine();
-			if (line.startsWith("#"))
+			if (line.equals("#keybindings")) {
+				type = SettingsType.KEYBINDINGS;
 				continue;
-			String kb[] = line.split("=");
-			keyBindings.setKeyBinding(KeyBinding.valueOf(kb[0]),
-					Integer.parseInt(kb[1]));
+			}
+			if (line.equals("#booleanoptions")) {
+				type = SettingsType.BOOLEANSETTINGS;
+				continue;
+			}
+
+			switch (type) {
+			case BOOLEANSETTINGS: {
+				String bs[] = line.split("=");
+				booleanSettings.put(bs[0], Boolean.parseBoolean(bs[1]));
+				break;
+			}
+			case KEYBINDINGS: {
+				String kb[] = line.split("=");
+				keyBindings.setKeyBinding(KeyBinding.valueOf(kb[0]),
+						Integer.parseInt(kb[1]));
+				break;
+			}
+			case NONE:
+				continue;
+			}
+
 		}
 		scanner.close();
 	}
@@ -80,12 +107,19 @@ public class Settings implements ResettableSetting {
 	 */
 	public void save() throws IOException {
 		PrintWriter writer = new PrintWriter(settingsFile);
+
 		writer.println("#keybindings");
 		for (KeyBinding binding : KeyBinding.values()) {
 			if (!keyBindings.isDefaultKey(binding)) {
 				writer.println(binding.name() + "="
 						+ keyBindings.getKey(binding));
 			}
+		}
+
+		writer.println("#booleanoptions");
+		for (String booleanSetting : getAllBooleanSettings()) {
+			writer.println(booleanSetting + "="
+					+ getBooleanSetting(booleanSetting));
 		}
 		writer.close();
 	}
@@ -116,5 +150,26 @@ public class Settings implements ResettableSetting {
 		}
 		throw new IllegalArgumentException("There is no setting named "
 				+ settingName);
+	}
+
+	/**
+	 * Returns all booleansettings names.
+	 * 
+	 * @return A collection of names that are true/false settings.
+	 */
+	public Collection<String> getAllBooleanSettings() {
+		return booleanSettings.keySet();
+	}
+
+	/**
+	 * Set the value for the given boolean setting.
+	 * 
+	 * @param booleanOption
+	 *            name of the setting
+	 * @param b
+	 *            new value
+	 */
+	public void setBooleanOption(String booleanOption, boolean b) {
+		booleanSettings.put(booleanOption, b);
 	}
 }
