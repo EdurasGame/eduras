@@ -1,5 +1,6 @@
 package de.illonis.eduras.logicabstraction;
 
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.logging.Level;
@@ -305,6 +306,11 @@ public class EdurasInitializer {
 		ClientInterface client = networkManager.getClient();
 
 		settings = new Settings();
+		try {
+			settings.load();
+		} catch (FileNotFoundException e) {
+			L.log(Level.WARNING, "Could not load user preferences.", e);
+		}
 
 		eventSender = new EventSender(client, logic);
 

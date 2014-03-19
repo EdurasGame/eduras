@@ -41,6 +41,7 @@ class LoginPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
 
 	private final JButton connectButton;
+	private final JButton settingsButton;
 	private final JTextField userInput, hostInput;
 	private final NumericTextField portInput;
 	private final JComboBox<ClientRole> roleSelect;
@@ -49,7 +50,7 @@ class LoginPanel extends JPanel {
 
 	LoginPanel(ListModel<ServerInfo> serverData, ActionListener listener) {
 		super(new BorderLayout());
-
+		
 		setBackground(Color.BLACK);
 		titlePanel = new LoginAnimation();
 		JLabel title = new JLabel(ImageFiler.loadIcon("gui/login/logo.png"));
@@ -127,13 +128,21 @@ class LoginPanel extends JPanel {
 		c.anchor = GridBagConstraints.LINE_START;
 		form.add(portInput, c);
 		c.gridy = 3;
-
+		c.gridx = 0;
+		c.gridwidth = 1;
+		settingsButton = new JButton("Einstellungen");
+		settingsButton.setActionCommand("settings");
+		settingsButton.addActionListener(listener);
+		form.add(settingsButton, c);
+		
 		// default values
 		hostInput.setText("localhost");
 		portInput.setText("4387");
 		c.gridx = 2;
 		c.gridwidth = 2;
+		
 		connectButton = new JButton("Verbinden");
+		connectButton.setActionCommand("login");
 		connectButton.setEnabled(false);
 		form.add(connectButton, c);
 		form.setBackground(new Color(.67f, .003f, .0015f, 1));
