@@ -30,6 +30,7 @@ import javax.swing.text.BadLocationException;
 import de.illonis.edulog.EduLog;
 import de.illonis.eduras.gameclient.gui.animation.LoginAnimation;
 import de.illonis.eduras.images.ImageFiler;
+import de.illonis.eduras.locale.Localization;
 import de.illonis.eduras.networking.ClientRole;
 import de.illonis.eduras.networking.discover.ServerInfo;
 
@@ -130,7 +131,7 @@ class LoginPanel extends JPanel {
 		c.gridy = 3;
 		c.gridx = 0;
 		c.gridwidth = 1;
-		settingsButton = new JButton("Einstellungen");
+		settingsButton = new JButton(Localization.getString("Client.preferences"));
 		settingsButton.setActionCommand("settings");
 		settingsButton.addActionListener(listener);
 		form.add(settingsButton, c);

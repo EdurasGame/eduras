@@ -19,6 +19,7 @@ import de.illonis.edulog.EduLog;
 import de.illonis.eduras.gameclient.userprefs.KeyBindings;
 import de.illonis.eduras.gameclient.userprefs.KeyBindings.KeyBinding;
 import de.illonis.eduras.gameclient.userprefs.Settings;
+import de.illonis.eduras.locale.Localization;
 import de.illonis.eduras.logicabstraction.EdurasInitializer;
 
 /**
@@ -46,7 +47,7 @@ public class SettingsWindow extends JDialog {
 		settings = EdurasInitializer.getInstance().getSettings();
 		nkr = new NewKeyReader(this);
 		getContentPane().setLayout(new BorderLayout());
-		setTitle("Einstellungen");
+		setTitle(Localization.getString("Client.preferences"));
 		bindingframe = new JPanel();
 		bindingframe
 				.setLayout(new BoxLayout(bindingframe, BoxLayout.PAGE_AXIS));
@@ -56,7 +57,7 @@ public class SettingsWindow extends JDialog {
 		settingsPanel.setLayout(new BoxLayout(settingsPanel,
 				BoxLayout.PAGE_AXIS));
 
-		resetButton = new JButton("Standard wiederherstellen");
+		resetButton = new JButton(Localization.getString("Client.preferences.resetall"));
 		resetButton.addActionListener(new ActionListener() {
 
 			@Override
@@ -68,7 +69,7 @@ public class SettingsWindow extends JDialog {
 		settingsPanel.add(resetButton);
 		getContentPane().add(sp, BorderLayout.CENTER);
 		setSize(new Dimension(400, 500));
-		JButton exitButton = new JButton("Schlie\u00DFen");
+		JButton exitButton = new JButton(Localization.getString("Client.preferences.saveandclose"));
 		exitButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -88,15 +89,15 @@ public class SettingsWindow extends JDialog {
 
 	private void builddisplay() {
 		bindingframe.removeAll();
-		bindingframe.add(new JLabel("Tastenbelegungen:"));
+		bindingframe.add(new JLabel(Localization.getString("Client.preferences.keybindings")));
 		final KeyBindings keyBindings = settings.getKeyBindings();
 
 		for (final KeyBinding kb : KeyBinding.values()) {
 			String desc = keyBindings.getDescription(kb);
 			String key = keyBindings.getBindingString(kb);
 			JLabel l = new JLabel("<html><br>" + desc
-					+ "<br><i>Aktuelle Belegung:</i> " + key);
-			JButton b = new JButton("Zur\u00FCcksetzen");
+					+ "<br><i>" + Localization.getString("Client.preferences.currentassigned") + ":</i> " + key);
+			JButton b = new JButton(Localization.getString("Client.preferences.reset"));
 			b.addActionListener(new ActionListener() {
 
 				@Override
@@ -105,7 +106,7 @@ public class SettingsWindow extends JDialog {
 					builddisplay();
 				}
 			});
-			JButton s = new JButton("Neu belegen");
+			JButton s = new JButton(Localization.getString("Client.preferences.assign"));
 			s.addActionListener(new ActionListener() {
 
 				@Override
