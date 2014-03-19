@@ -3,6 +3,7 @@ package de.illonis.eduras.items;
 import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.ObjectFactory.ObjectType;
 import de.illonis.eduras.gameobjects.GameObject;
+import de.illonis.eduras.gameobjects.TimingSource;
 
 /**
  * Items can be hold in player's inventory.
@@ -22,13 +23,16 @@ public abstract class Item extends GameObject {
 	 * 
 	 * @param type
 	 *            item type.
+	 * @param timingSource
+	 *            the timing source.
 	 * @param gi
 	 *            game information.
 	 * @param id
 	 *            the object id of the item.
 	 */
-	public Item(ObjectType type, GameInformation gi, int id) {
-		super(gi, id);
+	public Item(ObjectType type, TimingSource timingSource, GameInformation gi,
+			int id) {
+		super(gi, timingSource, id);
 		setObjectType(type);
 		this.name = "unknown";
 		unique = true;

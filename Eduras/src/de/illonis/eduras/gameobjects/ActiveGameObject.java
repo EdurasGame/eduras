@@ -17,11 +17,14 @@ public abstract class ActiveGameObject extends GameObject implements
 	 * 
 	 * @param game
 	 *            The gameinformation.
+	 * @param timingSource
+	 *            the timingSource.
 	 * @param id
 	 *            The new objects id.
 	 */
-	public ActiveGameObject(GameInformation game, int id) {
-		super(game, id);
+	public ActiveGameObject(GameInformation game, TimingSource timingSource,
+			int id) {
+		super(game, timingSource, id);
 	}
 
 }

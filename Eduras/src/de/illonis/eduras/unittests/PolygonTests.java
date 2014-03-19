@@ -29,7 +29,7 @@ public class PolygonTests {
 	@Before
 	public void init() {
 		polyBlock = new DynamicPolygonObject(ObjectType.DYNAMIC_POLYGON_BLOCK,
-				null, 0);
+				null, null, 0);
 	}
 
 	/**

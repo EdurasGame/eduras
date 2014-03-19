@@ -1,5 +1,6 @@
 package de.illonis.eduras.networking;
 
+import java.awt.Color;
 import java.util.LinkedList;
 import java.util.logging.Logger;
 
@@ -8,7 +9,7 @@ import de.eduras.eventingserver.EventHandler;
 import de.eduras.eventingserver.exceptions.TooFewArgumentsExceptions;
 import de.illonis.edulog.EduLog;
 import de.illonis.eduras.ObjectFactory.ObjectType;
-import de.illonis.eduras.Team.TeamColor;
+import de.illonis.eduras.Team;
 import de.illonis.eduras.events.AddPlayerToTeamEvent;
 import de.illonis.eduras.events.ClientRenameEvent;
 import de.illonis.eduras.events.DeathEvent;
@@ -260,17 +261,17 @@ public class EventParser implements EventHandler {
 				break;
 			case SET_TEAMS:
 				SetTeamsEvent setTeamsEvent = new SetTeamsEvent();
-				for (int i = 0; i < numberOfArgs; i = i + 2) {
-					setTeamsEvent.addTeam(
-							TeamColor.valueOf((String) event.getArgument(i)),
-							(String) event.getArgument(i + 1));
+				for (int i = 0; i < numberOfArgs; i = i + 3) {
+					setTeamsEvent.addTeam(new Team((String) event
+							.getArgument(i), (int) event.getArgument(i + 1),
+							new Color((int) event.getArgument(i + 2))));
 				}
 				logic.onGameEventAppeared(setTeamsEvent);
 				break;
 			case ADD_PLAYER_TO_TEAM:
 				logic.onGameEventAppeared(new AddPlayerToTeamEvent(
-						(Integer) event.getArgument(0), TeamColor
-								.valueOf((String) event.getArgument(1))));
+						(Integer) event.getArgument(0), (int) event
+								.getArgument(1)));
 				break;
 			case GAME_READY:
 				logic.onGameEventAppeared(new GameReadyEvent());

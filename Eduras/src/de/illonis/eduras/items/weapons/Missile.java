@@ -5,6 +5,7 @@ import java.util.LinkedList;
 import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.gameobjects.MoveableGameObject;
+import de.illonis.eduras.gameobjects.TimingSource;
 import de.illonis.eduras.math.Vector2D;
 import de.illonis.eduras.settings.S;
 import de.illonis.eduras.shapes.Circle;
@@ -29,11 +30,13 @@ public abstract class Missile extends MoveableGameObject {
 	 * 
 	 * @param game
 	 *            The gameinformation.
+	 * @param timingSource
+	 *            the timing source.
 	 * @param id
 	 *            The id.
 	 */
-	public Missile(GameInformation game, int id) {
-		super(game, id);
+	public Missile(GameInformation game, TimingSource timingSource, int id) {
+		super(game, timingSource, id);
 		rangeMoved = 0;
 		setShape(new Circle(S.go_missile_radius));
 	}
@@ -131,8 +134,8 @@ public abstract class Missile extends MoveableGameObject {
 				// do not handle collided object twice.
 				if (nearObject.equals(collidingObject))
 					continue;
-				Relation nearRelation = getGame().getGameSettings().getGameMode()
-						.getRelation(this, nearObject);
+				Relation nearRelation = getGame().getGameSettings()
+						.getGameMode().getRelation(this, nearObject);
 
 				if (nearRelation == Relation.HOSTILE && nearObject.isUnit()) {
 					((Unit) nearObject).damagedBy(getDamage(), getOwner());

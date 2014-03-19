@@ -1,7 +1,5 @@
 package de.illonis.eduras.events;
 
-import de.illonis.eduras.Team.TeamColor;
-
 /**
  * Adds a player to a given team.
  * 
@@ -10,28 +8,26 @@ import de.illonis.eduras.Team.TeamColor;
  */
 public class AddPlayerToTeamEvent extends OwnerGameEvent {
 
-	private final TeamColor teamColor;
+	private final int team;
 
 	/**
 	 * Creates a new event with given data.
 	 * 
 	 * @param ownerId
 	 *            the owner id of the player.
-	 * @param color
-	 *            the color of the team.
+	 * @param targetTeam
+	 *            the id of the team.
 	 */
-	public AddPlayerToTeamEvent(int ownerId, TeamColor color) {
+	public AddPlayerToTeamEvent(int ownerId, int targetTeam) {
 		super(GameEventNumber.ADD_PLAYER_TO_TEAM, ownerId);
-		this.teamColor = color;
-		putArgument(color.toString());
+		this.team = targetTeam;
+		putArgument(team);
 	}
 
 	/**
-	 * @return the color of the team.
-	 * 
-	 * @author illonis
+	 * @return the id of the team.
 	 */
-	public TeamColor getTeamColor() {
-		return teamColor;
+	public int getTeam() {
+		return team;
 	}
 }

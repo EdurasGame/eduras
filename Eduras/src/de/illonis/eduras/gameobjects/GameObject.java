@@ -1,6 +1,7 @@
 package de.illonis.eduras.gameobjects;
 
 import java.awt.geom.Rectangle2D;
+import java.util.Comparator;
 import java.util.LinkedList;
 
 import de.illonis.eduras.GameInformation;
@@ -32,6 +33,7 @@ public abstract class GameObject implements Comparable<GameObject> {
 	}
 
 	private final GameInformation game;
+	private final TimingSource timingSource;
 	private ObjectType type;
 
 	private ObjectShape shape;
@@ -55,12 +57,15 @@ public abstract class GameObject implements Comparable<GameObject> {
 	 * 
 	 * @param game
 	 *            game that contains this object.
+	 * @param timingSource
+	 *            the timing source used for timed events.
 	 * @param id
 	 *            the object id.
 	 */
-	public GameObject(GameInformation game, int id) {
+	public GameObject(GameInformation game, TimingSource timingSource, int id) {
 		this.game = game;
 		this.id = id;
+		this.timingSource = timingSource;
 		setObjectType(ObjectType.NO_OBJECT);
 	}
 
@@ -85,6 +90,10 @@ public abstract class GameObject implements Comparable<GameObject> {
 	 */
 	public void setOwner(int owner) {
 		this.owner = owner;
+	}
+
+	protected TimingSource getTimingSource() {
+		return timingSource;
 	}
 
 	/**
@@ -285,21 +294,40 @@ public abstract class GameObject implements Comparable<GameObject> {
 	 * @return bounding box.
 	 */
 	public Rectangle2D.Double getBoundingBox() {
-
+		// FIXME: Here is assumed that shape's center equals object's position.
 		Rectangle2D.Double r = getShape().getBoundingBox();
 		r.x = getDrawX() - getShape().getBoundingBox().getWidth() / 2;
 		r.y = getDrawY() - getShape().getBoundingBox().getHeight() / 2;
-
 		return r;
 	}
 
 	/**
-	 * This method is called when an object collides with this object.
+	 * This method is called when an object collides with this object.<br>
+	 * Note that this method is not called, when this object is not collidable.
+	 * Use {@link #onTouch(GameObject)} to receive non-colliding overlapping
+	 * events.
 	 * 
 	 * @param collidingObject
 	 *            The object colliding with this object.
+	 * 
+	 * @see #isCollidable()
+	 * @see #onTouch(GameObject)
 	 */
 	public abstract void onCollision(GameObject collidingObject);
+
+	/**
+	 * This method is called when an object touches this object.<br>
+	 * A <i>touch</i> occurs when two objects overlap and at least one of them
+	 * is non-collding.<br>
+	 * This means, whenever a non-collidable object would collide if it was
+	 * collidable, this method is called instead of
+	 * {@link #onCollision(GameObject)}.
+	 * 
+	 * @param touchingObject
+	 *            the object touching this object.
+	 */
+	public void onTouch(GameObject touchingObject) {
+	}
 
 	/**
 	 * Returns wether this object is collidable or not.
@@ -403,12 +431,7 @@ public abstract class GameObject implements Comparable<GameObject> {
 	 *         if there is no collision.
 	 */
 	public LinkedList<CollisionPoint> isIntersected(LinkedList<Line> lines) {
-
-		if (this.isCollidable()) {
-			return this.getShape().isIntersected(lines, this);
-		}
-
-		return new LinkedList<CollisionPoint>();
+		return this.getShape().isIntersected(lines, this);
 	}
 
 	/**
@@ -459,5 +482,26 @@ public abstract class GameObject implements Comparable<GameObject> {
 		// } else {
 		rotation = newValue;
 		// }
+	}
+
+	/**
+	 * Compares {@link GameObject}s by their {@link GameObject#id}.
+	 * 
+	 * @author illonis
+	 * 
+	 */
+	public static class GameObjectIdComparator implements
+			Comparator<GameObject> {
+
+		@Override
+		public int compare(GameObject lhs, GameObject rhs) {
+			if (lhs.getId() == rhs.getId())
+				return 0;
+			else if (lhs.getId() > rhs.getId())
+				return 1;
+			else
+				return -1;
+		}
+
 	}
 }

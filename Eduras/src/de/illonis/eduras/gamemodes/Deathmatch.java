@@ -1,5 +1,6 @@
 package de.illonis.eduras.gamemodes;
 
+import java.util.LinkedList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -7,7 +8,6 @@ import de.illonis.edulog.EduLog;
 import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.ObjectFactory.ObjectType;
 import de.illonis.eduras.Team;
-import de.illonis.eduras.Team.TeamColor;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
 import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.gameobjects.GameObject.Relation;
@@ -92,8 +92,10 @@ public class Deathmatch extends BasicGameMode {
 			return;
 		}
 
-		gameInfo.getEventTriggerer().addPlayerToTeam(ownerId,
-				gameInfo.getTeams().getFirst());
+		Team t = new Team(newPlayer.getName(), Team.getNextTeamId());
+		gameInfo.addTeam(t);
+		gameInfo.getEventTriggerer().setTeams(gameInfo.getTeams());
+		gameInfo.getEventTriggerer().addPlayerToTeam(newPlayer.getOwner(), t);
 		gameInfo.getEventTriggerer().respawnPlayer(newPlayer);
 
 		// and add it to the statistic
@@ -102,12 +104,13 @@ public class Deathmatch extends BasicGameMode {
 
 	@Override
 	public void onGameStart() {
-		Team team = new Team("All Players", TeamColor.NEUTRAL);
-		gameInfo.getEventTriggerer().setTeams(team);
+		LinkedList<Team> teams = new LinkedList<Team>();
 		for (PlayerMainFigure player : gameInfo.getPlayers()) {
-			gameInfo.getEventTriggerer().addPlayerToTeam(player.getOwner(),
-					team);
+			Team t = new Team(player.getName(), Team.getNextTeamId());
+			teams.add(t);
+			gameInfo.getEventTriggerer().addPlayerToTeam(player.getOwner(), t);
 		}
+		gameInfo.getEventTriggerer().setTeams(teams);
 
 	}
 

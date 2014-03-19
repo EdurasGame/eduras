@@ -8,7 +8,6 @@ import de.illonis.edulog.EduLog;
 import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.ObjectFactory;
 import de.illonis.eduras.Team;
-import de.illonis.eduras.Team.TeamColor;
 import de.illonis.eduras.events.AddPlayerToTeamEvent;
 import de.illonis.eduras.events.ClientRenameEvent;
 import de.illonis.eduras.events.DeathEvent;
@@ -58,7 +57,7 @@ public class ClientLogic implements GameLogicInterface {
 			.getName());
 
 	private final GameInformation gameInfo;
-	private final ObjectFactory objectFactory;
+	private ObjectFactory objectFactory;
 	private LogicGameWorker lgw;
 	private final ListenerHolder<GameEventListener> listenerHolder;
 	private Thread workerThread;
@@ -72,7 +71,7 @@ public class ClientLogic implements GameLogicInterface {
 	 */
 	public ClientLogic(GameInformation g) {
 		this.gameInfo = g;
-		objectFactory = new ObjectFactory(this);
+		objectFactory = new ObjectFactory(this, lgw);
 		listenerHolder = new ListenerHolder<GameEventListener>();
 
 	}
@@ -206,28 +205,31 @@ public class ClientLogic implements GameLogicInterface {
 			case SET_TEAMS:
 				SetTeamsEvent teamEvent = (SetTeamsEvent) event;
 				gameInfo.clearTeams();
-				for (TeamColor color : teamEvent.getTeamList().keySet()) {
-					String name = teamEvent.getTeamList().get(color);
-					Team t = new Team(name, color);
+				for (Team t : teamEvent.getTeamList()) {
 					gameInfo.addTeam(t);
 				}
 				break;
 			case ADD_PLAYER_TO_TEAM:
 				AddPlayerToTeamEvent pteEvent = (AddPlayerToTeamEvent) event;
-				for (Team t : gameInfo.getTeams()) {
-					if (t.getColor() == pteEvent.getTeamColor()) {
-						PlayerMainFigure player;
-						try {
-							player = gameInfo.getPlayerByOwnerId(pteEvent
-									.getOwner());
-						} catch (ObjectNotFoundException e1) {
-							return;
-						}
-						if (player.getTeam() != null)
-							player.getTeam().removePlayer(player);
-						t.addPlayer(player);
-					}
+				Team team = gameInfo.findTeamById(pteEvent.getTeam());
+				if (team == null) {
+					L.severe("Could not find a team with id "
+							+ pteEvent.getTeam()
+							+ " while adding player with ownerid "
+							+ pteEvent.getOwner() + ".");
+					break;
 				}
+				PlayerMainFigure player;
+				try {
+					player = gameInfo.getPlayerByOwnerId(pteEvent.getOwner());
+				} catch (ObjectNotFoundException e) {
+					L.log(Level.SEVERE, "Could not find player with ownerid "
+							+ pteEvent.getOwner(), e);
+					return;
+				}
+				if (player.getTeam() != null)
+					player.getTeam().removePlayer(player);
+				team.addPlayer(player);
 				break;
 			case DEATH:
 				DeathEvent de = (DeathEvent) event;
@@ -576,6 +578,7 @@ public class ClientLogic implements GameLogicInterface {
 		workerThread = new Thread(lgw);
 		workerThread.setName("ClientLogicGameWorker");
 		workerThread.start();
+		System.out.println("start worker");
 	}
 
 }

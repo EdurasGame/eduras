@@ -2,6 +2,7 @@ package de.illonis.eduras.items.weapons;
 
 import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.ObjectFactory.ObjectType;
+import de.illonis.eduras.gameobjects.TimingSource;
 import de.illonis.eduras.items.ItemUseInformation;
 import de.illonis.eduras.settings.S;
 import de.illonis.eduras.shapes.Circle;
@@ -19,10 +20,14 @@ public class AssaultRifle extends Weapon {
 	 * Create a new {@link AssaultRifle}.
 	 * 
 	 * @param gi
+	 *            game information.
+	 * @param timingSource
+	 *            the timing source.
 	 * @param id
+	 *            the object id.
 	 */
-	public AssaultRifle(GameInformation gi, int id) {
-		super(ObjectType.ASSAULTRIFLE, gi, id);
+	public AssaultRifle(GameInformation gi, TimingSource timingSource, int id) {
+		super(ObjectType.ASSAULTRIFLE, gi, timingSource, id);
 		setName("Assault Rifle");
 
 		setShape(new Circle(S.go_assaultrifle_shape_size));

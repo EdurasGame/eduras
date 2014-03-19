@@ -15,6 +15,7 @@ import java.awt.Toolkit;
 import java.awt.Transparency;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Area;
+import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 import java.util.Iterator;
@@ -25,7 +26,6 @@ import java.util.logging.Logger;
 
 import de.illonis.edulog.EduLog;
 import de.illonis.eduras.Team;
-import de.illonis.eduras.Team.TeamColor;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
 import de.illonis.eduras.gameclient.ClientData;
 import de.illonis.eduras.gameclient.VisionInformation;
@@ -413,6 +413,13 @@ public class GameRenderer implements TooltipHandler {
 				drawFace(obj, (Circle) objectShape);
 			}
 		}
+		if (S.debug_render_boundingboxes) {
+			mapGraphics.setColor(Color.YELLOW);
+			Rectangle2D.Double r = obj.getBoundingBox();
+			r.x -= camera.x;
+			r.y -= camera.y;
+			mapGraphics.draw(r);
+		}
 	}
 
 	private void drawFace(GameObject obj, Circle shape) {
@@ -478,10 +485,10 @@ public class GameRenderer implements TooltipHandler {
 			return Color.GRAY;
 		case PLAYER:
 			PlayerMainFigure p = (PlayerMainFigure) d;
-			if (p.getTeam() == null || p.getTeam().getColor() == TeamColor.BLUE) {
+			if (p.getTeam() == null) {
 				return Color.BLUE;
 			} else {
-				return Color.RED;
+				return p.getTeam().getColor();
 			}
 		case BIRD:
 			return new Color(0.4231f, 0.6361f, 0.995f, 0.4f);

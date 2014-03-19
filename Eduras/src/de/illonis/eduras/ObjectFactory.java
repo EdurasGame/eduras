@@ -19,6 +19,8 @@ import de.illonis.eduras.gameobjects.Bird;
 import de.illonis.eduras.gameobjects.Building;
 import de.illonis.eduras.gameobjects.DynamicPolygonObject;
 import de.illonis.eduras.gameobjects.GameObject;
+import de.illonis.eduras.gameobjects.NeutralBase;
+import de.illonis.eduras.gameobjects.TimingSource;
 import de.illonis.eduras.interfaces.GameLogicInterface;
 import de.illonis.eduras.items.weapons.AssaultMissile;
 import de.illonis.eduras.items.weapons.AssaultRifle;
@@ -51,6 +53,7 @@ public class ObjectFactory {
 			.getName());
 
 	private final GameLogicInterface logic;
+	private final TimingSource timingSource;
 
 	/**
 	 * Collection of object types that can be created by {@link ObjectFactory}.
@@ -66,7 +69,7 @@ public class ObjectFactory {
 				12), MISSILE_SPLASHED(13), DYNAMIC_POLYGON_BLOCK(14), ITEM_WEAPON_SWORD(
 				15), SWORDMISSILE(16), BIRD(17), ROCKETLAUNCHER(18), ROCKET_MISSILE(
 				19), MINELAUNCHER(20), MINE_MISSILE(21), ASSAULTRIFLE(22), ASSAULT_MISSILE(
-				23), MAPBOUNDS(24);
+				23), MAPBOUNDS(24), TRIGGER_AREA(25), NEUTRAL_BASE(26);
 
 		private int number;
 
@@ -93,9 +96,12 @@ public class ObjectFactory {
 	 * 
 	 * @param logic
 	 *            game object factory is assigned to.
+	 * @param source
+	 *            a timing source that will be attached to created objects.
 	 */
-	public ObjectFactory(GameLogicInterface logic) {
+	public ObjectFactory(GameLogicInterface logic, TimingSource source) {
 		this.logic = logic;
+		this.timingSource = source;
 	}
 
 	/**
@@ -116,7 +122,6 @@ public class ObjectFactory {
 	 *            object factory event with object id attached.
 	 */
 	public void onObjectFactoryEventAppeared(ObjectFactoryEvent event) {
-
 		GameObject go = null;
 		if (event.getType() == GameEventNumber.OBJECT_CREATE) {
 
@@ -137,86 +142,90 @@ public class ObjectFactory {
 
 			switch (event.getObjectType()) {
 			case PLAYER:
-				go = new PlayerMainFigure(logic.getGame(), event.getOwner(), id);
+				go = new PlayerMainFigure(logic.getGame(), timingSource,
+						event.getOwner(), id);
 				logic.getGame().addPlayer((PlayerMainFigure) go);
 
 				L.info("Player " + event.getOwner() + " created");
 				testSpawnBird();
 				break;
 			case SIMPLEMISSILE:
-				go = new SimpleMissile(logic.getGame(), id);
+				go = new SimpleMissile(logic.getGame(), timingSource, id);
 				break;
 			case BUILDING:
-				go = new Building(logic.getGame(), id);
+				go = new Building(logic.getGame(), timingSource, id);
 				break;
 			case BIRD:
-				go = new Bird(logic.getGame(), id);
+				go = new Bird(logic.getGame(), timingSource, id);
 				break;
 			case BIGGERBLOCK:
 				try {
-					go = new BiggerBlock(logic.getGame(), id);
+					go = new BiggerBlock(logic.getGame(), timingSource, id);
 				} catch (ShapeVerticesNotApplicableException e) {
 					L.log(Level.SEVERE, "shape vertices not applicable", e);
 					return;
 				}
 				break;
 			case ITEM_WEAPON_SIMPLE:
-				go = new SimpleWeapon(logic.getGame(), id);
+				go = new SimpleWeapon(logic.getGame(), timingSource, id);
 				break;
 			case BIGBLOCK:
 				try {
-					go = new BigBlock(logic.getGame(), id);
+					go = new BigBlock(logic.getGame(), timingSource, id);
 				} catch (ShapeVerticesNotApplicableException e) {
 					L.log(Level.SEVERE, "shape vertices not applicable", e);
 					return;
 				}
 				break;
 			case SNIPERMISSILE:
-				go = new SniperMissile(logic.getGame(), id);
+				go = new SniperMissile(logic.getGame(), timingSource, id);
 				break;
 			case MISSILE_SPLASH:
-				go = new SplashMissile(logic.getGame(), id);
+				go = new SplashMissile(logic.getGame(), timingSource, id);
 				break;
 			case MISSILE_SPLASHED:
-				go = new SplashedMissile(logic.getGame(), id);
+				go = new SplashedMissile(logic.getGame(), timingSource, id);
 				break;
 			case SWORDMISSILE:
-				go = new SwordMissile(logic.getGame(), id);
+				go = new SwordMissile(logic.getGame(), timingSource, id);
 				break;
 			case ITEM_WEAPON_SPLASH:
-				go = new SplashWeapon(logic.getGame(), id);
+				go = new SplashWeapon(logic.getGame(), timingSource, id);
 				break;
 			case ITEM_WEAPON_SNIPER:
-				go = new SniperWeapon(logic.getGame(), id);
+				go = new SniperWeapon(logic.getGame(), timingSource, id);
 				break;
 			case ITEM_WEAPON_SWORD:
-				go = new SwordWeapon(logic.getGame(), id);
+				go = new SwordWeapon(logic.getGame(), timingSource, id);
 				break;
 			case ROCKETLAUNCHER:
-				go = new RocketLauncher(logic.getGame(), id);
+				go = new RocketLauncher(logic.getGame(), timingSource, id);
 				break;
 			case ROCKET_MISSILE:
-				go = new RocketMissile(logic.getGame(), id);
+				go = new RocketMissile(logic.getGame(), timingSource, id);
 				break;
 			case MINELAUNCHER:
-				go = new MineWeapon(logic.getGame(), id);
+				go = new MineWeapon(logic.getGame(), timingSource, id);
 				break;
 			case MINE_MISSILE:
-				go = new MineMissile(logic.getGame(), id);
+				go = new MineMissile(logic.getGame(), timingSource, id);
 				break;
 			case ASSAULTRIFLE:
-				go = new AssaultRifle(logic.getGame(), id);
+				go = new AssaultRifle(logic.getGame(), timingSource, id);
 				break;
 			case ASSAULT_MISSILE:
-				go = new AssaultMissile(logic.getGame(), id);
+				go = new AssaultMissile(logic.getGame(), timingSource, id);
+				break;
+			case NEUTRAL_BASE:
+				go = new NeutralBase(logic.getGame(), timingSource, id, 1);
 				break;
 			case DYNAMIC_POLYGON_BLOCK:
 				go = new DynamicPolygonObject(ObjectType.DYNAMIC_POLYGON_BLOCK,
-						logic.getGame(), id);
+						logic.getGame(), timingSource, id);
 				break;
 			case MAPBOUNDS:
 				go = new DynamicPolygonObject(ObjectType.MAPBOUNDS,
-						logic.getGame(), id);
+						logic.getGame(), timingSource, id);
 				break;
 			default:
 				return;

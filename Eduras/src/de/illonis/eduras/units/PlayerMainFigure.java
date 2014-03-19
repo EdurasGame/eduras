@@ -7,6 +7,7 @@ import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.ObjectFactory.ObjectType;
 import de.illonis.eduras.Team;
 import de.illonis.eduras.gameobjects.GameObject;
+import de.illonis.eduras.gameobjects.TimingSource;
 import de.illonis.eduras.interfaces.MovementControlable;
 import de.illonis.eduras.inventory.Inventory;
 import de.illonis.eduras.math.Vector2D;
@@ -64,6 +65,8 @@ public class PlayerMainFigure extends Unit implements MovementControlable {
 	 * 
 	 * @param game
 	 *            The game the player belongs to.
+	 * @param timingSource
+	 *            the timing source.
 	 * @param ownerId
 	 *            The id of the owner.
 	 * @param name
@@ -71,9 +74,9 @@ public class PlayerMainFigure extends Unit implements MovementControlable {
 	 * @param id
 	 *            id of the player.
 	 */
-	public PlayerMainFigure(GameInformation game, int ownerId, String name,
-			int id) {
-		super(game, S.player_maxhealth_default, id);
+	public PlayerMainFigure(GameInformation game, TimingSource timingSource,
+			int ownerId, String name, int id) {
+		super(game, timingSource, S.player_maxhealth_default, id);
 		setObjectType(ObjectType.PLAYER);
 		this.name = name;
 		setSpeed(S.player_speed_default);
@@ -101,13 +104,16 @@ public class PlayerMainFigure extends Unit implements MovementControlable {
 	 * 
 	 * @param game
 	 *            The game the player belongs to.
+	 * @param timingSource
+	 *            the timing source.
 	 * @param ownerId
 	 *            The id of the owner.
 	 * @param id
 	 *            The id of the player.
 	 */
-	public PlayerMainFigure(GameInformation game, int ownerId, int id) {
-		this(game, ownerId, "unbekannt", id);
+	public PlayerMainFigure(GameInformation game, TimingSource timingSource,
+			int ownerId, int id) {
+		this(game, timingSource, ownerId, "unbekannt", id);
 	}
 
 	@Override

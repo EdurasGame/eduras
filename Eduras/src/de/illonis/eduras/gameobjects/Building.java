@@ -17,11 +17,13 @@ public class Building extends GameObject {
 	 * 
 	 * @param game
 	 *            game information.
+	 * @param timingSource
+	 *            the timing source.
 	 * @param id
 	 *            object id.
 	 */
-	public Building(GameInformation game, int id) {
-		super(game, id);
+	public Building(GameInformation game, TimingSource timingSource, int id) {
+		super(game, timingSource, id);
 		setObjectType(ObjectType.BUILDING);
 		setShape(new House());
 	}

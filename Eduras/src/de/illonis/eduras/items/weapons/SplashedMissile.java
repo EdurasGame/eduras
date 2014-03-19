@@ -2,6 +2,7 @@ package de.illonis.eduras.items.weapons;
 
 import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.ObjectFactory.ObjectType;
+import de.illonis.eduras.gameobjects.TimingSource;
 import de.illonis.eduras.settings.S;
 import de.illonis.eduras.shapes.Circle;
 
@@ -18,11 +19,14 @@ public class SplashedMissile extends Missile {
 	 * 
 	 * @param game
 	 *            game infos.
+	 * @param timingSource
+	 *            the timing source.
 	 * @param id
 	 *            object id.
 	 */
-	public SplashedMissile(GameInformation game, int id) {
-		super(game, id);
+	public SplashedMissile(GameInformation game, TimingSource timingSource,
+			int id) {
+		super(game, timingSource, id);
 		setObjectType(ObjectType.MISSILE_SPLASHED);
 		setDamage(S.go_splashedmissile_damage);
 		setDamageRadius(S.go_splashedmissile_damageradius);

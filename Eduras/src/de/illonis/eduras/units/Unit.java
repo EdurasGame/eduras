@@ -2,6 +2,7 @@ package de.illonis.eduras.units;
 
 import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.gameobjects.MoveableGameObject;
+import de.illonis.eduras.gameobjects.TimingSource;
 
 /**
  * A unit is a moveable object that has health. A unit can never have negative
@@ -20,13 +21,16 @@ public abstract class Unit extends MoveableGameObject {
 	 * 
 	 * @param game
 	 *            game information.
+	 * @param timingSource
+	 *            the timing source.
 	 * @param maxHealth
 	 *            maximum health. Must be >0. Will be set to 1 otherwise.
 	 * @param id
 	 *            id of unit.
 	 */
-	public Unit(GameInformation game, int maxHealth, int id) {
-		super(game, id);
+	public Unit(GameInformation game, TimingSource timingSource, int maxHealth,
+			int id) {
+		super(game, timingSource, id);
 		if (maxHealth <= 0)
 			maxHealth = 1;
 		this.health = this.maxHealth = maxHealth;

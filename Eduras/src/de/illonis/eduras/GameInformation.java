@@ -59,7 +59,7 @@ public class GameInformation {
 	private Map map;
 	private EventTriggerer eventTriggerer;
 	private GameSettings gameSettings;
-	private final LinkedList<Team> teams;
+	private final HashMap<Integer, Team> teams;
 	private final HashMap<Team, SpawnType> spawnGroups;
 
 	/**
@@ -71,7 +71,7 @@ public class GameInformation {
 		players = new ConcurrentHashMap<Integer, PlayerMainFigure>();
 		map = new FunMap();
 		gameSettings = new GameSettings(this);
-		teams = new LinkedList<Team>();
+		teams = new HashMap<Integer, Team>();
 		spawnGroups = new HashMap<Team, SpawnType>();
 	}
 
@@ -109,8 +109,8 @@ public class GameInformation {
 	 * 
 	 * @author illonis
 	 */
-	public LinkedList<Team> getTeams() {
-		return new LinkedList<Team>(teams);
+	public Collection<Team> getTeams() {
+		return new LinkedList<Team>(teams.values());
 	}
 
 	/**
@@ -128,7 +128,7 @@ public class GameInformation {
 	 *            the new team.
 	 */
 	public void addTeam(Team team) {
-		teams.add(team);
+		teams.put(team.getTeamId(), team);
 		spawnGroups.put(team, getGameSettings().getGameMode()
 				.getSpawnTypeForTeam(team));
 	}
@@ -201,6 +201,17 @@ public class GameInformation {
 	 */
 	public GameObject findObjectById(int id) {
 		return objects.get(id);
+	}
+
+	/**
+	 * Returns team with given id. If no object is found, null is returned.
+	 * 
+	 * @param teamId
+	 *            id to search for.
+	 * @return team with given id.
+	 */
+	public Team findTeamById(int teamId) {
+		return teams.get(teamId);
 	}
 
 	/**
@@ -409,10 +420,10 @@ public class GameInformation {
 		SetTeamsEvent teamEvent = new SetTeamsEvent();
 		LinkedList<AddPlayerToTeamEvent> teamPlayerEvents = new LinkedList<AddPlayerToTeamEvent>();
 		for (Team team : getTeams()) {
-			teamEvent.addTeam(team.getColor(), team.getName());
+			teamEvent.addTeam(team);
 			for (PlayerMainFigure player : team.getPlayers()) {
 				teamPlayerEvents.add(new AddPlayerToTeamEvent(
-						player.getOwner(), team.getColor()));
+						player.getOwner(), team.getTeamId()));
 			}
 		}
 
@@ -496,7 +507,7 @@ public class GameInformation {
 				getMap().getSpawnAreas());
 		for (int i = 0; i < spawnAreas.size(); i++) {
 			SpawnPosition p = spawnAreas.get(i);
-			if (p.getTeaming() == spawnType)
+			if (p.getTeaming() == spawnType || p.getTeaming() == SpawnType.ANY)
 				availableSpawnings.add(p);
 		}
 

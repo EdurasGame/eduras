@@ -2,6 +2,7 @@ package de.illonis.eduras.items.weapons;
 
 import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.ObjectFactory.ObjectType;
+import de.illonis.eduras.gameobjects.TimingSource;
 import de.illonis.eduras.items.ItemUseInformation;
 import de.illonis.eduras.settings.S;
 import de.illonis.eduras.shapes.ObjectShape.ShapeType;
@@ -20,11 +21,14 @@ public class RocketLauncher extends Weapon {
 	 * 
 	 * @param infos
 	 *            game info.
+	 * @param timingSource
+	 *            the timingsource.
 	 * @param id
 	 *            object id.
 	 */
-	public RocketLauncher(GameInformation infos, int id) {
-		super(ObjectType.ROCKETLAUNCHER, infos, id);
+	public RocketLauncher(GameInformation infos, TimingSource timingSource,
+			int id) {
+		super(ObjectType.ROCKETLAUNCHER, infos, timingSource, id);
 		setName("Rocket Launcher");
 
 		setShape(ShapeFactory.createShape(ShapeType.ROCKET));

@@ -1,5 +1,6 @@
 package de.illonis.eduras.gamemodes;
 
+import java.util.LinkedList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -7,7 +8,6 @@ import de.illonis.edulog.EduLog;
 import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.ObjectFactory.ObjectType;
 import de.illonis.eduras.Team;
-import de.illonis.eduras.Team.TeamColor;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
 import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.gameobjects.GameObject.Relation;
@@ -43,9 +43,12 @@ public class TeamDeathmatch extends Deathmatch {
 
 	@Override
 	public void onGameStart() {
-		teamA = new Team("Red Team", TeamColor.RED);
-		teamB = new Team("Blue Team", TeamColor.BLUE);
-		gameInfo.getEventTriggerer().setTeams(teamA, teamB);
+		teamA = new Team("Red Team", Team.getNextTeamId());
+		teamB = new Team("Blue Team", Team.getNextTeamId());
+		LinkedList<Team> teams = new LinkedList<Team>();
+		teams.add(teamA);
+		teams.add(teamB);
+		gameInfo.getEventTriggerer().setTeams(teams);
 		for (PlayerMainFigure player : gameInfo.getPlayers()) {
 			putPlayerInSmallestTeam(player);
 		}

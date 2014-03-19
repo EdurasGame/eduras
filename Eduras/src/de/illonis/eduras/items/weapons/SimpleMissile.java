@@ -2,6 +2,7 @@ package de.illonis.eduras.items.weapons;
 
 import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.ObjectFactory.ObjectType;
+import de.illonis.eduras.gameobjects.TimingSource;
 import de.illonis.eduras.settings.S;
 
 /**
@@ -15,11 +16,13 @@ public class SimpleMissile extends Missile {
 	 * 
 	 * @param game
 	 *            The game context
+	 * @param timingSource
+	 *            the timing source.
 	 * @param id
 	 *            The id of the new missile
 	 */
-	public SimpleMissile(GameInformation game, int id) {
-		super(game, id);
+	public SimpleMissile(GameInformation game, TimingSource timingSource, int id) {
+		super(game, timingSource, id);
 		setDamage(S.go_simplemissile_damage);
 		setDamageRadius(S.go_simplemissile_damage_radius);
 		setObjectType(ObjectType.SIMPLEMISSILE);

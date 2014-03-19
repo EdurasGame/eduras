@@ -2,6 +2,7 @@ package de.illonis.eduras.items.weapons;
 
 import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.ObjectFactory.ObjectType;
+import de.illonis.eduras.gameobjects.TimingSource;
 import de.illonis.eduras.settings.S;
 import de.illonis.eduras.shapes.ObjectShape.ShapeType;
 import de.illonis.eduras.shapes.ShapeFactory;
@@ -17,11 +18,13 @@ public class RocketMissile extends Missile {
 	 * 
 	 * @param game
 	 *            The game context
+	 * @param timingSource
+	 *            the timing source.
 	 * @param id
 	 *            The id of the new missile
 	 */
-	public RocketMissile(GameInformation game, int id) {
-		super(game, id);
+	public RocketMissile(GameInformation game, TimingSource timingSource, int id) {
+		super(game, timingSource, id);
 		setDamage(S.go_rocketmissile_damage);
 		setDamageRadius(S.go_rocketmissile_damageradius);
 		setObjectType(ObjectType.ROCKET_MISSILE);

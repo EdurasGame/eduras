@@ -20,14 +20,16 @@ public class BiggerBlock extends Block {
 	 * creates the bigger block
 	 * 
 	 * @param game
+	 * @param timingSource
 	 * @param xPos
 	 * @param yPos
 	 * @param id
 	 * @throws ShapeVerticesNotApplicableException
 	 */
-	public BiggerBlock(GameInformation game, double xPos, double yPos, int id)
+	public BiggerBlock(GameInformation game, TimingSource timingSource,
+			double xPos, double yPos, int id)
 			throws ShapeVerticesNotApplicableException {
-		super(game, xPos, yPos, WIDTH, HEIGHT, id);
+		super(game, timingSource, xPos, yPos, WIDTH, HEIGHT, id);
 		setObjectType(ObjectType.BIGGERBLOCK);
 	}
 
@@ -35,12 +37,14 @@ public class BiggerBlock extends Block {
 	 * creates the bigger block
 	 * 
 	 * @param game
+	 * @param timingSource
+	 *            the timing source.
 	 * @param id
 	 * @throws ShapeVerticesNotApplicableException
 	 */
-	public BiggerBlock(GameInformation game, int id)
+	public BiggerBlock(GameInformation game, TimingSource timingSource, int id)
 			throws ShapeVerticesNotApplicableException {
-		super(game, WIDTH, HEIGHT, id);
+		super(game, timingSource, WIDTH, HEIGHT, id);
 		setObjectType(ObjectType.BIGGERBLOCK);
 	}
 

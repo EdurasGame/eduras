@@ -21,11 +21,14 @@ public class DynamicPolygonObject extends GameObject {
 	 *            The type of the dynamic polygon
 	 * @param game
 	 *            game information.
+	 * @param timingSource
+	 *            the timing source.
 	 * @param id
 	 *            object id.
 	 */
-	public DynamicPolygonObject(ObjectType type, GameInformation game, int id) {
-		super(game, id);
+	public DynamicPolygonObject(ObjectType type, GameInformation game,
+			TimingSource timingSource, int id) {
+		super(game, timingSource, id);
 		setObjectType(type);
 		setShape(new Polygon());
 	}
@@ -37,17 +40,20 @@ public class DynamicPolygonObject extends GameObject {
 	 *            The type of the polygon object.
 	 * @param game
 	 *            game information.
+	 * @param timingSource
+	 *            the timing source.
 	 * @param id
 	 *            object id.
 	 * @param vertices
 	 *            vertices of polygon
 	 * 
 	 * @see Polygon#setVertices(Vector2D[])
-	 * @see #DynamicPolygonObject(ObjectType, GameInformation, int)
+	 * @see #DynamicPolygonObject(ObjectType, GameInformation, TimingSource,
+	 *      int)
 	 */
-	public DynamicPolygonObject(ObjectType type, GameInformation game, int id,
-			Vector2D[] vertices) {
-		this(type, game, id);
+	public DynamicPolygonObject(ObjectType type, GameInformation game,
+			TimingSource timingSource, int id, Vector2D[] vertices) {
+		this(type, game, timingSource, id);
 		setPolygonVertices(vertices);
 	}
 
