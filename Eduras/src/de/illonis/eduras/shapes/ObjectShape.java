@@ -91,12 +91,12 @@ public abstract class ObjectShape {
 
 			collisions.add(nearestCollision);
 		}
-		
+
 		for (GameObject touchedObject : touchedObjects) {
 			touchedObject.onTouch(thisObject);
 			thisObject.onTouch(touchedObject);
 		}
-		
+
 		if (!thisObject.isCollidable()) {
 			return result;
 		}
@@ -118,15 +118,15 @@ public abstract class ObjectShape {
 			thisObject.onCollision(collisionObject);
 			collisionObject.onCollision(thisObject);
 
-			Vector2D targetResult = new Vector2D(positionVector);
-			resultingCollisionPoint.getDistanceVector().invert();
-			targetResult.add(resultingCollisionPoint.getDistanceVector());
-			result = targetResult;
+			// Use the following code as an alternative. Gives more accurate
+			// results, but is visually ugly and can lead to stucking at edges
+			// more easily
+			// Vector2D targetResult = new Vector2D(positionVector);
+			// resultingCollisionPoint.getDistanceVector().invert();
+			// targetResult.add(resultingCollisionPoint.getDistanceVector());
+			// result = targetResult;
+			result = positionVector;
 		}
-
-		
-
-		// calculate the new position after a collision
 
 		return result;
 	}

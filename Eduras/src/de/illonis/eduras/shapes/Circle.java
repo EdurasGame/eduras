@@ -19,7 +19,7 @@ import de.illonis.eduras.math.Vector2D;
  */
 public class Circle extends ObjectShape {
 
-	private static final int COLLISION_ACCURACY = 20;
+	private static final int COLLISION_ACCURACY = 30;
 	private double radius = 0;
 	private final Rectangle2D.Double boundingBox;
 
