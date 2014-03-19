@@ -11,6 +11,7 @@ import javax.swing.DefaultListModel;
 import de.illonis.eduras.gameclient.LoginData;
 import de.illonis.eduras.gameclient.LoginPanelReactor;
 import de.illonis.eduras.gameclient.gui.ClientGuiStepLogic;
+import de.illonis.eduras.gameclient.gui.SettingsWindow;
 import de.illonis.eduras.locale.Localization;
 import de.illonis.eduras.networking.ClientRole;
 import de.illonis.eduras.networking.discover.ServerFoundListener;
@@ -44,7 +45,17 @@ public final class LoginPanelLogic extends ClientGuiStepLogic implements
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		startLogin();
+		switch (e.getActionCommand()) {
+		case "login":
+			startLogin();
+			break;
+		case "settings":
+			SettingsWindow prefWindow = new SettingsWindow();
+			prefWindow.setVisible(true);
+			break;
+		default:
+			break;
+		}
 	}
 
 	private void startLogin() {
