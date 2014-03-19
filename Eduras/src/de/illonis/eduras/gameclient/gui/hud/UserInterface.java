@@ -1,8 +1,12 @@
 package de.illonis.eduras.gameclient.gui.hud;
 
+import java.awt.AWTException;
 import java.awt.image.BufferedImage;
 import java.util.LinkedList;
 import java.util.TimerTask;
+
+import org.newdawn.slick.Image;
+import org.newdawn.slick.SlickException;
 
 import de.illonis.eduras.gameclient.ChatCache;
 import de.illonis.eduras.gameclient.gui.HudNotifier;
@@ -82,8 +86,8 @@ public class UserInterface implements GuiResizeListener, UserInputListener {
 	/**
 	 * @return the gamePanel.
 	 */
-	public BufferedImage getScreenshot() {
-		return renderer.getScreenshot();
+	public BufferedImage getScreenshot()   {
+		return renderer.takeScreenshot();
 	}
 
 	private void createElements() {

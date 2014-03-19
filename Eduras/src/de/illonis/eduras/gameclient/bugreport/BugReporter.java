@@ -12,12 +12,19 @@ import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.util.concurrent.ExecutionException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.imageio.ImageIO;
 import javax.swing.SwingWorker;
+
+import org.newdawn.slick.SlickException;
+import org.newdawn.slick.imageout.ImageOut;
 
 import de.illonis.edulog.EduLog;
 import de.illonis.eduras.utils.PathFinder;
@@ -48,29 +55,33 @@ public class BugReporter extends SwingWorker<String, Void> {
 	protected String doInBackground() throws Exception {
 		try {
 			sendReport();
-		} catch (IOException e) {
-
+		} catch (IOException | SlickException e) {
+			L.log(Level.SEVERE, "Error sending bugreport.", e);
 		}
 		return message;
 	}
 
-	private void sendReport() throws MalformedURLException, IOException {
+	private void sendReport() throws MalformedURLException, IOException,
+			SlickException {
 
 		// long byteTransferred = 0;
 		long logLength = 0;
 		long screenLength = 0;
 
-		File screenFile = null;
+		Path screenFile = null;
 		if (report.hasScreen()) {
 			URI file = PathFinder.findFile("bugscreen.png");
 			if (file == null) {
 				message = "Could not locate game dir.";
 				return;
 			}
-			screenFile = new File(file);
+
+			screenFile = Paths.get(file);
 			try {
-				ImageIO.write(report.getScreenshot(), "png", screenFile);
-				screenLength = screenFile.length();
+				ImageIO.write(report.getScreenshot(), "png", Files
+						.newOutputStream(screenFile, StandardOpenOption.CREATE,
+								StandardOpenOption.WRITE));
+				screenLength = screenFile.toFile().length();
 			} catch (IOException e) {
 				message = "Could not save image: " + e.getMessage();
 				L.log(Level.SEVERE, "Error saving the image.", e);
@@ -103,7 +114,7 @@ public class BugReporter extends SwingWorker<String, Void> {
 
 		if (report.hasScreen()) {
 			BufferedInputStream fis = new BufferedInputStream(
-					new FileInputStream(screenFile));
+					Files.newInputStream(screenFile, StandardOpenOption.READ));
 
 			for (int i = 0; i < screenLength; i++) {
 				os.write(fis.read());

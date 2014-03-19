@@ -89,7 +89,10 @@ public class GameRenderer implements TooltipHandler {
 		RendererTooltipHandler h = new RendererTooltipHandler(this);
 		gui.setTooltipHandler(h);
 	}
-	
+
+	/**
+	 * @return the current viewport.
+	 */
 	public Rectangle getViewport() {
 		return viewPort;
 	}
@@ -99,9 +102,15 @@ public class GameRenderer implements TooltipHandler {
 	 * 
 	 * @return a screenshot.
 	 */
-	public BufferedImage getScreenshot() {
-		// FIXME: adapt for slick
-		return null;
+	public BufferedImage takeScreenshot() {
+		BufferedImage image = new BufferedImage(DEFAULT_WIDTH, DEFAULT_HEIGHT,
+				BufferedImage.TYPE_INT_RGB);
+		return image;
+		// Image target = new Image(gameContainer.getWidth(),
+		// gameContainer.getHeight());
+		// Graphics g = gameContainer.getGraphics();
+		// g.copyArea(target, 0, 0);
+		// return target;
 	}
 
 	/**
