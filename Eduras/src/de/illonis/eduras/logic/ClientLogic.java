@@ -577,7 +577,6 @@ public class ClientLogic implements GameLogicInterface {
 		workerThread = new Thread(lgw);
 		workerThread.setName("ClientLogicGameWorker");
 		workerThread.start();
-		System.out.println("start worker");
 	}
 
 }
