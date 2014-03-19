@@ -28,9 +28,6 @@ public class FPSDisplay extends RenderedGuiObject implements FPSListener {
 
 	@Override
 	public void render(Graphics2D g2d) {
-		// g2d.setColor(Color.GRAY);
-		g2d.setColor(TRANSLUCENT); // transparent
-		g2d.fillRect(screenX, screenY, WIDTH, HEIGHT);
 		g2d.setFont(DEFAULT_FONT);
 		g2d.setColor(Color.WHITE);
 		g2d.drawString(fps, screenX + 6, screenY + HEIGHT - 5);

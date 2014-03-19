@@ -16,8 +16,6 @@ public class ChatDisplay extends RenderedGuiObject {
 
 	private final static int HEIGHT = 150;
 	private final static int WIDTH = 280;
-	// private final static Color BACKGROUND = new Color.BLACK;
-	private final static Color BACKGROUND = new Color(0, 0, 0, 0f);
 	private final ChatCache data;
 
 	protected ChatDisplay(ChatCache chatData, UserInterface gui) {
@@ -30,8 +28,6 @@ public class ChatDisplay extends RenderedGuiObject {
 	@Override
 	public void render(Graphics2D g2d) {
 		g2d.setFont(DEFAULT_FONT);
-		g2d.setColor(BACKGROUND);
-		g2d.fillRect(screenX, screenY, WIDTH, HEIGHT);
 		g2d.setColor(Color.WHITE);
 		g2d.drawString("Room: " + data.getRoomName(), screenX + WIDTH - 130,
 				screenY + 20);
