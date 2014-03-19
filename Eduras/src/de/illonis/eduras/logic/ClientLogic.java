@@ -71,9 +71,9 @@ public class ClientLogic implements GameLogicInterface {
 	 */
 	public ClientLogic(GameInformation g) {
 		this.gameInfo = g;
-		objectFactory = new ObjectFactory(this, lgw);
 		listenerHolder = new ListenerHolder<GameEventListener>();
-
+		lgw = new ClientLogicGameWorker(gameInfo, listenerHolder);
+		objectFactory = new ObjectFactory(this, lgw);
 	}
 
 	@Override
@@ -574,7 +574,6 @@ public class ClientLogic implements GameLogicInterface {
 
 	@Override
 	public void startWorker() {
-		lgw = new ClientLogicGameWorker(gameInfo, listenerHolder);
 		workerThread = new Thread(lgw);
 		workerThread.setName("ClientLogicGameWorker");
 		workerThread.start();

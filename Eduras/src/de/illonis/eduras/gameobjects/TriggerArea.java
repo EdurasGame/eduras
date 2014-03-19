@@ -40,7 +40,9 @@ public abstract class TriggerArea extends GameObject implements
 	public TriggerArea(GameInformation game, TimingSource timingSource, int id) {
 		super(game, timingSource, id);
 		setObjectType(ObjectType.TRIGGER_AREA);
+		setCollidable(false);
 		presentObjects = new TreeSet<GameObject>(new GameObjectIdComparator());
+		timingSource.addTimedEventHandler(this);
 	}
 
 	/**
@@ -51,20 +53,35 @@ public abstract class TriggerArea extends GameObject implements
 	}
 
 	@Override
-	public void onCollision(GameObject collidingObject) {
-		presentObjects.add(collidingObject);
-		onObjectEntered(collidingObject);
+	public synchronized void onTouch(GameObject collidingObject) {
+		synchronized (collidingObject) {
+			if (presentObjects.add(collidingObject))
+				onObjectEntered(collidingObject);
+		}
 	};
 
 	@Override
-	public void onIntervalElapsed(long delta) {
+	public void onCollision(GameObject collidingObject) {
+		// never called
+	}
+
+	@Override
+	public final synchronized void onIntervalElapsed(long delta) {
+		// System.out.println("[AREA] elapsed");
 		Rectangle2D.Double thisBounds = getBoundingBox();
+
 		for (GameObject obj : presentObjects) {
-			if (!obj.getBoundingBox().intersects(thisBounds)) {
-				presentObjects.remove(obj);
-				onObjectLeft(obj);
+			synchronized (obj) {
+				if (!obj.getBoundingBox().intersects(thisBounds)) {
+					presentObjects.remove(obj);
+					onObjectLeft(obj);
+				}
 			}
 		}
+		intervalElapsed(delta);
+	}
+
+	protected void intervalElapsed(long delta) {
 	}
 
 	@Override

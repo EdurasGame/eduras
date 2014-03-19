@@ -293,8 +293,8 @@ public class GamePanelLogic extends ClientGuiStepLogic implements
 	 *            the message.
 	 */
 	public void showNotification(String msg) {
-		userInterface.showNotification(msg);
-	}
+			userInterface.showNotification(msg);
+		}
 
 	/**
 	 * Assigns the chat to the logic.

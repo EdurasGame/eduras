@@ -1,11 +1,17 @@
 package de.illonis.eduras.gameobjects;
 
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import de.illonis.edulog.EduLog;
 import de.illonis.eduras.GameInformation;
+import de.illonis.eduras.ObjectFactory.ObjectType;
 import de.illonis.eduras.Team;
+import de.illonis.eduras.exceptions.ShapeVerticesNotApplicableException;
+import de.illonis.eduras.math.Vector2D;
 import de.illonis.eduras.settings.S;
+import de.illonis.eduras.shapes.Rectangle;
+import de.illonis.eduras.units.Unit;
 
 /**
  * A neutral base that can be captured.
@@ -39,11 +45,16 @@ public class NeutralBase extends TriggerArea {
 	public NeutralBase(GameInformation game, TimingSource timingSource, int id,
 			int mult) {
 		super(game, timingSource, id);
+		setObjectType(ObjectType.NEUTRAL_BASE);
+		try {
+			setShape(new Rectangle(new Vector2D(-20, 20), new Vector2D(20, -20)));
+		} catch (ShapeVerticesNotApplicableException e) {
+			L.log(Level.WARNING, "TODO: message", e);
+		}
 		currentOwnerTeam = null;
 		currentProgressingTeam = null;
 		resourceGenerateAmount = S.neutralbase_resource_baseamount * mult;
 		resourceGenerateTimeInterval = S.neutralbase_resource_interval;
-		// TODO: register at serverlogicgameworker
 	}
 
 	/**
@@ -71,13 +82,43 @@ public class NeutralBase extends TriggerArea {
 
 	@Override
 	public void onObjectEntered(GameObject object) {
-		// TODO Auto-generated method stub
+		if (object.isUnit()) {
+			Unit u = (Unit) object;
+			Team team = u.getTeam();
+			if (team == null)
+				return;
+
+			if (!team.equals(currentProgressingTeam)) {
+				// getGame().getEventTriggerer().onBaseStartCapturing(this,
+				// team);
+				System.out.println("Team: " + team.getName()
+						+ " starts taking over the base!");
+				currentProgressingTeam = team;
+			}
+		}
 	}
 
 	@Override
 	public void onObjectLeft(GameObject object) {
-		// TODO Auto-generated method stub
+		if (object.isUnit()) {
+			Unit u = (Unit) object;
+			Team team = u.getTeam();
+			if (team == null)
+				return;
 
+			if (team.equals(currentProgressingTeam)) {
+				// getGame().getEventTriggerer().onBaseStartCapturing(this,
+				// team);
+				System.out.println("Team: " + team.getName()
+						+ " left the base!");
+				currentProgressingTeam = null;
+			}
+		}
+	}
+
+	@Override
+	protected void intervalElapsed(long delta) {
+		// System.out.println("[BASE] elapsed");
 	}
 
 }
