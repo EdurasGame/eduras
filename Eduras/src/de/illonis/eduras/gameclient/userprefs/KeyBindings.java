@@ -92,6 +92,12 @@ public final class KeyBindings implements ResettableSetting {
 		}
 	}
 
+	/**
+	 * Resets a keybinding to default key.
+	 * 
+	 * @param binding
+	 *            the binding to reset.
+	 */
 	public void resetToDefault(KeyBinding binding) {
 		setKeyBinding(binding, getDefaultKey(binding));
 	}
