@@ -2,6 +2,8 @@ package de.illonis.eduras.gameclient.gui.login;
 
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 
 import javax.swing.JLabel;
@@ -28,13 +30,20 @@ public class ServerListRenderer extends JPanel implements
 	 * Creates a new list renderer.
 	 */
 	public ServerListRenderer() {
-		setLayout(new GridLayout(0, 3, 15, 0));
+		setLayout(new GridBagLayout());
+		GridBagConstraints c = new GridBagConstraints();
+		c.gridx = 0;
+		c.gridy = 0;
+		c.weightx = 2;
 		lbl[0] = new JLabel("", JLabel.RIGHT);
-		add(lbl[0]);
+		add(lbl[0], c);
+		c.gridx = 1;
+		c.weightx = 1;
 		lbl[1] = new JLabel("", JLabel.CENTER);
-		add(lbl[1]);
+		add(lbl[1], c);
+		c.gridx = 2;
 		lbl[2] = new JLabel("", JLabel.LEFT);
-		add(lbl[2]);
+		add(lbl[2], c);
 	}
 
 	@Override

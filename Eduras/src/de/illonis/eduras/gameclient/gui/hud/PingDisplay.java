@@ -13,7 +13,6 @@ public class PingDisplay extends RenderedGuiObject implements PingListener {
 
 	private final static int WIDTH = 70;
 	private final static int HEIGHT = 20;
-	private static final Color TRANSLUCENT = new Color(0, 0, 0, 0);
 	private String latency;
 
 	protected PingDisplay(UserInterface gui) {
@@ -25,9 +24,6 @@ public class PingDisplay extends RenderedGuiObject implements PingListener {
 
 	@Override
 	public void render(Graphics2D g2d) {
-		// g2d.setColor(Color.GRAY);
-		g2d.setColor(TRANSLUCENT);
-		g2d.fillRect(screenX, screenY, WIDTH, HEIGHT);
 		g2d.setFont(DEFAULT_FONT);
 		g2d.setColor(Color.WHITE);
 		g2d.drawString(latency, screenX + 6, screenY + HEIGHT - 5);

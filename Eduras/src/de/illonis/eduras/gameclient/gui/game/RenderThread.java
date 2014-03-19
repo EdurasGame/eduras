@@ -54,7 +54,6 @@ public final class RenderThread implements Runnable {
 			frames++;
 
 			renderer.render();
-			renderer.paintGame();
 			renderTime = System.currentTimeMillis();
 
 			if (renderTime > lastTime + 1000) {

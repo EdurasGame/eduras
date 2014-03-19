@@ -1,6 +1,5 @@
 package de.illonis.eduras.gameclient.gui.game;
 
-import java.awt.AlphaComposite;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Component;
@@ -59,12 +58,10 @@ public class GameRenderer implements TooltipHandler {
 	private final Logger L = EduLog.getLoggerFor(GameRenderer.class.getName());
 
 	private BufferedImage mapImage = null;
-	private BufferedImage guiImage = null;
 	private BufferedImage displayImage = null;
 	private final GameCamera camera;
 	private final UserInterface gui;
 	private Graphics2D mapGraphics = null;
-	private Graphics2D guiGraphics = null;
 	private Graphics2D bothGraphics = null;
 	private final Map<Integer, GameObject> objs;
 	private RenderThread rendererThread;
@@ -142,8 +139,8 @@ public class GameRenderer implements TooltipHandler {
 		int height = target.getHeight();
 
 		// recreate image if it does not exist
-		if (mapImage == null || mapGraphics == null || guiImage == null
-				|| guiGraphics == null || width != mapImage.getWidth()) {
+		if (mapImage == null || mapGraphics == null
+				|| width != mapImage.getWidth()) {
 			createGraphics(width, height);
 			camera.setSize(width, height);
 			camera.setScale(scale);
@@ -151,16 +148,25 @@ public class GameRenderer implements TooltipHandler {
 		// clear image
 		clear(width, height);
 		adjustCamera();
-		drawMap();
-		drawObjects();
-		drawAnimations();
-		drawGui();
+		drawMap(mapGraphics);
+		drawObjects(mapGraphics);
+		bothGraphics.drawImage(mapImage, 0, 0, null);
+		drawAnimations(mapGraphics);
+		drawGui(bothGraphics);
+
+		Graphics2D g2d = (Graphics2D) buffer.getDrawGraphics();
+		g2d.drawImage(displayImage, 0, 0, null);
+		g2d.dispose();
+		if (!buffer.contentsLost()) {
+			buffer.show();
+		}
+		Toolkit.getDefaultToolkit().sync();
 	}
 
-	private void drawAnimations() {
+	private void drawAnimations(Graphics2D g2d) {
 		for (int i = 0; i < data.getAnimations().size(); i++) {
 			Animation animation = data.getAnimations().get(i);
-			animation.draw(mapGraphics, -camera.x, -camera.y);
+			animation.draw(g2d, -camera.x, -camera.y);
 		}
 	}
 
@@ -192,23 +198,16 @@ public class GameRenderer implements TooltipHandler {
 
 		mapImage = config.createCompatibleImage(width, height,
 				Transparency.OPAQUE);
-		guiImage = config.createCompatibleImage(width, height,
-				Transparency.TRANSLUCENT);
 		displayImage = config.createCompatibleImage(width, height,
 				Transparency.OPAQUE);
 
 		scale = calculateScale(width, height);
 
 		bothGraphics = (Graphics2D) displayImage.getGraphics();
-		bothGraphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-				RenderingHints.VALUE_ANTIALIAS_ON);
 		mapGraphics = (Graphics2D) mapImage.getGraphics();
 		mapGraphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
 				RenderingHints.VALUE_ANTIALIAS_ON);
 		mapGraphics.scale(scale, scale);
-		guiGraphics = (Graphics2D) guiImage.getGraphics();
-		guiGraphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-				RenderingHints.VALUE_ANTIALIAS_ON);
 	}
 
 	private synchronized void clear(int width, int height) {
@@ -216,70 +215,43 @@ public class GameRenderer implements TooltipHandler {
 		mapGraphics.fillRect(0, 0, width, height);
 		bothGraphics.setColor(Color.black);
 		bothGraphics.fillRect(0, 0, width, height);
-
-		// clears ui image with alpha value to let map shine through
-		guiGraphics.setComposite(AlphaComposite
-				.getInstance(AlphaComposite.CLEAR));
-
-		guiGraphics.fillRect(0, 0, width, height);
-
-		// reset composite
-		guiGraphics.setComposite(AlphaComposite
-				.getInstance(AlphaComposite.SRC_OVER));
 	}
 
 	/**
 	 * Draw every gui element.
 	 */
-	private void drawGui() {
+	private void drawGui(Graphics2D g2d) {
 		for (int i = 0; i < uiObjects.size(); i++) {
 			RenderedGuiObject o = uiObjects.get(i);
 			if (!gui.isSpectator() || o.isVisibleForSpectator())
-				o.render(guiGraphics);
+				o.render(g2d);
 		}
 		if (tooltipShown) {
-			tooltip.render(guiGraphics);
-		}
-	}
-
-	/**
-	 * Actively renders the buffered image on draw target.
-	 * 
-	 */
-	public void paintGame() {
-		if ((buffer != null) && (mapImage != null) && guiImage != null
-				&& (displayImage != null)) {
-
-			Graphics2D g2d = (Graphics2D) buffer.getDrawGraphics();
-			bothGraphics.drawImage(mapImage, 0, 0, null);
-			bothGraphics.drawImage(guiImage, 0, 0, null);
-			g2d.drawImage(displayImage, 0, 0, null);
-			g2d.dispose();
-			if (!buffer.contentsLost()) {
-				buffer.show();
-			}
-			Toolkit.getDefaultToolkit().sync();
-
+			tooltip.render(g2d);
 		}
 	}
 
 	/**
 	 * Draws a small red border where map bounds are.
+	 * 
+	 * @param mapGraphics2
 	 */
-	private void drawMap() {
+	private void drawMap(Graphics2D g2d) {
 		Rectangle r = new Rectangle(info.getMapBounds());
 		r.x -= camera.x;
 		r.y -= camera.y;
-		mapGraphics.setColor(Color.BLACK);
-		mapGraphics.fill(r);
+		g2d.setColor(Color.BLACK);
+		g2d.fill(r);
 	}
 
 	/**
 	 * Draw every object of game-object list that is in camera viewport.
+	 * 
+	 * @param g2d
 	 */
-	private synchronized void drawObjects() {
+	private synchronized void drawObjects(Graphics2D g2d) {
 
-		mapGraphics.setColor(Color.YELLOW);
+		g2d.setColor(Color.YELLOW);
 
 		PlayerMainFigure myPlayer;
 
@@ -317,9 +289,9 @@ public class GameRenderer implements TooltipHandler {
 					// draw shape of gameObject instead if object has shape
 
 					if (isSelected(d)) {
-						mapGraphics.setColor(Color.RED);
+						g2d.setColor(Color.RED);
 					} else {
-						mapGraphics.setColor(Color.YELLOW);
+						g2d.setColor(Color.YELLOW);
 					}
 
 					if (d.getShape() != null) {
@@ -332,9 +304,8 @@ public class GameRenderer implements TooltipHandler {
 
 					if (d instanceof PlayerMainFigure) {
 						PlayerMainFigure player = (PlayerMainFigure) d;
-						mapGraphics.drawString(player.getName(),
-								player.getDrawX() - camera.x, player.getDrawY()
-										- camera.y);
+						g2d.drawString(player.getName(), player.getDrawX()
+								- camera.x, player.getDrawY() - camera.y);
 					}
 
 					// draws unit id next to unit for testing purpose

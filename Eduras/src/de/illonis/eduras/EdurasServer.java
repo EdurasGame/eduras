@@ -73,7 +73,6 @@ public class EdurasServer {
 	 *            </ul>
 	 */
 	public static void main(String[] args) {
-		SysOutCatcher.startCatching();
 		SimpleDateFormat simpleDate = new SimpleDateFormat("y-M-d-H-m-s");
 
 		try {
@@ -135,6 +134,7 @@ public class EdurasServer {
 
 		EduLog.setBasicLogLimit(logLimit);
 		EduLog.setConsoleLogLimit(logLimit);
+		SysOutCatcher.startCatching();
 
 		L.info("Caching shapes...");
 		GraphicsPreLoader.preLoadShapes();
