@@ -12,10 +12,10 @@ import de.illonis.eduras.exceptions.KeyNotBoundException;
 import de.illonis.eduras.gameclient.GamePanelReactor;
 import de.illonis.eduras.gameclient.gui.game.GamePanelLogic;
 import de.illonis.eduras.gameclient.gui.game.UserInputListener;
+import de.illonis.eduras.gameclient.userprefs.KeyBindings.KeyBinding;
+import de.illonis.eduras.gameclient.userprefs.Settings;
 import de.illonis.eduras.gameobjects.MoveableGameObject.Direction;
 import de.illonis.eduras.logicabstraction.EdurasInitializer;
-import de.illonis.eduras.settings.KeyBindings.KeyBinding;
-import de.illonis.eduras.settings.Settings;
 
 /**
  * This class handles user's key input and passes them to logic.

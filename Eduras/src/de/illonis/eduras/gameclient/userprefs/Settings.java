@@ -1,4 +1,4 @@
-package de.illonis.eduras.settings;
+package de.illonis.eduras.gameclient.userprefs;
 
 import de.illonis.eduras.exceptions.UserDataMissingException;
 import de.illonis.eduras.interfaces.ResettableSetting;

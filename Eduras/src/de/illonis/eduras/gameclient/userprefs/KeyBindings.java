@@ -1,4 +1,4 @@
-package de.illonis.eduras.settings;
+package de.illonis.eduras.gameclient.userprefs;
 
 import java.awt.event.KeyEvent;
 import java.util.HashMap;
