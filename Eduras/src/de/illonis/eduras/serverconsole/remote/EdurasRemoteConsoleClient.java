@@ -1,7 +1,5 @@
 package de.illonis.eduras.serverconsole.remote;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -16,22 +14,24 @@ import de.eduras.remote.RemoteServer;
 import de.eduras.remote.security.EncryptionService;
 import de.illonis.edulog.EduLog;
 
+/**
+ * A gui client for eduras remote console.
+ * 
+ * @author illonis
+ * 
+ */
 public class EdurasRemoteConsoleClient extends EncryptedRemoteClient {
 
 	private final static Logger L = EduLog
 			.getLoggerFor(EdurasRemoteConsoleClient.class.getName());
 
-	private final boolean authenticated;
-	private final BufferedReader console;
 	private final RemoteConsoleClientFrame frame;
 
-	public EdurasRemoteConsoleClient() {
-		authenticated = false;
+	private EdurasRemoteConsoleClient() {
 		frame = new RemoteConsoleClientFrame(this);
-		console = new BufferedReader(new InputStreamReader(System.in));
 	}
 
-	public void showGui() {
+	private void showGui() {
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
@@ -41,7 +41,7 @@ public class EdurasRemoteConsoleClient extends EncryptedRemoteClient {
 		frame.appendOutput("Waiting for connection details...");
 	}
 
-	public void askConnection() {
+	private void askConnection() {
 		String s = (String) JOptionPane.showInputDialog(null,
 				"Enter server address:\n" + "\"e.g. 192.168.0.4:4441",
 				"Connect to remote console", JOptionPane.PLAIN_MESSAGE, null,
@@ -74,6 +74,12 @@ public class EdurasRemoteConsoleClient extends EncryptedRemoteClient {
 
 	}
 
+	/**
+	 * Starts the remote console client.
+	 * 
+	 * @param args
+	 *            unused.
+	 */
 	public static void main(String[] args) {
 		EdurasRemoteConsoleClient client = new EdurasRemoteConsoleClient();
 		client.showGui();
@@ -108,7 +114,7 @@ public class EdurasRemoteConsoleClient extends EncryptedRemoteClient {
 		System.exit(1);
 	}
 
-	public void onCommand(String command) throws RemoteException {
+	void onCommand(String command) throws RemoteException {
 		if (command.equals("exit")) {
 			disconnect();
 			return;

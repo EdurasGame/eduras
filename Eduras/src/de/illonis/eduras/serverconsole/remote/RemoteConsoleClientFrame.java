@@ -19,6 +19,12 @@ import javax.swing.JTextField;
 import de.eduras.remote.RemoteException;
 import de.illonis.edulog.EduLog;
 
+/**
+ * The gui for {@link EdurasRemoteConsoleClient}.
+ * 
+ * @author illonis
+ * 
+ */
 public class RemoteConsoleClientFrame implements ActionListener {
 
 	private final static Logger L = EduLog
@@ -31,7 +37,7 @@ public class RemoteConsoleClientFrame implements ActionListener {
 	private final EdurasRemoteConsoleClient client;
 	private final static String PROMPT = "eduras-remote>";
 
-	public RemoteConsoleClientFrame(EdurasRemoteConsoleClient client) {
+	RemoteConsoleClientFrame(EdurasRemoteConsoleClient client) {
 		this.client = client;
 		initGui();
 	}
@@ -69,7 +75,7 @@ public class RemoteConsoleClientFrame implements ActionListener {
 		inputField.setEnabled(false);
 	}
 
-	public void show() {
+	void show() {
 		frame.setLocationRelativeTo(null);
 		frame.setVisible(true);
 	}
@@ -85,12 +91,12 @@ public class RemoteConsoleClientFrame implements ActionListener {
 		}
 	}
 
-	public void appendOutput(String text) {
+	void appendOutput(String text) {
 		consoleOutput.append(text + System.lineSeparator());
 		consoleOutput.setCaretPosition(consoleOutput.getDocument().getLength());
 	}
 
-	public void ready() {
+	void ready() {
 		sendButton.setEnabled(true);
 		inputField.setEnabled(true);
 		inputField.requestFocus();
