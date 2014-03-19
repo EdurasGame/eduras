@@ -37,6 +37,7 @@ import de.illonis.eduras.maps.Map;
 import de.illonis.eduras.maps.SpawnPosition;
 import de.illonis.eduras.maps.SpawnPosition.SpawnType;
 import de.illonis.eduras.math.Vector2D;
+import de.illonis.eduras.shapes.Circle;
 import de.illonis.eduras.shapes.ObjectShape;
 import de.illonis.eduras.shapes.Polygon;
 import de.illonis.eduras.units.PlayerMainFigure;
@@ -527,6 +528,10 @@ public class GameInformation {
 			do {
 				i++;
 				newPos = spawnPos.getAPoint(player.getShape());
+				if (!isValidPosition(newPos, player)) {
+					continue;
+				}
+
 				boundings.x = newPos.getX();
 				boundings.y = newPos.getY();
 
@@ -540,6 +545,12 @@ public class GameInformation {
 		}
 
 		return new Vector2D(boundings.x, boundings.y);
+	}
+
+	private boolean isValidPosition(Vector2D newPos, PlayerMainFigure player) {
+		// make sure the position is far apart enough from the map border object
+		double diameter = 2 * ((Circle) player.getShape()).getRadius();
+		return (newPos.getX() > diameter && newPos.getY() > diameter);
 	}
 
 	private boolean isObjectWithinExceptMap(Double boundings) {
