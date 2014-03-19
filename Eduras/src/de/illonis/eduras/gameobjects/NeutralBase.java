@@ -91,7 +91,7 @@ public class NeutralBase extends TriggerArea {
 			if (!team.equals(currentProgressingTeam)) {
 				// getGame().getEventTriggerer().onBaseStartCapturing(this,
 				// team);
-				System.out.println("Team: " + team.getName()
+				L.log(Level.INFO, "Team: " + team.getName()
 						+ " starts taking over the base!");
 				currentProgressingTeam = team;
 			}
@@ -109,8 +109,7 @@ public class NeutralBase extends TriggerArea {
 			if (team.equals(currentProgressingTeam)) {
 				// getGame().getEventTriggerer().onBaseStartCapturing(this,
 				// team);
-				System.out.println("Team: " + team.getName()
-						+ " left the base!");
+				L.log(Level.INFO, "Team: " + team.getName() + " left the base!");
 				currentProgressingTeam = null;
 			}
 		}
