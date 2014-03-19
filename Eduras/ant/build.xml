@@ -48,8 +48,9 @@
 				<include name="**/*.esh"></include>
 				<include name="**/*.properties"></include>
 			</fileset>
-			<fileset file="version" />
 			<zipgroupfileset dir="${base}${libs}" includes="*.jar" />
+			<fileset dir="${base}${libs}" includes="native/**" />
+			<fileset file="gitversion" />
 			<manifest>
 				<attribute name="Main-Class"
 					value="de.illonis.eduras.gameclient.EdurasClient" />
@@ -133,7 +134,7 @@
 			<arg value="rev-parse" />
 			<arg value="HEAD" />
 		</exec>
-		<echo file="${base}${ant}/version">${git.revision}</echo>
+		<echo file="${base}${ant}/gitversion">${git.revision}</echo>
 	</target>
 
 	<!-- <target name="deploy" depends="jars" description="Creates launcher 
