@@ -146,10 +146,17 @@ public abstract class MoveableGameObject extends GameObject implements Moveable 
 	public Vector2D checkCollisionOnMove(Vector2D target)
 			throws MapBorderReachedException {
 
+		Vector2D currentTarget = target;
 		Vector2D collisionPoint = this.getShape().checkCollisionOnMove(
-				getGame(), this, target);
+				getGame(), this, currentTarget);
 
-		return collisionPoint;
+		while (!collisionPoint.equals(currentTarget)) {
+			currentTarget = collisionPoint;
+			collisionPoint = this.getShape().checkCollisionOnMove(getGame(),
+					this, currentTarget);
+		}
+
+		return currentTarget;
 	}
 
 	/**
