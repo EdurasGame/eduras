@@ -377,6 +377,5 @@ public class GamePanelLogic extends ClientGuiStepLogic implements
 	public void selectItem(int i) {
 		data.setCurrentItemSelected(i);
 		currentClickState = ClickState.ITEM_SELECTED;
-		// TODO: How to notify the ItemDisplay?
 	}
 }

@@ -20,7 +20,6 @@ public abstract class GuiMouseAdapter extends MouseAdapter implements
 	GuiMouseAdapter(GamePanelLogic panelLogic, GuiInternalEventListener listener) {
 		this.panelLogic = panelLogic;
 		this.listener = listener;
-		// TODO Auto-generated constructor stub
 	}
 
 	GuiInternalEventListener getListener() {

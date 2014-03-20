@@ -70,6 +70,7 @@ public class ItemDisplay extends ClickableGuiElement implements
 
 	@Override
 	public void render(Graphics2D g2d) {
+		currentItem = getInfo().getClientData().getCurrentItemSelected();
 		g2d.setFont(DEFAULT_FONT);
 		// g2d.setColor(Color.GRAY);
 		g2d.setColor(TRANSLUCENT); // translucent
@@ -131,7 +132,7 @@ public class ItemDisplay extends ClickableGuiElement implements
 	 * @param itemSlot
 	 *            item clicked.
 	 */
-	private void itemClicked(int itemSlot) {
+	public void itemClicked(int itemSlot) {
 
 		try {
 			getInfo().getPlayer().getInventory().getItemBySlot(itemSlot);
