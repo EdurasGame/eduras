@@ -107,7 +107,7 @@ public class CollisionPoint {
 		double distanceVectorY = interceptPoint.getY() - line.getU().getY();
 		Vector2D distanceVector = new Vector2D(distanceVectorX, distanceVectorY);
 
-		L.info("[LOGIC][TRIANGLE] Collision at " + interceptPoint.getX()
+		L.finest("[LOGIC][TRIANGLE] Collision at " + interceptPoint.getX()
 				+ " , " + interceptPoint.getY());
 
 		CollisionPoint interception = new CollisionPoint(interceptPoint,
