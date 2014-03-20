@@ -56,9 +56,9 @@ import de.illonis.eduras.settings.S;
 import de.illonis.eduras.utils.WebFetcher;
 
 /**
- * The eduras server main executable.
+ * This is the main class to configure and start an Eduras? server.
  * 
- * @author illonis
+ * @author Florian 'Ren' Mai <florian.ren.mai@googlemail.com>
  * 
  */
 public class EdurasServer {
@@ -87,9 +87,11 @@ public class EdurasServer {
 
 	private Map startMap;
 	private String startGameMode;
-	private String startConfig;
 	private ServerEventTriggerer eventTriggerer;
 
+	/**
+	 * Create a new EdurasServer with default settings.
+	 */
 	public EdurasServer() {
 		server = new Server();
 		chatServer = new ChatServerImpl();
@@ -111,95 +113,198 @@ public class EdurasServer {
 		remoteConsolePassword = "password";
 	}
 
+	/**
+	 * Returns the hostaddress to be registered at the metaserver.
+	 * 
+	 * @return hostaddress
+	 */
 	public String getServerHostAddress() {
 		return serverHostAddress;
 	}
 
+	/**
+	 * Sets the hostaddress to be registered at the metaserver.
+	 * 
+	 * @param serverHostAddress
+	 *            The hostaddress
+	 */
 	public void setServerHostAddress(String serverHostAddress) {
 		this.serverHostAddress = serverHostAddress;
 	}
 
+	/**
+	 * Tells whether the Eduras? server registeres at the metaserver when
+	 * starting.
+	 * 
+	 * @return True if it does register at the metaserver.
+	 */
 	public boolean isRegisterAtMetaserver() {
 		return registerAtMetaserver;
 	}
 
+	/**
+	 * If you pass true, the Eduras? server will register at the metaserver.
+	 * 
+	 * @param registerAtMetaserver
+	 */
 	public void setRegisterAtMetaserver(boolean registerAtMetaserver) {
 		this.registerAtMetaserver = registerAtMetaserver;
 	}
 
+	/**
+	 * Returns the port the Eduras? server will be running on.
+	 * 
+	 * @return The portnumber
+	 */
 	public int getEdurasPort() {
 		return edurasPort;
 	}
 
+	/**
+	 * Sets the port the Eduras? server will be running on.
+	 * 
+	 * @param edurasPort
+	 */
 	public void setEdurasPort(int edurasPort) {
 		this.edurasPort = edurasPort;
 	}
 
+	/**
+	 * Returns the name the Eduras? server will be displayed under.
+	 * 
+	 * @return the name
+	 */
 	public String getName() {
 		return name;
 	}
 
+	/**
+	 * Sets the name the Eduras? server will be displayed under.
+	 * 
+	 * @param name
+	 */
 	public void setName(String name) {
 		this.name = name;
 	}
 
+	/**
+	 * Tells if a local console will be run.
+	 * 
+	 * @return True if so.
+	 */
 	public boolean isLocalConsoleOn() {
 		return localConsoleOn;
 	}
 
+	/**
+	 * Pass true if you want a local console to be run on the Eduras? server.
+	 * 
+	 * @param localConsoleOn
+	 */
 	public void setLocalConsoleOn(boolean localConsoleOn) {
 		this.localConsoleOn = localConsoleOn;
 	}
 
+	/**
+	 * Returns the number of the port the remote console will be running on.
+	 * 
+	 * @return remote console port
+	 */
 	public int getRemoteConsolePort() {
 		return remoteConsolePort;
 	}
 
+	/**
+	 * Sets the number of the port the remote console will be running on.
+	 * 
+	 * @param remoteConsolePort
+	 */
 	public void setRemoteConsolePort(int remoteConsolePort) {
 		this.remoteConsolePort = remoteConsolePort;
 	}
 
+	/**
+	 * Tells if a remote console will be run on the Eduras? server.
+	 * 
+	 * @return True if so.
+	 */
 	public boolean isRemoteConsoleOn() {
 		return remoteConsoleOn;
 	}
 
+	/**
+	 * Pass true if you want a remote console to be run on the Eduras? server.
+	 * 
+	 * @param remoteConsoleOn
+	 */
 	public void setRemoteConsoleOn(boolean remoteConsoleOn) {
 		this.remoteConsoleOn = remoteConsoleOn;
 	}
 
+	/**
+	 * Returns the remote console's password.
+	 * 
+	 * @return password
+	 */
 	public String getRemoteConsolePassword() {
 		return remoteConsolePassword;
 	}
 
+	/**
+	 * Sets the remote console's password.
+	 * 
+	 * @param remoteConsolePassword
+	 */
 	public void setRemoteConsolePassword(String remoteConsolePassword) {
 		this.remoteConsolePassword = remoteConsolePassword;
 	}
 
+	/**
+	 * Returns the name of the map that is initially started.
+	 * 
+	 * @return name of the map
+	 */
 	public String getStartMap() {
 		return startMap.getName();
 	}
 
+	/**
+	 * Sets the map of the server on startup.
+	 * 
+	 * @param startMap
+	 *            Name of the map.
+	 * @throws NoSuchMapException
+	 *             Thrown if the map is unknown.
+	 */
 	public void setStartMap(String startMap) throws NoSuchMapException {
 		this.startMap = Map.getMapByName(startMap);
 	}
 
+	/**
+	 * Returns the name of the game mode that is initially started.
+	 * 
+	 * @return name of game mode
+	 */
 	public String getStartGameMode() {
 		return startGameMode;
 	}
 
-	public void setStartGameMode(String startGameMode)
-			throws NoSuchGameModeException {
+	/**
+	 * Sets the gamemode of the Eduras? server on startup.
+	 * 
+	 * @param startGameMode
+	 *            name of game mode
+	 */
+	public void setStartGameMode(String startGameMode) {
 		this.startGameMode = startGameMode;
 	}
 
-	public String getStartConfig() {
-		return this.startConfig;
-	}
-
-	public void setStartConfig(String startConfig) {
-		this.startConfig = startConfig;
-	}
-
+	/**
+	 * Runs the server with the configurations set on the EdurasServer before.
+	 * 
+	 * @throws NoSuchGameModeException
+	 *             Thrown if the game mode set on the server is unknown.
+	 */
 	public void runServer() throws NoSuchGameModeException {
 		L.info("Caching shapes.");
 		GraphicsPreLoader.preLoadShapes();
@@ -448,13 +553,7 @@ public class EdurasServer {
 			}
 
 			case "startgamemode": {
-				try {
-					edurasServer.setStartGameMode(parameterValue);
-				} catch (NoSuchGameModeException e) {
-					System.out.println("There is no such game mode "
-							+ parameterValue);
-					System.exit(-1);
-				}
+				edurasServer.setStartGameMode(parameterValue);
 				break;
 			}
 
