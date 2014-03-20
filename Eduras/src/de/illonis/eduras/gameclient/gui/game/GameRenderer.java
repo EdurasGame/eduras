@@ -1,5 +1,6 @@
 package de.illonis.eduras.gameclient.gui.game;
 
+import java.awt.Polygon;
 import java.awt.geom.Area;
 import java.awt.image.BufferedImage;
 import java.util.Iterator;
@@ -61,6 +62,7 @@ public class GameRenderer implements TooltipHandler {
 	private final static int DEFAULT_HEIGHT = 500;
 	private final InformationProvider info;
 	private final ClientData data;
+	private final static Color FOG_OF_WAR = new Color(0, 0, 0, 200);
 
 	/**
 	 * Creates a new renderer.
@@ -247,17 +249,30 @@ public class GameRenderer implements TooltipHandler {
 			if (!d.isVisibleFor(myPlayer)) {
 				continue;
 			}
-
+			float[] points = d.getShape().getPoints();
+			Polygon p = new Polygon();
+			for (int i = 0; i < points.length / 2; i++) {
+				p.addPoint((int) points[2 * i], (int) points[2 * i + 1]);
+			}
+			Area a = new Area(p);
+			a.intersect(visionArea);
 			// draw only if in current view point
 			if (Geometry.shapeCollides(camera, d.getShape())) {
 				if (S.vision_disabled
-						|| (S.vision_neutral_always && d.getOwner() == -1)) {
+						|| (S.vision_neutral_always && d.getOwner() == -1
+								|| d.equals(myPlayer) || !a.isEmpty())) {
 					drawObject(d, g);
 					if (d instanceof PlayerMainFigure)
 						drawFace(d, (Circle) d.getShape(), g);
 				}
 			}
+			
 		}
+		
+//		if (!S.vision_disabled) {
+//			g.setColor(FOG_OF_WAR);
+//			g.fill(visionMask);
+//		}
 
 	}
 
