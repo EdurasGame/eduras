@@ -2,17 +2,17 @@ package de.illonis.eduras.logic;
 
 import java.io.File;
 import java.util.Collection;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import de.eduras.eventingserver.ServerInterface;
+import de.illonis.edulog.EduLog;
+import de.illonis.eduras.exceptions.NoSuchGameModeException;
+import de.illonis.eduras.exceptions.NoSuchMapException;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
-import de.illonis.eduras.gamemodes.Deathmatch;
+import de.illonis.eduras.gamemodes.BasicGameMode;
 import de.illonis.eduras.gamemodes.GameMode;
-import de.illonis.eduras.gamemodes.NoGameMode;
-import de.illonis.eduras.gamemodes.TeamDeathmatch;
-import de.illonis.eduras.maps.FunMap;
-import de.illonis.eduras.maps.ManyBlocks;
 import de.illonis.eduras.maps.Map;
-import de.illonis.eduras.maps.SimpleMap;
 import de.illonis.eduras.settings.S;
 import de.illonis.eduras.units.PlayerMainFigure;
 
@@ -24,8 +24,11 @@ import de.illonis.eduras.units.PlayerMainFigure;
  */
 public class ConsoleEventTriggerer {
 
-	private ServerEventTriggerer triggerer;
-	private ServerInterface server;
+	private final static Logger L = EduLog
+			.getLoggerFor(ConsoleEventTriggerer.class.getName());
+
+	private final ServerEventTriggerer triggerer;
+	private final ServerInterface server;
 
 	/**
 	 * Creates a new ConsoleEventTriggerer that uses the information and
@@ -95,26 +98,21 @@ public class ConsoleEventTriggerer {
 	 * 
 	 * @param gameModeName
 	 *            The name of the game mode to switch to.
-	 * @return false, if game mode name couldnt be found.
+	 * @return false, if game mode name couldn't be found.
 	 */
 	public boolean changeGameMode(String gameModeName) {
 
-		GameMode gameMode = null;
-		switch (gameModeName.toLowerCase()) {
-		case "deathmatch":
-			gameMode = new Deathmatch(triggerer.getGameInfo());
-			break;
-		case "teamdeathmatch":
-			gameMode = new TeamDeathmatch(triggerer.getGameInfo());
-			break;
-		default:
-			gameMode = new NoGameMode(triggerer.getGameInfo());
-			break;
+		GameMode gameMode;
+		try {
+			gameMode = BasicGameMode.getGameModeByName(gameModeName,
+					triggerer.getGameInfo());
+		} catch (NoSuchGameModeException e) {
+			L.log(Level.WARNING, "Tried to change gamemode to " + gameModeName
+					+ " which doesn't exist.", e);
+			return false;
 		}
 
 		triggerer.changeGameMode(gameMode);
-		if (gameMode instanceof NoGameMode)
-			return false;
 		return true;
 	}
 
@@ -129,21 +127,12 @@ public class ConsoleEventTriggerer {
 	 * @author illonis
 	 */
 	public boolean changeMap(String mapName) {
-		Map map = null;
-		switch (mapName.toLowerCase()) {
-		case "funmap":
-			map = new FunMap();
-			break;
-		case "simple":
-			map = new SimpleMap();
-			break;
-		case "manyblocks":
-			map = new ManyBlocks();
-			break;
-		default:
-		}
-
-		if (map == null) {
+		Map map;
+		try {
+			map = Map.getMapByName(mapName);
+		} catch (NoSuchMapException e) {
+			L.log(Level.INFO, "Tried to change map to " + mapName
+					+ " which doesn't exist", e);
 			return false;
 		}
 

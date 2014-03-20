@@ -13,6 +13,7 @@ import java.util.logging.Logger;
 
 import de.illonis.edulog.EduLog;
 import de.illonis.eduras.ObjectFactory.ObjectType;
+import de.illonis.eduras.exceptions.NoSuchMapException;
 import de.illonis.eduras.gamemodes.GameMode.GameModeNumber;
 import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.maps.SpawnPosition.SpawnType;
@@ -334,5 +335,27 @@ public abstract class Map {
 	 */
 	public void setBoundsObject(GameObject boundsObject) {
 		this.boundsObject = boundsObject;
+	}
+
+	/**
+	 * Get the map that has the given name if it exists.
+	 * 
+	 * @param mapName
+	 *            the name of the map
+	 * @return The map of the given name.
+	 * @throws NoSuchMapException
+	 *             Thrown if the map of the given name cannot be found.
+	 */
+	public static Map getMapByName(String mapName) throws NoSuchMapException {
+		switch (mapName.toLowerCase()) {
+		case "funmap":
+			return new FunMap();
+		case "simple":
+			return new SimpleMap();
+		case "manyblocks":
+			return new ManyBlocks();
+		default:
+			throw new NoSuchMapException(mapName);
+		}
 	}
 }
