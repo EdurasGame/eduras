@@ -397,6 +397,8 @@ public class ServerEventTriggerer implements EventTriggerer {
 		gameInfo.getGameSettings().changeGameMode(newMode);
 		SetGameModeEvent event = new SetGameModeEvent(newMode.getName());
 
+		restartRound();
+
 		sendEvents(event);
 	}
 

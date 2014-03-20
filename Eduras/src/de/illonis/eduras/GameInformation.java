@@ -508,7 +508,8 @@ public class GameInformation {
 				getMap().getSpawnAreas());
 		for (int i = 0; i < spawnAreas.size(); i++) {
 			SpawnPosition p = spawnAreas.get(i);
-			if (p.getTeaming() == spawnType || p.getTeaming() == SpawnType.ANY)
+			if (spawnType == SpawnType.ANY || p.getTeaming() == spawnType
+					|| p.getTeaming() == SpawnType.ANY)
 				availableSpawnings.add(p);
 		}
 
