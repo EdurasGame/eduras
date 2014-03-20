@@ -62,78 +62,78 @@ public class EdurasServer {
 			.getName());
 	private static final Level DEFAULT_LOGLIMIT = Level.WARNING;
 
-	/**
-	 * Starts an Eduras? server.
-	 * 
-	 * @param args
-	 *            Arguments passed from console.
-	 *            <ul>
-	 *            <li><b>arg0:</b> custom server name.</li>
-	 *            <li><b>arg1:</b> custom port to listen on.</li>
-	 *            </ul>
-	 */
-	public static void main(String[] args) {
-		SimpleDateFormat simpleDate = new SimpleDateFormat("y-M-d-H-m-s");
+	private String serverHostAddress;
+	private boolean registerAtMetaserver;
 
-		try {
-			EduLog.init(simpleDate.format(new Date()) + "-server.log", 2097152);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+	private int edurasPort;
+	private String name;
 
-		// arguments are of form <parametername>=<parametervalue>
-		String[][] parametersWithValues = new String[args.length][2];
+	private boolean localConsoleOn;
 
-		for (int i = 0; i < args.length; i++) {
-			parametersWithValues[i] = args[i].split("=");
-		}
+	private int remoteConsolePort;
+	private boolean remoteConsoleOn;
 
-		// read arguments
-		Level logLimit = DEFAULT_LOGLIMIT;
-		int port = DEFAULT_PORT;
-		String name = DEFAULT_NAME;
-		boolean consoleOn = false;
-		boolean registerAtMetaserver = false;
-		String serverHostAddress = "";
-		for (int i = 0; i < args.length; i++) {
+	public EdurasServer() {
+		init();
+	}
 
-			String parameterName = parametersWithValues[i][0];
-			String parameterValue = parametersWithValues[i][1];
+	public String getServerHostAddress() {
+		return serverHostAddress;
+	}
 
-			if (parameterName.equalsIgnoreCase("port")) {
-				try {
-					port = Integer.parseInt(parameterValue);
-				} catch (NumberFormatException e) {
-					L.severe(Localization.getStringF("Server.invalidportarg",
-							parameterValue));
-					return;
-				}
-				continue;
-			}
+	public void setServerHostAddress(String serverHostAddress) {
+		this.serverHostAddress = serverHostAddress;
+	}
 
-			if (parameterName.equalsIgnoreCase("serverhostaddress")) {
-				serverHostAddress = parameterValue;
-			}
+	public boolean isRegisterAtMetaserver() {
+		return registerAtMetaserver;
+	}
 
-			if (parameterName.equalsIgnoreCase("name")) {
-				name = parameterValue;
-			}
+	public void setRegisterAtMetaserver(boolean registerAtMetaserver) {
+		this.registerAtMetaserver = registerAtMetaserver;
+	}
 
-			if (parameterName.equalsIgnoreCase("registeratmetaserver")) {
-				registerAtMetaserver = Boolean.parseBoolean(parameterValue);
-			}
+	public int getEdurasPort() {
+		return edurasPort;
+	}
 
-			if (parameterName.equalsIgnoreCase("loglimit")) {
-				logLimit = Level.parse(parameterValue);
-			}
+	public void setEdurasPort(int edurasPort) {
+		this.edurasPort = edurasPort;
+	}
 
-			if (parameterName.equalsIgnoreCase("console")) {
-				consoleOn = Boolean.parseBoolean(parameterValue);
-			}
-		}
+	public String getName() {
+		return name;
+	}
 
-		EduLog.setBasicLogLimit(logLimit);
-		EduLog.setConsoleLogLimit(logLimit);
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public boolean isLocalConsoleOn() {
+		return localConsoleOn;
+	}
+
+	public void setLocalConsoleOn(boolean localConsoleOn) {
+		this.localConsoleOn = localConsoleOn;
+	}
+
+	public int getRemoteConsolePort() {
+		return remoteConsolePort;
+	}
+
+	public void setRemoteConsolePort(int remoteConsolePort) {
+		this.remoteConsolePort = remoteConsolePort;
+	}
+
+	public boolean isRemoteConsoleOn() {
+		return remoteConsoleOn;
+	}
+
+	public void setRemoteConsoleOn(boolean remoteConsoleOn) {
+		this.remoteConsoleOn = remoteConsoleOn;
+	}
+
+	public void runServer() {
 		SysOutCatcher.startCatching();
 
 		L.info("Caching shapes...");
@@ -156,7 +156,7 @@ public class EdurasServer {
 		server.setEventHandler(new EventParser(logic));
 
 		final ChatServer chatServer = new ChatServerImpl();
-		chatServer.start(port + 1);
+		chatServer.start(edurasPort + 1);
 		try {
 			final ChatRoom matchChatRoom = chatServer.createRoom("MatchChat",
 					true);
@@ -194,13 +194,13 @@ public class EdurasServer {
 
 		eventTriggerer.changeMap(new FunMap());
 
-		server.start(name, port);
+		server.start(name, edurasPort);
 
 		getInterfaces();
 		ServerConsole console = new ServerConsole(new ConsoleEventTriggerer(
 				eventTriggerer, server));
 
-		if (consoleOn) {
+		if (localConsoleOn) {
 			try {
 				console.startCommandPrompt();
 			} catch (NoConsoleException e) {
@@ -213,7 +213,7 @@ public class EdurasServer {
 				EncryptedRemoteServer.DEFAULT_REMOTE_SERVER_PORT, "password");
 
 		ServerDiscoveryListener sdl = new ServerDiscoveryListener(
-				server.getName(), port);
+				server.getName(), edurasPort);
 		sdl.start();
 
 		if (registerAtMetaserver) {
@@ -230,8 +230,98 @@ public class EdurasServer {
 				}
 
 			}
-			new MetaServerRegisterer(name, serverHostAddress, port).start();
+			new MetaServerRegisterer(name, serverHostAddress, edurasPort)
+					.start();
 		}
+	}
+
+	private void init() {
+		edurasPort = DEFAULT_PORT;
+		name = DEFAULT_NAME;
+
+		registerAtMetaserver = false;
+		serverHostAddress = "";
+
+		localConsoleOn = false;
+
+		remoteConsoleOn = true;
+		remoteConsolePort = EncryptedRemoteServer.DEFAULT_REMOTE_SERVER_PORT;
+	}
+
+	/**
+	 * Starts an Eduras? server.
+	 * 
+	 * @param args
+	 *            Arguments passed from console.
+	 *            <ul>
+	 *            <li><b>arg0:</b> custom server name.</li>
+	 *            <li><b>arg1:</b> custom port to listen on.</li>
+	 *            </ul>
+	 */
+	public static void main(String[] args) {
+		SimpleDateFormat simpleDate = new SimpleDateFormat("y-M-d-H-m-s");
+
+		try {
+			EduLog.init(simpleDate.format(new Date()) + "-server.log", 2097152);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		EdurasServer edurasServer = new EdurasServer();
+
+		// arguments are of form <parametername>=<parametervalue>
+		String[][] parametersWithValues = new String[args.length][2];
+
+		for (int i = 0; i < args.length; i++) {
+			parametersWithValues[i] = args[i].split("=");
+		}
+
+		// read arguments
+		Level logLimit = DEFAULT_LOGLIMIT;
+		for (int i = 0; i < args.length; i++) {
+
+			String parameterName = parametersWithValues[i][0];
+			String parameterValue = parametersWithValues[i][1];
+
+			if (parameterName.equalsIgnoreCase("port")) {
+				try {
+					edurasServer
+							.setEdurasPort(Integer.parseInt(parameterValue));
+				} catch (NumberFormatException e) {
+					L.severe(Localization.getStringF("Server.invalidportarg",
+							parameterValue));
+					return;
+				}
+				continue;
+			}
+
+			if (parameterName.equalsIgnoreCase("serverhostaddress")) {
+				edurasServer.setServerHostAddress(parameterValue);
+			}
+
+			if (parameterName.equalsIgnoreCase("name")) {
+				edurasServer.setName(parameterValue);
+			}
+
+			if (parameterName.equalsIgnoreCase("registeratmetaserver")) {
+				edurasServer.setRegisterAtMetaserver(Boolean
+						.parseBoolean(parameterValue));
+			}
+
+			if (parameterName.equalsIgnoreCase("loglimit")) {
+				logLimit = Level.parse(parameterValue);
+			}
+
+			if (parameterName.equalsIgnoreCase("console")) {
+				edurasServer.setLocalConsoleOn(Boolean
+						.parseBoolean(parameterValue));
+			}
+		}
+
+		EduLog.setBasicLogLimit(logLimit);
+		EduLog.setConsoleLogLimit(logLimit);
+
+		edurasServer.runServer();
 	}
 
 	/**
