@@ -132,7 +132,7 @@
 			<arg value="rev-parse" />
 			<arg value="HEAD" />
 		</exec>
-		<echo file="${base}${src}/version">${git.revision}</echo>
+		<echo file="${base}${ant}/version">${git.revision}</echo>
 	</target>
 
 <!--	<target name="deploy" depends="jars" description="Creates launcher and installers.">
