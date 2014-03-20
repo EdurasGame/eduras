@@ -46,12 +46,14 @@ import de.illonis.eduras.events.SetPolygonDataEvent;
 import de.illonis.eduras.events.SetRemainingTimeEvent;
 import de.illonis.eduras.events.SetStatsEvent;
 import de.illonis.eduras.events.SetTeamsEvent;
+import de.illonis.eduras.events.SetVisibilityEvent;
 import de.illonis.eduras.exceptions.GameModeNotSupportedByMapException;
 import de.illonis.eduras.exceptions.InvalidNameException;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
 import de.illonis.eduras.gamemodes.GameMode;
 import de.illonis.eduras.gameobjects.DynamicPolygonObject;
 import de.illonis.eduras.gameobjects.GameObject;
+import de.illonis.eduras.gameobjects.GameObject.Visibility;
 import de.illonis.eduras.gameobjects.NeutralArea;
 import de.illonis.eduras.interfaces.GameLogicInterface;
 import de.illonis.eduras.inventory.InventoryIsFullException;
@@ -200,11 +202,10 @@ public class ServerEventTriggerer implements EventTriggerer {
 	}
 
 	@Override
-	public void setVisibility(int objectId, boolean newVal) {
+	public void setVisibility(int objectId, Visibility newVal) {
 		GameObject object = gameInfo.findObjectById(objectId);
-
-		SetBooleanGameObjectAttributeEvent setVisibleEvent = new SetBooleanGameObjectAttributeEvent(
-				GameEventNumber.SET_VISIBLE, objectId, newVal);
+		SetVisibilityEvent setVisibleEvent = new SetVisibilityEvent(objectId,
+				newVal);
 		object.setVisible(newVal);
 		sendEvents(setVisibleEvent);
 	}
@@ -219,9 +220,9 @@ public class ServerEventTriggerer implements EventTriggerer {
 
 		i.setCollidable(false);
 
-		SetBooleanGameObjectAttributeEvent bov = new SetBooleanGameObjectAttributeEvent(
-				GameEventNumber.SET_VISIBLE, objectId, false);
-		i.setVisible(false);
+		SetVisibilityEvent bov = new SetVisibilityEvent(objectId,
+				Visibility.INVISIBLE);
+		i.setVisible(Visibility.INVISIBLE);
 		sendEvents(bo, bov);
 
 		if (i instanceof Lootable)
@@ -254,10 +255,10 @@ public class ServerEventTriggerer implements EventTriggerer {
 			item.setOwner(player.getOwner());
 
 			item.setCollidable(false);
-			item.setVisible(false);
+			item.setVisible(Visibility.INVISIBLE);
 
-			SetBooleanGameObjectAttributeEvent visEvent = new SetBooleanGameObjectAttributeEvent(
-					GameEventNumber.SET_VISIBLE, item.getId(), false);
+			SetVisibilityEvent visEvent = new SetVisibilityEvent(item.getId(),
+					Visibility.INVISIBLE);
 			SetBooleanGameObjectAttributeEvent colEvent = new SetBooleanGameObjectAttributeEvent(
 					GameEventNumber.SET_COLLIDABLE, item.getId(), false);
 			SetOwnerEvent soEvent = new SetOwnerEvent(player.getId(),
@@ -434,7 +435,7 @@ public class ServerEventTriggerer implements EventTriggerer {
 			if (o.getType() == ObjectType.MAPBOUNDS) {
 				mapBoundsFound = true;
 				gameInfo.getMap().setBoundsObject(o);
-				setVisibility(o.getId(), false);
+				setVisibility(o.getId(), Visibility.INVISIBLE);
 				break;
 			}
 		}
@@ -647,7 +648,6 @@ public class ServerEventTriggerer implements EventTriggerer {
 	@Override
 	public void notifyObjectCreated(ObjectFactoryEvent event) {
 		sendEventToAll(event);
-
 	}
 
 	@Override
@@ -742,5 +742,10 @@ public class ServerEventTriggerer implements EventTriggerer {
 		AreaConqueredEvent baseConqueredEvent = new AreaConqueredEvent(
 				neutralArea.getId(), occupyingTeam.getTeamId());
 		sendEvents(baseConqueredEvent);
+	}
+
+	@Override
+	public void notifyGameObjectVisibilityChanged(SetVisibilityEvent event) {
+		sendEventToAll(event);
 	}
 }

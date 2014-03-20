@@ -19,6 +19,7 @@ import de.illonis.eduras.events.SetIntegerGameObjectAttributeEvent;
 import de.illonis.eduras.events.SetInteractModeEvent;
 import de.illonis.eduras.events.SetItemSlotEvent;
 import de.illonis.eduras.events.SetOwnerEvent;
+import de.illonis.eduras.events.SetVisibilityEvent;
 import de.illonis.eduras.gamemodes.GameMode;
 import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.interfaces.GameEventListener;
@@ -48,27 +49,19 @@ public class ServerGameEventListener implements GameEventListener {
 
 	@Override
 	public void onNewObjectPosition(GameObject object) {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override
 	public void onInformationRequested(ArrayList<GameEvent> infos,
 			int targetOwner) {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override
 	public void onObjectCreation(ObjectFactoryEvent event) {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override
 	public void onClientRename(ClientRenameEvent event) {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override
@@ -78,79 +71,58 @@ public class ServerGameEventListener implements GameEventListener {
 		} catch (IllegalArgumentException | TooFewArgumentsExceptions e) {
 			L.log(Level.SEVERE, "Error appeared while trying to send event.", e);
 		}
-
 	}
 
 	@Override
 	public void onGameModeChanged(GameMode newGameMode) {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override
 	public void onHealthChanged(SetIntegerGameObjectAttributeEvent event) {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override
 	public void onMaxHealthChanged(SetIntegerGameObjectAttributeEvent event) {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override
 	public void onOwnerChanged(SetOwnerEvent event) {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override
 	public void onItemSlotChanged(SetItemSlotEvent event) {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override
 	public void onObjectRemove(ObjectFactoryEvent event) {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override
 	public void onMatchEnd(MatchEndEvent event) {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override
 	public void onDeath(DeathEvent event) {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override
 	public void onCooldownStarted(ItemEvent event) {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override
 	public void onCooldownFinished(ItemEvent event) {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override
 	public void onInteractModeChanged(SetInteractModeEvent setModeEvent) {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override
 	public void onGameReady() {
-		// TODO Auto-generated method stub
+	}
 
+	@Override
+	public void onVisibilityChanged(SetVisibilityEvent event) {
 	}
 
 }

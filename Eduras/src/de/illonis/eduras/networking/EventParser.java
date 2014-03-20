@@ -38,9 +38,11 @@ import de.illonis.eduras.events.SetPolygonDataEvent;
 import de.illonis.eduras.events.SetRemainingTimeEvent;
 import de.illonis.eduras.events.SetStatsEvent;
 import de.illonis.eduras.events.SetTeamsEvent;
+import de.illonis.eduras.events.SetVisibilityEvent;
 import de.illonis.eduras.events.SwitchInteractModeEvent;
 import de.illonis.eduras.events.UserMovementEvent;
 import de.illonis.eduras.exceptions.InvalidNameException;
+import de.illonis.eduras.gameobjects.GameObject.Visibility;
 import de.illonis.eduras.interfaces.GameLogicInterface;
 import de.illonis.eduras.math.Vector2df;
 import de.illonis.eduras.units.PlayerMainFigure.InteractMode;
@@ -186,9 +188,9 @@ public class EventParser implements EventHandler {
 						.getArgument(0), (Integer) event.getArgument(1)));
 				break;
 			case SET_VISIBLE:
-				logic.onGameEventAppeared(new SetBooleanGameObjectAttributeEvent(
-						GameEventNumber.SET_VISIBLE, (Integer) event
-								.getArgument(0), (Boolean) event.getArgument(1)));
+				logic.onGameEventAppeared(new SetVisibilityEvent(
+						(Integer) event.getArgument(0), Visibility
+								.valueOf((String) event.getArgument(1))));
 				break;
 			case SET_COLLIDABLE:
 				logic.onGameEventAppeared(new SetBooleanGameObjectAttributeEvent(

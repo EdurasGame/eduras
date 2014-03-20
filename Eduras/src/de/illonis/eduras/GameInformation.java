@@ -27,6 +27,7 @@ import de.illonis.eduras.events.SetIntegerGameObjectAttributeEvent;
 import de.illonis.eduras.events.SetPolygonDataEvent;
 import de.illonis.eduras.events.SetRemainingTimeEvent;
 import de.illonis.eduras.events.SetTeamsEvent;
+import de.illonis.eduras.events.SetVisibilityEvent;
 import de.illonis.eduras.exceptions.GameModeNotSupportedByMapException;
 import de.illonis.eduras.exceptions.InvalidNameException;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
@@ -359,9 +360,8 @@ public class GameInformation {
 			infos.add(me);
 
 			// send visible / collidable status
-			SetBooleanGameObjectAttributeEvent visEvent = new SetBooleanGameObjectAttributeEvent(
-					GameEventNumber.SET_VISIBLE, object.getId(),
-					object.isVisible());
+			SetVisibilityEvent visEvent = new SetVisibilityEvent(
+					object.getId(), object.getVisibility());
 			SetBooleanGameObjectAttributeEvent colEvent = new SetBooleanGameObjectAttributeEvent(
 					GameEventNumber.SET_COLLIDABLE, object.getId(),
 					object.isCollidable());

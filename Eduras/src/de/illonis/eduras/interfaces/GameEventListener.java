@@ -13,6 +13,7 @@ import de.illonis.eduras.events.SetIntegerGameObjectAttributeEvent;
 import de.illonis.eduras.events.SetInteractModeEvent;
 import de.illonis.eduras.events.SetItemSlotEvent;
 import de.illonis.eduras.events.SetOwnerEvent;
+import de.illonis.eduras.events.SetVisibilityEvent;
 import de.illonis.eduras.gamemodes.GameMode;
 import de.illonis.eduras.gameobjects.GameObject;
 
@@ -67,6 +68,14 @@ public interface GameEventListener {
 	 *            The correlating event.
 	 */
 	void onObjectStateChanged(SetGameObjectAttributeEvent<?> event);
+
+	/**
+	 * Called when the visibility of an object changed.
+	 * 
+	 * @param event
+	 *            the event.
+	 */
+	void onVisibilityChanged(SetVisibilityEvent event);
 
 	/**
 	 * Called when the game mode has changed.
