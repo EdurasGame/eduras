@@ -1,5 +1,6 @@
 package de.illonis.eduras;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.Inet4Address;
 import java.net.InetAddress;
@@ -31,13 +32,18 @@ import de.illonis.eduras.chat.ChatUser;
 import de.illonis.eduras.chat.NoSuchRoomException;
 import de.illonis.eduras.chat.NoSuchUserException;
 import de.illonis.eduras.chat.NotConnectedException;
+import de.illonis.eduras.exceptions.NoSuchGameModeException;
+import de.illonis.eduras.exceptions.NoSuchMapException;
 import de.illonis.eduras.gameclient.datacache.GraphicsPreLoader;
+import de.illonis.eduras.gamemodes.BasicGameMode;
+import de.illonis.eduras.gamemodes.Deathmatch;
 import de.illonis.eduras.locale.Localization;
 import de.illonis.eduras.logic.ConsoleEventTriggerer;
 import de.illonis.eduras.logic.ServerEventTriggerer;
 import de.illonis.eduras.logic.ServerGameEventListener;
 import de.illonis.eduras.logic.ServerLogic;
 import de.illonis.eduras.maps.FunMap;
+import de.illonis.eduras.maps.Map;
 import de.illonis.eduras.networking.EventParser;
 import de.illonis.eduras.networking.InetPolizei;
 import de.illonis.eduras.networking.ServerNetworker;
@@ -46,6 +52,7 @@ import de.illonis.eduras.networking.discover.ServerDiscoveryListener;
 import de.illonis.eduras.networking.discover.ServerSearcher;
 import de.illonis.eduras.serverconsole.NoConsoleException;
 import de.illonis.eduras.serverconsole.ServerConsole;
+import de.illonis.eduras.settings.S;
 import de.illonis.eduras.utils.WebFetcher;
 
 /**
@@ -62,19 +69,46 @@ public class EdurasServer {
 			.getName());
 	private static final Level DEFAULT_LOGLIMIT = Level.WARNING;
 
+	private final ServerInterface server;
+	private final ChatServer chatServer;
+
 	private String serverHostAddress;
 	private boolean registerAtMetaserver;
 
 	private int edurasPort;
 	private String name;
 
+	private ServerConsole console;
 	private boolean localConsoleOn;
 
 	private int remoteConsolePort;
 	private boolean remoteConsoleOn;
+	private String remoteConsolePassword;
+
+	private Map startMap;
+	private String startGameMode;
+	private String startConfig;
+	private ServerEventTriggerer eventTriggerer;
 
 	public EdurasServer() {
+		server = new Server();
+		chatServer = new ChatServerImpl();
 		init();
+	}
+
+	private void init() {
+
+		edurasPort = DEFAULT_PORT;
+		name = DEFAULT_NAME;
+
+		registerAtMetaserver = false;
+		serverHostAddress = "";
+
+		localConsoleOn = false;
+
+		remoteConsoleOn = true;
+		remoteConsolePort = EncryptedRemoteServer.DEFAULT_REMOTE_SERVER_PORT;
+		remoteConsolePassword = "password";
 	}
 
 	public String getServerHostAddress() {
@@ -133,29 +167,88 @@ public class EdurasServer {
 		this.remoteConsoleOn = remoteConsoleOn;
 	}
 
-	public void runServer() {
-		SysOutCatcher.startCatching();
+	public String getRemoteConsolePassword() {
+		return remoteConsolePassword;
+	}
 
-		L.info("Caching shapes...");
+	public void setRemoteConsolePassword(String remoteConsolePassword) {
+		this.remoteConsolePassword = remoteConsolePassword;
+	}
+
+	public String getStartMap() {
+		return startMap.getName();
+	}
+
+	public void setStartMap(String startMap) throws NoSuchMapException {
+		this.startMap = Map.getMapByName(startMap);
+	}
+
+	public String getStartGameMode() {
+		return startGameMode;
+	}
+
+	public void setStartGameMode(String startGameMode)
+			throws NoSuchGameModeException {
+		this.startGameMode = startGameMode;
+	}
+
+	public String getStartConfig() {
+		return this.startConfig;
+	}
+
+	public void setStartConfig(String startConfig) {
+		this.startConfig = startConfig;
+	}
+
+	public void runServer() throws NoSuchGameModeException {
+		L.info("Caching shapes.");
 		GraphicsPreLoader.preLoadShapes();
-		L.info("Caching shapes done.");
 
 		L.info(Localization.getString("Server.startstart"));
 
-		ServerInterface server = new Server();
+		setupEdurasServer();
+		setupChatServer();
 
-		GameInformation gameInfo = new GameInformation();
-		ServerLogic logic = new ServerLogic(gameInfo);
+		if (localConsoleOn) {
+			try {
+				console.startCommandPrompt();
+			} catch (NoConsoleException e) {
+				L.log(Level.WARNING, "Could not find console", e);
+			}
+		}
 
-		logic.setGameEventListener(new ServerGameEventListener(server));
-		ServerEventTriggerer eventTriggerer = new ServerEventTriggerer(logic,
-				server);
+		if (remoteConsoleOn) {
+			console.startRemoteServer(remoteConsolePort, remoteConsolePassword);
+		}
 
-		gameInfo.setEventTriggerer(eventTriggerer);
+		ServerDiscoveryListener sdl = new ServerDiscoveryListener(
+				server.getName(), edurasPort);
+		sdl.start();
 
-		server.setEventHandler(new EventParser(logic));
+		if (registerAtMetaserver) {
+			registerAtMetaserver();
+		}
+	}
 
-		final ChatServer chatServer = new ChatServerImpl();
+	private void registerAtMetaserver() {
+		if (serverHostAddress.equals("")) {
+			L.info("No IP was specified under which the Eduras server is supposed to register itself at the meta server.");
+			try {
+				L.info("Fetching WAN-IP...");
+				serverHostAddress = WebFetcher.get(new URL(
+						"http://www.icanhazip.com"),
+						new HashMap<String, String>());
+				L.info("WAN-IP is " + serverHostAddress);
+			} catch (IOException e) {
+				L.log(Level.WARNING, "Cannot fetch IP for server.", e);
+			}
+
+		}
+		new MetaServerRegisterer(name, serverHostAddress, edurasPort).start();
+
+	}
+
+	private void setupChatServer() {
 		chatServer.start(edurasPort + 1);
 		try {
 			final ChatRoom matchChatRoom = chatServer.createRoom("MatchChat",
@@ -188,74 +281,77 @@ public class EdurasServer {
 			L.log(Level.SEVERE, "An error appeared. Chat will not be working.",
 					e);
 		}
+	}
 
+	private void setupEdurasServer() throws NoSuchGameModeException {
+
+		GameInformation gameInfo = new GameInformation();
+		ServerLogic logic = new ServerLogic(gameInfo);
+		logic.setGameEventListener(new ServerGameEventListener(server));
+		eventTriggerer = new ServerEventTriggerer(logic, server);
+		gameInfo.setEventTriggerer(eventTriggerer);
+
+		server.setEventHandler(new EventParser(logic));
 		server.setNetworkEventHandler(new ServerNetworker(gameInfo));
 		server.setPolicy(new InetPolizei());
-
-		eventTriggerer.changeMap(new FunMap());
-
 		server.start(name, edurasPort);
 
+		console = new ServerConsole(new ConsoleEventTriggerer(eventTriggerer,
+				server));
+
+		switchToStartMap();
+		switchToStartGameMode();
+
 		getInterfaces();
-		ServerConsole console = new ServerConsole(new ConsoleEventTriggerer(
-				eventTriggerer, server));
 
-		if (localConsoleOn) {
-			try {
-				console.startCommandPrompt();
-			} catch (NoConsoleException e) {
-				L.log(Level.WARNING, "Could not find console", e);
-			}
-		}
+	}
 
-		// TODO: use command line argument for remote server port.
-		console.startRemoteServer(
-				EncryptedRemoteServer.DEFAULT_REMOTE_SERVER_PORT, "password");
-
-		ServerDiscoveryListener sdl = new ServerDiscoveryListener(
-				server.getName(), edurasPort);
-		sdl.start();
-
-		if (registerAtMetaserver) {
-			if (serverHostAddress.equals("")) {
-				L.info("No IP was specified under which the Eduras server is supposed to register itself at the meta server.");
-				try {
-					L.info("Trying to fetch WAN-IP...");
-					serverHostAddress = WebFetcher.get(new URL(
-							"http://www.icanhazip.com"),
-							new HashMap<String, String>());
-					L.info("WAN-IP is " + serverHostAddress);
-				} catch (IOException e) {
-					L.log(Level.WARNING, "Cannot fetch IP for server.", e);
-				}
-
-			}
-			new MetaServerRegisterer(name, serverHostAddress, edurasPort)
-					.start();
+	private void switchToStartMap() {
+		if (startMap == null) {
+			startMap = new FunMap();
+		} else {
+			eventTriggerer.changeMap(startMap);
 		}
 	}
 
-	private void init() {
-		edurasPort = DEFAULT_PORT;
-		name = DEFAULT_NAME;
-
-		registerAtMetaserver = false;
-		serverHostAddress = "";
-
-		localConsoleOn = false;
-
-		remoteConsoleOn = true;
-		remoteConsolePort = EncryptedRemoteServer.DEFAULT_REMOTE_SERVER_PORT;
+	private void switchToStartGameMode() throws NoSuchGameModeException {
+		if (startGameMode == null) {
+			eventTriggerer.changeGameMode(new Deathmatch(eventTriggerer
+					.getGameInfo()));
+		} else {
+			eventTriggerer.changeGameMode(BasicGameMode.getGameModeByName(
+					startGameMode, eventTriggerer.getGameInfo()));
+		}
 	}
 
 	/**
 	 * Starts an Eduras? server.
 	 * 
 	 * @param args
-	 *            Arguments passed from console.
+	 *            Arguments passed from console. Put them in the form
+	 *            "parametername1=parametervalue1 parametername2=parametervalue2 ..."
+	 *            where parameternameX is one of the following
 	 *            <ul>
-	 *            <li><b>arg0:</b> custom server name.</li>
-	 *            <li><b>arg1:</b> custom port to listen on.</li>
+	 *            <li><b>port:</b> Port of the Eduras? server.</li>
+	 *            <li><b>name:</b> Name of Eduras? server.</li>
+	 *            <li><b>serverhostaddress:</b> The address under which the
+	 *            server shall register itself at the metaserver.</li>
+	 *            <li><b>registeratmetaserver:</b> Tells whether the server
+	 *            shall register at the metaserver. Values: true/false.</li>
+	 *            <li><b>loglimit:</b> Set the loglimit for all outputs.</li>
+	 *            <li><b>localconsole:</b> Tells whether the local console shall
+	 *            be run or not. Values: true/false.</li>
+	 *            <li><b>remoteconsoleport:</b> Sets the port of the
+	 *            remoteconsole.</li>
+	 *            <li><b>remoteconsole:</b> Determines whether a remoteconsole
+	 *            shall be run or not.</li>
+	 *            <li><b>remoteconsolepassword:</b> Sets the password of the
+	 *            remoteconsole.</li>
+	 *            <li><b>startmap:</b> Sets the map the server is started with.</li>
+	 *            <li><b>startgamemode:</b> Sets the gamemode the server is
+	 *            started with.</li>
+	 *            <li><b>startconfig:</b> Path to config file to be loaded
+	 *            initially.</li>
 	 *            </ul>
 	 */
 	public static void main(String[] args) {
@@ -283,7 +379,8 @@ public class EdurasServer {
 			String parameterName = parametersWithValues[i][0];
 			String parameterValue = parametersWithValues[i][1];
 
-			if (parameterName.equalsIgnoreCase("port")) {
+			switch (parameterName.toLowerCase()) {
+			case "port": {
 				try {
 					edurasServer
 							.setEdurasPort(Integer.parseInt(parameterValue));
@@ -292,36 +389,103 @@ public class EdurasServer {
 							parameterValue));
 					return;
 				}
-				continue;
+				break;
 			}
 
-			if (parameterName.equalsIgnoreCase("serverhostaddress")) {
+			case "serverhostaddress": {
 				edurasServer.setServerHostAddress(parameterValue);
+				break;
 			}
 
-			if (parameterName.equalsIgnoreCase("name")) {
+			case "name": {
 				edurasServer.setName(parameterValue);
+				break;
 			}
 
-			if (parameterName.equalsIgnoreCase("registeratmetaserver")) {
+			case "registeratmetaserver": {
 				edurasServer.setRegisterAtMetaserver(Boolean
 						.parseBoolean(parameterValue));
+				break;
 			}
 
-			if (parameterName.equalsIgnoreCase("loglimit")) {
+			case "loglimit": {
 				logLimit = Level.parse(parameterValue);
+				break;
 			}
 
-			if (parameterName.equalsIgnoreCase("console")) {
+			case "localconsole": {
 				edurasServer.setLocalConsoleOn(Boolean
 						.parseBoolean(parameterValue));
+				break;
+			}
+
+			case "remoteconsoleport": {
+				edurasServer.setRemoteConsolePort(Integer
+						.parseInt(parameterValue));
+				break;
+			}
+
+			case "remoteconsole": {
+				edurasServer.setRemoteConsoleOn(Boolean
+						.parseBoolean(parameterValue));
+				break;
+			}
+
+			case "remoteconsolepassword": {
+				edurasServer.setRemoteConsolePassword(parameterValue);
+				break;
+			}
+
+			case "startmap": {
+				try {
+					edurasServer.setStartMap(parameterValue);
+				} catch (NoSuchMapException e) {
+					System.out
+							.println("There is no such map " + parameterValue);
+					System.exit(-1);
+				}
+				break;
+			}
+
+			case "startgamemode": {
+				try {
+					edurasServer.setStartGameMode(parameterValue);
+				} catch (NoSuchGameModeException e) {
+					System.out.println("There is no such game mode "
+							+ parameterValue);
+					System.exit(-1);
+				}
+				break;
+			}
+
+			case "startconfig": {
+				File settingsFile = new File(parameterValue);
+				if (!settingsFile.exists()) {
+					System.out.println("Config file at " + parameterValue
+							+ " does not exist.");
+					System.exit(-1);
+				}
+
+				S.loadSettings(settingsFile);
+				break;
+			}
+
+			default:
+				System.out.println("Unknown argument " + parameterName);
+				System.exit(-1);
 			}
 		}
 
 		EduLog.setBasicLogLimit(logLimit);
 		EduLog.setConsoleLogLimit(logLimit);
 
-		edurasServer.runServer();
+		SysOutCatcher.startCatching();
+
+		try {
+			edurasServer.runServer();
+		} catch (NoSuchGameModeException e) {
+			L.log(Level.WARNING, "The specified game mode doesn't exist.", e);
+		}
 	}
 
 	/**
