@@ -11,16 +11,9 @@ import de.illonis.eduras.shapes.Circle;
  */
 public abstract class CircledBlock extends GameObject {
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * de.illonis.eduras.GameObject#onCollision(de.illonis.eduras.GameObject)
-	 */
 	@Override
 	public void onCollision(GameObject collidingObject) {
 		// do nothing
-
 	}
 
 	/**
@@ -42,9 +35,7 @@ public abstract class CircledBlock extends GameObject {
 	 */
 	public CircledBlock(GameInformation game, TimingSource timingSource,
 			double radius, double posX, double posY, int id) {
-
 		super(game, timingSource, id);
-
 		setPosition(posX, posY);
 		setShape(new Circle(radius));
 	}

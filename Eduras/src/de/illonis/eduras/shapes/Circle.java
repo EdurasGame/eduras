@@ -88,8 +88,8 @@ public class Circle extends ObjectShape {
 	 */
 	private Vector2D getPointAt(double angle) {
 
-		double pointXPos = (Math.cos(angle) * this.radius);
-		double pointYPos = (Math.sin(angle) * this.radius);
+		double pointXPos = (Math.cos(angle) * this.radius) + this.radius;
+		double pointYPos = (Math.sin(angle) * this.radius) + this.radius;
 
 		return new Vector2D(pointXPos, pointYPos);
 	}
@@ -221,11 +221,6 @@ public class Circle extends ObjectShape {
 		this.radius = radius;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see de.illonis.eduras.shapes.ObjectShape#getBorderPoints()
-	 */
 	@Override
 	public Vector2D[] getBorderPoints() {
 		return getRelativePoints(COLLISION_ACCURACY).toArray(

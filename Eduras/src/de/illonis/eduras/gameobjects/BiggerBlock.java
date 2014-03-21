@@ -17,13 +17,18 @@ public class BiggerBlock extends Block {
 	private static final int HEIGHT = S.go_bigger_block_height;
 
 	/**
-	 * creates the bigger block
+	 * creates a bigger block at a given position.
 	 * 
 	 * @param game
+	 *            the game information.
 	 * @param timingSource
+	 *            the timing source
 	 * @param xPos
+	 *            x-position.
 	 * @param yPos
+	 *            y-position.
 	 * @param id
+	 *            object id
 	 * @throws ShapeVerticesNotApplicableException
 	 */
 	public BiggerBlock(GameInformation game, TimingSource timingSource,
@@ -34,18 +39,19 @@ public class BiggerBlock extends Block {
 	}
 
 	/**
-	 * creates the bigger block
+	 * creates a bigger block
 	 * 
 	 * @param game
+	 *            the gameinformation.
 	 * @param timingSource
 	 *            the timing source.
 	 * @param id
+	 *            object id.
 	 * @throws ShapeVerticesNotApplicableException
 	 */
 	public BiggerBlock(GameInformation game, TimingSource timingSource, int id)
 			throws ShapeVerticesNotApplicableException {
-		super(game, timingSource, WIDTH, HEIGHT, id);
-		setObjectType(ObjectType.BIGGERBLOCK);
+		this(game, timingSource, 0, 0, id);
 	}
 
 }

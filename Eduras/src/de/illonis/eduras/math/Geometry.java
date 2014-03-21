@@ -459,17 +459,14 @@ public class Geometry {
 	 * Returns the point on the circle at the given angle.
 	 * 
 	 * @param circle
-	 * @param centerPoint
-	 *            The circle's center.
+	 *            the circle
 	 * @param angle
+	 *            the angle of the point.
 	 * @return point on the circle.
 	 */
-	public static Vector2D getPointAtAngleOnCircle(Circle circle,
-			Vector2D centerPoint, double angle) {
-		Vector2D distanceVectorToPoint = new Vector2D(circle.getRadius(), 0);
-		distanceVectorToPoint.rotate(angle);
-		Vector2D pointOnCircle = centerPoint.copy();
-		pointOnCircle.add(distanceVectorToPoint);
+	public static Vector2D getRelativePointAtAngleOnCircle(Circle circle, double angle) {
+		Vector2D pointOnCircle = new Vector2D(circle.getRadius(), 0);
+		pointOnCircle.rotate(angle);
 		return pointOnCircle;
 	}
 

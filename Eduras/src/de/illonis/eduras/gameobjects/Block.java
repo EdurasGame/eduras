@@ -16,8 +16,8 @@ import de.illonis.eduras.shapes.Rectangle;
  */
 public abstract class Block extends GameObject {
 
-	double height;
-	double width;
+	protected double height;
+	protected double width;
 
 	/**
 	 * Creates a new block at position xPos and yPos.
@@ -48,8 +48,7 @@ public abstract class Block extends GameObject {
 		this.height = height;
 
 		setPosition(xPos, yPos);
-		setShape(new Rectangle(new Vector2D(-width / 2, height / 2),
-				new Vector2D(width / 2, -height / 2)));
+		setShape(new Rectangle(new Vector2D(), new Vector2D(width, height)));
 	}
 
 	/**
@@ -70,13 +69,7 @@ public abstract class Block extends GameObject {
 	 */
 	public Block(GameInformation game, TimingSource timingSource, double width,
 			double height, int id) throws ShapeVerticesNotApplicableException {
-		super(game, timingSource, id);
-
-		this.width = width;
-		this.height = height;
-
-		setShape(new Rectangle(new Vector2D(-width / 2, height / 2),
-				new Vector2D(width / 2, -height / 2)));
+		this(game, timingSource, 0, 0, width, height, id);
 	}
 
 	@Override

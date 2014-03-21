@@ -21,10 +21,13 @@ public class BigBlock extends Block {
 	 * given game information.
 	 * 
 	 * @param game
+	 *            the game info.
 	 * @param timingSource
 	 *            the timing source.
 	 * @param xPos
+	 *            x-position
 	 * @param yPos
+	 *            y-position
 	 * @param id
 	 *            object id.
 	 * @throws ShapeVerticesNotApplicableException
@@ -40,15 +43,16 @@ public class BigBlock extends Block {
 	 * Creates a BigBlock with the given id in the context of a gameinformation.
 	 * 
 	 * @param game
+	 *            the game info.
 	 * @param timingSource
 	 *            the timing source.
 	 * @param id
+	 *            the object id.
 	 * @throws ShapeVerticesNotApplicableException
 	 */
 	public BigBlock(GameInformation game, TimingSource timingSource, int id)
 			throws ShapeVerticesNotApplicableException {
-		super(game, timingSource, WIDTH, HEIGHT, id);
-		setObjectType(ObjectType.BIGBLOCK);
+		this(game, timingSource, 0, 0, id);
 	}
 
 }

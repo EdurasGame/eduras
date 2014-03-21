@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 
 import de.illonis.eduras.gameclient.gui.game.GameCamera;
+import de.illonis.eduras.units.PlayerMainFigure;
 import de.illonis.eduras.units.Unit;
 
 /**
@@ -38,42 +39,33 @@ public class HealthBar {
 	 * 
 	 * @param unit
 	 *            unit that's health should be shown.
+	 * @param g2d
+	 *            the target graphics
+	 * @param camera
+	 *            the current camera.
 	 */
-	public static void calculateFor(Unit unit) {
+	public static void calculateAndDrawFor(Unit unit, Graphics2D g2d,
+			GameCamera camera) {
 		int maxHealth = unit.getMaxHealth();
 		int health = unit.getHealth();
 
 		instance.w = (int) Math.round((double) health / maxHealth
 				* HEALTHBAR_WIDTH);
+		double unitHalfWidth = unit.getBoundingBox().getWidth() / 2;
+		instance.x = (int) Math.round(unit.getDrawX() + unitHalfWidth
+				- HEALTHBAR_WIDTH / 2);
+		instance.y = unit.getDrawY() - HEALTHBAR_HEIGHT - UNIT_GAP;
 
-		double overlength = (HEALTHBAR_WIDTH - unit.getBoundingBox().getWidth()) / 2;
-
-		instance.x = (int) Math.round(unit.getDrawX() - overlength);
-
-		// TODO: make position of objects either topleft or center, but make it
-		// unitary.
-		// fix because topleft is middle in triangles.
-		instance.x -= (int) unit.getBoundingBox().getWidth() / 2;
-
-		instance.y = (int) (unit.getBoundingBox().getY() - HEALTHBAR_HEIGHT - UNIT_GAP);
-
-	}
-
-	/**
-	 * Draws current healthbar settings to given graphic object.
-	 * 
-	 * @param g2d
-	 *            target graphics.
-	 * @param camera
-	 *            camera offset.
-	 */
-	public static void draw(Graphics2D g2d, GameCamera camera) {
 		// g2d.setColor(Color.black);
 		g2d.setColor(TRANSLUCENT); // translucent
 		g2d.fillRect(instance.x - camera.x, instance.y - camera.y,
 				HEALTHBAR_WIDTH, HEALTHBAR_HEIGHT);
-		g2d.setColor(Color.yellow);
+		g2d.setColor(Color.YELLOW);
 		g2d.fillRect(instance.x - camera.x, instance.y - camera.y, instance.w,
 				instance.h);
+		if (unit instanceof PlayerMainFigure) {
+			PlayerMainFigure player = (PlayerMainFigure) unit;
+			g2d.drawString(player.getName(), instance.x - camera.x, instance.y - camera.y - 1);
+		}
 	}
 }

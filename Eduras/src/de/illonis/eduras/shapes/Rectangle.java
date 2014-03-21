@@ -1,6 +1,3 @@
-/**
- * 
- */
 package de.illonis.eduras.shapes;
 
 import java.awt.geom.Rectangle2D;
@@ -25,23 +22,35 @@ public class Rectangle extends Polygon {
 	 * @param bottomRight
 	 *            The point at bottom right.
 	 * @throws ShapeVerticesNotApplicableException
-	 *             Thrown if the topleft point is not the topleft point or the
-	 *             bottom right point is not the bottom right point or if the
-	 *             origin (0,0) does not lie inside of the rectangle.
+	 *             Thrown if any point in the rectangle is negative on either x-
+	 *             or y-value.
 	 */
 	public Rectangle(Vector2D topLeft, Vector2D bottomRight)
 			throws ShapeVerticesNotApplicableException {
-		if (topLeft.getX() > 0 || topLeft.getY() < 0 || bottomRight.getX() < 0
-				|| bottomRight.getY() > 0) {
+		if (topLeft.getX() < 0 || topLeft.getY() < 0 || bottomRight.getX() < 0
+				|| bottomRight.getY() < 0) {
 			throw new ShapeVerticesNotApplicableException();
 		} else {
+			// whether topLeft and bottomRight are switches does not matter
 			Vector2D[] vertices = new Vector2D[4];
 			vertices[0] = topLeft;
-			vertices[1] = new Vector2D(bottomRight.getX(), topLeft.getY());
-			vertices[3] = new Vector2D(topLeft.getX(), bottomRight.getY());
+			vertices[1] = new Vector2D(topLeft.getX(), bottomRight.getY());
 			vertices[2] = bottomRight;
+			vertices[3] = new Vector2D(bottomRight.getX(), topLeft.getY());
 			setVertices(vertices);
 		}
+	}
+
+	/**
+	 * Creates a new rectangle with origin (0,0) and the given size.
+	 * 
+	 * @param size
+	 *            the dimension of the rectangle.
+	 * @throws ShapeVerticesNotApplicableException
+	 *             if any of the dimension parameters is negative.
+	 */
+	public Rectangle(Vector2D size) throws ShapeVerticesNotApplicableException {
+		this(new Vector2D(), size);
 	}
 
 	/**

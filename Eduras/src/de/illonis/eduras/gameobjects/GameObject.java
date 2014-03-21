@@ -294,10 +294,12 @@ public abstract class GameObject implements Comparable<GameObject> {
 	 * @return bounding box.
 	 */
 	public Rectangle2D.Double getBoundingBox() {
-		// FIXME: Here is assumed that shape's center equals object's position.
-		Rectangle2D.Double r = getShape().getBoundingBox();
-		r.x = getDrawX() - getShape().getBoundingBox().getWidth() / 2;
-		r.y = getDrawY() - getShape().getBoundingBox().getHeight() / 2;
+		// copy bounding box to maintain shape's boundingbox.
+		Rectangle2D.Double r = new Rectangle2D.Double();
+		r.x = getShape().getBoundingBox().x + getDrawX();
+		r.y = getShape().getBoundingBox().x + getDrawY();
+		r.width = getShape().getBoundingBox().width;
+		r.height = getShape().getBoundingBox().height;
 		return r;
 	}
 

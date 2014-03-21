@@ -47,7 +47,7 @@ public class NeutralBase extends TriggerArea {
 		super(game, timingSource, id);
 		setObjectType(ObjectType.NEUTRAL_BASE);
 		try {
-			setShape(new Rectangle(new Vector2D(-20, 20), new Vector2D(20, -20)));
+			setShape(new Rectangle(new Vector2D(), new Vector2D(40, 40)));
 		} catch (ShapeVerticesNotApplicableException e) {
 			L.log(Level.WARNING, "TODO: message", e);
 		}
