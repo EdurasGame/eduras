@@ -419,17 +419,10 @@ public class GameRenderer implements TooltipHandler {
 	 *            The object.
 	 */
 	private void drawCircle(Circle objectShape, GameObject d) {
-
 		int radius = (int) objectShape.getRadius();
-
 		int xPos = d.getDrawX() - radius - camera.x;
 		int yPos = d.getDrawY() - radius - camera.y;
-
-		// mapGraphics.setColor(Color.WHITE);
-		// mapGraphics.drawOval(d.getDrawX() - radius - camera.x, d.getDrawY()
-		// - radius - camera.y, 2 * radius, 2 * radius);
-		Color objectColor = getColorForObject(d);
-		mapGraphics.setColor(objectColor);
+		mapGraphics.setColor(getColorForObject(d));
 		mapGraphics.fillOval(xPos, yPos, 2 * radius, 2 * radius);
 	}
 
