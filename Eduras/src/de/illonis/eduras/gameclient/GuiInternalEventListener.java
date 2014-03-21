@@ -199,7 +199,8 @@ public class GuiInternalEventListener implements LoginPanelReactor,
 
 	@Override
 	public void sendSelectedUnits(Vector2D target) {
-		LinkedList<Integer> units = client.getData().getSelectedUnits();
+		LinkedList<Integer> units = new LinkedList<Integer>(client.getData()
+				.getSelectedUnits());
 		if (units.isEmpty())
 			return;
 		SendUnitsEvent sendEvent = new SendUnitsEvent(client.getOwnerID(),

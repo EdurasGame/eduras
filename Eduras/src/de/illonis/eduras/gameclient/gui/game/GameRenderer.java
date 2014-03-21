@@ -5,7 +5,6 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Graphics2D;
 import java.awt.GraphicsConfiguration;
-import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
 import java.awt.Point;
 import java.awt.Rectangle;
@@ -190,13 +189,9 @@ public class GameRenderer implements TooltipHandler {
 	 *            graphics height.
 	 */
 	private void createGraphics(int width, int height) {
-		// mapImage = new BufferedImage(width, height,
-		// BufferedImage.TYPE_INT_RGB);
-
-		GraphicsEnvironment env = GraphicsEnvironment
-				.getLocalGraphicsEnvironment();
-		GraphicsDevice device = env.getDefaultScreenDevice();
-		GraphicsConfiguration config = device.getDefaultConfiguration();
+		GraphicsConfiguration config = GraphicsEnvironment
+				.getLocalGraphicsEnvironment().getDefaultScreenDevice()
+				.getDefaultConfiguration();
 
 		mapImage = config.createCompatibleImage(width, height,
 				Transparency.OPAQUE);
@@ -217,8 +212,6 @@ public class GameRenderer implements TooltipHandler {
 	private synchronized void clear(int width, int height) {
 		mapGraphics.setColor(Color.GRAY);
 		mapGraphics.fillRect(0, 0, width, height);
-		bothGraphics.setColor(Color.black);
-		bothGraphics.fillRect(0, 0, width, height);
 	}
 
 	/**
@@ -242,8 +235,7 @@ public class GameRenderer implements TooltipHandler {
 	 */
 	private void drawMap(Graphics2D g2d) {
 		Rectangle r = new Rectangle(info.getMapBounds());
-		r.x -= camera.x;
-		r.y -= camera.y;
+		r.translate(-camera.x, -camera.y);
 		g2d.setColor(Color.BLACK);
 		g2d.fill(r);
 	}
@@ -252,15 +244,12 @@ public class GameRenderer implements TooltipHandler {
 	 * Draw every object of game-object list that is in camera viewport.
 	 * 
 	 * @param g2d
+	 *            the graphics target.
 	 */
-	private synchronized void drawObjects(Graphics2D g2d) {
-
-		g2d.setColor(Color.YELLOW);
-
+	private void drawObjects(Graphics2D g2d) {
 		PlayerMainFigure myPlayer;
-
 		try {
-			myPlayer = info.getPlayer();
+			myPlayer = getClientPlayer();
 		} catch (ObjectNotFoundException e) {
 			L.log(Level.SEVERE,
 					"Could not find playerMainFigure while rendering.", e);
@@ -317,16 +306,15 @@ public class GameRenderer implements TooltipHandler {
 			mapGraphics.drawImage(ImageCache.getObjectImage(d.getType()), x, y,
 					null);
 		} catch (CacheException e) {
-			if (isSelected(d)) {
-				g2d.setColor(Color.RED);
-			} else {
-				g2d.setColor(Color.YELLOW);
-			}
 			if (d.getShape() != null) {
+				if (isSelected(d)) {
+					g2d.setColor(Color.RED);
+				} else {
+					g2d.setColor(Color.YELLOW);
+				}
 				drawShapeOf(d);
 			}
 		}
-		// draw shape of gameObject instead if object has shape
 
 		if (d.isUnit()) {
 			drawHealthBarFor((Unit) d);
@@ -588,7 +576,7 @@ public class GameRenderer implements TooltipHandler {
 	}
 
 	private PlayerMainFigure getClientPlayer() throws ObjectNotFoundException {
-		return gui.getInfos().getPlayer();
+		return info.getPlayer();
 	}
 
 }
