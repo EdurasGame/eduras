@@ -152,8 +152,8 @@ public class GameRenderer implements TooltipHandler {
 		adjustCamera();
 		drawMap(mapGraphics);
 		drawObjects(mapGraphics);
-		bothGraphics.drawImage(mapImage, 0, 0, null);
 		drawAnimations(mapGraphics);
+		bothGraphics.drawImage(mapImage, 0, 0, null);
 		drawGui(bothGraphics);
 
 		Graphics2D g2d = (Graphics2D) buffer.getDrawGraphics();
