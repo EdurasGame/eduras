@@ -28,6 +28,8 @@ import de.illonis.eduras.Team;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
 import de.illonis.eduras.gameclient.ClientData;
 import de.illonis.eduras.gameclient.VisionInformation;
+import de.illonis.eduras.gameclient.datacache.CacheException;
+import de.illonis.eduras.gameclient.datacache.ImageCache;
 import de.illonis.eduras.gameclient.gui.animation.Animation;
 import de.illonis.eduras.gameclient.gui.hud.HealthBar;
 import de.illonis.eduras.gameclient.gui.hud.ItemTooltip;
@@ -159,8 +161,8 @@ public class GameRenderer implements TooltipHandler {
 		g2d.dispose();
 		if (!buffer.contentsLost()) {
 			buffer.show();
+			Toolkit.getDefaultToolkit().sync();
 		}
-		Toolkit.getDefaultToolkit().sync();
 	}
 
 	private void drawAnimations(Graphics2D g2d) {
@@ -204,6 +206,8 @@ public class GameRenderer implements TooltipHandler {
 		scale = calculateScale(width, height);
 
 		bothGraphics = (Graphics2D) displayImage.getGraphics();
+		bothGraphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+				RenderingHints.VALUE_ANTIALIAS_OFF);
 		mapGraphics = (Graphics2D) mapImage.getGraphics();
 		mapGraphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
 				RenderingHints.VALUE_ANTIALIAS_ON);
@@ -283,36 +287,7 @@ public class GameRenderer implements TooltipHandler {
 				if (S.vision_disabled
 						|| (S.vision_neutral_always && d.getOwner() == -1)
 						|| visionArea.intersects(d.getBoundingBox())) {
-
-					// TODO: distinguish between object images and icon images
-					// drawImageOf(d);
-					// draw shape of gameObject instead if object has shape
-
-					if (isSelected(d)) {
-						g2d.setColor(Color.RED);
-					} else {
-						g2d.setColor(Color.YELLOW);
-					}
-
-					if (d.getShape() != null) {
-						drawShapeOf(d);
-					}
-
-					if (d.isUnit()) {
-						drawHealthBarFor((Unit) d);
-					}
-
-					if (d instanceof PlayerMainFigure) {
-						PlayerMainFigure player = (PlayerMainFigure) d;
-						g2d.drawString(player.getName(), player.getDrawX()
-								- camera.x, player.getDrawY() - camera.y);
-					}
-
-					// draws unit id next to unit for testing purpose
-					/*
-					 * dbg.drawString(d.getId() + "", d.getDrawX() - camera.x,
-					 * d.getDrawY() - camera.y - 15);
-					 */
+					drawObject(d, g2d);
 				}
 			}
 		}
@@ -334,19 +309,43 @@ public class GameRenderer implements TooltipHandler {
 		}
 	}
 
-	private boolean isSelected(GameObject object) {
-		return data.getSelectedUnits().contains(object.getId());
+	private void drawObject(GameObject d, Graphics2D g2d) {
+		final int x = d.getDrawX() - camera.x;
+		final int y = d.getDrawY() - camera.y;
+
+		try {
+			mapGraphics.drawImage(ImageCache.getObjectImage(d.getType()), x, y,
+					null);
+		} catch (CacheException e) {
+			if (isSelected(d)) {
+				g2d.setColor(Color.RED);
+			} else {
+				g2d.setColor(Color.YELLOW);
+			}
+			if (d.getShape() != null) {
+				drawShapeOf(d);
+			}
+		}
+		// draw shape of gameObject instead if object has shape
+
+		if (d.isUnit()) {
+			drawHealthBarFor((Unit) d);
+		}
+
+		if (d instanceof PlayerMainFigure) {
+			PlayerMainFigure player = (PlayerMainFigure) d;
+			g2d.drawString(player.getName(), x, y);
+		}
+
+		// draws unit id next to unit for testing purpose
+		/*
+		 * dbg.drawString(d.getId() + "", d.getDrawX() - camera.x, d.getDrawY()
+		 * - camera.y - 15);
+		 */
 	}
 
-	/**
-	 * Draws image for given object.
-	 * 
-	 * @param obj
-	 *            object to draw image for.
-	 */
-	@SuppressWarnings("unused")
-	private void drawImageOf(GameObject obj) {
-		// TODO: implement (use scale!)
+	private boolean isSelected(GameObject object) {
+		return data.getSelectedUnits().contains(object.getId());
 	}
 
 	/**

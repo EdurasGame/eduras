@@ -22,6 +22,7 @@ public final class ImageCache {
 	private final static HashMap<ObjectType, BufferedImage> objectImages = new HashMap<ObjectType, BufferedImage>();
 	private final static HashMap<ImageKey, BufferedImage> guiImages = new HashMap<ImageKey, BufferedImage>();
 	private final static HashMap<ImageKey, ImageIcon> imageIcons = new HashMap<ImageKey, ImageIcon>();
+	private final static HashMap<ObjectType, BufferedImage> inventoryIcons = new HashMap<ObjectType, BufferedImage>();
 
 	static void addShape(ShapeType shapeType, Vector2D[] verts) {
 		shapeData.put(shapeType, verts);
@@ -37,6 +38,10 @@ public final class ImageCache {
 
 	static void addGuiImage(ImageKey key, BufferedImage image) {
 		guiImages.put(key, image);
+	}
+
+	static void addInventoryIcon(ObjectType key, BufferedImage image) {
+		inventoryIcons.put(key, image);
 	}
 
 	/**
@@ -105,9 +110,27 @@ public final class ImageCache {
 	}
 
 	/**
+	 * Retrieves an inventory icon by given key.
+	 * 
+	 * @param key
+	 *            the key of the icon.
+	 * @return the image icon.
+	 * @throws CacheException
+	 *             if imagedata for that key are not cached.
+	 */
+	public static BufferedImage getInventoryIcon(ObjectType key)
+			throws CacheException {
+		BufferedImage icon = inventoryIcons.get(key);
+		if (icon == null)
+			throw new CacheException("No cached inventory icon found for "
+					+ key);
+		return icon;
+	}
+
+	/**
 	 * Clears all buffered images.
 	 */
 	public static void dispose() {
-
+		// TODO: implement
 	}
 }

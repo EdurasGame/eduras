@@ -52,7 +52,7 @@ public class ItemTooltip extends Tooltip {
 		g2d.drawString("owner: " + item.getOwner(), screenX + 8, screenY + 90);
 		BufferedImage img;
 		try {
-			img = ImageCache.getObjectImage(item.getType());
+			img = ImageCache.getInventoryIcon(item.getType());
 			g2d.drawImage(img, screenX + width - img.getWidth() - 2,
 					screenY + 2, null);
 		} catch (CacheException e) {

@@ -169,7 +169,7 @@ public class ItemDisplay extends ClickableGuiElement implements
 		} else {
 			String newName = newItem.getName();
 			try {
-				BufferedImage image = ImageCache.getObjectImage(newItem
+				BufferedImage image = ImageCache.getInventoryIcon(newItem
 						.getType());
 				itemSlots[slot].setItemImage(image);
 			} catch (CacheException e) {

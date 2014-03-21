@@ -85,6 +85,29 @@ public final class GraphicsPreLoader extends AsyncLoader<Void> {
 		}
 	}
 
+	private void loadInventoryIcons() {
+		HashMap<ObjectType, String> inventoryIconInfo = CacheInfo
+				.getAllInventoryIcons();
+		Iterator<Map.Entry<ObjectType, String>> it = inventoryIconInfo
+				.entrySet().iterator();
+		int n = inventoryIconInfo.size();
+		int i = 0;
+		while (it.hasNext()) {
+			Map.Entry<ObjectType, String> pair = it.next();
+			try {
+				BufferedImage image = ImageFiler.load(pair.getValue());
+				ImageCache.addInventoryIcon(pair.getKey(), image);
+			} catch (IllegalArgumentException | IOException e) {
+				L.log(Level.SEVERE,
+						"Inventory icon not found: " + pair.getValue(), e);
+			}
+			i++;
+
+			int progress = (int) Math.floor((double) i / n * 25) + 50;
+			setProgress(progress);
+		}
+	}
+
 	private void loadGuiGraphics() {
 		HashMap<ImageKey, String> shapeInfo = CacheInfo.getAllGuiImages();
 		Iterator<Map.Entry<ImageKey, String>> it = shapeInfo.entrySet()
@@ -160,6 +183,7 @@ public final class GraphicsPreLoader extends AsyncLoader<Void> {
 		loadGraphics();
 		setProgress(50);
 		loadIcons();
+		loadInventoryIcons();
 		setProgress(75);
 		loadGuiGraphics();
 		setProgress(100);
