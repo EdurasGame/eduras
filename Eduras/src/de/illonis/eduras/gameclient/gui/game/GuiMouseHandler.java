@@ -81,7 +81,7 @@ public final class GuiMouseHandler extends GuiMouseAdapter implements
 	public void mouseClicked(MouseEvent e) {
 		super.mouseClicked(e);
 		Point p = e.getPoint();
-		L.info("Click at " + e.getX() + ", " + e.getY());
+		L.fine("Click at " + e.getX() + ", " + e.getY());
 		for (Iterator<ClickableGuiElementInterface> iterator = clickListeners
 				.iterator(); iterator.hasNext();) {
 			ClickableGuiElementInterface nextReactor = iterator.next();

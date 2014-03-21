@@ -719,7 +719,7 @@ class MetaServerRegisterer extends Thread {
 
 	private void registerAtMetaServer(String nameOfServer, String ipOfServer,
 			int portOfServer, String versionOfServer) {
-		L.info("Registering at meta server.");
+		L.fine("Registering at meta server.");
 
 		Event registerEvent = new Event(MetaServer.REGISTER_REQUEST);
 		registerEvent.putArgument(metaServerClient.getClientId());
