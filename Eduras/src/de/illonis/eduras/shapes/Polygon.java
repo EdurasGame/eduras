@@ -30,8 +30,6 @@ import de.illonis.eduras.utils.Pair;
  */
 public class Polygon extends ObjectShape {
 
-	private Rectangle2D.Double boundingBox;
-
 	private final static Logger L = EduLog.getLoggerFor(EdurasServer.class
 			.getName());
 
@@ -183,11 +181,6 @@ public class Polygon extends ObjectShape {
 			}
 		}
 		return interceptPoints;
-	}
-
-	@Override
-	public final Rectangle2D.Double getBoundingBox() {
-		return boundingBox;
 	}
 
 	private void calculateBoundingBox() {

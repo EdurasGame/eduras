@@ -20,6 +20,8 @@ import de.illonis.eduras.math.Vector2D;
  */
 public abstract class ObjectShape {
 
+	protected Rectangle2D.Double boundingBox;
+
 	/**
 	 * All types of shapes.
 	 * 
@@ -29,6 +31,10 @@ public abstract class ObjectShape {
 	@SuppressWarnings("javadoc")
 	public enum ShapeType {
 		BIRD, HOUSE, SWORD, TRIANGLE, ROCKET, STAR;
+	}
+
+	protected ObjectShape() {
+		boundingBox = new Rectangle2D.Double();
 	}
 
 	/**
@@ -173,7 +179,9 @@ public abstract class ObjectShape {
 	 * 
 	 * @return the bounding box.
 	 */
-	public abstract Rectangle2D.Double getBoundingBox();
+	public final Rectangle2D.Double getBoundingBox() {
+		return boundingBox;
+	}
 
 	/**
 	 * Returns a scaled version of this shape. The returned shape is a copy of

@@ -1,7 +1,5 @@
 package de.illonis.eduras.shapes;
 
-import java.awt.geom.Rectangle2D;
-import java.awt.geom.Rectangle2D.Double;
 import java.util.LinkedList;
 
 import de.illonis.eduras.GameInformation;
@@ -30,16 +28,6 @@ public final class NoCollisionShape extends ObjectShape {
 		return null;
 	}
 
-	@Override
-	public Double getBoundingBox() {
-		return new Rectangle2D.Double();
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see de.illonis.eduras.shapes.ObjectShape#getBorderPoints()
-	 */
 	@Override
 	public Vector2D[] getBorderPoints() {
 		return null;

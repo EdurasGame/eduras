@@ -1,7 +1,6 @@
 package de.illonis.eduras.shapes;
 
 import java.awt.geom.Rectangle2D;
-import java.awt.geom.Rectangle2D.Double;
 import java.util.LinkedList;
 
 import de.illonis.eduras.GameInformation;
@@ -21,7 +20,6 @@ public class Circle extends ObjectShape {
 
 	private static final int COLLISION_ACCURACY = 30;
 	private double radius = 0;
-	private final Rectangle2D.Double boundingBox;
 
 	/**
 	 * A circle shape is determined by its radius.
@@ -221,11 +219,6 @@ public class Circle extends ObjectShape {
 	 */
 	public void setRadius(double radius) {
 		this.radius = radius;
-	}
-
-	@Override
-	public Double getBoundingBox() {
-		return boundingBox;
 	}
 
 	/*
