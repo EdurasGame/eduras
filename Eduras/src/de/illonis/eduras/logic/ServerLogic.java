@@ -63,7 +63,7 @@ public class ServerLogic implements GameLogicInterface {
 
 	@Override
 	public synchronized void onGameEventAppeared(GameEvent event) {
-		L.info(Localization.getStringF("Client.networking.event", event
+		L.fine(Localization.getStringF("Client.networking.event", event
 				.getType().toString()));
 
 		switch (event.getType()) {

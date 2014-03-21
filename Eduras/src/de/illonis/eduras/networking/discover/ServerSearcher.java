@@ -75,7 +75,7 @@ public class ServerSearcher extends Thread {
 					ServerDiscoveryListener.SERVER_PORT);
 
 			c.send(ServerDiscoveryListener.REQUEST_MSG, target);
-			L.info("[ServerSearcher] Sent request packet via 255.255.255.255.");
+			L.fine("[ServerSearcher] Sent request packet via 255.255.255.255.");
 			// Broadcast the message over all the network interfaces
 			Enumeration<NetworkInterface> interfaces = NetworkInterface
 					.getNetworkInterfaces();
@@ -189,10 +189,11 @@ public class ServerSearcher extends Thread {
 		public void handleEvent(Event event) {
 			switch (event.getEventNumber()) {
 			case MetaServer.GET_SERVERS_RESPONSE: {
-				L.fine("Received metaserver answer.");
 				int numberOfEdurasServers;
 				try {
 					numberOfEdurasServers = (Integer) event.getArgument(0);
+					L.fine("Received metaserver GET_SERVERS_RESPONSE. It reported "
+							+ numberOfEdurasServers + " servers.");
 
 					for (int i = 1; i < numberOfEdurasServers * 4; i = i + 4) {
 						String nameOfEdurasServer = (String) event
@@ -203,6 +204,14 @@ public class ServerSearcher extends Thread {
 								.getArgument(i + 2);
 						String versionOfEdurasServer = (String) event
 								.getArgument(i + 3);
+
+						L.fine("Metaserver reported the following server. name : "
+								+ nameOfEdurasServer
+								+ " ; address : "
+								+ ipOfEdurasServer
+								+ ":"
+								+ portOfEdurasServer
+								+ " ; version : " + versionOfEdurasServer);
 
 						try {
 							ServerInfo serverInfo = new ServerInfo(
