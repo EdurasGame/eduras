@@ -1,7 +1,8 @@
 package de.illonis.eduras.exceptions;
 
+import org.newdawn.slick.geom.Circle;
+
 import de.illonis.eduras.math.Vector2D;
-import de.illonis.eduras.shapes.Circle;
 
 /**
  * Thrown when the given point is not located on the given circle.

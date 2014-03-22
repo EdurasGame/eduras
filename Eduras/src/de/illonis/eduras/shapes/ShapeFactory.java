@@ -4,6 +4,9 @@ import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.newdawn.slick.geom.Polygon;
+import org.newdawn.slick.geom.Shape;
+
 import de.illonis.edulog.EduLog;
 import de.illonis.eduras.gameclient.datacache.CacheException;
 import de.illonis.eduras.gameclient.datacache.CacheInfo;
@@ -52,14 +55,20 @@ public final class ShapeFactory {
 	 *            the type of the shape.
 	 * @return the newly created shape.
 	 */
-	public static ObjectShape createShape(ShapeType shapeType) {
+	public static Shape createShape(ShapeType shapeType) {
 
-		ObjectShape s;
+		Shape s;
 		switch (shapeType) {
 
 		default:
 			Vector2D[] verts = getVerticesForShape(shapeType);
-			s = new Polygon(verts);
+			float points[] = new float[verts.length * 2];
+
+			for (int i = 0; i < verts.length; i++) {
+				points[2 * i] = (float) verts[i].getX();
+				points[2 * i + 1] = (float) verts[i].getY();
+			}
+			s = new Polygon(points);
 		}
 		return s;
 	}

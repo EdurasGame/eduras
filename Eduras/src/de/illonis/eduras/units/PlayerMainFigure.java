@@ -2,6 +2,8 @@ package de.illonis.eduras.units;
 
 import java.util.logging.Logger;
 
+import org.newdawn.slick.geom.Circle;
+
 import de.illonis.edulog.EduLog;
 import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.ObjectFactory.ObjectType;
@@ -11,7 +13,6 @@ import de.illonis.eduras.interfaces.MovementControlable;
 import de.illonis.eduras.inventory.Inventory;
 import de.illonis.eduras.math.Vector2D;
 import de.illonis.eduras.settings.S;
-import de.illonis.eduras.shapes.Circle;
 
 /**
  * This class represents a player.
@@ -87,7 +88,7 @@ public class PlayerMainFigure extends Unit implements MovementControlable {
 		// Vector2D secondEdge = new Vector2D(-10, 10);
 		// Vector2D thirdEdge = new Vector2D(-10, -10);
 
-		setShape(new Circle(9));
+		setShape(new Circle(4.5f, 4.5f, 9));
 
 		// try {
 		// // setShape(new Triangle(firstEdge, secondEdge, thirdEdge));

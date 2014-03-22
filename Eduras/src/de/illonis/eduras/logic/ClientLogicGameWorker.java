@@ -105,10 +105,10 @@ public class ClientLogicGameWorker extends LogicGameWorker {
 		}
 
 		Area visionMask = new Area(visionArea);
-		for (GameObject nearObject : nearby) {
-			visionMask.add(new Area(nearObject.getBoundingBox()));
-		}
-		visionMask.add(new Area(player.getBoundingBox()));
+//		for (GameObject nearObject : nearby) {
+//			visionMask.add(new Area(nearObject.getBoundingBox()));
+//		}
+//		visionMask.add(new Area(player.getBoundingBox()));
 
 		VisionInformation vinfo = gameInformation.getClientData()
 				.getVisionInfo();

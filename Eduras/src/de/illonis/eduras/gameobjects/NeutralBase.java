@@ -8,7 +8,6 @@ import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.ObjectFactory.ObjectType;
 import de.illonis.eduras.Team;
 import de.illonis.eduras.exceptions.ShapeVerticesNotApplicableException;
-import de.illonis.eduras.math.Vector2D;
 import de.illonis.eduras.settings.S;
 import de.illonis.eduras.shapes.Rectangle;
 import de.illonis.eduras.units.Unit;
@@ -46,11 +45,9 @@ public class NeutralBase extends TriggerArea {
 			int mult) {
 		super(game, timingSource, id);
 		setObjectType(ObjectType.NEUTRAL_BASE);
-		try {
-			setShape(new Rectangle(new Vector2D(), new Vector2D(40, 40)));
-		} catch (ShapeVerticesNotApplicableException e) {
-			L.log(Level.WARNING, "TODO: message", e);
-		}
+
+			setShape(new org.newdawn.slick.geom.Rectangle(0f, 0f, 40f, 40f));
+		
 		currentOwnerTeam = null;
 		currentProgressingTeam = null;
 		resourceGenerateAmount = S.neutralbase_resource_baseamount * mult;

@@ -6,7 +6,6 @@ import de.illonis.eduras.events.GameEvent.GameEventNumber;
 import de.illonis.eduras.events.SetBooleanGameObjectAttributeEvent;
 import de.illonis.eduras.gameobjects.TimingSource;
 import de.illonis.eduras.settings.S;
-import de.illonis.eduras.shapes.Circle;
 
 /**
  * Wraps properties of {@link MineWeapon}s missiles.
@@ -20,7 +19,7 @@ public class MineMissile extends Missile {
 	 * Create a new MineMissile.
 	 * 
 	 * @param game
-	 * @param timingSource 
+	 * @param timingSource
 	 * @param id
 	 */
 	public MineMissile(GameInformation game, TimingSource timingSource, int id) {
@@ -30,7 +29,7 @@ public class MineMissile extends Missile {
 		setObjectType(ObjectType.MINE_MISSILE);
 		setSpeed(S.go_minemissile_speed);
 		setMaxRange(S.go_minemissile_maxrange);
-		setShape(new Circle(S.go_minemissile_shape_size));
+		// setShape(new Circle(S.go_minemissile_shape_size));
 
 		setVisible(false);
 		SetBooleanGameObjectAttributeEvent invisEvent = new SetBooleanGameObjectAttributeEvent(

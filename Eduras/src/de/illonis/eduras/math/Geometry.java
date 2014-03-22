@@ -2,8 +2,9 @@ package de.illonis.eduras.math;
 
 import java.util.LinkedList;
 
+import org.newdawn.slick.geom.Circle;
+
 import de.illonis.eduras.exceptions.PointNotOnCircleException;
-import de.illonis.eduras.shapes.Circle;
 import de.illonis.eduras.shapes.ObjectShape;
 import de.illonis.eduras.utils.Pair;
 
@@ -388,7 +389,8 @@ public class Geometry {
 			Vector2D centerPoint, Vector2D pointOnCircle) {
 		Vector2D diffVector = pointOnCircle.copy();
 		diffVector.subtract(centerPoint);
-		return new Circle(diffVector.getLength());
+		return new Circle((float) centerPoint.getX(),
+				(float) centerPoint.getY(), (float)diffVector.getLength());
 	}
 
 	/**
@@ -464,7 +466,8 @@ public class Geometry {
 	 *            the angle of the point.
 	 * @return point on the circle.
 	 */
-	public static Vector2D getRelativePointAtAngleOnCircle(Circle circle, double angle) {
+	public static Vector2D getRelativePointAtAngleOnCircle(Circle circle,
+			double angle) {
 		Vector2D pointOnCircle = new Vector2D(circle.getRadius(), 0);
 		pointOnCircle.rotate(angle);
 		return pointOnCircle;

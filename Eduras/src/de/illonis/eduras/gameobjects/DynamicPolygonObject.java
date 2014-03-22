@@ -30,7 +30,6 @@ public class DynamicPolygonObject extends GameObject {
 			TimingSource timingSource, int id) {
 		super(game, timingSource, id);
 		setObjectType(type);
-		setShape(new Polygon());
 	}
 
 	/**
@@ -68,7 +67,7 @@ public class DynamicPolygonObject extends GameObject {
 	 * @author illonis
 	 */
 	public void setPolygonVertices(Vector2D[] vertices) {
-		((Polygon) getShape()).setVertices(vertices);
+		//((Polygon) getShape()).setVertices(vertices);
 	}
 
 	@Override

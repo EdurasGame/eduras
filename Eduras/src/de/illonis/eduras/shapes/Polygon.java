@@ -7,6 +7,8 @@ import java.util.Collection;
 import java.util.LinkedList;
 import java.util.logging.Logger;
 
+import org.newdawn.slick.geom.Circle;
+
 import de.illonis.edulog.EduLog;
 import de.illonis.eduras.EdurasServer;
 import de.illonis.eduras.GameInformation;
@@ -371,28 +373,28 @@ public class Polygon extends ObjectShape {
 			}
 			// polygon
 			else {
-				if (anotherGameObject.getShape() instanceof Polygon) {
-					Polygon othersShape = (Polygon) anotherGameObject
-							.getShape();
-					for (Line anotherObjectsBorderLine : othersShape
-							.getBorderLines(anotherGameObject)) {
-						Vector2D[] polygonInterceptPoints = Geometry
-								.getCircleLineSegmentInterceptPoints(
-										aRotationCircle, posVector,
-										anotherObjectsBorderLine);
-						for (int i = 0; i < polygonInterceptPoints.length; i++) {
-							if (polygonInterceptPoints[i] != null) {
-								interceptPointsWithGameObject
-										.add(polygonInterceptPoints[i]);
-							}
-						}
-					}
-				} else {
-					L.severe("Can't calculate collision with objectshape "
-							+ anotherGameObject.getShape().getClass()
-									.getSimpleName());
-					break;
-				}
+//				if (anotherGameObject.getShape() instanceof Polygon) {
+//					Polygon othersShape = (Polygon) anotherGameObject
+//							.getShape();
+//					for (Line anotherObjectsBorderLine : othersShape
+//							.getBorderLines(anotherGameObject)) {
+//						Vector2D[] polygonInterceptPoints = Geometry
+//								.getCircleLineSegmentInterceptPoints(
+//										aRotationCircle, posVector,
+//										anotherObjectsBorderLine);
+//						for (int i = 0; i < polygonInterceptPoints.length; i++) {
+//							if (polygonInterceptPoints[i] != null) {
+//								interceptPointsWithGameObject
+//										.add(polygonInterceptPoints[i]);
+//							}
+//						}
+//					}
+//				} else {
+//					L.severe("Can't calculate collision with objectshape "
+//							+ anotherGameObject.getShape().getClass()
+//									.getSimpleName());
+//					break;
+//				}
 
 			}
 

@@ -1,7 +1,10 @@
 package de.illonis.eduras.gameclient.gui.game;
 
-import java.awt.Canvas;
 import java.awt.Color;
+
+import org.newdawn.slick.CanvasGameContainer;
+import org.newdawn.slick.Game;
+import org.newdawn.slick.SlickException;
 
 /**
  * The panel where the game is drawn on.
@@ -9,14 +12,15 @@ import java.awt.Color;
  * @author illonis
  * 
  */
-public class GamePanel extends Canvas {
+public class GamePanel extends CanvasGameContainer {
 
 	private static final long serialVersionUID = 1L;
 
-	GamePanel() {
+	GamePanel(Game game) throws SlickException {
+		super(game);
 		setFocusable(true);
 		setFocusTraversalKeysEnabled(false);
 		setBackground(Color.black);
-		setIgnoreRepaint(true);
+		//setIgnoreRepaint(true);
 	}
 }

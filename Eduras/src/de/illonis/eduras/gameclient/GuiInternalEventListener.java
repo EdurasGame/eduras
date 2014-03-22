@@ -6,6 +6,9 @@ import java.util.Map.Entry;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.newdawn.slick.geom.Rectangle;
+import org.newdawn.slick.geom.Vector2f;
+
 import de.illonis.edulog.EduLog;
 import de.illonis.eduras.events.GameEvent.GameEventNumber;
 import de.illonis.eduras.events.ItemEvent;
@@ -170,12 +173,13 @@ public class GuiInternalEventListener implements LoginPanelReactor,
 
 	@Override
 	public void onUnitsSelected(Rectangle2D.Double area) {
+		Rectangle r = new Rectangle((float) area.getX(), (float) area.getY(),
+				(float) area.getWidth(), (float) area.getHeight());
 		LinkedList<Integer> ids = new LinkedList<Integer>();
 		for (Entry<Integer, GameObject> obj : infoPro.getGameObjects()
 				.entrySet()) {
 			GameObject o = obj.getValue();
-			if (o.isUnit() && o.isVisible()
-					&& o.getBoundingBox().intersects(area)) {
+			if (o.isUnit() && o.isVisible() && o.getShape().intersects(r)) {
 				ids.add(obj.getKey());
 			}
 		}
@@ -188,8 +192,9 @@ public class GuiInternalEventListener implements LoginPanelReactor,
 		for (Entry<Integer, GameObject> obj : infoPro.getGameObjects()
 				.entrySet()) {
 			GameObject o = obj.getValue();
-			if (o.isUnit() && o.isVisible()
-					&& o.getBoundingBox().contains(point.toPoint())) {
+			Vector2f f = new Vector2f((float) point.getX(),
+					(float) point.getY());
+			if (o.isUnit() && o.isVisible() && o.getShape().contains(f.x, f.y)) {
 				client.getData().setSelectedUnit(obj.getKey());
 				return;
 			}

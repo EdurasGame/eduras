@@ -1,10 +1,11 @@
 package de.illonis.eduras.items.weapons;
 
+import org.newdawn.slick.geom.Circle;
+
 import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.ObjectFactory.ObjectType;
 import de.illonis.eduras.gameobjects.TimingSource;
 import de.illonis.eduras.settings.S;
-import de.illonis.eduras.shapes.Circle;
 
 /**
  * The missile for the corresponding {@link AssaultRifle}.
@@ -31,6 +32,6 @@ public class AssaultMissile extends Missile {
 		setDamageRadius(S.go_assaultmissile_damageradius);
 		setSpeed(S.go_assaultmissile_speed);
 		setMaxRange(S.go_assaultmissile_maxrange);
-		setShape(new Circle(S.go_assaultmissile_shape_size));
+//		setShape(new Circle(S.go_assaultmissile_shape_size));
 	}
 }

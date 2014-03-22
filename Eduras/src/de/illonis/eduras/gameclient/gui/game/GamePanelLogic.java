@@ -10,6 +10,8 @@ import java.awt.event.KeyEvent;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.newdawn.slick.SlickException;
+
 import de.illonis.edulog.EduLog;
 import de.illonis.eduras.chat.ChatClientImpl;
 import de.illonis.eduras.chat.NotConnectedException;
@@ -17,6 +19,7 @@ import de.illonis.eduras.chat.UserNotInRoomException;
 import de.illonis.eduras.gameclient.ChatCache;
 import de.illonis.eduras.gameclient.ClientData;
 import de.illonis.eduras.gameclient.GuiInternalEventListener;
+import de.illonis.eduras.gameclient.SlickGame;
 import de.illonis.eduras.gameclient.gui.CameraMouseListener;
 import de.illonis.eduras.gameclient.gui.ClientGuiStepLogic;
 import de.illonis.eduras.gameclient.gui.HudNotifier;
@@ -44,7 +47,7 @@ public class GamePanelLogic extends ClientGuiStepLogic implements
 	private GameRenderer renderer;
 	private final GameCamera camera;
 	private final CameraMouseListener cml;
-	private final GamePanel gui;
+	private GamePanel gui;
 	private final GuiInternalEventListener reactor;
 	private final InputKeyHandler keyHandler;
 	private final ResizeMonitor resizeMonitor;
@@ -79,10 +82,15 @@ public class GamePanelLogic extends ClientGuiStepLogic implements
 	public GamePanelLogic(GuiInternalEventListener listener,
 			ClientData clientData) {
 		this.data = clientData;
-		gui = new GamePanel();
+
 		currentClickState = ClickState.DEFAULT;
 		this.reactor = listener;
 		infoPro = EdurasInitializer.getInstance().getInformationProvider();
+		try {
+			gui = new GamePanel(new SlickGame(infoPro.getGameObjects()));
+		} catch (SlickException e) {
+			L.log(Level.WARNING, "TODO: message", e);
+		}
 		resizeMonitor = new ResizeMonitor();
 		keyHandler = new InputKeyHandler(this, reactor);
 		keyHandler.addUserInputListener(this);
@@ -111,7 +119,7 @@ public class GamePanelLogic extends ClientGuiStepLogic implements
 				hudNotifier, cache);
 		renderer = new GameRenderer(camera, userInterface, infoPro, data);
 		userInterface.setRenderer(renderer);
-		renderer.setTarget(gui);
+		//renderer.setTarget(gui);
 	}
 
 	/**
@@ -135,13 +143,17 @@ public class GamePanelLogic extends ClientGuiStepLogic implements
 	 * Starts rendering process.
 	 */
 	private void startRendering() {
-		renderer.startRendering();
+//		renderer.startRendering();
+		try {
+			gui.start();
+		} catch (SlickException e) {
+			L.log(Level.WARNING, "TODO: message", e);
+		}
 	}
 
 	@Override
 	public void onShown() {
 		camera.reset();
-		camera.startMoving();
 		EdurasInitializer.getInstance().startLogicWorker();
 		initUserInterface();
 		gui.addComponentListener(resizeMonitor);
@@ -175,7 +187,6 @@ public class GamePanelLogic extends ClientGuiStepLogic implements
 		gui.removeMouseMotionListener(mouseHandler);
 		gui.removeComponentListener(resizeMonitor);
 		gui.removeKeyListener(keyHandler);
-		camera.stopMoving();
 		cml.stop();
 		stopRendering();
 		stopTimedTasks();

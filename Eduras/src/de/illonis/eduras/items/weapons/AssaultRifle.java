@@ -1,11 +1,12 @@
 package de.illonis.eduras.items.weapons;
 
+import org.newdawn.slick.geom.Circle;
+
 import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.ObjectFactory.ObjectType;
 import de.illonis.eduras.gameobjects.TimingSource;
 import de.illonis.eduras.items.ItemUseInformation;
 import de.illonis.eduras.settings.S;
-import de.illonis.eduras.shapes.Circle;
 
 /**
  * An assault rifle is a very fast in cooldown and missile speed weapon, that
@@ -30,7 +31,9 @@ public class AssaultRifle extends Weapon {
 		super(ObjectType.ASSAULTRIFLE, gi, timingSource, id);
 		setName("Assault Rifle");
 
-		setShape(new Circle(S.go_assaultrifle_shape_size));
+		setShape(new Circle((float) S.go_assaultrifle_shape_size,
+				(float) S.go_assaultrifle_shape_size,
+				(float) S.go_assaultrifle_shape_size));
 		defaultCooldown = S.go_assaultrifle_cooldown;
 		setAmmunitionLimited(S.go_assaultrifle_fillamount,
 				S.go_assaultrifle_maxammo);

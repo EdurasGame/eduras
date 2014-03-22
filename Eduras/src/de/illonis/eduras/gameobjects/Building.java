@@ -1,5 +1,7 @@
 package de.illonis.eduras.gameobjects;
 
+import org.newdawn.slick.geom.Rectangle;
+
 import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.ObjectFactory.ObjectType;
 import de.illonis.eduras.shapes.House;
@@ -25,7 +27,8 @@ public class Building extends GameObject {
 	public Building(GameInformation game, TimingSource timingSource, int id) {
 		super(game, timingSource, id);
 		setObjectType(ObjectType.BUILDING);
-		setShape(new House());
+		setShape(new Rectangle(0,0, 30, 30));
+	//	setShape(new House());
 	}
 
 	@Override

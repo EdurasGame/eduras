@@ -4,9 +4,10 @@ import java.awt.geom.Rectangle2D;
 import java.util.Random;
 import java.util.logging.Logger;
 
+import org.newdawn.slick.geom.Shape;
+
 import de.illonis.edulog.EduLog;
 import de.illonis.eduras.math.Vector2D;
-import de.illonis.eduras.shapes.ObjectShape;
 
 /**
  * Specifies a rectangular spawning area for one or multiple units.
@@ -79,10 +80,9 @@ public class SpawnPosition {
 	 * 
 	 * @author illonis
 	 */
-	public Vector2D getAPoint(ObjectShape spawningShape) {
-		Rectangle2D.Double shapeRect = spawningShape.getBoundingBox();
-		double maxX = area.x + area.width - shapeRect.width;
-		double maxY = area.y + area.height - shapeRect.height;
+	public Vector2D getAPoint(Shape spawningShape) {
+		double maxX = area.x + area.width - spawningShape.getWidth();
+		double maxY = area.y + area.height - spawningShape.getHeight();
 		double minX = area.x;
 		double minY = area.y;
 
@@ -92,7 +92,7 @@ public class SpawnPosition {
 		if (spawnX < 0 || spawnY < 0) {
 			L.warning("Spawning object is too big for this spawning Point!"
 					+ "Size of Object: "
-					+ spawningShape.getBoundingBox().getBounds()
+
 					+ " Size of Area: " + area.getBounds());
 			spawnX = area.x;
 			spawnY = area.y;

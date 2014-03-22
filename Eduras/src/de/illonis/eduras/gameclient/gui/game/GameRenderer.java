@@ -22,6 +22,8 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.newdawn.slick.geom.Circle;
+
 import de.illonis.edulog.EduLog;
 import de.illonis.eduras.Team;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
@@ -41,7 +43,6 @@ import de.illonis.eduras.math.BasicMath;
 import de.illonis.eduras.math.Geometry;
 import de.illonis.eduras.math.Vector2D;
 import de.illonis.eduras.settings.S;
-import de.illonis.eduras.shapes.Circle;
 import de.illonis.eduras.shapes.ObjectShape;
 import de.illonis.eduras.shapes.Polygon;
 import de.illonis.eduras.units.PlayerMainFigure;
@@ -69,13 +70,14 @@ public class GameRenderer implements TooltipHandler {
 	private Component target;
 	private BufferStrategy buffer;
 	private ItemTooltip tooltip;
-	private double scale;
+	private float scale;
 	private boolean tooltipShown = false;
 	private final LinkedList<RenderedGuiObject> uiObjects;
 	private final static int DEFAULT_WIDTH = 484;
 	private final static int DEFAULT_HEIGHT = 462;
 	private final InformationProvider info;
 	private final ClientData data;
+	private final BasicStroke baseStroke = new BasicStroke(1f);
 
 	/**
 	 * Creates a new renderer.
@@ -121,14 +123,14 @@ public class GameRenderer implements TooltipHandler {
 	 *            current ui height.
 	 * @return new scale factor.
 	 */
-	private double calculateScale(int currentWidth, int currentHeight) {
+	private float calculateScale(int currentWidth, int currentHeight) {
 		if (currentHeight == DEFAULT_HEIGHT && currentWidth == DEFAULT_WIDTH)
 			return 1;
 
-		double diffW = (double) currentWidth / DEFAULT_WIDTH;
-		double diffH = (double) currentHeight / DEFAULT_HEIGHT;
+		float diffW = (float) currentWidth / DEFAULT_WIDTH;
+		float diffH = (float) currentHeight / DEFAULT_HEIGHT;
 
-		double newScale = BasicMath.avg(diffW, diffH);
+		float newScale = BasicMath.avg(diffW, diffH);
 		return newScale;
 	}
 
@@ -167,7 +169,7 @@ public class GameRenderer implements TooltipHandler {
 	private void drawAnimations(Graphics2D g2d) {
 		for (int i = 0; i < data.getAnimations().size(); i++) {
 			Animation animation = data.getAnimations().get(i);
-			animation.draw(g2d, -camera.x, -camera.y);
+			animation.draw(g2d, (int) -camera.getX(), (int) -camera.getY());
 		}
 	}
 
@@ -235,7 +237,7 @@ public class GameRenderer implements TooltipHandler {
 	 */
 	private void drawMap(Graphics2D g2d) {
 		Rectangle r = new Rectangle(info.getMapBounds());
-		r.translate(-camera.x, -camera.y);
+		r.translate((int) -camera.getX(), (int) -camera.getY());
 		g2d.setColor(Color.BLACK);
 		g2d.fill(r);
 	}
@@ -272,42 +274,20 @@ public class GameRenderer implements TooltipHandler {
 			}
 
 			// draw only if in current view point
-			if (d.getBoundingBox().intersects(camera)) {
+			if (d.getShape().intersects(camera)) {
 				if (S.vision_disabled
-						|| (S.vision_neutral_always && d.getOwner() == -1)
-						|| visionArea.intersects(d.getBoundingBox())) {
+						|| (S.vision_neutral_always && d.getOwner() == -1)) {
 					drawObject(d, g2d);
-					if (S.debug_render_boundingboxes) {
-						mapGraphics.setColor(Color.YELLOW);
-						Rectangle2D.Double r = d.getBoundingBox();
-						r.x -= camera.x;
-						r.y -= camera.y;
-						mapGraphics.draw(r);
-					}
+				
 				}
 			}
 		}
 
-		if (!S.vision_disabled) {
-			AffineTransform af = new AffineTransform();
-			af.translate(-camera.x, -camera.y);
-
-			Area map = new Area(camera);
-			map.subtract(visionMask);
-
-			map.transform(af);
-
-			mapGraphics.setStroke(new BasicStroke(1f));
-			mapGraphics.setColor(new Color(0, 0, 0, 0.6f));
-			mapGraphics.fill(map);
-			mapGraphics.setColor(Color.WHITE);
-			mapGraphics.draw(map);
-		}
 	}
 
 	private void drawObject(GameObject d, Graphics2D g2d) {
-		final int x = d.getDrawX() - camera.x;
-		final int y = d.getDrawY() - camera.y;
+		final int x = d.getDrawX() - (int) camera.getX();
+		final int y = d.getDrawY() - (int) camera.getY();
 
 		try {
 			mapGraphics.drawImage(ImageCache.getObjectImage(d.getType()), x, y,
@@ -319,7 +299,6 @@ public class GameRenderer implements TooltipHandler {
 				} else {
 					g2d.setColor(Color.YELLOW);
 				}
-				drawShapeOf(d);
 			}
 		}
 
@@ -351,59 +330,37 @@ public class GameRenderer implements TooltipHandler {
 		HealthBar.calculateAndDrawFor(unit, mapGraphics, camera);
 	}
 
-	/**
-	 * Draws shape of a {@link GameObject}.
-	 * 
-	 * @param obj
-	 *            gameobject.
-	 */
-	private void drawShapeOf(GameObject obj) {
-		ObjectShape objectShape = obj.getShape();
-
-		if (objectShape instanceof Polygon) {
-
-			drawPolygon((Polygon) objectShape, obj);
-
-		} else if (objectShape instanceof Circle) {
-			drawCircle((Circle) objectShape, obj);
-
-			if (obj instanceof PlayerMainFigure) {
-				drawFace(obj, (Circle) objectShape);
-			}
-		}
-	}
-
-	private void drawFace(GameObject obj, Circle shape) {
-		int noseRadius = 3;
-		int eyeRadius = 2;
-		Vector2D nose = Geometry.getRelativePointAtAngleOnCircle(shape,
-				obj.getRotation());
-		Vector2D radiusAdder = new Vector2D(shape.getRadius(),
-				shape.getRadius());
-		Vector2D circleCenter = obj.getPositionVector().copy();
-		circleCenter.add(radiusAdder);
-		nose.add(obj.getPositionVector());
-		nose.add(radiusAdder);
-		mapGraphics.setColor(Color.YELLOW);
-		mapGraphics.fillOval((int) nose.getX() - noseRadius - camera.x,
-				(int) nose.getY() - noseRadius - camera.y, 2 * noseRadius,
-				2 * noseRadius);
-
-		Vector2D leftEye = nose.copy();
-		leftEye.rotate(-35, circleCenter);
-		Vector2D centerDist = leftEye.getDistanceVectorTo(circleCenter);
-		centerDist.mult(.5);
-		leftEye.add(centerDist);
-		mapGraphics.fillOval((int) (leftEye.getX()) - eyeRadius - camera.x,
-				(int) (leftEye.getY()) - eyeRadius - camera.y, 2 * eyeRadius,
-				2 * eyeRadius);
-
-		leftEye.rotate(70, circleCenter);
-		mapGraphics.fillOval((int) (leftEye.getX()) - eyeRadius - camera.x,
-				(int) (leftEye.getY()) - eyeRadius - camera.y, 2 * eyeRadius,
-				2 * eyeRadius);
-
-	}
+//	private void drawFace(GameObject obj, Circle shape) {
+//		int noseRadius = 3;
+//		int eyeRadius = 2;
+//		Vector2D nose = Geometry.getRelativePointAtAngleOnCircle(shape,
+//				obj.getRotation());
+//		Vector2D radiusAdder = new Vector2D(shape.getRadius(),
+//				shape.getRadius());
+//		Vector2D circleCenter = obj.getPositionVector().copy();
+//		circleCenter.add(radiusAdder);
+//		nose.add(obj.getPositionVector());
+//		nose.add(radiusAdder);
+//		mapGraphics.setColor(Color.YELLOW);
+//		mapGraphics.fillOval((int) nose.getX() - noseRadius - camera.x,
+//				(int) nose.getY() - noseRadius - camera.y, 2 * noseRadius,
+//				2 * noseRadius);
+//
+//		Vector2D leftEye = nose.copy();
+//		leftEye.rotate(-35, circleCenter);
+//		Vector2D centerDist = leftEye.getDistanceVectorTo(circleCenter);
+//		centerDist.mult(.5);
+//		leftEye.add(centerDist);
+//		mapGraphics.fillOval((int) (leftEye.getX()) - eyeRadius - camera.getx,
+//				(int) (leftEye.getY()) - eyeRadius - camera.getY(), 2 * eyeRadius,
+//				2 * eyeRadius);
+//
+//		leftEye.rotate(70, circleCenter);
+//		mapGraphics.fillOval((int) (leftEye.getX()) - eyeRadius - camera.x,
+//				(int) (leftEye.getY()) - eyeRadius - camera.y, 2 * eyeRadius,
+//				2 * eyeRadius);
+//
+//	}
 
 	/**
 	 * Draws a circle which belongs to the given object.
@@ -415,8 +372,8 @@ public class GameRenderer implements TooltipHandler {
 	 */
 	private void drawCircle(Circle objectShape, GameObject d) {
 		int radius = (int) objectShape.getRadius();
-		int xPos = d.getDrawX() - camera.x;
-		int yPos = d.getDrawY() - camera.y;
+		int xPos = d.getDrawX() - (int)camera.getX();
+		int yPos = d.getDrawY() - (int)camera.getY();
 		mapGraphics.setColor(getColorForObject(d));
 		mapGraphics.fillOval(xPos, yPos, 2 * radius, 2 * radius);
 	}
@@ -485,8 +442,8 @@ public class GameRenderer implements TooltipHandler {
 		int[] yPositions = new int[vCount];
 
 		for (int j = 0; j < vCount; j++) {
-			xPositions[j] = (int) vertices.get(j).getX() - camera.x;
-			yPositions[j] = (int) vertices.get(j).getY() - camera.y;
+			xPositions[j] = (int) vertices.get(j).getX() -(int)camera.getX();
+			yPositions[j] = (int) vertices.get(j).getY() - (int)camera.getY();
 		}
 
 		// for (int j = 0; j < vCount; j++) {

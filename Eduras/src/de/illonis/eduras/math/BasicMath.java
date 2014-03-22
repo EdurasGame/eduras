@@ -122,6 +122,19 @@ public class BasicMath {
 	}
 
 	/**
+	 * Calculates arithmetic average of two given numbers.
+	 * 
+	 * @param x
+	 *            first value.
+	 * @param y
+	 *            second value.
+	 * @return the average.
+	 */
+	public static float avg(float x, float y) {
+		return (x + y) / 2;
+	}
+
+	/**
 	 * Implements the REAL modulo a mod b.
 	 * 
 	 * @param a

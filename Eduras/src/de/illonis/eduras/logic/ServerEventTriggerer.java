@@ -180,8 +180,8 @@ public class ServerEventTriggerer implements EventTriggerer {
 		logic.getObjectFactory().onObjectFactoryEventAppeared(newObjectEvent);
 
 		GameObject o = gameInfo.findObjectById(id);
-		o.setXPosition(position.getX());
-		o.setYPosition(position.getY());
+		o.setXPosition((float)position.getX());
+		o.setYPosition((float)position.getY());
 		MovementEvent setPos = new MovementEvent(GameEventNumber.SET_POS_TCP,
 				id);
 		setPos.setNewXPos(position.getX());
@@ -292,8 +292,8 @@ public class ServerEventTriggerer implements EventTriggerer {
 		e.setNewYPos(newPosition.getY());
 
 		GameObject o = gameInfo.findObjectById(objectId);
-		o.setXPosition(newPosition.getX());
-		o.setYPosition(newPosition.getY());
+		o.setXPosition((float)newPosition.getX());
+		o.setYPosition((float)newPosition.getY());
 		sendEvents(e);
 	}
 

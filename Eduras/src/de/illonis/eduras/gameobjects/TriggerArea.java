@@ -69,12 +69,11 @@ public abstract class TriggerArea extends GameObject implements
 	@Override
 	public final synchronized void onIntervalElapsed(long delta) {
 		// System.out.println("[AREA] elapsed");
-		Rectangle2D.Double thisBounds = getBoundingBox();
 
 		LinkedList<GameObject> leavingObjects = new LinkedList<GameObject>();
 		for (GameObject obj : presentObjects) {
 			synchronized (obj) {
-				if (!obj.getBoundingBox().intersects(thisBounds)) {
+				if (!obj.getShape().intersects(getShape())) {
 					leavingObjects.add(obj);
 					onObjectLeft(obj);
 				}

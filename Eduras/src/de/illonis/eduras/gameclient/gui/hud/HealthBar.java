@@ -51,21 +51,22 @@ public class HealthBar {
 
 		instance.w = (int) Math.round((double) health / maxHealth
 				* HEALTHBAR_WIDTH);
-		double unitHalfWidth = unit.getBoundingBox().getWidth() / 2;
+		double unitHalfWidth = unit.getShape().getWidth() / 2;
 		instance.x = (int) Math.round(unit.getDrawX() + unitHalfWidth
 				- HEALTHBAR_WIDTH / 2);
 		instance.y = unit.getDrawY() - HEALTHBAR_HEIGHT - UNIT_GAP;
 
 		// g2d.setColor(Color.black);
 		g2d.setColor(TRANSLUCENT); // translucent
-		g2d.fillRect(instance.x - camera.x, instance.y - camera.y,
-				HEALTHBAR_WIDTH, HEALTHBAR_HEIGHT);
+		g2d.fillRect(instance.x - (int) camera.getX(), instance.y
+				- (int) camera.getY(), HEALTHBAR_WIDTH, HEALTHBAR_HEIGHT);
 		g2d.setColor(Color.YELLOW);
-		g2d.fillRect(instance.x - camera.x, instance.y - camera.y, instance.w,
-				instance.h);
+		g2d.fillRect(instance.x - (int) camera.getX(), instance.y
+				- (int) camera.getY(), instance.w, instance.h);
 		if (unit instanceof PlayerMainFigure) {
 			PlayerMainFigure player = (PlayerMainFigure) unit;
-			g2d.drawString(player.getName(), instance.x - camera.x, instance.y - camera.y - 1);
+			g2d.drawString(player.getName(), instance.x - camera.getX(),
+					instance.y - camera.getY() - 1);
 		}
 	}
 }

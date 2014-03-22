@@ -1,11 +1,12 @@
 package de.illonis.eduras.items.weapons;
 
+import org.newdawn.slick.geom.Circle;
+
 import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.ObjectFactory.ObjectType;
 import de.illonis.eduras.gameobjects.TimingSource;
 import de.illonis.eduras.items.ItemUseInformation;
 import de.illonis.eduras.settings.S;
-import de.illonis.eduras.shapes.Circle;
 
 /**
  * The spawn weapon is a short-range weapon with small cooldown and damage.
@@ -28,7 +29,8 @@ public class SwordWeapon extends Weapon {
 	public SwordWeapon(GameInformation gi, TimingSource timingSource, int id) {
 		super(ObjectType.ITEM_WEAPON_SWORD, gi, timingSource, id);
 		setName("Sword");
-		setShape(new Circle(S.go_swordweapon_shape_radius));
+		setShape(new Circle((float)S.go_swordweapon_shape_radius,
+				(float)	S.go_swordweapon_shape_radius,(float) S.go_swordweapon_shape_radius));
 		defaultCooldown = S.go_swordweapon_cooldown;
 	}
 

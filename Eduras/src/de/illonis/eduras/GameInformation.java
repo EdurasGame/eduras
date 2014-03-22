@@ -12,6 +12,9 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.newdawn.slick.geom.Circle;
+import org.newdawn.slick.geom.Rectangle;
+
 import de.illonis.edulog.EduLog;
 import de.illonis.eduras.ObjectFactory.ObjectType;
 import de.illonis.eduras.events.AddPlayerToTeamEvent;
@@ -37,8 +40,6 @@ import de.illonis.eduras.maps.Map;
 import de.illonis.eduras.maps.SpawnPosition;
 import de.illonis.eduras.maps.SpawnPosition.SpawnType;
 import de.illonis.eduras.math.Vector2D;
-import de.illonis.eduras.shapes.Circle;
-import de.illonis.eduras.shapes.ObjectShape;
 import de.illonis.eduras.shapes.Polygon;
 import de.illonis.eduras.units.PlayerMainFigure;
 
@@ -175,24 +176,6 @@ public class GameInformation {
 	}
 
 	/**
-	 * Checks if there will be a collision of the given object trying to move to
-	 * the target position.
-	 * 
-	 * @param gameObject
-	 *            The object which wants to move.
-	 * @param target
-	 *            The target position.
-	 * @return Returns the objects position after the move. Note that the
-	 *         objects new position won't be set.
-	 */
-	@Deprecated
-	public Vector2D checkCollision(GameObject gameObject, Vector2D target) {
-		ObjectShape shape = gameObject.getShape();
-		Vector2D result = shape.checkCollisionOnMove(this, gameObject, target);
-		return result;
-	}
-
-	/**
 	 * Returns gameobject with given id. If no object is found, null is
 	 * returned.
 	 * 
@@ -253,7 +236,8 @@ public class GameInformation {
 				continue;
 			if (object.equals(ignore))
 				continue;
-			if (object.getBoundingBox().contains(p))
+			if (object.getShape().contains((float) point.getX(),
+					(float) point.getY()))
 				return true;
 		}
 		return false;
@@ -363,10 +347,11 @@ public class GameInformation {
 			infos.add(objectEvent);
 
 			if (object.getType() == ObjectType.DYNAMIC_POLYGON_BLOCK) {
-				SetPolygonDataEvent polygonData = new SetPolygonDataEvent(
-						object.getId(),
-						((Polygon) object.getShape()).getVerticesAsArray());
-				infos.add(polygonData);
+				continue;
+//				SetPolygonDataEvent polygonData = new SetPolygonDataEvent(
+//						object.getId(),
+//						((Polygon) object.getShape()).getVerticesAsArray());
+//				infos.add(polygonData);
 			}
 
 			// send position immediately
@@ -465,23 +450,13 @@ public class GameInformation {
 
 	}
 
-	/**
-	 * Checks whether any gameobject is within given bounds.
-	 * 
-	 * @param bounds
-	 *            rectangular shape.
-	 * @return true if object is in bounds.,
-	 * 
-	 * @author illonis
-	 */
-	public boolean isObjectWithin(Rectangle2D bounds) {
-		return isAnyOfObjectsWithinBounds(bounds, objects.values());
-	}
-
 	private boolean isAnyOfObjectsWithinBounds(Rectangle2D bounds,
 			Collection<GameObject> gameObjects) {
+		Rectangle r = new Rectangle((float) bounds.getX(),
+				(float) bounds.getY(), (float) bounds.getWidth(),
+				(float) bounds.getHeight());
 		for (GameObject o : gameObjects) {
-			if (o.getBoundingBox().intersects(bounds))
+			if (o.getShape().intersects(r))
 				return true;
 		}
 		return false;
@@ -520,8 +495,8 @@ public class GameInformation {
 		int area = RANDOM.nextInt(availableSpawnings.size());
 		SpawnPosition spawnPos = availableSpawnings.get(area);
 		Rectangle2D.Double boundings = new Rectangle2D.Double();
-		boundings.width = player.getBoundingBox().width;
-		boundings.height = player.getBoundingBox().height;
+		boundings.width = player.getShape().getWidth();
+		boundings.height = player.getShape().getHeight();
 
 		Vector2D newPos;
 		try {

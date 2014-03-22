@@ -89,8 +89,8 @@ public class ClientLogic implements GameLogicInterface {
 			case SET_POS_TCP:
 			case SET_POS_UDP:
 				MovementEvent moveEvent = (MovementEvent) event;
-				double newXPos = moveEvent.getNewXPos();
-				double newYPos = moveEvent.getNewYPos();
+				float newXPos = (float)moveEvent.getNewXPos();
+				float newYPos = (float)moveEvent.getNewYPos();
 				GameObject o = gameInfo.findObjectById(moveEvent.getObjectId());
 				if (o == null)
 					break;

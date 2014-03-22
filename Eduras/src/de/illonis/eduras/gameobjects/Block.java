@@ -5,8 +5,6 @@ package de.illonis.eduras.gameobjects;
 
 import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.exceptions.ShapeVerticesNotApplicableException;
-import de.illonis.eduras.math.Vector2D;
-import de.illonis.eduras.shapes.Rectangle;
 
 /**
  * This represents a block.
@@ -47,8 +45,10 @@ public abstract class Block extends GameObject {
 		this.width = width;
 		this.height = height;
 
-		setPosition(xPos, yPos);
-		setShape(new Rectangle(new Vector2D(), new Vector2D(width, height)));
+		setShape(new org.newdawn.slick.geom.Rectangle(0, 0, (float) width,
+				(float) height));
+
+		setPosition((float) xPos, (float) yPos);
 	}
 
 	/**

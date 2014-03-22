@@ -2,13 +2,14 @@ package de.illonis.eduras.items.weapons;
 
 import java.util.LinkedList;
 
+import org.newdawn.slick.geom.Circle;
+
 import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.gameobjects.MoveableGameObject;
 import de.illonis.eduras.gameobjects.TimingSource;
 import de.illonis.eduras.math.Vector2D;
 import de.illonis.eduras.settings.S;
-import de.illonis.eduras.shapes.Circle;
 import de.illonis.eduras.units.Unit;
 
 /**
@@ -38,7 +39,8 @@ public abstract class Missile extends MoveableGameObject {
 	public Missile(GameInformation game, TimingSource timingSource, int id) {
 		super(game, timingSource, id);
 		rangeMoved = 0;
-		setShape(new Circle(S.go_missile_radius));
+		setShape(new Circle((float) S.go_missile_radius,
+				(float) S.go_missile_radius, (float) S.go_missile_radius));
 	}
 
 	/**

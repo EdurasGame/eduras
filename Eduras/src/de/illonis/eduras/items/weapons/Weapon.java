@@ -232,8 +232,8 @@ public abstract class Weapon extends Item implements Lootable, Usable {
 		Vector2D speedVector = new Vector2D(target);
 		speedVector.subtract(position);
 
-		Vector2D diag = new Vector2D(triggeringObject.getBoundingBox()
-				.getWidth(), triggeringObject.getBoundingBox().getHeight());
+		Vector2D diag = new Vector2D(triggeringObject.getShape().getWidth(),
+				triggeringObject.getShape().getHeight());
 		Vector2D copy = speedVector.copy();
 		copy.setLength(diag.getLength());
 		position.add(copy);

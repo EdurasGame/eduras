@@ -120,7 +120,7 @@ public abstract class MoveableGameObject extends GameObject implements Moveable 
 		try {
 			targetPos = this
 					.checkCollisionOnMove(new Vector2D(targetX, targetY));
-			setPosition(targetPos.getX(), targetPos.getY());
+			setPosition((float)targetPos.getX(),(float) targetPos.getY());
 		} catch (MapBorderReachedException e) {
 			onMapBoundsReached();
 		}
@@ -145,18 +145,18 @@ public abstract class MoveableGameObject extends GameObject implements Moveable 
 	 */
 	public Vector2D checkCollisionOnMove(Vector2D target)
 			throws MapBorderReachedException {
-
-		Vector2D currentTarget = target;
-		Vector2D collisionPoint = this.getShape().checkCollisionOnMove(
-				getGame(), this, currentTarget);
-
-		while (!collisionPoint.equals(currentTarget)) {
-			currentTarget = collisionPoint;
-			collisionPoint = this.getShape().checkCollisionOnMove(getGame(),
-					this, currentTarget);
-		}
-
-		return currentTarget;
+return target;
+//		Vector2D currentTarget = target;
+//		Vector2D collisionPoint = this.getShape().checkCollisionOnMove(
+//				getGame(), this, currentTarget);
+//
+//		while (!collisionPoint.equals(currentTarget)) {
+//			currentTarget = collisionPoint;
+//			collisionPoint = this.getShape().checkCollisionOnMove(getGame(),
+//					this, currentTarget);
+//		}
+//
+//		return currentTarget;
 	}
 
 	/**
@@ -168,7 +168,8 @@ public abstract class MoveableGameObject extends GameObject implements Moveable 
 	 * @return Returns the angle of the gameobject after the rotation.
 	 */
 	public double checkCollisionOnRotation(double targetRotationAngle) {
-		return this.getShape().checkCollisionOnRotation(getGame(), this,
-				targetRotationAngle);
+		return targetRotationAngle;
+//		return this.getShape().checkCollisionOnRotation(getGame(), this,
+//				targetRotationAngle);
 	}
 }
