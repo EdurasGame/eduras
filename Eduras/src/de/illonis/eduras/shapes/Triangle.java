@@ -3,7 +3,7 @@
  */
 package de.illonis.eduras.shapes;
 
-import de.illonis.eduras.exceptions.ShapeVector2dfsNotApplicableException;
+import de.illonis.eduras.exceptions.ShapeVerticesNotApplicableException;
 import de.illonis.eduras.math.Vector2df;
 
 /**
@@ -22,12 +22,12 @@ public class Triangle extends Polygon {
 	 *            The second vertex relative position.
 	 * @param third
 	 *            The third vertex relative position.
-	 * @throws ShapeVector2dfsNotApplicableException
+	 * @throws ShapeVerticesNotApplicableException
 	 *             Is thrown if the given vertices do not enclose the objects
 	 *             centre point.
 	 */
 	public Triangle(Vector2df first, Vector2df second, Vector2df third)
-			throws ShapeVector2dfsNotApplicableException {
+			throws ShapeVerticesNotApplicableException {
 
 		boolean isPositiveX = first.getX() > 0 || second.getX() > 0
 				|| third.getX() > 0;
@@ -42,7 +42,7 @@ public class Triangle extends Polygon {
 			Vector2df[] vertices = { first, second, third };
 			setVector2dfs(vertices);
 		} else {
-			throw new ShapeVector2dfsNotApplicableException();
+			throw new ShapeVerticesNotApplicableException();
 		}
 	}
 }

@@ -1,8 +1,8 @@
 package de.illonis.eduras.gameclient.gui.hud;
 
-import java.awt.Color;
-import java.awt.Graphics2D;
-import java.awt.Point;
+import org.newdawn.slick.Color;
+import org.newdawn.slick.Graphics;
+import org.newdawn.slick.geom.Vector2f;
 
 import de.illonis.eduras.gameclient.gui.game.GameRenderer;
 
@@ -34,7 +34,7 @@ public abstract class Tooltip extends RenderedGuiObject {
 	 * @param p
 	 *            new position to anchor tooltip to.
 	 */
-	public void moveTo(Point p) {
+	public void moveTo(Vector2f p) {
 		this.screenX = p.x;
 		this.screenY = p.y - height;
 		// TODO: make mouse-relative position dependend on screen position to
@@ -42,11 +42,11 @@ public abstract class Tooltip extends RenderedGuiObject {
 	}
 
 	@Override
-	public void render(Graphics2D g2d) {
-		g2d.setColor(Color.BLACK);
+	public void render(Graphics g2d) {
+		g2d.setColor(Color.black);
 		g2d.fillRect(screenX, screenY, width, height);
-		g2d.setColor(Color.GRAY);
+		g2d.setColor(Color.gray);
 		g2d.drawRect(screenX, screenY, width, height);
-		g2d.setColor(Color.WHITE);
+		g2d.setColor(Color.white);
 	}
 }

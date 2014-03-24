@@ -1,17 +1,6 @@
 package de.illonis.eduras.gameclient.gui.game;
 
-import java.awt.BasicStroke;
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.Graphics2D;
-import java.awt.GraphicsConfiguration;
-import java.awt.GraphicsEnvironment;
-import java.awt.Point;
-import java.awt.RenderingHints;
-import java.awt.Toolkit;
-import java.awt.Transparency;
 import java.awt.geom.Area;
-import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -19,8 +8,12 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.newdawn.slick.geom.Circle;
+import org.newdawn.slick.Color;
+import org.newdawn.slick.GameContainer;
+import org.newdawn.slick.Graphics;
+import org.newdawn.slick.Image;
 import org.newdawn.slick.geom.Rectangle;
+import org.newdawn.slick.geom.Vector2f;
 
 import de.illonis.edulog.EduLog;
 import de.illonis.eduras.Team;
@@ -38,12 +31,9 @@ import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.items.Item;
 import de.illonis.eduras.logicabstraction.InformationProvider;
 import de.illonis.eduras.math.BasicMath;
-import de.illonis.eduras.math.Vector2df;
 import de.illonis.eduras.settings.S;
-import de.illonis.eduras.shapes.Polygon;
 import de.illonis.eduras.units.PlayerMainFigure;
 import de.illonis.eduras.units.Unit;
-import de.illonis.eduras.utils.ImageTools;
 
 /**
  * Renders the game graphics onto the gamepanel.
@@ -55,16 +45,9 @@ public class GameRenderer implements TooltipHandler {
 
 	private final Logger L = EduLog.getLoggerFor(GameRenderer.class.getName());
 
-	private BufferedImage mapImage = null;
-	private BufferedImage displayImage = null;
 	private final GameCamera camera;
 	private final UserInterface gui;
-	private Graphics2D mapGraphics = null;
-	private Graphics2D bothGraphics = null;
 	private final Map<Integer, GameObject> objs;
-	private RenderThread rendererThread;
-	private Component target;
-	private BufferStrategy buffer;
 	private ItemTooltip tooltip;
 	private float scale;
 	private boolean tooltipShown = false;
@@ -73,7 +56,6 @@ public class GameRenderer implements TooltipHandler {
 	private final static int DEFAULT_HEIGHT = 462;
 	private final InformationProvider info;
 	private final ClientData data;
-	private final BasicStroke baseStroke = new BasicStroke(1f);
 
 	/**
 	 * Creates a new renderer.
@@ -107,7 +89,8 @@ public class GameRenderer implements TooltipHandler {
 	 * @return a screenshot.
 	 */
 	public BufferedImage getScreenshot() {
-		return ImageTools.deepCopy(displayImage);
+		// FIXME: adapt for slick
+		return null;
 	}
 
 	/**
@@ -132,40 +115,30 @@ public class GameRenderer implements TooltipHandler {
 
 	/**
 	 * Renders buffered image with size of current target.
+	 * 
+	 * @param container
+	 *            the gamecontainer.
+	 * @param g
+	 *            the target graphics.
 	 */
-	public void render() {
-		int width = target.getWidth();
-		int height = target.getHeight();
-
-		// recreate image if it does not exist
-		if (mapImage == null || mapGraphics == null
-				|| width != mapImage.getWidth()) {
-			createGraphics(width, height);
-			camera.setSize(width, height);
-			camera.setScale(scale);
-		}
-		// clear image
-		clear(width, height);
+	public void render(GameContainer container, Graphics g) {
+		int width = container.getWidth();
+		int height = container.getHeight();
+		clear(g, width, height);
 		adjustCamera();
-		drawMap(mapGraphics);
-		drawObjects(mapGraphics);
-		drawAnimations(mapGraphics);
-		bothGraphics.drawImage(mapImage, 0, 0, null);
-		drawGui(bothGraphics);
+		g.translate(-camera.getX(), -camera.getY());
+		drawMap(g);
+		drawObjects(g);
+		drawAnimations(g);
+		g.translate(camera.getX(), camera.getY());
 
-		Graphics2D g2d = (Graphics2D) buffer.getDrawGraphics();
-		g2d.drawImage(displayImage, 0, 0, null);
-		g2d.dispose();
-		if (!buffer.contentsLost()) {
-			buffer.show();
-			Toolkit.getDefaultToolkit().sync();
-		}
+		drawGui(g);
 	}
 
-	private void drawAnimations(Graphics2D g2d) {
+	private void drawAnimations(Graphics g) {
 		for (int i = 0; i < data.getAnimations().size(); i++) {
 			Animation animation = data.getAnimations().get(i);
-			animation.draw(g2d, (int) -camera.getX(), (int) -camera.getY());
+			animation.draw(g, -camera.getX(), -camera.getY());
 		}
 	}
 
@@ -178,51 +151,22 @@ public class GameRenderer implements TooltipHandler {
 		}
 	}
 
-	/**
-	 * Rebuilds buffer graphics.
-	 * 
-	 * @param width
-	 *            graphics width.
-	 * @param height
-	 *            graphics height.
-	 */
-	private void createGraphics(int width, int height) {
-		GraphicsConfiguration config = GraphicsEnvironment
-				.getLocalGraphicsEnvironment().getDefaultScreenDevice()
-				.getDefaultConfiguration();
-
-		mapImage = config.createCompatibleImage(width, height,
-				Transparency.OPAQUE);
-		displayImage = config.createCompatibleImage(width, height,
-				Transparency.OPAQUE);
-
-		scale = calculateScale(width, height);
-
-		bothGraphics = (Graphics2D) displayImage.getGraphics();
-		bothGraphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-				RenderingHints.VALUE_ANTIALIAS_OFF);
-		mapGraphics = (Graphics2D) mapImage.getGraphics();
-		mapGraphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-				RenderingHints.VALUE_ANTIALIAS_ON);
-		mapGraphics.scale(scale, scale);
-	}
-
-	private synchronized void clear(int width, int height) {
-		mapGraphics.setColor(Color.GRAY);
-		mapGraphics.fillRect(0, 0, width, height);
+	private synchronized void clear(Graphics g, int width, int height) {
+		g.setColor(Color.gray);
+		g.fillRect(0, 0, width, height);
 	}
 
 	/**
 	 * Draw every gui element.
 	 */
-	private void drawGui(Graphics2D g2d) {
+	private void drawGui(Graphics g) {
 		for (int i = 0; i < uiObjects.size(); i++) {
 			RenderedGuiObject o = uiObjects.get(i);
 			if (!gui.isSpectator() || o.isVisibleForSpectator())
-				o.render(g2d);
+				o.render(g);
 		}
 		if (tooltipShown) {
-			tooltip.render(g2d);
+			tooltip.render(g);
 		}
 	}
 
@@ -231,11 +175,11 @@ public class GameRenderer implements TooltipHandler {
 	 * 
 	 * @param mapGraphics2
 	 */
-	private void drawMap(Graphics2D g2d) {
+	private void drawMap(Graphics g) {
 		Rectangle r = info.getMapBounds();
-		r.translate((int) -camera.getX(), (int) -camera.getY());
-		g2d.setColor(Color.BLACK);
-		g2d.fill(r);
+		//r.setLocation(-camera.getX(), -camera.getY());
+		g.setColor(Color.black);
+		g.fill(r);
 	}
 
 	/**
@@ -244,7 +188,7 @@ public class GameRenderer implements TooltipHandler {
 	 * @param g2d
 	 *            the graphics target.
 	 */
-	private void drawObjects(Graphics2D g2d) {
+	private void drawObjects(Graphics g) {
 		PlayerMainFigure myPlayer;
 		try {
 			myPlayer = getClientPlayer();
@@ -273,7 +217,7 @@ public class GameRenderer implements TooltipHandler {
 			if (d.getShape().intersects(camera)) {
 				if (S.vision_disabled
 						|| (S.vision_neutral_always && d.getOwner() == -1)) {
-					drawObject(d, g2d);
+					drawObject(d, g);
 
 				}
 			}
@@ -281,25 +225,26 @@ public class GameRenderer implements TooltipHandler {
 
 	}
 
-	private void drawObject(GameObject d, Graphics2D g2d) {
-		final int x = d.getDrawX() - (int) camera.getX();
-		final int y = d.getDrawY() - (int) camera.getY();
+	private void drawObject(GameObject d, Graphics g) {
+		final float x = d.getDrawX() - camera.getX();
+		final float y = d.getDrawY() - camera.getY();
 
 		try {
-			mapGraphics.drawImage(ImageCache.getObjectImage(d.getType()), x, y,
-					null);
+			Image image = ImageCache.getObjectImage(d.getType());
+			g.drawImage(image, x, y);
 		} catch (CacheException e) {
 			if (d.getShape() != null) {
 				if (isSelected(d)) {
-					g2d.setColor(Color.RED);
+					g.setColor(Color.red);
 				} else {
-					g2d.setColor(Color.YELLOW);
+					g.setColor(Color.yellow);
 				}
+				g.fill(d.getShape());
 			}
 		}
 
 		if (d.isUnit()) {
-			drawHealthBarFor((Unit) d);
+			drawHealthBarFor((Unit) d, g);
 		}
 
 		// draws unit id next to unit for testing purpose
@@ -320,10 +265,10 @@ public class GameRenderer implements TooltipHandler {
 	 * @param unit
 	 *            assigned unit.
 	 */
-	private void drawHealthBarFor(Unit unit) {
+	private void drawHealthBarFor(Unit unit, Graphics g) {
 		if (unit.isDead())
 			return;
-		HealthBar.calculateAndDrawFor(unit, mapGraphics, camera);
+		HealthBar.calculateAndDrawFor(unit, g, camera);
 	}
 
 	// private void drawFace(GameObject obj, Circle shape) {
@@ -358,22 +303,6 @@ public class GameRenderer implements TooltipHandler {
 	//
 	// }
 
-	/**
-	 * Draws a circle which belongs to the given object.
-	 * 
-	 * @param objectShape
-	 *            The circle.
-	 * @param d
-	 *            The object.
-	 */
-	private void drawCircle(Circle objectShape, GameObject d) {
-		int radius = (int) objectShape.getRadius();
-		int xPos = d.getDrawX() - (int) camera.getX();
-		int yPos = d.getDrawY() - (int) camera.getY();
-		mapGraphics.setColor(getColorForObject(d));
-		mapGraphics.fillOval(xPos, yPos, 2 * radius, 2 * radius);
-	}
-
 	private Color getColorForObject(GameObject d) {
 		switch (d.getType()) {
 		case BIGBLOCK:
@@ -381,79 +310,49 @@ public class GameRenderer implements TooltipHandler {
 		case BUILDING:
 		case SMALLCIRCLEDBLOCK:
 		case DYNAMIC_POLYGON_BLOCK:
-			return Color.GRAY;
+			return Color.gray;
 		case PLAYER:
 			PlayerMainFigure p = (PlayerMainFigure) d;
 			if (p.getTeam() == null) {
-				return Color.BLUE;
+				return Color.blue;
 			} else {
 				return p.getTeam().getColor();
 			}
 		case BIRD:
 			return new Color(0.4231f, 0.6361f, 0.995f, 0.4f);
 		case ITEM_WEAPON_SIMPLE:
-			return Color.ORANGE;
+			return Color.orange;
 		case ITEM_WEAPON_SNIPER:
-			return Color.MAGENTA;
+			return Color.magenta;
 		case ITEM_WEAPON_SPLASH:
-			return Color.GREEN;
+			return Color.green;
 		case ITEM_WEAPON_SWORD:
-			return Color.CYAN;
+			return Color.cyan;
 		case MISSILE_SPLASH:
-			return Color.GREEN;
+			return Color.green;
 		case MISSILE_SPLASHED:
-			return Color.GREEN;
+			return Color.green;
 		case SIMPLEMISSILE:
-			return Color.ORANGE;
+			return Color.orange;
 		case SNIPERMISSILE:
-			return Color.MAGENTA;
+			return Color.magenta;
 		case SWORDMISSILE:
-			return Color.CYAN;
+			return Color.cyan;
 		case MINELAUNCHER:
 		case MINE_MISSILE:
-			return Color.YELLOW;
+			return Color.yellow;
 		case ASSAULT_MISSILE:
 		case ASSAULTRIFLE:
-			return Color.PINK;
+			return Color.pink;
 		case MAPBOUNDS:
 			return new Color(0, 0, 0, 0);
 		default:
-			return Color.WHITE;
+			return Color.white;
 		}
-	}
-
-	/**
-	 * Draws a polygon which belongs to the given object.
-	 * 
-	 * @param polygon
-	 *            The polygon to draw.
-	 * @param object
-	 *            The gameobject the polygon belongs to.
-	 */
-	private void drawPolygon(Polygon polygon, GameObject object) {
-		LinkedList<Vector2df> vertices = polygon.getAbsoluteVector2dfs(object);
-
-		int vCount = vertices.size();
-		int[] xPositions = new int[vCount];
-		int[] yPositions = new int[vCount];
-
-		for (int j = 0; j < vCount; j++) {
-			xPositions[j] = (int) vertices.get(j).getX() - (int) camera.getX();
-			yPositions[j] = (int) vertices.get(j).getY() - (int) camera.getY();
-		}
-
-		// for (int j = 0; j < vCount; j++) {
-		// mapGraphics.drawLine(xPositions[j] - camera.x, yPositions[j]
-		// - camera.y, xPositions[(j + 1) % vCount] - camera.x,
-		// yPositions[(j + 1) % vCount] - camera.y);
-		// }
-
-		mapGraphics.setColor(getColorForObject(object));
-		mapGraphics.fillPolygon(xPositions, yPositions, vCount);
 	}
 
 	@Override
-	public void showItemTooltip(Point p, Item item) {
+	public void showItemTooltip(Vector2f p, Item item) {
 		if (tooltip == null) {
 			tooltip = new ItemTooltip(gui, item);
 			tooltip.removeFromGui();
@@ -465,46 +364,13 @@ public class GameRenderer implements TooltipHandler {
 	}
 
 	@Override
-	public void showTooltip(Point p, String text) {
+	public void showTooltip(Vector2f p, String text) {
 		// TODO: implement
-
 	}
 
 	@Override
 	public void hideTooltip() {
 		tooltipShown = false;
-	}
-
-	/**
-	 * Stops rendering process.
-	 */
-	void stopRendering() {
-		if (rendererThread != null)
-			rendererThread.stop();
-	}
-
-	/**
-	 * Starts rendering process by creating a new renderer thread. *
-	 * 
-	 * @author illonis
-	 */
-	void startRendering() {
-		rendererThread = new RenderThread(this, gui.getFPSListener());
-		Thread t = new Thread(rendererThread);
-		t.setName("RendererThread");
-		t.start();
-	}
-
-	/**
-	 * Sets drawing target of renderer.
-	 * 
-	 * @param guiPanel
-	 *            target game panel.
-	 */
-	void setTarget(GamePanel guiPanel) {
-		guiPanel.createBufferStrategy(2);
-		target = guiPanel;
-		buffer = guiPanel.getBufferStrategy();
 	}
 
 	/**

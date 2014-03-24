@@ -1,9 +1,10 @@
 package de.illonis.eduras.gameclient.gui.game;
 
 import java.awt.Point;
-import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Rectangle2D;
+
+import org.newdawn.slick.geom.Rectangle;
 
 import de.illonis.eduras.gameclient.GuiInternalEventListener;
 import de.illonis.eduras.gameclient.gui.game.GamePanelLogic.ClickState;
@@ -25,47 +26,19 @@ public class BuildModeMouseAdapter extends GuiMouseAdapter {
 		super(logic, reactor);
 	}
 
-	private void buildModeClick(MouseEvent e) {
+	private void buildModeClick(int button, int x, int y, int clickCount) {
 		Vector2df clickGamePoint = getPanelLogic()
-				.computeGuiPointToGameCoordinate(new Vector2df(e.getPoint()));
+				.computeGuiPointToGameCoordinate(new Vector2df(x, y));
 
-		if (e.getButton() == MouseEvent.BUTTON3) {
+		if (button == MouseEvent.BUTTON3) {
 			getListener().sendSelectedUnits(clickGamePoint);
-		} else if (e.getButton() == MouseEvent.BUTTON1) {
+		} else if (button == MouseEvent.BUTTON1) {
 			getListener().selectOrDeselectAt(clickGamePoint);
 		}
 	}
 
 	@Override
-	public void mouseClicked(MouseEvent e) {
-		buildModeClick(e);
-	}
-
-	@Override
 	public void itemClicked(int slot) {
-	}
-
-	@Override
-	public void mousePressed(MouseEvent e) {
-		if (e.getButton() == MouseEvent.BUTTON1) {
-			getPanelLogic().setClickState(ClickState.UNITSELECT_DRAGGING);
-			startPoint = e.getPoint();
-		}
-	}
-
-	@Override
-	public void mouseReleased(MouseEvent e) {
-		if (e.getButton() == MouseEvent.BUTTON1) {
-			getPanelLogic().setClickState(ClickState.DEFAULT);
-
-			Vector2df start = getPanelLogic().computeGuiPointToGameCoordinate(
-					new Vector2df(startPoint));
-			Vector2df end = getPanelLogic().computeGuiPointToGameCoordinate(
-					new Vector2df(e.getPoint()));
-			Rectangle2D.Double r = calculateDragRect(start, end);
-			getListener().onUnitsSelected(r);
-			getPanelLogic().getDragRect().clear();
-		}
 	}
 
 	private Rectangle calculateDrawRect(Point first, Point second) {
@@ -81,7 +54,8 @@ public class BuildModeMouseAdapter extends GuiMouseAdapter {
 				bottomRightY - topLeftY);
 	}
 
-	private Rectangle2D.Double calculateDragRect(Vector2df first, Vector2df second) {
+	private Rectangle2D.Double calculateDragRect(Vector2df first,
+			Vector2df second) {
 		if (first.getX() == second.getX() || first.getY() == second.getY())
 			return new Rectangle2D.Double(first.getX(), first.getY(), 0, 0);
 
@@ -95,13 +69,49 @@ public class BuildModeMouseAdapter extends GuiMouseAdapter {
 	}
 
 	@Override
-	public void mouseDragged(MouseEvent e) {
+	public void mouseClicked(int button, int x, int y, int clickCount) {
+		buildModeClick(button, x, y, clickCount);
+	}
+
+	@Override
+	public void mouseMoved(int oldx, int oldy, int newx, int newy) {
+	}
+
+	@Override
+	public void mouseDragged(int oldx, int oldy, int newx, int newy) {
 		if (getPanelLogic().getClickState() == ClickState.UNITSELECT_DRAGGING) {
 			Point first = startPoint;
-			Point second = e.getPoint();
+			Point second = new Point(newx, newy);
 			getPanelLogic().getDragRect().setRectangle(
 					calculateDrawRect(first, second));
 		}
+	}
+
+	@Override
+	public void mousePressed(int button, int x, int y) {
+		if (button == MouseEvent.BUTTON1) {
+			getPanelLogic().setClickState(ClickState.UNITSELECT_DRAGGING);
+			startPoint = new Point(x, y);
+		}
+	}
+
+	@Override
+	public void mouseReleased(int button, int x, int y) {
+		if (button == MouseEvent.BUTTON1) {
+			getPanelLogic().setClickState(ClickState.DEFAULT);
+
+			Vector2df start = getPanelLogic().computeGuiPointToGameCoordinate(
+					new Vector2df(startPoint));
+			Vector2df end = getPanelLogic().computeGuiPointToGameCoordinate(
+					new Vector2df(x, y));
+			Rectangle2D.Double r = calculateDragRect(start, end);
+			getListener().onUnitsSelected(r);
+			getPanelLogic().getDragRect().clear();
+		}
+	}
+
+	@Override
+	public void mouseWheelMoved(int change) {
 	}
 
 }

@@ -1,6 +1,6 @@
 package de.illonis.eduras.shapecreator.gui;
 
-import java.awt.Graphics2D;
+import java.awt.Graphics;
 import java.awt.Point;
 
 import de.illonis.eduras.interfaces.Drawable;
@@ -30,7 +30,7 @@ public class GuiPoint extends Point implements Drawable {
 	}
 
 	@Override
-	public void draw(Graphics2D g) {
+	public void draw(Graphics g) {
 		g.fillRect(x - SIZE / 2, y - SIZE / 2, SIZE, SIZE);
 	}
 

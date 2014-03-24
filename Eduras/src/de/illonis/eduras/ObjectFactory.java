@@ -10,7 +10,7 @@ import de.illonis.eduras.events.ObjectFactoryEvent;
 import de.illonis.eduras.events.SendUnitsEvent;
 import de.illonis.eduras.events.SetGameObjectAttributeEvent;
 import de.illonis.eduras.exceptions.DataMissingException;
-import de.illonis.eduras.exceptions.ShapeVector2dfsNotApplicableException;
+import de.illonis.eduras.exceptions.ShapeVerticesNotApplicableException;
 import de.illonis.eduras.gameclient.gui.animation.AnimationFactory;
 import de.illonis.eduras.gameclient.gui.animation.AnimationFactory.AnimationNumber;
 import de.illonis.eduras.gameobjects.BigBlock;
@@ -161,7 +161,7 @@ public class ObjectFactory {
 			case BIGGERBLOCK:
 				try {
 					go = new BiggerBlock(logic.getGame(), timingSource, id);
-				} catch (ShapeVector2dfsNotApplicableException e) {
+				} catch (ShapeVerticesNotApplicableException e) {
 					L.log(Level.SEVERE, "shape vertices not applicable", e);
 					return;
 				}
@@ -172,7 +172,7 @@ public class ObjectFactory {
 			case BIGBLOCK:
 				try {
 					go = new BigBlock(logic.getGame(), timingSource, id);
-				} catch (ShapeVector2dfsNotApplicableException e) {
+				} catch (ShapeVerticesNotApplicableException e) {
 					L.log(Level.SEVERE, "shape vertices not applicable", e);
 					return;
 				}

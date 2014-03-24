@@ -3,6 +3,8 @@ package de.illonis.eduras.images;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 
+import org.newdawn.slick.Image;
+
 import de.illonis.eduras.exceptions.ImageLoadingError;
 
 /**
@@ -12,6 +14,7 @@ import de.illonis.eduras.exceptions.ImageLoadingError;
  * @author illonis
  * 
  */
+@Deprecated
 public class SpriteSheet {
 
 	private ImageData[] data;
@@ -79,7 +82,7 @@ public class SpriteSheet {
 	 */
 	private ImageData[] cut(String string, int w, int h) throws IOException {
 
-		BufferedImage bi = ImageFiler.load(string);
+		Image bi = ImageFiler.load(string);
 
 		int xTiles = bi.getWidth() / w;
 		int yTiles = bi.getHeight() / h;

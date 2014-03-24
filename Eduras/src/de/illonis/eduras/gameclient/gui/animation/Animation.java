@@ -1,10 +1,10 @@
 package de.illonis.eduras.gameclient.gui.animation;
 
-import java.awt.Graphics2D;
 import java.util.concurrent.TimeUnit;
 
 import org.jdesktop.core.animation.timing.Animator;
 import org.jdesktop.core.animation.timing.TimingTarget;
+import org.newdawn.slick.Graphics;
 
 import de.illonis.eduras.math.Vector2df;
 
@@ -58,16 +58,16 @@ public abstract class Animation implements TimingTarget {
 	 * To draw game-relative, add <b>cameraX</b> and <b>cameraY</b> to your
 	 * drawing coordinates, otherwise you will paint HUD-relative.
 	 * 
-	 * @param g2d
+	 * @param g
 	 *            target graphics
 	 * @param cameraX
 	 *            the x-offset of the camera.
 	 * @param cameraY
 	 *            the y-offset of the camera.
 	 */
-	public final void draw(Graphics2D g2d, int cameraX, int cameraY) {
+	public final void draw(Graphics g, float cameraX, float cameraY) {
 		if (running)
-			drawAnimation(g2d, cameraX, cameraY);
+			drawAnimation(g, cameraX, cameraY);
 	}
 
 	/**
@@ -76,8 +76,8 @@ public abstract class Animation implements TimingTarget {
 	 * @param g2d
 	 *            target graphics object.
 	 */
-	protected abstract void drawAnimation(Graphics2D g2d, int cameraX,
-			int cameraY);
+	protected abstract void drawAnimation(Graphics g, float cameraX,
+			float cameraY);
 
 	@Override
 	public void begin(Animator source) {

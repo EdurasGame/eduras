@@ -1,10 +1,8 @@
 package de.illonis.eduras.gameclient.gui.hud;
 
-import java.awt.BasicStroke;
-import java.awt.Color;
-import java.awt.Graphics2D;
-import java.awt.Rectangle;
-import java.awt.Stroke;
+import org.newdawn.slick.Color;
+import org.newdawn.slick.Graphics;
+import org.newdawn.slick.geom.Rectangle;
 
 import de.illonis.eduras.units.PlayerMainFigure.InteractMode;
 
@@ -16,9 +14,9 @@ import de.illonis.eduras.units.PlayerMainFigure.InteractMode;
  * 
  */
 public class DragSelectionRectangle extends RenderedGuiObject {
-	private int width, height;
+	private float width, height;
 	private boolean draw;
-	private final Stroke stroke = new BasicStroke(1f);
+	private final float stroke = 1f;
 
 	protected DragSelectionRectangle(UserInterface gui) {
 		super(gui);
@@ -34,10 +32,10 @@ public class DragSelectionRectangle extends RenderedGuiObject {
 	 *            the rectangle in gui coordinates.
 	 */
 	public void setRectangle(Rectangle rect) {
-		screenX = rect.x;
-		screenY = rect.y;
-		width = rect.width;
-		height = rect.height;
+		screenX = rect.getX();
+		screenY = rect.getY();
+		width = rect.getWidth();
+		height = rect.getHeight();
 		draw = true;
 	}
 
@@ -49,12 +47,12 @@ public class DragSelectionRectangle extends RenderedGuiObject {
 	}
 
 	@Override
-	public void render(Graphics2D g2d) {
+	public void render(Graphics g) {
 		if (!draw)
 			return;
-		g2d.setColor(Color.WHITE);
-		g2d.setStroke(stroke);
-		g2d.drawRect(screenX, screenY, width, height);
+		g.setColor(Color.white);
+		g.setLineWidth(stroke);
+		g.drawRect(screenX, screenY, width, height);
 	}
 
 	@Override

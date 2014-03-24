@@ -1,6 +1,3 @@
-/**
- * 
- */
 package de.illonis.eduras.exceptions;
 
 /**
@@ -9,7 +6,7 @@ package de.illonis.eduras.exceptions;
  * @author Florian Mai <florian.ren.mai@googlemail.com>
  * 
  */
-public class ShapeVector2dfsNotApplicableException extends Exception {
+public class ShapeVerticesNotApplicableException extends Exception {
 
 	private static final long serialVersionUID = 1L;
 

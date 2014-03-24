@@ -1,7 +1,7 @@
 package de.illonis.eduras.gameclient.gui.hud;
 
-import java.awt.Color;
-import java.awt.Graphics2D;
+import org.newdawn.slick.Color;
+import org.newdawn.slick.Graphics;
 
 import de.illonis.eduras.gameclient.gui.game.FPSListener;
 
@@ -13,10 +13,8 @@ import de.illonis.eduras.gameclient.gui.game.FPSListener;
  */
 public class FPSDisplay extends RenderedGuiObject implements FPSListener {
 
-	private static final Color TRANSLUCENT = new Color(0, 0, 0, 0);
-
-	private final static int WIDTH = 50;
-	private final static int HEIGHT = 20;
+	private final static float WIDTH = 50f;
+	private final static float HEIGHT = 20f;
 	private String fps;
 
 	protected FPSDisplay(UserInterface gui) {
@@ -27,10 +25,9 @@ public class FPSDisplay extends RenderedGuiObject implements FPSListener {
 	}
 
 	@Override
-	public void render(Graphics2D g2d) {
-		g2d.setFont(DEFAULT_FONT);
-		g2d.setColor(Color.WHITE);
-		g2d.drawString(fps, screenX + 6, screenY + HEIGHT - 5);
+	public void render(Graphics g) {
+		g.setColor(Color.white);
+		g.drawString(fps, screenX + 6, screenY + HEIGHT - 5);
 	}
 
 	@Override

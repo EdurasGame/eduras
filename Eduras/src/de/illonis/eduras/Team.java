@@ -1,7 +1,8 @@
 package de.illonis.eduras;
 
-import java.awt.Color;
 import java.util.LinkedList;
+
+import org.newdawn.slick.Color;
 
 import de.illonis.eduras.units.PlayerMainFigure;
 
@@ -37,7 +38,7 @@ public class Team {
 	 *            the id of the team.
 	 */
 	public Team(String name, int teamId) {
-		this(name, teamId, Color.BLUE);
+		this(name, teamId, Color.blue);
 	}
 
 	/**

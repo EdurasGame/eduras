@@ -1,8 +1,7 @@
 package de.illonis.eduras.gameclient.gui.hud;
 
-import java.awt.Color;
-import java.awt.FontMetrics;
-import java.awt.Graphics2D;
+import org.newdawn.slick.Color;
+import org.newdawn.slick.Graphics;
 
 /**
  * A time frame that shows remaining time.
@@ -12,7 +11,6 @@ import java.awt.Graphics2D;
  */
 public class TimeFrame extends RenderedGuiObject {
 	private final static int WIDTH = 40;
-	private final static int HEIGHT = 30;
 
 	/**
 	 * Creates a new time frame.
@@ -28,13 +26,11 @@ public class TimeFrame extends RenderedGuiObject {
 	}
 
 	@Override
-	public void render(Graphics2D g2d) {
-		g2d.setFont(DEFAULT_FONT);
+	public void render(Graphics g2d) {
+		
 		String timeString = getRemainingTimeString();
-		FontMetrics fm = g2d.getFontMetrics();
-		int textWidth = fm.stringWidth(timeString);
-		// g2d.setColor(Color.BLACK);
-		g2d.setColor(Color.WHITE);
+		int textWidth = g2d.getFont().getWidth(timeString);
+		g2d.setColor(Color.white);
 		g2d.drawString(getRemainingTimeString(), screenX + WIDTH - textWidth
 				- 5, screenY + 20);
 	}

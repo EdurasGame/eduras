@@ -1,9 +1,9 @@
 package de.illonis.eduras.gameclient.gui.hud;
 
-import java.awt.Font;
-import java.awt.Graphics2D;
 import java.util.ArrayList;
 import java.util.LinkedList;
+
+import org.newdawn.slick.Graphics;
 
 import de.illonis.eduras.events.ClientRenameEvent;
 import de.illonis.eduras.events.DeathEvent;
@@ -36,12 +36,8 @@ import de.illonis.eduras.units.PlayerMainFigure.InteractMode;
  */
 public abstract class RenderedGuiObject implements GameEventListener {
 
-	/**
-	 * The default font used by gui elements.
-	 */
-	public final static Font DEFAULT_FONT = new Font("Arial", Font.PLAIN, 12);
 	private UserInterface gui;
-	protected int screenX, screenY;
+	protected float screenX, screenY;
 	protected boolean visibleForSpectator;
 	private final LinkedList<InteractMode> enabledModes;
 
@@ -145,10 +141,10 @@ public abstract class RenderedGuiObject implements GameEventListener {
 	/**
 	 * Renders this gui object on given graphics.
 	 * 
-	 * @param g2d
+	 * @param g
 	 *            graphic target.
 	 */
-	public abstract void render(Graphics2D g2d);
+	public abstract void render(Graphics g);
 
 	/**
 	 * Indicates that gui has changed and interface positions have to be

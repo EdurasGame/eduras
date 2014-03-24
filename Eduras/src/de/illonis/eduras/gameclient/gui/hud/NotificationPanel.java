@@ -1,12 +1,11 @@
 package de.illonis.eduras.gameclient.gui.hud;
 
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.FontMetrics;
-import java.awt.Graphics2D;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import org.newdawn.slick.Color;
+import org.newdawn.slick.Graphics;
 
 import de.illonis.edulog.EduLog;
 import de.illonis.eduras.events.ClientRenameEvent;
@@ -30,8 +29,6 @@ public class NotificationPanel extends RenderedGuiObject {
 	private final static Logger L = EduLog.getLoggerFor(NotificationPanel.class
 			.getName());
 
-	private final static Font NOTIFICATION_FONT = DEFAULT_FONT.deriveFont(16f)
-			.deriveFont(Font.BOLD);
 	private final static int Y_INSET = 80;
 
 	private final ConcurrentLinkedQueue<String> notifications;
@@ -39,7 +36,6 @@ public class NotificationPanel extends RenderedGuiObject {
 	private int y = 0;
 	private int x = 0;
 	private int screenWidth = 0;
-	private FontMetrics metrics;
 	private long lastChanged = System.currentTimeMillis();
 	private static long DISPLAY_TIME = 3000;
 
@@ -55,9 +51,7 @@ public class NotificationPanel extends RenderedGuiObject {
 	}
 
 	@Override
-	public void render(Graphics2D g2d) {
-		if (metrics == null)
-			metrics = g2d.getFontMetrics(NOTIFICATION_FONT);
+	public void render(Graphics g2d) {
 		if (currentMessage.isEmpty()) {
 			nextNotification();
 			return;
@@ -66,8 +60,9 @@ public class NotificationPanel extends RenderedGuiObject {
 		if (lastChanged + DISPLAY_TIME < now) {
 			nextNotification();
 		}
-		g2d.setColor(Color.WHITE);
-		g2d.setFont(NOTIFICATION_FONT);
+		int stringWidth = g2d.getFont().getWidth(currentMessage);
+		x = (screenWidth - stringWidth) / 2;
+		g2d.setColor(Color.white);
 		g2d.drawString(currentMessage, x, y);
 	}
 
@@ -88,8 +83,7 @@ public class NotificationPanel extends RenderedGuiObject {
 			currentMessage = "";
 		else {
 			currentMessage = next;
-			int stringWidth = metrics.stringWidth(next);
-			x = (screenWidth - stringWidth) / 2;
+
 			lastChanged = System.currentTimeMillis();
 		}
 	}

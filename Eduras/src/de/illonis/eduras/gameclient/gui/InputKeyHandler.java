@@ -1,6 +1,5 @@
 package de.illonis.eduras.gameclient.gui;
 
-import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -23,7 +22,7 @@ import de.illonis.eduras.logicabstraction.EdurasInitializer;
  * @author illonis
  * 
  */
-public class InputKeyHandler extends KeyAdapter {
+public class InputKeyHandler {
 
 	private final static Logger L = EduLog.getLoggerFor(InputKeyHandler.class
 			.getName());
@@ -108,20 +107,19 @@ public class InputKeyHandler extends KeyAdapter {
 		}
 	}
 
-	@Override
-	public void keyPressed(KeyEvent e) {
-
-		if (e.getKeyCode() != settings.getKeyBindings().getKey(KeyBinding.CHAT)
-				&& e.getKeyCode() != settings.getKeyBindings().getKey(
+	public void keyPressed(int key, char c) {
+		boolean consumed = false;
+		if (key != settings.getKeyBindings().getKey(KeyBinding.CHAT)
+				&& key != settings.getKeyBindings().getKey(
 						KeyBinding.EXIT_CLIENT))
-			client.onKeyType(e);
+			consumed = client.onKeyType(key, c);
 
-		if (e.isConsumed()) {
-			currentKey = e.getKeyCode();
+		if (consumed) {
+			currentKey = key;
 			return;
 		}
 
-		int keyCode = e.getKeyCode();
+		int keyCode = key;
 		KeyBinding binding;
 		try {
 			binding = settings.getKeyBindings().getBindingOf(keyCode);
@@ -147,6 +145,7 @@ public class InputKeyHandler extends KeyAdapter {
 			break;
 		case MOVE_DOWN:
 			reactor.onStartMovement(Direction.BOTTOM);
+			System.out.println("Start down");
 			break;
 		case MOVE_RIGHT:
 			reactor.onStartMovement(Direction.RIGHT);
@@ -215,31 +214,28 @@ public class InputKeyHandler extends KeyAdapter {
 		L.fine("Bound key pressed: " + keyCode);
 	}
 
-	@Override
-	public void keyReleased(KeyEvent e) {
+	public void keyReleased(int key, char c) {
 
-		int keyCode = e.getKeyCode();
-
-		if (e.getKeyCode() == currentKey) {
+		if (key == currentKey) {
 			currentKey = KeyEvent.VK_UNDEFINED;
 			return;
 		}
 		// don't handle other keys
-		if (!settings.getKeyBindings().isBound(keyCode))
+		if (!settings.getKeyBindings().isBound(key))
 			return;
 
 		if (lastTimePressed < KEY_INTERVAL)
 			return;
 
 		// release button
-		pressedButtons.put(keyCode, false);
+		pressedButtons.put(key, false);
 
 		KeyBinding binding;
 		try {
-			binding = settings.getKeyBindings().getBindingOf(keyCode);
+			binding = settings.getKeyBindings().getBindingOf(key);
 		} catch (KeyNotBoundException ex) {
 			L.log(Level.SEVERE, "Key is bound but receiving binding failed: "
-					+ keyCode, ex);
+					+ key, ex);
 			return;
 		}
 
@@ -252,6 +248,7 @@ public class InputKeyHandler extends KeyAdapter {
 			break;
 		case MOVE_DOWN:
 			reactor.onStopMovement(Direction.BOTTOM);
+			System.out.println("stop down");
 			break;
 		case MOVE_RIGHT:
 			reactor.onStopMovement(Direction.RIGHT);

@@ -1,7 +1,5 @@
 package de.illonis.eduras.gameclient.gui.game;
 
-import java.awt.event.MouseEvent;
-
 import de.illonis.eduras.gameclient.GuiInternalEventListener;
 import de.illonis.eduras.gameclient.gui.game.GamePanelLogic.ClickState;
 import de.illonis.eduras.inventory.Inventory;
@@ -22,7 +20,7 @@ public class EgoModeMouseAdapter extends GuiMouseAdapter {
 
 	}
 
-	private void egoModeClick(MouseEvent e) {
+	private void egoModeClick(int button, int x, int y, int clickCount) {
 		ClickState currentClickState = getPanelLogic().getClickState();
 		int currentItemSelected = getPanelLogic().getClientData()
 				.getCurrentItemSelected();
@@ -30,8 +28,7 @@ public class EgoModeMouseAdapter extends GuiMouseAdapter {
 		switch (currentClickState) {
 		case ITEM_SELECTED:
 			if (currentItemSelected != -1)
-				itemUsed(currentItemSelected,
-						new Vector2df(e.getPoint().x, e.getPoint().y));
+				itemUsed(currentItemSelected, new Vector2df(x, y));
 			break;
 		case DEFAULT:
 			// TODO: Notify only elements that are really clicked.
@@ -67,21 +64,35 @@ public class EgoModeMouseAdapter extends GuiMouseAdapter {
 		}
 	}
 
-	@Override
-	public void mouseClicked(MouseEvent e) {
-		egoModeClick(e);
-	}
-
-	@Override
-	public void mouseMoved(MouseEvent e) {
-		super.mouseMoved(e);
-
-		egoModeMove(e);
-	}
-
-	private void egoModeMove(MouseEvent e) {
+	private void egoModeMove(int oldx, int oldy, int newx, int newy) {
 		getListener().onViewingDirectionChanged(
 				getPanelLogic().computeGuiPointToGameCoordinate(
-						new Vector2df(e.getPoint().x, e.getPoint().y)));
+						new Vector2df(newx, newy)));
+	}
+
+	@Override
+	public void mouseClicked(int button, int x, int y, int clickCount) {
+		egoModeClick(button, x, y, clickCount);
+	}
+
+	@Override
+	public void mouseMoved(int oldx, int oldy, int newx, int newy) {
+		egoModeMove(oldx, oldy, newx, newy);
+	}
+
+	@Override
+	public void mouseDragged(int oldx, int oldy, int newx, int newy) {
+	}
+
+	@Override
+	public void mousePressed(int button, int x, int y) {
+	}
+
+	@Override
+	public void mouseReleased(int button, int x, int y) {
+	}
+
+	@Override
+	public void mouseWheelMoved(int change) {
 	}
 }

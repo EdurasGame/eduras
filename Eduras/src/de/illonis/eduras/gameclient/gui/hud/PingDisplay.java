@@ -1,7 +1,7 @@
 package de.illonis.eduras.gameclient.gui.hud;
 
-import java.awt.Color;
-import java.awt.Graphics2D;
+import org.newdawn.slick.Color;
+import org.newdawn.slick.Graphics;
 
 /**
  * Displays current latency on top right of screen.
@@ -23,9 +23,8 @@ public class PingDisplay extends RenderedGuiObject implements PingListener {
 	}
 
 	@Override
-	public void render(Graphics2D g2d) {
-		g2d.setFont(DEFAULT_FONT);
-		g2d.setColor(Color.WHITE);
+	public void render(Graphics g2d) {
+		g2d.setColor(Color.white);
 		g2d.drawString(latency, screenX + 6, screenY + HEIGHT - 5);
 	}
 

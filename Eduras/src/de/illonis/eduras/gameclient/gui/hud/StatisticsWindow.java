@@ -1,10 +1,11 @@
 package de.illonis.eduras.gameclient.gui.hud;
 
-import java.awt.Color;
-import java.awt.Graphics2D;
-import java.awt.image.BufferedImage;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import org.newdawn.slick.Color;
+import org.newdawn.slick.Graphics;
+import org.newdawn.slick.Image;
 
 import de.illonis.edulog.EduLog;
 import de.illonis.eduras.Team;
@@ -26,14 +27,14 @@ public class StatisticsWindow extends RenderedGuiObject {
 			.getName());
 
 	private final static Color COLOR_BG = new Color(0, 0, 0, 200);
-	private final static Color COLOR_TEXT = Color.WHITE;
-	private final static Color COLOR_HEADER = Color.YELLOW;
+	private final static Color COLOR_TEXT = Color.white;
+	private final static Color COLOR_HEADER = Color.yellow;
 	private final static int[] COLUMN_X = { 80, 180, 280 };
 	private final static int PADDING_Y = 80;
 	private final static int LINEHEIGHT = 30;
 	private final static long DISPLAY_TIME = 3000;
 
-	private BufferedImage artwork;
+	private Image artwork;
 	private final int width, height;
 	private boolean visible;
 
@@ -70,17 +71,16 @@ public class StatisticsWindow extends RenderedGuiObject {
 	}
 
 	@Override
-	public void render(Graphics2D g2d) {
+	public void render(Graphics g2d) {
 		if (!visible)
 			return;
 		// background
-		g2d.setPaint(COLOR_BG);
+		g2d.setColor(COLOR_BG);
 		if (artwork != null)
 			g2d.drawImage(artwork, screenX, screenY, null);
 		else
 			g2d.fillRect(screenX, screenY, width, height);
 
-		g2d.setFont(DEFAULT_FONT);
 		// header
 		g2d.setColor(COLOR_HEADER);
 		g2d.drawString("Player", screenX + COLUMN_X[0], screenY + PADDING_Y);
@@ -97,16 +97,16 @@ public class StatisticsWindow extends RenderedGuiObject {
 		}
 	}
 
-	private void drawTeamRow(Graphics2D g2d, Team team, int i) {
-		g2d.setColor(Color.WHITE);
+	private void drawTeamRow(Graphics g2d, Team team, int i) {
+		g2d.setColor(Color.white);
 		g2d.drawString(team.getName(), screenX + COLUMN_X[0] - 50, screenY
 				+ PADDING_Y + i * LINEHEIGHT);
 
 	}
 
-	private void drawPlayerRow(Graphics2D g2d, PlayerMainFigure p, int i) {
+	private void drawPlayerRow(Graphics g2d, PlayerMainFigure p, int i) {
 		// name
-		g2d.setColor(Color.YELLOW);
+		g2d.setColor(Color.yellow);
 		g2d.drawString(p.getName(), screenX + COLUMN_X[0], screenY + PADDING_Y
 				+ i * LINEHEIGHT);
 

@@ -1,10 +1,11 @@
 package de.illonis.eduras.gameclient.gui.hud;
 
-import java.awt.Color;
-import java.awt.Graphics2D;
-import java.awt.image.BufferedImage;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import org.newdawn.slick.Color;
+import org.newdawn.slick.Graphics;
+import org.newdawn.slick.Image;
 
 import de.illonis.edulog.EduLog;
 import de.illonis.eduras.gameclient.datacache.CacheException;
@@ -41,16 +42,14 @@ public class ItemTooltip extends Tooltip {
 	}
 
 	@Override
-	public void render(Graphics2D g2d) {
-		super.render(g2d);
-		g2d.setFont(DEFAULT_FONT);
-		g2d.setColor(Color.YELLOW);
+	public void render(Graphics g2d) {
+		g2d.setColor(Color.yellow);
 		g2d.drawString(item.getName(), screenX + 8, screenY + 20);
-		g2d.setColor(Color.WHITE);
+		g2d.setColor(Color.white);
 		g2d.drawString(item.getType().toString(), screenX + 8, screenY + 40);
 		g2d.drawString("id: " + item.getId(), screenX + 8, screenY + 70);
 		g2d.drawString("owner: " + item.getOwner(), screenX + 8, screenY + 90);
-		BufferedImage img;
+		Image img;
 		try {
 			img = ImageCache.getInventoryIcon(item.getType());
 			g2d.drawImage(img, screenX + width - img.getWidth() - 2,

@@ -1,6 +1,6 @@
 package de.illonis.eduras.shapes;
 
-import de.illonis.eduras.exceptions.ShapeVector2dfsNotApplicableException;
+import de.illonis.eduras.exceptions.ShapeVerticesNotApplicableException;
 import de.illonis.eduras.math.Vector2df;
 
 /**
@@ -19,15 +19,15 @@ public class Rectangle extends Polygon {
 	 *            The point at top left.
 	 * @param bottomRight
 	 *            The point at bottom right.
-	 * @throws ShapeVector2dfsNotApplicableException
+	 * @throws ShapeVerticesNotApplicableException
 	 *             Thrown if any point in the rectangle is negative on either x-
 	 *             or y-value.
 	 */
 	public Rectangle(Vector2df topLeft, Vector2df bottomRight)
-			throws ShapeVector2dfsNotApplicableException {
+			throws ShapeVerticesNotApplicableException {
 		if (topLeft.getX() < 0 || topLeft.getY() < 0 || bottomRight.getX() < 0
 				|| bottomRight.getY() < 0) {
-			throw new ShapeVector2dfsNotApplicableException();
+			throw new ShapeVerticesNotApplicableException();
 		} else {
 			// whether topLeft and bottomRight are switches does not matter
 			Vector2df[] vertices = new Vector2df[4];
@@ -44,10 +44,10 @@ public class Rectangle extends Polygon {
 	 * 
 	 * @param size
 	 *            the dimension of the rectangle.
-	 * @throws ShapeVector2dfsNotApplicableException
+	 * @throws ShapeVerticesNotApplicableException
 	 *             if any of the dimension parameters is negative.
 	 */
-	public Rectangle(Vector2df size) throws ShapeVector2dfsNotApplicableException {
+	public Rectangle(Vector2df size) throws ShapeVerticesNotApplicableException {
 		this(new Vector2df(), size);
 	}
 }

@@ -1,6 +1,6 @@
 package de.illonis.eduras.shapecreator.gui;
 
-import java.awt.Graphics2D;
+import java.awt.Graphics;
 
 import de.illonis.eduras.interfaces.Drawable;
 import de.illonis.eduras.math.Vector2df;
@@ -101,7 +101,7 @@ public class CoordinateSystem implements Drawable {
 	}
 
 	@Override
-	public void draw(Graphics2D g) {
+	public void draw(Graphics g) {
 		g.setColor(DataHolder.getInstance().getSettings().getGridColor());
 
 		// horizontal line

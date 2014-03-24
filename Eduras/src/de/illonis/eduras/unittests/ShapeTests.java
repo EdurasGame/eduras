@@ -10,7 +10,7 @@ import java.util.LinkedList;
 import org.junit.Test;
 
 import de.illonis.eduras.GameInformation;
-import de.illonis.eduras.exceptions.ShapeVector2dfsNotApplicableException;
+import de.illonis.eduras.exceptions.ShapeVerticesNotApplicableException;
 import de.illonis.eduras.gameobjects.BigBlock;
 import de.illonis.eduras.math.Vector2df;
 import de.illonis.eduras.shapes.Polygon;
@@ -60,7 +60,7 @@ public class ShapeTests {
 		BigBlock otherObject = null;
 		try {
 			otherObject = new BigBlock(gameInfo, null, 1);
-		} catch (ShapeVector2dfsNotApplicableException e) {
+		} catch (ShapeVerticesNotApplicableException e) {
 			assertTrue(false);
 		}
 		otherObject.setPosition(50, 50);

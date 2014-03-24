@@ -3,6 +3,8 @@ package de.illonis.eduras.gameclient.userprefs;
 import java.awt.event.KeyEvent;
 import java.util.HashMap;
 
+import org.newdawn.slick.Input;
+
 import de.illonis.eduras.exceptions.KeyNotBoundException;
 import de.illonis.eduras.interfaces.ResettableSetting;
 import de.illonis.eduras.locale.Localization;
@@ -18,8 +20,8 @@ public final class KeyBindings implements ResettableSetting {
 	private final HashMap<Integer, KeyBinding> defaultKeys;
 	private final HashMap<Integer, KeyBinding> keys;
 	private final HashMap<KeyBinding, String> descriptions;
-	private final static int[] arrs = { KeyEvent.VK_UP, KeyEvent.VK_DOWN,
-			KeyEvent.VK_LEFT, KeyEvent.VK_RIGHT };
+	private final static int[] arrs = { Input.KEY_UP, Input.KEY_DOWN,
+			Input.KEY_LEFT, Input.KEY_RIGHT };
 
 	/**
 	 * Initialize keybindings.
@@ -32,20 +34,20 @@ public final class KeyBindings implements ResettableSetting {
 	}
 
 	private void init() {
-		setDefaultKeyBinding(KeyBinding.MOVE_LEFT, KeyEvent.VK_A);
-		setDefaultKeyBinding(KeyBinding.MOVE_RIGHT, KeyEvent.VK_D);
-		setDefaultKeyBinding(KeyBinding.MOVE_DOWN, KeyEvent.VK_S);
-		setDefaultKeyBinding(KeyBinding.MOVE_UP, KeyEvent.VK_W);
-		setDefaultKeyBinding(KeyBinding.ITEM_1, KeyEvent.VK_1);
-		setDefaultKeyBinding(KeyBinding.ITEM_2, KeyEvent.VK_2);
-		setDefaultKeyBinding(KeyBinding.ITEM_3, KeyEvent.VK_3);
-		setDefaultKeyBinding(KeyBinding.ITEM_4, KeyEvent.VK_4);
-		setDefaultKeyBinding(KeyBinding.ITEM_5, KeyEvent.VK_5);
-		setDefaultKeyBinding(KeyBinding.ITEM_6, KeyEvent.VK_6);
-		setDefaultKeyBinding(KeyBinding.CHAT, KeyEvent.VK_ENTER);
-		setDefaultKeyBinding(KeyBinding.SWITCH_MODE, KeyEvent.VK_M);
-		setDefaultKeyBinding(KeyBinding.EXIT_CLIENT, KeyEvent.VK_ESCAPE);
-		setDefaultKeyBinding(KeyBinding.SHOW_STATS, KeyEvent.VK_TAB);
+		setDefaultKeyBinding(KeyBinding.MOVE_LEFT, Input.KEY_A);
+		setDefaultKeyBinding(KeyBinding.MOVE_RIGHT, Input.KEY_D);
+		setDefaultKeyBinding(KeyBinding.MOVE_DOWN, Input.KEY_S);
+		setDefaultKeyBinding(KeyBinding.MOVE_UP, Input.KEY_W);
+		setDefaultKeyBinding(KeyBinding.ITEM_1, Input.KEY_1);
+		setDefaultKeyBinding(KeyBinding.ITEM_2, Input.KEY_2);
+		setDefaultKeyBinding(KeyBinding.ITEM_3, Input.KEY_3);
+		setDefaultKeyBinding(KeyBinding.ITEM_4, Input.KEY_4);
+		setDefaultKeyBinding(KeyBinding.ITEM_5, Input.KEY_5);
+		setDefaultKeyBinding(KeyBinding.ITEM_6, Input.KEY_6);
+		setDefaultKeyBinding(KeyBinding.CHAT, Input.KEY_ENTER);
+		setDefaultKeyBinding(KeyBinding.SWITCH_MODE, Input.KEY_M);
+		setDefaultKeyBinding(KeyBinding.EXIT_CLIENT, Input.KEY_ESCAPE);
+		setDefaultKeyBinding(KeyBinding.SHOW_STATS, Input.KEY_TAB);
 	}
 
 	/**
@@ -80,7 +82,7 @@ public final class KeyBindings implements ResettableSetting {
 			if (i == key)
 				return "Pfeil " + KeyEvent.getKeyText(key).toLowerCase();
 		}
-		if (key == KeyEvent.VK_UNDEFINED)
+		if (key == Input.KEY_UNLABELED)
 			return Localization.getString("Client.preferences.keynotbound");
 		return KeyEvent.getKeyText(key);
 	}
@@ -169,7 +171,7 @@ public final class KeyBindings implements ResettableSetting {
 			if (keys.get(i) == binding)
 				return i;
 		}
-		return KeyEvent.VK_UNDEFINED;
+		return Input.KEY_UNLABELED;
 	}
 
 	/**
@@ -177,7 +179,7 @@ public final class KeyBindings implements ResettableSetting {
 	 * 
 	 * @param binding
 	 *            binding that's key is looked for.
-	 * @return default key or {@link KeyEvent#VK_UNDEFINED} if this binding does
+	 * @return default key or {@link Input#KEY_UNLABELED} if this binding does
 	 *         not exist.
 	 */
 	public int getDefaultKey(KeyBinding binding) {
@@ -185,7 +187,7 @@ public final class KeyBindings implements ResettableSetting {
 			if (defaultKeys.get(i) == binding)
 				return i;
 		}
-		return KeyEvent.VK_UNDEFINED;
+		return Input.KEY_UNLABELED;
 	}
 
 	/**

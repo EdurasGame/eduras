@@ -34,8 +34,8 @@ public class GamePanel extends CanvasGameContainer {
 	 *             Indicates a failure during game execution.
 	 * 
 	 */
-	public void start(LogicGameWorker worker) throws SlickException {
-		((SlickGame) game).setWorker(worker);
+	public void start(LogicGameWorker worker, GameRenderer renderer) throws SlickException {
+		((SlickGame) game).setWorker(worker, renderer);
 		super.start();
 	}
 }

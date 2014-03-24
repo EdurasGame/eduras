@@ -1,6 +1,5 @@
 package de.illonis.eduras.gameclient.datacache;
 
-import java.awt.image.BufferedImage;
 import java.beans.PropertyChangeEvent;
 import java.io.IOException;
 import java.net.URL;
@@ -11,6 +10,9 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.swing.ImageIcon;
+
+import org.newdawn.slick.Image;
+import org.newdawn.slick.SlickException;
 
 import de.illonis.edulog.EduLog;
 import de.illonis.eduras.ObjectFactory.ObjectType;
@@ -95,9 +97,9 @@ public final class GraphicsPreLoader extends AsyncLoader<Void> {
 		while (it.hasNext()) {
 			Map.Entry<ObjectType, String> pair = it.next();
 			try {
-				BufferedImage image = ImageFiler.load(pair.getValue());
+				Image image = ImageFiler.load(pair.getValue());
 				ImageCache.addInventoryIcon(pair.getKey(), image);
-			} catch (IllegalArgumentException | IOException e) {
+			} catch (SlickException e) {
 				L.log(Level.SEVERE,
 						"Inventory icon not found: " + pair.getValue(), e);
 			}
@@ -117,9 +119,9 @@ public final class GraphicsPreLoader extends AsyncLoader<Void> {
 		while (it.hasNext()) {
 			Map.Entry<ImageKey, String> pair = it.next();
 			try {
-				BufferedImage image = ImageFiler.load(pair.getValue());
+				Image image = ImageFiler.load(pair.getValue());
 				ImageCache.addGuiImage(pair.getKey(), image);
-			} catch (IllegalArgumentException | IOException e) {
+			} catch (SlickException e) {
 				L.log(Level.SEVERE,
 						"Guiimagefile not found: " + pair.getValue(), e);
 			}
@@ -163,9 +165,9 @@ public final class GraphicsPreLoader extends AsyncLoader<Void> {
 		while (it.hasNext()) {
 			Map.Entry<ObjectType, String> pair = it.next();
 			try {
-				BufferedImage image = ImageFiler.load(pair.getValue());
+				Image image = ImageFiler.load(pair.getValue());
 				ImageCache.addImage(pair.getKey(), image);
-			} catch (IllegalArgumentException | IOException e) {
+			} catch (SlickException e) {
 				L.log(Level.SEVERE, "Imagefile not found: " + pair.getValue(),
 						e);
 			}

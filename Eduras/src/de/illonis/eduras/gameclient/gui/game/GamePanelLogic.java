@@ -6,7 +6,6 @@ import java.awt.Point;
 import java.awt.PointerInfo;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
-import java.awt.event.KeyEvent;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -87,17 +86,19 @@ public class GamePanelLogic extends ClientGuiStepLogic implements
 		currentClickState = ClickState.DEFAULT;
 		this.reactor = listener;
 		infoPro = EdurasInitializer.getInstance().getInformationProvider();
-		try {
-			gui = new GamePanel(new SlickGame(infoPro.getGameObjects()));
-		} catch (SlickException e) {
-			L.log(Level.WARNING, "TODO: message", e);
-		}
+
 		resizeMonitor = new ResizeMonitor();
 		keyHandler = new InputKeyHandler(this, reactor);
 		keyHandler.addUserInputListener(this);
 		camera = new GameCamera();
 		mouseHandler = new GuiMouseHandler(this, reactor);
 		cml = new CameraMouseListener(camera);
+		try {
+			gui = new GamePanel(new SlickGame(infoPro.getGameObjects(),
+					mouseHandler, keyHandler));
+		} catch (SlickException e) {
+			L.log(Level.WARNING, "TODO: message", e);
+		}
 	}
 
 	/**
@@ -133,23 +134,15 @@ public class GamePanelLogic extends ClientGuiStepLogic implements
 	}
 
 	/**
-	 * Stopps rendering process.
-	 */
-	private void stopRendering() {
-		if (renderer != null)
-			renderer.stopRendering();
-	}
-
-	/**
 	 * Starts rendering process and logic updates.
 	 * 
 	 * @param worker
 	 *            the worker used for update.
 	 */
-	private void startGame(LogicGameWorker worker) {
+	private void startGame(LogicGameWorker worker, GameRenderer gameRenderer) {
 		// renderer.startRendering();
 		try {
-			gui.start(worker);
+			gui.start(worker, gameRenderer);
 		} catch (SlickException e) {
 			L.log(Level.WARNING, "TODO: message", e);
 		}
@@ -162,14 +155,11 @@ public class GamePanelLogic extends ClientGuiStepLogic implements
 				.startLogicWorker();
 		initUserInterface();
 		gui.addComponentListener(resizeMonitor);
-		gui.addMouseListener(mouseHandler);
-		gui.addMouseMotionListener(mouseHandler);
 		gui.addMouseMotionListener(cml);
 		gui.addMouseListener(cml);
-		startGame(worker);
+		startGame(worker, renderer);
 		doTimedTasks();
 		notifyGuiSizeChanged();
-		gui.addKeyListener(keyHandler);
 		gui.requestFocus();
 		gui.requestFocusInWindow();
 		hudNotifier.onGameReady();
@@ -188,12 +178,8 @@ public class GamePanelLogic extends ClientGuiStepLogic implements
 		EdurasInitializer.getInstance().stopLogicWorker();
 		gui.removeMouseMotionListener(cml);
 		gui.removeMouseListener(cml);
-		gui.removeMouseListener(mouseHandler);
-		gui.removeMouseMotionListener(mouseHandler);
 		gui.removeComponentListener(resizeMonitor);
-		gui.removeKeyListener(keyHandler);
 		cml.stop();
-		stopRendering();
 		stopTimedTasks();
 	}
 
@@ -366,14 +352,18 @@ public class GamePanelLogic extends ClientGuiStepLogic implements
 	/**
 	 * Handles key input for chat.
 	 * 
-	 * @param e
-	 *            the key event.
+	 * @param key
+	 *            the key number.
+	 * @param c
+	 *            the character.
+	 * @return true if keyevent was consumed.
 	 */
-	public void onKeyType(KeyEvent e) {
+	public boolean onKeyType(int key, char c) {
 		if (cache.isWriting()) {
-			e.consume();
-			cache.write(e);
+			cache.write(key, c);
+			return true;
 		}
+		return false;
 	}
 
 	/**

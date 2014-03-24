@@ -1,8 +1,9 @@
 package de.illonis.eduras.networking;
 
-import java.awt.Color;
 import java.util.LinkedList;
 import java.util.logging.Logger;
+
+import org.newdawn.slick.Color;
 
 import de.eduras.eventingserver.Event;
 import de.eduras.eventingserver.EventHandler;
@@ -145,7 +146,7 @@ public class EventParser implements EventHandler {
 						(Integer) event.getArgument(0));
 				float x = (float) event.getArgument(2);
 				float y = (float) event.getArgument(3);
-				itemEvent.setTarget(new Vector2df(x,y));
+				itemEvent.setTarget(new Vector2df(x, y));
 				logic.onGameEventAppeared(itemEvent);
 				break;
 			case SWITCH_INTERACTMODE:
@@ -262,10 +263,11 @@ public class EventParser implements EventHandler {
 				break;
 			case SET_TEAMS:
 				SetTeamsEvent setTeamsEvent = new SetTeamsEvent();
-				for (int i = 0; i < numberOfArgs; i = i + 3) {
+				for (int i = 0; i < numberOfArgs; i = i + 5) {
 					setTeamsEvent.addTeam(new Team((String) event
 							.getArgument(i), (int) event.getArgument(i + 1),
-							new Color((int) event.getArgument(i + 2))));
+							new Color((int) event.getArgument(i + 2),
+									(int) event.getArgument(i + 3),(int) event.getArgument(i + 4))));
 				}
 				logic.onGameEventAppeared(setTeamsEvent);
 				break;

@@ -4,7 +4,7 @@
 package de.illonis.eduras.gameobjects;
 
 import de.illonis.eduras.GameInformation;
-import de.illonis.eduras.exceptions.ShapeVector2dfsNotApplicableException;
+import de.illonis.eduras.exceptions.ShapeVerticesNotApplicableException;
 
 /**
  * This represents a block.
@@ -34,12 +34,12 @@ public abstract class Block extends GameObject {
 	 *            the height of the block
 	 * @param id
 	 *            the id of the object.
-	 * @throws ShapeVector2dfsNotApplicableException
+	 * @throws ShapeVerticesNotApplicableException
 	 *             Thrown if the given position values do not apply.
 	 */
 	public Block(GameInformation game, TimingSource timingSource, double xPos,
 			double yPos, double width, double height, int id)
-			throws ShapeVector2dfsNotApplicableException {
+			throws ShapeVerticesNotApplicableException {
 		super(game, timingSource, id);
 
 		this.width = width;
@@ -64,11 +64,11 @@ public abstract class Block extends GameObject {
 	 *            the height of the block.
 	 * @param id
 	 *            the object id.
-	 * @throws ShapeVector2dfsNotApplicableException
+	 * @throws ShapeVerticesNotApplicableException
 	 *             Thrown if the given position values do not apply.
 	 */
 	public Block(GameInformation game, TimingSource timingSource, double width,
-			double height, int id) throws ShapeVector2dfsNotApplicableException {
+			double height, int id) throws ShapeVerticesNotApplicableException {
 		this(game, timingSource, 0, 0, width, height, id);
 	}
 
