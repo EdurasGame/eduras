@@ -167,6 +167,13 @@ public class EgoModeMouseAdapter extends GuiMouseAdapter {
 		egoModeMove(e);
 	}
 
+	@Override
+	public void mouseDragged(MouseEvent e) {
+		super.mouseDragged(e);
+
+		egoModeMove(e);
+	}
+
 	private void egoModeMove(MouseEvent e) {
 		getListener().onViewingDirectionChanged(
 				getPanelLogic().computeGuiPointToGameCoordinate(
