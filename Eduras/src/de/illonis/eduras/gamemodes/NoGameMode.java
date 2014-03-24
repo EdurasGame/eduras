@@ -85,4 +85,10 @@ public class NoGameMode extends BasicGameMode {
 	public Relation getRelation(GameObject a, GameObject b) {
 		return Relation.HOSTILE;
 	}
+
+	@Override
+	public void onDisconnect(int ownerId) {
+		// simply remove the player
+		gameInfo.getEventTriggerer().removePlayer(ownerId);
+	}
 }

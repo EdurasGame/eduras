@@ -16,7 +16,7 @@ public class ServerNetworker implements ServerNetworkEventHandler {
 
 	private final static Logger L = EduLog.getLoggerFor("ServerNetworker");
 
-	private GameInformation gameInfo;
+	private final GameInformation gameInfo;
 
 	/**
 	 * Create a new ServerNetworker.
@@ -32,7 +32,7 @@ public class ServerNetworker implements ServerNetworkEventHandler {
 	public void onClientDisconnected(int clientId) {
 		L.info("User with id #" + clientId
 				+ " disconnected from Eduras Server.");
-		gameInfo.getEventTriggerer().removePlayer(clientId);
+		gameInfo.getGameSettings().getGameMode().onDisconnect(clientId);
 	}
 
 	@Override

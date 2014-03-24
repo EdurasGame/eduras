@@ -128,4 +128,27 @@ public class Deathmatch extends BasicGameMode {
 	public Relation getRelation(GameObject a, GameObject b) {
 		return Relation.HOSTILE;
 	}
+
+	@Override
+	public void onDisconnect(int ownerId) {
+		PlayerMainFigure gonePlayer;
+		try {
+			gonePlayer = gameInfo.getPlayerByOwnerId(ownerId);
+		} catch (ObjectNotFoundException e) {
+			L.log(Level.SEVERE, "player not found", e);
+			return;
+		}
+
+		// remove it to the statistic
+		gameInfo.getGameSettings().getStats().removePlayerFromStats(ownerId);
+
+		Team playersTeam = gonePlayer.getTeam();
+
+		// remove the actual player (also removes the player from its team)
+		gameInfo.getEventTriggerer().removePlayer(ownerId);
+
+		// .. and remove it's team
+		gameInfo.removeTeam(playersTeam);
+		gameInfo.getEventTriggerer().setTeams(gameInfo.getTeams());
+	}
 }
