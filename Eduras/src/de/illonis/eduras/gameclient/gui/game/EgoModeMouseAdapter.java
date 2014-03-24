@@ -68,6 +68,11 @@ public class EgoModeMouseAdapter extends GuiMouseAdapter {
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
+		// egoModeClick(e);
+	}
+
+	@Override
+	public void mousePressed(MouseEvent e) {
 		egoModeClick(e);
 	}
 
