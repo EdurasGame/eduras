@@ -88,7 +88,7 @@ public class PlayerMainFigure extends Unit implements MovementControlable {
 		// Vector2df secondEdge = new Vector2df(-10, 10);
 		// Vector2df thirdEdge = new Vector2df(-10, -10);
 
-		setShape(new Circle(4.5f, 4.5f, 9));
+		setShape(new Circle(4.5f, 4.5f, 9f));
 
 		// try {
 		// // setShape(new Triangle(firstEdge, secondEdge, thirdEdge));
@@ -172,7 +172,7 @@ public class PlayerMainFigure extends Unit implements MovementControlable {
 		if (isHorizontal(direction)) {
 			getSpeedVector().x = 0;
 		} else {
-			getSpeedVector().x = 0;
+			getSpeedVector().y = 0;
 		}
 	}
 

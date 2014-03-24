@@ -86,7 +86,7 @@ public class PlayerStatBar extends RenderedGuiObject {
 	}
 
 	private void recalculate() {
-		double percent = (double) health / maxHealth;
+		float percent = (float) health / maxHealth;
 		barWidth = (int) Math.round(percent * MAX_WIDTH);
 	}
 

@@ -51,7 +51,7 @@ public class CollisionPoint {
 	 * @return distance to the collision.
 	 */
 	public double getDistance() {
-		return distanceVector.getLength();
+		return distanceVector.length();
 	}
 
 	/**

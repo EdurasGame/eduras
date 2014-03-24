@@ -13,8 +13,8 @@ import de.illonis.eduras.settings.S;
  */
 public class BigBlock extends Block {
 
-	private static final int WIDTH = S.go_big_block_width;
-	private static final int HEIGHT = S.go_big_block_height;
+	private static final float WIDTH = S.go_big_block_width;
+	private static final float HEIGHT = S.go_big_block_height;
 
 	/**
 	 * Creates a BigBlock at the given position and id in the context of the
@@ -33,7 +33,7 @@ public class BigBlock extends Block {
 	 * @throws ShapeVerticesNotApplicableException
 	 */
 	public BigBlock(GameInformation game, TimingSource timingSource,
-			double xPos, double yPos, int id)
+			float xPos, float yPos, int id)
 			throws ShapeVerticesNotApplicableException {
 		super(game, timingSource, xPos, yPos, WIDTH, HEIGHT, id);
 		setObjectType(ObjectType.BIGBLOCK);

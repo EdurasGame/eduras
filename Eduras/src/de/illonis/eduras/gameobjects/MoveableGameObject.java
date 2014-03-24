@@ -104,7 +104,7 @@ public abstract class MoveableGameObject extends GameObject implements Moveable 
 	 * 
 	 * @author illonis
 	 */
-	public Vector2df getSpeedVector() {
+	public Vector2f getSpeedVector() {
 		return speedVector;
 	}
 
@@ -113,7 +113,7 @@ public abstract class MoveableGameObject extends GameObject implements Moveable 
 		if (speedVector.x == 0 && speedVector.y == 0)
 			return;
 		float distance = speed * (delta / (float) 1000L);
-		Vector2f target = speedVector.copy().normalise().scale(distance)
+		Vector2f target = speedVector.getNormal().scale(distance)
 				.add(getPositionVector());
 
 		Vector2f targetPos;
@@ -145,17 +145,17 @@ public abstract class MoveableGameObject extends GameObject implements Moveable 
 	public Vector2f checkCollisionOnMove(Vector2f target)
 			throws MapBorderReachedException {
 		return target;
-		// Vector2df currentTarget = target;
-		// Vector2df collisionPoint = this.getShape().checkCollisionOnMove(
-		// getGame(), this, currentTarget);
-		//
-		// while (!collisionPoint.equals(currentTarget)) {
-		// currentTarget = collisionPoint;
-		// collisionPoint = this.getShape().checkCollisionOnMove(getGame(),
-		// this, currentTarget);
-		// }
-		//
-		// return currentTarget;
+//		 Vector2df currentTarget = target;
+//		 Vector2df collisionPoint = this.getShape().checkCollisionOnMove(
+//		 getGame(), this, currentTarget);
+//		
+//		 while (!collisionPoint.equals(currentTarget)) {
+//		 currentTarget = collisionPoint;
+//		 collisionPoint = this.getShape().checkCollisionOnMove(getGame(),
+//		 this, currentTarget);
+//		 }
+//		
+//		 return currentTarget;
 	}
 
 	/**

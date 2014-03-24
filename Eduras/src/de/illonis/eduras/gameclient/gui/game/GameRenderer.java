@@ -125,6 +125,7 @@ public class GameRenderer implements TooltipHandler {
 		int width = container.getWidth();
 		int height = container.getHeight();
 		clear(g, width, height);
+		camera.setSize(container.getWidth(), container.getHeight());
 		adjustCamera();
 		g.translate(-camera.getX(), -camera.getY());
 		drawMap(g);
@@ -177,7 +178,6 @@ public class GameRenderer implements TooltipHandler {
 	 */
 	private void drawMap(Graphics g) {
 		Rectangle r = info.getMapBounds();
-		// r.setLocation(-camera.getX(), -camera.getY());
 		g.setColor(Color.black);
 		g.fill(r);
 	}

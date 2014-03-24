@@ -3,7 +3,7 @@ package de.illonis.eduras.events;
 import de.illonis.eduras.gameobjects.GameObject;
 
 /**
- * An event which indicates that a {@link GameObject}s double attribute has
+ * An event which indicates that a {@link GameObject}s float attribute has
  * changed.
  * 
  * @author Florian Mai <florian.ren.mai@googlemail.com>

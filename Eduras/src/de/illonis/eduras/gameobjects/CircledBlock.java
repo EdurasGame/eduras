@@ -35,11 +35,10 @@ public abstract class CircledBlock extends GameObject {
 	 * @param id
 	 */
 	public CircledBlock(GameInformation game, TimingSource timingSource,
-			double radius, double posX, double posY, int id) {
+			float radius, float posX, float posY, int id) {
 		super(game, timingSource, id);
-		setShape(new Circle((float) (posX + radius), (float) (posY + radius),
-				(float) radius));
+		setShape(new Circle((posX + radius), (posY + radius), radius));
 
-		setPosition((float) posX, (float) posY);
+		setPosition(posX, posY);
 	}
 }

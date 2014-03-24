@@ -6,6 +6,8 @@ import java.util.LinkedList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.newdawn.slick.geom.Vector2f;
+
 import de.eduras.eventingserver.Event;
 import de.eduras.eventingserver.Event.PacketType;
 import de.eduras.eventingserver.ServerInterface;
@@ -180,8 +182,8 @@ public class ServerEventTriggerer implements EventTriggerer {
 		logic.getObjectFactory().onObjectFactoryEventAppeared(newObjectEvent);
 
 		GameObject o = gameInfo.findObjectById(id);
-		o.setXPosition((float) position.getX());
-		o.setYPosition((float) position.getY());
+		o.setXPosition(position.getX());
+		o.setYPosition(position.getY());
 		MovementEvent setPos = new MovementEvent(GameEventNumber.SET_POS_TCP,
 				id);
 		setPos.setNewXPos(position.getX());
@@ -279,7 +281,7 @@ public class ServerEventTriggerer implements EventTriggerer {
 		setPositionOfObject(objectId, newPosition, PacketType.TCP);
 	}
 
-	private void setPositionOfObject(int objectId, Vector2df newPosition,
+	private void setPositionOfObject(int objectId, Vector2f newPosition,
 			PacketType type) {
 		GameEventNumber eventNumber;
 		if (type == PacketType.TCP)
@@ -288,8 +290,8 @@ public class ServerEventTriggerer implements EventTriggerer {
 			eventNumber = GameEventNumber.SET_POS_UDP;
 
 		MovementEvent e = new MovementEvent(eventNumber, objectId);
-		e.setNewXPos(newPosition.getX());
-		e.setNewYPos(newPosition.getY());
+		e.setNewXPos(newPosition.x);
+		e.setNewYPos(newPosition.y);
 
 		GameObject o = gameInfo.findObjectById(objectId);
 		o.setPosition(newPosition);

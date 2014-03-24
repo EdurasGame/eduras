@@ -21,9 +21,9 @@ import de.illonis.eduras.units.Unit;
 public abstract class Missile extends MoveableGameObject {
 
 	private int damage;
-	private double damageRadius;
-	private double maxRange = 0;
-	private double rangeMoved;
+	private float damageRadius;
+	private float maxRange = 0;
+	private float rangeMoved;
 
 	/**
 	 * Creates a new missile with the id given and in the context of specific
@@ -39,8 +39,8 @@ public abstract class Missile extends MoveableGameObject {
 	public Missile(GameInformation game, TimingSource timingSource, int id) {
 		super(game, timingSource, id);
 		rangeMoved = 0;
-		setShape(new Circle((float) S.go_missile_radius,
-				(float) S.go_missile_radius, (float) S.go_missile_radius));
+		setShape(new Circle(S.go_missile_radius, S.go_missile_radius,
+				S.go_missile_radius));
 	}
 
 	/**
@@ -50,7 +50,7 @@ public abstract class Missile extends MoveableGameObject {
 	 * 
 	 * @author illonis
 	 */
-	public double getMaxRange() {
+	public float getMaxRange() {
 		return maxRange;
 	}
 
@@ -62,7 +62,7 @@ public abstract class Missile extends MoveableGameObject {
 	 * 
 	 * @author illonis
 	 */
-	protected void setMaxRange(double maxRange) {
+	protected void setMaxRange(float maxRange) {
 		this.maxRange = maxRange;
 	}
 
@@ -91,7 +91,7 @@ public abstract class Missile extends MoveableGameObject {
 	 * 
 	 * @return the radius
 	 */
-	public double getDamageRadius() {
+	public float getDamageRadius() {
 		return damageRadius;
 	}
 
@@ -101,7 +101,7 @@ public abstract class Missile extends MoveableGameObject {
 	 * 
 	 * @param damageRadius
 	 */
-	public void setDamageRadius(double damageRadius) {
+	public void setDamageRadius(float damageRadius) {
 		this.damageRadius = damageRadius;
 	}
 

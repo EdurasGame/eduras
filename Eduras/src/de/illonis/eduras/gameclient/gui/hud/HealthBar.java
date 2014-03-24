@@ -16,8 +16,6 @@ import de.illonis.eduras.units.Unit;
  */
 public class HealthBar {
 
-	private static final Color TRANSLUCENT = new Color(0, 0, 0, 0);
-
 	private final static HealthBar instance = new HealthBar();
 	private final static int HEALTHBAR_WIDTH = 50;
 	private final static int HEALTHBAR_HEIGHT = 5;

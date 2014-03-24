@@ -32,7 +32,7 @@ public class BiggerBlock extends Block {
 	 * @throws ShapeVerticesNotApplicableException
 	 */
 	public BiggerBlock(GameInformation game, TimingSource timingSource,
-			double xPos, double yPos, int id)
+			float xPos, float yPos, int id)
 			throws ShapeVerticesNotApplicableException {
 		super(game, timingSource, xPos, yPos, WIDTH, HEIGHT, id);
 		setObjectType(ObjectType.BIGGERBLOCK);

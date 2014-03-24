@@ -197,7 +197,7 @@ public class GameInformation {
 	 * @return a list of nearby objects.
 	 */
 	public LinkedList<GameObject> findObjectsInDistance(Vector2df point,
-			double radius) {
+			float radius) {
 		// TODO: improve (using position is rather incorrect due to object's
 		// dimensions)
 		LinkedList<GameObject> objs = new LinkedList<GameObject>();
