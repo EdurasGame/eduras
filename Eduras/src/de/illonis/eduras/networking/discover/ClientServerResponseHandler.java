@@ -88,7 +88,6 @@ public class ClientServerResponseHandler extends Thread {
 			} catch (NumberFormatException ne) {
 			}
 		}
-
 	}
 
 	@Override

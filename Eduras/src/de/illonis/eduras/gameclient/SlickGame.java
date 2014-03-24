@@ -1,5 +1,6 @@
 package de.illonis.eduras.gameclient;
 
+import java.awt.Font;
 import java.util.Map;
 import java.util.logging.Logger;
 
@@ -8,6 +9,7 @@ import org.newdawn.slick.BasicGame;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
+import org.newdawn.slick.TrueTypeFont;
 
 import de.illonis.edulog.EduLog;
 import de.illonis.eduras.gameclient.gui.InputKeyHandler;
@@ -19,6 +21,8 @@ import de.illonis.eduras.logic.LogicGameWorker;
 public class SlickGame extends BasicGame {
 	private final static Logger L = EduLog.getLoggerFor(SlickGame.class
 			.getName());
+
+	private TrueTypeFont defaultFont;
 
 	private LogicGameWorker lgw;
 	private final GuiMouseHandler mouseHandler;
@@ -43,11 +47,13 @@ public class SlickGame extends BasicGame {
 	@Override
 	public void init(GameContainer container) throws SlickException {
 		GL11.glDisable(GL11.GL_TEXTURE_2D);
+		defaultFont = new TrueTypeFont(new Font("Arial", Font.PLAIN, 12), true);
 	}
 
 	@Override
 	public void render(GameContainer container, Graphics g)
 			throws SlickException {
+		g.setFont(defaultFont);
 		renderer.render(container, g);
 	}
 

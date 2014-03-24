@@ -40,7 +40,7 @@ public class GameCamera extends Rectangle {
 	 * @param newY
 	 *            y coordinate of new center.
 	 */
-	void centerAt(int newX, int newY) {
+	void centerAt(float newX, float newY) {
 		setLocation(newX - (width / scale) / 2, newY - (height / scale) / 2);
 	}
 }

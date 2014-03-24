@@ -10,8 +10,8 @@ import de.eduras.eventingserver.exceptions.TooFewArgumentsExceptions;
  */
 public class MovementEvent extends ObjectEvent {
 
-	private double newXPos = -1;
-	private double newYPos = -1;
+	private float newXPos = -1;
+	private float newYPos = -1;
 
 	/**
 	 * Creates a new MovementEvent belonging to the object of the given id.
@@ -30,7 +30,7 @@ public class MovementEvent extends ObjectEvent {
 	 * 
 	 * @return The new x position.
 	 */
-	public double getNewXPos() {
+	public float getNewXPos() {
 		return newXPos;
 	}
 
@@ -39,7 +39,7 @@ public class MovementEvent extends ObjectEvent {
 	 * 
 	 * @return The new y position.
 	 */
-	public double getNewYPos() {
+	public float getNewYPos() {
 		return newYPos;
 	}
 
@@ -49,7 +49,7 @@ public class MovementEvent extends ObjectEvent {
 	 * @param val
 	 *            The new value.
 	 */
-	public void setNewXPos(double val) {
+	public void setNewXPos(float val) {
 		newXPos = val;
 	}
 
@@ -59,7 +59,7 @@ public class MovementEvent extends ObjectEvent {
 	 * @param val
 	 *            The new value.
 	 */
-	public void setNewYPos(double val) {
+	public void setNewYPos(float val) {
 		newYPos = val;
 	}
 

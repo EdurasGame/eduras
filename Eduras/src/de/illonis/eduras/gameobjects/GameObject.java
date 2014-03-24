@@ -238,6 +238,7 @@ public abstract class GameObject implements Comparable<GameObject> {
 	 * 
 	 * @return x-value of draw-postion
 	 */
+	@Deprecated
 	public final int getDrawX() {
 		return (int) Math.round(xPosition);
 	}
@@ -250,6 +251,7 @@ public abstract class GameObject implements Comparable<GameObject> {
 	 * 
 	 * @return y-value of draw-postion
 	 */
+	@Deprecated
 	public final int getDrawY() {
 		return (int) Math.round(yPosition);
 	}

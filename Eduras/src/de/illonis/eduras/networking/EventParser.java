@@ -173,8 +173,8 @@ public class EventParser implements EventHandler {
 				MovementEvent setPosEvent = new MovementEvent(
 						GameEventNumber.SET_POS_TCP,
 						(Integer) event.getArgument(0));
-				setPosEvent.setNewXPos((Double) event.getArgument(1));
-				setPosEvent.setNewYPos((Double) event.getArgument(2));
+				setPosEvent.setNewXPos((float) event.getArgument(1));
+				setPosEvent.setNewYPos((float) event.getArgument(2));
 				logic.onGameEventAppeared(setPosEvent);
 				break;
 			case SET_OWNER:
@@ -296,8 +296,8 @@ public class EventParser implements EventHandler {
 				MovementEvent movementEvent = new MovementEvent(
 						GameEventNumber.SET_SPEEDVECTOR,
 						(Integer) event.getArgument(0));
-				movementEvent.setNewXPos((Double) event.getArgument(1));
-				movementEvent.setNewYPos((Double) event.getArgument(2));
+				movementEvent.setNewXPos((float) event.getArgument(1));
+				movementEvent.setNewYPos((float) event.getArgument(2));
 				logic.onGameEventAppeared(movementEvent);
 				break;
 			case SET_INTERACTMODE:

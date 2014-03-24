@@ -1,10 +1,11 @@
 package de.illonis.eduras.gameclient.gui;
 
-import java.awt.event.KeyEvent;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import org.newdawn.slick.Input;
 
 import de.illonis.edulog.EduLog;
 import de.illonis.eduras.exceptions.KeyNotBoundException;
@@ -42,7 +43,7 @@ public class InputKeyHandler {
 
 	private final Settings settings;
 	private final GamePanelLogic client;
-	private int currentKey = KeyEvent.VK_UNDEFINED;
+	private int currentKey = Input.KEY_UNLABELED;
 
 	/**
 	 * Creates a new input key handler.
@@ -138,9 +139,11 @@ public class InputKeyHandler {
 
 		switch (binding) {
 		case MOVE_UP:
+			System.out.println("start up");
 			reactor.onStartMovement(Direction.TOP);
 			break;
 		case MOVE_LEFT:
+			System.out.println("start left");
 			reactor.onStartMovement(Direction.LEFT);
 			break;
 		case MOVE_DOWN:
@@ -148,6 +151,7 @@ public class InputKeyHandler {
 			System.out.println("Start down");
 			break;
 		case MOVE_RIGHT:
+			System.out.println("start right");
 			reactor.onStartMovement(Direction.RIGHT);
 			break;
 		case ITEM_1:
@@ -217,7 +221,7 @@ public class InputKeyHandler {
 	public void keyReleased(int key, char c) {
 
 		if (key == currentKey) {
-			currentKey = KeyEvent.VK_UNDEFINED;
+			currentKey = Input.KEY_UNLABELED;
 			return;
 		}
 		// don't handle other keys
@@ -241,16 +245,20 @@ public class InputKeyHandler {
 
 		switch (binding) {
 		case MOVE_UP:
+			System.out.println("stop top");
 			reactor.onStopMovement(Direction.TOP);
 			break;
 		case MOVE_LEFT:
+			System.out.println("stop left");
 			reactor.onStopMovement(Direction.LEFT);
 			break;
 		case MOVE_DOWN:
+			System.out.println("stop down");
 			reactor.onStopMovement(Direction.BOTTOM);
 			System.out.println("stop down");
 			break;
 		case MOVE_RIGHT:
+			System.out.println("stop right");
 			reactor.onStopMovement(Direction.RIGHT);
 			break;
 		case SHOW_STATS:

@@ -145,7 +145,7 @@ public class GameRenderer implements TooltipHandler {
 	private void adjustCamera() {
 		try {
 			PlayerMainFigure p = getClientPlayer();
-			camera.centerAt(p.getDrawX(), p.getDrawY());
+			camera.centerAt(p.getXPosition(), p.getYPosition());
 		} catch (ObjectNotFoundException e) {
 			// EduLog.passException(e);
 		}
@@ -177,7 +177,7 @@ public class GameRenderer implements TooltipHandler {
 	 */
 	private void drawMap(Graphics g) {
 		Rectangle r = info.getMapBounds();
-		//r.setLocation(-camera.getX(), -camera.getY());
+		// r.setLocation(-camera.getX(), -camera.getY());
 		g.setColor(Color.black);
 		g.fill(r);
 	}
@@ -218,7 +218,6 @@ public class GameRenderer implements TooltipHandler {
 				if (S.vision_disabled
 						|| (S.vision_neutral_always && d.getOwner() == -1)) {
 					drawObject(d, g);
-
 				}
 			}
 		}
@@ -226,19 +225,15 @@ public class GameRenderer implements TooltipHandler {
 	}
 
 	private void drawObject(GameObject d, Graphics g) {
-		final float x = d.getDrawX() - camera.getX();
-		final float y = d.getDrawY() - camera.getY();
+		final float x = d.getXPosition();
+		final float y = d.getYPosition();
 
 		try {
 			Image image = ImageCache.getObjectImage(d.getType());
 			g.drawImage(image, x, y);
 		} catch (CacheException e) {
 			if (d.getShape() != null) {
-				if (isSelected(d)) {
-					g.setColor(Color.red);
-				} else {
-					g.setColor(Color.yellow);
-				}
+				g.setColor(getColorForObject(d));
 				g.fill(d.getShape());
 			}
 		}
