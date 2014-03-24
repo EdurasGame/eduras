@@ -1,10 +1,19 @@
 package de.illonis.eduras.gameclient.gui.game;
 
 import java.awt.event.MouseEvent;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
+import de.illonis.edulog.EduLog;
+import de.illonis.eduras.exceptions.ObjectNotFoundException;
 import de.illonis.eduras.gameclient.GuiInternalEventListener;
 import de.illonis.eduras.gameclient.gui.game.GamePanelLogic.ClickState;
 import de.illonis.eduras.inventory.Inventory;
+import de.illonis.eduras.inventory.ItemSlotIsEmptyException;
+import de.illonis.eduras.items.Usable;
+import de.illonis.eduras.logicabstraction.EdurasInitializer;
 import de.illonis.eduras.math.Vector2D;
 import de.illonis.eduras.units.PlayerMainFigure.InteractMode;
 
@@ -16,10 +25,16 @@ import de.illonis.eduras.units.PlayerMainFigure.InteractMode;
  */
 public class EgoModeMouseAdapter extends GuiMouseAdapter {
 
+	private final static Logger L = EduLog
+			.getLoggerFor(EgoModeMouseAdapter.class.getName());
+
+	Timer itemUseTimer;
+
 	protected EgoModeMouseAdapter(GamePanelLogic logic,
 			GuiInternalEventListener reactor) {
 		super(logic, reactor);
 
+		itemUseTimer = null;
 	}
 
 	private void egoModeClick(MouseEvent e) {
@@ -29,8 +44,37 @@ public class EgoModeMouseAdapter extends GuiMouseAdapter {
 
 		switch (currentClickState) {
 		case ITEM_SELECTED:
-			if (currentItemSelected != -1)
-				itemUsed(currentItemSelected, new Vector2D(e.getPoint()));
+			// if an item is selected...
+			if (currentItemSelected != -1) {
+
+				// use it instantly
+				itemUsed(currentItemSelected, new Vector2D(e.getPoint()), false);
+
+				// and if the user prefers so, do it continuously until
+				// mouse released.
+				if (EdurasInitializer.getInstance().getSettings()
+						.getBooleanSetting("continuousItemUsage")) {
+
+					itemUseTimer = new Timer();
+					ContinuousItemUser itemUser = new ContinuousItemUser(
+							currentItemSelected);
+					Usable itemToUse = null;
+					try {
+						itemToUse = (Usable) EdurasInitializer.getInstance()
+								.getInformationProvider().getPlayer()
+								.getInventory()
+								.getItemBySlot(currentItemSelected);
+					} catch (ItemSlotIsEmptyException | ObjectNotFoundException e1) {
+						L.log(Level.WARNING,
+								"Cannot find item when trying to set up the ContinuousItemUser!",
+								e1);
+						return;
+					}
+					itemUseTimer.schedule(itemUser,
+							itemToUse.getCooldownTime(),
+							itemToUse.getCooldownTime());
+				}
+			}
 			break;
 		case DEFAULT:
 			// TODO: Notify only elements that are really clicked.
@@ -50,19 +94,37 @@ public class EgoModeMouseAdapter extends GuiMouseAdapter {
 	 *            item slot.
 	 * @param target
 	 *            target position
+	 * @param isGameCoordinate
+	 *            tells if the given target is alrdeady a gamecoordinate
 	 */
-	void itemUsed(int i, Vector2D target) {
-		getListener().onItemUse(i,
-				getPanelLogic().computeGuiPointToGameCoordinate(target));
+	void itemUsed(int i, Vector2D target, boolean isGameCoordinate) {
+		if (!isGameCoordinate) {
+			getListener().onItemUse(i,
+					getPanelLogic().computeGuiPointToGameCoordinate(target));
+		} else {
+			getListener().onItemUse(i, target);
+		}
 	}
 
 	@Override
 	public void itemClicked(int i) {
 		if (i >= 0 && i < Inventory.MAX_CAPACITY) {
 			getPanelLogic().selectItem(i);
+
+			if (i != getPanelLogic().getClientData().getCurrentItemSelected()) {
+				discardItemUseTimer();
+			}
+
 		} else {
 			getPanelLogic().setClickState(ClickState.DEFAULT);
 			getPanelLogic().getClientData().setCurrentItemSelected(-1);
+		}
+	}
+
+	private void discardItemUseTimer() {
+		if (itemUseTimer != null) {
+			itemUseTimer.cancel();
+			itemUseTimer = null;
 		}
 	}
 
@@ -74,6 +136,28 @@ public class EgoModeMouseAdapter extends GuiMouseAdapter {
 	@Override
 	public void mousePressed(MouseEvent e) {
 		egoModeClick(e);
+	}
+
+	@Override
+	public void mouseReleased(MouseEvent e) {
+		if (EdurasInitializer.getInstance().getSettings()
+				.getBooleanSetting("continuousItemUsage")) {
+			discardItemUseTimer();
+		}
+	}
+
+	class ContinuousItemUser extends TimerTask {
+
+		private final int itemSlotNumber;
+
+		public ContinuousItemUser(int itemSlotNumber) {
+			this.itemSlotNumber = itemSlotNumber;
+		}
+
+		@Override
+		public void run() {
+			itemUsed(itemSlotNumber, getPanelLogic().getCurrentMousePos(), true);
+		}
 	}
 
 	@Override
