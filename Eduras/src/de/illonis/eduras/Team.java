@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.util.LinkedList;
 
 import de.illonis.eduras.units.PlayerMainFigure;
+import de.illonis.eduras.utils.Randomizer;
 
 /**
  * Represents a team of players.
@@ -15,9 +16,9 @@ public class Team {
 
 	private static int nextTeamId = 0;
 
-	private int teamId;
+	private final int teamId;
 	private Color color;
-	private String name;
+	private final String name;
 	private final LinkedList<PlayerMainFigure> players;
 
 	/**
@@ -28,7 +29,7 @@ public class Team {
 	}
 
 	/**
-	 * Creates a new team.
+	 * Creates a new team with random color.
 	 * 
 	 * @param name
 	 *            the name of the team.
@@ -37,7 +38,7 @@ public class Team {
 	 *            the id of the team.
 	 */
 	public Team(String name, int teamId) {
-		this(name, teamId, Color.BLUE);
+		this(name, teamId, Randomizer.getRandomColor());
 	}
 
 	/**
