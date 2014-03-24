@@ -5,6 +5,8 @@ import java.util.LinkedList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.newdawn.slick.geom.Vector2f;
+
 import de.illonis.edulog.EduLog;
 import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.Team;
@@ -16,7 +18,7 @@ import de.illonis.eduras.interfaces.GameEventListener;
 import de.illonis.eduras.items.Usable;
 import de.illonis.eduras.logicabstraction.EdurasInitializer;
 import de.illonis.eduras.math.Line;
-import de.illonis.eduras.math.Vector2D;
+import de.illonis.eduras.math.Vector2df;
 import de.illonis.eduras.settings.S;
 import de.illonis.eduras.units.PlayerMainFigure;
 
@@ -31,8 +33,8 @@ public class ClientLogicGameWorker extends LogicGameWorker {
 	private final static Logger L = EduLog
 			.getLoggerFor(ClientLogicGameWorker.class.getName());
 
-	private final static double ROTATION_STEP_RESOLUTION = 1;
-	private final static double ROTATION_DIST_RESOLUTION = 10;
+	private final static float ROTATION_STEP_RESOLUTION = 1;
+	private final static float ROTATION_DIST_RESOLUTION = 10;
 
 	protected ClientLogicGameWorker(GameInformation gameInfo,
 			ListenerHolder<? extends GameEventListener> listenerHolder) {
@@ -40,24 +42,23 @@ public class ClientLogicGameWorker extends LogicGameWorker {
 	}
 
 	@Override
-	protected void gameUpdate(long delta) {
+	public void gameUpdate(long delta) {
 
 		for (GameObject o : gameInformation.getObjects().values()) {
 			if (o instanceof Usable) {
 				((Usable) o).reduceCooldown(delta);
 			}
 			if (o instanceof MoveableGameObject) {
-				if (!((MoveableGameObject) o).getSpeedVector().isNull()) {
-					((MoveableGameObject) o).onMove(delta);
-					if (listenerHolder.hasListener())
-						listenerHolder.getListener().onNewObjectPosition(o);
-					gameInformation.getEventTriggerer()
-							.notifyNewObjectPosition(o);
-				}
+				MoveableGameObject mgo = (MoveableGameObject) o;
+				if (mgo.getSpeedVector().x != 0 || mgo.getSpeedVector().y != 0)
+					mgo.onMove(delta);
+				if (listenerHolder.hasListener())
+					listenerHolder.getListener().onNewObjectPosition(o);
+				gameInformation.getEventTriggerer().notifyNewObjectPosition(o);
+			}
 
-				if (hasRotated(o)) {
-					gameInformation.getEventTriggerer().setRotation(o);
-				}
+			if (hasRotated(o)) {
+				gameInformation.getEventTriggerer().setRotation(o);
 			}
 		}
 		updateVision();
@@ -80,7 +81,8 @@ public class ClientLogicGameWorker extends LogicGameWorker {
 		}
 
 		Team team = player.getTeam();
-		if (team == null) return;
+		if (team == null)
+			return;
 
 		LinkedList<Integer> teamOwners = new LinkedList<Integer>();
 		LinkedList<GameObject> teamObjects = new LinkedList<GameObject>();
@@ -105,10 +107,10 @@ public class ClientLogicGameWorker extends LogicGameWorker {
 		}
 
 		Area visionMask = new Area(visionArea);
-//		for (GameObject nearObject : nearby) {
-//			visionMask.add(new Area(nearObject.getBoundingBox()));
-//		}
-//		visionMask.add(new Area(player.getBoundingBox()));
+		// for (GameObject nearObject : nearby) {
+		// visionMask.add(new Area(nearObject.getBoundingBox()));
+		// }
+		// visionMask.add(new Area(player.getBoundingBox()));
 
 		VisionInformation vinfo = gameInformation.getClientData()
 				.getVisionInfo();
@@ -121,30 +123,30 @@ public class ClientLogicGameWorker extends LogicGameWorker {
 	}
 
 	private Area getVisionShapeFor(GameObject obj, LinkedList<GameObject> nearby) {
-		LinkedList<Vector2D> polyEdges = new LinkedList<Vector2D>();
+		LinkedList<Vector2df> polyEdges = new LinkedList<Vector2df>();
 
-		final double angle = obj.getVisionAngle();
-		final double radius = obj.getVisionRange();
-		final double rotation = obj.getRotation();
+		final float angle = obj.getVisionAngle();
+		final float radius = obj.getVisionRange();
+		final float rotation = obj.getRotation();
 
-		Vector2D orientation = new Vector2D(1, 0);
+		Vector2df orientation = new Vector2df(1, 0);
 		orientation.rotate(rotation);
-		Vector2D start = new Vector2D(orientation);
+		Vector2df start = new Vector2df(orientation);
 		start.rotate(-angle / 2);
 
-		Vector2D work = start.copy();
-		final Vector2D u = obj.getPositionVector();
+		Vector2df work = start.copy();
+		final Vector2df u = obj.getPositionVector();
 
 		for (double i = 0; i < angle; i += ROTATION_STEP_RESOLUTION) {
-			Vector2D v = u.copy();
+			Vector2df v = u.copy();
 			v.add(work);
 
 			Line l = new Line(u, v);
-			Vector2D r = l.getDirectionalVector().getUnitVector();
-			r.mult(ROTATION_DIST_RESOLUTION);
+			Vector2f r = l.getDirectionalVector().normalise();
+			r.scale(ROTATION_DIST_RESOLUTION);
 			double distance = 0;
 			int j = 1;
-			Vector2D p = null;
+			Vector2df p = null;
 			while (distance < radius) {
 				p = l.getPointAt(ROTATION_DIST_RESOLUTION * j);
 				LinkedList<GameObject> objs = gameInformation
@@ -156,14 +158,14 @@ public class ClientLogicGameWorker extends LogicGameWorker {
 					}
 				}
 				j++;
-				distance = p.calculateDistance(u);
+				distance = p.distance(u);
 			}
 			polyEdges.add(p);
 			work.rotate(ROTATION_STEP_RESOLUTION);
 		}
 
 		java.awt.Polygon poly = new java.awt.Polygon();
-		for (Vector2D vector2d : polyEdges) {
+		for (Vector2df vector2d : polyEdges) {
 			poly.addPoint((int) Math.round(vector2d.getX()),
 					(int) Math.round(vector2d.getY()));
 		}

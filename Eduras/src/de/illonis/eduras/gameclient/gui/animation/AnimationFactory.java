@@ -9,7 +9,7 @@ import org.jdesktop.swing.animation.timing.sources.SwingTimerTimingSource;
 
 import de.illonis.edulog.EduLog;
 import de.illonis.eduras.gameclient.ClientData;
-import de.illonis.eduras.math.Vector2D;
+import de.illonis.eduras.math.Vector2df;
 
 /**
  * Manages animation framework and generates animations.
@@ -77,7 +77,7 @@ public final class AnimationFactory {
 	 *            animation.
 	 */
 	public static void runAt(AnimationNumber animationNumber,
-			Vector2D mapPosition, Object... params) {
+			Vector2df mapPosition, Object... params) {
 		// do not run animations on server side (it won't work either)
 		if (data == null)
 			return;
@@ -94,7 +94,7 @@ public final class AnimationFactory {
 	}
 
 	private static Animation createAnimation(AnimationNumber number,
-			Vector2D position) throws AnimationNotFoundException {
+			Vector2df position) throws AnimationNotFoundException {
 		switch (number) {
 		case DEMO:
 			return new DemoAnimation(position);

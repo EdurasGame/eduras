@@ -1,12 +1,14 @@
 package de.illonis.eduras.gameclient.gui.game;
 
+import org.newdawn.slick.geom.Rectangle;
+
 /**
  * GameCamera stores where current viewport of player is.
  * 
  * @author illonis
  * 
  */
-public class GameCamera extends org.newdawn.slick.geom.Rectangle {
+public class GameCamera extends Rectangle {
 
 	private static final long serialVersionUID = 1L;
 	private float scale;

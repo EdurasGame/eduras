@@ -7,9 +7,7 @@ import de.illonis.edulog.EduLog;
 import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.ObjectFactory.ObjectType;
 import de.illonis.eduras.Team;
-import de.illonis.eduras.exceptions.ShapeVerticesNotApplicableException;
 import de.illonis.eduras.settings.S;
-import de.illonis.eduras.shapes.Rectangle;
 import de.illonis.eduras.units.Unit;
 
 /**

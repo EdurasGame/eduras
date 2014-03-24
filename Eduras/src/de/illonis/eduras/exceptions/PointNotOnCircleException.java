@@ -2,7 +2,7 @@ package de.illonis.eduras.exceptions;
 
 import org.newdawn.slick.geom.Circle;
 
-import de.illonis.eduras.math.Vector2D;
+import de.illonis.eduras.math.Vector2df;
 
 /**
  * Thrown when the given point is not located on the given circle.
@@ -18,7 +18,7 @@ public class PointNotOnCircleException extends Exception {
 	private static final long serialVersionUID = 1L;
 
 	private final Circle circle;
-	private final Vector2D point;
+	private final Vector2df point;
 
 	/**
 	 * Create a PointNotOnCircleException.
@@ -28,7 +28,7 @@ public class PointNotOnCircleException extends Exception {
 	 * @param p
 	 *            Point
 	 */
-	public PointNotOnCircleException(Circle c, Vector2D p) {
+	public PointNotOnCircleException(Circle c, Vector2df p) {
 		circle = c;
 		point = p;
 	}
@@ -47,7 +47,7 @@ public class PointNotOnCircleException extends Exception {
 	 * 
 	 * @return the point
 	 */
-	public Vector2D getPoint() {
+	public Vector2df getPoint() {
 		return point;
 	}
 

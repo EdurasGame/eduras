@@ -10,7 +10,7 @@ import de.illonis.eduras.events.ObjectFactoryEvent;
 import de.illonis.eduras.events.SendUnitsEvent;
 import de.illonis.eduras.events.SetGameObjectAttributeEvent;
 import de.illonis.eduras.exceptions.DataMissingException;
-import de.illonis.eduras.exceptions.ShapeVerticesNotApplicableException;
+import de.illonis.eduras.exceptions.ShapeVector2dfsNotApplicableException;
 import de.illonis.eduras.gameclient.gui.animation.AnimationFactory;
 import de.illonis.eduras.gameclient.gui.animation.AnimationFactory.AnimationNumber;
 import de.illonis.eduras.gameobjects.BigBlock;
@@ -37,7 +37,7 @@ import de.illonis.eduras.items.weapons.SplashWeapon;
 import de.illonis.eduras.items.weapons.SplashedMissile;
 import de.illonis.eduras.items.weapons.SwordMissile;
 import de.illonis.eduras.items.weapons.SwordWeapon;
-import de.illonis.eduras.math.Vector2D;
+import de.illonis.eduras.math.Vector2df;
 import de.illonis.eduras.settings.S;
 import de.illonis.eduras.units.PlayerMainFigure;
 
@@ -161,7 +161,7 @@ public class ObjectFactory {
 			case BIGGERBLOCK:
 				try {
 					go = new BiggerBlock(logic.getGame(), timingSource, id);
-				} catch (ShapeVerticesNotApplicableException e) {
+				} catch (ShapeVector2dfsNotApplicableException e) {
 					L.log(Level.SEVERE, "shape vertices not applicable", e);
 					return;
 				}
@@ -172,7 +172,7 @@ public class ObjectFactory {
 			case BIGBLOCK:
 				try {
 					go = new BigBlock(logic.getGame(), timingSource, id);
-				} catch (ShapeVerticesNotApplicableException e) {
+				} catch (ShapeVector2dfsNotApplicableException e) {
 					L.log(Level.SEVERE, "shape vertices not applicable", e);
 					return;
 				}
@@ -285,7 +285,7 @@ public class ObjectFactory {
 		o.setPosition(w, h);
 		LinkedList<Integer> units = new LinkedList<Integer>();
 		units.add(999);
-		SendUnitsEvent sendEvent = new SendUnitsEvent(-1, new Vector2D(), units);
+		SendUnitsEvent sendEvent = new SendUnitsEvent(-1, new Vector2df(), units);
 		logic.onGameEventAppeared(sendEvent);
 	}
 }

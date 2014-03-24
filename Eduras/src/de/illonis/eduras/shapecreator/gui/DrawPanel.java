@@ -13,8 +13,8 @@ import java.util.Collection;
 
 import javax.swing.JPanel;
 
+import de.illonis.eduras.math.Vector2df;
 import de.illonis.eduras.shapecreator.DataHolder;
-import de.illonis.eduras.shapecreator.Vertice;
 
 /**
  * A drawing panel where user creates and edits polygon on.
@@ -30,7 +30,7 @@ public class DrawPanel extends JPanel {
 
 	private CoordinateSystem coordinateSystem;
 	private final DataHolder data;
-	private Vertice hoverVertice, selectedVertice;
+	private Vector2df hoverVector2df, selectedVector2df;
 
 	/**
 	 * Creates an new drawpanel.
@@ -63,31 +63,31 @@ public class DrawPanel extends JPanel {
 		g2d.fillRect(0, 0, getWidth(), getHeight());
 
 		coordinateSystem.draw(g2d);
-		paintVertices(g2d);
+		paintVector2dfs(g2d);
 	}
 
-	private void paintVertices(Graphics2D g2d) {
+	private void paintVector2dfs(Graphics2D g2d) {
 		Color shapeLineColor = data.getSettings().getShapeLineColor();
 		Color shapeDotColor = data.getSettings().getShapeDotColor();
 		Color shapeLastLineColor = data.getSettings().getShapeLastLineColor();
 
-		Collection<Vertice> vertices = data.getPolygon().getVertices();
+		Collection<Vector2df> vertices = data.getPolygon().getVector2dfs();
 		boolean first = true;
-		Vertice firstVertice = null;
-		Vertice last = null;
+		Vector2df firstVector2df = null;
+		Vector2df last = null;
 		GuiPoint p = null;
-		for (Vertice vertice : vertices) {
+		for (Vector2df vertice : vertices) {
 
 			p = coordinateSystem.coordinateToGui(vertice);
-			if (vertice == hoverVertice)
+			if (vertice == hoverVector2df)
 				g2d.setColor(data.getSettings().getHoverShapeDotColor());
-			else if (vertice == selectedVertice)
+			else if (vertice == selectedVector2df)
 				g2d.setColor(data.getSettings().getSelectedShapeDotColor());
 			else
 				g2d.setColor(shapeDotColor);
 			p.draw(g2d);
 			if (first) {
-				firstVertice = vertice;
+				firstVector2df = vertice;
 				first = false;
 			} else {
 				g2d.setStroke(new BasicStroke(1.5f));
@@ -100,7 +100,7 @@ public class DrawPanel extends JPanel {
 		if (vertices.size() > 1) {
 			// connect last point with first one
 			GuiPoint firstPoint = coordinateSystem
-					.coordinateToGui(firstVertice);
+					.coordinateToGui(firstVector2df);
 			g2d.setColor(shapeLastLineColor);
 			g2d.drawLine(p.x, p.y, firstPoint.x, firstPoint.y);
 		}
@@ -128,17 +128,17 @@ public class DrawPanel extends JPanel {
 	 * @param vert
 	 *            the hovered vertice.
 	 */
-	public void onVerticeHover(Vertice vert) {
+	public void onVector2dfHover(Vector2df vert) {
 		setCursor(MOVE_CURSOR);
-		hoverVertice = vert;
+		hoverVector2df = vert;
 	}
 
 	/**
 	 * Triggers that user's mouse is not above any vertice.
 	 */
-	public void onVerticeLeft() {
+	public void onVector2dfLeft() {
 		setCursor(Cursor.getDefaultCursor());
-		hoverVertice = null;
+		hoverVector2df = null;
 	}
 
 	/**
@@ -147,9 +147,9 @@ public class DrawPanel extends JPanel {
 	 * @param v
 	 *            the selected vertice.
 	 */
-	public void selectVertice(Vertice v) {
+	public void selectVector2df(Vector2df v) {
 		data.verticeSelectedOnGui(v);
-		onVerticeSelected(v);
+		onVector2dfSelected(v);
 	}
 
 	/**
@@ -158,8 +158,8 @@ public class DrawPanel extends JPanel {
 	 * @param vertice
 	 *            the selected vertice.
 	 */
-	public void onVerticeSelected(Vertice vertice) {
-		this.selectedVertice = vertice;
+	public void onVector2dfSelected(Vector2df vertice) {
+		this.selectedVector2df = vertice;
 	}
 
 }

@@ -1,7 +1,7 @@
 package de.illonis.eduras.events;
 
 import de.illonis.eduras.gameobjects.DynamicPolygonObject;
-import de.illonis.eduras.math.Vector2D;
+import de.illonis.eduras.math.Vector2df;
 
 /**
  * Event that indicates a polygon data change on a {@link DynamicPolygonObject}.
@@ -11,7 +11,7 @@ import de.illonis.eduras.math.Vector2D;
  */
 public class SetPolygonDataEvent extends ObjectEvent {
 
-	private final Vector2D[] vertices;
+	private final Vector2df[] vertices;
 
 	/**
 	 * Creates a new event of this type.
@@ -21,7 +21,7 @@ public class SetPolygonDataEvent extends ObjectEvent {
 	 * @param vertices
 	 *            the new vertices.
 	 */
-	public SetPolygonDataEvent(int objectId, Vector2D[] vertices) {
+	public SetPolygonDataEvent(int objectId, Vector2df[] vertices) {
 		super(GameEventNumber.SET_POLYGON_DATA, objectId);
 		this.vertices = vertices;
 
@@ -38,7 +38,7 @@ public class SetPolygonDataEvent extends ObjectEvent {
 	 * 
 	 * @author illonis
 	 */
-	public Vector2D[] getVertices() {
+	public Vector2df[] getVector2dfs() {
 		return vertices;
 	}
 

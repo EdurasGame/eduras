@@ -31,7 +31,7 @@ public abstract class LogicGameWorker implements Runnable, TimingSource {
 
 	protected final GameInformation gameInformation;
 	protected final ListenerHolder<? extends GameEventListener> listenerHolder;
-	private final HashMap<Integer, Double> oldRotation;
+	private final HashMap<Integer, Float> oldRotation;
 	private final Map<TimedEventHandler, Long> timingTargets;
 
 	private long lastUpdate;
@@ -48,7 +48,7 @@ public abstract class LogicGameWorker implements Runnable, TimingSource {
 			ListenerHolder<? extends GameEventListener> listenerHolder) {
 		this.gameInformation = gameInfo;
 		this.listenerHolder = listenerHolder;
-		oldRotation = new HashMap<Integer, Double>();
+		oldRotation = new HashMap<Integer, Float>();
 		lastUpdate = 0;
 		timingTargets = new HashMap<TimedEventHandler, Long>();
 	}
@@ -138,7 +138,7 @@ public abstract class LogicGameWorker implements Runnable, TimingSource {
 	 *            the time elapsed since last update in ms.
 	 * 
 	 */
-	protected abstract void gameUpdate(long delta);
+	public abstract void gameUpdate(long delta);
 
 	protected final boolean hasRotated(GameObject o) {
 		if (!oldRotation.containsKey(o.getId())) {

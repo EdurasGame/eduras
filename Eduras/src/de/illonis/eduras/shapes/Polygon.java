@@ -18,7 +18,7 @@ import de.illonis.eduras.math.BasicMath;
 import de.illonis.eduras.math.CollisionPoint;
 import de.illonis.eduras.math.Geometry;
 import de.illonis.eduras.math.Line;
-import de.illonis.eduras.math.Vector2D;
+import de.illonis.eduras.math.Vector2df;
 import de.illonis.eduras.shapecreator.FileCorruptException;
 import de.illonis.eduras.shapes.data.ShapeParser;
 import de.illonis.eduras.utils.Pair;
@@ -30,6 +30,7 @@ import de.illonis.eduras.utils.Pair;
  * @author Florian Mai <florian.ren.mai@googlemail.com>
  * 
  */
+@Deprecated
 public class Polygon extends ObjectShape {
 
 	private final static Logger L = EduLog.getLoggerFor(EdurasServer.class
@@ -41,13 +42,13 @@ public class Polygon extends ObjectShape {
 	 */
 	private static final int COLLISION_ACCURACY = 20;
 
-	private Vector2D[] vertices;
+	private Vector2df[] vertices;
 
 	/**
 	 * Creates a polygon with no vertices.
 	 */
 	public Polygon() {
-		this(new Vector2D[0]);
+		this(new Vector2df[0]);
 	}
 
 	/**
@@ -55,13 +56,13 @@ public class Polygon extends ObjectShape {
 	 * 
 	 * @param vertices
 	 */
-	public Polygon(Vector2D[] vertices) {
-		setVertices(vertices);
+	public Polygon(Vector2df[] vertices) {
+		setVector2dfs(vertices);
 	}
 
 	/**
 	 * Loads shapedata from file instead of setting it manually using the
-	 * {@link #setVertices(Vector2D[])} method.
+	 * {@link #setVector2dfs(Vector2df[])} method.
 	 * 
 	 * @param shapeFileName
 	 *            the name of the shapefile. Must be located in the
@@ -73,10 +74,10 @@ public class Polygon extends ObjectShape {
 	 */
 	protected final void loadFromFile(String shapeFileName)
 			throws FileCorruptException, IOException {
-		Vector2D[] shapeVerts = ShapeParser.readShape(getClass().getResource(
+		Vector2df[] shapeVerts = ShapeParser.readShape(getClass().getResource(
 				"data/" + shapeFileName));
 
-		setVertices(shapeVerts);
+		setVector2dfs(shapeVerts);
 	}
 
 	/**
@@ -86,7 +87,7 @@ public class Polygon extends ObjectShape {
 	 * @param vertices
 	 *            The array to set the vertices of this polygon to.
 	 */
-	public void setVertices(Vector2D[] vertices) {
+	public void setVector2dfs(Vector2df[] vertices) {
 		this.vertices = vertices;
 		calculateBoundingBox();
 	}
@@ -100,8 +101,8 @@ public class Polygon extends ObjectShape {
 	 * @return The line segments representing the borders of the shape.
 	 */
 	public LinkedList<Line> getBorderLines(GameObject object) {
-		return Geometry.getRelativeBorderLines(getAbsoluteVertices(object)
-				.toArray(new Vector2D[getAbsoluteVertices(object).size()]));
+		return Geometry.getRelativeBorderLines(getAbsoluteVector2dfs(object)
+				.toArray(new Vector2df[getAbsoluteVector2dfs(object).size()]));
 	}
 
 	/**
@@ -111,8 +112,8 @@ public class Polygon extends ObjectShape {
 	 * @return the vertices.
 	 * 
 	 */
-	public LinkedList<Vector2D> getVertices() {
-		LinkedList<Vector2D> result = new LinkedList<Vector2D>();
+	public LinkedList<Vector2df> getVector2dfs() {
+		LinkedList<Vector2df> result = new LinkedList<Vector2df>();
 		for (int i = 0; i < vertices.length; i++) {
 			result.add(vertices[i]);
 		}
@@ -124,7 +125,7 @@ public class Polygon extends ObjectShape {
 	 * 
 	 * @return The vertices as an array.
 	 */
-	public Vector2D[] getVerticesAsArray() {
+	public Vector2df[] getVector2dfsAsArray() {
 		return vertices;
 	}
 
@@ -136,28 +137,28 @@ public class Polygon extends ObjectShape {
 	 *            The object to which the shape belongs.
 	 * @return Returns a LinkedList of absolute vertices.
 	 */
-	public LinkedList<Vector2D> getAbsoluteVertices(GameObject object) {
+	public LinkedList<Vector2df> getAbsoluteVector2dfs(GameObject object) {
 		double objectXPos = object.getXPosition();
 		double objectYPos = object.getYPosition();
 
-		LinkedList<Vector2D> relativeVertices = getVertices();
-		LinkedList<Vector2D> absoluteVertices = new LinkedList<Vector2D>();
+		LinkedList<Vector2df> relativeVector2dfs = getVector2dfs();
+		LinkedList<Vector2df> absoluteVector2dfs = new LinkedList<Vector2df>();
 
-		for (Vector2D singleRelativeVertex : relativeVertices) {
+		for (Vector2df singleRelativeVertex : relativeVector2dfs) {
 
-			Vector2D singleRelativeVertexCopy = new Vector2D(
+			Vector2df singleRelativeVertexCopy = new Vector2df(
 					singleRelativeVertex);
 			singleRelativeVertexCopy.rotate(object.getRotation());
 
 			double absXPos = singleRelativeVertexCopy.getX() + objectXPos;
 			double absYPos = singleRelativeVertexCopy.getY() + objectYPos;
 
-			Vector2D singleAbsoluteVertice = new Vector2D(absXPos, absYPos);
+			Vector2df singleAbsoluteVector2df = new Vector2df(absXPos, absYPos);
 
-			absoluteVertices.add(singleAbsoluteVertice);
+			absoluteVector2dfs.add(singleAbsoluteVector2df);
 		}
 
-		return absoluteVertices;
+		return absoluteVector2dfs;
 	}
 
 	@Override
@@ -167,7 +168,7 @@ public class Polygon extends ObjectShape {
 
 		for (Line line : lines) {
 			for (Line borderLine : getBorderLines(thisObject)) {
-				Vector2D interceptPoint = Geometry
+				Vector2df interceptPoint = Geometry
 						.getSegmentLinesInterceptPoint(borderLine, line);
 
 				if (interceptPoint == null) {
@@ -192,7 +193,7 @@ public class Polygon extends ObjectShape {
 		}
 		ArrayList<Double> xValues = new ArrayList<Double>();
 		ArrayList<Double> yValues = new ArrayList<Double>();
-		for (Vector2D vertex : vertices) {
+		for (Vector2df vertex : vertices) {
 			xValues.add(vertex.getX());
 			yValues.add(vertex.getY());
 		}
@@ -206,11 +207,11 @@ public class Polygon extends ObjectShape {
 	}
 
 	@Override
-	public Vector2D[] getBorderPoints() {
+	public Vector2df[] getBorderPoints() {
 		LinkedList<Line> borderLines = Geometry
 				.getRelativeBorderLines(vertices);
 
-		Vector2D[] movementPoints = new Vector2D[COLLISION_ACCURACY
+		Vector2df[] movementPoints = new Vector2df[COLLISION_ACCURACY
 				* vertices.length];
 
 		int j = 0;
@@ -235,9 +236,9 @@ public class Polygon extends ObjectShape {
 	public boolean equals(Object obj) {
 		if (obj instanceof Polygon) {
 			Polygon p = (Polygon) obj;
-			if (getVertices().isEmpty())
-				return p.getVertices().isEmpty();
-			return p.getVertices().equals(getVertices());
+			if (getVector2dfs().isEmpty())
+				return p.getVector2dfs().isEmpty();
+			return p.getVector2dfs().equals(getVector2dfs());
 		} else
 			return super.equals(obj);
 	}
@@ -252,13 +253,13 @@ public class Polygon extends ObjectShape {
 
 		double rotationDiff = targetRotationAngle - thisObject.getRotation();
 
-		Vector2D posVector = thisObject.getPositionVector();
+		Vector2df posVector = thisObject.getPositionVector();
 
 		double distance = BasicMath.findShortestDistanceModulo(
 				targetRotationAngle, thisObject.getRotation(), 360);
 		boolean turnLeft = doesTurnLeft(distance);
 
-		LinkedList<Vector2D> interceptPoints = new LinkedList<Vector2D>();
+		LinkedList<Vector2df> interceptPoints = new LinkedList<Vector2df>();
 		for (GameObject anotherGameObject : gameInfo.getObjects().values()) {
 			interceptPoints.addAll(calculateInterceptPointsWithObject(
 					anotherGameObject, thisObject, turnLeft, rotationDiff));
@@ -338,20 +339,20 @@ public class Polygon extends ObjectShape {
 		}
 	}
 
-	private Collection<? extends Vector2D> calculateInterceptPointsWithObject(
+	private Collection<? extends Vector2df> calculateInterceptPointsWithObject(
 			GameObject anotherGameObject, GameObject thisObject,
 			boolean turnLeft, double rotationDiff) {
-		Vector2D posVector = thisObject.getPositionVector();
-		LinkedList<Vector2D> thisObjectAbsoluteVertices = getAbsoluteVertices(thisObject);
+		Vector2df posVector = thisObject.getPositionVector();
+		LinkedList<Vector2df> thisObjectAbsoluteVector2dfs = getAbsoluteVector2dfs(thisObject);
 
-		LinkedList<Vector2D> interceptPointsWithGameObject = new LinkedList<Vector2D>();
+		LinkedList<Vector2df> interceptPointsWithGameObject = new LinkedList<Vector2df>();
 
 		if (anotherGameObject.equals(thisObject)
 				|| !anotherGameObject.isCollidable()) {
 			return interceptPointsWithGameObject;
 		}
 
-		for (Vector2D anAbsoluteVertex : thisObjectAbsoluteVertices) {
+		for (Vector2df anAbsoluteVertex : thisObjectAbsoluteVector2dfs) {
 			Circle aRotationCircle = Geometry
 					.getCircleByCenterAndPointOnCircle(posVector,
 							anAbsoluteVertex);
@@ -359,7 +360,7 @@ public class Polygon extends ObjectShape {
 			// circle, forget about this at the moment, as only polygon is
 			// implemented so far
 			if (anotherGameObject.getShape() instanceof Circle) {
-				Pair<Vector2D, Vector2D> circleIntercepts = Geometry
+				Pair<Vector2df, Vector2df> circleIntercepts = Geometry
 						.getInterceptPointsOfCircles(
 								(Circle) anotherGameObject.getShape(),
 								anotherGameObject.getPositionVector(),
@@ -378,7 +379,7 @@ public class Polygon extends ObjectShape {
 //							.getShape();
 //					for (Line anotherObjectsBorderLine : othersShape
 //							.getBorderLines(anotherGameObject)) {
-//						Vector2D[] polygonInterceptPoints = Geometry
+//						Vector2df[] polygonInterceptPoints = Geometry
 //								.getCircleLineSegmentInterceptPoints(
 //										aRotationCircle, posVector,
 //										anotherObjectsBorderLine);
@@ -411,9 +412,9 @@ public class Polygon extends ObjectShape {
 			}
 
 			// make copy to avoid concurrentmodificationexception
-			LinkedList<Vector2D> copyOfInterceptPoints = new LinkedList<Vector2D>(
+			LinkedList<Vector2df> copyOfInterceptPoints = new LinkedList<Vector2df>(
 					interceptPointsWithGameObject);
-			for (Vector2D anInterceptPoint : copyOfInterceptPoints) {
+			for (Vector2df anInterceptPoint : copyOfInterceptPoints) {
 
 				try {
 					double angle = Geometry.getAngleForPointOnCircle(

@@ -12,6 +12,7 @@ import java.util.LinkedList;
  * @author illonis
  * 
  */
+@Deprecated
 public class Vector2D {
 
 	private double x;

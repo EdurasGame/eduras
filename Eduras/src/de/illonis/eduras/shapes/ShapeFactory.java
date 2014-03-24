@@ -11,7 +11,7 @@ import de.illonis.edulog.EduLog;
 import de.illonis.eduras.gameclient.datacache.CacheException;
 import de.illonis.eduras.gameclient.datacache.CacheInfo;
 import de.illonis.eduras.gameclient.datacache.ImageCache;
-import de.illonis.eduras.math.Vector2D;
+import de.illonis.eduras.math.Vector2df;
 import de.illonis.eduras.shapecreator.FileCorruptException;
 import de.illonis.eduras.shapes.ObjectShape.ShapeType;
 import de.illonis.eduras.shapes.data.ShapeParser;
@@ -28,7 +28,7 @@ public final class ShapeFactory {
 	private final static Logger L = EduLog.getLoggerFor(ShapeFactory.class
 			.getName());
 
-	private static Vector2D[] getVerticesForShape(ShapeType shapeType) {
+	private static Vector2df[] getVector2dfsForShape(ShapeType shapeType) {
 		try {
 			return ImageCache.getShapeData(shapeType);
 		} catch (CacheException e) {
@@ -36,7 +36,7 @@ public final class ShapeFactory {
 					+ " from cache, loading directly", e);
 			String shapeFile = CacheInfo.getShapeFileName(shapeType);
 			try {
-				Vector2D[] verts = ShapeParser.readShape(ShapeParser.class
+				Vector2df[] verts = ShapeParser.readShape(ShapeParser.class
 						.getResource(shapeFile));
 				return verts;
 			} catch (FileCorruptException | IOException e1) {
@@ -61,7 +61,7 @@ public final class ShapeFactory {
 		switch (shapeType) {
 
 		default:
-			Vector2D[] verts = getVerticesForShape(shapeType);
+			Vector2df[] verts = getVector2dfsForShape(shapeType);
 			float points[] = new float[verts.length * 2];
 
 			for (int i = 0; i < verts.length; i++) {

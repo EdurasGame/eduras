@@ -1,6 +1,5 @@
 package de.illonis.eduras.gameobjects;
 
-import java.awt.geom.Rectangle2D;
 import java.util.LinkedList;
 import java.util.Set;
 import java.util.TreeSet;

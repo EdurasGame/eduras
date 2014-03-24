@@ -7,7 +7,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.newdawn.slick.geom.Rectangle;
-import org.newdawn.slick.geom.Vector2f;
 
 import de.illonis.edulog.EduLog;
 import de.illonis.eduras.events.GameEvent.GameEventNumber;
@@ -22,7 +21,7 @@ import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.gameobjects.MoveableGameObject.Direction;
 import de.illonis.eduras.logicabstraction.EdurasInitializer;
 import de.illonis.eduras.logicabstraction.InformationProvider;
-import de.illonis.eduras.math.Vector2D;
+import de.illonis.eduras.math.Vector2df;
 import de.illonis.eduras.units.PlayerMainFigure;
 import de.illonis.eduras.units.PlayerMainFigure.InteractMode;
 
@@ -72,7 +71,7 @@ public class GuiInternalEventListener implements LoginPanelReactor,
 	}
 
 	@Override
-	public void onItemUse(int slotId, Vector2D target) {
+	public void onItemUse(int slotId, Vector2df target) {
 		ItemEvent event = new ItemEvent(GameEventNumber.ITEM_USE,
 				client.getOwnerID(), slotId);
 		event.setTarget(target);
@@ -188,11 +187,11 @@ public class GuiInternalEventListener implements LoginPanelReactor,
 	}
 
 	@Override
-	public void selectOrDeselectAt(Vector2D point) {
+	public void selectOrDeselectAt(Vector2df point) {
 		for (Entry<Integer, GameObject> obj : infoPro.getGameObjects()
 				.entrySet()) {
 			GameObject o = obj.getValue();
-			Vector2f f = new Vector2f((float) point.getX(),
+			Vector2df f = new Vector2df((float) point.getX(),
 					(float) point.getY());
 			if (o.isUnit() && o.isVisible() && o.getShape().contains(f.x, f.y)) {
 				client.getData().setSelectedUnit(obj.getKey());
@@ -203,7 +202,7 @@ public class GuiInternalEventListener implements LoginPanelReactor,
 	}
 
 	@Override
-	public void sendSelectedUnits(Vector2D target) {
+	public void sendSelectedUnits(Vector2df target) {
 		LinkedList<Integer> units = new LinkedList<Integer>(client.getData()
 				.getSelectedUnits());
 		if (units.isEmpty())
@@ -217,7 +216,7 @@ public class GuiInternalEventListener implements LoginPanelReactor,
 		}
 	}
 
-	public void onViewingDirectionChanged(Vector2D viewingPoint) {
+	public void onViewingDirectionChanged(Vector2df viewingPoint) {
 		PlayerMainFigure player;
 		try {
 			player = infoPro.getPlayer();
@@ -225,8 +224,8 @@ public class GuiInternalEventListener implements LoginPanelReactor,
 			L.log(Level.SEVERE, "Cannot find player main figure :(", e);
 			return;
 		}
-		viewingPoint.subtract(player.getPositionVector());
-		double angle = viewingPoint.getAngleToXAxis();
+		viewingPoint.sub(player.getPositionVector());
+		float angle = viewingPoint.getAngleToXAxis();
 		player.setRotation(angle);
 	}
 }

@@ -1,6 +1,6 @@
 package de.illonis.eduras.ai.movement;
 
-import de.illonis.eduras.math.Vector2D;
+import de.illonis.eduras.math.Vector2df;
 import de.illonis.eduras.settings.S;
 
 /**
@@ -22,7 +22,7 @@ public final class UnitMover {
 		this.motionUnit = motionTarget;
 	}
 
-	void startMoving(Vector2D target) {
+	void startMoving(Vector2df target) {
 		pathFinder.setTarget(target);
 		if (!isActive()) {
 			currentMotion = new MoverThread();

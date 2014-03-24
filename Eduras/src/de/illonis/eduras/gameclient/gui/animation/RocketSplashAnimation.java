@@ -6,7 +6,7 @@ import java.awt.Graphics2D;
 
 import org.jdesktop.core.animation.timing.Animator;
 
-import de.illonis.eduras.math.Vector2D;
+import de.illonis.eduras.math.Vector2df;
 
 /**
  * Animation displayed when rocket missile explodes.
@@ -20,7 +20,7 @@ public class RocketSplashAnimation extends Animation {
 	private int x, y, dim;
 	private final static BasicStroke STROKE = new BasicStroke(6f);
 
-	RocketSplashAnimation(Vector2D position) {
+	RocketSplashAnimation(Vector2df position) {
 		super("Rocket splash", 300, position);
 	}
 

@@ -1,9 +1,11 @@
 package de.illonis.eduras.gameobjects;
 
+import org.newdawn.slick.geom.Vector2f;
+
 import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.exceptions.MapBorderReachedException;
 import de.illonis.eduras.interfaces.Moveable;
-import de.illonis.eduras.math.Vector2D;
+import de.illonis.eduras.math.Vector2df;
 
 /**
  * A moveable gameobject. It differs from {@link GameObject} because it has a
@@ -27,8 +29,8 @@ public abstract class MoveableGameObject extends GameObject implements Moveable 
 
 	private Direction currentDirection;
 
-	private double speed = 0;
-	private Vector2D speedVector = new Vector2D();
+	private float speed = 0;
+	private Vector2df speedVector = new Vector2df();
 
 	/**
 	 * Returns true if movement direction is horizontal.
@@ -72,7 +74,7 @@ public abstract class MoveableGameObject extends GameObject implements Moveable 
 	 * @param speed
 	 *            new speed.
 	 */
-	public void setSpeed(double speed) {
+	public void setSpeed(float speed) {
 		this.speed = speed;
 	}
 
@@ -81,7 +83,7 @@ public abstract class MoveableGameObject extends GameObject implements Moveable 
 	 * 
 	 * @return speed of gameobject.
 	 */
-	public double getSpeed() {
+	public float getSpeed() {
 		return speed;
 	}
 
@@ -91,7 +93,7 @@ public abstract class MoveableGameObject extends GameObject implements Moveable 
 	 * @param speedVector
 	 *            new speed vector
 	 */
-	public void setSpeedVector(Vector2D speedVector) {
+	public void setSpeedVector(Vector2df speedVector) {
 		this.speedVector = speedVector;
 	}
 
@@ -102,32 +104,29 @@ public abstract class MoveableGameObject extends GameObject implements Moveable 
 	 * 
 	 * @author illonis
 	 */
-	public Vector2D getSpeedVector() {
+	public Vector2df getSpeedVector() {
 		return speedVector;
 	}
 
 	@Override
 	public void onMove(long delta) {
-		if (speedVector.isNull())
+		if (speedVector.x == 0 && speedVector.y == 0)
 			return;
-		double distance = speed * (delta / (double) 1000L);
-		Vector2D unitSpeed = speedVector.getUnitVector();
-		unitSpeed.mult(distance);
-		double targetX = unitSpeed.getX() + getXPosition();
-		double targetY = unitSpeed.getY() + getYPosition();
+		float distance = speed * (delta / (float) 1000L);
+		Vector2f target = speedVector.copy().normalise().scale(distance)
+				.add(getPositionVector());
 
-		Vector2D targetPos;
+		Vector2f targetPos;
 		try {
-			targetPos = this
-					.checkCollisionOnMove(new Vector2D(targetX, targetY));
-			setPosition((float)targetPos.getX(),(float) targetPos.getY());
+			targetPos = this.checkCollisionOnMove(target);
+			setPosition(targetPos);
 		} catch (MapBorderReachedException e) {
 			onMapBoundsReached();
 		}
 	}
 
 	@Override
-	public void onRotate(double rotationAngle) {
+	public void onRotate(float rotationAngle) {
 		rotationAngle = checkCollisionOnRotation(rotationAngle);
 		rotation = rotationAngle;
 	}
@@ -143,20 +142,20 @@ public abstract class MoveableGameObject extends GameObject implements Moveable 
 	 * @throws MapBorderReachedException
 	 *             if object reached map border.
 	 */
-	public Vector2D checkCollisionOnMove(Vector2D target)
+	public Vector2f checkCollisionOnMove(Vector2f target)
 			throws MapBorderReachedException {
-return target;
-//		Vector2D currentTarget = target;
-//		Vector2D collisionPoint = this.getShape().checkCollisionOnMove(
-//				getGame(), this, currentTarget);
-//
-//		while (!collisionPoint.equals(currentTarget)) {
-//			currentTarget = collisionPoint;
-//			collisionPoint = this.getShape().checkCollisionOnMove(getGame(),
-//					this, currentTarget);
-//		}
-//
-//		return currentTarget;
+		return target;
+		// Vector2df currentTarget = target;
+		// Vector2df collisionPoint = this.getShape().checkCollisionOnMove(
+		// getGame(), this, currentTarget);
+		//
+		// while (!collisionPoint.equals(currentTarget)) {
+		// currentTarget = collisionPoint;
+		// collisionPoint = this.getShape().checkCollisionOnMove(getGame(),
+		// this, currentTarget);
+		// }
+		//
+		// return currentTarget;
 	}
 
 	/**
@@ -167,9 +166,9 @@ return target;
 	 *            The absolute target angle the object tries to rotate to.
 	 * @return Returns the angle of the gameobject after the rotation.
 	 */
-	public double checkCollisionOnRotation(double targetRotationAngle) {
+	public float checkCollisionOnRotation(float targetRotationAngle) {
 		return targetRotationAngle;
-//		return this.getShape().checkCollisionOnRotation(getGame(), this,
-//				targetRotationAngle);
+		// return this.getShape().checkCollisionOnRotation(getGame(), this,
+		// targetRotationAngle);
 	}
 }

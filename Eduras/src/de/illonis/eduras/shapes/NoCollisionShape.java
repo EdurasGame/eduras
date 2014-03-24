@@ -6,7 +6,7 @@ import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.math.CollisionPoint;
 import de.illonis.eduras.math.Line;
-import de.illonis.eduras.math.Vector2D;
+import de.illonis.eduras.math.Vector2df;
 
 /**
  * A simple shape that is empty and has no collision.
@@ -17,8 +17,8 @@ import de.illonis.eduras.math.Vector2D;
 public final class NoCollisionShape extends ObjectShape {
 
 	@Override
-	public Vector2D checkCollisionOnMove(GameInformation game,
-			GameObject thisObject, Vector2D target) {
+	public Vector2df checkCollisionOnMove(GameInformation game,
+			GameObject thisObject, Vector2df target) {
 		return target;
 	}
 
@@ -29,7 +29,7 @@ public final class NoCollisionShape extends ObjectShape {
 	}
 
 	@Override
-	public Vector2D[] getBorderPoints() {
+	public Vector2df[] getBorderPoints() {
 		return null;
 	}
 

@@ -17,8 +17,8 @@ public class Line {
 	private final double b;
 	private final double c;
 
-	private final Vector2D u;
-	private final Vector2D v;
+	private final Vector2df u;
+	private final Vector2df v;
 
 	/**
 	 * Creates a line that goes through u and v.
@@ -26,7 +26,7 @@ public class Line {
 	 * @param u
 	 * @param v
 	 */
-	public Line(Vector2D u, Vector2D v) {
+	public Line(Vector2df u, Vector2df v) {
 
 		this.u = u;
 		this.v = v;
@@ -48,7 +48,7 @@ public class Line {
 	 *            The point to check.
 	 * @return True if line contains point, false otherwise.
 	 */
-	public boolean containsPoint(Vector2D point) {
+	public boolean containsPoint(Vector2df point) {
 		return Math.abs(a * point.getX() + b * point.getY() + c) < RANGE;
 	}
 
@@ -57,7 +57,7 @@ public class Line {
 	 * 
 	 * @return A position vector to the first point.
 	 */
-	public Vector2D getU() {
+	public Vector2df getU() {
 		return u;
 	}
 
@@ -66,7 +66,7 @@ public class Line {
 	 * 
 	 * @return A position vector to the second point.
 	 */
-	public Vector2D getV() {
+	public Vector2df getV() {
 		return v;
 	}
 
@@ -79,9 +79,9 @@ public class Line {
 	 *         vectors of which this line was made up. So if you call getU() on
 	 *         this line and add the directional vector to u, you will gain v.
 	 */
-	public Vector2D getDirectionalVector() {
-		Vector2D vec = new Vector2D(v);
-		vec.subtract(u);
+	public Vector2df getDirectionalVector() {
+		Vector2df vec = new Vector2df(v);
+		vec.sub(u);
 		return vec;
 	}
 
@@ -90,8 +90,8 @@ public class Line {
 	 * 
 	 * @return You will get a copy of the vector you gain calling getU().
 	 */
-	public Vector2D getSupportVector() {
-		Vector2D vec = new Vector2D(u);
+	public Vector2df getSupportVector() {
+		Vector2df vec = new Vector2df(u);
 		return vec;
 	}
 
@@ -104,12 +104,12 @@ public class Line {
 	 *            The multiplier.
 	 * @return Returns u + uv * lambda
 	 */
-	public Vector2D getPointAt(double lambda) {
+	public Vector2df getPointAt(float lambda) {
 
-		Vector2D resultPoint = new Vector2D(getU());
+		Vector2df resultPoint = new Vector2df(getU());
 
-		Vector2D temp = new Vector2D(getDirectionalVector());
-		temp.mult(lambda);
+		Vector2df temp = new Vector2df(getDirectionalVector());
+		temp.scale(lambda);
 
 		resultPoint.add(temp);
 

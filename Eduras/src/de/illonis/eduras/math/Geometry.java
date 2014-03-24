@@ -44,6 +44,17 @@ public class Geometry {
 	}
 
 	/**
+	 * Converts given degree value to radian.
+	 * 
+	 * @param degree
+	 *            value in degree.
+	 * @return value in radian.
+	 */
+	public static float toRadian(float degree) {
+		return (float) (degree * (Math.PI / 180));
+	}
+
+	/**
 	 * Converts given radian value to degree.
 	 * 
 	 * @param radian
@@ -52,6 +63,17 @@ public class Geometry {
 	 */
 	public static double toDegree(double radian) {
 		return BasicMath.calcModulo((radian * (180 / Math.PI)), 360);
+	}
+
+	/**
+	 * Converts given radian value to degree.
+	 * 
+	 * @param radian
+	 *            value in radian.
+	 * @return value in degree.
+	 */
+	public static float toDegree(float radian) {
+		return BasicMath.calcModulo((radian * (180 / (float)Math.PI)), 360);
 	}
 
 	/**
@@ -67,16 +89,16 @@ public class Geometry {
 	 * @return Returns a list containing the resulting lines.
 	 */
 	public static LinkedList<Line> getLinesBetweenShapePositions(
-			Vector2D[] vertices, Vector2D source, Vector2D destination) {
+			Vector2df[] vertices, Vector2df source, Vector2df destination) {
 
 		LinkedList<Line> lines = new LinkedList<Line>();
 
 		for (int i = 0; i < vertices.length; i++) {
 
-			Vector2D sourcePoint = new Vector2D(source);
+			Vector2df sourcePoint = new Vector2df(source);
 			sourcePoint.add(vertices[i]);
 
-			Vector2D destPoint = new Vector2D(destination);
+			Vector2df destPoint = new Vector2df(destination);
 			destPoint.add(vertices[i]);
 
 			lines.add(new Line(sourcePoint, destPoint));
@@ -97,15 +119,15 @@ public class Geometry {
 	 *         number of intercept points, one of them will be returned (but you
 	 *         cant say which).
 	 */
-	public static Vector2D getSegmentLinesInterceptPoint(Line first, Line second) {
+	public static Vector2df getSegmentLinesInterceptPoint(Line first, Line second) {
 
 		// use parameter equotation of lines and equalize them. this results in
 		// the following calculation
 
-		Vector2D firstSupportVector = first.getSupportVector();
-		Vector2D secondSupportVector = second.getSupportVector();
-		Vector2D firstDirectionalVector = first.getDirectionalVector();
-		Vector2D secondDirectionalVector = second.getDirectionalVector();
+		Vector2df firstSupportVector = first.getSupportVector();
+		Vector2df secondSupportVector = second.getSupportVector();
+		Vector2df firstDirectionalVector = first.getDirectionalVector();
+		Vector2df secondDirectionalVector = second.getDirectionalVector();
 
 		double firstSupportX = firstSupportVector.getX();
 		double firstSupportY = firstSupportVector.getY();
@@ -272,7 +294,7 @@ public class Geometry {
 	 *            The vertices to make the borderlines of
 	 * @return The resulting borderlines.
 	 */
-	public static LinkedList<Line> getRelativeBorderLines(Vector2D[] vertices) {
+	public static LinkedList<Line> getRelativeBorderLines(Vector2df[] vertices) {
 
 		LinkedList<Line> borderLines = new LinkedList<Line>();
 
@@ -301,10 +323,10 @@ public class Geometry {
 	 *         there is only one intercept point, one of the array entrys is
 	 *         null. If there is no intercept points, both entrys are left null.
 	 */
-	public static Vector2D[] getCircleLineSegmentInterceptPoints(Circle circle,
-			Vector2D centerPoint, Line singleLine) {
+	public static Vector2df[] getCircleLineSegmentInterceptPoints(Circle circle,
+			Vector2df centerPoint, Line singleLine) {
 
-		Vector2D[] result = new Vector2D[2];
+		Vector2df[] result = new Vector2df[2];
 
 		// the calculation of the intercept point is derived from the
 		// mathematical approach of simply having equations for the circle and
@@ -358,8 +380,8 @@ public class Geometry {
 
 		// check if the points are on the line seqment.
 
-		Vector2D firstInterceptPoint = null;
-		Vector2D secondInterceptPoint = null;
+		Vector2df firstInterceptPoint = null;
+		Vector2df secondInterceptPoint = null;
 
 		if (lambdaOne <= 1 && lambdaOne >= 0) {
 			firstInterceptPoint = singleLine.getPointAt(lambdaOne);
@@ -386,16 +408,16 @@ public class Geometry {
 	 * @return Returns the circle that was calculated with the given points.
 	 */
 	public static Circle getCircleByCenterAndPointOnCircle(
-			Vector2D centerPoint, Vector2D pointOnCircle) {
-		Vector2D diffVector = pointOnCircle.copy();
+			Vector2df centerPoint, Vector2df pointOnCircle) {
+		Vector2df diffVector = pointOnCircle.copy();
 		diffVector.subtract(centerPoint);
 		return new Circle((float) centerPoint.getX(),
-				(float) centerPoint.getY(), (float)diffVector.getLength());
+				(float) centerPoint.getY(), (float) diffVector.getLength());
 	}
 
 	/**
 	 * Calculates the intercept points of two {@link Circle}s. The given circles
-	 * and {@link Vector2D}s are not modified.
+	 * and {@link Vector2df}s are not modified.
 	 * 
 	 * @param circleOne
 	 * @param centerOfCircleOne
@@ -406,9 +428,9 @@ public class Geometry {
 	 * @return Returns a pair with both intercept points, if there are any, or
 	 *         null if there are no interceptions.
 	 */
-	public static Pair<Vector2D, Vector2D> getInterceptPointsOfCircles(
-			Circle circleOne, Vector2D centerOfCircleOne, Circle circleTwo,
-			Vector2D centerOfCircleTwo) {
+	public static Pair<Vector2df, Vector2df> getInterceptPointsOfCircles(
+			Circle circleOne, Vector2df centerOfCircleOne, Circle circleTwo,
+			Vector2df centerOfCircleTwo) {
 		double distance = centerOfCircleOne
 				.calculateDistance(centerOfCircleTwo);
 		if (circleOne.getRadius() + circleTwo.getRadius() < distance) {
@@ -421,7 +443,7 @@ public class Geometry {
 		return null;
 	}
 
-	public static double getDistanceToShape(Vector2D point, ObjectShape shape) {
+	public static double getDistanceToShape(Vector2df point, ObjectShape shape) {
 
 		// TODO: Implement this...
 		LinkedList<Line> lines = Geometry.getRelativeBorderLines(shape
@@ -446,7 +468,7 @@ public class Geometry {
 	 *             Thrown if the given point is not on the circle.
 	 */
 	public static double getAngleForPointOnCircle(Circle circle,
-			Vector2D centerPoint, Vector2D pointOnCircle)
+			Vector2df centerPoint, Vector2df pointOnCircle)
 			throws PointNotOnCircleException {
 
 		double distance = pointOnCircle.calculateDistance(centerPoint);
@@ -466,9 +488,9 @@ public class Geometry {
 	 *            the angle of the point.
 	 * @return point on the circle.
 	 */
-	public static Vector2D getRelativePointAtAngleOnCircle(Circle circle,
+	public static Vector2df getRelativePointAtAngleOnCircle(Circle circle,
 			double angle) {
-		Vector2D pointOnCircle = new Vector2D(circle.getRadius(), 0);
+		Vector2df pointOnCircle = new Vector2df(circle.getRadius(), 0);
 		pointOnCircle.rotate(angle);
 		return pointOnCircle;
 	}

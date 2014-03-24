@@ -9,44 +9,44 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import de.illonis.eduras.math.Vector2D;
+import de.illonis.eduras.math.Vector2df;
 
 /**
- * Unit test class for Vector2D.
+ * Unit test class for Vector2df.
  * 
  * @author Florian Mai <florian.ren.mai@googlemail.com>
  * 
  */
 public class VectorTests {
 
-	Vector2D vector, lengthVector;
+	Vector2df vector, lengthVector;
 
 	/**
 	 * Executed before each test to set up some vectors.
 	 */
 	@Before
 	public void setUp() {
-		vector = new Vector2D(100, 100);
-		lengthVector = new Vector2D(4, 3);
+		vector = new Vector2df(100, 100);
+		lengthVector = new Vector2df(4, 3);
 	}
 
 	/**
-	 * Tests the {@link de.illonis.eduras.math.Vector2D#rotate(double) rotate()}
-	 * method of a Vector2D.
+	 * Tests the {@link de.illonis.eduras.math.Vector2df#rotate(double) rotate()}
+	 * method of a Vector2df.
 	 */
 	@Test
 	public void rotations() {
-		Vector2D copy = vector.copy();
+		Vector2df copy = vector.copy();
 		copy.rotate(0);
 		assertEquals(vector, copy);
 		copy.rotate(360);
 		assertEquals(vector, copy);
 		copy.rotate(90);
-		assertEquals(new Vector2D(-100, 100), copy);
+		assertEquals(new Vector2df(-100, 100), copy);
 		copy.rotate(90);
-		assertEquals(new Vector2D(-100, -100), copy);
+		assertEquals(new Vector2df(-100, -100), copy);
 		copy.rotate(90);
-		Vector2D check = new Vector2D(100, -100);
+		Vector2df check = new Vector2df(100, -100);
 		assertEquals(check, copy);
 		copy.rotate(90);
 		assertEquals(vector, copy);
@@ -56,19 +56,19 @@ public class VectorTests {
 
 	@Test
 	public void angles() {
-		Vector2D posYAxis = new Vector2D(0, 1);
-		Vector2D negYAxis = new Vector2D(0.1, 1);
+		Vector2df posYAxis = new Vector2df(0, 1);
+		Vector2df negYAxis = new Vector2df(0.1, 1);
 
 		assertTrue(Math.abs(posYAxis.getAngleToXAxis() - 90) < 0.0001);
 
 		assertTrue(Math.abs(posYAxis.getAngleBetween(negYAxis)) - 180 < 1);
 
-		assertTrue(Math.abs(new Vector2D(-1, 0).getAngleToXAxis() - 180) < 0.00001);
+		assertTrue(Math.abs(new Vector2df(-1, 0).getAngleToXAxis() - 180) < 0.00001);
 	}
 
 	/**
-	 * Tests the {@link de.illonis.eduras.math.Vector2D#mult(double) mult()}
-	 * method of a Vector2D.
+	 * Tests the {@link de.illonis.eduras.math.Vector2df#mult(double) mult()}
+	 * method of a Vector2df.
 	 */
 	@Test
 	public void mult() {
@@ -78,9 +78,9 @@ public class VectorTests {
 	}
 
 	/**
-	 * Tests the {@link de.illonis.eduras.math.Vector2D#getLength() getLength()}
-	 * and {@link de.illonis.eduras.math.Vector2D#setLength(double) setLength()}
-	 * methods of a Vector2D.
+	 * Tests the {@link de.illonis.eduras.math.Vector2df#getLength() getLength()}
+	 * and {@link de.illonis.eduras.math.Vector2df#setLength(double) setLength()}
+	 * methods of a Vector2df.
 	 */
 	@Test
 	public void lengthTests() {
@@ -96,7 +96,7 @@ public class VectorTests {
 		assertEquals("Length of unit vector", 1, lengthVector.getUnitVector()
 				.getLength(), 0);
 
-		Vector2D second = lengthVector.copy();
+		Vector2df second = lengthVector.copy();
 		second.invert();
 		lengthVector.mult(-1);
 
@@ -105,12 +105,12 @@ public class VectorTests {
 	}
 
 	/**
-	 * Tests the {@link de.illonis.eduras.math.Vector2D#getUnitVector()
-	 * getUnitVector()} method of a Vector2D.
+	 * Tests the {@link de.illonis.eduras.math.Vector2df#getUnitVector()
+	 * getUnitVector()} method of a Vector2df.
 	 */
 	@Test
 	public void unitVectorTests() {
-		Vector2D second = lengthVector.copy();
+		Vector2df second = lengthVector.copy();
 		second.mult(17.34);
 		assertEquals(
 				"Unitvectors of two linear dependend vectors should be the same.",
@@ -119,27 +119,27 @@ public class VectorTests {
 
 	/**
 	 * Tests the
-	 * {@link de.illonis.eduras.math.Vector2D#findShortestDistance(LinkedList, Vector2D)
-	 * findShortestDistance()} method of a Vector2D.
+	 * {@link de.illonis.eduras.math.Vector2df#findShortestDistance(LinkedList, Vector2df)
+	 * findShortestDistance()} method of a Vector2df.
 	 */
 	@Test
 	public void findClosestPoint() {
 
-		LinkedList<Vector2D> otherVectors = new LinkedList<Vector2D>();
+		LinkedList<Vector2df> otherVectors = new LinkedList<Vector2df>();
 
 		otherVectors.add(vector);
-		assertTrue(Vector2D.findShortestDistance(otherVectors, vector) == vector);
-		assertTrue(Vector2D.findShortestDistance(otherVectors, new Vector2D(0,
+		assertTrue(Vector2df.findShortestDistance(otherVectors, vector) == vector);
+		assertTrue(Vector2df.findShortestDistance(otherVectors, new Vector2df(0,
 				0)) == vector);
 
-		Vector2D closeVector = new Vector2D(101, 100);
-		Vector2D anotherCloseVector = new Vector2D(100, 101);
+		Vector2df closeVector = new Vector2df(101, 100);
+		Vector2df anotherCloseVector = new Vector2df(100, 101);
 
 		otherVectors.clear();
 		otherVectors.add(closeVector);
 		otherVectors.add(anotherCloseVector);
 
-		assertTrue(Vector2D.findShortestDistance(otherVectors, vector) == closeVector);
+		assertTrue(Vector2df.findShortestDistance(otherVectors, vector) == closeVector);
 
 	}
 

@@ -8,7 +8,7 @@ import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.gameobjects.MoveableGameObject;
 import de.illonis.eduras.gameobjects.TimingSource;
-import de.illonis.eduras.math.Vector2D;
+import de.illonis.eduras.math.Vector2df;
 import de.illonis.eduras.settings.S;
 import de.illonis.eduras.units.Unit;
 
@@ -110,10 +110,10 @@ public abstract class Missile extends MoveableGameObject {
 		if (maxRange == 0)
 			super.onMove(delta);
 		else {
-			Vector2D lastPos = getPositionVector();
+			Vector2df lastPos = getPositionVector();
 			super.onMove(delta);
-			Vector2D newPos = getPositionVector();
-			rangeMoved += lastPos.calculateDistance(newPos);
+			Vector2df newPos = getPositionVector();
+			rangeMoved += lastPos.distance(newPos);
 			if (rangeMoved > maxRange)
 				removeSelf();
 		}

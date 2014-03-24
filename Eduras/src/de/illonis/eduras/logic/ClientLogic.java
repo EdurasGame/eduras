@@ -19,7 +19,7 @@ import de.illonis.eduras.events.MovementEvent;
 import de.illonis.eduras.events.ObjectFactoryEvent;
 import de.illonis.eduras.events.SetAmmunitionEvent;
 import de.illonis.eduras.events.SetBooleanGameObjectAttributeEvent;
-import de.illonis.eduras.events.SetDoubleGameObjectAttributeEvent;
+import de.illonis.eduras.events.SetFloatGameObjectAttributeEvent;
 import de.illonis.eduras.events.SetGameModeEvent;
 import de.illonis.eduras.events.SetGameObjectAttributeEvent;
 import de.illonis.eduras.events.SetIntegerGameObjectAttributeEvent;
@@ -89,8 +89,8 @@ public class ClientLogic implements GameLogicInterface {
 			case SET_POS_TCP:
 			case SET_POS_UDP:
 				MovementEvent moveEvent = (MovementEvent) event;
-				float newXPos = (float)moveEvent.getNewXPos();
-				float newYPos = (float)moveEvent.getNewYPos();
+				float newXPos = (float) moveEvent.getNewXPos();
+				float newYPos = (float) moveEvent.getNewYPos();
 				GameObject o = gameInfo.findObjectById(moveEvent.getObjectId());
 				if (o == null)
 					break;
@@ -124,7 +124,7 @@ public class ClientLogic implements GameLogicInterface {
 				}
 				if (gameObj instanceof DynamicPolygonObject) {
 					((DynamicPolygonObject) gameObj)
-							.setPolygonVertices(polyEvent.getVertices());
+							.setPolygonVector2dfs(polyEvent.getVector2dfs());
 				} else {
 					L.warning("Given object id in SET_POLYGON_DATA event does not match a DynamicPolygonBlock, instead object is a "
 							+ gameObj.getClass().getName());
@@ -141,10 +141,10 @@ public class ClientLogic implements GameLogicInterface {
 				w.setCurrentAmmunition(setAmmuEvent.getNewValue());
 				break;
 			case SET_VISION_ANGLE:
-				if (!(event instanceof SetGameObjectAttributeEvent<?>)) {
+				if (!(event instanceof SetFloatGameObjectAttributeEvent)) {
 					break;
 				}
-				SetDoubleGameObjectAttributeEvent setAngleEvent = (SetDoubleGameObjectAttributeEvent) event;
+				SetFloatGameObjectAttributeEvent setAngleEvent = (SetFloatGameObjectAttributeEvent) event;
 				GameObject angleGameObject = gameInfo
 						.findObjectById(setAngleEvent.getObjectId());
 				if (angleGameObject == null) {
@@ -153,10 +153,10 @@ public class ClientLogic implements GameLogicInterface {
 				angleGameObject.setVisionAngle(setAngleEvent.getNewValue());
 				break;
 			case SET_VISION_RANGE:
-				if (!(event instanceof SetGameObjectAttributeEvent<?>)) {
+				if (!(event instanceof SetFloatGameObjectAttributeEvent)) {
 					break;
 				}
-				SetDoubleGameObjectAttributeEvent setRangeEvent = (SetDoubleGameObjectAttributeEvent) event;
+				SetFloatGameObjectAttributeEvent setRangeEvent = (SetFloatGameObjectAttributeEvent) event;
 				GameObject rangeGameObject = gameInfo
 						.findObjectById(setRangeEvent.getObjectId());
 				if (rangeGameObject == null) {
@@ -165,10 +165,10 @@ public class ClientLogic implements GameLogicInterface {
 				rangeGameObject.setVisionAngle(setRangeEvent.getNewValue());
 				break;
 			case SET_ROTATION:
-				if (!(event instanceof SetGameObjectAttributeEvent<?>)) {
+				if (!(event instanceof SetFloatGameObjectAttributeEvent)) {
 					break;
 				}
-				SetDoubleGameObjectAttributeEvent setRotationEvent = (SetDoubleGameObjectAttributeEvent) event;
+				SetFloatGameObjectAttributeEvent setRotationEvent = (SetFloatGameObjectAttributeEvent) event;
 				GameObject gameObject = gameInfo
 						.findObjectById(setRotationEvent.getObjectId());
 				if (gameObject == null) {
@@ -575,10 +575,11 @@ public class ClientLogic implements GameLogicInterface {
 	}
 
 	@Override
-	public void startWorker() {
+	public LogicGameWorker startWorker() {
 		workerThread = new Thread(lgw);
 		workerThread.setName("ClientLogicGameWorker");
 		workerThread.start();
+		return lgw;
 	}
 
 }

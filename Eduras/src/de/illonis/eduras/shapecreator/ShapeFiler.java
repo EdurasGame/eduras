@@ -8,6 +8,8 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.URL;
 
+import de.illonis.eduras.math.Vector2df;
+
 /**
  * Handle loading and saving of shapes.<br>
  * Shape files must have a correct syntax as described in docbook and use the
@@ -50,10 +52,10 @@ public class ShapeFiler {
 				continue;
 			String[] values = line.split(",");
 			try {
-				double x = Double.parseDouble(values[0].trim());
-				double y = Double.parseDouble(values[1].trim());
+				float x = Float.parseFloat(values[0].trim());
+				float y = Float.parseFloat(values[1].trim());
 
-				polygon.addVertice(new Vertice(x, y));
+				polygon.addVector2df(new Vector2df(x, y));
 			} catch (NumberFormatException e) {
 				throw new FileCorruptException(inputFile.toString());
 			}
@@ -80,7 +82,7 @@ public class ShapeFiler {
 		BufferedWriter writer = new BufferedWriter(new PrintWriter(outputFile,
 				ENCODING));
 
-		for (Vertice v : shape.getVertices()) {
+		for (Vector2df v : shape.getVector2dfs()) {
 			writer.write(v.getX() + "," + v.getY());
 			writer.newLine();
 		}

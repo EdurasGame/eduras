@@ -7,7 +7,7 @@ import javax.swing.ImageIcon;
 
 import de.illonis.eduras.ObjectFactory.ObjectType;
 import de.illonis.eduras.gameclient.datacache.CacheInfo.ImageKey;
-import de.illonis.eduras.math.Vector2D;
+import de.illonis.eduras.math.Vector2df;
 import de.illonis.eduras.shapes.ObjectShape.ShapeType;
 
 /**
@@ -18,13 +18,13 @@ import de.illonis.eduras.shapes.ObjectShape.ShapeType;
  */
 public final class ImageCache {
 
-	private final static HashMap<ShapeType, Vector2D[]> shapeData = new HashMap<ShapeType, Vector2D[]>();
+	private final static HashMap<ShapeType, Vector2df[]> shapeData = new HashMap<ShapeType, Vector2df[]>();
 	private final static HashMap<ObjectType, BufferedImage> objectImages = new HashMap<ObjectType, BufferedImage>();
 	private final static HashMap<ImageKey, BufferedImage> guiImages = new HashMap<ImageKey, BufferedImage>();
 	private final static HashMap<ImageKey, ImageIcon> imageIcons = new HashMap<ImageKey, ImageIcon>();
 	private final static HashMap<ObjectType, BufferedImage> inventoryIcons = new HashMap<ObjectType, BufferedImage>();
 
-	static void addShape(ShapeType shapeType, Vector2D[] verts) {
+	static void addShape(ShapeType shapeType, Vector2df[] verts) {
 		shapeData.put(shapeType, verts);
 	}
 
@@ -53,8 +53,8 @@ public final class ImageCache {
 	 * @throws CacheException
 	 *             if vertices for that shape are not cached.
 	 */
-	public static Vector2D[] getShapeData(ShapeType type) throws CacheException {
-		Vector2D[] verts = shapeData.get(type);
+	public static Vector2df[] getShapeData(ShapeType type) throws CacheException {
+		Vector2df[] verts = shapeData.get(type);
 		if (verts == null)
 			throw new CacheException("No cached data found for " + type);
 		return verts;

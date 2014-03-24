@@ -1,6 +1,6 @@
 package de.illonis.eduras.shapes;
 
-import de.illonis.eduras.math.Vector2D;
+import de.illonis.eduras.math.Vector2df;
 
 /**
  * A basic house.
@@ -15,9 +15,9 @@ public class House extends Polygon {
 	 */
 	public House() {
 		// FIXME: change coordinates.
-		Vector2D vertices[] = { new Vector2D(0, 20), new Vector2D(20, 0),
-				new Vector2D(40, 20), new Vector2D(40, 60),
-				new Vector2D(0, 60) };
-		setVertices(vertices);
+		Vector2df vertices[] = { new Vector2df(0, 20), new Vector2df(20, 0),
+				new Vector2df(40, 20), new Vector2df(40, 60),
+				new Vector2df(0, 60) };
+		setVector2dfs(vertices);
 	}
 }

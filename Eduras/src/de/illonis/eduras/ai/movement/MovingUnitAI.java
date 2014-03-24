@@ -2,7 +2,7 @@ package de.illonis.eduras.ai.movement;
 
 import de.illonis.eduras.ai.AIControllable;
 import de.illonis.eduras.ai.UnitAI;
-import de.illonis.eduras.math.Vector2D;
+import de.illonis.eduras.math.Vector2df;
 
 /**
  * A basic unit AI that supports moving and shooting.
@@ -39,7 +39,7 @@ public class MovingUnitAI implements UnitAI {
 	 * @param direction
 	 *            the target.
 	 */
-	public void moveTo(Vector2D direction) {
+	public void moveTo(Vector2df direction) {
 		mover.startMoving(direction);
 	}
 
@@ -49,7 +49,7 @@ public class MovingUnitAI implements UnitAI {
 	 * @param direction
 	 *            shooting direction.
 	 */
-	public void shootAt(Vector2D direction) {
+	public void shootAt(Vector2df direction) {
 		// TODO: implement
 	}
 

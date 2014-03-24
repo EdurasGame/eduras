@@ -18,6 +18,6 @@ public class PacmanTemplate extends CircleTemplate {
 	 */
 	public PacmanTemplate() {
 		super();
-		getDefaultVertices().get(4).update(4, 1);
+		getDefaultVector2dfs().get(4).set(4, 1);
 	}
 }

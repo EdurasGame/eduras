@@ -4,7 +4,6 @@ import org.newdawn.slick.geom.Rectangle;
 
 import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.ObjectFactory.ObjectType;
-import de.illonis.eduras.shapes.House;
 
 /**
  * A simple building.

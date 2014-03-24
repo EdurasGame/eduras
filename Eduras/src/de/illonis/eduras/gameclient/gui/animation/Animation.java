@@ -6,7 +6,7 @@ import java.util.concurrent.TimeUnit;
 import org.jdesktop.core.animation.timing.Animator;
 import org.jdesktop.core.animation.timing.TimingTarget;
 
-import de.illonis.eduras.math.Vector2D;
+import de.illonis.eduras.math.Vector2df;
 
 /**
  * A graphical animation on the game panel.
@@ -19,14 +19,14 @@ public abstract class Animation implements TimingTarget {
 	private long duration;
 	private long repeatCount;
 	private long startDelay;
-	protected Vector2D position;
+	protected Vector2df position;
 	private boolean running;
 
-	Animation(String name, long duration, Vector2D position) {
+	Animation(String name, long duration, Vector2df position) {
 		this(name, duration, position, 1);
 	}
 
-	Animation(String name, long duration, Vector2D position, long repeatCount) {
+	Animation(String name, long duration, Vector2df position, long repeatCount) {
 		this.name = name;
 		this.duration = duration;
 		this.repeatCount = repeatCount;

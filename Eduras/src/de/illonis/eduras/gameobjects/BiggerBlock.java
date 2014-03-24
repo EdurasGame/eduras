@@ -2,7 +2,7 @@ package de.illonis.eduras.gameobjects;
 
 import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.ObjectFactory.ObjectType;
-import de.illonis.eduras.exceptions.ShapeVerticesNotApplicableException;
+import de.illonis.eduras.exceptions.ShapeVector2dfsNotApplicableException;
 import de.illonis.eduras.settings.S;
 
 /**
@@ -29,11 +29,11 @@ public class BiggerBlock extends Block {
 	 *            y-position.
 	 * @param id
 	 *            object id
-	 * @throws ShapeVerticesNotApplicableException
+	 * @throws ShapeVector2dfsNotApplicableException
 	 */
 	public BiggerBlock(GameInformation game, TimingSource timingSource,
 			double xPos, double yPos, int id)
-			throws ShapeVerticesNotApplicableException {
+			throws ShapeVector2dfsNotApplicableException {
 		super(game, timingSource, xPos, yPos, WIDTH, HEIGHT, id);
 		setObjectType(ObjectType.BIGGERBLOCK);
 	}
@@ -47,10 +47,10 @@ public class BiggerBlock extends Block {
 	 *            the timing source.
 	 * @param id
 	 *            object id.
-	 * @throws ShapeVerticesNotApplicableException
+	 * @throws ShapeVector2dfsNotApplicableException
 	 */
 	public BiggerBlock(GameInformation game, TimingSource timingSource, int id)
-			throws ShapeVerticesNotApplicableException {
+			throws ShapeVector2dfsNotApplicableException {
 		this(game, timingSource, 0, 0, id);
 	}
 

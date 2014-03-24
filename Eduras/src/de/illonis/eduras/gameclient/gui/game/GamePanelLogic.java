@@ -27,9 +27,10 @@ import de.illonis.eduras.gameclient.gui.InputKeyHandler;
 import de.illonis.eduras.gameclient.gui.TimedTasksHolderGUI;
 import de.illonis.eduras.gameclient.gui.hud.DragSelectionRectangle;
 import de.illonis.eduras.gameclient.gui.hud.UserInterface;
+import de.illonis.eduras.logic.LogicGameWorker;
 import de.illonis.eduras.logicabstraction.EdurasInitializer;
 import de.illonis.eduras.logicabstraction.InformationProvider;
-import de.illonis.eduras.math.Vector2D;
+import de.illonis.eduras.math.Vector2df;
 
 /**
  * A panel that represents the gameworld. All world objects and user interface
@@ -119,7 +120,7 @@ public class GamePanelLogic extends ClientGuiStepLogic implements
 				hudNotifier, cache);
 		renderer = new GameRenderer(camera, userInterface, infoPro, data);
 		userInterface.setRenderer(renderer);
-		//renderer.setTarget(gui);
+		// renderer.setTarget(gui);
 	}
 
 	/**
@@ -127,7 +128,7 @@ public class GamePanelLogic extends ClientGuiStepLogic implements
 	 * 
 	 * @return current scale factor.
 	 */
-	double getCurrentScale() {
+	float getCurrentScale() {
 		return renderer.getCurrentScale();
 	}
 
@@ -140,12 +141,15 @@ public class GamePanelLogic extends ClientGuiStepLogic implements
 	}
 
 	/**
-	 * Starts rendering process.
+	 * Starts rendering process and logic updates.
+	 * 
+	 * @param worker
+	 *            the worker used for update.
 	 */
-	private void startRendering() {
-//		renderer.startRendering();
+	private void startGame(LogicGameWorker worker) {
+		// renderer.startRendering();
 		try {
-			gui.start();
+			gui.start(worker);
 		} catch (SlickException e) {
 			L.log(Level.WARNING, "TODO: message", e);
 		}
@@ -154,14 +158,15 @@ public class GamePanelLogic extends ClientGuiStepLogic implements
 	@Override
 	public void onShown() {
 		camera.reset();
-		EdurasInitializer.getInstance().startLogicWorker();
+		LogicGameWorker worker = EdurasInitializer.getInstance()
+				.startLogicWorker();
 		initUserInterface();
 		gui.addComponentListener(resizeMonitor);
 		gui.addMouseListener(mouseHandler);
 		gui.addMouseMotionListener(mouseHandler);
 		gui.addMouseMotionListener(cml);
 		gui.addMouseListener(cml);
-		startRendering();
+		startGame(worker);
 		doTimedTasks();
 		notifyGuiSizeChanged();
 		gui.addKeyListener(keyHandler);
@@ -248,12 +253,12 @@ public class GamePanelLogic extends ClientGuiStepLogic implements
 	 *            point to convert.
 	 * @return game-coordinate point.
 	 */
-	public Vector2D computeGuiPointToGameCoordinate(Vector2D v) {
-		double scale = getCurrentScale();
-		Vector2D vec = new Vector2D(v);
-		vec.modifyX(camera.getX() * scale);
-		vec.modifyY(camera.getY() * scale);
-		vec.mult(1 / scale);
+	public Vector2df computeGuiPointToGameCoordinate(Vector2df v) {
+		float scale = getCurrentScale();
+		Vector2df vec = new Vector2df(v);
+		vec.x += camera.getX() * scale;
+		vec.y += camera.getY() * scale;
+		vec.scale(1 / scale);
 		return vec;
 	}
 
@@ -262,11 +267,11 @@ public class GamePanelLogic extends ClientGuiStepLogic implements
 	 * 
 	 * @return mouse position computed to ingame point.
 	 */
-	public Vector2D getCurrentMousePos() {
+	public Vector2df getCurrentMousePos() {
 		PointerInfo pi = MouseInfo.getPointerInfo();
 		Point mp = pi.getLocation();
 		Point pos = getLocationOnScreen();
-		Vector2D p = new Vector2D(mp.x - pos.x, mp.y - pos.y);
+		Vector2df p = new Vector2df(mp.x - pos.x, mp.y - pos.y);
 		return computeGuiPointToGameCoordinate(p);
 	}
 

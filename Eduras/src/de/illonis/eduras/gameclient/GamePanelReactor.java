@@ -3,7 +3,7 @@ package de.illonis.eduras.gameclient;
 import java.awt.geom.Rectangle2D;
 
 import de.illonis.eduras.gameobjects.MoveableGameObject.Direction;
-import de.illonis.eduras.math.Vector2D;
+import de.illonis.eduras.math.Vector2df;
 import de.illonis.eduras.units.PlayerMainFigure;
 
 /**
@@ -23,7 +23,7 @@ public interface GamePanelReactor {
 	 * @param target
 	 *            the target location.
 	 */
-	void onItemUse(int slotId, Vector2D target);
+	void onItemUse(int slotId, Vector2df target);
 
 	/**
 	 * Triggers start of movement of clients {@link PlayerMainFigure}.
@@ -66,7 +66,7 @@ public interface GamePanelReactor {
 	 * @param point
 	 *            the point where user clicked.
 	 */
-	void selectOrDeselectAt(Vector2D point);
+	void selectOrDeselectAt(Vector2df point);
 
 	/**
 	 * Indicates to trigger a send units event to server with currently selected
@@ -75,6 +75,6 @@ public interface GamePanelReactor {
 	 * @param target
 	 *            the target location.
 	 */
-	void sendSelectedUnits(Vector2D target);
+	void sendSelectedUnits(Vector2df target);
 
 }

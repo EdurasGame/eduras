@@ -19,13 +19,13 @@ public class CircleTemplate extends ShapeTemplate {
 	public CircleTemplate() {
 		int max = 15;
 		int radius = 30;
-		double r = 0;
-		double c = Math.PI * 2;
+		float r = 0;
+		float c = (float) Math.PI * 2;
 		while (r < c) {
-			double x = Math.sin(r) * radius;
-			double y = Math.cos(r) * radius;
-			addVertice(x, y);
-			r += (double) c / max;
+			float x = (float) Math.sin(r) * radius;
+			float y = (float) Math.cos(r) * radius;
+			addVector2df(x, y);
+			r += (float) c / max;
 		}
 	}
 }

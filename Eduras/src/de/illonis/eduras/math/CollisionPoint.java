@@ -20,8 +20,8 @@ public class CollisionPoint {
 	private final static Logger L = EduLog.getLoggerFor(CollisionPoint.class
 			.getName());
 
-	private final Vector2D interceptPoint;
-	private final Vector2D distanceVector;
+	private final Vector2df interceptPoint;
+	private final Vector2df distanceVector;
 
 	/**
 	 * Creates a new point of collision.
@@ -31,7 +31,7 @@ public class CollisionPoint {
 	 * @param distanceVector
 	 *            The distancevector to this collision
 	 */
-	public CollisionPoint(Vector2D interceptPoint, Vector2D distanceVector) {
+	public CollisionPoint(Vector2df interceptPoint, Vector2df distanceVector) {
 		this.interceptPoint = interceptPoint;
 		this.distanceVector = distanceVector;
 	}
@@ -41,7 +41,7 @@ public class CollisionPoint {
 	 * 
 	 * @return point of collision.
 	 */
-	public Vector2D getInterceptPoint() {
+	public Vector2df getInterceptPoint() {
 		return interceptPoint;
 	}
 
@@ -59,7 +59,7 @@ public class CollisionPoint {
 	 * 
 	 * @return The distanceVector.
 	 */
-	public Vector2D getDistanceVector() {
+	public Vector2df getDistanceVector() {
 		return distanceVector;
 	}
 
@@ -102,10 +102,10 @@ public class CollisionPoint {
 	 * @return Returns the correlating CollisionPoint.
 	 */
 	public static CollisionPoint createCollisionPointByInterceptPoint(
-			Vector2D interceptPoint, Line line) {
+			Vector2df interceptPoint, Line line) {
 		double distanceVectorX = interceptPoint.getX() - line.getU().getX();
 		double distanceVectorY = interceptPoint.getY() - line.getU().getY();
-		Vector2D distanceVector = new Vector2D(distanceVectorX, distanceVectorY);
+		Vector2df distanceVector = new Vector2df(distanceVectorX, distanceVectorY);
 
 		L.finest("[LOGIC][TRIANGLE] Collision at " + interceptPoint.getX()
 				+ " , " + interceptPoint.getY());

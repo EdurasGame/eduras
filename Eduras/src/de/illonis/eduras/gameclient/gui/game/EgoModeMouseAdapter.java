@@ -5,7 +5,7 @@ import java.awt.event.MouseEvent;
 import de.illonis.eduras.gameclient.GuiInternalEventListener;
 import de.illonis.eduras.gameclient.gui.game.GamePanelLogic.ClickState;
 import de.illonis.eduras.inventory.Inventory;
-import de.illonis.eduras.math.Vector2D;
+import de.illonis.eduras.math.Vector2df;
 import de.illonis.eduras.units.PlayerMainFigure.InteractMode;
 
 /**
@@ -30,7 +30,8 @@ public class EgoModeMouseAdapter extends GuiMouseAdapter {
 		switch (currentClickState) {
 		case ITEM_SELECTED:
 			if (currentItemSelected != -1)
-				itemUsed(currentItemSelected, new Vector2D(e.getPoint()));
+				itemUsed(currentItemSelected,
+						new Vector2df(e.getPoint().x, e.getPoint().y));
 			break;
 		case DEFAULT:
 			// TODO: Notify only elements that are really clicked.
@@ -51,7 +52,7 @@ public class EgoModeMouseAdapter extends GuiMouseAdapter {
 	 * @param target
 	 *            target position
 	 */
-	void itemUsed(int i, Vector2D target) {
+	void itemUsed(int i, Vector2df target) {
 		getListener().onItemUse(i,
 				getPanelLogic().computeGuiPointToGameCoordinate(target));
 	}
@@ -81,6 +82,6 @@ public class EgoModeMouseAdapter extends GuiMouseAdapter {
 	private void egoModeMove(MouseEvent e) {
 		getListener().onViewingDirectionChanged(
 				getPanelLogic().computeGuiPointToGameCoordinate(
-						new Vector2D(e.getPoint().x, e.getPoint().y)));
+						new Vector2df(e.getPoint().x, e.getPoint().y)));
 	}
 }

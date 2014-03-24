@@ -16,7 +16,7 @@ import de.illonis.eduras.events.GameInfoRequest;
 import de.illonis.eduras.events.InitInformationEvent;
 import de.illonis.eduras.events.ItemEvent;
 import de.illonis.eduras.events.SendUnitsEvent;
-import de.illonis.eduras.events.SetDoubleGameObjectAttributeEvent;
+import de.illonis.eduras.events.SetFloatGameObjectAttributeEvent;
 import de.illonis.eduras.events.SwitchInteractModeEvent;
 import de.illonis.eduras.events.UserMovementEvent;
 import de.illonis.eduras.exceptions.InvalidNameException;
@@ -30,7 +30,7 @@ import de.illonis.eduras.items.Item;
 import de.illonis.eduras.items.ItemUseInformation;
 import de.illonis.eduras.items.Usable;
 import de.illonis.eduras.locale.Localization;
-import de.illonis.eduras.math.Vector2D;
+import de.illonis.eduras.math.Vector2df;
 import de.illonis.eduras.units.PlayerMainFigure;
 
 /**
@@ -107,7 +107,7 @@ public class ServerLogic implements GameLogicInterface {
 			break;
 		case SEND_UNITS:
 			SendUnitsEvent sendEvent = (SendUnitsEvent) event;
-			Vector2D target = sendEvent.getTarget();
+			Vector2df target = sendEvent.getTarget();
 			LinkedList<Integer> units = sendEvent.getUnits();
 			for (int i = 0; i < units.size(); i++) {
 				try {
@@ -165,10 +165,10 @@ public class ServerLogic implements GameLogicInterface {
 			}
 			break;
 		case SET_ROTATION:
-			if (!(event instanceof SetDoubleGameObjectAttributeEvent)) {
+			if (!(event instanceof SetFloatGameObjectAttributeEvent)) {
 				break;
 			}
-			SetDoubleGameObjectAttributeEvent setRotationEvent = (SetDoubleGameObjectAttributeEvent) event;
+			SetFloatGameObjectAttributeEvent setRotationEvent = (SetFloatGameObjectAttributeEvent) event;
 			GameObject gameObject = gameInfo.findObjectById(setRotationEvent
 					.getObjectId());
 			if (gameObject == null) {
@@ -305,11 +305,12 @@ public class ServerLogic implements GameLogicInterface {
 	}
 
 	@Override
-	public void startWorker() {
+	public LogicGameWorker startWorker() {
 		lgw = new ServerLogicGameWorker(gameInfo, listenerHolder);
 		Thread gameWorker = new Thread(lgw);
 		gameWorker.setName("ServerLogicGameWorker");
 		gameWorker.start();
+		return lgw;
 	}
 
 }

@@ -23,7 +23,7 @@ public interface Moveable {
 	 * @param rotationAngle
 	 *            The absolute angle an object tries to rotate to.
 	 */
-	void onRotate(double rotationAngle);
+	void onRotate(float rotationAngle);
 
 	/**
 	 * Indicate that object leaves map with current move.

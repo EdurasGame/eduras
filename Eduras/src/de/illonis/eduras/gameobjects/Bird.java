@@ -5,7 +5,7 @@ import de.illonis.eduras.ai.UnitAI;
 import de.illonis.eduras.ai.movement.MotionAIControllable;
 import de.illonis.eduras.ai.movement.MotionType;
 import de.illonis.eduras.ai.movement.MovingUnitAI;
-import de.illonis.eduras.math.Vector2D;
+import de.illonis.eduras.math.Vector2df;
 import de.illonis.eduras.settings.S;
 import de.illonis.eduras.shapes.ObjectShape.ShapeType;
 import de.illonis.eduras.shapes.ShapeFactory;
@@ -49,17 +49,17 @@ public class Bird extends MoveableGameObject implements MotionAIControllable {
 	}
 
 	@Override
-	public void startMovingTo(Vector2D direction) {
+	public void startMovingTo(Vector2df direction) {
 		setSpeedVector(direction);
 	}
 
 	@Override
 	public void stopMoving() {
-		setSpeedVector(new Vector2D());
+		setSpeedVector(new Vector2df());
 	}
 
 	@Override
-	public Vector2D getPosition() {
+	public Vector2df getPosition() {
 		return getPositionVector();
 	}
 

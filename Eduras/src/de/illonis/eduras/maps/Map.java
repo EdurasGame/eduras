@@ -1,7 +1,5 @@
 package de.illonis.eduras.maps;
 
-import java.awt.Rectangle;
-import java.awt.geom.Rectangle2D;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -11,6 +9,8 @@ import java.util.LinkedList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.newdawn.slick.geom.Rectangle;
+
 import de.illonis.edulog.EduLog;
 import de.illonis.eduras.ObjectFactory.ObjectType;
 import de.illonis.eduras.exceptions.NoSuchMapException;
@@ -19,7 +19,7 @@ import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.maps.SpawnPosition.SpawnType;
 import de.illonis.eduras.maps.persistence.InvalidDataException;
 import de.illonis.eduras.maps.persistence.MapParser;
-import de.illonis.eduras.math.Vector2D;
+import de.illonis.eduras.math.Vector2df;
 
 /**
  * A playable map for gaming.
@@ -73,11 +73,11 @@ public abstract class Map {
 	}
 
 	private void addBoundsObject() {
-		Vector2D[] mapBoundsShape = new Vector2D[4];
-		mapBoundsShape[0] = new Vector2D(0, 0);
-		mapBoundsShape[1] = new Vector2D(width, 0);
-		mapBoundsShape[2] = new Vector2D(width, height);
-		mapBoundsShape[3] = new Vector2D(0, height);
+		Vector2df[] mapBoundsShape = new Vector2df[4];
+		mapBoundsShape[0] = new Vector2df(0, 0);
+		mapBoundsShape[1] = new Vector2df(width, 0);
+		mapBoundsShape[2] = new Vector2df(width, height);
+		mapBoundsShape[3] = new Vector2df(0, height);
 		InitialObjectData boundsData = new InitialObjectData(
 				ObjectType.MAPBOUNDS, 0, 0, mapBoundsShape);
 		addObject(boundsData);
@@ -189,8 +189,8 @@ public abstract class Map {
 	 *            point to test.
 	 * @return true if point is on map.
 	 */
-	public final boolean contains(Vector2D point) {
-		return getBounds().contains(point.toPoint());
+	public final boolean contains(Vector2df point) {
+		return getBounds().contains(point.x, point.y);
 	}
 
 	/**
@@ -220,10 +220,9 @@ public abstract class Map {
 	 *            the spawn type.
 	 * @see #addSpawnArea(SpawnPosition)
 	 */
-	protected final void addSpawnArea(double x, double y, double w, double h,
+	protected final void addSpawnArea(float x, float y, float w, float h,
 			SpawnType spawnType) {
-		addSpawnArea(new SpawnPosition(new Rectangle2D.Double(x, y, w, h),
-				spawnType));
+		addSpawnArea(new SpawnPosition(new Rectangle(x, y, w, h), spawnType));
 	}
 
 	/**
@@ -237,7 +236,7 @@ public abstract class Map {
 	 *            y-position of that object.
 	 * @see #addObject(InitialObjectData)
 	 */
-	protected final void addObject(ObjectType type, double xPos, double yPos) {
+	protected final void addObject(ObjectType type, float xPos, float yPos) {
 		initialObjects.add(new InitialObjectData(type, xPos, yPos));
 	}
 

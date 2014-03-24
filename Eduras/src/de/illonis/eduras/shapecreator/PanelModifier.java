@@ -1,5 +1,6 @@
 package de.illonis.eduras.shapecreator;
 
+import de.illonis.eduras.math.Vector2df;
 import de.illonis.eduras.shapecreator.PanelInteractor.InteractMode;
 
 /**
@@ -38,7 +39,7 @@ public interface PanelModifier {
 	 * @param vert
 	 *            the selected vertice.
 	 */
-	void selectVertice(Vertice vert);
+	void selectVector2df(Vector2df vert);
 
 	/**
 	 * Sets the editing mode.

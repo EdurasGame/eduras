@@ -15,7 +15,7 @@ import de.illonis.eduras.gamemodes.GameMode;
 import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.items.Item;
 import de.illonis.eduras.maps.Map;
-import de.illonis.eduras.math.Vector2D;
+import de.illonis.eduras.math.Vector2df;
 import de.illonis.eduras.units.PlayerMainFigure;
 import de.illonis.eduras.units.PlayerMainFigure.InteractMode;
 import de.illonis.eduras.units.Unit;
@@ -41,8 +41,8 @@ public interface EventTriggerer {
 	 * @param speedVector
 	 *            speed of missile.
 	 */
-	void createMissile(ObjectType missileType, int owner, Vector2D position,
-			Vector2D speedVector);
+	void createMissile(ObjectType missileType, int owner, Vector2df position,
+			Vector2df speedVector);
 
 	/**
 	 * Removes given object from game object list.
@@ -57,7 +57,7 @@ public interface EventTriggerer {
 	 * 
 	 * @param type
 	 *            The type of the dynamic polygon.
-	 * @param polygonVertices
+	 * @param polygonVector2dfs
 	 *            vertices of polygon.
 	 * @param position
 	 *            position of polygon.
@@ -67,7 +67,7 @@ public interface EventTriggerer {
 	 * @author illonis
 	 */
 	void createDynamicPolygonObjectAt(ObjectType type,
-			Vector2D[] polygonVertices, Vector2D position, int owner);
+			Vector2df[] polygonVector2dfs, Vector2df position, int owner);
 
 	/**
 	 * Creates an object at given position.
@@ -79,22 +79,22 @@ public interface EventTriggerer {
 	 * @param owner
 	 *            owner id of new object.
 	 * @return the id of the created object.
-	 * @see #createDynamicPolygonObjectAt(ObjectType, Vector2D[], Vector2D, int)
+	 * @see #createDynamicPolygonObjectAt(ObjectType, Vector2df[], Vector2df, int)
 	 */
-	public int createObjectAt(ObjectType object, Vector2D position, int owner);
+	public int createObjectAt(ObjectType object, Vector2df position, int owner);
 
 	/**
 	 * Sets polygon data of a polygon with given id.
 	 * 
 	 * @param objectId
 	 *            object id of polygon.
-	 * @param polygonVertices
+	 * @param polygonVector2dfs
 	 *            new vertices of polygon.
-	 * @see #createDynamicPolygonObjectAt(ObjectType, Vector2D[], Vector2D, int)
+	 * @see #createDynamicPolygonObjectAt(ObjectType, Vector2df[], Vector2df, int)
 	 * 
 	 * @author illonis
 	 */
-	public void setPolygonData(int objectId, Vector2D[] polygonVertices);
+	public void setPolygonData(int objectId, Vector2df[] polygonVector2dfs);
 
 	/**
 	 * Creates an object.
@@ -140,7 +140,7 @@ public interface EventTriggerer {
 	 * @param newPosition
 	 *            target position.
 	 */
-	void maybeSetPositionOfObject(int objectId, Vector2D newPosition);
+	void maybeSetPositionOfObject(int objectId, Vector2df newPosition);
 
 	/**
 	 * Moves a specific object to a new position instantly. Does guarantee the
@@ -151,7 +151,7 @@ public interface EventTriggerer {
 	 * @param newPosition
 	 *            target position.
 	 */
-	void guaranteeSetPositionOfObject(int objectId, Vector2D newPosition);
+	void guaranteeSetPositionOfObject(int objectId, Vector2df newPosition);
 
 	/**
 	 * You can implement this method if you need to do some setup.
@@ -265,7 +265,7 @@ public interface EventTriggerer {
 	 * @throws UnitNotControllableException
 	 *             if that unit is not controllable regarding motion.
 	 */
-	void sendUnit(int objectId, Vector2D target)
+	void sendUnit(int objectId, Vector2df target)
 			throws ObjectNotFoundException, UnitNotControllableException;
 
 	/**

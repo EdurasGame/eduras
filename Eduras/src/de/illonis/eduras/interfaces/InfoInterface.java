@@ -1,10 +1,8 @@
-/**
- * 
- */
 package de.illonis.eduras.interfaces;
 
-import java.awt.Rectangle;
 import java.util.Collection;
+
+import org.newdawn.slick.geom.Rectangle;
 
 import de.illonis.eduras.Statistic;
 import de.illonis.eduras.Team;

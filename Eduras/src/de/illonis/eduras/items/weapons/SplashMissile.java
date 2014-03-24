@@ -6,7 +6,7 @@ import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.ObjectFactory.ObjectType;
 import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.gameobjects.TimingSource;
-import de.illonis.eduras.math.Vector2D;
+import de.illonis.eduras.math.Vector2df;
 import de.illonis.eduras.settings.S;
 
 /**
@@ -45,14 +45,15 @@ public class SplashMissile extends Missile {
 
 		int numberOfSplinters = S.go_splashmissile_splinters;
 
-		double circumferenceOfSplittering = 1;
+		float circumferenceOfSplittering = 1;
 
-		Vector2D speed[] = new Vector2D[numberOfSplinters];
-		double degreeSteps = 2 * Math.PI / numberOfSplinters;
+		Vector2df speed[] = new Vector2df[numberOfSplinters];
+		float degreeSteps = 2 * (float) Math.PI / numberOfSplinters;
 		for (int i = 0; i < numberOfSplinters; i++) {
-			double currentDegree = i * degreeSteps;
-			double x = Math.cos(currentDegree) * circumferenceOfSplittering;
-			double y;
+			float currentDegree = i * degreeSteps;
+			float x = (float) Math.cos(currentDegree)
+					* circumferenceOfSplittering;
+			float y;
 			if (x == circumferenceOfSplittering
 					|| x == -circumferenceOfSplittering) {
 				y = 0;
@@ -60,8 +61,8 @@ public class SplashMissile extends Missile {
 				if (x == 0) {
 					y = circumferenceOfSplittering;
 				} else {
-					y = Math.sqrt(Math.pow(circumferenceOfSplittering, 2)
-							- Math.pow(x, 2));
+					y = (float) Math.sqrt(Math.pow(circumferenceOfSplittering,
+							2) - Math.pow(x, 2));
 				}
 			}
 
@@ -69,14 +70,12 @@ public class SplashMissile extends Missile {
 				y = -y;
 			}
 
-			speed[i] = new Vector2D(x, y);
+			speed[i] = new Vector2df(x, y);
 		}
 
-		// Vector2D speed[] = { new Vector2D(1, 1), new Vector2D(-1, 1),
-		// new Vector2D(-1, -1), new Vector2D(1, -1) };
 		for (int i = 0; i < speed.length; i++) {
-			Vector2D pos = getPositionVector().copy();
-			speed[i].mult(S.go_splashmissile_shape_radius * 2);
+			Vector2df pos = getPositionVector().copy();
+			speed[i].scale(S.go_splashmissile_shape_radius * 2);
 			pos.add(speed[i]);
 			getGame().getEventTriggerer().createMissile(
 					ObjectType.MISSILE_SPLASHED, getOwner(), pos, speed[i]);

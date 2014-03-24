@@ -9,6 +9,7 @@ import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
 import de.illonis.edulog.EduLog;
+import de.illonis.eduras.math.Vector2df;
 import de.illonis.eduras.shapecreator.PanelInteractor.InteractMode;
 import de.illonis.eduras.shapecreator.ShapeCreator.FrameListener;
 import de.illonis.eduras.shapecreator.gui.ToolPanel;
@@ -117,14 +118,14 @@ public class MenuTriggerer implements MenuActionReactor {
 
 	@Override
 	public void mirrorShape(Axis axis) {
-		for (Vertice v : panel.getShape().getVertices()) {
+		for (Vector2df v : panel.getShape().getVector2dfs()) {
 			if (axis == Axis.VERTICAL) {
-				v.setX(-v.getX());
+				v.x = -v.x;
 			} else {
-				v.setY(-v.getY());
+				v.y = -v.y;
 			}
 		}
-		DataHolder.getInstance().notifyVerticesChanged();
+		DataHolder.getInstance().notifyVector2dfsChanged();
 	}
 
 	@Override

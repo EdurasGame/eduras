@@ -1,8 +1,5 @@
 package de.illonis.eduras;
 
-import java.awt.geom.Point2D;
-import java.awt.geom.Rectangle2D;
-import java.awt.geom.Rectangle2D.Double;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -26,7 +23,6 @@ import de.illonis.eduras.events.ObjectFactoryEvent;
 import de.illonis.eduras.events.SetBooleanGameObjectAttributeEvent;
 import de.illonis.eduras.events.SetGameModeEvent;
 import de.illonis.eduras.events.SetIntegerGameObjectAttributeEvent;
-import de.illonis.eduras.events.SetPolygonDataEvent;
 import de.illonis.eduras.events.SetRemainingTimeEvent;
 import de.illonis.eduras.events.SetTeamsEvent;
 import de.illonis.eduras.exceptions.GameModeNotSupportedByMapException;
@@ -39,16 +35,9 @@ import de.illonis.eduras.maps.FunMap;
 import de.illonis.eduras.maps.Map;
 import de.illonis.eduras.maps.SpawnPosition;
 import de.illonis.eduras.maps.SpawnPosition.SpawnType;
-import de.illonis.eduras.math.Vector2D;
-import de.illonis.eduras.shapes.Polygon;
+import de.illonis.eduras.math.Vector2df;
 import de.illonis.eduras.units.PlayerMainFigure;
 
-/**
- * Holds all game information of the current game.
- * 
- * @author illonis
- * 
- */
 public class GameInformation {
 	private final static Logger L = EduLog.getLoggerFor(GameInformation.class
 			.getName());
@@ -207,13 +196,13 @@ public class GameInformation {
 	 *            the search radius.
 	 * @return a list of nearby objects.
 	 */
-	public LinkedList<GameObject> findObjectsInDistance(Vector2D point,
+	public LinkedList<GameObject> findObjectsInDistance(Vector2df point,
 			double radius) {
 		// TODO: improve (using position is rather incorrect due to object's
 		// dimensions)
 		LinkedList<GameObject> objs = new LinkedList<GameObject>();
 		for (GameObject object : objects.values()) {
-			if (point.calculateDistance(object.getPositionVector()) <= radius) {
+			if (point.distance(object.getPositionVector()) <= radius) {
 				objs.add(object);
 			}
 		}
@@ -229,15 +218,13 @@ public class GameInformation {
 	 *            a gameobject to ignore while testing (can be null).
 	 * @return true if there is an object, false otherwise.
 	 */
-	public boolean isVisionBlockingObjectAt(Vector2D point, GameObject ignore) {
-		Point2D.Double p = point.toPoint();
+	public boolean isVisionBlockingObjectAt(Vector2df point, GameObject ignore) {
 		for (GameObject object : objects.values()) {
 			if (!object.isVisionBlocking())
 				continue;
 			if (object.equals(ignore))
 				continue;
-			if (object.getShape().contains((float) point.getX(),
-					(float) point.getY()))
+			if (object.getShape().includes(point.x, point.y))
 				return true;
 		}
 		return false;
@@ -348,10 +335,10 @@ public class GameInformation {
 
 			if (object.getType() == ObjectType.DYNAMIC_POLYGON_BLOCK) {
 				continue;
-//				SetPolygonDataEvent polygonData = new SetPolygonDataEvent(
-//						object.getId(),
-//						((Polygon) object.getShape()).getVerticesAsArray());
-//				infos.add(polygonData);
+				// SetPolygonDataEvent polygonData = new SetPolygonDataEvent(
+				// object.getId(),
+				// ((Polygon) object.getShape()).getVector2dfsAsArray());
+				// infos.add(polygonData);
 			}
 
 			// send position immediately
@@ -450,13 +437,10 @@ public class GameInformation {
 
 	}
 
-	private boolean isAnyOfObjectsWithinBounds(Rectangle2D bounds,
+	private boolean isAnyOfObjectsWithinBounds(Rectangle bounds,
 			Collection<GameObject> gameObjects) {
-		Rectangle r = new Rectangle((float) bounds.getX(),
-				(float) bounds.getY(), (float) bounds.getWidth(),
-				(float) bounds.getHeight());
 		for (GameObject o : gameObjects) {
-			if (o.getShape().intersects(r))
+			if (o.getShape().intersects(bounds))
 				return true;
 		}
 		return false;
@@ -472,7 +456,7 @@ public class GameInformation {
 	 * @throws GameModeNotSupportedByMapException
 	 *             if current game does not support game mode.
 	 */
-	public Vector2D getSpawnPointFor(PlayerMainFigure player)
+	public Vector2df getSpawnPointFor(PlayerMainFigure player)
 			throws GameModeNotSupportedByMapException {
 
 		SpawnType spawnType = spawnGroups.get(player.getTeam());
@@ -494,11 +478,10 @@ public class GameInformation {
 
 		int area = RANDOM.nextInt(availableSpawnings.size());
 		SpawnPosition spawnPos = availableSpawnings.get(area);
-		Rectangle2D.Double boundings = new Rectangle2D.Double();
-		boundings.width = player.getShape().getWidth();
-		boundings.height = player.getShape().getHeight();
+		Rectangle boundings = new Rectangle(0, 0, player.getShape().getWidth(),
+				player.getShape().getHeight());
 
-		Vector2D newPos;
+		Vector2df newPos;
 		try {
 			int i = 0;
 			do {
@@ -508,8 +491,8 @@ public class GameInformation {
 					continue;
 				}
 
-				boundings.x = newPos.getX();
-				boundings.y = newPos.getY();
+				boundings.setX(newPos.x);
+				boundings.setY(newPos.y);
 
 				if (i > 100000) {
 					L.severe("Cannot find a spawn point!");
@@ -520,16 +503,16 @@ public class GameInformation {
 			L.log(Level.SEVERE, e.getMessage(), e);
 		}
 
-		return new Vector2D(boundings.x, boundings.y);
+		return new Vector2df(boundings.getX(), boundings.getY());
 	}
 
-	private boolean isValidPosition(Vector2D newPos, PlayerMainFigure player) {
+	private boolean isValidPosition(Vector2df newPos, PlayerMainFigure player) {
 		// make sure the position is far apart enough from the map border object
 		double diameter = 2 * ((Circle) player.getShape()).getRadius();
-		return (newPos.getX() > diameter && newPos.getY() > diameter);
+		return (newPos.x > diameter && newPos.y > diameter);
 	}
 
-	private boolean isObjectWithinExceptMap(Double boundings) {
+	private boolean isObjectWithinExceptMap(Rectangle boundings) {
 		LinkedList<GameObject> objectsWithoutMap = new LinkedList<GameObject>(
 				objects.values());
 

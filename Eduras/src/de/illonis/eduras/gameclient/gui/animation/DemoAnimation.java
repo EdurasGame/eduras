@@ -5,7 +5,7 @@ import java.awt.Graphics2D;
 
 import org.jdesktop.core.animation.timing.Animator;
 
-import de.illonis.eduras.math.Vector2D;
+import de.illonis.eduras.math.Vector2df;
 
 /**
  * A demo animation moving a block right.
@@ -17,7 +17,7 @@ public class DemoAnimation extends Animation {
 	private int xPos;
 	private int yPos;
 
-	DemoAnimation(Vector2D mapPosition) {
+	DemoAnimation(Vector2df mapPosition) {
 		super("Test animation", 5000, mapPosition);
 
 	}

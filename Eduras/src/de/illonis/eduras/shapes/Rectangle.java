@@ -1,7 +1,7 @@
 package de.illonis.eduras.shapes;
 
-import de.illonis.eduras.exceptions.ShapeVerticesNotApplicableException;
-import de.illonis.eduras.math.Vector2D;
+import de.illonis.eduras.exceptions.ShapeVector2dfsNotApplicableException;
+import de.illonis.eduras.math.Vector2df;
 
 /**
  * Represents a rectangle.
@@ -19,23 +19,23 @@ public class Rectangle extends Polygon {
 	 *            The point at top left.
 	 * @param bottomRight
 	 *            The point at bottom right.
-	 * @throws ShapeVerticesNotApplicableException
+	 * @throws ShapeVector2dfsNotApplicableException
 	 *             Thrown if any point in the rectangle is negative on either x-
 	 *             or y-value.
 	 */
-	public Rectangle(Vector2D topLeft, Vector2D bottomRight)
-			throws ShapeVerticesNotApplicableException {
+	public Rectangle(Vector2df topLeft, Vector2df bottomRight)
+			throws ShapeVector2dfsNotApplicableException {
 		if (topLeft.getX() < 0 || topLeft.getY() < 0 || bottomRight.getX() < 0
 				|| bottomRight.getY() < 0) {
-			throw new ShapeVerticesNotApplicableException();
+			throw new ShapeVector2dfsNotApplicableException();
 		} else {
 			// whether topLeft and bottomRight are switches does not matter
-			Vector2D[] vertices = new Vector2D[4];
+			Vector2df[] vertices = new Vector2df[4];
 			vertices[0] = topLeft;
-			vertices[1] = new Vector2D(topLeft.getX(), bottomRight.getY());
+			vertices[1] = new Vector2df(topLeft.getX(), bottomRight.getY());
 			vertices[2] = bottomRight;
-			vertices[3] = new Vector2D(bottomRight.getX(), topLeft.getY());
-			setVertices(vertices);
+			vertices[3] = new Vector2df(bottomRight.getX(), topLeft.getY());
+			setVector2dfs(vertices);
 		}
 	}
 
@@ -44,10 +44,10 @@ public class Rectangle extends Polygon {
 	 * 
 	 * @param size
 	 *            the dimension of the rectangle.
-	 * @throws ShapeVerticesNotApplicableException
+	 * @throws ShapeVector2dfsNotApplicableException
 	 *             if any of the dimension parameters is negative.
 	 */
-	public Rectangle(Vector2D size) throws ShapeVerticesNotApplicableException {
-		this(new Vector2D(), size);
+	public Rectangle(Vector2df size) throws ShapeVector2dfsNotApplicableException {
+		this(new Vector2df(), size);
 	}
 }

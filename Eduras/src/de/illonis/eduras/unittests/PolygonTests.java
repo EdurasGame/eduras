@@ -7,7 +7,7 @@ import org.junit.Test;
 
 import de.illonis.eduras.ObjectFactory.ObjectType;
 import de.illonis.eduras.gameobjects.DynamicPolygonObject;
-import de.illonis.eduras.math.Vector2D;
+import de.illonis.eduras.math.Vector2df;
 import de.illonis.eduras.shapes.ObjectShape;
 import de.illonis.eduras.shapes.Polygon;
 
@@ -51,12 +51,12 @@ public class PolygonTests {
 	 */
 	@Test
 	public void someVerts() {
-		Vector2D[] vertices = new Vector2D[] { new Vector2D(3, 4),
-				new Vector2D(6, 8.5) };
-		polyBlock.setPolygonVertices(vertices);
+		Vector2df[] vertices = new Vector2df[] { new Vector2df(3, 4),
+				new Vector2df(6, 8.5) };
+		polyBlock.setPolygonVector2dfs(vertices);
 
 		assertTrue(vertices.equals(((Polygon) polyBlock.getShape())
-				.getVerticesAsArray()));
+				.getVector2dfsAsArray()));
 
 	}
 }

@@ -10,7 +10,7 @@ import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.math.CollisionPoint;
 import de.illonis.eduras.math.Geometry;
 import de.illonis.eduras.math.Line;
-import de.illonis.eduras.math.Vector2D;
+import de.illonis.eduras.math.Vector2df;
 
 /**
  * Super class of any shape a object in the game can have.
@@ -18,6 +18,7 @@ import de.illonis.eduras.math.Vector2D;
  * @author Florian Mai <florian.ren.mai@googlemail.com>
  * 
  */
+@Deprecated
 public abstract class ObjectShape {
 
 	protected Rectangle2D.Double boundingBox;
@@ -49,22 +50,22 @@ public abstract class ObjectShape {
 	 *            The target position
 	 * @return Returns the position of the object after the move.
 	 */
-	public Vector2D checkCollisionOnMove(GameInformation game,
-			GameObject thisObject, Vector2D target) {
+	public Vector2df checkCollisionOnMove(GameInformation game,
+			GameObject thisObject, Vector2df target) {
 
-		Vector2D result = new Vector2D(target);
+		Vector2df result = new Vector2df(target);
 		Map<Integer, GameObject> gameObjects = game.getObjects();
 
 		GameObject collisionObject = null;
 		GameObject touchObject = null;
 
-		Vector2D positionVector = thisObject.getPositionVector();
+		Vector2df positionVector = thisObject.getPositionVector();
 
 		// calculate border points to use for collision calculation
 
-		Vector2D[] movementPoints = getBorderPoints();
+		Vector2df[] movementPoints = getBorderPoints();
 
-		Vector2D.rotateAll(movementPoints, thisObject.getRotation());
+		Vector2df.rotateAll(movementPoints, thisObject.getRotation());
 
 		LinkedList<Line> lines = Geometry.getLinesBetweenShapePositions(
 				movementPoints, positionVector, target);
@@ -127,7 +128,7 @@ public abstract class ObjectShape {
 			// Use the following code as an alternative. Gives more accurate
 			// results, but is visually ugly and can lead to stucking at edges
 			// more easily
-			// Vector2D targetResult = new Vector2D(positionVector);
+			// Vector2df targetResult = new Vector2df(positionVector);
 			// resultingCollisionPoint.getDistanceVector().invert();
 			// targetResult.add(resultingCollisionPoint.getDistanceVector());
 			// result = targetResult;
@@ -158,7 +159,7 @@ public abstract class ObjectShape {
 	 * 
 	 * @return border points.
 	 */
-	public abstract Vector2D[] getBorderPoints();
+	public abstract Vector2df[] getBorderPoints();
 
 	/**
 	 * Checks if the shape related to a specific object is intersected by

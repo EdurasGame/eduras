@@ -10,9 +10,9 @@ import java.util.LinkedList;
 import org.junit.Test;
 
 import de.illonis.eduras.GameInformation;
-import de.illonis.eduras.exceptions.ShapeVerticesNotApplicableException;
+import de.illonis.eduras.exceptions.ShapeVector2dfsNotApplicableException;
 import de.illonis.eduras.gameobjects.BigBlock;
-import de.illonis.eduras.math.Vector2D;
+import de.illonis.eduras.math.Vector2df;
 import de.illonis.eduras.shapes.Polygon;
 import de.illonis.eduras.units.PlayerMainFigure;
 
@@ -26,23 +26,23 @@ public class ShapeTests {
 
 	/**
 	 * Tests the
-	 * {@link de.illonis.eduras.shapes.Polygon#getAbsoluteVertices(de.illonis.eduras.gameobjects.GameObject)
-	 * getAbsoluteVertices()} method.
+	 * {@link de.illonis.eduras.shapes.Polygon#getAbsoluteVector2dfs(de.illonis.eduras.gameobjects.GameObject)
+	 * getAbsoluteVector2dfs()} method.
 	 */
 	@Test
-	public void getAbsoluteVertices() {
+	public void getAbsoluteVector2dfs() {
 		PlayerMainFigure player = new PlayerMainFigure(new GameInformation(),
 				null, 0, 0);
 		player.setPosition(5, 5);
 
 		if (player.getShape() instanceof Polygon) {
 			Polygon playerShape = (Polygon) player.getShape();
-			LinkedList<Vector2D> absoluteVertices = playerShape
-					.getAbsoluteVertices(player);
+			LinkedList<Vector2df> absoluteVector2dfs = playerShape
+					.getAbsoluteVector2dfs(player);
 
-			assertTrue(new Vector2D(30, 5).equals(absoluteVertices.get(0)));
-			assertTrue(new Vector2D(-5, 15).equals(absoluteVertices.get(1)));
-			assertTrue(new Vector2D(-5, -5).equals(absoluteVertices.get(2)));
+			assertTrue(new Vector2df(30, 5).equals(absoluteVector2dfs.get(0)));
+			assertTrue(new Vector2df(-5, 15).equals(absoluteVector2dfs.get(1)));
+			assertTrue(new Vector2df(-5, -5).equals(absoluteVector2dfs.get(2)));
 		}
 
 	}
@@ -60,7 +60,7 @@ public class ShapeTests {
 		BigBlock otherObject = null;
 		try {
 			otherObject = new BigBlock(gameInfo, null, 1);
-		} catch (ShapeVerticesNotApplicableException e) {
+		} catch (ShapeVector2dfsNotApplicableException e) {
 			assertTrue(false);
 		}
 		otherObject.setPosition(50, 50);

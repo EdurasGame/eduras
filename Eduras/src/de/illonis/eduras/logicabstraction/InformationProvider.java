@@ -1,11 +1,9 @@
-/**
- * 
- */
 package de.illonis.eduras.logicabstraction;
 
-import java.awt.Rectangle;
 import java.util.Collection;
 import java.util.Map;
+
+import org.newdawn.slick.geom.Rectangle;
 
 import de.illonis.eduras.Statistic;
 import de.illonis.eduras.Team;
@@ -44,7 +42,7 @@ public class InformationProvider implements InfoInterface {
 
 	@Override
 	public Rectangle getMapBounds() {
-		return new Rectangle(logic.getGame().getMap().getBounds());
+		return logic.getGame().getMap().getBounds();
 	}
 
 	/**

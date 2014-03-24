@@ -1,13 +1,13 @@
 package de.illonis.eduras.maps;
 
-import java.awt.geom.Rectangle2D;
 import java.util.Random;
 import java.util.logging.Logger;
 
+import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.Shape;
 
 import de.illonis.edulog.EduLog;
-import de.illonis.eduras.math.Vector2D;
+import de.illonis.eduras.math.Vector2df;
 
 /**
  * Specifies a rectangular spawning area for one or multiple units.
@@ -22,7 +22,7 @@ public class SpawnPosition {
 
 	private final static Random RANDOM = new Random();
 
-	private final Rectangle2D.Double area;
+	private final Rectangle area;
 	private final SpawnType teaming;
 
 	/**
@@ -61,7 +61,7 @@ public class SpawnPosition {
 	 * @param teaming
 	 *            the type of spawning.
 	 */
-	public SpawnPosition(Rectangle2D.Double area, SpawnType teaming) {
+	public SpawnPosition(Rectangle area, SpawnType teaming) {
 		this.area = area;
 		this.teaming = teaming;
 	}
@@ -80,24 +80,25 @@ public class SpawnPosition {
 	 * 
 	 * @author illonis
 	 */
-	public Vector2D getAPoint(Shape spawningShape) {
-		double maxX = area.x + area.width - spawningShape.getWidth();
-		double maxY = area.y + area.height - spawningShape.getHeight();
-		double minX = area.x;
-		double minY = area.y;
+	public Vector2df getAPoint(Shape spawningShape) {
+		float maxX = area.getX() + area.getWidth() - spawningShape.getWidth();
+		float maxY = area.getY() + area.getHeight() - spawningShape.getHeight();
+		float minX = area.getX();
+		float minY = area.getY();
 
-		double spawnX = RANDOM.nextDouble() * (maxX - minX) + minX;
-		double spawnY = RANDOM.nextDouble() * (maxY - minY) + minY;
+		float spawnX = RANDOM.nextFloat() * (maxX - minX) + minX;
+		float spawnY = RANDOM.nextFloat() * (maxY - minY) + minY;
 
 		if (spawnX < 0 || spawnY < 0) {
 			L.warning("Spawning object is too big for this spawning Point!"
 					+ "Size of Object: "
 
-					+ " Size of Area: " + area.getBounds());
-			spawnX = area.x;
-			spawnY = area.y;
+					+ " Size of Area: " + area.getWidth() + ","
+					+ area.getHeight());
+			spawnX = area.getX();
+			spawnY = area.getY();
 		}
-		return new Vector2D(spawnX, spawnY);
+		return new Vector2df(spawnX, spawnY);
 	}
 
 	/**

@@ -1,7 +1,7 @@
 package de.illonis.eduras.ai.movement;
 
 import de.illonis.eduras.ai.AIControllable;
-import de.illonis.eduras.math.Vector2D;
+import de.illonis.eduras.math.Vector2df;
 
 /**
  * A motion controllable entity.
@@ -18,7 +18,7 @@ public interface MotionAIControllable extends AIControllable {
 	 * @param direction
 	 *            target direction.
 	 */
-	void startMovingTo(Vector2D direction);
+	void startMovingTo(Vector2df direction);
 
 	/**
 	 * Stops moving this entity.
@@ -28,7 +28,7 @@ public interface MotionAIControllable extends AIControllable {
 	/**
 	 * @return current position of this entity.
 	 */
-	Vector2D getPosition();
+	Vector2df getPosition();
 
 	/**
 	 * @return the motion type of this entity.

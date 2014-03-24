@@ -11,7 +11,7 @@ import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.gameobjects.TimingSource;
 import de.illonis.eduras.interfaces.MovementControlable;
 import de.illonis.eduras.inventory.Inventory;
-import de.illonis.eduras.math.Vector2D;
+import de.illonis.eduras.math.Vector2df;
 import de.illonis.eduras.settings.S;
 
 /**
@@ -84,15 +84,15 @@ public class PlayerMainFigure extends Unit implements MovementControlable {
 		setOwner(ownerId);
 
 		// get position
-		// Vector2D firstEdge = new Vector2D(25, 0);
-		// Vector2D secondEdge = new Vector2D(-10, 10);
-		// Vector2D thirdEdge = new Vector2D(-10, -10);
+		// Vector2df firstEdge = new Vector2df(25, 0);
+		// Vector2df secondEdge = new Vector2df(-10, 10);
+		// Vector2df thirdEdge = new Vector2df(-10, -10);
 
 		setShape(new Circle(4.5f, 4.5f, 9));
 
 		// try {
 		// // setShape(new Triangle(firstEdge, secondEdge, thirdEdge));
-		// } catch (ShapeVerticesNotApplicableException e) {
+		// } catch (ShapeVector2dfsNotApplicableException e) {
 		// L.log(Level.SEVERE, "error setting player shape", e);
 		// }
 	}
@@ -119,21 +119,21 @@ public class PlayerMainFigure extends Unit implements MovementControlable {
 	public void startMoving(Direction direction) {
 		switch (direction) {
 		case TOP:
-			getSpeedVector().setY(-getSpeed());
+			getSpeedVector().y = -getSpeed();
 			break;
 		case BOTTOM:
-			getSpeedVector().setY(getSpeed());
+			getSpeedVector().y = getSpeed();
 			break;
 		case LEFT:
-			getSpeedVector().setX(-getSpeed());
+			getSpeedVector().x = -getSpeed();
 			break;
 		case RIGHT:
-			getSpeedVector().setX(getSpeed());
+			getSpeedVector().x = getSpeed();
 			break;
 		default:
 			break;
 		}
-		getSpeedVector().setLength(getSpeed());
+		getSpeedVector().normalise().scale(getSpeed());
 	}
 
 	/**
@@ -170,15 +170,15 @@ public class PlayerMainFigure extends Unit implements MovementControlable {
 	@Override
 	public void stopMoving(Direction direction) {
 		if (isHorizontal(direction)) {
-			getSpeedVector().setX(0);
+			getSpeedVector().x = 0;
 		} else {
-			getSpeedVector().setY(0);
+			getSpeedVector().x = 0;
 		}
 	}
 
 	@Override
 	public void stopMoving() {
-		setSpeedVector(new Vector2D());
+		setSpeedVector(new Vector2df());
 	}
 
 	/**

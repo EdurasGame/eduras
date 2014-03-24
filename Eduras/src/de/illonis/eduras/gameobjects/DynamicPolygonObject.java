@@ -2,8 +2,7 @@ package de.illonis.eduras.gameobjects;
 
 import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.ObjectFactory.ObjectType;
-import de.illonis.eduras.math.Vector2D;
-import de.illonis.eduras.shapes.Polygon;
+import de.illonis.eduras.math.Vector2df;
 
 /**
  * A polygon block that's shape is designed to be changed later on, for example
@@ -46,14 +45,13 @@ public class DynamicPolygonObject extends GameObject {
 	 * @param vertices
 	 *            vertices of polygon
 	 * 
-	 * @see Polygon#setVertices(Vector2D[])
 	 * @see #DynamicPolygonObject(ObjectType, GameInformation, TimingSource,
 	 *      int)
 	 */
 	public DynamicPolygonObject(ObjectType type, GameInformation game,
-			TimingSource timingSource, int id, Vector2D[] vertices) {
+			TimingSource timingSource, int id, Vector2df[] vertices) {
 		this(type, game, timingSource, id);
-		setPolygonVertices(vertices);
+		setPolygonVector2dfs(vertices);
 	}
 
 	/**
@@ -62,12 +60,11 @@ public class DynamicPolygonObject extends GameObject {
 	 * @param vertices
 	 *            new vertices of shape.
 	 * 
-	 * @see Polygon#setVertices(Vector2D[])
 	 * 
 	 * @author illonis
 	 */
-	public void setPolygonVertices(Vector2D[] vertices) {
-		//((Polygon) getShape()).setVertices(vertices);
+	public void setPolygonVector2dfs(Vector2df[] vertices) {
+		// ((Polygon) getShape()).setVector2dfs(vertices);
 	}
 
 	@Override
