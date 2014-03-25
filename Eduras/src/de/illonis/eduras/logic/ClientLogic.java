@@ -124,7 +124,7 @@ public class ClientLogic implements GameLogicInterface {
 				}
 				if (gameObj instanceof DynamicPolygonObject) {
 					((DynamicPolygonObject) gameObj)
-							.setPolygonVector2dfs(polyEvent.getVector2dfs());
+							.setPolygonVertices(polyEvent.getVertices());
 				} else {
 					L.warning("Given object id in SET_POLYGON_DATA event does not match a DynamicPolygonBlock, instead object is a "
 							+ gameObj.getClass().getName());

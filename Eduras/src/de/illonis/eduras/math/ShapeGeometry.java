@@ -6,6 +6,7 @@ import org.newdawn.slick.geom.Shape;
 import org.newdawn.slick.geom.Vector2f;
 
 import de.illonis.eduras.gameobjects.GameObject;
+import de.illonis.eduras.gameobjects.MoveableGameObject;
 
 /**
  * Provides methods to compute collision between objects.
@@ -43,7 +44,7 @@ public interface ShapeGeometry {
 	 *         A second call on this method with identical parameters will
 	 *         return the same result if environment did not change.
 	 */
-	Vector2f moveTo(GameObject object, Vector2f target,
+	Vector2f moveTo(MoveableGameObject object, Vector2f target,
 			Collection<GameObject> touched, Collection<GameObject> collided);
 
 	/**
@@ -78,8 +79,11 @@ public interface ShapeGeometry {
 	 *            returns a list of objects that touch this area.
 	 * @param collided
 	 *            returns a list of objects that collide this area.
+	 * @param exclude
+	 *            excludes this object from checks, pass <i>null</i> to exclude
+	 *            nothing.
 	 * @return true if any object was found, false otherwise.
 	 */
 	boolean getObjectsIn(Shape shape, Collection<GameObject> touched,
-			Collection<GameObject> collided);
+			Collection<GameObject> collided, GameObject exclude);
 }

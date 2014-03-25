@@ -4,6 +4,7 @@ import java.util.LinkedList;
 import java.util.logging.Logger;
 
 import org.newdawn.slick.Color;
+import org.newdawn.slick.geom.Vector2f;
 
 import de.eduras.eventingserver.Event;
 import de.eduras.eventingserver.EventHandler;
@@ -192,11 +193,11 @@ public class EventParser implements EventHandler {
 								.getArgument(0), (Boolean) event.getArgument(1)));
 				break;
 			case SET_POLYGON_DATA:
-				int numberOfVector2dfs = (numberOfArgs - 1) / 2;
-				Vector2df[] vertices = new Vector2df[numberOfVector2dfs];
+				int numberOfVertices = (numberOfArgs - 1) / 2;
+				Vector2f[] vertices = new Vector2f[numberOfVertices];
 
-				for (int i = 0; i < numberOfVector2dfs; i++) {
-					Vector2df vertex = new Vector2df(
+				for (int i = 0; i < numberOfVertices; i++) {
+					Vector2f vertex = new Vector2f(
 							(float) event.getArgument(2 * i + 1),
 							(float) event.getArgument(2 * i + 2));
 					vertices[i] = vertex;
@@ -267,7 +268,8 @@ public class EventParser implements EventHandler {
 					setTeamsEvent.addTeam(new Team((String) event
 							.getArgument(i), (int) event.getArgument(i + 1),
 							new Color((int) event.getArgument(i + 2),
-									(int) event.getArgument(i + 3),(int) event.getArgument(i + 4))));
+									(int) event.getArgument(i + 3), (int) event
+											.getArgument(i + 4))));
 				}
 				logic.onGameEventAppeared(setTeamsEvent);
 				break;

@@ -48,7 +48,7 @@ public class RocketSplashAnimation extends Animation {
 	@Override
 	public void addParams(Object[] params) {
 		if (params.length > 0)
-			radius = (double) params[0] - 5;
+			radius = (float) params[0] - 5;
 		else
 			radius = 15;
 	}

@@ -71,6 +71,14 @@ public abstract class GameObject implements Comparable<GameObject> {
 		setObjectType(ObjectType.NO_OBJECT);
 	}
 
+	public float getShapeOffsetX() {
+		return shapeOffsetX;
+	}
+
+	public float getShapeOffsetY() {
+		return shapeOffsetY;
+	}
+
 	/**
 	 * Returns type of this object.
 	 * 

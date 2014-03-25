@@ -134,9 +134,9 @@ public class EdurasClient {
 		// buildChooserFrame();
 
 		BetaAuthenticator authenticator = new BetaAuthenticator();
-		if (authenticator.authenticate(3, betaUser, betaPassword)) {
+		//if (authenticator.authenticate(3, betaUser, betaPassword)) {
 			startWindowed();
-		}
+		//}
 	}
 
 	private static Object convert(Class<?> targetType, String text) {

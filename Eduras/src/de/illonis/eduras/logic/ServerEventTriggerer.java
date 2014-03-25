@@ -545,13 +545,13 @@ public class ServerEventTriggerer implements EventTriggerer {
 	}
 
 	@Override
-	public void setPolygonData(int objectId, Vector2df[] polygonVector2dfs) {
+	public void setPolygonData(int objectId, Vector2df[] polygonVertices) {
 		GameObject object = gameInfo.findObjectById(objectId);
 		if (object instanceof DynamicPolygonObject) {
 			DynamicPolygonObject block = (DynamicPolygonObject) object;
-			block.setPolygonVector2dfs(polygonVector2dfs);
+			block.setPolygonVertices(polygonVertices);
 			SetPolygonDataEvent event = new SetPolygonDataEvent(objectId,
-					polygonVector2dfs);
+					polygonVertices);
 			sendEvents(event);
 		}
 	}

@@ -50,7 +50,7 @@ public class ClientLogicGameWorker extends LogicGameWorker {
 			}
 			if (o instanceof MoveableGameObject) {
 				MoveableGameObject mgo = (MoveableGameObject) o;
-				mgo.onMove(delta);
+				mgo.onMove(delta, geometry);
 				if (listenerHolder.hasListener())
 					listenerHolder.getListener().onNewObjectPosition(o);
 				gameInformation.getEventTriggerer().notifyNewObjectPosition(o);

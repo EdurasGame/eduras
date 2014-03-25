@@ -147,7 +147,7 @@ public class ObjectFactory {
 				logic.getGame().addPlayer((PlayerMainFigure) go);
 
 				L.info("Player " + event.getOwner() + " created");
-				testSpawnBird();
+				//testSpawnBird();
 				break;
 			case SIMPLEMISSILE:
 				go = new SimpleMissile(logic.getGame(), timingSource, id);

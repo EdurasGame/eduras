@@ -3,6 +3,7 @@ package de.illonis.eduras.math;
 import java.util.LinkedList;
 
 import org.newdawn.slick.geom.Circle;
+import org.newdawn.slick.geom.Shape;
 import org.newdawn.slick.geom.Vector2f;
 
 /**
@@ -25,6 +26,10 @@ public class Geometry {
 	 */
 	public static double getHypotenuseLength(double a, double b) {
 		return Math.sqrt(BasicMath.square(a) + BasicMath.square(b));
+	}
+
+	public static boolean shapeCollides(Shape a, Shape b) {
+		return a.intersects(b) || a.contains(b) || b.contains(a);
 	}
 
 	/**

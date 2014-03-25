@@ -9,6 +9,8 @@ import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.gameobjects.TimedEventHandler;
 import de.illonis.eduras.gameobjects.TimingSource;
 import de.illonis.eduras.interfaces.GameEventListener;
+import de.illonis.eduras.math.ShapeGeometry;
+import de.illonis.eduras.math.SimpleGeometry;
 import de.illonis.eduras.settings.S;
 
 /**
@@ -34,6 +36,8 @@ public abstract class LogicGameWorker implements Runnable, TimingSource {
 	private final HashMap<Integer, Float> oldRotation;
 	private final Map<TimedEventHandler, Long> timingTargets;
 
+	protected final ShapeGeometry geometry;
+
 	private long lastUpdate;
 
 	/**
@@ -50,6 +54,7 @@ public abstract class LogicGameWorker implements Runnable, TimingSource {
 		this.listenerHolder = listenerHolder;
 		oldRotation = new HashMap<Integer, Float>();
 		lastUpdate = 0;
+		geometry = new SimpleGeometry(gameInfo.getObjects());
 		timingTargets = new HashMap<TimedEventHandler, Long>();
 	}
 

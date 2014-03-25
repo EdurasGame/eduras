@@ -1,8 +1,11 @@
 package de.illonis.eduras.gameobjects;
 
+import org.newdawn.slick.geom.Polygon;
+import org.newdawn.slick.geom.Rectangle;
+import org.newdawn.slick.geom.Vector2f;
+
 import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.ObjectFactory.ObjectType;
-import de.illonis.eduras.math.Vector2df;
 
 /**
  * A polygon block that's shape is designed to be changed later on, for example
@@ -29,6 +32,7 @@ public class DynamicPolygonObject extends GameObject {
 			TimingSource timingSource, int id) {
 		super(game, timingSource, id);
 		setObjectType(type);
+		setShape(new Rectangle(0, 0, 0, 0));
 	}
 
 	/**
@@ -49,9 +53,9 @@ public class DynamicPolygonObject extends GameObject {
 	 *      int)
 	 */
 	public DynamicPolygonObject(ObjectType type, GameInformation game,
-			TimingSource timingSource, int id, Vector2df[] vertices) {
+			TimingSource timingSource, int id, Vector2f[] vertices) {
 		this(type, game, timingSource, id);
-		setPolygonVector2dfs(vertices);
+		setPolygonVertices(vertices);
 	}
 
 	/**
@@ -63,8 +67,13 @@ public class DynamicPolygonObject extends GameObject {
 	 * 
 	 * @author illonis
 	 */
-	public void setPolygonVector2dfs(Vector2df[] vertices) {
-		// ((Polygon) getShape()).setVector2dfs(vertices);
+	public void setPolygonVertices(Vector2f[] vertices) {
+		float[] points = new float[vertices.length * 2];
+		for (int i = 0; i < vertices.length; i++) {
+			points[2 * i] = vertices[i].x;
+			points[2 * i + 1] = vertices[i].y;
+		}
+		setShape(new Polygon(points));
 	}
 
 	@Override

@@ -43,11 +43,7 @@ public class Bird extends MoveableGameObject implements MotionAIControllable {
 	public UnitAI getAI() {
 		return ai;
 	}
-
-	@Override
-	public void onMapBoundsReached() {
-	}
-
+	
 	@Override
 	public void startMovingTo(Vector2df direction) {
 		setSpeedVector(direction);

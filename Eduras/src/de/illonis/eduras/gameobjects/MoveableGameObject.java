@@ -1,10 +1,14 @@
 package de.illonis.eduras.gameobjects;
 
+import java.util.Iterator;
+import java.util.LinkedList;
+
 import org.newdawn.slick.geom.Vector2f;
 
 import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.exceptions.MapBorderReachedException;
 import de.illonis.eduras.interfaces.Moveable;
+import de.illonis.eduras.math.ShapeGeometry;
 import de.illonis.eduras.math.Vector2df;
 
 /**
@@ -113,7 +117,7 @@ public abstract class MoveableGameObject extends GameObject implements Moveable 
 	}
 
 	@Override
-	public void onMove(long delta) {
+	public void onMove(long delta, ShapeGeometry geometry) {
 		if (currentSpeedX == 0f && currentSpeedY == 0f)
 			return;
 		float distance = speed * (delta / (float) 1000L);
@@ -122,16 +126,26 @@ public abstract class MoveableGameObject extends GameObject implements Moveable 
 				.add(getPositionVector());
 
 		Vector2f targetPos;
-		try {
-			targetPos = this.checkCollisionOnMove(target);
-			setPosition(targetPos);
-		} catch (MapBorderReachedException e) {
-			onMapBoundsReached();
+		LinkedList<GameObject> touched = new LinkedList<GameObject>();
+		LinkedList<GameObject> collided = new LinkedList<GameObject>();
+		targetPos = geometry.moveTo(this, target, touched, collided);
+		setPosition(targetPos);
+		for (Iterator<GameObject> iterator = collided.iterator(); iterator
+				.hasNext();) {
+			GameObject gameObject = iterator.next();
+			gameObject.onCollision(this);
+			onCollision(gameObject);
+		}
+		for (Iterator<GameObject> iterator = touched.iterator(); iterator
+				.hasNext();) {
+			GameObject gameObject = iterator.next();
+			gameObject.onTouch(this);
+			onTouch(gameObject);
 		}
 	}
 
 	@Override
-	public void onRotate(float rotationAngle) {
+	public void onRotate(float rotationAngle, ShapeGeometry geometry) {
 		rotationAngle = checkCollisionOnRotation(rotationAngle);
 		rotation = rotationAngle;
 	}

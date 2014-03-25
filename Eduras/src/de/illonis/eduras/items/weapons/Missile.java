@@ -8,6 +8,7 @@ import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.gameobjects.MoveableGameObject;
 import de.illonis.eduras.gameobjects.TimingSource;
+import de.illonis.eduras.math.ShapeGeometry;
 import de.illonis.eduras.math.Vector2df;
 import de.illonis.eduras.settings.S;
 import de.illonis.eduras.units.Unit;
@@ -106,12 +107,12 @@ public abstract class Missile extends MoveableGameObject {
 	}
 
 	@Override
-	public void onMove(long delta) {
+	public void onMove(long delta, ShapeGeometry geometry) {
 		if (maxRange == 0)
-			super.onMove(delta);
+			super.onMove(delta, geometry);
 		else {
 			Vector2df lastPos = getPositionVector();
-			super.onMove(delta);
+			super.onMove(delta, geometry);
 			Vector2df newPos = getPositionVector();
 			rangeMoved += lastPos.distance(newPos);
 			if (rangeMoved > maxRange)
@@ -145,11 +146,6 @@ public abstract class Missile extends MoveableGameObject {
 			}
 		}
 		// TODO: use damage radius
-		removeSelf();
-	}
-
-	@Override
-	public void onMapBoundsReached() {
 		removeSelf();
 	}
 
