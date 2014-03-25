@@ -139,19 +139,15 @@ public class InputKeyHandler {
 
 		switch (binding) {
 		case MOVE_UP:
-			System.out.println("start up");
 			reactor.onStartMovement(Direction.TOP);
 			break;
 		case MOVE_LEFT:
-			System.out.println("start left");
 			reactor.onStartMovement(Direction.LEFT);
 			break;
 		case MOVE_DOWN:
 			reactor.onStartMovement(Direction.BOTTOM);
-			System.out.println("Start down");
 			break;
 		case MOVE_RIGHT:
-			System.out.println("start right");
 			reactor.onStartMovement(Direction.RIGHT);
 			break;
 		case ITEM_1:
@@ -245,20 +241,15 @@ public class InputKeyHandler {
 
 		switch (binding) {
 		case MOVE_UP:
-			System.out.println("stop top");
 			reactor.onStopMovement(Direction.TOP);
 			break;
 		case MOVE_LEFT:
-			System.out.println("stop left");
 			reactor.onStopMovement(Direction.LEFT);
 			break;
 		case MOVE_DOWN:
-			System.out.println("stop down");
 			reactor.onStopMovement(Direction.BOTTOM);
-			System.out.println("stop down");
 			break;
 		case MOVE_RIGHT:
-			System.out.println("stop right");
 			reactor.onStopMovement(Direction.RIGHT);
 			break;
 		case SHOW_STATS:

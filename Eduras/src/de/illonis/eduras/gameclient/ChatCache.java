@@ -147,7 +147,7 @@ public class ChatCache {
 	 *            the new chatroom.
 	 */
 	public void setCurrentRoom(ChatRoom chatRoom) {
-		pushSystemMessage("You joined " + chatRoom.getName());
+		pushSystemMessage("Set current room to " + chatRoom.getName());
 		currentRoom = chatRoom;
 	}
 

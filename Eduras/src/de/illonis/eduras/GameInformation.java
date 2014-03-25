@@ -523,4 +523,13 @@ public class GameInformation {
 
 		return isAnyOfObjectsWithinBounds(boundings, objectsWithoutMap);
 	}
+
+	/**
+	 * Removes the team.
+	 * 
+	 * @param team
+	 */
+	public void removeTeam(Team team) {
+		teams.remove(team.getTeamId());
+	}
 }

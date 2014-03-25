@@ -132,6 +132,7 @@ public class Settings implements ResettableSetting {
 
 	private void loadBooleanDefaults() {
 		booleanSettings.put("chooseOnPress", true);
+		booleanSettings.put("continuousItemUsage", true);
 	}
 
 	/**

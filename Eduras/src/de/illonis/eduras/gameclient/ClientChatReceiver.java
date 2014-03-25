@@ -58,7 +58,6 @@ public class ClientChatReceiver implements ChatActivityListener {
 	@Override
 	public void onYouJoined(ChatRoom chatRoom) {
 		cache.setCurrentRoom(chatRoom);
-		cache.pushSystemMessage("You joined " + chatRoom.getName());
 	}
 
 	@Override

@@ -77,6 +77,14 @@ public interface GameMode {
 	public void onConnect(int ownerId);
 
 	/**
+	 * Called when a player disconnects.
+	 * 
+	 * @param ownerId
+	 *            id of disconnected player.
+	 */
+	public void onDisconnect(int ownerId);
+
+	/**
 	 * Called when match begins to let gamemode initalize some things.
 	 * 
 	 * @author illonis

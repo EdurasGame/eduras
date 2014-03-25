@@ -126,4 +126,22 @@ public class TeamDeathmatch extends Deathmatch {
 		} else
 			return Relation.HOSTILE;
 	}
+
+	@Override
+	public void onDisconnect(int ownerId) {
+		PlayerMainFigure gonePlayer;
+		try {
+			gonePlayer = gameInfo.getPlayerByOwnerId(ownerId);
+		} catch (ObjectNotFoundException e) {
+			L.log(Level.SEVERE, "player not found", e);
+			return;
+		}
+
+		// and from the statistics and game
+		gameInfo.getGameSettings().getStats().removePlayerFromStats(ownerId);
+		gameInfo.getEventTriggerer().removePlayer(ownerId);
+
+		// reset the teams such that they don't contain the player anymore
+		gameInfo.getEventTriggerer().setTeams(gameInfo.getTeams());
+	}
 }

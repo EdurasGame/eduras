@@ -92,7 +92,8 @@ public class Deathmatch extends BasicGameMode {
 			return;
 		}
 
-		Team t = new Team(newPlayer.getName(), Team.getNextTeamId());
+		int teamId = Team.getNextTeamId();
+		Team t = new Team("Team " + teamId, teamId);
 		gameInfo.addTeam(t);
 		gameInfo.getEventTriggerer().setTeams(gameInfo.getTeams());
 		gameInfo.getEventTriggerer().addPlayerToTeam(newPlayer.getOwner(), t);
@@ -127,5 +128,28 @@ public class Deathmatch extends BasicGameMode {
 	@Override
 	public Relation getRelation(GameObject a, GameObject b) {
 		return Relation.HOSTILE;
+	}
+
+	@Override
+	public void onDisconnect(int ownerId) {
+		PlayerMainFigure gonePlayer;
+		try {
+			gonePlayer = gameInfo.getPlayerByOwnerId(ownerId);
+		} catch (ObjectNotFoundException e) {
+			L.log(Level.SEVERE, "player not found", e);
+			return;
+		}
+
+		// remove it to the statistic
+		gameInfo.getGameSettings().getStats().removePlayerFromStats(ownerId);
+
+		Team playersTeam = gonePlayer.getTeam();
+
+		// remove the actual player (also removes the player from its team)
+		gameInfo.getEventTriggerer().removePlayer(ownerId);
+
+		// .. and remove it's team
+		gameInfo.removeTeam(playersTeam);
+		gameInfo.getEventTriggerer().setTeams(gameInfo.getTeams());
 	}
 }
