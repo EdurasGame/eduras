@@ -139,6 +139,7 @@ public abstract class NeutralArea extends TriggerArea {
 	@Override
 	protected void intervalElapsed(long delta) {
 		if (currentProgressingTeam != null
+				&& currentProgressingTeam != currentOwnerTeam
 				&& (progress < 100 || !currentProgressingTeam
 						.equals(currentOwnerTeam))) {
 			if (timeNeededForTakeOver <= 0) {
