@@ -20,41 +20,6 @@ public class GeometryUtilsTests {
 
 	/**
 	 * Tests the
-	 * {@link de.illonis.eduras.math.Geometry#getSegmentLinesInterceptPoint(Line, Line)
-	 * getSegmentLineInterceptPoint} method.
-	 */
-	@Test
-	public void getSegmentLineInterceptPoint() {
-
-		Line line1 = new Line(new Vector2df(1, 0), new Vector2df(-1, 0));
-		Line line2 = new Line(new Vector2df(0, 1), new Vector2df(0, -1));
-
-		Vector2df interceptPoint = Geometry.getSegmentLinesInterceptPoint(
-				line1, line2);
-
-		assertTrue(interceptPoint.isNull());
-
-		Line line3 = new Line(new Vector2df(1, 1), new Vector2df(-1, -1));
-		assertTrue(Geometry.getSegmentLinesInterceptPoint(line1, line3)
-				.isNull());
-		assertTrue(Geometry.getSegmentLinesInterceptPoint(line3, line2)
-				.isNull());
-
-		Line line4 = new Line(new Vector2df(-3, -5), new Vector2df(1, 3));
-
-		interceptPoint = Geometry.getSegmentLinesInterceptPoint(line4, line1);
-
-		assertTrue(interceptPoint.equals(new Vector2df(-0.5f, 0)));
-
-		Line line5 = new Line(new Vector2df(2, 0), new Vector2df(-2, 0));
-
-		interceptPoint = Geometry.getSegmentLinesInterceptPoint(line1, line5);
-
-		assertTrue(interceptPoint != null);
-	}
-
-	/**
-	 * Tests the
 	 * {@link de.illonis.eduras.math.Geometry#getLinesBetweenShapePositions(Vector2df[], Vector2df, Vector2df)
 	 * getLinesBetweenShapePositions} method.
 	 */

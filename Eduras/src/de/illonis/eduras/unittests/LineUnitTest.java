@@ -5,6 +5,7 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.newdawn.slick.geom.Vector2f;
 
 import de.illonis.eduras.math.Line;
 import de.illonis.eduras.math.Vector2df;
@@ -42,9 +43,9 @@ public class LineUnitTest {
 	@Test
 	public void supportAndDirectionVectorCreation() {
 
-		Vector2df directionalVec = horizontallineThroughOrigin
+		Vector2f directionalVec = horizontallineThroughOrigin
 				.getDirectionalVector();
-		Vector2df suppVec = horizontallineThroughOrigin.getSupportVector();
+		Vector2f suppVec = horizontallineThroughOrigin.getSupportVector();
 		assertTrue(directionalVec.equals(new Vector2df(-2, 0)));
 		assertTrue(suppVec.equals(new Vector2df(1, 0)));
 

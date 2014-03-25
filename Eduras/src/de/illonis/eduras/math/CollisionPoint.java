@@ -103,9 +103,10 @@ public class CollisionPoint {
 	 */
 	public static CollisionPoint createCollisionPointByInterceptPoint(
 			Vector2df interceptPoint, Line line) {
-		double distanceVectorX = interceptPoint.getX() - line.getU().getX();
-		double distanceVectorY = interceptPoint.getY() - line.getU().getY();
-		Vector2df distanceVector = new Vector2df(distanceVectorX, distanceVectorY);
+		float distanceVectorX = interceptPoint.getX() - line.getU().getX();
+		float distanceVectorY = interceptPoint.getY() - line.getU().getY();
+		Vector2df distanceVector = new Vector2df(distanceVectorX,
+				distanceVectorY);
 
 		L.finest("[LOGIC][TRIANGLE] Collision at " + interceptPoint.getX()
 				+ " , " + interceptPoint.getY());

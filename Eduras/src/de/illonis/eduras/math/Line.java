@@ -1,5 +1,7 @@
 package de.illonis.eduras.math;
 
+import org.newdawn.slick.geom.Vector2f;
+
 /**
  * Represents a two-dimensional line. See <a href=
  * "http://www.java-forum.org/spiele-multimedia-programmierung/6588-einiges-geometrie-punkte-vektoren-geraden.html"
@@ -17,8 +19,8 @@ public class Line {
 	private final double b;
 	private final double c;
 
-	private final Vector2df u;
-	private final Vector2df v;
+	private final Vector2f u;
+	private final Vector2f v;
 
 	/**
 	 * Creates a line that goes through u and v.
@@ -26,7 +28,7 @@ public class Line {
 	 * @param u
 	 * @param v
 	 */
-	public Line(Vector2df u, Vector2df v) {
+	public Line(Vector2f u, Vector2f v) {
 
 		this.u = u;
 		this.v = v;
@@ -57,7 +59,7 @@ public class Line {
 	 * 
 	 * @return A position vector to the first point.
 	 */
-	public Vector2df getU() {
+	public Vector2f getU() {
 		return u;
 	}
 
@@ -66,7 +68,7 @@ public class Line {
 	 * 
 	 * @return A position vector to the second point.
 	 */
-	public Vector2df getV() {
+	public Vector2f getV() {
 		return v;
 	}
 
@@ -79,8 +81,8 @@ public class Line {
 	 *         vectors of which this line was made up. So if you call getU() on
 	 *         this line and add the directional vector to u, you will gain v.
 	 */
-	public Vector2df getDirectionalVector() {
-		Vector2df vec = new Vector2df(v);
+	public Vector2f getDirectionalVector() {
+		Vector2f vec = new Vector2f(v);
 		vec.sub(u);
 		return vec;
 	}
@@ -90,8 +92,8 @@ public class Line {
 	 * 
 	 * @return You will get a copy of the vector you gain calling getU().
 	 */
-	public Vector2df getSupportVector() {
-		Vector2df vec = new Vector2df(u);
+	public Vector2f getSupportVector() {
+		Vector2f vec = new Vector2df(u);
 		return vec;
 	}
 
@@ -104,11 +106,11 @@ public class Line {
 	 *            The multiplier.
 	 * @return Returns u + uv * lambda
 	 */
-	public Vector2df getPointAt(float lambda) {
+	public Vector2f getPointAt(float lambda) {
 
-		Vector2df resultPoint = new Vector2df(getU());
+		Vector2f resultPoint = new Vector2f(getU());
 
-		Vector2df temp = new Vector2df(getDirectionalVector());
+		Vector2f temp = new Vector2f(getDirectionalVector());
 		temp.scale(lambda);
 
 		resultPoint.add(temp);

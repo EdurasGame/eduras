@@ -147,7 +147,7 @@ public class ClientLogicGameWorker extends LogicGameWorker {
 			int j = 1;
 			Vector2df p = null;
 			while (distance < radius) {
-				p = l.getPointAt(ROTATION_DIST_RESOLUTION * j);
+				p = new Vector2df(l.getPointAt(ROTATION_DIST_RESOLUTION * j));
 				LinkedList<GameObject> objs = gameInformation
 						.findObjectsInDistance(p, ROTATION_DIST_RESOLUTION);
 				if (objs.size() > 0) {
