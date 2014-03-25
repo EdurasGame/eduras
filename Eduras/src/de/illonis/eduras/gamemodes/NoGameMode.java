@@ -1,5 +1,7 @@
 package de.illonis.eduras.gamemodes;
 
+import java.util.Set;
+
 import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.ObjectFactory.ObjectType;
 import de.illonis.eduras.Team;
@@ -90,5 +92,22 @@ public class NoGameMode extends BasicGameMode {
 	public void onDisconnect(int ownerId) {
 		// simply remove the player
 		gameInfo.getEventTriggerer().removePlayer(ownerId);
+	}
+
+	@Override
+	public Team determineProgressingTeam(GameObject object,
+			boolean objectEntered, Set<GameObject> presentObjects) {
+		// don't care about neutral bases
+		return null;
+	}
+
+	@Override
+	public void onBaseOccupied(Team occupyingTeam) {
+		// don't care about neutral bases
+	}
+
+	@Override
+	public void onBaseLost(Team losingTeam) {
+		// don't care about neutral bases
 	}
 }

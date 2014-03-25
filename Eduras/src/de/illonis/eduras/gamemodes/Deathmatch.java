@@ -1,6 +1,7 @@
 package de.illonis.eduras.gamemodes;
 
 import java.util.LinkedList;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -151,5 +152,25 @@ public class Deathmatch extends BasicGameMode {
 		// .. and remove it's team
 		gameInfo.removeTeam(playersTeam);
 		gameInfo.getEventTriggerer().setTeams(gameInfo.getTeams());
+	}
+
+	@Override
+	public Team determineProgressingTeam(GameObject object,
+			boolean objectEntered, Set<GameObject> presentObjects) {
+		if (presentObjects.size() == 1) {
+			Unit onlyUnitInside = (Unit) presentObjects.iterator().next();
+			return onlyUnitInside.getTeam();
+		}
+		return null;
+	}
+
+	@Override
+	public void onBaseOccupied(Team occupyingTeam) {
+		L.info("Team " + occupyingTeam.getName() + " occupied the base!");
+	}
+
+	@Override
+	public void onBaseLost(Team losingTeam) {
+		L.info("Team " + losingTeam.getName() + " lost the base!");
 	}
 }
