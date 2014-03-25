@@ -88,7 +88,7 @@ public class PlayerMainFigure extends Unit implements MovementControlable {
 		// Vector2df secondEdge = new Vector2df(-10, 10);
 		// Vector2df thirdEdge = new Vector2df(-10, -10);
 
-		setShape(new Circle(4.5f, 4.5f, 9f));
+		setShape(new Circle(4.5f, 4.5f, 9f, 360));
 
 		// try {
 		// // setShape(new Triangle(firstEdge, secondEdge, thirdEdge));

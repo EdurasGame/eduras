@@ -18,9 +18,9 @@ public class House extends Polygon {
 	public House() {
 		// FIXME: change coordinates.
 		addPoint(0, 20);
-		addPoint(20, 0);
-		addPoint(40, 20);
-		addPoint(40, 60);
 		addPoint(0, 60);
+		addPoint(40, 60);
+		addPoint(40, 20);
+		addPoint(20, 0);
 	}
 }
