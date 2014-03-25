@@ -2,6 +2,7 @@ package de.illonis.eduras;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.net.Inet4Address;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
@@ -53,6 +54,7 @@ import de.illonis.eduras.networking.discover.ServerSearcher;
 import de.illonis.eduras.serverconsole.NoConsoleException;
 import de.illonis.eduras.serverconsole.ServerConsole;
 import de.illonis.eduras.settings.S;
+import de.illonis.eduras.utils.ReflectionTools;
 import de.illonis.eduras.utils.WebFetcher;
 
 /**
@@ -570,8 +572,29 @@ public class EdurasServer {
 			}
 
 			default:
-				System.out.println("Unknown argument " + parameterName);
-				System.exit(-1);
+				final String sClassName = S.class.getSimpleName();
+
+				if (parameterName.startsWith(sClassName + ".")) {
+					try {
+						Field f = S.class.getField(parameterName
+								.substring(sClassName.length() + 1));
+						Class<?> targetClass = f.getType();
+						Object value = ReflectionTools.toPrimitive(targetClass,
+								parameterValue);
+						f.set(null, value);
+						L.log(Level.INFO, "Set S." + f.getName() + " to "
+								+ value);
+					} catch (NoSuchFieldException | SecurityException
+							| IllegalArgumentException | IllegalAccessException e) {
+						L.log(Level.WARNING,
+								"Failed to set S field from command line, argument: "
+										+ parameterName + "=" + parameterValue,
+								e);
+					}
+				} else {
+					System.out.println("Unknown argument " + parameterName);
+					System.exit(-1);
+				}
 			}
 		}
 
