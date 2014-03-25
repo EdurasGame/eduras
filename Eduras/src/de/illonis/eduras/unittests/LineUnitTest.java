@@ -1,6 +1,3 @@
-/**
- * 
- */
 package de.illonis.eduras.unittests;
 
 import static org.junit.Assert.assertFalse;
@@ -33,7 +30,7 @@ public class LineUnitTest {
 				new Vector2df(-1, 0));
 		fourtyFiveDegreesLineThroughOrigin = new Line(new Vector2df(-1, -1),
 				new Vector2df(1, 1));
-		randomLine = new Line(new Vector2df(-10.505, 2), new Vector2df(0, 23));
+		randomLine = new Line(new Vector2df(-10.505f, 2), new Vector2df(0, 23));
 	}
 
 	/**
@@ -62,8 +59,8 @@ public class LineUnitTest {
 		assertTrue("The vector (" + directionalVec.getX() + ","
 				+ directionalVec.getY()
 				+ ") is not the same as the vector (10.505,21)",
-				directionalVec.equals(new Vector2df(10.505, 21)));
-		assertTrue(suppVec.equals(new Vector2df(-10.505, 2)));
+				directionalVec.equals(new Vector2df(10.505f, 21)));
+		assertTrue(suppVec.equals(new Vector2df(-10.505f, 2)));
 
 	}
 
@@ -75,8 +72,8 @@ public class LineUnitTest {
 	public void containsPointTest() {
 		assertTrue(horizontallineThroughOrigin
 				.containsPoint(new Vector2df(0, 0)));
-		assertTrue(horizontallineThroughOrigin
-				.containsPoint(new Vector2df(30, 0)));
+		assertTrue(horizontallineThroughOrigin.containsPoint(new Vector2df(30,
+				0)));
 		assertTrue(horizontallineThroughOrigin
 				.containsPoint(new Vector2df(1, 0)));
 
@@ -85,10 +82,10 @@ public class LineUnitTest {
 		assertTrue(fourtyFiveDegreesLineThroughOrigin
 				.containsPoint(new Vector2df(0, 0)));
 		assertTrue(fourtyFiveDegreesLineThroughOrigin
-				.containsPoint(new Vector2df(10001.1001, 10001.1001)));
+				.containsPoint(new Vector2df(10001.1001f, 10001.1001f)));
 
-		assertTrue(randomLine.containsPoint(new Vector2df(10.505, 44)));
-		assertTrue(randomLine.containsPoint(new Vector2df(36.7675, 96.5)));
+		assertTrue(randomLine.containsPoint(new Vector2df(10.505f, 44)));
+		assertTrue(randomLine.containsPoint(new Vector2df(36.7675f, 96.5f)));
 		assertFalse(randomLine.containsPoint(new Vector2df(0, 0)));
 	}
 
