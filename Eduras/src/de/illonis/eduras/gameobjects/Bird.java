@@ -7,8 +7,8 @@ import de.illonis.eduras.ai.movement.MotionType;
 import de.illonis.eduras.ai.movement.MovingUnitAI;
 import de.illonis.eduras.math.Vector2df;
 import de.illonis.eduras.settings.S;
-import de.illonis.eduras.shapes.ObjectShape.ShapeType;
 import de.illonis.eduras.shapes.ShapeFactory;
+import de.illonis.eduras.shapes.ShapeFactory.ShapeType;
 
 /**
  * A simple flying bird.

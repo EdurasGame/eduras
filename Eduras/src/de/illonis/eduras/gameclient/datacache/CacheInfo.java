@@ -3,7 +3,7 @@ package de.illonis.eduras.gameclient.datacache;
 import java.util.HashMap;
 
 import de.illonis.eduras.ObjectFactory.ObjectType;
-import de.illonis.eduras.shapes.ObjectShape.ShapeType;
+import de.illonis.eduras.shapes.ShapeFactory.ShapeType;
 
 /**
  * Contains lists of cachable files and their location.<br>

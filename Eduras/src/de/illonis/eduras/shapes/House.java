@@ -1,6 +1,6 @@
 package de.illonis.eduras.shapes;
 
-import de.illonis.eduras.math.Vector2df;
+import org.newdawn.slick.geom.Polygon;
 
 /**
  * A basic house.
@@ -10,14 +10,17 @@ import de.illonis.eduras.math.Vector2df;
  */
 public class House extends Polygon {
 
+	private static final long serialVersionUID = 1L;
+
 	/**
 	 * Creates a basic house shape.
 	 */
 	public House() {
 		// FIXME: change coordinates.
-		Vector2df vertices[] = { new Vector2df(0, 20), new Vector2df(20, 0),
-				new Vector2df(40, 20), new Vector2df(40, 60),
-				new Vector2df(0, 60) };
-		setVector2dfs(vertices);
+		addPoint(0, 20);
+		addPoint(20, 0);
+		addPoint(40, 20);
+		addPoint(40, 60);
+		addPoint(0, 60);
 	}
 }

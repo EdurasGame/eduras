@@ -5,7 +5,6 @@ import java.util.LinkedList;
 import org.newdawn.slick.geom.Circle;
 
 import de.illonis.eduras.exceptions.PointNotOnCircleException;
-import de.illonis.eduras.shapes.ObjectShape;
 import de.illonis.eduras.utils.Pair;
 
 /**
