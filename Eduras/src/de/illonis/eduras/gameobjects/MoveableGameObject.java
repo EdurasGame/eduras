@@ -6,6 +6,7 @@ import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.exceptions.MapBorderReachedException;
 import de.illonis.eduras.interfaces.Moveable;
 import de.illonis.eduras.math.Vector2df;
+import de.illonis.eduras.units.PlayerMainFigure;
 
 /**
  * A moveable gameobject. It differs from {@link GameObject} because it has a
@@ -30,7 +31,8 @@ public abstract class MoveableGameObject extends GameObject implements Moveable 
 	private Direction currentDirection;
 
 	private float speed = 0;
-	private Vector2df speedVector = new Vector2df();
+	protected float currentSpeedX;
+	protected float currentSpeedY;
 
 	/**
 	 * Returns true if movement direction is horizontal.
@@ -56,6 +58,8 @@ public abstract class MoveableGameObject extends GameObject implements Moveable 
 	public MoveableGameObject(GameInformation game, TimingSource timingSource,
 			int id) {
 		super(game, timingSource, id);
+		currentSpeedX = 0f;
+		currentSpeedY = 0f;
 	}
 
 	/**
@@ -94,7 +98,8 @@ public abstract class MoveableGameObject extends GameObject implements Moveable 
 	 *            new speed vector
 	 */
 	public void setSpeedVector(Vector2df speedVector) {
-		this.speedVector = speedVector;
+		currentSpeedX = speedVector.x;
+		currentSpeedY = speedVector.y;
 	}
 
 	/**
@@ -105,15 +110,18 @@ public abstract class MoveableGameObject extends GameObject implements Moveable 
 	 * @author illonis
 	 */
 	public Vector2f getSpeedVector() {
-		return speedVector;
+		return new Vector2f(currentSpeedX, currentSpeedY);
 	}
 
 	@Override
 	public void onMove(long delta) {
-		if (speedVector.x == 0 && speedVector.y == 0)
+		if (currentSpeedX == 0f && currentSpeedY == 0f)
 			return;
+		if (this instanceof PlayerMainFigure)
+			System.out.println("x: " + currentSpeedX + ", y: " + currentSpeedY);
 		float distance = speed * (delta / (float) 1000L);
-		Vector2f target = speedVector.getNormal().scale(distance)
+
+		Vector2f target = getSpeedVector().normalise().scale(distance)
 				.add(getPositionVector());
 
 		Vector2f targetPos;
@@ -145,17 +153,17 @@ public abstract class MoveableGameObject extends GameObject implements Moveable 
 	public Vector2f checkCollisionOnMove(Vector2f target)
 			throws MapBorderReachedException {
 		return target;
-//		 Vector2df currentTarget = target;
-//		 Vector2df collisionPoint = this.getShape().checkCollisionOnMove(
-//		 getGame(), this, currentTarget);
-//		
-//		 while (!collisionPoint.equals(currentTarget)) {
-//		 currentTarget = collisionPoint;
-//		 collisionPoint = this.getShape().checkCollisionOnMove(getGame(),
-//		 this, currentTarget);
-//		 }
-//		
-//		 return currentTarget;
+		// Vector2df currentTarget = target;
+		// Vector2df collisionPoint = this.getShape().checkCollisionOnMove(
+		// getGame(), this, currentTarget);
+		//
+		// while (!collisionPoint.equals(currentTarget)) {
+		// currentTarget = collisionPoint;
+		// collisionPoint = this.getShape().checkCollisionOnMove(getGame(),
+		// this, currentTarget);
+		// }
+		//
+		// return currentTarget;
 	}
 
 	/**
