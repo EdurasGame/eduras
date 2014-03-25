@@ -14,21 +14,32 @@ import de.illonis.eduras.units.PlayerMainFigure;
 public class Statistic {
 
 	/**
-	 * Maps the owner id of a player to his kill count.
+	 * This enum represents the different kinds of statistics.
+	 * 
+	 * @author Florian 'Ren' Mai <florian.ren.mai@googlemail.com>
+	 * 
 	 */
-	private final HashMap<Integer, Integer> killsOfPlayer;
+	public enum StatsProperty {
+		/**
+		 * Number of kills
+		 */
+		KILLS,
+		/**
+		 * Number of deaths
+		 */
+		DEATHS
+	}
 
-	/**
-	 * Maps the owner id of a player to his death count.
-	 */
-	private final HashMap<Integer, Integer> deathsOfPlayer;
+	private final HashMap<StatsProperty, HashMap<Integer, Integer>> stats;
 
 	/**
 	 * Creates a new empty statistic.
 	 */
 	public Statistic() {
-		killsOfPlayer = new HashMap<Integer, Integer>();
-		deathsOfPlayer = new HashMap<Integer, Integer>();
+		stats = new HashMap<StatsProperty, HashMap<Integer, Integer>>();
+
+		stats.put(StatsProperty.KILLS, new HashMap<Integer, Integer>());
+		stats.put(StatsProperty.DEATHS, new HashMap<Integer, Integer>());
 	}
 
 	/**
@@ -39,9 +50,22 @@ public class Statistic {
 	 * @return The number of kills.
 	 */
 	public int getKillsOfPlayer(PlayerMainFigure player) {
-		if (killsOfPlayer.containsKey(player.getOwner()))
-			return killsOfPlayer.get(player.getOwner());
+		HashMap<Integer, Integer> kills = stats.get(StatsProperty.KILLS);
+		if (kills.containsKey(player.getOwner()))
+			return kills.get(player.getOwner());
 		return 0;
+	}
+
+	/**
+	 * Set a {@link StatsProperty} of a player identified by the given id to the
+	 * given value.
+	 * 
+	 * @param prop
+	 * @param ownerId
+	 * @param newVal
+	 */
+	public void setStatsProperty(StatsProperty prop, int ownerId, int newVal) {
+		stats.get(prop).put(ownerId, newVal);
 	}
 
 	/**
@@ -52,8 +76,9 @@ public class Statistic {
 	 * @return The number of deaths.
 	 */
 	public int getDeathsOfPlayer(PlayerMainFigure player) {
-		if (deathsOfPlayer.containsKey(player.getOwner()))
-			return deathsOfPlayer.get(player.getOwner());
+		HashMap<Integer, Integer> deaths = stats.get(StatsProperty.DEATHS);
+		if (deaths.containsKey(player.getOwner()))
+			return deaths.get(player.getOwner());
 		return 0;
 	}
 
@@ -63,7 +88,8 @@ public class Statistic {
 	 * @param player
 	 */
 	public void addDeathForPlayer(PlayerMainFigure player) {
-		deathsOfPlayer.put(player.getOwner(), getDeathsOfPlayer(player) + 1);
+		HashMap<Integer, Integer> deaths = stats.get(StatsProperty.DEATHS);
+		deaths.put(player.getOwner(), getDeathsOfPlayer(player) + 1);
 	}
 
 	/**
@@ -72,7 +98,8 @@ public class Statistic {
 	 * @param player
 	 */
 	public void addKillForPlayer(PlayerMainFigure player) {
-		killsOfPlayer.put(player.getOwner(), getKillsOfPlayer(player) + 1);
+		HashMap<Integer, Integer> kills = stats.get(StatsProperty.KILLS);
+		kills.put(player.getOwner(), getKillsOfPlayer(player) + 1);
 	}
 
 	/**
@@ -83,6 +110,8 @@ public class Statistic {
 	public int findPlayerWithMostFrags() {
 		int maxPlayerId = -1;
 		int maxFrags = 0;
+		HashMap<Integer, Integer> killsOfPlayer = stats
+				.get(StatsProperty.KILLS);
 
 		for (Integer playerId : killsOfPlayer.keySet()) {
 			if (killsOfPlayer.get(playerId) > maxFrags) {
@@ -101,8 +130,10 @@ public class Statistic {
 	 *            The id of the player.
 	 */
 	public void addPlayerToStats(int ownerId) {
-		killsOfPlayer.put(ownerId, 0);
-		deathsOfPlayer.put(ownerId, 0);
+
+		for (HashMap<Integer, Integer> statProp : stats.values()) {
+			statProp.put(ownerId, 0);
+		}
 	}
 
 	/**
@@ -110,12 +141,13 @@ public class Statistic {
 	 * set to zero.
 	 */
 	public void reset() {
+		HashMap<Integer, Integer> kills = stats.get(StatsProperty.KILLS);
 
-		LinkedList<Integer> players = new LinkedList<Integer>(
-				killsOfPlayer.keySet());
+		LinkedList<Integer> players = new LinkedList<Integer>(kills.keySet());
 
-		killsOfPlayer.clear();
-		deathsOfPlayer.clear();
+		for (HashMap<Integer, Integer> aStat : stats.values()) {
+			aStat.clear();
+		}
 
 		for (Integer player : players) {
 			addPlayerToStats(player);
@@ -130,7 +162,7 @@ public class Statistic {
 	 * @param newCount
 	 */
 	public void setKills(int playerId, int newCount) {
-		killsOfPlayer.put(playerId, newCount);
+		setStatsProperty(StatsProperty.KILLS, playerId, newCount);
 	}
 
 	/**
@@ -140,7 +172,7 @@ public class Statistic {
 	 * @param newCount
 	 */
 	public void setDeaths(int playerId, int newCount) {
-		deathsOfPlayer.put(playerId, newCount);
+		setStatsProperty(StatsProperty.DEATHS, playerId, newCount);
 	}
 
 	/**
@@ -150,7 +182,8 @@ public class Statistic {
 	 *            The id of the player to be removed from the stats.
 	 */
 	public void removePlayerFromStats(int ownerId) {
-		killsOfPlayer.remove(ownerId);
-		deathsOfPlayer.remove(ownerId);
+		for (HashMap<Integer, Integer> aStat : stats.values()) {
+			aStat.remove(ownerId);
+		}
 	}
 }

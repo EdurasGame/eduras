@@ -28,12 +28,12 @@ import de.illonis.eduras.events.SetItemSlotEvent;
 import de.illonis.eduras.events.SetOwnerEvent;
 import de.illonis.eduras.events.SetPolygonDataEvent;
 import de.illonis.eduras.events.SetRemainingTimeEvent;
+import de.illonis.eduras.events.SetStatsEvent;
 import de.illonis.eduras.events.SetTeamsEvent;
+import de.illonis.eduras.exceptions.NoSuchGameModeException;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
-import de.illonis.eduras.gamemodes.Deathmatch;
+import de.illonis.eduras.gamemodes.BasicGameMode;
 import de.illonis.eduras.gamemodes.GameMode;
-import de.illonis.eduras.gamemodes.NoGameMode;
-import de.illonis.eduras.gamemodes.TeamDeathmatch;
 import de.illonis.eduras.gameobjects.DynamicPolygonObject;
 import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.interfaces.GameEventListener;
@@ -293,23 +293,20 @@ public class ClientLogic implements GameLogicInterface {
 				break;
 			case SET_GAMEMODE:
 				SetGameModeEvent modeChangeEvent = (SetGameModeEvent) event;
-				GameMode newGameMode;
-				String newMode = modeChangeEvent.getNewMode();
-				switch (newMode) {
-				case "Deathmatch":
-					newGameMode = new Deathmatch(gameInfo);
-					break;
-				case "Team-Deathmatch":
-					newGameMode = new TeamDeathmatch(gameInfo);
-					break;
-				default:
-					newGameMode = new NoGameMode(gameInfo);
-					break;
+				String newModeString = modeChangeEvent.getNewMode();
+
+				GameMode newMode = null;
+				try {
+					newMode = BasicGameMode.getGameModeByName(newModeString,
+							getGame());
+				} catch (NoSuchGameModeException e1) {
+					L.log(Level.SEVERE, "Got unknown game mode", e1);
+					return;
 				}
 
-				gameInfo.getGameSettings().changeGameMode(newGameMode);
+				gameInfo.getGameSettings().changeGameMode(newMode);
 
-				getListener().onGameModeChanged(newGameMode);
+				getListener().onGameModeChanged(newMode);
 
 				break;
 			case SET_OWNER:
@@ -333,6 +330,14 @@ public class ClientLogic implements GameLogicInterface {
 				newCount = setDeathsEvent.getNewValue();
 				gameInfo.getGameSettings().getStats()
 						.setDeaths(ownerId, newCount);
+				break;
+			case SET_STATS:
+				SetStatsEvent setStatsEvent = (SetStatsEvent) event;
+				gameInfo.getGameSettings()
+						.getStats()
+						.setStatsProperty(setStatsEvent.getProperty(),
+								setStatsEvent.getPlayerId(),
+								setStatsEvent.getNewCount());
 				break;
 			case SET_REMAININGTIME:
 				SetRemainingTimeEvent remainingTimeEvent = (SetRemainingTimeEvent) event;

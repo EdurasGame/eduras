@@ -12,6 +12,7 @@ import de.illonis.eduras.ClientGameMode;
 import de.illonis.eduras.EdurasServer;
 import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.ObjectFactory.ObjectType;
+import de.illonis.eduras.Statistic.StatsProperty;
 import de.illonis.eduras.Team;
 import de.illonis.eduras.ai.movement.UnitNotControllableException;
 import de.illonis.eduras.events.GameEvent;
@@ -295,6 +296,13 @@ public class EdurasInitializer {
 			@Override
 			public void createDynamicPolygonObjectAt(ObjectType type,
 					Vector2D[] polygonVertices, Vector2D position, int owner) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void setStats(StatsProperty property, int ownerId,
+					int valueToSet) {
 				// TODO Auto-generated method stub
 
 			}

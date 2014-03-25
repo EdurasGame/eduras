@@ -14,6 +14,7 @@ import de.eduras.eventingserver.test.NoSuchClientException;
 import de.illonis.edulog.EduLog;
 import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.ObjectFactory.ObjectType;
+import de.illonis.eduras.Statistic.StatsProperty;
 import de.illonis.eduras.Team;
 import de.illonis.eduras.ai.movement.MotionAIControllable;
 import de.illonis.eduras.ai.movement.MovingUnitAI;
@@ -39,6 +40,7 @@ import de.illonis.eduras.events.SetItemSlotEvent;
 import de.illonis.eduras.events.SetOwnerEvent;
 import de.illonis.eduras.events.SetPolygonDataEvent;
 import de.illonis.eduras.events.SetRemainingTimeEvent;
+import de.illonis.eduras.events.SetStatsEvent;
 import de.illonis.eduras.events.SetTeamsEvent;
 import de.illonis.eduras.exceptions.GameModeNotSupportedByMapException;
 import de.illonis.eduras.exceptions.InvalidNameException;
@@ -712,5 +714,15 @@ public class ServerEventTriggerer implements EventTriggerer {
 				GameEventNumber.SET_COLLIDABLE, objectId, newVal);
 		object.setCollidable(newVal);
 		sendEvents(setCollidableEvent);
+	}
+
+	@Override
+	public void setStats(StatsProperty property, int ownerId, int valueToSet) {
+		gameInfo.getGameSettings().getStats()
+				.setStatsProperty(property, ownerId, valueToSet);
+
+		SetStatsEvent setStatsEvent = new SetStatsEvent(property, ownerId,
+				valueToSet);
+		sendEvents(setStatsEvent);
 	}
 }

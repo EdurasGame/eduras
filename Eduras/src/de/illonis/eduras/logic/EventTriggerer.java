@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import de.illonis.eduras.ObjectFactory.ObjectType;
+import de.illonis.eduras.Statistic.StatsProperty;
 import de.illonis.eduras.Team;
 import de.illonis.eduras.ai.movement.UnitNotControllableException;
 import de.illonis.eduras.events.GameEvent;
@@ -381,5 +382,15 @@ public interface EventTriggerer {
 	 *            The new value of the collidability.
 	 */
 	public void setCollidability(int objectId, boolean newVal);
+
+	/**
+	 * Set a {@link StatsProperty} of the player identified by the given id to
+	 * the given value.
+	 * 
+	 * @param property
+	 * @param ownerId
+	 * @param valueToSet
+	 */
+	public void setStats(StatsProperty property, int ownerId, int valueToSet);
 
 }
