@@ -16,12 +16,12 @@ public class Statistic {
 	/**
 	 * Maps the owner id of a player to his kill count.
 	 */
-	private HashMap<Integer, Integer> killsOfPlayer;
+	private final HashMap<Integer, Integer> killsOfPlayer;
 
 	/**
 	 * Maps the owner id of a player to his death count.
 	 */
-	private HashMap<Integer, Integer> deathsOfPlayer;
+	private final HashMap<Integer, Integer> deathsOfPlayer;
 
 	/**
 	 * Creates a new empty statistic.
@@ -141,5 +141,16 @@ public class Statistic {
 	 */
 	public void setDeaths(int playerId, int newCount) {
 		deathsOfPlayer.put(playerId, newCount);
+	}
+
+	/**
+	 * Removes a player from the frag and death count.
+	 * 
+	 * @param ownerId
+	 *            The id of the player to be removed from the stats.
+	 */
+	public void removePlayerFromStats(int ownerId) {
+		killsOfPlayer.remove(ownerId);
+		deathsOfPlayer.remove(ownerId);
 	}
 }

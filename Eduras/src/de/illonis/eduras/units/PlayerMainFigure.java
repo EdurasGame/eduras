@@ -3,6 +3,7 @@ package de.illonis.eduras.units;
 import java.util.logging.Logger;
 
 import org.newdawn.slick.geom.Circle;
+import org.newdawn.slick.geom.Vector2f;
 
 import de.illonis.edulog.EduLog;
 import de.illonis.eduras.GameInformation;
@@ -11,7 +12,6 @@ import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.gameobjects.TimingSource;
 import de.illonis.eduras.interfaces.MovementControlable;
 import de.illonis.eduras.inventory.Inventory;
-import de.illonis.eduras.math.Vector2df;
 import de.illonis.eduras.settings.S;
 
 /**
@@ -88,7 +88,7 @@ public class PlayerMainFigure extends Unit implements MovementControlable {
 		// Vector2df secondEdge = new Vector2df(-10, 10);
 		// Vector2df thirdEdge = new Vector2df(-10, -10);
 
-		setShape(new Circle(4.5f, 4.5f, 9f));
+		setShape(new Circle(4.5f, 4.5f, 9f, 360));
 
 		// try {
 		// // setShape(new Triangle(firstEdge, secondEdge, thirdEdge));
@@ -119,21 +119,23 @@ public class PlayerMainFigure extends Unit implements MovementControlable {
 	public void startMoving(Direction direction) {
 		switch (direction) {
 		case TOP:
-			getSpeedVector().y = -getSpeed();
+			currentSpeedY = -getSpeed();
 			break;
 		case BOTTOM:
-			getSpeedVector().y = getSpeed();
+			currentSpeedY = getSpeed();
 			break;
 		case LEFT:
-			getSpeedVector().x = -getSpeed();
+			currentSpeedX = -getSpeed();
 			break;
 		case RIGHT:
-			getSpeedVector().x = getSpeed();
+			currentSpeedX = getSpeed();
 			break;
 		default:
 			break;
 		}
-		getSpeedVector().normalise().scale(getSpeed());
+		Vector2f normalized = getSpeedVector().normalise().scale(getSpeed());
+		currentSpeedX = normalized.x;
+		currentSpeedY = normalized.y;
 	}
 
 	/**
@@ -170,15 +172,16 @@ public class PlayerMainFigure extends Unit implements MovementControlable {
 	@Override
 	public void stopMoving(Direction direction) {
 		if (isHorizontal(direction)) {
-			getSpeedVector().x = 0;
+			currentSpeedX = 0;
 		} else {
-			getSpeedVector().y = 0;
+			currentSpeedY = 0;
 		}
 	}
 
 	@Override
 	public void stopMoving() {
-		setSpeedVector(new Vector2df());
+		currentSpeedX = 0;
+		currentSpeedY = 0;
 	}
 
 	/**

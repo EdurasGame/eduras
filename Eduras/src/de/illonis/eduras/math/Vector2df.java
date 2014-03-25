@@ -37,6 +37,14 @@ public strictfp class Vector2df extends Vector2f {
 	}
 
 	/**
+	 * @param v
+	 *            array with x and y coordinate.
+	 */
+	public Vector2df(float[] v) {
+		this(v[0], v[1]);
+	}
+
+	/**
 	 * Creates a new vector with (0,0).
 	 */
 	public Vector2df() {

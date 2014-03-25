@@ -1,12 +1,16 @@
 package de.illonis.eduras.shapes;
 
+import org.newdawn.slick.geom.Polygon;
+
 /**
  * A sword for close combat.
  * 
  * @author jme
  * 
  */
-public class Sword extends org.newdawn.slick.geom.Polygon {
+public class Sword extends Polygon {
+
+	private static final long serialVersionUID = 1L;
 
 	/**
 	 * Creates a new sword.
@@ -22,6 +26,5 @@ public class Sword extends org.newdawn.slick.geom.Polygon {
 		addPoint(-3, -2);
 		addPoint(-3, -3);
 		addPoint(-1, -3);
-		trianglesDirty = true;
 	}
 }

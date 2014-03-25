@@ -23,6 +23,7 @@ public class HealthBar {
 	 * Gap between unit and health bar.
 	 */
 	private final static int UNIT_GAP = 5;
+	private final static int NAME_GAP = 5;
 
 	private int x, y, w, h;
 
@@ -59,7 +60,7 @@ public class HealthBar {
 		if (unit instanceof PlayerMainFigure) {
 			PlayerMainFigure player = (PlayerMainFigure) unit;
 			g.drawString(player.getName(), instance.x,
-					instance.y - HEALTHBAR_HEIGHT);
+					instance.y - HEALTHBAR_HEIGHT - UNIT_GAP - NAME_GAP);
 		}
 	}
 }

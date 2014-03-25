@@ -60,4 +60,9 @@ public class ClientGameMode implements GameMode {
 		return Relation.UNKNOWN;
 	}
 
+	@Override
+	public void onDisconnect(int ownerId) {
+		// do nothing
+	}
+
 }

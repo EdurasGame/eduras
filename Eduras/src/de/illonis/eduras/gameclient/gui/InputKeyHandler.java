@@ -108,6 +108,14 @@ public class InputKeyHandler {
 		}
 	}
 
+	/**
+	 * Indicates that a key was pressed.
+	 * 
+	 * @param key
+	 *            the key pressed (see {@link Input}).
+	 * @param c
+	 *            the key char.
+	 */
 	public void keyPressed(int key, char c) {
 		boolean consumed = false;
 		if (key != settings.getKeyBindings().getKey(KeyBinding.CHAT)
@@ -139,19 +147,15 @@ public class InputKeyHandler {
 
 		switch (binding) {
 		case MOVE_UP:
-			System.out.println("start up");
 			reactor.onStartMovement(Direction.TOP);
 			break;
 		case MOVE_LEFT:
-			System.out.println("start left");
 			reactor.onStartMovement(Direction.LEFT);
 			break;
 		case MOVE_DOWN:
 			reactor.onStartMovement(Direction.BOTTOM);
-			System.out.println("Start down");
 			break;
 		case MOVE_RIGHT:
-			System.out.println("start right");
 			reactor.onStartMovement(Direction.RIGHT);
 			break;
 		case ITEM_1:
@@ -218,6 +222,14 @@ public class InputKeyHandler {
 		L.fine("Bound key pressed: " + keyCode);
 	}
 
+	/**
+	 * Indicates a key release.
+	 * 
+	 * @param key
+	 *            the key code. See fields of {@link Input}.
+	 * @param c
+	 *            the key char.
+	 */
 	public void keyReleased(int key, char c) {
 
 		if (key == currentKey) {
@@ -245,20 +257,15 @@ public class InputKeyHandler {
 
 		switch (binding) {
 		case MOVE_UP:
-			System.out.println("stop top");
 			reactor.onStopMovement(Direction.TOP);
 			break;
 		case MOVE_LEFT:
-			System.out.println("stop left");
 			reactor.onStopMovement(Direction.LEFT);
 			break;
 		case MOVE_DOWN:
-			System.out.println("stop down");
 			reactor.onStopMovement(Direction.BOTTOM);
-			System.out.println("stop down");
 			break;
 		case MOVE_RIGHT:
-			System.out.println("stop right");
 			reactor.onStopMovement(Direction.RIGHT);
 			break;
 		case SHOW_STATS:

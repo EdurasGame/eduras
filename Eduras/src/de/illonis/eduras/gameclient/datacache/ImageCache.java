@@ -5,11 +5,12 @@ import java.util.HashMap;
 import javax.swing.ImageIcon;
 
 import org.newdawn.slick.Image;
+import org.newdawn.slick.geom.Vector2f;
 
 import de.illonis.eduras.ObjectFactory.ObjectType;
 import de.illonis.eduras.gameclient.datacache.CacheInfo.ImageKey;
 import de.illonis.eduras.math.Vector2df;
-import de.illonis.eduras.shapes.ObjectShape.ShapeType;
+import de.illonis.eduras.shapes.ShapeFactory.ShapeType;
 
 /**
  * A cache that holds all images and shapes loaded at runtime.
@@ -19,7 +20,7 @@ import de.illonis.eduras.shapes.ObjectShape.ShapeType;
  */
 public final class ImageCache {
 
-	private final static HashMap<ShapeType, Vector2df[]> shapeData = new HashMap<ShapeType, Vector2df[]>();
+	private final static HashMap<ShapeType, Vector2f[]> shapeData = new HashMap<ShapeType, Vector2f[]>();
 	private final static HashMap<ObjectType, Image> objectImages = new HashMap<ObjectType, Image>();
 	private final static HashMap<ImageKey, Image> guiImages = new HashMap<ImageKey, Image>();
 	private final static HashMap<ImageKey, ImageIcon> imageIcons = new HashMap<ImageKey, ImageIcon>();
@@ -54,9 +55,8 @@ public final class ImageCache {
 	 * @throws CacheException
 	 *             if vertices for that shape are not cached.
 	 */
-	public static Vector2df[] getShapeData(ShapeType type)
-			throws CacheException {
-		Vector2df[] verts = shapeData.get(type);
+	public static Vector2f[] getShapeData(ShapeType type) throws CacheException {
+		Vector2f[] verts = shapeData.get(type);
 		if (verts == null)
 			throw new CacheException("No cached data found for " + type);
 		return verts;
@@ -119,8 +119,7 @@ public final class ImageCache {
 	 * @throws CacheException
 	 *             if imagedata for that key are not cached.
 	 */
-	public static Image getInventoryIcon(ObjectType key)
-			throws CacheException {
+	public static Image getInventoryIcon(ObjectType key) throws CacheException {
 		Image icon = inventoryIcons.get(key);
 		if (icon == null)
 			throw new CacheException("No cached inventory icon found for "

@@ -46,8 +46,7 @@ public class ServerLogicGameWorker extends LogicGameWorker {
 			}
 			if (o instanceof MoveableGameObject) {
 				MoveableGameObject mgo = (MoveableGameObject) o;
-				if (mgo.getSpeedVector().x > 0 || mgo.getSpeedVector().y > 0)
-					mgo.onMove(delta);
+				mgo.onMove(delta);
 				if (listenerHolder.hasListener())
 					listenerHolder.getListener().onNewObjectPosition(o);
 				gameInformation.getEventTriggerer().notifyNewObjectPosition(o);

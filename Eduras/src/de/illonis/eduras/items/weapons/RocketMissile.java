@@ -4,8 +4,8 @@ import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.ObjectFactory.ObjectType;
 import de.illonis.eduras.gameobjects.TimingSource;
 import de.illonis.eduras.settings.S;
-import de.illonis.eduras.shapes.ObjectShape.ShapeType;
 import de.illonis.eduras.shapes.ShapeFactory;
+import de.illonis.eduras.shapes.ShapeFactory.ShapeType;
 
 /**
  * @author Florian Mai <florian.ren.mai@googlemail.com>

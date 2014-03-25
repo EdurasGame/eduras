@@ -5,8 +5,8 @@ import de.illonis.eduras.ObjectFactory.ObjectType;
 import de.illonis.eduras.gameobjects.TimingSource;
 import de.illonis.eduras.items.ItemUseInformation;
 import de.illonis.eduras.settings.S;
-import de.illonis.eduras.shapes.ObjectShape.ShapeType;
 import de.illonis.eduras.shapes.ShapeFactory;
+import de.illonis.eduras.shapes.ShapeFactory.ShapeType;
 
 /**
  * A rocket launcher launches slow missiles that explode on collision.

@@ -20,7 +20,7 @@ import de.illonis.eduras.gameclient.datacache.CacheInfo.ImageKey;
 import de.illonis.eduras.images.ImageFiler;
 import de.illonis.eduras.math.Vector2df;
 import de.illonis.eduras.shapecreator.FileCorruptException;
-import de.illonis.eduras.shapes.ObjectShape.ShapeType;
+import de.illonis.eduras.shapes.ShapeFactory.ShapeType;
 import de.illonis.eduras.shapes.data.ShapeParser;
 
 /**

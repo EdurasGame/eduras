@@ -12,6 +12,7 @@ import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
+import org.newdawn.slick.geom.Circle;
 import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.Vector2f;
 
@@ -31,6 +32,7 @@ import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.items.Item;
 import de.illonis.eduras.logicabstraction.InformationProvider;
 import de.illonis.eduras.math.BasicMath;
+import de.illonis.eduras.math.Vector2df;
 import de.illonis.eduras.settings.S;
 import de.illonis.eduras.units.PlayerMainFigure;
 import de.illonis.eduras.units.Unit;
@@ -214,10 +216,13 @@ public class GameRenderer implements TooltipHandler {
 			}
 
 			// draw only if in current view point
-			if (d.getShape().intersects(camera)) {
+			if (camera.intersects(d.getShape())
+					|| camera.contains(d.getShape())) {
 				if (S.vision_disabled
 						|| (S.vision_neutral_always && d.getOwner() == -1)) {
 					drawObject(d, g);
+					if (d instanceof PlayerMainFigure)
+						drawFace(d, (Circle) d.getShape(), g);
 				}
 			}
 		}
@@ -235,6 +240,15 @@ public class GameRenderer implements TooltipHandler {
 			if (d.getShape() != null) {
 				g.setColor(getColorForObject(d));
 				g.fill(d.getShape());
+				if (S.debug_render_boundingboxes) {
+					float circleRadius = d.getShape().getBoundingCircleRadius();
+					float[] center = d.getShape().getCenter();
+					Circle c = new Circle(center[0], center[1], circleRadius);
+					g.setColor(Color.yellow);
+					g.draw(c);
+					g.setColor(Color.white);
+					g.fillOval(x, y, 3, 3);
+				}
 			}
 		}
 
@@ -266,37 +280,29 @@ public class GameRenderer implements TooltipHandler {
 		HealthBar.calculateAndDrawFor(unit, g, camera);
 	}
 
-	// private void drawFace(GameObject obj, Circle shape) {
-	// int noseRadius = 3;
-	// int eyeRadius = 2;
-	// Vector2df nose = Geometry.getRelativePointAtAngleOnCircle(shape,
-	// obj.getRotation());
-	// Vector2df radiusAdder = new Vector2df(shape.getRadius(),
-	// shape.getRadius());
-	// Vector2df circleCenter = obj.getPositionVector().copy();
-	// circleCenter.add(radiusAdder);
-	// nose.add(obj.getPositionVector());
-	// nose.add(radiusAdder);
-	// mapGraphics.setColor(Color.YELLOW);
-	// mapGraphics.fillOval((int) nose.getX() - noseRadius - camera.x,
-	// (int) nose.getY() - noseRadius - camera.y, 2 * noseRadius,
-	// 2 * noseRadius);
-	//
-	// Vector2df leftEye = nose.copy();
-	// leftEye.rotate(-35, circleCenter);
-	// Vector2df centerDist = leftEye.getDistanceVectorTo(circleCenter);
-	// centerDist.mult(.5);
-	// leftEye.add(centerDist);
-	// mapGraphics.fillOval((int) (leftEye.getX()) - eyeRadius - camera.getx,
-	// (int) (leftEye.getY()) - eyeRadius - camera.getY(), 2 * eyeRadius,
-	// 2 * eyeRadius);
-	//
-	// leftEye.rotate(70, circleCenter);
-	// mapGraphics.fillOval((int) (leftEye.getX()) - eyeRadius - camera.x,
-	// (int) (leftEye.getY()) - eyeRadius - camera.y, 2 * eyeRadius,
-	// 2 * eyeRadius);
-	//
-	// }
+	private void drawFace(GameObject obj, Circle shape, Graphics g) {
+		int noseRadius = 3;
+		int eyeRadius = 2;
+
+		Vector2df circleCenter = new Vector2df(shape.getCenter());
+		Vector2df nose = new Vector2df(shape.getPoint(0));
+		nose.rotate(obj.getRotation(), circleCenter);
+		g.setColor(Color.yellow);
+		g.fill(new Circle(nose.x, nose.y, noseRadius));
+
+		Vector2df leftEye = nose.copy();
+		leftEye.rotate(-35, circleCenter);
+		Vector2f centerDist = leftEye.copy().sub(circleCenter);
+		centerDist.scale(.5f);
+		leftEye.add(centerDist);
+		g.fillOval((int) (leftEye.getX()) - eyeRadius, (int) (leftEye.getY())
+				- eyeRadius, 2 * eyeRadius, 2 * eyeRadius);
+
+		leftEye.rotate(70, circleCenter);
+		g.fillOval((int) (leftEye.getX()) - eyeRadius, (int) (leftEye.getY())
+				- eyeRadius, 2 * eyeRadius, 2 * eyeRadius);
+
+	}
 
 	private Color getColorForObject(GameObject d) {
 		switch (d.getType()) {
