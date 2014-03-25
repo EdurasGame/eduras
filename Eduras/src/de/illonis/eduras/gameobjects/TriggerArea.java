@@ -2,7 +2,7 @@ package de.illonis.eduras.gameobjects;
 
 import java.awt.geom.Rectangle2D;
 import java.util.LinkedList;
-import java.util.Set;
+import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.logging.Logger;
 
@@ -28,7 +28,7 @@ public abstract class TriggerArea extends GameObject implements
 	 */
 	private final static long CHECK_INTERVAL = 100;
 
-	private final Set<GameObject> presentObjects;
+	private final SortedSet<GameObject> presentObjects;
 
 	/**
 	 * @param game
@@ -49,7 +49,7 @@ public abstract class TriggerArea extends GameObject implements
 	/**
 	 * @return a set of objects that are currently in this area.
 	 */
-	public final Set<GameObject> getPresentObjects() {
+	public final SortedSet<GameObject> getPresentObjects() {
 		return new TreeSet<GameObject>(presentObjects);
 	}
 
@@ -76,13 +76,13 @@ public abstract class TriggerArea extends GameObject implements
 			synchronized (obj) {
 				if (!obj.getBoundingBox().intersects(thisBounds)) {
 					leavingObjects.add(obj);
-					onObjectLeft(obj);
 				}
 			}
 		}
 
 		for (GameObject obj : leavingObjects) {
 			presentObjects.remove(obj);
+			onObjectLeft(obj);
 		}
 
 		intervalElapsed(delta);

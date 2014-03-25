@@ -93,11 +93,19 @@ public abstract class NeutralArea extends TriggerArea {
 			if (team == null)
 				return;
 
+			L.log(Level.INFO, "Unit of team " + u.getTeam().getName()
+					+ " entered the NeutralArea.");
+
 			// getGame().getEventTriggerer().onBaseStartCapturing(this,
 			// team);
 			determineAndSetCurrentProgressingTeam(object, true);
-			L.log(Level.INFO, "Team: " + currentProgressingTeam.getName()
-					+ " is currently taking over the neutral area!");
+			if (currentProgressingTeam != null) {
+				L.log(Level.INFO, "Team: " + currentProgressingTeam.getName()
+						+ " is currently taking over the neutral area!");
+			} else {
+				L.log(Level.INFO,
+						"Currently no team is taking over the neutral area.");
+			}
 		}
 	}
 
@@ -130,7 +138,9 @@ public abstract class NeutralArea extends TriggerArea {
 
 	@Override
 	protected void intervalElapsed(long delta) {
-		if (currentProgressingTeam != null && progress < 100) {
+		if (currentProgressingTeam != null
+				&& (progress < 100 || !currentProgressingTeam
+						.equals(currentOwnerTeam))) {
 			if (timeNeededForTakeOver <= 0) {
 				progress = 100;
 			} else {

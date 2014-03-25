@@ -1,5 +1,7 @@
 package de.illonis.eduras.gameobjects;
 
+import java.util.HashSet;
+import java.util.Set;
 import java.util.logging.Logger;
 
 import de.illonis.edulog.EduLog;
@@ -46,7 +48,16 @@ public class NeutralBase extends NeutralArea {
 				.getGameSettings()
 				.getGameMode()
 				.determineProgressingTeam(object, objectEntered,
-						getPresentObjects());
+						getPresentUnits());
+	}
+
+	private Set<GameObject> getPresentUnits() {
+		HashSet<GameObject> unitsOnly = new HashSet<GameObject>();
+		for (GameObject anyObject : getPresentObjects())
+			if (anyObject.isUnit()) {
+				unitsOnly.add(anyObject);
+			}
+		return unitsOnly;
 	}
 
 	@Override
