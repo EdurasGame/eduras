@@ -442,7 +442,7 @@ public final class S {
 	 * Tells whether vision is disabled or not.
 	 */
 	public static boolean vision_disabled = true;
-	
+
 	public static boolean exit_on_sysout = true;
 
 	public static long neutralbase_resource_interval = 1000;
@@ -450,6 +450,8 @@ public final class S {
 	public static int neutralbase_resource_baseamount = 1;
 
 	public static boolean debug_render_boundingboxes = false;
+
+	public static long neutralbase_overtaketime_default = 2000;
 
 	/**
 	 * Reads values from the file and writes them to the S classes attributes.
