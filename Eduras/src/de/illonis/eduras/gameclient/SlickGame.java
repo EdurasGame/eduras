@@ -1,8 +1,6 @@
 package de.illonis.eduras.gameclient;
 
 import java.awt.Font;
-import java.util.Map;
-import java.util.logging.Logger;
 
 import org.lwjgl.opengl.GL11;
 import org.newdawn.slick.BasicGame;
@@ -11,16 +9,18 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.TrueTypeFont;
 
-import de.illonis.edulog.EduLog;
 import de.illonis.eduras.gameclient.gui.InputKeyHandler;
 import de.illonis.eduras.gameclient.gui.game.GameRenderer;
 import de.illonis.eduras.gameclient.gui.game.GuiMouseHandler;
-import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.logic.LogicGameWorker;
 
+/**
+ * Contains Slick implementation for Eduras.
+ * 
+ * @author illonis
+ * 
+ */
 public class SlickGame extends BasicGame {
-	private final static Logger L = EduLog.getLoggerFor(SlickGame.class
-			.getName());
 
 	private TrueTypeFont defaultFont;
 
@@ -29,19 +29,31 @@ public class SlickGame extends BasicGame {
 	private final InputKeyHandler keyHandler;
 	private GameRenderer renderer;
 
-	private Map<Integer, GameObject> objs;
-
+	/**
+	 * Associates logic and renderer that will be notified.
+	 * 
+	 * @param lgw
+	 *            the logic game worker.
+	 * @param renderer
+	 *            the renderer.
+	 */
 	public void setWorker(LogicGameWorker lgw, GameRenderer renderer) {
 		this.lgw = lgw;
 		this.renderer = renderer;
 	}
 
-	public SlickGame(Map<Integer, GameObject> objs, GuiMouseHandler handler,
-			InputKeyHandler keyHandler) {
+	/**
+	 * Creates a new game.
+	 * 
+	 * @param mouseHandler
+	 *            the mouseHandler.
+	 * @param keyHandler
+	 *            the keyHandler.
+	 */
+	public SlickGame(GuiMouseHandler mouseHandler, InputKeyHandler keyHandler) {
 		super("Eduras?");
-		this.mouseHandler = handler;
+		this.mouseHandler = mouseHandler;
 		this.keyHandler = keyHandler;
-		this.objs = objs;
 	}
 
 	@Override

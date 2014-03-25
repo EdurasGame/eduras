@@ -108,6 +108,14 @@ public class InputKeyHandler {
 		}
 	}
 
+	/**
+	 * Indicates that a key was pressed.
+	 * 
+	 * @param key
+	 *            the key pressed (see {@link Input}).
+	 * @param c
+	 *            the key char.
+	 */
 	public void keyPressed(int key, char c) {
 		boolean consumed = false;
 		if (key != settings.getKeyBindings().getKey(KeyBinding.CHAT)
@@ -214,6 +222,14 @@ public class InputKeyHandler {
 		L.fine("Bound key pressed: " + keyCode);
 	}
 
+	/**
+	 * Indicates a key release.
+	 * 
+	 * @param key
+	 *            the key code. See fields of {@link Input}.
+	 * @param c
+	 *            the key char.
+	 */
 	public void keyReleased(int key, char c) {
 
 		if (key == currentKey) {

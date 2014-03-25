@@ -94,8 +94,7 @@ public class GamePanelLogic extends ClientGuiStepLogic implements
 		mouseHandler = new GuiMouseHandler(this, reactor);
 		cml = new CameraMouseListener(camera);
 		try {
-			gui = new GamePanel(new SlickGame(infoPro.getGameObjects(),
-					mouseHandler, keyHandler));
+			gui = new GamePanel(new SlickGame(mouseHandler, keyHandler));
 		} catch (SlickException e) {
 			L.log(Level.WARNING, "TODO: message", e);
 		}
@@ -155,8 +154,6 @@ public class GamePanelLogic extends ClientGuiStepLogic implements
 				.startLogicWorker();
 		initUserInterface();
 		gui.addComponentListener(resizeMonitor);
-		gui.addMouseMotionListener(cml);
-		gui.addMouseListener(cml);
 		startGame(worker, renderer);
 		doTimedTasks();
 		notifyGuiSizeChanged();
@@ -175,9 +172,8 @@ public class GamePanelLogic extends ClientGuiStepLogic implements
 
 	@Override
 	public void onHidden() {
+		gui.exit();
 		EdurasInitializer.getInstance().stopLogicWorker();
-		gui.removeMouseMotionListener(cml);
-		gui.removeMouseListener(cml);
 		gui.removeComponentListener(resizeMonitor);
 		cml.stop();
 		stopTimedTasks();

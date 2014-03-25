@@ -6,7 +6,6 @@ import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.exceptions.MapBorderReachedException;
 import de.illonis.eduras.interfaces.Moveable;
 import de.illonis.eduras.math.Vector2df;
-import de.illonis.eduras.units.PlayerMainFigure;
 
 /**
  * A moveable gameobject. It differs from {@link GameObject} because it has a

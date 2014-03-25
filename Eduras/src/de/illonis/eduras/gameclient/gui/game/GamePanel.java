@@ -30,12 +30,22 @@ public class GamePanel extends CanvasGameContainer {
 	 * 
 	 * @param worker
 	 *            the worker to use.
+	 * @param renderer
+	 *            the renderer that renders the game.
 	 * @throws SlickException
 	 *             Indicates a failure during game execution.
 	 * 
 	 */
-	public void start(LogicGameWorker worker, GameRenderer renderer) throws SlickException {
+	public void start(LogicGameWorker worker, GameRenderer renderer)
+			throws SlickException {
 		((SlickGame) game).setWorker(worker, renderer);
 		super.start();
+	}
+
+	/**
+	 * exits the game.
+	 */
+	public void exit() {
+		getContainer().exit();
 	}
 }
