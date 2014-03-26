@@ -46,7 +46,8 @@ public class NeutralBase extends NeutralArea {
 
 	@Override
 	protected void onNeutralAreaOccupied(Team occupyingTeam) {
-		getGame().getGameSettings().getGameMode().onBaseOccupied(occupyingTeam);
+		getGame().getGameSettings().getGameMode()
+				.onBaseOccupied(this, occupyingTeam);
 	}
 
 	@Override
@@ -70,6 +71,6 @@ public class NeutralBase extends NeutralArea {
 
 	@Override
 	protected void onNeutralAreaLost(Team losingTeam) {
-		getGame().getGameSettings().getGameMode().onBaseLost(losingTeam);
+		getGame().getGameSettings().getGameMode().onBaseLost(this, losingTeam);
 	}
 }

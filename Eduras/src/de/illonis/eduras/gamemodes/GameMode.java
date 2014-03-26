@@ -124,17 +124,21 @@ public interface GameMode {
 	/**
 	 * Called when a team has occupied a {@link NeutralBase}.
 	 * 
+	 * @param base
+	 *            the base that was occupied
 	 * @param occupyingTeam
 	 *            The team that has occupied the {@link NeutralBase}.
 	 */
-	public void onBaseOccupied(Team occupyingTeam);
+	public void onBaseOccupied(NeutralBase base, Team occupyingTeam);
 
 	/**
 	 * Called when a team loses a {@link NeutralBase}.
 	 * 
+	 * @param base
+	 *            the base that was lost
 	 * @param losingTeam
 	 *            The team that has lost the {@link NeutralBase}.
 	 */
-	public void onBaseLost(Team losingTeam);
+	public void onBaseLost(NeutralBase base, Team losingTeam);
 
 }

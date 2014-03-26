@@ -7,6 +7,7 @@ import de.illonis.eduras.ObjectFactory.ObjectType;
 import de.illonis.eduras.Team;
 import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.gameobjects.GameObject.Relation;
+import de.illonis.eduras.gameobjects.NeutralBase;
 import de.illonis.eduras.logic.EventTriggerer;
 import de.illonis.eduras.maps.SpawnPosition.SpawnType;
 import de.illonis.eduras.units.PlayerMainFigure;
@@ -102,12 +103,12 @@ public class NoGameMode extends BasicGameMode {
 	}
 
 	@Override
-	public void onBaseOccupied(Team occupyingTeam) {
+	public void onBaseOccupied(NeutralBase base, Team occupyingTeam) {
 		// don't care about neutral bases
 	}
 
 	@Override
-	public void onBaseLost(Team losingTeam) {
+	public void onBaseLost(NeutralBase base, Team losingTeam) {
 		// don't care about neutral bases
 	}
 }

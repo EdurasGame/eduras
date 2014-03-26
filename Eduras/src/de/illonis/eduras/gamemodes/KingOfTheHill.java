@@ -1,5 +1,6 @@
 package de.illonis.eduras.gamemodes;
 
+import java.util.HashMap;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.logging.Logger;
@@ -8,6 +9,7 @@ import de.illonis.edulog.EduLog;
 import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.Statistic.StatsProperty;
 import de.illonis.eduras.Team;
+import de.illonis.eduras.gameobjects.NeutralBase;
 import de.illonis.eduras.settings.S;
 import de.illonis.eduras.units.PlayerMainFigure;
 
@@ -20,7 +22,7 @@ import de.illonis.eduras.units.PlayerMainFigure;
  */
 public class KingOfTheHill extends Deathmatch {
 
-	private Timer neutralBasePointsAdderTimer;
+	private HashMap<NeutralBase, Timer> neutralBasePointsAdderTimer;
 
 	/**
 	 * Create a new KingOfTheHill mode.
@@ -31,7 +33,7 @@ public class KingOfTheHill extends Deathmatch {
 	public KingOfTheHill(GameInformation gameInfo) {
 		super(gameInfo);
 
-		neutralBasePointsAdderTimer = null;
+		neutralBasePointsAdderTimer = new HashMap<NeutralBase, Timer>();
 	}
 
 	private final static Logger L = EduLog.getLoggerFor(KingOfTheHill.class
@@ -48,11 +50,11 @@ public class KingOfTheHill extends Deathmatch {
 	}
 
 	@Override
-	public void onBaseOccupied(Team occupyingTeam) {
+	public void onBaseOccupied(NeutralBase base, Team occupyingTeam) {
 		PlayerMainFigure player = occupyingTeam.getPlayers().getFirst();
-		neutralBasePointsAdderTimer = new Timer();
-		neutralBasePointsAdderTimer.schedule(
-				new NeutralBasePointsAdder(player),
+		Timer timerForBase = new Timer();
+		neutralBasePointsAdderTimer.put(base, timerForBase);
+		timerForBase.schedule(new NeutralBasePointsAdder(player),
 				S.gm_koth_gain_points_interval, S.gm_koth_gain_points_interval);
 		L.info("Team " + occupyingTeam.getName() + " occupied the base!");
 	}
@@ -75,14 +77,16 @@ public class KingOfTheHill extends Deathmatch {
 	}
 
 	@Override
-	public void onBaseLost(Team losingTeam) {
-		L.info("Team " + losingTeam.getName() + " lost the base!");
-		if (neutralBasePointsAdderTimer == null) {
+	public void onBaseLost(NeutralBase base, Team losingTeam) {
+		Timer timerForBase = neutralBasePointsAdderTimer.get(base);
+		L.info("Team " + losingTeam.getName() + " lost the base with id "
+				+ base.getId() + "!");
+		if (timerForBase == null) {
 			L.severe("NeutralBasePointsAdder is null when base is lost!");
 			return;
 		}
 
-		neutralBasePointsAdderTimer.cancel();
-		neutralBasePointsAdderTimer = null;
+		timerForBase.cancel();
+		neutralBasePointsAdderTimer.put(base, null);
 	}
 }

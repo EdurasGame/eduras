@@ -13,6 +13,7 @@ import de.illonis.eduras.Team;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
 import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.gameobjects.GameObject.Relation;
+import de.illonis.eduras.gameobjects.NeutralBase;
 import de.illonis.eduras.logic.EventTriggerer;
 import de.illonis.eduras.maps.SpawnPosition.SpawnType;
 import de.illonis.eduras.units.PlayerMainFigure;
@@ -170,12 +171,14 @@ public class Deathmatch extends BasicGameMode {
 	}
 
 	@Override
-	public void onBaseOccupied(Team occupyingTeam) {
-		L.info("Team " + occupyingTeam.getName() + " occupied the base!");
+	public void onBaseOccupied(NeutralBase base, Team occupyingTeam) {
+		L.info("Team " + occupyingTeam.getName()
+				+ " occupied the base with id " + base.getId() + "!");
 	}
 
 	@Override
-	public void onBaseLost(Team losingTeam) {
-		L.info("Team " + losingTeam.getName() + " lost the base!");
+	public void onBaseLost(NeutralBase base, Team losingTeam) {
+		L.info("Team " + losingTeam.getName() + " lost the base with id "
+				+ base.getId() + "!");
 	}
 }

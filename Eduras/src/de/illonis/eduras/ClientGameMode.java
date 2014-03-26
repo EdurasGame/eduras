@@ -5,6 +5,7 @@ import java.util.Set;
 import de.illonis.eduras.gamemodes.GameMode;
 import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.gameobjects.GameObject.Relation;
+import de.illonis.eduras.gameobjects.NeutralBase;
 import de.illonis.eduras.maps.SpawnPosition.SpawnType;
 import de.illonis.eduras.units.Unit;
 
@@ -75,13 +76,13 @@ public class ClientGameMode implements GameMode {
 	}
 
 	@Override
-	public void onBaseOccupied(Team occupyingTeam) {
+	public void onBaseOccupied(NeutralBase base, Team occupyingTeam) {
 		// TODO Auto-generated method stub
 
 	}
 
 	@Override
-	public void onBaseLost(Team losingTeam) {
+	public void onBaseLost(NeutralBase base, Team losingTeam) {
 		// TODO Auto-generated method stub
 
 	}
