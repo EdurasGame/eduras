@@ -354,6 +354,8 @@ public abstract class Map {
 			return new SimpleMap();
 		case "manyblocks":
 			return new ManyBlocks();
+		case "testmap":
+			return new TestMap();
 		default:
 			throw new NoSuchMapException(mapName);
 		}

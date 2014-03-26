@@ -1,0 +1,27 @@
+@mapname	= testmap
+@author		= Florian Mai
+@gamemodes	= Deathmatch, Team_Deathmatch, KING_OF_THE_HILL
+@created	= 2014-03-26
+@width		= 1000
+@height		= 1000
+
+:spawnpoints
+# X		Y		W		H		Type
+W / 3,	H / 3,	100,	100,	ANY
+W / 3 * 2,	H / 3 * 2,	100,	100,	ANY
+
+:objects
+ITEM_WEAPON_SWORD,		W / 3,	H / 8 * 1
+ITEM_WEAPON_SIMPLE,		W / 3,	H / 8 * 2
+ITEM_WEAPON_SNIPER,		W / 3,	H / 8 * 3
+ITEM_WEAPON_SPLASH,		W / 3,	H / 8 * 4
+ROCKETLAUNCHER, 		W / 3,	H / 8 * 5
+MINELAUNCHER, 			W / 3,	H / 8 * 6
+ASSAULTRIFLE,   		W / 3,	H / 8 * 7
+
+BIGGERBLOCK,		W/2, H/2
+
+NEUTRAL_BASE,	W/2 + 50, H/2+50
+NEUTRAL_BASE,	W/2 - 50, H/2+50
+NEUTRAL_BASE,	W/2 + 50, H/2-50
+NEUTRAL_BASE,	W/2 - 50, H/2-50
