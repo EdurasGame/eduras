@@ -236,8 +236,6 @@ public class ClientLogic implements GameLogicInterface {
 				GameObject killed = gameInfo.findObjectById(de.getKilled());
 				if (killed.isUnit()) {
 					Unit un = (Unit) killed;
-					gameInfo.getGameSettings().getGameMode()
-							.onDeath(un, de.getKillerOwner());
 					getListener().onDeath(de);
 
 				}

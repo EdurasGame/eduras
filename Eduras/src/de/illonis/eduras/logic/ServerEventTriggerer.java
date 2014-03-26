@@ -14,6 +14,7 @@ import de.eduras.eventingserver.test.NoSuchClientException;
 import de.illonis.edulog.EduLog;
 import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.ObjectFactory.ObjectType;
+import de.illonis.eduras.Statistic;
 import de.illonis.eduras.Statistic.StatsProperty;
 import de.illonis.eduras.Team;
 import de.illonis.eduras.ai.movement.MotionAIControllable;
@@ -501,17 +502,8 @@ public class ServerEventTriggerer implements EventTriggerer {
 	 * @param player
 	 */
 	private void resetStats(PlayerMainFigure player) {
-		int playerId = player.getOwner();
-
-		gameInfo.getGameSettings().getStats().setDeaths(playerId, 0);
-		gameInfo.getGameSettings().getStats().setKills(playerId, 0);
-
-		SetIntegerGameObjectAttributeEvent setdeaths = new SetIntegerGameObjectAttributeEvent(
-				GameEventNumber.SET_DEATHS, playerId, 0);
-		SetIntegerGameObjectAttributeEvent setkills = new SetIntegerGameObjectAttributeEvent(
-				GameEventNumber.SET_KILLS, playerId, 0);
-
-		sendEvents(setdeaths, setkills);
+		setStats(StatsProperty.KILLS, player.getOwner(), 0);
+		setStats(StatsProperty.DEATHS, player.getOwner(), 0);
 	}
 
 	private void resetSettings() {
@@ -718,11 +710,28 @@ public class ServerEventTriggerer implements EventTriggerer {
 
 	@Override
 	public void setStats(StatsProperty property, int ownerId, int valueToSet) {
-		gameInfo.getGameSettings().getStats()
-				.setStatsProperty(property, ownerId, valueToSet);
+		Statistic stats = gameInfo.getGameSettings().getStats();
 
-		SetStatsEvent setStatsEvent = new SetStatsEvent(property, ownerId,
-				valueToSet);
-		sendEvents(setStatsEvent);
+		synchronized (stats) {
+			stats.setStatsProperty(property, ownerId, valueToSet);
+
+			SetStatsEvent setStatsEvent = new SetStatsEvent(property, ownerId,
+					valueToSet);
+			sendEvents(setStatsEvent);
+		}
+	}
+
+	@Override
+	public void changeStatOfPlayerByAmount(StatsProperty prop,
+			PlayerMainFigure player, int i) {
+		Statistic stats = gameInfo.getGameSettings().getStats();
+
+		synchronized (stats) {
+			int newVal = stats.getStatsProperty(prop, player.getOwner()) + i;
+			stats.setStatsProperty(prop, player.getOwner(), newVal);
+			SetStatsEvent setStatsEvent = new SetStatsEvent(prop,
+					player.getOwner(), newVal);
+			sendEvents(setStatsEvent);
+		}
 	}
 }

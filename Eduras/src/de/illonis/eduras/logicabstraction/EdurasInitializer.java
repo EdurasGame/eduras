@@ -307,6 +307,13 @@ public class EdurasInitializer {
 
 			}
 
+			@Override
+			public void changeStatOfPlayerByAmount(StatsProperty prop,
+					PlayerMainFigure player, int i) {
+				// TODO Auto-generated method stub
+
+			}
+
 		});
 
 		networkManager = new NetworkManager(logic);

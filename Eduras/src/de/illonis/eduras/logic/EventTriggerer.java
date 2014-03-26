@@ -393,4 +393,18 @@ public interface EventTriggerer {
 	 */
 	public void setStats(StatsProperty property, int ownerId, int valueToSet);
 
+	/**
+	 * Increases the count of a player's {@link StatsProperty} by the given
+	 * number.
+	 * 
+	 * @param prop
+	 *            stat to increase (or decrease)
+	 * @param player
+	 *            player to change the stats of
+	 * @param i
+	 *            amount
+	 */
+	void changeStatOfPlayerByAmount(StatsProperty prop,
+			PlayerMainFigure player, int i);
+
 }

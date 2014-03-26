@@ -69,6 +69,18 @@ public class Statistic {
 	}
 
 	/**
+	 * Get a {@link StatsProperty} of a player identified by the given id.
+	 * 
+	 * @param prop
+	 * @param ownerId
+	 * 
+	 * @return Returns the value
+	 */
+	public int getStatsProperty(StatsProperty prop, int ownerId) {
+		return stats.get(prop).get(ownerId);
+	}
+
+	/**
 	 * Returns the number of deaths of the given player.
 	 * 
 	 * @param player
