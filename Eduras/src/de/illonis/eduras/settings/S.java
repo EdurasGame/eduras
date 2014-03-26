@@ -453,6 +453,10 @@ public final class S {
 
 	public static long neutralbase_overtaketime_default = 2000;
 
+	public static int gm_koth_points_per_interval = 1;
+
+	public static long gm_koth_gain_points_interval = 10000;
+
 	/**
 	 * Reads values from the file and writes them to the S classes attributes.
 	 * 

@@ -27,7 +27,7 @@ public interface GameMode {
 	 */
 	@SuppressWarnings("javadoc")
 	public enum GameModeNumber {
-		NO_GAMEMODE, DEATHMATCH, TEAM_DEATHMATCH, CAPTURE_THE_FLAG, NINJA_VS_SAMURAI;
+		NO_GAMEMODE, DEATHMATCH, TEAM_DEATHMATCH, CAPTURE_THE_FLAG, NINJA_VS_SAMURAI, KING_OF_THE_HILL;
 	}
 
 	/**

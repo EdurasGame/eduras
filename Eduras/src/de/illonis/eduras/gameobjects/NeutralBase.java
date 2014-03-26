@@ -7,8 +7,16 @@ import java.util.logging.Logger;
 import de.illonis.edulog.EduLog;
 import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.Team;
+import de.illonis.eduras.gamemodes.GameMode;
 import de.illonis.eduras.settings.S;
 
+/**
+ * A NeutralBase is a {@link NeutralArea} that triggers {@link GameMode}
+ * dependent behavior when occupied.
+ * 
+ * @author Florian 'Ren' Mai <florian.ren.mai@googlemail.com>
+ * 
+ */
 public class NeutralBase extends NeutralArea {
 
 	private final static Logger L = EduLog.getLoggerFor(NeutralBase.class
