@@ -21,6 +21,7 @@ import de.illonis.eduras.ai.movement.MotionAIControllable;
 import de.illonis.eduras.ai.movement.MovingUnitAI;
 import de.illonis.eduras.ai.movement.UnitNotControllableException;
 import de.illonis.eduras.events.AddPlayerToTeamEvent;
+import de.illonis.eduras.events.AreaConqueredEvent;
 import de.illonis.eduras.events.ClientRenameEvent;
 import de.illonis.eduras.events.DeathEvent;
 import de.illonis.eduras.events.GameEvent;
@@ -49,6 +50,7 @@ import de.illonis.eduras.exceptions.ObjectNotFoundException;
 import de.illonis.eduras.gamemodes.GameMode;
 import de.illonis.eduras.gameobjects.DynamicPolygonObject;
 import de.illonis.eduras.gameobjects.GameObject;
+import de.illonis.eduras.gameobjects.NeutralArea;
 import de.illonis.eduras.interfaces.GameLogicInterface;
 import de.illonis.eduras.inventory.InventoryIsFullException;
 import de.illonis.eduras.items.Item;
@@ -733,5 +735,12 @@ public class ServerEventTriggerer implements EventTriggerer {
 					player.getOwner(), newVal);
 			sendEvents(setStatsEvent);
 		}
+	}
+
+	@Override
+	public void notifyAreaConquered(NeutralArea neutralArea, Team occupyingTeam) {
+		AreaConqueredEvent baseConqueredEvent = new AreaConqueredEvent(
+				neutralArea.getId(), occupyingTeam.getTeamId());
+		sendEvents(baseConqueredEvent);
 	}
 }

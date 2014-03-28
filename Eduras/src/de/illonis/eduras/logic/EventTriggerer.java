@@ -14,6 +14,7 @@ import de.illonis.eduras.events.SetGameObjectAttributeEvent;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
 import de.illonis.eduras.gamemodes.GameMode;
 import de.illonis.eduras.gameobjects.GameObject;
+import de.illonis.eduras.gameobjects.NeutralArea;
 import de.illonis.eduras.items.Item;
 import de.illonis.eduras.maps.Map;
 import de.illonis.eduras.math.Vector2D;
@@ -406,5 +407,14 @@ public interface EventTriggerer {
 	 */
 	void changeStatOfPlayerByAmount(StatsProperty prop,
 			PlayerMainFigure player, int i);
+
+	/**
+	 * Notifies all clients that the {@link NeutralArea} was conquered by the
+	 * given team.
+	 * 
+	 * @param neutralArea
+	 * @param occupyingTeam
+	 */
+	void notifyAreaConquered(NeutralArea neutralArea, Team occupyingTeam);
 
 }

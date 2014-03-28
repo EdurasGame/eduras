@@ -85,6 +85,15 @@ public abstract class NeutralArea extends TriggerArea {
 		return currentProgressingTeam;
 	}
 
+	/**
+	 * Sets the currently owning team of the area.
+	 * 
+	 * @param newOwnerTeam
+	 */
+	public void setCurrentOwnerTeam(Team newOwnerTeam) {
+		currentOwnerTeam = newOwnerTeam;
+	}
+
 	@Override
 	public void onObjectEntered(GameObject object) {
 		if (object.isUnit()) {
@@ -156,6 +165,8 @@ public abstract class NeutralArea extends TriggerArea {
 				}
 				currentOwnerTeam = currentProgressingTeam;
 				onNeutralAreaOccupied(currentProgressingTeam);
+				getGame().getEventTriggerer().notifyAreaConquered(this,
+						currentOwnerTeam);
 			}
 		}
 	}

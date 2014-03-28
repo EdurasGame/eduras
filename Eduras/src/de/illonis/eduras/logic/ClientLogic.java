@@ -9,6 +9,7 @@ import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.ObjectFactory;
 import de.illonis.eduras.Team;
 import de.illonis.eduras.events.AddPlayerToTeamEvent;
+import de.illonis.eduras.events.AreaConqueredEvent;
 import de.illonis.eduras.events.ClientRenameEvent;
 import de.illonis.eduras.events.DeathEvent;
 import de.illonis.eduras.events.GameEvent;
@@ -36,6 +37,7 @@ import de.illonis.eduras.gamemodes.BasicGameMode;
 import de.illonis.eduras.gamemodes.GameMode;
 import de.illonis.eduras.gameobjects.DynamicPolygonObject;
 import de.illonis.eduras.gameobjects.GameObject;
+import de.illonis.eduras.gameobjects.NeutralArea;
 import de.illonis.eduras.interfaces.GameEventListener;
 import de.illonis.eduras.interfaces.GameLogicInterface;
 import de.illonis.eduras.inventory.ItemSlotIsEmptyException;
@@ -344,6 +346,25 @@ public class ClientLogic implements GameLogicInterface {
 				break;
 			case GAME_READY:
 				getListener().onGameReady();
+				break;
+			case BASE_CONQUERED:
+				AreaConqueredEvent baseConqueredEvent = (AreaConqueredEvent) event;
+
+				Team conqueringTeam = gameInfo.findTeamById(baseConqueredEvent
+						.getConqueringTeam());
+				if (conqueringTeam == null) {
+					L.severe("Cannot find team with id "
+							+ baseConqueredEvent.getConqueringTeam());
+				}
+
+				NeutralArea conqueredArea = (NeutralArea) gameInfo
+						.findObjectById(baseConqueredEvent.getBaseId());
+				if (conqueredArea == null) {
+					L.severe("Cannot find base with id "
+							+ baseConqueredEvent.getBaseId());
+				}
+				conqueredArea.setCurrentOwnerTeam(conqueringTeam);
+
 				break;
 			default:
 				break;

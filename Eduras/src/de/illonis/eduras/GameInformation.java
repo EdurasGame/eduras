@@ -15,6 +15,7 @@ import java.util.logging.Logger;
 import de.illonis.edulog.EduLog;
 import de.illonis.eduras.ObjectFactory.ObjectType;
 import de.illonis.eduras.events.AddPlayerToTeamEvent;
+import de.illonis.eduras.events.AreaConqueredEvent;
 import de.illonis.eduras.events.ClientRenameEvent;
 import de.illonis.eduras.events.GameEvent;
 import de.illonis.eduras.events.GameEvent.GameEventNumber;
@@ -31,6 +32,7 @@ import de.illonis.eduras.exceptions.InvalidNameException;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
 import de.illonis.eduras.gameclient.ClientData;
 import de.illonis.eduras.gameobjects.GameObject;
+import de.illonis.eduras.gameobjects.NeutralBase;
 import de.illonis.eduras.logic.EventTriggerer;
 import de.illonis.eduras.maps.FunMap;
 import de.illonis.eduras.maps.Map;
@@ -355,6 +357,8 @@ public class GameInformation {
 
 		ArrayList<GameEvent> infos = new ArrayList<GameEvent>();
 
+		ArrayList<NeutralBase> neutralBases = new ArrayList<NeutralBase>();
+
 		for (GameObject object : objects.values()) {
 			ObjectFactoryEvent objectEvent = new ObjectFactoryEvent(
 					GameEventNumber.OBJECT_CREATE, object.getType(),
@@ -367,6 +371,10 @@ public class GameInformation {
 						object.getId(),
 						((Polygon) object.getShape()).getVerticesAsArray());
 				infos.add(polygonData);
+			}
+
+			if (object.getType() == ObjectType.NEUTRAL_BASE) {
+				neutralBases.add((NeutralBase) object);
 			}
 
 			// send position immediately
@@ -430,6 +438,14 @@ public class GameInformation {
 
 		infos.add(teamEvent);
 		infos.addAll(teamPlayerEvents);
+
+		for (NeutralBase base : neutralBases) {
+			if (base.getCurrentOwnerTeam() != null) {
+				AreaConqueredEvent baseConqueredNotification = new AreaConqueredEvent(
+						base.getId(), base.getCurrentOwnerTeam().getTeamId());
+				infos.add(baseConqueredNotification);
+			}
+		}
 
 		return infos;
 	}

@@ -12,6 +12,7 @@ import de.illonis.eduras.ObjectFactory.ObjectType;
 import de.illonis.eduras.Statistic.StatsProperty;
 import de.illonis.eduras.Team;
 import de.illonis.eduras.events.AddPlayerToTeamEvent;
+import de.illonis.eduras.events.AreaConqueredEvent;
 import de.illonis.eduras.events.ClientRenameEvent;
 import de.illonis.eduras.events.DeathEvent;
 import de.illonis.eduras.events.GameEvent.GameEventNumber;
@@ -309,6 +310,11 @@ public class EventParser implements EventHandler {
 				logic.onGameEventAppeared(new SetInteractModeEvent(
 						(Integer) event.getArgument(0), InteractMode
 								.valueOf((String) event.getArgument(1))));
+				break;
+			case BASE_CONQUERED:
+				logic.onGameEventAppeared(new AreaConqueredEvent(
+						(Integer) event.getArgument(0), (Integer) event
+								.getArgument(1)));
 				break;
 			default:
 				L.warning("Cannot handle event with event number "

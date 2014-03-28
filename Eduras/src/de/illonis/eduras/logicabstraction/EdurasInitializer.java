@@ -27,6 +27,7 @@ import de.illonis.eduras.exceptions.WrongEventTypeException;
 import de.illonis.eduras.gameclient.userprefs.Settings;
 import de.illonis.eduras.gamemodes.GameMode;
 import de.illonis.eduras.gameobjects.GameObject;
+import de.illonis.eduras.gameobjects.NeutralArea;
 import de.illonis.eduras.interfaces.GameLogicInterface;
 import de.illonis.eduras.items.Item;
 import de.illonis.eduras.logic.ClientLogic;
@@ -310,6 +311,13 @@ public class EdurasInitializer {
 			@Override
 			public void changeStatOfPlayerByAmount(StatsProperty prop,
 					PlayerMainFigure player, int i) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void notifyAreaConquered(NeutralArea neutralBase,
+					Team occupyingTeam) {
 				// TODO Auto-generated method stub
 
 			}
