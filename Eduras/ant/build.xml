@@ -122,6 +122,9 @@
 	<target name="jars"
 		depends="clean,jar-server,jar-client, jar-remoteclient, jar-shapecreator, jar-metaserver"
 		description="Creates clean executables.">
+		<copy todir="${jars}/native">
+			<fileset dir="${base}${libs}/native" includes="**" />
+		</copy>
 	</target>
 
 	<target name="current-commit"
