@@ -95,11 +95,11 @@ public class ItemDisplay extends ClickableGuiElement implements
 			long cd = item.getCooldown();
 			if (cd > 0) {
 				g.setColor(COLOR_SEMITRANSPARENT);
-
+				float a = item.getCooldownPercent();
+				System.out.println(a);
 				g.fillArc(itemRect.getX(), itemRect.getY(),
-						itemRect.getWidth(), itemRect.getHeight(),
-						360 - item.getCooldownArc() - 90, -90);
-				g.setColor(Color.white);
+						itemRect.getWidth(), itemRect.getHeight(), -90 - a
+								* 360, -90);
 			}
 		}
 	}
@@ -233,11 +233,11 @@ public class ItemDisplay extends ClickableGuiElement implements
 			return 0;
 		}
 
-		float getCooldownArc() {
+		float getCooldownPercent() {
 			float e = 0;
 			if (item instanceof Usable) {
 				Usable u = (Usable) item;
-				e = (float) u.getCooldown() / u.getCooldownTime() * 360;
+				e = (float) u.getCooldown() / u.getCooldownTime();
 			}
 			return e;
 		}

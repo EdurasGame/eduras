@@ -635,7 +635,6 @@ public class ServerEventTriggerer implements EventTriggerer {
 	@Override
 	public void notifyCooldownStarted(ItemEvent event) {
 		sendEventToAll(event);
-
 	}
 
 	@Override

@@ -34,9 +34,9 @@ public class DemoAnimation extends Animation {
 	}
 
 	@Override
-	public void drawAnimation(Graphics g, float cameraX, float cameraY) {
+	public void drawAnimation(Graphics g) {
 		g.setColor(Color.cyan);
-		g.fillRect(xPos + cameraX, yPos + cameraY, 30, 30);
+		g.fillRect(xPos, yPos, 30, 30);
 	}
 
 	@Override

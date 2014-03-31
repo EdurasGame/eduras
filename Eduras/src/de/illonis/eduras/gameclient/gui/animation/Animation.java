@@ -60,24 +60,19 @@ public abstract class Animation implements TimingTarget {
 	 * 
 	 * @param g
 	 *            target graphics
-	 * @param cameraX
-	 *            the x-offset of the camera.
-	 * @param cameraY
-	 *            the y-offset of the camera.
 	 */
-	public final void draw(Graphics g, float cameraX, float cameraY) {
+	public final void draw(Graphics g) {
 		if (running)
-			drawAnimation(g, cameraX, cameraY);
+			drawAnimation(g);
 	}
 
 	/**
 	 * Draws this animation onto given graphics.
 	 * 
-	 * @param g2d
+	 * @param g
 	 *            target graphics object.
 	 */
-	protected abstract void drawAnimation(Graphics g, float cameraX,
-			float cameraY);
+	protected abstract void drawAnimation(Graphics g);
 
 	@Override
 	public void begin(Animator source) {

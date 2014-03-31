@@ -39,10 +39,10 @@ public class RocketSplashAnimation extends Animation {
 	}
 
 	@Override
-	protected void drawAnimation(Graphics g, float cameraX, float cameraY) {
+	protected void drawAnimation(Graphics g) {
 		g.setLineWidth(STROKE_WIDTH);
 		g.setColor(Color.red);
-		g.drawOval(x + cameraX, y + cameraY, dim, dim);
+		g.drawOval(x, y, dim, dim);
 	}
 
 	@Override
