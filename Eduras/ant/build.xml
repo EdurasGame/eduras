@@ -17,14 +17,7 @@
 	<property name="exclude" value="**/unittests/*" />
 
 	<path id="classpath">
-		<fileset dir="${base}${libs}">
-			<include name="timingframework*.jar" />
-			<include name="eventingserver.jar" />
-			<include name="eduras-remote.jar" />
-			<include name="edulog-2.jar" />
-			<include name="junit-4.11.jar" />
-			<include name="json.jar" />
-		</fileset>
+		<fileset dir="${base}${libs}" includes="*.jar" />
 		<pathelement path="${base}${build}" />
 	</path>
 
@@ -43,7 +36,8 @@
 		</javac>
 	</target>
 
-	<target name="jar-client" depends="compile, current-commit" description="Creates client-executable.">
+	<target name="jar-client" depends="compile, current-commit"
+		description="Creates client-executable.">
 
 		<jar destfile="${jars}/eduras-client.jar" excludes="**/*.svg, **/unittests/**"
 			basedir="${base}${build}">
@@ -54,16 +48,17 @@
 				<include name="**/*.esh"></include>
 				<include name="**/*.properties"></include>
 			</fileset>
-			<fileset file="version"/>
-			<zipgroupfileset dir="${base}${libs}" includes="**/*.jar" />
+			<fileset file="version" />
+			<zipgroupfileset dir="${base}${libs}" includes="*.jar" />
 			<manifest>
 				<attribute name="Main-Class"
 					value="de.illonis.eduras.gameclient.EdurasClient" />
 			</manifest>
 		</jar>
 	</target>
-	
-	<target name="jar-remoteclient" depends="compile" description="Creates remoteclient-executable.">
+
+	<target name="jar-remoteclient" depends="compile"
+		description="Creates remoteclient-executable.">
 
 		<jar destfile="${jars}/eduras-remoteclient.jar" excludes="**/*.svg, **/unittests/**"
 			basedir="${base}${build}">
@@ -75,7 +70,8 @@
 		</jar>
 	</target>
 
-	<target name="jar-server" depends="compile, current-commit" description="Creates server-executable.">
+	<target name="jar-server" depends="compile, current-commit"
+		description="Creates server-executable.">
 		<jar destfile="${jars}/eduras-server.jar" basedir="${base}${build}"
 			excludes="**/unittests/**">
 			<fileset dir="${base}${src}">
@@ -83,7 +79,7 @@
 				<include name="**/*.esh"></include>
 				<include name="**/*.properties"></include>
 			</fileset>
-			<fileset file="version"/>
+			<fileset file="version" />
 			<zipgroupfileset dir="${base}${libs}" includes="**/*.jar" />
 			<manifest>
 				<attribute name="Main-Class" value="de.illonis.eduras.EdurasServer" />
@@ -106,7 +102,7 @@
 			</manifest>
 		</jar>
 	</target>
-	
+
 	<target name="jar-metaserver" depends="compile"
 		description="Creates metaserver executable.">
 		<jar destfile="${jars}/tools/metaserver.jar" basedir="${base}${build}"
@@ -114,7 +110,8 @@
 			<fileset dir="${base}${src}">
 				<include name="**/*.properties"></include>
 			</fileset>
-			<zipgroupfileset dir="${base}${libs}" includes="edulog*.jar, eventingserver.jar" />
+			<zipgroupfileset dir="${base}${libs}"
+				includes="edulog*.jar, eventingserver.jar" />
 			<manifest>
 				<attribute name="Main-Class"
 					value="de.illonis.eduras.networking.discover.MetaServer" />
@@ -122,10 +119,11 @@
 		</jar>
 	</target>
 
-	<target name="jars" depends="clean,jar-server,jar-client, jar-remoteclient, jar-shapecreator, jar-metaserver"
+	<target name="jars"
+		depends="clean,jar-server,jar-client, jar-remoteclient, jar-shapecreator, jar-metaserver"
 		description="Creates clean executables.">
 	</target>
-	
+
 	<target name="current-commit"
 		description="Determines the current commit and writes it to a file.">
 		<exec executable="git" outputproperty="git.revision">
@@ -135,8 +133,7 @@
 		<echo file="${base}${ant}/version">${git.revision}</echo>
 	</target>
 
-<!--	<target name="deploy" depends="jars" description="Creates launcher and installers.">
-		<ant antfile="${base}../EdurasLauncher/build.xml"
-			useNativeBasedir="true" inheritAll="false" />
-	</target> -->
+	<!-- <target name="deploy" depends="jars" description="Creates launcher 
+		and installers."> <ant antfile="${base}../EdurasLauncher/build.xml" useNativeBasedir="true" 
+		inheritAll="false" /> </target> -->
 </project> 
