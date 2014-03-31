@@ -65,11 +65,15 @@ public final class GraphicsPreLoader extends AsyncLoader<Void> {
 		p.loadShapes();
 	}
 	
+	/**
+	 * Loads images for client.
+	 */
 	public static void preLoadImages() {
 		GraphicsPreLoader p = new GraphicsPreLoader();
 		p.loadShapes();
 		p.loadGuiGraphics();
 		p.loadIcons();
+		p.loadGraphics();
 		p.loadInventoryIcons();
 	}
 

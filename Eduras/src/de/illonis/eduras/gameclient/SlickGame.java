@@ -74,8 +74,6 @@ public class SlickGame extends BasicGame {
 		e.setColor(Color.white);
 		defaultFont.getEffects().add(e);
 		defaultFont.loadGlyphs();
-		
-		// defaultFont.
 		GraphicsPreLoader.preLoadImages();
 	}
 
