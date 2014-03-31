@@ -12,6 +12,7 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.beans.PropertyEditor;
 import java.beans.PropertyEditorManager;
+import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.text.SimpleDateFormat;
@@ -36,6 +37,7 @@ import de.illonis.eduras.beta.BetaAuthenticator;
 import de.illonis.eduras.gameclient.gui.ClientFrame;
 import de.illonis.eduras.gameclient.gui.FullScreenClientFrame;
 import de.illonis.eduras.settings.S;
+import de.illonis.eduras.utils.PathFinder;
 
 /**
  * Eduras? Game client for end user.
@@ -65,7 +67,7 @@ public class EdurasClient {
 	 *            client is bound.
 	 */
 	public static void main(String[] args) {
-		
+
 		SimpleDateFormat simpleDate = new SimpleDateFormat("y-M-d-H-m-s");
 
 		try {
@@ -132,11 +134,13 @@ public class EdurasClient {
 
 		// Note that this is very bad coded due to testing ;)
 		// buildChooserFrame();
+		System.setProperty("org.lwjgl.librarypath",
+				(new File(PathFinder.findFile("native"))).getAbsolutePath());
 
 		BetaAuthenticator authenticator = new BetaAuthenticator();
-		//if (authenticator.authenticate(3, betaUser, betaPassword)) {
+		if (authenticator.authenticate(3, betaUser, betaPassword)) {
 			startWindowed();
-		//}
+		}
 	}
 
 	private static Object convert(Class<?> targetType, String text) {
