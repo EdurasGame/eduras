@@ -10,8 +10,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.beans.PropertyEditor;
-import java.beans.PropertyEditorManager;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Field;
@@ -38,6 +36,7 @@ import de.illonis.eduras.gameclient.gui.ClientFrame;
 import de.illonis.eduras.gameclient.gui.FullScreenClientFrame;
 import de.illonis.eduras.settings.S;
 import de.illonis.eduras.utils.PathFinder;
+import de.illonis.eduras.utils.ReflectionTools;
 
 /**
  * Eduras? Game client for end user.
@@ -119,7 +118,8 @@ public class EdurasClient {
 					Field f = S.class.getField(parameterName
 							.substring(sClassName.length() + 1));
 					Class<?> targetClass = f.getType();
-					Object value = convert(targetClass, parameterValue);
+					Object value = ReflectionTools.toPrimitive(targetClass,
+							parameterValue);
 					f.set(null, value);
 					L.log(Level.INFO, "Set S." + f.getName() + " to " + value);
 				} catch (NoSuchFieldException | SecurityException
@@ -146,12 +146,6 @@ public class EdurasClient {
 		if (authenticator.authenticate(3, betaUser, betaPassword)) {
 			startWindowed();
 		}
-	}
-
-	private static Object convert(Class<?> targetType, String text) {
-		PropertyEditor editor = PropertyEditorManager.findEditor(targetType);
-		editor.setAsText(text);
-		return editor.getValue();
 	}
 
 	protected static void startWindowed() {

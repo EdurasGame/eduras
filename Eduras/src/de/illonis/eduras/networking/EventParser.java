@@ -11,8 +11,10 @@ import de.eduras.eventingserver.EventHandler;
 import de.eduras.eventingserver.exceptions.TooFewArgumentsExceptions;
 import de.illonis.edulog.EduLog;
 import de.illonis.eduras.ObjectFactory.ObjectType;
+import de.illonis.eduras.Statistic.StatsProperty;
 import de.illonis.eduras.Team;
 import de.illonis.eduras.events.AddPlayerToTeamEvent;
+import de.illonis.eduras.events.AreaConqueredEvent;
 import de.illonis.eduras.events.ClientRenameEvent;
 import de.illonis.eduras.events.DeathEvent;
 import de.illonis.eduras.events.GameEvent.GameEventNumber;
@@ -34,6 +36,7 @@ import de.illonis.eduras.events.SetItemSlotEvent;
 import de.illonis.eduras.events.SetOwnerEvent;
 import de.illonis.eduras.events.SetPolygonDataEvent;
 import de.illonis.eduras.events.SetRemainingTimeEvent;
+import de.illonis.eduras.events.SetStatsEvent;
 import de.illonis.eduras.events.SetTeamsEvent;
 import de.illonis.eduras.events.SwitchInteractModeEvent;
 import de.illonis.eduras.events.UserMovementEvent;
@@ -254,6 +257,12 @@ public class EventParser implements EventHandler {
 						GameEventNumber.SET_DEATHS, (Integer) event
 								.getArgument(0), (Integer) event.getArgument(1)));
 				break;
+			case SET_STATS:
+				logic.onGameEventAppeared(new SetStatsEvent(StatsProperty
+						.valueOf((String) event.getArgument(0)),
+						(Integer) event.getArgument(1), (Integer) event
+								.getArgument(2)));
+				break;
 			case SET_REMAININGTIME:
 				logic.onGameEventAppeared(new SetRemainingTimeEvent(
 						(Long) event.getArgument(0)));
@@ -306,6 +315,11 @@ public class EventParser implements EventHandler {
 				logic.onGameEventAppeared(new SetInteractModeEvent(
 						(Integer) event.getArgument(0), InteractMode
 								.valueOf((String) event.getArgument(1))));
+				break;
+			case BASE_CONQUERED:
+				logic.onGameEventAppeared(new AreaConqueredEvent(
+						(Integer) event.getArgument(0), (Integer) event
+								.getArgument(1)));
 				break;
 			default:
 				L.warning("Cannot handle event with event number "

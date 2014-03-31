@@ -76,6 +76,19 @@ public class DynamicPolygonObject extends GameObject {
 		setShape(new Polygon(points));
 	}
 
+	/**
+	 * @return the vertices of this object's polygon.
+	 */
+	public Vector2f[] getPolygonVertices() {
+		Polygon p = (Polygon) getShape();
+		float points[] = p.getPoints();
+		Vector2f result[] = new Vector2f[points.length / 2];
+		for (int i = 0; i < result.length; i++) {
+			result[i] = new Vector2f(points[2 * i], points[2 * i + 1]);
+		}
+		return result;
+	}
+
 	@Override
 	public void onCollision(GameObject collidingObject) {
 		// just block

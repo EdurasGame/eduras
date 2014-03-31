@@ -16,11 +16,14 @@ import de.eduras.eventingserver.test.NoSuchClientException;
 import de.illonis.edulog.EduLog;
 import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.ObjectFactory.ObjectType;
+import de.illonis.eduras.Statistic;
+import de.illonis.eduras.Statistic.StatsProperty;
 import de.illonis.eduras.Team;
 import de.illonis.eduras.ai.movement.MotionAIControllable;
 import de.illonis.eduras.ai.movement.MovingUnitAI;
 import de.illonis.eduras.ai.movement.UnitNotControllableException;
 import de.illonis.eduras.events.AddPlayerToTeamEvent;
+import de.illonis.eduras.events.AreaConqueredEvent;
 import de.illonis.eduras.events.ClientRenameEvent;
 import de.illonis.eduras.events.DeathEvent;
 import de.illonis.eduras.events.GameEvent;
@@ -41,6 +44,7 @@ import de.illonis.eduras.events.SetItemSlotEvent;
 import de.illonis.eduras.events.SetOwnerEvent;
 import de.illonis.eduras.events.SetPolygonDataEvent;
 import de.illonis.eduras.events.SetRemainingTimeEvent;
+import de.illonis.eduras.events.SetStatsEvent;
 import de.illonis.eduras.events.SetTeamsEvent;
 import de.illonis.eduras.exceptions.GameModeNotSupportedByMapException;
 import de.illonis.eduras.exceptions.InvalidNameException;
@@ -48,6 +52,7 @@ import de.illonis.eduras.exceptions.ObjectNotFoundException;
 import de.illonis.eduras.gamemodes.GameMode;
 import de.illonis.eduras.gameobjects.DynamicPolygonObject;
 import de.illonis.eduras.gameobjects.GameObject;
+import de.illonis.eduras.gameobjects.NeutralArea;
 import de.illonis.eduras.interfaces.GameLogicInterface;
 import de.illonis.eduras.inventory.InventoryIsFullException;
 import de.illonis.eduras.items.Item;
@@ -500,17 +505,8 @@ public class ServerEventTriggerer implements EventTriggerer {
 	 * @param player
 	 */
 	private void resetStats(PlayerMainFigure player) {
-		int playerId = player.getOwner();
-
-		gameInfo.getGameSettings().getStats().setDeaths(playerId, 0);
-		gameInfo.getGameSettings().getStats().setKills(playerId, 0);
-
-		SetIntegerGameObjectAttributeEvent setdeaths = new SetIntegerGameObjectAttributeEvent(
-				GameEventNumber.SET_DEATHS, playerId, 0);
-		SetIntegerGameObjectAttributeEvent setkills = new SetIntegerGameObjectAttributeEvent(
-				GameEventNumber.SET_KILLS, playerId, 0);
-
-		sendEvents(setdeaths, setkills);
+		setStats(StatsProperty.KILLS, player.getOwner(), 0);
+		setStats(StatsProperty.DEATHS, player.getOwner(), 0);
 	}
 
 	private void resetSettings() {
@@ -713,5 +709,39 @@ public class ServerEventTriggerer implements EventTriggerer {
 				GameEventNumber.SET_COLLIDABLE, objectId, newVal);
 		object.setCollidable(newVal);
 		sendEvents(setCollidableEvent);
+	}
+
+	@Override
+	public void setStats(StatsProperty property, int ownerId, int valueToSet) {
+		Statistic stats = gameInfo.getGameSettings().getStats();
+
+		synchronized (stats) {
+			stats.setStatsProperty(property, ownerId, valueToSet);
+
+			SetStatsEvent setStatsEvent = new SetStatsEvent(property, ownerId,
+					valueToSet);
+			sendEvents(setStatsEvent);
+		}
+	}
+
+	@Override
+	public void changeStatOfPlayerByAmount(StatsProperty prop,
+			PlayerMainFigure player, int i) {
+		Statistic stats = gameInfo.getGameSettings().getStats();
+
+		synchronized (stats) {
+			int newVal = stats.getStatsProperty(prop, player.getOwner()) + i;
+			stats.setStatsProperty(prop, player.getOwner(), newVal);
+			SetStatsEvent setStatsEvent = new SetStatsEvent(prop,
+					player.getOwner(), newVal);
+			sendEvents(setStatsEvent);
+		}
+	}
+
+	@Override
+	public void notifyAreaConquered(NeutralArea neutralArea, Team occupyingTeam) {
+		AreaConqueredEvent baseConqueredEvent = new AreaConqueredEvent(
+				neutralArea.getId(), occupyingTeam.getTeamId());
+		sendEvents(baseConqueredEvent);
 	}
 }

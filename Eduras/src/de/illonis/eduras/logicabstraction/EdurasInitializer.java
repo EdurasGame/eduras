@@ -12,6 +12,7 @@ import de.illonis.eduras.ClientGameMode;
 import de.illonis.eduras.EdurasServer;
 import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.ObjectFactory.ObjectType;
+import de.illonis.eduras.Statistic.StatsProperty;
 import de.illonis.eduras.Team;
 import de.illonis.eduras.ai.movement.UnitNotControllableException;
 import de.illonis.eduras.events.GameEvent;
@@ -26,6 +27,7 @@ import de.illonis.eduras.exceptions.WrongEventTypeException;
 import de.illonis.eduras.gameclient.userprefs.Settings;
 import de.illonis.eduras.gamemodes.GameMode;
 import de.illonis.eduras.gameobjects.GameObject;
+import de.illonis.eduras.gameobjects.NeutralArea;
 import de.illonis.eduras.interfaces.GameLogicInterface;
 import de.illonis.eduras.items.Item;
 import de.illonis.eduras.logic.ClientLogic;
@@ -296,6 +298,27 @@ public class EdurasInitializer {
 			@Override
 			public void createDynamicPolygonObjectAt(ObjectType type,
 					Vector2df[] polygonVector2dfs, Vector2df position, int owner) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void setStats(StatsProperty property, int ownerId,
+					int valueToSet) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void changeStatOfPlayerByAmount(StatsProperty prop,
+					PlayerMainFigure player, int i) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void notifyAreaConquered(NeutralArea neutralBase,
+					Team occupyingTeam) {
 				// TODO Auto-generated method stub
 
 			}

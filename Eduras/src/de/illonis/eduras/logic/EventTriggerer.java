@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import de.illonis.eduras.ObjectFactory.ObjectType;
+import de.illonis.eduras.Statistic.StatsProperty;
 import de.illonis.eduras.Team;
 import de.illonis.eduras.ai.movement.UnitNotControllableException;
 import de.illonis.eduras.events.GameEvent;
@@ -13,6 +14,7 @@ import de.illonis.eduras.events.SetGameObjectAttributeEvent;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
 import de.illonis.eduras.gamemodes.GameMode;
 import de.illonis.eduras.gameobjects.GameObject;
+import de.illonis.eduras.gameobjects.NeutralArea;
 import de.illonis.eduras.items.Item;
 import de.illonis.eduras.maps.Map;
 import de.illonis.eduras.math.Vector2df;
@@ -381,5 +383,38 @@ public interface EventTriggerer {
 	 *            The new value of the collidability.
 	 */
 	public void setCollidability(int objectId, boolean newVal);
+
+	/**
+	 * Set a {@link StatsProperty} of the player identified by the given id to
+	 * the given value.
+	 * 
+	 * @param property
+	 * @param ownerId
+	 * @param valueToSet
+	 */
+	public void setStats(StatsProperty property, int ownerId, int valueToSet);
+
+	/**
+	 * Increases the count of a player's {@link StatsProperty} by the given
+	 * number.
+	 * 
+	 * @param prop
+	 *            stat to increase (or decrease)
+	 * @param player
+	 *            player to change the stats of
+	 * @param i
+	 *            amount
+	 */
+	void changeStatOfPlayerByAmount(StatsProperty prop,
+			PlayerMainFigure player, int i);
+
+	/**
+	 * Notifies all clients that the {@link NeutralArea} was conquered by the
+	 * given team.
+	 * 
+	 * @param neutralArea
+	 * @param occupyingTeam
+	 */
+	void notifyAreaConquered(NeutralArea neutralArea, Team occupyingTeam);
 
 }

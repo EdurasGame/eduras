@@ -1,16 +1,19 @@
 package de.illonis.eduras.gamemodes;
 
 import java.util.LinkedList;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import de.illonis.edulog.EduLog;
 import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.ObjectFactory.ObjectType;
+import de.illonis.eduras.Statistic.StatsProperty;
 import de.illonis.eduras.Team;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
 import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.gameobjects.GameObject.Relation;
+import de.illonis.eduras.gameobjects.NeutralBase;
 import de.illonis.eduras.logic.EventTriggerer;
 import de.illonis.eduras.maps.SpawnPosition.SpawnType;
 import de.illonis.eduras.units.PlayerMainFigure;
@@ -43,25 +46,29 @@ public class Deathmatch extends BasicGameMode {
 
 	@Override
 	public void onDeath(Unit killedUnit, int killingPlayer) {
-
 		try {
 			// TODO: should not track npc kills this way.
 			PlayerMainFigure killer = gameInfo
 					.getPlayerByOwnerId(killingPlayer);
+
+			EventTriggerer et = gameInfo.getEventTriggerer();
+			if (et == null) {
+				L.severe("EventTriggerer is null!");
+				System.exit(-1);
+			}
 			if (killedUnit instanceof PlayerMainFigure) {
-				EventTriggerer et = gameInfo.getEventTriggerer();
+
 				// need to check here because client has no event triggerer.
 				// TODO: find a solution for client-workaraound.
-				if (et != null)
-					gameInfo.getEventTriggerer().respawnPlayer(
-							(PlayerMainFigure) killedUnit);
+				et.respawnPlayer((PlayerMainFigure) killedUnit);
+				et.changeStatOfPlayerByAmount(StatsProperty.DEATHS,
+						(PlayerMainFigure) killedUnit, 1);
 				// TODO: give player items here if game mode should do.
-				gameInfo.getGameSettings().getStats()
-						.addDeathForPlayer((PlayerMainFigure) killedUnit);
+
 			}
 			if (killer.equals(killedUnit))
 				return;
-			gameInfo.getGameSettings().getStats().addKillForPlayer(killer);
+			et.changeStatOfPlayerByAmount(StatsProperty.KILLS, killer, 1);
 		} catch (ObjectNotFoundException e) {
 			L.log(Level.SEVERE, "player not found", e);
 		}
@@ -151,5 +158,27 @@ public class Deathmatch extends BasicGameMode {
 		// .. and remove it's team
 		gameInfo.removeTeam(playersTeam);
 		gameInfo.getEventTriggerer().setTeams(gameInfo.getTeams());
+	}
+
+	@Override
+	public Team determineProgressingTeam(GameObject object,
+			boolean objectEntered, Set<GameObject> presentObjects) {
+		if (presentObjects.size() == 1) {
+			Unit onlyUnitInside = (Unit) presentObjects.iterator().next();
+			return onlyUnitInside.getTeam();
+		}
+		return null;
+	}
+
+	@Override
+	public void onBaseOccupied(NeutralBase base, Team occupyingTeam) {
+		L.info("Team " + occupyingTeam.getName()
+				+ " occupied the base with id " + base.getId() + "!");
+	}
+
+	@Override
+	public void onBaseLost(NeutralBase base, Team losingTeam) {
+		L.info("Team " + losingTeam.getName() + " lost the base with id "
+				+ base.getId() + "!");
 	}
 }

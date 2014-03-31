@@ -9,6 +9,7 @@ import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.ObjectFactory;
 import de.illonis.eduras.Team;
 import de.illonis.eduras.events.AddPlayerToTeamEvent;
+import de.illonis.eduras.events.AreaConqueredEvent;
 import de.illonis.eduras.events.ClientRenameEvent;
 import de.illonis.eduras.events.DeathEvent;
 import de.illonis.eduras.events.GameEvent;
@@ -28,14 +29,15 @@ import de.illonis.eduras.events.SetItemSlotEvent;
 import de.illonis.eduras.events.SetOwnerEvent;
 import de.illonis.eduras.events.SetPolygonDataEvent;
 import de.illonis.eduras.events.SetRemainingTimeEvent;
+import de.illonis.eduras.events.SetStatsEvent;
 import de.illonis.eduras.events.SetTeamsEvent;
+import de.illonis.eduras.exceptions.NoSuchGameModeException;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
-import de.illonis.eduras.gamemodes.Deathmatch;
+import de.illonis.eduras.gamemodes.BasicGameMode;
 import de.illonis.eduras.gamemodes.GameMode;
-import de.illonis.eduras.gamemodes.NoGameMode;
-import de.illonis.eduras.gamemodes.TeamDeathmatch;
 import de.illonis.eduras.gameobjects.DynamicPolygonObject;
 import de.illonis.eduras.gameobjects.GameObject;
+import de.illonis.eduras.gameobjects.NeutralArea;
 import de.illonis.eduras.interfaces.GameEventListener;
 import de.illonis.eduras.interfaces.GameLogicInterface;
 import de.illonis.eduras.inventory.ItemSlotIsEmptyException;
@@ -236,8 +238,6 @@ public class ClientLogic implements GameLogicInterface {
 				GameObject killed = gameInfo.findObjectById(de.getKilled());
 				if (killed.isUnit()) {
 					Unit un = (Unit) killed;
-					gameInfo.getGameSettings().getGameMode()
-							.onDeath(un, de.getKillerOwner());
 					getListener().onDeath(de);
 
 				}
@@ -293,23 +293,20 @@ public class ClientLogic implements GameLogicInterface {
 				break;
 			case SET_GAMEMODE:
 				SetGameModeEvent modeChangeEvent = (SetGameModeEvent) event;
-				GameMode newGameMode;
-				String newMode = modeChangeEvent.getNewMode();
-				switch (newMode) {
-				case "Deathmatch":
-					newGameMode = new Deathmatch(gameInfo);
-					break;
-				case "Team-Deathmatch":
-					newGameMode = new TeamDeathmatch(gameInfo);
-					break;
-				default:
-					newGameMode = new NoGameMode(gameInfo);
-					break;
+				String newModeString = modeChangeEvent.getNewMode();
+
+				GameMode newMode = null;
+				try {
+					newMode = BasicGameMode.getGameModeByName(newModeString,
+							getGame());
+				} catch (NoSuchGameModeException e1) {
+					L.log(Level.SEVERE, "Got unknown game mode", e1);
+					return;
 				}
 
-				gameInfo.getGameSettings().changeGameMode(newGameMode);
+				gameInfo.getGameSettings().changeGameMode(newMode);
 
-				getListener().onGameModeChanged(newGameMode);
+				getListener().onGameModeChanged(newMode);
 
 				break;
 			case SET_OWNER:
@@ -334,6 +331,14 @@ public class ClientLogic implements GameLogicInterface {
 				gameInfo.getGameSettings().getStats()
 						.setDeaths(ownerId, newCount);
 				break;
+			case SET_STATS:
+				SetStatsEvent setStatsEvent = (SetStatsEvent) event;
+				gameInfo.getGameSettings()
+						.getStats()
+						.setStatsProperty(setStatsEvent.getProperty(),
+								setStatsEvent.getPlayerId(),
+								setStatsEvent.getNewCount());
+				break;
 			case SET_REMAININGTIME:
 				SetRemainingTimeEvent remainingTimeEvent = (SetRemainingTimeEvent) event;
 				long remainingTime = remainingTimeEvent.getRemainingTime();
@@ -341,6 +346,25 @@ public class ClientLogic implements GameLogicInterface {
 				break;
 			case GAME_READY:
 				getListener().onGameReady();
+				break;
+			case BASE_CONQUERED:
+				AreaConqueredEvent baseConqueredEvent = (AreaConqueredEvent) event;
+
+				Team conqueringTeam = gameInfo.findTeamById(baseConqueredEvent
+						.getConqueringTeam());
+				if (conqueringTeam == null) {
+					L.severe("Cannot find team with id "
+							+ baseConqueredEvent.getConqueringTeam());
+				}
+
+				NeutralArea conqueredArea = (NeutralArea) gameInfo
+						.findObjectById(baseConqueredEvent.getBaseId());
+				if (conqueredArea == null) {
+					L.severe("Cannot find base with id "
+							+ baseConqueredEvent.getBaseId());
+				}
+				conqueredArea.setCurrentOwnerTeam(conqueringTeam);
+
 				break;
 			default:
 				break;
