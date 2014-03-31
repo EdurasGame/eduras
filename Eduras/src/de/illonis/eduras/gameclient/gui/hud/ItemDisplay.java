@@ -72,10 +72,8 @@ public class ItemDisplay extends ClickableGuiElement implements
 		for (GuiItem item : itemSlots) {
 			// TODO: make nicer
 			if (item.getSlotId() == currentItem) {
-				// g2d.setColor(Color.RED);
 				g.setColor(Color.yellow);
 			} else {
-				// g2d.setColor(Color.BLACK);
 				g.setColor(Color.white);
 			}
 			g.setLineWidth(rectStroke);
@@ -83,24 +81,25 @@ public class ItemDisplay extends ClickableGuiElement implements
 					item.getY() + screenY, BLOCKSIZE, BLOCKSIZE);
 			g.draw(itemRect);
 			g.drawString("#" + (item.getSlotId() + 1), item.getX() + screenX
-					+ BLOCKSIZE / 4, item.getY() + screenY - 2);
+					+ BLOCKSIZE / 4, item.getY() + screenY - 17);
 
 			if (item.isWeapon()) {
 				int ammo = item.getWeaponAmmu();
 				g.drawString("#" + ammo, item.getX() + screenX + BLOCKSIZE / 4
-						+ 20, item.getY() + screenY - 2);
+						+ 20, item.getY() + screenY - 17);
 			}
+			g.setColor(Color.white);
 			if (item.hasImage())
 				g.drawImage(item.getItemImage(), item.getX() + screenX,
-						item.getY() + screenY, null);
+						item.getY() + screenY);
 			long cd = item.getCooldown();
 			if (cd > 0) {
 				g.setColor(COLOR_SEMITRANSPARENT);
 
 				g.fillArc(itemRect.getX(), itemRect.getY(),
-						itemRect.getWidth(), itemRect.getHeight(), 90,
-						item.getCooldownArc());
-
+						itemRect.getWidth(), itemRect.getHeight(),
+						360 - item.getCooldownArc() - 90, -90);
+				g.setColor(Color.white);
 			}
 		}
 	}
