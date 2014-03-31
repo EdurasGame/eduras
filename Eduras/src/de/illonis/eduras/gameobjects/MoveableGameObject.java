@@ -120,7 +120,7 @@ public abstract class MoveableGameObject extends GameObject implements Moveable 
 	public void onMove(long delta, ShapeGeometry geometry) {
 		if (currentSpeedX == 0f && currentSpeedY == 0f)
 			return;
-		float distance = speed * (delta / (float) 1000L);
+		float distance = speed * ((float) delta / 1000L);
 
 		Vector2f target = getSpeedVector().normalise().scale(distance)
 				.add(getPositionVector());

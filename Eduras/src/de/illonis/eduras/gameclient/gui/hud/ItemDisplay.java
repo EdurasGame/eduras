@@ -96,7 +96,6 @@ public class ItemDisplay extends ClickableGuiElement implements
 			if (cd > 0) {
 				g.setColor(COLOR_SEMITRANSPARENT);
 				float a = item.getCooldownPercent();
-				System.out.println(a);
 				g.fillArc(itemRect.getX(), itemRect.getY(),
 						itemRect.getWidth(), itemRect.getHeight(), -90 - a
 								* 360, -90);

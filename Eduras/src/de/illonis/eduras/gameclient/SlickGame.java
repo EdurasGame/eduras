@@ -3,6 +3,7 @@ package de.illonis.eduras.gameclient;
 import java.awt.Color;
 import java.awt.Font;
 
+import org.lwjgl.Sys;
 import org.newdawn.slick.BasicGame;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
@@ -66,6 +67,9 @@ public class SlickGame extends BasicGame {
 		// GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 		defaultFont = new UnicodeFont(new Font("Arial", Font.PLAIN, 12));
 		defaultFont.addAsciiGlyphs();
+		container.setMinimumLogicUpdateInterval(10);
+		container.setMaximumLogicUpdateInterval(70);
+		container.setTargetFrameRate(60);
 		ColorEffect e = new ColorEffect();
 		e.setColor(Color.white);
 		defaultFont.getEffects().add(e);
@@ -85,7 +89,12 @@ public class SlickGame extends BasicGame {
 	@Override
 	public void update(GameContainer container, int delta)
 			throws SlickException {
+		//System.out.println(getTime() + " elapsed " + delta);
 		lgw.gameUpdate(delta);
+	}
+	
+	public long getTime() {
+		return (Sys.getTime() * 1000) / Sys.getTimerResolution();
 	}
 
 	@Override
