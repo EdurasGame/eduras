@@ -33,6 +33,7 @@ import de.illonis.eduras.gameobjects.NeutralBase;
 import de.illonis.eduras.items.Item;
 import de.illonis.eduras.logicabstraction.InformationProvider;
 import de.illonis.eduras.math.BasicMath;
+import de.illonis.eduras.math.Geometry;
 import de.illonis.eduras.math.Vector2df;
 import de.illonis.eduras.settings.S;
 import de.illonis.eduras.units.PlayerMainFigure;
@@ -177,7 +178,8 @@ public class GameRenderer implements TooltipHandler {
 	/**
 	 * Draws a small red border where map bounds are.
 	 * 
-	 * @param mapGraphics2
+	 * @param g
+	 *            the target graphics.
 	 */
 	private void drawMap(Graphics g) {
 		Rectangle r = info.getMapBounds();
@@ -217,8 +219,7 @@ public class GameRenderer implements TooltipHandler {
 			}
 
 			// draw only if in current view point
-			if (camera.intersects(d.getShape())
-					|| camera.contains(d.getShape())) {
+			if (Geometry.shapeCollides(camera, d.getShape())) {
 				if (S.vision_disabled
 						|| (S.vision_neutral_always && d.getOwner() == -1)) {
 					drawObject(d, g);
