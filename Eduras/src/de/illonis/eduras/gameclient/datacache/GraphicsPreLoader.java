@@ -64,6 +64,14 @@ public final class GraphicsPreLoader extends AsyncLoader<Void> {
 		GraphicsPreLoader p = new GraphicsPreLoader();
 		p.loadShapes();
 	}
+	
+	public static void preLoadImages() {
+		GraphicsPreLoader p = new GraphicsPreLoader();
+		p.loadShapes();
+		p.loadGuiGraphics();
+		p.loadIcons();
+		p.loadInventoryIcons();
+	}
 
 	private void loadIcons() {
 		HashMap<ImageKey, String> shapeInfo = CacheInfo.getAllImageIcons();

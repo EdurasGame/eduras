@@ -43,7 +43,8 @@ public class LoadingPanelLogic extends ClientGuiStepLogic implements
 	@Override
 	public void onShown() {
 		terminateLoader();
-		startLoading();
+		//startLoading();
+		onDataLoaded();
 	}
 
 	private void startLoading() {

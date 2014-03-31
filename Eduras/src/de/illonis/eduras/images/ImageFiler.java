@@ -12,6 +12,7 @@ import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 
 import de.illonis.edulog.EduLog;
+import de.illonis.eduras.gameclient.datacache.CacheInfo;
 import de.illonis.eduras.locale.Localization;
 
 /**
@@ -38,7 +39,7 @@ public class ImageFiler {
 	 * @throws IllegalArgumentException
 	 */
 	public static Image load(String fileName) throws SlickException {
-		return new Image(fileName);
+		return new Image(CacheInfo.BASE_URL + fileName);
 	}
 
 	/**

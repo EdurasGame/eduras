@@ -24,6 +24,8 @@ public final class CacheInfo {
 	public enum ImageKey {
 		STATISTICS_BG;
 	}
+	
+	public final static String BASE_URL = "de/illonis/eduras/images/"; 
 
 	private final static HashMap<ShapeType, String> shapes;
 	private final static HashMap<ObjectType, String> objectImages;

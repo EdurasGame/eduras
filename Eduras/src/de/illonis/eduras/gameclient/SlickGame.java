@@ -9,6 +9,7 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.TrueTypeFont;
 
+import de.illonis.eduras.gameclient.datacache.GraphicsPreLoader;
 import de.illonis.eduras.gameclient.gui.InputKeyHandler;
 import de.illonis.eduras.gameclient.gui.game.GameRenderer;
 import de.illonis.eduras.gameclient.gui.game.GuiMouseHandler;
@@ -60,6 +61,7 @@ public class SlickGame extends BasicGame {
 	public void init(GameContainer container) throws SlickException {
 		GL11.glDisable(GL11.GL_TEXTURE_2D);
 		defaultFont = new TrueTypeFont(new Font("Arial", Font.PLAIN, 12), true);
+		GraphicsPreLoader.preLoadImages();
 	}
 
 	@Override
