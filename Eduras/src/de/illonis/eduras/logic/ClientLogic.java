@@ -31,6 +31,7 @@ import de.illonis.eduras.events.SetPolygonDataEvent;
 import de.illonis.eduras.events.SetRemainingTimeEvent;
 import de.illonis.eduras.events.SetStatsEvent;
 import de.illonis.eduras.events.SetTeamsEvent;
+import de.illonis.eduras.events.SetVisibilityEvent;
 import de.illonis.eduras.exceptions.NoSuchGameModeException;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
 import de.illonis.eduras.gamemodes.BasicGameMode;
@@ -269,8 +270,16 @@ public class ClientLogic implements GameLogicInterface {
 				break;
 			case SET_VISION_BLOCKING:
 			case SET_COLLIDABLE:
-			case SET_VISIBLE:
 				handleObjectAttributeEvent((SetBooleanGameObjectAttributeEvent) event);
+				break;
+			case SET_VISIBLE:
+				SetVisibilityEvent visionEvent = (SetVisibilityEvent) event;
+				GameObject vObject = gameInfo.findObjectById(visionEvent
+						.getObjectId());
+				if (vObject != null) {
+					vObject.setVisible(visionEvent.getNewVisibility());
+					getListener().onVisibilityChanged(visionEvent);
+				}
 				break;
 			case SET_ITEM_SLOT:
 				SetItemSlotEvent slotEvent = (SetItemSlotEvent) event;
@@ -438,9 +447,6 @@ public class ClientLogic implements GameLogicInterface {
 		// FIXME: fix null objects.
 
 		switch (event.getType()) {
-		case SET_VISIBLE:
-			object.setVisible(event.getNewValue());
-			break;
 		case SET_COLLIDABLE:
 			object.setCollidable(event.getNewValue());
 			break;
@@ -461,114 +467,85 @@ public class ClientLogic implements GameLogicInterface {
 	@Override
 	public GameEventListener getListener() {
 		GameEventListener l = listenerHolder.getListener();
+		// return a dummy listener if no listener is attached to prevent errors.
 		if (l == null)
 			return new GameEventListener() {
 
 				@Override
 				public void onOwnerChanged(SetOwnerEvent event) {
-					// TODO Auto-generated method stub
-
 				}
 
 				@Override
 				public void onObjectStateChanged(
 						SetGameObjectAttributeEvent<?> event) {
-					// TODO Auto-generated method stub
-
 				}
 
 				@Override
 				public void onObjectRemove(ObjectFactoryEvent event) {
-					// TODO Auto-generated method stub
-
 				}
 
 				@Override
 				public void onObjectCreation(ObjectFactoryEvent event) {
-					// TODO Auto-generated method stub
-
 				}
 
 				@Override
 				public void onNewObjectPosition(GameObject object) {
-					// TODO Auto-generated method stub
-
 				}
 
 				@Override
 				public void onMaxHealthChanged(
 						SetIntegerGameObjectAttributeEvent event) {
-					// TODO Auto-generated method stub
-
 				}
 
 				@Override
 				public void onMatchEnd(MatchEndEvent event) {
-					// TODO Auto-generated method stub
-
 				}
 
 				@Override
 				public void onItemSlotChanged(SetItemSlotEvent event) {
-					// TODO Auto-generated method stub
-
 				}
 
 				@Override
 				public void onInteractModeChanged(
 						SetInteractModeEvent setModeEvent) {
-					// TODO Auto-generated method stub
-
 				}
 
 				@Override
 				public void onInformationRequested(ArrayList<GameEvent> infos,
 						int targetOwner) {
-					// TODO Auto-generated method stub
-
 				}
 
 				@Override
 				public void onHealthChanged(
 						SetIntegerGameObjectAttributeEvent event) {
-					// TODO Auto-generated method stub
-
 				}
 
 				@Override
 				public void onGameModeChanged(GameMode newGameMode) {
-					// TODO Auto-generated method stub
-
 				}
 
 				@Override
 				public void onDeath(DeathEvent event) {
-					// TODO Auto-generated method stub
-
 				}
 
 				@Override
 				public void onCooldownStarted(ItemEvent event) {
-					// TODO Auto-generated method stub
-
 				}
 
 				@Override
 				public void onCooldownFinished(ItemEvent event) {
-					// TODO Auto-generated method stub
-
 				}
 
 				@Override
 				public void onClientRename(ClientRenameEvent event) {
-					// TODO Auto-generated method stub
-
 				}
 
 				@Override
 				public void onGameReady() {
-					// TODO Auto-generated method stub
+				}
 
+				@Override
+				public void onVisibilityChanged(SetVisibilityEvent event) {
 				}
 			};
 		return l;

@@ -170,11 +170,19 @@ public class GuiInternalEventListener implements LoginPanelReactor,
 
 	@Override
 	public void onUnitsSelected(Rectangle2D.Double area) {
+		PlayerMainFigure p;
+		try {
+			p = infoPro.getPlayer();
+		} catch (ObjectNotFoundException e) {
+			L.log(Level.SEVERE,
+					"No playermainfigure found after units were selected.", e);
+			return;
+		}
 		LinkedList<Integer> ids = new LinkedList<Integer>();
 		for (Entry<Integer, GameObject> obj : infoPro.getGameObjects()
 				.entrySet()) {
 			GameObject o = obj.getValue();
-			if (o.isUnit() && o.isVisible()
+			if (o.isUnit() && o.isVisibleFor(p)
 					&& o.getBoundingBox().intersects(area)) {
 				ids.add(obj.getKey());
 			}
@@ -185,10 +193,19 @@ public class GuiInternalEventListener implements LoginPanelReactor,
 
 	@Override
 	public void selectOrDeselectAt(Vector2D point) {
+		PlayerMainFigure p;
+		try {
+			p = infoPro.getPlayer();
+		} catch (ObjectNotFoundException e) {
+			L.log(Level.SEVERE,
+					"No playermainfigure found after a unit was (de)selected.",
+					e);
+			return;
+		}
 		for (Entry<Integer, GameObject> obj : infoPro.getGameObjects()
 				.entrySet()) {
 			GameObject o = obj.getValue();
-			if (o.isUnit() && o.isVisible()
+			if (o.isUnit() && o.isVisibleFor(p)
 					&& o.getBoundingBox().contains(point.toPoint())) {
 				client.getData().setSelectedUnit(obj.getKey());
 				return;

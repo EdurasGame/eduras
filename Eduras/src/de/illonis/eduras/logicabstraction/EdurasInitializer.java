@@ -21,12 +21,14 @@ import de.illonis.eduras.events.ItemEvent;
 import de.illonis.eduras.events.ObjectFactoryEvent;
 import de.illonis.eduras.events.SetDoubleGameObjectAttributeEvent;
 import de.illonis.eduras.events.SetGameObjectAttributeEvent;
+import de.illonis.eduras.events.SetVisibilityEvent;
 import de.illonis.eduras.exceptions.MessageNotSupportedException;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
 import de.illonis.eduras.exceptions.WrongEventTypeException;
 import de.illonis.eduras.gameclient.userprefs.Settings;
 import de.illonis.eduras.gamemodes.GameMode;
 import de.illonis.eduras.gameobjects.GameObject;
+import de.illonis.eduras.gameobjects.GameObject.Visibility;
 import de.illonis.eduras.gameobjects.NeutralArea;
 import de.illonis.eduras.interfaces.GameLogicInterface;
 import de.illonis.eduras.items.Item;
@@ -72,188 +74,130 @@ public class EdurasInitializer {
 			@Override
 			public void createMissile(ObjectType missileType, int owner,
 					Vector2D position, Vector2D speedVector) {
-				// TODO Auto-generated method stub
-
 			}
 
 			@Override
 			public void removeObject(int objectId) {
-				// TODO Auto-generated method stub
-
 			}
 
 			@Override
 			public int createObjectAt(ObjectType object, Vector2D position,
 					int owner) {
-				// TODO Auto-generated method stub
-				return 0;
+				return -1;
 			}
 
 			@Override
 			public void setPolygonData(int objectId, Vector2D[] polygonVertices) {
-				// TODO Auto-generated method stub
-
 			}
 
 			@Override
 			public int createObject(ObjectType object, int owner) {
-				// TODO Auto-generated method stub
-				return 0;
+				return -1;
 			}
 
 			@Override
 			public void lootItem(int objectId, int playerId) {
-				// TODO Auto-generated method stub
-
 			}
 
 			@Override
 			public void changeItemSlot(int slot, int player, Item newItem) {
-				// TODO Auto-generated method stub
-
 			}
 
 			@Override
 			public void maybeSetPositionOfObject(int objectId,
 					Vector2D newPosition) {
-				// TODO Auto-generated method stub
-
 			}
 
 			@Override
 			public void guaranteeSetPositionOfObject(int objectId,
 					Vector2D newPosition) {
-				// TODO Auto-generated method stub
-
 			}
 
 			@Override
 			public void init() {
-				// TODO Auto-generated method stub
-
 			}
 
 			@Override
 			public void setHealth(int id, int newHealth) {
-				// TODO Auto-generated method stub
-
 			}
 
 			@Override
 			public void respawnPlayer(PlayerMainFigure player) {
-				// TODO Auto-generated method stub
-
 			}
 
 			@Override
 			public void renamePlayer(int ownerId, String newName) {
-				// TODO Auto-generated method stub
-
 			}
 
 			@Override
 			public void onMatchEnd() {
-				// TODO Auto-generated method stub
-
 			}
 
 			@Override
 			public void restartRound() {
-				// TODO Auto-generated method stub
-
 			}
 
 			@Override
 			public void setRemainingTime(long remainingTime) {
-				// TODO Auto-generated method stub
-
 			}
 
 			@Override
 			public void changeMap(Map map) {
-				// TODO Auto-generated method stub
-
 			}
 
 			@Override
 			public void onDeath(Unit unit, int killer) {
-				// TODO Auto-generated method stub
-
 			}
 
 			@Override
 			public void changeGameMode(GameMode newMode) {
-				// TODO Auto-generated method stub
-
 			}
 
 			@Override
 			public void remaxHealth(Unit unit) {
-				// TODO Auto-generated method stub
-
 			}
 
 			@Override
 			public void sendUnit(int objectId, Vector2D target)
 					throws ObjectNotFoundException,
 					UnitNotControllableException {
-				// TODO Auto-generated method stub
-
 			}
 
 			@Override
 			public void setTeams(Collection<Team> teams) {
-				// TODO Auto-generated method stub
-
 			}
 
 			@Override
 			public void addPlayerToTeam(int ownerId, Team team) {
-				// TODO Auto-generated method stub
-
 			}
 
 			@Override
 			public void kickPlayer(int ownerId) {
-				// TODO Auto-generated method stub
-
 			}
 
 			@Override
 			public void sendRequestedInfos(ArrayList<GameEvent> infos, int owner) {
-				// TODO Auto-generated method stub
-
 			}
 
 			@Override
 			public void notifyCooldownStarted(ItemEvent event) {
-				// TODO Auto-generated method stub
-
 			}
 
 			@Override
 			public void notifyGameObjectStateChanged(
 					SetGameObjectAttributeEvent<?> event) {
-				// TODO Auto-generated method stub
-
 			}
 
 			@Override
 			public void notifyObjectCreated(ObjectFactoryEvent event) {
-				// TODO Auto-generated method stub
-
 			}
 
 			@Override
 			public void notifyNewObjectPosition(GameObject o) {
-				// TODO Auto-generated method stub
-
 			}
 
 			@Override
 			public void changeInteractMode(int ownerId, InteractMode newMode) {
-				// TODO Auto-generated method stub
-
 			}
 
 			@Override
@@ -278,48 +222,39 @@ public class EdurasInitializer {
 
 			@Override
 			public void removePlayer(int ownerId) {
-				// TODO Auto-generated method stub
-
 			}
 
 			@Override
-			public void setVisibility(int objectId, boolean newVal) {
-				// TODO Auto-generated method stub
-
+			public void setVisibility(int objectId, Visibility newVal) {
 			}
 
 			@Override
 			public void setCollidability(int objectId, boolean newVal) {
-				// TODO Auto-generated method stub
-
 			}
 
 			@Override
 			public void createDynamicPolygonObjectAt(ObjectType type,
 					Vector2D[] polygonVertices, Vector2D position, int owner) {
-				// TODO Auto-generated method stub
-
 			}
 
 			@Override
 			public void setStats(StatsProperty property, int ownerId,
 					int valueToSet) {
-				// TODO Auto-generated method stub
-
 			}
 
 			@Override
 			public void changeStatOfPlayerByAmount(StatsProperty prop,
 					PlayerMainFigure player, int i) {
-				// TODO Auto-generated method stub
-
 			}
 
 			@Override
 			public void notifyAreaConquered(NeutralArea neutralBase,
 					Team occupyingTeam) {
-				// TODO Auto-generated method stub
+			}
 
+			@Override
+			public void notifyGameObjectVisibilityChanged(
+					SetVisibilityEvent event) {
 			}
 
 		});

@@ -3,7 +3,9 @@ package de.illonis.eduras.logic;
 import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.events.GameEvent.GameEventNumber;
 import de.illonis.eduras.events.SetBooleanGameObjectAttributeEvent;
+import de.illonis.eduras.events.SetVisibilityEvent;
 import de.illonis.eduras.gameobjects.GameObject;
+import de.illonis.eduras.gameobjects.GameObject.Visibility;
 import de.illonis.eduras.gameobjects.MoveableGameObject;
 import de.illonis.eduras.interfaces.GameEventListener;
 import de.illonis.eduras.items.Lootable;
@@ -33,12 +35,12 @@ public class ServerLogicGameWorker extends LogicGameWorker {
 				if (rs) {
 					SetBooleanGameObjectAttributeEvent sc = new SetBooleanGameObjectAttributeEvent(
 							GameEventNumber.SET_COLLIDABLE, o.getId(), true);
-					SetBooleanGameObjectAttributeEvent sv = new SetBooleanGameObjectAttributeEvent(
-							GameEventNumber.SET_VISIBLE, o.getId(), true);
+					SetVisibilityEvent sv = new SetVisibilityEvent(o.getId(),
+							Visibility.ALL);
 					o.setCollidable(true);
-					o.setVisible(true);
+					o.setVisible(Visibility.ALL);
 					if (listenerHolder.hasListener()) {
-						listenerHolder.getListener().onObjectStateChanged(sv);
+						listenerHolder.getListener().onVisibilityChanged(sv);
 						listenerHolder.getListener().onObjectStateChanged(sc);
 
 					}

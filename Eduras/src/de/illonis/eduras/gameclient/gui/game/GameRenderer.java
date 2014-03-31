@@ -275,7 +275,7 @@ public class GameRenderer implements TooltipHandler {
 		for (Iterator<GameObject> iterator = objs.values().iterator(); iterator
 				.hasNext();) {
 			GameObject d = iterator.next();
-			if (!d.isVisible()) {
+			if (!d.isVisibleFor(myPlayer)) {
 				continue;
 			}
 

@@ -7,10 +7,12 @@ import java.util.LinkedList;
 import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.ObjectFactory.ObjectType;
 import de.illonis.eduras.ai.AIControllable;
+import de.illonis.eduras.exceptions.ObjectNotFoundException;
 import de.illonis.eduras.math.CollisionPoint;
 import de.illonis.eduras.math.Line;
 import de.illonis.eduras.math.Vector2D;
 import de.illonis.eduras.shapes.ObjectShape;
+import de.illonis.eduras.units.PlayerMainFigure;
 import de.illonis.eduras.units.Unit;
 
 /**
@@ -38,7 +40,7 @@ public abstract class GameObject implements Comparable<GameObject> {
 
 	private ObjectShape shape;
 	private boolean collidable = true;
-	private boolean visible = true;
+	private Visibility visible = Visibility.ALL;
 	private double visionRange = 200;
 	private double visionAngle = 90;
 	private boolean isVisionBlocking = false;
@@ -50,6 +52,38 @@ public abstract class GameObject implements Comparable<GameObject> {
 	protected double rotation = 0;
 
 	private double xPosition, yPosition;
+
+	/**
+	 * Describes which other objects can see this object.
+	 */
+	public enum Visibility {
+		/**
+		 * This object is invisible for everybody (including itself).
+		 */
+		INVISIBLE,
+		/**
+		 * This object is only visible for its direct owner.
+		 */
+		OWNER,
+		/**
+		 * This object is only visible for members in the same team. If this
+		 * object or the compared object is not a unit, it is invisible.
+		 */
+		TEAM,
+		/**
+		 * This object is only visible for the team of this objects owner.
+		 */
+		OWNER_TEAM,
+		/**
+		 * This object is only visible for objects that are in an
+		 * {@link Relation#ALLIED} relation to this object.
+		 */
+		OWNER_ALLIED,
+		/**
+		 * This object is visible for everybody.
+		 */
+		ALL;
+	}
 
 	/**
 	 * Creates a new gameobject that is associated with given game. Each
@@ -350,22 +384,60 @@ public abstract class GameObject implements Comparable<GameObject> {
 	}
 
 	/**
-	 * Returns the visible status of this object.
+	 * Returns whether the given object may see this object.
 	 * 
-	 * @return Returns true if the object is visible and false otherwise.
+	 * @param other
+	 *            the spectating object.
+	 * 
+	 * @return Returns true if this object is visible and false otherwise.
 	 */
-	public boolean isVisible() {
+	public final boolean isVisibleFor(GameObject other) {
+		switch (visible) {
+		case ALL:
+			return true;
+		case INVISIBLE:
+			return false;
+		case OWNER:
+			return (this.owner == other.getOwner());
+		case OWNER_TEAM:
+			if (!other.isUnit())
+				return false;
+			PlayerMainFigure player;
+			try {
+				player = game.getPlayerByOwnerId(this.owner);
+			} catch (ObjectNotFoundException e) {
+				return false;
+			}
+			return player.getTeam().equals(((Unit) other).getTeam());
+		case OWNER_ALLIED:
+			return (game.getGameSettings().getGameMode()
+					.getRelation(this, other) == Relation.ALLIED);
+		case TEAM:
+			if (!isUnit() || !other.isUnit())
+				return false;
+			Unit a = (Unit) this;
+			Unit b = (Unit) other;
+			return a.getTeam().equals(b.getTeam());
+		default:
+			return false;
+		}
+	}
+
+	/**
+	 * @return the visibility state of this object.
+	 * @see GameObject#isVisibleFor(GameObject)
+	 */
+	public Visibility getVisibility() {
 		return visible;
 	}
 
 	/**
-	 * Sets the visible status of this object.
+	 * Sets the visibility status of this object.
 	 * 
 	 * @param visible
-	 *            The new status. If you set it to false, the object won't be
-	 *            visible.
+	 *            The new status.
 	 */
-	public void setVisible(boolean visible) {
+	public void setVisible(Visibility visible) {
 		this.visible = visible;
 	}
 

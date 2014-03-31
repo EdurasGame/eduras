@@ -11,9 +11,11 @@ import de.illonis.eduras.events.GameEvent;
 import de.illonis.eduras.events.ItemEvent;
 import de.illonis.eduras.events.ObjectFactoryEvent;
 import de.illonis.eduras.events.SetGameObjectAttributeEvent;
+import de.illonis.eduras.events.SetVisibilityEvent;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
 import de.illonis.eduras.gamemodes.GameMode;
 import de.illonis.eduras.gameobjects.GameObject;
+import de.illonis.eduras.gameobjects.GameObject.Visibility;
 import de.illonis.eduras.gameobjects.NeutralArea;
 import de.illonis.eduras.items.Item;
 import de.illonis.eduras.maps.Map;
@@ -338,6 +340,15 @@ public interface EventTriggerer {
 	 */
 	public void notifyGameObjectStateChanged(
 			SetGameObjectAttributeEvent<?> event);
+	
+	/**
+	 * Notify all clients that an object's visibility has changed.
+	 * 
+	 * @param event
+	 *            The event that indicate what has changed.
+	 */
+	public void notifyGameObjectVisibilityChanged(
+			SetVisibilityEvent event);
 
 	/**
 	 * Notify all clients that an object has been created.
@@ -372,7 +383,7 @@ public interface EventTriggerer {
 	 * @param newVal
 	 *            The new value of the visibility.
 	 */
-	public void setVisibility(int objectId, boolean newVal);
+	public void setVisibility(int objectId, Visibility newVal);
 
 	/**
 	 * Set the collidability of the given object.
