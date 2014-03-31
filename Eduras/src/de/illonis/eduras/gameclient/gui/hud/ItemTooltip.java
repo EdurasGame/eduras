@@ -43,17 +43,21 @@ public class ItemTooltip extends Tooltip {
 
 	@Override
 	public void render(Graphics g2d) {
+		g2d.setLineWidth(1f);
+		g2d.setColor(Color.black);
+		g2d.fillRect(screenX, screenY, width, height);
+		g2d.setColor(Color.gray);
+		g2d.drawRect(screenX, screenY, width, height);
 		g2d.setColor(Color.yellow);
-		g2d.drawString(item.getName(), screenX + 8, screenY + 20);
+		g2d.drawString(item.getName(), screenX + 8, screenY + 10);
 		g2d.setColor(Color.white);
-		g2d.drawString(item.getType().toString(), screenX + 8, screenY + 40);
-		g2d.drawString("id: " + item.getId(), screenX + 8, screenY + 70);
-		g2d.drawString("owner: " + item.getOwner(), screenX + 8, screenY + 90);
+		g2d.drawString("id: " + item.getId(), screenX + 8, screenY + 50);
+		g2d.drawString("owner: " + item.getOwner(), screenX + 8, screenY + 70);
 		Image img;
 		try {
 			img = ImageCache.getInventoryIcon(item.getType());
 			g2d.drawImage(img, screenX + width - img.getWidth() - 2,
-					screenY + 2, null);
+					screenY + 2);
 		} catch (CacheException e) {
 			L.log(Level.SEVERE,
 					"Could not find cache image for " + item.getType(), e);

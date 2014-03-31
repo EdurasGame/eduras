@@ -55,15 +55,15 @@ public class BugReportButton extends ClickableGuiElement {
 
 	@Override
 	public void render(Graphics g) {
-		g.setColor(org.newdawn.slick.Color.blue);
+		g.setColor(Color.blue);
 		g.fill(bounds);
 		g.setColor(Color.white);
-		g.drawString(buttonText, screenX + 10, screenY + height - 5);
+		g.drawString(buttonText, screenX + 10, screenY + height - 15);
 	}
 
 	@Override
 	public void onGuiSizeChanged(int newWidth, int newHeight) {
-		screenX = 0;
+		screenX = 100;
 		screenY = 0;
 		bounds.setLocation(screenX, screenY);
 	}

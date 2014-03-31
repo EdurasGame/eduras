@@ -11,7 +11,7 @@ import org.newdawn.slick.Graphics;
  */
 public class PingDisplay extends RenderedGuiObject implements PingListener {
 
-	private final static int WIDTH = 70;
+	private final static int WIDTH = 80;
 	private final static int HEIGHT = 20;
 	private String latency;
 

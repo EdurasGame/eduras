@@ -29,11 +29,11 @@ public class ChatDisplay extends RenderedGuiObject {
 	public void render(Graphics g) {
 		g.setColor(Color.white);
 		g.drawString("Room: " + data.getRoomName(), screenX + WIDTH - 130,
-				screenY + 20);
+				screenY + 10);
 		ChatMessage msg;
-		int i = 10;
+		int i = 15;
 		if (data.isWriting())
-			i = 25;
+			i = 30;
 
 		while (i < HEIGHT - 15 && null != (msg = data.popMessage())) {
 			if (msg.isSystemMessage())
@@ -47,7 +47,7 @@ public class ChatDisplay extends RenderedGuiObject {
 		if (data.isWriting()) {
 			g.setColor(Color.white);
 			g.drawString(data.getInput() + "_", screenX + 5, screenY + HEIGHT
-					- 10);
+					- 15);
 		}
 		data.resetPop();
 	}

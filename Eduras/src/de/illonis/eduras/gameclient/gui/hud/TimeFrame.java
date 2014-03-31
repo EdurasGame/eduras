@@ -32,7 +32,7 @@ public class TimeFrame extends RenderedGuiObject {
 		int textWidth = g2d.getFont().getWidth(timeString);
 		g2d.setColor(Color.white);
 		g2d.drawString(getRemainingTimeString(), screenX + WIDTH - textWidth
-				- 5, screenY + 20);
+				- 5, screenY + 10);
 	}
 
 	private String getRemainingTimeString() {

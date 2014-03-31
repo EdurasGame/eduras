@@ -1,13 +1,14 @@
 package de.illonis.eduras.gameclient;
 
+import java.awt.Color;
 import java.awt.Font;
 
-import org.lwjgl.opengl.GL11;
 import org.newdawn.slick.BasicGame;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
-import org.newdawn.slick.TrueTypeFont;
+import org.newdawn.slick.UnicodeFont;
+import org.newdawn.slick.font.effects.ColorEffect;
 
 import de.illonis.eduras.gameclient.datacache.GraphicsPreLoader;
 import de.illonis.eduras.gameclient.gui.InputKeyHandler;
@@ -23,7 +24,7 @@ import de.illonis.eduras.logic.LogicGameWorker;
  */
 public class SlickGame extends BasicGame {
 
-	private TrueTypeFont defaultFont;
+	private UnicodeFont defaultFont;
 
 	private LogicGameWorker lgw;
 	private final GuiMouseHandler mouseHandler;
@@ -57,10 +58,20 @@ public class SlickGame extends BasicGame {
 		this.keyHandler = keyHandler;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public void init(GameContainer container) throws SlickException {
-		GL11.glDisable(GL11.GL_TEXTURE_2D);
-		defaultFont = new TrueTypeFont(new Font("Arial", Font.PLAIN, 12), true);
+		// GL11.glDis(GL11.GL_TEXTURE_2D);
+		// GL11.glEnable(GL11.GL_BLEND);
+		// GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+		defaultFont = new UnicodeFont(new Font("Arial", Font.PLAIN, 12));
+		defaultFont.addAsciiGlyphs();
+		ColorEffect e = new ColorEffect();
+		e.setColor(Color.white);
+		defaultFont.getEffects().add(e);
+		defaultFont.loadGlyphs();
+		
+		// defaultFont.
 		GraphicsPreLoader.preLoadImages();
 	}
 

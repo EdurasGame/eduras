@@ -81,12 +81,12 @@ public class ItemDisplay extends ClickableGuiElement implements
 					item.getY() + screenY, BLOCKSIZE, BLOCKSIZE);
 			g.draw(itemRect);
 			g.drawString("#" + (item.getSlotId() + 1), item.getX() + screenX
-					+ BLOCKSIZE / 4, item.getY() + screenY - 17);
+					+ BLOCKSIZE / 4, item.getY() + screenY - 15);
 
 			if (item.isWeapon()) {
 				int ammo = item.getWeaponAmmu();
 				g.drawString("#" + ammo, item.getX() + screenX + BLOCKSIZE / 4
-						+ 20, item.getY() + screenY - 17);
+						+ 20, item.getY() + screenY - 15);
 			}
 			g.setColor(Color.white);
 			if (item.hasImage())
@@ -173,9 +173,9 @@ public class ItemDisplay extends ClickableGuiElement implements
 						"Missing cache image for: " + newItem.getType(), e);
 			}
 
-			itemSlots[slot].setItem(newItem);
 			itemSlots[slot].setName(newName);
 		}
+		itemSlots[slot].setItem(newItem);
 	}
 
 	/**
@@ -274,7 +274,7 @@ public class ItemDisplay extends ClickableGuiElement implements
 	public void onMouseOver(Vector2f p) {
 
 		for (int i = 0; i < Inventory.MAX_CAPACITY; i++) {
-			if (itemSlots[i].getClickableRect().includes(p.x, p.y)) {
+			if (itemSlots[i].getClickableRect().contains(p.x, p.y)) {
 				try {
 					getTooltipHandler().showItemTooltip(
 							p,
