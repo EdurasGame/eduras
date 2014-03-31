@@ -76,6 +76,7 @@ public class EdurasClient {
 			e.printStackTrace();
 		}
 
+		boolean debug = false;
 		// arguments are of form <parametername>=<parametervalue>
 		String[][] parametersWithValues = new String[args.length][2];
 
@@ -111,6 +112,8 @@ public class EdurasClient {
 				betaPassword = parameterValue;
 			} else if (parameterName.equalsIgnoreCase("loglimit")) {
 				logLimit = Level.parse(parameterValue);
+			} else if (parameterName.equalsIgnoreCase("debug")) {
+				debug = true;
 			} else if (parameterName.startsWith(sClassName + ".")) {
 				try {
 					Field f = S.class.getField(parameterName
@@ -134,8 +137,10 @@ public class EdurasClient {
 
 		// Note that this is very bad coded due to testing ;)
 		// buildChooserFrame();
-		System.setProperty("org.lwjgl.librarypath",
-				(new File(PathFinder.findFile("native"))).getAbsolutePath());
+
+		if (!debug)
+			System.setProperty("org.lwjgl.librarypath",
+					(new File(PathFinder.findFile("native"))).getAbsolutePath());
 
 		BetaAuthenticator authenticator = new BetaAuthenticator();
 		if (authenticator.authenticate(3, betaUser, betaPassword)) {
