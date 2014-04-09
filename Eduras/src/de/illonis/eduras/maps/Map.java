@@ -42,9 +42,9 @@ public abstract class Map {
 	private Date created;
 	private final int width;
 	private final int height;
-	private final LinkedList<InitialObjectData> initialObjects;
-	private final LinkedList<GameModeNumber> supportedGameModes;
-	private final LinkedList<SpawnPosition> spawnPositions;
+	protected final LinkedList<InitialObjectData> initialObjects;
+	protected final LinkedList<GameModeNumber> supportedGameModes;
+	protected final LinkedList<SpawnPosition> spawnPositions;
 	private GameObject boundsObject;
 
 	/**
@@ -277,7 +277,7 @@ public abstract class Map {
 	 * @see #addSpawnArea(double, double, double, double, SpawnType)
 	 * @see #addSupportedGameMode(GameModeNumber)
 	 */
-	protected final void loadFromFile(String mapFileName)
+	protected void loadFromFile(String mapFileName)
 			throws InvalidDataException, IOException {
 		Map map = MapParser.readMap(getClass().getResource(
 				"data/" + mapFileName));
@@ -356,6 +356,8 @@ public abstract class Map {
 			return new ManyBlocks();
 		case "testmap":
 			return new TestMap();
+		case "eduratestmap":
+			return new EduraTestMap();
 		default:
 			throw new NoSuchMapException(mapName);
 		}

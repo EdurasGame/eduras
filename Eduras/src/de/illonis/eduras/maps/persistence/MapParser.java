@@ -16,9 +16,11 @@ import javax.script.ScriptException;
 
 import de.illonis.eduras.ObjectFactory.ObjectType;
 import de.illonis.eduras.gamemodes.GameMode.GameModeNumber;
+import de.illonis.eduras.maps.EduraMap;
 import de.illonis.eduras.maps.InitialObjectData;
 import de.illonis.eduras.maps.LoadedMap;
 import de.illonis.eduras.maps.Map;
+import de.illonis.eduras.maps.NodeData;
 import de.illonis.eduras.maps.SpawnPosition;
 import de.illonis.eduras.maps.SpawnPosition.SpawnType;
 
@@ -38,7 +40,7 @@ public class MapParser {
 	public final static String FILE_EXTENSION = ".erm";
 
 	private enum ReadMode {
-		NONE, SPAWNPOINTS, OBJECTS;
+		NONE, SPAWNPOINTS, OBJECTS, NODES;
 	}
 
 	/**
@@ -66,6 +68,7 @@ public class MapParser {
 		final LinkedList<GameModeNumber> gameModes = new LinkedList<GameModeNumber>();
 		final LinkedList<SpawnPosition> spawnPositions = new LinkedList<SpawnPosition>();
 		final LinkedList<InitialObjectData> gameObjects = new LinkedList<InitialObjectData>();
+		final LinkedList<NodeData> nodes = new LinkedList<NodeData>();
 
 		// Charset charset = Charset.forName("UTF-8");
 
@@ -128,6 +131,13 @@ public class MapParser {
 				case "objects":
 					currentMode = ReadMode.OBJECTS;
 					break;
+				case "nodes":
+					if (!gameModes.contains(GameModeNumber.EDURA)) {
+						throw new InvalidDataException(
+								"Nodes are defined although the map doesn't support Edura! mode.");
+					}
+					currentMode = ReadMode.NODES;
+					break;
 				default:
 					throw new InvalidDataException("Invalid control point: "
 							+ mode);
@@ -137,10 +147,9 @@ public class MapParser {
 				case NONE:
 					throw new InvalidDataException("Invalid line found: "
 							+ line);
-				case OBJECTS:
+				case OBJECTS: {
 					String[] objectData = line.split(",");
-					double objX = 0,
-					objY = 0;
+					double objX = 0, objY = 0;
 					try {
 						ObjectType objectType = ObjectType
 								.valueOf(objectData[0].trim());
@@ -159,12 +168,11 @@ public class MapParser {
 					}
 
 					break;
-				case SPAWNPOINTS:
+				}
+				case SPAWNPOINTS: {
 					String[] spawnData = line.split(",");
-					double x = 0,
-					y = 0;
-					int w = 0,
-					h = 0;
+					double x = 0, y = 0;
+					int w = 0, h = 0;
 					try {
 						x = evaluateString(spawnData[0].trim(), width, height);
 						y = evaluateString(spawnData[1].trim(), width, height);
@@ -183,14 +191,59 @@ public class MapParser {
 					Rectangle2D.Double area = new Rectangle2D.Double(x, y, w, h);
 					spawnPositions.add(new SpawnPosition(area, type));
 					break;
+				}
+				case NODES: {
+					String[] nodeData = line.split(",");
+					int nodeId = 0;
+					int w, h = 0;
+					boolean isMainNode = false;
+					LinkedList<Integer> adjacentNodes = new LinkedList<Integer>();
+
+					try {
+						nodeId = Integer.parseInt(nodeData[0]);
+					} catch (NumberFormatException e) {
+						throw new InvalidDataException("Cannot read node-id: "
+								+ e.getMessage());
+					}
+
+					try {
+						w = evaluateString(nodeData[1], width, height)
+								.intValue();
+						h = evaluateString(nodeData[2], width, height)
+								.intValue();
+					} catch (ScriptException e) {
+						throw new InvalidDataException(
+								"Invalid math expression: " + e.getMessage());
+					}
+
+					isMainNode = Boolean.parseBoolean(nodeData[3]);
+
+					for (int i = 4; i < nodeData.length; i++) {
+						try {
+							adjacentNodes.add(Integer.parseInt(nodeData[i]));
+						} catch (NumberFormatException e) {
+							throw new InvalidDataException(
+									"Cannot read node-id: " + e.getMessage());
+						}
+					}
+					nodes.add(new NodeData(w, h, nodeId, adjacentNodes,
+							isMainNode));
+					break;
+				}
 				default:
 					break;
 				}
 			}
 		}
 		reader.close();
-		return new LoadedMap(mapName, author, width, height, created,
-				spawnPositions, gameObjects, gameModes);
+
+		if (gameModes.contains(GameModeNumber.EDURA)) {
+			return new EduraMap(mapName, author, width, height, created,
+					spawnPositions, gameObjects, gameModes, nodes);
+		} else {
+			return new LoadedMap(mapName, author, width, height, created,
+					spawnPositions, gameObjects, gameModes);
+		}
 	}
 
 	/**
