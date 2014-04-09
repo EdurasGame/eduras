@@ -69,13 +69,6 @@ public class ClientGameMode implements GameMode {
 	}
 
 	@Override
-	public Team determineProgressingTeam(GameObject object,
-			boolean objectEntered, Set<GameObject> presentObjects) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
 	public void onBaseOccupied(NeutralBase base, Team occupyingTeam) {
 		// TODO Auto-generated method stub
 
@@ -85,6 +78,13 @@ public class ClientGameMode implements GameMode {
 	public void onBaseLost(NeutralBase base, Team losingTeam) {
 		// TODO Auto-generated method stub
 
+	}
+
+	@Override
+	public Team determineProgressingTeam(NeutralBase base, GameObject object,
+			boolean objectEntered, Set<GameObject> presentObjects) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

@@ -96,7 +96,7 @@ public class NoGameMode extends BasicGameMode {
 	}
 
 	@Override
-	public Team determineProgressingTeam(GameObject object,
+	public Team determineProgressingTeam(NeutralBase base, GameObject object,
 			boolean objectEntered, Set<GameObject> presentObjects) {
 		// don't care about neutral bases
 		return null;

@@ -161,7 +161,7 @@ public class Deathmatch extends BasicGameMode {
 	}
 
 	@Override
-	public Team determineProgressingTeam(GameObject object,
+	public Team determineProgressingTeam(NeutralBase base, GameObject object,
 			boolean objectEntered, Set<GameObject> presentObjects) {
 		if (presentObjects.size() == 1) {
 			Unit onlyUnitInside = (Unit) presentObjects.iterator().next();

@@ -56,7 +56,7 @@ public class NeutralBase extends NeutralArea {
 		return getGame()
 				.getGameSettings()
 				.getGameMode()
-				.determineProgressingTeam(object, objectEntered,
+				.determineProgressingTeam(this, object, objectEntered,
 						getPresentUnits());
 	}
 

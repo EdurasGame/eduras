@@ -27,7 +27,7 @@ public interface GameMode {
 	 */
 	@SuppressWarnings("javadoc")
 	public enum GameModeNumber {
-		NO_GAMEMODE, DEATHMATCH, TEAM_DEATHMATCH, CAPTURE_THE_FLAG, NINJA_VS_SAMURAI, KING_OF_THE_HILL;
+		NO_GAMEMODE, DEATHMATCH, TEAM_DEATHMATCH, CAPTURE_THE_FLAG, NINJA_VS_SAMURAI, KING_OF_THE_HILL, EDURA;
 	}
 
 	/**
@@ -110,6 +110,8 @@ public interface GameMode {
 	 * When an object is entering a {@link NeutralBase}, this method is called
 	 * to determine which team becomes the base overtaking team.
 	 * 
+	 * @param base
+	 *            The base that is being taken over.
 	 * @param object
 	 *            The object that entered or left the game.
 	 * @param objectEntered
@@ -118,7 +120,7 @@ public interface GameMode {
 	 *            All objects that are currently in the area.
 	 * @return The team that is determined to be overtaking the base.
 	 */
-	public Team determineProgressingTeam(GameObject object,
+	public Team determineProgressingTeam(NeutralBase base, GameObject object,
 			boolean objectEntered, Set<GameObject> presentObjects);
 
 	/**

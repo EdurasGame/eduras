@@ -73,6 +73,8 @@ public abstract class BasicGameMode implements GameMode {
 			return new TeamDeathmatch(gameInfo);
 		case "kingofthehill":
 			return new KingOfTheHill(gameInfo);
+		case "edura":
+			return new Edura(gameInfo);
 		default:
 			throw new NoSuchGameModeException(gameModeName);
 		}
