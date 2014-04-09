@@ -57,6 +57,8 @@ public class Edura extends TeamDeathmatch {
 		HashMap<Integer, NeutralBase> nodeIdToBase = new HashMap<Integer, NeutralBase>();
 		EduraMap eduraMap = (EduraMap) gameInfo.getMap();
 
+		clear();
+
 		for (NodeData nodeData : eduraMap.getNodes()) {
 			int nodeid = nodeData.getId();
 			int objectId = gameInfo.getEventTriggerer().createObjectAt(
@@ -102,6 +104,12 @@ public class Edura extends TeamDeathmatch {
 			}
 		}
 
+	}
+
+	private void clear() {
+		for (GameObject neutralBase : baseToVertex.keySet()) {
+			gameInfo.getEventTriggerer().removeObject(neutralBase.getId());
+		}
 	}
 
 	private Vertex nodeIdToVertex(HashMap<Integer, NeutralBase> nodeIdToBase,
@@ -152,13 +160,21 @@ public class Edura extends TeamDeathmatch {
 
 	@Override
 	public void onBaseOccupied(NeutralBase base, Team occupyingTeam) {
+		boolean matchEnd = false;
 		for (NeutralBase aMainBase : mainBaseOfTeam.values()) {
 			if (base.equals(aMainBase)) {
-				gameInfo.getEventTriggerer().onMatchEnd();
+				// TODO: we're assuming that a main base cannot be conquered by
+				// the own team for any reason. put a check if the conquered
+				// main base belongs to the opponent.
+				matchEnd = true;
 			}
 		}
 
-		baseToVertex.get(base).setColor(occupyingTeam.getTeamId());
+		if (matchEnd) {
+			gameInfo.getEventTriggerer().onMatchEnd();
+		} else {
+			baseToVertex.get(base).setColor(occupyingTeam.getTeamId());
+		}
 	}
 
 	@Override

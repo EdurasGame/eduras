@@ -387,6 +387,7 @@ public class ClientLogic implements GameLogicInterface {
 				if (conqueredArea == null) {
 					L.severe("Cannot find base with id "
 							+ baseConqueredEvent.getBaseId());
+					break;
 				}
 				conqueredArea.setCurrentOwnerTeam(conqueringTeam);
 
