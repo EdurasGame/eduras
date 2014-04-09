@@ -39,6 +39,7 @@ import de.illonis.eduras.events.SetGameObjectAttributeEvent;
 import de.illonis.eduras.events.SetIntegerGameObjectAttributeEvent;
 import de.illonis.eduras.events.SetInteractModeEvent;
 import de.illonis.eduras.events.SetItemSlotEvent;
+import de.illonis.eduras.events.SetMapEvent;
 import de.illonis.eduras.events.SetOwnerEvent;
 import de.illonis.eduras.events.SetPolygonDataEvent;
 import de.illonis.eduras.events.SetRemainingTimeEvent;
@@ -412,9 +413,13 @@ public class ServerEventTriggerer implements EventTriggerer {
 	public void changeMap(Map map) {
 
 		gameInfo.setMap(map);
-
 		removeAllNonPlayers();
 
+		// notify client
+		SetMapEvent setMapEvent = new SetMapEvent(map.getName());
+		sendEvents(setMapEvent);
+
+		// send objects to client
 		for (InitialObjectData initialObject : map.getInitialObjects()) {
 
 			if (initialObject.getType() == ObjectType.DYNAMIC_POLYGON_BLOCK

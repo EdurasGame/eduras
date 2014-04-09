@@ -40,8 +40,8 @@ public abstract class Map {
 	private final String name;
 	private final String author;
 	private Date created;
-	private final int width;
-	private final int height;
+	private int width;
+	private int height;
 	protected final LinkedList<InitialObjectData> initialObjects;
 	protected final LinkedList<GameModeNumber> supportedGameModes;
 	protected final LinkedList<SpawnPosition> spawnPositions;
@@ -285,6 +285,9 @@ public abstract class Map {
 		initialObjects.addAll(map.getInitialObjects());
 		spawnPositions.addAll(map.getSpawnAreas());
 		supportedGameModes.addAll(map.getSupportedGameModes());
+
+		width = map.getWidth();
+		height = map.getHeight();
 	}
 
 	/**

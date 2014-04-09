@@ -26,6 +26,7 @@ import de.illonis.eduras.events.SetGameObjectAttributeEvent;
 import de.illonis.eduras.events.SetIntegerGameObjectAttributeEvent;
 import de.illonis.eduras.events.SetInteractModeEvent;
 import de.illonis.eduras.events.SetItemSlotEvent;
+import de.illonis.eduras.events.SetMapEvent;
 import de.illonis.eduras.events.SetOwnerEvent;
 import de.illonis.eduras.events.SetPolygonDataEvent;
 import de.illonis.eduras.events.SetRemainingTimeEvent;
@@ -33,6 +34,7 @@ import de.illonis.eduras.events.SetStatsEvent;
 import de.illonis.eduras.events.SetTeamsEvent;
 import de.illonis.eduras.events.SetVisibilityEvent;
 import de.illonis.eduras.exceptions.NoSuchGameModeException;
+import de.illonis.eduras.exceptions.NoSuchMapException;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
 import de.illonis.eduras.gamemodes.BasicGameMode;
 import de.illonis.eduras.gamemodes.GameMode;
@@ -45,6 +47,7 @@ import de.illonis.eduras.inventory.ItemSlotIsEmptyException;
 import de.illonis.eduras.items.Item;
 import de.illonis.eduras.items.Usable;
 import de.illonis.eduras.items.weapons.Weapon;
+import de.illonis.eduras.maps.Map;
 import de.illonis.eduras.units.PlayerMainFigure;
 import de.illonis.eduras.units.Unit;
 
@@ -318,6 +321,19 @@ public class ClientLogic implements GameLogicInterface {
 				getListener().onGameModeChanged(newMode);
 
 				break;
+			case SET_MAP: {
+				SetMapEvent setMapEvent = (SetMapEvent) event;
+				try {
+					gameInfo.setMap(Map.getMapByName(setMapEvent
+							.getNameOfNewMap()));
+					L.info("Set map to " + setMapEvent.getNameOfNewMap());
+				} catch (NoSuchMapException e1) {
+					L.log(Level.SEVERE,
+							"Cannot find map " + setMapEvent.getNameOfNewMap(),
+							e1);
+				}
+				break;
+			}
 			case SET_OWNER:
 				SetOwnerEvent setownerEvent = (SetOwnerEvent) event;
 				Item item = (Item) gameInfo.findObjectById(setownerEvent

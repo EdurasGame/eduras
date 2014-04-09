@@ -31,6 +31,7 @@ import de.illonis.eduras.events.SetGameModeEvent;
 import de.illonis.eduras.events.SetIntegerGameObjectAttributeEvent;
 import de.illonis.eduras.events.SetInteractModeEvent;
 import de.illonis.eduras.events.SetItemSlotEvent;
+import de.illonis.eduras.events.SetMapEvent;
 import de.illonis.eduras.events.SetOwnerEvent;
 import de.illonis.eduras.events.SetPolygonDataEvent;
 import de.illonis.eduras.events.SetRemainingTimeEvent;
@@ -317,6 +318,10 @@ public class EventParser implements EventHandler {
 				logic.onGameEventAppeared(new AreaConqueredEvent(
 						(Integer) event.getArgument(0), (Integer) event
 								.getArgument(1)));
+				break;
+			case SET_MAP:
+				logic.onGameEventAppeared(new SetMapEvent((String) event
+						.getArgument(0)));
 				break;
 			default:
 				L.warning("Cannot handle event with event number "

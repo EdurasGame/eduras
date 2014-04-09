@@ -33,12 +33,10 @@ public class EduraMap extends LoadedMap {
 	@Override
 	protected void loadFromFile(String mapFileName)
 			throws InvalidDataException, IOException {
+		super.loadFromFile(mapFileName);
+
 		EduraMap map = (EduraMap) MapParser.readMap(getClass().getResource(
 				"data/" + mapFileName));
-		initialObjects.clear();
-		initialObjects.addAll(map.getInitialObjects());
-		spawnPositions.addAll(map.getSpawnAreas());
-		supportedGameModes.addAll(map.getSupportedGameModes());
 
 		if (nodes == null) {
 			nodes = new LinkedList<NodeData>();

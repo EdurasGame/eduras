@@ -16,7 +16,7 @@ public class EduraTestMap extends EduraMap {
 			.getName());
 
 	public EduraTestMap() {
-		super("eduratest", "ren mai", 200, 200, new Date(),
+		super("eduratestmap", "ren mai", 200, 200, new Date(),
 				new LinkedList<SpawnPosition>(),
 				new LinkedList<InitialObjectData>(),
 				new LinkedList<GameModeNumber>(), null);
