@@ -92,6 +92,7 @@ public class UserInterface implements GuiResizeListener, UserInputListener {
 		new PlayerStatBar(this);
 		new MiniMap(this);
 		new TimeFrame(this);
+		new ResourceDisplay(this);
 		pingDisplay = new PingDisplay(this);
 		notificationPanel = new NotificationPanel(this);
 		dragRect = new DragSelectionRectangle(this);

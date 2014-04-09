@@ -13,6 +13,7 @@ import de.illonis.eduras.events.SetIntegerGameObjectAttributeEvent;
 import de.illonis.eduras.events.SetInteractModeEvent;
 import de.illonis.eduras.events.SetItemSlotEvent;
 import de.illonis.eduras.events.SetOwnerEvent;
+import de.illonis.eduras.events.SetTeamResourceEvent;
 import de.illonis.eduras.events.SetVisibilityEvent;
 import de.illonis.eduras.gamemodes.GameMode;
 import de.illonis.eduras.gameobjects.GameObject;
@@ -170,6 +171,8 @@ public interface GameEventListener {
 	 *            mode change event
 	 */
 	void onInteractModeChanged(SetInteractModeEvent setModeEvent);
+
+	void onTeamResourceChanged(SetTeamResourceEvent setTeamResourceEvent);
 
 	/**
 	 * Called when all initial information has been exchanged and the client is

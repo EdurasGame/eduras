@@ -14,6 +14,7 @@ import de.illonis.eduras.events.SetIntegerGameObjectAttributeEvent;
 import de.illonis.eduras.events.SetInteractModeEvent;
 import de.illonis.eduras.events.SetItemSlotEvent;
 import de.illonis.eduras.events.SetOwnerEvent;
+import de.illonis.eduras.events.SetTeamResourceEvent;
 import de.illonis.eduras.events.SetVisibilityEvent;
 import de.illonis.eduras.gameclient.gui.hud.RenderedGuiObject;
 import de.illonis.eduras.gamemodes.GameMode;
@@ -179,6 +180,13 @@ public class HudNotifier implements GameEventListener {
 	public void onVisibilityChanged(SetVisibilityEvent event) {
 		for (RenderedGuiObject obj : uiObjects) {
 			obj.onVisibilityChanged(event);
+		}
+	}
+
+	@Override
+	public void onTeamResourceChanged(SetTeamResourceEvent setTeamResourceEvent) {
+		for (RenderedGuiObject obj : uiObjects) {
+			obj.onTeamResourceChanged(setTeamResourceEvent);
 		}
 	}
 }

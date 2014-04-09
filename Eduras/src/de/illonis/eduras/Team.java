@@ -20,6 +20,7 @@ public class Team {
 	private final int teamId;
 	private Color color;
 	private final String name;
+	private int resource;
 	private final LinkedList<PlayerMainFigure> players;
 
 	/**
@@ -55,6 +56,7 @@ public class Team {
 		this.name = name;
 		players = new LinkedList<PlayerMainFigure>();
 		this.color = color;
+		resource = 0;
 	}
 
 	/**
@@ -126,6 +128,23 @@ public class Team {
 	 */
 	public String getName() {
 		return name;
+	}
+
+	/**
+	 * @return current resource amount.
+	 */
+	public int getResource() {
+		return resource;
+	}
+
+	/**
+	 * Sets the current resource amount.
+	 * 
+	 * @param resource
+	 *            new amount.
+	 */
+	public void setResource(int resource) {
+		this.resource = resource;
 	}
 
 	@Override
