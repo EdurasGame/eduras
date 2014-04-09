@@ -162,7 +162,7 @@ public class EgoModeMouseAdapter extends GuiMouseAdapter {
 
 	@Override
 	public void mouseDragged(int oldx, int oldy, int newx, int newy) {
-
+		egoModeMove(oldx, oldy, newx, newy);
 	}
 
 	@Override
