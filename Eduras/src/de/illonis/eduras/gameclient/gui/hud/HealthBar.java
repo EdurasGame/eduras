@@ -25,13 +25,13 @@ public class HealthBar {
 	private final static int UNIT_GAP = 5;
 	private final static int NAME_GAP = 5;
 
-	private int x, y, w, h;
+	private float x, y, w, h;
 
 	private HealthBar() {
 		x = y = 0;
 		w = HEALTHBAR_WIDTH;
 		h = HEALTHBAR_HEIGHT;
-		
+
 	}
 
 	/**
@@ -49,19 +49,17 @@ public class HealthBar {
 		int maxHealth = unit.getMaxHealth();
 		int health = unit.getHealth();
 
-		instance.w = (int) Math.round((float) health / maxHealth
-				* HEALTHBAR_WIDTH);
+		instance.w = Math.round((float) health / maxHealth * HEALTHBAR_WIDTH);
 		double unitHalfWidth = unit.getShape().getWidth() / 2;
-		instance.x = (int) Math.round(unit.getDrawX() + unitHalfWidth
+		instance.x = Math.round(unit.getXPosition() + unitHalfWidth
 				- HEALTHBAR_WIDTH / 2);
-		instance.y = unit.getDrawY() - HEALTHBAR_HEIGHT - UNIT_GAP;
+		instance.y = unit.getYPosition() - HEALTHBAR_HEIGHT - UNIT_GAP;
 		g.setColor(Color.yellow);
-		g.fillRect(instance.x, instance.y ,
-				instance.w, instance.h);
+		g.fillRect(instance.x, instance.y, instance.w, instance.h);
 		if (unit instanceof PlayerMainFigure) {
 			PlayerMainFigure player = (PlayerMainFigure) unit;
-			g.drawString(player.getName(), instance.x,
-					instance.y - HEALTHBAR_HEIGHT - UNIT_GAP - NAME_GAP);
+			g.drawString(player.getName(), instance.x, instance.y
+					- HEALTHBAR_HEIGHT - UNIT_GAP - NAME_GAP);
 		}
 	}
 }

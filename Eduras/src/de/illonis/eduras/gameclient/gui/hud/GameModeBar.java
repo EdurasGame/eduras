@@ -7,7 +7,6 @@ import org.newdawn.slick.Graphics;
 
 import de.illonis.edulog.EduLog;
 import de.illonis.eduras.gamemodes.GameMode;
-import de.illonis.eduras.units.PlayerMainFigure.InteractMode;
 
 /**
  * A simple status bar that shows the current game mode at top of screen.

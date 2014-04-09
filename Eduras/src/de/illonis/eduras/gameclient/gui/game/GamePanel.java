@@ -43,6 +43,9 @@ public class GamePanel extends CanvasGameContainer {
 		super.start();
 	}
 
+	/**
+	 * @return current mouse position in gui-coordinates.
+	 */
 	public Vector2f getMousePos() {
 		return new Vector2f(getContainer().getInput().getMouseX(),
 				getContainer().getInput().getMouseY());
