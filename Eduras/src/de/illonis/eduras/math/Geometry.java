@@ -2,10 +2,9 @@ package de.illonis.eduras.math;
 
 import java.util.LinkedList;
 
-import de.illonis.eduras.exceptions.PointNotOnCircleException;
-import de.illonis.eduras.shapes.Circle;
-import de.illonis.eduras.shapes.ObjectShape;
-import de.illonis.eduras.utils.Pair;
+import org.newdawn.slick.geom.Circle;
+import org.newdawn.slick.geom.Shape;
+import org.newdawn.slick.geom.Vector2f;
 
 /**
  * A math class that provides useful functions that are used in two-dimensional
@@ -15,8 +14,6 @@ import de.illonis.eduras.utils.Pair;
  * 
  */
 public class Geometry {
-
-	private static final double BOUNDARY = 1;
 
 	/**
 	 * Return length of a hypotenuse in a right-angled triangle.
@@ -32,6 +29,19 @@ public class Geometry {
 	}
 
 	/**
+	 * Tests whether two shapes collide.
+	 * 
+	 * @param a
+	 *            first shape
+	 * @param b
+	 *            second shape
+	 * @return true if given shapes collide.
+	 */
+	public static boolean shapeCollides(Shape a, Shape b) {
+		return a.intersects(b) || a.contains(b) || b.contains(a);
+	}
+
+	/**
 	 * Converts given degree value to radian.
 	 * 
 	 * @param degree
@@ -43,6 +53,17 @@ public class Geometry {
 	}
 
 	/**
+	 * Converts given degree value to radian.
+	 * 
+	 * @param degree
+	 *            value in degree.
+	 * @return value in radian.
+	 */
+	public static float toRadian(float degree) {
+		return (float) (degree * (Math.PI / 180));
+	}
+
+	/**
 	 * Converts given radian value to degree.
 	 * 
 	 * @param radian
@@ -51,6 +72,17 @@ public class Geometry {
 	 */
 	public static double toDegree(double radian) {
 		return BasicMath.calcModulo((radian * (180 / Math.PI)), 360);
+	}
+
+	/**
+	 * Converts given radian value to degree.
+	 * 
+	 * @param radian
+	 *            value in radian.
+	 * @return value in degree.
+	 */
+	public static float toDegree(float radian) {
+		return BasicMath.calcModulo((radian * (180 / (float) Math.PI)), 360);
 	}
 
 	/**
@@ -66,184 +98,22 @@ public class Geometry {
 	 * @return Returns a list containing the resulting lines.
 	 */
 	public static LinkedList<Line> getLinesBetweenShapePositions(
-			Vector2D[] vertices, Vector2D source, Vector2D destination) {
+			Vector2df[] vertices, Vector2df source, Vector2df destination) {
 
 		LinkedList<Line> lines = new LinkedList<Line>();
 
 		for (int i = 0; i < vertices.length; i++) {
 
-			Vector2D sourcePoint = new Vector2D(source);
+			Vector2df sourcePoint = new Vector2df(source);
 			sourcePoint.add(vertices[i]);
 
-			Vector2D destPoint = new Vector2D(destination);
+			Vector2df destPoint = new Vector2df(destination);
 			destPoint.add(vertices[i]);
 
 			lines.add(new Line(sourcePoint, destPoint));
 		}
 
 		return lines;
-	}
-
-	/**
-	 * Returns the intercept point of two line segments.
-	 * 
-	 * @param first
-	 *            The first line segment.
-	 * @param second
-	 *            The second line segment.
-	 * @return Returns null if there was no intercept point found and returns
-	 *         the intercept point as a vector otherwise. If there's an infinite
-	 *         number of intercept points, one of them will be returned (but you
-	 *         cant say which).
-	 */
-	public static Vector2D getSegmentLinesInterceptPoint(Line first, Line second) {
-
-		// use parameter equotation of lines and equalize them. this results in
-		// the following calculation
-
-		Vector2D firstSupportVector = first.getSupportVector();
-		Vector2D secondSupportVector = second.getSupportVector();
-		Vector2D firstDirectionalVector = first.getDirectionalVector();
-		Vector2D secondDirectionalVector = second.getDirectionalVector();
-
-		double firstSupportX = firstSupportVector.getX();
-		double firstSupportY = firstSupportVector.getY();
-		double secondSupportX = secondSupportVector.getX();
-		double secondSupportY = secondSupportVector.getY();
-
-		double firstDirectionX = firstDirectionalVector.getX();
-		double firstDirectionY = firstDirectionalVector.getY();
-		double secondDirectionX = secondDirectionalVector.getX();
-		double secondDirectionY = secondDirectionalVector.getY();
-
-		double s = 0;
-		double r = 0;
-
-		// We must distinguish between cases when one or more of the direction
-		// vectors are zero.
-		// The cases firstDirectionX == firstDirectionY == 0 and
-		// secondDirectionX == secondDirectionY == 0 cannot (or should not)
-		// occur because then one of the lines is not really a line.
-		// If the directionVectors are linearly depending on each other, the
-		// lines might be the same, so we must
-		// check for that.
-		// In any other case we can give a calculation for s and r.
-		// TODO: the following check does not work properly. However, it throws
-		// an exception at pacman.
-		// if ((firstDirectionX == 0 && firstDirectionY == 0)
-		// || (secondDirectionX == 0 && secondDirectionY == 0)) {
-		// try {
-		// throw new Exception(
-		// "There was a line given that was not correct.");
-		// } catch (Exception e) {
-		// e.printStackTrace();
-		// return null;
-		// }
-		// }
-
-		if (firstDirectionalVector.isLinearTo(secondDirectionalVector)) {
-
-			boolean firstIn = false;
-			boolean secondIn = false;
-
-			if (second.containsPoint(firstSupportVector)) {
-				firstIn = firstSupportVector.calculateDistance(first.getV()) > firstSupportVector
-						.calculateDistance(secondSupportVector);
-				secondIn = secondSupportVector.calculateDistance(second.getV()) > secondSupportVector
-						.calculateDistance(firstSupportVector);
-				if (firstIn && secondIn) {
-					return secondSupportVector;
-				}
-			} else {
-				return null;
-			}
-		}
-
-		if (firstDirectionX != 0 && firstDirectionY != 0
-				&& secondDirectionX != 0 && secondDirectionY != 0) {
-
-			s = (firstSupportY - secondSupportY + ((secondSupportX - firstSupportX) * firstDirectionY)
-					/ firstDirectionX)
-					/ (secondDirectionY - ((secondDirectionX * firstDirectionY) / firstDirectionX));
-
-			r = (secondSupportX + s * secondDirectionX - firstSupportX)
-					/ firstDirectionX;
-			// the first line segment ends for s = 1, the second ends for r = 1
-			// so
-			// if s > 1 || r > 1 there is no intersection
-			// points
-
-			if (checkNotWithin(s, r)) {
-				return null;
-			}
-
-			return second.getPointAt(s);
-		}
-
-		if (firstDirectionX == 0 && secondDirectionY == 0) {
-			s = (firstSupportX - secondSupportX) / secondDirectionX;
-			r = (secondSupportY - firstSupportY) / firstDirectionY;
-			if (!checkNotWithin(s, r)) {
-				return second.getPointAt(s);
-			}
-			return null;
-		}
-
-		if (firstDirectionX == 0) {
-			s = (firstSupportX - secondSupportX) / secondDirectionX;
-			r = (secondSupportY - firstSupportY + ((firstSupportX - secondSupportX) * secondDirectionY)
-					/ secondDirectionX)
-					/ firstDirectionY;
-			if (!checkNotWithin(s, r)) {
-				return second.getPointAt(s);
-			}
-			return null;
-		}
-
-		if (firstDirectionY == 0 && secondDirectionX == 0) {
-			s = (firstSupportY - secondSupportY) / secondDirectionY;
-			r = (secondSupportX - firstSupportX) / firstDirectionX;
-			if (!checkNotWithin(s, r)) {
-				return second.getPointAt(s);
-			}
-			return null;
-		}
-
-		if (firstDirectionY == 0) {
-			s = (firstSupportY - secondSupportY) / secondDirectionY;
-			r = (secondSupportX - firstSupportX + ((firstSupportY - secondSupportY)
-					* secondDirectionX / secondDirectionY))
-					/ firstDirectionX;
-			if (!checkNotWithin(s, r)) {
-				return second.getPointAt(s);
-			}
-			return null;
-		}
-
-		if (secondDirectionX == 0) {
-			r = (secondSupportX - firstSupportX) / firstDirectionX;
-			s = (firstSupportY - secondSupportY + ((secondSupportX - firstSupportX)
-					* firstDirectionY / firstDirectionX))
-					/ secondDirectionY;
-			if (!checkNotWithin(s, r)) {
-				return second.getPointAt(s);
-			}
-			return null;
-		}
-
-		if (secondDirectionY == 0) {
-			r = (secondSupportY - firstSupportY) / firstDirectionY;
-			s = (firstSupportX - secondSupportX + ((secondSupportY - firstSupportY)
-					* firstDirectionX / firstDirectionY))
-					/ secondDirectionX;
-			if (!checkNotWithin(s, r)) {
-				return second.getPointAt(s);
-			}
-			return null;
-		}
-
-		return null;
-
 	}
 
 	/**
@@ -271,7 +141,7 @@ public class Geometry {
 	 *            The vertices to make the borderlines of
 	 * @return The resulting borderlines.
 	 */
-	public static LinkedList<Line> getRelativeBorderLines(Vector2D[] vertices) {
+	public static LinkedList<Line> getRelativeBorderLines(Vector2f[] vertices) {
 
 		LinkedList<Line> borderLines = new LinkedList<Line>();
 
@@ -286,95 +156,6 @@ public class Geometry {
 	}
 
 	/**
-	 * Calculates the interception points of a circle and a line segment. This
-	 * method assumes that the given line is a valid one, means that it's
-	 * directional vector must not be the nullvector.
-	 * 
-	 * @param circle
-	 *            The circle.
-	 * @param centerPoint
-	 *            The circle's center point.
-	 * @param singleLine
-	 *            The line.
-	 * @return The intercept points as an array of two, if there are any. If
-	 *         there is only one intercept point, one of the array entrys is
-	 *         null. If there is no intercept points, both entrys are left null.
-	 */
-	public static Vector2D[] getCircleLineSegmentInterceptPoints(Circle circle,
-			Vector2D centerPoint, Line singleLine) {
-
-		Vector2D[] result = new Vector2D[2];
-
-		// the calculation of the intercept point is derived from the
-		// mathematical approach of simply having equations for the circle and
-		// the line containing the x and y values of the intercept point.
-		//
-		// line: let (u1,u2) be the line's supportvector and (v1,v2) the line's
-		// directional vector. For any point (x,y) on the line the following
-		// equations hold:
-		// 1. x = u1 + v1 * lambda
-		// 2. y = u2 + v2 * lambda
-
-		double u1 = singleLine.getSupportVector().getX();
-		double u2 = singleLine.getSupportVector().getY();
-
-		double v1 = singleLine.getDirectionalVector().getX();
-		double v2 = singleLine.getDirectionalVector().getY();
-
-		// circle: let (m1,m2) the circle's center point and r its radius. For
-		// any point on the circle
-		// the following equation holds:
-		// 3. r^2 = (x - m1)^2 + (y - m2)^2
-
-		double r = circle.getRadius();
-		double m1 = centerPoint.getX();
-		double m2 = centerPoint.getY();
-
-		// Applying equations one and two for the third and solving for lambda
-		// gives a square equation (in pq formula) having the following p and q:
-
-		double p = (2 * v1 * u1 - 2 * v1 * m1 + 2 * v2 * u2 - 2 * m2 * v2)
-				/ (BasicMath.square(v1) + BasicMath.square(v2));
-
-		double q = (BasicMath.square(u1) + BasicMath.square(u2)
-				+ BasicMath.square(m1) + BasicMath.square(m2) - 2 * m2 * u2 - 2
-				* m1 * u1 - BasicMath.square(r))
-				/ (BasicMath.square(v1) + BasicMath.square(v2));
-
-		// there is a solution if the pq formula's radiant is >= 0.
-		// check whether there is a solution:
-
-		double pqRadian = BasicMath.square(p / 2) - q;
-
-		if (pqRadian < 0) {
-			return result;
-		}
-
-		// if there is a solution, there is two:
-
-		double lambdaOne = -(p / 2) + Math.sqrt(pqRadian);
-		double lambdaTwo = -(p / 2) - Math.sqrt(pqRadian);
-
-		// check if the points are on the line seqment.
-
-		Vector2D firstInterceptPoint = null;
-		Vector2D secondInterceptPoint = null;
-
-		if (lambdaOne <= 1 && lambdaOne >= 0) {
-			firstInterceptPoint = singleLine.getPointAt(lambdaOne);
-		}
-
-		if (lambdaTwo <= 1 && lambdaTwo >= 0) {
-			secondInterceptPoint = singleLine.getPointAt(lambdaTwo);
-		}
-
-		result[0] = firstInterceptPoint;
-		result[1] = secondInterceptPoint;
-
-		return result;
-	}
-
-	/**
 	 * Calculates a {@link Circle} by a given center point and a point on the
 	 * circle. Neither of the given points is modified.
 	 * 
@@ -385,92 +166,9 @@ public class Geometry {
 	 * @return Returns the circle that was calculated with the given points.
 	 */
 	public static Circle getCircleByCenterAndPointOnCircle(
-			Vector2D centerPoint, Vector2D pointOnCircle) {
-		Vector2D diffVector = pointOnCircle.copy();
-		diffVector.subtract(centerPoint);
-		return new Circle(diffVector.getLength());
+			Vector2f centerPoint, Vector2f pointOnCircle) {
+		Vector2f diffVector = pointOnCircle.copy();
+		diffVector.sub(centerPoint);
+		return new Circle(centerPoint.x, centerPoint.y, diffVector.length());
 	}
-
-	/**
-	 * Calculates the intercept points of two {@link Circle}s. The given circles
-	 * and {@link Vector2D}s are not modified.
-	 * 
-	 * @param circleOne
-	 * @param centerOfCircleOne
-	 * @param circleTwo
-	 * @param centerOfCircleTwo
-	 * 
-	 * 
-	 * @return Returns a pair with both intercept points, if there are any, or
-	 *         null if there are no interceptions.
-	 */
-	public static Pair<Vector2D, Vector2D> getInterceptPointsOfCircles(
-			Circle circleOne, Vector2D centerOfCircleOne, Circle circleTwo,
-			Vector2D centerOfCircleTwo) {
-		double distance = centerOfCircleOne
-				.calculateDistance(centerOfCircleTwo);
-		if (circleOne.getRadius() + circleTwo.getRadius() < distance) {
-			return null;
-		}
-
-		// TODO: implement this...
-		// http://mathworld.wolfram.com/Circle-CircleIntersection.html
-
-		return null;
-	}
-
-	public static double getDistanceToShape(Vector2D point, ObjectShape shape) {
-
-		// TODO: Implement this...
-		LinkedList<Line> lines = Geometry.getRelativeBorderLines(shape
-				.getBorderPoints());
-
-		return 0;
-	}
-
-	/**
-	 * Calculates the angle between the given point on the circle and the point
-	 * which is at position (x,0) relative to the center point, where x is some
-	 * positive number.
-	 * 
-	 * @param circle
-	 *            The circle we are talking about.
-	 * @param centerPoint
-	 *            The circle's center point.
-	 * @param pointOnCircle
-	 *            The point whose angle we wanna calculate.
-	 * @return Returns the calculated angle.
-	 * @throws PointNotOnCircleException
-	 *             Thrown if the given point is not on the circle.
-	 */
-	public static double getAngleForPointOnCircle(Circle circle,
-			Vector2D centerPoint, Vector2D pointOnCircle)
-			throws PointNotOnCircleException {
-
-		double distance = pointOnCircle.calculateDistance(centerPoint);
-
-		if (Math.abs(distance - circle.getRadius()) > BOUNDARY) {
-			throw new PointNotOnCircleException(circle, pointOnCircle);
-		}
-		return pointOnCircle.getAngleToXAxis();
-	}
-
-	/**
-	 * Returns the point on the circle at the given angle.
-	 * 
-	 * @param circle
-	 * @param centerPoint
-	 *            The circle's center.
-	 * @param angle
-	 * @return point on the circle.
-	 */
-	public static Vector2D getPointAtAngleOnCircle(Circle circle,
-			Vector2D centerPoint, double angle) {
-		Vector2D distanceVectorToPoint = new Vector2D(circle.getRadius(), 0);
-		distanceVectorToPoint.rotate(angle);
-		Vector2D pointOnCircle = centerPoint.copy();
-		pointOnCircle.add(distanceVectorToPoint);
-		return pointOnCircle;
-	}
-
 }

@@ -18,10 +18,10 @@ public class RectangleTemplate extends ShapeTemplate {
 	 */
 	public RectangleTemplate() {
 		super();
-		addVertice(-30, -30);
-		addVertice(-30, 30);
-		addVertice(30, 30);
-		addVertice(30, -30);
+		addVector2df(-30, -30);
+		addVector2df(-30, 30);
+		addVector2df(30, 30);
+		addVector2df(30, -30);
 	}
 
 }

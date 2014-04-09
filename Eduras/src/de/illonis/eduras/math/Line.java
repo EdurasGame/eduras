@@ -1,5 +1,7 @@
 package de.illonis.eduras.math;
 
+import org.newdawn.slick.geom.Vector2f;
+
 /**
  * Represents a two-dimensional line. See <a href=
  * "http://www.java-forum.org/spiele-multimedia-programmierung/6588-einiges-geometrie-punkte-vektoren-geraden.html"
@@ -17,8 +19,8 @@ public class Line {
 	private final double b;
 	private final double c;
 
-	private final Vector2D u;
-	private final Vector2D v;
+	private final Vector2f u;
+	private final Vector2f v;
 
 	/**
 	 * Creates a line that goes through u and v.
@@ -26,7 +28,7 @@ public class Line {
 	 * @param u
 	 * @param v
 	 */
-	public Line(Vector2D u, Vector2D v) {
+	public Line(Vector2f u, Vector2f v) {
 
 		this.u = u;
 		this.v = v;
@@ -48,7 +50,7 @@ public class Line {
 	 *            The point to check.
 	 * @return True if line contains point, false otherwise.
 	 */
-	public boolean containsPoint(Vector2D point) {
+	public boolean containsPoint(Vector2df point) {
 		return Math.abs(a * point.getX() + b * point.getY() + c) < RANGE;
 	}
 
@@ -57,7 +59,7 @@ public class Line {
 	 * 
 	 * @return A position vector to the first point.
 	 */
-	public Vector2D getU() {
+	public Vector2f getU() {
 		return u;
 	}
 
@@ -66,7 +68,7 @@ public class Line {
 	 * 
 	 * @return A position vector to the second point.
 	 */
-	public Vector2D getV() {
+	public Vector2f getV() {
 		return v;
 	}
 
@@ -79,9 +81,9 @@ public class Line {
 	 *         vectors of which this line was made up. So if you call getU() on
 	 *         this line and add the directional vector to u, you will gain v.
 	 */
-	public Vector2D getDirectionalVector() {
-		Vector2D vec = new Vector2D(v);
-		vec.subtract(u);
+	public Vector2f getDirectionalVector() {
+		Vector2f vec = new Vector2f(v);
+		vec.sub(u);
 		return vec;
 	}
 
@@ -90,8 +92,8 @@ public class Line {
 	 * 
 	 * @return You will get a copy of the vector you gain calling getU().
 	 */
-	public Vector2D getSupportVector() {
-		Vector2D vec = new Vector2D(u);
+	public Vector2f getSupportVector() {
+		Vector2f vec = new Vector2df(u);
 		return vec;
 	}
 
@@ -104,12 +106,12 @@ public class Line {
 	 *            The multiplier.
 	 * @return Returns u + uv * lambda
 	 */
-	public Vector2D getPointAt(double lambda) {
+	public Vector2f getPointAt(float lambda) {
 
-		Vector2D resultPoint = new Vector2D(getU());
+		Vector2f resultPoint = new Vector2f(getU());
 
-		Vector2D temp = new Vector2D(getDirectionalVector());
-		temp.mult(lambda);
+		Vector2f temp = new Vector2f(getDirectionalVector());
+		temp.scale(lambda);
 
 		resultPoint.add(temp);
 

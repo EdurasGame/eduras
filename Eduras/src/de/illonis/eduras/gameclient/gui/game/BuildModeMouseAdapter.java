@@ -1,13 +1,14 @@
 package de.illonis.eduras.gameclient.gui.game;
 
 import java.awt.Point;
-import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Rectangle2D;
 
+import org.newdawn.slick.geom.Rectangle;
+import org.newdawn.slick.geom.Vector2f;
+
 import de.illonis.eduras.gameclient.GuiInternalEventListener;
 import de.illonis.eduras.gameclient.gui.game.GamePanelLogic.ClickState;
-import de.illonis.eduras.math.Vector2D;
 import de.illonis.eduras.units.PlayerMainFigure.InteractMode;
 
 /**
@@ -25,47 +26,19 @@ public class BuildModeMouseAdapter extends GuiMouseAdapter {
 		super(logic, reactor);
 	}
 
-	private void buildModeClick(MouseEvent e) {
-		Vector2D clickGamePoint = getPanelLogic()
-				.computeGuiPointToGameCoordinate(new Vector2D(e.getPoint()));
+	private void buildModeClick(int button, int x, int y, int clickCount) {
+		Vector2f clickGamePoint = getPanelLogic()
+				.computeGuiPointToGameCoordinate(new Vector2f(x, y));
 
-		if (e.getButton() == MouseEvent.BUTTON3) {
+		if (button == MouseEvent.BUTTON3) {
 			getListener().sendSelectedUnits(clickGamePoint);
-		} else if (e.getButton() == MouseEvent.BUTTON1) {
+		} else if (button == MouseEvent.BUTTON1) {
 			getListener().selectOrDeselectAt(clickGamePoint);
 		}
 	}
 
 	@Override
-	public void mouseClicked(MouseEvent e) {
-		buildModeClick(e);
-	}
-
-	@Override
 	public void itemClicked(int slot) {
-	}
-
-	@Override
-	public void mousePressed(MouseEvent e) {
-		if (e.getButton() == MouseEvent.BUTTON1) {
-			getPanelLogic().setClickState(ClickState.UNITSELECT_DRAGGING);
-			startPoint = e.getPoint();
-		}
-	}
-
-	@Override
-	public void mouseReleased(MouseEvent e) {
-		if (e.getButton() == MouseEvent.BUTTON1) {
-			getPanelLogic().setClickState(ClickState.DEFAULT);
-
-			Vector2D start = getPanelLogic().computeGuiPointToGameCoordinate(
-					new Vector2D(startPoint));
-			Vector2D end = getPanelLogic().computeGuiPointToGameCoordinate(
-					new Vector2D(e.getPoint()));
-			Rectangle2D.Double r = calculateDragRect(start, end);
-			getListener().onUnitsSelected(r);
-			getPanelLogic().getDragRect().clear();
-		}
 	}
 
 	private Rectangle calculateDrawRect(Point first, Point second) {
@@ -81,7 +54,7 @@ public class BuildModeMouseAdapter extends GuiMouseAdapter {
 				bottomRightY - topLeftY);
 	}
 
-	private Rectangle2D.Double calculateDragRect(Vector2D first, Vector2D second) {
+	private Rectangle2D.Double calculateDragRect(Vector2f first, Vector2f second) {
 		if (first.getX() == second.getX() || first.getY() == second.getY())
 			return new Rectangle2D.Double(first.getX(), first.getY(), 0, 0);
 
@@ -95,13 +68,49 @@ public class BuildModeMouseAdapter extends GuiMouseAdapter {
 	}
 
 	@Override
-	public void mouseDragged(MouseEvent e) {
+	public void mouseClicked(int button, int x, int y, int clickCount) {
+		buildModeClick(button, x, y, clickCount);
+	}
+
+	@Override
+	public void mouseMoved(int oldx, int oldy, int newx, int newy) {
+	}
+
+	@Override
+	public void mouseDragged(int oldx, int oldy, int newx, int newy) {
 		if (getPanelLogic().getClickState() == ClickState.UNITSELECT_DRAGGING) {
 			Point first = startPoint;
-			Point second = e.getPoint();
+			Point second = new Point(newx, newy);
 			getPanelLogic().getDragRect().setRectangle(
 					calculateDrawRect(first, second));
 		}
+	}
+
+	@Override
+	public void mousePressed(int button, int x, int y) {
+		if (button == MouseEvent.BUTTON1) {
+			getPanelLogic().setClickState(ClickState.UNITSELECT_DRAGGING);
+			startPoint = new Point(x, y);
+		}
+	}
+
+	@Override
+	public void mouseReleased(int button, int x, int y) {
+		if (button == MouseEvent.BUTTON1) {
+			getPanelLogic().setClickState(ClickState.DEFAULT);
+
+			Vector2f start = getPanelLogic().computeGuiPointToGameCoordinate(
+					new Vector2f(startPoint.x, startPoint.y));
+			Vector2f end = getPanelLogic().computeGuiPointToGameCoordinate(
+					new Vector2f(x, y));
+			Rectangle2D.Double r = calculateDragRect(start, end);
+			getListener().onUnitsSelected(r);
+			getPanelLogic().getDragRect().clear();
+		}
+	}
+
+	@Override
+	public void mouseWheelMoved(int change) {
 	}
 
 }

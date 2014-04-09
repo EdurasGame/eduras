@@ -1,5 +1,7 @@
 package de.illonis.eduras.items.weapons;
 
+import org.newdawn.slick.geom.Vector2f;
+
 import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.ObjectFactory.ObjectType;
 import de.illonis.eduras.gameobjects.GameObject;
@@ -8,7 +10,7 @@ import de.illonis.eduras.items.Item;
 import de.illonis.eduras.items.ItemUseInformation;
 import de.illonis.eduras.items.Lootable;
 import de.illonis.eduras.items.Usable;
-import de.illonis.eduras.math.Vector2D;
+import de.illonis.eduras.math.Vector2df;
 import de.illonis.eduras.settings.S;
 import de.illonis.eduras.units.PlayerMainFigure;
 
@@ -224,18 +226,17 @@ public abstract class Weapon extends Item implements Lootable, Usable {
 		// (jme) Spawn position will be calculated in a simplified way. We use
 		// diagonal's length of shooting player to move missile away from him.
 
-		Vector2D target = info.getTarget();
+		Vector2f target = info.getTarget();
 		GameObject triggeringObject = info.getTriggeringObject();
 
-		Vector2D position = triggeringObject.getPositionVector();
+		Vector2df position = new Vector2df(triggeringObject.getShape().getCenter());
 
-		Vector2D speedVector = new Vector2D(target);
-		speedVector.subtract(position);
+		Vector2df speedVector = new Vector2df(target);
+		speedVector.sub(position);
 
-		Vector2D diag = new Vector2D(triggeringObject.getBoundingBox()
-				.getWidth(), triggeringObject.getBoundingBox().getHeight());
-		Vector2D copy = speedVector.copy();
-		copy.setLength(diag.getLength());
+		Vector2df diag = new Vector2df(triggeringObject.getShape().getWidth(),
+				triggeringObject.getShape().getHeight());
+		Vector2f copy = speedVector.copy().normalise().scale(diag.length());
 		position.add(copy);
 
 		getGame().getEventTriggerer().createMissile(missileType, getOwner(),

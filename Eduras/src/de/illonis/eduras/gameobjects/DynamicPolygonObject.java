@@ -1,9 +1,11 @@
 package de.illonis.eduras.gameobjects;
 
+import org.newdawn.slick.geom.Polygon;
+import org.newdawn.slick.geom.Rectangle;
+import org.newdawn.slick.geom.Vector2f;
+
 import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.ObjectFactory.ObjectType;
-import de.illonis.eduras.math.Vector2D;
-import de.illonis.eduras.shapes.Polygon;
 
 /**
  * A polygon block that's shape is designed to be changed later on, for example
@@ -30,7 +32,7 @@ public class DynamicPolygonObject extends GameObject {
 			TimingSource timingSource, int id) {
 		super(game, timingSource, id);
 		setObjectType(type);
-		setShape(new Polygon());
+		setShape(new Rectangle(0, 0, 0, 0));
 	}
 
 	/**
@@ -47,12 +49,11 @@ public class DynamicPolygonObject extends GameObject {
 	 * @param vertices
 	 *            vertices of polygon
 	 * 
-	 * @see Polygon#setVertices(Vector2D[])
 	 * @see #DynamicPolygonObject(ObjectType, GameInformation, TimingSource,
 	 *      int)
 	 */
 	public DynamicPolygonObject(ObjectType type, GameInformation game,
-			TimingSource timingSource, int id, Vector2D[] vertices) {
+			TimingSource timingSource, int id, Vector2f[] vertices) {
 		this(type, game, timingSource, id);
 		setPolygonVertices(vertices);
 	}
@@ -63,12 +64,29 @@ public class DynamicPolygonObject extends GameObject {
 	 * @param vertices
 	 *            new vertices of shape.
 	 * 
-	 * @see Polygon#setVertices(Vector2D[])
 	 * 
 	 * @author illonis
 	 */
-	public void setPolygonVertices(Vector2D[] vertices) {
-		((Polygon) getShape()).setVertices(vertices);
+	public void setPolygonVertices(Vector2f[] vertices) {
+		float[] points = new float[vertices.length * 2];
+		for (int i = 0; i < vertices.length; i++) {
+			points[2 * i] = vertices[i].x;
+			points[2 * i + 1] = vertices[i].y;
+		}
+		setShape(new Polygon(points));
+	}
+
+	/**
+	 * @return the vertices of this object's polygon.
+	 */
+	public Vector2f[] getPolygonVertices() {
+		Polygon p = (Polygon) getShape();
+		float points[] = p.getPoints();
+		Vector2f result[] = new Vector2f[points.length / 2];
+		for (int i = 0; i < result.length; i++) {
+			result[i] = new Vector2f(points[2 * i], points[2 * i + 1]);
+		}
+		return result;
 	}
 
 	@Override

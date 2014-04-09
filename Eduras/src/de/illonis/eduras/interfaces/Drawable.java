@@ -1,6 +1,6 @@
 package de.illonis.eduras.interfaces;
 
-import java.awt.Graphics2D;
+import java.awt.Graphics;
 
 /**
  * A drawable object.
@@ -16,6 +16,6 @@ public interface Drawable {
 	 * @param g
 	 *            graphics object.
 	 */
-	void draw(Graphics2D g);
+	void draw(Graphics g);
 
 }

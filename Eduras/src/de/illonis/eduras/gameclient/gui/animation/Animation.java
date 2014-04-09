@@ -1,12 +1,12 @@
 package de.illonis.eduras.gameclient.gui.animation;
 
-import java.awt.Graphics2D;
 import java.util.concurrent.TimeUnit;
 
 import org.jdesktop.core.animation.timing.Animator;
 import org.jdesktop.core.animation.timing.TimingTarget;
+import org.newdawn.slick.Graphics;
 
-import de.illonis.eduras.math.Vector2D;
+import de.illonis.eduras.math.Vector2df;
 
 /**
  * A graphical animation on the game panel.
@@ -19,14 +19,14 @@ public abstract class Animation implements TimingTarget {
 	private long duration;
 	private long repeatCount;
 	private long startDelay;
-	protected Vector2D position;
+	protected Vector2df position;
 	private boolean running;
 
-	Animation(String name, long duration, Vector2D position) {
+	Animation(String name, long duration, Vector2df position) {
 		this(name, duration, position, 1);
 	}
 
-	Animation(String name, long duration, Vector2D position, long repeatCount) {
+	Animation(String name, long duration, Vector2df position, long repeatCount) {
 		this.name = name;
 		this.duration = duration;
 		this.repeatCount = repeatCount;
@@ -58,26 +58,21 @@ public abstract class Animation implements TimingTarget {
 	 * To draw game-relative, add <b>cameraX</b> and <b>cameraY</b> to your
 	 * drawing coordinates, otherwise you will paint HUD-relative.
 	 * 
-	 * @param g2d
+	 * @param g
 	 *            target graphics
-	 * @param cameraX
-	 *            the x-offset of the camera.
-	 * @param cameraY
-	 *            the y-offset of the camera.
 	 */
-	public final void draw(Graphics2D g2d, int cameraX, int cameraY) {
+	public final void draw(Graphics g) {
 		if (running)
-			drawAnimation(g2d, cameraX, cameraY);
+			drawAnimation(g);
 	}
 
 	/**
 	 * Draws this animation onto given graphics.
 	 * 
-	 * @param g2d
+	 * @param g
 	 *            target graphics object.
 	 */
-	protected abstract void drawAnimation(Graphics2D g2d, int cameraX,
-			int cameraY);
+	protected abstract void drawAnimation(Graphics g);
 
 	@Override
 	public void begin(Animator source) {

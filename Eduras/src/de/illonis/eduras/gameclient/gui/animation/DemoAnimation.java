@@ -1,11 +1,10 @@
 package de.illonis.eduras.gameclient.gui.animation;
 
-import java.awt.Color;
-import java.awt.Graphics2D;
-
 import org.jdesktop.core.animation.timing.Animator;
+import org.newdawn.slick.Color;
+import org.newdawn.slick.Graphics;
 
-import de.illonis.eduras.math.Vector2D;
+import de.illonis.eduras.math.Vector2df;
 
 /**
  * A demo animation moving a block right.
@@ -14,18 +13,18 @@ import de.illonis.eduras.math.Vector2D;
  * 
  */
 public class DemoAnimation extends Animation {
-	private int xPos;
-	private int yPos;
+	private float xPos;
+	private float yPos;
 
-	DemoAnimation(Vector2D mapPosition) {
+	DemoAnimation(Vector2df mapPosition) {
 		super("Test animation", 5000, mapPosition);
 
 	}
 
 	@Override
 	public void begin(Animator source) {
-		xPos = (int) position.getX();
-		yPos = (int) position.getY();
+		xPos = position.getX();
+		yPos = position.getY();
 		super.begin(source);
 	}
 
@@ -35,9 +34,9 @@ public class DemoAnimation extends Animation {
 	}
 
 	@Override
-	public void drawAnimation(Graphics2D g2d, int cameraX, int cameraY) {
-		g2d.setColor(Color.CYAN);
-		g2d.fillRect(xPos + cameraX, yPos + cameraY, 30, 30);
+	public void drawAnimation(Graphics g) {
+		g.setColor(Color.cyan);
+		g.fillRect(xPos, yPos, 30, 30);
 	}
 
 	@Override

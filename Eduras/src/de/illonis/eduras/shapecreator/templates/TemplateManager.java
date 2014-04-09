@@ -3,7 +3,7 @@ package de.illonis.eduras.shapecreator.templates;
 import java.util.HashMap;
 import java.util.LinkedList;
 
-import de.illonis.eduras.shapecreator.Vertice;
+import de.illonis.eduras.math.Vector2df;
 
 /**
  * Manages existing templates.
@@ -60,14 +60,14 @@ public class TemplateManager {
 	 * @throws TemplateNotFoundException
 	 *             if template was not found.
 	 */
-	public LinkedList<Vertice> getVertsOfTemplate(String templateName)
+	public LinkedList<Vector2df> getVertsOfTemplate(String templateName)
 			throws TemplateNotFoundException {
 		ShapeTemplate t = templates.get(templateName);
 		if (t == null)
 			throw new TemplateNotFoundException(templateName);
-		LinkedList<Vertice> vertices = new LinkedList<Vertice>();
-		for (Vertice v : t.getDefaultVertices()) {
-			vertices.add(new Vertice(v.getX(), v.getY()));
+		LinkedList<Vector2df> vertices = new LinkedList<Vector2df>();
+		for (Vector2df v : t.getDefaultVector2dfs()) {
+			vertices.add(new Vector2df(v.getX(), v.getY()));
 		}
 		return vertices;
 	}

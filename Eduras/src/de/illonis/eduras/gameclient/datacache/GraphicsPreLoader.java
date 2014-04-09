@@ -1,6 +1,5 @@
 package de.illonis.eduras.gameclient.datacache;
 
-import java.awt.image.BufferedImage;
 import java.beans.PropertyChangeEvent;
 import java.io.IOException;
 import java.net.URL;
@@ -12,13 +11,16 @@ import java.util.logging.Logger;
 
 import javax.swing.ImageIcon;
 
+import org.newdawn.slick.Image;
+import org.newdawn.slick.SlickException;
+
 import de.illonis.edulog.EduLog;
 import de.illonis.eduras.ObjectFactory.ObjectType;
 import de.illonis.eduras.gameclient.datacache.CacheInfo.ImageKey;
 import de.illonis.eduras.images.ImageFiler;
-import de.illonis.eduras.math.Vector2D;
+import de.illonis.eduras.math.Vector2df;
 import de.illonis.eduras.shapecreator.FileCorruptException;
-import de.illonis.eduras.shapes.ObjectShape.ShapeType;
+import de.illonis.eduras.shapes.ShapeFactory.ShapeType;
 import de.illonis.eduras.shapes.data.ShapeParser;
 
 /**
@@ -62,6 +64,18 @@ public final class GraphicsPreLoader extends AsyncLoader<Void> {
 		GraphicsPreLoader p = new GraphicsPreLoader();
 		p.loadShapes();
 	}
+	
+	/**
+	 * Loads images for client.
+	 */
+	public static void preLoadImages() {
+		GraphicsPreLoader p = new GraphicsPreLoader();
+		p.loadShapes();
+		p.loadGuiGraphics();
+		p.loadIcons();
+		p.loadGraphics();
+		p.loadInventoryIcons();
+	}
 
 	private void loadIcons() {
 		HashMap<ImageKey, String> shapeInfo = CacheInfo.getAllImageIcons();
@@ -85,6 +99,29 @@ public final class GraphicsPreLoader extends AsyncLoader<Void> {
 		}
 	}
 
+	private void loadInventoryIcons() {
+		HashMap<ObjectType, String> inventoryIconInfo = CacheInfo
+				.getAllInventoryIcons();
+		Iterator<Map.Entry<ObjectType, String>> it = inventoryIconInfo
+				.entrySet().iterator();
+		int n = inventoryIconInfo.size();
+		int i = 0;
+		while (it.hasNext()) {
+			Map.Entry<ObjectType, String> pair = it.next();
+			try {
+				Image image = ImageFiler.load(pair.getValue());
+				ImageCache.addInventoryIcon(pair.getKey(), image);
+			} catch (SlickException e) {
+				L.log(Level.SEVERE,
+						"Inventory icon not found: " + pair.getValue(), e);
+			}
+			i++;
+
+			int progress = (int) Math.floor((double) i / n * 25) + 50;
+			setProgress(progress);
+		}
+	}
+
 	private void loadGuiGraphics() {
 		HashMap<ImageKey, String> shapeInfo = CacheInfo.getAllGuiImages();
 		Iterator<Map.Entry<ImageKey, String>> it = shapeInfo.entrySet()
@@ -94,9 +131,9 @@ public final class GraphicsPreLoader extends AsyncLoader<Void> {
 		while (it.hasNext()) {
 			Map.Entry<ImageKey, String> pair = it.next();
 			try {
-				BufferedImage image = ImageFiler.load(pair.getValue());
+				Image image = ImageFiler.load(pair.getValue());
 				ImageCache.addGuiImage(pair.getKey(), image);
-			} catch (IllegalArgumentException | IOException e) {
+			} catch (SlickException e) {
 				L.log(Level.SEVERE,
 						"Guiimagefile not found: " + pair.getValue(), e);
 			}
@@ -117,7 +154,7 @@ public final class GraphicsPreLoader extends AsyncLoader<Void> {
 			Map.Entry<ShapeType, String> pair = it.next();
 			URL u = ShapeParser.class.getResource(pair.getValue());
 			try {
-				Vector2D[] verts = ShapeParser.readShape(u);
+				Vector2df[] verts = ShapeParser.readShape(u);
 				ImageCache.addShape(pair.getKey(), verts);
 			} catch (FileCorruptException | IOException e) {
 				L.log(Level.SEVERE, "Shapefile not found: " + pair.getValue(),
@@ -140,9 +177,9 @@ public final class GraphicsPreLoader extends AsyncLoader<Void> {
 		while (it.hasNext()) {
 			Map.Entry<ObjectType, String> pair = it.next();
 			try {
-				BufferedImage image = ImageFiler.load(pair.getValue());
+				Image image = ImageFiler.load(pair.getValue());
 				ImageCache.addImage(pair.getKey(), image);
-			} catch (IllegalArgumentException | IOException e) {
+			} catch (SlickException e) {
 				L.log(Level.SEVERE, "Imagefile not found: " + pair.getValue(),
 						e);
 			}
@@ -160,6 +197,7 @@ public final class GraphicsPreLoader extends AsyncLoader<Void> {
 		loadGraphics();
 		setProgress(50);
 		loadIcons();
+		loadInventoryIcons();
 		setProgress(75);
 		loadGuiGraphics();
 		setProgress(100);

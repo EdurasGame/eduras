@@ -2,6 +2,7 @@ package de.illonis.eduras.shapecreator;
 
 import java.awt.Color;
 
+import de.illonis.eduras.math.Vector2df;
 import de.illonis.eduras.shapecreator.gui.DrawPanel;
 import de.illonis.eduras.shapecreator.gui.RecordTableModel;
 
@@ -63,7 +64,7 @@ public class DataHolder {
 	 * @param tableModel
 	 *            new table model.
 	 */
-	public void setVerticeTableModel(RecordTableModel tableModel) {
+	public void setVector2dfTableModel(RecordTableModel tableModel) {
 		this.tableModel = tableModel;
 	}
 
@@ -80,7 +81,7 @@ public class DataHolder {
 	/**
 	 * Notifies that vertice data has changed and updates table values.
 	 */
-	public void notifyVerticesChanged() {
+	public void notifyVector2dfsChanged() {
 		if (tableModel != null) {
 			tableModel.fireTableDataChanged();
 		}
@@ -234,20 +235,20 @@ public class DataHolder {
 	/**
 	 * Notify that a vertice was selected on gui.
 	 * 
-	 * @param selectedVertice
+	 * @param selectedVector2df
 	 *            the selected vertice.
 	 */
-	public void verticeSelectedOnGui(Vertice selectedVertice) {
-		tableModel.selectVertice(selectedVertice);
+	public void verticeSelectedOnGui(Vector2df selectedVector2df) {
+		tableModel.selectVector2df(selectedVector2df);
 	}
 
 	/**
 	 * Notify that a vertice was selected in table.
 	 * 
-	 * @param selectedVertice
+	 * @param selectedVector2df
 	 *            the selected vertice.
 	 */
-	public void verticeSelectedOnTable(Vertice selectedVertice) {
-		drawPanel.onVerticeSelected(selectedVertice);
+	public void verticeSelectedOnTable(Vector2df selectedVector2df) {
+		drawPanel.onVector2dfSelected(selectedVector2df);
 	}
 }

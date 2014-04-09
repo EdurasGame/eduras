@@ -21,6 +21,8 @@ public class EdurasVersion {
 			.getName());
 	private final static Charset ENCODING = StandardCharsets.UTF_8;
 
+	private final static String VERSION_FILENAME = "gitversion";
+
 	/**
 	 * Returns the Eduras? distribution's version.
 	 * 
@@ -28,7 +30,7 @@ public class EdurasVersion {
 	 */
 	public static String getVersion() {
 		String version = "unknown";
-		URL res = EdurasVersion.class.getResource("/version");
+		URL res = EdurasVersion.class.getResource("/" + VERSION_FILENAME);
 		if (res == null) {
 			L.log(Level.SEVERE, "Could not locate version file in resources.");
 			return version;

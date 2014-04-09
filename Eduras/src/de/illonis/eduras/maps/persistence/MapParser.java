@@ -1,6 +1,5 @@
 package de.illonis.eduras.maps.persistence;
 
-import java.awt.geom.Rectangle2D;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -13,6 +12,8 @@ import java.util.LinkedList;
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
+
+import org.newdawn.slick.geom.Rectangle;
 
 import de.illonis.eduras.ObjectFactory.ObjectType;
 import de.illonis.eduras.gamemodes.GameMode.GameModeNumber;
@@ -149,7 +150,7 @@ public class MapParser {
 							+ line);
 				case OBJECTS: {
 					String[] objectData = line.split(",");
-					double objX = 0, objY = 0;
+					float objX = 0, objY = 0;
 					try {
 						ObjectType objectType = ObjectType
 								.valueOf(objectData[0].trim());
@@ -171,7 +172,7 @@ public class MapParser {
 				}
 				case SPAWNPOINTS: {
 					String[] spawnData = line.split(",");
-					double x = 0, y = 0;
+					float x = 0, y = 0;
 					int w = 0, h = 0;
 					try {
 						x = evaluateString(spawnData[0].trim(), width, height);
@@ -188,14 +189,14 @@ public class MapParser {
 								"Invalid width/height value: " + e.getMessage());
 					}
 					SpawnType type = SpawnType.valueOf(spawnData[4].trim());
-					Rectangle2D.Double area = new Rectangle2D.Double(x, y, w, h);
+					Rectangle area = new Rectangle(x, y, w, h);
 					spawnPositions.add(new SpawnPosition(area, type));
 					break;
 				}
 				case NODES: {
 					String[] nodeData = line.split(",");
 					int nodeId = 0;
-					int w, h = 0;
+					float w, h = 0;
 					boolean isMainNode = false;
 					LinkedList<Integer> adjacentNodes = new LinkedList<Integer>();
 
@@ -207,10 +208,8 @@ public class MapParser {
 					}
 
 					try {
-						w = evaluateString(nodeData[1], width, height)
-								.intValue();
-						h = evaluateString(nodeData[2], width, height)
-								.intValue();
+						w = evaluateString(nodeData[1], width, height);
+						h = evaluateString(nodeData[2], width, height);
 					} catch (ScriptException e) {
 						throw new InvalidDataException(
 								"Invalid math expression: " + e.getMessage());
@@ -274,7 +273,7 @@ public class MapParser {
 	 * @throws ScriptException
 	 *             if there is a syntax error in expression.
 	 */
-	private static Double evaluateString(String expression, int w, int h)
+	private static float evaluateString(String expression, int w, int h)
 			throws ScriptException {
 
 		expression = expression.replaceAll("H", h + "").replaceAll("W", w + "");
@@ -282,7 +281,7 @@ public class MapParser {
 		ScriptEngineManager mgr = new ScriptEngineManager();
 		ScriptEngine engine = mgr.getEngineByName("JavaScript");
 		Object result = engine.eval(expression);
-		return (Double) result;
+		return Float.parseFloat(result.toString());
 	}
 
 }

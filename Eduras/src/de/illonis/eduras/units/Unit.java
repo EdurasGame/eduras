@@ -102,7 +102,7 @@ public abstract class Unit extends MoveableGameObject {
 	public void setMaxHealth(int maxHealth) {
 		if (maxHealth <= 0)
 			return;
-		double percent = maxHealth / (double) this.maxHealth;
+		float percent = maxHealth / (float) this.maxHealth;
 		this.maxHealth = maxHealth;
 		this.health *= percent;
 	}

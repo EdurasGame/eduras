@@ -12,8 +12,8 @@ import java.util.Collection;
 
 import javax.swing.JPanel;
 
+import de.illonis.eduras.math.Vector2df;
 import de.illonis.eduras.shapecreator.DataHolder;
-import de.illonis.eduras.shapecreator.Vertice;
 
 /**
  * Provides a preview of the shape in gamesize.
@@ -53,17 +53,17 @@ public class PreviewPanel extends JPanel {
 		Color shapeLineColor = data.getSettings().getShapeLineColor();
 		Color shapeLastLineColor = data.getSettings().getShapeLastLineColor();
 
-		Collection<Vertice> vertices = data.getPolygon().getVertices();
+		Collection<Vector2df> vertices = data.getPolygon().getVector2dfs();
 		boolean first = true;
-		Vertice firstVertice = null;
-		Vertice last = null;
+		Vector2df firstVector2df = null;
+		Vector2df last = null;
 		GuiPoint p = null;
-		for (Vertice vertice : vertices) {
+		for (Vector2df vertice : vertices) {
 
 			p = coordinateSystem.coordinateToGui(vertice);
 
 			if (first) {
-				firstVertice = vertice;
+				firstVector2df = vertice;
 				first = false;
 			} else {
 				g2d.setStroke(new BasicStroke(1.5f));
@@ -76,7 +76,7 @@ public class PreviewPanel extends JPanel {
 		if (vertices.size() > 1) {
 			// connect last point with first one
 			GuiPoint firstPoint = coordinateSystem
-					.coordinateToGui(firstVertice);
+					.coordinateToGui(firstVector2df);
 			g2d.setColor(shapeLastLineColor);
 			g2d.drawLine(p.x, p.y, firstPoint.x, firstPoint.y);
 		}

@@ -1,7 +1,8 @@
 package de.illonis.eduras.gameclient.gui.hud;
 
-import java.awt.Point;
-import java.awt.Rectangle;
+
+import org.newdawn.slick.geom.Rectangle;
+import org.newdawn.slick.geom.Vector2f;
 
 /**
  * A clickable gui element.
@@ -20,7 +21,7 @@ public interface ClickableGuiElementInterface {
 	 *            click position.
 	 * @return true if event is consumed, false otherwise.
 	 */
-	boolean onClick(Point p);
+	boolean onClick(Vector2f p);
 
 	/**
 	 * Returns bounds of the clickable element relative to game screen. This

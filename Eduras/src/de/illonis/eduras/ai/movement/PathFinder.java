@@ -1,6 +1,6 @@
 package de.illonis.eduras.ai.movement;
 
-import de.illonis.eduras.math.Vector2D;
+import org.newdawn.slick.geom.Vector2f;
 
 /**
  * Provides pathfinding methods that allow a unit to receive its current moving
@@ -20,7 +20,7 @@ public interface PathFinder {
 	 *         Should return an empty array if {@link #hasReachedTarget()}
 	 *         returns true.
 	 */
-	Vector2D[] getWayPoints();
+	Vector2f[] getWayPoints();
 
 	/**
 	 * Sets location of the unit to given position.
@@ -28,7 +28,7 @@ public interface PathFinder {
 	 * @param location
 	 *            unit's current position.
 	 */
-	void setLocation(Vector2D location);
+	void setLocation(Vector2f location);
 
 	/**
 	 * Sets the moving target.
@@ -36,7 +36,7 @@ public interface PathFinder {
 	 * @param target
 	 *            target position.
 	 */
-	void setTarget(Vector2D target);
+	void setTarget(Vector2f target);
 
 	/**
 	 * Retrieves the current moving direction considering required waypoints,
@@ -45,7 +45,7 @@ public interface PathFinder {
 	 * 
 	 * @return the current moving direction.
 	 */
-	Vector2D getMovingDirection();
+	Vector2f getMovingDirection();
 
 	/**
 	 * Determines whether unit has reached its goal or should move on.

@@ -2,7 +2,7 @@ package de.illonis.eduras.shapecreator.templates;
 
 import java.util.LinkedList;
 
-import de.illonis.eduras.shapecreator.Vertice;
+import de.illonis.eduras.math.Vector2df;
 
 /**
  * A template for editable shapes.
@@ -11,10 +11,10 @@ import de.illonis.eduras.shapecreator.Vertice;
  * 
  */
 public abstract class ShapeTemplate {
-	private final LinkedList<Vertice> vertices;
+	private final LinkedList<Vector2df> vertices;
 
 	protected ShapeTemplate() {
-		vertices = new LinkedList<Vertice>();
+		vertices = new LinkedList<Vector2df>();
 	}
 
 	/**
@@ -22,15 +22,15 @@ public abstract class ShapeTemplate {
 	 */
 	public abstract String getName();
 
-	protected final void addVertice(Vertice v) {
+	protected final void addVector2df(Vector2df v) {
 		vertices.add(v);
 	}
 
-	protected final void addVertice(double x, double y) {
-		vertices.add(new Vertice(x, y));
+	protected final void addVector2df(float x, float y) {
+		vertices.add(new Vector2df(x, y));
 	}
 
-	final LinkedList<Vertice> getDefaultVertices() {
+	final LinkedList<Vector2df> getDefaultVector2dfs() {
 		return vertices;
 	}
 

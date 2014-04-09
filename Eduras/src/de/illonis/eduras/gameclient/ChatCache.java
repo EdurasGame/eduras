@@ -1,8 +1,9 @@
 package de.illonis.eduras.gameclient;
 
-import java.awt.event.KeyEvent;
 import java.util.HashMap;
 import java.util.LinkedList;
+
+import org.newdawn.slick.Input;
 
 import de.illonis.eduras.chat.ChatMessage;
 import de.illonis.eduras.chat.ChatRoom;
@@ -40,14 +41,16 @@ public class ChatCache {
 	/**
 	 * Indicates that a letter has been typed into chat window.
 	 * 
-	 * @param letter
-	 *            the event of writing the letter.
+	 * @param key
+	 *            the key number
+	 * @param c
+	 *            the character.
 	 */
-	public void write(KeyEvent letter) {
-		if (letter.getKeyCode() == KeyEvent.VK_BACK_SPACE) {
+	public void write(int key, char c) {
+		if (key == Input.KEY_BACK) {
 			deleteChar();
-		} else if (letter.getKeyChar() != KeyEvent.CHAR_UNDEFINED) {
-			input.append(letter.getKeyChar());
+		} else if (c != Input.KEY_UNLABELED) {
+			input.append(c);
 			startWriting();
 		}
 	}

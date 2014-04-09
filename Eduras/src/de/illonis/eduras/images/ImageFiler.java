@@ -1,17 +1,18 @@
 package de.illonis.eduras.images;
 
 import java.awt.Graphics2D;
-import java.awt.Image;
 import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
 import java.net.URL;
 import java.util.logging.Logger;
 
-import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 
+import org.newdawn.slick.Image;
+import org.newdawn.slick.SlickException;
+
 import de.illonis.edulog.EduLog;
+import de.illonis.eduras.gameclient.datacache.CacheInfo;
 import de.illonis.eduras.locale.Localization;
 
 /**
@@ -33,14 +34,12 @@ public class ImageFiler {
 	 * @param fileName
 	 *            file name of image. Must be relative to images-package.
 	 * @return image.
-	 * @throws IOException
+	 * @throws SlickException
 	 *             when image could not be loaded.
 	 * @throws IllegalArgumentException
-	 *             if there is no file with given filename.
 	 */
-	public static BufferedImage load(String fileName) throws IOException,
-			IllegalArgumentException {
-		return ImageIO.read(ImageFiler.class.getResource(fileName));
+	public static Image load(String fileName) throws SlickException {
+		return new Image(CacheInfo.BASE_URL + fileName);
 	}
 
 	/**
@@ -73,6 +72,22 @@ public class ImageFiler {
 	 * @return the scaled image.
 	 */
 	public static Image getScaledImage(Image srcImg, int w, int h) {
+		return srcImg.getScaledCopy(w, h);
+	}
+
+	/**
+	 * Calculates a scaled instance of an image.
+	 * 
+	 * @param srcImg
+	 *            the source.
+	 * @param w
+	 *            the target width.
+	 * @param h
+	 *            the target height.
+	 * @return the scaled image.
+	 */
+	public static java.awt.Image getScaledImage(java.awt.Image srcImg, int w,
+			int h) {
 		BufferedImage resizedImg = new BufferedImage(w, h,
 				BufferedImage.TYPE_INT_ARGB);
 		Graphics2D g2 = resizedImg.createGraphics();

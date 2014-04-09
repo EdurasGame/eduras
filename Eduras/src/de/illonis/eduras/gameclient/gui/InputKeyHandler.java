@@ -1,11 +1,11 @@
 package de.illonis.eduras.gameclient.gui;
 
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import org.newdawn.slick.Input;
 
 import de.illonis.edulog.EduLog;
 import de.illonis.eduras.exceptions.KeyNotBoundException;
@@ -23,7 +23,7 @@ import de.illonis.eduras.logicabstraction.EdurasInitializer;
  * @author illonis
  * 
  */
-public class InputKeyHandler extends KeyAdapter {
+public class InputKeyHandler {
 
 	private final static Logger L = EduLog.getLoggerFor(InputKeyHandler.class
 			.getName());
@@ -43,7 +43,7 @@ public class InputKeyHandler extends KeyAdapter {
 
 	private final Settings settings;
 	private final GamePanelLogic client;
-	private int currentKey = KeyEvent.VK_UNDEFINED;
+	private int currentKey = Input.KEY_UNLABELED;
 
 	/**
 	 * Creates a new input key handler.
@@ -108,20 +108,27 @@ public class InputKeyHandler extends KeyAdapter {
 		}
 	}
 
-	@Override
-	public void keyPressed(KeyEvent e) {
-
-		if (e.getKeyCode() != settings.getKeyBindings().getKey(KeyBinding.CHAT)
-				&& e.getKeyCode() != settings.getKeyBindings().getKey(
+	/**
+	 * Indicates that a key was pressed.
+	 * 
+	 * @param key
+	 *            the key pressed (see {@link Input}).
+	 * @param c
+	 *            the key char.
+	 */
+	public void keyPressed(int key, char c) {
+		boolean consumed = false;
+		if (key != settings.getKeyBindings().getKey(KeyBinding.CHAT)
+				&& key != settings.getKeyBindings().getKey(
 						KeyBinding.EXIT_CLIENT))
-			client.onKeyType(e);
+			consumed = client.onKeyType(key, c);
 
-		if (e.isConsumed()) {
-			currentKey = e.getKeyCode();
+		if (consumed) {
+			currentKey = key;
 			return;
 		}
 
-		int keyCode = e.getKeyCode();
+		int keyCode = key;
 		KeyBinding binding;
 		try {
 			binding = settings.getKeyBindings().getBindingOf(keyCode);
@@ -215,31 +222,36 @@ public class InputKeyHandler extends KeyAdapter {
 		L.fine("Bound key pressed: " + keyCode);
 	}
 
-	@Override
-	public void keyReleased(KeyEvent e) {
+	/**
+	 * Indicates a key release.
+	 * 
+	 * @param key
+	 *            the key code. See fields of {@link Input}.
+	 * @param c
+	 *            the key char.
+	 */
+	public void keyReleased(int key, char c) {
 
-		int keyCode = e.getKeyCode();
-
-		if (e.getKeyCode() == currentKey) {
-			currentKey = KeyEvent.VK_UNDEFINED;
+		if (key == currentKey) {
+			currentKey = Input.KEY_UNLABELED;
 			return;
 		}
 		// don't handle other keys
-		if (!settings.getKeyBindings().isBound(keyCode))
+		if (!settings.getKeyBindings().isBound(key))
 			return;
 
 		if (lastTimePressed < KEY_INTERVAL)
 			return;
 
 		// release button
-		pressedButtons.put(keyCode, false);
+		pressedButtons.put(key, false);
 
 		KeyBinding binding;
 		try {
-			binding = settings.getKeyBindings().getBindingOf(keyCode);
+			binding = settings.getKeyBindings().getBindingOf(key);
 		} catch (KeyNotBoundException ex) {
 			L.log(Level.SEVERE, "Key is bound but receiving binding failed: "
-					+ keyCode, ex);
+					+ key, ex);
 			return;
 		}
 

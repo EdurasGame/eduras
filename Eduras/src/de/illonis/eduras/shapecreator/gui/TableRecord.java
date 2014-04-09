@@ -1,6 +1,6 @@
 package de.illonis.eduras.shapecreator.gui;
 
-import de.illonis.eduras.shapecreator.Vertice;
+import de.illonis.eduras.math.Vector2df;
 
 /**
  * Represents a row in the vertice table.
@@ -9,7 +9,7 @@ import de.illonis.eduras.shapecreator.Vertice;
  * 
  */
 public class TableRecord {
-	private Vertice vertice;
+	private Vector2df vertice;
 
 	/**
 	 * Creates a new record that holds given vertice.
@@ -17,7 +17,7 @@ public class TableRecord {
 	 * @param vertice
 	 *            the vertice for this row.
 	 */
-	public TableRecord(Vertice vertice) {
+	public TableRecord(Vector2df vertice) {
 		this.vertice = vertice;
 	}
 
@@ -45,8 +45,8 @@ public class TableRecord {
 	 * @param x
 	 *            the new x-coordinate.
 	 */
-	public void setX(double x) {
-		vertice.setX(x);
+	public void setX(float x) {
+		vertice.x = x;
 	}
 
 	/**
@@ -55,8 +55,8 @@ public class TableRecord {
 	 * @param y
 	 *            the new y-coordinate.
 	 */
-	public void setY(double y) {
-		vertice.setY(y);
+	public void setY(float y) {
+		vertice.y = y;
 	}
 
 	/**
@@ -64,7 +64,7 @@ public class TableRecord {
 	 * 
 	 * @return the vertices of this row.
 	 */
-	public Vertice getVertice() {
+	public Vector2df getVector2df() {
 		return vertice;
 	}
 }

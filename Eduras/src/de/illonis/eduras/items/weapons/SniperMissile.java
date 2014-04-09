@@ -4,7 +4,6 @@ import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.ObjectFactory.ObjectType;
 import de.illonis.eduras.gameobjects.TimingSource;
 import de.illonis.eduras.settings.S;
-import de.illonis.eduras.shapes.Circle;
 
 /**
  * 
@@ -27,7 +26,7 @@ public class SniperMissile extends Missile {
 		setDamage(S.go_snipermissile_damage);
 		setDamageRadius(S.go_snipermissile_damageradius);
 		setObjectType(ObjectType.SNIPERMISSILE);
-		setShape(new Circle(S.go_snipermissile_shape_radius));
+		// setShape(new Circle(S.go_snipermissile_shape_radius));
 		setSpeed(S.go_snipermissile_speed);
 	}
 

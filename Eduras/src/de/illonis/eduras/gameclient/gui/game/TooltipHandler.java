@@ -1,6 +1,6 @@
 package de.illonis.eduras.gameclient.gui.game;
 
-import java.awt.Point;
+import org.newdawn.slick.geom.Vector2f;
 
 import de.illonis.eduras.items.Item;
 
@@ -20,7 +20,7 @@ public interface TooltipHandler {
 	 * @param item
 	 *            item to describe.
 	 */
-	void showItemTooltip(Point p, Item item);
+	void showItemTooltip(Vector2f p, Item item);
 
 	/**
 	 * Shows a tooltip at given position with given text.
@@ -30,7 +30,7 @@ public interface TooltipHandler {
 	 * @param text
 	 *            text.
 	 */
-	void showTooltip(Point p, String text);
+	void showTooltip(Vector2f p, String text);
 
 	/**
 	 * Hides any currently shown tooltip.

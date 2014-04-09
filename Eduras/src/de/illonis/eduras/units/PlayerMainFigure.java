@@ -2,6 +2,9 @@ package de.illonis.eduras.units;
 
 import java.util.logging.Logger;
 
+import org.newdawn.slick.geom.Circle;
+import org.newdawn.slick.geom.Vector2f;
+
 import de.illonis.edulog.EduLog;
 import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.ObjectFactory.ObjectType;
@@ -9,9 +12,7 @@ import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.gameobjects.TimingSource;
 import de.illonis.eduras.interfaces.MovementControlable;
 import de.illonis.eduras.inventory.Inventory;
-import de.illonis.eduras.math.Vector2D;
 import de.illonis.eduras.settings.S;
-import de.illonis.eduras.shapes.Circle;
 
 /**
  * This class represents a player.
@@ -83,15 +84,15 @@ public class PlayerMainFigure extends Unit implements MovementControlable {
 		setOwner(ownerId);
 
 		// get position
-		// Vector2D firstEdge = new Vector2D(25, 0);
-		// Vector2D secondEdge = new Vector2D(-10, 10);
-		// Vector2D thirdEdge = new Vector2D(-10, -10);
+		// Vector2df firstEdge = new Vector2df(25, 0);
+		// Vector2df secondEdge = new Vector2df(-10, 10);
+		// Vector2df thirdEdge = new Vector2df(-10, -10);
 
-		setShape(new Circle(9));
+		setShape(new Circle(4.5f, 4.5f, 9f, 360));
 
 		// try {
 		// // setShape(new Triangle(firstEdge, secondEdge, thirdEdge));
-		// } catch (ShapeVerticesNotApplicableException e) {
+		// } catch (ShapeVector2dfsNotApplicableException e) {
 		// L.log(Level.SEVERE, "error setting player shape", e);
 		// }
 	}
@@ -118,21 +119,23 @@ public class PlayerMainFigure extends Unit implements MovementControlable {
 	public void startMoving(Direction direction) {
 		switch (direction) {
 		case TOP:
-			getSpeedVector().setY(-getSpeed());
+			currentSpeedY = -getSpeed();
 			break;
 		case BOTTOM:
-			getSpeedVector().setY(getSpeed());
+			currentSpeedY = getSpeed();
 			break;
 		case LEFT:
-			getSpeedVector().setX(-getSpeed());
+			currentSpeedX = -getSpeed();
 			break;
 		case RIGHT:
-			getSpeedVector().setX(getSpeed());
+			currentSpeedX = getSpeed();
 			break;
 		default:
 			break;
 		}
-		getSpeedVector().setLength(getSpeed());
+		Vector2f normalized = getSpeedVector().normalise().scale(getSpeed());
+		currentSpeedX = normalized.x;
+		currentSpeedY = normalized.y;
 	}
 
 	/**
@@ -169,15 +172,16 @@ public class PlayerMainFigure extends Unit implements MovementControlable {
 	@Override
 	public void stopMoving(Direction direction) {
 		if (isHorizontal(direction)) {
-			getSpeedVector().setX(0);
+			currentSpeedX = 0;
 		} else {
-			getSpeedVector().setY(0);
+			currentSpeedY = 0;
 		}
 	}
 
 	@Override
 	public void stopMoving() {
-		setSpeedVector(new Vector2D());
+		currentSpeedX = 0;
+		currentSpeedY = 0;
 	}
 
 	/**
@@ -212,10 +216,6 @@ public class PlayerMainFigure extends Unit implements MovementControlable {
 	 */
 	public Inventory getInventory() {
 		return inventory;
-	}
-
-	@Override
-	public void onMapBoundsReached() {
 	}
 
 }

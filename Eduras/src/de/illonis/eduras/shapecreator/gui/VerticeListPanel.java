@@ -13,8 +13,8 @@ import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
+import de.illonis.eduras.math.Vector2df;
 import de.illonis.eduras.shapecreator.DataHolder;
-import de.illonis.eduras.shapecreator.Vertice;
 import de.illonis.eduras.shapecreator.VerticeListException;
 
 /**
@@ -55,10 +55,10 @@ public class VerticeListPanel extends ScrollablePanel implements
 			public void actionPerformed(ActionEvent e) {
 				JTable table = (JTable) e.getSource();
 				int modelRow = Integer.valueOf(e.getActionCommand());
-				Vertice v = ((RecordTableModel) table.getModel())
-						.getVertice(modelRow);
+				Vector2df v = ((RecordTableModel) table.getModel())
+						.getVector2df(modelRow);
 				try {
-					data.getPolygon().moveUpVertice(v);
+					data.getPolygon().moveUpVector2df(v);
 					m.exchange(modelRow, modelRow - 1);
 				} catch (VerticeListException e1) {
 				}
@@ -72,11 +72,11 @@ public class VerticeListPanel extends ScrollablePanel implements
 			public void actionPerformed(ActionEvent e) {
 				JTable table = (JTable) e.getSource();
 				int modelRow = Integer.valueOf(e.getActionCommand());
-				Vertice v = ((RecordTableModel) table.getModel())
-						.getVertice(modelRow);
+				Vector2df v = ((RecordTableModel) table.getModel())
+						.getVector2df(modelRow);
 				try {
 
-					data.getPolygon().moveDownVertice(v);
+					data.getPolygon().moveDownVector2df(v);
 					m.exchange(modelRow, modelRow + 1);
 				} catch (VerticeListException e1) {
 				}
@@ -90,11 +90,11 @@ public class VerticeListPanel extends ScrollablePanel implements
 			public void actionPerformed(ActionEvent e) {
 				JTable table = (JTable) e.getSource();
 				int modelRow = Integer.valueOf(e.getActionCommand());
-				Vertice v = ((RecordTableModel) table.getModel())
-						.getVertice(modelRow);
+				Vector2df v = ((RecordTableModel) table.getModel())
+						.getVector2df(modelRow);
 
 				m.remove(modelRow);
-				data.getPolygon().removeVertice(v);
+				data.getPolygon().removeVector2df(v);
 			}
 		};
 
@@ -115,7 +115,7 @@ public class VerticeListPanel extends ScrollablePanel implements
 		verticeList.getColumnModel().getColumn(3).setHeaderValue("down");
 		verticeList.getColumnModel().getColumn(4).setHeaderValue("del");
 
-		data.setVerticeTableModel(m);
+		data.setVector2dfTableModel(m);
 		verticeList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
 		JScrollPane scrollPanel = new JScrollPane(verticeList);
@@ -131,8 +131,8 @@ public class VerticeListPanel extends ScrollablePanel implements
 	@Override
 	public void valueChanged(ListSelectionEvent e) {
 		if (!e.getValueIsAdjusting()) {
-			LinkedList<Vertice> l = new LinkedList<Vertice>(data.getPolygon()
-					.getVertices());
+			LinkedList<Vector2df> l = new LinkedList<Vector2df>(data.getPolygon()
+					.getVector2dfs());
 			int selection = verticeList.getSelectedRow();
 			if (selection >= 0)
 				data.verticeSelectedOnTable(l.get(selection));

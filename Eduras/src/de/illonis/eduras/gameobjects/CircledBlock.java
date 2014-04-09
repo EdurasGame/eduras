@@ -1,7 +1,8 @@
 package de.illonis.eduras.gameobjects;
 
+import org.newdawn.slick.geom.Circle;
+
 import de.illonis.eduras.GameInformation;
-import de.illonis.eduras.shapes.Circle;
 
 /**
  * A circled block.
@@ -11,16 +12,9 @@ import de.illonis.eduras.shapes.Circle;
  */
 public abstract class CircledBlock extends GameObject {
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * de.illonis.eduras.GameObject#onCollision(de.illonis.eduras.GameObject)
-	 */
 	@Override
 	public void onCollision(GameObject collidingObject) {
 		// do nothing
-
 	}
 
 	/**
@@ -41,11 +35,10 @@ public abstract class CircledBlock extends GameObject {
 	 * @param id
 	 */
 	public CircledBlock(GameInformation game, TimingSource timingSource,
-			double radius, double posX, double posY, int id) {
-
+			float radius, float posX, float posY, int id) {
 		super(game, timingSource, id);
+		setShape(new Circle((posX + radius), (posY + radius), radius));
 
 		setPosition(posX, posY);
-		setShape(new Circle(radius));
 	}
 }

@@ -1,10 +1,11 @@
 package de.illonis.eduras.gameclient.gui.game;
 
-import java.awt.event.MouseEvent;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import org.newdawn.slick.geom.Vector2f;
 
 import de.illonis.edulog.EduLog;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
@@ -14,7 +15,7 @@ import de.illonis.eduras.inventory.Inventory;
 import de.illonis.eduras.inventory.ItemSlotIsEmptyException;
 import de.illonis.eduras.items.Usable;
 import de.illonis.eduras.logicabstraction.EdurasInitializer;
-import de.illonis.eduras.math.Vector2D;
+import de.illonis.eduras.math.Vector2df;
 import de.illonis.eduras.units.PlayerMainFigure.InteractMode;
 
 /**
@@ -37,7 +38,7 @@ public class EgoModeMouseAdapter extends GuiMouseAdapter {
 		itemUseTimer = null;
 	}
 
-	private void egoModeClick(MouseEvent e) {
+	private void egoModeClick(int button, int x, int y, int clickCount) {
 		ClickState currentClickState = getPanelLogic().getClickState();
 		int currentItemSelected = getPanelLogic().getClientData()
 				.getCurrentItemSelected();
@@ -48,7 +49,7 @@ public class EgoModeMouseAdapter extends GuiMouseAdapter {
 			if (currentItemSelected != -1) {
 
 				// use it instantly
-				itemUsed(currentItemSelected, new Vector2D(e.getPoint()), false);
+				itemUsed(currentItemSelected, new Vector2df(x, y), false);
 
 				// and if the user prefers so, do it continuously until
 				// mouse released.
@@ -95,9 +96,10 @@ public class EgoModeMouseAdapter extends GuiMouseAdapter {
 	 * @param target
 	 *            target position
 	 * @param isGameCoordinate
-	 *            tells if the given target is alrdeady a gamecoordinate
+	 *            tells if the given target is already a gamecoordinate
 	 */
-	void itemUsed(int i, Vector2D target, boolean isGameCoordinate) {
+
+	void itemUsed(int i, Vector2f target, boolean isGameCoordinate) {
 		if (!isGameCoordinate) {
 			getListener().onItemUse(i,
 					getPanelLogic().computeGuiPointToGameCoordinate(target));
@@ -121,28 +123,26 @@ public class EgoModeMouseAdapter extends GuiMouseAdapter {
 		}
 	}
 
+	private void egoModeMove(int oldx, int oldy, int newx, int newy) {
+		getListener().onViewingDirectionChanged(
+				getPanelLogic().computeGuiPointToGameCoordinate(
+						new Vector2f(newx, newy)));
+	}
+
+	@Override
+	public void mouseClicked(int button, int x, int y, int clickCount) {
+		egoModeClick(button, x, y, clickCount);
+	}
+
+	@Override
+	public void mouseMoved(int oldx, int oldy, int newx, int newy) {
+		egoModeMove(oldx, oldy, newx, newy);
+	}
+
 	private void discardItemUseTimer() {
 		if (itemUseTimer != null) {
 			itemUseTimer.cancel();
 			itemUseTimer = null;
-		}
-	}
-
-	@Override
-	public void mouseClicked(MouseEvent e) {
-		// egoModeClick(e);
-	}
-
-	@Override
-	public void mousePressed(MouseEvent e) {
-		egoModeClick(e);
-	}
-
-	@Override
-	public void mouseReleased(MouseEvent e) {
-		if (EdurasInitializer.getInstance().getSettings()
-				.getBooleanSetting("continuousItemUsage")) {
-			discardItemUseTimer();
 		}
 	}
 
@@ -161,22 +161,25 @@ public class EgoModeMouseAdapter extends GuiMouseAdapter {
 	}
 
 	@Override
-	public void mouseMoved(MouseEvent e) {
-		super.mouseMoved(e);
+	public void mouseDragged(int oldx, int oldy, int newx, int newy) {
 
-		egoModeMove(e);
 	}
 
 	@Override
-	public void mouseDragged(MouseEvent e) {
-		super.mouseDragged(e);
-
-		egoModeMove(e);
+	public void mousePressed(int button, int x, int y) {
 	}
 
-	private void egoModeMove(MouseEvent e) {
-		getListener().onViewingDirectionChanged(
-				getPanelLogic().computeGuiPointToGameCoordinate(
-						new Vector2D(e.getPoint().x, e.getPoint().y)));
+	@Override
+	public void mouseReleased(int button, int x, int y) {
+		if (EdurasInitializer.getInstance().getSettings()
+				.getBooleanSetting("continuousItemUsage")) {
+			discardItemUseTimer();
+		}
+
 	}
+
+	@Override
+	public void mouseWheelMoved(int change) {
+	}
+
 }

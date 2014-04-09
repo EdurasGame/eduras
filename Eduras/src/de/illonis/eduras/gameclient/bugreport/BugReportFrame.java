@@ -148,7 +148,9 @@ public class BugReportFrame implements ActionListener {
 		attachLogBox.setSelected(true);
 		attachScreenBox.setSelected(true);
 		frame.setLocationRelativeTo(null);
+
 		image = ui.getScreenshot();
+
 		frame.setVisible(true);
 		/*
 		 * JOptionPane.showMessageDialog( null, new JLabel(new

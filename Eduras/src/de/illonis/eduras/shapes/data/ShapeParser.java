@@ -4,11 +4,10 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.LinkedList;
 
-import de.illonis.eduras.math.Vector2D;
+import de.illonis.eduras.math.Vector2df;
 import de.illonis.eduras.shapecreator.EditablePolygon;
 import de.illonis.eduras.shapecreator.FileCorruptException;
 import de.illonis.eduras.shapecreator.ShapeFiler;
-import de.illonis.eduras.shapecreator.Vertice;
 
 /**
  * Provides functionality to parse a human readable shapefile into shape data.
@@ -39,15 +38,15 @@ public class ShapeParser {
 	 * @throws IOException
 	 *             if an I/O error occurs while reading the file.
 	 */
-	public static Vector2D[] readShape(URL inputFile)
+	public static Vector2df[] readShape(URL inputFile)
 			throws FileCorruptException, IOException {
 
 		EditablePolygon poly = ShapeFiler.loadShape(inputFile);
 
-		LinkedList<Vector2D> vertices = new LinkedList<Vector2D>();
-		for (Vertice vertice : poly.getVertices()) {
-			vertices.add(new Vector2D(vertice.getX(), vertice.getY()));
+		LinkedList<Vector2df> vertices = new LinkedList<Vector2df>();
+		for (Vector2df vertice : poly.getVector2dfs()) {
+			vertices.add(new Vector2df(vertice.getX(), vertice.getY()));
 		}
-		return vertices.toArray(new Vector2D[] {});
+		return vertices.toArray(new Vector2df[] {});
 	}
 }

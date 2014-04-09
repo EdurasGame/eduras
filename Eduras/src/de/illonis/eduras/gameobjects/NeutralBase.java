@@ -38,7 +38,6 @@ public class NeutralBase extends NeutralArea {
 	public NeutralBase(GameInformation game, TimingSource timingSource, int id,
 			int mult) {
 		super(game, timingSource, id);
-		// TODO Auto-generated constructor stub
 		setTimeNeeded(S.neutralbase_overtaketime_default);
 		resourceGenerateAmount = S.neutralbase_resource_baseamount * mult;
 		resourceGenerateTimeInterval = S.neutralbase_resource_interval;

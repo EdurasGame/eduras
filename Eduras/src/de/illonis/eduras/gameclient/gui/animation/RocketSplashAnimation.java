@@ -1,12 +1,10 @@
 package de.illonis.eduras.gameclient.gui.animation;
 
-import java.awt.BasicStroke;
-import java.awt.Color;
-import java.awt.Graphics2D;
-
 import org.jdesktop.core.animation.timing.Animator;
+import org.newdawn.slick.Color;
+import org.newdawn.slick.Graphics;
 
-import de.illonis.eduras.math.Vector2D;
+import de.illonis.eduras.math.Vector2df;
 
 /**
  * Animation displayed when rocket missile explodes.
@@ -17,17 +15,17 @@ import de.illonis.eduras.math.Vector2D;
 public class RocketSplashAnimation extends Animation {
 
 	private double radius;
-	private int x, y, dim;
-	private final static BasicStroke STROKE = new BasicStroke(6f);
+	private float x, y, dim;
+	private final float STROKE_WIDTH = 6f;
 
-	RocketSplashAnimation(Vector2D position) {
+	RocketSplashAnimation(Vector2df position) {
 		super("Rocket splash", 300, position);
 	}
 
 	@Override
 	public void begin(Animator source) {
-		x = (int) position.getX();
-		y = (int) position.getY();
+		x = position.getX();
+		y = position.getY();
 		dim = 1;
 		super.begin(source);
 	}
@@ -35,22 +33,22 @@ public class RocketSplashAnimation extends Animation {
 	@Override
 	public void timingEvent(Animator source, double fraction) {
 		double currentRadius = radius * fraction;
-		x = (int) (position.getX() - currentRadius);
-		y = (int) (position.getY() - currentRadius);
-		dim = (int) (2 * currentRadius);
+		x = (float) (position.getX() - currentRadius);
+		y = (float) (position.getY() - currentRadius);
+		dim = (float) (2 * currentRadius);
 	}
 
 	@Override
-	protected void drawAnimation(Graphics2D g2d, int cameraX, int cameraY) {
-		g2d.setStroke(STROKE);
-		g2d.setColor(Color.RED);
-		g2d.drawOval(x + cameraX, y + cameraY, dim, dim);
+	protected void drawAnimation(Graphics g) {
+		g.setLineWidth(STROKE_WIDTH);
+		g.setColor(Color.red);
+		g.drawOval(x, y, dim, dim);
 	}
 
 	@Override
 	public void addParams(Object[] params) {
 		if (params.length > 0)
-			radius = (double) params[0] - 5;
+			radius = (float) params[0] - 5;
 		else
 			radius = 15;
 	}

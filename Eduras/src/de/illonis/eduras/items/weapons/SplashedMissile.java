@@ -1,10 +1,11 @@
 package de.illonis.eduras.items.weapons;
 
+import org.newdawn.slick.geom.Circle;
+
 import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.ObjectFactory.ObjectType;
 import de.illonis.eduras.gameobjects.TimingSource;
 import de.illonis.eduras.settings.S;
-import de.illonis.eduras.shapes.Circle;
 
 /**
  * A missile that is spawned by {@link SplashMissile} when that collides.
@@ -30,8 +31,9 @@ public class SplashedMissile extends Missile {
 		setObjectType(ObjectType.MISSILE_SPLASHED);
 		setDamage(S.go_splashedmissile_damage);
 		setDamageRadius(S.go_splashedmissile_damageradius);
-		setShape(new Circle(S.go_splashedmissile_shape_radius));
+		setShape(new Circle((float) S.go_splashedmissile_shape_radius,
+				(float) S.go_splashedmissile_shape_radius,
+				(float) S.go_splashedmissile_shape_radius));
 		setSpeed(S.go_splashedmissile_speed);
 	}
-
 }

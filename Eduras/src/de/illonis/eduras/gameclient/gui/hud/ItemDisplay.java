@@ -1,14 +1,13 @@
 package de.illonis.eduras.gameclient.gui.hud;
 
-import java.awt.BasicStroke;
-import java.awt.Color;
-import java.awt.Graphics2D;
-import java.awt.Point;
-import java.awt.Rectangle;
-import java.awt.geom.Arc2D;
-import java.awt.image.BufferedImage;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import org.newdawn.slick.Color;
+import org.newdawn.slick.Graphics;
+import org.newdawn.slick.Image;
+import org.newdawn.slick.geom.Rectangle;
+import org.newdawn.slick.geom.Vector2f;
 
 import de.illonis.edulog.EduLog;
 import de.illonis.eduras.events.SetItemSlotEvent;
@@ -37,7 +36,6 @@ public class ItemDisplay extends ClickableGuiElement implements
 	private final static int BLOCKSIZE = 48;
 	private int currentItem = -1;
 	private final static Color COLOR_SEMITRANSPARENT = new Color(0, 0, 0, 120);
-	private static final Color TRANSLUCENT = new Color(0, 0, 0, 0);
 
 	// top, right, bottom, left
 	private final static int OUTER_GAP[] = { 20, 5, 10, 15 };
@@ -51,7 +49,7 @@ public class ItemDisplay extends ClickableGuiElement implements
 	public final static int WIDTH = BLOCKSIZE * 3 + 4 * ITEM_GAP;
 
 	private GuiItem itemSlots[];
-	private BasicStroke rectStroke = new BasicStroke(3);
+	private final float rectStroke = 3f;
 
 	/**
 	 * Creates a new item toolbar.
@@ -69,41 +67,38 @@ public class ItemDisplay extends ClickableGuiElement implements
 	}
 
 	@Override
-	public void render(Graphics2D g2d) {
+	public void render(Graphics g) {
 		currentItem = getInfo().getClientData().getCurrentItemSelected();
-		g2d.setFont(DEFAULT_FONT);
-		// g2d.setColor(Color.GRAY);
-		g2d.setColor(TRANSLUCENT); // translucent
-		g2d.fillRect(screenX, screenY, WIDTH, HEIGHT);
 		for (GuiItem item : itemSlots) {
 			// TODO: make nicer
 			if (item.getSlotId() == currentItem) {
-				// g2d.setColor(Color.RED);
-				g2d.setColor(Color.YELLOW);
+				g.setColor(Color.yellow);
 			} else {
-				// g2d.setColor(Color.BLACK);
-				g2d.setColor(Color.WHITE);
+				g.setColor(Color.white);
 			}
-			g2d.setStroke(rectStroke);
+			g.setLineWidth(rectStroke);
 			Rectangle itemRect = new Rectangle(item.getX() + screenX,
 					item.getY() + screenY, BLOCKSIZE, BLOCKSIZE);
-			g2d.draw(itemRect);
-			g2d.drawString("#" + (item.getSlotId() + 1), item.getX() + screenX
-					+ BLOCKSIZE / 4, item.getY() + screenY - 2);
+			g.draw(itemRect);
+			g.drawString("#" + (item.getSlotId() + 1), item.getX() + screenX
+					+ BLOCKSIZE / 4, item.getY() + screenY - 15);
 
 			if (item.isWeapon()) {
 				int ammo = item.getWeaponAmmu();
-				g2d.drawString("#" + ammo, item.getX() + screenX + BLOCKSIZE
-						/ 4 + 20, item.getY() + screenY - 2);
+				g.drawString("#" + ammo, item.getX() + screenX + BLOCKSIZE / 4
+						+ 20, item.getY() + screenY - 15);
 			}
+			g.setColor(Color.white);
 			if (item.hasImage())
-				g2d.drawImage(item.getItemImage(), item.getX() + screenX,
-						item.getY() + screenY, null);
+				g.drawImage(item.getItemImage(), item.getX() + screenX,
+						item.getY() + screenY);
 			long cd = item.getCooldown();
 			if (cd > 0) {
-				g2d.setPaint(COLOR_SEMITRANSPARENT);
-				g2d.fill(new Arc2D.Double(itemRect, 90, item.getCooldownArc(),
-						Arc2D.PIE));
+				g.setColor(COLOR_SEMITRANSPARENT);
+				float a = item.getCooldownPercent();
+				g.fillArc(itemRect.getX(), itemRect.getY(),
+						itemRect.getWidth(), itemRect.getHeight(), -90 - a
+								* 360, -90);
 			}
 		}
 	}
@@ -115,9 +110,9 @@ public class ItemDisplay extends ClickableGuiElement implements
 	}
 
 	@Override
-	public boolean onClick(Point p) {
+	public boolean onClick(Vector2f p) {
 		for (int i = 0; i < Inventory.MAX_CAPACITY; i++) {
-			if (itemSlots[i].getClickableRect().contains(p)) {
+			if (itemSlots[i].getClickableRect().contains(p.x, p.y)) {
 				L.info("User clicked on item " + i);
 				itemClicked(i);
 				return true;
@@ -169,8 +164,7 @@ public class ItemDisplay extends ClickableGuiElement implements
 		} else {
 			String newName = newItem.getName();
 			try {
-				BufferedImage image = ImageCache.getObjectImage(newItem
-						.getType());
+				Image image = ImageCache.getInventoryIcon(newItem.getType());
 				itemSlots[slot].setItemImage(image);
 			} catch (CacheException e) {
 				itemSlots[slot].setItemImage(null);
@@ -178,9 +172,9 @@ public class ItemDisplay extends ClickableGuiElement implements
 						"Missing cache image for: " + newItem.getType(), e);
 			}
 
-			itemSlots[slot].setItem(newItem);
 			itemSlots[slot].setName(newName);
 		}
+		itemSlots[slot].setItem(newItem);
 	}
 
 	/**
@@ -193,7 +187,7 @@ public class ItemDisplay extends ClickableGuiElement implements
 		private int x, y, slotId;
 		private String name;
 		private Item item;
-		private BufferedImage itemImage;
+		private Image itemImage;
 
 		GuiItem(int slotId) {
 
@@ -213,11 +207,11 @@ public class ItemDisplay extends ClickableGuiElement implements
 			return itemImage != null;
 		}
 
-		BufferedImage getItemImage() {
+		Image getItemImage() {
 			return itemImage;
 		}
 
-		void setItemImage(BufferedImage image) {
+		void setItemImage(Image image) {
 			this.itemImage = image;
 		}
 
@@ -238,11 +232,11 @@ public class ItemDisplay extends ClickableGuiElement implements
 			return 0;
 		}
 
-		double getCooldownArc() {
-			double e = 0;
+		float getCooldownPercent() {
+			float e = 0;
 			if (item instanceof Usable) {
 				Usable u = (Usable) item;
-				e = (double) u.getCooldown() / u.getCooldownTime() * 360;
+				e = (float) u.getCooldown() / u.getCooldownTime();
 			}
 			return e;
 		}
@@ -276,10 +270,10 @@ public class ItemDisplay extends ClickableGuiElement implements
 	}
 
 	@Override
-	public void onMouseOver(Point p) {
+	public void onMouseOver(Vector2f p) {
 
 		for (int i = 0; i < Inventory.MAX_CAPACITY; i++) {
-			if (itemSlots[i].getClickableRect().contains(p)) {
+			if (itemSlots[i].getClickableRect().contains(p.x, p.y)) {
 				try {
 					getTooltipHandler().showItemTooltip(
 							p,

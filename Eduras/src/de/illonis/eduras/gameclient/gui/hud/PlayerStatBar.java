@@ -1,9 +1,10 @@
 package de.illonis.eduras.gameclient.gui.hud;
 
-import java.awt.Color;
-import java.awt.Graphics2D;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import org.newdawn.slick.Color;
+import org.newdawn.slick.Graphics;
 
 import de.illonis.edulog.EduLog;
 import de.illonis.eduras.events.SetIntegerGameObjectAttributeEvent;
@@ -22,8 +23,8 @@ public class PlayerStatBar extends RenderedGuiObject {
 
 	private final static int MAX_WIDTH = ItemDisplay.WIDTH;
 	private final static int HEIGHT = 20;
-	private final static Color COLOR_BAR = Color.YELLOW;
-	private final static Color COLOR_BG = Color.BLACK;
+	private final static Color COLOR_BAR = Color.yellow;
+	private final static Color COLOR_BG = Color.black;
 
 	private int health;
 	private int maxHealth;
@@ -44,12 +45,11 @@ public class PlayerStatBar extends RenderedGuiObject {
 	}
 
 	@Override
-	public void render(Graphics2D g2d) {
+	public void render(Graphics g2d) {
 		g2d.setColor(COLOR_BG);
 		g2d.fillRect(screenX, screenY, MAX_WIDTH, HEIGHT);
 		g2d.setColor(COLOR_BAR);
 		g2d.fillRect(screenX, screenY, barWidth, HEIGHT);
-		g2d.setColor(Color.BLACK);
 	}
 
 	@Override
@@ -86,7 +86,7 @@ public class PlayerStatBar extends RenderedGuiObject {
 	}
 
 	private void recalculate() {
-		double percent = (double) health / maxHealth;
+		float percent = (float) health / maxHealth;
 		barWidth = (int) Math.round(percent * MAX_WIDTH);
 	}
 

@@ -9,14 +9,14 @@ public class NodeData {
 	private final static Logger L = EduLog.getLoggerFor(NodeData.class
 			.getName());
 
-	private final int x;
-	private final int y;
+	private final float x;
+	private final float y;
 	private final int id;
 	private final LinkedList<Integer> adjacentNodes;
 	private final boolean isMainNode;
 
-	public NodeData(int x, int y, int id, LinkedList<Integer> adjacentNodes,
-			boolean isMainNode) {
+	public NodeData(float x, float y, int id,
+			LinkedList<Integer> adjacentNodes, boolean isMainNode) {
 		this.x = x;
 		this.y = y;
 		this.id = id;
@@ -24,11 +24,11 @@ public class NodeData {
 		this.isMainNode = isMainNode;
 	}
 
-	public int getX() {
+	public float getX() {
 		return x;
 	}
 
-	public int getY() {
+	public float getY() {
 		return y;
 	}
 

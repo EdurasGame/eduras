@@ -3,7 +3,7 @@ package de.illonis.eduras.gameclient.datacache;
 import java.util.HashMap;
 
 import de.illonis.eduras.ObjectFactory.ObjectType;
-import de.illonis.eduras.shapes.ObjectShape.ShapeType;
+import de.illonis.eduras.shapes.ShapeFactory.ShapeType;
 
 /**
  * Contains lists of cachable files and their location.<br>
@@ -25,10 +25,16 @@ public final class CacheInfo {
 		STATISTICS_BG;
 	}
 
+	/**
+	 * Absolute base url to resolve path for Slick.
+	 */
+	public final static String BASE_URL = "de/illonis/eduras/images/";
+
 	private final static HashMap<ShapeType, String> shapes;
 	private final static HashMap<ObjectType, String> objectImages;
 	private final static HashMap<ImageKey, String> guiImages;
 	private final static HashMap<ImageKey, String> imageIcons;
+	private final static HashMap<ObjectType, String> inventoryIcons;
 
 	static {
 		shapes = new HashMap<ShapeType, String>();
@@ -37,22 +43,27 @@ public final class CacheInfo {
 		shapes.put(ShapeType.STAR, "mine.esh");
 
 		objectImages = new HashMap<ObjectType, String>();
-		objectImages.put(ObjectType.ITEM_WEAPON_SIMPLE,
+		inventoryIcons = new HashMap<ObjectType, String>();
+
+		inventoryIcons.put(ObjectType.ITEM_WEAPON_SIMPLE,
 				"gui/icons/icon-weapon1.png");
-		objectImages.put(ObjectType.ITEM_WEAPON_SNIPER,
+		inventoryIcons.put(ObjectType.ITEM_WEAPON_SNIPER,
 				"gui/icons/icon-weapon-sniper.png");
-		objectImages.put(ObjectType.ITEM_WEAPON_SPLASH,
+		inventoryIcons.put(ObjectType.ITEM_WEAPON_SPLASH,
 				"gui/icons/icon-weapon-splash.png");
-		objectImages.put(ObjectType.ITEM_WEAPON_SWORD,
+		inventoryIcons.put(ObjectType.ITEM_WEAPON_SWORD,
 				"gui/icons/icon-sword.png");
-		objectImages.put(ObjectType.ROCKETLAUNCHER,
+		inventoryIcons.put(ObjectType.ROCKETLAUNCHER,
 				"gui/icons/icon-rocketlauncher.png");
-		objectImages.put(ObjectType.ROCKET_MISSILE,
+		inventoryIcons.put(ObjectType.ROCKET_MISSILE,
 				"gui/icons/icon-rocketlauncher.png");
-		objectImages.put(ObjectType.MINELAUNCHER, "gui/icons/icon-mine.png");
-		objectImages.put(ObjectType.ASSAULTRIFLE,
+		inventoryIcons.put(ObjectType.MINELAUNCHER, "gui/icons/icon-mine.png");
+		inventoryIcons.put(ObjectType.ASSAULTRIFLE,
 				"gui/icons/icon-assaultrifle.png");
 
+		objectImages.put(ObjectType.BIGBLOCK, "gameobjects/bigblock.png");
+		objectImages.put(ObjectType.ITEM_WEAPON_SNIPER,
+				"gameobjects/sniper.png");
 		guiImages = new HashMap<ImageKey, String>();
 		guiImages.put(ImageKey.STATISTICS_BG, "gui/artwork/statwindow.png");
 
@@ -79,6 +90,17 @@ public final class CacheInfo {
 	 */
 	public static String getObjectImageFile(ObjectType type) {
 		return objectImages.get(type);
+	}
+
+	/**
+	 * Retrieves the filename for an inventory icon for given object type.
+	 * 
+	 * @param type
+	 *            type of the object.
+	 * @return the file name.
+	 */
+	public static String getInventoryIconFile(ObjectType type) {
+		return inventoryIcons.get(type);
 	}
 
 	/**
@@ -117,5 +139,9 @@ public final class CacheInfo {
 
 	static HashMap<ImageKey, String> getAllImageIcons() {
 		return new HashMap<ImageKey, String>(imageIcons);
+	}
+
+	static HashMap<ObjectType, String> getAllInventoryIcons() {
+		return new HashMap<ObjectType, String>(inventoryIcons);
 	}
 }

@@ -1,9 +1,9 @@
 package de.illonis.eduras.shapecreator.gui;
 
-import java.awt.Graphics2D;
+import java.awt.Graphics;
 
 import de.illonis.eduras.interfaces.Drawable;
-import de.illonis.eduras.math.Vector2D;
+import de.illonis.eduras.math.Vector2df;
 import de.illonis.eduras.shapecreator.DataHolder;
 
 /**
@@ -58,13 +58,13 @@ public class CoordinateSystem implements Drawable {
 	 * 
 	 * @author illonis
 	 */
-	public Vector2D guiToCoordinate(GuiPoint point) {
+	public Vector2df guiToCoordinate(GuiPoint point) {
 		int guiX = point.x;
 		int guiY = point.y;
 		float zoom = 1.0f / zoomFactor;
 		int coordX = Math.round((guiX - origin.x) * zoom);
 		int coordY = Math.round((guiY - origin.y) * zoom);
-		Vector2D pos = new Vector2D(coordX, coordY);
+		Vector2df pos = new Vector2df(coordX, coordY);
 		return pos;
 	}
 
@@ -77,7 +77,7 @@ public class CoordinateSystem implements Drawable {
 	 * 
 	 * @author illonis
 	 */
-	public GuiPoint coordinateToGui(Vector2D point) {
+	public GuiPoint coordinateToGui(Vector2df point) {
 		int coordX = (int) Math.round(point.getX() * zoomFactor);
 		int coordY = (int) Math.round(point.getY() * zoomFactor);
 
@@ -101,7 +101,7 @@ public class CoordinateSystem implements Drawable {
 	}
 
 	@Override
-	public void draw(Graphics2D g) {
+	public void draw(Graphics g) {
 		g.setColor(DataHolder.getInstance().getSettings().getGridColor());
 
 		// horizontal line

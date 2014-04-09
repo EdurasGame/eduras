@@ -1,7 +1,8 @@
 package de.illonis.eduras.gameclient.gui.hud;
 
-import java.awt.Point;
-import java.awt.Rectangle;
+import org.newdawn.slick.geom.Rectangle;
+import org.newdawn.slick.geom.Vector2f;
+
 
 /**
  * Triggers tooltip actions and receives mouse position after move.
@@ -17,7 +18,7 @@ public interface TooltipTriggerer {
 	 * @param p
 	 *            mouse point relative to trigger area's origin.
 	 */
-	void onMouseOver(Point p);
+	void onMouseOver(Vector2f p);
 
 	/**
 	 * Returns area on that tooltip is triggered relative to game area. This

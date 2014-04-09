@@ -1,10 +1,11 @@
 package de.illonis.eduras.gameclient.gui.hud;
 
-import java.awt.Color;
-import java.awt.Graphics2D;
-import java.awt.Point;
-import java.awt.Rectangle;
 import java.util.logging.Logger;
+
+import org.newdawn.slick.Color;
+import org.newdawn.slick.Graphics;
+import org.newdawn.slick.geom.Rectangle;
+import org.newdawn.slick.geom.Vector2f;
 
 import de.illonis.edulog.EduLog;
 import de.illonis.eduras.gameclient.bugreport.BugReportFrame;
@@ -37,7 +38,7 @@ public class BugReportButton extends ClickableGuiElement {
 	}
 
 	@Override
-	public boolean onClick(Point p) {
+	public boolean onClick(Vector2f p) {
 		openBugWindow();
 		return true;
 	}
@@ -53,16 +54,16 @@ public class BugReportButton extends ClickableGuiElement {
 	}
 
 	@Override
-	public void render(Graphics2D g2d) {
-		g2d.setColor(Color.BLUE);
-		g2d.fill(bounds);
-		g2d.setColor(Color.WHITE);
-		g2d.drawString(buttonText, screenX + 10, screenY + height - 5);
+	public void render(Graphics g) {
+		g.setColor(Color.blue);
+		g.fill(bounds);
+		g.setColor(Color.white);
+		g.drawString(buttonText, screenX + 10, screenY + height - 15);
 	}
 
 	@Override
 	public void onGuiSizeChanged(int newWidth, int newHeight) {
-		screenX = 0;
+		screenX = 100;
 		screenY = 0;
 		bounds.setLocation(screenX, screenY);
 	}

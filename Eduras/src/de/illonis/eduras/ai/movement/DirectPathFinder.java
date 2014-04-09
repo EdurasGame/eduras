@@ -1,6 +1,8 @@
 package de.illonis.eduras.ai.movement;
 
-import de.illonis.eduras.math.Vector2D;
+import org.newdawn.slick.geom.Vector2f;
+
+import de.illonis.eduras.math.Vector2df;
 import de.illonis.eduras.settings.S;
 
 /**
@@ -12,25 +14,25 @@ import de.illonis.eduras.settings.S;
  */
 public class DirectPathFinder implements PathFinder {
 
-	private Vector2D target = new Vector2D(0, 0),
-			location = new Vector2D(0, 0);
-	private Vector2D[] waypoints;
-	private Vector2D direction;
+	private Vector2f target = new Vector2f(0, 0),
+			location = new Vector2f(0, 0);
+	private Vector2f[] waypoints;
+	private Vector2f direction;
 
 	private void recalculateDirection() {
-		direction = new Vector2D(target);
-		direction.subtract(location);
+		direction = new Vector2df(target);
+		direction.sub(location);
 	}
 
 	@Override
-	public void setTarget(Vector2D target) {
+	public void setTarget(Vector2f target) {
 		this.target = target;
-		waypoints = new Vector2D[] { target };
+		waypoints = new Vector2f[] { target };
 		recalculateDirection();
 	}
 
 	@Override
-	public void setLocation(Vector2D location) {
+	public void setLocation(Vector2f location) {
 		this.location = location;
 		recalculateDirection();
 	}
@@ -41,18 +43,18 @@ public class DirectPathFinder implements PathFinder {
 	}
 
 	@Override
-	public Vector2D[] getWayPoints() {
+	public Vector2f[] getWayPoints() {
 		return waypoints;
 	}
 
 	@Override
-	public Vector2D getMovingDirection() {
+	public Vector2f getMovingDirection() {
 		return direction;
 	}
 
 	@Override
 	public double getDistance() {
-		return location.calculateDistance(target);
+		return location.distance(target);
 	}
 
 }

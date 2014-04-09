@@ -6,6 +6,8 @@ import java.util.LinkedList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.newdawn.slick.geom.Vector2f;
+
 import de.eduras.eventingserver.Event;
 import de.eduras.eventingserver.Event.PacketType;
 import de.eduras.eventingserver.ServerInterface;
@@ -33,7 +35,7 @@ import de.illonis.eduras.events.MovementEvent;
 import de.illonis.eduras.events.ObjectFactoryEvent;
 import de.illonis.eduras.events.SetAmmunitionEvent;
 import de.illonis.eduras.events.SetBooleanGameObjectAttributeEvent;
-import de.illonis.eduras.events.SetDoubleGameObjectAttributeEvent;
+import de.illonis.eduras.events.SetFloatGameObjectAttributeEvent;
 import de.illonis.eduras.events.SetGameModeEvent;
 import de.illonis.eduras.events.SetGameObjectAttributeEvent;
 import de.illonis.eduras.events.SetIntegerGameObjectAttributeEvent;
@@ -62,7 +64,7 @@ import de.illonis.eduras.items.weapons.Missile;
 import de.illonis.eduras.items.weapons.Weapon;
 import de.illonis.eduras.maps.InitialObjectData;
 import de.illonis.eduras.maps.Map;
-import de.illonis.eduras.math.Vector2D;
+import de.illonis.eduras.math.Vector2df;
 import de.illonis.eduras.units.PlayerMainFigure;
 import de.illonis.eduras.units.PlayerMainFigure.InteractMode;
 import de.illonis.eduras.units.Unit;
@@ -111,7 +113,7 @@ public class ServerEventTriggerer implements EventTriggerer {
 
 	@Override
 	public void createMissile(ObjectType missileType, int owner,
-			Vector2D position, Vector2D speedVector) {
+			Vector2df position, Vector2df speedVector) {
 
 		int missileId = createObjectAt(missileType, position, owner);
 		Missile o = (Missile) gameInfo.findObjectById(missileId);
@@ -144,7 +146,7 @@ public class ServerEventTriggerer implements EventTriggerer {
 	}
 
 	@Override
-	public void sendUnit(int objectId, Vector2D target)
+	public void sendUnit(int objectId, Vector2f target)
 			throws ObjectNotFoundException, UnitNotControllableException {
 		GameObject gameObject = gameInfo.findObjectById(objectId);
 		if (gameObject == null) {
@@ -178,7 +180,7 @@ public class ServerEventTriggerer implements EventTriggerer {
 	}
 
 	@Override
-	public int createObjectAt(ObjectType object, Vector2D position, int owner) {
+	public int createObjectAt(ObjectType object, Vector2df position, int owner) {
 
 		ObjectFactoryEvent newObjectEvent = new ObjectFactoryEvent(
 				GameEventNumber.OBJECT_CREATE, object, owner);
@@ -277,16 +279,16 @@ public class ServerEventTriggerer implements EventTriggerer {
 	}
 
 	@Override
-	public void maybeSetPositionOfObject(int objectId, Vector2D newPosition) {
+	public void maybeSetPositionOfObject(int objectId, Vector2df newPosition) {
 		setPositionOfObject(objectId, newPosition, PacketType.UDP);
 	}
 
 	@Override
-	public void guaranteeSetPositionOfObject(int objectId, Vector2D newPosition) {
+	public void guaranteeSetPositionOfObject(int objectId, Vector2df newPosition) {
 		setPositionOfObject(objectId, newPosition, PacketType.TCP);
 	}
 
-	private void setPositionOfObject(int objectId, Vector2D newPosition,
+	private void setPositionOfObject(int objectId, Vector2f newPosition,
 			PacketType type) {
 		GameEventNumber eventNumber;
 		if (type == PacketType.TCP)
@@ -295,12 +297,11 @@ public class ServerEventTriggerer implements EventTriggerer {
 			eventNumber = GameEventNumber.SET_POS_UDP;
 
 		MovementEvent e = new MovementEvent(eventNumber, objectId);
-		e.setNewXPos(newPosition.getX());
-		e.setNewYPos(newPosition.getY());
+		e.setNewXPos(newPosition.x);
+		e.setNewYPos(newPosition.y);
 
 		GameObject o = gameInfo.findObjectById(objectId);
-		o.setXPosition(newPosition.getX());
-		o.setYPosition(newPosition.getY());
+		o.setPosition(newPosition);
 		sendEvents(e);
 	}
 
@@ -347,7 +348,7 @@ public class ServerEventTriggerer implements EventTriggerer {
 		// TODO: Fire a respawn event to client.
 		remaxHealth(player);
 
-		Vector2D spawnPosition = null;
+		Vector2df spawnPosition = null;
 		try {
 			spawnPosition = gameInfo.getSpawnPointFor(player);
 		} catch (GameModeNotSupportedByMapException e) {
@@ -425,7 +426,7 @@ public class ServerEventTriggerer implements EventTriggerer {
 			if (initialObject.getType() == ObjectType.DYNAMIC_POLYGON_BLOCK
 					|| initialObject.getType() == ObjectType.MAPBOUNDS) {
 				createDynamicPolygonObjectAt(initialObject.getType(),
-						initialObject.getPolygonVertices(),
+						initialObject.getPolygonVector2dfs(),
 						initialObject.getPosition(), -1);
 			} else {
 				createObjectAt(initialObject.getType(),
@@ -540,13 +541,13 @@ public class ServerEventTriggerer implements EventTriggerer {
 
 	@Override
 	public void createDynamicPolygonObjectAt(ObjectType type,
-			Vector2D[] polygonVertices, Vector2D position, int owner) {
+			Vector2df[] polygonVector2dfs, Vector2df position, int owner) {
 		int objId = createObjectAt(type, position, owner);
-		setPolygonData(objId, polygonVertices);
+		setPolygonData(objId, polygonVector2dfs);
 	}
 
 	@Override
-	public void setPolygonData(int objectId, Vector2D[] polygonVertices) {
+	public void setPolygonData(int objectId, Vector2df[] polygonVertices) {
 		GameObject object = gameInfo.findObjectById(objectId);
 		if (object instanceof DynamicPolygonObject) {
 			DynamicPolygonObject block = (DynamicPolygonObject) object;
@@ -640,7 +641,6 @@ public class ServerEventTriggerer implements EventTriggerer {
 	@Override
 	public void notifyCooldownStarted(ItemEvent event) {
 		sendEventToAll(event);
-
 	}
 
 	@Override
@@ -676,7 +676,7 @@ public class ServerEventTriggerer implements EventTriggerer {
 	@Override
 	public void setRotation(GameObject gameObject) {
 
-		Event setRotationEvent = new SetDoubleGameObjectAttributeEvent(
+		Event setRotationEvent = new SetFloatGameObjectAttributeEvent(
 				GameEventNumber.SET_ROTATION, gameObject.getId(),
 				gameObject.getRotation()) {
 		};

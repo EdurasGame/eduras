@@ -1,13 +1,16 @@
 package de.illonis.eduras.gameclient.gui.hud;
 
+import java.awt.AWTException;
 import java.awt.image.BufferedImage;
 import java.util.LinkedList;
 import java.util.TimerTask;
 
+import org.newdawn.slick.Image;
+import org.newdawn.slick.SlickException;
+
 import de.illonis.eduras.gameclient.ChatCache;
 import de.illonis.eduras.gameclient.gui.HudNotifier;
 import de.illonis.eduras.gameclient.gui.TimedTasksHolderGUI;
-import de.illonis.eduras.gameclient.gui.game.FPSListener;
 import de.illonis.eduras.gameclient.gui.game.GameRenderer;
 import de.illonis.eduras.gameclient.gui.game.GuiClickReactor;
 import de.illonis.eduras.gameclient.gui.game.GuiResizeListener;
@@ -35,7 +38,6 @@ public class UserInterface implements GuiResizeListener, UserInputListener {
 	private TooltipHandler tooltipHandler;
 	private TooltipTriggererNotifier tooltipNotifier;
 	private StatisticsWindow statWindow;
-	private FPSDisplay fpsDisplay;
 	private DragSelectionRectangle dragRect;
 	private boolean spectator;
 	private NotificationPanel notificationPanel;
@@ -84,8 +86,8 @@ public class UserInterface implements GuiResizeListener, UserInputListener {
 	/**
 	 * @return the gamePanel.
 	 */
-	public BufferedImage getScreenshot() {
-		return renderer.getScreenshot();
+	public BufferedImage getScreenshot()   {
+		return renderer.takeScreenshot();
 	}
 
 	private void createElements() {
@@ -93,7 +95,6 @@ public class UserInterface implements GuiResizeListener, UserInputListener {
 		new GameModeBar(this);
 		new PlayerStatBar(this);
 		new TimeFrame(this);
-		fpsDisplay = new FPSDisplay(this);
 		pingDisplay = new PingDisplay(this);
 		notificationPanel = new NotificationPanel(this);
 		dragRect = new DragSelectionRectangle(this);
@@ -213,13 +214,6 @@ public class UserInterface implements GuiResizeListener, UserInputListener {
 					removeGuiElement(o);
 			}
 		}
-	}
-
-	/**
-	 * @return the element that listens for fps.
-	 */
-	public FPSListener getFPSListener() {
-		return fpsDisplay;
 	}
 
 	/**

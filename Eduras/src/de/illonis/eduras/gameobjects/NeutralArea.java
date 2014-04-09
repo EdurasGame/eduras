@@ -3,13 +3,12 @@ package de.illonis.eduras.gameobjects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.newdawn.slick.geom.Rectangle;
+
 import de.illonis.edulog.EduLog;
 import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.ObjectFactory.ObjectType;
 import de.illonis.eduras.Team;
-import de.illonis.eduras.exceptions.ShapeVerticesNotApplicableException;
-import de.illonis.eduras.math.Vector2D;
-import de.illonis.eduras.shapes.Rectangle;
 import de.illonis.eduras.units.Unit;
 
 /**
@@ -42,11 +41,7 @@ public abstract class NeutralArea extends TriggerArea {
 	public NeutralArea(GameInformation game, TimingSource timingSource, int id) {
 		super(game, timingSource, id);
 		setObjectType(ObjectType.NEUTRAL_BASE);
-		try {
-			setShape(new Rectangle(new Vector2D(-20, 20), new Vector2D(20, -20)));
-		} catch (ShapeVerticesNotApplicableException e) {
-			L.log(Level.WARNING, "TODO: message", e);
-		}
+		setShape(new Rectangle(0, 0, 40, 40));
 		currentOwnerTeam = null;
 		currentProgressingTeam = null;
 	}

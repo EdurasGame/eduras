@@ -1,7 +1,8 @@
 package de.illonis.eduras.events;
 
+import org.newdawn.slick.geom.Vector2f;
+
 import de.illonis.eduras.gameobjects.DynamicPolygonObject;
-import de.illonis.eduras.math.Vector2D;
 
 /**
  * Event that indicates a polygon data change on a {@link DynamicPolygonObject}.
@@ -11,7 +12,7 @@ import de.illonis.eduras.math.Vector2D;
  */
 public class SetPolygonDataEvent extends ObjectEvent {
 
-	private final Vector2D[] vertices;
+	private final Vector2f[] vertices;
 
 	/**
 	 * Creates a new event of this type.
@@ -21,13 +22,13 @@ public class SetPolygonDataEvent extends ObjectEvent {
 	 * @param vertices
 	 *            the new vertices.
 	 */
-	public SetPolygonDataEvent(int objectId, Vector2D[] vertices) {
+	public SetPolygonDataEvent(int objectId, Vector2f[] vertices) {
 		super(GameEventNumber.SET_POLYGON_DATA, objectId);
 		this.vertices = vertices;
 
 		for (int i = 0; i < vertices.length; i++) {
-			putArgument(vertices[i].getX());
-			putArgument(vertices[i].getY());
+			putArgument(vertices[i].x);
+			putArgument(vertices[i].y);
 		}
 	}
 
@@ -38,7 +39,7 @@ public class SetPolygonDataEvent extends ObjectEvent {
 	 * 
 	 * @author illonis
 	 */
-	public Vector2D[] getVertices() {
+	public Vector2f[] getVertices() {
 		return vertices;
 	}
 

@@ -53,15 +53,15 @@ public class CameraMouseListener extends MouseAdapter {
 	public void mouseMoved(MouseEvent e) {
 		if (!inGui)
 			return;
-		if (e.getX() < (double) camera.width * SIDE_RANGE) {
+		if (e.getX() < (double) camera.getWidth() * SIDE_RANGE) {
 			dx = -CAMERA_SPEED;
-		} else if (e.getX() > (double) camera.width * (1 - SIDE_RANGE)) {
+		} else if (e.getX() > (double) camera.getWidth() * (1 - SIDE_RANGE)) {
 			dx = CAMERA_SPEED;
 		} else
 			dx = 0;
-		if (e.getY() < (double) camera.height * SIDE_RANGE) {
+		if (e.getY() < (double) camera.getHeight() * SIDE_RANGE) {
 			dy = -CAMERA_SPEED;
-		} else if (e.getY() > (double) camera.height * (1 - SIDE_RANGE)) {
+		} else if (e.getY() > (double) camera.getHeight() * (1 - SIDE_RANGE)) {
 			dy = CAMERA_SPEED;
 		} else
 			dy = 0;
@@ -91,8 +91,8 @@ public class CameraMouseListener extends MouseAdapter {
 		public void run() {
 			while (running) {
 				if (inGui) {
-					camera.x += dx;
-					camera.y += dy;
+					camera.setX(camera.getX() + dx);
+					camera.setY(camera.getY() + dy);
 				}
 				try {
 					Thread.sleep(50);

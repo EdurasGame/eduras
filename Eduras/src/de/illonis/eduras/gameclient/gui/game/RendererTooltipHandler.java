@@ -1,6 +1,6 @@
 package de.illonis.eduras.gameclient.gui.game;
 
-import java.awt.Point;
+import org.newdawn.slick.geom.Vector2f;
 
 import de.illonis.eduras.items.Item;
 
@@ -24,12 +24,12 @@ public class RendererTooltipHandler implements TooltipHandler {
 	}
 
 	@Override
-	public void showItemTooltip(Point p, Item data) {
+	public void showItemTooltip(Vector2f p, Item data) {
 		renderer.showItemTooltip(p, data);
 	}
 
 	@Override
-	public void showTooltip(Point p, String text) {
+	public void showTooltip(Vector2f p, String text) {
 		renderer.showTooltip(p, text);
 	}
 

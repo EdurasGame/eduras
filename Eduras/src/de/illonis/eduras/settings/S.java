@@ -1,4 +1,4 @@
-package de.illonis.eduras.settings;
+  package de.illonis.eduras.settings;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -80,7 +80,7 @@ public final class S {
 	/**
 	 * The speed of a {@link Bird} object.
 	 */
-	public static double go_bird_speed = 40;
+	public static float go_bird_speed = 40;
 
 	/**
 	 * Tells whether a {@link Bird} is collidable or not.
@@ -95,7 +95,7 @@ public final class S {
 	/**
 	 * Denotes the size of a {@link Missile} object.
 	 */
-	public static double go_missile_radius = 5;
+	public static float go_missile_radius = 5;
 
 	/**
 	 * Damage caused by one {@link SimpleMissile} object.
@@ -105,23 +105,23 @@ public final class S {
 	/**
 	 * Area Of Effect of a {@link SimpleMissile} object.
 	 */
-	public static double go_simplemissile_damage_radius = 5;
+	public static float go_simplemissile_damage_radius = 5;
 
 	/**
 	 * Speed of a {@link SimpleMissile} object.
 	 */
-	public static double go_simplemissile_speed = 100;
+	public static float go_simplemissile_speed = 100;
 
 	/**
 	 * Denotes how far a {@link SimpleMissile} object can go before it
 	 * disappears.
 	 */
-	public static double go_simplemissile_maxrange = 200;
+	public static float go_simplemissile_maxrange = 200;
 
 	/**
 	 * Denotes the size of a {@link SimpleWeapon} object.
 	 */
-	public static double go_simpleweapon_shape_radius = 10;
+	public static float go_simpleweapon_shape_radius = 10;
 
 	/**
 	 * Cooldown of a {@link SimpleWeapon}.
@@ -136,22 +136,22 @@ public final class S {
 	/**
 	 * Area of Effect of a {@link SniperMissile}.
 	 */
-	public static double go_snipermissile_damageradius = 1;
+	public static float go_snipermissile_damageradius = 1;
 
 	/**
 	 * Radius of the shape of a {@link SniperMissile} object.
 	 */
-	public static double go_snipermissile_shape_radius = 1.5;
+	public static float go_snipermissile_shape_radius = 1.5f;
 
 	/**
 	 * Speed of a {@link SniperMissile}.
 	 */
-	public static double go_snipermissile_speed = 500;
+	public static float go_snipermissile_speed = 500;
 
 	/**
 	 * Size (radius) of a {@link SniperWeapon} object.
 	 */
-	public static double go_sniperweapon_shape_radius = 5;
+	public static float go_sniperweapon_shape_radius = 5;
 
 	/**
 	 * Cooldown of {@link SniperWeapon} item.
@@ -166,17 +166,17 @@ public final class S {
 	/**
 	 * Area of Effect of {@link SplashedMissile}.
 	 */
-	public static double go_splashedmissile_damageradius = 1;
+	public static float go_splashedmissile_damageradius = 1;
 
 	/**
 	 * Size (radius) of {@link SplashedMissile}.
 	 */
-	public static double go_splashedmissile_shape_radius = 3;
+	public static float go_splashedmissile_shape_radius = 3;
 
 	/**
 	 * Speed of a {link SplashedMissile}.
 	 */
-	public static double go_splashedmissile_speed = 250;
+	public static float go_splashedmissile_speed = 250;
 
 	/**
 	 * Damage caused by a {@link SplashMissile}.
@@ -186,22 +186,22 @@ public final class S {
 	/**
 	 * Area of Effect of {@link SplashMissile}.
 	 */
-	public static double go_splashmissile_damageradius = 1;
+	public static float go_splashmissile_damageradius = 1;
 
 	/**
 	 * Size (radius) of {@link SplashMissile}.
 	 */
-	public static double go_splashmissile_shape_radius = 5;
+	public static float go_splashmissile_shape_radius = 5;
 
 	/**
 	 * Speed of a {link SplashMissile}.
 	 */
-	public static double go_splashmissile_speed = 250;
+	public static float go_splashmissile_speed = 250;
 
 	/**
 	 * Size (radius) of a {link SplashWeapon}.
 	 */
-	public static double go_splashweapon_shape_radius = 7;
+	public static float go_splashweapon_shape_radius = 7;
 
 	/**
 	 * Denotes the cooldown when you use a {@link SplashWeapon}.
@@ -216,22 +216,22 @@ public final class S {
 	/**
 	 * Area of Effect of {@link SwordMissile}.
 	 */
-	public static double go_swordmissile_damageradius = 1;
+	public static float go_swordmissile_damageradius = 1;
 
 	/**
 	 * Speed of {@link SwordMissile}.
 	 */
-	public static double go_swordmissile_speed = 100;
+	public static float go_swordmissile_speed = 100;
 
 	/**
 	 * Denotes how far a {@link SwordMissile} can go before it disappears.
 	 */
-	public static double go_swordmissile_maxrange = 10;
+	public static float go_swordmissile_maxrange = 10;
 
 	/**
 	 * Size (radius) of {@link SwordMissile}.
 	 */
-	public static double go_swordweapon_shape_radius = 7;
+	public static float go_swordweapon_shape_radius = 7;
 
 	/**
 	 * Denotes the cooldown of the {@link SwordWeapon} before you can use it
@@ -252,7 +252,7 @@ public final class S {
 	/**
 	 * Base speed of a {@link PlayerMainFigure}.
 	 */
-	public static double player_speed_default = 50;
+	public static float player_speed_default = 50;
 
 	/**
 	 * Tells in how many {@link SplashedMissile}s a {@link SplashMissile} breaks
@@ -274,7 +274,7 @@ public final class S {
 	/**
 	 * Area Of Effect of a {@link RocketMissile}.
 	 */
-	public static double go_rocketmissile_damageradius = 100;
+	public static float go_rocketmissile_damageradius = 100;
 
 	/**
 	 * Damage caused by a {@link RocketMissile}.
@@ -284,17 +284,17 @@ public final class S {
 	/**
 	 * Speed of a {@link RocketMissile}.
 	 */
-	public static double go_rocketmissile_speed = 150;
+	public static float go_rocketmissile_speed = 150;
 
 	/**
 	 * Denotes how far a {@link RocketMissile} can go before it disappears.
 	 */
-	public static double go_rocketmissile_maxrange = 400;
+	public static float go_rocketmissile_maxrange = 400;
 
 	/**
 	 * Size (radius) of a {@link MineWeapon}.
 	 */
-	public static double go_mineweapon_size = 5;
+	public static float go_mineweapon_size = 5;
 
 	/**
 	 * Cooldown of {@link MineWeapon}.
@@ -309,22 +309,22 @@ public final class S {
 	/**
 	 * Area Of Effect of a {@link MineMissile}.
 	 */
-	public static double go_minemissile_damageradius = 50;
+	public static float go_minemissile_damageradius = 50;
 
 	/**
 	 * Speed of a {@link MineMissile}.
 	 */
-	public static double go_minemissile_speed = 0;
+	public static float go_minemissile_speed = 0;
 
 	/**
 	 * Denotes how far a {@link MineMissile} can go before it disappears.
 	 */
-	public static double go_minemissile_maxrange = 1;
+	public static float go_minemissile_maxrange = 1;
 
 	/**
 	 * Size (radius) of a {@link MineMissile}.
 	 */
-	public static double go_minemissile_shape_size = 2;
+	public static float go_minemissile_shape_size = 2;
 
 	/**
 	 * Denotes by how much the {@link SplashWeapon}'s ammunition is filled up
@@ -389,7 +389,7 @@ public final class S {
 	/**
 	 * Size (radius) of an {@link AssaultRifle}.
 	 */
-	public static double go_assaultrifle_shape_size = 5;
+	public static float go_assaultrifle_shape_size = 5;
 
 	/**
 	 * Cooldown of the {@link AssaultRifle}.
@@ -416,22 +416,22 @@ public final class S {
 	/**
 	 * Speed of an {@link AssaultMissile}.
 	 */
-	public static double go_assaultmissile_speed = 2000;
+	public static float go_assaultmissile_speed = 2000;
 
 	/**
 	 * Denotes how far an {@link AssaultMissile} can go before it disappears.
 	 */
-	public static double go_assaultmissile_maxrange = 4000;
+	public static float go_assaultmissile_maxrange = 4000;
 
 	/**
 	 * Size (radius) of an {@link AssaultMissile}.
 	 */
-	public static double go_assaultmissile_shape_size = 1;
+	public static float go_assaultmissile_shape_size = 1;
 
 	/**
 	 * Area Of Effect of an {@link AssaultMissile}.
 	 */
-	public static double go_assaultmissile_damageradius = 3;
+	public static float go_assaultmissile_damageradius = 3;
 
 	/**
 	 * Tells whether neutral objects are always shown when vision is enabled.
@@ -443,7 +443,7 @@ public final class S {
 	 */
 	public static boolean vision_disabled = true;
 
-	public static boolean exit_on_sysout = true;
+	public static boolean exit_on_sysout = false;
 
 	public static long neutralbase_resource_interval = 1000;
 

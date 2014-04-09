@@ -25,7 +25,7 @@ public class ServerLogicGameWorker extends LogicGameWorker {
 	}
 
 	@Override
-	protected void gameUpdate(long delta) {
+	public void gameUpdate(long delta) {
 		for (GameObject o : gameInformation.getObjects().values()) {
 			if (o instanceof Usable) {
 				((Usable) o).reduceCooldown(delta);
@@ -47,18 +47,17 @@ public class ServerLogicGameWorker extends LogicGameWorker {
 				}
 			}
 			if (o instanceof MoveableGameObject) {
-				if (!((MoveableGameObject) o).getSpeedVector().isNull()) {
-					((MoveableGameObject) o).onMove(delta);
-					if (listenerHolder.hasListener())
-						listenerHolder.getListener().onNewObjectPosition(o);
-					gameInformation.getEventTriggerer()
-							.notifyNewObjectPosition(o);
-				}
-
-				if (hasRotated(o)) {
-					gameInformation.getEventTriggerer().setRotation(o);
-				}
+				MoveableGameObject mgo = (MoveableGameObject) o;
+				mgo.onMove(delta, geometry);
+				if (listenerHolder.hasListener())
+					listenerHolder.getListener().onNewObjectPosition(o);
+				gameInformation.getEventTriggerer().notifyNewObjectPosition(o);
 			}
+
+			if (hasRotated(o)) {
+				gameInformation.getEventTriggerer().setRotation(o);
+			}
+
 		}
 	}
 }

@@ -1,7 +1,7 @@
 package de.illonis.eduras.gameclient.gui.hud;
 
-import java.awt.Color;
-import java.awt.Graphics2D;
+import org.newdawn.slick.Color;
+import org.newdawn.slick.Graphics;
 
 import de.illonis.eduras.chat.ChatMessage;
 import de.illonis.eduras.gameclient.ChatCache;
@@ -26,29 +26,28 @@ public class ChatDisplay extends RenderedGuiObject {
 	}
 
 	@Override
-	public void render(Graphics2D g2d) {
-		g2d.setFont(DEFAULT_FONT);
-		g2d.setColor(Color.WHITE);
-		g2d.drawString("Room: " + data.getRoomName(), screenX + WIDTH - 130,
-				screenY + 20);
+	public void render(Graphics g) {
+		g.setColor(Color.white);
+		g.drawString("Room: " + data.getRoomName(), screenX + WIDTH - 130,
+				screenY + 10);
 		ChatMessage msg;
-		int i = 10;
+		int i = 15;
 		if (data.isWriting())
-			i = 25;
+			i = 30;
 
 		while (i < HEIGHT - 15 && null != (msg = data.popMessage())) {
 			if (msg.isSystemMessage())
-				g2d.setColor(Color.YELLOW);
+				g.setColor(Color.yellow);
 			else
-				g2d.setColor(Color.WHITE);
-			g2d.drawString(msg.toChatWindowString(), screenX + 5, screenY
+				g.setColor(Color.white);
+			g.drawString(msg.toChatWindowString(), screenX + 5, screenY
 					+ HEIGHT - i);
 			i += 15;
 		}
 		if (data.isWriting()) {
-			g2d.setColor(Color.WHITE);
-			g2d.drawString(data.getInput() + "_", screenX + 5, screenY + HEIGHT
-					- 10);
+			g.setColor(Color.white);
+			g.drawString(data.getInput() + "_", screenX + 5, screenY + HEIGHT
+					- 15);
 		}
 		data.resetPop();
 	}

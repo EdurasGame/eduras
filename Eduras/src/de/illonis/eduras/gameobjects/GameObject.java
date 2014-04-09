@@ -1,8 +1,10 @@
 package de.illonis.eduras.gameobjects;
 
-import java.awt.geom.Rectangle2D;
 import java.util.Comparator;
 import java.util.LinkedList;
+
+import org.newdawn.slick.geom.Shape;
+import org.newdawn.slick.geom.Vector2f;
 
 import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.ObjectFactory.ObjectType;
@@ -10,10 +12,11 @@ import de.illonis.eduras.ai.AIControllable;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
 import de.illonis.eduras.math.CollisionPoint;
 import de.illonis.eduras.math.Line;
-import de.illonis.eduras.math.Vector2D;
-import de.illonis.eduras.shapes.ObjectShape;
+import de.illonis.eduras.math.Vector2df;
 import de.illonis.eduras.units.PlayerMainFigure;
 import de.illonis.eduras.units.Unit;
+
+
 
 /**
  * Meta class for all objects that can be on the game's map.
@@ -38,20 +41,21 @@ public abstract class GameObject implements Comparable<GameObject> {
 	private final TimingSource timingSource;
 	private ObjectType type;
 
-	private ObjectShape shape;
+	private Shape shape;
 	private boolean collidable = true;
 	private Visibility visible = Visibility.ALL;
-	private double visionRange = 200;
-	private double visionAngle = 90;
+	private float visionRange = 200;
+	private float visionAngle = 90;
 	private boolean isVisionBlocking = false;
 	private int zLayer = 1;
 
 	private int id;
 	private int owner = -1;
 
-	protected double rotation = 0;
+	protected float rotation = 0;
 
-	private double xPosition, yPosition;
+	private float xPosition, yPosition;
+	private float shapeOffsetX = 0, shapeOffsetY = 0;
 
 	/**
 	 * Describes which other objects can see this object.
@@ -101,6 +105,14 @@ public abstract class GameObject implements Comparable<GameObject> {
 		this.id = id;
 		this.timingSource = timingSource;
 		setObjectType(ObjectType.NO_OBJECT);
+	}
+
+	public float getShapeOffsetX() {
+		return shapeOffsetX;
+	}
+
+	public float getShapeOffsetY() {
+		return shapeOffsetY;
 	}
 
 	/**
@@ -177,9 +189,19 @@ public abstract class GameObject implements Comparable<GameObject> {
 	 * @param y
 	 *            The new value of the y-position.
 	 */
-	public void setPosition(double x, double y) {
+	public final void setPosition(float x, float y) {
 		setXPosition(x);
 		setYPosition(y);
+	}
+
+	/**
+	 * Sets the position of the object.
+	 * 
+	 * @param pos
+	 *            new position.
+	 */
+	public final void setPosition(Vector2f pos) {
+		setPosition(pos.x, pos.y);
 	}
 
 	/**
@@ -187,7 +209,7 @@ public abstract class GameObject implements Comparable<GameObject> {
 	 * 
 	 * @return The x-position.
 	 */
-	public double getXPosition() {
+	public final float getXPosition() {
 		return xPosition;
 	}
 
@@ -197,8 +219,10 @@ public abstract class GameObject implements Comparable<GameObject> {
 	 * @param xPosition
 	 *            The new value of the x-position.
 	 */
-	public void setXPosition(double xPosition) {
+	public final void setXPosition(float xPosition) {
 		this.xPosition = xPosition;
+		if (shape != null)
+			shape.setX(xPosition + shapeOffsetX);
 	}
 
 	/**
@@ -206,12 +230,12 @@ public abstract class GameObject implements Comparable<GameObject> {
 	 * This modifies current position by adding given value. This is equal to
 	 * <code>setXPosition(getXPosition() + xDiff)</code>.
 	 * 
-	 * @see #setXPosition(double)
+	 * @see #setXPosition(float)
 	 * 
 	 * @param xDiff
 	 *            value to be added to x-position.
 	 */
-	public void modifyXPosition(double xDiff) {
+	public final void modifyXPosition(float xDiff) {
 		setXPosition(xPosition + xDiff);
 	}
 
@@ -220,7 +244,7 @@ public abstract class GameObject implements Comparable<GameObject> {
 	 * 
 	 * @return The y-position.
 	 */
-	public double getYPosition() {
+	public final float getYPosition() {
 		return yPosition;
 	}
 
@@ -230,8 +254,10 @@ public abstract class GameObject implements Comparable<GameObject> {
 	 * @param yPosition
 	 *            The value of the new y-position.
 	 */
-	public void setYPosition(double yPosition) {
+	public final void setYPosition(float yPosition) {
 		this.yPosition = yPosition;
+		if (shape != null)
+			shape.setY(yPosition + shapeOffsetY);
 	}
 
 	/**
@@ -239,12 +265,12 @@ public abstract class GameObject implements Comparable<GameObject> {
 	 * This modifies current position by adding given value. This is equal to
 	 * <code>setYPosition(getYPosition() + yDiff)</code>.
 	 * 
-	 * @see #setYPosition(double)
+	 * @see #setYPosition(float)
 	 * 
 	 * @param yDiff
 	 *            value to be added to y-position.
 	 */
-	public void modifyYPosition(double yDiff) {
+	public void modifyYPosition(float yDiff) {
 		setYPosition(yPosition + yDiff);
 	}
 
@@ -256,7 +282,8 @@ public abstract class GameObject implements Comparable<GameObject> {
 	 * 
 	 * @return x-value of draw-postion
 	 */
-	public int getDrawX() {
+	@Deprecated
+	public final int getDrawX() {
 		return (int) Math.round(xPosition);
 	}
 
@@ -268,7 +295,8 @@ public abstract class GameObject implements Comparable<GameObject> {
 	 * 
 	 * @return y-value of draw-postion
 	 */
-	public int getDrawY() {
+	@Deprecated
+	public final int getDrawY() {
 		return (int) Math.round(yPosition);
 	}
 
@@ -277,7 +305,7 @@ public abstract class GameObject implements Comparable<GameObject> {
 	 * 
 	 * @return The shape of the object.
 	 */
-	public ObjectShape getShape() {
+	public Shape getShape() {
 		return shape;
 	}
 
@@ -287,7 +315,7 @@ public abstract class GameObject implements Comparable<GameObject> {
 	 * @param shape
 	 *            new shape.
 	 */
-	protected void setShape(ObjectShape shape) {
+	protected void setShape(Shape shape) {
 		this.shape = shape;
 	}
 
@@ -317,22 +345,8 @@ public abstract class GameObject implements Comparable<GameObject> {
 	 * 
 	 * @return The position vector.
 	 */
-	public Vector2D getPositionVector() {
-		return new Vector2D(getXPosition(), getYPosition());
-	}
-
-	/**
-	 * Returns bounding box. This is required for renderer to compute which
-	 * objects are in visible region.
-	 * 
-	 * @return bounding box.
-	 */
-	public Rectangle2D.Double getBoundingBox() {
-		// FIXME: Here is assumed that shape's center equals object's position.
-		Rectangle2D.Double r = getShape().getBoundingBox();
-		r.x = getDrawX() - getShape().getBoundingBox().getWidth() / 2;
-		r.y = getDrawY() - getShape().getBoundingBox().getHeight() / 2;
-		return r;
+	public Vector2df getPositionVector() {
+		return new Vector2df(getXPosition(), getYPosition());
 	}
 
 	/**
@@ -444,14 +458,14 @@ public abstract class GameObject implements Comparable<GameObject> {
 	/**
 	 * @return the vision radius in degree.
 	 */
-	public double getVisionAngle() {
+	public float getVisionAngle() {
 		return visionAngle;
 	}
 
 	/**
 	 * @return the vision range.
 	 */
-	public double getVisionRange() {
+	public float getVisionRange() {
 		return visionRange;
 	}
 
@@ -461,7 +475,7 @@ public abstract class GameObject implements Comparable<GameObject> {
 	 * @param visionAngle
 	 *            angle in degree.
 	 */
-	public void setVisionAngle(double visionAngle) {
+	public void setVisionAngle(float visionAngle) {
 		this.visionAngle = visionAngle;
 	}
 
@@ -471,7 +485,7 @@ public abstract class GameObject implements Comparable<GameObject> {
 	 * @param visionRange
 	 *            new vision range.
 	 */
-	public void setVisionRange(double visionRange) {
+	public void setVisionRange(float visionRange) {
 		this.visionRange = visionRange;
 	}
 
@@ -503,7 +517,8 @@ public abstract class GameObject implements Comparable<GameObject> {
 	 *         if there is no collision.
 	 */
 	public LinkedList<CollisionPoint> isIntersected(LinkedList<Line> lines) {
-		return this.getShape().isIntersected(lines, this);
+		return new LinkedList<>();
+		// return this.getShape().isIntersected(lines, this);
 	}
 
 	/**
@@ -538,7 +553,7 @@ public abstract class GameObject implements Comparable<GameObject> {
 	 * 
 	 * @return The angle in degrees.
 	 */
-	public double getRotation() {
+	public float getRotation() {
 		return rotation;
 	}
 
@@ -548,7 +563,7 @@ public abstract class GameObject implements Comparable<GameObject> {
 	 * @param newValue
 	 *            The new value.
 	 */
-	public void setRotation(Double newValue) {
+	public void setRotation(float newValue) {
 		// if (this instanceof MoveableGameObject) {
 		// ((MoveableGameObject) this).onRotate(newValue);
 		// } else {

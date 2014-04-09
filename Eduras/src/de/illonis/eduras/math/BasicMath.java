@@ -122,6 +122,19 @@ public class BasicMath {
 	}
 
 	/**
+	 * Calculates arithmetic average of two given numbers.
+	 * 
+	 * @param x
+	 *            first value.
+	 * @param y
+	 *            second value.
+	 * @return the average.
+	 */
+	public static float avg(float x, float y) {
+		return (x + y) / 2;
+	}
+
+	/**
 	 * Implements the REAL modulo a mod b.
 	 * 
 	 * @param a
@@ -130,6 +143,21 @@ public class BasicMath {
 	 */
 	public static double calcModulo(double a, double b) {
 		double r = (a % b);
+		if (r < 0) {
+			r += b;
+		}
+		return r;
+	}
+
+	/**
+	 * Implements the REAL modulo a mod b.
+	 * 
+	 * @param a
+	 * @param b
+	 * @return a mod b
+	 */
+	public static float calcModulo(float a, float b) {
+		float r = (a % b);
 		if (r < 0) {
 			r += b;
 		}

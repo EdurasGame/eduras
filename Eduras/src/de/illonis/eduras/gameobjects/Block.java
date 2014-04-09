@@ -1,12 +1,9 @@
-/**
- * 
- */
 package de.illonis.eduras.gameobjects;
+
+import org.newdawn.slick.geom.Rectangle;
 
 import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.exceptions.ShapeVerticesNotApplicableException;
-import de.illonis.eduras.math.Vector2D;
-import de.illonis.eduras.shapes.Rectangle;
 
 /**
  * This represents a block.
@@ -16,8 +13,8 @@ import de.illonis.eduras.shapes.Rectangle;
  */
 public abstract class Block extends GameObject {
 
-	double height;
-	double width;
+	protected float height;
+	protected float width;
 
 	/**
 	 * Creates a new block at position xPos and yPos.
@@ -39,17 +36,15 @@ public abstract class Block extends GameObject {
 	 * @throws ShapeVerticesNotApplicableException
 	 *             Thrown if the given position values do not apply.
 	 */
-	public Block(GameInformation game, TimingSource timingSource, double xPos,
-			double yPos, double width, double height, int id)
+	public Block(GameInformation game, TimingSource timingSource, float xPos,
+			float yPos, float width, float height, int id)
 			throws ShapeVerticesNotApplicableException {
 		super(game, timingSource, id);
 
 		this.width = width;
 		this.height = height;
-
+		setShape(new Rectangle(0, 0, width, height));
 		setPosition(xPos, yPos);
-		setShape(new Rectangle(new Vector2D(-width / 2, height / 2),
-				new Vector2D(width / 2, -height / 2)));
 	}
 
 	/**
@@ -68,15 +63,9 @@ public abstract class Block extends GameObject {
 	 * @throws ShapeVerticesNotApplicableException
 	 *             Thrown if the given position values do not apply.
 	 */
-	public Block(GameInformation game, TimingSource timingSource, double width,
-			double height, int id) throws ShapeVerticesNotApplicableException {
-		super(game, timingSource, id);
-
-		this.width = width;
-		this.height = height;
-
-		setShape(new Rectangle(new Vector2D(-width / 2, height / 2),
-				new Vector2D(width / 2, -height / 2)));
+	public Block(GameInformation game, TimingSource timingSource, float width,
+			float height, int id) throws ShapeVerticesNotApplicableException {
+		this(game, timingSource, 0f, 0f, width, height, id);
 	}
 
 	@Override

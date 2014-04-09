@@ -2,7 +2,9 @@ package de.illonis.eduras.ai.movement;
 
 import java.util.Random;
 
-import de.illonis.eduras.math.Vector2D;
+import org.newdawn.slick.geom.Vector2f;
+
+import de.illonis.eduras.math.Vector2df;
 
 /**
  * A random path finder that let a unit move randomly without taking the target
@@ -20,36 +22,36 @@ public final class RandomPathFinder implements PathFinder {
 	private long lastChange = 0;
 	private int lastIndex = 0;
 
-	private Vector2D[] waypoints;
+	private Vector2f[] waypoints;
 	private final static Random r = new Random();
 
 	RandomPathFinder() {
-		waypoints = new Vector2D[10];
+		waypoints = new Vector2f[10];
 		for (int i = 0; i < waypoints.length; i++) {
 			int xneg = (r.nextBoolean()) ? 1 : -1;
 			int yneg = (r.nextBoolean()) ? 1 : -1;
 
-			double x = r.nextDouble();
-			double y = r.nextDouble();
-			waypoints[i] = new Vector2D(x * xneg, y * yneg);
+			float x = r.nextFloat();
+			float y = r.nextFloat();
+			waypoints[i] = new Vector2df(x * xneg, y * yneg);
 		}
 	}
 
 	@Override
-	public Vector2D[] getWayPoints() {
+	public Vector2f[] getWayPoints() {
 		return waypoints;
 	}
 
 	@Override
-	public void setLocation(Vector2D location) {
+	public void setLocation(Vector2f location) {
 	}
 
 	@Override
-	public void setTarget(Vector2D target) {
+	public void setTarget(Vector2f target) {
 	}
 
 	@Override
-	public Vector2D getMovingDirection() {
+	public Vector2f getMovingDirection() {
 		if (System.currentTimeMillis() - lastChange > 3000) {
 			lastChange = System.currentTimeMillis();
 			lastIndex = r.nextInt(10);

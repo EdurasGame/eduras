@@ -12,6 +12,7 @@ import java.util.LinkedList;
  * @author illonis
  * 
  */
+@Deprecated
 public class Vector2D {
 
 	private double x;
@@ -69,6 +70,19 @@ public class Vector2D {
 	 */
 	public double getX() {
 		return x;
+	}
+
+	/**
+	 * Moves this vector by given values.
+	 * 
+	 * @param xDiff
+	 *            x movement.
+	 * @param yDiff
+	 *            y movement.
+	 */
+	public void translate(double xDiff, double yDiff) {
+		modifyX(xDiff);
+		modifyY(yDiff);
 	}
 
 	/**
@@ -192,6 +206,31 @@ public class Vector2D {
 		double radian = Geometry.toRadian(degrees);
 		this.x = oldX * Math.cos(radian) - oldY * Math.sin(radian);
 		this.y = oldX * Math.sin(radian) + oldY * Math.cos(radian);
+	}
+
+	/**
+	 * Rotates this vector by given angle using given point as rotation-center.
+	 * 
+	 * @param degrees
+	 *            the angle in degrees.
+	 * @param center
+	 *            the center point.
+	 */
+	public void rotate(double degrees, Vector2D center) {
+		if (center.isNull()) {
+			rotate(degrees);
+			return;
+		}
+		degrees = BasicMath.calcModulo(degrees, 360);
+		if (degrees == 0)
+			return;
+		double oldX = this.x;
+		double oldY = this.y;
+		double radian = Geometry.toRadian(degrees);
+		this.x = center.getX() + Math.cos(radian) * (oldX - center.getX())
+				- Math.sin(radian) * (oldY - center.getY());
+		this.y = center.getY() + Math.sin(radian) * (oldX - center.getX())
+				+ Math.cos(radian) * (oldY - center.getY());
 	}
 
 	/**

@@ -6,6 +6,8 @@ import java.util.Collection;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.newdawn.slick.geom.Vector2f;
+
 import de.eduras.eventingserver.ClientInterface;
 import de.illonis.edulog.EduLog;
 import de.illonis.eduras.ClientGameMode;
@@ -19,7 +21,7 @@ import de.illonis.eduras.events.GameEvent;
 import de.illonis.eduras.events.GameEvent.GameEventNumber;
 import de.illonis.eduras.events.ItemEvent;
 import de.illonis.eduras.events.ObjectFactoryEvent;
-import de.illonis.eduras.events.SetDoubleGameObjectAttributeEvent;
+import de.illonis.eduras.events.SetFloatGameObjectAttributeEvent;
 import de.illonis.eduras.events.SetGameObjectAttributeEvent;
 import de.illonis.eduras.events.SetVisibilityEvent;
 import de.illonis.eduras.exceptions.MessageNotSupportedException;
@@ -34,8 +36,9 @@ import de.illonis.eduras.interfaces.GameLogicInterface;
 import de.illonis.eduras.items.Item;
 import de.illonis.eduras.logic.ClientLogic;
 import de.illonis.eduras.logic.EventTriggerer;
+import de.illonis.eduras.logic.LogicGameWorker;
 import de.illonis.eduras.maps.Map;
-import de.illonis.eduras.math.Vector2D;
+import de.illonis.eduras.math.Vector2df;
 import de.illonis.eduras.units.PlayerMainFigure;
 import de.illonis.eduras.units.PlayerMainFigure.InteractMode;
 import de.illonis.eduras.units.Unit;
@@ -73,7 +76,9 @@ public class EdurasInitializer {
 
 			@Override
 			public void createMissile(ObjectType missileType, int owner,
-					Vector2D position, Vector2D speedVector) {
+
+			Vector2df position, Vector2df speedVector) {
+
 			}
 
 			@Override
@@ -81,13 +86,14 @@ public class EdurasInitializer {
 			}
 
 			@Override
-			public int createObjectAt(ObjectType object, Vector2D position,
+			public int createObjectAt(ObjectType object, Vector2df position,
 					int owner) {
 				return -1;
 			}
 
 			@Override
-			public void setPolygonData(int objectId, Vector2D[] polygonVertices) {
+			public void setPolygonData(int objectId,
+					Vector2df[] polygonVector2dfs) {
 			}
 
 			@Override
@@ -105,12 +111,12 @@ public class EdurasInitializer {
 
 			@Override
 			public void maybeSetPositionOfObject(int objectId,
-					Vector2D newPosition) {
+					Vector2df newPosition) {
 			}
 
 			@Override
 			public void guaranteeSetPositionOfObject(int objectId,
-					Vector2D newPosition) {
+					Vector2df newPosition) {
 			}
 
 			@Override
@@ -158,7 +164,7 @@ public class EdurasInitializer {
 			}
 
 			@Override
-			public void sendUnit(int objectId, Vector2D target)
+			public void sendUnit(int objectId, Vector2f target)
 					throws ObjectNotFoundException,
 					UnitNotControllableException {
 			}
@@ -210,7 +216,7 @@ public class EdurasInitializer {
 					return;
 				}
 
-				SetDoubleGameObjectAttributeEvent setRotationEvent = new SetDoubleGameObjectAttributeEvent(
+				SetFloatGameObjectAttributeEvent setRotationEvent = new SetFloatGameObjectAttributeEvent(
 						GameEventNumber.SET_ROTATION, gameObject.getId(),
 						gameObject.getRotation());
 				try {
@@ -234,7 +240,7 @@ public class EdurasInitializer {
 
 			@Override
 			public void createDynamicPolygonObjectAt(ObjectType type,
-					Vector2D[] polygonVertices, Vector2D position, int owner) {
+					Vector2df[] polygonVector2dfs, Vector2df position, int owner) {
 			}
 
 			@Override
@@ -326,9 +332,11 @@ public class EdurasInitializer {
 
 	/**
 	 * Starts the logic game worker.
+	 * 
+	 * @return the worker.
 	 */
-	public void startLogicWorker() {
-		logic.startWorker();
+	public LogicGameWorker startLogicWorker() {
+		return logic.startWorker();
 	}
 
 	/**

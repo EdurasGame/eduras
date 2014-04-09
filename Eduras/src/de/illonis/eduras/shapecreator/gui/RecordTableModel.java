@@ -8,8 +8,8 @@ import javax.swing.JTable;
 import javax.swing.table.AbstractTableModel;
 
 import de.illonis.eduras.images.ImageFiler;
+import de.illonis.eduras.math.Vector2df;
 import de.illonis.eduras.shapecreator.DataHolder;
-import de.illonis.eduras.shapecreator.Vertice;
 
 /**
  * Handles the table data.
@@ -37,7 +37,7 @@ public class RecordTableModel extends AbstractTableModel {
 	public void fireTableDataChanged() {
 		lstRecords.clear();
 		DataHolder data = DataHolder.getInstance();
-		for (Vertice v : data.getPolygon().getVertices()) {
+		for (Vector2df v : data.getPolygon().getVector2dfs()) {
 			lstRecords.add(new TableRecord(v));
 		}
 		super.fireTableDataChanged();
@@ -136,8 +136,8 @@ public class RecordTableModel extends AbstractTableModel {
 	 *            the row index.
 	 * @return the vertice that is represented by given row.
 	 */
-	public Vertice getVertice(int row) {
-		return lstRecords.get(row).getVertice();
+	public Vector2df getVector2df(int row) {
+		return lstRecords.get(row).getVector2df();
 	}
 
 	@Override
@@ -150,14 +150,14 @@ public class RecordTableModel extends AbstractTableModel {
 		TableRecord record = lstRecords.get(rowIndex);
 		switch (columnIndex) {
 		case 0:
-			record.setX((aValue == null ? 0 : Double.parseDouble(aValue
+			record.setX((aValue == null ? 0 : Float.parseFloat(aValue
 					.toString())));
 			fireTableCellUpdated(rowIndex, columnIndex);
 			break;
 		case 1:
 			if (aValue != null) {
 				try {
-					double value = Double.parseDouble(aValue.toString());
+					float value = Float.parseFloat(aValue.toString());
 					record.setY(value);
 					fireTableCellUpdated(rowIndex, columnIndex);
 				} catch (NumberFormatException e) {
@@ -171,13 +171,13 @@ public class RecordTableModel extends AbstractTableModel {
 	/**
 	 * Mark the row that contains given vertice as selected.
 	 * 
-	 * @param selectedVertice
+	 * @param selectedVector2df
 	 *            the vertice of row that should selected.
 	 */
-	public void selectVertice(Vertice selectedVertice) {
+	public void selectVector2df(Vector2df selectedVector2df) {
 		for (int i = 0; i < lstRecords.size(); i++) {
 			TableRecord record = lstRecords.get(i);
-			if (record.getVertice().equals(selectedVertice))
+			if (record.getVector2df().equals(selectedVector2df))
 				table.setRowSelectionInterval(i, i);
 		}
 

@@ -1,9 +1,14 @@
 package de.illonis.eduras.gameobjects;
 
+import java.util.Iterator;
+import java.util.LinkedList;
+
+import org.newdawn.slick.geom.Vector2f;
+
 import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.exceptions.MapBorderReachedException;
 import de.illonis.eduras.interfaces.Moveable;
-import de.illonis.eduras.math.Vector2D;
+import de.illonis.eduras.math.ShapeGeometry;
 
 /**
  * A moveable gameobject. It differs from {@link GameObject} because it has a
@@ -27,8 +32,9 @@ public abstract class MoveableGameObject extends GameObject implements Moveable 
 
 	private Direction currentDirection;
 
-	private double speed = 0;
-	private Vector2D speedVector = new Vector2D();
+	private float speed = 0;
+	protected float currentSpeedX;
+	protected float currentSpeedY;
 
 	/**
 	 * Returns true if movement direction is horizontal.
@@ -54,6 +60,8 @@ public abstract class MoveableGameObject extends GameObject implements Moveable 
 	public MoveableGameObject(GameInformation game, TimingSource timingSource,
 			int id) {
 		super(game, timingSource, id);
+		currentSpeedX = 0f;
+		currentSpeedY = 0f;
 	}
 
 	/**
@@ -72,7 +80,7 @@ public abstract class MoveableGameObject extends GameObject implements Moveable 
 	 * @param speed
 	 *            new speed.
 	 */
-	public void setSpeed(double speed) {
+	public void setSpeed(float speed) {
 		this.speed = speed;
 	}
 
@@ -81,7 +89,7 @@ public abstract class MoveableGameObject extends GameObject implements Moveable 
 	 * 
 	 * @return speed of gameobject.
 	 */
-	public double getSpeed() {
+	public float getSpeed() {
 		return speed;
 	}
 
@@ -91,8 +99,9 @@ public abstract class MoveableGameObject extends GameObject implements Moveable 
 	 * @param speedVector
 	 *            new speed vector
 	 */
-	public void setSpeedVector(Vector2D speedVector) {
-		this.speedVector = speedVector;
+	public void setSpeedVector(Vector2f speedVector) {
+		currentSpeedX = speedVector.x;
+		currentSpeedY = speedVector.y;
 	}
 
 	/**
@@ -102,32 +111,40 @@ public abstract class MoveableGameObject extends GameObject implements Moveable 
 	 * 
 	 * @author illonis
 	 */
-	public Vector2D getSpeedVector() {
-		return speedVector;
+	public Vector2f getSpeedVector() {
+		return new Vector2f(currentSpeedX, currentSpeedY);
 	}
 
 	@Override
-	public void onMove(long delta) {
-		if (speedVector.isNull())
+	public void onMove(long delta, ShapeGeometry geometry) {
+		if (currentSpeedX == 0f && currentSpeedY == 0f)
 			return;
-		double distance = speed * (delta / (double) 1000L);
-		Vector2D unitSpeed = speedVector.getUnitVector();
-		unitSpeed.mult(distance);
-		double targetX = unitSpeed.getX() + getXPosition();
-		double targetY = unitSpeed.getY() + getYPosition();
+		float distance = speed * ((float) delta / 1000L);
 
-		Vector2D targetPos;
-		try {
-			targetPos = this
-					.checkCollisionOnMove(new Vector2D(targetX, targetY));
-			setPosition(targetPos.getX(), targetPos.getY());
-		} catch (MapBorderReachedException e) {
-			onMapBoundsReached();
+		Vector2f target = getSpeedVector().normalise().scale(distance)
+				.add(getPositionVector());
+
+		Vector2f targetPos;
+		LinkedList<GameObject> touched = new LinkedList<GameObject>();
+		LinkedList<GameObject> collided = new LinkedList<GameObject>();
+		targetPos = geometry.moveTo(this, target, touched, collided);
+		setPosition(targetPos);
+		for (Iterator<GameObject> iterator = collided.iterator(); iterator
+				.hasNext();) {
+			GameObject gameObject = iterator.next();
+			gameObject.onCollision(this);
+			onCollision(gameObject);
+		}
+		for (Iterator<GameObject> iterator = touched.iterator(); iterator
+				.hasNext();) {
+			GameObject gameObject = iterator.next();
+			gameObject.onTouch(this);
+			onTouch(gameObject);
 		}
 	}
 
 	@Override
-	public void onRotate(double rotationAngle) {
+	public void onRotate(float rotationAngle, ShapeGeometry geometry) {
 		rotationAngle = checkCollisionOnRotation(rotationAngle);
 		rotation = rotationAngle;
 	}
@@ -143,20 +160,20 @@ public abstract class MoveableGameObject extends GameObject implements Moveable 
 	 * @throws MapBorderReachedException
 	 *             if object reached map border.
 	 */
-	public Vector2D checkCollisionOnMove(Vector2D target)
+	public Vector2f checkCollisionOnMove(Vector2f target)
 			throws MapBorderReachedException {
-
-		Vector2D currentTarget = target;
-		Vector2D collisionPoint = this.getShape().checkCollisionOnMove(
-				getGame(), this, currentTarget);
-
-		while (!collisionPoint.equals(currentTarget)) {
-			currentTarget = collisionPoint;
-			collisionPoint = this.getShape().checkCollisionOnMove(getGame(),
-					this, currentTarget);
-		}
-
-		return currentTarget;
+		return target;
+		// Vector2df currentTarget = target;
+		// Vector2df collisionPoint = this.getShape().checkCollisionOnMove(
+		// getGame(), this, currentTarget);
+		//
+		// while (!collisionPoint.equals(currentTarget)) {
+		// currentTarget = collisionPoint;
+		// collisionPoint = this.getShape().checkCollisionOnMove(getGame(),
+		// this, currentTarget);
+		// }
+		//
+		// return currentTarget;
 	}
 
 	/**
@@ -167,8 +184,9 @@ public abstract class MoveableGameObject extends GameObject implements Moveable 
 	 *            The absolute target angle the object tries to rotate to.
 	 * @return Returns the angle of the gameobject after the rotation.
 	 */
-	public double checkCollisionOnRotation(double targetRotationAngle) {
-		return this.getShape().checkCollisionOnRotation(getGame(), this,
-				targetRotationAngle);
+	public float checkCollisionOnRotation(float targetRotationAngle) {
+		return targetRotationAngle;
+		// return this.getShape().checkCollisionOnRotation(getGame(), this,
+		// targetRotationAngle);
 	}
 }

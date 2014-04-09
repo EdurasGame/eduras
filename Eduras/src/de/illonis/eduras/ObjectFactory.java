@@ -37,7 +37,7 @@ import de.illonis.eduras.items.weapons.SplashWeapon;
 import de.illonis.eduras.items.weapons.SplashedMissile;
 import de.illonis.eduras.items.weapons.SwordMissile;
 import de.illonis.eduras.items.weapons.SwordWeapon;
-import de.illonis.eduras.math.Vector2D;
+import de.illonis.eduras.math.Vector2df;
 import de.illonis.eduras.settings.S;
 import de.illonis.eduras.units.PlayerMainFigure;
 
@@ -147,7 +147,7 @@ public class ObjectFactory {
 				logic.getGame().addPlayer((PlayerMainFigure) go);
 
 				L.info("Player " + event.getOwner() + " created");
-				testSpawnBird();
+				//testSpawnBird();
 				break;
 			case SIMPLEMISSILE:
 				go = new SimpleMissile(logic.getGame(), timingSource, id);
@@ -285,7 +285,7 @@ public class ObjectFactory {
 		o.setPosition(w, h);
 		LinkedList<Integer> units = new LinkedList<Integer>();
 		units.add(999);
-		SendUnitsEvent sendEvent = new SendUnitsEvent(-1, new Vector2D(), units);
+		SendUnitsEvent sendEvent = new SendUnitsEvent(-1, new Vector2df(), units);
 		logic.onGameEventAppeared(sendEvent);
 	}
 }

@@ -49,8 +49,10 @@ public interface GameLogicInterface {
 
 	/**
 	 * Starts the {@link LogicGameWorker}.
+	 * 
+	 * @return the worker.
 	 */
-	public void startWorker();
+	public LogicGameWorker startWorker();
 
 	/**
 	 * Indicates shutdown of server/client and stops the gameworker.

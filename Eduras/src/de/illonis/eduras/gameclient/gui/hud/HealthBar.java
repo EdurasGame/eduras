@@ -1,9 +1,10 @@
 package de.illonis.eduras.gameclient.gui.hud;
 
-import java.awt.Color;
-import java.awt.Graphics2D;
+import org.newdawn.slick.Color;
+import org.newdawn.slick.Graphics;
 
 import de.illonis.eduras.gameclient.gui.game.GameCamera;
+import de.illonis.eduras.units.PlayerMainFigure;
 import de.illonis.eduras.units.Unit;
 
 /**
@@ -15,8 +16,6 @@ import de.illonis.eduras.units.Unit;
  */
 public class HealthBar {
 
-	private static final Color TRANSLUCENT = new Color(0, 0, 0, 0);
-
 	private final static HealthBar instance = new HealthBar();
 	private final static int HEALTHBAR_WIDTH = 50;
 	private final static int HEALTHBAR_HEIGHT = 5;
@@ -24,6 +23,7 @@ public class HealthBar {
 	 * Gap between unit and health bar.
 	 */
 	private final static int UNIT_GAP = 5;
+	private final static int NAME_GAP = 5;
 
 	private int x, y, w, h;
 
@@ -38,42 +38,29 @@ public class HealthBar {
 	 * 
 	 * @param unit
 	 *            unit that's health should be shown.
+	 * @param g
+	 *            the target graphics
+	 * @param camera
+	 *            the current camera.
 	 */
-	public static void calculateFor(Unit unit) {
+	public static void calculateAndDrawFor(Unit unit, Graphics g,
+			GameCamera camera) {
 		int maxHealth = unit.getMaxHealth();
 		int health = unit.getHealth();
 
-		instance.w = (int) Math.round((double) health / maxHealth
+		instance.w = (int) Math.round((float) health / maxHealth
 				* HEALTHBAR_WIDTH);
-
-		double overlength = (HEALTHBAR_WIDTH - unit.getBoundingBox().getWidth()) / 2;
-
-		instance.x = (int) Math.round(unit.getDrawX() - overlength);
-
-		// TODO: make position of objects either topleft or center, but make it
-		// unitary.
-		// fix because topleft is middle in triangles.
-		instance.x -= (int) unit.getBoundingBox().getWidth() / 2;
-
-		instance.y = (int) (unit.getBoundingBox().getY() - HEALTHBAR_HEIGHT - UNIT_GAP);
-
-	}
-
-	/**
-	 * Draws current healthbar settings to given graphic object.
-	 * 
-	 * @param g2d
-	 *            target graphics.
-	 * @param camera
-	 *            camera offset.
-	 */
-	public static void draw(Graphics2D g2d, GameCamera camera) {
-		// g2d.setColor(Color.black);
-		g2d.setColor(TRANSLUCENT); // translucent
-		g2d.fillRect(instance.x - camera.x, instance.y - camera.y,
-				HEALTHBAR_WIDTH, HEALTHBAR_HEIGHT);
-		g2d.setColor(Color.yellow);
-		g2d.fillRect(instance.x - camera.x, instance.y - camera.y, instance.w,
-				instance.h);
+		double unitHalfWidth = unit.getShape().getWidth() / 2;
+		instance.x = (int) Math.round(unit.getDrawX() + unitHalfWidth
+				- HEALTHBAR_WIDTH / 2);
+		instance.y = unit.getDrawY() - HEALTHBAR_HEIGHT - UNIT_GAP;
+		g.setColor(Color.yellow);
+		g.fillRect(instance.x, instance.y ,
+				instance.w, instance.h);
+		if (unit instanceof PlayerMainFigure) {
+			PlayerMainFigure player = (PlayerMainFigure) unit;
+			g.drawString(player.getName(), instance.x,
+					instance.y - HEALTHBAR_HEIGHT - UNIT_GAP - NAME_GAP);
+		}
 	}
 }

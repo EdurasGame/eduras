@@ -10,8 +10,16 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.lang.reflect.Field;
+import java.net.URI;
+import java.nio.file.Files;
+import java.nio.file.LinkOption;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Vector;
@@ -34,6 +42,7 @@ import de.illonis.eduras.beta.BetaAuthenticator;
 import de.illonis.eduras.gameclient.gui.ClientFrame;
 import de.illonis.eduras.gameclient.gui.FullScreenClientFrame;
 import de.illonis.eduras.settings.S;
+import de.illonis.eduras.utils.PathFinder;
 import de.illonis.eduras.utils.ReflectionTools;
 
 /**
@@ -46,6 +55,13 @@ public class EdurasClient {
 
 	private final static Logger L = EduLog.getLoggerFor(EdurasClient.class
 			.getName());
+
+	private final static String[] nativeFiles = new String[] {
+			"jinput-dx8_64.dll", "jinput-dx8.dll", "jinput-raw_64.dll",
+			"jinput-raw.dll", "libjinput-linux.so", "libjinput-linux64.so",
+			"libjinput-osx.jnilib", "liblwjgl.jnilib", "liblwjgl.so",
+			"liblwjgl64.so", "libopenal.so", "libopenal64.so", "lwjgl.dll",
+			"lwjgl64.dll", "openal.dylib", "OpenAL32.dll", "OpenAL64.dll" };
 
 	/**
 	 * Indicates how long an Eduras client tries to connect to a server.
@@ -73,6 +89,7 @@ public class EdurasClient {
 			e.printStackTrace();
 		}
 
+		boolean debug = false;
 		// arguments are of form <parametername>=<parametervalue>
 		String[][] parametersWithValues = new String[args.length][2];
 
@@ -108,6 +125,8 @@ public class EdurasClient {
 				betaPassword = parameterValue;
 			} else if (parameterName.equalsIgnoreCase("loglimit")) {
 				logLimit = Level.parse(parameterValue);
+			} else if (parameterName.equalsIgnoreCase("debug")) {
+				debug = true;
 			} else if (parameterName.startsWith(sClassName + ".")) {
 				try {
 					Field f = S.class.getField(parameterName
@@ -129,14 +148,51 @@ public class EdurasClient {
 		EduLog.setConsoleLogLimit(logLimit);
 		EduLog.setFileLogLimit(logLimit);
 		SysOutCatcher.startCatching();
+		try {
+			extractNatives();
+		} catch (UnsatisfiedLinkError | IOException e) {
+			L.log(Level.SEVERE, "Could not extract native libraries.", e);
+		}
 
 		// Note that this is very bad coded due to testing ;)
 		// buildChooserFrame();
+
+		if (!debug)
+			System.setProperty("org.lwjgl.librarypath",
+					(new File(PathFinder.findFile("native"))).getAbsolutePath());
 
 		BetaAuthenticator authenticator = new BetaAuthenticator();
 		if (authenticator.authenticate(3, betaUser, betaPassword)) {
 			startWindowed();
 		}
+	}
+
+	private static void extractNatives() throws UnsatisfiedLinkError,
+			IOException {
+		URI nativeDir = PathFinder.findFile("native/");
+		Path nativePath = Paths.get(nativeDir);
+		if (Files.exists(nativePath, LinkOption.NOFOLLOW_LINKS)) {
+			L.info("Found native folder. Skipping extraction.");
+			return;
+		} else {
+			L.fine("Creating native directory at " + nativePath);
+			Files.createDirectory(nativePath);
+		}
+
+		L.info("Extracting native libraries...");
+		for (String file : nativeFiles) {
+			InputStream internalFile = EdurasClient.class
+					.getResourceAsStream("/native/" + file);
+			if (internalFile == null)
+				throw new UnsatisfiedLinkError("Could not load " + file);
+
+			Path target = Paths.get(nativeDir.resolve(file));
+			Files.copy(internalFile, target,
+					StandardCopyOption.REPLACE_EXISTING);
+		}
+
+		L.info("Done extracting native libraries.");
+		System.exit(0);
 	}
 
 	protected static void startWindowed() {

@@ -13,7 +13,7 @@ import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.gameobjects.NeutralBase;
 import de.illonis.eduras.maps.EduraMap;
 import de.illonis.eduras.maps.NodeData;
-import de.illonis.eduras.math.Vector2D;
+import de.illonis.eduras.math.Vector2df;
 import de.illonis.eduras.math.graphs.Vertex;
 import de.illonis.eduras.units.Unit;
 
@@ -63,7 +63,7 @@ public class Edura extends TeamDeathmatch {
 			int nodeid = nodeData.getId();
 			int objectId = gameInfo.getEventTriggerer().createObjectAt(
 					ObjectType.NEUTRAL_BASE,
-					new Vector2D(nodeData.getX(), nodeData.getY()), -1);
+					new Vector2df(nodeData.getX(), nodeData.getY()), -1);
 
 			NeutralBase base = (NeutralBase) gameInfo.findObjectById(objectId);
 			nodeIdToBase.put(nodeid, base);

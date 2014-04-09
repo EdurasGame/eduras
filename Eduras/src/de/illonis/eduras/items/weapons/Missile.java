@@ -2,13 +2,15 @@ package de.illonis.eduras.items.weapons;
 
 import java.util.LinkedList;
 
+import org.newdawn.slick.geom.Circle;
+
 import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.gameobjects.MoveableGameObject;
 import de.illonis.eduras.gameobjects.TimingSource;
-import de.illonis.eduras.math.Vector2D;
+import de.illonis.eduras.math.ShapeGeometry;
+import de.illonis.eduras.math.Vector2df;
 import de.illonis.eduras.settings.S;
-import de.illonis.eduras.shapes.Circle;
 import de.illonis.eduras.units.Unit;
 
 /**
@@ -20,9 +22,9 @@ import de.illonis.eduras.units.Unit;
 public abstract class Missile extends MoveableGameObject {
 
 	private int damage;
-	private double damageRadius;
-	private double maxRange = 0;
-	private double rangeMoved;
+	private float damageRadius;
+	private float maxRange = 0;
+	private float rangeMoved;
 
 	/**
 	 * Creates a new missile with the id given and in the context of specific
@@ -38,7 +40,8 @@ public abstract class Missile extends MoveableGameObject {
 	public Missile(GameInformation game, TimingSource timingSource, int id) {
 		super(game, timingSource, id);
 		rangeMoved = 0;
-		setShape(new Circle(S.go_missile_radius));
+		setShape(new Circle(S.go_missile_radius, S.go_missile_radius,
+				S.go_missile_radius));
 	}
 
 	/**
@@ -48,7 +51,7 @@ public abstract class Missile extends MoveableGameObject {
 	 * 
 	 * @author illonis
 	 */
-	public double getMaxRange() {
+	public float getMaxRange() {
 		return maxRange;
 	}
 
@@ -60,7 +63,7 @@ public abstract class Missile extends MoveableGameObject {
 	 * 
 	 * @author illonis
 	 */
-	protected void setMaxRange(double maxRange) {
+	protected void setMaxRange(float maxRange) {
 		this.maxRange = maxRange;
 	}
 
@@ -89,7 +92,7 @@ public abstract class Missile extends MoveableGameObject {
 	 * 
 	 * @return the radius
 	 */
-	public double getDamageRadius() {
+	public float getDamageRadius() {
 		return damageRadius;
 	}
 
@@ -99,19 +102,19 @@ public abstract class Missile extends MoveableGameObject {
 	 * 
 	 * @param damageRadius
 	 */
-	public void setDamageRadius(double damageRadius) {
+	public void setDamageRadius(float damageRadius) {
 		this.damageRadius = damageRadius;
 	}
 
 	@Override
-	public void onMove(long delta) {
+	public void onMove(long delta, ShapeGeometry geometry) {
 		if (maxRange == 0)
-			super.onMove(delta);
+			super.onMove(delta, geometry);
 		else {
-			Vector2D lastPos = getPositionVector();
-			super.onMove(delta);
-			Vector2D newPos = getPositionVector();
-			rangeMoved += lastPos.calculateDistance(newPos);
+			Vector2df lastPos = getPositionVector();
+			super.onMove(delta, geometry);
+			Vector2df newPos = getPositionVector();
+			rangeMoved += lastPos.distance(newPos);
 			if (rangeMoved > maxRange)
 				removeSelf();
 		}
@@ -143,11 +146,6 @@ public abstract class Missile extends MoveableGameObject {
 			}
 		}
 		// TODO: use damage radius
-		removeSelf();
-	}
-
-	@Override
-	public void onMapBoundsReached() {
 		removeSelf();
 	}
 

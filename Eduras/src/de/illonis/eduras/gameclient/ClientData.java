@@ -1,6 +1,8 @@
 package de.illonis.eduras.gameclient;
 
 import java.util.LinkedList;
+import java.util.Set;
+import java.util.TreeSet;
 
 import de.illonis.eduras.gameclient.gui.animation.Animation;
 import de.illonis.eduras.logicabstraction.InformationProvider;
@@ -14,7 +16,7 @@ import de.illonis.eduras.logicabstraction.InformationProvider;
  * 
  */
 public final class ClientData {
-	private final LinkedList<Integer> selectedUnits;
+	private final TreeSet<Integer> selectedUnits;
 	private final LinkedList<Animation> animations;
 	private final VisionInformation visionInfo;
 	private int currentItemSelected;
@@ -24,7 +26,7 @@ public final class ClientData {
 	 */
 	public ClientData() {
 		currentItemSelected = -1;
-		selectedUnits = new LinkedList<Integer>();
+		selectedUnits = new TreeSet<Integer>();
 		animations = new LinkedList<Animation>();
 		visionInfo = new VisionInformation();
 	}
@@ -60,8 +62,8 @@ public final class ClientData {
 	 * 
 	 * @return a list of selected units.
 	 */
-	public LinkedList<Integer> getSelectedUnits() {
-		return new LinkedList<Integer>(selectedUnits);
+	public Set<Integer> getSelectedUnits() {
+		return selectedUnits;
 	}
 
 	/**

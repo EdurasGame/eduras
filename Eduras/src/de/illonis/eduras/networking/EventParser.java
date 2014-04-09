@@ -1,8 +1,10 @@
 package de.illonis.eduras.networking;
 
-import java.awt.Color;
 import java.util.LinkedList;
 import java.util.logging.Logger;
+
+import org.newdawn.slick.Color;
+import org.newdawn.slick.geom.Vector2f;
 
 import de.eduras.eventingserver.Event;
 import de.eduras.eventingserver.EventHandler;
@@ -26,7 +28,7 @@ import de.illonis.eduras.events.ObjectFactoryEvent;
 import de.illonis.eduras.events.SendUnitsEvent;
 import de.illonis.eduras.events.SetAmmunitionEvent;
 import de.illonis.eduras.events.SetBooleanGameObjectAttributeEvent;
-import de.illonis.eduras.events.SetDoubleGameObjectAttributeEvent;
+import de.illonis.eduras.events.SetFloatGameObjectAttributeEvent;
 import de.illonis.eduras.events.SetGameModeEvent;
 import de.illonis.eduras.events.SetIntegerGameObjectAttributeEvent;
 import de.illonis.eduras.events.SetInteractModeEvent;
@@ -43,7 +45,7 @@ import de.illonis.eduras.events.UserMovementEvent;
 import de.illonis.eduras.exceptions.InvalidNameException;
 import de.illonis.eduras.gameobjects.GameObject.Visibility;
 import de.illonis.eduras.interfaces.GameLogicInterface;
-import de.illonis.eduras.math.Vector2D;
+import de.illonis.eduras.math.Vector2df;
 import de.illonis.eduras.units.PlayerMainFigure.InteractMode;
 
 /**
@@ -141,16 +143,17 @@ public class EventParser implements EventHandler {
 								.getArgument(0), (Integer) event.getArgument(1)));
 				break;
 			case SET_ROTATION:
-				logic.onGameEventAppeared(new SetDoubleGameObjectAttributeEvent(
-						GameEventNumber.SET_ROTATION, (Integer) event
-								.getArgument(0), (Double) event.getArgument(1)));
+				logic.onGameEventAppeared(new SetFloatGameObjectAttributeEvent(
+						GameEventNumber.SET_ROTATION, (int) event
+								.getArgument(0), (float) event.getArgument(1)));
 				break;
 			case ITEM_USE:
 				ItemEvent itemEvent = new ItemEvent(GameEventNumber.ITEM_USE,
 						(Integer) event.getArgument(1),
 						(Integer) event.getArgument(0));
-				itemEvent.setTargetX((Double) event.getArgument(2));
-				itemEvent.setTargetY((Double) event.getArgument(3));
+				float x = (float) event.getArgument(2);
+				float y = (float) event.getArgument(3);
+				itemEvent.setTarget(new Vector2df(x, y));
 				logic.onGameEventAppeared(itemEvent);
 				break;
 			case SWITCH_INTERACTMODE:
@@ -160,8 +163,8 @@ public class EventParser implements EventHandler {
 						(Integer) event.getArgument(0), mode));
 				break;
 			case SEND_UNITS:
-				Vector2D target = new Vector2D((Double) event.getArgument(1),
-						(Double) event.getArgument(2));
+				Vector2df target = new Vector2df((float) event.getArgument(1),
+						(float) event.getArgument(2));
 
 				LinkedList<Integer> unitIds = new LinkedList<Integer>();
 				for (int i = 3; i < numberOfArgs; i++) {
@@ -177,8 +180,8 @@ public class EventParser implements EventHandler {
 				MovementEvent setPosEvent = new MovementEvent(
 						GameEventNumber.SET_POS_TCP,
 						(Integer) event.getArgument(0));
-				setPosEvent.setNewXPos((Double) event.getArgument(1));
-				setPosEvent.setNewYPos((Double) event.getArgument(2));
+				setPosEvent.setNewXPos((float) event.getArgument(1));
+				setPosEvent.setNewYPos((float) event.getArgument(2));
 				logic.onGameEventAppeared(setPosEvent);
 				break;
 			case SET_OWNER:
@@ -197,12 +200,12 @@ public class EventParser implements EventHandler {
 				break;
 			case SET_POLYGON_DATA:
 				int numberOfVertices = (numberOfArgs - 1) / 2;
-				Vector2D[] vertices = new Vector2D[numberOfVertices];
+				Vector2f[] vertices = new Vector2f[numberOfVertices];
 
 				for (int i = 0; i < numberOfVertices; i++) {
-					Vector2D vertex = new Vector2D(
-							(Double) event.getArgument(2 * i + 1),
-							(Double) event.getArgument(2 * i + 2));
+					Vector2f vertex = new Vector2f(
+							(float) event.getArgument(2 * i + 1),
+							(float) event.getArgument(2 * i + 2));
 					vertices[i] = vertex;
 				}
 				logic.onGameEventAppeared(new SetPolygonDataEvent(
@@ -273,10 +276,12 @@ public class EventParser implements EventHandler {
 				break;
 			case SET_TEAMS:
 				SetTeamsEvent setTeamsEvent = new SetTeamsEvent();
-				for (int i = 0; i < numberOfArgs; i = i + 3) {
+				for (int i = 0; i < numberOfArgs; i = i + 5) {
 					setTeamsEvent.addTeam(new Team((String) event
 							.getArgument(i), (int) event.getArgument(i + 1),
-							new Color((int) event.getArgument(i + 2))));
+							new Color((int) event.getArgument(i + 2),
+									(int) event.getArgument(i + 3), (int) event
+											.getArgument(i + 4))));
 				}
 				logic.onGameEventAppeared(setTeamsEvent);
 				break;
@@ -305,8 +310,8 @@ public class EventParser implements EventHandler {
 				MovementEvent movementEvent = new MovementEvent(
 						GameEventNumber.SET_SPEEDVECTOR,
 						(Integer) event.getArgument(0));
-				movementEvent.setNewXPos((Double) event.getArgument(1));
-				movementEvent.setNewYPos((Double) event.getArgument(2));
+				movementEvent.setNewXPos((float) event.getArgument(1));
+				movementEvent.setNewYPos((float) event.getArgument(2));
 				logic.onGameEventAppeared(movementEvent);
 				break;
 			case SET_INTERACTMODE:

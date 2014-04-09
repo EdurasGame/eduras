@@ -45,7 +45,9 @@ public class SetTeamsEvent extends GameEvent {
 		teamList.add(team);
 		putArgument(team.getName());
 		putArgument(team.getTeamId());
-		putArgument(team.getColor().getRGB());
+		putArgument(team.getColor().getRed());
+		putArgument(team.getColor().getGreen());
+		putArgument(team.getColor().getBlue());
 	}
 
 	/**
@@ -61,7 +63,7 @@ public class SetTeamsEvent extends GameEvent {
 
 	@Override
 	public int getNumberOfArguments() {
-		return teamList.size() * 3;
+		return teamList.size() * 5;
 	}
 
 }

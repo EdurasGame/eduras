@@ -43,9 +43,4 @@ public class SwordMissile extends Missile {
 		}
 		removeSelf();
 	}
-
-	@Override
-	public void onMapBoundsReached() {
-		removeSelf();
-	}
 }

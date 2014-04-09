@@ -1,8 +1,9 @@
 package de.illonis.eduras.gameclient.gui.hud;
 
-import java.awt.Color;
-import java.awt.Graphics2D;
 import java.util.logging.Logger;
+
+import org.newdawn.slick.Color;
+import org.newdawn.slick.Graphics;
 
 import de.illonis.edulog.EduLog;
 import de.illonis.eduras.gamemodes.GameMode;
@@ -14,11 +15,9 @@ import de.illonis.eduras.gamemodes.GameMode;
  * 
  */
 public class GameModeBar extends RenderedGuiObject {
-	private final static Logger L = EduLog.getLoggerFor("GameModeBar");
+	private final static Logger L = EduLog.getLoggerFor(GameModeBar.class.getName());
 
 	private String mode;
-
-	private static final Color TRANSLUCENT = new Color(0, 0, 0, 0);
 
 	/**
 	 * Creates the game stat bar.
@@ -36,14 +35,14 @@ public class GameModeBar extends RenderedGuiObject {
 	}
 
 	@Override
-	public void render(Graphics2D g2d) {
-		g2d.setColor(Color.WHITE);
-		g2d.drawString(mode, screenX + 20, screenY + 20);
+	public void render(Graphics g) {
+		g.setColor(Color.white);
+		g.drawString(mode, screenX + 10, screenY + 10);
 	}
 
 	@Override
 	public void onGuiSizeChanged(int newWidth, int newHeight) {
-		screenX = newWidth / 2 - 100;
+		screenX = newWidth / 2 ;
 	}
 
 	@Override

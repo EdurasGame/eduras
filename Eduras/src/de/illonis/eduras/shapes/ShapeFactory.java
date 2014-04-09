@@ -4,13 +4,16 @@ import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.newdawn.slick.geom.Polygon;
+import org.newdawn.slick.geom.Shape;
+import org.newdawn.slick.geom.Vector2f;
+
 import de.illonis.edulog.EduLog;
 import de.illonis.eduras.gameclient.datacache.CacheException;
 import de.illonis.eduras.gameclient.datacache.CacheInfo;
 import de.illonis.eduras.gameclient.datacache.ImageCache;
-import de.illonis.eduras.math.Vector2D;
+import de.illonis.eduras.math.Vector2df;
 import de.illonis.eduras.shapecreator.FileCorruptException;
-import de.illonis.eduras.shapes.ObjectShape.ShapeType;
 import de.illonis.eduras.shapes.data.ShapeParser;
 
 /**
@@ -25,7 +28,15 @@ public final class ShapeFactory {
 	private final static Logger L = EduLog.getLoggerFor(ShapeFactory.class
 			.getName());
 
-	private static Vector2D[] getVerticesForShape(ShapeType shapeType) {
+	/**
+	 * All types of shapes.
+	 */
+	@SuppressWarnings("javadoc")
+	public enum ShapeType {
+		BIRD, HOUSE, SWORD, TRIANGLE, ROCKET, STAR;
+	}
+
+	private static Vector2f[] getVerticesForShape(ShapeType shapeType) {
 		try {
 			return ImageCache.getShapeData(shapeType);
 		} catch (CacheException e) {
@@ -33,7 +44,7 @@ public final class ShapeFactory {
 					+ " from cache, loading directly", e);
 			String shapeFile = CacheInfo.getShapeFileName(shapeType);
 			try {
-				Vector2D[] verts = ShapeParser.readShape(ShapeParser.class
+				Vector2df[] verts = ShapeParser.readShape(ShapeParser.class
 						.getResource(shapeFile));
 				return verts;
 			} catch (FileCorruptException | IOException e1) {
@@ -52,14 +63,20 @@ public final class ShapeFactory {
 	 *            the type of the shape.
 	 * @return the newly created shape.
 	 */
-	public static ObjectShape createShape(ShapeType shapeType) {
+	public static Shape createShape(ShapeType shapeType) {
 
-		ObjectShape s;
+		Shape s;
 		switch (shapeType) {
 
 		default:
-			Vector2D[] verts = getVerticesForShape(shapeType);
-			s = new Polygon(verts);
+			Vector2f[] verts = getVerticesForShape(shapeType);
+			float points[] = new float[verts.length * 2];
+
+			for (int i = 0; i < verts.length; i++) {
+				points[2 * i] = verts[i].getX();
+				points[2 * i + 1] = verts[i].getY();
+			}
+			s = new Polygon(points);
 		}
 		return s;
 	}

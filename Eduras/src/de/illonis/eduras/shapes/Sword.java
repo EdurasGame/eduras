@@ -1,6 +1,6 @@
 package de.illonis.eduras.shapes;
 
-import de.illonis.eduras.math.Vector2D;
+import org.newdawn.slick.geom.Polygon;
 
 /**
  * A sword for close combat.
@@ -10,17 +10,21 @@ import de.illonis.eduras.math.Vector2D;
  */
 public class Sword extends Polygon {
 
+	private static final long serialVersionUID = 1L;
+
 	/**
 	 * Creates a new sword.
 	 */
 	public Sword() {
-		super();
-		Vector2D vertices[] = { new Vector2D(-1, -11), new Vector2D(0, -14),
-				new Vector2D(1, -11), new Vector2D(1, -3), new Vector2D(3, -3),
-				new Vector2D(3, -2), new Vector2D(1, -2), new Vector2D(1, 0),
-				new Vector2D(-1, 0), new Vector2D(-1, -2),
-				new Vector2D(-3, -2), new Vector2D(-3, -3),
-				new Vector2D(-1, -3) };
-		setVertices(vertices);
+		addPoint(-1, -11);
+		addPoint(0, -14);
+		addPoint(1, -11);
+		addPoint(1, -3);
+		addPoint(3, -3);
+		addPoint(-1, 0);
+		addPoint(-1, -2);
+		addPoint(-3, -2);
+		addPoint(-3, -3);
+		addPoint(-1, -3);
 	}
 }

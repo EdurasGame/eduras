@@ -1,7 +1,7 @@
 package de.illonis.eduras.maps;
 
 import de.illonis.eduras.ObjectFactory.ObjectType;
-import de.illonis.eduras.math.Vector2D;
+import de.illonis.eduras.math.Vector2df;
 
 /**
  * Holds data for an initial object on a map.
@@ -11,8 +11,8 @@ import de.illonis.eduras.math.Vector2D;
  */
 public class InitialObjectData {
 	private final ObjectType type;
-	private final double x, y;
-	private final Vector2D[] polygonShapeVertices;
+	private final float x, y;
+	private final Vector2df[] polygonShapeVector2dfs;
 
 	/**
 	 * Creates a new dataset holding given information for a new object.
@@ -24,11 +24,11 @@ public class InitialObjectData {
 	 * @param yPos
 	 *            the y-coordinate of the new object.
 	 */
-	public InitialObjectData(ObjectType type, double xPos, double yPos) {
+	public InitialObjectData(ObjectType type, float xPos, float yPos) {
 		this.type = type;
 		this.x = xPos;
 		this.y = yPos;
-		polygonShapeVertices = null;
+		polygonShapeVector2dfs = null;
 	}
 
 	/**
@@ -42,11 +42,11 @@ public class InitialObjectData {
 	 * @param vertices
 	 *            the vertices of the dynamic polygon.
 	 */
-	public InitialObjectData(double xPos, double yPos, Vector2D[] vertices) {
+	public InitialObjectData(float xPos, float yPos, Vector2df[] vertices) {
 		this.type = ObjectType.DYNAMIC_POLYGON_BLOCK;
 		this.x = xPos;
 		this.y = yPos;
-		polygonShapeVertices = vertices;
+		polygonShapeVector2dfs = vertices;
 	}
 
 	/**
@@ -62,12 +62,12 @@ public class InitialObjectData {
 	 * @param vertices
 	 *            the vertices of the dynamic polygon.
 	 */
-	public InitialObjectData(ObjectType type, double xPos, double yPos,
-			Vector2D[] vertices) {
+	public InitialObjectData(ObjectType type, float xPos, float yPos,
+			Vector2df[] vertices) {
 		this.type = type;
 		this.x = xPos;
 		this.y = yPos;
-		polygonShapeVertices = vertices;
+		polygonShapeVector2dfs = vertices;
 	}
 
 	/**
@@ -83,28 +83,28 @@ public class InitialObjectData {
 	 * 
 	 * @return The associated vertices
 	 */
-	public Vector2D[] getPolygonVertices() {
-		return polygonShapeVertices;
+	public Vector2df[] getPolygonVector2dfs() {
+		return polygonShapeVector2dfs;
 	}
 
 	/**
 	 * @return the x coordinate of the object.
 	 */
-	public double getX() {
+	public float getX() {
 		return x;
 	}
 
 	/**
 	 * @return the y coordinate of the object.
 	 */
-	public double getY() {
+	public float getY() {
 		return y;
 	}
 
 	/**
 	 * @return the position as vector.
 	 */
-	public Vector2D getPosition() {
-		return new Vector2D(x, y);
+	public Vector2df getPosition() {
+		return new Vector2df(x, y);
 	}
 }

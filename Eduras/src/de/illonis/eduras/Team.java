@@ -1,7 +1,8 @@
 package de.illonis.eduras;
 
-import java.awt.Color;
 import java.util.LinkedList;
+
+import org.newdawn.slick.Color;
 
 import de.illonis.eduras.units.PlayerMainFigure;
 import de.illonis.eduras.utils.Randomizer;

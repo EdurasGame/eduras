@@ -1,8 +1,9 @@
 package de.illonis.eduras.utils;
 
-import java.awt.Color;
 import java.util.Random;
 import java.util.logging.Logger;
+
+import org.newdawn.slick.Color;
 
 import de.illonis.edulog.EduLog;
 

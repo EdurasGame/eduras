@@ -6,6 +6,9 @@ import java.util.Map.Entry;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.newdawn.slick.geom.Rectangle;
+import org.newdawn.slick.geom.Vector2f;
+
 import de.illonis.edulog.EduLog;
 import de.illonis.eduras.events.GameEvent.GameEventNumber;
 import de.illonis.eduras.events.ItemEvent;
@@ -19,7 +22,8 @@ import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.gameobjects.MoveableGameObject.Direction;
 import de.illonis.eduras.logicabstraction.EdurasInitializer;
 import de.illonis.eduras.logicabstraction.InformationProvider;
-import de.illonis.eduras.math.Vector2D;
+import de.illonis.eduras.math.Geometry;
+import de.illonis.eduras.math.Vector2df;
 import de.illonis.eduras.units.PlayerMainFigure;
 import de.illonis.eduras.units.PlayerMainFigure.InteractMode;
 
@@ -69,7 +73,7 @@ public class GuiInternalEventListener implements LoginPanelReactor,
 	}
 
 	@Override
-	public void onItemUse(int slotId, Vector2D target) {
+	public void onItemUse(int slotId, Vector2f target) {
 		ItemEvent event = new ItemEvent(GameEventNumber.ITEM_USE,
 				client.getOwnerID(), slotId);
 		event.setTarget(target);
@@ -170,6 +174,10 @@ public class GuiInternalEventListener implements LoginPanelReactor,
 
 	@Override
 	public void onUnitsSelected(Rectangle2D.Double area) {
+
+		Rectangle r = new Rectangle((float) area.getX(), (float) area.getY(),
+				(float) area.getWidth(), (float) area.getHeight());
+
 		PlayerMainFigure p;
 		try {
 			p = infoPro.getPlayer();
@@ -178,12 +186,14 @@ public class GuiInternalEventListener implements LoginPanelReactor,
 					"No playermainfigure found after units were selected.", e);
 			return;
 		}
+
 		LinkedList<Integer> ids = new LinkedList<Integer>();
 		for (Entry<Integer, GameObject> obj : infoPro.getGameObjects()
 				.entrySet()) {
 			GameObject o = obj.getValue();
 			if (o.isUnit() && o.isVisibleFor(p)
-					&& o.getBoundingBox().intersects(area)) {
+					&& Geometry.shapeCollides(o.getShape(), r)) {
+
 				ids.add(obj.getKey());
 			}
 		}
@@ -192,7 +202,7 @@ public class GuiInternalEventListener implements LoginPanelReactor,
 	}
 
 	@Override
-	public void selectOrDeselectAt(Vector2D point) {
+	public void selectOrDeselectAt(Vector2f point) {
 		PlayerMainFigure p;
 		try {
 			p = infoPro.getPlayer();
@@ -206,7 +216,7 @@ public class GuiInternalEventListener implements LoginPanelReactor,
 				.entrySet()) {
 			GameObject o = obj.getValue();
 			if (o.isUnit() && o.isVisibleFor(p)
-					&& o.getBoundingBox().contains(point.toPoint())) {
+					&& o.getShape().contains(point.x, point.y)) {
 				client.getData().setSelectedUnit(obj.getKey());
 				return;
 			}
@@ -215,8 +225,9 @@ public class GuiInternalEventListener implements LoginPanelReactor,
 	}
 
 	@Override
-	public void sendSelectedUnits(Vector2D target) {
-		LinkedList<Integer> units = client.getData().getSelectedUnits();
+	public void sendSelectedUnits(Vector2f target) {
+		LinkedList<Integer> units = new LinkedList<Integer>(client.getData()
+				.getSelectedUnits());
 		if (units.isEmpty())
 			return;
 		SendUnitsEvent sendEvent = new SendUnitsEvent(client.getOwnerID(),
@@ -228,7 +239,7 @@ public class GuiInternalEventListener implements LoginPanelReactor,
 		}
 	}
 
-	public void onViewingDirectionChanged(Vector2D viewingPoint) {
+	public void onViewingDirectionChanged(Vector2f viewingPoint) {
 		PlayerMainFigure player;
 		try {
 			player = infoPro.getPlayer();
@@ -236,8 +247,11 @@ public class GuiInternalEventListener implements LoginPanelReactor,
 			L.log(Level.SEVERE, "Cannot find player main figure :(", e);
 			return;
 		}
-		viewingPoint.subtract(player.getPositionVector());
-		double angle = viewingPoint.getAngleToXAxis();
+		Vector2f center = new Vector2f(player.getShape().getCenter())
+				.sub(player.getPositionVector());
+		Vector2df vPoint = new Vector2df(viewingPoint.sub(
+				player.getPositionVector()).sub(center));
+		float angle = vPoint.getAngleToXAxis();
 		player.setRotation(angle);
 	}
 }

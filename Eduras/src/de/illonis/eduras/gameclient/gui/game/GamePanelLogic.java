@@ -1,14 +1,14 @@
 package de.illonis.eduras.gameclient.gui.game;
 
 import java.awt.Component;
-import java.awt.MouseInfo;
 import java.awt.Point;
-import java.awt.PointerInfo;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
-import java.awt.event.KeyEvent;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import org.newdawn.slick.SlickException;
+import org.newdawn.slick.geom.Vector2f;
 
 import de.illonis.edulog.EduLog;
 import de.illonis.eduras.chat.ChatClientImpl;
@@ -17,6 +17,7 @@ import de.illonis.eduras.chat.UserNotInRoomException;
 import de.illonis.eduras.gameclient.ChatCache;
 import de.illonis.eduras.gameclient.ClientData;
 import de.illonis.eduras.gameclient.GuiInternalEventListener;
+import de.illonis.eduras.gameclient.SlickGame;
 import de.illonis.eduras.gameclient.gui.CameraMouseListener;
 import de.illonis.eduras.gameclient.gui.ClientGuiStepLogic;
 import de.illonis.eduras.gameclient.gui.HudNotifier;
@@ -24,9 +25,9 @@ import de.illonis.eduras.gameclient.gui.InputKeyHandler;
 import de.illonis.eduras.gameclient.gui.TimedTasksHolderGUI;
 import de.illonis.eduras.gameclient.gui.hud.DragSelectionRectangle;
 import de.illonis.eduras.gameclient.gui.hud.UserInterface;
+import de.illonis.eduras.logic.LogicGameWorker;
 import de.illonis.eduras.logicabstraction.EdurasInitializer;
 import de.illonis.eduras.logicabstraction.InformationProvider;
-import de.illonis.eduras.math.Vector2D;
 
 /**
  * A panel that represents the gameworld. All world objects and user interface
@@ -44,7 +45,7 @@ public class GamePanelLogic extends ClientGuiStepLogic implements
 	private GameRenderer renderer;
 	private final GameCamera camera;
 	private final CameraMouseListener cml;
-	private final GamePanel gui;
+	private GamePanel gui;
 	private final GuiInternalEventListener reactor;
 	private final InputKeyHandler keyHandler;
 	private final ResizeMonitor resizeMonitor;
@@ -79,16 +80,22 @@ public class GamePanelLogic extends ClientGuiStepLogic implements
 	public GamePanelLogic(GuiInternalEventListener listener,
 			ClientData clientData) {
 		this.data = clientData;
-		gui = new GamePanel();
+
 		currentClickState = ClickState.DEFAULT;
 		this.reactor = listener;
 		infoPro = EdurasInitializer.getInstance().getInformationProvider();
+
 		resizeMonitor = new ResizeMonitor();
 		keyHandler = new InputKeyHandler(this, reactor);
 		keyHandler.addUserInputListener(this);
 		camera = new GameCamera();
 		mouseHandler = new GuiMouseHandler(this, reactor);
 		cml = new CameraMouseListener(camera);
+		try {
+			gui = new GamePanel(new SlickGame(mouseHandler, keyHandler));
+		} catch (SlickException e) {
+			L.log(Level.WARNING, "TODO: message", e);
+		}
 	}
 
 	/**
@@ -111,7 +118,7 @@ public class GamePanelLogic extends ClientGuiStepLogic implements
 				hudNotifier, cache);
 		renderer = new GameRenderer(camera, userInterface, infoPro, data);
 		userInterface.setRenderer(renderer);
-		renderer.setTarget(gui);
+		// renderer.setTarget(gui);
 	}
 
 	/**
@@ -119,40 +126,35 @@ public class GamePanelLogic extends ClientGuiStepLogic implements
 	 * 
 	 * @return current scale factor.
 	 */
-	double getCurrentScale() {
+	float getCurrentScale() {
 		return renderer.getCurrentScale();
 	}
 
 	/**
-	 * Stopps rendering process.
+	 * Starts rendering process and logic updates.
+	 * 
+	 * @param worker
+	 *            the worker used for update.
 	 */
-	private void stopRendering() {
-		if (renderer != null)
-			renderer.stopRendering();
-	}
-
-	/**
-	 * Starts rendering process.
-	 */
-	private void startRendering() {
-		renderer.startRendering();
+	private void startGame(LogicGameWorker worker, GameRenderer gameRenderer) {
+		// renderer.startRendering();
+		try {
+			gui.start(worker, gameRenderer);
+		} catch (SlickException e) {
+			L.log(Level.WARNING, "TODO: message", e);
+		}
 	}
 
 	@Override
 	public void onShown() {
 		camera.reset();
-		camera.startMoving();
-		EdurasInitializer.getInstance().startLogicWorker();
+		LogicGameWorker worker = EdurasInitializer.getInstance()
+				.startLogicWorker();
 		initUserInterface();
 		gui.addComponentListener(resizeMonitor);
-		gui.addMouseListener(mouseHandler);
-		gui.addMouseMotionListener(mouseHandler);
-		gui.addMouseMotionListener(cml);
-		gui.addMouseListener(cml);
-		startRendering();
+		startGame(worker, renderer);
 		doTimedTasks();
 		notifyGuiSizeChanged();
-		gui.addKeyListener(keyHandler);
 		gui.requestFocus();
 		gui.requestFocusInWindow();
 		hudNotifier.onGameReady();
@@ -168,16 +170,10 @@ public class GamePanelLogic extends ClientGuiStepLogic implements
 
 	@Override
 	public void onHidden() {
+		gui.exit();
 		EdurasInitializer.getInstance().stopLogicWorker();
-		gui.removeMouseMotionListener(cml);
-		gui.removeMouseListener(cml);
-		gui.removeMouseListener(mouseHandler);
-		gui.removeMouseMotionListener(mouseHandler);
 		gui.removeComponentListener(resizeMonitor);
-		gui.removeKeyListener(keyHandler);
-		camera.stopMoving();
 		cml.stop();
-		stopRendering();
 		stopTimedTasks();
 	}
 
@@ -237,12 +233,14 @@ public class GamePanelLogic extends ClientGuiStepLogic implements
 	 *            point to convert.
 	 * @return game-coordinate point.
 	 */
-	public Vector2D computeGuiPointToGameCoordinate(Vector2D v) {
-		double scale = getCurrentScale();
-		Vector2D vec = new Vector2D(v);
-		vec.modifyX(camera.getX() * scale);
-		vec.modifyY(camera.getY() * scale);
-		vec.mult(1 / scale);
+	public Vector2f computeGuiPointToGameCoordinate(Vector2f v) {
+		float scale = getCurrentScale();
+		Vector2f vec = new Vector2f(v);
+		vec.x += renderer.getViewport().getX();
+		vec.y += renderer.getViewport().getY();
+		//vec.x /= gui.getContainer().getWidth();
+		//vec.y /= gui.getContainer().getHeight();
+		vec.scale(1 / scale);
 		return vec;
 	}
 
@@ -251,12 +249,8 @@ public class GamePanelLogic extends ClientGuiStepLogic implements
 	 * 
 	 * @return mouse position computed to ingame point.
 	 */
-	public Vector2D getCurrentMousePos() {
-		PointerInfo pi = MouseInfo.getPointerInfo();
-		Point mp = pi.getLocation();
-		Point pos = getLocationOnScreen();
-		Vector2D p = new Vector2D(mp.x - pos.x, mp.y - pos.y);
-		return computeGuiPointToGameCoordinate(p);
+	public Vector2f getCurrentMousePos() {
+		return computeGuiPointToGameCoordinate(gui.getMousePos());
 	}
 
 	private Point getLocationOnScreen() {
@@ -350,14 +344,18 @@ public class GamePanelLogic extends ClientGuiStepLogic implements
 	/**
 	 * Handles key input for chat.
 	 * 
-	 * @param e
-	 *            the key event.
+	 * @param key
+	 *            the key number.
+	 * @param c
+	 *            the character.
+	 * @return true if keyevent was consumed.
 	 */
-	public void onKeyType(KeyEvent e) {
+	public boolean onKeyType(int key, char c) {
 		if (cache.isWriting()) {
-			e.consume();
-			cache.write(e);
+			cache.write(key, c);
+			return true;
 		}
+		return false;
 	}
 
 	/**
