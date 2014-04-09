@@ -24,6 +24,7 @@ import de.illonis.eduras.events.ObjectFactoryEvent;
 import de.illonis.eduras.events.SetBooleanGameObjectAttributeEvent;
 import de.illonis.eduras.events.SetGameModeEvent;
 import de.illonis.eduras.events.SetIntegerGameObjectAttributeEvent;
+import de.illonis.eduras.events.SetMapEvent;
 import de.illonis.eduras.events.SetPolygonDataEvent;
 import de.illonis.eduras.events.SetRemainingTimeEvent;
 import de.illonis.eduras.events.SetTeamsEvent;
@@ -359,7 +360,73 @@ public class GameInformation {
 		ArrayList<GameEvent> infos = new ArrayList<GameEvent>();
 
 		ArrayList<NeutralBase> neutralBases = new ArrayList<NeutralBase>();
+		putObjectInfos(infos, neutralBases);
 
+		putCurrentSettings(infos);
+
+		putCurrentStatsAndTeams(infos);
+
+		putNeutralBaseOwnerInfos(infos, neutralBases);
+
+		return infos;
+	}
+
+	private void putNeutralBaseOwnerInfos(ArrayList<GameEvent> infos,
+			ArrayList<NeutralBase> neutralBases) {
+		for (NeutralBase base : neutralBases) {
+			if (base.getCurrentOwnerTeam() != null) {
+				AreaConqueredEvent baseConqueredNotification = new AreaConqueredEvent(
+						base.getId(), base.getCurrentOwnerTeam().getTeamId());
+				infos.add(baseConqueredNotification);
+			}
+		}
+	}
+
+	private void putCurrentStatsAndTeams(ArrayList<GameEvent> infos) {
+		Statistic stats = gameSettings.getStats();
+
+		for (PlayerMainFigure player : players.values()) {
+			int killsOfPlayer = stats.getKillsOfPlayer(player);
+			SetIntegerGameObjectAttributeEvent setKillsEvent = new SetIntegerGameObjectAttributeEvent(
+					GameEventNumber.SET_KILLS, player.getOwner(), killsOfPlayer);
+			infos.add(setKillsEvent);
+
+			int deathsOfPlayer = stats.getDeathsOfPlayer(player);
+			SetIntegerGameObjectAttributeEvent setDeathsEvent = new SetIntegerGameObjectAttributeEvent(
+					GameEventNumber.SET_DEATHS, player.getOwner(),
+					deathsOfPlayer);
+			infos.add(setDeathsEvent);
+		}
+
+		SetTeamsEvent teamEvent = new SetTeamsEvent();
+		LinkedList<AddPlayerToTeamEvent> teamPlayerEvents = new LinkedList<AddPlayerToTeamEvent>();
+		for (Team team : getTeams()) {
+			teamEvent.addTeam(team);
+			for (PlayerMainFigure player : team.getPlayers()) {
+				teamPlayerEvents.add(new AddPlayerToTeamEvent(
+						player.getOwner(), team.getTeamId()));
+			}
+		}
+
+		infos.add(teamEvent);
+		infos.addAll(teamPlayerEvents);
+	}
+
+	private void putCurrentSettings(ArrayList<GameEvent> infos) {
+		SetGameModeEvent e = new SetGameModeEvent(gameSettings.getGameMode()
+				.getName());
+		infos.add(e);
+
+		SetRemainingTimeEvent remaining = new SetRemainingTimeEvent(
+				gameSettings.getRemainingTime());
+		infos.add(remaining);
+
+		SetMapEvent setMapEvent = new SetMapEvent(map.getName());
+		infos.add(setMapEvent);
+	}
+
+	private void putObjectInfos(ArrayList<GameEvent> infos,
+			ArrayList<NeutralBase> neutralBases) {
 		for (GameObject object : objects.values()) {
 			ObjectFactoryEvent objectEvent = new ObjectFactoryEvent(
 					GameEventNumber.OBJECT_CREATE, object.getType(),
@@ -367,7 +434,8 @@ public class GameInformation {
 			objectEvent.setId(object.getId());
 			infos.add(objectEvent);
 
-			if (object.getType() == ObjectType.DYNAMIC_POLYGON_BLOCK) {
+			if (object.getType() == ObjectType.DYNAMIC_POLYGON_BLOCK
+					|| object.getType() == ObjectType.MAPBOUNDS) {
 				SetPolygonDataEvent polygonData = new SetPolygonDataEvent(
 						object.getId(),
 						((Polygon) object.getShape()).getVerticesAsArray());
@@ -403,51 +471,7 @@ public class GameInformation {
 				continue;
 			}
 		}
-		SetGameModeEvent e = new SetGameModeEvent(gameSettings.getGameMode()
-				.getName());
-		infos.add(e);
-		SetRemainingTimeEvent remaining = new SetRemainingTimeEvent(
-				gameSettings.getRemainingTime());
-		infos.add(remaining);
 
-		// send statistics
-		Statistic stats = gameSettings.getStats();
-
-		for (PlayerMainFigure player : players.values()) {
-			int killsOfPlayer = stats.getKillsOfPlayer(player);
-			SetIntegerGameObjectAttributeEvent setKillsEvent = new SetIntegerGameObjectAttributeEvent(
-					GameEventNumber.SET_KILLS, player.getOwner(), killsOfPlayer);
-			infos.add(setKillsEvent);
-
-			int deathsOfPlayer = stats.getDeathsOfPlayer(player);
-			SetIntegerGameObjectAttributeEvent setDeathsEvent = new SetIntegerGameObjectAttributeEvent(
-					GameEventNumber.SET_DEATHS, player.getOwner(),
-					deathsOfPlayer);
-			infos.add(setDeathsEvent);
-		}
-
-		SetTeamsEvent teamEvent = new SetTeamsEvent();
-		LinkedList<AddPlayerToTeamEvent> teamPlayerEvents = new LinkedList<AddPlayerToTeamEvent>();
-		for (Team team : getTeams()) {
-			teamEvent.addTeam(team);
-			for (PlayerMainFigure player : team.getPlayers()) {
-				teamPlayerEvents.add(new AddPlayerToTeamEvent(
-						player.getOwner(), team.getTeamId()));
-			}
-		}
-
-		infos.add(teamEvent);
-		infos.addAll(teamPlayerEvents);
-
-		for (NeutralBase base : neutralBases) {
-			if (base.getCurrentOwnerTeam() != null) {
-				AreaConqueredEvent baseConqueredNotification = new AreaConqueredEvent(
-						base.getId(), base.getCurrentOwnerTeam().getTeamId());
-				infos.add(baseConqueredNotification);
-			}
-		}
-
-		return infos;
 	}
 
 	/**
