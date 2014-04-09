@@ -11,6 +11,7 @@ import de.illonis.eduras.ObjectFactory.ObjectType;
 import de.illonis.eduras.Statistic.StatsProperty;
 import de.illonis.eduras.Team;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
+import de.illonis.eduras.gameclient.userprefs.KeyBindings.KeyBinding;
 import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.gameobjects.GameObject.Relation;
 import de.illonis.eduras.gameobjects.NeutralBase;
@@ -180,5 +181,12 @@ public class Deathmatch extends BasicGameMode {
 	public void onBaseLost(NeutralBase base, Team losingTeam) {
 		L.info("Team " + losingTeam.getName() + " lost the base with id "
 				+ base.getId() + "!");
+	}
+
+	@Override
+	public boolean supportsKeyBinding(KeyBinding binding) {
+		if (binding == KeyBinding.SWITCH_MODE)
+			return false;
+		return true;
 	}
 }

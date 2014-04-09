@@ -130,16 +130,18 @@ public class InputKeyHandler {
 			return;
 
 		pressedButtons.put(keyCode, true);
-		PlayerMainFigure player;
-		try {
-			player = infoPro.getPlayer();
-		} catch (ObjectNotFoundException e1) {
-			L.log(Level.SEVERE, "Something terribly bad happened.", e1);
-			return;
-		}
-		GuiKeyHandler handler = keyHandlers.get(player.getCurrentMode());
-		if (handler != null) {
-			handler.keyPressed(binding);
+		if (infoPro.getGameMode().supportsKeyBinding(binding)) {
+			PlayerMainFigure player;
+			try {
+				player = infoPro.getPlayer();
+			} catch (ObjectNotFoundException e1) {
+				L.log(Level.SEVERE, "Something terribly bad happened.", e1);
+				return;
+			}
+			GuiKeyHandler handler = keyHandlers.get(player.getCurrentMode());
+			if (handler != null) {
+				handler.keyPressed(binding);
+			}
 		}
 
 		lastTimePressed = System.currentTimeMillis();
@@ -178,16 +180,19 @@ public class InputKeyHandler {
 					+ key, ex);
 			return;
 		}
-		PlayerMainFigure player;
-		try {
-			player = infoPro.getPlayer();
-		} catch (ObjectNotFoundException e1) {
-			L.log(Level.SEVERE, "Something terribly bad happened.", e1);
-			return;
-		}
-		GuiKeyHandler handler = keyHandlers.get(player.getCurrentMode());
-		if (handler != null) {
-			handler.keyReleased(binding);
+		if (infoPro.getGameMode().supportsKeyBinding(binding)) {
+
+			PlayerMainFigure player;
+			try {
+				player = infoPro.getPlayer();
+			} catch (ObjectNotFoundException e1) {
+				L.log(Level.SEVERE, "Something terribly bad happened.", e1);
+				return;
+			}
+			GuiKeyHandler handler = keyHandlers.get(player.getCurrentMode());
+			if (handler != null) {
+				handler.keyReleased(binding);
+			}
 		}
 
 	}

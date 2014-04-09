@@ -2,6 +2,7 @@ package de.illonis.eduras;
 
 import java.util.Set;
 
+import de.illonis.eduras.gameclient.userprefs.KeyBindings.KeyBinding;
 import de.illonis.eduras.gamemodes.GameMode;
 import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.gameobjects.GameObject.Relation;
@@ -25,27 +26,18 @@ public class ClientGameMode implements GameMode {
 
 	@Override
 	public void onDeath(Unit killedUnit, int killingUnit) {
-
-		// do nothing
-
 	}
 
 	@Override
 	public void onTimeUp() {
-		// do nothing
-
 	}
 
 	@Override
 	public void onConnect(int ownerId) {
-		// do nothing
-
 	}
 
 	@Override
 	public void onGameStart() {
-		// nothing
-
 	}
 
 	@Override
@@ -65,26 +57,25 @@ public class ClientGameMode implements GameMode {
 
 	@Override
 	public void onDisconnect(int ownerId) {
-		// do nothing
 	}
 
 	@Override
 	public Team determineProgressingTeam(GameObject object,
 			boolean objectEntered, Set<GameObject> presentObjects) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public void onBaseOccupied(NeutralBase base, Team occupyingTeam) {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override
 	public void onBaseLost(NeutralBase base, Team losingTeam) {
-		// TODO Auto-generated method stub
+	}
 
+	@Override
+	public boolean supportsKeyBinding(KeyBinding binding) {
+		return false;
 	}
 
 }
