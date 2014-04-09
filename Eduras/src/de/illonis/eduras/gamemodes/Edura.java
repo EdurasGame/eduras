@@ -20,6 +20,7 @@ import de.illonis.eduras.units.Unit;
 public class Edura extends TeamDeathmatch {
 
 	private HashMap<NeutralBase, Vertex> baseToVertex;
+	private HashMap<Team, NeutralBase> mainBaseOfTeam;
 
 	private final static Logger L = EduLog.getLoggerFor(Edura.class.getName());
 
@@ -27,6 +28,7 @@ public class Edura extends TeamDeathmatch {
 		super(gameInfo);
 
 		baseToVertex = new HashMap<NeutralBase, Vertex>();
+		mainBaseOfTeam = new HashMap<Team, NeutralBase>();
 	}
 
 	@Override
@@ -66,6 +68,8 @@ public class Edura extends TeamDeathmatch {
 			baseToVertex.put(base, new Vertex());
 		}
 
+		// TODO: At the moment we rely on the assumption that there are always
+		// two main nodes in the map and that there is only two teams.
 		Iterator<Team> iterator = gameInfo.getTeams().iterator();
 		Team teamA = iterator.next();
 		Team teamB = iterator.next();
@@ -86,10 +90,12 @@ public class Edura extends TeamDeathmatch {
 				if (teamAHasMainNode) {
 					vertexForNode.setColor(teamB.getTeamId());
 					NeutralBase mainBase = nodeIdToBase.get(nodeid);
+					mainBaseOfTeam.put(teamB, mainBase);
 					mainBase.setCurrentOwnerTeam(teamB);
 				} else {
 					vertexForNode.setColor(teamA.getTeamId());
 					NeutralBase mainBase = nodeIdToBase.get(nodeid);
+					mainBaseOfTeam.put(teamA, mainBase);
 					mainBase.setCurrentOwnerTeam(teamA);
 					teamAHasMainNode = true;
 				}
@@ -146,6 +152,12 @@ public class Edura extends TeamDeathmatch {
 
 	@Override
 	public void onBaseOccupied(NeutralBase base, Team occupyingTeam) {
+		for (NeutralBase aMainBase : mainBaseOfTeam.values()) {
+			if (base.equals(aMainBase)) {
+				gameInfo.getEventTriggerer().onMatchEnd();
+			}
+		}
+
 		baseToVertex.get(base).setColor(occupyingTeam.getTeamId());
 	}
 
