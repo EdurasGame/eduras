@@ -136,7 +136,7 @@ public abstract class RenderedGuiObject implements GameEventListener {
 	 *         false otherwise.
 	 */
 	public final boolean isEnabledIn(InteractMode interactMode) {
-		return enabledModes.contains(interactMode);
+		return enabledModes.isEmpty() || enabledModes.contains(interactMode);
 	}
 
 	/**
@@ -232,7 +232,7 @@ public abstract class RenderedGuiObject implements GameEventListener {
 	@Override
 	public void onGameReady() {
 	}
-	
+
 	@Override
 	public void onVisibilityChanged(SetVisibilityEvent event) {
 	}

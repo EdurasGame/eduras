@@ -52,7 +52,7 @@ public class ClientFrame extends JFrame {
 		super("Eduras? Client");
 		this.client = client;
 
-		setSize(500, 500);
+		setSize(800, 600);
 		setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
 		setLocationRelativeTo(null);
 		addWindowFocusListener(new WindowAdapter() {

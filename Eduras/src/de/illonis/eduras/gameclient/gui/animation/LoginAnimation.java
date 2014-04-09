@@ -90,12 +90,12 @@ public class LoginAnimation extends JPanel implements ComponentListener {
 		private void myRepeat() {
 			int width = getWidth();
 			if (width < 20)
-				width = 480;
+				width = 780;
 
 			this.x = r.nextInt(width + 20) - 10;
 			int height = getHeight();
 			if (height < 20)
-				height = 197;
+				height = 297;
 			oldY = height + 10;
 		}
 

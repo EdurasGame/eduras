@@ -31,6 +31,7 @@ public class HealthBar {
 		x = y = 0;
 		w = HEALTHBAR_WIDTH;
 		h = HEALTHBAR_HEIGHT;
+		
 	}
 
 	/**
