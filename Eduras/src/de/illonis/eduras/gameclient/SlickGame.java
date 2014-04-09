@@ -12,9 +12,9 @@ import org.newdawn.slick.UnicodeFont;
 import org.newdawn.slick.font.effects.ColorEffect;
 
 import de.illonis.eduras.gameclient.datacache.GraphicsPreLoader;
-import de.illonis.eduras.gameclient.gui.InputKeyHandler;
 import de.illonis.eduras.gameclient.gui.game.GameRenderer;
 import de.illonis.eduras.gameclient.gui.game.GuiMouseHandler;
+import de.illonis.eduras.gameclient.gui.game.InputKeyHandler;
 import de.illonis.eduras.logic.LogicGameWorker;
 
 /**
@@ -87,10 +87,10 @@ public class SlickGame extends BasicGame {
 	@Override
 	public void update(GameContainer container, int delta)
 			throws SlickException {
-		//System.out.println(getTime() + " elapsed " + delta);
+		// System.out.println(getTime() + " elapsed " + delta);
 		lgw.gameUpdate(delta);
 	}
-	
+
 	public long getTime() {
 		return (Sys.getTime() * 1000) / Sys.getTimerResolution();
 	}

@@ -1,7 +1,6 @@
-package de.illonis.eduras.gameclient.gui;
+package de.illonis.eduras.gameclient.gui.game;
 
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -9,16 +8,18 @@ import org.newdawn.slick.Input;
 
 import de.illonis.edulog.EduLog;
 import de.illonis.eduras.exceptions.KeyNotBoundException;
+import de.illonis.eduras.exceptions.ObjectNotFoundException;
 import de.illonis.eduras.gameclient.GamePanelReactor;
-import de.illonis.eduras.gameclient.gui.game.GamePanelLogic;
-import de.illonis.eduras.gameclient.gui.game.UserInputListener;
 import de.illonis.eduras.gameclient.userprefs.KeyBindings.KeyBinding;
 import de.illonis.eduras.gameclient.userprefs.Settings;
-import de.illonis.eduras.gameobjects.MoveableGameObject.Direction;
 import de.illonis.eduras.logicabstraction.EdurasInitializer;
+import de.illonis.eduras.logicabstraction.InformationProvider;
+import de.illonis.eduras.units.PlayerMainFigure;
+import de.illonis.eduras.units.PlayerMainFigure.InteractMode;
 
 /**
- * This class handles user's key input and passes them to logic.
+ * This class handles user's key input and triggers the correspondend
+ * {@link GuiKeyHandler} for current interactmode.
  * 
  * @author illonis
  * 
@@ -28,11 +29,10 @@ public class InputKeyHandler {
 	private final static Logger L = EduLog.getLoggerFor(InputKeyHandler.class
 			.getName());
 
+	private final InformationProvider infoPro;
 	private static final long KEY_INTERVAL = 20;
-	private final LinkedList<UserInputListener> listeners;
-	private final ListenerPromoter promoter;
 
-	private final GamePanelReactor reactor;
+	private final HashMap<InteractMode, GuiKeyHandler> keyHandlers;
 
 	/**
 	 * Used to support linux os. If a key is hold down on a linux system, it
@@ -54,28 +54,16 @@ public class InputKeyHandler {
 	 *            the reactor that passes actions to server.
 	 */
 	public InputKeyHandler(GamePanelLogic client, GamePanelReactor reactor) {
-		promoter = new ListenerPromoter();
-		listeners = new LinkedList<UserInputListener>();
+		keyHandlers = new HashMap<InteractMode, GuiKeyHandler>();
+		infoPro = EdurasInitializer.getInstance().getInformationProvider();
 		this.settings = EdurasInitializer.getInstance().getSettings();
 		pressedButtons = new HashMap<Integer, Boolean>();
-
-		this.reactor = reactor;
-
-		lastTimePressed = System.currentTimeMillis();
-
 		this.client = client;
-	}
-
-	/**
-	 * Adds a {@link UserInputListener}.
-	 * 
-	 * @param listener
-	 *            the new listener.
-	 * 
-	 * @author illonis
-	 */
-	public void addUserInputListener(UserInputListener listener) {
-		listeners.add(listener);
+		lastTimePressed = System.currentTimeMillis();
+		keyHandlers.put(InteractMode.MODE_EGO, new EgoModeKeyHandler(client,
+				reactor));
+		keyHandlers.put(InteractMode.MODE_STRATEGY, new BuildModeKeyHandler(
+				client, reactor));
 	}
 
 	/**
@@ -100,10 +88,8 @@ public class InputKeyHandler {
 		for (java.util.Map.Entry<Integer, Boolean> button : pressedButtons
 				.entrySet()) {
 			if (button.getValue()) {
-				if (!settings.getKeyBindings().isBound(button.getKey()))
-					return;
 				// release button
-				pressedButtons.put(button.getKey(), false);
+				keyReleased(button.getKey(), ' ');
 			}
 		}
 	}
@@ -144,78 +130,16 @@ public class InputKeyHandler {
 			return;
 
 		pressedButtons.put(keyCode, true);
-
-		switch (binding) {
-		case MOVE_UP:
-			reactor.onStartMovement(Direction.TOP);
-			break;
-		case MOVE_LEFT:
-			reactor.onStartMovement(Direction.LEFT);
-			break;
-		case MOVE_DOWN:
-			reactor.onStartMovement(Direction.BOTTOM);
-			break;
-		case MOVE_RIGHT:
-			reactor.onStartMovement(Direction.RIGHT);
-			break;
-		case ITEM_1:
-			if (settings.getBooleanSetting("chooseOnPress")) {
-				client.selectItem(0);
-			} else {
-				reactor.onItemUse(0, client.getCurrentMousePos());
-			}
-			break;
-		case ITEM_2:
-			if (settings.getBooleanSetting("chooseOnPress")) {
-				client.selectItem(1);
-			} else {
-				reactor.onItemUse(1, client.getCurrentMousePos());
-			}
-			break;
-		case ITEM_3:
-			if (settings.getBooleanSetting("chooseOnPress")) {
-				client.selectItem(2);
-			} else {
-				reactor.onItemUse(2, client.getCurrentMousePos());
-			}
-			break;
-		case ITEM_4:
-			if (settings.getBooleanSetting("chooseOnPress")) {
-				client.selectItem(3);
-			} else {
-				reactor.onItemUse(3, client.getCurrentMousePos());
-			}
-			break;
-		case ITEM_5:
-			if (settings.getBooleanSetting("chooseOnPress")) {
-				client.selectItem(4);
-			} else {
-				reactor.onItemUse(4, client.getCurrentMousePos());
-			}
-			break;
-		case ITEM_6:
-			if (settings.getBooleanSetting("chooseOnPress")) {
-				client.selectItem(5);
-			} else {
-				reactor.onItemUse(5, client.getCurrentMousePos());
-			}
-			break;
-		case SHOW_STATS:
-			promoter.showStatWindow();
-			break;
-		case SWITCH_MODE:
-			reactor.onModeSwitch();
-			break;
-		case CHAT:
-			client.onChatEnter();
-			break;
-		case EXIT_CLIENT:
-			if (!client.abortChat())
-				reactor.onGameQuit();
-			break;
-
-		default:
-			break;
+		PlayerMainFigure player;
+		try {
+			player = infoPro.getPlayer();
+		} catch (ObjectNotFoundException e1) {
+			L.log(Level.SEVERE, "Something terribly bad happened.", e1);
+			return;
+		}
+		GuiKeyHandler handler = keyHandlers.get(player.getCurrentMode());
+		if (handler != null) {
+			handler.keyPressed(binding);
 		}
 
 		lastTimePressed = System.currentTimeMillis();
@@ -254,58 +178,18 @@ public class InputKeyHandler {
 					+ key, ex);
 			return;
 		}
-
-		switch (binding) {
-		case MOVE_UP:
-			reactor.onStopMovement(Direction.TOP);
-			break;
-		case MOVE_LEFT:
-			reactor.onStopMovement(Direction.LEFT);
-			break;
-		case MOVE_DOWN:
-			reactor.onStopMovement(Direction.BOTTOM);
-			break;
-		case MOVE_RIGHT:
-			reactor.onStopMovement(Direction.RIGHT);
-			break;
-		case SHOW_STATS:
-			promoter.hideStatWindow();
-			break;
-		default:
-			break;
+		PlayerMainFigure player;
+		try {
+			player = infoPro.getPlayer();
+		} catch (ObjectNotFoundException e1) {
+			L.log(Level.SEVERE, "Something terribly bad happened.", e1);
+			return;
 		}
+		GuiKeyHandler handler = keyHandlers.get(player.getCurrentMode());
+		if (handler != null) {
+			handler.keyReleased(binding);
+		}
+
 	}
 
-	private class ListenerPromoter implements UserInputListener {
-
-		@Override
-		public void showStatWindow() {
-			for (UserInputListener listener : listeners) {
-				listener.showStatWindow();
-			}
-		}
-
-		@Override
-		public void hideStatWindow() {
-			for (UserInputListener listener : listeners) {
-				listener.hideStatWindow();
-			}
-		}
-
-		@Override
-		public void onChatEnter() {
-			for (UserInputListener listener : listeners) {
-				listener.onChatEnter();
-			}
-		}
-
-		@Override
-		public boolean abortChat() {
-			for (UserInputListener listener : listeners) {
-				if (listener.abortChat())
-					return true;
-			}
-			return false;
-		}
-	}
 }
