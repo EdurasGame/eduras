@@ -131,7 +131,7 @@ public class EgoModeMouseAdapter extends GuiMouseAdapter {
 
 	@Override
 	public void mouseClicked(int button, int x, int y, int clickCount) {
-		egoModeClick(button, x, y, clickCount);
+		// egoModeClick(button, x, y, clickCount);
 	}
 
 	@Override
@@ -167,6 +167,7 @@ public class EgoModeMouseAdapter extends GuiMouseAdapter {
 
 	@Override
 	public void mousePressed(int button, int x, int y) {
+		egoModeClick(button, x, y, 1);
 	}
 
 	@Override
