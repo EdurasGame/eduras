@@ -16,8 +16,6 @@ import de.illonis.eduras.math.Vector2df;
 import de.illonis.eduras.units.PlayerMainFigure;
 import de.illonis.eduras.units.Unit;
 
-
-
 /**
  * Meta class for all objects that can be on the game's map.
  * 
@@ -138,7 +136,7 @@ public abstract class GameObject implements Comparable<GameObject> {
 		this.owner = owner;
 	}
 
-	protected TimingSource getTimingSource() {
+	public TimingSource getTimingSource() {
 		return timingSource;
 	}
 
@@ -284,7 +282,7 @@ public abstract class GameObject implements Comparable<GameObject> {
 	 */
 	@Deprecated
 	public final int getDrawX() {
-		return (int) Math.round(xPosition);
+		return Math.round(xPosition);
 	}
 
 	/**
@@ -297,7 +295,7 @@ public abstract class GameObject implements Comparable<GameObject> {
 	 */
 	@Deprecated
 	public final int getDrawY() {
-		return (int) Math.round(yPosition);
+		return Math.round(yPosition);
 	}
 
 	/**

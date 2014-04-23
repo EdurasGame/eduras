@@ -72,4 +72,23 @@ public class NeutralBase extends NeutralArea {
 	protected void onNeutralAreaLost(Team losingTeam) {
 		getGame().getGameSettings().getGameMode().onBaseLost(this, losingTeam);
 	}
+
+	/**
+	 * Returns the amount of resources this base generates in one period of the
+	 * interval.
+	 * 
+	 * @return amount of resources
+	 */
+	public int getResourceGenerateAmount() {
+		return resourceGenerateAmount;
+	}
+
+	/**
+	 * Get the interval in which resources are generated.
+	 * 
+	 * @return interval
+	 */
+	public long getResourceGenerateTimeInterval() {
+		return resourceGenerateTimeInterval;
+	}
 }

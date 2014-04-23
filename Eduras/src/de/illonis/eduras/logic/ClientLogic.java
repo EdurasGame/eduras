@@ -30,6 +30,7 @@ import de.illonis.eduras.events.SetMapEvent;
 import de.illonis.eduras.events.SetOwnerEvent;
 import de.illonis.eduras.events.SetPolygonDataEvent;
 import de.illonis.eduras.events.SetRemainingTimeEvent;
+import de.illonis.eduras.events.SetResourcesEvent;
 import de.illonis.eduras.events.SetStatsEvent;
 import de.illonis.eduras.events.SetTeamsEvent;
 import de.illonis.eduras.events.SetVisibilityEvent;
@@ -364,6 +365,17 @@ public class ClientLogic implements GameLogicInterface {
 								setStatsEvent.getPlayerId(),
 								setStatsEvent.getNewCount());
 				break;
+			case SET_RESOURCES:
+				SetResourcesEvent resourceEvent = (SetResourcesEvent) event;
+				Team teamToSetResourcesOf = gameInfo.findTeamById(resourceEvent
+						.getTeamId());
+				teamToSetResourcesOf.setResourceCount(resourceEvent
+						.getNewAmount());
+				System.out
+						.println("Team #" + teamToSetResourcesOf.getTeamId()
+								+ " at " + resourceEvent.getNewAmount()
+								+ " resources.");
+				break;
 			case SET_REMAININGTIME:
 				SetRemainingTimeEvent remainingTimeEvent = (SetRemainingTimeEvent) event;
 				long remainingTime = remainingTimeEvent.getRemainingTime();
@@ -469,6 +481,7 @@ public class ClientLogic implements GameLogicInterface {
 			break;
 		case SET_VISION_BLOCKING:
 			object.setVisionBlocking(event.getNewValue());
+			break;
 		default:
 		}
 

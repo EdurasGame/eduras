@@ -21,6 +21,7 @@ public class Team {
 	private Color color;
 	private final String name;
 	private final LinkedList<PlayerMainFigure> players;
+	private int resourceCount;
 
 	/**
 	 * @return the next free id for a new team.
@@ -135,5 +136,23 @@ public class Team {
 			return getTeamId() == other.getTeamId();
 		}
 		return super.equals(obj);
+	}
+
+	/**
+	 * Returns the amount of resources that this team has available.
+	 * 
+	 * @return resources
+	 */
+	public int getResourceCount() {
+		return resourceCount;
+	}
+
+	/**
+	 * Sets the amount of resources this team has available.
+	 * 
+	 * @param resourceCount
+	 */
+	public void setResourceCount(int resourceCount) {
+		this.resourceCount = resourceCount;
 	}
 }

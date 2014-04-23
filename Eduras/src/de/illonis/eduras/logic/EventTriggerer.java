@@ -344,15 +344,14 @@ public interface EventTriggerer {
 	 */
 	public void notifyGameObjectStateChanged(
 			SetGameObjectAttributeEvent<?> event);
-	
+
 	/**
 	 * Notify all clients that an object's visibility has changed.
 	 * 
 	 * @param event
 	 *            The event that indicate what has changed.
 	 */
-	public void notifyGameObjectVisibilityChanged(
-			SetVisibilityEvent event);
+	public void notifyGameObjectVisibilityChanged(SetVisibilityEvent event);
 
 	/**
 	 * Notify all clients that an object has been created.
@@ -431,5 +430,15 @@ public interface EventTriggerer {
 	 * @param occupyingTeam
 	 */
 	void notifyAreaConquered(NeutralArea neutralArea, Team occupyingTeam);
+
+	/**
+	 * Increases the count of a team's resources by the given number.
+	 * 
+	 * @param team
+	 *            The team to increase the resourcecount of
+	 * @param amount
+	 *            the amount to increase by (can be negative)
+	 */
+	void changeResourcesOfTeamByAmount(Team team, int amount);
 
 }

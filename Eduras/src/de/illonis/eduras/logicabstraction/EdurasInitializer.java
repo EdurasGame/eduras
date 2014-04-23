@@ -263,6 +263,12 @@ public class EdurasInitializer {
 					SetVisibilityEvent event) {
 			}
 
+			@Override
+			public void changeResourcesOfTeamByAmount(Team team, int amount) {
+				// TODO Auto-generated method stub
+
+			}
+
 		});
 
 		networkManager = new NetworkManager(logic);
