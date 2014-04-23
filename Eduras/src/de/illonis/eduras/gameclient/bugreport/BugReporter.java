@@ -40,7 +40,7 @@ public class BugReporter extends SwingWorker<String, Void> {
 	private final static Logger L = EduLog.getLoggerFor(BugReporter.class
 			.getName());
 
-	private final static String LOG_BASE_URL = "http://illonis.dyndns.org/pstatus/bugupload.php";
+	private final static String LOG_BASE_URL = "http://illonis.de/pstatus/bugupload.php";
 	private final BugReportFrame frame;
 	private final BugReport report;
 	private String message;

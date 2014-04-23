@@ -18,7 +18,7 @@ import de.illonis.eduras.utils.WebFetcher;
  */
 public class AuthenticationWorker extends SwingWorker<Boolean, Void> {
 
-	private final static URL AUTH_URL = createAuthURL("http://illonis.dyndns.org/eduras/auth/");
+	private final static URL AUTH_URL = createAuthURL("http://illonis.de/eduras/auth/");
 
 	private static URL createAuthURL(final String name) {
 		try {
