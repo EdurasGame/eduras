@@ -266,13 +266,13 @@ public class GameRenderer implements TooltipHandler {
 						drawFace(d, (Circle) d.getShape(), g);
 				}
 			}
-			
+
 		}
-		
-//		if (!S.vision_disabled) {
-//			g.setColor(FOG_OF_WAR);
-//			g.fill(visionMask);
-//		}
+
+		// if (!S.vision_disabled) {
+		// g.setColor(FOG_OF_WAR);
+		// g.fill(visionMask);
+		// }
 
 	}
 
@@ -341,7 +341,7 @@ public class GameRenderer implements TooltipHandler {
 		leftEye.rotate(-35, circleCenter);
 		Vector2f centerDist = leftEye.copy().sub(circleCenter);
 		centerDist.scale(.5f);
-		leftEye.add(centerDist);
+		leftEye.sub(centerDist);
 		g.fillOval((int) (leftEye.getX()) - eyeRadius, (int) (leftEye.getY())
 				- eyeRadius, 2 * eyeRadius, 2 * eyeRadius);
 
