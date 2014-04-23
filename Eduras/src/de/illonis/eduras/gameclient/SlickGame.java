@@ -70,6 +70,7 @@ public class SlickGame extends BasicGame {
 		container.setMinimumLogicUpdateInterval(10);
 		container.setMaximumLogicUpdateInterval(70);
 		container.setTargetFrameRate(60);
+		container.setAlwaysRender(true);
 		ColorEffect e = new ColorEffect();
 		e.setColor(Color.white);
 		defaultFont.getEffects().add(e);
@@ -87,10 +88,10 @@ public class SlickGame extends BasicGame {
 	@Override
 	public void update(GameContainer container, int delta)
 			throws SlickException {
-		//System.out.println(getTime() + " elapsed " + delta);
+		// System.out.println(getTime() + " elapsed " + delta);
 		lgw.gameUpdate(delta);
 	}
-	
+
 	public long getTime() {
 		return (Sys.getTime() * 1000) / Sys.getTimerResolution();
 	}
