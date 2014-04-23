@@ -5,6 +5,7 @@ import java.util.TimerTask;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.newdawn.slick.Input;
 import org.newdawn.slick.geom.Vector2f;
 
 import de.illonis.edulog.EduLog;
@@ -43,49 +44,61 @@ public class EgoModeMouseAdapter extends GuiMouseAdapter {
 		int currentItemSelected = getPanelLogic().getClientData()
 				.getCurrentItemSelected();
 
-		switch (currentClickState) {
-		case ITEM_SELECTED:
-			// if an item is selected...
-			if (currentItemSelected != -1) {
+		// which mouse button?
+		switch (button) {
+		case Input.MOUSE_LEFT_BUTTON:
 
-				// use it instantly
-				itemUsed(currentItemSelected, new Vector2df(x, y), false);
+			// which state are we in?
+			switch (currentClickState) {
+			case ITEM_SELECTED:
+				// if an item is selected...
+				if (currentItemSelected != -1) {
 
-				// and if the user prefers so, do it continuously until
-				// mouse released.
-				if (EdurasInitializer.getInstance().getSettings()
-						.getBooleanSetting("continuousItemUsage")) {
+					// use it instantly
+					itemUsed(currentItemSelected, new Vector2df(x, y), false);
 
-					itemUseTimer = new Timer();
-					ContinuousItemUser itemUser = new ContinuousItemUser(
-							currentItemSelected);
-					Usable itemToUse = null;
-					try {
-						itemToUse = (Usable) EdurasInitializer.getInstance()
-								.getInformationProvider().getPlayer()
-								.getInventory()
-								.getItemBySlot(currentItemSelected);
-					} catch (ItemSlotIsEmptyException | ObjectNotFoundException e1) {
-						L.log(Level.WARNING,
-								"Cannot find item when trying to set up the ContinuousItemUser!",
-								e1);
-						return;
+					// and if the user prefers so, do it continuously until
+					// mouse released.
+					if (EdurasInitializer.getInstance().getSettings()
+							.getBooleanSetting("continuousItemUsage")) {
+
+						itemUseTimer = new Timer();
+						ContinuousItemUser itemUser = new ContinuousItemUser(
+								currentItemSelected);
+						Usable itemToUse = null;
+						try {
+							itemToUse = (Usable) EdurasInitializer
+									.getInstance().getInformationProvider()
+									.getPlayer().getInventory()
+									.getItemBySlot(currentItemSelected);
+						} catch (ItemSlotIsEmptyException
+								| ObjectNotFoundException e1) {
+							L.log(Level.WARNING,
+									"Cannot find item when trying to set up the ContinuousItemUser!",
+									e1);
+							return;
+						}
+						itemUseTimer.schedule(itemUser,
+								itemToUse.getCooldownTime(),
+								itemToUse.getCooldownTime());
 					}
-					itemUseTimer.schedule(itemUser,
-							itemToUse.getCooldownTime(),
-							itemToUse.getCooldownTime());
 				}
+				break;
+			case DEFAULT:
+				// TODO: Notify only elements that are really clicked.
+
+				// inGameClick(e.getPoint());
+				break;
+			default:
+				break;
+
 			}
 			break;
-		case DEFAULT:
-			// TODO: Notify only elements that are really clicked.
 
-			// inGameClick(e.getPoint());
-			break;
 		default:
-			break;
-
+			L.fine("Button " + button + " not assigned to anything.");
 		}
+
 	}
 
 	/**
@@ -172,9 +185,17 @@ public class EgoModeMouseAdapter extends GuiMouseAdapter {
 
 	@Override
 	public void mouseReleased(int button, int x, int y) {
-		if (EdurasInitializer.getInstance().getSettings()
-				.getBooleanSetting("continuousItemUsage")) {
-			discardItemUseTimer();
+
+		switch (button) {
+		case Input.MOUSE_LEFT_BUTTON: {
+			if (EdurasInitializer.getInstance().getSettings()
+					.getBooleanSetting("continuousItemUsage")) {
+				discardItemUseTimer();
+			}
+			break;
+		}
+		default:
+			L.fine("Released not assigned button " + button);
 		}
 
 	}
