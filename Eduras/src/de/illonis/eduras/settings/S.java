@@ -44,8 +44,6 @@ public final class S {
 	private final static Logger L = EduLog.getLoggerFor(EdurasServer.class
 			.getName());
 
-	public static int gm_edura_action_respawnplayer_cost = 15;
-
 	// real values
 	/**
 	 * Max distance of an AI object to its destination at which the target is
@@ -458,6 +456,22 @@ public final class S {
 	public static int gm_koth_points_per_interval = 1;
 
 	public static long gm_koth_gain_points_interval = 10000;
+
+	public static int gm_edura_action_respawnplayer_cost = 15;
+
+	public static int go_rocketlauncher_costs = 100;
+
+	public static int go_mineweapon_costs = 100;
+
+	public static int go_assaultmissile_costs = 100;
+
+	public static int go_swordweapon_costs = 100;
+
+	public static int go_splashweapon_costs = 100;
+
+	public static int go_sniperweapon_costs = 100;
+
+	public static int go_simpleweapon_costs = 100;
 
 	/**
 	 * Reads values from the file and writes them to the S classes attributes.

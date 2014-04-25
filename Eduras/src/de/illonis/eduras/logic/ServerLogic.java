@@ -11,6 +11,7 @@ import de.illonis.edulog.EduLog;
 import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.ObjectFactory;
 import de.illonis.eduras.actions.RespawnPlayerAction;
+import de.illonis.eduras.actions.SpawnItemAction;
 import de.illonis.eduras.ai.movement.UnitNotControllableException;
 import de.illonis.eduras.events.ClientRenameEvent;
 import de.illonis.eduras.events.GameEvent;
@@ -21,10 +22,12 @@ import de.illonis.eduras.events.ItemEvent;
 import de.illonis.eduras.events.RespawnPlayerEvent;
 import de.illonis.eduras.events.SendUnitsEvent;
 import de.illonis.eduras.events.SetFloatGameObjectAttributeEvent;
+import de.illonis.eduras.events.SpawnItemEvent;
 import de.illonis.eduras.events.SwitchInteractModeEvent;
 import de.illonis.eduras.events.UserMovementEvent;
 import de.illonis.eduras.exceptions.InvalidNameException;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
+import de.illonis.eduras.exceptions.WrongObjectTypeException;
 import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.gameobjects.MoveableGameObject.Direction;
 import de.illonis.eduras.gameobjects.NeutralBase;
@@ -186,7 +189,7 @@ public class ServerLogic implements GameLogicInterface {
 			try {
 				PlayerMainFigure executingPlayer = gameInfo
 						.getPlayerByOwnerId(respawnPlayerEvent
-								.getIdOfExecutingPlayer());
+								.getExecutingPlayer());
 				PlayerMainFigure playerToRespawn = gameInfo
 						.getPlayerByOwnerId(respawnPlayerEvent
 								.getIdOfPlayerToRespawn());
@@ -195,11 +198,27 @@ public class ServerLogic implements GameLogicInterface {
 								.getIdOfBaseToRespawnAt());
 
 				RespawnPlayerAction respawnPlayerAction = new RespawnPlayerAction(
-						playerToRespawn, baseToRespawnAt);
-				respawnPlayerAction
-						.execute(gameInfo, executingPlayer.getTeam());
+						executingPlayer, playerToRespawn, baseToRespawnAt);
+				respawnPlayerAction.execute(gameInfo);
 			} catch (ObjectNotFoundException e1) {
 				L.log(Level.WARNING, "Couldn't find player!", e1);
+				return;
+			}
+			break;
+		case SPAWN_ITEM:
+			SpawnItemEvent spawnItemEvent = (SpawnItemEvent) event;
+
+			PlayerMainFigure executingPlayer;
+			try {
+				executingPlayer = gameInfo.getPlayerByOwnerId(spawnItemEvent
+						.getExecutingPlayer());
+				SpawnItemAction spawnItemAction = new SpawnItemAction(
+						executingPlayer, spawnItemEvent.getObjectType(),
+						spawnItemEvent.getPosition());
+				spawnItemAction.execute(gameInfo);
+			} catch (ObjectNotFoundException | WrongObjectTypeException e1) {
+				L.log(Level.WARNING, "Something went wrong spawning an item.",
+						e1);
 				return;
 			}
 			break;

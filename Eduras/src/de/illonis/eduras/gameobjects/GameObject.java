@@ -24,6 +24,8 @@ import de.illonis.eduras.units.Unit;
  */
 public abstract class GameObject implements Comparable<GameObject> {
 
+	public static final int OWNER_WORLD = -1;
+
 	/**
 	 * Defines the kind of relation between two units.
 	 * 
@@ -48,7 +50,7 @@ public abstract class GameObject implements Comparable<GameObject> {
 	private int zLayer = 1;
 
 	private int id;
-	private int owner = -1;
+	private int owner = OWNER_WORLD;
 
 	protected float rotation = 0;
 
