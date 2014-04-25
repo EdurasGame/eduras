@@ -759,7 +759,7 @@ public class ServerEventTriggerer implements EventTriggerer {
 	public void changeResourcesOfTeamByAmount(Team team, int amount) {
 		synchronized (team) {
 			int currentCount = team.getResourceCount();
-			int newCount = currentCount + amount;
+			int newCount = Math.max(0, currentCount + amount);
 
 			team.setResourceCount(newCount);
 		}
