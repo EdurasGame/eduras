@@ -444,4 +444,6 @@ public interface EventTriggerer {
 	 */
 	void changeResourcesOfTeamByAmount(Team team, int amount);
 
+	void changeHealthByAmount(Unit unitToHeal, int spell_heal_amount);
+
 }

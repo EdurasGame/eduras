@@ -272,6 +272,13 @@ public class EdurasInitializer {
 					Vector2df pos) {
 			}
 
+			@Override
+			public void changeHealthByAmount(Unit unitToHeal,
+					int spell_heal_amount) {
+				// TODO Auto-generated method stub
+
+			}
+
 		});
 
 		networkManager = new NetworkManager(logic);

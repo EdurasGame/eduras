@@ -473,6 +473,10 @@ public final class S {
 
 	public static int go_simpleweapon_costs = 100;
 
+	public static int spell_heal_costs = 100;
+
+	public static int spell_heal_amount = 100;
+
 	/**
 	 * Reads values from the file and writes them to the S classes attributes.
 	 * 

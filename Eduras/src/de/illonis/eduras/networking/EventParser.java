@@ -20,6 +20,7 @@ import de.illonis.eduras.events.DeathEvent;
 import de.illonis.eduras.events.GameEvent.GameEventNumber;
 import de.illonis.eduras.events.GameInfoRequest;
 import de.illonis.eduras.events.GameReadyEvent;
+import de.illonis.eduras.events.HealActionEvent;
 import de.illonis.eduras.events.InitInformationEvent;
 import de.illonis.eduras.events.ItemEvent;
 import de.illonis.eduras.events.MatchEndEvent;
@@ -346,6 +347,10 @@ public class EventParser implements EventHandler {
 						.getObjectTypeByNumber((Integer) event.getArgument(1)),
 						new Vector2df((Float) event.getArgument(2),
 								(Float) event.getArgument(3))));
+				break;
+			case HEAL_ACTION:
+				logic.onGameEventAppeared(new HealActionEvent((Integer) event
+						.getArgument(0), (Integer) event.getArgument(1)));
 				break;
 			default:
 				L.warning("Cannot handle event with event number "

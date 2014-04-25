@@ -10,6 +10,7 @@ import org.newdawn.slick.geom.Vector2f;
 import de.illonis.edulog.EduLog;
 import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.ObjectFactory;
+import de.illonis.eduras.actions.HealSpellAction;
 import de.illonis.eduras.actions.RespawnPlayerAction;
 import de.illonis.eduras.actions.SpawnItemAction;
 import de.illonis.eduras.ai.movement.UnitNotControllableException;
@@ -17,6 +18,7 @@ import de.illonis.eduras.events.ClientRenameEvent;
 import de.illonis.eduras.events.GameEvent;
 import de.illonis.eduras.events.GameEvent.GameEventNumber;
 import de.illonis.eduras.events.GameInfoRequest;
+import de.illonis.eduras.events.HealActionEvent;
 import de.illonis.eduras.events.InitInformationEvent;
 import de.illonis.eduras.events.ItemEvent;
 import de.illonis.eduras.events.RespawnPlayerEvent;
@@ -39,6 +41,7 @@ import de.illonis.eduras.items.ItemUseInformation;
 import de.illonis.eduras.items.Usable;
 import de.illonis.eduras.locale.Localization;
 import de.illonis.eduras.units.PlayerMainFigure;
+import de.illonis.eduras.units.Unit;
 
 /**
  * Server logic.
@@ -205,7 +208,7 @@ public class ServerLogic implements GameLogicInterface {
 				return;
 			}
 			break;
-		case SPAWN_ITEM:
+		case SPAWN_ITEM: {
 			SpawnItemEvent spawnItemEvent = (SpawnItemEvent) event;
 
 			PlayerMainFigure executingPlayer;
@@ -220,6 +223,25 @@ public class ServerLogic implements GameLogicInterface {
 				L.log(Level.WARNING, "Something went wrong spawning an item.",
 						e1);
 				return;
+			}
+			break;
+		}
+		case HEAL_ACTION:
+			HealActionEvent healEvent = (HealActionEvent) event;
+
+			PlayerMainFigure executingPlayer;
+			try {
+				executingPlayer = gameInfo.getPlayerByOwnerId(healEvent
+						.getExecutingPlayer());
+				HealSpellAction healSpellAction = new HealSpellAction(
+						executingPlayer,
+						(Unit) gameInfo.findObjectById(healEvent
+								.getIdOfUnitToHeal()));
+				healSpellAction.execute(gameInfo);
+			} catch (ObjectNotFoundException ex) {
+				L.log(Level.WARNING,
+						"Cannot find player when receiving heal action.", ex);
+				break;
 			}
 			break;
 		default:

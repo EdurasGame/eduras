@@ -781,4 +781,15 @@ public class ServerEventTriggerer implements EventTriggerer {
 
 		guaranteeSetPositionOfObject(player.getId(), position);
 	}
+
+	@Override
+	public void changeHealthByAmount(Unit unitToHeal, int healAmount) {
+		synchronized (unitToHeal) {
+			setHealth(
+					unitToHeal.getId(),
+					Math.max(unitToHeal.getMaxHealth(), unitToHeal.getHealth()
+							+ healAmount));
+		}
+
+	}
 }
