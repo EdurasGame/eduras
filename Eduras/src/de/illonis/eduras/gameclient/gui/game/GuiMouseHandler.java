@@ -126,7 +126,7 @@ public final class GuiMouseHandler extends GuiMouseAdapter implements
 		Vector2f p = new Vector2f(newx, newy);
 
 		for (TooltipTriggerer t : triggerers) {
-			if (t.getTriggerArea().contains(newx, newy)) {
+			if (t.isActive() && t.getTriggerArea().contains(newx, newy)) {
 				t.onMouseOver(p);
 				break;
 			}

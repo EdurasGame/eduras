@@ -1,7 +1,6 @@
 package de.illonis.eduras.gameclient.gui.game;
 
 import java.awt.Component;
-import java.awt.Point;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.util.logging.Level;
@@ -21,7 +20,6 @@ import de.illonis.eduras.gameclient.SlickGame;
 import de.illonis.eduras.gameclient.gui.CameraMouseListener;
 import de.illonis.eduras.gameclient.gui.ClientGuiStepLogic;
 import de.illonis.eduras.gameclient.gui.HudNotifier;
-import de.illonis.eduras.gameclient.gui.InputKeyHandler;
 import de.illonis.eduras.gameclient.gui.TimedTasksHolderGUI;
 import de.illonis.eduras.gameclient.gui.hud.DragSelectionRectangle;
 import de.illonis.eduras.gameclient.gui.hud.UserInterface;
@@ -87,7 +85,6 @@ public class GamePanelLogic extends ClientGuiStepLogic implements
 
 		resizeMonitor = new ResizeMonitor();
 		keyHandler = new InputKeyHandler(this, reactor);
-		keyHandler.addUserInputListener(this);
 		camera = new GameCamera();
 		mouseHandler = new GuiMouseHandler(this, reactor);
 		cml = new CameraMouseListener(camera);
@@ -238,8 +235,8 @@ public class GamePanelLogic extends ClientGuiStepLogic implements
 		Vector2f vec = new Vector2f(v);
 		vec.x += renderer.getViewport().getX();
 		vec.y += renderer.getViewport().getY();
-		//vec.x /= gui.getContainer().getWidth();
-		//vec.y /= gui.getContainer().getHeight();
+		// vec.x /= gui.getContainer().getWidth();
+		// vec.y /= gui.getContainer().getHeight();
 		vec.scale(1 / scale);
 		return vec;
 	}
@@ -251,12 +248,6 @@ public class GamePanelLogic extends ClientGuiStepLogic implements
 	 */
 	public Vector2f getCurrentMousePos() {
 		return computeGuiPointToGameCoordinate(gui.getMousePos());
-	}
-
-	private Point getLocationOnScreen() {
-		if (gui.isVisible())
-			return gui.getLocationOnScreen();
-		return new Point();
 	}
 
 	/**

@@ -19,6 +19,7 @@ import de.illonis.eduras.events.SetIntegerGameObjectAttributeEvent;
 import de.illonis.eduras.events.SetInteractModeEvent;
 import de.illonis.eduras.events.SetItemSlotEvent;
 import de.illonis.eduras.events.SetOwnerEvent;
+import de.illonis.eduras.events.SetTeamResourceEvent;
 import de.illonis.eduras.events.SetVisibilityEvent;
 import de.illonis.eduras.gamemodes.GameMode;
 import de.illonis.eduras.gameobjects.GameObject;
@@ -123,6 +124,10 @@ public class ServerGameEventListener implements GameEventListener {
 
 	@Override
 	public void onVisibilityChanged(SetVisibilityEvent event) {
+	}
+
+	@Override
+	public void onTeamResourceChanged(SetTeamResourceEvent setTeamResourceEvent) {
 	}
 
 }

@@ -38,6 +38,7 @@ import de.illonis.eduras.events.SetOwnerEvent;
 import de.illonis.eduras.events.SetPolygonDataEvent;
 import de.illonis.eduras.events.SetRemainingTimeEvent;
 import de.illonis.eduras.events.SetStatsEvent;
+import de.illonis.eduras.events.SetTeamResourceEvent;
 import de.illonis.eduras.events.SetTeamsEvent;
 import de.illonis.eduras.events.SetVisibilityEvent;
 import de.illonis.eduras.events.SwitchInteractModeEvent;
@@ -197,6 +198,10 @@ public class EventParser implements EventHandler {
 				logic.onGameEventAppeared(new SetBooleanGameObjectAttributeEvent(
 						GameEventNumber.SET_COLLIDABLE, (Integer) event
 								.getArgument(0), (Boolean) event.getArgument(1)));
+				break;
+			case SET_TEAM_RESOURCE:
+				logic.onGameEventAppeared(new SetTeamResourceEvent((int) event
+						.getArgument(0), (int) event.getArgument(1)));
 				break;
 			case SET_POLYGON_DATA:
 				int numberOfVertices = (numberOfArgs - 1) / 2;

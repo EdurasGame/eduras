@@ -22,7 +22,7 @@ public final class CacheInfo {
 	 */
 	@SuppressWarnings("javadoc")
 	public enum ImageKey {
-		STATISTICS_BG;
+		STATISTICS_BG, MINIMAP_DUMMY, RESOURCE_ICON;
 	}
 
 	/**
@@ -66,6 +66,8 @@ public final class CacheInfo {
 				"gameobjects/sniper.png");
 		guiImages = new HashMap<ImageKey, String>();
 		guiImages.put(ImageKey.STATISTICS_BG, "gui/artwork/statwindow.png");
+		guiImages.put(ImageKey.MINIMAP_DUMMY, "gui/artwork/minimap.png");
+		guiImages.put(ImageKey.RESOURCE_ICON, "gui/artwork/resource.png");
 
 		imageIcons = new HashMap<ImageKey, String>();
 	}

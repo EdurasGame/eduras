@@ -31,6 +31,7 @@ import de.illonis.eduras.events.SetOwnerEvent;
 import de.illonis.eduras.events.SetPolygonDataEvent;
 import de.illonis.eduras.events.SetRemainingTimeEvent;
 import de.illonis.eduras.events.SetStatsEvent;
+import de.illonis.eduras.events.SetTeamResourceEvent;
 import de.illonis.eduras.events.SetTeamsEvent;
 import de.illonis.eduras.events.SetVisibilityEvent;
 import de.illonis.eduras.exceptions.NoSuchGameModeException;
@@ -146,6 +147,14 @@ public class ClientLogic implements GameLogicInterface {
 				Weapon w = (Weapon) weapon;
 				w.setCurrentAmmunition(setAmmuEvent.getNewValue());
 				break;
+			case SET_TEAM_RESOURCE:
+				SetTeamResourceEvent setTeamResEvent = (SetTeamResourceEvent) event;
+				Team t = gameInfo.findTeamById(setTeamResEvent.getTeamId());
+				if (t == null)
+					break;
+				t.setResource(setTeamResEvent.getNewAmount());
+				getListener().onTeamResourceChanged(setTeamResEvent);
+				break;
 			case SET_VISION_ANGLE:
 				if (!(event instanceof SetFloatGameObjectAttributeEvent)) {
 					break;
@@ -211,8 +220,8 @@ public class ClientLogic implements GameLogicInterface {
 			case SET_TEAMS:
 				SetTeamsEvent teamEvent = (SetTeamsEvent) event;
 				gameInfo.clearTeams();
-				for (Team t : teamEvent.getTeamList()) {
-					gameInfo.addTeam(t);
+				for (Team team : teamEvent.getTeamList()) {
+					gameInfo.addTeam(team);
 				}
 				break;
 			case ADD_PLAYER_TO_TEAM:
@@ -243,7 +252,6 @@ public class ClientLogic implements GameLogicInterface {
 				if (killed.isUnit()) {
 					Unit un = (Unit) killed;
 					getListener().onDeath(de);
-
 				}
 
 				break;
@@ -563,6 +571,11 @@ public class ClientLogic implements GameLogicInterface {
 
 				@Override
 				public void onVisibilityChanged(SetVisibilityEvent event) {
+				}
+
+				@Override
+				public void onTeamResourceChanged(
+						SetTeamResourceEvent setTeamResourceEvent) {
 				}
 			};
 		return l;

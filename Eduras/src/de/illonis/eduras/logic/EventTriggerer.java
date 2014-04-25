@@ -116,6 +116,16 @@ public interface EventTriggerer {
 	public int createObject(ObjectType object, int owner);
 
 	/**
+	 * Sets the resource amount for a team.
+	 * 
+	 * @param team
+	 *            the team.
+	 * @param newAmount
+	 *            the new resource amount.
+	 */
+	void setTeamResource(Team team, int newAmount);
+
+	/**
 	 * Creates loot events.
 	 * 
 	 * @param objectId
@@ -344,15 +354,14 @@ public interface EventTriggerer {
 	 */
 	public void notifyGameObjectStateChanged(
 			SetGameObjectAttributeEvent<?> event);
-	
+
 	/**
 	 * Notify all clients that an object's visibility has changed.
 	 * 
 	 * @param event
 	 *            The event that indicate what has changed.
 	 */
-	public void notifyGameObjectVisibilityChanged(
-			SetVisibilityEvent event);
+	public void notifyGameObjectVisibilityChanged(SetVisibilityEvent event);
 
 	/**
 	 * Notify all clients that an object has been created.
