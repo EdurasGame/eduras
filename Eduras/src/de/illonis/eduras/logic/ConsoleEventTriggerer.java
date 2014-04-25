@@ -88,7 +88,7 @@ public class ConsoleEventTriggerer {
 		} catch (ObjectNotFoundException e) {
 			return false;
 		}
-		triggerer.respawnPlayer(player);
+		triggerer.respawnPlayerAtRandomSpawnpoint(player);
 
 		return true;
 	}

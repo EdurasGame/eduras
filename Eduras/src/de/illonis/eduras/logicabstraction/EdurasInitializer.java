@@ -128,7 +128,7 @@ public class EdurasInitializer {
 			}
 
 			@Override
-			public void respawnPlayer(PlayerMainFigure player) {
+			public void respawnPlayerAtRandomSpawnpoint(PlayerMainFigure player) {
 			}
 
 			@Override
@@ -265,8 +265,11 @@ public class EdurasInitializer {
 
 			@Override
 			public void changeResourcesOfTeamByAmount(Team team, int amount) {
-				// TODO Auto-generated method stub
+			}
 
+			@Override
+			public void respawnPlayerAtPosition(PlayerMainFigure player,
+					Vector2df pos) {
 			}
 
 		});

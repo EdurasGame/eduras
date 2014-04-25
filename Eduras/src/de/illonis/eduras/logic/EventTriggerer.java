@@ -177,12 +177,15 @@ public interface EventTriggerer {
 	void setHealth(int id, int newHealth);
 
 	/**
-	 * Respawns a player. Assumes the player has not been removed yet.
+	 * Respawns a player at a random spawnpoint that suits the player's team.
+	 * Assumes the player has not been removed yet.
 	 * 
 	 * @param player
 	 *            The player to respawn.
 	 */
-	void respawnPlayer(PlayerMainFigure player);
+	void respawnPlayerAtRandomSpawnpoint(PlayerMainFigure player);
+
+	void respawnPlayerAtPosition(PlayerMainFigure player, Vector2df position);
 
 	/**
 	 * Called when a player changes his name.

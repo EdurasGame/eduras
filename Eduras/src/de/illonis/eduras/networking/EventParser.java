@@ -25,6 +25,7 @@ import de.illonis.eduras.events.ItemEvent;
 import de.illonis.eduras.events.MatchEndEvent;
 import de.illonis.eduras.events.MovementEvent;
 import de.illonis.eduras.events.ObjectFactoryEvent;
+import de.illonis.eduras.events.RespawnPlayerEvent;
 import de.illonis.eduras.events.SendUnitsEvent;
 import de.illonis.eduras.events.SetAmmunitionEvent;
 import de.illonis.eduras.events.SetBooleanGameObjectAttributeEvent;
@@ -332,6 +333,11 @@ public class EventParser implements EventHandler {
 			case SET_RESOURCES:
 				logic.onGameEventAppeared(new SetResourcesEvent((Integer) event
 						.getArgument(0), (Integer) event.getArgument(1)));
+				break;
+			case RESPAWN_PLAYER:
+				logic.onGameEventAppeared(new RespawnPlayerEvent(
+						(Integer) event.getArgument(0), (Integer) event
+								.getArgument(1), (Integer) event.getArgument(2)));
 				break;
 			default:
 				L.warning("Cannot handle event with event number "

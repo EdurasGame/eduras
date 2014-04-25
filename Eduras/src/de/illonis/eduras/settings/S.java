@@ -1,4 +1,4 @@
-  package de.illonis.eduras.settings;
+package de.illonis.eduras.settings;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -43,6 +43,8 @@ public final class S {
 
 	private final static Logger L = EduLog.getLoggerFor(EdurasServer.class
 			.getName());
+
+	public static int gm_edura_action_respawnplayer_cost = 15;
 
 	// real values
 	/**

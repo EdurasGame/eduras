@@ -46,7 +46,7 @@ public class NoGameMode extends BasicGameMode {
 		if (killedUnit instanceof PlayerMainFigure) {
 			PlayerMainFigure killedPlayer = (PlayerMainFigure) killedUnit;
 
-			triggerer.respawnPlayer(killedPlayer);
+			triggerer.respawnPlayerAtRandomSpawnpoint(killedPlayer);
 		} else {
 			triggerer.removeObject(killedUnit.getId());
 		}

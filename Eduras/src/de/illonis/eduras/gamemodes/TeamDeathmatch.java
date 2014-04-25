@@ -87,7 +87,7 @@ public class TeamDeathmatch extends Deathmatch {
 
 		putPlayerInSmallestTeam(newPlayer);
 
-		gameInfo.getEventTriggerer().respawnPlayer(newPlayer);
+		gameInfo.getEventTriggerer().respawnPlayerAtRandomSpawnpoint(newPlayer);
 
 		// and add it to the statistic
 		gameInfo.getGameSettings().getStats().addPlayerToStats(ownerId);
