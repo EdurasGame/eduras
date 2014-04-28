@@ -139,7 +139,12 @@ public class ServerLogic implements GameLogicInterface {
 						"Got mode switch request from nonexisting player.", e1);
 				break;
 			}
-			if (mf.getCurrentMode() != switchEvent.getRequestedMode()
+
+			boolean switchAllowed = getGame().getGameSettings().getGameMode()
+					.canSwitchMode(mf, switchEvent.getRequestedMode());
+
+			if (switchAllowed
+					&& mf.getCurrentMode() != switchEvent.getRequestedMode()
 					&& mf.getModeSwitchCooldown() <= 0) {
 				mf.stopMoving();
 				mf.setMode(switchEvent.getRequestedMode());
@@ -148,7 +153,6 @@ public class ServerLogic implements GameLogicInterface {
 			} else {
 				L.info("Got an switch request but player is already in that mode or switching is not ready.");
 			}
-
 			break;
 		case ITEM_USE:
 			ItemEvent itemEvent = (ItemEvent) event;
