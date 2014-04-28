@@ -21,7 +21,7 @@ public class InetPolizei extends NetworkPolicy {
 				.getEventNumber());
 		if (number == GameEventNumber.SET_POS_UDP
 				|| number == GameEventNumber.SET_ROTATION
-				|| number == GameEventNumber.SET_RESOURCES) {
+				|| number == GameEventNumber.SET_TEAM_RESOURCE) {
 			return PacketType.UDP;
 		} else {
 			return PacketType.TCP;

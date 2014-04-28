@@ -10,6 +10,7 @@ import de.illonis.edulog.EduLog;
 import de.illonis.eduras.events.SetIntegerGameObjectAttributeEvent;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
 import de.illonis.eduras.units.PlayerMainFigure;
+import de.illonis.eduras.units.PlayerMainFigure.InteractMode;
 
 /**
  * Displays player details like stats, health, etc.
@@ -42,6 +43,7 @@ public class PlayerStatBar extends RenderedGuiObject {
 		health = maxHealth = 10;
 		screenX = 0;
 		recalculate();
+		setActiveInteractModes(InteractMode.MODE_EGO);
 	}
 
 	@Override

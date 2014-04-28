@@ -15,7 +15,8 @@ import de.illonis.eduras.gamemodes.GameMode;
  * 
  */
 public class GameModeBar extends RenderedGuiObject {
-	private final static Logger L = EduLog.getLoggerFor(GameModeBar.class.getName());
+	private final static Logger L = EduLog.getLoggerFor(GameModeBar.class
+			.getName());
 
 	private String mode;
 
@@ -42,7 +43,7 @@ public class GameModeBar extends RenderedGuiObject {
 
 	@Override
 	public void onGuiSizeChanged(int newWidth, int newHeight) {
-		screenX = newWidth / 2 ;
+		screenX = newWidth / 2;
 	}
 
 	@Override

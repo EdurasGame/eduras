@@ -16,6 +16,7 @@ import de.illonis.eduras.events.SetIntegerGameObjectAttributeEvent;
 import de.illonis.eduras.events.SetInteractModeEvent;
 import de.illonis.eduras.events.SetItemSlotEvent;
 import de.illonis.eduras.events.SetOwnerEvent;
+import de.illonis.eduras.events.SetTeamResourceEvent;
 import de.illonis.eduras.events.SetVisibilityEvent;
 import de.illonis.eduras.gameclient.gui.game.GuiClickReactor;
 import de.illonis.eduras.gameclient.gui.game.TooltipHandler;
@@ -136,7 +137,7 @@ public abstract class RenderedGuiObject implements GameEventListener {
 	 *         false otherwise.
 	 */
 	public final boolean isEnabledIn(InteractMode interactMode) {
-		return enabledModes.contains(interactMode);
+		return enabledModes.isEmpty() || enabledModes.contains(interactMode);
 	}
 
 	/**
@@ -232,9 +233,13 @@ public abstract class RenderedGuiObject implements GameEventListener {
 	@Override
 	public void onGameReady() {
 	}
-	
+
 	@Override
 	public void onVisibilityChanged(SetVisibilityEvent event) {
+	}
+	
+	@Override
+	public void onTeamResourceChanged(SetTeamResourceEvent setTeamResourceEvent) {
 	}
 
 }

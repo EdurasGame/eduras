@@ -12,9 +12,9 @@ import org.newdawn.slick.UnicodeFont;
 import org.newdawn.slick.font.effects.ColorEffect;
 
 import de.illonis.eduras.gameclient.datacache.GraphicsPreLoader;
-import de.illonis.eduras.gameclient.gui.InputKeyHandler;
 import de.illonis.eduras.gameclient.gui.game.GameRenderer;
 import de.illonis.eduras.gameclient.gui.game.GuiMouseHandler;
+import de.illonis.eduras.gameclient.gui.game.InputKeyHandler;
 import de.illonis.eduras.logic.LogicGameWorker;
 
 /**

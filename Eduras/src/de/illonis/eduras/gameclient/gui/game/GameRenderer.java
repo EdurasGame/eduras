@@ -38,6 +38,7 @@ import de.illonis.eduras.math.Geometry;
 import de.illonis.eduras.math.Vector2df;
 import de.illonis.eduras.settings.S;
 import de.illonis.eduras.units.PlayerMainFigure;
+import de.illonis.eduras.units.PlayerMainFigure.InteractMode;
 import de.illonis.eduras.units.Unit;
 
 /**
@@ -58,8 +59,8 @@ public class GameRenderer implements TooltipHandler {
 	private float scale;
 	private boolean tooltipShown = false;
 	private final LinkedList<RenderedGuiObject> uiObjects;
-	private final static int DEFAULT_WIDTH = 500;
-	private final static int DEFAULT_HEIGHT = 500;
+	private final static int DEFAULT_WIDTH = 798;
+	private final static int DEFAULT_HEIGHT = 571;
 	private final InformationProvider info;
 	private final ClientData data;
 	private final static Color FOG_OF_WAR = new Color(0, 0, 0, 200);
@@ -197,9 +198,17 @@ public class GameRenderer implements TooltipHandler {
 	 * Draw every gui element.
 	 */
 	private void drawGui(Graphics g) {
+		InteractMode mode;
+		try {
+			mode = info.getPlayer().getCurrentMode();
+		} catch (ObjectNotFoundException e) {
+			L.log(Level.WARNING, "Player not found", e);
+			return;
+		}
 		for (int i = 0; i < uiObjects.size(); i++) {
 			RenderedGuiObject o = uiObjects.get(i);
-			if (!gui.isSpectator() || o.isVisibleForSpectator())
+			if (o.isEnabledIn(mode)
+					&& (!gui.isSpectator() || o.isVisibleForSpectator()))
 				o.render(g);
 		}
 		if (tooltipShown) {

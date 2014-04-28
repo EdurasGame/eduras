@@ -102,6 +102,9 @@ public class ChatCache {
 			currentRoom = getSelfUser().getOccupiedRooms().getFirst();
 	}
 
+	/**
+	 * @return true if user is active in chat window.
+	 */
 	public boolean isWriting() {
 		return writing;
 	}
