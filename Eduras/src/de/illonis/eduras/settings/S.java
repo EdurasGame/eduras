@@ -477,6 +477,12 @@ public final class S {
 
 	public static int spell_heal_amount = 100;
 
+	public static int unit_observer_maxhealth = 10;
+
+	public static float unit_observer_visionangle = 360;
+
+	public static float unit_observer_visionrange = 300;
+
 	/**
 	 * Reads values from the file and writes them to the S classes attributes.
 	 * 
