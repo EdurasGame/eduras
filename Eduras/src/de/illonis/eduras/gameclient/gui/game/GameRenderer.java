@@ -184,6 +184,10 @@ public class GameRenderer implements TooltipHandler {
 		try {
 			PlayerMainFigure p = getClientPlayer();
 			Vector2f c = p.getPositionVector();
+			// get offset and increase offset by movement
+			Vector2f offset = camera.getCameraOffset().add(
+					camera.getCameraMovement());
+			c.add(offset);
 			camera.centerAt(c.x, c.y);
 			viewPort.centerAt(c.x * scale, c.y * scale);
 		} catch (ObjectNotFoundException e) {

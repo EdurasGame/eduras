@@ -5,7 +5,6 @@ import java.awt.event.MouseEvent;
 import java.awt.geom.Rectangle2D;
 import java.util.LinkedList;
 
-import org.newdawn.slick.Game;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.Vector2f;
@@ -24,6 +23,8 @@ import de.illonis.eduras.units.PlayerMainFigure.InteractMode;
  * 
  */
 public class BuildModeMouseAdapter extends GuiMouseAdapter {
+
+	private final static int SCROLL_MOUSE_PADDING = 30;
 
 	private Point startPoint;
 
@@ -50,7 +51,7 @@ public class BuildModeMouseAdapter extends GuiMouseAdapter {
 						EdurasInitializer.getInstance()
 								.getInformationProvider()
 								.findObjectsAt(clickGamePoint));
-				
+
 				for (GameObject gameObject : obs) {
 					System.out.println(gameObject.getType());
 					if (gameObject instanceof NeutralBase) {
@@ -121,6 +122,28 @@ public class BuildModeMouseAdapter extends GuiMouseAdapter {
 
 	@Override
 	public void mouseMoved(int oldx, int oldy, int newx, int newy) {
+		Vector2f cameraMovement = getPanelLogic().getCamera()
+				.getCameraMovement();
+		// TODO: Make camera movement speed a user setting.
+
+		// scroll camera when mouse is near window border
+		// horizontal movement
+		if (newx < SCROLL_MOUSE_PADDING)
+			cameraMovement.x = -5;
+		else if (newx > getPanelLogic().getGui().getWidth()
+				- SCROLL_MOUSE_PADDING)
+			cameraMovement.x = 5;
+		else
+			cameraMovement.x = 0;
+
+		// vertical movement
+		if (newy < SCROLL_MOUSE_PADDING)
+			cameraMovement.y = -5;
+		else if (newy > getPanelLogic().getGui().getHeight()
+				- SCROLL_MOUSE_PADDING)
+			cameraMovement.y = 5;
+		else
+			cameraMovement.y = 0;
 	}
 
 	@Override

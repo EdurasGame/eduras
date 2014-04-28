@@ -176,6 +176,13 @@ public class GamePanelLogic extends ClientGuiStepLogic implements
 	}
 
 	/**
+	 * @return the current gamecamera.
+	 */
+	public GameCamera getCamera() {
+		return camera;
+	}
+
+	/**
 	 * Notifies all ui objects that gui size has changed.
 	 * 
 	 */
