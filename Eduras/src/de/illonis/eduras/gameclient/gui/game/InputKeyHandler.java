@@ -7,6 +7,7 @@ import java.util.logging.Logger;
 import org.newdawn.slick.Input;
 
 import de.illonis.edulog.EduLog;
+import de.illonis.eduras.exceptions.ActionFailedException;
 import de.illonis.eduras.exceptions.KeyNotBoundException;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
 import de.illonis.eduras.gameclient.GamePanelReactor;
@@ -140,7 +141,11 @@ public class InputKeyHandler {
 			}
 			GuiKeyHandler handler = keyHandlers.get(player.getCurrentMode());
 			if (handler != null) {
-				handler.keyPressed(binding);
+				try {
+					handler.keyPressed(binding);
+				} catch (ActionFailedException e) {
+					client.onActionFailed(e);
+				}
 			}
 		}
 

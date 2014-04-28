@@ -8,6 +8,8 @@ import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.gameobjects.GameObject.Relation;
 import de.illonis.eduras.gameobjects.NeutralBase;
 import de.illonis.eduras.maps.SpawnPosition.SpawnType;
+import de.illonis.eduras.units.PlayerMainFigure;
+import de.illonis.eduras.units.PlayerMainFigure.InteractMode;
 import de.illonis.eduras.units.Unit;
 
 /**
@@ -154,5 +156,16 @@ public interface GameMode {
 	 * @return true if the binding is supported.
 	 */
 	public boolean supportsKeyBinding(KeyBinding binding);
+
+	/**
+	 * Determines whether the given player is allowed/is able to switch to the
+	 * given mode.
+	 * 
+	 * @param player
+	 *            The player for which to determine whether he can switch modes.
+	 * @param mode
+	 * @return true if player is allowed/able to, false otherwise.
+	 */
+	public boolean canSwitchMode(PlayerMainFigure player, InteractMode mode);
 
 }

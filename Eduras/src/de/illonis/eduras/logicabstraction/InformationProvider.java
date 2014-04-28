@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.newdawn.slick.geom.Rectangle;
 
+import de.illonis.eduras.ObjectFactory.ObjectType;
 import de.illonis.eduras.Statistic;
 import de.illonis.eduras.Team;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
@@ -126,4 +127,8 @@ public class InformationProvider implements InfoInterface {
 		return logic.getGame().getClientData();
 	}
 
+	@Override
+	public Collection<GameObject> findObjectsByType(ObjectType type) {
+		return logic.getGame().findObjectsByType(type);
+	}
 }

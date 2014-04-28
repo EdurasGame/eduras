@@ -18,6 +18,7 @@ import de.illonis.eduras.gameobjects.NeutralBase;
 import de.illonis.eduras.logic.EventTriggerer;
 import de.illonis.eduras.maps.SpawnPosition.SpawnType;
 import de.illonis.eduras.units.PlayerMainFigure;
+import de.illonis.eduras.units.PlayerMainFigure.InteractMode;
 import de.illonis.eduras.units.Unit;
 
 /**
@@ -188,5 +189,10 @@ public class Deathmatch extends BasicGameMode {
 		if (binding == KeyBinding.SWITCH_MODE)
 			return false;
 		return true;
+	}
+
+	@Override
+	public boolean canSwitchMode(PlayerMainFigure player, InteractMode mode) {
+		return false;
 	}
 }

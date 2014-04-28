@@ -4,6 +4,7 @@ import java.awt.geom.Rectangle2D;
 
 import org.newdawn.slick.geom.Vector2f;
 
+import de.illonis.eduras.exceptions.NotWithinBaseException;
 import de.illonis.eduras.gameobjects.MoveableGameObject.Direction;
 import de.illonis.eduras.units.PlayerMainFigure;
 
@@ -57,8 +58,10 @@ public interface GamePanelReactor {
 
 	/**
 	 * Indicates a mode switch.
+	 * 
+	 * @throws NotWithinBaseException
 	 */
-	void onModeSwitch();
+	void onModeSwitch() throws NotWithinBaseException;
 
 	/**
 	 * Indicates a simple click at given position. This should either select a
