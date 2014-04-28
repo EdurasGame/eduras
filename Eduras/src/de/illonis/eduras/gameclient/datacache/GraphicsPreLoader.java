@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -33,6 +34,8 @@ import de.illonis.eduras.shapes.data.ShapeParser;
  */
 public final class GraphicsPreLoader extends AsyncLoader<Void> {
 
+	private final static LinkedList<CacheReadyListener> listeners = new LinkedList<CacheReadyListener>();
+
 	private final static Logger L = EduLog.getLoggerFor(GraphicsPreLoader.class
 			.getName());
 
@@ -42,6 +45,10 @@ public final class GraphicsPreLoader extends AsyncLoader<Void> {
 	 */
 	public GraphicsPreLoader(AsyncLoadCompletedListener listener) {
 		super(listener);
+	}
+
+	public static void addCacheListener(CacheReadyListener listener) {
+		listeners.add(listener);
 	}
 
 	private GraphicsPreLoader() {
@@ -64,7 +71,7 @@ public final class GraphicsPreLoader extends AsyncLoader<Void> {
 		GraphicsPreLoader p = new GraphicsPreLoader();
 		p.loadShapes();
 	}
-	
+
 	/**
 	 * Loads images for client.
 	 */
@@ -75,6 +82,10 @@ public final class GraphicsPreLoader extends AsyncLoader<Void> {
 		p.loadIcons();
 		p.loadGraphics();
 		p.loadInventoryIcons();
+
+		for (CacheReadyListener listener : listeners) {
+			listener.cacheReady();
+		}
 	}
 
 	private void loadIcons() {

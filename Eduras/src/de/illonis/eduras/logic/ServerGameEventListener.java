@@ -130,4 +130,8 @@ public class ServerGameEventListener implements GameEventListener {
 	public void onTeamResourceChanged(SetTeamResourceEvent setTeamResourceEvent) {
 	}
 
+	@Override
+	public void onPlayerInformationReceived() {
+	}
+
 }

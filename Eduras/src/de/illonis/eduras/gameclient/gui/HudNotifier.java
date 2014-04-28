@@ -16,7 +16,6 @@ import de.illonis.eduras.events.SetItemSlotEvent;
 import de.illonis.eduras.events.SetOwnerEvent;
 import de.illonis.eduras.events.SetTeamResourceEvent;
 import de.illonis.eduras.events.SetVisibilityEvent;
-import de.illonis.eduras.gameclient.gui.hud.RenderedGuiObject;
 import de.illonis.eduras.gamemodes.GameMode;
 import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.interfaces.GameEventListener;
@@ -30,14 +29,16 @@ import de.illonis.eduras.interfaces.GameEventListener;
  */
 public class HudNotifier implements GameEventListener {
 
-	private LinkedList<RenderedGuiObject> uiObjects;
+	private LinkedList<? extends GameEventListener> uiObjects;
+	private final LinkedList<GameEventListener> otherObjects;
 
 	/**
 	 * Creates a new {@link HudNotifier}.
 	 * 
 	 */
 	public HudNotifier() {
-		this.uiObjects = new LinkedList<RenderedGuiObject>();
+		this.uiObjects = new LinkedList<GameEventListener>();
+		this.otherObjects = new LinkedList<GameEventListener>();
 	}
 
 	/**
@@ -46,20 +47,34 @@ public class HudNotifier implements GameEventListener {
 	 * @param objects
 	 *            a list of gui objects that should be notified.
 	 */
-	public void setUiObjects(LinkedList<RenderedGuiObject> objects) {
+	public void setUiObjects(LinkedList<? extends GameEventListener> objects) {
 		this.uiObjects = objects;
+	}
+
+	public void addListener(GameEventListener listener) {
+		otherObjects.add(listener);
+	}
+
+	public void removeListener(GameEventListener listener) {
+		otherObjects.remove(listener);
 	}
 
 	@Override
 	public void onMaxHealthChanged(SetIntegerGameObjectAttributeEvent event) {
-		for (RenderedGuiObject obj : uiObjects) {
+		for (GameEventListener obj : uiObjects) {
+			obj.onMaxHealthChanged(event);
+		}
+		for (GameEventListener obj : otherObjects) {
 			obj.onMaxHealthChanged(event);
 		}
 	}
 
 	@Override
 	public void onNewObjectPosition(GameObject object) {
-		for (RenderedGuiObject obj : uiObjects) {
+		for (GameEventListener obj : uiObjects) {
+			obj.onNewObjectPosition(object);
+		}
+		for (GameEventListener obj : otherObjects) {
 			obj.onNewObjectPosition(object);
 		}
 	}
@@ -67,107 +82,150 @@ public class HudNotifier implements GameEventListener {
 	@Override
 	public void onInformationRequested(ArrayList<GameEvent> events,
 			int targetOwner) {
-		for (RenderedGuiObject obj : uiObjects) {
+		for (GameEventListener obj : uiObjects) {
+			obj.onInformationRequested(events, targetOwner);
+		}
+		for (GameEventListener obj : otherObjects) {
 			obj.onInformationRequested(events, targetOwner);
 		}
 	}
 
 	@Override
 	public void onObjectCreation(ObjectFactoryEvent event) {
-		for (RenderedGuiObject obj : uiObjects) {
+		for (GameEventListener obj : uiObjects) {
+			obj.onObjectCreation(event);
+		}
+		for (GameEventListener obj : otherObjects) {
 			obj.onObjectCreation(event);
 		}
 	}
 
 	@Override
 	public void onClientRename(ClientRenameEvent event) {
-		for (RenderedGuiObject obj : uiObjects) {
+		for (GameEventListener obj : uiObjects) {
+			obj.onClientRename(event);
+		}
+		for (GameEventListener obj : otherObjects) {
 			obj.onClientRename(event);
 		}
 	}
 
 	@Override
 	public void onObjectStateChanged(SetGameObjectAttributeEvent<?> event) {
-		for (RenderedGuiObject obj : uiObjects) {
+		for (GameEventListener obj : uiObjects) {
+			obj.onObjectStateChanged(event);
+		}
+		for (GameEventListener obj : otherObjects) {
 			obj.onObjectStateChanged(event);
 		}
 	}
 
 	@Override
 	public void onGameModeChanged(GameMode newGameMode) {
-		for (RenderedGuiObject obj : uiObjects) {
+		for (GameEventListener obj : uiObjects) {
+			obj.onGameModeChanged(newGameMode);
+		}
+		for (GameEventListener obj : otherObjects) {
 			obj.onGameModeChanged(newGameMode);
 		}
 	}
 
 	@Override
 	public void onHealthChanged(SetIntegerGameObjectAttributeEvent event) {
-		for (RenderedGuiObject obj : uiObjects) {
+		for (GameEventListener obj : uiObjects) {
+			obj.onHealthChanged(event);
+		}
+		for (GameEventListener obj : otherObjects) {
 			obj.onHealthChanged(event);
 		}
 	}
 
 	@Override
 	public void onOwnerChanged(SetOwnerEvent event) {
-		for (RenderedGuiObject obj : uiObjects) {
+		for (GameEventListener obj : uiObjects) {
+			obj.onOwnerChanged(event);
+		}
+		for (GameEventListener obj : otherObjects) {
 			obj.onOwnerChanged(event);
 		}
 	}
 
 	@Override
 	public void onItemSlotChanged(SetItemSlotEvent event) {
-		for (RenderedGuiObject obj : uiObjects) {
+		for (GameEventListener obj : uiObjects) {
+			obj.onItemSlotChanged(event);
+		}
+		for (GameEventListener obj : otherObjects) {
 			obj.onItemSlotChanged(event);
 		}
 	}
 
 	@Override
 	public void onObjectRemove(ObjectFactoryEvent event) {
-		for (RenderedGuiObject obj : uiObjects) {
+		for (GameEventListener obj : uiObjects) {
+			obj.onObjectRemove(event);
+		}
+		for (GameEventListener obj : otherObjects) {
 			obj.onObjectRemove(event);
 		}
 	}
 
 	@Override
 	public void onMatchEnd(MatchEndEvent event) {
-		for (RenderedGuiObject obj : uiObjects) {
+		for (GameEventListener obj : uiObjects) {
+			obj.onMatchEnd(event);
+		}
+		for (GameEventListener obj : otherObjects) {
 			obj.onMatchEnd(event);
 		}
 	}
 
-	/**
-	 * Notifies gui objects that player object has been received.
-	 */
-	public void onPlayerReceived() {
-		for (RenderedGuiObject obj : uiObjects) {
+	@Override
+	public void onPlayerInformationReceived() {
+		for (GameEventListener obj : uiObjects) {
+			obj.onPlayerInformationReceived();
+		}
+		for (GameEventListener obj : otherObjects) {
 			obj.onPlayerInformationReceived();
 		}
 	}
 
 	@Override
 	public void onDeath(DeathEvent event) {
-		for (RenderedGuiObject obj : uiObjects) {
+		for (GameEventListener obj : uiObjects) {
+			obj.onDeath(event);
+		}
+		for (GameEventListener obj : otherObjects) {
 			obj.onDeath(event);
 		}
 	}
 
 	@Override
 	public void onCooldownStarted(ItemEvent event) {
-		for (RenderedGuiObject obj : uiObjects) {
+		for (GameEventListener obj : uiObjects) {
+			obj.onCooldownStarted(event);
+		}
+		for (GameEventListener obj : otherObjects) {
 			obj.onCooldownStarted(event);
 		}
 	}
 
 	@Override
 	public void onCooldownFinished(ItemEvent event) {
-		for (RenderedGuiObject obj : uiObjects) {
+		for (GameEventListener obj : uiObjects) {
+			obj.onCooldownFinished(event);
+		}
+		for (GameEventListener obj : otherObjects) {
 			obj.onCooldownFinished(event);
 		}
 	}
 
 	@Override
 	public void onInteractModeChanged(SetInteractModeEvent setModeEvent) {
-		for (RenderedGuiObject obj : uiObjects) {
+		for (GameEventListener obj : uiObjects) {
+			obj.onInteractModeChanged(setModeEvent);
+		}
+		for (GameEventListener obj : otherObjects) {
 			obj.onInteractModeChanged(setModeEvent);
 		}
 	}
@@ -178,14 +236,20 @@ public class HudNotifier implements GameEventListener {
 
 	@Override
 	public void onVisibilityChanged(SetVisibilityEvent event) {
-		for (RenderedGuiObject obj : uiObjects) {
+		for (GameEventListener obj : uiObjects) {
+			obj.onVisibilityChanged(event);
+		}
+		for (GameEventListener obj : otherObjects) {
 			obj.onVisibilityChanged(event);
 		}
 	}
 
 	@Override
 	public void onTeamResourceChanged(SetTeamResourceEvent setTeamResourceEvent) {
-		for (RenderedGuiObject obj : uiObjects) {
+		for (GameEventListener obj : uiObjects) {
+			obj.onTeamResourceChanged(setTeamResourceEvent);
+		}
+		for (GameEventListener obj : otherObjects) {
 			obj.onTeamResourceChanged(setTeamResourceEvent);
 		}
 	}

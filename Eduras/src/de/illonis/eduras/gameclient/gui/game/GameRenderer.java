@@ -28,6 +28,8 @@ import de.illonis.eduras.gameclient.gui.animation.Animation;
 import de.illonis.eduras.gameclient.gui.hud.HealthBar;
 import de.illonis.eduras.gameclient.gui.hud.ItemTooltip;
 import de.illonis.eduras.gameclient.gui.hud.RenderedGuiObject;
+import de.illonis.eduras.gameclient.gui.hud.TextTooltip;
+import de.illonis.eduras.gameclient.gui.hud.Tooltip;
 import de.illonis.eduras.gameclient.gui.hud.UserInterface;
 import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.gameobjects.NeutralBase;
@@ -55,7 +57,7 @@ public class GameRenderer implements TooltipHandler {
 	private final GameCamera viewPort;
 	private final UserInterface gui;
 	private final Map<Integer, GameObject> objs;
-	private ItemTooltip tooltip;
+	private Tooltip tooltip;
 	private float scale;
 	private boolean tooltipShown = false;
 	private final LinkedList<RenderedGuiObject> uiObjects;
@@ -417,11 +419,10 @@ public class GameRenderer implements TooltipHandler {
 
 	@Override
 	public void showItemTooltip(Vector2f p, Item item) {
-		if (tooltip == null) {
-			tooltip = new ItemTooltip(gui, item);
-			tooltip.removeFromGui();
+		if (tooltip == null || !(tooltip instanceof ItemTooltip)) {
+			tooltip = new ItemTooltip(item);
 		} else {
-			tooltip.setItem(item);
+			((ItemTooltip) tooltip).setItem(item);
 		}
 		tooltip.moveTo(p);
 		tooltipShown = true;
@@ -429,7 +430,13 @@ public class GameRenderer implements TooltipHandler {
 
 	@Override
 	public void showTooltip(Vector2f p, String text) {
-		// TODO: implement
+		if (tooltip == null || !(tooltip instanceof TextTooltip)) {
+			tooltip = new TextTooltip(text);
+		} else {
+			((TextTooltip) tooltip).setText(text);
+		}
+		tooltip.moveTo(p);
+		tooltipShown = true;
 	}
 
 	@Override

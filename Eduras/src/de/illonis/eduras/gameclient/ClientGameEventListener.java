@@ -65,7 +65,7 @@ public class ClientGameEventListener implements GameEventListener {
 		// if our player was created, player data is there.
 		if (event.getOwner() == client.getOwnerID()
 				&& event.getObjectType() == ObjectType.PLAYER)
-			ui.onPlayerReceived();
+			ui.onPlayerInformationReceived();
 	}
 
 	@Override
@@ -148,5 +148,9 @@ public class ClientGameEventListener implements GameEventListener {
 	@Override
 	public void onTeamResourceChanged(SetTeamResourceEvent setTeamResourceEvent) {
 		ui.onTeamResourceChanged(setTeamResourceEvent);		
+	}
+
+	@Override
+	public void onPlayerInformationReceived() {
 	}
 }

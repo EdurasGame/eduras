@@ -112,7 +112,7 @@ public class GamePanelLogic extends ClientGuiStepLogic implements
 
 	private void initUserInterface() {
 		userInterface = new UserInterface(infoPro, mouseHandler, mouseHandler,
-				hudNotifier, cache);
+				hudNotifier, reactor, cache);
 		renderer = new GameRenderer(camera, userInterface, infoPro, data);
 		userInterface.setRenderer(renderer);
 		// renderer.setTarget(gui);

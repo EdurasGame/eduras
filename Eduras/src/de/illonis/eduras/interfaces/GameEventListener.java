@@ -55,6 +55,12 @@ public interface GameEventListener {
 	void onObjectCreation(ObjectFactoryEvent event);
 
 	/**
+	 * Indicates that player information have been received and initial logic is
+	 * available.
+	 */
+	void onPlayerInformationReceived();
+
+	/**
 	 * Fired when a client has a new name.
 	 * 
 	 * @param event
@@ -172,6 +178,12 @@ public interface GameEventListener {
 	 */
 	void onInteractModeChanged(SetInteractModeEvent setModeEvent);
 
+	/**
+	 * Called when the amount of a team resource changed.
+	 * 
+	 * @param setTeamResourceEvent
+	 *            the event data.
+	 */
 	void onTeamResourceChanged(SetTeamResourceEvent setTeamResourceEvent);
 
 	/**

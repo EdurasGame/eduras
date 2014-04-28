@@ -49,6 +49,8 @@ public interface GamePanelReactor {
 	 *            the rectangle that has been drawn.
 	 */
 	void onUnitsSelected(Rectangle2D.Double area);
+	
+	void onPlayerRezz(PlayerMainFigure target);
 
 	/**
 	 * Triggers users wish of quitting the game.

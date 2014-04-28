@@ -254,4 +254,9 @@ public class GuiInternalEventListener implements LoginPanelReactor,
 		float angle = vPoint.getAngleToXAxis();
 		player.setRotation(angle);
 	}
+
+	@Override
+	public void onPlayerRezz(PlayerMainFigure target) {
+		
+	}
 }

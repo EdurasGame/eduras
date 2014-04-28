@@ -13,17 +13,8 @@ import de.illonis.eduras.gameclient.gui.game.GameRenderer;
  * @author illonis
  * 
  */
-public abstract class Tooltip extends RenderedGuiObject {
-
-	/**
-	 * Creates a new tooltip.
-	 * 
-	 * @param gui
-	 *            the associated user interface.
-	 */
-	protected Tooltip(UserInterface gui) {
-		super(gui);
-	}
+public abstract class Tooltip {
+	float screenX, screenY;
 
 	protected int width, height;
 
@@ -41,12 +32,17 @@ public abstract class Tooltip extends RenderedGuiObject {
 		// prevent hidden parts.
 	}
 
-	@Override
+	/**
+	 * Renders this tooltip
+	 * 
+	 * @param g2d
+	 *            target graphics.
+	 */
 	public void render(Graphics g2d) {
+		g2d.setLineWidth(1f);
 		g2d.setColor(Color.black);
 		g2d.fillRect(screenX, screenY, width, height);
 		g2d.setColor(Color.gray);
 		g2d.drawRect(screenX, screenY, width, height);
-		g2d.setColor(Color.white);
 	}
 }

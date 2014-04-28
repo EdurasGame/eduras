@@ -159,12 +159,6 @@ public abstract class RenderedGuiObject implements GameEventListener {
 	 */
 	public abstract void onGuiSizeChanged(int newWidth, int newHeight);
 
-	/**
-	 * Indicates that player information have been received and initial logic is
-	 * available.
-	 */
-	public abstract void onPlayerInformationReceived();
-
 	@Override
 	public void onNewObjectPosition(GameObject object) {
 	}
