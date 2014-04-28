@@ -5,7 +5,9 @@ import java.awt.geom.Rectangle2D;
 import org.newdawn.slick.geom.Vector2f;
 
 import de.illonis.eduras.exceptions.NotWithinBaseException;
+import de.illonis.eduras.gameclient.gui.game.GamePanelLogic.ClickState;
 import de.illonis.eduras.gameobjects.MoveableGameObject.Direction;
+import de.illonis.eduras.gameobjects.NeutralBase;
 import de.illonis.eduras.units.PlayerMainFigure;
 
 /**
@@ -26,6 +28,14 @@ public interface GamePanelReactor {
 	 *            the target location.
 	 */
 	void onItemUse(int slotId, Vector2f target);
+
+	/**
+	 * Triggers direction change.
+	 * 
+	 * @param viewingPoint
+	 *            the new viewing direction.
+	 */
+	void onViewingDirectionChanged(Vector2f viewingPoint);
 
 	/**
 	 * Triggers start of movement of clients {@link PlayerMainFigure}.
@@ -50,8 +60,16 @@ public interface GamePanelReactor {
 	 *            the rectangle that has been drawn.
 	 */
 	void onUnitsSelected(Rectangle2D.Double area);
-	
-	void onPlayerRezz(PlayerMainFigure target);
+
+	/**
+	 * Resurrects given player.
+	 * 
+	 * @param player
+	 *            the player to resurrect.
+	 * @param base
+	 *            the base to resurrect at.
+	 */
+	void onPlayerRezz(PlayerMainFigure player, NeutralBase base);
 
 	/**
 	 * Triggers users wish of quitting the game.
@@ -82,5 +100,13 @@ public interface GamePanelReactor {
 	 *            the target location.
 	 */
 	void sendSelectedUnits(Vector2f target);
+
+	/**
+	 * Sets current click state in gui.
+	 * 
+	 * @param newState
+	 *            the new state.
+	 */
+	void setClickState(ClickState newState);
 
 }

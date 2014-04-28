@@ -3,12 +3,17 @@ package de.illonis.eduras.gameclient.gui.game;
 import java.awt.Point;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Rectangle2D;
+import java.util.LinkedList;
 
+import org.newdawn.slick.Input;
 import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.Vector2f;
 
 import de.illonis.eduras.gameclient.GuiInternalEventListener;
 import de.illonis.eduras.gameclient.gui.game.GamePanelLogic.ClickState;
+import de.illonis.eduras.gameobjects.GameObject;
+import de.illonis.eduras.gameobjects.NeutralBase;
+import de.illonis.eduras.logicabstraction.EdurasInitializer;
 import de.illonis.eduras.units.PlayerMainFigure.InteractMode;
 
 /**
@@ -30,10 +35,49 @@ public class BuildModeMouseAdapter extends GuiMouseAdapter {
 		Vector2f clickGamePoint = getPanelLogic()
 				.computeGuiPointToGameCoordinate(new Vector2f(x, y));
 
-		if (button == MouseEvent.BUTTON3) {
-			getListener().sendSelectedUnits(clickGamePoint);
-		} else if (button == MouseEvent.BUTTON1) {
-			getListener().selectOrDeselectAt(clickGamePoint);
+		switch (getPanelLogic().getClickState()) {
+		case DEFAULT:
+			if (button == Input.MOUSE_RIGHT_BUTTON) {
+				getListener().sendSelectedUnits(clickGamePoint);
+			} else if (button == Input.MOUSE_LEFT_BUTTON) {
+				getListener().selectOrDeselectAt(clickGamePoint);
+			}
+			break;
+		case SELECT_BASE_FOR_REZZ:
+			if (button == Input.MOUSE_LEFT_BUTTON) {
+				LinkedList<GameObject> obs = new LinkedList<GameObject>(
+						EdurasInitializer.getInstance()
+								.getInformationProvider()
+								.findObjectsAt(new Vector2f(x, y)));
+				for (GameObject gameObject : obs) {
+					if (gameObject instanceof NeutralBase) {
+						if (((NeutralBase) gameObject).getCurrentOwnerTeam() == getPanelLogic()
+								.getClientData().getCurrentResurrectTarget()
+								.getTeam()) {
+							getListener().onPlayerRezz(
+									getPanelLogic().getClientData()
+											.getCurrentResurrectTarget(),
+									(NeutralBase) gameObject);
+							getPanelLogic().setClickState(ClickState.DEFAULT);
+							return;
+						} else {
+							getPanelLogic()
+									.showNotification(
+											"You can only resurrect on bases your team owns.");
+							return;
+						}
+					}
+				}
+				getPanelLogic().showNotification(
+						"Please select a base owned by your team to resurrect "
+								+ getPanelLogic().getClientData()
+										.getCurrentResurrectTarget().getName());
+			} else {
+				getPanelLogic().setClickState(ClickState.DEFAULT);
+			}
+			break;
+		default:
+			break;
 		}
 	}
 

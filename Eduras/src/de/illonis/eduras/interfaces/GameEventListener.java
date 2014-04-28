@@ -8,6 +8,7 @@ import de.illonis.eduras.events.GameEvent;
 import de.illonis.eduras.events.ItemEvent;
 import de.illonis.eduras.events.MatchEndEvent;
 import de.illonis.eduras.events.ObjectFactoryEvent;
+import de.illonis.eduras.events.RespawnEvent;
 import de.illonis.eduras.events.SetGameObjectAttributeEvent;
 import de.illonis.eduras.events.SetIntegerGameObjectAttributeEvent;
 import de.illonis.eduras.events.SetInteractModeEvent;
@@ -149,6 +150,14 @@ public interface GameEventListener {
 	 * @author illonis
 	 */
 	void onDeath(DeathEvent event);
+
+	/**
+	 * Called when a unit respawns.
+	 * 
+	 * @param event
+	 *            the event holding information.
+	 */
+	void onRespawn(RespawnEvent event);
 
 	/**
 	 * Called when cooldown of an item has finished.

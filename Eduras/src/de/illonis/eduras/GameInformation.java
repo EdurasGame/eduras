@@ -11,6 +11,7 @@ import java.util.logging.Logger;
 
 import org.newdawn.slick.geom.Circle;
 import org.newdawn.slick.geom.Rectangle;
+import org.newdawn.slick.geom.Vector2f;
 
 import de.illonis.edulog.EduLog;
 import de.illonis.eduras.ObjectFactory.ObjectType;
@@ -604,5 +605,22 @@ public class GameInformation {
 		}
 
 		return objectsOfType;
+	}
+
+	/**
+	 * Searches for gameobjects at a given point in game.
+	 * 
+	 * @param point
+	 *            the game coordinate.
+	 * @return a list of objects that collide with that point.
+	 */
+	public LinkedList<GameObject> findObjectsAt(Vector2f point) {
+		LinkedList<GameObject> objs = new LinkedList<GameObject>();
+		for (GameObject object : objects.values()) {
+			if (object.getShape().contains(point.x, point.y)) {
+				objs.add(object);
+			}
+		}
+		return objs;
 	}
 }

@@ -65,7 +65,7 @@ public class GamePanelLogic extends ClientGuiStepLogic implements
 	 */
 	@SuppressWarnings("javadoc")
 	public enum ClickState {
-		DEFAULT, ITEM_SELECTED, UNITSELECT_DRAGGING;
+		DEFAULT, ITEM_SELECTED, UNITSELECT_DRAGGING, SELECT_BASE_FOR_REZZ;
 	}
 
 	/**

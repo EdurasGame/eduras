@@ -17,6 +17,7 @@ import de.illonis.eduras.events.ItemEvent;
 import de.illonis.eduras.events.MatchEndEvent;
 import de.illonis.eduras.events.MovementEvent;
 import de.illonis.eduras.events.ObjectFactoryEvent;
+import de.illonis.eduras.events.RespawnEvent;
 import de.illonis.eduras.events.SetAmmunitionEvent;
 import de.illonis.eduras.events.SetBooleanGameObjectAttributeEvent;
 import de.illonis.eduras.events.SetFloatGameObjectAttributeEvent;
@@ -102,9 +103,10 @@ public class ClientLogic implements GameLogicInterface {
 					break;
 				o.setYPosition(newYPos);
 				o.setXPosition(newXPos);
-
 				getListener().onNewObjectPosition(o);
-
+				break;
+			case INFO_RESPAWN:
+				getListener().onRespawn((RespawnEvent) event);
 				break;
 			case SET_HEALTH:
 				SetIntegerGameObjectAttributeEvent healthEvent = (SetIntegerGameObjectAttributeEvent) event;

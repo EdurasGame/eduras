@@ -11,6 +11,7 @@ import de.illonis.eduras.events.GameEvent;
 import de.illonis.eduras.events.ItemEvent;
 import de.illonis.eduras.events.MatchEndEvent;
 import de.illonis.eduras.events.ObjectFactoryEvent;
+import de.illonis.eduras.events.RespawnEvent;
 import de.illonis.eduras.events.SetGameObjectAttributeEvent;
 import de.illonis.eduras.events.SetIntegerGameObjectAttributeEvent;
 import de.illonis.eduras.events.SetInteractModeEvent;
@@ -142,15 +143,20 @@ public class ClientGameEventListener implements GameEventListener {
 
 	@Override
 	public void onVisibilityChanged(SetVisibilityEvent event) {
-		ui.onVisibilityChanged(event);		
+		ui.onVisibilityChanged(event);
 	}
 
 	@Override
 	public void onTeamResourceChanged(SetTeamResourceEvent setTeamResourceEvent) {
-		ui.onTeamResourceChanged(setTeamResourceEvent);		
+		ui.onTeamResourceChanged(setTeamResourceEvent);
 	}
 
 	@Override
 	public void onPlayerInformationReceived() {
+	}
+
+	@Override
+	public void onRespawn(RespawnEvent event) {
+		ui.onRespawn(event);
 	}
 }

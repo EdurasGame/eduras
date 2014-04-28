@@ -12,6 +12,7 @@ import org.newdawn.slick.geom.Vector2f;
 import de.illonis.edulog.EduLog;
 import de.illonis.eduras.events.GameEvent.GameEventNumber;
 import de.illonis.eduras.events.ItemEvent;
+import de.illonis.eduras.events.ResurrectPlayerEvent;
 import de.illonis.eduras.events.SendUnitsEvent;
 import de.illonis.eduras.events.SwitchInteractModeEvent;
 import de.illonis.eduras.events.UserMovementEvent;
@@ -19,8 +20,10 @@ import de.illonis.eduras.exceptions.MessageNotSupportedException;
 import de.illonis.eduras.exceptions.NotWithinBaseException;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
 import de.illonis.eduras.exceptions.WrongEventTypeException;
+import de.illonis.eduras.gameclient.gui.game.GamePanelLogic.ClickState;
 import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.gameobjects.MoveableGameObject.Direction;
+import de.illonis.eduras.gameobjects.NeutralBase;
 import de.illonis.eduras.logicabstraction.EdurasInitializer;
 import de.illonis.eduras.logicabstraction.InformationProvider;
 import de.illonis.eduras.math.Geometry;
@@ -245,6 +248,7 @@ public class GuiInternalEventListener implements LoginPanelReactor,
 		}
 	}
 
+	@Override
 	public void onViewingDirectionChanged(Vector2f viewingPoint) {
 		PlayerMainFigure player;
 		try {
@@ -262,7 +266,27 @@ public class GuiInternalEventListener implements LoginPanelReactor,
 	}
 
 	@Override
-	public void onPlayerRezz(PlayerMainFigure target) {
-		
+	public void onPlayerRezz(PlayerMainFigure player, NeutralBase base) {
+		ResurrectPlayerEvent event = new ResurrectPlayerEvent(
+				client.getOwnerID(), player.getOwner(), base.getId());
+		if (!player.isDead()) {
+			client.getFrame().getGamePanel()
+					.showNotification("Player is not dead");
+			return;
+		}
+		try {
+			client.sendEvent(event);
+			client.getFrame()
+					.getGamePanel()
+					.showNotification(
+							"Resurrecting " + player.getName() + "...");
+		} catch (WrongEventTypeException | MessageNotSupportedException e) {
+			L.log(Level.SEVERE, "Error sending resurrection event", e);
+		}
+	}
+
+	@Override
+	public void setClickState(ClickState newState) {
+		client.getFrame().getGamePanel().setClickState(newState);
 	}
 }

@@ -6,6 +6,8 @@ import java.util.TreeSet;
 
 import de.illonis.eduras.gameclient.gui.animation.Animation;
 import de.illonis.eduras.logicabstraction.InformationProvider;
+import de.illonis.eduras.units.PlayerMainFigure;
+import de.illonis.eduras.units.Unit;
 
 /**
  * Holds data that are stored only on client side and do not have to be
@@ -20,6 +22,7 @@ public final class ClientData {
 	private final LinkedList<Animation> animations;
 	private final VisionInformation visionInfo;
 	private int currentItemSelected;
+	private PlayerMainFigure currentResurrectTarget;
 
 	/**
 	 * Creates a new storage.
@@ -134,6 +137,15 @@ public final class ClientData {
 	 */
 	public VisionInformation getVisionInfo() {
 		return visionInfo;
+	}
+
+	public void setCurrentResurrectTarget(
+			PlayerMainFigure currentResurrectTarget) {
+		this.currentResurrectTarget = currentResurrectTarget;
+	}
+
+	public PlayerMainFigure getCurrentResurrectTarget() {
+		return currentResurrectTarget;
 	}
 
 }

@@ -9,6 +9,7 @@ import de.illonis.eduras.events.GameEvent;
 import de.illonis.eduras.events.ItemEvent;
 import de.illonis.eduras.events.MatchEndEvent;
 import de.illonis.eduras.events.ObjectFactoryEvent;
+import de.illonis.eduras.events.RespawnEvent;
 import de.illonis.eduras.events.SetGameObjectAttributeEvent;
 import de.illonis.eduras.events.SetIntegerGameObjectAttributeEvent;
 import de.illonis.eduras.events.SetInteractModeEvent;
@@ -251,6 +252,16 @@ public class HudNotifier implements GameEventListener {
 		}
 		for (GameEventListener obj : otherObjects) {
 			obj.onTeamResourceChanged(setTeamResourceEvent);
+		}
+	}
+
+	@Override
+	public void onRespawn(RespawnEvent event) {
+		for (GameEventListener obj : uiObjects) {
+			obj.onRespawn(event);
+		}
+		for (GameEventListener obj : otherObjects) {
+			obj.onRespawn(event);
 		}
 	}
 }

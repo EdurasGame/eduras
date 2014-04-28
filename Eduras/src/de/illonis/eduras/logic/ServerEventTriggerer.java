@@ -33,6 +33,7 @@ import de.illonis.eduras.events.ItemEvent;
 import de.illonis.eduras.events.MatchEndEvent;
 import de.illonis.eduras.events.MovementEvent;
 import de.illonis.eduras.events.ObjectFactoryEvent;
+import de.illonis.eduras.events.RespawnEvent;
 import de.illonis.eduras.events.SetAmmunitionEvent;
 import de.illonis.eduras.events.SetBooleanGameObjectAttributeEvent;
 import de.illonis.eduras.events.SetFloatGameObjectAttributeEvent;
@@ -361,6 +362,7 @@ public class ServerEventTriggerer implements EventTriggerer {
 		for (int i = 0; i < 6; i++)
 			changeItemSlot(i, player.getOwner(), null);
 
+		sendEventToAll(new RespawnEvent(player.getOwner()));
 		// TODO: Fire a respawn event to client.
 		remaxHealth(player);
 

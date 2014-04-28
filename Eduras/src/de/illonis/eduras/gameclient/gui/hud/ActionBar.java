@@ -1,12 +1,9 @@
 package de.illonis.eduras.gameclient.gui.hud;
 
-import java.util.logging.Logger;
-
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.Vector2f;
 
-import de.illonis.edulog.EduLog;
 import de.illonis.eduras.gameclient.gui.hud.ActionBarPage.PageNumber;
 import de.illonis.eduras.units.PlayerMainFigure.InteractMode;
 
