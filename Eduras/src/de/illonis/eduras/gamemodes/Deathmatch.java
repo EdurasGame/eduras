@@ -18,6 +18,7 @@ import de.illonis.eduras.gameobjects.NeutralBase;
 import de.illonis.eduras.logic.EventTriggerer;
 import de.illonis.eduras.maps.SpawnPosition.SpawnType;
 import de.illonis.eduras.units.PlayerMainFigure;
+import de.illonis.eduras.units.PlayerMainFigure.InteractMode;
 import de.illonis.eduras.units.Unit;
 
 /**
@@ -61,7 +62,7 @@ public class Deathmatch extends BasicGameMode {
 
 				// need to check here because client has no event triggerer.
 				// TODO: find a solution for client-workaraound.
-				et.respawnPlayer((PlayerMainFigure) killedUnit);
+				et.respawnPlayerAtRandomSpawnpoint((PlayerMainFigure) killedUnit);
 				et.changeStatOfPlayerByAmount(StatsProperty.DEATHS,
 						(PlayerMainFigure) killedUnit, 1);
 				// TODO: give player items here if game mode should do.
@@ -105,7 +106,7 @@ public class Deathmatch extends BasicGameMode {
 		gameInfo.addTeam(t);
 		gameInfo.getEventTriggerer().setTeams(gameInfo.getTeams());
 		gameInfo.getEventTriggerer().addPlayerToTeam(newPlayer.getOwner(), t);
-		gameInfo.getEventTriggerer().respawnPlayer(newPlayer);
+		gameInfo.getEventTriggerer().respawnPlayerAtRandomSpawnpoint(newPlayer);
 
 		// and add it to the statistic
 		gameInfo.getGameSettings().getStats().addPlayerToStats(ownerId);
@@ -188,5 +189,10 @@ public class Deathmatch extends BasicGameMode {
 //		if (binding == KeyBinding.SWITCH_MODE)
 //			return false;
 		return true;
+	}
+
+	@Override
+	public boolean canSwitchMode(PlayerMainFigure player, InteractMode mode) {
+		return false;
 	}
 }

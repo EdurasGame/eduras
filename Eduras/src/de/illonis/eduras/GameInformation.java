@@ -487,6 +487,18 @@ public class GameInformation {
 		return false;
 	}
 
+	public Collection<GameObject> doesAnyOfOtherObjectsIntersect(
+			GameObject object, Collection<GameObject> otherObjects) {
+		Collection<GameObject> intersectingGameObjects = new LinkedList<GameObject>();
+
+		for (GameObject o : otherObjects) {
+			if (o.getShape().intersects(object.getShape()))
+				intersectingGameObjects.add(o);
+		}
+
+		return intersectingGameObjects;
+	}
+
 	/**
 	 * Returns the spawning position for given player. This may change upon each
 	 * call.
@@ -572,5 +584,25 @@ public class GameInformation {
 	 */
 	public void removeTeam(Team team) {
 		teams.remove(team.getTeamId());
+	}
+
+	/**
+	 * Returns all objects of the given type.
+	 * 
+	 * @param type
+	 *            an object must have this type.
+	 * @return a collection of all objects of the given type.
+	 */
+	public Collection<GameObject> findObjectsByType(ObjectType type) {
+		Collection<GameObject> objectsOfType = new LinkedList<GameObject>();
+		Collection<GameObject> allObjects = getObjects().values();
+
+		for (GameObject singleObject : allObjects) {
+			if (singleObject.getType() == type) {
+				objectsOfType.add(singleObject);
+			}
+		}
+
+		return objectsOfType;
 	}
 }

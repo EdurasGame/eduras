@@ -8,6 +8,8 @@ import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.gameobjects.GameObject.Relation;
 import de.illonis.eduras.gameobjects.NeutralBase;
 import de.illonis.eduras.maps.SpawnPosition.SpawnType;
+import de.illonis.eduras.units.PlayerMainFigure;
+import de.illonis.eduras.units.PlayerMainFigure.InteractMode;
 import de.illonis.eduras.units.Unit;
 
 /**
@@ -59,7 +61,6 @@ public class ClientGameMode implements GameMode {
 	public void onDisconnect(int ownerId) {
 	}
 
-
 	@Override
 	public void onBaseOccupied(NeutralBase base, Team occupyingTeam) {
 	}
@@ -77,6 +78,11 @@ public class ClientGameMode implements GameMode {
 	public Team determineProgressingTeam(NeutralBase base, GameObject object,
 			boolean objectEntered, Set<GameObject> presentObjects) {
 		return null;
+	}
+
+	@Override
+	public boolean canSwitchMode(PlayerMainFigure player, InteractMode mode) {
+		return false;
 	}
 
 }

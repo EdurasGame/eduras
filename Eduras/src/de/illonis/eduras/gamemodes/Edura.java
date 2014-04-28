@@ -1,5 +1,6 @@
 package de.illonis.eduras.gamemodes;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Set;
@@ -11,16 +12,20 @@ import de.illonis.eduras.ObjectFactory.ObjectType;
 import de.illonis.eduras.Team;
 import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.gameobjects.NeutralBase;
+import de.illonis.eduras.gameobjects.TimedEventHandler;
 import de.illonis.eduras.maps.EduraMap;
 import de.illonis.eduras.maps.NodeData;
 import de.illonis.eduras.math.Vector2df;
 import de.illonis.eduras.math.graphs.Vertex;
+import de.illonis.eduras.units.PlayerMainFigure;
+import de.illonis.eduras.units.PlayerMainFigure.InteractMode;
 import de.illonis.eduras.units.Unit;
 
 public class Edura extends TeamDeathmatch {
 
 	private HashMap<NeutralBase, Vertex> baseToVertex;
 	private HashMap<Team, NeutralBase> mainBaseOfTeam;
+	private HashMap<NeutralBase, ResourceGenerator> baseToResourceGenerator;
 
 	private final static Logger L = EduLog.getLoggerFor(Edura.class.getName());
 
@@ -29,6 +34,7 @@ public class Edura extends TeamDeathmatch {
 
 		baseToVertex = new HashMap<NeutralBase, Vertex>();
 		mainBaseOfTeam = new HashMap<Team, NeutralBase>();
+		baseToResourceGenerator = new HashMap<NeutralBase, ResourceGenerator>();
 	}
 
 	@Override
@@ -43,7 +49,6 @@ public class Edura extends TeamDeathmatch {
 
 	@Override
 	public void onTimeUp() {
-		// TODO: do something when time is up
 	}
 
 	@Override
@@ -175,10 +180,72 @@ public class Edura extends TeamDeathmatch {
 		} else {
 			baseToVertex.get(base).setColor(occupyingTeam.getTeamId());
 		}
+
+		// generate resources
+		if (baseToResourceGenerator.containsKey(base)) {
+			L.severe("Base got occupied although it's already generating resources.");
+		} else {
+			ResourceGenerator newGenerator = new ResourceGenerator(base,
+					occupyingTeam);
+			base.getTimingSource().addTimedEventHandler(newGenerator);
+			baseToResourceGenerator.put(base, newGenerator);
+		}
+	}
+
+	class ResourceGenerator implements TimedEventHandler {
+
+		private NeutralBase base;
+		private Team team;
+
+		public ResourceGenerator(NeutralBase base, Team team) {
+			this.base = base;
+			this.team = team;
+		}
+
+		@Override
+		public long getInterval() {
+			return base.getResourceGenerateTimeInterval();
+		}
+
+		@Override
+		public void onIntervalElapsed(long delta) {
+			gameInfo.getEventTriggerer().changeResourcesOfTeamByAmount(team,
+					base.getResourceGenerateAmount());
+		}
+
 	}
 
 	@Override
 	public void onBaseLost(NeutralBase base, Team losingTeam) {
-		// don't do anything
+		// stop generating resources for the team
+		base.getTimingSource().removeTimedEventHandler(
+				baseToResourceGenerator.get(base));
+		baseToResourceGenerator.put(base, null);
+	}
+
+	@Override
+	public boolean canSwitchMode(PlayerMainFigure player, InteractMode mode) {
+		switch (mode) {
+		case MODE_EGO:
+			return true;
+		case MODE_STRATEGY:
+			Collection<GameObject> neutralBases = gameInfo
+					.findObjectsByType(ObjectType.NEUTRAL_BASE);
+
+			Collection<GameObject> intersectingObjects = gameInfo
+					.doesAnyOfOtherObjectsIntersect(player, neutralBases);
+
+			for (GameObject intersectingGameObject : intersectingObjects) {
+				NeutralBase intersectingBase = (NeutralBase) intersectingGameObject;
+				if (intersectingBase.getCurrentOwnerTeam() != null
+						&& intersectingBase.getCurrentOwnerTeam().equals(
+								player.getTeam())) {
+					return true;
+				}
+			}
+			return false;
+		default:
+			return false;
+		}
 	}
 }

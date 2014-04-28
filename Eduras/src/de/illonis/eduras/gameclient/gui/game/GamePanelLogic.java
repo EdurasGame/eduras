@@ -13,6 +13,7 @@ import de.illonis.edulog.EduLog;
 import de.illonis.eduras.chat.ChatClientImpl;
 import de.illonis.eduras.chat.NotConnectedException;
 import de.illonis.eduras.chat.UserNotInRoomException;
+import de.illonis.eduras.exceptions.ActionFailedException;
 import de.illonis.eduras.gameclient.ChatCache;
 import de.illonis.eduras.gameclient.ClientData;
 import de.illonis.eduras.gameclient.GuiInternalEventListener;
@@ -366,5 +367,9 @@ public class GamePanelLogic extends ClientGuiStepLogic implements
 	public void selectItem(int i) {
 		data.setCurrentItemSelected(i);
 		currentClickState = ClickState.ITEM_SELECTED;
+	}
+
+	public void onActionFailed(ActionFailedException e) {
+		showNotification(e.getMessage());
 	}
 }

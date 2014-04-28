@@ -20,11 +20,13 @@ import de.illonis.eduras.events.DeathEvent;
 import de.illonis.eduras.events.GameEvent.GameEventNumber;
 import de.illonis.eduras.events.GameInfoRequest;
 import de.illonis.eduras.events.GameReadyEvent;
+import de.illonis.eduras.events.HealActionEvent;
 import de.illonis.eduras.events.InitInformationEvent;
 import de.illonis.eduras.events.ItemEvent;
 import de.illonis.eduras.events.MatchEndEvent;
 import de.illonis.eduras.events.MovementEvent;
 import de.illonis.eduras.events.ObjectFactoryEvent;
+import de.illonis.eduras.events.RespawnPlayerEvent;
 import de.illonis.eduras.events.SendUnitsEvent;
 import de.illonis.eduras.events.SetAmmunitionEvent;
 import de.illonis.eduras.events.SetBooleanGameObjectAttributeEvent;
@@ -41,6 +43,7 @@ import de.illonis.eduras.events.SetStatsEvent;
 import de.illonis.eduras.events.SetTeamResourceEvent;
 import de.illonis.eduras.events.SetTeamsEvent;
 import de.illonis.eduras.events.SetVisibilityEvent;
+import de.illonis.eduras.events.SpawnItemEvent;
 import de.illonis.eduras.events.SwitchInteractModeEvent;
 import de.illonis.eduras.events.UserMovementEvent;
 import de.illonis.eduras.exceptions.InvalidNameException;
@@ -332,6 +335,22 @@ public class EventParser implements EventHandler {
 			case SET_MAP:
 				logic.onGameEventAppeared(new SetMapEvent((String) event
 						.getArgument(0)));
+				break;
+			case RESPAWN_PLAYER:
+				logic.onGameEventAppeared(new RespawnPlayerEvent(
+						(Integer) event.getArgument(0), (Integer) event
+								.getArgument(1), (Integer) event.getArgument(2)));
+				break;
+			case SPAWN_ITEM:
+				logic.onGameEventAppeared(new SpawnItemEvent((Integer) event
+						.getArgument(0), ObjectType
+						.getObjectTypeByNumber((Integer) event.getArgument(1)),
+						new Vector2df((Float) event.getArgument(2),
+								(Float) event.getArgument(3))));
+				break;
+			case HEAL_ACTION:
+				logic.onGameEventAppeared(new HealActionEvent((Integer) event
+						.getArgument(0), (Integer) event.getArgument(1)));
 				break;
 			default:
 				L.warning("Cannot handle event with event number "

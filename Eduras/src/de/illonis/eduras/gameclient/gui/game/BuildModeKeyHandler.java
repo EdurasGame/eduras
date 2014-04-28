@@ -1,5 +1,6 @@
 package de.illonis.eduras.gameclient.gui.game;
 
+import de.illonis.eduras.exceptions.NotWithinBaseException;
 import de.illonis.eduras.gameclient.GamePanelReactor;
 import de.illonis.eduras.gameclient.userprefs.KeyBindings.KeyBinding;
 import de.illonis.eduras.units.PlayerMainFigure.InteractMode;
@@ -17,7 +18,7 @@ public class BuildModeKeyHandler extends GuiKeyHandler {
 	}
 
 	@Override
-	void keyPressed(KeyBinding key) {
+	void keyPressed(KeyBinding key) throws NotWithinBaseException {
 		switch (key) {
 		case SWITCH_MODE:
 			reactor.onModeSwitch();

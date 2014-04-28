@@ -10,21 +10,29 @@ import org.newdawn.slick.geom.Vector2f;
 import de.illonis.edulog.EduLog;
 import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.ObjectFactory;
+import de.illonis.eduras.actions.HealSpellAction;
+import de.illonis.eduras.actions.RespawnPlayerAction;
+import de.illonis.eduras.actions.SpawnItemAction;
 import de.illonis.eduras.ai.movement.UnitNotControllableException;
 import de.illonis.eduras.events.ClientRenameEvent;
 import de.illonis.eduras.events.GameEvent;
 import de.illonis.eduras.events.GameEvent.GameEventNumber;
 import de.illonis.eduras.events.GameInfoRequest;
+import de.illonis.eduras.events.HealActionEvent;
 import de.illonis.eduras.events.InitInformationEvent;
 import de.illonis.eduras.events.ItemEvent;
+import de.illonis.eduras.events.RespawnPlayerEvent;
 import de.illonis.eduras.events.SendUnitsEvent;
 import de.illonis.eduras.events.SetFloatGameObjectAttributeEvent;
+import de.illonis.eduras.events.SpawnItemEvent;
 import de.illonis.eduras.events.SwitchInteractModeEvent;
 import de.illonis.eduras.events.UserMovementEvent;
 import de.illonis.eduras.exceptions.InvalidNameException;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
+import de.illonis.eduras.exceptions.WrongObjectTypeException;
 import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.gameobjects.MoveableGameObject.Direction;
+import de.illonis.eduras.gameobjects.NeutralBase;
 import de.illonis.eduras.interfaces.GameEventListener;
 import de.illonis.eduras.interfaces.GameLogicInterface;
 import de.illonis.eduras.inventory.ItemSlotIsEmptyException;
@@ -33,6 +41,7 @@ import de.illonis.eduras.items.ItemUseInformation;
 import de.illonis.eduras.items.Usable;
 import de.illonis.eduras.locale.Localization;
 import de.illonis.eduras.units.PlayerMainFigure;
+import de.illonis.eduras.units.Unit;
 
 /**
  * Server logic.
@@ -178,6 +187,63 @@ public class ServerLogic implements GameLogicInterface {
 			}
 
 			gameObject.setRotation(setRotationEvent.getNewValue());
+			break;
+		case RESPAWN_PLAYER:
+			RespawnPlayerEvent respawnPlayerEvent = (RespawnPlayerEvent) event;
+			try {
+				PlayerMainFigure executingPlayer = gameInfo
+						.getPlayerByOwnerId(respawnPlayerEvent
+								.getExecutingPlayer());
+				PlayerMainFigure playerToRespawn = gameInfo
+						.getPlayerByOwnerId(respawnPlayerEvent
+								.getIdOfPlayerToRespawn());
+				NeutralBase baseToRespawnAt = (NeutralBase) gameInfo
+						.findObjectById(respawnPlayerEvent
+								.getIdOfBaseToRespawnAt());
+
+				RespawnPlayerAction respawnPlayerAction = new RespawnPlayerAction(
+						executingPlayer, playerToRespawn, baseToRespawnAt);
+				respawnPlayerAction.execute(gameInfo);
+			} catch (ObjectNotFoundException e1) {
+				L.log(Level.WARNING, "Couldn't find player!", e1);
+				return;
+			}
+			break;
+		case SPAWN_ITEM: {
+			SpawnItemEvent spawnItemEvent = (SpawnItemEvent) event;
+
+			PlayerMainFigure executingPlayer;
+			try {
+				executingPlayer = gameInfo.getPlayerByOwnerId(spawnItemEvent
+						.getExecutingPlayer());
+				SpawnItemAction spawnItemAction = new SpawnItemAction(
+						executingPlayer, spawnItemEvent.getObjectType(),
+						spawnItemEvent.getPosition());
+				spawnItemAction.execute(gameInfo);
+			} catch (ObjectNotFoundException | WrongObjectTypeException e1) {
+				L.log(Level.WARNING, "Something went wrong spawning an item.",
+						e1);
+				return;
+			}
+			break;
+		}
+		case HEAL_ACTION:
+			HealActionEvent healEvent = (HealActionEvent) event;
+
+			PlayerMainFigure executingPlayer;
+			try {
+				executingPlayer = gameInfo.getPlayerByOwnerId(healEvent
+						.getExecutingPlayer());
+				HealSpellAction healSpellAction = new HealSpellAction(
+						executingPlayer,
+						(Unit) gameInfo.findObjectById(healEvent
+								.getIdOfUnitToHeal()));
+				healSpellAction.execute(gameInfo);
+			} catch (ObjectNotFoundException ex) {
+				L.log(Level.WARNING,
+						"Cannot find player when receiving heal action.", ex);
+				break;
+			}
 			break;
 		default:
 			L.severe(Localization.getStringF("Server.networking.illegalevent",

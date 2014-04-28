@@ -128,7 +128,7 @@ public class EdurasInitializer {
 			}
 
 			@Override
-			public void respawnPlayer(PlayerMainFigure player) {
+			public void respawnPlayerAtRandomSpawnpoint(PlayerMainFigure player) {
 			}
 
 			@Override
@@ -264,7 +264,18 @@ public class EdurasInitializer {
 			}
 
 			@Override
-			public void setTeamResource(Team team, int newAmount) {
+			public void changeResourcesOfTeamByAmount(Team team, int amount) {
+			}
+
+			@Override
+			public void respawnPlayerAtPosition(PlayerMainFigure player,
+					Vector2df pos) {
+			}
+
+			@Override
+			public void changeHealthByAmount(Unit unitToHeal,
+					int spell_heal_amount) {
+				// TODO Auto-generated method stub
 			}
 
 		});

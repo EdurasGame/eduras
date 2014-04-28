@@ -89,6 +89,21 @@ public class ObjectFactory {
 			}
 			return ObjectType.NO_OBJECT;
 		}
+
+		public boolean isItem() {
+			switch (this) {
+			case ITEM_WEAPON_SIMPLE:
+			case ITEM_WEAPON_SNIPER:
+			case ITEM_WEAPON_SPLASH:
+			case ITEM_WEAPON_SWORD:
+			case ROCKETLAUNCHER:
+			case MINELAUNCHER:
+			case ASSAULTRIFLE:
+				return true;
+			default:
+				return false;
+			}
+		}
 	}
 
 	/**
@@ -147,7 +162,7 @@ public class ObjectFactory {
 				logic.getGame().addPlayer((PlayerMainFigure) go);
 
 				L.info("Player " + event.getOwner() + " created");
-				//testSpawnBird();
+				// testSpawnBird();
 				break;
 			case SIMPLEMISSILE:
 				go = new SimpleMissile(logic.getGame(), timingSource, id);
@@ -285,7 +300,8 @@ public class ObjectFactory {
 		o.setPosition(w, h);
 		LinkedList<Integer> units = new LinkedList<Integer>();
 		units.add(999);
-		SendUnitsEvent sendEvent = new SendUnitsEvent(-1, new Vector2df(), units);
+		SendUnitsEvent sendEvent = new SendUnitsEvent(-1, new Vector2df(),
+				units);
 		logic.onGameEventAppeared(sendEvent);
 	}
 }

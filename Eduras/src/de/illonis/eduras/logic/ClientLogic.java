@@ -475,6 +475,7 @@ public class ClientLogic implements GameLogicInterface {
 			break;
 		case SET_VISION_BLOCKING:
 			object.setVisionBlocking(event.getNewValue());
+			break;
 		default:
 		}
 

@@ -16,6 +16,7 @@ import de.illonis.eduras.events.SendUnitsEvent;
 import de.illonis.eduras.events.SwitchInteractModeEvent;
 import de.illonis.eduras.events.UserMovementEvent;
 import de.illonis.eduras.exceptions.MessageNotSupportedException;
+import de.illonis.eduras.exceptions.NotWithinBaseException;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
 import de.illonis.eduras.exceptions.WrongEventTypeException;
 import de.illonis.eduras.gameobjects.GameObject;
@@ -154,13 +155,18 @@ public class GuiInternalEventListener implements LoginPanelReactor,
 	}
 
 	@Override
-	public void onModeSwitch() {
+	public void onModeSwitch() throws NotWithinBaseException {
 		try {
-			InteractMode nextMode = EdurasInitializer.getInstance()
-					.getInformationProvider().getPlayer().getCurrentMode()
-					.next();
-			client.sendEvent(new SwitchInteractModeEvent(client.getOwnerID(),
-					nextMode));
+			InteractMode nextMode = infoPro.getPlayer().getCurrentMode().next();
+
+			if (infoPro.getGameMode().canSwitchMode(infoPro.getPlayer(),
+					nextMode)) {
+
+				client.sendEvent(new SwitchInteractModeEvent(client
+						.getOwnerID(), nextMode));
+			} else {
+				throw new NotWithinBaseException();
+			}
 		} catch (WrongEventTypeException | MessageNotSupportedException
 				| ObjectNotFoundException e) {
 			L.log(Level.SEVERE, "mode switch request could not be sent.", e);

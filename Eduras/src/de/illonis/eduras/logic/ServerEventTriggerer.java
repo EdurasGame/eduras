@@ -341,13 +341,8 @@ public class ServerEventTriggerer implements EventTriggerer {
 	}
 
 	@Override
-	public void respawnPlayer(PlayerMainFigure player) {
-		// TODO: This should be dependend on game mode:
-		for (int i = 0; i < 6; i++)
-			changeItemSlot(i, player.getOwner(), null);
-
-		// TODO: Fire a respawn event to client.
-		remaxHealth(player);
+	public void respawnPlayerAtRandomSpawnpoint(PlayerMainFigure player) {
+		respawnPlayer(player);
 
 		Vector2df spawnPosition = null;
 		try {
@@ -359,6 +354,16 @@ public class ServerEventTriggerer implements EventTriggerer {
 		}
 
 		guaranteeSetPositionOfObject(player.getId(), spawnPosition);
+	}
+
+	private void respawnPlayer(PlayerMainFigure player) {
+		// TODO: This should be dependend on game mode:
+		for (int i = 0; i < 6; i++)
+			changeItemSlot(i, player.getOwner(), null);
+
+		// TODO: Fire a respawn event to client.
+		remaxHealth(player);
+
 	}
 
 	@Override
@@ -452,7 +457,7 @@ public class ServerEventTriggerer implements EventTriggerer {
 		gameInfo.getGameSettings().getGameMode().onGameStart();
 
 		for (PlayerMainFigure player : gameInfo.getPlayers()) {
-			respawnPlayer(player);
+			respawnPlayerAtRandomSpawnpoint(player);
 		}
 	}
 
@@ -756,10 +761,35 @@ public class ServerEventTriggerer implements EventTriggerer {
 	}
 
 	@Override
-	public void setTeamResource(Team team, int newAmount) {
-		SetTeamResourceEvent e = new SetTeamResourceEvent(team.getTeamId(),
-				newAmount);
-		team.setResource(newAmount);
-		sendEventToAll(e);
+	public void changeResourcesOfTeamByAmount(Team team, int amount) {
+		synchronized (team) {
+			int currentCount = team.getResource();
+			int newCount = Math.max(0, currentCount + amount);
+
+			team.setResource(newCount);
+		}
+
+		SetTeamResourceEvent resourcesEvent = new SetTeamResourceEvent(
+				team.getTeamId(), team.getResource());
+		sendEvents(resourcesEvent);
+	}
+
+	@Override
+	public void respawnPlayerAtPosition(PlayerMainFigure player,
+			Vector2df position) {
+		respawnPlayer(player);
+
+		guaranteeSetPositionOfObject(player.getId(), position);
+	}
+
+	@Override
+	public void changeHealthByAmount(Unit unitToHeal, int healAmount) {
+		synchronized (unitToHeal) {
+			setHealth(
+					unitToHeal.getId(),
+					Math.max(unitToHeal.getMaxHealth(), unitToHeal.getHealth()
+							+ healAmount));
+		}
+
 	}
 }

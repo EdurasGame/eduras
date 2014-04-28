@@ -1,4 +1,4 @@
-  package de.illonis.eduras.settings;
+package de.illonis.eduras.settings;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -456,6 +456,26 @@ public final class S {
 	public static int gm_koth_points_per_interval = 1;
 
 	public static long gm_koth_gain_points_interval = 10000;
+
+	public static int gm_edura_action_respawnplayer_cost = 15;
+
+	public static int go_rocketlauncher_costs = 100;
+
+	public static int go_mineweapon_costs = 100;
+
+	public static int go_assaultmissile_costs = 100;
+
+	public static int go_swordweapon_costs = 100;
+
+	public static int go_splashweapon_costs = 100;
+
+	public static int go_sniperweapon_costs = 100;
+
+	public static int go_simpleweapon_costs = 100;
+
+	public static int spell_heal_costs = 100;
+
+	public static int spell_heal_amount = 100;
 
 	/**
 	 * Reads values from the file and writes them to the S classes attributes.

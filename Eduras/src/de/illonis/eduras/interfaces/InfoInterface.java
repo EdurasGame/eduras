@@ -4,6 +4,7 @@ import java.util.Collection;
 
 import org.newdawn.slick.geom.Rectangle;
 
+import de.illonis.eduras.ObjectFactory.ObjectType;
 import de.illonis.eduras.Statistic;
 import de.illonis.eduras.Team;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
@@ -91,6 +92,15 @@ public interface InfoInterface {
 	 * @author illonis
 	 */
 	public GameObject findObjectById(int id);
+
+	/**
+	 * Returns all objects of the given type.
+	 * 
+	 * @param type
+	 *            an object must have this type.
+	 * @return a collection of all objects of the given type.
+	 */
+	public Collection<GameObject> findObjectsByType(ObjectType type);
 
 	/**
 	 * Returns the player that has given ownerid.

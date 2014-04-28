@@ -12,6 +12,7 @@ import de.illonis.eduras.gameobjects.NeutralBase;
 import de.illonis.eduras.logic.EventTriggerer;
 import de.illonis.eduras.maps.SpawnPosition.SpawnType;
 import de.illonis.eduras.units.PlayerMainFigure;
+import de.illonis.eduras.units.PlayerMainFigure.InteractMode;
 import de.illonis.eduras.units.Unit;
 
 /**
@@ -47,7 +48,7 @@ public class NoGameMode extends BasicGameMode {
 		if (killedUnit instanceof PlayerMainFigure) {
 			PlayerMainFigure killedPlayer = (PlayerMainFigure) killedUnit;
 
-			triggerer.respawnPlayer(killedPlayer);
+			triggerer.respawnPlayerAtRandomSpawnpoint(killedPlayer);
 		} else {
 			triggerer.removeObject(killedUnit.getId());
 		}
@@ -116,5 +117,10 @@ public class NoGameMode extends BasicGameMode {
 	@Override
 	public boolean supportsKeyBinding(KeyBinding binding) {
 		return true;
+	}
+
+	@Override
+	public boolean canSwitchMode(PlayerMainFigure player, InteractMode mode) {
+		return false;
 	}
 }
