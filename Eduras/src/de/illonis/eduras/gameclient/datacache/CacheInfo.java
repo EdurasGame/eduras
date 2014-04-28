@@ -68,10 +68,12 @@ public final class CacheInfo {
 		guiImages.put(ImageKey.STATISTICS_BG, "gui/artwork/statwindow.png");
 		guiImages.put(ImageKey.MINIMAP_DUMMY, "gui/artwork/minimap.png");
 		guiImages.put(ImageKey.RESOURCE_ICON, "gui/artwork/resource.png");
-		guiImages.put(ImageKey.ACTION_HEAL, "gui/artwork/resource.png");
-		guiImages.put(ImageKey.ACTION_RESURRECT, "gui/artwork/resource.png");
-		guiImages.put(ImageKey.ACTION_RESURRECT_PLAYER, "gui/icons/icon-mine.png");
-		guiImages.put(ImageKey.ACTION_ABORT, "gui/icons/icon-mine.png");
+		guiImages.put(ImageKey.ACTION_HEAL, "gui/icons/icon-heal.png");
+		guiImages
+				.put(ImageKey.ACTION_RESURRECT, "gui/icons/icon-resurrect.png");
+		guiImages.put(ImageKey.ACTION_RESURRECT_PLAYER,
+				"gui/icons/icon-resurrect.png");
+		guiImages.put(ImageKey.ACTION_ABORT, "gui/icons/icon-abort.png");
 
 		imageIcons = new HashMap<ImageKey, String>();
 	}
