@@ -96,6 +96,7 @@ public class ClientGameEventListener implements GameEventListener {
 
 	@Override
 	public void onObjectRemove(ObjectFactoryEvent event) {
+		ui.onObjectRemove(event);
 	}
 
 	@Override
@@ -158,5 +159,15 @@ public class ClientGameEventListener implements GameEventListener {
 	@Override
 	public void onRespawn(RespawnEvent event) {
 		ui.onRespawn(event);
+	}
+
+	@Override
+	public void onPlayerJoined(int ownerId) {
+		ui.onPlayerJoined(ownerId);
+	}
+
+	@Override
+	public void onPlayerLeft(int ownerId) {
+		ui.onPlayerLeft(ownerId);
 	}
 }

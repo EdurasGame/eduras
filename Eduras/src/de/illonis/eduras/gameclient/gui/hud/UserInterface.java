@@ -145,19 +145,9 @@ public class UserInterface implements GuiResizeListener, UserInputListener {
 		hudNotifier.addListener(b);
 		hudNotifier.addListener(b2);
 
-		ActionBarPage resurrectPage = new ResurrectPage();
+		ActionBarPage resurrectPage = new ResurrectPage(actionBar, guiReactor);
 		hudNotifier.addListener(resurrectPage);
-		ActionButton rb = new ActionButton("rezz",
-				ImageKey.ACTION_RESURRECT_PLAYER, guiReactor) {
-
-			@Override
-			public void actionPerformed() {
-				showNotification("ok");
-			}
-		};
 		resurrectPage.addButton(abortButton);
-		resurrectPage.addButton(rb);
-		hudNotifier.addListener(rb);
 		actionBar.setPage(PageNumber.MAIN);
 	}
 

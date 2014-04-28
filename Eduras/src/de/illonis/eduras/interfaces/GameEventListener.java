@@ -200,4 +200,20 @@ public interface GameEventListener {
 	 * ready to go.
 	 */
 	void onGameReady();
+
+	/**
+	 * Called when a new player joins.
+	 * 
+	 * @param ownerId
+	 *            the owner id of joined player.
+	 */
+	void onPlayerJoined(int ownerId);
+
+	/**
+	 * Called when a player leaves.
+	 * 
+	 * @param ownerId
+	 *            the owner id of left player.
+	 */
+	void onPlayerLeft(int ownerId);
 }

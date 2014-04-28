@@ -17,20 +17,22 @@ import de.illonis.eduras.events.SetItemSlotEvent;
 import de.illonis.eduras.events.SetOwnerEvent;
 import de.illonis.eduras.events.SetTeamResourceEvent;
 import de.illonis.eduras.events.SetVisibilityEvent;
+import de.illonis.eduras.gameclient.gui.hud.RenderedGuiObject;
 import de.illonis.eduras.gamemodes.GameMode;
 import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.interfaces.GameEventListener;
 
 /**
- * The eventlistener that listens for new events and passes them to gui
- * elements.
+ * The eventlistener that listens for new events and passes them to all
+ * displayed gui elements as well as other gui components that register
+ * manually.
  * 
  * @author illonis
  * 
  */
 public class HudNotifier implements GameEventListener {
 
-	private LinkedList<? extends GameEventListener> uiObjects;
+	private LinkedList<RenderedGuiObject> uiObjects;
 	private final LinkedList<GameEventListener> otherObjects;
 
 	/**
@@ -38,7 +40,7 @@ public class HudNotifier implements GameEventListener {
 	 * 
 	 */
 	public HudNotifier() {
-		this.uiObjects = new LinkedList<GameEventListener>();
+		this.uiObjects = new LinkedList<RenderedGuiObject>();
 		this.otherObjects = new LinkedList<GameEventListener>();
 	}
 
@@ -48,14 +50,26 @@ public class HudNotifier implements GameEventListener {
 	 * @param objects
 	 *            a list of gui objects that should be notified.
 	 */
-	public void setUiObjects(LinkedList<? extends GameEventListener> objects) {
+	public void setUiObjects(LinkedList<RenderedGuiObject> objects) {
 		this.uiObjects = objects;
 	}
 
+	/**
+	 * Adds a listener to this listener.
+	 * 
+	 * @param listener
+	 *            the new listener.
+	 */
 	public void addListener(GameEventListener listener) {
 		otherObjects.add(listener);
 	}
 
+	/**
+	 * Removes given listener.
+	 * 
+	 * @param listener
+	 *            the listener to remove.
+	 */
 	public void removeListener(GameEventListener listener) {
 		otherObjects.remove(listener);
 	}
@@ -262,6 +276,26 @@ public class HudNotifier implements GameEventListener {
 		}
 		for (GameEventListener obj : otherObjects) {
 			obj.onRespawn(event);
+		}
+	}
+
+	@Override
+	public void onPlayerJoined(int ownerId) {
+		for (GameEventListener obj : uiObjects) {
+			obj.onPlayerJoined(ownerId);
+		}
+		for (GameEventListener obj : otherObjects) {
+			obj.onPlayerJoined(ownerId);
+		}
+	}
+
+	@Override
+	public void onPlayerLeft(int ownerId) {
+		for (GameEventListener obj : uiObjects) {
+			obj.onPlayerLeft(ownerId);
+		}
+		for (GameEventListener obj : otherObjects) {
+			obj.onPlayerLeft(ownerId);
 		}
 	}
 }

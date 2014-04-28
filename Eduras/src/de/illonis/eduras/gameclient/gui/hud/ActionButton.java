@@ -68,12 +68,15 @@ public abstract class ActionButton extends GameEventAdapter implements
 	/**
 	 * Action that is performed when user triggers this button.
 	 */
-	public abstract void actionPerformed();
+	protected abstract void actionPerformed();
 
 	protected final Image getIcon() {
 		return icon;
 	}
 
+	/**
+	 * @return the display text.
+	 */
 	public final String getLabel() {
 		return label;
 	}
@@ -93,5 +96,13 @@ public abstract class ActionButton extends GameEventAdapter implements
 	 */
 	public final void setEnabled(boolean enabled) {
 		this.enabled = enabled;
+	}
+
+	/**
+	 * Clicks this button. Will do nothing when button is disabled.
+	 */
+	public final void click() {
+		if (enabled)
+			actionPerformed();
 	}
 }

@@ -19,6 +19,14 @@ public class RezzButton extends ActionButton {
 	private final static String BASE_STRING = "Resurrect %s";
 	private final PlayerMainFigure target;
 
+	/**
+	 * Creates a rezz-button for given player.
+	 * 
+	 * @param player
+	 *            the player that is resurrected when this button is used.
+	 * @param reactor
+	 *            the reactor.
+	 */
 	public RezzButton(PlayerMainFigure player, GamePanelReactor reactor) {
 		super(String.format(BASE_STRING, player.getName()),
 				ImageKey.ACTION_HEAL, reactor);

@@ -162,9 +162,9 @@ public class EdurasClient {
 					(new File(PathFinder.findFile("native"))).getAbsolutePath());
 
 		BetaAuthenticator authenticator = new BetaAuthenticator();
-		if (authenticator.authenticate(3, betaUser, betaPassword)) {
+		//if (authenticator.authenticate(3, betaUser, betaPassword)) {
 			startWindowed();
-		}
+		//}
 	}
 
 	private static void extractNatives() throws UnsatisfiedLinkError,

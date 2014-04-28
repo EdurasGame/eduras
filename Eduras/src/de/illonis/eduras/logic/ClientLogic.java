@@ -17,6 +17,7 @@ import de.illonis.eduras.events.ItemEvent;
 import de.illonis.eduras.events.MatchEndEvent;
 import de.illonis.eduras.events.MovementEvent;
 import de.illonis.eduras.events.ObjectFactoryEvent;
+import de.illonis.eduras.events.OwnerGameEvent;
 import de.illonis.eduras.events.RespawnEvent;
 import de.illonis.eduras.events.SetAmmunitionEvent;
 import de.illonis.eduras.events.SetBooleanGameObjectAttributeEvent;
@@ -179,6 +180,14 @@ public class ClientLogic implements GameLogicInterface {
 					break;
 				}
 				rangeGameObject.setVisionAngle(setRangeEvent.getNewValue());
+				break;
+			case INFO_PLAYER_JOIN:
+				OwnerGameEvent joinEvent = (OwnerGameEvent) event;
+				getListener().onPlayerJoined(joinEvent.getOwner());
+				break;
+			case INFO_PLAYER_LEFT:
+				OwnerGameEvent leaveEvent = (OwnerGameEvent) event;
+				getListener().onPlayerLeft(leaveEvent.getOwner());
 				break;
 			case SET_ROTATION:
 				if (!(event instanceof SetFloatGameObjectAttributeEvent)) {

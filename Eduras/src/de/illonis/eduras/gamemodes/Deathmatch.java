@@ -153,7 +153,6 @@ public class Deathmatch extends BasicGameMode {
 		gameInfo.getGameSettings().getStats().removePlayerFromStats(ownerId);
 
 		Team playersTeam = gonePlayer.getTeam();
-
 		// remove the actual player (also removes the player from its team)
 		gameInfo.getEventTriggerer().removePlayer(ownerId);
 
@@ -186,13 +185,13 @@ public class Deathmatch extends BasicGameMode {
 
 	@Override
 	public boolean supportsKeyBinding(KeyBinding binding) {
-//		if (binding == KeyBinding.SWITCH_MODE)
-//			return false;
+		// if (binding == KeyBinding.SWITCH_MODE)
+		// retburn false;
 		return true;
 	}
 
 	@Override
 	public boolean canSwitchMode(PlayerMainFigure player, InteractMode mode) {
-		return false;
+		return true;
 	}
 }

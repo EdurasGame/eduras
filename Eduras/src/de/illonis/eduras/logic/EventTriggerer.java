@@ -444,6 +444,22 @@ public interface EventTriggerer {
 	 */
 	void changeResourcesOfTeamByAmount(Team team, int amount);
 
+	/**
+	 * Notifies client that a player joined.
+	 * 
+	 * @param ownerId
+	 *            the ownerid of joined player.
+	 */
+	void notifyPlayerJoined(int ownerId);
+
+	/**
+	 * Notifies client that a player left.
+	 * 
+	 * @param ownerId
+	 *            the owner id of left player.
+	 */
+	void notifyPlayerLeft(int ownerId);
+
 	void changeHealthByAmount(Unit unitToHeal, int spell_heal_amount);
 
 }

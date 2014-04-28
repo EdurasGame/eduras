@@ -224,6 +224,7 @@ public class EdurasInitializer {
 				} catch (WrongEventTypeException | MessageNotSupportedException e) {
 					L.log(Level.SEVERE, "Cannot send setRotationEvent.", e);
 				}
+
 			}
 
 			@Override
@@ -276,6 +277,14 @@ public class EdurasInitializer {
 			public void changeHealthByAmount(Unit unitToHeal,
 					int spell_heal_amount) {
 				// TODO Auto-generated method stub
+			}
+
+			@Override
+			public void notifyPlayerJoined(int ownerId) {
+			}
+
+			@Override
+			public void notifyPlayerLeft(int ownerId) {
 			}
 
 		});

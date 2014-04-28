@@ -111,4 +111,12 @@ public class GameEventAdapter implements GameEventListener {
 	@Override
 	public void onRespawn(RespawnEvent event) {
 	}
+
+	@Override
+	public void onPlayerJoined(int ownerId) {
+	}
+
+	@Override
+	public void onPlayerLeft(int ownerId) {
+	}
 }

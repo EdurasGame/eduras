@@ -33,6 +33,7 @@ import de.illonis.eduras.events.ItemEvent;
 import de.illonis.eduras.events.MatchEndEvent;
 import de.illonis.eduras.events.MovementEvent;
 import de.illonis.eduras.events.ObjectFactoryEvent;
+import de.illonis.eduras.events.OwnerGameEvent;
 import de.illonis.eduras.events.RespawnEvent;
 import de.illonis.eduras.events.SetAmmunitionEvent;
 import de.illonis.eduras.events.SetBooleanGameObjectAttributeEvent;
@@ -793,5 +794,17 @@ public class ServerEventTriggerer implements EventTriggerer {
 							+ healAmount));
 		}
 
+	}
+
+	@Override
+	public void notifyPlayerJoined(int ownerId) {
+		sendEventToAll(new OwnerGameEvent(GameEventNumber.INFO_PLAYER_JOIN,
+				ownerId));
+	}
+
+	@Override
+	public void notifyPlayerLeft(int ownerId) {
+		sendEventToAll(new OwnerGameEvent(GameEventNumber.INFO_PLAYER_LEFT,
+				ownerId));
 	}
 }

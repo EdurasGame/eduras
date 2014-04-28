@@ -5,6 +5,7 @@ import java.awt.event.MouseEvent;
 import java.awt.geom.Rectangle2D;
 import java.util.LinkedList;
 
+import org.newdawn.slick.Game;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.Vector2f;
@@ -48,8 +49,10 @@ public class BuildModeMouseAdapter extends GuiMouseAdapter {
 				LinkedList<GameObject> obs = new LinkedList<GameObject>(
 						EdurasInitializer.getInstance()
 								.getInformationProvider()
-								.findObjectsAt(new Vector2f(x, y)));
+								.findObjectsAt(clickGamePoint));
+				
 				for (GameObject gameObject : obs) {
+					System.out.println(gameObject.getType());
 					if (gameObject instanceof NeutralBase) {
 						if (((NeutralBase) gameObject).getCurrentOwnerTeam() == getPanelLogic()
 								.getClientData().getCurrentResurrectTarget()

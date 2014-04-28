@@ -59,19 +59,34 @@ public class ActionBarPage extends GameEventAdapter {
 		return id;
 	}
 
+	/**
+	 * Adds a button to this page.<br>
+	 * If this page is currently shown, you need to manually re-show this page
+	 * using {@link ActionBar#setPage(PageNumber)}
+	 * 
+	 * @param button
+	 *            the button to add.
+	 */
 	public final void addButton(ActionButton button) {
 		buttons.add(button);
 	}
 
+	/**
+	 * @return a list of all contained buttons.
+	 */
 	public final LinkedList<ActionButton> getButtons() {
 		return buttons;
 	}
 
+	/**
+	 * Called when this page is shown.
+	 */
 	public void onShown() {
-
 	}
 
+	/**
+	 * Called when this page is hidden.
+	 */
 	public void onHidden() {
-
 	}
 }

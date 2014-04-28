@@ -42,9 +42,16 @@ import de.illonis.eduras.maps.FunMap;
 import de.illonis.eduras.maps.Map;
 import de.illonis.eduras.maps.SpawnPosition;
 import de.illonis.eduras.maps.SpawnPosition.SpawnType;
+import de.illonis.eduras.math.Geometry;
 import de.illonis.eduras.math.Vector2df;
 import de.illonis.eduras.units.PlayerMainFigure;
 
+/**
+ * Contains game information.
+ * 
+ * @author illonis
+ * 
+ */
 public class GameInformation {
 	private final static Logger L = EduLog.getLoggerFor(GameInformation.class
 			.getName());
@@ -488,12 +495,22 @@ public class GameInformation {
 		return false;
 	}
 
+	/**
+	 * Checks whether an object collides with a given list of other objects.
+	 * 
+	 * @param object
+	 *            the base object.
+	 * @param otherObjects
+	 *            A list of objects that should be checked for collision.
+	 * @return a list containing every object from <i>otherObjects</i> that
+	 *         collides with <i>object</i>.
+	 */
 	public Collection<GameObject> doesAnyOfOtherObjectsIntersect(
 			GameObject object, Collection<GameObject> otherObjects) {
 		Collection<GameObject> intersectingGameObjects = new LinkedList<GameObject>();
 
 		for (GameObject o : otherObjects) {
-			if (o.getShape().intersects(object.getShape()))
+			if (Geometry.shapeCollides(o.getShape(), object.getShape()))
 				intersectingGameObjects.add(o);
 		}
 
@@ -617,6 +634,8 @@ public class GameInformation {
 	public LinkedList<GameObject> findObjectsAt(Vector2f point) {
 		LinkedList<GameObject> objs = new LinkedList<GameObject>();
 		for (GameObject object : objects.values()) {
+			if (object.getType() == ObjectType.MAPBOUNDS)
+				continue;
 			if (object.getShape().contains(point.x, point.y)) {
 				objs.add(object);
 			}
