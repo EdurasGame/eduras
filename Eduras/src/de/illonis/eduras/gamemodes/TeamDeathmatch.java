@@ -9,6 +9,7 @@ import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.ObjectFactory.ObjectType;
 import de.illonis.eduras.Team;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
+import de.illonis.eduras.gameclient.userprefs.KeyBindings.KeyBinding;
 import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.gameobjects.GameObject.Relation;
 import de.illonis.eduras.maps.SpawnPosition.SpawnType;
@@ -143,5 +144,10 @@ public class TeamDeathmatch extends Deathmatch {
 
 		// reset the teams such that they don't contain the player anymore
 		gameInfo.getEventTriggerer().setTeams(gameInfo.getTeams());
+	}
+
+	@Override
+	public boolean supportsKeyBinding(KeyBinding binding) {
+		return true;
 	}
 }

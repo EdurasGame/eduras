@@ -24,7 +24,7 @@ public abstract class RTSAction {
 	public void execute(GameInformation info) {
 		Team executingTeam = executingPlayer.getTeam();
 
-		if (executingTeam.getResourceCount() >= costs) {
+		if (executingTeam.getResource() >= costs) {
 
 			EventTriggerer eventTriggerer = info.getEventTriggerer();
 			eventTriggerer.changeResourcesOfTeamByAmount(executingTeam, -costs);

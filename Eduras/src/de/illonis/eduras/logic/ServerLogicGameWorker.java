@@ -37,13 +37,14 @@ public class ServerLogicGameWorker extends LogicGameWorker {
 							GameEventNumber.SET_COLLIDABLE, o.getId(), true);
 					SetVisibilityEvent sv = new SetVisibilityEvent(o.getId(),
 							Visibility.ALL);
-					o.setCollidable(true);
-					o.setVisible(Visibility.ALL);
 					if (listenerHolder.hasListener()) {
 						listenerHolder.getListener().onVisibilityChanged(sv);
 						listenerHolder.getListener().onObjectStateChanged(sc);
-
 					}
+					gameInformation.getEventTriggerer().setCollidability(
+							o.getId(), true);
+					gameInformation.getEventTriggerer().setVisibility(
+							o.getId(), Visibility.ALL);
 				}
 			}
 			if (o instanceof MoveableGameObject) {

@@ -19,6 +19,7 @@ import de.illonis.eduras.inventory.ItemSlotIsEmptyException;
 import de.illonis.eduras.items.Item;
 import de.illonis.eduras.items.Usable;
 import de.illonis.eduras.items.weapons.Weapon;
+import de.illonis.eduras.units.PlayerMainFigure.InteractMode;
 
 /**
  * Displays player items on user interface.
@@ -64,6 +65,7 @@ public class ItemDisplay extends ClickableGuiElement implements
 			itemSlots[i] = new GuiItem(i);
 		}
 		registerAsTooltipTriggerer(this);
+		setActiveInteractModes(InteractMode.MODE_EGO);
 	}
 
 	@Override
@@ -90,8 +92,8 @@ public class ItemDisplay extends ClickableGuiElement implements
 			}
 			g.setColor(Color.white);
 			if (item.hasImage())
-				g.drawImage(item.getItemImage(), item.getX() + screenX,
-						item.getY() + screenY);
+				g.drawImage(item.getItemImage(), itemRect.getX(),
+						itemRect.getY());
 			long cd = item.getCooldown();
 			if (cd > 0) {
 				g.setColor(COLOR_SEMITRANSPARENT);
@@ -105,7 +107,7 @@ public class ItemDisplay extends ClickableGuiElement implements
 
 	@Override
 	public void onGuiSizeChanged(int newWidth, int newHeight) {
-		screenX = 0;
+		screenX = MiniMap.SIZE;
 		screenY = newHeight - HEIGHT;
 	}
 
@@ -300,8 +302,4 @@ public class ItemDisplay extends ClickableGuiElement implements
 		return new Rectangle(screenX, screenY, WIDTH, HEIGHT);
 	}
 
-	@Override
-	public boolean isActive() {
-		return true;
-	}
 }

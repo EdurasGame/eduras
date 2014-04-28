@@ -3,6 +3,7 @@ package de.illonis.eduras.gamemodes;
 import java.util.Set;
 
 import de.illonis.eduras.Team;
+import de.illonis.eduras.gameclient.userprefs.KeyBindings.KeyBinding;
 import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.gameobjects.GameObject.Relation;
 import de.illonis.eduras.gameobjects.NeutralBase;
@@ -142,5 +143,16 @@ public interface GameMode {
 	 *            The team that has lost the {@link NeutralBase}.
 	 */
 	public void onBaseLost(NeutralBase base, Team losingTeam);
+
+	/**
+	 * Checks whether given binding is supported by this gamemode. If a key is
+	 * reported as unsupported, keyhandlers will not be notified for that key
+	 * while playing in this gamemode.
+	 * 
+	 * @param binding
+	 *            the binding.
+	 * @return true if the binding is supported.
+	 */
+	public boolean supportsKeyBinding(KeyBinding binding);
 
 }

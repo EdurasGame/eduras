@@ -20,8 +20,8 @@ public class Team {
 	private final int teamId;
 	private Color color;
 	private final String name;
+	private int resource;
 	private final LinkedList<PlayerMainFigure> players;
-	private int resourceCount;
 
 	/**
 	 * @return the next free id for a new team.
@@ -56,6 +56,7 @@ public class Team {
 		this.name = name;
 		players = new LinkedList<PlayerMainFigure>();
 		this.color = color;
+		resource = 0;
 	}
 
 	/**
@@ -129,6 +130,23 @@ public class Team {
 		return name;
 	}
 
+	/**
+	 * @return current resource amount.
+	 */
+	public int getResource() {
+		return resource;
+	}
+
+	/**
+	 * Sets the current resource amount.
+	 * 
+	 * @param resource
+	 *            new amount.
+	 */
+	public void setResource(int resource) {
+		this.resource = resource;
+	}
+
 	@Override
 	public boolean equals(Object obj) {
 		if (obj instanceof Team) {
@@ -136,23 +154,5 @@ public class Team {
 			return getTeamId() == other.getTeamId();
 		}
 		return super.equals(obj);
-	}
-
-	/**
-	 * Returns the amount of resources that this team has available.
-	 * 
-	 * @return resources
-	 */
-	public int getResourceCount() {
-		return resourceCount;
-	}
-
-	/**
-	 * Sets the amount of resources this team has available.
-	 * 
-	 * @param resourceCount
-	 */
-	public void setResourceCount(int resourceCount) {
-		this.resourceCount = resourceCount;
 	}
 }

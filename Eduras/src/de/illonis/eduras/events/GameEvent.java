@@ -35,7 +35,7 @@ public abstract class GameEvent extends Event {
 				180), SET_TEAMS(191), ADD_PLAYER_TO_TEAM(192), SET_POS_TCP(106), INIT_INFORMATION(
 				203), GAME_READY(204), SET_ROTATION(80), SET_AMMU(125), SET_VISION_ANGLE(
 				107), SET_VISION_RANGE(108), SET_VISION_BLOCKING(109), SET_MAP(
-				110), SET_RESOURCES(153);
+				110), SET_TEAM_RESOURCE(134);
 		private int number;
 
 		GameEventNumber(int num) {

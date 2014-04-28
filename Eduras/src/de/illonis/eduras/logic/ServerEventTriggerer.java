@@ -45,8 +45,8 @@ import de.illonis.eduras.events.SetMapEvent;
 import de.illonis.eduras.events.SetOwnerEvent;
 import de.illonis.eduras.events.SetPolygonDataEvent;
 import de.illonis.eduras.events.SetRemainingTimeEvent;
-import de.illonis.eduras.events.SetResourcesEvent;
 import de.illonis.eduras.events.SetStatsEvent;
+import de.illonis.eduras.events.SetTeamResourceEvent;
 import de.illonis.eduras.events.SetTeamsEvent;
 import de.illonis.eduras.events.SetVisibilityEvent;
 import de.illonis.eduras.exceptions.GameModeNotSupportedByMapException;
@@ -209,7 +209,7 @@ public class ServerEventTriggerer implements EventTriggerer {
 		SetVisibilityEvent setVisibleEvent = new SetVisibilityEvent(objectId,
 				newVal);
 		object.setVisible(newVal);
-		sendEvents(setVisibleEvent);
+		sendEventToAll(setVisibleEvent);
 	}
 
 	@Override
@@ -763,14 +763,14 @@ public class ServerEventTriggerer implements EventTriggerer {
 	@Override
 	public void changeResourcesOfTeamByAmount(Team team, int amount) {
 		synchronized (team) {
-			int currentCount = team.getResourceCount();
+			int currentCount = team.getResource();
 			int newCount = Math.max(0, currentCount + amount);
 
-			team.setResourceCount(newCount);
+			team.setResource(newCount);
 		}
 
-		SetResourcesEvent resourcesEvent = new SetResourcesEvent(
-				team.getTeamId(), team.getResourceCount());
+		SetTeamResourceEvent resourcesEvent = new SetTeamResourceEvent(
+				team.getTeamId(), team.getResource());
 		sendEvents(resourcesEvent);
 	}
 

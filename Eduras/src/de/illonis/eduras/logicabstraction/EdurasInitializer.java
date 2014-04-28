@@ -276,7 +276,6 @@ public class EdurasInitializer {
 			public void changeHealthByAmount(Unit unitToHeal,
 					int spell_heal_amount) {
 				// TODO Auto-generated method stub
-
 			}
 
 		});
