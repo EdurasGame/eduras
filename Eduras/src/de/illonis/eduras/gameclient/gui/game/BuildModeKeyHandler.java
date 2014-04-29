@@ -21,6 +21,7 @@ public class BuildModeKeyHandler extends GuiKeyHandler {
 	void keyPressed(KeyBinding key) throws NotWithinBaseException {
 		switch (key) {
 		case SWITCH_MODE:
+			client.getCamera().reset();
 			reactor.onModeSwitch();
 			break;
 		default:

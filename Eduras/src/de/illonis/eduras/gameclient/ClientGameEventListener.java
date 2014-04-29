@@ -133,6 +133,7 @@ public class ClientGameEventListener implements GameEventListener {
 	@Override
 	public void onInteractModeChanged(SetInteractModeEvent setModeEvent) {
 		ui.onInteractModeChanged(setModeEvent);
+		client.getFrame().getGamePanel().getCamera().reset();
 	}
 
 	@Override

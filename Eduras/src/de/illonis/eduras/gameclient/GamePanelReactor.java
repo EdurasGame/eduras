@@ -9,6 +9,7 @@ import de.illonis.eduras.gameclient.gui.game.GamePanelLogic.ClickState;
 import de.illonis.eduras.gameobjects.MoveableGameObject.Direction;
 import de.illonis.eduras.gameobjects.NeutralBase;
 import de.illonis.eduras.units.PlayerMainFigure;
+import de.illonis.eduras.units.Unit;
 
 /**
  * Handles interactions from graphical user interface that should be passed
@@ -70,6 +71,14 @@ public interface GamePanelReactor {
 	 *            the base to resurrect at.
 	 */
 	void onPlayerRezz(PlayerMainFigure player, NeutralBase base);
+
+	/**
+	 * Heals a unit.
+	 * 
+	 * @param targetUnit
+	 *            the unit to heal.
+	 */
+	void onUnitHeal(Unit targetUnit);
 
 	/**
 	 * Triggers users wish of quitting the game.

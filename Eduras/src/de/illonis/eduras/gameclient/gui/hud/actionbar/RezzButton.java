@@ -29,7 +29,7 @@ public class RezzButton extends ActionButton {
 	 */
 	public RezzButton(PlayerMainFigure player, GamePanelReactor reactor) {
 		super(String.format(BASE_STRING, player.getName()),
-				ImageKey.ACTION_HEAL, reactor);
+				ImageKey.ACTION_RESURRECT_PLAYER, reactor);
 		this.target = player;
 	}
 

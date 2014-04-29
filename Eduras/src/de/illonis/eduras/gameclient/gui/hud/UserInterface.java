@@ -16,6 +16,7 @@ import de.illonis.eduras.gameclient.gui.game.TooltipHandler;
 import de.illonis.eduras.gameclient.gui.game.TooltipTriggererNotifier;
 import de.illonis.eduras.gameclient.gui.game.UserInputListener;
 import de.illonis.eduras.gameclient.gui.hud.ActionBarPage.PageNumber;
+import de.illonis.eduras.gameclient.gui.hud.actionbar.HealButton;
 import de.illonis.eduras.gameclient.gui.hud.actionbar.ResurrectPage;
 import de.illonis.eduras.logicabstraction.EdurasInitializer;
 import de.illonis.eduras.logicabstraction.InformationProvider;
@@ -125,25 +126,17 @@ public class UserInterface implements GuiResizeListener, UserInputListener {
 				actionBar.setPage(PageNumber.MAIN);
 			}
 		};
-		ActionButton b = new ActionButton("heal", ImageKey.ACTION_HEAL,
-				guiReactor) {
-
-			@Override
-			public void actionPerformed() {
-				actionBar.setPage(PageNumber.HEAL);
-			}
-		};
-		mainPage.addButton(b);
-		ActionButton b2 = new ActionButton("resurrect",
+		HealButton healButton = new HealButton(guiReactor);
+		mainPage.addButton(healButton);
+		ActionButton resurrectButton = new ActionButton("resurrect",
 				ImageKey.ACTION_RESURRECT, guiReactor) {
 			@Override
 			public void actionPerformed() {
 				actionBar.setPage(PageNumber.RESURRECT);
 			}
 		};
-		mainPage.addButton(b2);
-		hudNotifier.addListener(b);
-		hudNotifier.addListener(b2);
+		mainPage.addButton(resurrectButton);
+		hudNotifier.addListener(resurrectButton);
 
 		ActionBarPage resurrectPage = new ResurrectPage(actionBar, guiReactor);
 		hudNotifier.addListener(resurrectPage);

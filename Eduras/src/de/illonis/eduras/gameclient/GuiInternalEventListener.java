@@ -11,6 +11,7 @@ import org.newdawn.slick.geom.Vector2f;
 
 import de.illonis.edulog.EduLog;
 import de.illonis.eduras.events.GameEvent.GameEventNumber;
+import de.illonis.eduras.events.HealActionEvent;
 import de.illonis.eduras.events.ItemEvent;
 import de.illonis.eduras.events.ResurrectPlayerEvent;
 import de.illonis.eduras.events.SendUnitsEvent;
@@ -22,6 +23,7 @@ import de.illonis.eduras.exceptions.ObjectNotFoundException;
 import de.illonis.eduras.exceptions.WrongEventTypeException;
 import de.illonis.eduras.gameclient.gui.game.GamePanelLogic.ClickState;
 import de.illonis.eduras.gameobjects.GameObject;
+import de.illonis.eduras.gameobjects.GameObject.Relation;
 import de.illonis.eduras.gameobjects.MoveableGameObject.Direction;
 import de.illonis.eduras.gameobjects.NeutralBase;
 import de.illonis.eduras.logicabstraction.EdurasInitializer;
@@ -30,6 +32,7 @@ import de.illonis.eduras.math.Geometry;
 import de.illonis.eduras.math.Vector2df;
 import de.illonis.eduras.units.PlayerMainFigure;
 import de.illonis.eduras.units.PlayerMainFigure.InteractMode;
+import de.illonis.eduras.units.Unit;
 
 /**
  * Handles events from login panels and gui and performs the appropriate action.
@@ -286,7 +289,35 @@ public class GuiInternalEventListener implements LoginPanelReactor,
 	}
 
 	@Override
+	public void onUnitHeal(Unit targetUnit) {
+		PlayerMainFigure player;
+		try {
+			player = infoPro.getPlayer();
+		} catch (ObjectNotFoundException e) {
+			L.log(Level.SEVERE, "Player not found while healing unit.", e);
+			return;
+		}
+		HealActionEvent healEvent = new HealActionEvent(client.getOwnerID(),
+				targetUnit.getId());
+
+		if (infoPro.getGameMode().getRelation(targetUnit, player) != Relation.ALLIED) {
+			client.getFrame().getGamePanel()
+					.showNotification("Player is not friendly");
+			return;
+		}
+		try {
+			client.sendEvent(healEvent);
+			client.getFrame().getGamePanel()
+					.showNotification("Healing unit...");
+		} catch (WrongEventTypeException | MessageNotSupportedException e) {
+			L.log(Level.SEVERE, "Error sending heal event", e);
+		}
+
+	}
+
+	@Override
 	public void setClickState(ClickState newState) {
 		client.getFrame().getGamePanel().setClickState(newState);
 	}
+
 }

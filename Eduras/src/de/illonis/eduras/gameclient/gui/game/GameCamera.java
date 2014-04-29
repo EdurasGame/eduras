@@ -25,7 +25,7 @@ public class GameCamera extends Rectangle {
 	 * 
 	 * @author illonis
 	 */
-	void reset() {
+	public void reset() {
 		setLocation(0, 0);
 		cameraMovement = new Vector2f();
 		cameraOffset = new Vector2f();

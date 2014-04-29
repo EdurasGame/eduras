@@ -397,11 +397,8 @@ public class ServerEventTriggerer implements EventTriggerer {
 		for (PlayerMainFigure player : gameInfo.getPlayers()) {
 			resetStats(player);
 		}
-
 		changeMap(gameInfo.getMap());
-
 		resetSettings();
-
 	}
 
 	@Override
