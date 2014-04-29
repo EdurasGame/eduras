@@ -116,6 +116,8 @@ public class Deathmatch extends BasicGameMode {
 	public void onGameStart() {
 		LinkedList<Team> teams = new LinkedList<Team>();
 		for (PlayerMainFigure player : gameInfo.getPlayers()) {
+			gameInfo.getEventTriggerer().changeInteractMode(player.getOwner(),
+					InteractMode.MODE_EGO);
 			Team t = new Team(player.getName(), Team.getNextTeamId());
 			teams.add(t);
 			gameInfo.getEventTriggerer().addPlayerToTeam(player.getOwner(), t);
@@ -136,6 +138,8 @@ public class Deathmatch extends BasicGameMode {
 
 	@Override
 	public Relation getRelation(GameObject a, GameObject b) {
+		if (a.getId() == b.getId())
+			return Relation.ALLIED;
 		return Relation.HOSTILE;
 	}
 
