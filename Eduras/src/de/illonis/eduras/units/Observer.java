@@ -8,7 +8,7 @@ import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.gameobjects.TimingSource;
 import de.illonis.eduras.settings.S;
 
-public class Observer extends Unit {
+public class Observer extends DisposableUnit {
 
 	private final static Logger L = EduLog.getLoggerFor(Observer.class
 			.getName());
@@ -27,9 +27,4 @@ public class Observer extends Unit {
 		// don't do anything
 	}
 
-	@Override
-	protected void onDead(int killer) {
-		// TODO Auto-generated method stub
-
-	}
 }
