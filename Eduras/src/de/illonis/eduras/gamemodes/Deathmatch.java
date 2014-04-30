@@ -49,9 +49,7 @@ public class Deathmatch extends BasicGameMode {
 	@Override
 	public void onDeath(Unit killedUnit, int killingPlayer) {
 		try {
-			// TODO: should not track npc kills this way.
-			PlayerMainFigure killer = gameInfo
-					.getPlayerByOwnerId(killingPlayer);
+			changeStatsOnDeath(killedUnit, killingPlayer);
 
 			EventTriggerer et = gameInfo.getEventTriggerer();
 			if (et == null) {
@@ -63,16 +61,29 @@ public class Deathmatch extends BasicGameMode {
 				// need to check here because client has no event triggerer.
 				// TODO: find a solution for client-workaraound.
 				et.respawnPlayerAtRandomSpawnpoint((PlayerMainFigure) killedUnit);
-				et.changeStatOfPlayerByAmount(StatsProperty.DEATHS,
-						(PlayerMainFigure) killedUnit, 1);
 				// TODO: give player items here if game mode should do.
 
 			}
-			if (killer.equals(killedUnit))
-				return;
-			et.changeStatOfPlayerByAmount(StatsProperty.KILLS, killer, 1);
 		} catch (ObjectNotFoundException e) {
 			L.log(Level.SEVERE, "player not found", e);
+		}
+
+	}
+
+	protected void changeStatsOnDeath(Unit killedUnit, int killingPlayer)
+			throws ObjectNotFoundException {
+
+		EventTriggerer et = gameInfo.getEventTriggerer();
+		if (killedUnit instanceof PlayerMainFigure) {
+
+			et.changeStatOfPlayerByAmount(StatsProperty.DEATHS,
+					(PlayerMainFigure) killedUnit, 1);
+		}
+
+		PlayerMainFigure killer = gameInfo.getPlayerByOwnerId(killingPlayer);
+
+		if (!killer.equals(killedUnit)) {
+			et.changeStatOfPlayerByAmount(StatsProperty.KILLS, killer, 1);
 		}
 
 	}
