@@ -479,9 +479,11 @@ public final class S {
 
 	public static int unit_observer_maxhealth = 10;
 
-	public static float unit_observer_visionangle = 360;
+	public static float unit_observer_visionangle = 360f;
 
-	public static float unit_observer_visionrange = 300;
+	public static float unit_observer_visionrange = 300f;
+
+	public static int unit_observer_costs = 100;
 
 	/**
 	 * Reads values from the file and writes them to the S classes attributes.

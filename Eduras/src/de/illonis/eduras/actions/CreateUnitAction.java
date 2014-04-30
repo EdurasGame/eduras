@@ -7,6 +7,7 @@ import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.ObjectFactory.ObjectType;
 import de.illonis.eduras.exceptions.WrongObjectTypeException;
 import de.illonis.eduras.gameobjects.NeutralBase;
+import de.illonis.eduras.settings.S;
 import de.illonis.eduras.units.PlayerMainFigure;
 
 public class CreateUnitAction extends RTSAction {
@@ -26,6 +27,14 @@ public class CreateUnitAction extends RTSAction {
 
 		if (!typeOfUnit.isUnit()) {
 			throw new WrongObjectTypeException(typeOfUnit);
+		}
+
+		switch (typeOfUnit) {
+		case OBSERVER:
+			costs = S.unit_observer_costs;
+			break;
+		default:
+			break;
 		}
 	}
 

@@ -39,6 +39,7 @@ import de.illonis.eduras.items.weapons.SwordMissile;
 import de.illonis.eduras.items.weapons.SwordWeapon;
 import de.illonis.eduras.math.Vector2df;
 import de.illonis.eduras.settings.S;
+import de.illonis.eduras.units.Observer;
 import de.illonis.eduras.units.PlayerMainFigure;
 
 /**
@@ -69,7 +70,8 @@ public class ObjectFactory {
 				12), MISSILE_SPLASHED(13), DYNAMIC_POLYGON_BLOCK(14), ITEM_WEAPON_SWORD(
 				15), SWORDMISSILE(16), BIRD(17), ROCKETLAUNCHER(18), ROCKET_MISSILE(
 				19), MINELAUNCHER(20), MINE_MISSILE(21), ASSAULTRIFLE(22), ASSAULT_MISSILE(
-				23), MAPBOUNDS(24), TRIGGER_AREA(25), NEUTRAL_BASE(26);
+				23), MAPBOUNDS(24), TRIGGER_AREA(25), NEUTRAL_BASE(26), OBSERVER(
+				30);
 
 		private int number;
 
@@ -99,6 +101,15 @@ public class ObjectFactory {
 			case ROCKETLAUNCHER:
 			case MINELAUNCHER:
 			case ASSAULTRIFLE:
+				return true;
+			default:
+				return false;
+			}
+		}
+
+		public boolean isUnit() {
+			switch (this) {
+			case OBSERVER:
 				return true;
 			default:
 				return false;
@@ -242,6 +253,8 @@ public class ObjectFactory {
 				go = new DynamicPolygonObject(ObjectType.MAPBOUNDS,
 						logic.getGame(), timingSource, id);
 				break;
+			case OBSERVER:
+				go = new Observer(logic.getGame(), timingSource, id, owner);
 			default:
 				return;
 			}

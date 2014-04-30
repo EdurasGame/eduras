@@ -13,9 +13,11 @@ public class Observer extends Unit {
 	private final static Logger L = EduLog.getLoggerFor(Observer.class
 			.getName());
 
-	public Observer(GameInformation game, TimingSource timingSource, int id) {
+	public Observer(GameInformation game, TimingSource timingSource, int id,
+			int owner) {
 		super(game, timingSource, S.unit_observer_maxhealth, id);
 
+		setOwner(owner);
 		setVisionAngle(S.unit_observer_visionangle);
 		setVisionRange(S.unit_observer_visionrange);
 	}

@@ -16,6 +16,7 @@ import de.illonis.eduras.Team;
 import de.illonis.eduras.events.AddPlayerToTeamEvent;
 import de.illonis.eduras.events.AreaConqueredEvent;
 import de.illonis.eduras.events.ClientRenameEvent;
+import de.illonis.eduras.events.CreateUnitEvent;
 import de.illonis.eduras.events.DeathEvent;
 import de.illonis.eduras.events.GameEvent.GameEventNumber;
 import de.illonis.eduras.events.GameInfoRequest;
@@ -351,6 +352,12 @@ public class EventParser implements EventHandler {
 			case HEAL_ACTION:
 				logic.onGameEventAppeared(new HealActionEvent((Integer) event
 						.getArgument(0), (Integer) event.getArgument(1)));
+				break;
+			case CREATE_UNIT:
+				logic.onGameEventAppeared(new CreateUnitEvent((Integer) event
+						.getArgument(0), ObjectType
+						.getObjectTypeByNumber((Integer) event.getArgument(1)),
+						(Integer) event.getArgument(2)));
 				break;
 			default:
 				L.warning("Cannot handle event with event number "

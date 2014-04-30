@@ -40,4 +40,8 @@ public abstract class RTSAction {
 	public int getCosts() {
 		return costs;
 	}
+
+	public PlayerMainFigure getExecutingPlayer() {
+		return executingPlayer;
+	}
 }
