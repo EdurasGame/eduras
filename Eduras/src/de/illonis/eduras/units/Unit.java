@@ -130,8 +130,11 @@ public abstract class Unit extends MoveableGameObject {
 			return;
 		int newHealth = Math.max(getHealth() - damage, 0);
 		getGame().getEventTriggerer().setHealth(this.getId(), newHealth);
-		if (isDead())
+		if (isDead()) {
+			getGame().getEventTriggerer().notifyDeath(this, damager);
+			getGame().getGameSettings().getGameMode().onDeath(this, damager);
 			onDead(damager);
+		}
 	}
 
 	/**
@@ -140,7 +143,5 @@ public abstract class Unit extends MoveableGameObject {
 	 * @param killer
 	 *            Specifies who killed this object. -1 if there is no killer.
 	 */
-	protected void onDead(int killer) {
-		getGame().getEventTriggerer().onDeath(this, killer);
-	}
+	protected abstract void onDead(int killer);
 }

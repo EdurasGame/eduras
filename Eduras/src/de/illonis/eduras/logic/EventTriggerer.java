@@ -235,7 +235,7 @@ public interface EventTriggerer {
 	 * 
 	 * @author illonis
 	 */
-	void onDeath(Unit unit, int killer);
+	void notifyDeath(Unit unit, int killer);
 
 	/**
 	 * Changes the gamemode to newMode.

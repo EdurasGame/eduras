@@ -26,4 +26,10 @@ public class Observer extends Unit {
 	public void onCollision(GameObject collidingObject) {
 		// don't do anything
 	}
+
+	@Override
+	protected void onDead(int killer) {
+		// TODO Auto-generated method stub
+
+	}
 }

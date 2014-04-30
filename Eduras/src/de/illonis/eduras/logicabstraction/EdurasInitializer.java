@@ -152,7 +152,7 @@ public class EdurasInitializer {
 			}
 
 			@Override
-			public void onDeath(Unit unit, int killer) {
+			public void notifyDeath(Unit unit, int killer) {
 			}
 
 			@Override

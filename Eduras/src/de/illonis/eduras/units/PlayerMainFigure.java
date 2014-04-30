@@ -218,4 +218,9 @@ public class PlayerMainFigure extends Unit implements MovementControlable {
 		return inventory;
 	}
 
+	@Override
+	protected void onDead(int killer) {
+		//
+	}
+
 }
