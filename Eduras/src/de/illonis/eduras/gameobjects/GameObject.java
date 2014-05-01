@@ -317,6 +317,12 @@ public abstract class GameObject implements Comparable<GameObject> {
 	 */
 	protected void setShape(Shape shape) {
 		this.shape = shape;
+		updatePosition();
+	}
+
+	private void updatePosition() {
+		setXPosition(xPosition);
+		setYPosition(yPosition);
 	}
 
 	@Override
