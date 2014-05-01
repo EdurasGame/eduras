@@ -106,8 +106,7 @@ public class Deathmatch extends BasicGameMode {
 	public void onConnect(int ownerId) {
 		super.onConnect(ownerId);
 
-		Player newPlayer = new Player(ownerId, "unknown");
-		gameInfo.addPlayer(newPlayer);
+		Player newPlayer = handleNewPlayer(ownerId);
 
 		// simply create the player and respawn it somewhere
 		gameInfo.getEventTriggerer().createObject(ObjectType.PLAYER, ownerId);
@@ -122,6 +121,16 @@ public class Deathmatch extends BasicGameMode {
 
 		// and add it to the statistic
 		gameInfo.getGameSettings().getStats().addPlayerToStats(ownerId);
+	}
+
+	protected Player handleNewPlayer(int ownerId) {
+		EventTriggerer eventTriggerer = gameInfo.getEventTriggerer();
+
+		Player newPlayer = new Player(ownerId, "unknown");
+		gameInfo.addPlayer(newPlayer);
+
+		eventTriggerer.onPlayerJoined(newPlayer);
+		return newPlayer;
 	}
 
 	@Override

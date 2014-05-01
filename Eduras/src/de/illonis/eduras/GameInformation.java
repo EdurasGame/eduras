@@ -22,6 +22,7 @@ import de.illonis.eduras.events.GameEvent;
 import de.illonis.eduras.events.GameEvent.GameEventNumber;
 import de.illonis.eduras.events.MovementEvent;
 import de.illonis.eduras.events.ObjectFactoryEvent;
+import de.illonis.eduras.events.OwnerGameEvent;
 import de.illonis.eduras.events.SetBooleanGameObjectAttributeEvent;
 import de.illonis.eduras.events.SetGameModeEvent;
 import de.illonis.eduras.events.SetIntegerGameObjectAttributeEvent;
@@ -329,6 +330,8 @@ public class GameInformation {
 
 		ArrayList<GameEvent> infos = new ArrayList<GameEvent>();
 
+		announceAllPlayers(infos);
+
 		ArrayList<NeutralBase> neutralBases = new ArrayList<NeutralBase>();
 		putObjectInfos(infos, neutralBases);
 
@@ -339,6 +342,13 @@ public class GameInformation {
 		putNeutralBaseOwnerInfos(infos, neutralBases);
 
 		return infos;
+	}
+
+	private void announceAllPlayers(ArrayList<GameEvent> infos) {
+		for (Player player : players.values()) {
+			infos.add(new OwnerGameEvent(GameEventNumber.PLAYER_JOINED, player
+					.getPlayerId()));
+		}
 	}
 
 	private void putNeutralBaseOwnerInfos(ArrayList<GameEvent> infos,

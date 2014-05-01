@@ -27,6 +27,7 @@ import de.illonis.eduras.events.ItemEvent;
 import de.illonis.eduras.events.MatchEndEvent;
 import de.illonis.eduras.events.MovementEvent;
 import de.illonis.eduras.events.ObjectFactoryEvent;
+import de.illonis.eduras.events.OwnerGameEvent;
 import de.illonis.eduras.events.RespawnPlayerEvent;
 import de.illonis.eduras.events.SendUnitsEvent;
 import de.illonis.eduras.events.SetAmmunitionEvent;
@@ -178,6 +179,11 @@ public class EventParser implements EventHandler {
 
 				logic.onGameEventAppeared(new SendUnitsEvent((Integer) event
 						.getArgument(0), target, unitIds));
+				break;
+			case PLAYER_JOINED:
+			case PLAYER_LEFT:
+				logic.onGameEventAppeared(new OwnerGameEvent(gameEventNumber,
+						(Integer) event.getArgument(0)));
 				break;
 			case SET_POS_UDP:
 			case SET_POS_TCP:

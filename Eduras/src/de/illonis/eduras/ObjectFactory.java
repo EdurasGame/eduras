@@ -174,9 +174,9 @@ public class ObjectFactory {
 					playerForMainFigure = logic.getGame().getPlayerByOwnerId(
 							owner);
 				} catch (ObjectNotFoundException e1) {
-					L.info("When generating a mainfigure for a player, the player isn't tracked yet. Create entry for player...");
-					playerForMainFigure = new Player(owner, "unknown");
-					logic.getGame().addPlayer(playerForMainFigure);
+					L.log(Level.SEVERE,
+							"There is no player for the given owner!", e1);
+					return;
 				}
 
 				go = new PlayerMainFigure(logic.getGame(), timingSource,

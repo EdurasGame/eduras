@@ -70,8 +70,7 @@ public class TeamDeathmatch extends Deathmatch {
 	@Override
 	public void onConnect(int ownerId) {
 
-		Player newPlayer = new Player(ownerId, "unknown");
-		gameInfo.addPlayer(newPlayer);
+		Player newPlayer = handleNewPlayer(ownerId);
 
 		// have to reimplement this unfortunately
 		if (gameInfo.getPlayers().size() >= gameInfo.getGameSettings()

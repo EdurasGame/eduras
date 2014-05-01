@@ -19,6 +19,7 @@ import de.illonis.eduras.events.ItemEvent;
 import de.illonis.eduras.events.MatchEndEvent;
 import de.illonis.eduras.events.MovementEvent;
 import de.illonis.eduras.events.ObjectFactoryEvent;
+import de.illonis.eduras.events.OwnerGameEvent;
 import de.illonis.eduras.events.SetAmmunitionEvent;
 import de.illonis.eduras.events.SetBooleanGameObjectAttributeEvent;
 import de.illonis.eduras.events.SetFloatGameObjectAttributeEvent;
@@ -400,6 +401,16 @@ public class ClientLogic implements GameLogicInterface {
 				conqueredArea.setCurrentOwnerTeam(conqueringTeam);
 
 				break;
+			case PLAYER_JOINED: {
+				OwnerGameEvent ownerEvent = (OwnerGameEvent) event;
+				gameInfo.addPlayer(new Player(ownerEvent.getOwner(), "unknown"));
+				break;
+			}
+			case PLAYER_LEFT: {
+				OwnerGameEvent ownerEvent = (OwnerGameEvent) event;
+				gameInfo.removePlayer(ownerEvent.getOwner());
+				break;
+			}
 			default:
 				break;
 			}

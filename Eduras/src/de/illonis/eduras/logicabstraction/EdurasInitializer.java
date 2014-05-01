@@ -275,13 +275,14 @@ public class EdurasInitializer {
 			@Override
 			public void changeHealthByAmount(Unit unitToHeal,
 					int spell_heal_amount) {
-				// TODO Auto-generated method stub
 			}
 
 			@Override
 			public void clearInventoryOfPlayer(Player player) {
-				// TODO Auto-generated method stub
+			}
 
+			@Override
+			public void onPlayerJoined(Player newPlayer) {
 			}
 
 		});

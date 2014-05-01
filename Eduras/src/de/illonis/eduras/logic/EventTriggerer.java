@@ -448,4 +448,6 @@ public interface EventTriggerer {
 	void changeHealthByAmount(Unit unitToHeal, int spell_heal_amount);
 
 	void clearInventoryOfPlayer(Player player);
+
+	void onPlayerJoined(Player newPlayer);
 }

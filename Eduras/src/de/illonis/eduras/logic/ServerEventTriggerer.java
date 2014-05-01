@@ -34,6 +34,7 @@ import de.illonis.eduras.events.ItemEvent;
 import de.illonis.eduras.events.MatchEndEvent;
 import de.illonis.eduras.events.MovementEvent;
 import de.illonis.eduras.events.ObjectFactoryEvent;
+import de.illonis.eduras.events.OwnerGameEvent;
 import de.illonis.eduras.events.SetAmmunitionEvent;
 import de.illonis.eduras.events.SetBooleanGameObjectAttributeEvent;
 import de.illonis.eduras.events.SetFloatGameObjectAttributeEvent;
@@ -621,7 +622,10 @@ public class ServerEventTriggerer implements EventTriggerer {
 			gonePlayerEvent.setId(objectId);
 			logic.getObjectFactory().onObjectFactoryEventAppeared(
 					gonePlayerEvent);
-			sendEvents(gonePlayerEvent);
+
+			OwnerGameEvent playerLeftEvent = new OwnerGameEvent(
+					GameEventNumber.PLAYER_LEFT, ownerId);
+			sendEvents(gonePlayerEvent, playerLeftEvent);
 		} catch (ObjectNotFoundException e) {
 			// if there is no mainfigure, this function is used to prevent
 			// someone to join the server
@@ -795,5 +799,11 @@ public class ServerEventTriggerer implements EventTriggerer {
 		for (int i = 0; i < 6; i++) {
 			changeItemSlot(i, player.getPlayerId(), null);
 		}
+	}
+
+	@Override
+	public void onPlayerJoined(Player newPlayer) {
+		sendEvents(new OwnerGameEvent(GameEventNumber.PLAYER_JOINED,
+				newPlayer.getPlayerId()));
 	}
 }

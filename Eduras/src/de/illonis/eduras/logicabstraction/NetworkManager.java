@@ -38,7 +38,7 @@ public class NetworkManager {
 
 			@Override
 			public void onClientDisconnected(int clientId) {
-				gameInfo.removePlayer(clientId);
+				edurasGUINetworkHandler.onClientDisconnected(clientId);
 			}
 
 			@Override
