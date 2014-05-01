@@ -65,6 +65,8 @@ public class InputKeyHandler {
 				reactor));
 		keyHandlers.put(InteractMode.MODE_STRATEGY, new BuildModeKeyHandler(
 				client, reactor));
+		keyHandlers.put(InteractMode.MODE_DEAD, new DeadModeKeyHandler(client,
+				reactor));
 	}
 
 	/**

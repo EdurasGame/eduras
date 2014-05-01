@@ -20,7 +20,8 @@ public class DragSelectionRectangle extends RenderedGuiObject {
 
 	protected DragSelectionRectangle(UserInterface gui) {
 		super(gui);
-		setActiveInteractModes(InteractMode.MODE_STRATEGY);
+		setActiveInteractModes(InteractMode.MODE_STRATEGY,
+				InteractMode.MODE_DEAD);
 		setVisibleForSpectator(false);
 		draw = false;
 	}

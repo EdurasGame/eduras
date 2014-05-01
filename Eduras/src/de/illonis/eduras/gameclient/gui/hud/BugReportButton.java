@@ -34,7 +34,7 @@ public class BugReportButton extends ClickableGuiElement {
 		height = 20;
 		bounds = new Rectangle(screenX, screenY, width, height);
 		setActiveInteractModes(InteractMode.MODE_EGO,
-				InteractMode.MODE_STRATEGY);
+				InteractMode.MODE_STRATEGY, InteractMode.MODE_DEAD);
 	}
 
 	@Override

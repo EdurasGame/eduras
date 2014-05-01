@@ -9,7 +9,7 @@ package de.illonis.eduras.units;
 @SuppressWarnings("javadoc")
 public enum InteractMode {
 
-	MODE_EGO(5000), MODE_STRATEGY(1000);
+	MODE_EGO(5000), MODE_STRATEGY(1000), MODE_DEAD(0);
 
 	private final long coolDown; // in ms.
 

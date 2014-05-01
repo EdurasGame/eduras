@@ -180,9 +180,10 @@ public class Edura extends TeamDeathmatch {
 		eventTriggerer.removeObject(killedUnit.getId());
 
 		if (killedUnit instanceof PlayerMainFigure) {
-			eventTriggerer
-					.clearInventoryOfPlayer(((PlayerMainFigure) killedUnit)
-							.getPlayer());
+			PlayerMainFigure mainFigure = (PlayerMainFigure) killedUnit;
+			eventTriggerer.clearInventoryOfPlayer(mainFigure.getPlayer());
+			eventTriggerer.changeInteractMode(mainFigure.getPlayer()
+					.getPlayerId(), InteractMode.MODE_DEAD);
 		}
 	}
 
@@ -252,6 +253,10 @@ public class Edura extends TeamDeathmatch {
 		case MODE_EGO:
 			return true;
 		case MODE_STRATEGY:
+			if (player.getPlayerMainFigure().isDead()) {
+				return false;
+			}
+
 			Collection<GameObject> neutralBases = gameInfo
 					.findObjectsByType(ObjectType.NEUTRAL_BASE);
 

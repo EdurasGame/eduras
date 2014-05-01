@@ -32,6 +32,7 @@ public final class GuiMouseHandler extends GuiMouseAdapter implements
 
 	private final EgoModeMouseAdapter egoModeHandler;
 	private final BuildModeMouseAdapter buildModeHandler;
+	private final DeadModeMouseAdapter deadModeHandler;
 	private final LinkedList<ClickableGuiElementInterface> clickListeners;
 
 	private final LinkedList<TooltipTriggerer> triggerers;
@@ -44,6 +45,7 @@ public final class GuiMouseHandler extends GuiMouseAdapter implements
 		triggerers = new LinkedList<TooltipTriggerer>();
 		buildModeHandler = new BuildModeMouseAdapter(logic, reactor);
 		egoModeHandler = new EgoModeMouseAdapter(logic, reactor);
+		deadModeHandler = new DeadModeMouseAdapter(logic, reactor);
 		clickListeners = new LinkedList<ClickableGuiElementInterface>();
 	}
 
@@ -72,6 +74,10 @@ public final class GuiMouseHandler extends GuiMouseAdapter implements
 			break;
 		case MODE_STRATEGY:
 			buildModeHandler.itemClicked(slot);
+			break;
+		case MODE_DEAD:
+			deadModeHandler.itemClicked(slot);
+			break;
 		default:
 			break;
 		}
@@ -115,6 +121,10 @@ public final class GuiMouseHandler extends GuiMouseAdapter implements
 			break;
 		case MODE_STRATEGY:
 			buildModeHandler.mouseClicked(button, x, y, clickCount);
+			break;
+		case MODE_DEAD:
+			deadModeHandler.mouseClicked(button, x, y, clickCount);
+			break;
 		default:
 			break;
 		}
@@ -145,6 +155,10 @@ public final class GuiMouseHandler extends GuiMouseAdapter implements
 			break;
 		case MODE_STRATEGY:
 			buildModeHandler.mouseMoved(oldx, oldy, newx, newy);
+			break;
+		case MODE_DEAD:
+			deadModeHandler.mouseMoved(oldx, oldy, newx, newy);
+			break;
 		default:
 			break;
 		}
@@ -165,6 +179,10 @@ public final class GuiMouseHandler extends GuiMouseAdapter implements
 			break;
 		case MODE_STRATEGY:
 			buildModeHandler.mouseDragged(oldx, oldy, newx, newy);
+			break;
+		case MODE_DEAD:
+			deadModeHandler.mouseDragged(oldx, oldy, newx, newy);
+			break;
 		default:
 			break;
 		}
@@ -185,6 +203,10 @@ public final class GuiMouseHandler extends GuiMouseAdapter implements
 			break;
 		case MODE_STRATEGY:
 			buildModeHandler.mouseReleased(button, x, y);
+			break;
+		case MODE_DEAD:
+			deadModeHandler.mouseReleased(button, x, y);
+			break;
 		default:
 			break;
 		}
@@ -209,6 +231,10 @@ public final class GuiMouseHandler extends GuiMouseAdapter implements
 			break;
 		case MODE_STRATEGY:
 			buildModeHandler.mousePressed(button, x, y);
+			break;
+		case MODE_DEAD:
+			deadModeHandler.mousePressed(button, x, y);
+			break;
 		default:
 			break;
 		}
