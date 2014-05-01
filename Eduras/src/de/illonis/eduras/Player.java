@@ -1,0 +1,107 @@
+package de.illonis.eduras;
+
+import java.util.logging.Logger;
+
+import de.illonis.edulog.EduLog;
+import de.illonis.eduras.inventory.Inventory;
+import de.illonis.eduras.units.InteractMode;
+import de.illonis.eduras.units.PlayerMainFigure;
+
+public class Player {
+	private final static Logger L = EduLog.getLoggerFor(Player.class.getName());
+
+	private String name;
+	private int playerId;
+	private InteractMode currentMode;
+	private long lastModeSwitch;
+	private final Inventory inventory = new Inventory();
+	private PlayerMainFigure playerMainFigure;
+	private Team team;
+
+	public Player(int playerId, String name) {
+		this.name = name;
+		this.playerId = playerId;
+		lastModeSwitch = 0;
+		currentMode = InteractMode.MODE_EGO;
+	}
+
+	/**
+	 * Changes the interaction mode this player is in.
+	 * 
+	 * @param newMode
+	 *            the new mode.
+	 */
+	public void setMode(InteractMode newMode) {
+		currentMode = newMode;
+		lastModeSwitch = System.currentTimeMillis();
+	}
+
+	/**
+	 * Returns the interaction mode the player is currently in.
+	 * 
+	 * @return this player's interaction mode.
+	 */
+	public InteractMode getCurrentMode() {
+		return currentMode;
+	}
+
+	/**
+	 * Calculates the cooldown remaining until player can switch mode again.
+	 * 
+	 * @return the remaining cooldown in ms. This may be negative is there is no
+	 *         cooldown anymore.
+	 */
+	public long getModeSwitchCooldown() {
+		return (lastModeSwitch + currentMode.getCoolDown())
+				- System.currentTimeMillis();
+	}
+
+	/**
+	 * Returns name of player.
+	 * 
+	 * @return player's name.
+	 */
+	public String getName() {
+		return name;
+	}
+
+	/**
+	 * Sets name of player.
+	 * 
+	 * @param name
+	 *            new player name.
+	 */
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	/**
+	 * Returns the player's inventory.
+	 * 
+	 * @return Player's inventory.
+	 */
+	public Inventory getInventory() {
+		return inventory;
+	}
+
+	public void setPlayerMainFigure(PlayerMainFigure go) {
+		this.playerMainFigure = go;
+	}
+
+	public int getPlayerId() {
+		return playerId;
+	}
+
+	public PlayerMainFigure getPlayerMainFigure() {
+		return playerMainFigure;
+	}
+
+	public void setTeam(Team team) {
+		this.team = team;
+	}
+
+	public Team getTeam() {
+		return team;
+	}
+
+}

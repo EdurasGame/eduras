@@ -1,6 +1,6 @@
 package de.illonis.eduras.events;
 
-import de.illonis.eduras.units.PlayerMainFigure.InteractMode;
+import de.illonis.eduras.units.InteractMode;
 
 /**
  * Indicates the setting of a interact mode by server for a specific player.

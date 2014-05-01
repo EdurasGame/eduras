@@ -8,12 +8,12 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 
 import de.illonis.edulog.EduLog;
+import de.illonis.eduras.Player;
 import de.illonis.eduras.Team;
 import de.illonis.eduras.events.MatchEndEvent;
 import de.illonis.eduras.gameclient.datacache.CacheException;
 import de.illonis.eduras.gameclient.datacache.CacheInfo.ImageKey;
 import de.illonis.eduras.gameclient.datacache.ImageCache;
-import de.illonis.eduras.units.PlayerMainFigure;
 
 /**
  * Displays a statistics frame that displays player stats of all players.
@@ -91,7 +91,7 @@ public class StatisticsWindow extends RenderedGuiObject {
 		int i = 1;
 		for (Team team : getInfo().getTeams()) {
 			drawTeamRow(g2d, team, i++);
-			for (PlayerMainFigure p : team.getPlayers()) {
+			for (Player p : team.getPlayers()) {
 				drawPlayerRow(g2d, p, i++);
 			}
 		}
@@ -104,7 +104,7 @@ public class StatisticsWindow extends RenderedGuiObject {
 
 	}
 
-	private void drawPlayerRow(Graphics g2d, PlayerMainFigure p, int i) {
+	private void drawPlayerRow(Graphics g2d, Player p, int i) {
 		// name
 		g2d.setColor(Color.yellow);
 		g2d.drawString(p.getName(), screenX + COLUMN_X[0], screenY + PADDING_Y

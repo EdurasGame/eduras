@@ -418,7 +418,8 @@ public abstract class GameObject implements Comparable<GameObject> {
 				return false;
 			PlayerMainFigure player;
 			try {
-				player = game.getPlayerByOwnerId(this.owner);
+				player = game.getPlayerByOwnerId(this.owner)
+						.getPlayerMainFigure();
 			} catch (ObjectNotFoundException e) {
 				return false;
 			}

@@ -4,19 +4,19 @@ import java.util.logging.Logger;
 
 import de.illonis.edulog.EduLog;
 import de.illonis.eduras.GameInformation;
+import de.illonis.eduras.Player;
 import de.illonis.eduras.Team;
 import de.illonis.eduras.logic.EventTriggerer;
-import de.illonis.eduras.units.PlayerMainFigure;
 
 public abstract class RTSAction {
 
 	protected int costs;
-	protected PlayerMainFigure executingPlayer;
+	protected Player executingPlayer;
 
 	private final static Logger L = EduLog.getLoggerFor(RTSAction.class
 			.getName());
 
-	public RTSAction(PlayerMainFigure executingPlayer, int costs) {
+	public RTSAction(Player executingPlayer, int costs) {
 		this.costs = costs;
 		this.executingPlayer = executingPlayer;
 	}
@@ -41,7 +41,7 @@ public abstract class RTSAction {
 		return costs;
 	}
 
-	public PlayerMainFigure getExecutingPlayer() {
+	public Player getExecutingPlayer() {
 		return executingPlayer;
 	}
 }

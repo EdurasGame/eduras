@@ -8,12 +8,12 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 
 import de.illonis.edulog.EduLog;
+import de.illonis.eduras.Player;
 import de.illonis.eduras.events.SetTeamResourceEvent;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
 import de.illonis.eduras.gameclient.datacache.CacheException;
 import de.illonis.eduras.gameclient.datacache.CacheInfo.ImageKey;
 import de.illonis.eduras.gameclient.datacache.ImageCache;
-import de.illonis.eduras.units.PlayerMainFigure;
 
 /**
  * Displays team resources.
@@ -28,7 +28,7 @@ public class ResourceDisplay extends RenderedGuiObject {
 
 	private final static int ICON_WIDTH = 20;
 
-	private PlayerMainFigure player;
+	private Player player;
 	private int resAmount;
 
 	protected ResourceDisplay(UserInterface gui) {

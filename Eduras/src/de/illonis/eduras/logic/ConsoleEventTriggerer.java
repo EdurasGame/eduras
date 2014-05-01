@@ -7,6 +7,7 @@ import java.util.logging.Logger;
 
 import de.eduras.eventingserver.ServerInterface;
 import de.illonis.edulog.EduLog;
+import de.illonis.eduras.Player;
 import de.illonis.eduras.exceptions.NoSuchGameModeException;
 import de.illonis.eduras.exceptions.NoSuchMapException;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
@@ -14,7 +15,6 @@ import de.illonis.eduras.gamemodes.BasicGameMode;
 import de.illonis.eduras.gamemodes.GameMode;
 import de.illonis.eduras.maps.Map;
 import de.illonis.eduras.settings.S;
-import de.illonis.eduras.units.PlayerMainFigure;
 
 /**
  * Triggers events from console.
@@ -50,7 +50,7 @@ public class ConsoleEventTriggerer {
 	 * 
 	 * @return list of players.
 	 */
-	public Collection<PlayerMainFigure> getPlayers() {
+	public Collection<Player> getPlayers() {
 		return triggerer.getGameInfo().getPlayers();
 	}
 
@@ -82,7 +82,7 @@ public class ConsoleEventTriggerer {
 	 * @return false, if the player couldnt be found.
 	 */
 	public boolean respawnPlayerById(int ownerId) {
-		PlayerMainFigure player;
+		Player player;
 		try {
 			player = triggerer.getGameInfo().getPlayerByOwnerId(ownerId);
 		} catch (ObjectNotFoundException e) {

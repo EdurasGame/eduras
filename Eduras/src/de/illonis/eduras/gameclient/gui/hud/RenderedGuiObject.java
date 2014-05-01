@@ -24,7 +24,7 @@ import de.illonis.eduras.gamemodes.GameMode;
 import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.interfaces.GameEventListener;
 import de.illonis.eduras.logicabstraction.InformationProvider;
-import de.illonis.eduras.units.PlayerMainFigure.InteractMode;
+import de.illonis.eduras.units.InteractMode;
 
 /**
  * An element that is part of the gui and is shown to end user (that means it is

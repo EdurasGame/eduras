@@ -6,6 +6,7 @@ import java.util.Collection;
 import org.newdawn.slick.geom.Vector2f;
 
 import de.illonis.eduras.ObjectFactory.ObjectType;
+import de.illonis.eduras.Player;
 import de.illonis.eduras.Statistic.StatsProperty;
 import de.illonis.eduras.Team;
 import de.illonis.eduras.ai.movement.UnitNotControllableException;
@@ -22,8 +23,8 @@ import de.illonis.eduras.gameobjects.NeutralArea;
 import de.illonis.eduras.items.Item;
 import de.illonis.eduras.maps.Map;
 import de.illonis.eduras.math.Vector2df;
+import de.illonis.eduras.units.InteractMode;
 import de.illonis.eduras.units.PlayerMainFigure;
-import de.illonis.eduras.units.PlayerMainFigure.InteractMode;
 import de.illonis.eduras.units.Unit;
 
 /**
@@ -183,9 +184,9 @@ public interface EventTriggerer {
 	 * @param player
 	 *            The player to respawn.
 	 */
-	void respawnPlayerAtRandomSpawnpoint(PlayerMainFigure player);
+	void respawnPlayerAtRandomSpawnpoint(Player player);
 
-	void respawnPlayerAtPosition(PlayerMainFigure player, Vector2df position);
+	void respawnPlayerAtPosition(Player player, Vector2df position);
 
 	/**
 	 * Called when a player changes his name.
@@ -446,4 +447,5 @@ public interface EventTriggerer {
 
 	void changeHealthByAmount(Unit unitToHeal, int spell_heal_amount);
 
+	void clearInventoryOfPlayer(Player player);
 }

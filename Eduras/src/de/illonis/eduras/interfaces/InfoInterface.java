@@ -5,6 +5,7 @@ import java.util.Collection;
 import org.newdawn.slick.geom.Rectangle;
 
 import de.illonis.eduras.ObjectFactory.ObjectType;
+import de.illonis.eduras.Player;
 import de.illonis.eduras.Statistic;
 import de.illonis.eduras.Team;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
@@ -12,7 +13,6 @@ import de.illonis.eduras.gameclient.ClientData;
 import de.illonis.eduras.gamemodes.GameMode;
 import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.maps.Map;
-import de.illonis.eduras.units.PlayerMainFigure;
 
 /**
  * This interface determines what information must be provided to the GUI.
@@ -38,7 +38,7 @@ public interface InfoInterface {
 	 * @throws ObjectNotFoundException
 	 *             Thrown if the player could not be found.
 	 */
-	public PlayerMainFigure getPlayer() throws ObjectNotFoundException;
+	public Player getPlayer() throws ObjectNotFoundException;
 
 	/**
 	 * Returns the game objects currently in the game.
@@ -59,7 +59,7 @@ public interface InfoInterface {
 	 * 
 	 * @author illonis
 	 */
-	public Collection<PlayerMainFigure> getPlayers();
+	public Collection<Player> getPlayers();
 
 	/**
 	 * @return copy of the team list.
@@ -113,7 +113,7 @@ public interface InfoInterface {
 	 * @throws ObjectNotFoundException
 	 *             if player does not exist.
 	 */
-	public PlayerMainFigure getPlayerByOwnerId(int ownerId)
+	public Player getPlayerByOwnerId(int ownerId)
 			throws ObjectNotFoundException;
 
 	/**

@@ -9,6 +9,7 @@ import java.util.logging.Logger;
 import de.illonis.edulog.EduLog;
 import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.ObjectFactory.ObjectType;
+import de.illonis.eduras.Player;
 import de.illonis.eduras.Team;
 import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.gameobjects.NeutralBase;
@@ -17,8 +18,7 @@ import de.illonis.eduras.maps.EduraMap;
 import de.illonis.eduras.maps.NodeData;
 import de.illonis.eduras.math.Vector2df;
 import de.illonis.eduras.math.graphs.Vertex;
-import de.illonis.eduras.units.PlayerMainFigure;
-import de.illonis.eduras.units.PlayerMainFigure.InteractMode;
+import de.illonis.eduras.units.InteractMode;
 import de.illonis.eduras.units.Unit;
 
 public class Edura extends TeamDeathmatch {
@@ -224,7 +224,7 @@ public class Edura extends TeamDeathmatch {
 	}
 
 	@Override
-	public boolean canSwitchMode(PlayerMainFigure player, InteractMode mode) {
+	public boolean canSwitchMode(Player player, InteractMode mode) {
 		switch (mode) {
 		case MODE_EGO:
 			return true;
@@ -233,7 +233,8 @@ public class Edura extends TeamDeathmatch {
 					.findObjectsByType(ObjectType.NEUTRAL_BASE);
 
 			Collection<GameObject> intersectingObjects = gameInfo
-					.doesAnyOfOtherObjectsIntersect(player, neutralBases);
+					.doesAnyOfOtherObjectsIntersect(
+							player.getPlayerMainFigure(), neutralBases);
 
 			for (GameObject intersectingGameObject : intersectingObjects) {
 				NeutralBase intersectingBase = (NeutralBase) intersectingGameObject;

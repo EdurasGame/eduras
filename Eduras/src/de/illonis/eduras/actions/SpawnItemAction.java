@@ -5,11 +5,11 @@ import java.util.logging.Logger;
 import de.illonis.edulog.EduLog;
 import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.ObjectFactory.ObjectType;
+import de.illonis.eduras.Player;
 import de.illonis.eduras.exceptions.WrongObjectTypeException;
 import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.math.Vector2df;
 import de.illonis.eduras.settings.S;
-import de.illonis.eduras.units.PlayerMainFigure;
 
 public class SpawnItemAction extends RTSAction {
 
@@ -19,9 +19,8 @@ public class SpawnItemAction extends RTSAction {
 	private ObjectType itemType;
 	private Vector2df spawnPos;
 
-	public SpawnItemAction(PlayerMainFigure executingPlayer,
-			ObjectType itemType, Vector2df position)
-			throws WrongObjectTypeException {
+	public SpawnItemAction(Player executingPlayer, ObjectType itemType,
+			Vector2df position) throws WrongObjectTypeException {
 		super(executingPlayer, -1);
 
 		this.itemType = itemType;

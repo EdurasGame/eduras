@@ -9,7 +9,7 @@ import org.newdawn.slick.geom.Vector2f;
 
 import de.illonis.edulog.EduLog;
 import de.illonis.eduras.gameclient.bugreport.BugReportFrame;
-import de.illonis.eduras.units.PlayerMainFigure.InteractMode;
+import de.illonis.eduras.units.InteractMode;
 
 /**
  * A button that opens a bug report window.

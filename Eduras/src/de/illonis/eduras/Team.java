@@ -4,7 +4,6 @@ import java.util.LinkedList;
 
 import org.newdawn.slick.Color;
 
-import de.illonis.eduras.units.PlayerMainFigure;
 import de.illonis.eduras.utils.Randomizer;
 
 /**
@@ -21,7 +20,7 @@ public class Team {
 	private Color color;
 	private final String name;
 	private int resource;
-	private final LinkedList<PlayerMainFigure> players;
+	private final LinkedList<Player> players;
 
 	/**
 	 * @return the next free id for a new team.
@@ -54,7 +53,7 @@ public class Team {
 	public Team(String name, int teamId, Color color) {
 		this.teamId = teamId;
 		this.name = name;
-		players = new LinkedList<PlayerMainFigure>();
+		players = new LinkedList<Player>();
 		this.color = color;
 		resource = 0;
 	}
@@ -82,7 +81,7 @@ public class Team {
 	 * 
 	 * @author illonis
 	 */
-	public void addPlayer(PlayerMainFigure newPlayer) {
+	public void addPlayer(Player newPlayer) {
 
 		newPlayer.setTeam(this);
 		if (players.contains(newPlayer))
@@ -98,7 +97,7 @@ public class Team {
 	 * 
 	 * @author illonis
 	 */
-	public void removePlayer(PlayerMainFigure playerToRemove) {
+	public void removePlayer(Player playerToRemove) {
 		playerToRemove.setTeam(null);
 		players.remove(playerToRemove);
 	}
@@ -117,7 +116,7 @@ public class Team {
 	 * 
 	 * @author illonis
 	 */
-	public LinkedList<PlayerMainFigure> getPlayers() {
+	public LinkedList<Player> getPlayers() {
 		return players;
 	}
 

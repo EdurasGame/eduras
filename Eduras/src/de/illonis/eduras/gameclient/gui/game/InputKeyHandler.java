@@ -7,6 +7,7 @@ import java.util.logging.Logger;
 import org.newdawn.slick.Input;
 
 import de.illonis.edulog.EduLog;
+import de.illonis.eduras.Player;
 import de.illonis.eduras.exceptions.ActionFailedException;
 import de.illonis.eduras.exceptions.KeyNotBoundException;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
@@ -15,8 +16,7 @@ import de.illonis.eduras.gameclient.userprefs.KeyBindings.KeyBinding;
 import de.illonis.eduras.gameclient.userprefs.Settings;
 import de.illonis.eduras.logicabstraction.EdurasInitializer;
 import de.illonis.eduras.logicabstraction.InformationProvider;
-import de.illonis.eduras.units.PlayerMainFigure;
-import de.illonis.eduras.units.PlayerMainFigure.InteractMode;
+import de.illonis.eduras.units.InteractMode;
 
 /**
  * This class handles user's key input and triggers the correspondend
@@ -132,7 +132,7 @@ public class InputKeyHandler {
 
 		pressedButtons.put(keyCode, true);
 		if (infoPro.getGameMode().supportsKeyBinding(binding)) {
-			PlayerMainFigure player;
+			Player player;
 			try {
 				player = infoPro.getPlayer();
 			} catch (ObjectNotFoundException e1) {
@@ -187,7 +187,7 @@ public class InputKeyHandler {
 		}
 		if (infoPro.getGameMode().supportsKeyBinding(binding)) {
 
-			PlayerMainFigure player;
+			Player player;
 			try {
 				player = infoPro.getPlayer();
 			} catch (ObjectNotFoundException e1) {

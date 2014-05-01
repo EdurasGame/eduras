@@ -9,6 +9,7 @@ import java.net.InetAddress;
 import de.eduras.eventingserver.Client;
 import de.eduras.eventingserver.ClientInterface;
 import de.eduras.eventingserver.ClientNetworkEventHandler;
+import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.interfaces.GameLogicInterface;
 
 /**
@@ -18,7 +19,9 @@ import de.illonis.eduras.interfaces.GameLogicInterface;
  * 
  */
 public class NetworkManager {
-	ClientInterface client;
+	private ClientInterface client;
+	private ClientNetworkEventHandler edurasGUINetworkHandler;
+	private GameInformation gameInfo;
 
 	/**
 	 * Creates a new NetworkManager with the given logic.
@@ -30,6 +33,51 @@ public class NetworkManager {
 	NetworkManager(GameLogicInterface logic) {
 
 		client = new Client();
+		gameInfo = logic.getGame();
+		client.setNetworkEventHandler(new ClientNetworkEventHandler() {
+
+			@Override
+			public void onClientDisconnected(int clientId) {
+				gameInfo.removePlayer(clientId);
+			}
+
+			@Override
+			public void onClientConnected(int clientId) {
+				edurasGUINetworkHandler.onClientConnected(clientId);
+
+			}
+
+			@Override
+			public void onConnectionLost() {
+				edurasGUINetworkHandler.onConnectionLost();
+			}
+
+			@Override
+			public void onDisconnected() {
+				edurasGUINetworkHandler.onDisconnected();
+			}
+
+			@Override
+			public void onClientKicked(int clientId, String reason) {
+				edurasGUINetworkHandler.onClientKicked(clientId, reason);
+			}
+
+			@Override
+			public void onServerIsFull() {
+				edurasGUINetworkHandler.onServerIsFull();
+			}
+
+			@Override
+			public void onPingReceived(long latency) {
+				edurasGUINetworkHandler.onPingReceived(latency);
+			}
+
+			@Override
+			public void onConnectionEstablished(int clientId) {
+				edurasGUINetworkHandler.onConnectionEstablished(clientId);
+			}
+
+		});
 	}
 
 	/**
@@ -87,7 +135,7 @@ public class NetworkManager {
 	 *            The listener to forward NetworkEvents to.
 	 */
 	public void setNetworkEventHandler(ClientNetworkEventHandler handler) {
-		client.setNetworkEventHandler(handler);
+		edurasGUINetworkHandler = handler;
 	}
 
 	/**

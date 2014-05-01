@@ -19,7 +19,7 @@ import de.illonis.eduras.inventory.ItemSlotIsEmptyException;
 import de.illonis.eduras.items.Item;
 import de.illonis.eduras.items.Usable;
 import de.illonis.eduras.items.weapons.Weapon;
-import de.illonis.eduras.units.PlayerMainFigure.InteractMode;
+import de.illonis.eduras.units.InteractMode;
 
 /**
  * Displays player items on user interface.

@@ -2,14 +2,14 @@ package de.illonis.eduras.gamemodes;
 
 import java.util.Set;
 
+import de.illonis.eduras.Player;
 import de.illonis.eduras.Team;
 import de.illonis.eduras.gameclient.userprefs.KeyBindings.KeyBinding;
 import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.gameobjects.GameObject.Relation;
 import de.illonis.eduras.gameobjects.NeutralBase;
 import de.illonis.eduras.maps.SpawnPosition.SpawnType;
-import de.illonis.eduras.units.PlayerMainFigure;
-import de.illonis.eduras.units.PlayerMainFigure.InteractMode;
+import de.illonis.eduras.units.InteractMode;
 import de.illonis.eduras.units.Unit;
 
 /**
@@ -166,6 +166,6 @@ public interface GameMode {
 	 * @param mode
 	 * @return true if player is allowed/able to, false otherwise.
 	 */
-	public boolean canSwitchMode(PlayerMainFigure player, InteractMode mode);
+	public boolean canSwitchMode(Player player, InteractMode mode);
 
 }

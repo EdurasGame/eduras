@@ -9,7 +9,7 @@ import org.newdawn.slick.geom.Vector2f;
 
 import de.illonis.eduras.gameclient.GuiInternalEventListener;
 import de.illonis.eduras.gameclient.gui.game.GamePanelLogic.ClickState;
-import de.illonis.eduras.units.PlayerMainFigure.InteractMode;
+import de.illonis.eduras.units.InteractMode;
 
 /**
  * Handles mouse events in the build mode ({@link InteractMode#MODE_STRATEGY}).

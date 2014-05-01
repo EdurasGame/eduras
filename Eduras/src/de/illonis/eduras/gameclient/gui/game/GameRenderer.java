@@ -18,6 +18,7 @@ import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.Vector2f;
 
 import de.illonis.edulog.EduLog;
+import de.illonis.eduras.Player;
 import de.illonis.eduras.Team;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
 import de.illonis.eduras.gameclient.ClientData;
@@ -37,8 +38,8 @@ import de.illonis.eduras.math.BasicMath;
 import de.illonis.eduras.math.Geometry;
 import de.illonis.eduras.math.Vector2df;
 import de.illonis.eduras.settings.S;
+import de.illonis.eduras.units.InteractMode;
 import de.illonis.eduras.units.PlayerMainFigure;
-import de.illonis.eduras.units.PlayerMainFigure.InteractMode;
 import de.illonis.eduras.units.Unit;
 
 /**
@@ -180,7 +181,7 @@ public class GameRenderer implements TooltipHandler {
 
 	private void adjustCamera() {
 		try {
-			PlayerMainFigure p = getClientPlayer();
+			PlayerMainFigure p = getClientPlayer().getPlayerMainFigure();
 			Vector2f c = p.getPositionVector();
 			camera.centerAt(c.x, c.y);
 			viewPort.centerAt(c.x * scale, c.y * scale);
@@ -237,7 +238,7 @@ public class GameRenderer implements TooltipHandler {
 	private void drawObjects(Graphics g) {
 		PlayerMainFigure myPlayer;
 		try {
-			myPlayer = getClientPlayer();
+			myPlayer = getClientPlayer().getPlayerMainFigure();
 		} catch (ObjectNotFoundException e) {
 			L.log(Level.SEVERE,
 					"Could not find playerMainFigure while rendering.", e);
@@ -446,7 +447,7 @@ public class GameRenderer implements TooltipHandler {
 		return scale;
 	}
 
-	private PlayerMainFigure getClientPlayer() throws ObjectNotFoundException {
+	private Player getClientPlayer() throws ObjectNotFoundException {
 		return info.getPlayer();
 	}
 

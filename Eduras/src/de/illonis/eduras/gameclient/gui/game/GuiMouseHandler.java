@@ -8,13 +8,13 @@ import java.util.logging.Logger;
 import org.newdawn.slick.geom.Vector2f;
 
 import de.illonis.edulog.EduLog;
+import de.illonis.eduras.Player;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
 import de.illonis.eduras.gameclient.GuiInternalEventListener;
 import de.illonis.eduras.gameclient.gui.hud.ClickableGuiElementInterface;
 import de.illonis.eduras.gameclient.gui.hud.TooltipTriggerer;
 import de.illonis.eduras.logicabstraction.EdurasInitializer;
 import de.illonis.eduras.logicabstraction.InformationProvider;
-import de.illonis.eduras.units.PlayerMainFigure;
 
 /**
  * Handles mouse clicks and mouse movement in the gui.<br>
@@ -59,7 +59,7 @@ public final class GuiMouseHandler extends GuiMouseAdapter implements
 
 	@Override
 	public void itemClicked(int slot) {
-		PlayerMainFigure player;
+		Player player;
 		try {
 			player = infoPro.getPlayer();
 		} catch (ObjectNotFoundException e1) {
@@ -101,7 +101,7 @@ public final class GuiMouseHandler extends GuiMouseAdapter implements
 					return;
 		}
 
-		PlayerMainFigure player;
+		Player player;
 		try {
 			player = infoPro.getPlayer();
 		} catch (ObjectNotFoundException e) {
@@ -132,7 +132,7 @@ public final class GuiMouseHandler extends GuiMouseAdapter implements
 			}
 		}
 
-		PlayerMainFigure player;
+		Player player;
 		try {
 			player = infoPro.getPlayer();
 		} catch (ObjectNotFoundException e) {
@@ -152,7 +152,7 @@ public final class GuiMouseHandler extends GuiMouseAdapter implements
 
 	@Override
 	public void mouseDragged(int oldx, int oldy, int newx, int newy) {
-		PlayerMainFigure player;
+		Player player;
 		try {
 			player = infoPro.getPlayer();
 		} catch (ObjectNotFoundException e1) {
@@ -172,7 +172,7 @@ public final class GuiMouseHandler extends GuiMouseAdapter implements
 
 	@Override
 	public void mouseReleased(int button, int x, int y) {
-		PlayerMainFigure player;
+		Player player;
 		try {
 			player = infoPro.getPlayer();
 		} catch (ObjectNotFoundException e) {
@@ -196,7 +196,7 @@ public final class GuiMouseHandler extends GuiMouseAdapter implements
 
 	@Override
 	public void mousePressed(int button, int x, int y) {
-		PlayerMainFigure player;
+		Player player;
 		try {
 			player = infoPro.getPlayer();
 		} catch (ObjectNotFoundException e) {

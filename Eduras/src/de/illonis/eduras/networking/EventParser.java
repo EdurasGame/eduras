@@ -51,7 +51,7 @@ import de.illonis.eduras.exceptions.InvalidNameException;
 import de.illonis.eduras.gameobjects.GameObject.Visibility;
 import de.illonis.eduras.interfaces.GameLogicInterface;
 import de.illonis.eduras.math.Vector2df;
-import de.illonis.eduras.units.PlayerMainFigure.InteractMode;
+import de.illonis.eduras.units.InteractMode;
 
 /**
  * This class serves as a bridge between the network and the logic. Events'

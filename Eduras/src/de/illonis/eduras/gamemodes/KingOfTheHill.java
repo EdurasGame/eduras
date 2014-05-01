@@ -7,6 +7,7 @@ import java.util.logging.Logger;
 
 import de.illonis.edulog.EduLog;
 import de.illonis.eduras.GameInformation;
+import de.illonis.eduras.Player;
 import de.illonis.eduras.Statistic.StatsProperty;
 import de.illonis.eduras.Team;
 import de.illonis.eduras.gameobjects.NeutralBase;
@@ -51,10 +52,11 @@ public class KingOfTheHill extends Deathmatch {
 
 	@Override
 	public void onBaseOccupied(NeutralBase base, Team occupyingTeam) {
-		PlayerMainFigure player = occupyingTeam.getPlayers().getFirst();
+		Player player = occupyingTeam.getPlayers().getFirst();
 		Timer timerForBase = new Timer();
 		neutralBasePointsAdderTimer.put(base, timerForBase);
-		timerForBase.schedule(new NeutralBasePointsAdder(player),
+		timerForBase.schedule(
+				new NeutralBasePointsAdder(player.getPlayerMainFigure()),
 				S.gm_koth_gain_points_interval, S.gm_koth_gain_points_interval);
 		L.info("Team " + occupyingTeam.getName() + " occupied the base!");
 	}

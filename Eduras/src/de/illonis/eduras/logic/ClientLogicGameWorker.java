@@ -9,6 +9,7 @@ import org.newdawn.slick.geom.Vector2f;
 
 import de.illonis.edulog.EduLog;
 import de.illonis.eduras.GameInformation;
+import de.illonis.eduras.Player;
 import de.illonis.eduras.Team;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
 import de.illonis.eduras.gameclient.VisionInformation;
@@ -73,7 +74,8 @@ public class ClientLogicGameWorker extends LogicGameWorker {
 				.getInformationProvider().getOwnerID();
 		PlayerMainFigure player;
 		try {
-			player = gameInformation.getPlayerByOwnerId(playerOwner);
+			player = gameInformation.getPlayerByOwnerId(playerOwner)
+					.getPlayerMainFigure();
 		} catch (ObjectNotFoundException e) {
 			L.log(Level.SEVERE, "Player has no mainfigure.", e);
 			return;
@@ -86,8 +88,8 @@ public class ClientLogicGameWorker extends LogicGameWorker {
 		LinkedList<Integer> teamOwners = new LinkedList<Integer>();
 		LinkedList<GameObject> teamObjects = new LinkedList<GameObject>();
 
-		for (PlayerMainFigure teamPlayer : team.getPlayers()) {
-			teamOwners.add(teamPlayer.getOwner());
+		for (Player teamPlayer : team.getPlayers()) {
+			teamOwners.add(teamPlayer.getPlayerId());
 		}
 
 		for (GameObject o : gameInformation.getObjects().values()) {
@@ -165,10 +167,10 @@ public class ClientLogicGameWorker extends LogicGameWorker {
 
 		java.awt.Polygon poly = new java.awt.Polygon();
 		for (Vector2df vector2d : polyEdges) {
-			poly.addPoint((int) Math.round(vector2d.getX()),
-					(int) Math.round(vector2d.getY()));
+			poly.addPoint(Math.round(vector2d.getX()),
+					Math.round(vector2d.getY()));
 		}
-		poly.addPoint((int) Math.round(u.getX()), (int) Math.round(u.getY()));
+		poly.addPoint(Math.round(u.getX()), Math.round(u.getY()));
 		return new Area(poly);
 	}
 }

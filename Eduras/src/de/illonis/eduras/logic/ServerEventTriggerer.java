@@ -16,6 +16,7 @@ import de.eduras.eventingserver.test.NoSuchClientException;
 import de.illonis.edulog.EduLog;
 import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.ObjectFactory.ObjectType;
+import de.illonis.eduras.Player;
 import de.illonis.eduras.Statistic;
 import de.illonis.eduras.Statistic.StatsProperty;
 import de.illonis.eduras.Team;
@@ -66,8 +67,8 @@ import de.illonis.eduras.items.weapons.Weapon;
 import de.illonis.eduras.maps.InitialObjectData;
 import de.illonis.eduras.maps.Map;
 import de.illonis.eduras.math.Vector2df;
+import de.illonis.eduras.units.InteractMode;
 import de.illonis.eduras.units.PlayerMainFigure;
-import de.illonis.eduras.units.PlayerMainFigure.InteractMode;
 import de.illonis.eduras.units.Unit;
 
 /**
@@ -231,9 +232,9 @@ public class ServerEventTriggerer implements EventTriggerer {
 			((Lootable) i).loot();
 		try {
 			if (i.isUnique()
-					&& gameInfo.getPlayerByObjectId(playerId).getInventory()
-							.hasItemOfType(i.getType())) {
-				Item item = gameInfo.getPlayerByObjectId(playerId)
+					&& gameInfo.getPlayerByObjectId(playerId).getPlayer()
+							.getInventory().hasItemOfType(i.getType())) {
+				Item item = gameInfo.getPlayerByObjectId(playerId).getPlayer()
 						.getInventory().getItemOfType(i.getType());
 				if (item instanceof Weapon) {
 					Weapon weapon = (Weapon) item;
@@ -253,7 +254,7 @@ public class ServerEventTriggerer implements EventTriggerer {
 			PlayerMainFigure player = gameInfo.getPlayerByObjectId(playerId);
 			Item item = (Item) gameInfo.findObjectById(newObjId);
 
-			itemSlot = player.getInventory().loot(item);
+			itemSlot = player.getPlayer().getInventory().loot(item);
 			item.setOwner(player.getOwner());
 
 			item.setCollidable(false);
@@ -341,8 +342,8 @@ public class ServerEventTriggerer implements EventTriggerer {
 	}
 
 	@Override
-	public void respawnPlayerAtRandomSpawnpoint(PlayerMainFigure player) {
-		respawnPlayer(player);
+	public void respawnPlayerAtRandomSpawnpoint(Player player) {
+		int idOfRespawnedPlayer = respawnPlayer(player);
 
 		Vector2df spawnPosition = null;
 		try {
@@ -353,17 +354,15 @@ public class ServerEventTriggerer implements EventTriggerer {
 					e);
 		}
 
-		guaranteeSetPositionOfObject(player.getId(), spawnPosition);
+		guaranteeSetPositionOfObject(idOfRespawnedPlayer, spawnPosition);
 	}
 
-	private void respawnPlayer(PlayerMainFigure player) {
-		// TODO: This should be dependend on game mode:
-		for (int i = 0; i < 6; i++)
-			changeItemSlot(i, player.getOwner(), null);
+	private int respawnPlayer(Player player) {
+		if (player.getPlayerMainFigure() != null) {
+			removeObject(player.getPlayerMainFigure().getId());
+		}
 
-		// TODO: Fire a respawn event to client.
-		remaxHealth(player);
-
+		return createObject(ObjectType.PLAYER, player.getPlayerId());
 	}
 
 	@Override
@@ -391,7 +390,7 @@ public class ServerEventTriggerer implements EventTriggerer {
 	@Override
 	public void restartRound() {
 
-		for (PlayerMainFigure player : gameInfo.getPlayers()) {
+		for (Player player : gameInfo.getPlayers()) {
 			resetStats(player);
 		}
 
@@ -456,7 +455,7 @@ public class ServerEventTriggerer implements EventTriggerer {
 
 		gameInfo.getGameSettings().getGameMode().onGameStart();
 
-		for (PlayerMainFigure player : gameInfo.getPlayers()) {
+		for (Player player : gameInfo.getPlayers()) {
 			respawnPlayerAtRandomSpawnpoint(player);
 		}
 	}
@@ -510,9 +509,9 @@ public class ServerEventTriggerer implements EventTriggerer {
 	 * 
 	 * @param player
 	 */
-	private void resetStats(PlayerMainFigure player) {
-		setStats(StatsProperty.KILLS, player.getOwner(), 0);
-		setStats(StatsProperty.DEATHS, player.getOwner(), 0);
+	private void resetStats(Player player) {
+		setStats(StatsProperty.KILLS, player.getPlayerId(), 0);
+		setStats(StatsProperty.DEATHS, player.getPlayerId(), 0);
 	}
 
 	private void resetSettings() {
@@ -569,8 +568,8 @@ public class ServerEventTriggerer implements EventTriggerer {
 		sendEvents(event);
 
 		for (Team team : teams) {
-			for (PlayerMainFigure player : team.getPlayers()) {
-				addPlayerToTeam(player.getOwner(), team);
+			for (Player player : team.getPlayers()) {
+				addPlayerToTeam(player.getPlayerId(), team);
 			}
 		}
 	}
@@ -578,7 +577,7 @@ public class ServerEventTriggerer implements EventTriggerer {
 	@Override
 	public void addPlayerToTeam(int ownerId, Team team) {
 
-		PlayerMainFigure newPlayer;
+		Player newPlayer;
 		try {
 			newPlayer = gameInfo.getPlayerByOwnerId(ownerId);
 		} catch (ObjectNotFoundException e) {
@@ -586,8 +585,9 @@ public class ServerEventTriggerer implements EventTriggerer {
 			return;
 		}
 
-		if (newPlayer.getTeam() != null)
+		if (newPlayer.getTeam() != null) {
 			newPlayer.getTeam().removePlayer(newPlayer);
+		}
 		team.addPlayer(newPlayer);
 
 		AddPlayerToTeamEvent event = new AddPlayerToTeamEvent(ownerId,
@@ -607,13 +607,16 @@ public class ServerEventTriggerer implements EventTriggerer {
 
 	@Override
 	public void removePlayer(int ownerId) {
-		int objectId = -1;
-		PlayerMainFigure mainFigure;
-		ObjectFactoryEvent gonePlayerEvent = new ObjectFactoryEvent(
-				GameEventNumber.OBJECT_REMOVE, ObjectType.PLAYER, 0);
-
 		try {
-			mainFigure = gameInfo.getPlayerByOwnerId(ownerId);
+			Player player = gameInfo.getPlayerByOwnerId(ownerId);
+			player.getTeam().removePlayer(player);
+
+			int objectId = -1;
+			PlayerMainFigure mainFigure;
+			ObjectFactoryEvent gonePlayerEvent = new ObjectFactoryEvent(
+					GameEventNumber.OBJECT_REMOVE, ObjectType.PLAYER, 0);
+
+			mainFigure = player.getPlayerMainFigure();
 			objectId = mainFigure.getId();
 			gonePlayerEvent.setId(objectId);
 			logic.getObjectFactory().onObjectFactoryEventAppeared(
@@ -769,11 +772,11 @@ public class ServerEventTriggerer implements EventTriggerer {
 	}
 
 	@Override
-	public void respawnPlayerAtPosition(PlayerMainFigure player,
-			Vector2df position) {
+	public void respawnPlayerAtPosition(Player player, Vector2df position) {
 		respawnPlayer(player);
 
-		guaranteeSetPositionOfObject(player.getId(), position);
+		guaranteeSetPositionOfObject(player.getPlayerMainFigure().getId(),
+				position);
 	}
 
 	@Override
@@ -785,5 +788,12 @@ public class ServerEventTriggerer implements EventTriggerer {
 							+ healAmount));
 		}
 
+	}
+
+	@Override
+	public void clearInventoryOfPlayer(Player player) {
+		for (int i = 0; i < 6; i++) {
+			changeItemSlot(i, player.getPlayerId(), null);
+		}
 	}
 }

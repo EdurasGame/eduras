@@ -7,10 +7,11 @@ import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 
 import de.illonis.edulog.EduLog;
+import de.illonis.eduras.Player;
 import de.illonis.eduras.events.SetIntegerGameObjectAttributeEvent;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
+import de.illonis.eduras.units.InteractMode;
 import de.illonis.eduras.units.PlayerMainFigure;
-import de.illonis.eduras.units.PlayerMainFigure.InteractMode;
 
 /**
  * Displays player details like stats, health, etc.
@@ -30,7 +31,7 @@ public class PlayerStatBar extends RenderedGuiObject {
 	private int health;
 	private int maxHealth;
 	private int barWidth;
-	private PlayerMainFigure player;
+	private Player player;
 
 	/**
 	 * Creates a new player stat bar.
@@ -63,8 +64,9 @@ public class PlayerStatBar extends RenderedGuiObject {
 	public void onPlayerInformationReceived() {
 		try {
 			player = getInfo().getPlayer();
-			maxHealth = player.getMaxHealth();
-			health = player.getHealth();
+			PlayerMainFigure mainFigure = player.getPlayerMainFigure();
+			maxHealth = mainFigure.getMaxHealth();
+			health = mainFigure.getHealth();
 			recalculate();
 		} catch (ObjectNotFoundException e) {
 			L.log(Level.SEVERE, "Player received not found", e);
@@ -73,7 +75,8 @@ public class PlayerStatBar extends RenderedGuiObject {
 
 	@Override
 	public void onHealthChanged(SetIntegerGameObjectAttributeEvent event) {
-		if (player != null && event.getObjectId() == player.getId()) {
+		PlayerMainFigure mainFigure = player.getPlayerMainFigure();
+		if (mainFigure != null && event.getObjectId() == mainFigure.getId()) {
 			health = event.getNewValue();
 			recalculate();
 		}
@@ -81,7 +84,8 @@ public class PlayerStatBar extends RenderedGuiObject {
 
 	@Override
 	public void onMaxHealthChanged(SetIntegerGameObjectAttributeEvent event) {
-		if (event.getObjectId() == player.getId()) {
+		PlayerMainFigure mainFigure = player.getPlayerMainFigure();
+		if (event.getObjectId() == mainFigure.getId()) {
 			maxHealth = event.getNewValue();
 			recalculate();
 		}
@@ -89,7 +93,7 @@ public class PlayerStatBar extends RenderedGuiObject {
 
 	private void recalculate() {
 		float percent = (float) health / maxHealth;
-		barWidth = (int) Math.round(percent * MAX_WIDTH);
+		barWidth = Math.round(percent * MAX_WIDTH);
 	}
 
 }

@@ -4,8 +4,8 @@ import java.util.logging.Logger;
 
 import de.illonis.edulog.EduLog;
 import de.illonis.eduras.GameInformation;
+import de.illonis.eduras.Player;
 import de.illonis.eduras.settings.S;
-import de.illonis.eduras.units.PlayerMainFigure;
 import de.illonis.eduras.units.Unit;
 
 public class HealSpellAction extends RTSAction {
@@ -15,7 +15,7 @@ public class HealSpellAction extends RTSAction {
 
 	private Unit unitToHeal;
 
-	public HealSpellAction(PlayerMainFigure executingPlayer, Unit unitToHeal) {
+	public HealSpellAction(Player executingPlayer, Unit unitToHeal) {
 		super(executingPlayer, S.spell_heal_costs);
 
 		this.unitToHeal = unitToHeal;

@@ -3,8 +3,6 @@ package de.illonis.eduras;
 import java.util.HashMap;
 import java.util.LinkedList;
 
-import de.illonis.eduras.units.PlayerMainFigure;
-
 /**
  * Holds all statistics data.
  * 
@@ -49,10 +47,10 @@ public class Statistic {
 	 *            The player
 	 * @return The number of kills.
 	 */
-	public int getKillsOfPlayer(PlayerMainFigure player) {
+	public int getKillsOfPlayer(Player player) {
 		HashMap<Integer, Integer> kills = stats.get(StatsProperty.KILLS);
-		if (kills.containsKey(player.getOwner()))
-			return kills.get(player.getOwner());
+		if (kills.containsKey(player.getPlayerId()))
+			return kills.get(player.getPlayerId());
 		return 0;
 	}
 
@@ -87,10 +85,10 @@ public class Statistic {
 	 *            The player
 	 * @return The number of deaths.
 	 */
-	public int getDeathsOfPlayer(PlayerMainFigure player) {
+	public int getDeathsOfPlayer(Player player) {
 		HashMap<Integer, Integer> deaths = stats.get(StatsProperty.DEATHS);
-		if (deaths.containsKey(player.getOwner()))
-			return deaths.get(player.getOwner());
+		if (deaths.containsKey(player.getPlayerId()))
+			return deaths.get(player.getPlayerId());
 		return 0;
 	}
 
@@ -99,9 +97,9 @@ public class Statistic {
 	 * 
 	 * @param player
 	 */
-	public void addDeathForPlayer(PlayerMainFigure player) {
+	public void addDeathForPlayer(Player player) {
 		HashMap<Integer, Integer> deaths = stats.get(StatsProperty.DEATHS);
-		deaths.put(player.getOwner(), getDeathsOfPlayer(player) + 1);
+		deaths.put(player.getPlayerId(), getDeathsOfPlayer(player) + 1);
 	}
 
 	/**
@@ -109,9 +107,9 @@ public class Statistic {
 	 * 
 	 * @param player
 	 */
-	public void addKillForPlayer(PlayerMainFigure player) {
+	public void addKillForPlayer(Player player) {
 		HashMap<Integer, Integer> kills = stats.get(StatsProperty.KILLS);
-		kills.put(player.getOwner(), getKillsOfPlayer(player) + 1);
+		kills.put(player.getPlayerId(), getKillsOfPlayer(player) + 1);
 	}
 
 	/**

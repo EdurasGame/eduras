@@ -10,6 +10,7 @@ import de.illonis.eduras.events.ObjectFactoryEvent;
 import de.illonis.eduras.events.SendUnitsEvent;
 import de.illonis.eduras.events.SetGameObjectAttributeEvent;
 import de.illonis.eduras.exceptions.DataMissingException;
+import de.illonis.eduras.exceptions.ObjectNotFoundException;
 import de.illonis.eduras.exceptions.ShapeVerticesNotApplicableException;
 import de.illonis.eduras.gameclient.gui.animation.AnimationFactory;
 import de.illonis.eduras.gameclient.gui.animation.AnimationFactory.AnimationNumber;
@@ -168,9 +169,19 @@ public class ObjectFactory {
 
 			switch (event.getObjectType()) {
 			case PLAYER:
+				Player playerForMainFigure;
+				try {
+					playerForMainFigure = logic.getGame().getPlayerByOwnerId(
+							owner);
+				} catch (ObjectNotFoundException e1) {
+					L.info("When generating a mainfigure for a player, the player isn't tracked yet. Create entry for player...");
+					playerForMainFigure = new Player(owner, "unknown");
+					logic.getGame().addPlayer(playerForMainFigure);
+				}
+
 				go = new PlayerMainFigure(logic.getGame(), timingSource,
-						event.getOwner(), id);
-				logic.getGame().addPlayer((PlayerMainFigure) go);
+						event.getOwner(), id, playerForMainFigure);
+				playerForMainFigure.setPlayerMainFigure((PlayerMainFigure) go);
 
 				L.info("Player " + event.getOwner() + " created");
 				// testSpawnBird();
@@ -281,10 +292,6 @@ public class ObjectFactory {
 			GameObject objectToRemove = logic.getGame().getObjects().get(id);
 			if (objectToRemove == null)
 				return;
-			if (objectToRemove instanceof PlayerMainFigure) {
-				PlayerMainFigure mainFigure = (PlayerMainFigure) objectToRemove;
-				mainFigure.getTeam().removePlayer(mainFigure);
-			}
 
 			// rocket splash animation
 			if (objectToRemove.getType() == ObjectType.ROCKET_MISSILE

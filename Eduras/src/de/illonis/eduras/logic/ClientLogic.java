@@ -7,6 +7,7 @@ import java.util.logging.Logger;
 import de.illonis.edulog.EduLog;
 import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.ObjectFactory;
+import de.illonis.eduras.Player;
 import de.illonis.eduras.Team;
 import de.illonis.eduras.events.AddPlayerToTeamEvent;
 import de.illonis.eduras.events.AreaConqueredEvent;
@@ -49,7 +50,6 @@ import de.illonis.eduras.items.Item;
 import de.illonis.eduras.items.Usable;
 import de.illonis.eduras.items.weapons.Weapon;
 import de.illonis.eduras.maps.Map;
-import de.illonis.eduras.units.PlayerMainFigure;
 import de.illonis.eduras.units.Unit;
 
 /**
@@ -194,8 +194,8 @@ public class ClientLogic implements GameLogicInterface {
 			case SET_INTERACTMODE:
 				SetInteractModeEvent interactEvent = (SetInteractModeEvent) event;
 				try {
-					PlayerMainFigure mf = gameInfo
-							.getPlayerByOwnerId(interactEvent.getOwner());
+					Player mf = gameInfo.getPlayerByOwnerId(interactEvent
+							.getOwner());
 
 					mf.setMode(interactEvent.getNewMode());
 					getListener().onInteractModeChanged(interactEvent);
@@ -234,7 +234,7 @@ public class ClientLogic implements GameLogicInterface {
 							+ pteEvent.getOwner() + ".");
 					break;
 				}
-				PlayerMainFigure player;
+				Player player;
 				try {
 					player = gameInfo.getPlayerByOwnerId(pteEvent.getOwner());
 				} catch (ObjectNotFoundException e) {
@@ -257,7 +257,7 @@ public class ClientLogic implements GameLogicInterface {
 				break;
 			case CLIENT_SETNAME:
 				ClientRenameEvent e = (ClientRenameEvent) event;
-				PlayerMainFigure p = null;
+				Player p = null;
 				try {
 					p = gameInfo.getPlayerByOwnerId(e.getOwner());
 				} catch (ObjectNotFoundException e1) {
@@ -268,7 +268,7 @@ public class ClientLogic implements GameLogicInterface {
 
 				L.info("SETTING player found by owner " + e.getOwner()
 						+ " to name: " + e.getName() + "  playerid="
-						+ p.getId() + " playerowner=" + p.getOwner());
+						+ " playerowner=" + p.getPlayerId());
 				p.setName(e.getName());
 
 				getListener().onClientRename(e);
@@ -413,7 +413,7 @@ public class ClientLogic implements GameLogicInterface {
 	 *            event to handle.
 	 */
 	private void handleItemEvent(ItemEvent itemEvent) {
-		PlayerMainFigure player;
+		Player player;
 
 		try {
 			player = gameInfo.getPlayerByOwnerId(itemEvent.getOwner());

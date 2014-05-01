@@ -10,6 +10,7 @@ import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.Vector2f;
 
 import de.illonis.edulog.EduLog;
+import de.illonis.eduras.Player;
 import de.illonis.eduras.events.GameEvent.GameEventNumber;
 import de.illonis.eduras.events.ItemEvent;
 import de.illonis.eduras.events.SendUnitsEvent;
@@ -25,8 +26,8 @@ import de.illonis.eduras.logicabstraction.EdurasInitializer;
 import de.illonis.eduras.logicabstraction.InformationProvider;
 import de.illonis.eduras.math.Geometry;
 import de.illonis.eduras.math.Vector2df;
+import de.illonis.eduras.units.InteractMode;
 import de.illonis.eduras.units.PlayerMainFigure;
-import de.illonis.eduras.units.PlayerMainFigure.InteractMode;
 
 /**
  * Handles events from login panels and gui and performs the appropriate action.
@@ -184,7 +185,7 @@ public class GuiInternalEventListener implements LoginPanelReactor,
 		Rectangle r = new Rectangle((float) area.getX(), (float) area.getY(),
 				(float) area.getWidth(), (float) area.getHeight());
 
-		PlayerMainFigure p;
+		Player p;
 		try {
 			p = infoPro.getPlayer();
 		} catch (ObjectNotFoundException e) {
@@ -197,7 +198,7 @@ public class GuiInternalEventListener implements LoginPanelReactor,
 		for (Entry<Integer, GameObject> obj : infoPro.getGameObjects()
 				.entrySet()) {
 			GameObject o = obj.getValue();
-			if (o.isUnit() && o.isVisibleFor(p)
+			if (o.isUnit() && o.isVisibleFor(p.getPlayerMainFigure())
 					&& Geometry.shapeCollides(o.getShape(), r)) {
 
 				ids.add(obj.getKey());
@@ -211,7 +212,7 @@ public class GuiInternalEventListener implements LoginPanelReactor,
 	public void selectOrDeselectAt(Vector2f point) {
 		PlayerMainFigure p;
 		try {
-			p = infoPro.getPlayer();
+			p = infoPro.getPlayer().getPlayerMainFigure();
 		} catch (ObjectNotFoundException e) {
 			L.log(Level.SEVERE,
 					"No playermainfigure found after a unit was (de)selected.",
@@ -248,7 +249,7 @@ public class GuiInternalEventListener implements LoginPanelReactor,
 	public void onViewingDirectionChanged(Vector2f viewingPoint) {
 		PlayerMainFigure player;
 		try {
-			player = infoPro.getPlayer();
+			player = infoPro.getPlayer().getPlayerMainFigure();
 		} catch (ObjectNotFoundException e) {
 			L.log(Level.SEVERE, "Cannot find player main figure :(", e);
 			return;

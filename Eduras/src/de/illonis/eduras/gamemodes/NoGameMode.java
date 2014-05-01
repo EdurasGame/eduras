@@ -4,6 +4,7 @@ import java.util.Set;
 
 import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.ObjectFactory.ObjectType;
+import de.illonis.eduras.Player;
 import de.illonis.eduras.Team;
 import de.illonis.eduras.gameclient.userprefs.KeyBindings.KeyBinding;
 import de.illonis.eduras.gameobjects.GameObject;
@@ -11,8 +12,8 @@ import de.illonis.eduras.gameobjects.GameObject.Relation;
 import de.illonis.eduras.gameobjects.NeutralBase;
 import de.illonis.eduras.logic.EventTriggerer;
 import de.illonis.eduras.maps.SpawnPosition.SpawnType;
+import de.illonis.eduras.units.InteractMode;
 import de.illonis.eduras.units.PlayerMainFigure;
-import de.illonis.eduras.units.PlayerMainFigure.InteractMode;
 import de.illonis.eduras.units.Unit;
 
 /**
@@ -48,7 +49,7 @@ public class NoGameMode extends BasicGameMode {
 		if (killedUnit instanceof PlayerMainFigure) {
 			PlayerMainFigure killedPlayer = (PlayerMainFigure) killedUnit;
 
-			triggerer.respawnPlayerAtRandomSpawnpoint(killedPlayer);
+			triggerer.respawnPlayerAtRandomSpawnpoint(killedPlayer.getPlayer());
 		} else {
 			triggerer.removeObject(killedUnit.getId());
 		}
@@ -120,7 +121,7 @@ public class NoGameMode extends BasicGameMode {
 	}
 
 	@Override
-	public boolean canSwitchMode(PlayerMainFigure player, InteractMode mode) {
+	public boolean canSwitchMode(Player player, InteractMode mode) {
 		return false;
 	}
 }

@@ -14,6 +14,7 @@ import de.illonis.eduras.ClientGameMode;
 import de.illonis.eduras.EdurasServer;
 import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.ObjectFactory.ObjectType;
+import de.illonis.eduras.Player;
 import de.illonis.eduras.Statistic.StatsProperty;
 import de.illonis.eduras.Team;
 import de.illonis.eduras.ai.movement.UnitNotControllableException;
@@ -39,8 +40,8 @@ import de.illonis.eduras.logic.EventTriggerer;
 import de.illonis.eduras.logic.LogicGameWorker;
 import de.illonis.eduras.maps.Map;
 import de.illonis.eduras.math.Vector2df;
+import de.illonis.eduras.units.InteractMode;
 import de.illonis.eduras.units.PlayerMainFigure;
-import de.illonis.eduras.units.PlayerMainFigure.InteractMode;
 import de.illonis.eduras.units.Unit;
 
 /**
@@ -128,7 +129,7 @@ public class EdurasInitializer {
 			}
 
 			@Override
-			public void respawnPlayerAtRandomSpawnpoint(PlayerMainFigure player) {
+			public void respawnPlayerAtRandomSpawnpoint(Player player) {
 			}
 
 			@Override
@@ -268,14 +269,19 @@ public class EdurasInitializer {
 			}
 
 			@Override
-			public void respawnPlayerAtPosition(PlayerMainFigure player,
-					Vector2df pos) {
+			public void respawnPlayerAtPosition(Player player, Vector2df pos) {
 			}
 
 			@Override
 			public void changeHealthByAmount(Unit unitToHeal,
 					int spell_heal_amount) {
 				// TODO Auto-generated method stub
+			}
+
+			@Override
+			public void clearInventoryOfPlayer(Player player) {
+				// TODO Auto-generated method stub
+
 			}
 
 		});

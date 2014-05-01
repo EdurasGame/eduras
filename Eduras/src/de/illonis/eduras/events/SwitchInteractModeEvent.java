@@ -1,6 +1,6 @@
 package de.illonis.eduras.events;
 
-import de.illonis.eduras.units.PlayerMainFigure.InteractMode;
+import de.illonis.eduras.units.InteractMode;
 
 /**
  * Indicates a mode switching request by a player.

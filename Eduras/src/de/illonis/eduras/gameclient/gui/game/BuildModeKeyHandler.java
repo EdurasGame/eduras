@@ -3,7 +3,7 @@ package de.illonis.eduras.gameclient.gui.game;
 import de.illonis.eduras.exceptions.NotWithinBaseException;
 import de.illonis.eduras.gameclient.GamePanelReactor;
 import de.illonis.eduras.gameclient.userprefs.KeyBindings.KeyBinding;
-import de.illonis.eduras.units.PlayerMainFigure.InteractMode;
+import de.illonis.eduras.units.InteractMode;
 
 /**
  * A keyhandler for {@link InteractMode#MODE_STRATEGY}.

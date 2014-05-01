@@ -6,6 +6,7 @@ import java.util.Map;
 import org.newdawn.slick.geom.Rectangle;
 
 import de.illonis.eduras.ObjectFactory.ObjectType;
+import de.illonis.eduras.Player;
 import de.illonis.eduras.Statistic;
 import de.illonis.eduras.Team;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
@@ -15,7 +16,6 @@ import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.interfaces.GameEventListener;
 import de.illonis.eduras.interfaces.GameLogicInterface;
 import de.illonis.eduras.interfaces.InfoInterface;
-import de.illonis.eduras.units.PlayerMainFigure;
 
 /**
  * This class provides a connection between GUI and logic. GUI developers can
@@ -67,7 +67,7 @@ public class InformationProvider implements InfoInterface {
 	}
 
 	@Override
-	public PlayerMainFigure getPlayer() throws ObjectNotFoundException {
+	public Player getPlayer() throws ObjectNotFoundException {
 		return logic.getGame().getPlayerByOwnerId(getOwnerID());
 	}
 
@@ -97,7 +97,7 @@ public class InformationProvider implements InfoInterface {
 	}
 
 	@Override
-	public Collection<PlayerMainFigure> getPlayers() {
+	public Collection<Player> getPlayers() {
 		return logic.getGame().getPlayers();
 	}
 
@@ -107,7 +107,7 @@ public class InformationProvider implements InfoInterface {
 	}
 
 	@Override
-	public PlayerMainFigure getPlayerByOwnerId(int ownerId)
+	public Player getPlayerByOwnerId(int ownerId)
 			throws ObjectNotFoundException {
 		return logic.getGame().getPlayerByOwnerId(ownerId);
 	}

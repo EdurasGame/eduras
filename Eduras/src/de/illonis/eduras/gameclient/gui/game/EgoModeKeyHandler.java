@@ -4,7 +4,7 @@ import de.illonis.eduras.exceptions.NotWithinBaseException;
 import de.illonis.eduras.gameclient.GamePanelReactor;
 import de.illonis.eduras.gameclient.userprefs.KeyBindings.KeyBinding;
 import de.illonis.eduras.gameobjects.MoveableGameObject.Direction;
-import de.illonis.eduras.units.PlayerMainFigure.InteractMode;
+import de.illonis.eduras.units.InteractMode;
 
 /**
  * A keyhandler for {@link InteractMode#MODE_EGO}.

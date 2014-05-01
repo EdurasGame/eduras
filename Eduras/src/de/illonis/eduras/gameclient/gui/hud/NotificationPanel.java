@@ -8,6 +8,7 @@ import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 
 import de.illonis.edulog.EduLog;
+import de.illonis.eduras.Player;
 import de.illonis.eduras.events.ClientRenameEvent;
 import de.illonis.eduras.events.DeathEvent;
 import de.illonis.eduras.events.SetInteractModeEvent;
@@ -16,7 +17,6 @@ import de.illonis.eduras.exceptions.ObjectNotFoundException;
 import de.illonis.eduras.inventory.ItemSlotIsEmptyException;
 import de.illonis.eduras.items.Item;
 import de.illonis.eduras.locale.Localization;
-import de.illonis.eduras.units.PlayerMainFigure;
 
 /**
  * Displays text notifications to the user.
@@ -101,11 +101,11 @@ public class NotificationPanel extends RenderedGuiObject {
 	@Override
 	public void onDeath(DeathEvent event) {
 		try {
-			PlayerMainFigure killer = getInfo().getPlayerByOwnerId(
-					event.getKillerOwner());
+			Player killer = getInfo()
+					.getPlayerByOwnerId(event.getKillerOwner());
 			int killedOwner = getInfo().findObjectById(event.getKilled())
 					.getOwner();
-			PlayerMainFigure killed = getInfo().getPlayerByOwnerId(killedOwner);
+			Player killed = getInfo().getPlayerByOwnerId(killedOwner);
 			String note;
 			if (getInfo().getPlayer().equals(killed)) {
 				note = Localization.getStringF(

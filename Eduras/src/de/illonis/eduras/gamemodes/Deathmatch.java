@@ -8,6 +8,7 @@ import java.util.logging.Logger;
 import de.illonis.edulog.EduLog;
 import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.ObjectFactory.ObjectType;
+import de.illonis.eduras.Player;
 import de.illonis.eduras.Statistic.StatsProperty;
 import de.illonis.eduras.Team;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
@@ -17,8 +18,8 @@ import de.illonis.eduras.gameobjects.GameObject.Relation;
 import de.illonis.eduras.gameobjects.NeutralBase;
 import de.illonis.eduras.logic.EventTriggerer;
 import de.illonis.eduras.maps.SpawnPosition.SpawnType;
+import de.illonis.eduras.units.InteractMode;
 import de.illonis.eduras.units.PlayerMainFigure;
-import de.illonis.eduras.units.PlayerMainFigure.InteractMode;
 import de.illonis.eduras.units.Unit;
 
 /**
@@ -60,7 +61,10 @@ public class Deathmatch extends BasicGameMode {
 
 				// need to check here because client has no event triggerer.
 				// TODO: find a solution for client-workaraound.
-				et.respawnPlayerAtRandomSpawnpoint((PlayerMainFigure) killedUnit);
+				et.clearInventoryOfPlayer(((PlayerMainFigure) killedUnit)
+						.getPlayer());
+				et.respawnPlayerAtRandomSpawnpoint(((PlayerMainFigure) killedUnit)
+						.getPlayer());
 				// TODO: give player items here if game mode should do.
 
 			}
@@ -80,7 +84,8 @@ public class Deathmatch extends BasicGameMode {
 					(PlayerMainFigure) killedUnit, 1);
 		}
 
-		PlayerMainFigure killer = gameInfo.getPlayerByOwnerId(killingPlayer);
+		PlayerMainFigure killer = gameInfo.getPlayerByOwnerId(killingPlayer)
+				.getPlayerMainFigure();
 
 		if (!killer.equals(killedUnit)) {
 			et.changeStatOfPlayerByAmount(StatsProperty.KILLS, killer, 1);
@@ -101,22 +106,18 @@ public class Deathmatch extends BasicGameMode {
 	public void onConnect(int ownerId) {
 		super.onConnect(ownerId);
 
+		Player newPlayer = new Player(ownerId, "unknown");
+		gameInfo.addPlayer(newPlayer);
+
 		// simply create the player and respawn it somewhere
 		gameInfo.getEventTriggerer().createObject(ObjectType.PLAYER, ownerId);
-
-		PlayerMainFigure newPlayer;
-		try {
-			newPlayer = gameInfo.getPlayerByOwnerId(ownerId);
-		} catch (ObjectNotFoundException e) {
-			L.log(Level.SEVERE, "player not found", e);
-			return;
-		}
 
 		int teamId = Team.getNextTeamId();
 		Team t = new Team("Team " + teamId, teamId);
 		gameInfo.addTeam(t);
 		gameInfo.getEventTriggerer().setTeams(gameInfo.getTeams());
-		gameInfo.getEventTriggerer().addPlayerToTeam(newPlayer.getOwner(), t);
+		gameInfo.getEventTriggerer()
+				.addPlayerToTeam(newPlayer.getPlayerId(), t);
 		gameInfo.getEventTriggerer().respawnPlayerAtRandomSpawnpoint(newPlayer);
 
 		// and add it to the statistic
@@ -126,10 +127,11 @@ public class Deathmatch extends BasicGameMode {
 	@Override
 	public void onGameStart() {
 		LinkedList<Team> teams = new LinkedList<Team>();
-		for (PlayerMainFigure player : gameInfo.getPlayers()) {
+		for (Player player : gameInfo.getPlayers()) {
 			Team t = new Team(player.getName(), Team.getNextTeamId());
 			teams.add(t);
-			gameInfo.getEventTriggerer().addPlayerToTeam(player.getOwner(), t);
+			gameInfo.getEventTriggerer().addPlayerToTeam(player.getPlayerId(),
+					t);
 		}
 		gameInfo.getEventTriggerer().setTeams(teams);
 
@@ -152,7 +154,7 @@ public class Deathmatch extends BasicGameMode {
 
 	@Override
 	public void onDisconnect(int ownerId) {
-		PlayerMainFigure gonePlayer;
+		Player gonePlayer;
 		try {
 			gonePlayer = gameInfo.getPlayerByOwnerId(ownerId);
 		} catch (ObjectNotFoundException e) {
@@ -203,7 +205,7 @@ public class Deathmatch extends BasicGameMode {
 	}
 
 	@Override
-	public boolean canSwitchMode(PlayerMainFigure player, InteractMode mode) {
+	public boolean canSwitchMode(Player player, InteractMode mode) {
 		return false;
 	}
 }

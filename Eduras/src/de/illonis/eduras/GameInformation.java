@@ -11,6 +11,7 @@ import java.util.logging.Logger;
 
 import org.newdawn.slick.geom.Circle;
 import org.newdawn.slick.geom.Rectangle;
+import org.newdawn.slick.geom.Shape;
 
 import de.illonis.edulog.EduLog;
 import de.illonis.eduras.ObjectFactory.ObjectType;
@@ -52,7 +53,7 @@ public class GameInformation {
 	private final ClientData clientData;
 
 	private final java.util.Map<Integer, GameObject> objects;
-	private final java.util.Map<Integer, PlayerMainFigure> players;
+	private final java.util.Map<Integer, Player> players;
 	private Map map;
 	private EventTriggerer eventTriggerer;
 	private GameSettings gameSettings;
@@ -65,7 +66,7 @@ public class GameInformation {
 	public GameInformation() {
 		clientData = new ClientData();
 		objects = new ConcurrentHashMap<Integer, GameObject>();
-		players = new ConcurrentHashMap<Integer, PlayerMainFigure>();
+		players = new ConcurrentHashMap<Integer, Player>();
 		map = new FunMap();
 		gameSettings = new GameSettings(this);
 		teams = new HashMap<Integer, Team>();
@@ -95,7 +96,7 @@ public class GameInformation {
 	 * 
 	 * @author illonis
 	 */
-	public Collection<PlayerMainFigure> getPlayers() {
+	public Collection<Player> getPlayers() {
 		return players.values();
 	}
 
@@ -258,10 +259,6 @@ public class GameInformation {
 			return true;
 		boolean playerRemoveSuccess = true;
 
-		if (go instanceof PlayerMainFigure) {
-			playerRemoveSuccess = players.remove(go.getOwner()) != null;
-		}
-
 		return playerRemoveSuccess && (objects.remove(go.getId()) != null);
 	}
 
@@ -272,8 +269,8 @@ public class GameInformation {
 	 * @param player
 	 *            player to add.
 	 */
-	public void addPlayer(PlayerMainFigure player) {
-		players.put(player.getOwner(), player);
+	public void addPlayer(Player player) {
+		players.put(player.getPlayerId(), player);
 	}
 
 	/**
@@ -285,9 +282,9 @@ public class GameInformation {
 	 * @throws ObjectNotFoundException
 	 *             Thrown if there is no object found
 	 */
-	public PlayerMainFigure getPlayerByOwnerId(int ownerId)
+	public Player getPlayerByOwnerId(int ownerId)
 			throws ObjectNotFoundException {
-		PlayerMainFigure result = players.get(ownerId);
+		Player result = players.get(ownerId);
 		if (result == null) {
 			throw new ObjectNotFoundException(ownerId);
 		}
@@ -307,9 +304,9 @@ public class GameInformation {
 	public PlayerMainFigure getPlayerByObjectId(int objectId)
 			throws ObjectNotFoundException {
 		PlayerMainFigure result = null;
-		for (PlayerMainFigure singlePlayer : players.values()) {
-			if (singlePlayer.getId() == objectId) {
-				result = singlePlayer;
+		for (Player singlePlayer : players.values()) {
+			if (singlePlayer.getPlayerMainFigure().getId() == objectId) {
+				result = singlePlayer.getPlayerMainFigure();
 				break;
 			}
 		}
@@ -358,15 +355,16 @@ public class GameInformation {
 	private void putCurrentStatsAndTeams(ArrayList<GameEvent> infos) {
 		Statistic stats = gameSettings.getStats();
 
-		for (PlayerMainFigure player : players.values()) {
+		for (Player player : players.values()) {
 			int killsOfPlayer = stats.getKillsOfPlayer(player);
 			SetIntegerGameObjectAttributeEvent setKillsEvent = new SetIntegerGameObjectAttributeEvent(
-					GameEventNumber.SET_KILLS, player.getOwner(), killsOfPlayer);
+					GameEventNumber.SET_KILLS, player.getPlayerId(),
+					killsOfPlayer);
 			infos.add(setKillsEvent);
 
 			int deathsOfPlayer = stats.getDeathsOfPlayer(player);
 			SetIntegerGameObjectAttributeEvent setDeathsEvent = new SetIntegerGameObjectAttributeEvent(
-					GameEventNumber.SET_DEATHS, player.getOwner(),
+					GameEventNumber.SET_DEATHS, player.getPlayerId(),
 					deathsOfPlayer);
 			infos.add(setDeathsEvent);
 		}
@@ -375,9 +373,9 @@ public class GameInformation {
 		LinkedList<AddPlayerToTeamEvent> teamPlayerEvents = new LinkedList<AddPlayerToTeamEvent>();
 		for (Team team : getTeams()) {
 			teamEvent.addTeam(team);
-			for (PlayerMainFigure player : team.getPlayers()) {
-				teamPlayerEvents.add(new AddPlayerToTeamEvent(
-						player.getOwner(), team.getTeamId()));
+			for (Player player : team.getPlayers()) {
+				teamPlayerEvents.add(new AddPlayerToTeamEvent(player
+						.getPlayerId(), team.getTeamId()));
 			}
 		}
 
@@ -436,9 +434,9 @@ public class GameInformation {
 			infos.add(visEvent);
 
 		}
-		for (PlayerMainFigure p : players.values()) {
+		for (Player p : players.values()) {
 			try {
-				infos.add(new ClientRenameEvent(p.getOwner(), p.getName()));
+				infos.add(new ClientRenameEvent(p.getPlayerId(), p.getName()));
 			} catch (InvalidNameException e) {
 				L.log(Level.WARNING, e.getLocalizedMessage(), e);
 				continue;
@@ -509,7 +507,7 @@ public class GameInformation {
 	 * @throws GameModeNotSupportedByMapException
 	 *             if current game does not support game mode.
 	 */
-	public Vector2df getSpawnPointFor(PlayerMainFigure player)
+	public Vector2df getSpawnPointFor(Player player)
 			throws GameModeNotSupportedByMapException {
 
 		SpawnType spawnType = spawnGroups.get(player.getTeam());
@@ -529,18 +527,19 @@ public class GameInformation {
 			throw new GameModeNotSupportedByMapException(getGameSettings()
 					.getGameMode(), getMap());
 
+		Shape playerShape = player.getPlayerMainFigure().getShape();
 		int area = RANDOM.nextInt(availableSpawnings.size());
 		SpawnPosition spawnPos = availableSpawnings.get(area);
-		Rectangle boundings = new Rectangle(0, 0, player.getShape().getWidth(),
-				player.getShape().getHeight());
+		Rectangle boundings = new Rectangle(0, 0, playerShape.getWidth(),
+				playerShape.getHeight());
 
 		Vector2df newPos;
 		try {
 			int i = 0;
 			do {
 				i++;
-				newPos = spawnPos.getAPoint(player.getShape());
-				if (!isValidPosition(newPos, player)) {
+				newPos = spawnPos.getAPoint(playerShape);
+				if (!isValidPosition(newPos, player.getPlayerMainFigure())) {
 					continue;
 				}
 
@@ -604,5 +603,9 @@ public class GameInformation {
 		}
 
 		return objectsOfType;
+	}
+
+	public void removePlayer(int clientId) {
+		players.remove(clientId);
 	}
 }

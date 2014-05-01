@@ -17,7 +17,7 @@ import de.illonis.eduras.inventory.ItemSlotIsEmptyException;
 import de.illonis.eduras.items.Usable;
 import de.illonis.eduras.logicabstraction.EdurasInitializer;
 import de.illonis.eduras.math.Vector2df;
-import de.illonis.eduras.units.PlayerMainFigure.InteractMode;
+import de.illonis.eduras.units.InteractMode;
 
 /**
  * Handles mouse events in the ego mode ({@link InteractMode#MODE_EGO}).

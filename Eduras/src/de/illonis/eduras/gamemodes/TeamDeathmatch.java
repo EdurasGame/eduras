@@ -7,6 +7,7 @@ import java.util.logging.Logger;
 import de.illonis.edulog.EduLog;
 import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.ObjectFactory.ObjectType;
+import de.illonis.eduras.Player;
 import de.illonis.eduras.Team;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
 import de.illonis.eduras.gameclient.userprefs.KeyBindings.KeyBinding;
@@ -50,24 +51,27 @@ public class TeamDeathmatch extends Deathmatch {
 		teams.add(teamA);
 		teams.add(teamB);
 		gameInfo.getEventTriggerer().setTeams(teams);
-		for (PlayerMainFigure player : gameInfo.getPlayers()) {
+		for (Player player : gameInfo.getPlayers()) {
 			putPlayerInSmallestTeam(player);
 		}
 	}
 
-	private void putPlayerInSmallestTeam(PlayerMainFigure player) {
+	private void putPlayerInSmallestTeam(Player player) {
 		Team targetTeam;
 		if (teamA.getPlayers().size() > teamB.getPlayers().size()) {
 			targetTeam = teamB;
 		} else {
 			targetTeam = teamA;
 		}
-		gameInfo.getEventTriggerer().addPlayerToTeam(player.getOwner(),
+		gameInfo.getEventTriggerer().addPlayerToTeam(player.getPlayerId(),
 				targetTeam);
 	}
 
 	@Override
 	public void onConnect(int ownerId) {
+
+		Player newPlayer = new Player(ownerId, "unknown");
+		gameInfo.addPlayer(newPlayer);
 
 		// have to reimplement this unfortunately
 		if (gameInfo.getPlayers().size() >= gameInfo.getGameSettings()
@@ -77,14 +81,6 @@ public class TeamDeathmatch extends Deathmatch {
 
 		// simply create the player and respawn it somewhere
 		gameInfo.getEventTriggerer().createObject(ObjectType.PLAYER, ownerId);
-
-		PlayerMainFigure newPlayer;
-		try {
-			newPlayer = gameInfo.getPlayerByOwnerId(ownerId);
-		} catch (ObjectNotFoundException e) {
-			L.log(Level.SEVERE, "player not found", e);
-			return;
-		}
 
 		putPlayerInSmallestTeam(newPlayer);
 
@@ -116,8 +112,10 @@ public class TeamDeathmatch extends Deathmatch {
 		if (ownerA == -1 || ownerB == -1)
 			return Relation.ENVIRONMENT;
 		try {
-			playerA = gameInfo.getPlayerByOwnerId(a.getOwner());
-			playerB = gameInfo.getPlayerByOwnerId(b.getOwner());
+			playerA = gameInfo.getPlayerByOwnerId(a.getOwner())
+					.getPlayerMainFigure();
+			playerB = gameInfo.getPlayerByOwnerId(b.getOwner())
+					.getPlayerMainFigure();
 		} catch (ObjectNotFoundException e) {
 			L.log(Level.SEVERE, "player not found", e);
 			return Relation.UNKNOWN;
@@ -130,13 +128,6 @@ public class TeamDeathmatch extends Deathmatch {
 
 	@Override
 	public void onDisconnect(int ownerId) {
-		PlayerMainFigure gonePlayer;
-		try {
-			gonePlayer = gameInfo.getPlayerByOwnerId(ownerId);
-		} catch (ObjectNotFoundException e) {
-			L.log(Level.SEVERE, "player not found", e);
-			return;
-		}
 
 		// and from the statistics and game
 		gameInfo.getGameSettings().getStats().removePlayerFromStats(ownerId);

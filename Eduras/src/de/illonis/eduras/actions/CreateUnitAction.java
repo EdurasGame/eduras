@@ -5,10 +5,10 @@ import java.util.logging.Logger;
 import de.illonis.edulog.EduLog;
 import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.ObjectFactory.ObjectType;
+import de.illonis.eduras.Player;
 import de.illonis.eduras.exceptions.WrongObjectTypeException;
 import de.illonis.eduras.gameobjects.NeutralBase;
 import de.illonis.eduras.settings.S;
-import de.illonis.eduras.units.PlayerMainFigure;
 
 public class CreateUnitAction extends RTSAction {
 	private final static Logger L = EduLog.getLoggerFor(CreateUnitAction.class
@@ -17,9 +17,8 @@ public class CreateUnitAction extends RTSAction {
 	private NeutralBase baseToSpawnAt;
 	private ObjectType typeOfUnitToSpawn;
 
-	public CreateUnitAction(PlayerMainFigure executingPlayer,
-			ObjectType typeOfUnit, NeutralBase baseToSpawnAt)
-			throws WrongObjectTypeException {
+	public CreateUnitAction(Player executingPlayer, ObjectType typeOfUnit,
+			NeutralBase baseToSpawnAt) throws WrongObjectTypeException {
 		super(executingPlayer, -1);
 
 		this.baseToSpawnAt = baseToSpawnAt;
@@ -49,6 +48,6 @@ public class CreateUnitAction extends RTSAction {
 
 		info.getEventTriggerer().createObjectAt(typeOfUnitToSpawn,
 				baseToSpawnAt.getPositionVector(),
-				getExecutingPlayer().getOwner());
+				getExecutingPlayer().getPlayerId());
 	}
 }

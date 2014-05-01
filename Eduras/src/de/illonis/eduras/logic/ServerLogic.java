@@ -10,6 +10,7 @@ import org.newdawn.slick.geom.Vector2f;
 import de.illonis.edulog.EduLog;
 import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.ObjectFactory;
+import de.illonis.eduras.Player;
 import de.illonis.eduras.actions.CreateUnitAction;
 import de.illonis.eduras.actions.HealSpellAction;
 import de.illonis.eduras.actions.RespawnPlayerAction;
@@ -99,7 +100,7 @@ public class ServerLogic implements GameLogicInterface {
 			break;
 		case CLIENT_SETNAME:
 			ClientRenameEvent e = (ClientRenameEvent) event;
-			PlayerMainFigure p = null;
+			Player p = null;
 			try {
 				p = gameInfo.getPlayerByOwnerId(e.getOwner());
 			} catch (ObjectNotFoundException e1) {
@@ -109,8 +110,8 @@ public class ServerLogic implements GameLogicInterface {
 			}
 
 			L.info("SETTING player found by owner " + e.getOwner()
-					+ " to name: " + e.getName() + "  playerid=" + p.getId()
-					+ " playerowner=" + p.getOwner());
+					+ " to name: " + e.getName() + " playerowner="
+					+ p.getPlayerId());
 			p.setName(e.getName());
 
 			getGame().getEventTriggerer().renamePlayer(e.getOwner(),
@@ -133,7 +134,7 @@ public class ServerLogic implements GameLogicInterface {
 			break;
 		case SWITCH_INTERACTMODE:
 			SwitchInteractModeEvent switchEvent = (SwitchInteractModeEvent) event;
-			PlayerMainFigure mf;
+			Player mf;
 			try {
 				mf = getGame().getPlayerByOwnerId(switchEvent.getOwner());
 			} catch (ObjectNotFoundException e1) {
@@ -148,7 +149,7 @@ public class ServerLogic implements GameLogicInterface {
 			if (switchAllowed
 					&& mf.getCurrentMode() != switchEvent.getRequestedMode()
 					&& mf.getModeSwitchCooldown() <= 0) {
-				mf.stopMoving();
+				mf.getPlayerMainFigure().stopMoving();
 				mf.setMode(switchEvent.getRequestedMode());
 				getGame().getEventTriggerer().changeInteractMode(
 						switchEvent.getOwner(), switchEvent.getRequestedMode());
@@ -197,10 +198,10 @@ public class ServerLogic implements GameLogicInterface {
 		case RESPAWN_PLAYER:
 			RespawnPlayerEvent respawnPlayerEvent = (RespawnPlayerEvent) event;
 			try {
-				PlayerMainFigure executingPlayer = gameInfo
+				Player executingPlayer = gameInfo
 						.getPlayerByOwnerId(respawnPlayerEvent
 								.getExecutingPlayer());
-				PlayerMainFigure playerToRespawn = gameInfo
+				Player playerToRespawn = gameInfo
 						.getPlayerByOwnerId(respawnPlayerEvent
 								.getIdOfPlayerToRespawn());
 				NeutralBase baseToRespawnAt = (NeutralBase) gameInfo
@@ -218,7 +219,7 @@ public class ServerLogic implements GameLogicInterface {
 		case SPAWN_ITEM: {
 			SpawnItemEvent spawnItemEvent = (SpawnItemEvent) event;
 
-			PlayerMainFigure executingPlayer;
+			Player executingPlayer;
 			try {
 				executingPlayer = gameInfo.getPlayerByOwnerId(spawnItemEvent
 						.getExecutingPlayer());
@@ -236,7 +237,7 @@ public class ServerLogic implements GameLogicInterface {
 		case HEAL_ACTION: {
 			HealActionEvent healEvent = (HealActionEvent) event;
 
-			PlayerMainFigure executingPlayer;
+			Player executingPlayer;
 			try {
 				executingPlayer = gameInfo.getPlayerByOwnerId(healEvent
 						.getExecutingPlayer());
@@ -255,7 +256,7 @@ public class ServerLogic implements GameLogicInterface {
 		case CREATE_UNIT: {
 			CreateUnitEvent createUnitEvent = (CreateUnitEvent) event;
 
-			PlayerMainFigure executingPlayer;
+			Player executingPlayer;
 			try {
 				executingPlayer = gameInfo.getPlayerByOwnerId(createUnitEvent
 						.getExecutingPlayer());
@@ -292,7 +293,7 @@ public class ServerLogic implements GameLogicInterface {
 	 *            event to handle.
 	 */
 	private void handleItemEvent(ItemEvent itemEvent) {
-		PlayerMainFigure player;
+		Player player;
 
 		try {
 			player = gameInfo.getPlayerByOwnerId(itemEvent.getOwner());
@@ -309,8 +310,8 @@ public class ServerLogic implements GameLogicInterface {
 			L.info(e.getMessage());
 			return;
 		}
-		ItemUseInformation useInfo = new ItemUseInformation(player,
-				itemEvent.getTarget());
+		ItemUseInformation useInfo = new ItemUseInformation(
+				player.getPlayerMainFigure(), itemEvent.getTarget());
 
 		switch (itemEvent.getType()) {
 		case ITEM_USE:
@@ -342,7 +343,8 @@ public class ServerLogic implements GameLogicInterface {
 
 		PlayerMainFigure player = null;
 		try {
-			player = gameInfo.getPlayerByOwnerId(event.getOwner());
+			player = gameInfo.getPlayerByOwnerId(event.getOwner())
+					.getPlayerMainFigure();
 		} catch (ObjectNotFoundException e) {
 			L.warning(Localization.getStringF("Server.logic.playernotfound",
 					e.getObjectId()));
