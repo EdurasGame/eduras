@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Set;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import de.illonis.edulog.EduLog;
@@ -11,14 +12,17 @@ import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.ObjectFactory.ObjectType;
 import de.illonis.eduras.Player;
 import de.illonis.eduras.Team;
+import de.illonis.eduras.exceptions.ObjectNotFoundException;
 import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.gameobjects.NeutralBase;
 import de.illonis.eduras.gameobjects.TimedEventHandler;
+import de.illonis.eduras.logic.EventTriggerer;
 import de.illonis.eduras.maps.EduraMap;
 import de.illonis.eduras.maps.NodeData;
 import de.illonis.eduras.math.Vector2df;
 import de.illonis.eduras.math.graphs.Vertex;
 import de.illonis.eduras.units.InteractMode;
+import de.illonis.eduras.units.PlayerMainFigure;
 import de.illonis.eduras.units.Unit;
 
 public class Edura extends TeamDeathmatch {
@@ -161,6 +165,25 @@ public class Edura extends TeamDeathmatch {
 			}
 		}
 		return null;
+	}
+
+	@Override
+	public void onDeath(Unit killedUnit, int killingPlayer) {
+		try {
+			changeStatsOnDeath(killedUnit, killingPlayer);
+		} catch (ObjectNotFoundException e) {
+			L.log(Level.WARNING, "Cannot update stats!", e);
+			return;
+		}
+
+		EventTriggerer eventTriggerer = gameInfo.getEventTriggerer();
+		eventTriggerer.removeObject(killedUnit.getId());
+
+		if (killedUnit instanceof PlayerMainFigure) {
+			eventTriggerer
+					.clearInventoryOfPlayer(((PlayerMainFigure) killedUnit)
+							.getPlayer());
+		}
 	}
 
 	@Override
