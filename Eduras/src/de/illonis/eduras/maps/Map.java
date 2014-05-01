@@ -66,20 +66,37 @@ public abstract class Map {
 		this.author = author;
 		created = new Date();
 		initialObjects = new LinkedList<InitialObjectData>();
-		addBoundsObject();
+		addBoundsObjects();
 		supportedGameModes = new LinkedList<GameModeNumber>();
 		spawnPositions = new LinkedList<SpawnPosition>();
 		buildMap();
 	}
 
-	private void addBoundsObject() {
-		Vector2df[] mapBoundsShape = new Vector2df[4];
-		mapBoundsShape[0] = new Vector2df(0, 0);
-		mapBoundsShape[1] = new Vector2df(width, 0);
-		mapBoundsShape[2] = new Vector2df(width, height);
-		mapBoundsShape[3] = new Vector2df(0, height);
+	private void addBoundsObjects() {
+		Vector2df[] verticalBoundShape = new Vector2df[4];
+		verticalBoundShape[0] = new Vector2df(-10, 0);
+		verticalBoundShape[1] = new Vector2df(0, 0);
+		verticalBoundShape[2] = new Vector2df(0, height);
+		verticalBoundShape[3] = new Vector2df(-10, height);
 		InitialObjectData boundsData = new InitialObjectData(
-				ObjectType.MAPBOUNDS, 0, 0, mapBoundsShape);
+				ObjectType.DYNAMIC_POLYGON_BLOCK, -10, 0, verticalBoundShape);
+		addObject(boundsData);
+
+		boundsData = new InitialObjectData(ObjectType.DYNAMIC_POLYGON_BLOCK,
+				width, 0, verticalBoundShape);
+		addObject(boundsData);
+
+		Vector2df[] horizontalBoundShape = new Vector2df[4];
+		horizontalBoundShape[0] = new Vector2df(0, -10);
+		horizontalBoundShape[1] = new Vector2df(width, -10);
+		horizontalBoundShape[2] = new Vector2df(width, 0);
+		horizontalBoundShape[3] = new Vector2df(0, 0);
+		boundsData = new InitialObjectData(ObjectType.DYNAMIC_POLYGON_BLOCK, 0,
+				-10, horizontalBoundShape);
+		addObject(boundsData);
+
+		boundsData = new InitialObjectData(ObjectType.DYNAMIC_POLYGON_BLOCK, 0,
+				height, horizontalBoundShape);
 		addObject(boundsData);
 
 		boundsObject = null;

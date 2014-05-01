@@ -368,7 +368,7 @@ public class GameRenderer implements TooltipHandler {
 		case BUILDING:
 		case SMALLCIRCLEDBLOCK:
 		case DYNAMIC_POLYGON_BLOCK:
-			return Color.gray;
+			return Color.pink;
 		case PLAYER:
 			PlayerMainFigure p = (PlayerMainFigure) d;
 			if (p.getTeam() == null) {
