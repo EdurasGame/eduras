@@ -349,7 +349,16 @@ public class GameInformation {
 
 		putNeutralBaseOwnerInfos(infos, neutralBases);
 
+		putGuiNotifications(infos);
+
 		return infos;
+	}
+
+	private void putGuiNotifications(ArrayList<GameEvent> infos) {
+		for (Player player : players.values()) {
+			infos.add(new OwnerGameEvent(GameEventNumber.INFO_PLAYER_JOIN,
+					player.getPlayerId()));
+		}
 	}
 
 	private void announceAllPlayers(ArrayList<GameEvent> infos) {

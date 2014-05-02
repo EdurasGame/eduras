@@ -624,7 +624,9 @@ public class ServerEventTriggerer implements EventTriggerer {
 
 			OwnerGameEvent playerLeftEvent = new OwnerGameEvent(
 					GameEventNumber.PLAYER_LEFT, ownerId);
-			sendEvents(gonePlayerEvent, playerLeftEvent);
+			OwnerGameEvent playerLeftEventInfo = new OwnerGameEvent(
+					GameEventNumber.INFO_PLAYER_LEFT, ownerId);
+			sendEvents(gonePlayerEvent, playerLeftEvent, playerLeftEventInfo);
 		} catch (ObjectNotFoundException e) {
 			// if there is no mainfigure, this function is used to prevent
 			// someone to join the server
