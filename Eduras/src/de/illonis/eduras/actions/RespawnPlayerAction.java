@@ -6,7 +6,9 @@ import de.illonis.edulog.EduLog;
 import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.Player;
 import de.illonis.eduras.gameobjects.NeutralBase;
+import de.illonis.eduras.logic.EventTriggerer;
 import de.illonis.eduras.settings.S;
+import de.illonis.eduras.units.InteractMode;
 
 public class RespawnPlayerAction extends RTSAction {
 
@@ -32,7 +34,12 @@ public class RespawnPlayerAction extends RTSAction {
 			L.warning("Trying to respawn player at a base that isn't owned by the players team!");
 			return;
 		}
-		info.getEventTriggerer().respawnPlayerAtPosition(playerToRespawn,
+
+		EventTriggerer eventTriggerer = info.getEventTriggerer();
+
+		eventTriggerer.respawnPlayerAtPosition(playerToRespawn,
 				base.getPositionVector());
+		eventTriggerer.changeInteractMode(playerToRespawn.getPlayerId(),
+				InteractMode.MODE_EGO);
 	}
 }
