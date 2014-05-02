@@ -12,7 +12,6 @@ import de.illonis.eduras.gameclient.GamePanelReactor;
 import de.illonis.eduras.gameclient.gui.hud.ActionBar;
 import de.illonis.eduras.gameclient.gui.hud.ActionBarPage;
 import de.illonis.eduras.gameclient.gui.hud.ActionButton;
-import de.illonis.eduras.gameobjects.GameObject.Relation;
 import de.illonis.eduras.logicabstraction.EdurasInitializer;
 import de.illonis.eduras.logicabstraction.InformationProvider;
 
@@ -79,6 +78,7 @@ public class ResurrectPage extends ActionBarPage {
 				RezzButton rezzButton = new RezzButton(joinedPlayer, reactor);
 				rezzButton.cacheReady();
 				addButton(rezzButton);
+				// refresh bar if it is currently visible
 				if (bar.getCurrentPage() == getId())
 					bar.setPage(getId());
 			}

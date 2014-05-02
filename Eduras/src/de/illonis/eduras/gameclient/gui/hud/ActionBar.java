@@ -81,7 +81,7 @@ public class ActionBar extends ClickableGuiElement implements TooltipTriggerer {
 
 	@Override
 	public void onGuiSizeChanged(int newWidth, int newHeight) {
-		screenY = newHeight - ActionButton.BUTTON_SIZE;
+		screenY = newHeight - ActionButton.BUTTON_SIZE - 30;
 		bounds.setLocation(screenX, screenY);
 	}
 
