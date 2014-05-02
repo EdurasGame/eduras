@@ -1,7 +1,6 @@
 package de.illonis.eduras.gameclient.gui.game;
 
 import java.awt.Point;
-import java.awt.event.MouseEvent;
 import java.awt.geom.Rectangle2D;
 import java.util.LinkedList;
 import java.util.logging.Level;
@@ -242,7 +241,8 @@ public class BuildModeMouseAdapter extends GuiMouseAdapter {
 
 	@Override
 	public void mousePressed(int button, int x, int y) {
-		if (button == MouseEvent.BUTTON1) {
+		if (button == Input.MOUSE_LEFT_BUTTON
+				&& getPanelLogic().getClickState() == ClickState.DEFAULT) {
 			getPanelLogic().setClickState(ClickState.UNITSELECT_DRAGGING);
 			startPoint = new Point(x, y);
 		}
@@ -250,16 +250,19 @@ public class BuildModeMouseAdapter extends GuiMouseAdapter {
 
 	@Override
 	public void mouseReleased(int button, int x, int y) {
-		if (button == MouseEvent.BUTTON1) {
-			getPanelLogic().setClickState(ClickState.DEFAULT);
+		if (getPanelLogic().getClickState() == ClickState.UNITSELECT_DRAGGING) {
+			if (button == Input.MOUSE_LEFT_BUTTON) {
+				getPanelLogic().setClickState(ClickState.DEFAULT);
 
-			Vector2f start = getPanelLogic().computeGuiPointToGameCoordinate(
-					new Vector2f(startPoint.x, startPoint.y));
-			Vector2f end = getPanelLogic().computeGuiPointToGameCoordinate(
-					new Vector2f(x, y));
-			Rectangle2D.Double r = calculateDragRect(start, end);
-			getListener().onUnitsSelected(r);
-			getPanelLogic().getDragRect().clear();
+				Vector2f start = getPanelLogic()
+						.computeGuiPointToGameCoordinate(
+								new Vector2f(startPoint.x, startPoint.y));
+				Vector2f end = getPanelLogic().computeGuiPointToGameCoordinate(
+						new Vector2f(x, y));
+				Rectangle2D.Double r = calculateDragRect(start, end);
+				getListener().onUnitsSelected(r);
+				getPanelLogic().getDragRect().clear();
+			}
 		}
 	}
 

@@ -193,9 +193,9 @@ public class GuiInternalEventListener implements LoginPanelReactor,
 		Rectangle r = new Rectangle((float) area.getX(), (float) area.getY(),
 				(float) area.getWidth(), (float) area.getHeight());
 
-		Player p;
+		PlayerMainFigure p;
 		try {
-			p = infoPro.getPlayer();
+			p = infoPro.getPlayer().getPlayerMainFigure();
 		} catch (ObjectNotFoundException e) {
 			L.log(Level.SEVERE,
 					"No playermainfigure found after units were selected.", e);
@@ -206,7 +206,9 @@ public class GuiInternalEventListener implements LoginPanelReactor,
 		for (Entry<Integer, GameObject> obj : infoPro.getGameObjects()
 				.entrySet()) {
 			GameObject o = obj.getValue();
-			if (o.isUnit() && o.isVisibleFor(p.getPlayerMainFigure())
+			if (o.isUnit()
+					&& o.isVisibleFor(p)
+					&& infoPro.getGameMode().getRelation(o, p) == Relation.ALLIED
 					&& Geometry.shapeCollides(o.getShape(), r)) {
 
 				ids.add(obj.getKey());
