@@ -35,6 +35,7 @@ import de.illonis.eduras.events.MatchEndEvent;
 import de.illonis.eduras.events.MovementEvent;
 import de.illonis.eduras.events.ObjectFactoryEvent;
 import de.illonis.eduras.events.OwnerGameEvent;
+import de.illonis.eduras.events.RespawnEvent;
 import de.illonis.eduras.events.SetAmmunitionEvent;
 import de.illonis.eduras.events.SetBooleanGameObjectAttributeEvent;
 import de.illonis.eduras.events.SetFloatGameObjectAttributeEvent;
@@ -363,6 +364,7 @@ public class ServerEventTriggerer implements EventTriggerer {
 			removeObject(player.getPlayerMainFigure().getId());
 		}
 
+		sendEventToAll(new RespawnEvent(player.getPlayerId()));
 		return createObject(ObjectType.PLAYER, player.getPlayerId());
 	}
 
@@ -394,11 +396,8 @@ public class ServerEventTriggerer implements EventTriggerer {
 		for (Player player : gameInfo.getPlayers()) {
 			resetStats(player);
 		}
-
 		changeMap(gameInfo.getMap());
-
 		resetSettings();
-
 	}
 
 	@Override
@@ -805,5 +804,17 @@ public class ServerEventTriggerer implements EventTriggerer {
 	public void onPlayerJoined(Player newPlayer) {
 		sendEvents(new OwnerGameEvent(GameEventNumber.PLAYER_JOINED,
 				newPlayer.getPlayerId()));
+	}
+
+	@Override
+	public void notifyPlayerJoined(int ownerId) {
+		sendEventToAll(new OwnerGameEvent(GameEventNumber.INFO_PLAYER_JOIN,
+				ownerId));
+	}
+
+	@Override
+	public void notifyPlayerLeft(int ownerId) {
+		sendEventToAll(new OwnerGameEvent(GameEventNumber.INFO_PLAYER_LEFT,
+				ownerId));
 	}
 }

@@ -3,13 +3,26 @@ package de.illonis.eduras.gameclient.gui.game;
 import java.awt.Point;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Rectangle2D;
+import java.util.LinkedList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
+import org.newdawn.slick.Input;
 import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.Vector2f;
 
+import de.illonis.edulog.EduLog;
+import de.illonis.eduras.exceptions.ObjectNotFoundException;
 import de.illonis.eduras.gameclient.GuiInternalEventListener;
 import de.illonis.eduras.gameclient.gui.game.GamePanelLogic.ClickState;
+import de.illonis.eduras.gameobjects.GameObject;
+import de.illonis.eduras.gameobjects.GameObject.Relation;
+import de.illonis.eduras.gameobjects.NeutralBase;
+import de.illonis.eduras.logicabstraction.EdurasInitializer;
+import de.illonis.eduras.logicabstraction.InformationProvider;
 import de.illonis.eduras.units.InteractMode;
+import de.illonis.eduras.units.PlayerMainFigure;
+import de.illonis.eduras.units.Unit;
 
 /**
  * Handles mouse events in the build mode ({@link InteractMode#MODE_STRATEGY}).
@@ -18,6 +31,11 @@ import de.illonis.eduras.units.InteractMode;
  * 
  */
 public class BuildModeMouseAdapter extends GuiMouseAdapter {
+
+	private final static Logger L = EduLog
+			.getLoggerFor(BuildModeMouseAdapter.class.getName());
+
+	private final static int SCROLL_MOUSE_PADDING = 30;
 
 	private Point startPoint;
 
@@ -30,10 +48,83 @@ public class BuildModeMouseAdapter extends GuiMouseAdapter {
 		Vector2f clickGamePoint = getPanelLogic()
 				.computeGuiPointToGameCoordinate(new Vector2f(x, y));
 
-		if (button == MouseEvent.BUTTON3) {
-			getListener().sendSelectedUnits(clickGamePoint);
-		} else if (button == MouseEvent.BUTTON1) {
-			getListener().selectOrDeselectAt(clickGamePoint);
+		switch (getPanelLogic().getClickState()) {
+		case DEFAULT:
+			if (button == Input.MOUSE_RIGHT_BUTTON) {
+				getListener().sendSelectedUnits(clickGamePoint);
+			} else if (button == Input.MOUSE_LEFT_BUTTON) {
+				getListener().selectOrDeselectAt(clickGamePoint);
+			}
+			break;
+		case SELECT_TARGET_FOR_HEAL:
+			if (button == Input.MOUSE_LEFT_BUTTON) {
+				System.out.println("try healing");
+				InformationProvider infoPro = EdurasInitializer.getInstance()
+						.getInformationProvider();
+
+				LinkedList<GameObject> obs = new LinkedList<GameObject>(
+						infoPro.findObjectsAt(clickGamePoint));
+				PlayerMainFigure player;
+				try {
+					player = infoPro.getPlayer().getPlayerMainFigure();
+				} catch (ObjectNotFoundException e) {
+					L.log(Level.SEVERE,
+							"Player not found while selecting healtarget.", e);
+					return;
+				}
+				System.out.println("found " + obs.size() + " units.");
+				for (GameObject gameObject : obs) {
+
+					if (gameObject.isUnit()
+							&& infoPro.getGameMode().getRelation(gameObject,
+									player) == Relation.ALLIED) {
+						System.out.println(gameObject.getType());
+						getListener().onUnitHeal((Unit) gameObject);
+						getPanelLogic().setClickState(ClickState.DEFAULT);
+						return;
+					}
+				}
+
+			} else {
+				getPanelLogic().setClickState(ClickState.DEFAULT);
+			}
+			break;
+		case SELECT_BASE_FOR_REZZ:
+			if (button == Input.MOUSE_LEFT_BUTTON) {
+				LinkedList<GameObject> obs = new LinkedList<GameObject>(
+						EdurasInitializer.getInstance()
+								.getInformationProvider()
+								.findObjectsAt(clickGamePoint));
+
+				for (GameObject gameObject : obs) {
+					if (gameObject instanceof NeutralBase) {
+						if (((NeutralBase) gameObject).getCurrentOwnerTeam() == getPanelLogic()
+								.getClientData().getCurrentResurrectTarget()
+								.getTeam()) {
+							getListener().onPlayerRezz(
+									getPanelLogic().getClientData()
+											.getCurrentResurrectTarget(),
+									(NeutralBase) gameObject);
+							getPanelLogic().setClickState(ClickState.DEFAULT);
+							return;
+						} else {
+							getPanelLogic()
+									.showNotification(
+											"You can only resurrect on bases your team owns.");
+							return;
+						}
+					}
+				}
+				getPanelLogic().showNotification(
+						"Please select a base owned by your team to resurrect "
+								+ getPanelLogic().getClientData()
+										.getCurrentResurrectTarget().getName());
+			} else {
+				getPanelLogic().setClickState(ClickState.DEFAULT);
+			}
+			break;
+		default:
+			break;
 		}
 	}
 
@@ -74,6 +165,28 @@ public class BuildModeMouseAdapter extends GuiMouseAdapter {
 
 	@Override
 	public void mouseMoved(int oldx, int oldy, int newx, int newy) {
+		Vector2f cameraMovement = getPanelLogic().getCamera()
+				.getCameraMovement();
+		// TODO: Make camera movement speed a user setting.
+
+		// scroll camera when mouse is near window border
+		// horizontal movement
+		if (newx < SCROLL_MOUSE_PADDING)
+			cameraMovement.x = -5;
+		else if (newx > getPanelLogic().getGui().getWidth()
+				- SCROLL_MOUSE_PADDING)
+			cameraMovement.x = 5;
+		else
+			cameraMovement.x = 0;
+
+		// vertical movement
+		if (newy < SCROLL_MOUSE_PADDING)
+			cameraMovement.y = -5;
+		else if (newy > getPanelLogic().getGui().getHeight()
+				- SCROLL_MOUSE_PADDING)
+			cameraMovement.y = 5;
+		else
+			cameraMovement.y = 0;
 	}
 
 	@Override

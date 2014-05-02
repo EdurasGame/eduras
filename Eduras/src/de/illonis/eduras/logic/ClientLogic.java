@@ -1,6 +1,5 @@
 package de.illonis.eduras.logic;
 
-import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -20,11 +19,11 @@ import de.illonis.eduras.events.MatchEndEvent;
 import de.illonis.eduras.events.MovementEvent;
 import de.illonis.eduras.events.ObjectFactoryEvent;
 import de.illonis.eduras.events.OwnerGameEvent;
+import de.illonis.eduras.events.RespawnEvent;
 import de.illonis.eduras.events.SetAmmunitionEvent;
 import de.illonis.eduras.events.SetBooleanGameObjectAttributeEvent;
 import de.illonis.eduras.events.SetFloatGameObjectAttributeEvent;
 import de.illonis.eduras.events.SetGameModeEvent;
-import de.illonis.eduras.events.SetGameObjectAttributeEvent;
 import de.illonis.eduras.events.SetIntegerGameObjectAttributeEvent;
 import de.illonis.eduras.events.SetInteractModeEvent;
 import de.illonis.eduras.events.SetItemSlotEvent;
@@ -39,6 +38,7 @@ import de.illonis.eduras.events.SetVisibilityEvent;
 import de.illonis.eduras.exceptions.NoSuchGameModeException;
 import de.illonis.eduras.exceptions.NoSuchMapException;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
+import de.illonis.eduras.gameclient.GameEventAdapter;
 import de.illonis.eduras.gamemodes.BasicGameMode;
 import de.illonis.eduras.gamemodes.GameMode;
 import de.illonis.eduras.gameobjects.DynamicPolygonObject;
@@ -104,9 +104,10 @@ public class ClientLogic implements GameLogicInterface {
 					break;
 				o.setYPosition(newYPos);
 				o.setXPosition(newXPos);
-
 				getListener().onNewObjectPosition(o);
-
+				break;
+			case INFO_RESPAWN:
+				getListener().onRespawn((RespawnEvent) event);
 				break;
 			case SET_HEALTH:
 				SetIntegerGameObjectAttributeEvent healthEvent = (SetIntegerGameObjectAttributeEvent) event;
@@ -180,6 +181,14 @@ public class ClientLogic implements GameLogicInterface {
 				}
 				rangeGameObject.setVisionAngle(setRangeEvent.getNewValue());
 				break;
+			case INFO_PLAYER_JOIN:
+				OwnerGameEvent joinEvent = (OwnerGameEvent) event;
+				getListener().onPlayerJoined(joinEvent.getOwner());
+				break;
+			case INFO_PLAYER_LEFT:
+				OwnerGameEvent leaveEvent = (OwnerGameEvent) event;
+				getListener().onPlayerLeft(leaveEvent.getOwner());
+				break;
 			case SET_ROTATION:
 				if (!(event instanceof SetFloatGameObjectAttributeEvent)) {
 					break;
@@ -251,7 +260,6 @@ public class ClientLogic implements GameLogicInterface {
 				DeathEvent de = (DeathEvent) event;
 				GameObject killed = gameInfo.findObjectById(de.getKilled());
 				if (killed.isUnit()) {
-					Unit un = (Unit) killed;
 					getListener().onDeath(de);
 				}
 
@@ -506,90 +514,7 @@ public class ClientLogic implements GameLogicInterface {
 		GameEventListener l = listenerHolder.getListener();
 		// return a dummy listener if no listener is attached to prevent errors.
 		if (l == null)
-			return new GameEventListener() {
-
-				@Override
-				public void onOwnerChanged(SetOwnerEvent event) {
-				}
-
-				@Override
-				public void onObjectStateChanged(
-						SetGameObjectAttributeEvent<?> event) {
-				}
-
-				@Override
-				public void onObjectRemove(ObjectFactoryEvent event) {
-				}
-
-				@Override
-				public void onObjectCreation(ObjectFactoryEvent event) {
-				}
-
-				@Override
-				public void onNewObjectPosition(GameObject object) {
-				}
-
-				@Override
-				public void onMaxHealthChanged(
-						SetIntegerGameObjectAttributeEvent event) {
-				}
-
-				@Override
-				public void onMatchEnd(MatchEndEvent event) {
-				}
-
-				@Override
-				public void onItemSlotChanged(SetItemSlotEvent event) {
-				}
-
-				@Override
-				public void onInteractModeChanged(
-						SetInteractModeEvent setModeEvent) {
-				}
-
-				@Override
-				public void onInformationRequested(ArrayList<GameEvent> infos,
-						int targetOwner) {
-				}
-
-				@Override
-				public void onHealthChanged(
-						SetIntegerGameObjectAttributeEvent event) {
-				}
-
-				@Override
-				public void onGameModeChanged(GameMode newGameMode) {
-				}
-
-				@Override
-				public void onDeath(DeathEvent event) {
-				}
-
-				@Override
-				public void onCooldownStarted(ItemEvent event) {
-				}
-
-				@Override
-				public void onCooldownFinished(ItemEvent event) {
-				}
-
-				@Override
-				public void onClientRename(ClientRenameEvent event) {
-				}
-
-				@Override
-				public void onGameReady() {
-				}
-
-				@Override
-				public void onVisibilityChanged(SetVisibilityEvent event) {
-				}
-
-				@Override
-				public void onTeamResourceChanged(
-						SetTeamResourceEvent setTeamResourceEvent) {
-				}
-			};
+			return new GameEventAdapter();
 		return l;
 	}
 

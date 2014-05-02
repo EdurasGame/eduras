@@ -225,6 +225,7 @@ public class EdurasInitializer {
 				} catch (WrongEventTypeException | MessageNotSupportedException e) {
 					L.log(Level.SEVERE, "Cannot send setRotationEvent.", e);
 				}
+
 			}
 
 			@Override
@@ -283,6 +284,14 @@ public class EdurasInitializer {
 
 			@Override
 			public void onPlayerJoined(Player newPlayer) {
+			}
+
+			@Override
+			public void notifyPlayerJoined(int ownerId) {
+			}
+
+			@Override
+			public void notifyPlayerLeft(int ownerId) {
 			}
 
 		});

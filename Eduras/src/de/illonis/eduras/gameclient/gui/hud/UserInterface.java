@@ -5,6 +5,8 @@ import java.util.LinkedList;
 import java.util.TimerTask;
 
 import de.illonis.eduras.gameclient.ChatCache;
+import de.illonis.eduras.gameclient.GuiInternalEventListener;
+import de.illonis.eduras.gameclient.datacache.CacheInfo.ImageKey;
 import de.illonis.eduras.gameclient.gui.HudNotifier;
 import de.illonis.eduras.gameclient.gui.TimedTasksHolderGUI;
 import de.illonis.eduras.gameclient.gui.game.GameRenderer;
@@ -13,6 +15,9 @@ import de.illonis.eduras.gameclient.gui.game.GuiResizeListener;
 import de.illonis.eduras.gameclient.gui.game.TooltipHandler;
 import de.illonis.eduras.gameclient.gui.game.TooltipTriggererNotifier;
 import de.illonis.eduras.gameclient.gui.game.UserInputListener;
+import de.illonis.eduras.gameclient.gui.hud.ActionBarPage.PageNumber;
+import de.illonis.eduras.gameclient.gui.hud.actionbar.HealButton;
+import de.illonis.eduras.gameclient.gui.hud.actionbar.ResurrectPage;
 import de.illonis.eduras.logicabstraction.EdurasInitializer;
 import de.illonis.eduras.logicabstraction.InformationProvider;
 import de.illonis.eduras.networking.ClientRole;
@@ -40,6 +45,9 @@ public class UserInterface implements GuiResizeListener, UserInputListener {
 	private PingDisplay pingDisplay;
 	private final ChatCache cache;
 	private GameRenderer renderer;
+	private ActionBar actionBar;
+	private HudNotifier hudNotifier;
+	private final GuiInternalEventListener guiReactor;
 
 	/**
 	 * Creates the user interface. The tooltip handler will be set manually
@@ -53,16 +61,20 @@ public class UserInterface implements GuiResizeListener, UserInputListener {
 	 *            click reactor.
 	 * @param hudNotifier
 	 *            the hud notifier.
+	 * @param reactor
+	 *            the listener for guievents.
 	 * @param cache
 	 *            the chat cache object.
 	 */
 	public UserInterface(InformationProvider infos,
 			TooltipTriggererNotifier tooltipNotifier,
 			GuiClickReactor clickReactor, HudNotifier hudNotifier,
-			ChatCache cache) {
+			GuiInternalEventListener reactor, ChatCache cache) {
 		this.uiObjects = new LinkedList<RenderedGuiObject>();
 		this.infos = infos;
+		this.hudNotifier = hudNotifier;
 		spectator = false;
+		this.guiReactor = reactor;
 		this.reactor = clickReactor;
 		this.tooltipNotifier = tooltipNotifier;
 		this.cache = cache;
@@ -99,6 +111,37 @@ public class UserInterface implements GuiResizeListener, UserInputListener {
 		statWindow = new StatisticsWindow(this);
 		new ChatDisplay(cache, this);
 		new BugReportButton(this);
+		actionBar = new ActionBar(this);
+		initActionBar();
+	}
+
+	private void initActionBar() {
+
+		ActionBarPage mainPage = new ActionBarPage(PageNumber.MAIN);
+		ActionButton abortButton = new ActionButton("abort",
+				ImageKey.ACTION_ABORT, guiReactor) {
+
+			@Override
+			public void actionPerformed() {
+				actionBar.setPage(PageNumber.MAIN);
+			}
+		};
+		HealButton healButton = new HealButton(guiReactor);
+		mainPage.addButton(healButton);
+		ActionButton resurrectButton = new ActionButton("resurrect",
+				ImageKey.ACTION_RESURRECT, guiReactor) {
+			@Override
+			public void actionPerformed() {
+				actionBar.setPage(PageNumber.RESURRECT);
+			}
+		};
+		mainPage.addButton(resurrectButton);
+		hudNotifier.addListener(resurrectButton);
+
+		ActionBarPage resurrectPage = new ResurrectPage(actionBar, guiReactor);
+		hudNotifier.addListener(resurrectPage);
+		resurrectPage.addButton(abortButton);
+		actionBar.setPage(PageNumber.MAIN);
 	}
 
 	/**

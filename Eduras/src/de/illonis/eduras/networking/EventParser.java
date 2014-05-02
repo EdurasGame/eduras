@@ -28,7 +28,8 @@ import de.illonis.eduras.events.MatchEndEvent;
 import de.illonis.eduras.events.MovementEvent;
 import de.illonis.eduras.events.ObjectFactoryEvent;
 import de.illonis.eduras.events.OwnerGameEvent;
-import de.illonis.eduras.events.RespawnPlayerEvent;
+import de.illonis.eduras.events.RespawnEvent;
+import de.illonis.eduras.events.ResurrectPlayerEvent;
 import de.illonis.eduras.events.SendUnitsEvent;
 import de.illonis.eduras.events.SetAmmunitionEvent;
 import de.illonis.eduras.events.SetBooleanGameObjectAttributeEvent;
@@ -143,6 +144,11 @@ public class EventParser implements EventHandler {
 						GameEventNumber.MOVE_DOWN_RELEASED, (Integer) event
 								.getArgument(0)));
 				break;
+			case INFO_PLAYER_JOIN:
+			case INFO_PLAYER_LEFT:
+				logic.onGameEventAppeared(new OwnerGameEvent(gameEventNumber,
+						(int) event.getArgument(0)));
+				break;
 			case SET_SPEED:
 				logic.onGameEventAppeared(new SetIntegerGameObjectAttributeEvent(
 						GameEventNumber.SET_SPEED, (Integer) event
@@ -161,6 +167,10 @@ public class EventParser implements EventHandler {
 				float y = (float) event.getArgument(3);
 				itemEvent.setTarget(new Vector2df(x, y));
 				logic.onGameEventAppeared(itemEvent);
+				break;
+			case INFO_RESPAWN:
+				logic.onGameEventAppeared(new RespawnEvent((int) event
+						.getArgument(0)));
 				break;
 			case SWITCH_INTERACTMODE:
 				InteractMode mode = InteractMode.valueOf((String) event
@@ -343,8 +353,8 @@ public class EventParser implements EventHandler {
 				logic.onGameEventAppeared(new SetMapEvent((String) event
 						.getArgument(0)));
 				break;
-			case RESPAWN_PLAYER:
-				logic.onGameEventAppeared(new RespawnPlayerEvent(
+			case RESURRECT_PLAYER:
+				logic.onGameEventAppeared(new ResurrectPlayerEvent(
 						(Integer) event.getArgument(0), (Integer) event
 								.getArgument(1), (Integer) event.getArgument(2)));
 				break;

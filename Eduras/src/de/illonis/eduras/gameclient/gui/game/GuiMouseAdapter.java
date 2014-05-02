@@ -1,5 +1,6 @@
 package de.illonis.eduras.gameclient.gui.game;
 
+import de.illonis.eduras.gameclient.GamePanelReactor;
 import de.illonis.eduras.gameclient.GuiInternalEventListener;
 import de.illonis.eduras.gameclient.gui.hud.ClickableGuiElementInterface;
 
@@ -19,7 +20,7 @@ public abstract class GuiMouseAdapter implements GuiClickReactor {
 		this.listener = listener;
 	}
 
-	GuiInternalEventListener getListener() {
+	GamePanelReactor getListener() {
 		return listener;
 	}
 

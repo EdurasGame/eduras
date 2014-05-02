@@ -8,6 +8,7 @@ import de.illonis.eduras.events.GameEvent;
 import de.illonis.eduras.events.ItemEvent;
 import de.illonis.eduras.events.MatchEndEvent;
 import de.illonis.eduras.events.ObjectFactoryEvent;
+import de.illonis.eduras.events.RespawnEvent;
 import de.illonis.eduras.events.SetGameObjectAttributeEvent;
 import de.illonis.eduras.events.SetIntegerGameObjectAttributeEvent;
 import de.illonis.eduras.events.SetInteractModeEvent;
@@ -53,6 +54,12 @@ public interface GameEventListener {
 	 *            the corresponding event.
 	 */
 	void onObjectCreation(ObjectFactoryEvent event);
+
+	/**
+	 * Indicates that player information have been received and initial logic is
+	 * available.
+	 */
+	void onPlayerInformationReceived();
 
 	/**
 	 * Fired when a client has a new name.
@@ -145,6 +152,14 @@ public interface GameEventListener {
 	void onDeath(DeathEvent event);
 
 	/**
+	 * Called when a unit respawns.
+	 * 
+	 * @param event
+	 *            the event holding information.
+	 */
+	void onRespawn(RespawnEvent event);
+
+	/**
 	 * Called when cooldown of an item has finished.
 	 * 
 	 * @param event
@@ -172,6 +187,12 @@ public interface GameEventListener {
 	 */
 	void onInteractModeChanged(SetInteractModeEvent setModeEvent);
 
+	/**
+	 * Called when the amount of a team resource changed.
+	 * 
+	 * @param setTeamResourceEvent
+	 *            the event data.
+	 */
 	void onTeamResourceChanged(SetTeamResourceEvent setTeamResourceEvent);
 
 	/**
@@ -179,4 +200,20 @@ public interface GameEventListener {
 	 * ready to go.
 	 */
 	void onGameReady();
+
+	/**
+	 * Called when a new player joins.
+	 * 
+	 * @param ownerId
+	 *            the owner id of joined player.
+	 */
+	void onPlayerJoined(int ownerId);
+
+	/**
+	 * Called when a player leaves.
+	 * 
+	 * @param ownerId
+	 *            the owner id of left player.
+	 */
+	void onPlayerLeft(int ownerId);
 }

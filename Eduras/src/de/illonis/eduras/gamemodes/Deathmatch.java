@@ -137,6 +137,8 @@ public class Deathmatch extends BasicGameMode {
 	public void onGameStart() {
 		LinkedList<Team> teams = new LinkedList<Team>();
 		for (Player player : gameInfo.getPlayers()) {
+			gameInfo.getEventTriggerer().changeInteractMode(
+					player.getPlayerId(), InteractMode.MODE_EGO);
 			Team t = new Team(player.getName(), Team.getNextTeamId());
 			teams.add(t);
 			gameInfo.getEventTriggerer().addPlayerToTeam(player.getPlayerId(),
@@ -158,6 +160,8 @@ public class Deathmatch extends BasicGameMode {
 
 	@Override
 	public Relation getRelation(GameObject a, GameObject b) {
+		if (a.getId() == b.getId())
+			return Relation.ALLIED;
 		return Relation.HOSTILE;
 	}
 
@@ -175,7 +179,6 @@ public class Deathmatch extends BasicGameMode {
 		gameInfo.getGameSettings().getStats().removePlayerFromStats(ownerId);
 
 		Team playersTeam = gonePlayer.getTeam();
-
 		// remove the actual player (also removes the player from its team)
 		gameInfo.getEventTriggerer().removePlayer(ownerId);
 
@@ -208,8 +211,8 @@ public class Deathmatch extends BasicGameMode {
 
 	@Override
 	public boolean supportsKeyBinding(KeyBinding binding) {
-		if (binding == KeyBinding.SWITCH_MODE)
-			return false;
+		// if (binding == KeyBinding.SWITCH_MODE)
+		// retburn false;
 		return true;
 	}
 

@@ -32,6 +32,7 @@ public class ServerNetworker implements ServerNetworkEventHandler {
 	public void onClientDisconnected(int clientId) {
 		L.info("User with id #" + clientId
 				+ " disconnected from Eduras Server.");
+		gameInfo.getEventTriggerer().notifyPlayerLeft(clientId);
 		gameInfo.getGameSettings().getGameMode().onDisconnect(clientId);
 	}
 

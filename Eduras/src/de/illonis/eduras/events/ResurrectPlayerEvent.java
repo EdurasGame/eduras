@@ -4,17 +4,17 @@ import java.util.logging.Logger;
 
 import de.illonis.edulog.EduLog;
 
-public class RespawnPlayerEvent extends RTSActionEvent {
+public class ResurrectPlayerEvent extends RTSActionEvent {
 
 	private final static Logger L = EduLog
-			.getLoggerFor(RespawnPlayerEvent.class.getName());
+			.getLoggerFor(ResurrectPlayerEvent.class.getName());
 
 	private final int idOfPlayerToRespawn;
 	private final int idOfBaseToRespawnAt;
 
-	public RespawnPlayerEvent(int executingPlayer, int playerToRespawn,
+	public ResurrectPlayerEvent(int executingPlayer, int playerToRespawn,
 			int baseToRespawnAt) {
-		super(GameEventNumber.RESPAWN_PLAYER, executingPlayer);
+		super(GameEventNumber.RESURRECT_PLAYER, executingPlayer);
 
 		putArgument(playerToRespawn);
 		putArgument(baseToRespawnAt);

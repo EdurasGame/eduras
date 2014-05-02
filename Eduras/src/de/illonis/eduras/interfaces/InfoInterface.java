@@ -3,6 +3,7 @@ package de.illonis.eduras.interfaces;
 import java.util.Collection;
 
 import org.newdawn.slick.geom.Rectangle;
+import org.newdawn.slick.geom.Vector2f;
 
 import de.illonis.eduras.ObjectFactory.ObjectType;
 import de.illonis.eduras.Player;
@@ -115,6 +116,13 @@ public interface InfoInterface {
 	 */
 	public Player getPlayerByOwnerId(int ownerId)
 			throws ObjectNotFoundException;
+
+	/**
+	 * @param point
+	 *            the game coordinate to look at.
+	 * @return a list of objects colliding given point.
+	 */
+	public Collection<GameObject> findObjectsAt(Vector2f point);
 
 	/**
 	 * Returns the remaining game time.

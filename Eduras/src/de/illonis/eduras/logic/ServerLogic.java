@@ -24,7 +24,7 @@ import de.illonis.eduras.events.GameInfoRequest;
 import de.illonis.eduras.events.HealActionEvent;
 import de.illonis.eduras.events.InitInformationEvent;
 import de.illonis.eduras.events.ItemEvent;
-import de.illonis.eduras.events.RespawnPlayerEvent;
+import de.illonis.eduras.events.ResurrectPlayerEvent;
 import de.illonis.eduras.events.SendUnitsEvent;
 import de.illonis.eduras.events.SetFloatGameObjectAttributeEvent;
 import de.illonis.eduras.events.SpawnItemEvent;
@@ -181,6 +181,9 @@ public class ServerLogic implements GameLogicInterface {
 			} catch (InvalidNameException e1) {
 				L.log(Level.SEVERE, "invalid client name", e1);
 			}
+			getGame().getEventTriggerer().notifyPlayerJoined(
+					initInfoEvent.getClientId());
+
 			break;
 		case SET_ROTATION:
 			if (!(event instanceof SetFloatGameObjectAttributeEvent)) {
@@ -195,8 +198,8 @@ public class ServerLogic implements GameLogicInterface {
 
 			gameObject.setRotation(setRotationEvent.getNewValue());
 			break;
-		case RESPAWN_PLAYER:
-			RespawnPlayerEvent respawnPlayerEvent = (RespawnPlayerEvent) event;
+		case RESURRECT_PLAYER:
+			ResurrectPlayerEvent respawnPlayerEvent = (ResurrectPlayerEvent) event;
 			try {
 				Player executingPlayer = gameInfo
 						.getPlayerByOwnerId(respawnPlayerEvent

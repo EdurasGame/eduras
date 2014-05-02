@@ -12,7 +12,9 @@ import org.newdawn.slick.geom.Vector2f;
 import de.illonis.edulog.EduLog;
 import de.illonis.eduras.Player;
 import de.illonis.eduras.events.GameEvent.GameEventNumber;
+import de.illonis.eduras.events.HealActionEvent;
 import de.illonis.eduras.events.ItemEvent;
+import de.illonis.eduras.events.ResurrectPlayerEvent;
 import de.illonis.eduras.events.SendUnitsEvent;
 import de.illonis.eduras.events.SwitchInteractModeEvent;
 import de.illonis.eduras.events.UserMovementEvent;
@@ -20,14 +22,18 @@ import de.illonis.eduras.exceptions.MessageNotSupportedException;
 import de.illonis.eduras.exceptions.NotWithinBaseException;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
 import de.illonis.eduras.exceptions.WrongEventTypeException;
+import de.illonis.eduras.gameclient.gui.game.GamePanelLogic.ClickState;
 import de.illonis.eduras.gameobjects.GameObject;
+import de.illonis.eduras.gameobjects.GameObject.Relation;
 import de.illonis.eduras.gameobjects.MoveableGameObject.Direction;
+import de.illonis.eduras.gameobjects.NeutralBase;
 import de.illonis.eduras.logicabstraction.EdurasInitializer;
 import de.illonis.eduras.logicabstraction.InformationProvider;
 import de.illonis.eduras.math.Geometry;
 import de.illonis.eduras.math.Vector2df;
 import de.illonis.eduras.units.InteractMode;
 import de.illonis.eduras.units.PlayerMainFigure;
+import de.illonis.eduras.units.Unit;
 
 /**
  * Handles events from login panels and gui and performs the appropriate action.
@@ -246,6 +252,7 @@ public class GuiInternalEventListener implements LoginPanelReactor,
 		}
 	}
 
+	@Override
 	public void onViewingDirectionChanged(Vector2f viewingPoint) {
 		PlayerMainFigure player;
 		try {
@@ -261,4 +268,57 @@ public class GuiInternalEventListener implements LoginPanelReactor,
 		float angle = vPoint.getAngleToXAxis();
 		player.setRotation(angle);
 	}
+
+	@Override
+	public void onPlayerRezz(Player player, NeutralBase base) {
+		ResurrectPlayerEvent event = new ResurrectPlayerEvent(
+				client.getOwnerID(), player.getPlayerId(), base.getId());
+		if (!player.getPlayerMainFigure().isDead()) {
+			client.getFrame().getGamePanel()
+					.showNotification("Player is not dead");
+			return;
+		}
+		try {
+			client.sendEvent(event);
+			client.getFrame()
+					.getGamePanel()
+					.showNotification(
+							"Resurrecting " + player.getName() + "...");
+		} catch (WrongEventTypeException | MessageNotSupportedException e) {
+			L.log(Level.SEVERE, "Error sending resurrection event", e);
+		}
+	}
+
+	@Override
+	public void onUnitHeal(Unit targetUnit) {
+		PlayerMainFigure player;
+		try {
+			player = infoPro.getPlayer().getPlayerMainFigure();
+		} catch (ObjectNotFoundException e) {
+			L.log(Level.SEVERE, "Player not found while healing unit.", e);
+			return;
+		}
+		HealActionEvent healEvent = new HealActionEvent(client.getOwnerID(),
+				targetUnit.getId());
+
+		if (infoPro.getGameMode().getRelation(targetUnit, player) != Relation.ALLIED) {
+			client.getFrame().getGamePanel()
+					.showNotification("Player is not friendly");
+			return;
+		}
+		try {
+			client.sendEvent(healEvent);
+			client.getFrame().getGamePanel()
+					.showNotification("Healing unit...");
+		} catch (WrongEventTypeException | MessageNotSupportedException e) {
+			L.log(Level.SEVERE, "Error sending heal event", e);
+		}
+
+	}
+
+	@Override
+	public void setClickState(ClickState newState) {
+		client.getFrame().getGamePanel().setClickState(newState);
+	}
+
 }

@@ -4,6 +4,7 @@ import java.util.LinkedList;
 import java.util.Set;
 import java.util.TreeSet;
 
+import de.illonis.eduras.Player;
 import de.illonis.eduras.gameclient.gui.animation.Animation;
 import de.illonis.eduras.logicabstraction.InformationProvider;
 
@@ -20,6 +21,7 @@ public final class ClientData {
 	private final LinkedList<Animation> animations;
 	private final VisionInformation visionInfo;
 	private int currentItemSelected;
+	private Player currentResurrectTarget;
 
 	/**
 	 * Creates a new storage.
@@ -134,6 +136,14 @@ public final class ClientData {
 	 */
 	public VisionInformation getVisionInfo() {
 		return visionInfo;
+	}
+
+	public void setCurrentResurrectTarget(Player currentResurrectTarget) {
+		this.currentResurrectTarget = currentResurrectTarget;
+	}
+
+	public Player getCurrentResurrectTarget() {
+		return currentResurrectTarget;
 	}
 
 }

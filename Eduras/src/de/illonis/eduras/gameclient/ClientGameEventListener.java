@@ -11,6 +11,7 @@ import de.illonis.eduras.events.GameEvent;
 import de.illonis.eduras.events.ItemEvent;
 import de.illonis.eduras.events.MatchEndEvent;
 import de.illonis.eduras.events.ObjectFactoryEvent;
+import de.illonis.eduras.events.RespawnEvent;
 import de.illonis.eduras.events.SetGameObjectAttributeEvent;
 import de.illonis.eduras.events.SetIntegerGameObjectAttributeEvent;
 import de.illonis.eduras.events.SetInteractModeEvent;
@@ -65,7 +66,7 @@ public class ClientGameEventListener implements GameEventListener {
 		// if our player was created, player data is there.
 		if (event.getOwner() == client.getOwnerID()
 				&& event.getObjectType() == ObjectType.PLAYER)
-			ui.onPlayerReceived();
+			ui.onPlayerInformationReceived();
 	}
 
 	@Override
@@ -95,6 +96,7 @@ public class ClientGameEventListener implements GameEventListener {
 
 	@Override
 	public void onObjectRemove(ObjectFactoryEvent event) {
+		ui.onObjectRemove(event);
 	}
 
 	@Override
@@ -131,6 +133,7 @@ public class ClientGameEventListener implements GameEventListener {
 	@Override
 	public void onInteractModeChanged(SetInteractModeEvent setModeEvent) {
 		ui.onInteractModeChanged(setModeEvent);
+		client.getFrame().getGamePanel().getCamera().reset();
 	}
 
 	@Override
@@ -142,11 +145,30 @@ public class ClientGameEventListener implements GameEventListener {
 
 	@Override
 	public void onVisibilityChanged(SetVisibilityEvent event) {
-		ui.onVisibilityChanged(event);		
+		ui.onVisibilityChanged(event);
 	}
 
 	@Override
 	public void onTeamResourceChanged(SetTeamResourceEvent setTeamResourceEvent) {
-		ui.onTeamResourceChanged(setTeamResourceEvent);		
+		ui.onTeamResourceChanged(setTeamResourceEvent);
+	}
+
+	@Override
+	public void onPlayerInformationReceived() {
+	}
+
+	@Override
+	public void onRespawn(RespawnEvent event) {
+		ui.onRespawn(event);
+	}
+
+	@Override
+	public void onPlayerJoined(int ownerId) {
+		ui.onPlayerJoined(ownerId);
+	}
+
+	@Override
+	public void onPlayerLeft(int ownerId) {
+		ui.onPlayerLeft(ownerId);
 	}
 }

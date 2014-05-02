@@ -29,13 +29,10 @@ public class ItemTooltip extends Tooltip {
 	 * Creates a new item tooltip that uses given information and displays data
 	 * about given item.
 	 * 
-	 * @param gui
-	 *            user interface.
 	 * @param item
 	 *            item to present.
 	 */
-	public ItemTooltip(UserInterface gui, Item item) {
-		super(gui);
+	public ItemTooltip(Item item) {
 		width = 200;
 		height = 100;
 		this.item = item;
@@ -43,11 +40,7 @@ public class ItemTooltip extends Tooltip {
 
 	@Override
 	public void render(Graphics g2d) {
-		g2d.setLineWidth(1f);
-		g2d.setColor(Color.black);
-		g2d.fillRect(screenX, screenY, width, height);
-		g2d.setColor(Color.gray);
-		g2d.drawRect(screenX, screenY, width, height);
+		super.render(g2d);
 		g2d.setColor(Color.yellow);
 		g2d.drawString(item.getName(), screenX + 8, screenY + 10);
 		g2d.setColor(Color.white);
@@ -62,16 +55,6 @@ public class ItemTooltip extends Tooltip {
 			L.log(Level.SEVERE,
 					"Could not find cache image for " + item.getType(), e);
 		}
-	}
-
-	@Override
-	public void onGuiSizeChanged(int newWidth, int newHeight) {
-
-	}
-
-	@Override
-	public void onPlayerInformationReceived() {
-
 	}
 
 	/**

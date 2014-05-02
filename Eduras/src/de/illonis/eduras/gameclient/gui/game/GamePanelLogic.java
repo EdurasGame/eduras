@@ -65,7 +65,7 @@ public class GamePanelLogic extends ClientGuiStepLogic implements
 	 */
 	@SuppressWarnings("javadoc")
 	public enum ClickState {
-		DEFAULT, ITEM_SELECTED, UNITSELECT_DRAGGING;
+		DEFAULT, ITEM_SELECTED, UNITSELECT_DRAGGING, SELECT_BASE_FOR_REZZ, SELECT_TARGET_FOR_HEAL;
 	}
 
 	/**
@@ -113,7 +113,7 @@ public class GamePanelLogic extends ClientGuiStepLogic implements
 
 	private void initUserInterface() {
 		userInterface = new UserInterface(infoPro, mouseHandler, mouseHandler,
-				hudNotifier, cache);
+				hudNotifier, reactor, cache);
 		renderer = new GameRenderer(camera, userInterface, infoPro, data);
 		userInterface.setRenderer(renderer);
 		// renderer.setTarget(gui);
@@ -173,6 +173,13 @@ public class GamePanelLogic extends ClientGuiStepLogic implements
 		gui.removeComponentListener(resizeMonitor);
 		cml.stop();
 		stopTimedTasks();
+	}
+
+	/**
+	 * @return the current gamecamera.
+	 */
+	public GameCamera getCamera() {
+		return camera;
 	}
 
 	/**

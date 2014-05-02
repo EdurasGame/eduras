@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.Map;
 
 import org.newdawn.slick.geom.Rectangle;
+import org.newdawn.slick.geom.Vector2f;
 
 import de.illonis.eduras.ObjectFactory.ObjectType;
 import de.illonis.eduras.Player;
@@ -130,5 +131,10 @@ public class InformationProvider implements InfoInterface {
 	@Override
 	public Collection<GameObject> findObjectsByType(ObjectType type) {
 		return logic.getGame().findObjectsByType(type);
+	}
+
+	@Override
+	public Collection<GameObject> findObjectsAt(Vector2f point) {
+		return logic.getGame().findObjectsAt(point);
 	}
 }
