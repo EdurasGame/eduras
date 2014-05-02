@@ -53,6 +53,13 @@ public class Edura extends TeamDeathmatch {
 
 	@Override
 	public void onTimeUp() {
+		gameInfo.getEventTriggerer().setRemainingTime(
+				gameInfo.getGameSettings().getRoundTime());
+
+		for (NeutralBase aNeutralBase : baseToVertex.keySet()) {
+			aNeutralBase.setResourceGenerateMultiplicator(aNeutralBase
+					.getResourceGenerateMultiplicator() + 1);
+		}
 	}
 
 	@Override
@@ -234,9 +241,8 @@ public class Edura extends TeamDeathmatch {
 		@Override
 		public void onIntervalElapsed(long delta) {
 			gameInfo.getEventTriggerer().changeResourcesOfTeamByAmount(team,
-					base.getResourceGenerateAmount());
+					base.getResourceGenerateAmountPerTimeInterval());
 		}
-
 	}
 
 	@Override

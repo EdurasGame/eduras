@@ -24,6 +24,7 @@ public class NeutralBase extends NeutralArea {
 
 	private final long resourceGenerateTimeInterval;
 	private final int resourceGenerateAmount;
+	private int resourceGenerateMultiplicator;
 
 	/**
 	 * @param game
@@ -39,7 +40,8 @@ public class NeutralBase extends NeutralArea {
 			int mult) {
 		super(game, timingSource, id);
 		setTimeNeeded(S.neutralbase_overtaketime_default);
-		resourceGenerateAmount = S.neutralbase_resource_baseamount * mult;
+		resourceGenerateAmount = S.neutralbase_resource_baseamount;
+		resourceGenerateMultiplicator = mult;
 		resourceGenerateTimeInterval = S.neutralbase_resource_interval;
 	}
 
@@ -75,12 +77,22 @@ public class NeutralBase extends NeutralArea {
 
 	/**
 	 * Returns the amount of resources this base generates in one period of the
-	 * interval.
+	 * interval without taking into account the multiplicator.
 	 * 
 	 * @return amount of resources
 	 */
 	public int getResourceGenerateAmount() {
 		return resourceGenerateAmount;
+	}
+
+	/**
+	 * Returns the amount of resources this base generates in one period of the
+	 * interval.
+	 * 
+	 * @return amount of resources
+	 */
+	public int getResourceGenerateAmountPerTimeInterval() {
+		return resourceGenerateAmount * resourceGenerateMultiplicator;
 	}
 
 	/**
@@ -90,5 +102,14 @@ public class NeutralBase extends NeutralArea {
 	 */
 	public long getResourceGenerateTimeInterval() {
 		return resourceGenerateTimeInterval;
+	}
+
+	public int getResourceGenerateMultiplicator() {
+		return resourceGenerateMultiplicator;
+	}
+
+	public void setResourceGenerateMultiplicator(
+			int resourceGenerateMultiplicator) {
+		this.resourceGenerateMultiplicator = resourceGenerateMultiplicator;
 	}
 }

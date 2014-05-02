@@ -402,7 +402,12 @@ public class ServerEventTriggerer implements EventTriggerer {
 
 	@Override
 	public void setRemainingTime(long remainingTime) {
-		// TODO Auto-generated method stub
+		gameInfo.getGameSettings().changeTime(remainingTime);
+
+		SetRemainingTimeEvent setTimeEvent = new SetRemainingTimeEvent(
+				remainingTime);
+
+		sendEvents(setTimeEvent);
 	}
 
 	@Override
