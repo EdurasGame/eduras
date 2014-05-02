@@ -18,6 +18,7 @@ import de.illonis.eduras.gameclient.gui.game.UserInputListener;
 import de.illonis.eduras.gameclient.gui.hud.ActionBarPage.PageNumber;
 import de.illonis.eduras.gameclient.gui.hud.actionbar.HealButton;
 import de.illonis.eduras.gameclient.gui.hud.actionbar.ResurrectPage;
+import de.illonis.eduras.gameclient.gui.hud.actionbar.SpawnObserverButton;
 import de.illonis.eduras.logicabstraction.EdurasInitializer;
 import de.illonis.eduras.logicabstraction.InformationProvider;
 import de.illonis.eduras.networking.ClientRole;
@@ -126,6 +127,8 @@ public class UserInterface implements GuiResizeListener, UserInputListener {
 				actionBar.setPage(PageNumber.MAIN);
 			}
 		};
+		SpawnObserverButton spawnButton = new SpawnObserverButton(guiReactor);
+		mainPage.addButton(spawnButton);
 		HealButton healButton = new HealButton(guiReactor);
 		mainPage.addButton(healButton);
 		ActionButton resurrectButton = new ActionButton("resurrect",

@@ -4,6 +4,7 @@ import java.awt.geom.Rectangle2D;
 
 import org.newdawn.slick.geom.Vector2f;
 
+import de.illonis.eduras.ObjectFactory.ObjectType;
 import de.illonis.eduras.Player;
 import de.illonis.eduras.exceptions.NotWithinBaseException;
 import de.illonis.eduras.gameclient.gui.game.GamePanelLogic.ClickState;
@@ -110,6 +111,16 @@ public interface GamePanelReactor {
 	 *            the target location.
 	 */
 	void sendSelectedUnits(Vector2f target);
+
+	/**
+	 * Spawns a unit at given base.
+	 * 
+	 * @param type
+	 *            the type of unit to spawn.
+	 * @param base
+	 *            the base to spawn unit at.
+	 */
+	void onUnitSpawned(ObjectType type, NeutralBase base);
 
 	/**
 	 * Sets current click state in gui.

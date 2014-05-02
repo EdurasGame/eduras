@@ -10,7 +10,9 @@ import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.Vector2f;
 
 import de.illonis.edulog.EduLog;
+import de.illonis.eduras.ObjectFactory.ObjectType;
 import de.illonis.eduras.Player;
+import de.illonis.eduras.events.CreateUnitEvent;
 import de.illonis.eduras.events.GameEvent.GameEventNumber;
 import de.illonis.eduras.events.HealActionEvent;
 import de.illonis.eduras.events.ItemEvent;
@@ -321,4 +323,23 @@ public class GuiInternalEventListener implements LoginPanelReactor,
 		client.getFrame().getGamePanel().setClickState(newState);
 	}
 
+	@Override
+	public void onUnitSpawned(ObjectType type, NeutralBase base) {
+		Player player;
+		try {
+			player = infoPro.getPlayer();
+		} catch (ObjectNotFoundException e) {
+			L.log(Level.SEVERE, "Player not found spawning observer.", e);
+			return;
+		}
+		CreateUnitEvent event = new CreateUnitEvent(player.getPlayerId(), type,
+				base.getId());
+		try {
+			client.sendEvent(event);
+			client.getFrame().getGamePanel()
+					.showNotification("Spawning observer...");
+		} catch (WrongEventTypeException | MessageNotSupportedException e) {
+			L.log(Level.SEVERE, "Error sending spawn observer event", e);
+		}
+	}
 }

@@ -21,7 +21,6 @@ import de.illonis.eduras.logicabstraction.EdurasInitializer;
 import de.illonis.eduras.math.Line;
 import de.illonis.eduras.math.Vector2df;
 import de.illonis.eduras.settings.S;
-import de.illonis.eduras.units.PlayerMainFigure;
 
 /**
  * The {@link LogicGameWorker} on client side.
@@ -72,10 +71,9 @@ public class ClientLogicGameWorker extends LogicGameWorker {
 
 		int playerOwner = EdurasInitializer.getInstance()
 				.getInformationProvider().getOwnerID();
-		PlayerMainFigure player;
+		Player player;
 		try {
-			player = gameInformation.getPlayerByOwnerId(playerOwner)
-					.getPlayerMainFigure();
+			player = gameInformation.getPlayerByOwnerId(playerOwner);
 		} catch (ObjectNotFoundException e) {
 			L.log(Level.SEVERE, "Player has no mainfigure.", e);
 			return;

@@ -41,7 +41,7 @@ public class CreateUnitAction extends RTSAction {
 	protected void executeAction(GameInformation info) {
 		if (baseToSpawnAt.getCurrentOwnerTeam() == null
 				|| !baseToSpawnAt.getCurrentOwnerTeam().equals(
-						getExecutingPlayer())) {
+						getExecutingPlayer().getTeam())) {
 			L.warning("Player tried to spawn a unit at a base that is not his own. Should already be caught on client.");
 			return;
 		}

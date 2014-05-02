@@ -12,6 +12,8 @@ import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.Vector2f;
 
 import de.illonis.edulog.EduLog;
+import de.illonis.eduras.ObjectFactory.ObjectType;
+import de.illonis.eduras.Player;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
 import de.illonis.eduras.gameclient.GuiInternalEventListener;
 import de.illonis.eduras.gameclient.gui.game.GamePanelLogic.ClickState;
@@ -58,7 +60,6 @@ public class BuildModeMouseAdapter extends GuiMouseAdapter {
 			break;
 		case SELECT_TARGET_FOR_HEAL:
 			if (button == Input.MOUSE_LEFT_BUTTON) {
-				System.out.println("try healing");
 				InformationProvider infoPro = EdurasInitializer.getInstance()
 						.getInformationProvider();
 
@@ -72,19 +73,59 @@ public class BuildModeMouseAdapter extends GuiMouseAdapter {
 							"Player not found while selecting healtarget.", e);
 					return;
 				}
-				System.out.println("found " + obs.size() + " units.");
 				for (GameObject gameObject : obs) {
 
 					if (gameObject.isUnit()
 							&& infoPro.getGameMode().getRelation(gameObject,
 									player) == Relation.ALLIED) {
-						System.out.println(gameObject.getType());
 						getListener().onUnitHeal((Unit) gameObject);
 						getPanelLogic().setClickState(ClickState.DEFAULT);
 						return;
 					}
 				}
 
+			} else {
+				getPanelLogic().setClickState(ClickState.DEFAULT);
+			}
+			break;
+		case SELECT_POSITION_FOR_OBSERVERUNIT:
+			if (button == Input.MOUSE_LEFT_BUTTON) {
+				InformationProvider infoPro = EdurasInitializer.getInstance()
+						.getInformationProvider();
+				Player player;
+				try {
+					player = infoPro.getPlayer();
+				} catch (ObjectNotFoundException e) {
+					L.log(Level.SEVERE,
+							"Could not find player while spawning observer unit.",
+							e);
+					return;
+				}
+				LinkedList<GameObject> obs = new LinkedList<GameObject>(
+						EdurasInitializer.getInstance()
+								.getInformationProvider()
+								.findObjectsAt(clickGamePoint));
+
+				for (GameObject gameObject : obs) {
+					if (gameObject instanceof NeutralBase) {
+
+						if (((NeutralBase) gameObject).getCurrentOwnerTeam() == player
+								.getTeam()) {
+							getListener().onUnitSpawned(ObjectType.OBSERVER,
+									(NeutralBase) gameObject);
+							getPanelLogic().setClickState(ClickState.DEFAULT);
+							return;
+						} else {
+							getPanelLogic()
+									.showNotification(
+											"You can only spawn observers in bases your team owns.");
+							return;
+						}
+					}
+				}
+				getPanelLogic()
+						.showNotification(
+								"Please select a base owned by your team to spawn a observer");
 			} else {
 				getPanelLogic().setClickState(ClickState.DEFAULT);
 			}

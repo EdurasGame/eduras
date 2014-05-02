@@ -272,8 +272,8 @@ public class ServerLogic implements GameLogicInterface {
 						baseToCreateAt);
 				createUnitAction.execute(gameInfo);
 			} catch (ObjectNotFoundException ex) {
-				L.log(Level.WARNING,
-						"Cannot find player when receiving heal action.", ex);
+				L.log(Level.WARNING, "Cannot find player when creating unit.",
+						ex);
 				break;
 			} catch (WrongObjectTypeException e1) {
 				L.log(Level.WARNING, "Trying to spawn a non-unit type!", e1);
