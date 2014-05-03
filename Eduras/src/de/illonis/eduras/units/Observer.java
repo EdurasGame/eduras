@@ -44,7 +44,6 @@ public class Observer extends ControlledUnit {
 
 	@Override
 	public void onCollision(GameObject collidingObject) {
-		System.out.println("colliding with " + collidingObject.getType());
 		// stop all movement
 		ai.discard();
 	}

@@ -59,6 +59,13 @@ public class MovingUnitAI implements UnitAI {
 		return unit;
 	}
 
+	/**
+	 * @return the mover.
+	 */
+	public UnitMover getMover() {
+		return mover;
+	}
+
 	@Override
 	public void discard() {
 		mover.stopMovement();

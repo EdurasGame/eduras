@@ -49,13 +49,13 @@ public final class S {
 	 * Max distance of an AI object to its destination at which the target is
 	 * assumed to be reached.
 	 */
-	public static double ai_target_reached_distance = 30;
+	public static double ai_target_reached_distance = 5;
 
 	/**
 	 * Denotes the interval in which an AI object's motion behavior is updated
 	 * by the AI.
 	 */
-	public static long ai_motion_update_interval = 800;
+	public static long ai_motion_update_interval = 20;
 
 	/**
 	 * Denotes the width of a {@link BigBlock} object.

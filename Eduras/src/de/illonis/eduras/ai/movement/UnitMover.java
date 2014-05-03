@@ -2,8 +2,6 @@ package de.illonis.eduras.ai.movement;
 
 import org.newdawn.slick.geom.Vector2f;
 
-import de.illonis.eduras.settings.S;
-
 /**
  * Allows commanding of a unit and keeps track of pathfinder and motion of a
  * unit.
@@ -14,10 +12,11 @@ import de.illonis.eduras.settings.S;
 public final class UnitMover {
 
 	private final PathFinder pathFinder;
-	private Thread currentMotion;
 	private final MotionAIControllable motionUnit;
+	private boolean active;
 
 	UnitMover(MotionAIControllable motionTarget) {
+		active = false;
 		pathFinder = PathFinderFactory.getFinderFor(motionTarget
 				.getMotionType());
 		this.motionUnit = motionTarget;
@@ -25,42 +24,29 @@ public final class UnitMover {
 
 	void startMoving(Vector2f target) {
 		pathFinder.setTarget(target);
-		if (!isActive()) {
-			System.out.println("create moveer");
-			currentMotion = new MoverThread();
-			currentMotion.start();
-		}
+		active = true;
 	}
 
 	void stopMovement() {
-		currentMotion.interrupt();
+		active = false;
 	}
 
-	boolean isActive() {
-		if (currentMotion == null)
-			return false;
-		return currentMotion.isAlive();
+	/**
+	 * @return true if movement AI is active.
+	 */
+	public boolean isActive() {
+		return active;
 	}
 
-	private class MoverThread extends Thread {
-
-		public MoverThread() {
-			super("MoverThread");
-		}
-
-		@Override
-		public void run() {
-			while (!pathFinder.hasReachedTarget()) {
-				motionUnit.startMovingTo(pathFinder.getMovingDirection());
-				try {
-					Thread.sleep(S.ai_motion_update_interval);
-				} catch (InterruptedException e) {
-					break;
-				}
-				pathFinder.setLocation(motionUnit.getPosition());
-			}
-			System.out.println("stopping");
+	/**
+	 * Checks for new targets.
+	 */
+	public void check() {
+		pathFinder.setLocation(motionUnit.getPosition());
+		if (pathFinder.hasReachedTarget()) {
 			motionUnit.stopMoving();
+			return;
 		}
+		motionUnit.startMovingTo(pathFinder.getMovingDirection());
 	}
 }

@@ -1,6 +1,9 @@
 package de.illonis.eduras.logic;
 
 import de.illonis.eduras.GameInformation;
+import de.illonis.eduras.ai.movement.MotionAIControllable;
+import de.illonis.eduras.ai.movement.MovingUnitAI;
+import de.illonis.eduras.ai.movement.UnitMover;
 import de.illonis.eduras.events.GameEvent.GameEventNumber;
 import de.illonis.eduras.events.SetBooleanGameObjectAttributeEvent;
 import de.illonis.eduras.events.SetVisibilityEvent;
@@ -50,6 +53,13 @@ public class ServerLogicGameWorker extends LogicGameWorker {
 			if (o instanceof MoveableGameObject) {
 				MoveableGameObject mgo = (MoveableGameObject) o;
 				mgo.onMove(delta, geometry);
+				if (o instanceof MotionAIControllable) {
+					MovingUnitAI ai = (MovingUnitAI) ((MotionAIControllable) o)
+							.getAI();
+					UnitMover mover = ai.getMover();
+					if (mover.isActive())
+						mover.check();
+				}
 				if (listenerHolder.hasListener())
 					listenerHolder.getListener().onNewObjectPosition(o);
 				gameInformation.getEventTriggerer().notifyNewObjectPosition(o);

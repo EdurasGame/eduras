@@ -19,10 +19,6 @@ public class DirectPathFinder implements PathFinder {
 	private Vector2f direction;
 	private float oldDistance = Float.MAX_VALUE;
 
-	public DirectPathFinder() {
-		oldDistance = Float.MAX_VALUE;
-	}
-
 	private void recalculateDirection() {
 		direction = new Vector2f(target);
 		direction.sub(location);
@@ -30,6 +26,7 @@ public class DirectPathFinder implements PathFinder {
 
 	@Override
 	public void setTarget(Vector2f target) {
+		oldDistance = Float.MAX_VALUE;
 		this.target = target;
 		waypoints = new Vector2f[] { target };
 		recalculateDirection();
@@ -47,7 +44,7 @@ public class DirectPathFinder implements PathFinder {
 		if (oldDistance < distance)
 			return true;
 		oldDistance = distance;
-		return distance < S.ai_target_reached_distance;
+		return distance <= S.ai_target_reached_distance;
 	}
 
 	@Override
