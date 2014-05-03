@@ -61,7 +61,7 @@ public class SendUnitsEvent extends OwnerGameEvent {
 
 	@Override
 	public int getNumberOfArguments() {
-		return units.size() + 2;
+		return units.size() + 3;
 	}
 
 }
