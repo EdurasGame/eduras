@@ -210,12 +210,10 @@ public class GuiInternalEventListener implements LoginPanelReactor,
 					&& o.isVisibleFor(p)
 					&& infoPro.getGameMode().getRelation(o, p) == Relation.ALLIED
 					&& Geometry.shapeCollides(o.getShape(), r)) {
-
 				ids.add(obj.getKey());
 			}
 		}
 		client.getData().setSelectedUnits(ids);
-
 	}
 
 	@Override

@@ -13,6 +13,7 @@ import de.illonis.eduras.ObjectFactory.ObjectType;
 import de.illonis.eduras.Player;
 import de.illonis.eduras.Team;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
+import de.illonis.eduras.gameclient.userprefs.KeyBindings.KeyBinding;
 import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.gameobjects.NeutralBase;
 import de.illonis.eduras.gameobjects.TimedEventHandler;
@@ -159,6 +160,10 @@ public class Edura extends TeamDeathmatch {
 			boolean ofThisTeam = true;
 			for (GameObject go : presentObjects) {
 				Unit unit = (Unit) go;
+				if (unit.getTeam() == null) {
+					ofThisTeam = false;
+					break;
+				}
 				if (!unit.getTeam().equals(team)) {
 					ofThisTeam = false;
 					break;
@@ -282,5 +287,10 @@ public class Edura extends TeamDeathmatch {
 		default:
 			return false;
 		}
+	}
+
+	@Override
+	public boolean supportsKeyBinding(KeyBinding binding) {
+		return true;
 	}
 }

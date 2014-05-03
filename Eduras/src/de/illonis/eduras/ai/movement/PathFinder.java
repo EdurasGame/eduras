@@ -61,6 +61,6 @@ public interface PathFinder {
 	 * 
 	 * @return total distance.
 	 */
-	double getDistance();
+	float getDistance();
 
 }

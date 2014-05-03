@@ -266,6 +266,7 @@ public class ObjectFactory {
 				break;
 			case OBSERVER:
 				go = new Observer(logic.getGame(), timingSource, id, owner);
+				break;
 			default:
 				return;
 			}

@@ -14,6 +14,7 @@ import de.illonis.eduras.gameclient.userprefs.KeyBindings.KeyBinding;
 import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.gameobjects.GameObject.Relation;
 import de.illonis.eduras.maps.SpawnPosition.SpawnType;
+import de.illonis.eduras.units.InteractMode;
 import de.illonis.eduras.units.PlayerMainFigure;
 
 /**
@@ -138,6 +139,11 @@ public class TeamDeathmatch extends Deathmatch {
 
 	@Override
 	public boolean supportsKeyBinding(KeyBinding binding) {
+		return true;
+	}
+
+	@Override
+	public boolean canSwitchMode(Player player, InteractMode mode) {
 		return true;
 	}
 }

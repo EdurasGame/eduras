@@ -49,13 +49,13 @@ public final class S {
 	 * Max distance of an AI object to its destination at which the target is
 	 * assumed to be reached.
 	 */
-	public static double ai_target_reached_distance = 10;
+	public static double ai_target_reached_distance = 30;
 
 	/**
 	 * Denotes the interval in which an AI object's motion behavior is updated
 	 * by the AI.
 	 */
-	public static long ai_motion_update_interval = 400;
+	public static long ai_motion_update_interval = 800;
 
 	/**
 	 * Denotes the width of a {@link BigBlock} object.
@@ -484,6 +484,8 @@ public final class S {
 	public static float unit_observer_visionrange = 300f;
 
 	public static int unit_observer_costs = 100;
+
+	public static float unit_observer_speed = 100;
 
 	/**
 	 * Reads values from the file and writes them to the S classes attributes.

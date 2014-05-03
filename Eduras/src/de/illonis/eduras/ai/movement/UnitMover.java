@@ -26,6 +26,7 @@ public final class UnitMover {
 	void startMoving(Vector2f target) {
 		pathFinder.setTarget(target);
 		if (!isActive()) {
+			System.out.println("create moveer");
 			currentMotion = new MoverThread();
 			currentMotion.start();
 		}
@@ -50,14 +51,15 @@ public final class UnitMover {
 		@Override
 		public void run() {
 			while (!pathFinder.hasReachedTarget()) {
-				pathFinder.setLocation(motionUnit.getPosition());
 				motionUnit.startMovingTo(pathFinder.getMovingDirection());
 				try {
 					Thread.sleep(S.ai_motion_update_interval);
 				} catch (InterruptedException e) {
 					break;
 				}
+				pathFinder.setLocation(motionUnit.getPosition());
 			}
+			System.out.println("stopping");
 			motionUnit.stopMoving();
 		}
 	}

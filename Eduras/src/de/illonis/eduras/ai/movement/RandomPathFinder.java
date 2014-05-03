@@ -65,7 +65,7 @@ public final class RandomPathFinder implements PathFinder {
 	}
 
 	@Override
-	public double getDistance() {
-		return Double.MAX_VALUE;
+	public float getDistance() {
+		return Float.MAX_VALUE;
 	}
 }
