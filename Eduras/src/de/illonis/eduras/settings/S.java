@@ -487,6 +487,14 @@ public final class S {
 
 	public static float unit_observer_speed = 100;
 
+	public static float spell_scout_visionrange = 300f;
+
+	public static float spell_scout_visionangle = 360f;
+
+	public static int spell_scout_costs = 50;
+
+	public static long spell_scout_duration = 3000;
+
 	/**
 	 * Reads values from the file and writes them to the S classes attributes.
 	 * 

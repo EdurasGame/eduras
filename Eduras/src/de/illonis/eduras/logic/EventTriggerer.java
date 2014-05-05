@@ -64,7 +64,7 @@ public interface EventTriggerer {
 	 * 
 	 * @param type
 	 *            The type of the dynamic polygon.
-	 * @param polygonVector2dfs
+	 * @param polygonVector2fs
 	 *            vertices of polygon.
 	 * @param position
 	 *            position of polygon.
@@ -74,7 +74,7 @@ public interface EventTriggerer {
 	 * @author illonis
 	 */
 	void createDynamicPolygonObjectAt(ObjectType type,
-			Vector2df[] polygonVector2dfs, Vector2df position, int owner);
+			Vector2f[] polygonVector2fs, Vector2f position, int owner);
 
 	/**
 	 * Creates an object at given position.
@@ -86,24 +86,22 @@ public interface EventTriggerer {
 	 * @param owner
 	 *            owner id of new object.
 	 * @return the id of the created object.
-	 * @see #createDynamicPolygonObjectAt(ObjectType, Vector2df[], Vector2df,
-	 *      int)
+	 * @see #createDynamicPolygonObjectAt(ObjectType, Vector2f[], Vector2f, int)
 	 */
-	public int createObjectAt(ObjectType object, Vector2df position, int owner);
+	public int createObjectAt(ObjectType object, Vector2f position, int owner);
 
 	/**
 	 * Sets polygon data of a polygon with given id.
 	 * 
 	 * @param objectId
 	 *            object id of polygon.
-	 * @param polygonVector2dfs
+	 * @param polygonVector2fs
 	 *            new vertices of polygon.
-	 * @see #createDynamicPolygonObjectAt(ObjectType, Vector2df[], Vector2df,
-	 *      int)
+	 * @see #createDynamicPolygonObjectAt(ObjectType, Vector2f[], Vector2f, int)
 	 * 
 	 * @author illonis
 	 */
-	public void setPolygonData(int objectId, Vector2df[] polygonVector2dfs);
+	public void setPolygonData(int objectId, Vector2f[] polygonVector2fs);
 
 	/**
 	 * Creates an object.

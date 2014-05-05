@@ -30,6 +30,7 @@ import de.illonis.eduras.events.ObjectFactoryEvent;
 import de.illonis.eduras.events.OwnerGameEvent;
 import de.illonis.eduras.events.RespawnEvent;
 import de.illonis.eduras.events.ResurrectPlayerEvent;
+import de.illonis.eduras.events.ScoutSpellEvent;
 import de.illonis.eduras.events.SendUnitsEvent;
 import de.illonis.eduras.events.SetAmmunitionEvent;
 import de.illonis.eduras.events.SetBooleanGameObjectAttributeEvent;
@@ -153,6 +154,12 @@ public class EventParser implements EventHandler {
 				logic.onGameEventAppeared(new SetIntegerGameObjectAttributeEvent(
 						GameEventNumber.SET_SPEED, (Integer) event
 								.getArgument(0), (Integer) event.getArgument(1)));
+				break;
+			case SPELL_SCOUT:
+				System.out.println("scout!");
+				logic.onGameEventAppeared(new ScoutSpellEvent((int) event
+						.getArgument(0), new Vector2f((float) event
+						.getArgument(1), (float) event.getArgument(2))));
 				break;
 			case SET_ROTATION:
 				logic.onGameEventAppeared(new SetFloatGameObjectAttributeEvent(

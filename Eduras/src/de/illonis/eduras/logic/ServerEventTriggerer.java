@@ -184,7 +184,7 @@ public class ServerEventTriggerer implements EventTriggerer {
 	}
 
 	@Override
-	public int createObjectAt(ObjectType object, Vector2df position, int owner) {
+	public int createObjectAt(ObjectType object, Vector2f position, int owner) {
 
 		ObjectFactoryEvent newObjectEvent = new ObjectFactoryEvent(
 				GameEventNumber.OBJECT_CREATE, object, owner);
@@ -545,13 +545,13 @@ public class ServerEventTriggerer implements EventTriggerer {
 
 	@Override
 	public void createDynamicPolygonObjectAt(ObjectType type,
-			Vector2df[] polygonVector2dfs, Vector2df position, int owner) {
+			Vector2f[] polygonVector2fs, Vector2f position, int owner) {
 		int objId = createObjectAt(type, position, owner);
-		setPolygonData(objId, polygonVector2dfs);
+		setPolygonData(objId, polygonVector2fs);
 	}
 
 	@Override
-	public void setPolygonData(int objectId, Vector2df[] polygonVertices) {
+	public void setPolygonData(int objectId, Vector2f[] polygonVertices) {
 		GameObject object = gameInfo.findObjectById(objectId);
 		if (object instanceof DynamicPolygonObject) {
 			DynamicPolygonObject block = (DynamicPolygonObject) object;

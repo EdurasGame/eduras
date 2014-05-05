@@ -42,6 +42,7 @@ import de.illonis.eduras.math.Vector2df;
 import de.illonis.eduras.settings.S;
 import de.illonis.eduras.units.Observer;
 import de.illonis.eduras.units.PlayerMainFigure;
+import de.illonis.eduras.units.ScoutSpell;
 
 /**
  * ObjectFactory is in charge of handling Objectfactory events and creating and
@@ -72,7 +73,7 @@ public class ObjectFactory {
 				15), SWORDMISSILE(16), BIRD(17), ROCKETLAUNCHER(18), ROCKET_MISSILE(
 				19), MINELAUNCHER(20), MINE_MISSILE(21), ASSAULTRIFLE(22), ASSAULT_MISSILE(
 				23), MAPBOUNDS(24), TRIGGER_AREA(25), NEUTRAL_BASE(26), OBSERVER(
-				30);
+				30), SPELL_SCOUT(31);
 
 		private int number;
 
@@ -110,6 +111,7 @@ public class ObjectFactory {
 
 		public boolean isUnit() {
 			switch (this) {
+			case SPELL_SCOUT:
 			case OBSERVER:
 				return true;
 			default:
@@ -266,6 +268,9 @@ public class ObjectFactory {
 				break;
 			case OBSERVER:
 				go = new Observer(logic.getGame(), timingSource, id, owner);
+				break;
+			case SPELL_SCOUT:
+				go = new ScoutSpell(logic.getGame(), timingSource, id, owner);
 				break;
 			default:
 				return;

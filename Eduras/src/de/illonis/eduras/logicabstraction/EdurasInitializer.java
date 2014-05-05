@@ -87,14 +87,13 @@ public class EdurasInitializer {
 			}
 
 			@Override
-			public int createObjectAt(ObjectType object, Vector2df position,
+			public int createObjectAt(ObjectType object, Vector2f position,
 					int owner) {
 				return -1;
 			}
 
 			@Override
-			public void setPolygonData(int objectId,
-					Vector2df[] polygonVector2dfs) {
+			public void setPolygonData(int objectId, Vector2f[] polygonVector2fs) {
 			}
 
 			@Override
@@ -242,7 +241,7 @@ public class EdurasInitializer {
 
 			@Override
 			public void createDynamicPolygonObjectAt(ObjectType type,
-					Vector2df[] polygonVector2dfs, Vector2df position, int owner) {
+					Vector2f[] polygonVector2fs, Vector2f position, int owner) {
 			}
 
 			@Override

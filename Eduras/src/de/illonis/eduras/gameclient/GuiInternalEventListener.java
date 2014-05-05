@@ -17,6 +17,7 @@ import de.illonis.eduras.events.GameEvent.GameEventNumber;
 import de.illonis.eduras.events.HealActionEvent;
 import de.illonis.eduras.events.ItemEvent;
 import de.illonis.eduras.events.ResurrectPlayerEvent;
+import de.illonis.eduras.events.ScoutSpellEvent;
 import de.illonis.eduras.events.SendUnitsEvent;
 import de.illonis.eduras.events.SwitchInteractModeEvent;
 import de.illonis.eduras.events.UserMovementEvent;
@@ -341,5 +342,26 @@ public class GuiInternalEventListener implements LoginPanelReactor,
 		} catch (WrongEventTypeException | MessageNotSupportedException e) {
 			L.log(Level.SEVERE, "Error sending spawn observer event", e);
 		}
+	}
+
+	@Override
+	public void onSpawnScout(Vector2f target) {
+		Player player;
+		try {
+			player = infoPro.getPlayer();
+		} catch (ObjectNotFoundException e) {
+			L.log(Level.SEVERE, "Player not found spawning observer.", e);
+			return;
+		}
+		ScoutSpellEvent event = new ScoutSpellEvent(player.getPlayerId(),
+				target);
+		try {
+			client.sendEvent(event);
+			client.getFrame().getGamePanel()
+					.showNotification("Vision spell...");
+		} catch (WrongEventTypeException | MessageNotSupportedException e) {
+			L.log(Level.SEVERE, "Error casting vision spell event", e);
+		}
+
 	}
 }

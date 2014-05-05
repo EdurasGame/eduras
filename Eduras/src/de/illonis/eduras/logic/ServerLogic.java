@@ -14,6 +14,7 @@ import de.illonis.eduras.Player;
 import de.illonis.eduras.actions.CreateUnitAction;
 import de.illonis.eduras.actions.HealSpellAction;
 import de.illonis.eduras.actions.RespawnPlayerAction;
+import de.illonis.eduras.actions.ScoutSpellAction;
 import de.illonis.eduras.actions.SpawnItemAction;
 import de.illonis.eduras.ai.movement.UnitNotControllableException;
 import de.illonis.eduras.events.ClientRenameEvent;
@@ -25,6 +26,7 @@ import de.illonis.eduras.events.HealActionEvent;
 import de.illonis.eduras.events.InitInformationEvent;
 import de.illonis.eduras.events.ItemEvent;
 import de.illonis.eduras.events.ResurrectPlayerEvent;
+import de.illonis.eduras.events.ScoutSpellEvent;
 import de.illonis.eduras.events.SendUnitsEvent;
 import de.illonis.eduras.events.SetFloatGameObjectAttributeEvent;
 import de.illonis.eduras.events.SpawnItemEvent;
@@ -216,6 +218,20 @@ public class ServerLogic implements GameLogicInterface {
 				respawnPlayerAction.execute(gameInfo);
 			} catch (ObjectNotFoundException e1) {
 				L.log(Level.WARNING, "Couldn't find player!", e1);
+				return;
+			}
+			break;
+		case SPELL_SCOUT:
+			ScoutSpellEvent scoutEvent = (ScoutSpellEvent) event;
+			Player player;
+			try {
+				player = gameInfo.getPlayerByOwnerId(scoutEvent.getOwner());
+				ScoutSpellAction scoutAction = new ScoutSpellAction(player,
+						scoutEvent.getTarget());
+				scoutAction.execute(gameInfo);
+			} catch (ObjectNotFoundException e1) {
+				L.log(Level.WARNING,
+						"Something went wrong casting scout spell.", e1);
 				return;
 			}
 			break;

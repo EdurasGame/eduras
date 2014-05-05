@@ -88,6 +88,14 @@ public interface GamePanelReactor {
 	void onGameQuit();
 
 	/**
+	 * Scout spell.
+	 * 
+	 * @param target
+	 *            target location.
+	 */
+	void onSpawnScout(Vector2f target);
+
+	/**
 	 * Indicates a mode switch.
 	 * 
 	 * @throws NotWithinBaseException

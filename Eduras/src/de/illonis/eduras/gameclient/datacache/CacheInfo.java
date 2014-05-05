@@ -22,7 +22,7 @@ public final class CacheInfo {
 	 */
 	@SuppressWarnings("javadoc")
 	public enum ImageKey {
-		STATISTICS_BG, MINIMAP_DUMMY, RESOURCE_ICON, ACTION_HEAL, ACTION_RESURRECT, ACTION_RESURRECT_PLAYER, ACTION_ABORT, ACTION_SPAWN_OBSERVER;
+		STATISTICS_BG, MINIMAP_DUMMY, RESOURCE_ICON, ACTION_HEAL, ACTION_RESURRECT, ACTION_RESURRECT_PLAYER, ACTION_ABORT, ACTION_SPAWN_OBSERVER, ACTION_SPELL_SCOUT;
 	}
 
 	/**
@@ -76,6 +76,8 @@ public final class CacheInfo {
 		guiImages.put(ImageKey.ACTION_ABORT, "gui/icons/icon-abort.png");
 		guiImages.put(ImageKey.ACTION_SPAWN_OBSERVER,
 				"gui/icons/icon-spawn-observer.png");
+		guiImages.put(ImageKey.ACTION_SPELL_SCOUT,
+				"gui/icons/icon-spell-scout.png");
 
 		imageIcons = new HashMap<ImageKey, String>();
 	}

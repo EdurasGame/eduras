@@ -57,6 +57,12 @@ public class BuildModeMouseAdapter extends GuiMouseAdapter {
 				getListener().selectOrDeselectAt(clickGamePoint);
 			}
 			break;
+		case SELECT_POSITION_FOR_SCOUT:
+			if (button == Input.MOUSE_LEFT_BUTTON) {
+				getListener().onSpawnScout(clickGamePoint);
+			}
+			getListener().setClickState(ClickState.DEFAULT);
+			break;
 		case SELECT_TARGET_FOR_HEAL:
 			if (button == Input.MOUSE_LEFT_BUTTON) {
 				InformationProvider infoPro = EdurasInitializer.getInstance()

@@ -37,7 +37,7 @@ public abstract class GameEvent extends Event {
 				205), INFO_PLAYER_LEFT(206), PLAYER_JOINED(207), PLAYER_LEFT(
 				208), SET_ROTATION(80), SET_AMMU(125), SET_VISION_ANGLE(107), SET_VISION_RANGE(
 				108), SET_VISION_BLOCKING(109), SET_MAP(110), SET_TEAM_RESOURCE(
-				134);
+				134), SPELL_SCOUT(401);
 		private int number;
 
 		GameEventNumber(int num) {
