@@ -21,6 +21,7 @@ import de.illonis.eduras.events.ScoutSpellEvent;
 import de.illonis.eduras.events.SendUnitsEvent;
 import de.illonis.eduras.events.SwitchInteractModeEvent;
 import de.illonis.eduras.events.UserMovementEvent;
+import de.illonis.eduras.exceptions.InsufficientResourceException;
 import de.illonis.eduras.exceptions.MessageNotSupportedException;
 import de.illonis.eduras.exceptions.NotWithinBaseException;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
@@ -34,6 +35,7 @@ import de.illonis.eduras.logicabstraction.EdurasInitializer;
 import de.illonis.eduras.logicabstraction.InformationProvider;
 import de.illonis.eduras.math.Geometry;
 import de.illonis.eduras.math.Vector2df;
+import de.illonis.eduras.settings.S;
 import de.illonis.eduras.units.InteractMode;
 import de.illonis.eduras.units.PlayerMainFigure;
 import de.illonis.eduras.units.Unit;
@@ -274,6 +276,13 @@ public class GuiInternalEventListener implements LoginPanelReactor,
 
 	@Override
 	public void onPlayerRezz(Player player, NeutralBase base) {
+		try {
+			hasSufficientResources(player, S.gm_edura_action_respawnplayer_cost);
+		} catch (InsufficientResourceException e1) {
+			client.getFrame().getGamePanel().onActionFailed(e1);
+			return;
+		}
+
 		ResurrectPlayerEvent event = new ResurrectPlayerEvent(
 				client.getOwnerID(), player.getPlayerId(), base.getId());
 		if (!player.getPlayerMainFigure().isDead()) {
@@ -292,8 +301,16 @@ public class GuiInternalEventListener implements LoginPanelReactor,
 		}
 	}
 
+	private void hasSufficientResources(Player player, int neededAmount)
+			throws InsufficientResourceException {
+		if (player.getTeam().getResource() < neededAmount) {
+			throw new InsufficientResourceException(neededAmount);
+		}
+	}
+
 	@Override
 	public void onUnitHeal(Unit targetUnit) {
+
 		PlayerMainFigure player;
 		try {
 			player = infoPro.getPlayer().getPlayerMainFigure();
@@ -301,6 +318,14 @@ public class GuiInternalEventListener implements LoginPanelReactor,
 			L.log(Level.SEVERE, "Player not found while healing unit.", e);
 			return;
 		}
+
+		try {
+			hasSufficientResources(player.getPlayer(), S.spell_heal_costs);
+		} catch (InsufficientResourceException e1) {
+			client.getFrame().getGamePanel().onActionFailed(e1);
+			return;
+		}
+
 		HealActionEvent healEvent = new HealActionEvent(client.getOwnerID(),
 				targetUnit.getId());
 
@@ -326,6 +351,7 @@ public class GuiInternalEventListener implements LoginPanelReactor,
 
 	@Override
 	public void onUnitSpawned(ObjectType type, NeutralBase base) {
+
 		Player player;
 		try {
 			player = infoPro.getPlayer();
@@ -333,6 +359,14 @@ public class GuiInternalEventListener implements LoginPanelReactor,
 			L.log(Level.SEVERE, "Player not found spawning observer.", e);
 			return;
 		}
+
+		try {
+			hasSufficientResources(player, type.getCosts());
+		} catch (InsufficientResourceException e1) {
+			client.getFrame().getGamePanel().onActionFailed(e1);
+			return;
+		}
+
 		CreateUnitEvent event = new CreateUnitEvent(player.getPlayerId(), type,
 				base.getId());
 		try {
@@ -353,6 +387,14 @@ public class GuiInternalEventListener implements LoginPanelReactor,
 			L.log(Level.SEVERE, "Player not found spawning observer.", e);
 			return;
 		}
+
+		try {
+			hasSufficientResources(player, S.spell_scout_costs);
+		} catch (InsufficientResourceException e1) {
+			client.getFrame().getGamePanel().onActionFailed(e1);
+			return;
+		}
+
 		ScoutSpellEvent event = new ScoutSpellEvent(player.getPlayerId(),
 				target);
 		try {

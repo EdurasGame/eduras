@@ -118,6 +118,16 @@ public class ObjectFactory {
 				return false;
 			}
 		}
+
+		public int getCosts() {
+			switch (this) {
+			case OBSERVER:
+				return S.unit_observer_costs;
+			default:
+				return 0;
+
+			}
+		}
 	}
 
 	/**
