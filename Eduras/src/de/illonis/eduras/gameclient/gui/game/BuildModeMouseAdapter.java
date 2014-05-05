@@ -31,12 +31,10 @@ import de.illonis.eduras.units.Unit;
  * @author illonis
  * 
  */
-public class BuildModeMouseAdapter extends GuiMouseAdapter {
+public class BuildModeMouseAdapter extends ScrollModeMouseAdapter {
 
 	private final static Logger L = EduLog
 			.getLoggerFor(BuildModeMouseAdapter.class.getName());
-
-	private final static int SCROLL_MOUSE_PADDING = 30;
 
 	private Point startPoint;
 
@@ -207,32 +205,6 @@ public class BuildModeMouseAdapter extends GuiMouseAdapter {
 	@Override
 	public void mouseClicked(int button, int x, int y, int clickCount) {
 		buildModeClick(button, x, y, clickCount);
-	}
-
-	@Override
-	public void mouseMoved(int oldx, int oldy, int newx, int newy) {
-		Vector2f cameraMovement = getPanelLogic().getCamera()
-				.getCameraMovement();
-		// TODO: Make camera movement speed a user setting.
-
-		// scroll camera when mouse is near window border
-		// horizontal movement
-		if (newx < SCROLL_MOUSE_PADDING)
-			cameraMovement.x = -5;
-		else if (newx > getPanelLogic().getGui().getWidth()
-				- SCROLL_MOUSE_PADDING)
-			cameraMovement.x = 5;
-		else
-			cameraMovement.x = 0;
-
-		// vertical movement
-		if (newy < SCROLL_MOUSE_PADDING)
-			cameraMovement.y = -5;
-		else if (newy > getPanelLogic().getGui().getHeight()
-				- SCROLL_MOUSE_PADDING)
-			cameraMovement.y = 5;
-		else
-			cameraMovement.y = 0;
 	}
 
 	@Override
