@@ -111,12 +111,16 @@ public class Edura extends TeamDeathmatch {
 					NeutralBase mainBase = nodeIdToBase.get(nodeid);
 					mainBaseOfTeam.put(teamB, mainBase);
 					mainBase.setCurrentOwnerTeam(teamB);
+
+					startGeneratingResourcesInBaseForTeam(mainBase, teamB);
 				} else {
 					vertexForNode.setColor(teamA.getTeamId());
 					NeutralBase mainBase = nodeIdToBase.get(nodeid);
 					mainBaseOfTeam.put(teamA, mainBase);
 					mainBase.setCurrentOwnerTeam(teamA);
 					teamAHasMainNode = true;
+
+					startGeneratingResourcesInBaseForTeam(mainBase, teamA);
 				}
 			}
 		}
@@ -217,15 +221,20 @@ public class Edura extends TeamDeathmatch {
 			baseToVertex.get(base).setColor(occupyingTeam.getTeamId());
 		}
 
+		startGeneratingResourcesInBaseForTeam(base, occupyingTeam);
+	}
+
+	private void startGeneratingResourcesInBaseForTeam(NeutralBase base,
+			Team team) {
 		// generate resources
 		if (baseToResourceGenerator.containsKey(base)) {
 			L.severe("Base got occupied although it's already generating resources.");
 		} else {
-			ResourceGenerator newGenerator = new ResourceGenerator(base,
-					occupyingTeam);
+			ResourceGenerator newGenerator = new ResourceGenerator(base, team);
 			base.getTimingSource().addTimedEventHandler(newGenerator);
 			baseToResourceGenerator.put(base, newGenerator);
 		}
+
 	}
 
 	class ResourceGenerator implements TimedEventHandler {
