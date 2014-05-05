@@ -293,6 +293,12 @@ public class EdurasInitializer {
 			public void notifyPlayerLeft(int ownerId) {
 			}
 
+			@Override
+			public void notifyGameReady(int clientId) {
+				// TODO Auto-generated method stub
+
+			}
+
 		});
 
 		networkManager = new NetworkManager(logic);

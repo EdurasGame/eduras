@@ -58,8 +58,4 @@ public class MiniMap extends ClickableGuiElement {
 		bounds.setLocation(screenX, screenY);
 	}
 
-	@Override
-	public void onPlayerInformationReceived() {
-	}
-
 }

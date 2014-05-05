@@ -22,6 +22,7 @@ import de.illonis.eduras.events.CreateUnitEvent;
 import de.illonis.eduras.events.GameEvent;
 import de.illonis.eduras.events.GameEvent.GameEventNumber;
 import de.illonis.eduras.events.GameInfoRequest;
+import de.illonis.eduras.events.GameReadyEvent;
 import de.illonis.eduras.events.HealActionEvent;
 import de.illonis.eduras.events.InitInformationEvent;
 import de.illonis.eduras.events.ItemEvent;
@@ -175,6 +176,9 @@ public class ServerLogic implements GameLogicInterface {
 			// ClientRole.PLAYER)
 			getGame().getGameSettings().getGameMode()
 					.onConnect(initInfoEvent.getClientId());
+
+			getGame().getEventTriggerer().notifyGameReady(
+					initInfoEvent.getClientId());
 
 			String playerName = initInfoEvent.getName();
 			try {

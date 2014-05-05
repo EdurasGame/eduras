@@ -57,8 +57,4 @@ public class ChatDisplay extends RenderedGuiObject {
 		screenY = newHeight - HEIGHT;
 		screenX = newWidth - WIDTH;
 	}
-
-	@Override
-	public void onPlayerInformationReceived() {
-	}
 }

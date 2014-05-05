@@ -105,10 +105,6 @@ public class GameEventAdapter implements GameEventListener {
 	}
 
 	@Override
-	public void onPlayerInformationReceived() {
-	}
-
-	@Override
 	public void onRespawn(RespawnEvent event) {
 	}
 

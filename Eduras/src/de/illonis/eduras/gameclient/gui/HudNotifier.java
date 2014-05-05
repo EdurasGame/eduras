@@ -196,16 +196,6 @@ public class HudNotifier implements GameEventListener {
 	}
 
 	@Override
-	public void onPlayerInformationReceived() {
-		for (GameEventListener obj : uiObjects) {
-			obj.onPlayerInformationReceived();
-		}
-		for (GameEventListener obj : otherObjects) {
-			obj.onPlayerInformationReceived();
-		}
-	}
-
-	@Override
 	public void onDeath(DeathEvent event) {
 		for (GameEventListener obj : uiObjects) {
 			obj.onDeath(event);
@@ -247,6 +237,12 @@ public class HudNotifier implements GameEventListener {
 
 	@Override
 	public void onGameReady() {
+		for (GameEventListener obj : uiObjects) {
+			obj.onGameReady();
+		}
+		for (GameEventListener obj : otherObjects) {
+			obj.onGameReady();
+		}
 	}
 
 	@Override

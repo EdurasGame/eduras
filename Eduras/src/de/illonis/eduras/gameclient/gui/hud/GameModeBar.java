@@ -47,10 +47,6 @@ public class GameModeBar extends RenderedGuiObject {
 	}
 
 	@Override
-	public void onPlayerInformationReceived() {
-	}
-
-	@Override
 	public void onGameModeChanged(GameMode newMode) {
 		L.info("gamemode bar to: " + newMode);
 

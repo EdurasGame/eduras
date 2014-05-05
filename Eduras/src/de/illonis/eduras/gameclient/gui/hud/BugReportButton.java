@@ -68,8 +68,4 @@ public class BugReportButton extends ClickableGuiElement {
 		bounds.setLocation(screenX, screenY);
 	}
 
-	@Override
-	public void onPlayerInformationReceived() {
-	}
-
 }

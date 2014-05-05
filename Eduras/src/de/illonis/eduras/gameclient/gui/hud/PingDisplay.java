@@ -34,10 +34,6 @@ public class PingDisplay extends RenderedGuiObject implements PingListener {
 	}
 
 	@Override
-	public void onPlayerInformationReceived() {
-	}
-
-	@Override
 	public void setPING(long value) {
 		this.latency = "Latency: " + value;
 	}

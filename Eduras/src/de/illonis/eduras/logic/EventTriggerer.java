@@ -464,4 +464,6 @@ public interface EventTriggerer {
 	void clearInventoryOfPlayer(Player player);
 
 	void onPlayerJoined(Player newPlayer);
+
+	void notifyGameReady(int clientId);
 }
