@@ -22,7 +22,6 @@ import de.illonis.eduras.events.CreateUnitEvent;
 import de.illonis.eduras.events.GameEvent;
 import de.illonis.eduras.events.GameEvent.GameEventNumber;
 import de.illonis.eduras.events.GameInfoRequest;
-import de.illonis.eduras.events.GameReadyEvent;
 import de.illonis.eduras.events.HealActionEvent;
 import de.illonis.eduras.events.InitInformationEvent;
 import de.illonis.eduras.events.ItemEvent;
@@ -177,9 +176,6 @@ public class ServerLogic implements GameLogicInterface {
 			getGame().getGameSettings().getGameMode()
 					.onConnect(initInfoEvent.getClientId());
 
-			getGame().getEventTriggerer().notifyGameReady(
-					initInfoEvent.getClientId());
-
 			String playerName = initInfoEvent.getName();
 			try {
 				onGameEventAppeared(new ClientRenameEvent(
@@ -187,6 +183,10 @@ public class ServerLogic implements GameLogicInterface {
 			} catch (InvalidNameException e1) {
 				L.log(Level.SEVERE, "invalid client name", e1);
 			}
+
+			getGame().getEventTriggerer().notifyGameReady(
+					initInfoEvent.getClientId());
+
 			getGame().getEventTriggerer().notifyPlayerJoined(
 					initInfoEvent.getClientId());
 
