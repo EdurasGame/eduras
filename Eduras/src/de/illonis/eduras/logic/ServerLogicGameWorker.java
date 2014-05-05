@@ -29,6 +29,11 @@ public class ServerLogicGameWorker extends LogicGameWorker {
 
 	@Override
 	public void gameUpdate(long delta) {
+		for (DelayedLogicAction action : DelayedActionQueue.getActions()) {
+			if (action.timePassed(delta))
+				action.performAction(gameInformation);
+		}
+
 		for (GameObject o : gameInformation.getObjects().values()) {
 			if (o instanceof Usable) {
 				((Usable) o).reduceCooldown(delta);
