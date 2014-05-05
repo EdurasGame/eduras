@@ -27,6 +27,6 @@ public class RemoveObjectLaterAction extends DelayedLogicAction {
 
 	@Override
 	protected void execute(GameInformation info) {
-		info.removeObject(gameObject);
+		info.getEventTriggerer().removeObject(gameObject.getId());
 	}
 }
