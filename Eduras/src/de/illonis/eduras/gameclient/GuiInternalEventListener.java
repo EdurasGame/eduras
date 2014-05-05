@@ -285,7 +285,8 @@ public class GuiInternalEventListener implements LoginPanelReactor,
 
 		ResurrectPlayerEvent event = new ResurrectPlayerEvent(
 				client.getOwnerID(), player.getPlayerId(), base.getId());
-		if (!player.getPlayerMainFigure().isDead()) {
+		if (player.getPlayerMainFigure() != null
+				&& player.getPlayerMainFigure().isDead() == false) {
 			client.getFrame().getGamePanel()
 					.showNotification("Player is not dead");
 			return;
