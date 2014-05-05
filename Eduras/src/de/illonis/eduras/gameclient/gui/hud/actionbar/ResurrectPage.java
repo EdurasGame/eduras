@@ -77,7 +77,6 @@ public class ResurrectPage extends ActionBarPage {
 
 	@Override
 	public void onPlayerJoined(int ownerId) {
-		// TODO: check for duplicate entries (just to be sure)
 		InformationProvider infoPro = EdurasInitializer.getInstance()
 				.getInformationProvider();
 
@@ -94,6 +93,10 @@ public class ResurrectPage extends ActionBarPage {
 		InformationProvider infoPro = EdurasInitializer.getInstance()
 				.getInformationProvider();
 
+		if (isPlayerButtonAlreadyAvailable(player)) {
+			return;
+		}
+
 		if (player.getTeam().equals(infoPro.getPlayer().getTeam())) {
 			RezzButton rezzButton = new RezzButton(player, reactor);
 			rezzButton.cacheReady();
@@ -102,6 +105,16 @@ public class ResurrectPage extends ActionBarPage {
 			if (bar.getCurrentPage() == getId())
 				bar.setPage(getId());
 		}
+	}
+
+	private boolean isPlayerButtonAlreadyAvailable(Player player) {
+		for (ActionButton button : getButtons()) {
+			if (button instanceof RezzButton
+					&& ((RezzButton) button).getTarget().equals(player)) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	@Override
