@@ -160,7 +160,6 @@ public class GameRenderer implements TooltipHandler {
 
 		if (scale != newScale) {
 			viewPort.setSize(width, height);
-			viewPort.setScale(newScale);
 		}
 
 		scale = newScale;
