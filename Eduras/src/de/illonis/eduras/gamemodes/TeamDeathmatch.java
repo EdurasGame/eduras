@@ -4,6 +4,8 @@ import java.util.LinkedList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.newdawn.slick.Color;
+
 import de.illonis.edulog.EduLog;
 import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.ObjectFactory.ObjectType;
@@ -46,8 +48,8 @@ public class TeamDeathmatch extends Deathmatch {
 
 	@Override
 	public void onGameStart() {
-		teamA = new Team("Red Team", Team.getNextTeamId());
-		teamB = new Team("Blue Team", Team.getNextTeamId());
+		teamA = new Team("Red Team", Team.getNextTeamId(), Color.red);
+		teamB = new Team("Blue Team", Team.getNextTeamId(), Color.blue);
 		LinkedList<Team> teams = new LinkedList<Team>();
 		teams.add(teamA);
 		teams.add(teamB);
