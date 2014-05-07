@@ -58,7 +58,6 @@ public class MiniMap extends ClickableGuiElement {
 	}
 
 	private void renderPlayers(Graphics g) {
-		// System.out.println("rendering " + players.size() + " players");
 		for (MiniMapPlayer object : players.values()) {
 			g.setColor(object.getColor());
 			// System.out.println("rendering player " +
@@ -114,6 +113,24 @@ public class MiniMap extends ClickableGuiElement {
 	@Override
 	public void onObjectCreation(ObjectFactoryEvent event) {
 		GameObject o = getInfo().findObjectById(event.getId());
+		maybeAddObject(o);
+	}
+
+	@Override
+	public void onObjectRemove(ObjectFactoryEvent event) {
+		GameObject o = getInfo().findObjectById(event.getId());
+		if (o == null)
+			return;
+		if (o instanceof PlayerMainFigure)
+			players.remove(o.getId());
+		else if (o instanceof NeutralBase) {
+			bases.remove(o.getId());
+		} else if (o.getOwner() == -1) {
+			neutralObjects.remove(o.getId());
+		}
+	}
+
+	private void maybeAddObject(GameObject o) {
 		if (o == null || o instanceof Missile) {
 			return;
 		}
@@ -124,27 +141,18 @@ public class MiniMap extends ClickableGuiElement {
 
 		if (o instanceof PlayerMainFigure) {
 			float w = o.getShape().getWidth() * scale;
-			float h = o.getShape().getWidth() * scale;
+			float h = o.getShape().getHeight() * scale;
 			players.put(o.getId(), new MiniMapPlayer((PlayerMainFigure) o, x,
 					y, w, h));
 		} else if (o instanceof NeutralBase) {
-			bases.put(o.getId(), new MiniMapBase((NeutralBase) o, x, y));
+			float w = o.getShape().getWidth() * scale;
+			float h = o.getShape().getHeight() * scale;
+			bases.put(o.getId(), new MiniMapBase((NeutralBase) o, x, y, w, h));
 		} else if (o.getOwner() == -1) {
-			neutralObjects.put(o.getId(), new MiniMapNeutralObject(o, x, y));
-		}
-	}
-
-	@Override
-	public void onObjectRemove(ObjectFactoryEvent event) {
-		GameObject o = getInfo().findObjectById(event.getId());
-		if (o == null)
-			return;
-		if (o instanceof PlayerMainFigure)
-			players.remove((PlayerMainFigure) o);
-		else if (o instanceof NeutralBase) {
-			bases.remove((NeutralBase) o);
-		} else if (o.getOwner() == -1) {
-			neutralObjects.remove(o);
+			float w = o.getShape().getWidth() * scale;
+			float h = o.getShape().getHeight() * scale;
+			neutralObjects.put(o.getId(), new MiniMapNeutralObject(o, x, y, w,
+					h));
 		}
 	}
 
@@ -157,7 +165,9 @@ public class MiniMap extends ClickableGuiElement {
 		float y = miniPos.y;
 		switch (object.getType()) {
 		case PLAYER:
-			players.get(object.getId()).setLocation(x, y);
+			MiniMapPlayer p = players.get(object.getId());
+			if (p != null)
+				p.setLocation(x, y);
 			break;
 		case NEUTRAL_BASE:
 			bases.get(object.getId()).setLocation(x, y);
@@ -178,22 +188,7 @@ public class MiniMap extends ClickableGuiElement {
 
 		System.out.println("scale: " + scale);
 		for (GameObject o : getInfo().getGameObjects().values()) {
-
-			Vector2f gamePos = new Vector2f(o.getXPosition(), o.getYPosition());
-			Vector2f miniPos = gameToMinimapPosition(gamePos);
-			float x = miniPos.x;
-			float y = miniPos.y;
-			if (o instanceof PlayerMainFigure) {
-				float w = o.getShape().getWidth() * scale;
-				float h = o.getShape().getWidth() * scale;
-				players.put(o.getId(), new MiniMapPlayer((PlayerMainFigure) o,
-						x, y, w, h));
-			} else if (o instanceof NeutralBase) {
-				bases.put(o.getId(), new MiniMapBase((NeutralBase) o, x, y));
-			} else if (o.getOwner() == -1) {
-				neutralObjects
-						.put(o.getId(), new MiniMapNeutralObject(o, x, y));
-			}
+			maybeAddObject(o);
 		}
 	}
 

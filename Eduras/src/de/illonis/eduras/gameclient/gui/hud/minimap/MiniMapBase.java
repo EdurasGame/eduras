@@ -9,9 +9,8 @@ public class MiniMapBase extends MiniMapObject {
 
 	private final NeutralBase base;
 
-	public MiniMapBase(NeutralBase base, float x, float y) {
-		super(ObjectType.NEUTRAL_BASE, base.getOwner(), x, y, base.getShape()
-				.getWidth(), base.getShape().getHeight());
+	public MiniMapBase(NeutralBase base, float x, float y, float w, float h) {
+		super(ObjectType.NEUTRAL_BASE, base.getOwner(), x, y, w, h);
 		this.base = base;
 	}
 	
