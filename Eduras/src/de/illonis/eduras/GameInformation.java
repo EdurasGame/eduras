@@ -587,7 +587,7 @@ public class GameInformation {
 					L.severe("Cannot find a spawn point!");
 					break;
 				}
-			} while (isObjectWithinExceptMap(boundings));
+			} while (isAnyOfObjectsWithinBounds(boundings, objects.values()));
 		} catch (IllegalArgumentException e) {
 			L.log(Level.SEVERE, e.getMessage(), e);
 		}
@@ -599,18 +599,6 @@ public class GameInformation {
 		// make sure the position is far apart enough from the map border object
 		double diameter = 2 * ((Circle) player.getShape()).getRadius();
 		return (newPos.x > diameter && newPos.y > diameter);
-	}
-
-	private boolean isObjectWithinExceptMap(Rectangle boundings) {
-		LinkedList<GameObject> objectsWithoutMap = new LinkedList<GameObject>(
-				objects.values());
-
-		if (!objectsWithoutMap.remove(map.getBoundsObject())) {
-			throw new IllegalArgumentException(
-					"Didn't find map-bounds-object in objects!");
-		}
-
-		return isAnyOfObjectsWithinBounds(boundings, objectsWithoutMap);
 	}
 
 	/**
