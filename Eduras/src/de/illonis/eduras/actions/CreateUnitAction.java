@@ -10,6 +10,12 @@ import de.illonis.eduras.exceptions.WrongObjectTypeException;
 import de.illonis.eduras.gameobjects.NeutralBase;
 import de.illonis.eduras.settings.S;
 
+/**
+ * An {@link RTSAction} that can be used for creating a unit.
+ * 
+ * @author Florian 'Ren' Mai <florian.ren.mai@googlemail.com>
+ * 
+ */
 public class CreateUnitAction extends RTSAction {
 	private final static Logger L = EduLog.getLoggerFor(CreateUnitAction.class
 			.getName());
@@ -17,6 +23,18 @@ public class CreateUnitAction extends RTSAction {
 	private NeutralBase baseToSpawnAt;
 	private ObjectType typeOfUnitToSpawn;
 
+	/**
+	 * Instantiates a CreateUnitAction.
+	 * 
+	 * @param executingPlayer
+	 *            The player who wants to create a unit.
+	 * @param typeOfUnit
+	 *            The type of unit to create.
+	 * @param baseToSpawnAt
+	 *            The base to spawn the new unit at.
+	 * @throws WrongObjectTypeException
+	 *             Thrown if the given object type cannot be spawned.
+	 */
 	public CreateUnitAction(Player executingPlayer, ObjectType typeOfUnit,
 			NeutralBase baseToSpawnAt) throws WrongObjectTypeException {
 		super(executingPlayer, -1);

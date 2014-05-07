@@ -12,6 +12,11 @@ import java.util.logging.Logger;
 
 import de.illonis.edulog.EduLog;
 import de.illonis.eduras.EdurasServer;
+import de.illonis.eduras.actions.CreateUnitAction;
+import de.illonis.eduras.actions.HealSpellAction;
+import de.illonis.eduras.actions.RespawnPlayerAction;
+import de.illonis.eduras.actions.ScoutSpellAction;
+import de.illonis.eduras.actions.SpawnItemAction;
 import de.illonis.eduras.gameobjects.BigBlock;
 import de.illonis.eduras.gameobjects.BiggerBlock;
 import de.illonis.eduras.gameobjects.Bird;
@@ -31,6 +36,7 @@ import de.illonis.eduras.items.weapons.SplashWeapon;
 import de.illonis.eduras.items.weapons.SplashedMissile;
 import de.illonis.eduras.items.weapons.SwordMissile;
 import de.illonis.eduras.items.weapons.SwordWeapon;
+import de.illonis.eduras.units.Observer;
 import de.illonis.eduras.units.PlayerMainFigure;
 
 /**
@@ -443,56 +449,150 @@ public final class S {
 	 */
 	public static boolean vision_disabled = true;
 
+	/**
+	 * Tells whether the application shall shut down if a sysout occurs (use it
+	 * for debugging!).
+	 */
 	public static boolean exit_on_sysout = false;
 
+	/**
+	 * Determines the interval by which a base generates resources (in ms).
+	 */
 	public static long neutralbase_resource_interval = 1000;
 
+	/**
+	 * Determines the amount of resources to generate in each interval.
+	 */
 	public static int neutralbase_resource_baseamount = 1;
 
+	/**
+	 * Determines if bounding boxes of objects are rendered or not (for
+	 * debugging).
+	 */
 	public static boolean debug_render_boundingboxes = false;
 
+	/**
+	 * Determines the default time it takes to conquer a neutral base.
+	 */
 	public static long neutralbase_overtaketime_default = 2000;
 
+	/**
+	 * Determines how many points a player gains per interval when he had
+	 * conquered a neutral base.
+	 */
 	public static int gm_koth_points_per_interval = 1;
 
+	/**
+	 * Determines the interval by which a player gains points from a neutral
+	 * base.
+	 */
 	public static long gm_koth_gain_points_interval = 10000;
 
+	/**
+	 * Determines how much resource it takes to perform a
+	 * {@link RespawnPlayerAction}.
+	 */
 	public static int gm_edura_action_respawnplayer_cost = 15;
 
+	/**
+	 * Determines how much resource it takes to perform a
+	 * {@link SpawnItemAction} when the item's type is rocketlauncher.
+	 */
 	public static int go_rocketlauncher_costs = 100;
 
+	/**
+	 * Determines how much resource it takes to perform a
+	 * {@link SpawnItemAction} when the item's type is minelauncher.
+	 */
 	public static int go_mineweapon_costs = 100;
 
-	public static int go_assaultmissile_costs = 100;
+	/**
+	 * Determines how much resource it takes to perform a
+	 * {@link SpawnItemAction} when the item's type is assaultRifle.
+	 */
+	public static int go_assaultrifle_costs = 100;
 
+	/**
+	 * Determines how much resource it takes to perform a
+	 * {@link SpawnItemAction} when the item's type is sword.
+	 */
 	public static int go_swordweapon_costs = 100;
 
+	/**
+	 * Determines how much resource it takes to perform a
+	 * {@link SpawnItemAction} when the item's type is splash weapon.
+	 */
 	public static int go_splashweapon_costs = 100;
 
+	/**
+	 * Determines how much resource it takes to perform a
+	 * {@link SpawnItemAction} when the item's type is sniper weapon.
+	 */
 	public static int go_sniperweapon_costs = 100;
 
+	/**
+	 * Determines how much resource it takes to perform a
+	 * {@link SpawnItemAction} when the item's type is simple weapon.
+	 */
 	public static int go_simpleweapon_costs = 100;
 
+	/**
+	 * Determines how much resource it takes to perform a
+	 * {@link HealSpellAction}.
+	 */
 	public static int spell_heal_costs = 100;
 
+	/**
+	 * Determines by how many health points a unit is healed when a
+	 * {@link HealSpellAction} is performed on it.
+	 */
 	public static int spell_heal_amount = 100;
 
+	/**
+	 * Determines how much health an observer can have at max.
+	 */
 	public static int unit_observer_maxhealth = 10;
 
+	/**
+	 * Determines the angle by which an observer gives vision.
+	 */
 	public static float unit_observer_visionangle = 360f;
 
+	/**
+	 * Determines the range by which an observer gives vision.
+	 */
 	public static float unit_observer_visionrange = 300f;
 
+	/**
+	 * Determines how much resource it takes to perform a
+	 * {@link CreateUnitAction} with unit type {@link Observer}.
+	 */
 	public static int unit_observer_costs = 100;
 
+	/**
+	 * Determines the speed of an {@link Observer}.
+	 */
 	public static float unit_observer_speed = 100;
 
+	/**
+	 * Determines the range by which a {@link ScoutSpellAction} gives vision.
+	 */
 	public static float spell_scout_visionrange = 300f;
 
+	/**
+	 * Determines the range by which a {@link ScoutSpellAction} gives vision.
+	 */
 	public static float spell_scout_visionangle = 360f;
 
+	/**
+	 * Determines the costs it takes to perform a scout spell.
+	 */
 	public static int spell_scout_costs = 50;
 
+	/**
+	 * Determines for how long the scout spell lasts, that is, for how long
+	 * vision is given.
+	 */
 	public static long spell_scout_duration = 3000;
 
 	/**

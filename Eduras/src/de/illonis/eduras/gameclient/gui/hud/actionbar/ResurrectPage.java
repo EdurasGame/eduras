@@ -46,7 +46,17 @@ public class ResurrectPage extends ActionBarPage {
 
 	@Override
 	public void onGameReady() {
-		// TODO: add all existing players.
+		InformationProvider infoPro = EdurasInitializer.getInstance()
+				.getInformationProvider();
+
+		for (Player player : infoPro.getPlayers()) {
+			try {
+				addRezzButtonForPlayer(player);
+			} catch (ObjectNotFoundException e) {
+				L.log(Level.SEVERE, "Joined player cannot be found.", e);
+				continue;
+			}
+		}
 	}
 
 	@Override
@@ -67,24 +77,44 @@ public class ResurrectPage extends ActionBarPage {
 
 	@Override
 	public void onPlayerJoined(int ownerId) {
-		// TODO: check for duplicate entries (just to be sure)
 		InformationProvider infoPro = EdurasInitializer.getInstance()
 				.getInformationProvider();
 
 		try {
 			Player joinedPlayer = infoPro.getPlayerByOwnerId(ownerId);
-			Player player = infoPro.getPlayer();
-			if (joinedPlayer.getTeam().equals(player.getTeam())) {
-				RezzButton rezzButton = new RezzButton(joinedPlayer, reactor);
-				rezzButton.cacheReady();
-				addButton(rezzButton);
-				// refresh bar if it is currently visible
-				if (bar.getCurrentPage() == getId())
-					bar.setPage(getId());
-			}
+			addRezzButtonForPlayer(joinedPlayer);
 		} catch (ObjectNotFoundException e) {
 			L.log(Level.SEVERE, "Joined player cannot be found.", e);
 		}
+	}
+
+	private void addRezzButtonForPlayer(Player player)
+			throws ObjectNotFoundException {
+		InformationProvider infoPro = EdurasInitializer.getInstance()
+				.getInformationProvider();
+
+		if (isPlayerButtonAlreadyAvailable(player)) {
+			return;
+		}
+
+		if (player.getTeam().equals(infoPro.getPlayer().getTeam())) {
+			RezzButton rezzButton = new RezzButton(player, reactor);
+			rezzButton.cacheReady();
+			addButton(rezzButton);
+			// refresh bar if it is currently visible
+			if (bar.getCurrentPage() == getId())
+				bar.setPage(getId());
+		}
+	}
+
+	private boolean isPlayerButtonAlreadyAvailable(Player player) {
+		for (ActionButton button : getButtons()) {
+			if (button instanceof RezzButton
+					&& ((RezzButton) button).getTarget().equals(player)) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	@Override

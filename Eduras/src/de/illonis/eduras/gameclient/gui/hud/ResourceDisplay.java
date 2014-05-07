@@ -55,7 +55,7 @@ public class ResourceDisplay extends RenderedGuiObject {
 	}
 
 	@Override
-	public void onPlayerInformationReceived() {
+	public void onGameReady() {
 		try {
 			player = getInfo().getPlayer();
 		} catch (ObjectNotFoundException e) {

@@ -10,11 +10,20 @@ import de.illonis.edulog.EduLog;
 import de.illonis.eduras.gamemodes.GameMode.GameModeNumber;
 import de.illonis.eduras.maps.persistence.InvalidDataException;
 
+/**
+ * This map is used to test Edura! functionalities.
+ * 
+ * @author Florian 'Ren' Mai <florian.ren.mai@googlemail.com>
+ * 
+ */
 public class EduraTestMap extends EduraMap {
 
 	private final static Logger L = EduLog.getLoggerFor(EduraTestMap.class
 			.getName());
 
+	/**
+	 * Creates the map.
+	 */
 	public EduraTestMap() {
 		super("eduratestmap", "ren mai", 200, 200, new Date(),
 				new LinkedList<SpawnPosition>(),

@@ -56,12 +56,6 @@ public interface GameEventListener {
 	void onObjectCreation(ObjectFactoryEvent event);
 
 	/**
-	 * Indicates that player information have been received and initial logic is
-	 * available.
-	 */
-	void onPlayerInformationReceived();
-
-	/**
 	 * Fired when a client has a new name.
 	 * 
 	 * @param event

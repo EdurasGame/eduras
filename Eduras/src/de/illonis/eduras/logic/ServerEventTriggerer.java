@@ -644,7 +644,6 @@ public class ServerEventTriggerer implements EventTriggerer {
 			for (GameEvent event : infos) {
 				sendEventToClient(event, owner);
 			}
-			sendEventToClient(new GameReadyEvent(), owner);
 		} catch (IllegalArgumentException e) {
 			L.log(Level.SEVERE,
 					"Something went wrong when sending the requested infos.", e);
@@ -823,5 +822,10 @@ public class ServerEventTriggerer implements EventTriggerer {
 	public void notifyPlayerLeft(int ownerId) {
 		sendEventToAll(new OwnerGameEvent(GameEventNumber.INFO_PLAYER_LEFT,
 				ownerId));
+	}
+
+	@Override
+	public void notifyGameReady(int clientId) {
+		sendEventToClient(new GameReadyEvent(), clientId);
 	}
 }

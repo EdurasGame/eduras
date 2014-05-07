@@ -95,10 +95,6 @@ public class NotificationPanel extends RenderedGuiObject {
 	}
 
 	@Override
-	public void onPlayerInformationReceived() {
-	}
-
-	@Override
 	public void onDeath(DeathEvent event) {
 		try {
 			Player killer = getInfo()

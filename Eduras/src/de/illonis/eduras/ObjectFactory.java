@@ -293,7 +293,6 @@ public class ObjectFactory {
 
 				logic.getGame().getEventTriggerer().notifyObjectCreated(event);
 				logic.getListener().onObjectCreation(event);
-
 			}
 
 		}

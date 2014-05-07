@@ -9,10 +9,25 @@ import de.illonis.eduras.logic.EventTriggerer;
 import de.illonis.eduras.logic.delayedactions.RemoveObjectLaterAction;
 import de.illonis.eduras.settings.S;
 
+/**
+ * A scout spell action gives the executing player's team vision at the
+ * specified location.
+ * 
+ * @author Florian 'Ren' Mai <florian.ren.mai@googlemail.com>
+ * 
+ */
 public class ScoutSpellAction extends RTSAction {
 
 	private final Vector2f target;
 
+	/**
+	 * Create the action.
+	 * 
+	 * @param executingPlayer
+	 *            The player to execute the action
+	 * @param target
+	 *            the location to give vision at
+	 */
 	public ScoutSpellAction(Player executingPlayer, Vector2f target) {
 		super(executingPlayer, S.spell_scout_costs);
 		this.target = target;

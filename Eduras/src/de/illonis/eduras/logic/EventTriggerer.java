@@ -5,6 +5,7 @@ import java.util.Collection;
 
 import org.newdawn.slick.geom.Vector2f;
 
+import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.ObjectFactory.ObjectType;
 import de.illonis.eduras.Player;
 import de.illonis.eduras.Statistic.StatsProperty;
@@ -184,7 +185,15 @@ public interface EventTriggerer {
 	 */
 	void respawnPlayerAtRandomSpawnpoint(Player player);
 
-	void respawnPlayerAtPosition(Player player, Vector2df position);
+	/**
+	 * Respawns a player at a given location.
+	 * 
+	 * @param player
+	 *            Player to respawn
+	 * @param location
+	 *            Location to respawn the player at.
+	 */
+	void respawnPlayerAtPosition(Player player, Vector2df location);
 
 	/**
 	 * Called when a player changes his name.
@@ -328,7 +337,8 @@ public interface EventTriggerer {
 	public void sendRequestedInfos(ArrayList<GameEvent> infos, int id);
 
 	// TODO: Shouldn't we send this information only to the client that is
-	// affected by this event? (jme) yes (/jme)
+	// affected by this event? (jme) yes (/jme) (fma) I'm glad we talked about
+	// this :) (/fma)
 	/**
 	 * 
 	 * Notify all clients that a cooldown has started.
@@ -459,9 +469,38 @@ public interface EventTriggerer {
 	 */
 	void notifyPlayerLeft(int ownerId);
 
-	void changeHealthByAmount(Unit unitToHeal, int spell_heal_amount);
+	/**
+	 * Heals a {@link Unit} by the given amount and tells the clients.
+	 * Thread-safe.
+	 * 
+	 * @param unitToHeal
+	 * @param healAmount
+	 *            should be positive, but isn't checked.
+	 */
+	void changeHealthByAmount(Unit unitToHeal, int healAmount);
 
+	/**
+	 * Sets all the inventory slots to null.
+	 * 
+	 * @param player
+	 *            The player to clear the inventory of.
+	 */
 	void clearInventoryOfPlayer(Player player);
 
+	/**
+	 * Called when a player joins. Notifies the client. Is used differently to
+	 * notifyPlayerJoined such that it is used to modify the
+	 * {@link GameInformation}'s state on the client rather than the GUI.
+	 * 
+	 * @param newPlayer
+	 */
 	void onPlayerJoined(Player newPlayer);
+
+	/**
+	 * Notifies a client that he has received all the information he needs.
+	 * 
+	 * @param clientId
+	 *            id of the client to notify that the game is ready to go.
+	 */
+	void notifyGameReady(int clientId);
 }

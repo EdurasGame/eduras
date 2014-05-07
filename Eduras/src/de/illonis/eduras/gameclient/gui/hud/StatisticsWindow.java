@@ -147,8 +147,4 @@ public class StatisticsWindow extends RenderedGuiObject {
 			setVisible(false);
 		}
 	};
-
-	@Override
-	public void onPlayerInformationReceived() {
-	}
 }

@@ -183,6 +183,10 @@ public class ServerLogic implements GameLogicInterface {
 			} catch (InvalidNameException e1) {
 				L.log(Level.SEVERE, "invalid client name", e1);
 			}
+
+			getGame().getEventTriggerer().notifyGameReady(
+					initInfoEvent.getClientId());
+
 			getGame().getEventTriggerer().notifyPlayerJoined(
 					initInfoEvent.getClientId());
 

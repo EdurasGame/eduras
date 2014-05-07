@@ -24,7 +24,6 @@ import javax.imageio.ImageIO;
 import javax.swing.SwingWorker;
 
 import org.newdawn.slick.SlickException;
-import org.newdawn.slick.imageout.ImageOut;
 
 import de.illonis.edulog.EduLog;
 import de.illonis.eduras.utils.PathFinder;

@@ -138,10 +138,20 @@ public final class ClientData {
 		return visionInfo;
 	}
 
+	/**
+	 * Store the player to be resurrected.
+	 * 
+	 * @param currentResurrectTarget
+	 */
 	public void setCurrentResurrectTarget(Player currentResurrectTarget) {
 		this.currentResurrectTarget = currentResurrectTarget;
 	}
 
+	/**
+	 * Determines which player is currently selected to be resurrected.
+	 * 
+	 * @return player
+	 */
 	public Player getCurrentResurrectTarget() {
 		return currentResurrectTarget;
 	}

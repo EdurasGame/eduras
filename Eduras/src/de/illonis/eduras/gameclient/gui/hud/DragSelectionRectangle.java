@@ -59,9 +59,4 @@ public class DragSelectionRectangle extends RenderedGuiObject {
 	@Override
 	public void onGuiSizeChanged(int newWidth, int newHeight) {
 	}
-
-	@Override
-	public void onPlayerInformationReceived() {
-	}
-
 }

@@ -7,6 +7,12 @@ import de.illonis.eduras.inventory.Inventory;
 import de.illonis.eduras.units.InteractMode;
 import de.illonis.eduras.units.PlayerMainFigure;
 
+/**
+ * Represents an Eduras? player.
+ * 
+ * @author Florian 'Ren' Mai <florian.ren.mai@googlemail.com>
+ * 
+ */
 public class Player {
 	private final static Logger L = EduLog.getLoggerFor(Player.class.getName());
 
@@ -18,6 +24,11 @@ public class Player {
 	private PlayerMainFigure playerMainFigure;
 	private Team team;
 
+	/**
+	 * 
+	 * @param playerId
+	 * @param name
+	 */
 	public Player(int playerId, String name) {
 		this.name = name;
 		this.playerId = playerId;
@@ -84,22 +95,48 @@ public class Player {
 		return inventory;
 	}
 
+	/**
+	 * Sets the player's respective {@link PlayerMainFigure}.
+	 * 
+	 * @param go
+	 *            the main figure
+	 */
 	public void setPlayerMainFigure(PlayerMainFigure go) {
 		this.playerMainFigure = go;
 	}
 
+	/**
+	 * Returns the player's id. It's the same as the main figure's owner id.
+	 * 
+	 * @return player's id / owner id
+	 */
 	public int getPlayerId() {
 		return playerId;
 	}
 
+	/**
+	 * Returns the player's respective {@link PlayerMainFigure}.
+	 * 
+	 * @return player's main figure
+	 */
 	public PlayerMainFigure getPlayerMainFigure() {
 		return playerMainFigure;
 	}
 
+	/**
+	 * Set the team the player is in.
+	 * 
+	 * @param team
+	 */
 	public void setTeam(Team team) {
 		this.team = team;
 	}
 
+	/**
+	 * Returns the team the player is in.
+	 * 
+	 * @return player's team
+	 */
 	public Team getTeam() {
 		return team;
 	}

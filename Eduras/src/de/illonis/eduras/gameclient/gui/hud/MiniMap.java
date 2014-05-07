@@ -1,9 +1,5 @@
 package de.illonis.eduras.gameclient.gui.hud;
 
-import java.awt.Graphics2D;
-import java.awt.GraphicsConfiguration;
-import java.awt.GraphicsEnvironment;
-import java.awt.image.BufferedImage;
 import java.util.HashMap;
 
 import org.newdawn.slick.Color;
@@ -62,12 +58,13 @@ public class MiniMap extends ClickableGuiElement {
 	}
 
 	private void renderPlayers(Graphics g) {
-		//System.out.println("rendering " + players.size() + " players");
+		// System.out.println("rendering " + players.size() + " players");
 		for (MiniMapPlayer object : players.values()) {
 			g.setColor(object.getColor());
-//			System.out.println("rendering player " + object.getPlayer().getId() + " at " + object.getX() + ", "
-//					+ object.getY());
-//			System.out.println("size: " + object.getWidth());
+			// System.out.println("rendering player " +
+			// object.getPlayer().getId() + " at " + object.getX() + ", "
+			// + object.getY());
+			// System.out.println("size: " + object.getWidth());
 			g.fillOval(object.getX(), object.getY(), object.getWidth(),
 					object.getHeight());
 		}
@@ -180,27 +177,22 @@ public class MiniMap extends ClickableGuiElement {
 		scale = SIZE / size;
 
 		System.out.println("scale: " + scale);
-
-	}
-
-	@Override
-	public void onPlayerInformationReceived() {
 		for (GameObject o : getInfo().getGameObjects().values()) {
+
+			Vector2f gamePos = new Vector2f(o.getXPosition(), o.getYPosition());
+			Vector2f miniPos = gameToMinimapPosition(gamePos);
+			float x = miniPos.x;
+			float y = miniPos.y;
 			if (o instanceof PlayerMainFigure) {
 				float w = o.getShape().getWidth() * scale;
 				float h = o.getShape().getWidth() * scale;
 				players.put(o.getId(), new MiniMapPlayer((PlayerMainFigure) o,
-						o.getXPosition(), o.getYPosition(), w, h));
+						x, y, w, h));
 			} else if (o instanceof NeutralBase) {
-				bases.put(
-						o.getId(),
-						new MiniMapBase((NeutralBase) o, o.getXPosition(), o
-								.getYPosition()));
+				bases.put(o.getId(), new MiniMapBase((NeutralBase) o, x, y));
 			} else if (o.getOwner() == -1) {
-				neutralObjects.put(
-						o.getId(),
-						new MiniMapNeutralObject(o, o.getXPosition(), o
-								.getYPosition()));
+				neutralObjects
+						.put(o.getId(), new MiniMapNeutralObject(o, x, y));
 			}
 		}
 	}

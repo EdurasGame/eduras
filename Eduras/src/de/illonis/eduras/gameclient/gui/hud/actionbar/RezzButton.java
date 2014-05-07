@@ -51,4 +51,13 @@ public class RezzButton extends ActionButton {
 		if (event.getOwner() == target.getPlayerId())
 			setEnabled(false);
 	}
+
+	/**
+	 * Returns the player that will be rezzed when this button is used.
+	 * 
+	 * @return player to be rezzed by clicking this button
+	 */
+	public Player getTarget() {
+		return target;
+	}
 }

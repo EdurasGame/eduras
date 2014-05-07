@@ -265,13 +265,6 @@ public class ItemDisplay extends ClickableGuiElement implements
 	}
 
 	@Override
-	public void onPlayerInformationReceived() {
-		for (int i = 0; i < Inventory.MAX_CAPACITY; i++) {
-			// onItemChanged(i);
-		}
-	}
-
-	@Override
 	public void onMouseOver(Vector2f p) {
 
 		for (int i = 0; i < Inventory.MAX_CAPACITY; i++) {
@@ -300,6 +293,13 @@ public class ItemDisplay extends ClickableGuiElement implements
 	@Override
 	public Rectangle getTriggerArea() {
 		return new Rectangle(screenX, screenY, WIDTH, HEIGHT);
+	}
+
+	@Override
+	public void onGameReady() {
+		for (int i = 0; i < Inventory.MAX_CAPACITY; i++) {
+			// onItemChanged(i);
+		}
 	}
 
 }

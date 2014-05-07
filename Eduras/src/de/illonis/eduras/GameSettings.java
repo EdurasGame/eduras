@@ -46,6 +46,11 @@ public class GameSettings {
 		remainingTime = time;
 	}
 
+	/**
+	 * Returns the round time.
+	 * 
+	 * @return round time.
+	 */
 	public long getRoundTime() {
 		return roundTime;
 	}

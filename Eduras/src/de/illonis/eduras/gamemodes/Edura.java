@@ -26,6 +26,13 @@ import de.illonis.eduras.units.InteractMode;
 import de.illonis.eduras.units.PlayerMainFigure;
 import de.illonis.eduras.units.Unit;
 
+/**
+ * This is intended to be Eduras? main game mode as described in the Eduras?
+ * documentation.
+ * 
+ * @author Florian 'Ren' Mai <florian.ren.mai@googlemail.com>
+ * 
+ */
 public class Edura extends TeamDeathmatch {
 
 	private HashMap<NeutralBase, Vertex> baseToVertex;
@@ -34,6 +41,11 @@ public class Edura extends TeamDeathmatch {
 
 	private final static Logger L = EduLog.getLoggerFor(Edura.class.getName());
 
+	/**
+	 * Create the game mode.
+	 * 
+	 * @param gameInfo
+	 */
 	public Edura(GameInformation gameInfo) {
 		super(gameInfo);
 

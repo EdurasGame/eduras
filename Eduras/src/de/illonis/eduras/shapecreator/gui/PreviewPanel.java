@@ -23,6 +23,10 @@ import de.illonis.eduras.shapecreator.DataHolder;
  */
 public class PreviewPanel extends JPanel {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private CoordinateSystem coordinateSystem;
 	private final DataHolder data;
 

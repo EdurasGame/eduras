@@ -27,7 +27,7 @@ public class TimeFrame extends RenderedGuiObject {
 
 	@Override
 	public void render(Graphics g2d) {
-		
+
 		String timeString = getRemainingTimeString();
 		int textWidth = g2d.getFont().getWidth(timeString);
 		g2d.setColor(Color.white);
@@ -45,9 +45,5 @@ public class TimeFrame extends RenderedGuiObject {
 	@Override
 	public void onGuiSizeChanged(int newWidth, int newHeight) {
 		screenX = newWidth - WIDTH;
-	}
-
-	@Override
-	public void onPlayerInformationReceived() {
 	}
 }

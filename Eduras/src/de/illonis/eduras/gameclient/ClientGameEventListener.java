@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.logging.Logger;
 
 import de.illonis.edulog.EduLog;
-import de.illonis.eduras.ObjectFactory.ObjectType;
 import de.illonis.eduras.events.ClientRenameEvent;
 import de.illonis.eduras.events.DeathEvent;
 import de.illonis.eduras.events.GameEvent;
@@ -63,10 +62,6 @@ public class ClientGameEventListener implements GameEventListener {
 
 	@Override
 	public void onObjectCreation(ObjectFactoryEvent event) {
-		// if our player was created, player data is there.
-		if (event.getOwner() == client.getOwnerID()
-				&& event.getObjectType() == ObjectType.PLAYER)
-			ui.onPlayerInformationReceived();
 	}
 
 	@Override
@@ -151,10 +146,6 @@ public class ClientGameEventListener implements GameEventListener {
 	@Override
 	public void onTeamResourceChanged(SetTeamResourceEvent setTeamResourceEvent) {
 		ui.onTeamResourceChanged(setTeamResourceEvent);
-	}
-
-	@Override
-	public void onPlayerInformationReceived() {
 	}
 
 	@Override
