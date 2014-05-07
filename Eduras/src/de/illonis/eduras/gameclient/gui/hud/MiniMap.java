@@ -60,10 +60,6 @@ public class MiniMap extends ClickableGuiElement {
 	private void renderPlayers(Graphics g) {
 		for (MiniMapPlayer object : players.values()) {
 			g.setColor(object.getColor());
-			// System.out.println("rendering player " +
-			// object.getPlayer().getId() + " at " + object.getX() + ", "
-			// + object.getY());
-			// System.out.println("size: " + object.getWidth());
 			g.fillOval(object.getX(), object.getY(), object.getWidth(),
 					object.getHeight());
 		}
@@ -96,12 +92,6 @@ public class MiniMap extends ClickableGuiElement {
 		renderNeutral(g);
 		renderBases(g);
 		renderPlayers(g);
-		// try {
-		// Image i = ImageCache.getGuiImage(ImageKey.MINIMAP_DUMMY);
-		// g.drawImage(i, screenX, screenY);
-		// } catch (CacheException e) {
-		// L.log(Level.WARNING, "Minimap dummy image not found.", e);
-		// }
 	}
 
 	@Override
