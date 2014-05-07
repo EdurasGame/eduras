@@ -51,8 +51,8 @@ public class ClientGameEventListener implements GameEventListener {
 	}
 
 	@Override
-	public void onNewObjectPosition(GameObject player) {
-
+	public void onNewObjectPosition(GameObject object) {
+		ui.onNewObjectPosition(object);
 	}
 
 	@Override
@@ -62,6 +62,7 @@ public class ClientGameEventListener implements GameEventListener {
 
 	@Override
 	public void onObjectCreation(ObjectFactoryEvent event) {
+		ui.onObjectCreation(event);
 	}
 
 	@Override

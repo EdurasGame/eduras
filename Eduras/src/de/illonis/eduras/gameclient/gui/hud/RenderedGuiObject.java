@@ -5,6 +5,7 @@ import java.util.LinkedList;
 import org.newdawn.slick.Graphics;
 
 import de.illonis.eduras.gameclient.GameEventAdapter;
+import de.illonis.eduras.gameclient.gui.game.GameCamera;
 import de.illonis.eduras.gameclient.gui.game.GuiClickReactor;
 import de.illonis.eduras.gameclient.gui.game.TooltipHandler;
 import de.illonis.eduras.logicabstraction.InformationProvider;

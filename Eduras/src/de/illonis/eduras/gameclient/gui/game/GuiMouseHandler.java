@@ -60,6 +60,30 @@ public final class GuiMouseHandler extends GuiMouseAdapter implements
 	}
 
 	@Override
+	public void mapClicked(Vector2f gamePos) {
+		Player player;
+		try {
+			player = infoPro.getPlayer();
+		} catch (ObjectNotFoundException e) {
+			L.log(Level.SEVERE, "Something terribly bad happened.", e);
+			return;
+		}
+		switch (player.getCurrentMode()) {
+		case MODE_EGO:
+			egoModeHandler.mapClicked(gamePos);
+			break;
+		case MODE_STRATEGY:
+			buildModeHandler.mapClicked(gamePos);
+			break;
+		case MODE_DEAD:
+			deadModeHandler.mapClicked(gamePos);
+			break;
+		default:
+			break;
+		}
+	}
+
+	@Override
 	public void itemClicked(int slot) {
 		Player player;
 		try {

@@ -1,5 +1,7 @@
 package de.illonis.eduras.gameclient.gui.game;
 
+import org.newdawn.slick.geom.Vector2f;
+
 import de.illonis.eduras.gameclient.gui.hud.ClickableGuiElementInterface;
 
 /**
@@ -34,4 +36,12 @@ public interface GuiClickReactor {
 	 *            element to remove.
 	 */
 	void removeClickableGuiElement(ClickableGuiElementInterface elem);
+
+	/**
+	 * Indicates a click on the minimap that correspondates a position ingame.
+	 * 
+	 * @param gamePos
+	 *            the target location on map.
+	 */
+	void mapClicked(Vector2f gamePos);
 }

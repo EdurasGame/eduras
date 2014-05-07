@@ -315,14 +315,9 @@ public class ObjectFactory {
 				go.setId(id);
 				go.setOwner(owner);
 				logic.getGame().addObject(go);
-				try {
-					logic.getGame().getEventTriggerer()
-							.notifyObjectCreated(event);
-					logic.getListener().onObjectCreation(event);
-				} catch (NullPointerException | IllegalStateException e) {
-					// (jme) we need to catch it here because a listener is not
-					// assigned on initial map creation.
-				}
+
+				logic.getGame().getEventTriggerer().notifyObjectCreated(event);
+				logic.getListener().onObjectCreation(event);
 			}
 
 		}
@@ -343,6 +338,7 @@ public class ObjectFactory {
 						objectToRemove.getPositionVector(),
 						S.go_rocketmissile_damageradius);
 			}
+			logic.getListener().onObjectRemove(event);
 			logic.getGame().removeObject(objectToRemove);
 		}
 	}

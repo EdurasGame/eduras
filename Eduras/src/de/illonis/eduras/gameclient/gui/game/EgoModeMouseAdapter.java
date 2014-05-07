@@ -204,4 +204,8 @@ public class EgoModeMouseAdapter extends GuiMouseAdapter {
 	public void mouseWheelMoved(int change) {
 	}
 
+	@Override
+	public void mapClicked(Vector2f gamePos) {		
+	}
+
 }

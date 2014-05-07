@@ -99,7 +99,7 @@ public class GameRenderer implements TooltipHandler {
 	/**
 	 * @return the current viewport.
 	 */
-	public Rectangle getViewport() {
+	public GameCamera getViewport() {
 		return viewPort;
 	}
 
