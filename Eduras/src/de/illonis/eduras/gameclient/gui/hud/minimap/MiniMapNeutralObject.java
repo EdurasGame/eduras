@@ -1,5 +1,7 @@
 package de.illonis.eduras.gameclient.gui.hud.minimap;
 
+import org.newdawn.slick.geom.Vector2f;
+
 import de.illonis.eduras.gameobjects.GameObject;
 
 /**
@@ -35,5 +37,10 @@ public class MiniMapNeutralObject extends MiniMapObject {
 	 */
 	public GameObject getObject() {
 		return object;
+	}
+
+	@Override
+	public Vector2f getObjectLocation() {
+		return object.getPositionVector();
 	}
 }

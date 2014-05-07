@@ -1,6 +1,7 @@
 package de.illonis.eduras.gameclient.gui.hud.minimap;
 
 import org.newdawn.slick.Color;
+import org.newdawn.slick.geom.Vector2f;
 
 import de.illonis.eduras.gameobjects.NeutralBase;
 
@@ -38,6 +39,11 @@ public class MiniMapBase extends MiniMapObject {
 		if (base.getCurrentOwnerTeam() == null)
 			return Color.white;
 		return base.getCurrentOwnerTeam().getColor();
+	}
+	
+	@Override
+	public Vector2f getObjectLocation() {
+		return base.getPositionVector();
 	}
 
 }

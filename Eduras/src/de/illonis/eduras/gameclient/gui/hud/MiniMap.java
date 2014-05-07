@@ -12,6 +12,7 @@ import org.newdawn.slick.geom.Vector2f;
 import de.illonis.edulog.EduLog;
 import de.illonis.eduras.events.ObjectFactoryEvent;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
+import de.illonis.eduras.gameclient.gui.game.GameCamera;
 import de.illonis.eduras.gameclient.gui.hud.minimap.MiniMapBase;
 import de.illonis.eduras.gameclient.gui.hud.minimap.MiniMapNeutralObject;
 import de.illonis.eduras.gameclient.gui.hud.minimap.MiniMapPlayer;
@@ -36,7 +37,7 @@ public class MiniMap extends ClickableGuiElement {
 	private HashMap<Integer, MiniMapNeutralObject> neutralObjects;
 	private HashMap<Integer, MiniMapBase> bases;
 	private HashMap<Integer, MiniMapPlayer> players;
-	private Rectangle viewPort;
+	private GameCamera viewPort;
 	private float scale;
 
 	final static int SIZE = 150;
@@ -49,7 +50,6 @@ public class MiniMap extends ClickableGuiElement {
 		bases = new HashMap<Integer, MiniMapBase>();
 		players = new HashMap<Integer, MiniMapPlayer>();
 		scale = 1f;
-		viewPort = new Rectangle(0, 0, 0, 0);
 	}
 
 	private void renderNeutral(Graphics g) {
@@ -129,6 +129,22 @@ public class MiniMap extends ClickableGuiElement {
 	public void onGuiSizeChanged(int newWidth, int newHeight) {
 		screenY = newHeight - SIZE;
 		bounds.setLocation(screenX, screenY);
+		relocateObjects();
+	}
+
+	private void relocateObjects() {
+		for (MiniMapPlayer player : players.values()) {
+			Vector2f miniPos = gameToMinimapPosition(player.getObjectLocation());
+			player.setLocation(miniPos.x, miniPos.y);
+		}
+		for (MiniMapBase base : bases.values()) {
+			Vector2f miniPos = gameToMinimapPosition(base.getObjectLocation());
+			base.setLocation(miniPos.x, miniPos.y);
+		}
+		for (MiniMapNeutralObject object : neutralObjects.values()) {
+			Vector2f miniPos = gameToMinimapPosition(object.getObjectLocation());
+			object.setLocation(miniPos.x, miniPos.y);
+		}
 	}
 
 	@Override
@@ -213,7 +229,7 @@ public class MiniMap extends ClickableGuiElement {
 		}
 	}
 
-	public void setCamera(Rectangle viewport) {
+	public void setCamera(GameCamera viewport) {
 		this.viewPort = viewport;
 	}
 

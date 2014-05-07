@@ -1,5 +1,7 @@
 package de.illonis.eduras.gameclient.gui.hud.minimap;
 
+import org.newdawn.slick.geom.Vector2f;
+
 /**
  * 
  * @author illonis
@@ -27,6 +29,11 @@ public abstract class MiniMapObject {
 		this.height = height;
 		setLocation(x, y);
 	}
+
+	/**
+	 * @return the location of the object on real map.
+	 */
+	public abstract Vector2f getObjectLocation();
 
 	/**
 	 * Relocates this object.

@@ -99,7 +99,7 @@ public class GameRenderer implements TooltipHandler {
 	/**
 	 * @return the current viewport.
 	 */
-	public Rectangle getViewport() {
+	public GameCamera getViewport() {
 		return viewPort;
 	}
 
@@ -160,6 +160,7 @@ public class GameRenderer implements TooltipHandler {
 
 		if (scale != newScale) {
 			viewPort.setSize(width, height);
+			viewPort.setScale(newScale);
 		}
 
 		scale = newScale;

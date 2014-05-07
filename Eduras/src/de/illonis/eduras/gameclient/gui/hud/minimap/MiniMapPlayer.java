@@ -1,6 +1,7 @@
 package de.illonis.eduras.gameclient.gui.hud.minimap;
 
 import org.newdawn.slick.Color;
+import org.newdawn.slick.geom.Vector2f;
 
 import de.illonis.eduras.units.PlayerMainFigure;
 
@@ -44,6 +45,11 @@ public class MiniMapPlayer extends MiniMapObject {
 	 */
 	public Color getColor() {
 		return player.getTeam().getColor();
+	}
+
+	@Override
+	public Vector2f getObjectLocation() {
+		return player.getPositionVector();
 	}
 
 }
