@@ -50,6 +50,7 @@ public class UserInterface implements GuiResizeListener, UserInputListener {
 	private ActionBar actionBar;
 	private HudNotifier hudNotifier;
 	private final GuiInternalEventListener guiReactor;
+	private MiniMap minimap;
 
 	/**
 	 * Creates the user interface. The tooltip handler will be set manually
@@ -104,7 +105,7 @@ public class UserInterface implements GuiResizeListener, UserInputListener {
 		new ItemDisplay(this);
 		new GameModeBar(this);
 		new PlayerStatBar(this);
-		new MiniMap(this);
+		minimap = new MiniMap(this);
 		new TimeFrame(this);
 		new ResourceDisplay(this);
 		pingDisplay = new PingDisplay(this);
@@ -303,5 +304,6 @@ public class UserInterface implements GuiResizeListener, UserInputListener {
 	 */
 	public void setRenderer(GameRenderer renderer) {
 		this.renderer = renderer;
+		minimap.setCamera(renderer.getViewport());
 	}
 }

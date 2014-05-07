@@ -36,6 +36,7 @@ public class MiniMap extends ClickableGuiElement {
 	private HashMap<Integer, MiniMapNeutralObject> neutralObjects;
 	private HashMap<Integer, MiniMapBase> bases;
 	private HashMap<Integer, MiniMapPlayer> players;
+	private Rectangle viewPort;
 	private float scale;
 
 	final static int SIZE = 150;
@@ -48,6 +49,7 @@ public class MiniMap extends ClickableGuiElement {
 		bases = new HashMap<Integer, MiniMapBase>();
 		players = new HashMap<Integer, MiniMapPlayer>();
 		scale = 1f;
+		viewPort = new Rectangle(0, 0, 0, 0);
 	}
 
 	private void renderNeutral(Graphics g) {
@@ -112,6 +114,15 @@ public class MiniMap extends ClickableGuiElement {
 		renderNeutral(g);
 		renderBases(g);
 		renderPlayers(g);
+		renderViewPort(g);
+	}
+
+	private void renderViewPort(Graphics g) {
+		g.setLineWidth(1f);
+		g.setColor(Color.white);
+		Vector2f pos = gameToMinimapPosition(viewPort.getLocation());
+		g.drawRect(pos.x, pos.y, viewPort.getWidth() * scale,
+				viewPort.getHeight() * scale);
 	}
 
 	@Override
@@ -200,6 +211,10 @@ public class MiniMap extends ClickableGuiElement {
 		for (GameObject o : getInfo().getGameObjects().values()) {
 			maybeAddObject(o);
 		}
+	}
+
+	public void setCamera(Rectangle viewport) {
+		this.viewPort = viewport;
 	}
 
 }
