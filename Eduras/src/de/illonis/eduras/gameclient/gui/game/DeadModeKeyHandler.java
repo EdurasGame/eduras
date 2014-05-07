@@ -7,6 +7,12 @@ import de.illonis.eduras.exceptions.ActionFailedException;
 import de.illonis.eduras.gameclient.GamePanelReactor;
 import de.illonis.eduras.gameclient.userprefs.KeyBindings.KeyBinding;
 
+/**
+ * {@link GuiKeyHandler} for a dead player.
+ * 
+ * @author Florian 'Ren' Mai <florian.ren.mai@googlemail.com>
+ * 
+ */
 public class DeadModeKeyHandler extends GuiKeyHandler {
 
 	private final static Logger L = EduLog

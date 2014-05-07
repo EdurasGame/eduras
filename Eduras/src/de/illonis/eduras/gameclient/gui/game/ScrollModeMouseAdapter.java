@@ -7,6 +7,12 @@ import org.newdawn.slick.geom.Vector2f;
 import de.illonis.edulog.EduLog;
 import de.illonis.eduras.gameclient.GuiInternalEventListener;
 
+/**
+ * Abstract mouse adapter that enables the user to scroll over the map.
+ * 
+ * @author Florian 'Ren' Mai <florian.ren.mai@googlemail.com>
+ * 
+ */
 public abstract class ScrollModeMouseAdapter extends GuiMouseAdapter {
 
 	private final static Logger L = EduLog

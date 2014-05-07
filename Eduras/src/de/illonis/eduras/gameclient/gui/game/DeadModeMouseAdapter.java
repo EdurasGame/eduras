@@ -4,7 +4,14 @@ import java.util.logging.Logger;
 
 import de.illonis.edulog.EduLog;
 import de.illonis.eduras.gameclient.GuiInternalEventListener;
+import de.illonis.eduras.units.InteractMode;
 
+/**
+ * The {@link GuiMouseAdapter} for a player in {@link InteractMode}_DEAD_MODE.
+ * 
+ * @author Florian 'Ren' Mai <florian.ren.mai@googlemail.com>
+ * 
+ */
 public class DeadModeMouseAdapter extends ScrollModeMouseAdapter {
 
 	private final static Logger L = EduLog

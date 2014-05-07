@@ -10,11 +10,28 @@ import de.illonis.eduras.logic.EventTriggerer;
 import de.illonis.eduras.settings.S;
 import de.illonis.eduras.units.InteractMode;
 
+/**
+ * A RespawnPlayerAction respawns a dead player at a neutral base of the
+ * player's team.
+ * 
+ * @author Florian 'Ren' Mai <florian.ren.mai@googlemail.com>
+ * 
+ */
 public class RespawnPlayerAction extends RTSAction {
 
 	private Player playerToRespawn;
 	private NeutralBase base;
 
+	/**
+	 * Create a new RespawnPlayerAction.
+	 * 
+	 * @param executingPlayer
+	 *            the player to execute the respawning of a player
+	 * @param playerToRespawn
+	 *            the player to be respawned
+	 * @param base
+	 *            the base to respawn the player at
+	 */
 	public RespawnPlayerAction(Player executingPlayer, Player playerToRespawn,
 			NeutralBase base) {
 		super(executingPlayer, S.gm_edura_action_respawnplayer_cost);

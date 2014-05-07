@@ -11,6 +11,12 @@ import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.math.Vector2df;
 import de.illonis.eduras.settings.S;
 
+/**
+ * This action spawns an item of a certain type at a certain position.
+ * 
+ * @author Florian 'Ren' Mai <florian.ren.mai@googlemail.com>
+ * 
+ */
 public class SpawnItemAction extends RTSAction {
 
 	private final static Logger L = EduLog.getLoggerFor(SpawnItemAction.class
@@ -19,6 +25,18 @@ public class SpawnItemAction extends RTSAction {
 	private ObjectType itemType;
 	private Vector2df spawnPos;
 
+	/**
+	 * Create a new SpawnItemAction.
+	 * 
+	 * @param executingPlayer
+	 *            The player to perform the action.
+	 * @param itemType
+	 *            The type of the item to spawn. Must be an item type.
+	 * @param position
+	 *            the location to spawn the item at.
+	 * @throws WrongObjectTypeException
+	 *             Thrown if the given type is not an item.
+	 */
 	public SpawnItemAction(Player executingPlayer, ObjectType itemType,
 			Vector2df position) throws WrongObjectTypeException {
 		super(executingPlayer, -1);
@@ -50,7 +68,7 @@ public class SpawnItemAction extends RTSAction {
 			costs = S.go_mineweapon_costs;
 			break;
 		case ASSAULTRIFLE:
-			costs = S.go_assaultmissile_costs;
+			costs = S.go_assaultrifle_costs;
 			break;
 		default:
 			throw new WrongObjectTypeException(itemType);

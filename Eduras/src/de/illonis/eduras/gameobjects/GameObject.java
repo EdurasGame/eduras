@@ -24,6 +24,9 @@ import de.illonis.eduras.units.Unit;
  */
 public abstract class GameObject implements Comparable<GameObject> {
 
+	/**
+	 * denotes the environment (or that there is no owner respectivly)
+	 */
 	public static final int OWNER_WORLD = -1;
 
 	/**
@@ -107,10 +110,20 @@ public abstract class GameObject implements Comparable<GameObject> {
 		setObjectType(ObjectType.NO_OBJECT);
 	}
 
+	/**
+	 * Returns the x coordinate of the shape's offset.
+	 * 
+	 * @return x coordinate of shape's offset.
+	 */
 	public float getShapeOffsetX() {
 		return shapeOffsetX;
 	}
 
+	/**
+	 * Returns the y coordinate of the shape's offset.
+	 * 
+	 * @return y coordinate of shape's offset.
+	 */
 	public float getShapeOffsetY() {
 		return shapeOffsetY;
 	}
@@ -138,6 +151,11 @@ public abstract class GameObject implements Comparable<GameObject> {
 		this.owner = owner;
 	}
 
+	/**
+	 * Returns the timing source this object uses for timing events.
+	 * 
+	 * @return timing source
+	 */
 	public TimingSource getTimingSource() {
 		return timingSource;
 	}

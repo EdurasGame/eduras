@@ -104,10 +104,20 @@ public class NeutralBase extends NeutralArea {
 		return resourceGenerateTimeInterval;
 	}
 
+	/**
+	 * Returns the factor the generated amount is multiplied by.
+	 * 
+	 * @return multiplicator
+	 */
 	public int getResourceGenerateMultiplicator() {
 		return resourceGenerateMultiplicator;
 	}
 
+	/**
+	 * set the factor the generated amount is mutliplied by.
+	 * 
+	 * @param resourceGenerateMultiplicator
+	 */
 	public void setResourceGenerateMultiplicator(
 			int resourceGenerateMultiplicator) {
 		this.resourceGenerateMultiplicator = resourceGenerateMultiplicator;

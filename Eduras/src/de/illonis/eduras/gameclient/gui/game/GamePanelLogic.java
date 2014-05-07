@@ -376,6 +376,13 @@ public class GamePanelLogic extends ClientGuiStepLogic implements
 		currentClickState = ClickState.ITEM_SELECTED;
 	}
 
+	/**
+	 * Called when an RTS action fails. Displays an error message on the
+	 * notification panel.
+	 * 
+	 * @param e
+	 *            the related {@link ActionFailedException}.
+	 */
 	public void onActionFailed(ActionFailedException e) {
 		showNotification(e.getMessage());
 	}

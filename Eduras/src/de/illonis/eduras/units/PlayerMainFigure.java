@@ -40,6 +40,8 @@ public class PlayerMainFigure extends Unit implements MovementControlable {
 	 *            The id of the owner.
 	 * @param id
 	 *            id of the player.
+	 * @param player
+	 *            the respective player this main figure belongs to.
 	 */
 	public PlayerMainFigure(GameInformation game, TimingSource timingSource,
 			int ownerId, int id, Player player) {
@@ -112,10 +114,20 @@ public class PlayerMainFigure extends Unit implements MovementControlable {
 		//
 	}
 
+	/**
+	 * Set the player this main figure belongs to.
+	 * 
+	 * @param player
+	 */
 	public void setPlayer(Player player) {
 		this.player = player;
 	}
 
+	/**
+	 * Returns the player this main figure belongs to.
+	 * 
+	 * @return player
+	 */
 	public Player getPlayer() {
 		return player;
 	}

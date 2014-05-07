@@ -642,6 +642,12 @@ public class GameInformation {
 		return objectsOfType;
 	}
 
+	/**
+	 * Remove a player.
+	 * 
+	 * @param clientId
+	 *            the players clientId (ownerId).
+	 */
 	public void removePlayer(int clientId) {
 		players.remove(clientId);
 	}
