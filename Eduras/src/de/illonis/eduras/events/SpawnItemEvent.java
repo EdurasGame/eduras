@@ -2,10 +2,11 @@ package de.illonis.eduras.events;
 
 import java.util.logging.Logger;
 
+import org.newdawn.slick.geom.Vector2f;
+
 import de.illonis.edulog.EduLog;
 import de.illonis.eduras.ObjectFactory.ObjectType;
 import de.illonis.eduras.actions.SpawnItemAction;
-import de.illonis.eduras.math.Vector2df;
 
 /**
  * Respective event for {@link SpawnItemAction}.
@@ -19,7 +20,7 @@ public class SpawnItemEvent extends RTSActionEvent {
 			.getName());
 
 	private ObjectType objectType;
-	private Vector2df position;
+	private Vector2f position;
 
 	/**
 	 * Create the event.
@@ -31,7 +32,7 @@ public class SpawnItemEvent extends RTSActionEvent {
 	 * @param position
 	 */
 	public SpawnItemEvent(int executingPlayer, ObjectType type,
-			Vector2df position) {
+			Vector2f position) {
 		super(GameEventNumber.SPAWN_ITEM, executingPlayer);
 
 		putArgument(type.getNumber());
@@ -56,7 +57,7 @@ public class SpawnItemEvent extends RTSActionEvent {
 	 * 
 	 * @return Location
 	 */
-	public Vector2df getPosition() {
+	public Vector2f getPosition() {
 		return position;
 	}
 }

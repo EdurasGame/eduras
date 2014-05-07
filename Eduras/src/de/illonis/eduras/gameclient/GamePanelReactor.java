@@ -7,6 +7,7 @@ import org.newdawn.slick.geom.Vector2f;
 import de.illonis.eduras.ObjectFactory.ObjectType;
 import de.illonis.eduras.Player;
 import de.illonis.eduras.exceptions.NotWithinBaseException;
+import de.illonis.eduras.exceptions.WrongObjectTypeException;
 import de.illonis.eduras.gameclient.gui.game.GamePanelLogic.ClickState;
 import de.illonis.eduras.gameobjects.MoveableGameObject.Direction;
 import de.illonis.eduras.gameobjects.NeutralBase;
@@ -94,6 +95,18 @@ public interface GamePanelReactor {
 	 *            target location.
 	 */
 	void onSpawnScout(Vector2f target);
+
+	/**
+	 * Indicates that the player wants to spawn an item of the given type at the
+	 * given location.
+	 * 
+	 * @param type
+	 * @param locationToSpawnAt
+	 * @throws WrongObjectTypeException
+	 *             thrown if the given type isn't an item
+	 */
+	void onSpawnItem(ObjectType type, Vector2f locationToSpawnAt)
+			throws WrongObjectTypeException;
 
 	/**
 	 * Indicates a mode switch.

@@ -123,10 +123,35 @@ public class ObjectFactory {
 			switch (this) {
 			case OBSERVER:
 				return S.unit_observer_costs;
+			case ITEM_WEAPON_SIMPLE:
+				return S.go_simpleweapon_costs;
+			case ITEM_WEAPON_SNIPER:
+				return S.go_sniperweapon_costs;
+			case ITEM_WEAPON_SPLASH:
+				return S.go_splashweapon_costs;
+			case ITEM_WEAPON_SWORD:
+				return S.go_swordweapon_costs;
+			case ROCKETLAUNCHER:
+				return S.go_rocketlauncher_costs;
+			case MINELAUNCHER:
+				return S.go_mineweapon_costs;
+			case ASSAULTRIFLE:
+				return S.go_assaultrifle_costs;
 			default:
 				return 0;
 
 			}
+		}
+
+		public static LinkedList<ObjectType> getItemTypes() {
+			LinkedList<ObjectType> itemTypes = new LinkedList<ObjectType>();
+			for (ObjectType someObjectType : ObjectType.values()) {
+				if (someObjectType.isItem()) {
+					itemTypes.add(someObjectType);
+				}
+			}
+
+			return itemTypes;
 		}
 	}
 

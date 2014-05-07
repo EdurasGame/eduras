@@ -19,6 +19,7 @@ import de.illonis.eduras.events.ItemEvent;
 import de.illonis.eduras.events.ResurrectPlayerEvent;
 import de.illonis.eduras.events.ScoutSpellEvent;
 import de.illonis.eduras.events.SendUnitsEvent;
+import de.illonis.eduras.events.SpawnItemEvent;
 import de.illonis.eduras.events.SwitchInteractModeEvent;
 import de.illonis.eduras.events.UserMovementEvent;
 import de.illonis.eduras.exceptions.InsufficientResourceException;
@@ -26,6 +27,7 @@ import de.illonis.eduras.exceptions.MessageNotSupportedException;
 import de.illonis.eduras.exceptions.NotWithinBaseException;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
 import de.illonis.eduras.exceptions.WrongEventTypeException;
+import de.illonis.eduras.exceptions.WrongObjectTypeException;
 import de.illonis.eduras.gameclient.gui.game.GamePanelLogic.ClickState;
 import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.gameobjects.GameObject.Relation;
@@ -406,5 +408,41 @@ public class GuiInternalEventListener implements LoginPanelReactor,
 			L.log(Level.SEVERE, "Error casting vision spell event", e);
 		}
 
+	}
+
+	@Override
+	public void onSpawnItem(ObjectType type, Vector2f locationToSpawnAt)
+			throws WrongObjectTypeException {
+		Player player;
+		try {
+			player = infoPro.getPlayer();
+		} catch (ObjectNotFoundException e) {
+			L.log(Level.SEVERE, "Player not found spawning observer.", e);
+			return;
+		}
+
+		if (!type.isItem()) {
+			throw new WrongObjectTypeException(type);
+		}
+
+		try {
+			hasSufficientResources(player, type.getCosts());
+		} catch (InsufficientResourceException e1) {
+			client.getFrame().getGamePanel().onActionFailed(e1);
+			return;
+		}
+
+		// TODO: only allow to spawn where you have vision...
+
+		SpawnItemEvent spawnItemEvent = new SpawnItemEvent(
+				player.getPlayerId(), type, locationToSpawnAt);
+
+		try {
+			client.sendEvent(spawnItemEvent);
+			client.getFrame().getGamePanel()
+					.showNotification("Spawning " + type.toString());
+		} catch (WrongEventTypeException | MessageNotSupportedException e) {
+			L.log(Level.SEVERE, "Error spawning item", e);
+		}
 	}
 }

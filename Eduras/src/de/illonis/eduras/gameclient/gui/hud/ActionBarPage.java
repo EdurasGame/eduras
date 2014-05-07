@@ -23,7 +23,7 @@ public class ActionBarPage extends GameEventAdapter {
 	 */
 	@SuppressWarnings("javadoc")
 	public enum PageNumber {
-		MAIN, RESURRECT, HEAL;
+		MAIN, RESURRECT, HEAL, ITEMS;
 	}
 
 	/**

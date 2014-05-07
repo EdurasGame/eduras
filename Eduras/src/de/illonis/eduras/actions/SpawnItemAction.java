@@ -2,13 +2,14 @@ package de.illonis.eduras.actions;
 
 import java.util.logging.Logger;
 
+import org.newdawn.slick.geom.Vector2f;
+
 import de.illonis.edulog.EduLog;
 import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.ObjectFactory.ObjectType;
 import de.illonis.eduras.Player;
 import de.illonis.eduras.exceptions.WrongObjectTypeException;
 import de.illonis.eduras.gameobjects.GameObject;
-import de.illonis.eduras.math.Vector2df;
 import de.illonis.eduras.settings.S;
 
 /**
@@ -23,7 +24,7 @@ public class SpawnItemAction extends RTSAction {
 			.getName());
 
 	private ObjectType itemType;
-	private Vector2df spawnPos;
+	private Vector2f spawnPos;
 
 	/**
 	 * Create a new SpawnItemAction.
@@ -38,7 +39,7 @@ public class SpawnItemAction extends RTSAction {
 	 *             Thrown if the given type is not an item.
 	 */
 	public SpawnItemAction(Player executingPlayer, ObjectType itemType,
-			Vector2df position) throws WrongObjectTypeException {
+			Vector2f position) throws WrongObjectTypeException {
 		super(executingPlayer, -1);
 
 		this.itemType = itemType;

@@ -22,7 +22,28 @@ public final class CacheInfo {
 	 */
 	@SuppressWarnings("javadoc")
 	public enum ImageKey {
-		STATISTICS_BG, MINIMAP_DUMMY, RESOURCE_ICON, ACTION_HEAL, ACTION_RESURRECT, ACTION_RESURRECT_PLAYER, ACTION_ABORT, ACTION_SPAWN_OBSERVER, ACTION_SPELL_SCOUT;
+		STATISTICS_BG, MINIMAP_DUMMY, RESOURCE_ICON, ACTION_HEAL, ACTION_RESURRECT, ACTION_RESURRECT_PLAYER, ACTION_ABORT, ACTION_SPAWN_OBSERVER, ACTION_SPELL_SCOUT, ACTION_SPAWN_ITEMS, ITEM_DUMMY, ITEM_SIMPLEWEAPON, ITEM_SNIPERWEAPON, ITEM_SPLASHWEAPON, ITEM_SWORDWEAPON, ITEM_ROCKETLAUNCHER, ITEM_MINELAUNCHER, ITEM_ASSAULTRIFLE;
+
+		public static ImageKey typeToImageKey(ObjectType type) {
+			switch (type) {
+			case ITEM_WEAPON_SIMPLE:
+				return ImageKey.ITEM_SIMPLEWEAPON;
+			case ITEM_WEAPON_SNIPER:
+				return ImageKey.ITEM_SNIPERWEAPON;
+			case ITEM_WEAPON_SPLASH:
+				return ImageKey.ITEM_SPLASHWEAPON;
+			case ITEM_WEAPON_SWORD:
+				return ImageKey.ITEM_SWORDWEAPON;
+			case ROCKETLAUNCHER:
+				return ImageKey.ITEM_ROCKETLAUNCHER;
+			case MINELAUNCHER:
+				return ImageKey.ITEM_MINELAUNCHER;
+			case ASSAULTRIFLE:
+				return ImageKey.ITEM_ASSAULTRIFLE;
+			default:
+				return ImageKey.ITEM_DUMMY;
+			}
+		}
 	}
 
 	/**
@@ -78,6 +99,25 @@ public final class CacheInfo {
 				"gui/icons/icon-spawn-observer.png");
 		guiImages.put(ImageKey.ACTION_SPELL_SCOUT,
 				"gui/icons/icon-spell-scout.png");
+
+		// items
+		guiImages.put(ImageKey.ITEM_DUMMY, "gui/icons/icon-resurrect.png");
+		guiImages.put(ImageKey.ACTION_SPAWN_ITEMS,
+				"gui/icons/icon_spawn_item.png");
+		guiImages.put(ImageKey.ITEM_ASSAULTRIFLE,
+				inventoryIcons.get(ObjectType.ASSAULTRIFLE));
+		guiImages.put(ImageKey.ITEM_MINELAUNCHER,
+				inventoryIcons.get(ObjectType.MINELAUNCHER));
+		guiImages.put(ImageKey.ITEM_ROCKETLAUNCHER,
+				inventoryIcons.get(ObjectType.ROCKETLAUNCHER));
+		guiImages.put(ImageKey.ITEM_SIMPLEWEAPON,
+				inventoryIcons.get(ObjectType.ITEM_WEAPON_SIMPLE));
+		guiImages.put(ImageKey.ITEM_SNIPERWEAPON,
+				inventoryIcons.get(ObjectType.ITEM_WEAPON_SNIPER));
+		guiImages.put(ImageKey.ITEM_SPLASHWEAPON,
+				inventoryIcons.get(ObjectType.ITEM_WEAPON_SPLASH));
+		guiImages.put(ImageKey.ITEM_SWORDWEAPON,
+				inventoryIcons.get(ObjectType.ITEM_WEAPON_SWORD));
 
 		imageIcons = new HashMap<ImageKey, String>();
 	}
