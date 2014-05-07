@@ -24,6 +24,7 @@ import de.illonis.eduras.maps.Map;
 import de.illonis.eduras.maps.NodeData;
 import de.illonis.eduras.maps.SpawnPosition;
 import de.illonis.eduras.maps.SpawnPosition.SpawnType;
+import de.illonis.eduras.math.Vector2df;
 
 /**
  * Provides functionality to parse a human readable map into map data. More
@@ -156,8 +157,28 @@ public class MapParser {
 								.valueOf(objectData[0].trim());
 						objX = evaluateString(objectData[1], width, height);
 						objY = evaluateString(objectData[2], width, height);
-						InitialObjectData oData = new InitialObjectData(
-								objectType, objX, objY);
+
+						InitialObjectData oData;
+
+						if (objectType.equals(ObjectType.DYNAMIC_POLYGON_BLOCK)) {
+							// handle dynamic blocks
+							int numOfVertexCoordinates = objectData.length - 3;
+							if ((numOfVertexCoordinates % 2) != 0
+									|| numOfVertexCoordinates < 4) {
+								throw new InvalidDataException(
+										"Number of vertices either odd or not at least 2 vertices.");
+							} else {
+								Vector2df[] vertices = readVertices(objectData,
+										width, height,
+										numOfVertexCoordinates / 2);
+								oData = new InitialObjectData(objectType, objX,
+										objY, vertices);
+							}
+						} else {
+							// handle normal objects
+							oData = new InitialObjectData(objectType, objX,
+									objY);
+						}
 						gameObjects.add(oData);
 					} catch (ScriptException e) {
 						throw new InvalidDataException(
@@ -243,6 +264,20 @@ public class MapParser {
 			return new LoadedMap(mapName, author, width, height, created,
 					spawnPositions, gameObjects, gameModes);
 		}
+	}
+
+	private static Vector2df[] readVertices(String[] objectData, int width,
+			int height, int numberOfVertices) throws ScriptException {
+		Vector2df[] vertices = new Vector2df[numberOfVertices];
+		for (int i = 0; i < numberOfVertices; i++) {
+			float vertexXCoordinate = evaluateString(objectData[3 + 2 * i],
+					width, height);
+			float vertexYCoordinate = evaluateString(objectData[3 + 2 * i + 1],
+					width, height);
+			vertices[i] = new Vector2df(vertexXCoordinate, vertexYCoordinate);
+		}
+
+		return vertices;
 	}
 
 	/**
