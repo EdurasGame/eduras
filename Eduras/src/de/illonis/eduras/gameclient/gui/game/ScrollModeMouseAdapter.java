@@ -1,11 +1,14 @@
 package de.illonis.eduras.gameclient.gui.game;
 
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.newdawn.slick.geom.Vector2f;
 
 import de.illonis.edulog.EduLog;
+import de.illonis.eduras.exceptions.ObjectNotFoundException;
 import de.illonis.eduras.gameclient.GuiInternalEventListener;
+import de.illonis.eduras.logicabstraction.EdurasInitializer;
 
 /**
  * Abstract mouse adapter that enables the user to scroll over the map.
@@ -58,14 +61,17 @@ public abstract class ScrollModeMouseAdapter extends GuiMouseAdapter {
 	}
 
 	@Override
-	public abstract void mouseDragged(int oldx, int oldy, int newx, int newy);
+	public void mapClicked(Vector2f gamePos) {
+		try {
+			Vector2f newPos = EdurasInitializer.getInstance()
+					.getInformationProvider().getPlayer().getPlayerMainFigure()
+					.getPositionVector().copy();
+			gamePos.sub(newPos);
 
-	@Override
-	public abstract void mousePressed(int button, int x, int y);
-
-	@Override
-	public abstract void mouseReleased(int button, int x, int y);
-
-	@Override
-	public abstract void mouseWheelMoved(int change);
+			getPanelLogic().getCamera().getCameraOffset()
+					.set(gamePos.x, gamePos.y);
+		} catch (ObjectNotFoundException e) {
+			L.log(Level.WARNING, "Could not retrieve player location.", e);
+		}
+	}
 }

@@ -1,19 +1,25 @@
 package de.illonis.eduras.gameclient.gui.hud;
 
 import java.util.HashMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.Vector2f;
 
+import de.illonis.edulog.EduLog;
 import de.illonis.eduras.events.ObjectFactoryEvent;
+import de.illonis.eduras.exceptions.ObjectNotFoundException;
 import de.illonis.eduras.gameclient.gui.hud.minimap.MiniMapBase;
 import de.illonis.eduras.gameclient.gui.hud.minimap.MiniMapNeutralObject;
 import de.illonis.eduras.gameclient.gui.hud.minimap.MiniMapPlayer;
 import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.gameobjects.NeutralBase;
 import de.illonis.eduras.items.weapons.Missile;
+import de.illonis.eduras.items.weapons.Weapon;
+import de.illonis.eduras.units.InteractMode;
 import de.illonis.eduras.units.PlayerMainFigure;
 
 /**
@@ -23,6 +29,9 @@ import de.illonis.eduras.units.PlayerMainFigure;
  * 
  */
 public class MiniMap extends ClickableGuiElement {
+
+	private final static Logger L = EduLog
+			.getLoggerFor(MiniMap.class.getName());
 
 	private HashMap<Integer, MiniMapNeutralObject> neutralObjects;
 	private HashMap<Integer, MiniMapBase> bases;
@@ -67,6 +76,15 @@ public class MiniMap extends ClickableGuiElement {
 
 	@Override
 	public boolean onClick(Vector2f p) {
+		try {
+			if (getInfo().getPlayer().getCurrentMode() == InteractMode.MODE_STRATEGY) {
+				Vector2f gamePos = minimapToGamePosition(p);
+				getMouseHandler().mapClicked(gamePos);
+				return true;
+			}
+		} catch (ObjectNotFoundException e) {
+			L.log(Level.WARNING, "Could not determine interaction mode.", e);
+		}
 		return false;
 	}
 
@@ -82,7 +100,9 @@ public class MiniMap extends ClickableGuiElement {
 	}
 
 	private Vector2f minimapToGamePosition(Vector2f pos) {
-		return null;
+		Vector2f gamePos = new Vector2f(pos).sub(getBounds().getLocation());
+		gamePos.scale(1 / scale);
+		return gamePos;
 	}
 
 	@Override
@@ -138,7 +158,7 @@ public class MiniMap extends ClickableGuiElement {
 			float w = o.getShape().getWidth() * scale;
 			float h = o.getShape().getHeight() * scale;
 			bases.put(o.getId(), new MiniMapBase((NeutralBase) o, x, y, w, h));
-		} else if (o.getOwner() == -1) {
+		} else if (o.getOwner() == -1 && !(o instanceof Weapon)) {
 			float w = o.getShape().getWidth() * scale;
 			float h = o.getShape().getHeight() * scale;
 			neutralObjects.put(o.getId(), new MiniMapNeutralObject(o, x, y, w,
