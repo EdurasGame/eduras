@@ -4,6 +4,7 @@ import java.util.LinkedList;
 import java.util.Set;
 import java.util.TreeSet;
 
+import de.illonis.eduras.ObjectFactory.ObjectType;
 import de.illonis.eduras.Player;
 import de.illonis.eduras.gameclient.gui.animation.Animation;
 import de.illonis.eduras.logicabstraction.InformationProvider;
@@ -22,6 +23,7 @@ public final class ClientData {
 	private final VisionInformation visionInfo;
 	private int currentItemSelected;
 	private Player currentResurrectTarget;
+	private ObjectType typeOfItemToSpawn;
 
 	/**
 	 * Creates a new storage.
@@ -154,6 +156,24 @@ public final class ClientData {
 	 */
 	public Player getCurrentResurrectTarget() {
 		return currentResurrectTarget;
+	}
+
+	/**
+	 * Store the type of item to be spawned next.
+	 * 
+	 * @param typeOfItemToSpawn
+	 */
+	public void setCurrentItemSpawnType(ObjectType typeOfItemToSpawn) {
+		this.typeOfItemToSpawn = typeOfItemToSpawn;
+	}
+
+	/**
+	 * Determines which type of item is currently selected to be spawned.
+	 * 
+	 * @return type
+	 */
+	public ObjectType getTypeOfItemToSpawn() {
+		return typeOfItemToSpawn;
 	}
 
 }

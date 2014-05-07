@@ -14,6 +14,7 @@ import de.illonis.edulog.EduLog;
 import de.illonis.eduras.ObjectFactory.ObjectType;
 import de.illonis.eduras.Player;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
+import de.illonis.eduras.exceptions.WrongObjectTypeException;
 import de.illonis.eduras.gameclient.GuiInternalEventListener;
 import de.illonis.eduras.gameclient.gui.game.GamePanelLogic.ClickState;
 import de.illonis.eduras.gameobjects.GameObject;
@@ -131,6 +132,19 @@ public class BuildModeMouseAdapter extends ScrollModeMouseAdapter {
 								"Please select a base owned by your team to spawn a observer");
 			} else {
 				getPanelLogic().setClickState(ClickState.DEFAULT);
+			}
+			break;
+		case SELECT_POSITION_FOR_ITEMSPAWN:
+			if (button == Input.MOUSE_LEFT_BUTTON) {
+				try {
+					getListener().onSpawnItem(
+							EdurasInitializer.getInstance()
+									.getInformationProvider().getClientData()
+									.getTypeOfItemToSpawn(), clickGamePoint);
+				} catch (WrongObjectTypeException e) {
+					L.log(Level.WARNING, "Cannot spawn this object type!!", e);
+					return;
+				}
 			}
 			break;
 		case SELECT_BASE_FOR_REZZ:
