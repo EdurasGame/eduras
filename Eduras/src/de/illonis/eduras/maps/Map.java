@@ -377,6 +377,8 @@ public abstract class Map {
 			return new TestMap();
 		case "eduratestmap":
 			return new EduraTestMap();
+		case "eduramus":
+			return new Eduramus();
 		default:
 			throw new NoSuchMapException(mapName);
 		}
