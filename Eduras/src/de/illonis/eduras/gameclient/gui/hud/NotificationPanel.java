@@ -17,6 +17,7 @@ import de.illonis.eduras.exceptions.ObjectNotFoundException;
 import de.illonis.eduras.inventory.ItemSlotIsEmptyException;
 import de.illonis.eduras.items.Item;
 import de.illonis.eduras.locale.Localization;
+import de.illonis.eduras.units.PlayerMainFigure;
 
 /**
  * Displays text notifications to the user.
@@ -97,6 +98,12 @@ public class NotificationPanel extends RenderedGuiObject {
 	@Override
 	public void onDeath(DeathEvent event) {
 		try {
+			if (!(getInfo().getGameObjects().get(event.getKilled()) instanceof PlayerMainFigure)) {
+				// TODO: decide: want to show something if the killed unit isn't
+				// a player?
+				return;
+			}
+
 			Player killer = getInfo()
 					.getPlayerByOwnerId(event.getKillerOwner());
 			int killedOwner = getInfo().findObjectById(event.getKilled())
