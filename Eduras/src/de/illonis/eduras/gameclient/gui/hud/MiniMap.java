@@ -158,6 +158,11 @@ public class MiniMap extends ClickableGuiElement {
 		GameObject o = getInfo().findObjectById(event.getId());
 		if (o == null)
 			return;
+
+		if (!isTracked(o)) {
+			return;
+		}
+
 		if (o instanceof PlayerMainFigure)
 			players.remove(o.getId());
 		else if (o instanceof NeutralBase) {
@@ -168,7 +173,7 @@ public class MiniMap extends ClickableGuiElement {
 	}
 
 	private void maybeAddObject(GameObject o) {
-		if (o == null || o instanceof Missile) {
+		if (!isTracked(o)) {
 			return;
 		}
 		Vector2f gamePos = new Vector2f(o.getXPosition(), o.getYPosition());
@@ -193,8 +198,19 @@ public class MiniMap extends ClickableGuiElement {
 		}
 	}
 
+	private boolean isTracked(GameObject o) {
+		if (o == null || o instanceof Missile || o instanceof Weapon) {
+			return false;
+		}
+		return true;
+	}
+
 	@Override
 	public void onNewObjectPosition(GameObject object) {
+		if (!isTracked(object)) {
+			return;
+		}
+
 		Vector2f gamePos = new Vector2f(object.getXPosition(),
 				object.getYPosition());
 		Vector2f miniPos = gameToMinimapPosition(gamePos);
@@ -223,7 +239,6 @@ public class MiniMap extends ClickableGuiElement {
 		float size = Math.min(r.getWidth(), r.getHeight());
 		scale = SIZE / size;
 
-		System.out.println("scale: " + scale);
 		for (GameObject o : getInfo().getGameObjects().values()) {
 			maybeAddObject(o);
 		}
