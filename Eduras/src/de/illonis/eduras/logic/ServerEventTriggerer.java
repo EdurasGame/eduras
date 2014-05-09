@@ -444,20 +444,6 @@ public class ServerEventTriggerer implements EventTriggerer {
 			}
 		}
 
-		// find bounds map object and fail if you cannot find it
-		boolean mapBoundsFound = false;
-		for (GameObject o : gameInfo.getObjects().values()) {
-			if (o.getType() == ObjectType.MAPBOUNDS) {
-				mapBoundsFound = true;
-				gameInfo.getMap().setBoundsObject(o);
-				setVisibility(o.getId(), Visibility.INVISIBLE);
-				break;
-			}
-		}
-		if (!mapBoundsFound) {
-			L.severe("Cannot find the map bounds!");
-		}
-
 		gameInfo.getGameSettings().getGameMode().onGameStart();
 
 		for (Player player : gameInfo.getPlayers()) {
