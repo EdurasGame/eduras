@@ -595,6 +595,8 @@ public final class S {
 	 */
 	public static long spell_scout_duration = 3000;
 
+	public static float go_missile_defaultrange = 5000;
+
 	/**
 	 * Reads values from the file and writes them to the S classes attributes.
 	 * 

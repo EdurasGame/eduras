@@ -42,6 +42,7 @@ public abstract class Missile extends MoveableGameObject {
 		rangeMoved = 0;
 		setShape(new Circle(S.go_missile_radius, S.go_missile_radius,
 				S.go_missile_radius));
+		setMaxRange(S.go_missile_defaultrange);
 	}
 
 	/**

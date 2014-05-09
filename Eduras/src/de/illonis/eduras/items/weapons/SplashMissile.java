@@ -33,9 +33,9 @@ public class SplashMissile extends Missile {
 		setObjectType(ObjectType.MISSILE_SPLASH);
 		setDamage(S.go_splashmissile_damage);
 		setDamageRadius(S.go_splashmissile_damageradius);
-		setShape(new Circle((float) S.go_splashmissile_shape_radius,
-				(float) S.go_splashmissile_shape_radius,
-				(float) S.go_splashmissile_shape_radius));
+		setShape(new Circle(S.go_splashmissile_shape_radius,
+				S.go_splashmissile_shape_radius,
+				S.go_splashmissile_shape_radius));
 		setSpeed(S.go_splashmissile_speed);
 	}
 
