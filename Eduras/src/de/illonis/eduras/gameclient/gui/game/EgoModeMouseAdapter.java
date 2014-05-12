@@ -2,7 +2,6 @@ package de.illonis.eduras.gameclient.gui.game;
 
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.newdawn.slick.Input;
@@ -73,9 +72,6 @@ public class EgoModeMouseAdapter extends GuiMouseAdapter {
 									.getItemBySlot(currentItemSelected);
 						} catch (ItemSlotIsEmptyException
 								| ObjectNotFoundException e1) {
-							L.log(Level.WARNING,
-									"Cannot find item when trying to set up the ContinuousItemUser!",
-									e1);
 							return;
 						}
 						itemUseTimer.schedule(itemUser,
@@ -205,7 +201,7 @@ public class EgoModeMouseAdapter extends GuiMouseAdapter {
 	}
 
 	@Override
-	public void mapClicked(Vector2f gamePos) {		
+	public void mapClicked(Vector2f gamePos) {
 	}
 
 }
