@@ -123,6 +123,8 @@ public class Edura extends TeamDeathmatch {
 					NeutralBase mainBase = nodeIdToBase.get(nodeid);
 					mainBaseOfTeam.put(teamB, mainBase);
 					mainBase.setCurrentOwnerTeam(teamB);
+					gameInfo.getEventTriggerer().notifyAreaConquered(mainBase,
+							teamB);
 
 					startGeneratingResourcesInBaseForTeam(mainBase, teamB);
 				} else {
@@ -131,6 +133,8 @@ public class Edura extends TeamDeathmatch {
 					mainBaseOfTeam.put(teamA, mainBase);
 					mainBase.setCurrentOwnerTeam(teamA);
 					teamAHasMainNode = true;
+					gameInfo.getEventTriggerer().notifyAreaConquered(mainBase,
+							teamA);
 
 					startGeneratingResourcesInBaseForTeam(mainBase, teamA);
 				}
