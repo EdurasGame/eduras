@@ -86,6 +86,24 @@ public class Geometry {
 	}
 
 	/**
+	 * Converts an array of vectors into an array of floats such that floats[2 *
+	 * i] = vectors[i].x; and floats[2 * i + 1] = vectors[i].y;
+	 * 
+	 * @param vectors
+	 *            the vectors to convert to floats.
+	 * @return array of floats
+	 */
+	public static float[] vectorsToFloat(Vector2f[] vectors) {
+		float[] floats = new float[vectors.length * 2];
+		for (int i = 0; i < vectors.length; i++) {
+			floats[2 * i] = vectors[i].getX();
+			floats[2 * i + 1] = vectors[i].getY();
+		}
+
+		return floats;
+	}
+
+	/**
 	 * Returns all the lines between a shape's corner points and its counterpart
 	 * of a second shape, that is a shifted copy of the first shape.
 	 * 

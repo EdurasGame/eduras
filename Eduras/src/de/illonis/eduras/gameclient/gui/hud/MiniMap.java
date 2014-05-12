@@ -6,20 +6,26 @@ import java.util.logging.Logger;
 
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
+import org.newdawn.slick.ShapeFill;
+import org.newdawn.slick.geom.Polygon;
 import org.newdawn.slick.geom.Rectangle;
+import org.newdawn.slick.geom.Shape;
 import org.newdawn.slick.geom.Vector2f;
 
 import de.illonis.edulog.EduLog;
+import de.illonis.eduras.ObjectFactory.ObjectType;
 import de.illonis.eduras.events.ObjectFactoryEvent;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
 import de.illonis.eduras.gameclient.gui.game.GameCamera;
 import de.illonis.eduras.gameclient.gui.hud.minimap.MiniMapBase;
 import de.illonis.eduras.gameclient.gui.hud.minimap.MiniMapNeutralObject;
 import de.illonis.eduras.gameclient.gui.hud.minimap.MiniMapPlayer;
+import de.illonis.eduras.gameobjects.DynamicPolygonObject;
 import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.gameobjects.NeutralBase;
 import de.illonis.eduras.items.weapons.Missile;
 import de.illonis.eduras.items.weapons.Weapon;
+import de.illonis.eduras.math.Geometry;
 import de.illonis.eduras.units.InteractMode;
 import de.illonis.eduras.units.PlayerMainFigure;
 
@@ -41,6 +47,8 @@ public class MiniMap extends ClickableGuiElement {
 	private float scale;
 
 	final static int SIZE = 150;
+	private static final Color NEUTRAL_OBJECTS_FILL_COLOR = Color.gray;
+
 	private final Rectangle bounds;
 
 	protected MiniMap(UserInterface gui) {
@@ -53,10 +61,28 @@ public class MiniMap extends ClickableGuiElement {
 	}
 
 	private void renderNeutral(Graphics g) {
-		g.setColor(Color.gray);
+		g.setColor(NEUTRAL_OBJECTS_FILL_COLOR);
 		for (MiniMapNeutralObject object : neutralObjects.values()) {
-			g.fillRect(object.getX(), object.getY(), object.getWidth(),
-					object.getHeight());
+			if (object.isDynamicShape()) {
+				g.draw(new Polygon(
+						Geometry.vectorsToFloat(object.getVertices())),
+						new ShapeFill() {
+
+							@Override
+							public Vector2f getOffsetAt(Shape shape, float x,
+									float y) {
+								return new Vector2f();
+							}
+
+							@Override
+							public Color colorAt(Shape shape, float x, float y) {
+								return NEUTRAL_OBJECTS_FILL_COLOR;
+							}
+						});
+			} else {
+				g.fillRect(object.getX(), object.getY(), object.getWidth(),
+						object.getHeight());
+			}
 		}
 	}
 
@@ -191,10 +217,28 @@ public class MiniMap extends ClickableGuiElement {
 			float h = o.getShape().getHeight() * scale;
 			bases.put(o.getId(), new MiniMapBase((NeutralBase) o, x, y, w, h));
 		} else if (o.getOwner() == -1 && !(o instanceof Weapon)) {
+
 			float w = o.getShape().getWidth() * scale;
 			float h = o.getShape().getHeight() * scale;
-			neutralObjects.put(o.getId(), new MiniMapNeutralObject(o, x, y, w,
-					h));
+
+			MiniMapNeutralObject newNeutralObject;
+
+			if (o.getType() == ObjectType.DYNAMIC_POLYGON_BLOCK) {
+				DynamicPolygonObject dynamicObject = (DynamicPolygonObject) o;
+
+				Vector2f[] originalVertices = dynamicObject
+						.getPolygonVertices();
+				Vector2f[] verticesOnMinimap = new Vector2f[originalVertices.length];
+				for (int i = 0; i < originalVertices.length; i++) {
+
+					verticesOnMinimap[i] = gameToMinimapPosition(originalVertices[i]);
+				}
+				newNeutralObject = new MiniMapNeutralObject(o, x, y, w, h,
+						verticesOnMinimap);
+			} else {
+				newNeutralObject = new MiniMapNeutralObject(o, x, y, w, h);
+			}
+			neutralObjects.put(o.getId(), newNeutralObject);
 		}
 	}
 
