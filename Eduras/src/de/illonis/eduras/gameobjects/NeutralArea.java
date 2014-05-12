@@ -159,9 +159,9 @@ public abstract class NeutralArea extends TriggerArea {
 					onNeutralAreaLost(currentOwnerTeam);
 				}
 				currentOwnerTeam = currentProgressingTeam;
-				onNeutralAreaOccupied(currentProgressingTeam);
 				getGame().getEventTriggerer().notifyAreaConquered(this,
 						currentOwnerTeam);
+				onNeutralAreaOccupied(currentProgressingTeam);
 			}
 		}
 	}
