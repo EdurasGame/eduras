@@ -230,6 +230,10 @@ public class Deathmatch extends BasicGameMode {
 
 	@Override
 	public void onGameEnd() {
+		for (Player player : gameInfo.getPlayers()) {
+			gameInfo.getEventTriggerer().clearInventoryOfPlayer(player);
+		}
+
 		for (Team team : gameInfo.getTeams()) {
 			gameInfo.removeTeam(team);
 		}
