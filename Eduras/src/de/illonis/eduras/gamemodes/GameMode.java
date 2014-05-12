@@ -98,6 +98,11 @@ public interface GameMode {
 	public void onGameStart();
 
 	/**
+	 * Called when match ends to let gamemode deinitialize some things.
+	 */
+	public void onGameEnd();
+
+	/**
 	 * Assignes a team to a spawntype. Used to map teams to the
 	 * pseudo-spawngroups in a map.<br>
 	 * For example if you have team-deathmatch, return {@link SpawnType#TEAM_A}

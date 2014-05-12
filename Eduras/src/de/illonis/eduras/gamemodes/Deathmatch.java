@@ -135,16 +135,23 @@ public class Deathmatch extends BasicGameMode {
 
 	@Override
 	public void onGameStart() {
+		EventTriggerer eventTriggerer = gameInfo.getEventTriggerer();
+
 		LinkedList<Team> teams = new LinkedList<Team>();
 		for (Player player : gameInfo.getPlayers()) {
-			gameInfo.getEventTriggerer().changeInteractMode(
-					player.getPlayerId(), InteractMode.MODE_EGO);
+			eventTriggerer.changeInteractMode(player.getPlayerId(),
+					InteractMode.MODE_EGO);
 			Team t = new Team(player.getName(), Team.getNextTeamId());
 			teams.add(t);
-			gameInfo.getEventTriggerer().addPlayerToTeam(player.getPlayerId(),
-					t);
+			eventTriggerer.addPlayerToTeam(player.getPlayerId(), t);
 		}
-		gameInfo.getEventTriggerer().setTeams(teams);
+		eventTriggerer.setTeams(teams);
+
+		for (Player player : gameInfo.getPlayers()) {
+			eventTriggerer
+					.createObject(ObjectType.PLAYER, player.getPlayerId());
+			eventTriggerer.respawnPlayerAtRandomSpawnpoint(player);
+		}
 
 	}
 
@@ -219,5 +226,15 @@ public class Deathmatch extends BasicGameMode {
 	@Override
 	public boolean canSwitchMode(Player player, InteractMode mode) {
 		return false;
+	}
+
+	@Override
+	public void onGameEnd() {
+		for (Team team : gameInfo.getTeams()) {
+			gameInfo.removeTeam(team);
+		}
+
+		// tell clients that all teams have been removed
+		gameInfo.getEventTriggerer().setTeams(new LinkedList<Team>());
 	}
 }

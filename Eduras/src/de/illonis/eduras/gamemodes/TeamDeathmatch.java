@@ -15,6 +15,7 @@ import de.illonis.eduras.exceptions.ObjectNotFoundException;
 import de.illonis.eduras.gameclient.userprefs.KeyBindings.KeyBinding;
 import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.gameobjects.GameObject.Relation;
+import de.illonis.eduras.logic.EventTriggerer;
 import de.illonis.eduras.maps.SpawnPosition.SpawnType;
 import de.illonis.eduras.units.InteractMode;
 import de.illonis.eduras.units.PlayerMainFigure;
@@ -48,14 +49,22 @@ public class TeamDeathmatch extends Deathmatch {
 
 	@Override
 	public void onGameStart() {
+		EventTriggerer eventTriggerer = gameInfo.getEventTriggerer();
+
 		teamA = new Team("Red Team", Team.getNextTeamId(), Color.red);
 		teamB = new Team("Blue Team", Team.getNextTeamId(), Color.blue);
 		LinkedList<Team> teams = new LinkedList<Team>();
 		teams.add(teamA);
 		teams.add(teamB);
-		gameInfo.getEventTriggerer().setTeams(teams);
+		eventTriggerer.setTeams(teams);
 		for (Player player : gameInfo.getPlayers()) {
 			putPlayerInSmallestTeam(player);
+		}
+
+		for (Player player : gameInfo.getPlayers()) {
+			eventTriggerer
+					.createObject(ObjectType.PLAYER, player.getPlayerId());
+			eventTriggerer.respawnPlayerAtRandomSpawnpoint(player);
 		}
 	}
 
@@ -148,4 +157,5 @@ public class TeamDeathmatch extends Deathmatch {
 	public boolean canSwitchMode(Player player, InteractMode mode) {
 		return true;
 	}
+
 }

@@ -124,4 +124,10 @@ public class NoGameMode extends BasicGameMode {
 	public boolean canSwitchMode(Player player, InteractMode mode) {
 		return false;
 	}
+
+	@Override
+	public void onGameEnd() {
+		// TODO Auto-generated method stub
+
+	}
 }

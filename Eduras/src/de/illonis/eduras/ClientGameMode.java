@@ -84,4 +84,8 @@ public class ClientGameMode implements GameMode {
 		return false;
 	}
 
+	@Override
+	public void onGameEnd() {
+	}
+
 }

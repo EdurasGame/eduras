@@ -387,6 +387,8 @@ public class ServerEventTriggerer implements EventTriggerer {
 				.getGameSettings().getStats().findPlayerWithMostFrags());
 
 		sendEvents(matchEndEvent);
+
+		gameInfo.getGameSettings().getGameMode().onGameEnd();
 		restartRound();
 	}
 
@@ -424,7 +426,7 @@ public class ServerEventTriggerer implements EventTriggerer {
 	public void changeMap(Map map) {
 
 		gameInfo.setMap(map);
-		removeAllNonPlayers();
+		removeAllObjects();
 
 		// notify client
 		SetMapEvent setMapEvent = new SetMapEvent(map.getName());
@@ -445,9 +447,11 @@ public class ServerEventTriggerer implements EventTriggerer {
 		}
 
 		gameInfo.getGameSettings().getGameMode().onGameStart();
+	}
 
-		for (Player player : gameInfo.getPlayers()) {
-			respawnPlayerAtRandomSpawnpoint(player);
+	private void removeAllObjects() {
+		for (GameObject oldObject : gameInfo.getObjects().values()) {
+			removeObject(oldObject.getId());
 		}
 	}
 
