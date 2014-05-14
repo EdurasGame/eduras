@@ -35,10 +35,10 @@ public class Bird extends MoveableGameObject implements MotionAIControllable {
 	public Bird(GameInformation game, TimingSource timingSource, int id) {
 		super(game, timingSource, id);
 		ai = new MovingUnitAI(this);
-		setSpeed(S.go_bird_speed);
+		setSpeed(S.Server.go_bird_speed);
 		setShape(ShapeFactory.createShape(ShapeType.BIRD));
 		setPosition(80, 20);
-		setCollidable(S.go_bird_collidable);
+		setCollidable(S.Server.go_bird_collidable);
 	}
 
 	@Override

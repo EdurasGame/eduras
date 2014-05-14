@@ -31,19 +31,19 @@ public class SplashMissile extends Missile {
 	public SplashMissile(GameInformation game, TimingSource timingSource, int id) {
 		super(game, timingSource, id);
 		setObjectType(ObjectType.MISSILE_SPLASH);
-		setDamage(S.go_splashmissile_damage);
-		setDamageRadius(S.go_splashmissile_damageradius);
-		setShape(new Circle(S.go_splashmissile_shape_radius,
-				S.go_splashmissile_shape_radius,
-				S.go_splashmissile_shape_radius));
-		setSpeed(S.go_splashmissile_speed);
+		setDamage(S.Server.go_splashmissile_damage);
+		setDamageRadius(S.Server.go_splashmissile_damageradius);
+		setShape(new Circle(S.Server.go_splashmissile_shape_radius,
+				S.Server.go_splashmissile_shape_radius,
+				S.Server.go_splashmissile_shape_radius));
+		setSpeed(S.Server.go_splashmissile_speed);
 	}
 
 	@Override
 	public void onCollision(GameObject collidingObject) {
 		super.onCollision(collidingObject);
 
-		int numberOfSplinters = S.go_splashmissile_splinters;
+		int numberOfSplinters = S.Server.go_splashmissile_splinters;
 
 		float circumferenceOfSplittering = 1;
 
@@ -75,7 +75,7 @@ public class SplashMissile extends Missile {
 
 		for (int i = 0; i < speed.length; i++) {
 			Vector2df pos = getPositionVector().copy();
-			speed[i].scale(S.go_splashmissile_shape_radius * 2);
+			speed[i].scale(S.Server.go_splashmissile_shape_radius * 2);
 			pos.add(speed[i]);
 			getGame().getEventTriggerer().createMissile(
 					ObjectType.MISSILE_SPLASHED, getOwner(), pos, speed[i]);

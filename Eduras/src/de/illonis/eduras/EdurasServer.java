@@ -602,7 +602,7 @@ public class EdurasServer {
 
 				if (parameterName.startsWith(sClassName + ".")) {
 					try {
-						Field f = S.class.getField(parameterName
+						Field f = S.Server.class.getField(parameterName
 								.substring(sClassName.length() + 1));
 						Class<?> targetClass = f.getType();
 						Object value = ReflectionTools.toPrimitive(targetClass,
@@ -627,7 +627,9 @@ public class EdurasServer {
 		EduLog.setBasicLogLimit(logLimit);
 		EduLog.setConsoleLogLimit(logLimit);
 
-		SysOutCatcher.startCatching();
+		if (S.Server.exit_on_sysout) {
+			SysOutCatcher.startCatching();
+		}
 
 		try {
 			edurasServer.runServer();

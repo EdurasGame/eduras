@@ -34,8 +34,8 @@ public class ScoutSpell extends DisposableUnit {
 		setOwner(owner);
 		setShape(new Rectangle(0, 0, 5f, 5f));
 		setObjectType(ObjectType.SPELL_SCOUT);
-		setVisionAngle(S.spell_scout_visionangle);
-		setVisionRange(S.spell_scout_visionrange);
+		setVisionAngle(S.Server.spell_scout_visionangle);
+		setVisionRange(S.Server.spell_scout_visionrange);
 		setCollidable(false);
 		setVisible(Visibility.INVISIBLE);
 	}

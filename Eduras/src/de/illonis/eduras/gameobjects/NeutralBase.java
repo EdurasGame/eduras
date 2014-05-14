@@ -39,10 +39,10 @@ public class NeutralBase extends NeutralArea {
 	public NeutralBase(GameInformation game, TimingSource timingSource, int id,
 			int mult) {
 		super(game, timingSource, id);
-		setTimeNeeded(S.neutralbase_overtaketime_default);
-		resourceGenerateAmount = S.neutralbase_resource_baseamount;
+		setTimeNeeded(S.Server.neutralbase_overtaketime_default);
+		resourceGenerateAmount = S.Server.neutralbase_resource_baseamount;
 		resourceGenerateMultiplicator = mult;
-		resourceGenerateTimeInterval = S.neutralbase_resource_interval;
+		resourceGenerateTimeInterval = S.Server.neutralbase_resource_interval;
 	}
 
 	@Override

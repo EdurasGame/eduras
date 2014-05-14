@@ -23,7 +23,7 @@ public class Inventory {
 	/**
 	 * Maximum number of items that can be stored.
 	 */
-	public final static int MAX_CAPACITY = S.player_max_item_capacity;
+	public final static int MAX_CAPACITY = S.Server.player_max_item_capacity;
 
 	private int gold;
 	private final ItemSlot[] itemSlots;

@@ -3,8 +3,6 @@ package de.illonis.eduras;
 import java.io.OutputStream;
 import java.io.PrintStream;
 
-import de.illonis.eduras.settings.S;
-
 /**
  * Catches all {@link System#out} calls, prints a stacktrace and terminates the
  * program.
@@ -18,8 +16,7 @@ public class SysOutCatcher extends PrintStream {
 	 * Starts catching.
 	 */
 	public static void startCatching() {
-		if (S.exit_on_sysout)
-			System.setOut(new SysOutCatcher(System.out));
+		System.setOut(new SysOutCatcher(System.out));
 	}
 
 	private SysOutCatcher(OutputStream out) {

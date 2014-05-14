@@ -32,7 +32,7 @@ public abstract class Weapon extends Item implements Lootable, Usable {
 	private int maxAmmunition = -1;
 	private long cooldown = 0;
 	protected long defaultCooldown = 0;
-	protected long respawnTime = S.go_weapon_respawntime_default;
+	protected long respawnTime = S.Server.go_weapon_respawntime_default;
 	private long respawnTimeRemaining = 0;
 
 	/**
@@ -229,7 +229,8 @@ public abstract class Weapon extends Item implements Lootable, Usable {
 		Vector2f target = info.getTarget();
 		GameObject triggeringObject = info.getTriggeringObject();
 
-		Vector2df position = new Vector2df(triggeringObject.getShape().getCenter());
+		Vector2df position = new Vector2df(triggeringObject.getShape()
+				.getCenter());
 
 		Vector2df speedVector = new Vector2df(target);
 		speedVector.sub(position);

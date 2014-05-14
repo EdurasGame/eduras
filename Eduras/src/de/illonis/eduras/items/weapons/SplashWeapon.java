@@ -30,12 +30,12 @@ public class SplashWeapon extends Weapon {
 	public SplashWeapon(GameInformation infos, TimingSource timingSource, int id) {
 		super(ObjectType.ITEM_WEAPON_SPLASH, infos, timingSource, id);
 		setName("SplashWeapon");
-		setShape(new Circle((float) S.go_splashweapon_shape_radius,
-				(float) S.go_splashweapon_shape_radius,
-				(float) S.go_splashweapon_shape_radius));
-		defaultCooldown = S.go_splashweapon_cooldown;
-		setAmmunitionLimited(S.go_splashweapon_fillamount,
-				S.go_splashweapon_maxammo);
+		setShape(new Circle(S.Server.go_splashweapon_shape_radius,
+				S.Server.go_splashweapon_shape_radius,
+				S.Server.go_splashweapon_shape_radius));
+		defaultCooldown = S.Server.go_splashweapon_cooldown;
+		setAmmunitionLimited(S.Server.go_splashweapon_fillamount,
+				S.Server.go_splashweapon_maxammo);
 	}
 
 	@Override

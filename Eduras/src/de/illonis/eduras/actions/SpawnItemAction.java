@@ -51,25 +51,25 @@ public class SpawnItemAction extends RTSAction {
 
 		switch (itemType) {
 		case ITEM_WEAPON_SIMPLE:
-			costs = S.go_simpleweapon_costs;
+			costs = S.Server.go_simpleweapon_costs;
 			break;
 		case ITEM_WEAPON_SNIPER:
-			costs = S.go_sniperweapon_costs;
+			costs = S.Server.go_sniperweapon_costs;
 			break;
 		case ITEM_WEAPON_SPLASH:
-			costs = S.go_splashweapon_costs;
+			costs = S.Server.go_splashweapon_costs;
 			break;
 		case ITEM_WEAPON_SWORD:
-			costs = S.go_swordweapon_costs;
+			costs = S.Server.go_swordweapon_costs;
 			break;
 		case ROCKETLAUNCHER:
-			costs = S.go_rocketlauncher_costs;
+			costs = S.Server.go_rocketlauncher_costs;
 			break;
 		case MINELAUNCHER:
-			costs = S.go_mineweapon_costs;
+			costs = S.Server.go_mineweapon_costs;
 			break;
 		case ASSAULTRIFLE:
-			costs = S.go_assaultrifle_costs;
+			costs = S.Server.go_assaultrifle_costs;
 			break;
 		default:
 			throw new WrongObjectTypeException(itemType);

@@ -27,12 +27,12 @@ public class SimpleWeapon extends Weapon {
 	public SimpleWeapon(GameInformation gi, TimingSource timingSource, int id) {
 		super(ObjectType.ITEM_WEAPON_SIMPLE, gi, timingSource, id);
 		setName("SimpleWeapon");
-		setShape(new Circle((float) S.go_simpleweapon_shape_radius,
-				(float) S.go_simpleweapon_shape_radius,
-				(float) S.go_simpleweapon_shape_radius));
-		defaultCooldown = S.go_simpleweapon_cooldown;
-		setAmmunitionLimited(S.go_simpleweapon_fillamount,
-				S.go_simpleweapon_maxammo);
+		setShape(new Circle(S.Server.go_simpleweapon_shape_radius,
+				S.Server.go_simpleweapon_shape_radius,
+				S.Server.go_simpleweapon_shape_radius));
+		defaultCooldown = S.Server.go_simpleweapon_cooldown;
+		setAmmunitionLimited(S.Server.go_simpleweapon_fillamount,
+				S.Server.go_simpleweapon_maxammo);
 	}
 
 	@Override

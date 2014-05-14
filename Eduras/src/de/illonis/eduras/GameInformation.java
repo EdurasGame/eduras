@@ -50,6 +50,7 @@ import de.illonis.eduras.maps.SpawnPosition.SpawnType;
 import de.illonis.eduras.math.Geometry;
 import de.illonis.eduras.math.Vector2df;
 import de.illonis.eduras.settings.S;
+import de.illonis.eduras.settings.S.SettingType;
 import de.illonis.eduras.units.PlayerMainFigure;
 
 /**
@@ -363,7 +364,7 @@ public class GameInformation {
 	private void giveSettings(ArrayList<GameEvent> infos) {
 		File settingsFile;
 		try {
-			settingsFile = S.putSettingsInFile();
+			settingsFile = S.putSettingsInFile(SettingType.SERVER);
 			infos.add(new SetSettingsEvent(settingsFile));
 		} catch (IOException e) {
 			L.log(Level.WARNING,

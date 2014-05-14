@@ -13,8 +13,8 @@ import de.illonis.eduras.settings.S;
  */
 public class BiggerBlock extends Block {
 
-	private static final int WIDTH = S.go_bigger_block_width;
-	private static final int HEIGHT = S.go_bigger_block_height;
+	private static final int WIDTH = S.Server.go_bigger_block_width;
+	private static final int HEIGHT = S.Server.go_bigger_block_height;
 
 	/**
 	 * creates a bigger block at a given position.

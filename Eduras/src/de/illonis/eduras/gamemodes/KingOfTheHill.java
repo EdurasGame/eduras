@@ -57,7 +57,8 @@ public class KingOfTheHill extends Deathmatch {
 		neutralBasePointsAdderTimer.put(base, timerForBase);
 		timerForBase.schedule(
 				new NeutralBasePointsAdder(player.getPlayerMainFigure()),
-				S.gm_koth_gain_points_interval, S.gm_koth_gain_points_interval);
+				S.Server.gm_koth_gain_points_interval,
+				S.Server.gm_koth_gain_points_interval);
 		L.info("Team " + occupyingTeam.getName() + " occupied the base!");
 	}
 
@@ -73,7 +74,7 @@ public class KingOfTheHill extends Deathmatch {
 		public void run() {
 			gameInfo.getEventTriggerer().changeStatOfPlayerByAmount(
 					StatsProperty.KILLS, baseOwner,
-					S.gm_koth_points_per_interval);
+					S.Server.gm_koth_points_per_interval);
 		}
 
 	}

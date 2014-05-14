@@ -48,7 +48,7 @@ public class CreateUnitAction extends RTSAction {
 
 		switch (typeOfUnit) {
 		case OBSERVER:
-			costs = S.unit_observer_costs;
+			costs = S.Server.unit_observer_costs;
 			break;
 		default:
 			break;

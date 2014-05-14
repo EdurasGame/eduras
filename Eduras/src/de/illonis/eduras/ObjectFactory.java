@@ -122,21 +122,21 @@ public class ObjectFactory {
 		public int getCosts() {
 			switch (this) {
 			case OBSERVER:
-				return S.unit_observer_costs;
+				return S.Server.unit_observer_costs;
 			case ITEM_WEAPON_SIMPLE:
-				return S.go_simpleweapon_costs;
+				return S.Server.go_simpleweapon_costs;
 			case ITEM_WEAPON_SNIPER:
-				return S.go_sniperweapon_costs;
+				return S.Server.go_sniperweapon_costs;
 			case ITEM_WEAPON_SPLASH:
-				return S.go_splashweapon_costs;
+				return S.Server.go_splashweapon_costs;
 			case ITEM_WEAPON_SWORD:
-				return S.go_swordweapon_costs;
+				return S.Server.go_swordweapon_costs;
 			case ROCKETLAUNCHER:
-				return S.go_rocketlauncher_costs;
+				return S.Server.go_rocketlauncher_costs;
 			case MINELAUNCHER:
-				return S.go_mineweapon_costs;
+				return S.Server.go_mineweapon_costs;
 			case ASSAULTRIFLE:
-				return S.go_assaultrifle_costs;
+				return S.Server.go_assaultrifle_costs;
 			default:
 				return 0;
 
@@ -336,7 +336,7 @@ public class ObjectFactory {
 				// logic. We should call a handler here.
 				AnimationFactory.runAt(AnimationNumber.ROCKET_SPLASH,
 						objectToRemove.getPositionVector(),
-						S.go_rocketmissile_damageradius);
+						S.Server.go_rocketmissile_damageradius);
 			}
 			logic.getListener().onObjectRemove(event);
 			logic.getGame().removeObject(objectToRemove);

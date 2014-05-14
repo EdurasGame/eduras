@@ -274,9 +274,10 @@ public class GameRenderer implements TooltipHandler {
 			a.intersect(visionArea);
 			// draw only if in current view point
 			if (Geometry.shapeCollides(camera, d.getShape())) {
-				if (S.vision_disabled
-						|| (S.vision_neutral_always && d.getOwner() == -1
-								|| d.equals(myPlayer) || !a.isEmpty())) {
+				if (S.Server.vision_disabled
+						|| (S.Server.vision_neutral_always
+								&& d.getOwner() == -1 || d.equals(myPlayer) || !a
+									.isEmpty())) {
 					drawObject(d, g);
 					if (d instanceof PlayerMainFigure)
 						drawFace(d, (Circle) d.getShape(), g);
@@ -303,7 +304,7 @@ public class GameRenderer implements TooltipHandler {
 			if (d.getShape() != null) {
 				g.setColor(getColorForObject(d));
 				g.fill(d.getShape());
-				if (S.debug_render_boundingboxes) {
+				if (S.Client.debug_render_boundingboxes) {
 					float circleRadius = d.getShape().getBoundingCircleRadius();
 					float[] center = d.getShape().getCenter();
 					Circle c = new Circle(center[0], center[1], circleRadius);

@@ -45,9 +45,9 @@ public class PlayerMainFigure extends Unit implements MovementControlable {
 	 */
 	public PlayerMainFigure(GameInformation game, TimingSource timingSource,
 			int ownerId, int id, Player player) {
-		super(game, timingSource, S.player_maxhealth_default, id);
+		super(game, timingSource, S.Server.player_maxhealth_default, id);
 		setObjectType(ObjectType.PLAYER);
-		setSpeed(S.player_speed_default);
+		setSpeed(S.Server.player_speed_default);
 		setOwner(ownerId);
 		this.player = player;
 

@@ -32,14 +32,14 @@ public class Observer extends ControlledUnit {
 	 */
 	public Observer(GameInformation game, TimingSource timingSource, int id,
 			int owner) {
-		super(game, timingSource, S.unit_observer_maxhealth, id);
+		super(game, timingSource, S.Server.unit_observer_maxhealth, id);
 		setObjectType(ObjectType.OBSERVER);
 		ai = new MovingUnitAI(this);
 		setOwner(owner);
-		setSpeed(S.unit_observer_speed);
+		setSpeed(S.Server.unit_observer_speed);
 		setShape(new Rectangle(0, 0, 15, 15));
-		setVisionAngle(S.unit_observer_visionangle);
-		setVisionRange(S.unit_observer_visionrange);
+		setVisionAngle(S.Server.unit_observer_visionangle);
+		setVisionRange(S.Server.unit_observer_visionrange);
 	}
 
 	@Override

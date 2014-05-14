@@ -31,12 +31,12 @@ public class AssaultRifle extends Weapon {
 		super(ObjectType.ASSAULTRIFLE, gi, timingSource, id);
 		setName("Assault Rifle");
 
-		setShape(new Circle((float) S.go_assaultrifle_shape_size,
-				(float) S.go_assaultrifle_shape_size,
-				(float) S.go_assaultrifle_shape_size));
-		defaultCooldown = S.go_assaultrifle_cooldown;
-		setAmmunitionLimited(S.go_assaultrifle_fillamount,
-				S.go_assaultrifle_maxammo);
+		setShape(new Circle(S.Server.go_assaultrifle_shape_size,
+				S.Server.go_assaultrifle_shape_size,
+				S.Server.go_assaultrifle_shape_size));
+		defaultCooldown = S.Server.go_assaultrifle_cooldown;
+		setAmmunitionLimited(S.Server.go_assaultrifle_fillamount,
+				S.Server.go_assaultrifle_maxammo);
 	}
 
 	@Override

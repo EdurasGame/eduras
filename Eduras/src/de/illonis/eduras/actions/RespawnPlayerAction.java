@@ -34,7 +34,7 @@ public class RespawnPlayerAction extends RTSAction {
 	 */
 	public RespawnPlayerAction(Player executingPlayer, Player playerToRespawn,
 			NeutralBase base) {
-		super(executingPlayer, S.gm_edura_action_respawnplayer_cost);
+		super(executingPlayer, S.Server.gm_edura_action_respawnplayer_cost);
 
 		this.playerToRespawn = playerToRespawn;
 		this.base = base;

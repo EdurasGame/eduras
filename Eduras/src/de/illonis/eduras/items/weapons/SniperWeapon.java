@@ -27,11 +27,12 @@ public class SniperWeapon extends Weapon {
 	public SniperWeapon(GameInformation gi, TimingSource timingSource, int id) {
 		super(ObjectType.ITEM_WEAPON_SNIPER, gi, timingSource, id);
 		setName("Sniper");
-		setShape(new Circle(S.go_sniperweapon_shape_radius,
-				S.go_sniperweapon_shape_radius, S.go_sniperweapon_shape_radius));
-		defaultCooldown = S.go_sniperweapon_cooldown;
-		setAmmunitionLimited(S.go_sniperweapon_fillamount,
-				S.go_sniperweapon_maxammo);
+		setShape(new Circle(S.Server.go_sniperweapon_shape_radius,
+				S.Server.go_sniperweapon_shape_radius,
+				S.Server.go_sniperweapon_shape_radius));
+		defaultCooldown = S.Server.go_sniperweapon_cooldown;
+		setAmmunitionLimited(S.Server.go_sniperweapon_fillamount,
+				S.Server.go_sniperweapon_maxammo);
 	}
 
 	@Override

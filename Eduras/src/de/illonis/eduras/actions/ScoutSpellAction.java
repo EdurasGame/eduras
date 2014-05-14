@@ -29,7 +29,7 @@ public class ScoutSpellAction extends RTSAction {
 	 *            the location to give vision at
 	 */
 	public ScoutSpellAction(Player executingPlayer, Vector2f target) {
-		super(executingPlayer, S.spell_scout_costs);
+		super(executingPlayer, S.Server.spell_scout_costs);
 		this.target = target;
 	}
 
@@ -40,7 +40,7 @@ public class ScoutSpellAction extends RTSAction {
 				executingPlayer.getPlayerId());
 
 		RemoveObjectLaterAction action = new RemoveObjectLaterAction(
-				info.findObjectById(objectId), S.spell_scout_duration);
+				info.findObjectById(objectId), S.Server.spell_scout_duration);
 		action.schedule();
 	}
 }

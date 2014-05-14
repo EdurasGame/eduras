@@ -25,13 +25,14 @@ public class MineMissile extends Missile {
 	 */
 	public MineMissile(GameInformation game, TimingSource timingSource, int id) {
 		super(game, timingSource, id);
-		setDamage(S.go_minemissile_damage);
-		setDamageRadius(S.go_minemissile_damageradius);
+		setDamage(S.Server.go_minemissile_damage);
+		setDamageRadius(S.Server.go_minemissile_damageradius);
 		setObjectType(ObjectType.MINE_MISSILE);
-		setSpeed(S.go_minemissile_speed);
-		setMaxRange(S.go_minemissile_maxrange);
-		setShape(new Circle(S.go_minemissile_shape_size,
-				S.go_minemissile_shape_size, S.go_minemissile_shape_size));
+		setSpeed(S.Server.go_minemissile_speed);
+		setMaxRange(S.Server.go_minemissile_maxrange);
+		setShape(new Circle(S.Server.go_minemissile_shape_size,
+				S.Server.go_minemissile_shape_size,
+				S.Server.go_minemissile_shape_size));
 		setVisible(Visibility.OWNER_TEAM);
 		SetVisibilityEvent visEvent = new SetVisibilityEvent(id,
 				Visibility.OWNER_TEAM);

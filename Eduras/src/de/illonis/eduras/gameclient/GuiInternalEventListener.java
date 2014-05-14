@@ -279,7 +279,8 @@ public class GuiInternalEventListener implements LoginPanelReactor,
 	@Override
 	public void onPlayerRezz(Player player, NeutralBase base) {
 		try {
-			hasSufficientResources(player, S.gm_edura_action_respawnplayer_cost);
+			hasSufficientResources(player,
+					S.Server.gm_edura_action_respawnplayer_cost);
 		} catch (InsufficientResourceException e1) {
 			client.getFrame().getGamePanel().onActionFailed(e1);
 			return;
@@ -323,7 +324,8 @@ public class GuiInternalEventListener implements LoginPanelReactor,
 		}
 
 		try {
-			hasSufficientResources(player.getPlayer(), S.spell_heal_costs);
+			hasSufficientResources(player.getPlayer(),
+					S.Server.spell_heal_costs);
 		} catch (InsufficientResourceException e1) {
 			client.getFrame().getGamePanel().onActionFailed(e1);
 			return;
@@ -392,7 +394,7 @@ public class GuiInternalEventListener implements LoginPanelReactor,
 		}
 
 		try {
-			hasSufficientResources(player, S.spell_scout_costs);
+			hasSufficientResources(player, S.Server.spell_scout_costs);
 		} catch (InsufficientResourceException e1) {
 			client.getFrame().getGamePanel().onActionFailed(e1);
 			return;

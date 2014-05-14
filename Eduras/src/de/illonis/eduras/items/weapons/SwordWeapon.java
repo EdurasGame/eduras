@@ -29,9 +29,10 @@ public class SwordWeapon extends Weapon {
 	public SwordWeapon(GameInformation gi, TimingSource timingSource, int id) {
 		super(ObjectType.ITEM_WEAPON_SWORD, gi, timingSource, id);
 		setName("Sword");
-		setShape(new Circle((float)S.go_swordweapon_shape_radius,
-				(float)	S.go_swordweapon_shape_radius,(float) S.go_swordweapon_shape_radius));
-		defaultCooldown = S.go_swordweapon_cooldown;
+		setShape(new Circle(S.Server.go_swordweapon_shape_radius,
+				S.Server.go_swordweapon_shape_radius,
+				S.Server.go_swordweapon_shape_radius));
+		defaultCooldown = S.Server.go_swordweapon_cooldown;
 	}
 
 	@Override

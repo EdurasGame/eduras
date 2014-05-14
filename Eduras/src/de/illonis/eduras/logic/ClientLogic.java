@@ -53,6 +53,7 @@ import de.illonis.eduras.items.Usable;
 import de.illonis.eduras.items.weapons.Weapon;
 import de.illonis.eduras.maps.Map;
 import de.illonis.eduras.settings.S;
+import de.illonis.eduras.settings.S.SettingType;
 import de.illonis.eduras.units.Unit;
 
 /**
@@ -422,7 +423,8 @@ public class ClientLogic implements GameLogicInterface {
 				break;
 			}
 			case SET_SETTINGS: {
-				S.loadSettings(((SetSettingsEvent) event).getSettingsFile());
+				S.loadSettings(((SetSettingsEvent) event).getSettingsFile(),
+						SettingType.SERVER);
 				break;
 			}
 			default:

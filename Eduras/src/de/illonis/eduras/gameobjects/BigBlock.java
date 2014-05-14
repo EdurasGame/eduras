@@ -13,8 +13,8 @@ import de.illonis.eduras.settings.S;
  */
 public class BigBlock extends Block {
 
-	private static final float WIDTH = S.go_big_block_width;
-	private static final float HEIGHT = S.go_big_block_height;
+	private static final float WIDTH = S.Server.go_big_block_width;
+	private static final float HEIGHT = S.Server.go_big_block_height;
 
 	/**
 	 * Creates a BigBlock at the given position and id in the context of the

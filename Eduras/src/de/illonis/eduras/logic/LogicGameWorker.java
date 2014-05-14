@@ -156,7 +156,7 @@ public abstract class LogicGameWorker implements Runnable, TimingSource {
 			return true;
 		}
 
-		if (Math.abs(oldRotation.get(o.getId()) - o.getRotation()) > S.sv_performance_rotationdelta_minimum) {
+		if (Math.abs(oldRotation.get(o.getId()) - o.getRotation()) > S.Server.sv_performance_rotationdelta_minimum) {
 			oldRotation.put(o.getId(), o.getRotation());
 			return true;
 		}

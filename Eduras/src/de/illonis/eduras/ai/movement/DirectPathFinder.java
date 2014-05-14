@@ -44,7 +44,7 @@ public class DirectPathFinder implements PathFinder {
 		if (oldDistance < distance)
 			return true;
 		oldDistance = distance;
-		return distance <= S.ai_target_reached_distance;
+		return distance <= S.Server.ai_target_reached_distance;
 	}
 
 	@Override

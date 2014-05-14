@@ -25,11 +25,11 @@ public class RocketMissile extends Missile {
 	 */
 	public RocketMissile(GameInformation game, TimingSource timingSource, int id) {
 		super(game, timingSource, id);
-		setDamage(S.go_rocketmissile_damage);
-		setDamageRadius(S.go_rocketmissile_damageradius);
+		setDamage(S.Server.go_rocketmissile_damage);
+		setDamageRadius(S.Server.go_rocketmissile_damageradius);
 		setObjectType(ObjectType.ROCKET_MISSILE);
-		setSpeed(S.go_rocketmissile_speed);
-		setMaxRange(S.go_rocketmissile_maxrange);
+		setSpeed(S.Server.go_rocketmissile_speed);
+		setMaxRange(S.Server.go_rocketmissile_maxrange);
 		setShape(ShapeFactory.createShape(ShapeType.ROCKET));
 	}
 

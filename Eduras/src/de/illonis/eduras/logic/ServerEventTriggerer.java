@@ -73,6 +73,7 @@ import de.illonis.eduras.maps.InitialObjectData;
 import de.illonis.eduras.maps.Map;
 import de.illonis.eduras.math.Vector2df;
 import de.illonis.eduras.settings.S;
+import de.illonis.eduras.settings.S.SettingType;
 import de.illonis.eduras.units.InteractMode;
 import de.illonis.eduras.units.PlayerMainFigure;
 import de.illonis.eduras.units.Unit;
@@ -825,7 +826,7 @@ public class ServerEventTriggerer implements EventTriggerer {
 
 	@Override
 	public void loadSettings(File settingsFile) {
-		S.loadSettings(settingsFile);
+		S.loadSettings(settingsFile, SettingType.SERVER);
 		try {
 			SetSettingsEvent setSettingsEvent = new SetSettingsEvent(
 					settingsFile);

@@ -28,7 +28,7 @@ public class HealSpellAction extends RTSAction {
 	 * @param unitToHeal
 	 */
 	public HealSpellAction(Player executingPlayer, Unit unitToHeal) {
-		super(executingPlayer, S.spell_heal_costs);
+		super(executingPlayer, S.Server.spell_heal_costs);
 
 		this.unitToHeal = unitToHeal;
 	}
@@ -36,6 +36,6 @@ public class HealSpellAction extends RTSAction {
 	@Override
 	protected void executeAction(GameInformation info) {
 		info.getEventTriggerer().changeHealthByAmount(unitToHeal,
-				S.spell_heal_amount);
+				S.Server.spell_heal_amount);
 	}
 }

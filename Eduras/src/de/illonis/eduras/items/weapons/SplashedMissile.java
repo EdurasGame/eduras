@@ -29,11 +29,11 @@ public class SplashedMissile extends Missile {
 			int id) {
 		super(game, timingSource, id);
 		setObjectType(ObjectType.MISSILE_SPLASHED);
-		setDamage(S.go_splashedmissile_damage);
-		setDamageRadius(S.go_splashedmissile_damageradius);
-		setShape(new Circle((float) S.go_splashedmissile_shape_radius,
-				(float) S.go_splashedmissile_shape_radius,
-				(float) S.go_splashedmissile_shape_radius));
-		setSpeed(S.go_splashedmissile_speed);
+		setDamage(S.Server.go_splashedmissile_damage);
+		setDamageRadius(S.Server.go_splashedmissile_damageradius);
+		setShape(new Circle(S.Server.go_splashedmissile_shape_radius,
+				S.Server.go_splashedmissile_shape_radius,
+				S.Server.go_splashedmissile_shape_radius));
+		setSpeed(S.Server.go_splashedmissile_speed);
 	}
 }

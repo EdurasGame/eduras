@@ -25,11 +25,11 @@ public class AssaultMissile extends Missile {
 	public AssaultMissile(GameInformation game, TimingSource timingSource,
 			int id) {
 		super(game, timingSource, id);
-		setDamage(S.go_assaultmissile_damage);
+		setDamage(S.Server.go_assaultmissile_damage);
 		setObjectType(ObjectType.ASSAULT_MISSILE);
-		setDamageRadius(S.go_assaultmissile_damageradius);
-		setSpeed(S.go_assaultmissile_speed);
-		setMaxRange(S.go_assaultmissile_maxrange);
-//		setShape(new Circle(S.go_assaultmissile_shape_size));
+		setDamageRadius(S.Server.go_assaultmissile_damageradius);
+		setSpeed(S.Server.go_assaultmissile_speed);
+		setMaxRange(S.Server.go_assaultmissile_maxrange);
+		// setShape(new Circle(S.go_assaultmissile_shape_size));
 	}
 }

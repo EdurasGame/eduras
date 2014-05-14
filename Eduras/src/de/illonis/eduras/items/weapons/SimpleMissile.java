@@ -23,11 +23,11 @@ public class SimpleMissile extends Missile {
 	 */
 	public SimpleMissile(GameInformation game, TimingSource timingSource, int id) {
 		super(game, timingSource, id);
-		setDamage(S.go_simplemissile_damage);
-		setDamageRadius(S.go_simplemissile_damage_radius);
+		setDamage(S.Server.go_simplemissile_damage);
+		setDamageRadius(S.Server.go_simplemissile_damage_radius);
 		setObjectType(ObjectType.SIMPLEMISSILE);
-		setSpeed(S.go_simplemissile_speed);
-		setMaxRange(S.go_simplemissile_maxrange);
+		setSpeed(S.Server.go_simplemissile_speed);
+		setMaxRange(S.Server.go_simplemissile_maxrange);
 	}
 
 }

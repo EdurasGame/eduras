@@ -64,7 +64,7 @@ public class ClientLogicGameWorker extends LogicGameWorker {
 	}
 
 	private void updateVision() {
-		if (S.vision_disabled)
+		if (S.Server.vision_disabled)
 			return;
 
 		// TODO: improve the following by storing objects for teams directly.

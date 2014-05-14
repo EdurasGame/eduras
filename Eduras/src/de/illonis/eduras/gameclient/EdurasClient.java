@@ -147,7 +147,11 @@ public class EdurasClient {
 		EduLog.setBasicLogLimit(logLimit);
 		EduLog.setConsoleLogLimit(logLimit);
 		EduLog.setFileLogLimit(logLimit);
-		SysOutCatcher.startCatching();
+
+		if (S.Client.exit_on_sysout) {
+			SysOutCatcher.startCatching();
+		}
+
 		try {
 			extractNatives();
 		} catch (UnsatisfiedLinkError | IOException e) {
@@ -162,9 +166,9 @@ public class EdurasClient {
 					(new File(PathFinder.findFile("native"))).getAbsolutePath());
 
 		BetaAuthenticator authenticator = new BetaAuthenticator();
-		//if (authenticator.authenticate(3, betaUser, betaPassword)) {
-			startWindowed();
-		//}
+		// if (authenticator.authenticate(3, betaUser, betaPassword)) {
+		startWindowed();
+		// }
 	}
 
 	private static void extractNatives() throws UnsatisfiedLinkError,
