@@ -13,7 +13,8 @@ import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.gameobjects.MoveableGameObject;
 
 /**
- * A very dump and slow implementation of geometry.
+ * A very dump and slow implementation of geometry. (fma) I don't even think
+ * it's slow, but it's inaccurate! :) (/fma)
  * 
  * @author illonis
  * 
