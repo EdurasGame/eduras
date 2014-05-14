@@ -569,7 +569,8 @@ public class ServerEventTriggerer implements EventTriggerer {
 
 		for (Team team : teams) {
 			for (Player player : team.getPlayers()) {
-				addPlayerToTeam(player.getPlayerId(), team);
+				sendEvents(new AddPlayerToTeamEvent(player.getPlayerId(),
+						team.getTeamId()));
 			}
 		}
 	}
