@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.lang.reflect.Field;
 import java.util.LinkedList;
 import java.util.logging.Level;
@@ -637,6 +638,13 @@ public final class S {
 			}
 
 			try {
+				L.info("Setting " + setting.getName() + "="
+						+ setting.get(null).toString());
+			} catch (IllegalArgumentException | IllegalAccessException e1) {
+				L.log(Level.WARNING, "Cannot read field", e1);
+			}
+
+			try {
 
 				if (setting.getType().equals(boolean.class)) {
 					setting.setBoolean(null, Boolean.parseBoolean(settingValue));
@@ -706,4 +714,29 @@ public final class S {
 		return readSettings;
 	}
 
+	/**
+	 * Writes all settings into a temporary file. The file is deleted when the
+	 * program exits.
+	 * 
+	 * @return the file with settings
+	 * @throws IOException
+	 *             thrown if the file can't be created.
+	 */
+	public static File putSettingsInFile() throws IOException {
+		File settingsFile = File.createTempFile("edurassettings", ".tmp");
+		PrintWriter fileWriter = new PrintWriter(settingsFile);
+		for (Field field : S.class.getFields()) {
+			try {
+				fileWriter.write(field.getName() + "="
+						+ field.get(null).toString() + "\r");
+			} catch (IllegalArgumentException | IllegalAccessException e) {
+				L.log(Level.WARNING,
+						"Exception occured when accessing an S-field. Skipping this one...",
+						e);
+				continue;
+			}
+		}
+		fileWriter.close();
+		return settingsFile;
+	}
 }

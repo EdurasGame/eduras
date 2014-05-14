@@ -89,6 +89,8 @@ public class EdurasServer {
 
 	private Map startMap;
 	private String startGameMode;
+	private File startSettings;
+
 	private ServerEventTriggerer eventTriggerer;
 
 	/**
@@ -302,6 +304,24 @@ public class EdurasServer {
 	}
 
 	/**
+	 * Returns the a file containing the settings set on server startup.
+	 * 
+	 * @return settings-file
+	 */
+	public File getStartSettings() {
+		return startSettings;
+	}
+
+	/**
+	 * Set the settings file that will be loaded when server starts.
+	 * 
+	 * @param startSettings
+	 */
+	public void setStartSettings(File startSettings) {
+		this.startSettings = startSettings;
+	}
+
+	/**
 	 * Runs the server with the configurations set on the EdurasServer before.
 	 * 
 	 * @throws NoSuchGameModeException
@@ -406,11 +426,18 @@ public class EdurasServer {
 		console = new ServerConsole(new ConsoleEventTriggerer(eventTriggerer,
 				server));
 
+		switchToStartSettings();
 		switchToStartMap();
 		switchToStartGameMode();
 
 		getInterfaces();
 
+	}
+
+	private void switchToStartSettings() {
+		if (startSettings != null) {
+			eventTriggerer.loadSettings(startSettings);
+		}
 	}
 
 	private void switchToStartMap() {
@@ -566,8 +593,7 @@ public class EdurasServer {
 							+ " does not exist.");
 					System.exit(-1);
 				}
-
-				S.loadSettings(settingsFile);
+				edurasServer.setStartSettings(settingsFile);
 				break;
 			}
 

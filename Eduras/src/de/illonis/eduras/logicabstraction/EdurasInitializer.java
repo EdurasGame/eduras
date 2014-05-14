@@ -1,5 +1,6 @@
 package de.illonis.eduras.logicabstraction;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -295,8 +296,10 @@ public class EdurasInitializer {
 
 			@Override
 			public void notifyGameReady(int clientId) {
-				// TODO Auto-generated method stub
+			}
 
+			@Override
+			public void loadSettings(File settingsFile) {
 			}
 
 		});

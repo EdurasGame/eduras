@@ -1,5 +1,7 @@
 package de.illonis.eduras.logic;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedList;
@@ -48,6 +50,7 @@ import de.illonis.eduras.events.SetMapEvent;
 import de.illonis.eduras.events.SetOwnerEvent;
 import de.illonis.eduras.events.SetPolygonDataEvent;
 import de.illonis.eduras.events.SetRemainingTimeEvent;
+import de.illonis.eduras.events.SetSettingsEvent;
 import de.illonis.eduras.events.SetStatsEvent;
 import de.illonis.eduras.events.SetTeamResourceEvent;
 import de.illonis.eduras.events.SetTeamsEvent;
@@ -69,6 +72,7 @@ import de.illonis.eduras.items.weapons.Weapon;
 import de.illonis.eduras.maps.InitialObjectData;
 import de.illonis.eduras.maps.Map;
 import de.illonis.eduras.math.Vector2df;
+import de.illonis.eduras.settings.S;
 import de.illonis.eduras.units.InteractMode;
 import de.illonis.eduras.units.PlayerMainFigure;
 import de.illonis.eduras.units.Unit;
@@ -817,5 +821,19 @@ public class ServerEventTriggerer implements EventTriggerer {
 	@Override
 	public void notifyGameReady(int clientId) {
 		sendEventToClient(new GameReadyEvent(), clientId);
+	}
+
+	@Override
+	public void loadSettings(File settingsFile) {
+		S.loadSettings(settingsFile);
+		try {
+			SetSettingsEvent setSettingsEvent = new SetSettingsEvent(
+					settingsFile);
+			sendEvents(setSettingsEvent);
+		} catch (IOException e) {
+			L.log(Level.WARNING,
+					"IOException occured when trying to load settings", e);
+			return;
+		}
 	}
 }

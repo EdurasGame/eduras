@@ -1,5 +1,7 @@
 package de.illonis.eduras;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -30,6 +32,7 @@ import de.illonis.eduras.events.SetIntegerGameObjectAttributeEvent;
 import de.illonis.eduras.events.SetMapEvent;
 import de.illonis.eduras.events.SetPolygonDataEvent;
 import de.illonis.eduras.events.SetRemainingTimeEvent;
+import de.illonis.eduras.events.SetSettingsEvent;
 import de.illonis.eduras.events.SetTeamsEvent;
 import de.illonis.eduras.events.SetVisibilityEvent;
 import de.illonis.eduras.exceptions.GameModeNotSupportedByMapException;
@@ -46,6 +49,7 @@ import de.illonis.eduras.maps.SpawnPosition;
 import de.illonis.eduras.maps.SpawnPosition.SpawnType;
 import de.illonis.eduras.math.Geometry;
 import de.illonis.eduras.math.Vector2df;
+import de.illonis.eduras.settings.S;
 import de.illonis.eduras.units.PlayerMainFigure;
 
 /**
@@ -338,6 +342,8 @@ public class GameInformation {
 
 		ArrayList<GameEvent> infos = new ArrayList<GameEvent>();
 
+		giveSettings(infos);
+
 		announceAllPlayers(infos);
 
 		ArrayList<NeutralBase> neutralBases = new ArrayList<NeutralBase>();
@@ -352,6 +358,18 @@ public class GameInformation {
 		putGuiNotifications(infos);
 
 		return infos;
+	}
+
+	private void giveSettings(ArrayList<GameEvent> infos) {
+		File settingsFile;
+		try {
+			settingsFile = S.putSettingsInFile();
+			infos.add(new SetSettingsEvent(settingsFile));
+		} catch (IOException e) {
+			L.log(Level.WARNING,
+					"IOException when trying to create file from settings!", e);
+			return;
+		}
 	}
 
 	private void putGuiNotifications(ArrayList<GameEvent> infos) {

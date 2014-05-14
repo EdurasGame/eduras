@@ -1,5 +1,6 @@
 package de.illonis.eduras.logic;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -503,4 +504,11 @@ public interface EventTriggerer {
 	 *            id of the client to notify that the game is ready to go.
 	 */
 	void notifyGameReady(int clientId);
+
+	/**
+	 * Loads the given settings file on the server and sends it to the clients.
+	 * 
+	 * @param settingsFile
+	 */
+	void loadSettings(File settingsFile);
 }

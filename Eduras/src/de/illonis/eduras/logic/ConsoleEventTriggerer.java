@@ -14,7 +14,6 @@ import de.illonis.eduras.exceptions.ObjectNotFoundException;
 import de.illonis.eduras.gamemodes.BasicGameMode;
 import de.illonis.eduras.gamemodes.GameMode;
 import de.illonis.eduras.maps.Map;
-import de.illonis.eduras.settings.S;
 
 /**
  * Triggers events from console.
@@ -161,8 +160,8 @@ public class ConsoleEventTriggerer {
 	}
 
 	/**
-	 * Loads the file at the given path, parses it and calls
-	 * {@link #restartRound()}.
+	 * Loads the file at the given path, parses it, sends it to the clients and
+	 * calls {@link #restartRound()}.
 	 * 
 	 * @param path
 	 *            The path to the file to load.
@@ -176,7 +175,7 @@ public class ConsoleEventTriggerer {
 					+ " doesnt exist.");
 		}
 
-		S.loadSettings(settingsFile);
+		triggerer.loadSettings(settingsFile);
 		restartRound();
 	}
 }

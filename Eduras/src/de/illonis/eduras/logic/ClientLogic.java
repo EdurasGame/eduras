@@ -31,6 +31,7 @@ import de.illonis.eduras.events.SetMapEvent;
 import de.illonis.eduras.events.SetOwnerEvent;
 import de.illonis.eduras.events.SetPolygonDataEvent;
 import de.illonis.eduras.events.SetRemainingTimeEvent;
+import de.illonis.eduras.events.SetSettingsEvent;
 import de.illonis.eduras.events.SetStatsEvent;
 import de.illonis.eduras.events.SetTeamResourceEvent;
 import de.illonis.eduras.events.SetTeamsEvent;
@@ -51,6 +52,7 @@ import de.illonis.eduras.items.Item;
 import de.illonis.eduras.items.Usable;
 import de.illonis.eduras.items.weapons.Weapon;
 import de.illonis.eduras.maps.Map;
+import de.illonis.eduras.settings.S;
 import de.illonis.eduras.units.Unit;
 
 /**
@@ -417,6 +419,10 @@ public class ClientLogic implements GameLogicInterface {
 			case PLAYER_LEFT: {
 				OwnerGameEvent ownerEvent = (OwnerGameEvent) event;
 				gameInfo.removePlayer(ownerEvent.getOwner());
+				break;
+			}
+			case SET_SETTINGS: {
+				S.loadSettings(((SetSettingsEvent) event).getSettingsFile());
 				break;
 			}
 			default:

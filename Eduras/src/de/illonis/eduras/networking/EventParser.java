@@ -1,6 +1,10 @@
 package de.illonis.eduras.networking;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.LinkedList;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.newdawn.slick.Color;
@@ -43,6 +47,7 @@ import de.illonis.eduras.events.SetMapEvent;
 import de.illonis.eduras.events.SetOwnerEvent;
 import de.illonis.eduras.events.SetPolygonDataEvent;
 import de.illonis.eduras.events.SetRemainingTimeEvent;
+import de.illonis.eduras.events.SetSettingsEvent;
 import de.illonis.eduras.events.SetStatsEvent;
 import de.illonis.eduras.events.SetTeamResourceEvent;
 import de.illonis.eduras.events.SetTeamsEvent;
@@ -381,6 +386,21 @@ public class EventParser implements EventHandler {
 						.getArgument(0), ObjectType
 						.getObjectTypeByNumber((Integer) event.getArgument(1)),
 						(Integer) event.getArgument(2)));
+				break;
+			case SET_SETTINGS:
+				File newSettingsFile;
+				try {
+					newSettingsFile = File.createTempFile("edurassetting",
+							".tmp");
+					FileOutputStream stream = new FileOutputStream(
+							newSettingsFile.getPath());
+					stream.write((byte[]) event.getArgument(0));
+					stream.close();
+					logic.onGameEventAppeared(new SetSettingsEvent(
+							newSettingsFile));
+				} catch (IOException e) {
+					L.log(Level.WARNING, "TODO: message", e);
+				}
 				break;
 			default:
 				L.warning("Cannot handle event with event number "
