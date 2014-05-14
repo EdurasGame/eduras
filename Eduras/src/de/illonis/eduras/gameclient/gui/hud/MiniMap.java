@@ -123,12 +123,13 @@ public class MiniMap extends ClickableGuiElement {
 
 	private Vector2f gameToMinimapPosition(Vector2f pos) {
 		Vector2f miniPos = new Vector2f(pos).scale(scale);
-		miniPos.add(getBounds().getLocation());
+		miniPos.add(new Vector2f(getBounds().getX(), getBounds().getY()));
 		return miniPos;
 	}
 
 	private Vector2f minimapToGamePosition(Vector2f pos) {
-		Vector2f gamePos = new Vector2f(pos).sub(getBounds().getLocation());
+		Vector2f gamePos = new Vector2f(pos).sub(new Vector2f(getBounds()
+				.getX(), getBounds().getY()));
 		gamePos.scale(1 / scale);
 		return gamePos;
 	}
@@ -146,7 +147,7 @@ public class MiniMap extends ClickableGuiElement {
 	private void renderViewPort(Graphics g) {
 		g.setLineWidth(1f);
 		g.setColor(Color.white);
-		Vector2f pos = gameToMinimapPosition(viewPort.getLocation());
+		Vector2f pos = gameToMinimapPosition(new Vector2f (viewPort.getX(), viewPort.getY()));
 		g.drawRect(pos.x, pos.y, viewPort.getWidth() * scale,
 				viewPort.getHeight() * scale);
 	}

@@ -56,7 +56,7 @@ public class SimpleGeometry implements ShapeGeometry {
 		Vector2f diff = new Vector2f(object.getShapeOffsetX(),
 				object.getShapeOffsetY());
 		Vector2f shapeTarget = target.copy().add(diff);
-		Vector2f shapeLocation = shape.getLocation();
+		Vector2f shapeLocation = new Vector2f(shape.getX(), shape.getY());
 		shape.setLocation(shapeTarget);
 		getObjectsIn(shape, touched, collided, object);
 
