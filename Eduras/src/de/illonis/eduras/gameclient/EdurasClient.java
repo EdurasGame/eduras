@@ -192,7 +192,6 @@ public class EdurasClient {
 		}
 
 		L.info("Done extracting native libraries.");
-		System.exit(0);
 	}
 
 	protected static void startWindowed() {
