@@ -5,9 +5,10 @@ import static org.junit.Assert.assertTrue;
 import java.util.LinkedList;
 
 import org.junit.Test;
+import org.newdawn.slick.geom.Line;
+import org.newdawn.slick.geom.Vector2f;
 
 import de.illonis.eduras.math.Geometry;
-import de.illonis.eduras.math.Line;
 import de.illonis.eduras.math.Vector2df;
 
 /**
@@ -20,7 +21,7 @@ public class GeometryUtilsTests {
 
 	/**
 	 * Tests the
-	 * {@link de.illonis.eduras.math.Geometry#getLinesBetweenShapePositions(Vector2df[], Vector2df, Vector2df)
+	 * {@link de.illonis.eduras.math.Geometry#getLinesBetweenShapePositions(Vector2f[], Vector2f, Vector2f)
 	 * getLinesBetweenShapePositions} method.
 	 */
 	@Test

@@ -6,6 +6,7 @@ import org.newdawn.slick.geom.Vector2f;
 
 import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.ObjectFactory.ObjectType;
+import de.illonis.eduras.math.Geometry;
 
 /**
  * A polygon block that's shape is designed to be changed later on, for example
@@ -82,11 +83,7 @@ public class DynamicPolygonObject extends GameObject {
 	public Vector2f[] getPolygonVertices() {
 		Polygon p = (Polygon) getShape();
 		float points[] = p.getPoints();
-		Vector2f result[] = new Vector2f[points.length / 2];
-		for (int i = 0; i < result.length; i++) {
-			result[i] = new Vector2f(points[2 * i], points[2 * i + 1]);
-		}
-		return result;
+		return Geometry.floatsToVectors(points);
 	}
 
 	@Override

@@ -5,6 +5,7 @@ import java.util.LinkedList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.newdawn.slick.geom.Line;
 import org.newdawn.slick.geom.Vector2f;
 
 import de.illonis.edulog.EduLog;
@@ -18,7 +19,7 @@ import de.illonis.eduras.gameobjects.MoveableGameObject;
 import de.illonis.eduras.interfaces.GameEventListener;
 import de.illonis.eduras.items.Usable;
 import de.illonis.eduras.logicabstraction.EdurasInitializer;
-import de.illonis.eduras.math.Line;
+import de.illonis.eduras.math.Geometry;
 import de.illonis.eduras.math.Vector2df;
 import de.illonis.eduras.settings.S;
 
@@ -141,13 +142,14 @@ public class ClientLogicGameWorker extends LogicGameWorker {
 			v.add(work);
 
 			Line l = new Line(u, v);
-			Vector2f r = l.getDirectionalVector().normalise();
+			Vector2f r = new Vector2f(l.getDX(), l.getDY()).normalise();
 			r.scale(ROTATION_DIST_RESOLUTION);
 			double distance = 0;
 			int j = 1;
 			Vector2df p = null;
 			while (distance < radius) {
-				p = new Vector2df(l.getPointAt(ROTATION_DIST_RESOLUTION * j));
+				p = new Vector2df(Geometry.getPointOnLineAt(l,
+						ROTATION_DIST_RESOLUTION * j));
 				LinkedList<GameObject> objs = gameInformation
 						.findObjectsInDistance(p, ROTATION_DIST_RESOLUTION);
 				if (objs.size() > 0) {

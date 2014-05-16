@@ -22,6 +22,19 @@ public class BasicMath {
 	}
 
 	/**
+	 * Returns square of given float number.
+	 * 
+	 * @see BasicMath#square(int)
+	 * 
+	 * @param x
+	 *            number
+	 * @return square of x
+	 */
+	public static float square(float x) {
+		return x * x;
+	}
+
+	/**
 	 * Returns square of given integer number.
 	 * 
 	 * @see #square(double)

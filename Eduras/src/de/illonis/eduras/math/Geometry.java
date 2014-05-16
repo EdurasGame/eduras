@@ -3,8 +3,14 @@ package de.illonis.eduras.math;
 import java.util.LinkedList;
 
 import org.newdawn.slick.geom.Circle;
+import org.newdawn.slick.geom.Ellipse;
+import org.newdawn.slick.geom.Line;
+import org.newdawn.slick.geom.Polygon;
+import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.Shape;
 import org.newdawn.slick.geom.Vector2f;
+
+import de.illonis.eduras.exceptions.ShapeNotSupportedException;
 
 /**
  * A math class that provides useful functions that are used in two-dimensional
@@ -104,6 +110,21 @@ public class Geometry {
 	}
 
 	/**
+	 * Converts an array of floats to an array of vectors where vector[i] =
+	 * (float[2 * i], float[2 * i + 1]).
+	 * 
+	 * @param floats
+	 * @return vectors
+	 */
+	public static Vector2f[] floatsToVectors(float[] floats) {
+		Vector2f result[] = new Vector2f[floats.length / 2];
+		for (int i = 0; i < result.length; i++) {
+			result[i] = new Vector2f(floats[2 * i], floats[2 * i + 1]);
+		}
+		return result;
+	}
+
+	/**
 	 * Returns all the lines between a shape's corner points and its counterpart
 	 * of a second shape, that is a shifted copy of the first shape.
 	 * 
@@ -116,7 +137,7 @@ public class Geometry {
 	 * @return Returns a list containing the resulting lines.
 	 */
 	public static LinkedList<Line> getLinesBetweenShapePositions(
-			Vector2df[] vertices, Vector2df source, Vector2df destination) {
+			Vector2f[] vertices, Vector2f source, Vector2f destination) {
 
 		LinkedList<Line> lines = new LinkedList<Line>();
 
@@ -132,6 +153,45 @@ public class Geometry {
 		}
 
 		return lines;
+	}
+
+	/**
+	 * Returns 'numpoints' points on the circle with the origin as its
+	 * centerpoint such that two neighboured points have the same distance.
+	 * 
+	 * @param circle
+	 *            the circle to return the points of
+	 * @param numPoints
+	 *            The number of points you want to receive.
+	 * @return Returns a list containing the points on the circle.
+	 */
+	public static LinkedList<Vector2f> getPointsOnCirlce(Ellipse circle,
+			int numPoints) {
+
+		LinkedList<Vector2f> result = new LinkedList<Vector2f>();
+		float angle = (float) (2 * Math.PI) / numPoints;
+
+		for (int i = 0; i < numPoints; i++) {
+			result.add(getPointOnCircleAtAngle(circle, i * angle));
+		}
+		return result;
+	}
+
+	/**
+	 * Returns the point on the circle at the given angle.
+	 * 
+	 * @param circle
+	 * @param angle
+	 *            The angle on the circle where to find the point.
+	 * @return The point.
+	 */
+	public static Vector2f getPointOnCircleAtAngle(Ellipse circle, float angle) {
+
+		// assuming this is a circle, so the radii are identical
+		float pointXPos = (float) (Math.cos(angle) * circle.getRadius1());
+		float pointYPos = (float) (Math.sin(angle) * circle.getRadius1());
+
+		return new Vector2f(pointXPos, pointYPos);
 	}
 
 	/**
@@ -159,7 +219,7 @@ public class Geometry {
 	 *            The vertices to make the borderlines of
 	 * @return The resulting borderlines.
 	 */
-	public static LinkedList<Line> getRelativeBorderLines(Vector2f[] vertices) {
+	public static LinkedList<Line> getBorderLines(Vector2f[] vertices) {
 
 		LinkedList<Line> borderLines = new LinkedList<Line>();
 
@@ -188,5 +248,429 @@ public class Geometry {
 		Vector2f diffVector = pointOnCircle.copy();
 		diffVector.sub(centerPoint);
 		return new Circle(centerPoint.x, centerPoint.y, diffVector.length());
+	}
+
+	/**
+	 * Calculates all {@link CollisionPoint}s that occur when checking if the
+	 * given shape is intersected by the given lines.
+	 * 
+	 * @param lines
+	 * @param shape
+	 * @return a list of {@link CollisionPoint}.
+	 * @throws ShapeNotSupportedException
+	 */
+	public static LinkedList<CollisionPoint> isShapeIntersectedByLines(
+			LinkedList<Line> lines, Shape shape)
+			throws ShapeNotSupportedException {
+
+		if (shape instanceof Polygon) {
+			return isPolygonIntersectedByLines(lines, (Polygon) shape);
+		}
+
+		if (shape instanceof Rectangle) {
+			Rectangle rectangle = (Rectangle) shape;
+			return isPolygonIntersectedByLines(lines,
+					new Polygon(rectangle.getPoints()));
+		}
+
+		if (shape instanceof Circle) {
+
+			return isCircleIntersectedByLines(lines, (Circle) shape);
+		}
+
+		throw new ShapeNotSupportedException(shape);
+	}
+
+	private static LinkedList<CollisionPoint> isCircleIntersectedByLines(
+			LinkedList<Line> lines, Circle circle) {
+
+		LinkedList<CollisionPoint> result = new LinkedList<CollisionPoint>();
+
+		for (Line singleLine : lines) {
+
+			// check wether given line is valid
+			// if (singleLine.getDirectionalVector().isNull()) {
+			// continue;
+			// }
+
+			Vector2f[] interceptionPoints = Geometry
+					.getCircleLineSegmentInterceptPoints(circle, new Vector2f(
+							circle.getCenter()), singleLine);
+
+			if (interceptionPoints[0] == null && interceptionPoints[1] == null) {
+				continue;
+			}
+
+			for (int i = 0; i < 2; i++) {
+
+				if (interceptionPoints[i] != null) {
+
+					CollisionPoint collisionPoint = CollisionPoint
+							.createCollisionPointByInterceptPoint(
+									interceptionPoints[i], singleLine);
+					result.add(collisionPoint);
+				}
+			}
+
+		}
+
+		return result;
+	}
+
+	/**
+	 * Calculates the interception points of a circle and a line segment. This
+	 * method assumes that the given line is a valid one, means that it's
+	 * directional vector must not be the nullvector.
+	 * 
+	 * @param circle
+	 *            The circle.
+	 * @param centerPoint
+	 *            The circle's center point.
+	 * @param singleLine
+	 *            The line.
+	 * @return The intercept points as an array of two, if there are any. If
+	 *         there is only one intercept point, one of the array entrys is
+	 *         null. If there is no intercept points, both entrys are left null.
+	 */
+	public static Vector2f[] getCircleLineSegmentInterceptPoints(Circle circle,
+			Vector2f centerPoint, Line singleLine) {
+
+		Vector2f[] result = new Vector2f[2];
+
+		// the calculation of the intercept point is derived from the
+		// mathematical approach of simply having equations for the circle and
+		// the line containing the x and y values of the intercept point.
+		//
+		// line: let (u1,u2) be the line's supportvector and (v1,v2) the line's
+		// directional vector. For any point (x,y) on the line the following
+		// equations hold:
+		// 1. x = u1 + v1 * lambda
+		// 2. y = u2 + v2 * lambda
+
+		float u1 = singleLine.getX1();
+		float u2 = singleLine.getY1();
+
+		float v1 = singleLine.getDX();
+		float v2 = singleLine.getDY();
+
+		// circle: let (m1,m2) the circle's center point and r its radius. For
+		// any point on the circle
+		// the following equation holds:
+		// 3. r^2 = (x - m1)^2 + (y - m2)^2
+
+		float r = circle.getRadius();
+		float m1 = centerPoint.getX();
+		float m2 = centerPoint.getY();
+
+		// Applying equations one and two for the third and solving for lambda
+		// gives a square equation (in pq formula) having the following p and q:
+
+		float p = (2 * v1 * u1 - 2 * v1 * m1 + 2 * v2 * u2 - 2 * m2 * v2)
+				/ (BasicMath.square(v1) + BasicMath.square(v2));
+
+		float q = (BasicMath.square(u1) + BasicMath.square(u2)
+				+ BasicMath.square(m1) + BasicMath.square(m2) - 2 * m2 * u2 - 2
+				* m1 * u1 - BasicMath.square(r))
+				/ (BasicMath.square(v1) + BasicMath.square(v2));
+
+		// there is a solution if the pq formula's radiant is >= 0.
+		// check whether there is a solution:
+
+		float pqRadian = BasicMath.square(p / 2) - q;
+
+		if (pqRadian < 0) {
+			return result;
+		}
+
+		// if there is a solution, there is two:
+
+		float lambdaOne = -(p / 2) + (float) Math.sqrt(pqRadian);
+		float lambdaTwo = -(p / 2) - (float) Math.sqrt(pqRadian);
+
+		// check if the points are on the line seqment.
+
+		Vector2f firstInterceptPoint = null;
+		Vector2f secondInterceptPoint = null;
+
+		if (lambdaOne <= 1 && lambdaOne >= 0) {
+			firstInterceptPoint = getPointOnLineAt(singleLine, lambdaOne);
+		}
+
+		if (lambdaTwo <= 1 && lambdaTwo >= 0) {
+			secondInterceptPoint = getPointOnLineAt(singleLine, lambdaTwo);
+		}
+
+		result[0] = firstInterceptPoint;
+		result[1] = secondInterceptPoint;
+
+		return result;
+	}
+
+	private static LinkedList<CollisionPoint> isPolygonIntersectedByLines(
+			LinkedList<Line> lines, Polygon polygon) {
+		LinkedList<CollisionPoint> interceptPoints = new LinkedList<CollisionPoint>();
+
+		for (Line line : lines) {
+			for (Line borderLine : getBorderLines(polygon)) {
+				Vector2f interceptPoint = Geometry
+						.getSegmentLinesInterceptPoint(borderLine, line);
+
+				if (interceptPoint == null) {
+					continue;
+				} else {
+
+					CollisionPoint interception = CollisionPoint
+							.createCollisionPointByInterceptPoint(
+									interceptPoint, line);
+					interceptPoints.add(interception);
+				}
+
+			}
+		}
+		return interceptPoints;
+	}
+
+	public static LinkedList<Line> getBorderLines(Shape shape) {
+		return Geometry.getBorderLines(Geometry.floatsToVectors(shape
+				.getPoints()));
+	}
+
+	/**
+	 * Returns the intercept point of two line segments.
+	 * 
+	 * @param first
+	 *            The first line segment.
+	 * @param second
+	 *            The second line segment.
+	 * @return Returns null if there was no intercept point found and returns
+	 *         the intercept point as a vector otherwise. If there's an infinite
+	 *         number of intercept points, one of them will be returned (but you
+	 *         cant say which).
+	 */
+	public static Vector2f getSegmentLinesInterceptPoint(Line first, Line second) {
+		Vector2f result = new Vector2f(0, 0);
+		Boolean limitToExtend = true;
+		boolean doesIntersect = first.intersect(second, limitToExtend, result);
+
+		// do this switch because not sure what intersect does with
+		// "result"-vector if there is no intersection
+		if (doesIntersect) {
+			return result;
+		} else {
+			return null;
+		}
+
+		// TODO: remove legacy code
+
+		// // use parameter equotation of lines and equalize them. this results
+		// in
+		// // the following calculation
+		//
+		// Vector2f firstSupportVector = first.getSupportVector();
+		// Vector2f secondSupportVector = second.getSupportVector();
+		// Vector2f firstDirectionalVector = first.getDirectionalVector();
+		// Vector2f secondDirectionalVector = second.getDirectionalVector();
+		//
+		// float firstSupportX = firstSupportVector.getX();
+		// float firstSupportY = firstSupportVector.getY();
+		// float secondSupportX = secondSupportVector.getX();
+		// float secondSupportY = secondSupportVector.getY();
+		//
+		// float firstDirectionX = firstDirectionalVector.getX();
+		// float firstDirectionY = firstDirectionalVector.getY();
+		// float secondDirectionX = secondDirectionalVector.getX();
+		// float secondDirectionY = secondDirectionalVector.getY();
+		//
+		// float s = 0;
+		// float r = 0;
+		//
+		// // We must distinguish between cases when one or more of the
+		// direction
+		// // vectors are zero.
+		// // The cases firstDirectionX == firstDirectionY == 0 and
+		// // secondDirectionX == secondDirectionY == 0 cannot (or should not)
+		// // occur because then one of the lines is not really a line.
+		// // If the directionVectors are linearly depending on each other, the
+		// // lines might be the same, so we must
+		// // check for that.
+		// // In any other case we can give a calculation for s and r.
+		// // TODO: the following check does not work properly. However, it
+		// throws
+		// // an exception at pacman.
+		// // if ((firstDirectionX == 0 && firstDirectionY == 0)
+		// // || (secondDirectionX == 0 && secondDirectionY == 0)) {
+		// // try {
+		// // throw new Exception(
+		// // "There was a line given that was not correct.");
+		// // } catch (Exception e) {
+		// // e.printStackTrace();
+		// // return null;
+		// // }
+		// // }
+		//
+		// if (isVectorLinearTo(firstDirectionalVector,
+		// secondDirectionalVector)) {
+		//
+		// boolean firstIn = false;
+		// boolean secondIn = false;
+		//
+		// if (second.containsPoint(firstSupportVector)) {
+		// firstIn = firstSupportVector.distance(first.getV()) >
+		// firstSupportVector
+		// .distance(secondSupportVector);
+		// secondIn = secondSupportVector.distance(second.getV()) >
+		// secondSupportVector
+		// .distance(firstSupportVector);
+		// if (firstIn && secondIn) {
+		// return secondSupportVector;
+		// }
+		// } else {
+		// return null;
+		// }
+		// }
+		//
+		// if (firstDirectionX != 0 && firstDirectionY != 0
+		// && secondDirectionX != 0 && secondDirectionY != 0) {
+		//
+		// s = (firstSupportY - secondSupportY + ((secondSupportX -
+		// firstSupportX) * firstDirectionY)
+		// / firstDirectionX)
+		// / (secondDirectionY - ((secondDirectionX * firstDirectionY) /
+		// firstDirectionX));
+		//
+		// r = (secondSupportX + s * secondDirectionX - firstSupportX)
+		// / firstDirectionX;
+		// // the first line segment ends for s = 1, the second ends for r = 1
+		// // so
+		// // if s > 1 || r > 1 there is no intersection
+		// // points
+		//
+		// if (checkNotWithin(s, r)) {
+		// return null;
+		// }
+		//
+		// return second.getPointAt(s);
+		// }
+		//
+		// if (firstDirectionX == 0 && secondDirectionY == 0) {
+		// s = (firstSupportX - secondSupportX) / secondDirectionX;
+		// r = (secondSupportY - firstSupportY) / firstDirectionY;
+		// if (!checkNotWithin(s, r)) {
+		// return second.getPointAt(s);
+		// }
+		// return null;
+		// }
+		//
+		// if (firstDirectionX == 0) {
+		// s = (firstSupportX - secondSupportX) / secondDirectionX;
+		// r = (secondSupportY - firstSupportY + ((firstSupportX -
+		// secondSupportX) * secondDirectionY)
+		// / secondDirectionX)
+		// / firstDirectionY;
+		// if (!checkNotWithin(s, r)) {
+		// return second.getPointAt(s);
+		// }
+		// return null;
+		// }
+		//
+		// if (firstDirectionY == 0 && secondDirectionX == 0) {
+		// s = (firstSupportY - secondSupportY) / secondDirectionY;
+		// r = (secondSupportX - firstSupportX) / firstDirectionX;
+		// if (!checkNotWithin(s, r)) {
+		// return second.getPointAt(s);
+		// }
+		// return null;
+		// }
+		//
+		// if (firstDirectionY == 0) {
+		// s = (firstSupportY - secondSupportY) / secondDirectionY;
+		// r = (secondSupportX - firstSupportX + ((firstSupportY -
+		// secondSupportY)
+		// * secondDirectionX / secondDirectionY))
+		// / firstDirectionX;
+		// if (!checkNotWithin(s, r)) {
+		// return second.getPointAt(s);
+		// }
+		// return null;
+		// }
+		//
+		// if (secondDirectionX == 0) {
+		// r = (secondSupportX - firstSupportX) / firstDirectionX;
+		// s = (firstSupportY - secondSupportY + ((secondSupportX -
+		// firstSupportX)
+		// * firstDirectionY / firstDirectionX))
+		// / secondDirectionY;
+		// if (!checkNotWithin(s, r)) {
+		// return second.getPointAt(s);
+		// }
+		// return null;
+		// }
+		//
+		// if (secondDirectionY == 0) {
+		// r = (secondSupportY - firstSupportY) / firstDirectionY;
+		// s = (firstSupportX - secondSupportX + ((secondSupportY -
+		// firstSupportY)
+		// * firstDirectionX / firstDirectionY))
+		// / secondDirectionX;
+		// if (!checkNotWithin(s, r)) {
+		// return second.getPointAt(s);
+		// }
+		// return null;
+		// }
+		//
+		// return null;
+
+	}
+
+	/**
+	 * Calculates whether the first vector is linearly depending on the second
+	 * vector.
+	 * 
+	 * @param firstVector
+	 * @param secondVector
+	 *            second vector.
+	 * 
+	 * @return true if vectors are linearly depending.
+	 */
+	public static boolean isVectorLinearTo(Vector2f firstVector,
+			Vector2f secondVector) {
+
+		if (firstVector.getX() == 0) {
+			return secondVector.getX() == 0;
+		}
+
+		if (firstVector.getY() == 0) {
+			return secondVector.getY() == 0;
+		}
+
+		// reaching this case X and Y of this vector cannot be 0 anymore.
+		if (secondVector.getX() == 0 || secondVector.getY() == 0) {
+			return false;
+		}
+
+		// so now there no component of any vector can be zero.
+
+		double r = secondVector.getX() / firstVector.getX();
+
+		return firstVector.getY() * r == secondVector.getY();
+	}
+
+	/**
+	 * This function returns the point you will get by multiplying the given //
+	 * * lambda with the directional vector of the line (considered to be
+	 * endpoint - startpoint) and add it to the support vector 'start point'.
+	 * 
+	 * @param line
+	 *            the line
+	 * @param lambda
+	 *            * The multiplier.
+	 * @return Returns u + uv * lambda
+	 */
+	public static Vector2f getPointOnLineAt(Line line, float lambda) {
+		Vector2f startPoint = new Vector2f(line.getX1(), line.getY1());
+		Vector2f endPoint = new Vector2f(line.getX2(), line.getY2());
+
+		Vector2f directionalVector = endPoint.sub(startPoint);
+		return startPoint.add(directionalVector.scale(lambda));
 	}
 }

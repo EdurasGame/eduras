@@ -15,6 +15,8 @@ import java.util.LinkedList;
 @Deprecated
 public class Vector2D {
 
+	static final double RANGE = 0.00001;
+
 	private double x;
 	private double y;
 
@@ -398,8 +400,8 @@ public class Vector2D {
 	 * @return true if vectors are equal, false otherwise.
 	 */
 	public boolean equals(Vector2D vec) {
-		return (Math.abs(this.getX() - vec.getX()) < Line.RANGE && Math
-				.abs(this.getY() - vec.getY()) < Line.RANGE);
+		return (Math.abs(this.getX() - vec.getX()) < RANGE && Math.abs(this
+				.getY() - vec.getY()) < RANGE);
 	}
 
 	/**
