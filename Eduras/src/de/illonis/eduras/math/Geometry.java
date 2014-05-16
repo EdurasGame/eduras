@@ -125,31 +125,31 @@ public class Geometry {
 	}
 
 	/**
-	 * Returns all the lines between a shape's corner points and its counterpart
-	 * of a second shape, that is a shifted copy of the first shape.
+	 * Returns all the lines between a shape and its counterpart of a second
+	 * shape, that is a shifted copy of the first shape.
 	 * 
-	 * @param vertices
-	 *            The relative vertices of the shape.
-	 * @param source
-	 *            The middle point of the shape.
+	 * @param shape
+	 *            the shape.
 	 * @param destination
 	 *            The middle point of the shapes copy.
 	 * @return Returns a list containing the resulting lines.
 	 */
-	public static LinkedList<Line> getLinesBetweenShapePositions(
-			Vector2f[] vertices, Vector2f source, Vector2f destination) {
+	public static LinkedList<Line> getLinesBetweenShapePositions(Shape shape,
+			Vector2f destination) {
 
 		LinkedList<Line> lines = new LinkedList<Line>();
 
-		for (int i = 0; i < vertices.length; i++) {
+		Vector2f originalPosition = shape.getLocation();
+		Vector2f[] pointsOfOriginalPosition = floatsToVectors(shape.getPoints());
 
-			Vector2df sourcePoint = new Vector2df(source);
-			sourcePoint.add(vertices[i]);
+		shape.setLocation(destination);
+		Vector2f[] pointOfDestinationPosition = floatsToVectors(shape
+				.getPoints());
+		shape.setLocation(originalPosition);
 
-			Vector2df destPoint = new Vector2df(destination);
-			destPoint.add(vertices[i]);
-
-			lines.add(new Line(sourcePoint, destPoint));
+		for (int i = 0; i < pointsOfOriginalPosition.length; i++) {
+			lines.add(new Line(pointsOfOriginalPosition[i],
+					pointOfDestinationPosition[i]));
 		}
 
 		return lines;

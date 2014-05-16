@@ -52,17 +52,17 @@ public class LinearAlgebraGeometry extends SimpleGeometry {
 	public Vector2f moveTo(MoveableGameObject object, Vector2f target,
 			Collection<GameObject> touched, Collection<GameObject> collided) {
 
-		float distanceToTarget = object.getPositionVector().distance(target);
-		if (distanceToTarget < object.getShape().getBoundingCircleRadius()) {
-			// in this case, the approach used by SimpleGeometry will always
-			// give an exact result, because if it didn't detect a collision
-			// with an object by shape intersection, it must also have not been
-			// detected in the preceding iteration, which cannot be the case
-			return super.moveTo(object, target, touched, collided);
-		} else {
-			return checkCollisionOnMove(object.getGame(), object, target,
-					touched, collided);
-		}
+		// float distanceToTarget = object.getPositionVector().distance(target);
+		// if (distanceToTarget < object.getShape().getBoundingCircleRadius()) {
+		// // in this case, the approach used by SimpleGeometry will always
+		// // give an exact result, because if it didn't detect a collision
+		// // with an object by shape intersection, it must also have not been
+		// // detected in the preceding iteration, which cannot be the case
+		// return super.moveTo(object, target, touched, collided);
+		// } else {
+		return checkCollisionOnMove(object.getGame(), object, target, touched,
+				collided);
+		// }
 	}
 
 	/**
@@ -96,19 +96,19 @@ public class LinearAlgebraGeometry extends SimpleGeometry {
 
 		// calculate border points to use for collision calculation
 
-		Vector2f[] movementPoints;
-		try {
-			movementPoints = getBorderPointsForShape(thisObject.getShape());
-		} catch (ShapeNotSupportedException e) {
-			L.log(Level.SEVERE, "The shape of object #" + thisObject.getId()
-					+ " is not supported! Not moving the object...", e);
-			return thisObject.getPositionVector();
-		}
+		// Vector2f[] movementPoints;
+		// try {
+		// movementPoints = getBorderPointsForShape(thisObject.getShape());
+		// } catch (ShapeNotSupportedException e) {
+		// L.log(Level.SEVERE, "The shape of object #" + thisObject.getId()
+		// + " is not supported! Not moving the object...", e);
+		// return positionVector;
+		// }
 
-		rotateAll(movementPoints, thisObject.getRotation());
+		// rotateAll(movementPoints, thisObject.getRotation());
 
 		LinkedList<Line> lines = Geometry.getLinesBetweenShapePositions(
-				movementPoints, positionVector, target);
+				thisObject.getShape(), target);
 		TreeSet<GameObject> touchedObjects = new TreeSet<GameObject>(
 				new GameObject.GameObjectIdComparator());
 
