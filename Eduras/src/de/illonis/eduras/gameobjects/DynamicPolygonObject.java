@@ -1,7 +1,6 @@
 package de.illonis.eduras.gameobjects;
 
 import org.newdawn.slick.geom.Polygon;
-import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.Vector2f;
 
 import de.illonis.eduras.GameInformation;
@@ -32,7 +31,8 @@ public class DynamicPolygonObject extends GameObject {
 			TimingSource timingSource, int id) {
 		super(game, timingSource, id);
 		setObjectType(type);
-		setShape(new Rectangle(0, 0, 0, 0));
+		float[] nullPolygon = new float[6];
+		setShape(new Polygon(nullPolygon));
 	}
 
 	/**
