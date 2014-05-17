@@ -10,7 +10,7 @@ import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
 
 /**
- * Handles gui interaction for {@link TestState}.
+ * Handles gui interaction for {@link LoginState}.
  * 
  * @author illonis
  * 

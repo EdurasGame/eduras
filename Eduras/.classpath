@@ -33,5 +33,8 @@
 	<classpathentry kind="lib" path="lib/nifty-default-controls-1.4.0-SNAPSHOT.jar" sourcepath="lib/src/nifty-default-controls-1.4.0-SNAPSHOT-sources.jar"/>
 	<classpathentry kind="lib" path="lib/nifty-style-black-1.4.0-SNAPSHOT.jar" sourcepath="lib/src/nifty-style-black-1.4.0-SNAPSHOT-sources.jar"/>
 	<classpathentry kind="lib" path="lib/nifty-openal-soundsystem-1.4.0-SNAPSHOT.jar"/>
+	<classpathentry kind="lib" path="lib/slick-util.jar" sourcepath="lib/src/slick-util-src.zip"/>
+	<classpathentry kind="lib" path="lib/jogg-0.0.7.jar"/>
+	<classpathentry kind="lib" path="lib/jorbis-0.0.15.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

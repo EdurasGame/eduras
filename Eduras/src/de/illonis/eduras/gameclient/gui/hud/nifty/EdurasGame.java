@@ -12,9 +12,9 @@ import de.lessvoid.nifty.slick2d.NiftyStateBasedGame;
  * @author illonis
  * 
  */
-public class NiftyTest extends NiftyStateBasedGame {
+public class EdurasGame extends NiftyStateBasedGame {
 
-	protected NiftyTest() {
+	protected EdurasGame() {
 		super("title");
 	}
 
@@ -25,19 +25,20 @@ public class NiftyTest extends NiftyStateBasedGame {
 	 * @throws Exception
 	 */
 	public static void main(String[] args) throws Exception {
-		// just as usual as NiftyStateBasedGame extends slicks BasicGame
-		NiftyTest test = new NiftyTest();
+		EdurasGame test = new EdurasGame();
 		AppGameContainer game = new AppGameContainer(test);
 		game.setDisplayMode(800, 600, false);
 		game.setAlwaysRender(true);
 		game.start();
+		game.exit();
 	}
 
 	@Override
 	public void initStatesList(GameContainer container) throws SlickException {
 		// add game states here
-		addState(new TestState());
-		addState(new TestState2());
+		addState(new LoginState(this));
+		addState(new SettingsState(this));
+		
 	}
 
 }

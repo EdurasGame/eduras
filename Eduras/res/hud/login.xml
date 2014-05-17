@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nifty xmlns="nifty.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="nifty.xsd nifty.xsd">
+	<useStyles filename="nifty-default-styles.xml" />
+	<useControls filename="nifty-default-controls.xml" />
+	<popup id="niftyPopupMenu" childLayout="center" width="20%" height="50%">
+		<panel backgroundColor="#333f" height="*" childLayout="vertical" align="center">
+			<control type="label" id="yesButton" font="aurulent-sans-16.fnt"
+				color="#ffff" text="Yes" margin="0px,10px,0px,0px">
+				<interact onClick="ok()" />
+				</control>
+			<control type="label" id="noButton" font="aurulent-sans-16.fnt"
+				color="#ffff" text="No" margin="0px,10px,0px,0px" />
+		</panel>
+	</popup>
+	<screen id="login"
+		controller="de.illonis.eduras.gameclient.gui.hud.nifty.LoginController">
+		<layer id="progressLayer" childLayout="vertical">
+			<panel childLayout="center" width="*">
+				<image filename="/res/images/logo.png" margin="15px,0,0,0" />
+			</panel>
+		</layer>
+		<layer id="closeLayer" childLayout="vertical">
+			<control type="button" id="exitButton" font="aurulent-sans-16.fnt"
+				color="#ffff" label="X" align="right">
+				<interact onClick="exit()" />
+			</control>
+		</layer>
+		<layer id="topLayer" childLayout="center">
+			<panel backgroundColor="#333f" height="20%" childLayout="vertical">
+				<panel backgroundColor="#333f" height="30%" childLayout="center">
+					<panel backgroundColor="#333f" height="*" width="50%"
+						childLayout="horizontal" align="center" padding="15px,15px,15px,15px">
+						<control type="label" id="userNameLabel" font="aurulent-sans-16.fnt"
+							color="#ffff" text="Username:" align="center" margin="0px,10px,0px,0px" />
+						<control id="userNameField" font="aurulent-sans-16.fnt"
+							type="textfield" maxLength="20" text="" />
+						<control type="label" id="userNameNote" font="aurulent-sans-16.fnt"
+							color="#888f" text="minimum 3 chars" margin="0px,0px,0px,10px" />
+					</panel>
+				</panel>
+				<panel backgroundColor="#333f" height="30%" childLayout="center">
+					<panel backgroundColor="#333f" height="*" width="50%"
+						childLayout="horizontal" align="center" padding="15px,15px,15px,15px">
+						<control type="label" id="passwordLabel" font="aurulent-sans-16.fnt"
+							color="#ffff" text="Password:" margin="0px,10px,0px,0px" />
+
+						<control id="passwordField" font="aurulent-sans-16.fnt"
+							type="textfield" maxLength="20" text="" />
+						<control type="label" id="passwordNote" font="aurulent-sans-16.fnt"
+							color="#888f" text="" margin="0px,0px,0px,10px" />
+
+					</panel>
+				</panel>
+				<panel backgroundColor="#333f" height="*" childLayout="center">
+					<panel backgroundColor="#333f" height="*" width="50%"
+						childLayout="center" align="center">
+						<control type="button" id="loginButton" font="aurulent-sans-16.fnt"
+							color="#ffff" label="Login" align="left">
+							<interact onClick="login()" />
+						</control>
+						<control type="button" id="settingsButton" font="aurulent-sans-16.fnt"
+							color="#ffff" label="Settings" align="right">
+							<interact onClick="showSettings()" />
+						</control>
+					</panel>
+				</panel>
+			</panel>
+		</layer>
+	</screen>
+</nifty>
