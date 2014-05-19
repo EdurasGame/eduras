@@ -94,7 +94,6 @@ public class LinearAlgebraGeometry extends SimpleGeometry {
 		Map<Integer, GameObject> gameObjects = game.getObjects();
 
 		GameObject collisionObject = null;
-		GameObject touchObject = null;
 
 		Vector2f positionVector = movingObject.getPositionVector();
 
@@ -173,31 +172,27 @@ public class LinearAlgebraGeometry extends SimpleGeometry {
 			collisions.add(nearestCollision);
 		}
 
-		for (GameObject touchedObject : touchedObjects) {
-			touchedObject.onTouch(movingObject);
-			movingObject.onTouch(touchedObject);
-		}
+		touched.addAll(touchedObjects);
 
 		if (!movingObject.isCollidable()) {
 			return result;
 		}
 
 		// Figure out which collision is the nearest
-		CollisionPoint resultingCollisionPoint = null;
-		if (collisions.size() > 1) {
-			resultingCollisionPoint = CollisionPoint
-					.findNearestCollision(collisions);
-		} else {
-			if (collisions.size() > 0) {
-				resultingCollisionPoint = collisions.getFirst();
-			}
-		}
+		// CollisionPoint resultingCollisionPoint = null;
+		// if (collisions.size() > 1) {
+		// resultingCollisionPoint = CollisionPoint
+		// .findNearestCollision(collisions);
+		// } else {
+		// if (collisions.size() > 0) {
+		// resultingCollisionPoint = collisions.getFirst();
+		// }
+		// }
 
 		// if there was a collision, notify the involved objects and calculate
 		// the new position
 		if (collisionObject != null) {
-			movingObject.onCollision(collisionObject);
-			collisionObject.onCollision(movingObject);
+			collided.add(collisionObject);
 
 			// Use the following code as an alternative. Gives more accurate
 			// results, but is visually ugly and can lead to stucking at edges
