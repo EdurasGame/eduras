@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nifty xmlns="nifty.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="nifty.xsd nifty.xsd">
+	<useStyles filename="nifty-default-styles.xml" />
+	<useControls filename="nifty-default-controls.xml" />
+	<!-- this defines the control for a single line of text in the chat and 
+		player window -->
+	<controlDefinition name="serverEntry">
+		<panel childLayout="horizontal" width="100%" align="center"
+			padding="5px,5px,5px,5px">
+			<control id="#serverName" name="label" align="left"
+				textHAlign="left" height="23px" width="25%" />
+			<control id="#serverAddress" name="label" align="left"
+				textHAlign="left" height="23px" width="25%" />
+			<control id="#serverPlayers" name="label" align="left"
+				textHAlign="left" height="23px" width="25%" />
+			<control id="#serverStatus" name="label" align="left"
+				textHAlign="right" height="23px" width="*" />
+		</panel>
+		<interact onClick="listBoxItemClicked()" />
+		<effect>
+			<onCustom customKey="select" name="colorBar" post="false"
+				color="#444f" neverStopRendering="true" timeType="infinite" />
+			<onCustom customKey="select" name="textColor" post="false"
+				color="#fc0f" neverStopRendering="true" timeType="infinite" />
+		</effect>
+	</controlDefinition>
+	<screen id="serverlist"
+		controller="de.illonis.eduras.gameclient.gui.hud.nifty.ServerListController">
+		<layer id="progressLayer" childLayout="vertical">
+			<panel childLayout="center" width="*">
+				<control type="label" font="aurulent-sans-16.fnt" color="#ffff"
+					text="Select a server" align="center" margin="0px,10px,0px,0px" />
+			</panel>
+		</layer>
+		<layer id="closeLayer" childLayout="vertical">
+			<control type="button" id="exitButton" font="aurulent-sans-16.fnt"
+				color="#ffff" label="X" align="right">
+				<interact onClick="exit()" />
+			</control>
+		</layer>
+		<layer id="topLayer" childLayout="center">
+			<panel backgroundColor="#333f" height="80%" width="80%"
+				childLayout="vertical">
+				<panel backgroundColor="#333f" height="50px" width="*"
+					padding="15px,15px,15px,15px" childLayout="center">
+					<control type="button" id="customButton" font="aurulent-sans-16.fnt"
+						color="#ffff" label="Custom..." align="left">
+						<interact onClick="custom()" />
+					</control>
+					<control type="button" id="joinButton" font="aurulent-sans-16.fnt"
+						color="#ffff" label="Join" align="center">
+						<interact onClick="join()" />
+					</control>
+					<control type="button" id="settingsButton" font="aurulent-sans-16.fnt"
+						color="#ffff" label="Settings" align="right">
+						<interact onClick="showSettings()" />
+					</control>
+
+				</panel>
+
+				<control id="serverList" name="listBox" height="*" vertical="optional"
+					forceSelection="true" horizontal="off" displayItems="10" selection="Single"
+					viewConverterClass="de.illonis.eduras.gameclient.gui.hud.nifty.ServerListViewConverter">
+					<control name="serverEntry"
+						controller="de.lessvoid.nifty.controls.listbox.ListBoxItemController">
+
+					</control>
+				</control>
+			</panel>
+		</layer>
+	</screen>
+</nifty>

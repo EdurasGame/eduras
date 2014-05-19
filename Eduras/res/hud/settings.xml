@@ -3,13 +3,13 @@
 	xsi:schemaLocation="nifty.xsd nifty.xsd">
 	<useStyles filename="nifty-default-styles.xml" />
 	<useControls filename="nifty-default-controls.xml" />
-	
+
 	<screen id="settings"
 		controller="de.illonis.eduras.gameclient.gui.hud.nifty.SettingsController">
 		<layer childLayout="vertical">
 			<panel childLayout="center" width="*">
 				<control type="label" id="settingsTitle" font="aurulent-sans-16.fnt"
-							color="#888f" text="Settings" margin="0px,0px,0px,10px" />
+					color="#888f" text="Settings" margin="0px,0px,0px,10px" />
 			</panel>
 		</layer>
 		<layer id="closeLayer" childLayout="vertical">
@@ -19,12 +19,22 @@
 			</control>
 		</layer>
 		<layer id="topLayer" childLayout="center">
-			<panel backgroundColor="#333f" height="50%" width="80%" childLayout="vertical">
+			<panel backgroundColor="#333f" height="80%" width="80%"
+				childLayout="vertical">
 				<control type="button" id="backButton" font="aurulent-sans-16.fnt"
-				color="#ffff" label="Back" align="left">
-				<interact onClick="back()" />
-			</control>
-				
+					color="#ffff" label="Back" align="left">
+					<interact onClick="back()" />
+				</control>
+				<panel childLayout="horizontal" width="*" height="50px"
+					padding="15px,15px,15px,15px">
+					<control type="label" font="aurulent-sans-16.fnt" color="#888f"
+						text="Display Resolution:" padding="0px,10px,0px,10px" />
+					<control id="resolutionSelect" displayItems="10" name="dropDown"
+						width="50%" />
+
+				</panel>
+				<control type="label" id="currentResolution" font="aurulent-sans-16.fnt"
+					color="#888f" width="50%" text="" />
 			</panel>
 		</layer>
 	</screen>

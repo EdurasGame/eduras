@@ -59,10 +59,6 @@
 							color="#ffff" label="Login" align="left">
 							<interact onClick="login()" />
 						</control>
-						<control type="button" id="settingsButton" font="aurulent-sans-16.fnt"
-							color="#ffff" label="Settings" align="right">
-							<interact onClick="showSettings()" />
-						</control>
 					</panel>
 				</panel>
 			</panel>

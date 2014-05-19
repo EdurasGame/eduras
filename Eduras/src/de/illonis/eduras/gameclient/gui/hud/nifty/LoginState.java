@@ -5,9 +5,6 @@ import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.StateBasedGame;
-import org.newdawn.slick.state.transition.EmptyTransition;
-import org.newdawn.slick.state.transition.FadeInTransition;
-import org.newdawn.slick.state.transition.FadeOutTransition;
 
 import de.illonis.eduras.gameclient.gui.SoundMachine;
 import de.lessvoid.nifty.Nifty;
@@ -21,10 +18,10 @@ import de.lessvoid.nifty.slick2d.NiftyOverlayBasicGameState;
  */
 public class LoginState extends NiftyOverlayBasicGameState {
 
-	private final EdurasGame game;
+	private final GameControllerBridge game;
 
-	public LoginState(EdurasGame edurasGame) {
-		this.game = edurasGame;
+	public LoginState(GameControllerBridge game) {
+		this.game = game;
 	}
 
 	@Override
@@ -53,7 +50,8 @@ public class LoginState extends NiftyOverlayBasicGameState {
 
 	@Override
 	protected void prepareNifty(Nifty nifty, StateBasedGame game) {
-		nifty.fromXml("/res/hud/login.xml", "login", new LoginController(this));
+		nifty.fromXml("/res/hud/login.xml", "login", new LoginController(
+				this.game));
 	}
 
 	@Override
@@ -69,10 +67,5 @@ public class LoginState extends NiftyOverlayBasicGameState {
 			Graphics g) {
 		g.setColor(Color.white);
 		g.drawString("Welcome to Eduras!", 150, 150);
-	}
-
-	public void showSettings() {
-		game.enterState(1, new FadeOutTransition(Color.black, 100),
-				new FadeInTransition(Color.black, 300));
 	}
 }

@@ -1,70 +1,80 @@
 package de.illonis.eduras.gameclient.gui.hud.nifty;
 
-import de.illonis.eduras.gameclient.gui.SoundMachine;
-import de.illonis.eduras.gameclient.gui.SoundMachine.SoundType;
-import de.lessvoid.nifty.Nifty;
+import java.util.Arrays;
+import java.util.Comparator;
+
+import org.lwjgl.LWJGLException;
+import org.lwjgl.opengl.Display;
+import org.lwjgl.opengl.DisplayMode;
+import org.newdawn.slick.Color;
+import org.newdawn.slick.SlickException;
+import org.newdawn.slick.state.transition.FadeInTransition;
+import org.newdawn.slick.state.transition.FadeOutTransition;
+
 import de.lessvoid.nifty.NiftyEventSubscriber;
-import de.lessvoid.nifty.controls.Button;
+import de.lessvoid.nifty.controls.DropDown;
+import de.lessvoid.nifty.controls.DropDownSelectionChangedEvent;
 import de.lessvoid.nifty.controls.Label;
-import de.lessvoid.nifty.controls.MessageBox;
-import de.lessvoid.nifty.controls.TextField;
-import de.lessvoid.nifty.controls.TextFieldChangedEvent;
-import de.lessvoid.nifty.controls.textfield.format.FormatPassword;
 import de.lessvoid.nifty.elements.Element;
-import de.lessvoid.nifty.input.NiftyInputEvent;
 import de.lessvoid.nifty.screen.Screen;
-import de.lessvoid.nifty.screen.ScreenController;
 
-public class SettingsController implements ScreenController {
+public class SettingsController extends EdurasScreenController {
 
-	private final SettingsState state;
-	private Nifty nifty;
-
-	public SettingsController(SettingsState testState) {
-		this.state = testState;
+	public SettingsController(GameControllerBridge game) {
+		super(game);
 	}
 
-	/**
-	 * Handles a textfield content change.<br>
-	 * The annotation automatically registers the appropriate eventlistener.
-	 * 
-	 * @param id
-	 *            the id of the textfield.
-	 * @param event
-	 *            the event.
-	 */
-	@NiftyEventSubscriber(pattern = ".*Field")
-	public void onTextfieldChange(final String id,
-			final TextFieldChangedEvent event) {
-	}
-
-	@Override
-	public void bind(Nifty nifty, Screen screen) {
-		this.nifty = nifty;
-
-	}
-
-	public void exit() {
-		SoundMachine.getSound(SoundType.CLICK).play(2f, 0.1f);
-		// TODO: implement
-	}
-	
 	public void back() {
-		state.back();
+		game.enterState(2, new FadeOutTransition(Color.black, 100),
+				new FadeInTransition(Color.black, 300));
 	}
 
 	@Override
-	public void onStartScreen() {
-		// try {
-		// Music openingMenuMusic = new Music("/res/music/test.ogg");
-		// openingMenuMusic.loop();
-		// } catch (SlickException e) {
-		// e.printStackTrace();
-		// }
+	protected void initScreen(Screen screen) {
+		DropDown<DisplayMode> control = (DropDown<DisplayMode>) screen
+				.findNiftyControl("resolutionSelect", DropDown.class);
+
+		Element currentModeField = screen.findElementById("currentResolution");
+		Label label = currentModeField.getNiftyControl(Label.class);
+		try {
+			DisplayMode currentMode = Display.getDisplayMode();
+			label.setText("Current resolution: " + currentMode.toString());
+			DisplayMode[] modes = Display.getAvailableDisplayModes();
+			Arrays.sort(modes, new Comparator<DisplayMode>() {
+				@Override
+				public int compare(DisplayMode a, DisplayMode b) {
+					if (a.getWidth() > b.getWidth())
+						return -1;
+					else if (a.getWidth() < b.getWidth())
+						return 1;
+					else if (a.getHeight() > b.getHeight())
+						return -1;
+					else if (a.getHeight() < b.getHeight())
+						return 1;
+					else if (a.getFrequency() > b.getFrequency())
+						return -1;
+					else if (a.getFrequency() < b.getFrequency())
+						return 1;
+					else
+						return 0;
+				}
+			});
+			for (DisplayMode displayMode : modes) {
+				control.addItem(displayMode);
+			}
+
+		} catch (LWJGLException e) {
+		}
+
 	}
 
-	@Override
-	public void onEndScreen() {
+	@NiftyEventSubscriber(id = "resolutionSelect")
+	public void onDropDownSelectionChanged(final String id,
+			final DropDownSelectionChangedEvent<DisplayMode> event) {
+		DisplayMode selected = event.getSelection();
+		try {
+			game.changeResolution(selected.getWidth(), selected.getHeight());
+		} catch (SlickException e) {
+		}
 	}
-
 }
