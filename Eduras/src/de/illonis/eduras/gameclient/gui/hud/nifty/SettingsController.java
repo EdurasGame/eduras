@@ -20,6 +20,8 @@ import de.lessvoid.nifty.screen.Screen;
 
 public class SettingsController extends EdurasScreenController {
 
+	private Label resolutionLabel;
+
 	public SettingsController(GameControllerBridge game) {
 		super(game);
 	}
@@ -34,11 +36,12 @@ public class SettingsController extends EdurasScreenController {
 		DropDown<DisplayMode> control = (DropDown<DisplayMode>) screen
 				.findNiftyControl("resolutionSelect", DropDown.class);
 
-		Element currentModeField = screen.findElementById("currentResolution");
-		Label label = currentModeField.getNiftyControl(Label.class);
+		resolutionLabel = screen.findNiftyControl("currentResolution",
+				Label.class);
 		try {
 			DisplayMode currentMode = Display.getDisplayMode();
-			label.setText("Current resolution: " + currentMode.toString());
+			resolutionLabel.setText("Current resolution: "
+					+ currentMode.toString());
 			DisplayMode[] modes = Display.getAvailableDisplayModes();
 			Arrays.sort(modes, new Comparator<DisplayMode>() {
 				@Override
@@ -74,6 +77,9 @@ public class SettingsController extends EdurasScreenController {
 		DisplayMode selected = event.getSelection();
 		try {
 			game.changeResolution(selected.getWidth(), selected.getHeight());
+
+			resolutionLabel.setText("Current resolution: "
+					+ selected.toString());
 		} catch (SlickException e) {
 		}
 	}

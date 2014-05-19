@@ -7,6 +7,8 @@ import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.transition.Transition;
 
+import de.lessvoid.nifty.controls.Controller;
+import de.lessvoid.nifty.screen.ScreenController;
 import de.lessvoid.nifty.slick2d.NiftyStateBasedGame;
 
 /**
@@ -72,6 +74,7 @@ public class EdurasClient implements GameControllerBridge {
 			addState(new LoginState(EdurasClient.this));
 			addState(new SettingsState(EdurasClient.this));
 			addState(new ServerListState(EdurasClient.this));
+			addState(new LoadingState(EdurasClient.this));
 		}
 	}
 

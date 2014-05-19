@@ -49,6 +49,7 @@ public class ServerListController extends EdurasScreenController {
 		if (selected.size() == 1) {
 			ServerInfo current = selected.get(0);
 			System.out.println("joining " + current.getName());
+			game.enterState(3);
 		}
 	}
 

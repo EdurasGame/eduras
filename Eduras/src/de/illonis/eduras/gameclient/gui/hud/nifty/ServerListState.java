@@ -4,6 +4,7 @@ import org.newdawn.slick.state.StateBasedGame;
 
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.slick2d.NiftyBasicGameState;
+import de.lessvoid.nifty.tools.SizeValue;
 
 public class ServerListState extends NiftyBasicGameState {
 
@@ -24,4 +25,5 @@ public class ServerListState extends NiftyBasicGameState {
 	public int getID() {
 		return 2;
 	}
+
 }

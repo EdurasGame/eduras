@@ -45,7 +45,7 @@
 				<panel backgroundColor="#333f" height="50px" width="*"
 					padding="15px,15px,15px,15px" childLayout="center">
 					<control type="button" id="customButton" font="aurulent-sans-16.fnt"
-						color="#ffff" label="Custom..." align="left">
+						color="#ffff" label="Connect to IP..." align="left">
 						<interact onClick="custom()" />
 					</control>
 					<control type="button" id="joinButton" font="aurulent-sans-16.fnt"
