@@ -37,6 +37,10 @@ public class LinearAlgebraGeometry extends SimpleGeometry {
 	 */
 	private static final int COLLISION_ACCURACY = 20;
 
+	private long skippedCalculations;
+
+	private long allCalculations;
+
 	/**
 	 * Create the geometry.
 	 * 
@@ -71,7 +75,7 @@ public class LinearAlgebraGeometry extends SimpleGeometry {
 	 * 
 	 * @param game
 	 *            The current state of the game.
-	 * @param thisObject
+	 * @param movingObject
 	 *            The object which wants to move.
 	 * @param target
 	 *            The target position
@@ -83,7 +87,7 @@ public class LinearAlgebraGeometry extends SimpleGeometry {
 	 * @return Returns the position of the object after the move.
 	 */
 	private Vector2f checkCollisionOnMove(GameInformation game,
-			GameObject thisObject, Vector2f target,
+			GameObject movingObject, Vector2f target,
 			Collection<GameObject> touched, Collection<GameObject> collided) {
 
 		Vector2f result = new Vector2f(target);
@@ -92,7 +96,7 @@ public class LinearAlgebraGeometry extends SimpleGeometry {
 		GameObject collisionObject = null;
 		GameObject touchObject = null;
 
-		Vector2f positionVector = thisObject.getPositionVector();
+		Vector2f positionVector = movingObject.getPositionVector();
 
 		// calculate border points to use for collision calculation
 
@@ -108,18 +112,40 @@ public class LinearAlgebraGeometry extends SimpleGeometry {
 		// rotateAll(movementPoints, thisObject.getRotation());
 
 		LinkedList<Line> lines = Geometry.getLinesBetweenShapePositions(
-				thisObject.getShape(), target);
+				movingObject.getShape(), target);
 		TreeSet<GameObject> touchedObjects = new TreeSet<GameObject>(
 				new GameObject.GameObjectIdComparator());
 
 		LinkedList<CollisionPoint> collisions = new LinkedList<CollisionPoint>();
 
+		float sizeOfThisObject = movingObject.getShape()
+				.getBoundingCircleRadius();
+		float maxDistanceToTarget = sizeOfThisObject
+				+ target.distance(movingObject.getPositionVector());
+
 		// Check for collides with objects
 		for (GameObject singleObject : gameObjects.values()) {
 
 			// skip comparing the object with itself
-			if (singleObject.equals(thisObject))
+			if (singleObject.equals(movingObject)) {
 				continue;
+			}
+
+			allCalculations++;
+
+			// check if the object is in range so a collision is possible at all
+			// to be sure at all times we need to assume that the position
+			// vectors are at the worst possible locations within the shape such
+			// that the distance is maximized.
+			float sizeOfOtherObject = singleObject.getShape()
+					.getBoundingCircleRadius() * 2;
+			float minDistanceToOtherObject = movingObject.getPositionVector()
+					.distance(singleObject.getPositionVector())
+					- sizeOfThisObject - sizeOfOtherObject;
+			if (maxDistanceToTarget < minDistanceToOtherObject) {
+				skippedCalculations++;
+				continue;
+			}
 
 			CollisionPoint nearestCollision;
 			try {
@@ -129,7 +155,7 @@ public class LinearAlgebraGeometry extends SimpleGeometry {
 				L.log(Level.SEVERE,
 						"The gameobject's shape to compare against isn't supported!",
 						e);
-				return thisObject.getPositionVector();
+				return movingObject.getPositionVector();
 			}
 
 			// skip if there was no collision
@@ -137,7 +163,7 @@ public class LinearAlgebraGeometry extends SimpleGeometry {
 				continue;
 			}
 
-			if (thisObject.isCollidable() && singleObject.isCollidable()) {
+			if (movingObject.isCollidable() && singleObject.isCollidable()) {
 				// remember the gameObject that had a collision
 				collisionObject = singleObject;
 			} else {
@@ -148,11 +174,11 @@ public class LinearAlgebraGeometry extends SimpleGeometry {
 		}
 
 		for (GameObject touchedObject : touchedObjects) {
-			touchedObject.onTouch(thisObject);
-			thisObject.onTouch(touchedObject);
+			touchedObject.onTouch(movingObject);
+			movingObject.onTouch(touchedObject);
 		}
 
-		if (!thisObject.isCollidable()) {
+		if (!movingObject.isCollidable()) {
 			return result;
 		}
 
@@ -170,8 +196,8 @@ public class LinearAlgebraGeometry extends SimpleGeometry {
 		// if there was a collision, notify the involved objects and calculate
 		// the new position
 		if (collisionObject != null) {
-			thisObject.onCollision(collisionObject);
-			collisionObject.onCollision(thisObject);
+			movingObject.onCollision(collisionObject);
+			collisionObject.onCollision(movingObject);
 
 			// Use the following code as an alternative. Gives more accurate
 			// results, but is visually ugly and can lead to stucking at edges
@@ -183,6 +209,8 @@ public class LinearAlgebraGeometry extends SimpleGeometry {
 			result = positionVector;
 		}
 
+		System.out.println("Skipped "
+				+ ((float) skippedCalculations / (float) allCalculations));
 		return result;
 	}
 
