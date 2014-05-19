@@ -22,6 +22,12 @@ import de.illonis.eduras.exceptions.ShapeNotSupportedException;
 public class Geometry {
 
 	/**
+	 * Determines how exactly collisions are calculated. The higher this value,
+	 * the less will gameobjects of type triangle will be able to overlap.
+	 */
+	private static final int SHAPE_ACCURACY = 20;
+
+	/**
 	 * Return length of a hypotenuse in a right-angled triangle.
 	 * 
 	 * @param a
@@ -430,6 +436,14 @@ public class Geometry {
 		return interceptPoints;
 	}
 
+	/**
+	 * Calculates the borderlines spanned by the given shape's vertices assuming
+	 * that a borderline i is given by a line between vertex no i and vertex no
+	 * (i + 1).
+	 * 
+	 * @param shape
+	 * @return see {@link #getBorderLines(Vector2f[])}
+	 */
 	public static LinkedList<Line> getBorderLines(Shape shape) {
 		return Geometry.getBorderLines(Geometry.floatsToVectors(shape
 				.getPoints()));
@@ -459,167 +473,6 @@ public class Geometry {
 		} else {
 			return null;
 		}
-
-		// TODO: remove legacy code
-
-		// // use parameter equotation of lines and equalize them. this results
-		// in
-		// // the following calculation
-		//
-		// Vector2f firstSupportVector = first.getSupportVector();
-		// Vector2f secondSupportVector = second.getSupportVector();
-		// Vector2f firstDirectionalVector = first.getDirectionalVector();
-		// Vector2f secondDirectionalVector = second.getDirectionalVector();
-		//
-		// float firstSupportX = firstSupportVector.getX();
-		// float firstSupportY = firstSupportVector.getY();
-		// float secondSupportX = secondSupportVector.getX();
-		// float secondSupportY = secondSupportVector.getY();
-		//
-		// float firstDirectionX = firstDirectionalVector.getX();
-		// float firstDirectionY = firstDirectionalVector.getY();
-		// float secondDirectionX = secondDirectionalVector.getX();
-		// float secondDirectionY = secondDirectionalVector.getY();
-		//
-		// float s = 0;
-		// float r = 0;
-		//
-		// // We must distinguish between cases when one or more of the
-		// direction
-		// // vectors are zero.
-		// // The cases firstDirectionX == firstDirectionY == 0 and
-		// // secondDirectionX == secondDirectionY == 0 cannot (or should not)
-		// // occur because then one of the lines is not really a line.
-		// // If the directionVectors are linearly depending on each other, the
-		// // lines might be the same, so we must
-		// // check for that.
-		// // In any other case we can give a calculation for s and r.
-		// // TODO: the following check does not work properly. However, it
-		// throws
-		// // an exception at pacman.
-		// // if ((firstDirectionX == 0 && firstDirectionY == 0)
-		// // || (secondDirectionX == 0 && secondDirectionY == 0)) {
-		// // try {
-		// // throw new Exception(
-		// // "There was a line given that was not correct.");
-		// // } catch (Exception e) {
-		// // e.printStackTrace();
-		// // return null;
-		// // }
-		// // }
-		//
-		// if (isVectorLinearTo(firstDirectionalVector,
-		// secondDirectionalVector)) {
-		//
-		// boolean firstIn = false;
-		// boolean secondIn = false;
-		//
-		// if (second.containsPoint(firstSupportVector)) {
-		// firstIn = firstSupportVector.distance(first.getV()) >
-		// firstSupportVector
-		// .distance(secondSupportVector);
-		// secondIn = secondSupportVector.distance(second.getV()) >
-		// secondSupportVector
-		// .distance(firstSupportVector);
-		// if (firstIn && secondIn) {
-		// return secondSupportVector;
-		// }
-		// } else {
-		// return null;
-		// }
-		// }
-		//
-		// if (firstDirectionX != 0 && firstDirectionY != 0
-		// && secondDirectionX != 0 && secondDirectionY != 0) {
-		//
-		// s = (firstSupportY - secondSupportY + ((secondSupportX -
-		// firstSupportX) * firstDirectionY)
-		// / firstDirectionX)
-		// / (secondDirectionY - ((secondDirectionX * firstDirectionY) /
-		// firstDirectionX));
-		//
-		// r = (secondSupportX + s * secondDirectionX - firstSupportX)
-		// / firstDirectionX;
-		// // the first line segment ends for s = 1, the second ends for r = 1
-		// // so
-		// // if s > 1 || r > 1 there is no intersection
-		// // points
-		//
-		// if (checkNotWithin(s, r)) {
-		// return null;
-		// }
-		//
-		// return second.getPointAt(s);
-		// }
-		//
-		// if (firstDirectionX == 0 && secondDirectionY == 0) {
-		// s = (firstSupportX - secondSupportX) / secondDirectionX;
-		// r = (secondSupportY - firstSupportY) / firstDirectionY;
-		// if (!checkNotWithin(s, r)) {
-		// return second.getPointAt(s);
-		// }
-		// return null;
-		// }
-		//
-		// if (firstDirectionX == 0) {
-		// s = (firstSupportX - secondSupportX) / secondDirectionX;
-		// r = (secondSupportY - firstSupportY + ((firstSupportX -
-		// secondSupportX) * secondDirectionY)
-		// / secondDirectionX)
-		// / firstDirectionY;
-		// if (!checkNotWithin(s, r)) {
-		// return second.getPointAt(s);
-		// }
-		// return null;
-		// }
-		//
-		// if (firstDirectionY == 0 && secondDirectionX == 0) {
-		// s = (firstSupportY - secondSupportY) / secondDirectionY;
-		// r = (secondSupportX - firstSupportX) / firstDirectionX;
-		// if (!checkNotWithin(s, r)) {
-		// return second.getPointAt(s);
-		// }
-		// return null;
-		// }
-		//
-		// if (firstDirectionY == 0) {
-		// s = (firstSupportY - secondSupportY) / secondDirectionY;
-		// r = (secondSupportX - firstSupportX + ((firstSupportY -
-		// secondSupportY)
-		// * secondDirectionX / secondDirectionY))
-		// / firstDirectionX;
-		// if (!checkNotWithin(s, r)) {
-		// return second.getPointAt(s);
-		// }
-		// return null;
-		// }
-		//
-		// if (secondDirectionX == 0) {
-		// r = (secondSupportX - firstSupportX) / firstDirectionX;
-		// s = (firstSupportY - secondSupportY + ((secondSupportX -
-		// firstSupportX)
-		// * firstDirectionY / firstDirectionX))
-		// / secondDirectionY;
-		// if (!checkNotWithin(s, r)) {
-		// return second.getPointAt(s);
-		// }
-		// return null;
-		// }
-		//
-		// if (secondDirectionY == 0) {
-		// r = (secondSupportY - firstSupportY) / firstDirectionY;
-		// s = (firstSupportX - secondSupportX + ((secondSupportY -
-		// firstSupportY)
-		// * firstDirectionX / firstDirectionY))
-		// / secondDirectionX;
-		// if (!checkNotWithin(s, r)) {
-		// return second.getPointAt(s);
-		// }
-		// return null;
-		// }
-		//
-		// return null;
-
 	}
 
 	/**
@@ -672,5 +525,52 @@ public class Geometry {
 
 		Vector2f directionalVector = endPoint.sub(startPoint);
 		return startPoint.add(directionalVector.scale(lambda));
+	}
+
+	/**
+	 * Returns an array of vectors which approximate the borders of the given
+	 * shape.
+	 * 
+	 * @param shape
+	 *            the shape to return the border points of
+	 * @return points
+	 * @throws ShapeNotSupportedException
+	 *             Thrown if the given shape type is not supported
+	 */
+	public Vector2f[] getBorderPointsForShape(Shape shape)
+			throws ShapeNotSupportedException {
+		if (shape instanceof Polygon) {
+			return getPolygonBorderPoints((Polygon) shape);
+		}
+
+		if (shape instanceof Ellipse) {
+			Vector2f[] result = new Vector2f[0];
+			result = Geometry
+					.getPointsOnCirlce((Ellipse) shape, SHAPE_ACCURACY)
+					.toArray(result);
+			return result;
+		}
+
+		throw new ShapeNotSupportedException(shape);
+	}
+
+	private Vector2f[] getPolygonBorderPoints(Polygon shape) {
+		Vector2f[] vertices = Geometry.floatsToVectors(shape.getPoints());
+
+		LinkedList<Line> borderLines = Geometry.getBorderLines(vertices);
+
+		Vector2f[] movementPoints = new Vector2f[SHAPE_ACCURACY
+				* vertices.length];
+
+		int j = 0;
+		for (Line singleBorderLine : borderLines) {
+			for (int i = 0; i < SHAPE_ACCURACY; i++) {
+				movementPoints[j] = Geometry.getPointOnLineAt(singleBorderLine,
+						(1f / SHAPE_ACCURACY) * i);
+				j++;
+			}
+		}
+
+		return movementPoints;
 	}
 }
