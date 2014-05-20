@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Random;
@@ -11,7 +12,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.newdawn.slick.geom.Circle;
 import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.Shape;
 import org.newdawn.slick.geom.Vector2f;
@@ -37,6 +37,7 @@ import de.illonis.eduras.events.SetTeamsEvent;
 import de.illonis.eduras.events.SetVisibilityEvent;
 import de.illonis.eduras.exceptions.GameModeNotSupportedByMapException;
 import de.illonis.eduras.exceptions.InvalidNameException;
+import de.illonis.eduras.exceptions.NoSpawnAvailableException;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
 import de.illonis.eduras.gameclient.ClientData;
 import de.illonis.eduras.gameobjects.DynamicPolygonObject;
@@ -62,6 +63,8 @@ import de.illonis.eduras.units.PlayerMainFigure;
 public class GameInformation {
 	private final static Logger L = EduLog.getLoggerFor(GameInformation.class
 			.getName());
+
+	private static final int ATTEMPT_PER_SPAWNPOINT = 100;
 
 	private static final Random RANDOM = new Random();
 	private final ClientData clientData;
@@ -562,9 +565,12 @@ public class GameInformation {
 	 * @return the new spawning position.
 	 * @throws GameModeNotSupportedByMapException
 	 *             if current game does not support game mode.
+	 * @throws NoSpawnAvailableException
+	 *             thrown if no spawnpoint can be determined
 	 */
 	public Vector2df getSpawnPointFor(Player player)
-			throws GameModeNotSupportedByMapException {
+			throws GameModeNotSupportedByMapException,
+			NoSpawnAvailableException {
 
 		SpawnType spawnType = spawnGroups.get(player.getTeam());
 
@@ -583,41 +589,52 @@ public class GameInformation {
 			throw new GameModeNotSupportedByMapException(getGameSettings()
 					.getGameMode(), getMap());
 
+		// make it approximately random what spawn position will be used
+		Collections.shuffle(availableSpawnings, new Random(System.nanoTime()));
+
 		Shape playerShape = player.getPlayerMainFigure().getShape();
-		int area = RANDOM.nextInt(availableSpawnings.size());
-		SpawnPosition spawnPos = availableSpawnings.get(area);
 		Rectangle boundings = new Rectangle(0, 0, playerShape.getWidth(),
 				playerShape.getHeight());
 
-		Vector2df newPos;
-		try {
-			int i = 0;
-			do {
-				i++;
-				newPos = spawnPos.getAPoint(playerShape);
-				if (!isValidPosition(newPos, player.getPlayerMainFigure())) {
-					continue;
-				}
+		for (SpawnPosition spawnPos : availableSpawnings) {
 
-				boundings.setX(newPos.x);
-				boundings.setY(newPos.y);
+			boolean spawnPositionOkay = false;
+			Vector2df newPos;
+			try {
+				int i = 0;
+				do {
+					i++;
+					newPos = spawnPos.getAPoint(playerShape);
 
-				if (i > 100000) {
-					L.severe("Cannot find a spawn point!");
-					break;
+					boundings.setX(newPos.x);
+					boundings.setY(newPos.y);
+
+					if (i > ATTEMPT_PER_SPAWNPOINT) {
+						break;
+					}
+
+					spawnPositionOkay = !isAnyOfObjectsWithinBounds(boundings,
+							objects.values());
+				} while (!spawnPositionOkay);
+
+				if (spawnPositionOkay) {
+					return new Vector2df(boundings.getX(), boundings.getY());
+				} else {
+					L.warning("There is no spawnpoint in the spawnposition at x : "
+							+ spawnPos.getArea().getX()
+							+ " y : "
+							+ spawnPos.getArea().getY()
+							+ " after "
+							+ ATTEMPT_PER_SPAWNPOINT + " attempts.");
 				}
-			} while (isAnyOfObjectsWithinBounds(boundings, objects.values()));
-		} catch (IllegalArgumentException e) {
-			L.log(Level.SEVERE, e.getMessage(), e);
+			} catch (IllegalArgumentException e) {
+				L.log(Level.SEVERE, e.getMessage(), e);
+			}
+
 		}
 
-		return new Vector2df(boundings.getX(), boundings.getY());
-	}
+		throw new NoSpawnAvailableException();
 
-	private boolean isValidPosition(Vector2df newPos, PlayerMainFigure player) {
-		// make sure the position is far apart enough from the map border object
-		double diameter = 2 * ((Circle) player.getShape()).getRadius();
-		return (newPos.x > diameter && newPos.y > diameter);
 	}
 
 	/**

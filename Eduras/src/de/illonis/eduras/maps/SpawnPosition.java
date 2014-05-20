@@ -109,4 +109,13 @@ public class SpawnPosition {
 	public SpawnType getTeaming() {
 		return teaming;
 	}
+
+	/**
+	 * Returns the spawn area as a rectangular area.
+	 * 
+	 * @return spawn area
+	 */
+	public Rectangle getArea() {
+		return area;
+	}
 }
