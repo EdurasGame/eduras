@@ -7,22 +7,44 @@
 
 :spawnpoints
 # X		Y		W		H		Type
-1,		1,		75,		100,	TEAM_A
-1,		H - 75,	200,	70,		TEAM_A
-W - 39,	1,		35,		100,	TEAM_B
-W - 205,H - 75,	200,	70,		TEAM_B
+
+#left spawnpoints
+1, 1 * H / 4, 30, 30, ANY
+1, H / 2    , 30, 30, ANY
+1, 3 * H / 4, 30, 30, ANY
+
+#middle spawnpoints
+1 * W/4, H/2, 30, 30, ANY
+3 * W/4, H/2, 30, 30, ANY
+W / 2, 1 * H / 4, 30, 30, ANY
+W / 2, 3 * H / 4, 30, 30, ANY
+
+#right spawnpoints
+W - 31, 1 * H / 4, 30, 30, ANY
+W - 31, 3 * H / 4, 30, 30, ANY
+W - 31, H / 2    , 30, 30, ANY
+
+#bottom spawns
+W / 4, H - 30, 30, 30, ANY
+W / 4 * 3, H - 30, 30, 30, ANY
+W / 2, H / 4 * 3, 30, 30, ANY
+
+#top spawns
+W / 4, 10, 30, 30, ANY
+W / 4 * 3, 10, 30, 30, ANY
+W / 2, H / 4, 30, 30, ANY
 
 :objects
-ITEM_WEAPON_SWORD,		25,	25
-ITEM_WEAPON_SWORD,		25,	H-25
-ITEM_WEAPON_SIMPLE,		W-25,	25
-ITEM_WEAPON_SIMPLE,		W-25,	H-25
+ITEM_WEAPON_SPLASH,		25  ,	H-25
+ASSAULTRIFLE      ,		25  ,	25
+ITEM_WEAPON_SPLASH,		W-25,	25
+ASSAULTRIFLE      ,		W-25,	H-25
 ITEM_WEAPON_SIMPLE,		W/2,	25
+ITEM_WEAPON_SIMPLE,		W/2,	H-25
 ITEM_WEAPON_SNIPER,	W /2,	H/2
-ITEM_WEAPON_SPLASH,	W/2,	H/3
-ROCKETLAUNCHER, W/3,	H/3
-MINELAUNCHER, 	W/3 * 2,	H/3 *2
-ASSAULTRIFLE,   W/2 , H/3 * 2
+ROCKETLAUNCHER, W / 4, H / 4
+MINELAUNCHER, 	W/4 * 3,	H/4 * 3
+
 BUILDING,		80,	80
 BUILDING,		W-80,	80
 BUILDING,		80,	H-80
@@ -75,4 +97,3 @@ BIGBLOCK,		120+240, H-180
 BIGBLOCK,		120+270, H-180
 BIGBLOCK,		120+300, H-150
 BIGBLOCK,		120+330, H-120
-NEUTRAL_BASE,	W/2, H/2+50
