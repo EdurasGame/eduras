@@ -28,7 +28,6 @@ public class EdurasClient implements GameControllerBridge {
 		DisplayMode currentMode = Display.getDesktopDisplayMode();
 		gameContainer.setDisplayMode(currentMode.getWidth(),
 				currentMode.getHeight(), true);
-		gameContainer.setAlwaysRender(true);
 		gameContainer.start();
 	}
 
@@ -53,14 +52,14 @@ public class EdurasClient implements GameControllerBridge {
 		gameContainer.exit();
 
 	}
-
+	
 	@Override
 	public void changeResolution(int width, int height) throws SlickException {
 		gameContainer.setDisplayMode(width, height, true);
 	}
 
 	class Game extends NiftyStateBasedGame {
-
+		
 		protected Game() {
 			super("Eduras? Client");
 		}
