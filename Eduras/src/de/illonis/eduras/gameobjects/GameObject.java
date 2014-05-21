@@ -2,16 +2,20 @@ package de.illonis.eduras.gameobjects;
 
 import java.util.Comparator;
 import java.util.LinkedList;
+import java.util.logging.Logger;
 
+import org.newdawn.slick.geom.Line;
 import org.newdawn.slick.geom.Shape;
 import org.newdawn.slick.geom.Vector2f;
 
+import de.illonis.edulog.EduLog;
 import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.ObjectFactory.ObjectType;
 import de.illonis.eduras.ai.AIControllable;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
+import de.illonis.eduras.exceptions.ShapeNotSupportedException;
 import de.illonis.eduras.math.CollisionPoint;
-import de.illonis.eduras.math.Line;
+import de.illonis.eduras.math.Geometry;
 import de.illonis.eduras.math.Vector2df;
 import de.illonis.eduras.units.PlayerMainFigure;
 import de.illonis.eduras.units.Unit;
@@ -23,6 +27,9 @@ import de.illonis.eduras.units.Unit;
  * 
  */
 public abstract class GameObject implements Comparable<GameObject> {
+
+	private final static Logger L = EduLog.getLoggerFor(GameObject.class
+			.getName());
 
 	/**
 	 * denotes the environment (or that there is no owner respectivly)
@@ -540,10 +547,13 @@ public abstract class GameObject implements Comparable<GameObject> {
 	 *            The lines representing the moving object.
 	 * @return Returns a linked list of collision points. The list will be empty
 	 *         if there is no collision.
+	 * @throws ShapeNotSupportedException
 	 */
-	public LinkedList<CollisionPoint> isIntersected(LinkedList<Line> lines) {
-		return new LinkedList<>();
-		// return this.getShape().isIntersected(lines, this);
+	public LinkedList<CollisionPoint> isIntersected(LinkedList<Line> lines)
+			throws ShapeNotSupportedException {
+
+		return Geometry.isShapeIntersectedByLines(lines, this.getShape());
+
 	}
 
 	/**

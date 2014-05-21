@@ -6,6 +6,9 @@ package de.illonis.eduras.math;
 import java.util.LinkedList;
 import java.util.logging.Logger;
 
+import org.newdawn.slick.geom.Line;
+import org.newdawn.slick.geom.Vector2f;
+
 import de.illonis.edulog.EduLog;
 
 /**
@@ -20,8 +23,8 @@ public class CollisionPoint {
 	private final static Logger L = EduLog.getLoggerFor(CollisionPoint.class
 			.getName());
 
-	private final Vector2df interceptPoint;
-	private final Vector2df distanceVector;
+	private final Vector2f interceptPoint;
+	private final Vector2f distanceVector;
 
 	/**
 	 * Creates a new point of collision.
@@ -31,7 +34,7 @@ public class CollisionPoint {
 	 * @param distanceVector
 	 *            The distancevector to this collision
 	 */
-	public CollisionPoint(Vector2df interceptPoint, Vector2df distanceVector) {
+	public CollisionPoint(Vector2f interceptPoint, Vector2f distanceVector) {
 		this.interceptPoint = interceptPoint;
 		this.distanceVector = distanceVector;
 	}
@@ -41,7 +44,7 @@ public class CollisionPoint {
 	 * 
 	 * @return point of collision.
 	 */
-	public Vector2df getInterceptPoint() {
+	public Vector2f getInterceptPoint() {
 		return interceptPoint;
 	}
 
@@ -59,7 +62,7 @@ public class CollisionPoint {
 	 * 
 	 * @return The distanceVector.
 	 */
-	public Vector2df getDistanceVector() {
+	public Vector2f getDistanceVector() {
 		return distanceVector;
 	}
 
@@ -102,10 +105,10 @@ public class CollisionPoint {
 	 * @return Returns the correlating CollisionPoint.
 	 */
 	public static CollisionPoint createCollisionPointByInterceptPoint(
-			Vector2df interceptPoint, Line line) {
-		float distanceVectorX = interceptPoint.getX() - line.getU().getX();
-		float distanceVectorY = interceptPoint.getY() - line.getU().getY();
-		Vector2df distanceVector = new Vector2df(distanceVectorX,
+			Vector2f interceptPoint, Line line) {
+		float distanceVectorX = interceptPoint.getX() - line.getX1();
+		float distanceVectorY = interceptPoint.getY() - line.getY1();
+		Vector2f distanceVector = new Vector2df(distanceVectorX,
 				distanceVectorY);
 
 		L.finest("[LOGIC][TRIANGLE] Collision at " + interceptPoint.getX()

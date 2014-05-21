@@ -290,17 +290,21 @@ public class MetaServer {
 	 *            1st argument: The port on which the meta server will listen.
 	 */
 	public static void main(String[] args) {
+		Boolean logToFile = true;
 		try {
 			EduLog.init("metaserver.log");
 		} catch (IOException e) {
 			e.printStackTrace();
-			throw new RuntimeException(
-					"error starting logging to metaserver.log");
+			System.out.println("No logging to file active.");
+			logToFile = false;
 		}
 
 		EduLog.setBasicLogLimit(Level.ALL);
 		EduLog.setConsoleLogLimit(Level.ALL);
-		EduLog.setFileLogLimit(Level.ALL);
+		if (logToFile) {
+			EduLog.setFileLogLimit(Level.ALL);
+		}
+
 		MetaServer metaServer;
 		try {
 			if (args.length > 0) {

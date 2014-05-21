@@ -3,8 +3,14 @@ package de.illonis.eduras.math;
 import java.util.LinkedList;
 
 import org.newdawn.slick.geom.Circle;
+import org.newdawn.slick.geom.Ellipse;
+import org.newdawn.slick.geom.Line;
+import org.newdawn.slick.geom.Polygon;
+import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.Shape;
 import org.newdawn.slick.geom.Vector2f;
+
+import de.illonis.eduras.exceptions.ShapeNotSupportedException;
 
 /**
  * A math class that provides useful functions that are used in two-dimensional
@@ -14,6 +20,12 @@ import org.newdawn.slick.geom.Vector2f;
  * 
  */
 public class Geometry {
+
+	/**
+	 * Determines how exactly collisions are calculated. The higher this value,
+	 * the less will gameobjects of type triangle will be able to overlap.
+	 */
+	private static final int SHAPE_ACCURACY = 20;
 
 	/**
 	 * Return length of a hypotenuse in a right-angled triangle.
@@ -104,34 +116,88 @@ public class Geometry {
 	}
 
 	/**
-	 * Returns all the lines between a shape's corner points and its counterpart
-	 * of a second shape, that is a shifted copy of the first shape.
+	 * Converts an array of floats to an array of vectors where vector[i] =
+	 * (float[2 * i], float[2 * i + 1]).
 	 * 
-	 * @param vertices
-	 *            The relative vertices of the shape.
-	 * @param source
-	 *            The middle point of the shape.
+	 * @param floats
+	 * @return vectors
+	 */
+	public static Vector2f[] floatsToVectors(float[] floats) {
+		Vector2f result[] = new Vector2f[floats.length / 2];
+		for (int i = 0; i < result.length; i++) {
+			result[i] = new Vector2f(floats[2 * i], floats[2 * i + 1]);
+		}
+		return result;
+	}
+
+	/**
+	 * Returns all the lines between a shape and its counterpart of a second
+	 * shape, that is a shifted copy of the first shape.
+	 * 
+	 * @param shape
+	 *            the shape.
 	 * @param destination
 	 *            The middle point of the shapes copy.
 	 * @return Returns a list containing the resulting lines.
 	 */
-	public static LinkedList<Line> getLinesBetweenShapePositions(
-			Vector2df[] vertices, Vector2df source, Vector2df destination) {
+	public static LinkedList<Line> getLinesBetweenShapePositions(Shape shape,
+			Vector2f destination) {
 
 		LinkedList<Line> lines = new LinkedList<Line>();
 
-		for (int i = 0; i < vertices.length; i++) {
+		Vector2f originalPosition = new Vector2f(shape.getX(), shape.getY());
+		Vector2f[] pointsOfOriginalPosition = floatsToVectors(shape.getPoints());
 
-			Vector2df sourcePoint = new Vector2df(source);
-			sourcePoint.add(vertices[i]);
+		shape.setLocation(destination);
+		Vector2f[] pointOfDestinationPosition = floatsToVectors(shape
+				.getPoints());
+		shape.setLocation(originalPosition);
 
-			Vector2df destPoint = new Vector2df(destination);
-			destPoint.add(vertices[i]);
-
-			lines.add(new Line(sourcePoint, destPoint));
+		for (int i = 0; i < pointsOfOriginalPosition.length; i++) {
+			lines.add(new Line(pointsOfOriginalPosition[i],
+					pointOfDestinationPosition[i]));
 		}
 
 		return lines;
+	}
+
+	/**
+	 * Returns 'numpoints' points on the circle with the origin as its
+	 * centerpoint such that two neighboured points have the same distance.
+	 * 
+	 * @param circle
+	 *            the circle to return the points of
+	 * @param numPoints
+	 *            The number of points you want to receive.
+	 * @return Returns a list containing the points on the circle.
+	 */
+	public static LinkedList<Vector2f> getPointsOnCirlce(Ellipse circle,
+			int numPoints) {
+
+		LinkedList<Vector2f> result = new LinkedList<Vector2f>();
+		float angle = (float) (2 * Math.PI) / numPoints;
+
+		for (int i = 0; i < numPoints; i++) {
+			result.add(getPointOnCircleAtAngle(circle, i * angle));
+		}
+		return result;
+	}
+
+	/**
+	 * Returns the point on the circle at the given angle.
+	 * 
+	 * @param circle
+	 * @param angle
+	 *            The angle on the circle where to find the point.
+	 * @return The point.
+	 */
+	public static Vector2f getPointOnCircleAtAngle(Ellipse circle, float angle) {
+
+		// assuming this is a circle, so the radii are identical
+		float pointXPos = (float) (Math.cos(angle) * circle.getRadius1());
+		float pointYPos = (float) (Math.sin(angle) * circle.getRadius1());
+
+		return new Vector2f(pointXPos, pointYPos);
 	}
 
 	/**
@@ -159,7 +225,7 @@ public class Geometry {
 	 *            The vertices to make the borderlines of
 	 * @return The resulting borderlines.
 	 */
-	public static LinkedList<Line> getRelativeBorderLines(Vector2f[] vertices) {
+	public static LinkedList<Line> getBorderLines(Vector2f[] vertices) {
 
 		LinkedList<Line> borderLines = new LinkedList<Line>();
 
@@ -188,5 +254,323 @@ public class Geometry {
 		Vector2f diffVector = pointOnCircle.copy();
 		diffVector.sub(centerPoint);
 		return new Circle(centerPoint.x, centerPoint.y, diffVector.length());
+	}
+
+	/**
+	 * Calculates all {@link CollisionPoint}s that occur when checking if the
+	 * given shape is intersected by the given lines.
+	 * 
+	 * @param lines
+	 * @param shape
+	 * @return a list of {@link CollisionPoint}.
+	 * @throws ShapeNotSupportedException
+	 */
+	public static LinkedList<CollisionPoint> isShapeIntersectedByLines(
+			LinkedList<Line> lines, Shape shape)
+			throws ShapeNotSupportedException {
+
+		if (shape instanceof Polygon) {
+			return isPolygonIntersectedByLines(lines, (Polygon) shape);
+		}
+
+		if (shape instanceof Rectangle) {
+			Rectangle rectangle = (Rectangle) shape;
+			return isPolygonIntersectedByLines(lines,
+					new Polygon(rectangle.getPoints()));
+		}
+
+		if (shape instanceof Circle) {
+
+			return isCircleIntersectedByLines(lines, (Circle) shape);
+		}
+
+		throw new ShapeNotSupportedException(shape);
+	}
+
+	private static LinkedList<CollisionPoint> isCircleIntersectedByLines(
+			LinkedList<Line> lines, Circle circle) {
+
+		LinkedList<CollisionPoint> result = new LinkedList<CollisionPoint>();
+
+		for (Line singleLine : lines) {
+
+			// check wether given line is valid
+			// if (singleLine.getDirectionalVector().isNull()) {
+			// continue;
+			// }
+
+			Vector2f[] interceptionPoints = Geometry
+					.getCircleLineSegmentInterceptPoints(circle, new Vector2f(
+							circle.getCenter()), singleLine);
+
+			if (interceptionPoints[0] == null && interceptionPoints[1] == null) {
+				continue;
+			}
+
+			for (int i = 0; i < 2; i++) {
+
+				if (interceptionPoints[i] != null) {
+
+					CollisionPoint collisionPoint = CollisionPoint
+							.createCollisionPointByInterceptPoint(
+									interceptionPoints[i], singleLine);
+					result.add(collisionPoint);
+				}
+			}
+
+		}
+
+		return result;
+	}
+
+	/**
+	 * Calculates the interception points of a circle and a line segment. This
+	 * method assumes that the given line is a valid one, means that it's
+	 * directional vector must not be the nullvector.
+	 * 
+	 * @param circle
+	 *            The circle.
+	 * @param centerPoint
+	 *            The circle's center point.
+	 * @param singleLine
+	 *            The line.
+	 * @return The intercept points as an array of two, if there are any. If
+	 *         there is only one intercept point, one of the array entrys is
+	 *         null. If there is no intercept points, both entrys are left null.
+	 */
+	public static Vector2f[] getCircleLineSegmentInterceptPoints(Circle circle,
+			Vector2f centerPoint, Line singleLine) {
+
+		Vector2f[] result = new Vector2f[2];
+
+		// the calculation of the intercept point is derived from the
+		// mathematical approach of simply having equations for the circle and
+		// the line containing the x and y values of the intercept point.
+		//
+		// line: let (u1,u2) be the line's supportvector and (v1,v2) the line's
+		// directional vector. For any point (x,y) on the line the following
+		// equations hold:
+		// 1. x = u1 + v1 * lambda
+		// 2. y = u2 + v2 * lambda
+
+		float u1 = singleLine.getX1();
+		float u2 = singleLine.getY1();
+
+		float v1 = singleLine.getDX();
+		float v2 = singleLine.getDY();
+
+		// circle: let (m1,m2) the circle's center point and r its radius. For
+		// any point on the circle
+		// the following equation holds:
+		// 3. r^2 = (x - m1)^2 + (y - m2)^2
+
+		float r = circle.getRadius();
+		float m1 = centerPoint.getX();
+		float m2 = centerPoint.getY();
+
+		// Applying equations one and two for the third and solving for lambda
+		// gives a square equation (in pq formula) having the following p and q:
+
+		float p = (2 * v1 * u1 - 2 * v1 * m1 + 2 * v2 * u2 - 2 * m2 * v2)
+				/ (BasicMath.square(v1) + BasicMath.square(v2));
+
+		float q = (BasicMath.square(u1) + BasicMath.square(u2)
+				+ BasicMath.square(m1) + BasicMath.square(m2) - 2 * m2 * u2 - 2
+				* m1 * u1 - BasicMath.square(r))
+				/ (BasicMath.square(v1) + BasicMath.square(v2));
+
+		// there is a solution if the pq formula's radiant is >= 0.
+		// check whether there is a solution:
+
+		float pqRadian = BasicMath.square(p / 2) - q;
+
+		if (pqRadian < 0) {
+			return result;
+		}
+
+		// if there is a solution, there is two:
+
+		float lambdaOne = -(p / 2) + (float) Math.sqrt(pqRadian);
+		float lambdaTwo = -(p / 2) - (float) Math.sqrt(pqRadian);
+
+		// check if the points are on the line seqment.
+
+		Vector2f firstInterceptPoint = null;
+		Vector2f secondInterceptPoint = null;
+
+		if (lambdaOne <= 1 && lambdaOne >= 0) {
+			firstInterceptPoint = getPointOnLineAt(singleLine, lambdaOne);
+		}
+
+		if (lambdaTwo <= 1 && lambdaTwo >= 0) {
+			secondInterceptPoint = getPointOnLineAt(singleLine, lambdaTwo);
+		}
+
+		result[0] = firstInterceptPoint;
+		result[1] = secondInterceptPoint;
+
+		return result;
+	}
+
+	private static LinkedList<CollisionPoint> isPolygonIntersectedByLines(
+			LinkedList<Line> lines, Polygon polygon) {
+		LinkedList<CollisionPoint> interceptPoints = new LinkedList<CollisionPoint>();
+
+		for (Line line : lines) {
+			for (Line borderLine : getBorderLines(polygon)) {
+				Vector2f interceptPoint = Geometry
+						.getSegmentLinesInterceptPoint(borderLine, line);
+
+				if (interceptPoint == null) {
+					continue;
+				} else {
+
+					CollisionPoint interception = CollisionPoint
+							.createCollisionPointByInterceptPoint(
+									interceptPoint, line);
+					interceptPoints.add(interception);
+				}
+
+			}
+		}
+		return interceptPoints;
+	}
+
+	/**
+	 * Calculates the borderlines spanned by the given shape's vertices assuming
+	 * that a borderline i is given by a line between vertex no i and vertex no
+	 * (i + 1).
+	 * 
+	 * @param shape
+	 * @return see {@link #getBorderLines(Vector2f[])}
+	 */
+	public static LinkedList<Line> getBorderLines(Shape shape) {
+		return Geometry.getBorderLines(Geometry.floatsToVectors(shape
+				.getPoints()));
+	}
+
+	/**
+	 * Returns the intercept point of two line segments.
+	 * 
+	 * @param first
+	 *            The first line segment.
+	 * @param second
+	 *            The second line segment.
+	 * @return Returns null if there was no intercept point found and returns
+	 *         the intercept point as a vector otherwise. If there's an infinite
+	 *         number of intercept points, one of them will be returned (but you
+	 *         cant say which).
+	 */
+	public static Vector2f getSegmentLinesInterceptPoint(Line first, Line second) {
+		Vector2f result = new Vector2f(0, 0);
+		Boolean limitToExtend = true;
+		boolean doesIntersect = first.intersect(second, limitToExtend, result);
+
+		// do this switch because not sure what intersect does with
+		// "result"-vector if there is no intersection
+		if (doesIntersect) {
+			return result;
+		} else {
+			return null;
+		}
+	}
+
+	/**
+	 * Calculates whether the first vector is linearly depending on the second
+	 * vector.
+	 * 
+	 * @param firstVector
+	 * @param secondVector
+	 *            second vector.
+	 * 
+	 * @return true if vectors are linearly depending.
+	 */
+	public static boolean isVectorLinearTo(Vector2f firstVector,
+			Vector2f secondVector) {
+
+		if (firstVector.getX() == 0) {
+			return secondVector.getX() == 0;
+		}
+
+		if (firstVector.getY() == 0) {
+			return secondVector.getY() == 0;
+		}
+
+		// reaching this case X and Y of this vector cannot be 0 anymore.
+		if (secondVector.getX() == 0 || secondVector.getY() == 0) {
+			return false;
+		}
+
+		// so now there no component of any vector can be zero.
+
+		double r = secondVector.getX() / firstVector.getX();
+
+		return firstVector.getY() * r == secondVector.getY();
+	}
+
+	/**
+	 * This function returns the point you will get by multiplying the given //
+	 * * lambda with the directional vector of the line (considered to be
+	 * endpoint - startpoint) and add it to the support vector 'start point'.
+	 * 
+	 * @param line
+	 *            the line
+	 * @param lambda
+	 *            * The multiplier.
+	 * @return Returns u + uv * lambda
+	 */
+	public static Vector2f getPointOnLineAt(Line line, float lambda) {
+		Vector2f startPoint = new Vector2f(line.getX1(), line.getY1());
+		Vector2f endPoint = new Vector2f(line.getX2(), line.getY2());
+
+		Vector2f directionalVector = endPoint.sub(startPoint);
+		return startPoint.add(directionalVector.scale(lambda));
+	}
+
+	/**
+	 * Returns an array of vectors which approximate the borders of the given
+	 * shape.
+	 * 
+	 * @param shape
+	 *            the shape to return the border points of
+	 * @return points
+	 * @throws ShapeNotSupportedException
+	 *             Thrown if the given shape type is not supported
+	 */
+	public Vector2f[] getBorderPointsForShape(Shape shape)
+			throws ShapeNotSupportedException {
+		if (shape instanceof Polygon) {
+			return getPolygonBorderPoints((Polygon) shape);
+		}
+
+		if (shape instanceof Ellipse) {
+			Vector2f[] result = new Vector2f[0];
+			result = Geometry
+					.getPointsOnCirlce((Ellipse) shape, SHAPE_ACCURACY)
+					.toArray(result);
+			return result;
+		}
+
+		throw new ShapeNotSupportedException(shape);
+	}
+
+	private Vector2f[] getPolygonBorderPoints(Polygon shape) {
+		Vector2f[] vertices = Geometry.floatsToVectors(shape.getPoints());
+
+		LinkedList<Line> borderLines = Geometry.getBorderLines(vertices);
+
+		Vector2f[] movementPoints = new Vector2f[SHAPE_ACCURACY
+				* vertices.length];
+
+		int j = 0;
+		for (Line singleBorderLine : borderLines) {
+			for (int i = 0; i < SHAPE_ACCURACY; i++) {
+				movementPoints[j] = Geometry.getPointOnLineAt(singleBorderLine,
+						(1f / SHAPE_ACCURACY) * i);
+				j++;
+			}
+		}
+
+		return movementPoints;
 	}
 }

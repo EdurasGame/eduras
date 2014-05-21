@@ -129,7 +129,7 @@ public class EdurasClient {
 				debug = true;
 			} else if (parameterName.startsWith(sClassName + ".")) {
 				try {
-					Field f = S.class.getField(parameterName
+					Field f = S.Client.class.getField(parameterName
 							.substring(sClassName.length() + 1));
 					Class<?> targetClass = f.getType();
 					Object value = ReflectionTools.toPrimitive(targetClass,

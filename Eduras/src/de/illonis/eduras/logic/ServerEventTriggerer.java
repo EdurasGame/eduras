@@ -57,6 +57,7 @@ import de.illonis.eduras.events.SetTeamsEvent;
 import de.illonis.eduras.events.SetVisibilityEvent;
 import de.illonis.eduras.exceptions.GameModeNotSupportedByMapException;
 import de.illonis.eduras.exceptions.InvalidNameException;
+import de.illonis.eduras.exceptions.NoSpawnAvailableException;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
 import de.illonis.eduras.gamemodes.GameMode;
 import de.illonis.eduras.gameobjects.DynamicPolygonObject;
@@ -359,6 +360,12 @@ public class ServerEventTriggerer implements EventTriggerer {
 			L.log(Level.SEVERE,
 					"Cannot respawn because map doesn't support the game mode.",
 					e);
+			return;
+		} catch (NoSpawnAvailableException e) {
+			L.log(Level.SEVERE,
+					"Cannot find a spawn for the player. Check the map's .erm file to see if all spawn areas are occupied.",
+					e);
+			return;
 		}
 
 		guaranteeSetPositionOfObject(idOfRespawnedPlayer, spawnPosition);
@@ -569,7 +576,8 @@ public class ServerEventTriggerer implements EventTriggerer {
 
 		for (Team team : teams) {
 			for (Player player : team.getPlayers()) {
-				addPlayerToTeam(player.getPlayerId(), team);
+				sendEvents(new AddPlayerToTeamEvent(player.getPlayerId(),
+						team.getTeamId()));
 			}
 		}
 	}
