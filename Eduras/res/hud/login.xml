@@ -3,12 +3,14 @@
 	xsi:schemaLocation="nifty.xsd nifty.xsd">
 	<useStyles filename="nifty-default-styles.xml" />
 	<useControls filename="nifty-default-controls.xml" />
-	<popup id="niftyPopupMenu" childLayout="center" width="20%" height="50%">
-		<panel backgroundColor="#333f" height="*" childLayout="vertical" align="center">
+	<popup id="niftyPopupMenu" childLayout="center" width="20%"
+		height="50%">
+		<panel backgroundColor="#333f" height="*" childLayout="vertical"
+			align="center">
 			<control type="label" id="yesButton" font="aurulent-sans-16.fnt"
 				color="#ffff" text="Yes" margin="0px,10px,0px,0px">
 				<interact onClick="ok()" />
-				</control>
+			</control>
 			<control type="label" id="noButton" font="aurulent-sans-16.fnt"
 				color="#ffff" text="No" margin="0px,10px,0px,0px" />
 		</panel>
@@ -35,8 +37,9 @@
 							color="#ffff" text="Username:" align="center" margin="0px,10px,0px,0px" />
 						<control id="userNameField" font="aurulent-sans-16.fnt"
 							type="textfield" maxLength="20" text="" />
-						<control type="label" id="userNameNote" font="aurulent-sans-16.fnt"
-							color="#888f" text="minimum 3 chars" margin="0px,0px,0px,10px" />
+						<control type="label" id="userNameNote" width="*"
+							font="aurulent-sans-16.fnt" color="#888f" text="minimum 3 chars"
+							margin="0px,0px,0px,10px" />
 					</panel>
 				</panel>
 				<panel backgroundColor="#333f" height="30%" childLayout="center">
@@ -47,8 +50,8 @@
 
 						<control id="passwordField" font="aurulent-sans-16.fnt"
 							type="textfield" maxLength="20" text="" />
-						<control type="label" id="passwordNote" font="aurulent-sans-16.fnt"
-							color="#888f" text="" margin="0px,0px,0px,10px" />
+						<control type="label" id="passwordNote" width="*"
+							font="aurulent-sans-16.fnt" color="#888f" text="" margin="0px,0px,0px,10px" />
 
 					</panel>
 				</panel>

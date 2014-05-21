@@ -181,7 +181,6 @@ public class ClientFrame extends JFrame {
 	 */
 	public void hideLogin() {
 		loginPanel.onHidden();
-		client.stopDiscovery();
 	}
 
 	/**
@@ -189,7 +188,7 @@ public class ClientFrame extends JFrame {
 	 */
 	public void showLogin() {
 		cardLayout.show(getContentPane(), LOGINPANEL);
-		client.startDiscovery(loginPanel);
+		
 		loginPanel.onShown();
 	}
 

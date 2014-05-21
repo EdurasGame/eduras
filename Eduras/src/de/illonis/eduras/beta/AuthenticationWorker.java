@@ -31,7 +31,7 @@ public class AuthenticationWorker extends SwingWorker<Boolean, Void> {
 	private final static String USERNAME_FIELD = "user";
 	private final static String PASSWORD_FIELD = "password";
 	private final static String CHANNEL_FIELD = "rel";
-	private final static String CHANNEL_VALUE = "bewta";
+	private final static String CHANNEL_VALUE = "beta";
 
 	private final String username;
 	private final String password;

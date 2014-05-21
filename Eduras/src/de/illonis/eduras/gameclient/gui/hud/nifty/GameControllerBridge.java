@@ -18,5 +18,9 @@ public interface GameControllerBridge {
 	void enterState(int id, Transition leave, Transition enter);
 	
 	void changeResolution(int width, int height) throws SlickException;
+	
+	String getUsername();
+	
+	void setUsername(String name);
 
 }

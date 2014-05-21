@@ -39,7 +39,6 @@ public class GameClient {
 	private EdurasInitializer initializer;
 	private ClientNetworkEventListener eventHandler;
 	private ClientFrame frame;
-	private ServerSearcher searcher;
 	private HudNotifier hudNotifier;
 	private boolean wantsExit = false;
 
@@ -240,26 +239,6 @@ public class GameClient {
 
 	ClientFrame getFrame() {
 		return frame;
-	}
-
-	/**
-	 * Starts searching for servers in local network.
-	 * 
-	 * @param listener
-	 *            the listener that retrieves found servers.
-	 */
-	public void startDiscovery(ServerFoundListener listener) {
-		searcher = new ServerSearcher(listener);
-		searcher.start();
-	}
-
-	/**
-	 * Stops searching for servers.
-	 */
-	public void stopDiscovery() {
-		if (searcher == null)
-			return;
-		searcher.interrupt();
 	}
 
 	/**

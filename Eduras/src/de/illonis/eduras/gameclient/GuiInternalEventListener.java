@@ -77,7 +77,6 @@ public class GuiInternalEventListener implements LoginPanelReactor,
 
 	@Override
 	public void login(LoginData data) {
-		client.stopDiscovery();
 		client.setClientName(data.getUsername());
 		client.setRole(data.getRole());
 		establisher = new ConnectionEstablisher(data,

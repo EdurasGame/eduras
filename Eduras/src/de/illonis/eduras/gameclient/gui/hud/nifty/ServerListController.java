@@ -10,13 +10,17 @@ import org.newdawn.slick.state.transition.FadeOutTransition;
 
 import de.illonis.eduras.gameclient.gui.SoundMachine;
 import de.illonis.eduras.gameclient.gui.SoundMachine.SoundType;
+import de.illonis.eduras.networking.discover.ServerFoundListener;
 import de.illonis.eduras.networking.discover.ServerInfo;
+import de.illonis.eduras.networking.discover.ServerSearcher;
 import de.lessvoid.nifty.controls.ListBox;
 import de.lessvoid.nifty.screen.Screen;
 
-public class ServerListController extends EdurasScreenController {
+public class ServerListController extends EdurasScreenController implements ServerFoundListener {
 
 	private ListBox<ServerInfo> listBox;
+	private ServerSearcher searcher;
+
 
 	public ServerListController(GameControllerBridge game) {
 		super(game);
@@ -53,9 +57,51 @@ public class ServerListController extends EdurasScreenController {
 		}
 	}
 
+	@Override
+	public void onStartScreen() {
+		super.onStartScreen();
+		startDiscovery(this);
+	}
+
+	@Override
+	public void onEndScreen() {
+		super.onEndScreen();
+		stopDiscovery();
+	}
+
+	/**
+	 * Starts searching for servers in local network.
+	 * 
+	 * @param listener
+	 *            the listener that retrieves found servers.
+	 */
+	public void startDiscovery(ServerFoundListener listener) {
+		searcher = new ServerSearcher(listener);
+		searcher.start();
+	}
+
+	/**
+	 * Stops searching for servers.
+	 */
+	public void stopDiscovery() {
+		if (searcher == null)
+			return;
+		searcher.interrupt();
+	}
+
 	public void showSettings() {
 		SoundMachine.getSound(SoundType.CLICK).play(2f, 0.1f);
 		game.enterState(1, new FadeOutTransition(Color.black, 100),
 				new FadeInTransition(Color.black, 300));
+	}
+
+	@Override
+	public void onServerFound(ServerInfo info) {
+		listBox.addItem(info);		
+	}
+
+	@Override
+	public void onDiscoveryFailed() {
+		// TODO: implement
 	}
 }

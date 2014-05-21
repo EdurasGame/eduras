@@ -1,5 +1,7 @@
 package de.illonis.eduras.gameclient.gui.hud.nifty;
 
+import java.util.concurrent.Callable;
+
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
@@ -19,6 +21,7 @@ import de.lessvoid.nifty.slick2d.NiftyOverlayBasicGameState;
 public class LoginState extends NiftyOverlayBasicGameState {
 
 	private final GameControllerBridge game;
+	private LoginController controller;
 
 	public LoginState(GameControllerBridge game) {
 		this.game = game;
@@ -50,13 +53,15 @@ public class LoginState extends NiftyOverlayBasicGameState {
 
 	@Override
 	protected void prepareNifty(Nifty nifty, StateBasedGame game) {
-		nifty.fromXml("/res/hud/login.xml", "login", new LoginController(
-				this.game));
+		controller = new LoginController(
+				this.game);
+		nifty.fromXml("/res/hud/login.xml", "login", controller);
 	}
 
 	@Override
 	protected void updateGame(GameContainer container, StateBasedGame game,
 			int delta) {
+		controller.update();
 		// Input input = container.getInput();
 		// if (input.isMouseButtonDown(Input.MOUSE_RIGHT_BUTTON))
 		// game.enterState(1);
@@ -68,4 +73,5 @@ public class LoginState extends NiftyOverlayBasicGameState {
 		g.setColor(Color.white);
 		g.drawString("Welcome to Eduras!", 150, 150);
 	}
+	
 }

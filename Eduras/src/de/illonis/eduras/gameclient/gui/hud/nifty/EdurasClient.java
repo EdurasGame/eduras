@@ -19,6 +19,7 @@ public class EdurasClient implements GameControllerBridge {
 
 	private AppGameContainer gameContainer;
 	private Game game;
+	private String username = "";
 
 	void startGui() throws SlickException {
 		if (game != null)
@@ -84,6 +85,16 @@ public class EdurasClient implements GameControllerBridge {
 	@Override
 	public void enterState(int id, Transition leave, Transition enter) {
 		game.enterState(id, leave, enter);
+	}
+
+	@Override
+	public String getUsername() {
+		return username;
+	}
+
+	@Override
+	public void setUsername(String name) {
+		this.username = name;
 	}
 
 }
