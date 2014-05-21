@@ -41,6 +41,9 @@
 
 		<jar destfile="${jars}/eduras-client.jar" excludes="**/*.svg, **/unittests/**"
 			basedir="${base}${build}">
+			<fileset dir="${base}">
+				<include name="res/**" />
+			</fileset>
 			<fileset dir="${base}${src}">
 				<include name="**/*.png"></include>
 				<include name="**/*.gif"></include>
@@ -54,6 +57,8 @@
 			<manifest>
 				<attribute name="Main-Class"
 					value="de.illonis.eduras.gameclient.EdurasClient" />
+				<attribute name="SplashScreen-Image"
+									value="res/images/splash.png" />
 			</manifest>
 		</jar>
 	</target>
