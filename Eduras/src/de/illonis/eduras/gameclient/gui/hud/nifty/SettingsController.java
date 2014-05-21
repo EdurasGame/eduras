@@ -17,8 +17,11 @@ import de.illonis.eduras.gameclient.gui.SoundMachine;
 import de.illonis.eduras.gameclient.gui.SoundMachine.SoundType;
 import de.illonis.eduras.gameclient.userprefs.KeyBindings;
 import de.illonis.eduras.gameclient.userprefs.KeyBindings.KeyBinding;
+import de.illonis.eduras.gameclient.userprefs.Settings;
 import de.illonis.eduras.logicabstraction.EdurasInitializer;
 import de.lessvoid.nifty.NiftyEventSubscriber;
+import de.lessvoid.nifty.controls.CheckBox;
+import de.lessvoid.nifty.controls.CheckBoxStateChangedEvent;
 import de.lessvoid.nifty.controls.DropDown;
 import de.lessvoid.nifty.controls.DropDownSelectionChangedEvent;
 import de.lessvoid.nifty.controls.Label;
@@ -30,11 +33,14 @@ public class SettingsController extends EdurasScreenController {
 	private Label resolutionLabel;
 	private ListBox<KeyBinding> box;
 	private final KeyBindings bindings;
+	private final Settings settings;
+	private CheckBox chooseOnPressBox;
+	private CheckBox continuousItemUsageBox;
 
 	public SettingsController(GameControllerBridge game) {
 		super(game);
-		bindings = EdurasInitializer.getInstance().getSettings()
-				.getKeyBindings();
+		settings = EdurasInitializer.getInstance().getSettings();
+		bindings = settings.getKeyBindings();
 	}
 
 	public void back() {
@@ -42,10 +48,17 @@ public class SettingsController extends EdurasScreenController {
 		game.enterState(2, new FadeOutTransition(Color.black, 100),
 				new FadeInTransition(Color.black, 300));
 		try {
-			EdurasInitializer.getInstance().getSettings().save();
+			settings.save();
 		} catch (IOException e) {
-			System.out.println("Could not save settingsgwe");
+			System.out.println("Could not save settings.");
 		}
+	}
+
+	@NiftyEventSubscriber(pattern = ".*Box")
+	public void onCheckboxChanged(final String checkboxId,
+			final CheckBoxStateChangedEvent event) {
+		String setting = checkboxId.substring(0, checkboxId.length() - 3);
+		settings.setBooleanOption(setting, event.getCheckBox().isChecked());
 	}
 
 	public void resetAllKeyBindings() {
@@ -108,6 +121,10 @@ public class SettingsController extends EdurasScreenController {
 		hintLabel.setText("Select a keybinding and press a key to bind it.");
 		box = (ListBox<KeyBinding>) screen.findNiftyControl("keyBindingsList",
 				ListBox.class);
+		chooseOnPressBox = screen.findNiftyControl("chooseOnPressBox",
+				CheckBox.class);
+		continuousItemUsageBox = screen.findNiftyControl(
+				"continuousItemUsageBox", CheckBox.class);
 
 		for (KeyBinding binding : KeyBinding.values()) {
 			box.addItem(binding);
@@ -139,6 +156,10 @@ public class SettingsController extends EdurasScreenController {
 	@Override
 	public void onStartScreen() {
 		super.onStartScreen();
+		chooseOnPressBox
+				.setChecked(settings.getBooleanSetting("chooseOnPress"));
+		continuousItemUsageBox.setChecked(settings
+				.getBooleanSetting("continuousItemUsage"));
 		nifty.setIgnoreKeyboardEvents(true);
 	}
 

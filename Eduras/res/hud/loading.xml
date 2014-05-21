@@ -22,11 +22,5 @@
 					text="                                                  " />
 			</panel>
 		</layer>
-		<layer id="closeLayer" childLayout="vertical">
-			<control type="button" id="exitButton" font="aurulent-sans-16.fnt"
-				color="#ffff" label="X" align="right">
-				<interact onClick="exit()" />
-			</control>
-		</layer>
 	</screen>
 </nifty>

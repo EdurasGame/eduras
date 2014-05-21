@@ -22,7 +22,7 @@
 		</layer>
 		<layer id="closeLayer" childLayout="vertical">
 			<control type="button" id="exitButton" font="aurulent-sans-16.fnt"
-				color="#ffff" label="X" align="right">
+				color="#ffff" label="Quit game" align="right">
 				<interact onClick="exit()" />
 			</control>
 		</layer>
