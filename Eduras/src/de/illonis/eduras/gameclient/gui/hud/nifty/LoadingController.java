@@ -53,6 +53,7 @@ public class LoadingController extends EdurasScreenController {
 				// after it is attached, it's managed by the update loop thread
 				// and may not be modified from any other thread anymore!
 				load = false;
+				game.enterState(4);
 			}
 		}
 	}

@@ -3,7 +3,24 @@
 	xsi:schemaLocation="nifty.xsd nifty.xsd">
 	<useStyles filename="nifty-default-styles.xml" />
 	<useControls filename="nifty-default-controls.xml" />
-
+	<!-- this defines the control for a single line of text in the chat and 
+		player window -->
+	<controlDefinition name="keybindingsEntry">
+		<panel childLayout="horizontal" width="100%" align="center"
+			padding="5px,5px,5px,5px">
+			<control id="#description" name="label" align="left"
+				textHAlign="left" height="23px" width="50%" wrap="false" />
+			<control id="#current-key" name="label" align="right"
+				textHAlign="left" height="23px" width="30%" wrap="false" />
+		</panel>
+		<interact onClick="listBoxItemClicked()" />
+		<effect>
+			<onCustom customKey="select" name="colorBar" post="false"
+				color="#444f" neverStopRendering="true" timeType="infinite" />
+			<onCustom customKey="select" name="textColor" post="false"
+				color="#fc0f" neverStopRendering="true" timeType="infinite" />
+		</effect>
+	</controlDefinition>
 	<screen id="settings"
 		controller="de.illonis.eduras.gameclient.gui.hud.nifty.SettingsController">
 		<layer childLayout="vertical">
@@ -25,16 +42,50 @@
 					color="#ffff" label="Back" align="left">
 					<interact onClick="back()" />
 				</control>
-				<panel childLayout="horizontal" width="*" height="50px"
-					padding="15px,15px,15px,15px">
-					<control type="label" font="aurulent-sans-16.fnt" color="#888f"
-						text="Display Resolution:" padding="0px,10px,0px,10px" />
-					<control id="resolutionSelect" displayItems="10" name="dropDown"
-						width="50%" />
+				// create a tabs control
+				<control id="edit_tabs" name="tabGroup" buttonWidth="50%"
+					buttonHeight="50px">
+					<control id="tab_1" name="tab" caption="Keybindings"
+						childLayout="vertical">
+						<panel childLayout="vertical" width="*" height="*">
+							<panel childLayout="center" width="*">
+								<control type="button" id="resetButton" width=""
+									font="aurulent-sans-16.fnt" color="#ffff" label="Reset selected to default"
+									align="left">
+									<interact onClick="resetKeyBinding()" />
+								</control>
+								<control type="button" id="resetAllButton" width=""
+									font="aurulent-sans-16.fnt" color="#ffff" label="Reset all to default"
+									align="right" margin="10px,10px,10px,10px">
+									<interact onClick="resetAllKeyBindings()" />
+								</control>
+							</panel>
+							<control type="label" id="hintLabel" font="aurulent-sans-16.fnt"
+								color="#000f" width="*" text="" />
+							<control id="keyBindingsList" name="listBox" vertical="optional"
+								horizontal="off" selection="Single" displayItems="15" height="*"
+								viewConverterClass="de.illonis.eduras.gameclient.gui.hud.nifty.KeyBindingsViewConverter">
+								<control name="keybindingsEntry"
+									controller="de.lessvoid.nifty.controls.listbox.ListBoxItemController" />
+							</control>
+						</panel>
+					</control>
+					<control id="tab_2" name="tab" caption="Display"
+						childLayout="vertical">
+						<panel childLayout="vertical" width="*" height="*">
+							<panel childLayout="horizontal" width="*" height="50px"
+								padding="15px,15px,15px,15px">
+								<control type="label" font="aurulent-sans-16.fnt" color="#000f"
+									text="Display Resolution:" padding="0px,10px,0px,10px" />
+								<control id="resolutionSelect" displayItems="10" name="dropDown"
+									width="50%" />
+							</panel>
+							<control type="label" id="currentResolution" font="aurulent-sans-16.fnt"
+								color="#000f" width="50%" text="" />
+						</panel>
+					</control>
+				</control>
 
-				</panel>
-				<control type="label" id="currentResolution" font="aurulent-sans-16.fnt"
-					color="#888f" width="50%" text="" />
 			</panel>
 		</layer>
 	</screen>

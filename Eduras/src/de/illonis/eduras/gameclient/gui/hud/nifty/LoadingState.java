@@ -1,6 +1,5 @@
 package de.illonis.eduras.gameclient.gui.hud.nifty;
 
-import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.state.StateBasedGame;
@@ -16,11 +15,11 @@ import de.lessvoid.nifty.slick2d.NiftyOverlayBasicGameState;
  */
 public class LoadingState extends NiftyOverlayBasicGameState {
 
-	private final GameControllerBridge game;
+	private final GameControllerBridge gameBridge;
 	private LoadingController controller;
 
 	public LoadingState(GameControllerBridge game) {
-		this.game = game;
+		this.gameBridge = game;
 	}
 
 	@Override
@@ -30,7 +29,7 @@ public class LoadingState extends NiftyOverlayBasicGameState {
 
 	@Override
 	protected void prepareNifty(Nifty nifty, StateBasedGame game) {
-		controller = new LoadingController(this.game);
+		controller = new LoadingController(this.gameBridge);
 		nifty.fromXml("/res/hud/loading.xml", "loading", controller);
 	}
 
@@ -43,7 +42,6 @@ public class LoadingState extends NiftyOverlayBasicGameState {
 	@Override
 	protected void renderGame(GameContainer container, StateBasedGame game,
 			Graphics g) {
-	
 	}
 
 	@Override
@@ -58,5 +56,4 @@ public class LoadingState extends NiftyOverlayBasicGameState {
 	@Override
 	protected void leaveState(GameContainer container, StateBasedGame game) {
 	}
-
 }

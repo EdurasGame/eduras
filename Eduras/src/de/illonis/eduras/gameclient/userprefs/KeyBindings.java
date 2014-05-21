@@ -20,8 +20,6 @@ public final class KeyBindings implements ResettableSetting {
 	private final HashMap<Integer, KeyBinding> defaultKeys;
 	private final HashMap<Integer, KeyBinding> keys;
 	private final HashMap<KeyBinding, String> descriptions;
-	private final static int[] arrs = { Input.KEY_UP, Input.KEY_DOWN,
-			Input.KEY_LEFT, Input.KEY_RIGHT };
 
 	/**
 	 * Initialize keybindings.
@@ -78,13 +76,9 @@ public final class KeyBindings implements ResettableSetting {
 	 */
 	public String getBindingString(KeyBinding binding) {
 		int key = getKey(binding);
-		for (int i : arrs) {
-			if (i == key)
-				return "Pfeil " + KeyEvent.getKeyText(key).toLowerCase();
-		}
 		if (key == Input.KEY_UNLABELED)
 			return Localization.getString("Client.preferences.keynotbound");
-		return KeyEvent.getKeyText(key);
+		return Input.getKeyName(key);
 	}
 
 	@Override
@@ -106,7 +100,7 @@ public final class KeyBindings implements ResettableSetting {
 
 	/**
 	 * Sets the default key binding for a specified binding.<br>
-	 * Use {@link KeyEvent#VK_UNDEFINED} to set key to <i>None</i>. This will
+	 * Use {@link Input#KEY_UNLABELED} to set key to <i>None</i>. This will
 	 * overwrite any existing key for this binding as each binding can only have
 	 * one key assigned.
 	 * 

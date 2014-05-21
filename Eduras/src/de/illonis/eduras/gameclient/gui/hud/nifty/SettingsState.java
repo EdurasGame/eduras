@@ -15,6 +15,7 @@ import de.lessvoid.nifty.slick2d.NiftyBasicGameState;
 public class SettingsState extends NiftyBasicGameState {
 
 	private final GameControllerBridge game;
+	private SettingsController controller;
 
 	public SettingsState(GameControllerBridge edurasGame) {
 		super("settings");
@@ -36,8 +37,14 @@ public class SettingsState extends NiftyBasicGameState {
 
 	@Override
 	protected void prepareNifty(Nifty nifty, StateBasedGame game) {
+		controller = new SettingsController(this.game);
 		nifty.fromXml("/res/hud/settings.xml", "settings",
-				new SettingsController(this.game));
+				controller);
+	}
+	
+	@Override
+	public void keyPressed(int key, char c) {
+		controller.keyPressed(key);
 	}
 
 }
