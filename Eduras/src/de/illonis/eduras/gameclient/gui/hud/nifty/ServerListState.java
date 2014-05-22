@@ -3,7 +3,6 @@ package de.illonis.eduras.gameclient.gui.hud.nifty;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.state.StateBasedGame;
 
-import de.illonis.eduras.networking.discover.ServerFoundListener;
 import de.illonis.eduras.networking.discover.ServerSearcher;
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.slick2d.NiftyBasicGameState;
@@ -33,7 +32,7 @@ public class ServerListState extends NiftyBasicGameState {
 	@Override
 	public void enterState(GameContainer container, StateBasedGame game) {
 		System.out.println("start serverlist");
-		startDiscovery(controller);
+		startDiscovery();
 	}
 
 	public void leaveState(GameContainer container, StateBasedGame game) {
@@ -42,12 +41,9 @@ public class ServerListState extends NiftyBasicGameState {
 
 	/**
 	 * Starts searching for servers in local network.
-	 * 
-	 * @param listener
-	 *            the listener that retrieves found servers.
 	 */
-	public void startDiscovery(ServerFoundListener listener) {
-		searcher = new ServerSearcher(listener);
+	public void startDiscovery() {
+		searcher = new ServerSearcher(controller);
 		searcher.start();
 	}
 

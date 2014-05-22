@@ -12,11 +12,11 @@ import de.illonis.eduras.gameclient.gui.SoundMachine;
 import de.illonis.eduras.gameclient.gui.SoundMachine.SoundType;
 import de.illonis.eduras.networking.discover.ServerFoundListener;
 import de.illonis.eduras.networking.discover.ServerInfo;
-import de.illonis.eduras.networking.discover.ServerSearcher;
 import de.lessvoid.nifty.controls.ListBox;
 import de.lessvoid.nifty.screen.Screen;
 
-public class ServerListController extends EdurasScreenController implements ServerFoundListener {
+public class ServerListController extends EdurasScreenController implements
+		ServerFoundListener {
 
 	private ListBox<ServerInfo> listBox;
 
@@ -63,11 +63,13 @@ public class ServerListController extends EdurasScreenController implements Serv
 
 	@Override
 	public void onServerFound(ServerInfo info) {
-		listBox.addItem(info);		
+		listBox.addItem(info);
+		listBox.refresh();
 	}
 
 	@Override
 	public void onDiscoveryFailed() {
+		System.out.println("discovery failed");
 		// TODO: implement
 	}
 }
