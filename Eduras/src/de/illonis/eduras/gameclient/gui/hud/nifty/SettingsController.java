@@ -129,7 +129,10 @@ public class SettingsController extends EdurasScreenController {
 		for (KeyBinding binding : KeyBinding.values()) {
 			box.addItem(binding);
 		}
-		box.setFocus();
+		chooseOnPressBox
+				.setChecked(settings.getBooleanSetting("chooseOnPress"));
+		continuousItemUsageBox.setChecked(settings
+				.getBooleanSetting("continuousItemUsage"));
 	}
 
 	@NiftyEventSubscriber(id = "resolutionSelect")
@@ -156,10 +159,6 @@ public class SettingsController extends EdurasScreenController {
 	@Override
 	public void onStartScreen() {
 		super.onStartScreen();
-		chooseOnPressBox
-				.setChecked(settings.getBooleanSetting("chooseOnPress"));
-		continuousItemUsageBox.setChecked(settings
-				.getBooleanSetting("continuousItemUsage"));
 		nifty.setIgnoreKeyboardEvents(true);
 	}
 

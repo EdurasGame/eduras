@@ -117,14 +117,13 @@ public class LoginController extends EdurasScreenController {
 					} else {
 						nameNote.setText("Login failed.");
 						// login failed
-						passwordField.setText("");
-						loginFuture = null;
-						setControlsEnabled(true);
 					}
 				} catch (InterruptedException | ExecutionException e) {
-					e.printStackTrace();
+					nameNote.setText(e.getMessage());
 				}
-
+				loginFuture = null;
+				passwordField.setText("");
+				setControlsEnabled(true);
 			}
 		}
 	}

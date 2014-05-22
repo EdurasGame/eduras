@@ -19,8 +19,6 @@ import de.lessvoid.nifty.screen.Screen;
 public class ServerListController extends EdurasScreenController implements ServerFoundListener {
 
 	private ListBox<ServerInfo> listBox;
-	private ServerSearcher searcher;
-
 
 	public ServerListController(GameControllerBridge game) {
 		super(game);
@@ -55,38 +53,6 @@ public class ServerListController extends EdurasScreenController implements Serv
 			System.out.println("joining " + current.getName());
 			game.enterState(3);
 		}
-	}
-
-	@Override
-	public void onStartScreen() {
-		super.onStartScreen();
-		startDiscovery(this);
-	}
-
-	@Override
-	public void onEndScreen() {
-		super.onEndScreen();
-		stopDiscovery();
-	}
-
-	/**
-	 * Starts searching for servers in local network.
-	 * 
-	 * @param listener
-	 *            the listener that retrieves found servers.
-	 */
-	public void startDiscovery(ServerFoundListener listener) {
-		searcher = new ServerSearcher(listener);
-		searcher.start();
-	}
-
-	/**
-	 * Stops searching for servers.
-	 */
-	public void stopDiscovery() {
-		if (searcher == null)
-			return;
-		searcher.interrupt();
 	}
 
 	public void showSettings() {
