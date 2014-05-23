@@ -528,16 +528,8 @@ public class ClientLogic implements GameLogicInterface {
 
 	@Override
 	public void stopWorker() {
-		if (null == lgw)
-			return;
-		lgw.stop();
-		if (null == workerThread)
-			return;
-		try {
-			workerThread.join();
-		} catch (InterruptedException e) {
-			L.log(Level.SEVERE, "Got interrupted waiting for worker thread.", e);
-		}
+		// we don't need to do anything, because slick is responsible for
+		// updates
 	}
 
 	@Override
@@ -552,9 +544,8 @@ public class ClientLogic implements GameLogicInterface {
 
 	@Override
 	public LogicGameWorker startWorker() {
-		workerThread = new Thread(lgw);
-		workerThread.setName("ClientLogicGameWorker");
-		workerThread.start();
+		// we don't need to start the thread, because slick does the updating
+		// stuff.
 		return lgw;
 	}
 
