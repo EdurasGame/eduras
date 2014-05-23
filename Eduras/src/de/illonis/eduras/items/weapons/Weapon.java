@@ -6,10 +6,8 @@ import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.ObjectFactory.ObjectType;
 import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.gameobjects.TimingSource;
-import de.illonis.eduras.items.Item;
 import de.illonis.eduras.items.ItemUseInformation;
 import de.illonis.eduras.items.Lootable;
-import de.illonis.eduras.items.Usable;
 import de.illonis.eduras.math.Vector2df;
 import de.illonis.eduras.settings.S;
 import de.illonis.eduras.units.PlayerMainFigure;
@@ -20,7 +18,7 @@ import de.illonis.eduras.units.PlayerMainFigure;
  * @author illonis
  * 
  */
-public abstract class Weapon extends Item implements Lootable, Usable {
+public abstract class Weapon extends UsableItem implements Lootable {
 
 	protected enum AmmunitionLimit {
 		INFINITE, CAPPED;
@@ -30,8 +28,6 @@ public abstract class Weapon extends Item implements Lootable, Usable {
 	private int currentAmmunition = 0;
 	private int fillAmmunitionAmount = 0;
 	private int maxAmmunition = -1;
-	private long cooldown = 0;
-	protected long defaultCooldown = 0;
 	protected long respawnTime = S.Server.go_weapon_respawntime_default;
 	private long respawnTimeRemaining = 0;
 
@@ -50,31 +46,6 @@ public abstract class Weapon extends Item implements Lootable, Usable {
 	public Weapon(ObjectType type, GameInformation gi,
 			TimingSource timingSource, int id) {
 		super(type, timingSource, gi, id);
-	}
-
-	@Override
-	public long getCooldown() {
-		return cooldown;
-	}
-
-	@Override
-	public final long getCooldownTime() {
-		return defaultCooldown;
-	}
-
-	@Override
-	public final void reduceCooldown(long value) {
-		cooldown = Math.max(0, cooldown - value);
-	}
-
-	@Override
-	public final void resetCooldown() {
-		cooldown = 0;
-	}
-
-	@Override
-	public final void startCooldown() {
-		cooldown = defaultCooldown;
 	}
 
 	@Override
@@ -160,11 +131,6 @@ public abstract class Weapon extends Item implements Lootable, Usable {
 	 *            item use information.
 	 */
 	protected abstract void doIfReady(ItemUseInformation info);
-
-	@Override
-	public boolean hasCooldown() {
-		return (cooldown > 0);
-	}
 
 	@Override
 	public long getRespawnTime() {
