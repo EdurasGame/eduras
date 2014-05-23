@@ -112,8 +112,8 @@ public class ClientLogicGameWorker extends LogicGameWorker {
 		// }
 		// visionMask.add(new Area(player.getBoundingBox()));
 
-		VisionInformation vinfo = gameInformation.getClientData()
-				.getVisionInfo();
+		VisionInformation vinfo = EdurasInitializer.getInstance()
+				.getInformationProvider().getClientData().getVisionInfo();
 		synchronized (vinfo) {
 			vinfo.clear();
 			vinfo.setAreaForTeam(team, visionArea);

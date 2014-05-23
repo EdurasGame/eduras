@@ -29,6 +29,7 @@ import de.illonis.eduras.interfaces.InfoInterface;
 public class InformationProvider implements InfoInterface {
 	private final GameLogicInterface logic;
 	private final NetworkManager networkManager;
+	private ClientData clientData;
 
 	/**
 	 * Creates a new InformationProvider that gains information with the given
@@ -40,6 +41,7 @@ public class InformationProvider implements InfoInterface {
 	InformationProvider(GameLogicInterface logic, NetworkManager networkManager) {
 		this.logic = logic;
 		this.networkManager = networkManager;
+		this.clientData = new ClientData();
 	}
 
 	@Override
@@ -125,7 +127,7 @@ public class InformationProvider implements InfoInterface {
 
 	@Override
 	public ClientData getClientData() {
-		return logic.getGame().getClientData();
+		return clientData;
 	}
 
 	@Override

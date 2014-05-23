@@ -39,7 +39,6 @@ import de.illonis.eduras.exceptions.GameModeNotSupportedByMapException;
 import de.illonis.eduras.exceptions.InvalidNameException;
 import de.illonis.eduras.exceptions.NoSpawnAvailableException;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
-import de.illonis.eduras.gameclient.ClientData;
 import de.illonis.eduras.gameobjects.DynamicPolygonObject;
 import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.gameobjects.NeutralBase;
@@ -67,7 +66,6 @@ public class GameInformation {
 	private static final int ATTEMPT_PER_SPAWNPOINT = 100;
 
 	private static final Random RANDOM = new Random();
-	private final ClientData clientData;
 
 	private final java.util.Map<Integer, GameObject> objects;
 	private final java.util.Map<Integer, Player> players;
@@ -81,20 +79,12 @@ public class GameInformation {
 	 * Creates a new game information object with emtpy object lists.
 	 */
 	public GameInformation() {
-		clientData = new ClientData();
 		objects = new ConcurrentHashMap<Integer, GameObject>();
 		players = new ConcurrentHashMap<Integer, Player>();
 		map = new FunMap();
 		gameSettings = new GameSettings(this);
 		teams = new HashMap<Integer, Team>();
 		spawnGroups = new HashMap<Team, SpawnType>();
-	}
-
-	/**
-	 * @return the client data.
-	 */
-	public ClientData getClientData() {
-		return clientData;
 	}
 
 	/**
