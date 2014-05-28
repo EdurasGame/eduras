@@ -85,10 +85,8 @@ public class GameClient {
 
 	private void initChat() {
 		ChatClientImpl chat = new ChatClientImpl();
-		ChatCache cache = new ChatCache();
-		chat.setChatActivityListener(new ClientChatReceiver(chat, clientName,
-				cache));
-		frame.getGamePanel().setChat(chat, cache);
+		chat.setChatActivityListener(new ClientChatReceiver(chat, clientName));
+		frame.getGamePanel().setChat(chat);
 		chat.connect(nwm.getServerAddress().getHostAddress(), nwm.getPort() + 1);
 	}
 

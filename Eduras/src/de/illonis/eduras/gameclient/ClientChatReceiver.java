@@ -12,6 +12,7 @@ import de.illonis.eduras.chat.ChatRoom;
 import de.illonis.eduras.chat.ChatUser;
 import de.illonis.eduras.chat.Invitation;
 import de.illonis.eduras.chat.NotConnectedException;
+import de.illonis.eduras.logicabstraction.EdurasInitializer;
 
 /**
  * Handles incoming chat events on client side.
@@ -28,9 +29,9 @@ public class ClientChatReceiver implements ChatActivityListener {
 	private final ChatClient chat;
 	private final String clientName;
 
-	ClientChatReceiver(ChatClient chat, String clientName, ChatCache cache) {
+	ClientChatReceiver(ChatClient chat, String clientName) {
 		this.chat = chat;
-		this.cache = cache;
+		this.cache = EdurasInitializer.getInstance().getInformationProvider().getClientData().getChatCache();
 		this.clientName = clientName;
 	}
 

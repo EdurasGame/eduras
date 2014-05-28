@@ -295,12 +295,10 @@ public class GamePanelLogic extends ClientGuiStepLogic implements
 	 * 
 	 * @param chat
 	 *            the chat implementation.
-	 * @param cache
-	 *            the cache object.
 	 */
-	public void setChat(ChatClientImpl chat, ChatCache cache) {
+	public void setChat(ChatClientImpl chat) {
 		this.chat = chat;
-		this.cache = cache;
+		this.cache = infoPro.getClientData().getChatCache();
 	}
 
 	/**

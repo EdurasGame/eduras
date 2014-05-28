@@ -18,6 +18,8 @@ import de.illonis.eduras.logicabstraction.InformationProvider;
  * 
  */
 public final class ClientData {
+	
+	private final ChatCache chatCache;
 	private final TreeSet<Integer> selectedUnits;
 	private final LinkedList<Animation> animations;
 	private final VisionInformation visionInfo;
@@ -30,6 +32,7 @@ public final class ClientData {
 	 */
 	public ClientData() {
 		currentItemSelected = -1;
+		chatCache = new ChatCache();
 		selectedUnits = new TreeSet<Integer>();
 		animations = new LinkedList<Animation>();
 		visionInfo = new VisionInformation();
@@ -174,6 +177,13 @@ public final class ClientData {
 	 */
 	public ObjectType getTypeOfItemToSpawn() {
 		return typeOfItemToSpawn;
+	}
+	
+	/**
+	 * @return the chat cache.
+	 */
+	public ChatCache getChatCache() {
+		return chatCache;
 	}
 
 }
