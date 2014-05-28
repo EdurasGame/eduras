@@ -19,8 +19,6 @@ import de.illonis.eduras.logicabstraction.EventSender;
 import de.illonis.eduras.logicabstraction.InformationProvider;
 import de.illonis.eduras.logicabstraction.NetworkManager;
 import de.illonis.eduras.networking.ClientRole;
-import de.illonis.eduras.networking.discover.ServerFoundListener;
-import de.illonis.eduras.networking.discover.ServerSearcher;
 
 /**
  * Represents a full game client that handles both, network management and gui.
@@ -88,8 +86,8 @@ public class GameClient {
 	private void initChat() {
 		ChatClientImpl chat = new ChatClientImpl();
 		ChatCache cache = new ChatCache();
-		chat.setChatActivityListener(new ClientChatReceiver(frame
-				.getGamePanel(), chat, clientName, cache));
+		chat.setChatActivityListener(new ClientChatReceiver(chat, clientName,
+				cache));
 		frame.getGamePanel().setChat(chat, cache);
 		chat.connect(nwm.getServerAddress().getHostAddress(), nwm.getPort() + 1);
 	}

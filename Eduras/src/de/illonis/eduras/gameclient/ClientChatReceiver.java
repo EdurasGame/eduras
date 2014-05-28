@@ -12,7 +12,6 @@ import de.illonis.eduras.chat.ChatRoom;
 import de.illonis.eduras.chat.ChatUser;
 import de.illonis.eduras.chat.Invitation;
 import de.illonis.eduras.chat.NotConnectedException;
-import de.illonis.eduras.gameclient.gui.game.GamePanelLogic;
 
 /**
  * Handles incoming chat events on client side.
@@ -25,14 +24,11 @@ public class ClientChatReceiver implements ChatActivityListener {
 	private final static Logger L = EduLog
 			.getLoggerFor(ClientChatReceiver.class.getName());
 
-	private final GamePanelLogic panelLogic;
 	private final ChatCache cache;
 	private final ChatClient chat;
 	private final String clientName;
 
-	ClientChatReceiver(GamePanelLogic panelLogic, ChatClient chat,
-			String clientName, ChatCache cache) {
-		this.panelLogic = panelLogic;
+	ClientChatReceiver(ChatClient chat, String clientName, ChatCache cache) {
 		this.chat = chat;
 		this.cache = cache;
 		this.clientName = clientName;

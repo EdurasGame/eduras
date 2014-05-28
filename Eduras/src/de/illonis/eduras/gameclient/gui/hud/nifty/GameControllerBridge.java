@@ -3,6 +3,8 @@ package de.illonis.eduras.gameclient.gui.hud.nifty;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.transition.Transition;
 
+import de.illonis.eduras.networking.discover.ServerInfo;
+
 /**
  * Provides some access to the game itself from controllers.
  * 
@@ -22,5 +24,9 @@ public interface GameControllerBridge {
 	String getUsername();
 	
 	void setUsername(String name);
+
+	void setServer(ServerInfo current);
+	
+	ServerInfo getServer();
 
 }

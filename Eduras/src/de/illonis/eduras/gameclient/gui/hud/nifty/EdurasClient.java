@@ -7,6 +7,7 @@ import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.transition.Transition;
 
+import de.illonis.eduras.networking.discover.ServerInfo;
 import de.lessvoid.nifty.slick2d.NiftyStateBasedGame;
 
 /**
@@ -20,6 +21,7 @@ public class EdurasClient implements GameControllerBridge {
 	private AppGameContainer gameContainer;
 	private Game game;
 	private String username = "";
+	private ServerInfo server;
 
 	void startGui() throws SlickException {
 		if (game != null)
@@ -95,6 +97,16 @@ public class EdurasClient implements GameControllerBridge {
 	@Override
 	public void setUsername(String name) {
 		this.username = name;
+	}
+
+	@Override
+	public void setServer(ServerInfo current) {
+		server = current;		
+	}
+
+	@Override
+	public ServerInfo getServer() {
+		return server;
 	}
 
 }

@@ -1,7 +1,5 @@
 package de.illonis.eduras.gameclient.gui.hud.nifty;
 
-import java.net.InetAddress;
-import java.net.UnknownHostException;
 import java.util.List;
 
 import org.newdawn.slick.Color;
@@ -28,29 +26,13 @@ public class ServerListController extends EdurasScreenController implements
 	protected void initScreen(Screen screen) {
 		listBox = (ListBox<ServerInfo>) screen.findNiftyControl("serverList",
 				ListBox.class);
-		fillMyListBox();
-	}
-
-	/**
-	 * Fill the listbox with items. In this case with Strings.
-	 */
-	public void fillMyListBox() {
-		try {
-			listBox.addItem(new ServerInfo("testserver", InetAddress
-					.getByName("illonis.de"), 41, "4.3"));
-			listBox.addItem(new ServerInfo("testserver 13", InetAddress
-					.getByName("illonis.de"), 43, "4.2"));
-			listBox.addItem(new ServerInfo("testserver 41", InetAddress
-					.getByName("illonis.de"), 44, "1"));
-		} catch (UnknownHostException e) {
-		}
 	}
 
 	public void join() {
 		List<ServerInfo> selected = listBox.getSelection();
 		if (selected.size() == 1) {
 			ServerInfo current = selected.get(0);
-			System.out.println("joining " + current.getName());
+			game.setServer(current);
 			game.enterState(3);
 		}
 	}
@@ -63,13 +45,19 @@ public class ServerListController extends EdurasScreenController implements
 
 	@Override
 	public void onServerFound(ServerInfo info) {
-		listBox.addItem(info);
-		listBox.refresh();
+		if (!listBox.getItems().contains(info)) {
+			listBox.addItem(info);
+			listBox.refresh();
+		}
 	}
 
 	@Override
 	public void onDiscoveryFailed() {
 		System.out.println("discovery failed");
 		// TODO: implement
+	}
+
+	public void clearList() {
+		listBox.clear();
 	}
 }

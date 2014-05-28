@@ -31,10 +31,11 @@ public class ServerListState extends NiftyBasicGameState {
 
 	@Override
 	public void enterState(GameContainer container, StateBasedGame game) {
-		System.out.println("start serverlist");
 		startDiscovery();
+		controller.clearList();
 	}
 
+	@Override
 	public void leaveState(GameContainer container, StateBasedGame game) {
 		stopDiscovery();
 	}
