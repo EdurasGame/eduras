@@ -17,7 +17,10 @@ import de.illonis.eduras.settings.S;
 
 /**
  * This class is responsible for updating the current game information triggered
- * by a timer.
+ * by a timer. The trigger can either be an external one, which then has to call
+ * {@link #update(long)} on every iteration. Or this class can function as its
+ * own timer. To achieve this, start it as a its own thread. Make sure not to do
+ * both!
  * 
  * @author Florian Mai <florian.ren.mai@googlemail.com>
  * 
@@ -78,18 +81,7 @@ public abstract class LogicGameWorker implements Runnable, TimingSource {
 			if (delta > 0) {
 				lastUpdate = System.nanoTime();
 
-				// check game settings
-				long gameRemainingTime = gameInformation.getGameSettings()
-						.getRemainingTime();
-
-				if (gameRemainingTime <= 0) {
-					gameInformation.getGameSettings().getGameMode().onTimeUp();
-				} else {
-					gameInformation.getGameSettings().changeTime(
-							gameRemainingTime - delta);
-				}
-				notifyTimingTargets(delta);
-				gameUpdate(delta);
+				update(delta);
 			}
 			afterTime = System.nanoTime();
 			timeDiff = afterTime - beforeTime;
@@ -111,6 +103,28 @@ public abstract class LogicGameWorker implements Runnable, TimingSource {
 			}
 			beforeTime = System.nanoTime();
 		}
+	}
+
+	/**
+	 * Updates the games states. First it updates what's common to both client
+	 * and server logic. After that it calls the respective
+	 * {@link #gameUpdate(long)} method of the subclass.
+	 * 
+	 * @param delta
+	 */
+	public void update(long delta) {
+		// check game settings
+		long gameRemainingTime = gameInformation.getGameSettings()
+				.getRemainingTime();
+
+		if (gameRemainingTime <= 0) {
+			gameInformation.getGameSettings().getGameMode().onTimeUp();
+		} else {
+			gameInformation.getGameSettings().changeTime(
+					gameRemainingTime - delta);
+		}
+		notifyTimingTargets(delta);
+		gameUpdate(delta);
 	}
 
 	private void notifyTimingTargets(long delta) {

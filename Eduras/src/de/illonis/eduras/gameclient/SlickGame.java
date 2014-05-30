@@ -89,7 +89,7 @@ public class SlickGame extends BasicGame {
 	public void update(GameContainer container, int delta)
 			throws SlickException {
 		// System.out.println(getTime() + " elapsed " + delta);
-		lgw.gameUpdate(delta);
+		lgw.update(delta);
 	}
 
 	public long getTime() {
