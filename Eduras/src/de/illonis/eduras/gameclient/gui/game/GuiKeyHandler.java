@@ -16,9 +16,9 @@ public abstract class GuiKeyHandler {
 
 	protected final Settings settings;
 	protected final GamePanelReactor reactor;
-	protected final GamePanelLogic client;
+	protected final UserInputListener client;
 
-	GuiKeyHandler(GamePanelLogic client, GamePanelReactor reactor) {
+	GuiKeyHandler(UserInputListener client, GamePanelReactor reactor) {
 		this.settings = EdurasInitializer.getInstance().getSettings();
 		this.reactor = reactor;
 		this.client = client;
@@ -33,9 +33,19 @@ public abstract class GuiKeyHandler {
 	abstract void keyPressed(KeyBinding key) throws ActionFailedException;
 
 	/**
+	 * Indicates that a key was released.
 	 * 
 	 * @param key
+	 *            the released binding.
 	 */
 	abstract void keyReleased(KeyBinding key);
+
+	/**
+	 * Returns whether chat is enabled and chat keys (start chat, abort chat)
+	 * should be consumed automatically.
+	 * 
+	 * @return true if chat is enabled.
+	 */
+	abstract boolean isChatEnabled();
 
 }

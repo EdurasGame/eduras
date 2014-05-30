@@ -96,43 +96,5 @@ public class SlickGame extends BasicGame {
 		return (Sys.getTime() * 1000) / Sys.getTimerResolution();
 	}
 
-	@Override
-	public void mousePressed(int button, int x, int y) {
-		mouseHandler.mousePressed(button, x, y);
-	}
-
-	@Override
-	public void mouseClicked(int button, int x, int y, int clickCount) {
-		mouseHandler.mouseClicked(button, x, y, clickCount);
-	}
-
-	@Override
-	public void mouseMoved(int oldx, int oldy, int newx, int newy) {
-		mouseHandler.mouseMoved(oldx, oldy, newx, newy);
-	}
-
-	@Override
-	public void mouseDragged(int oldx, int oldy, int newx, int newy) {
-		mouseHandler.mouseDragged(oldx, oldy, newx, newy);
-	}
-
-	@Override
-	public void mouseReleased(int button, int x, int y) {
-		mouseHandler.mouseReleased(button, x, y);
-	}
-
-	@Override
-	public void mouseWheelMoved(int change) {
-		mouseHandler.mouseWheelMoved(change);
-	}
-
-	@Override
-	public void keyPressed(int key, char c) {
-		keyHandler.keyPressed(key, c);
-	}
-
-	@Override
-	public void keyReleased(int key, char c) {
-		keyHandler.keyReleased(key, c);
-	}
+	
 }

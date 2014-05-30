@@ -1,12 +1,11 @@
 package de.illonis.eduras.gameclient.gui.game;
 
-import java.awt.Component;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.newdawn.slick.SlickException;
+import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.geom.Vector2f;
 
 import de.illonis.edulog.EduLog;
@@ -17,14 +16,11 @@ import de.illonis.eduras.exceptions.ActionFailedException;
 import de.illonis.eduras.gameclient.ChatCache;
 import de.illonis.eduras.gameclient.ClientData;
 import de.illonis.eduras.gameclient.GuiInternalEventListener;
-import de.illonis.eduras.gameclient.SlickGame;
 import de.illonis.eduras.gameclient.gui.CameraMouseListener;
-import de.illonis.eduras.gameclient.gui.ClientGuiStepLogic;
 import de.illonis.eduras.gameclient.gui.HudNotifier;
 import de.illonis.eduras.gameclient.gui.TimedTasksHolderGUI;
 import de.illonis.eduras.gameclient.gui.hud.DragSelectionRectangle;
 import de.illonis.eduras.gameclient.gui.hud.UserInterface;
-import de.illonis.eduras.logic.LogicGameWorker;
 import de.illonis.eduras.logicabstraction.EdurasInitializer;
 import de.illonis.eduras.logicabstraction.InformationProvider;
 
@@ -35,8 +31,7 @@ import de.illonis.eduras.logicabstraction.InformationProvider;
  * @author illonis
  * 
  */
-public class GamePanelLogic extends ClientGuiStepLogic implements
-		UserInputListener {
+public class GamePanelLogic implements UserInputListener {
 
 	private final static Logger L = EduLog.getLoggerFor(GamePanelLogic.class
 			.getName());
@@ -44,7 +39,7 @@ public class GamePanelLogic extends ClientGuiStepLogic implements
 	private GameRenderer renderer;
 	private final GameCamera camera;
 	private final CameraMouseListener cml;
-	private GamePanel gui;
+	private GameContainer gui;
 	private final GuiInternalEventListener reactor;
 	private final InputKeyHandler keyHandler;
 	private final ResizeMonitor resizeMonitor;
@@ -73,13 +68,12 @@ public class GamePanelLogic extends ClientGuiStepLogic implements
 	 * 
 	 * @param listener
 	 *            the listener.
-	 * @param clientData
-	 *            client data object.
+	 * @param container the game container.
 	 */
-	public GamePanelLogic(GuiInternalEventListener listener,
-			ClientData clientData) {
-		this.data = clientData;
-
+	public GamePanelLogic(GuiInternalEventListener listener, GameContainer container) {
+		this.data = EdurasInitializer.getInstance().getInformationProvider()
+				.getClientData();
+		this.gui = container;
 		currentClickState = ClickState.DEFAULT;
 		this.reactor = listener;
 		infoPro = EdurasInitializer.getInstance().getInformationProvider();
@@ -89,11 +83,6 @@ public class GamePanelLogic extends ClientGuiStepLogic implements
 		camera = new GameCamera();
 		mouseHandler = new GuiMouseHandler(this, reactor);
 		cml = new CameraMouseListener(camera);
-		try {
-			gui = new GamePanel(new SlickGame(mouseHandler, keyHandler));
-		} catch (SlickException e) {
-			L.log(Level.WARNING, "TODO: message", e);
-		}
 	}
 
 	/**
@@ -127,35 +116,16 @@ public class GamePanelLogic extends ClientGuiStepLogic implements
 	float getCurrentScale() {
 		return renderer.getCurrentScale();
 	}
-
-	/**
-	 * Starts rendering process and logic updates.
-	 * 
-	 * @param worker
-	 *            the worker used for update.
-	 */
-	private void startGame(LogicGameWorker worker, GameRenderer gameRenderer) {
-		// renderer.startRendering();
-		try {
-			gui.start(worker, gameRenderer);
-		} catch (SlickException e) {
-			L.log(Level.WARNING, "TODO: message", e);
-		}
+	
+	public GameRenderer getRenderer() {
+		return renderer;
 	}
 
-	@Override
-	public void onShown() {
+	public void start() {
 		camera.reset();
-		LogicGameWorker worker = EdurasInitializer.getInstance()
-				.startLogicWorker();
 		initUserInterface();
-		gui.addComponentListener(resizeMonitor);
-		startGame(worker, renderer);
 		doTimedTasks();
 		notifyGuiSizeChanged();
-		gui.requestFocus();
-		gui.requestFocusInWindow();
-		hudNotifier.onGameReady();
 	}
 
 	private void doTimedTasks() {
@@ -166,11 +136,8 @@ public class GamePanelLogic extends ClientGuiStepLogic implements
 		TimedTasksHolderGUI.getInstance().cancel();
 	}
 
-	@Override
-	public void onHidden() {
+	public void stop() {
 		gui.exit();
-		EdurasInitializer.getInstance().stopLogicWorker();
-		gui.removeComponentListener(resizeMonitor);
 		cml.stop();
 		stopTimedTasks();
 	}
@@ -188,6 +155,8 @@ public class GamePanelLogic extends ClientGuiStepLogic implements
 	 */
 	private void notifyGuiSizeChanged() {
 		L.fine("[GUI] Size changed. New size: " + gui.getWidth() + ", "
+				+ gui.getHeight());
+		System.out.println("[GUI] Size changed. New size: " + gui.getWidth() + ", "
 				+ gui.getHeight());
 		userInterface.onGuiSizeChanged(gui.getWidth(), gui.getHeight());
 		camera.setSize(gui.getWidth(), gui.getHeight()); // maybe not?
@@ -207,8 +176,7 @@ public class GamePanelLogic extends ClientGuiStepLogic implements
 		}
 	}
 
-	@Override
-	public Component getGui() {
+	public GameContainer getGui() {
 		return gui;
 	}
 
@@ -249,13 +217,10 @@ public class GamePanelLogic extends ClientGuiStepLogic implements
 		return vec;
 	}
 
-	/**
-	 * Calculates current mouse position in gamePanel
-	 * 
-	 * @return mouse position computed to ingame point.
-	 */
+	@Override
 	public Vector2f getCurrentMousePos() {
-		return computeGuiPointToGameCoordinate(gui.getMousePos());
+		return computeGuiPointToGameCoordinate(new Vector2f(gui.getInput()
+				.getMouseX(), gui.getInput().getMouseY()));
 	}
 
 	/**
@@ -331,30 +296,6 @@ public class GamePanelLogic extends ClientGuiStepLogic implements
 			}
 	}
 
-	@Override
-	public boolean abortChat() {
-		boolean writing = cache.isWriting();
-		cache.stopWriting();
-		return writing;
-	}
-
-	/**
-	 * Handles key input for chat.
-	 * 
-	 * @param key
-	 *            the key number.
-	 * @param c
-	 *            the character.
-	 * @return true if keyevent was consumed.
-	 */
-	public boolean onKeyType(int key, char c) {
-		if (cache.isWriting()) {
-			cache.write(key, c);
-			return true;
-		}
-		return false;
-	}
-
 	/**
 	 * Returns the {@link ClientData}.
 	 * 
@@ -364,11 +305,7 @@ public class GamePanelLogic extends ClientGuiStepLogic implements
 		return data;
 	}
 
-	/**
-	 * Sets the item of the given slot number as selected.
-	 * 
-	 * @param i
-	 */
+	@Override
 	public void selectItem(int i) {
 		data.setCurrentItemSelected(i);
 		currentClickState = ClickState.ITEM_SELECTED;
@@ -383,5 +320,32 @@ public class GamePanelLogic extends ClientGuiStepLogic implements
 	 */
 	public void onActionFailed(ActionFailedException e) {
 		showNotification(e.getMessage());
+	}
+
+	@Override
+	public void resetCamera() {
+		getCamera().reset();
+	}
+
+	@Override
+	public boolean abortChat() {
+		if (cache.isWriting()) {
+			cache.stopWriting();
+			return true;
+		}
+		return false;
+	}
+
+	public InputKeyHandler getKeyHandler() {
+		return keyHandler;
+	}
+
+	public GuiMouseHandler getMouseHandler() {
+		return mouseHandler;
+	}
+
+	@Override
+	public void onGameQuit() {
+		reactor.onGameQuit();
 	}
 }

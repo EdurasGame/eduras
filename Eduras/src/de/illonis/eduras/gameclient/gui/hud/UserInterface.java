@@ -32,7 +32,7 @@ import de.illonis.eduras.networking.ClientRole;
  * @author illonis
  * 
  */
-public class UserInterface implements GuiResizeListener, UserInputListener {
+public class UserInterface implements GuiResizeListener {
 
 	private static final long PING_TIME = 2000;
 
@@ -247,12 +247,10 @@ public class UserInterface implements GuiResizeListener, UserInputListener {
 		}
 	}
 
-	@Override
 	public void showStatWindow() {
 		statWindow.setVisible(true);
 	}
 
-	@Override
 	public void hideStatWindow() {
 		statWindow.setVisible(false);
 	}
@@ -297,15 +295,6 @@ public class UserInterface implements GuiResizeListener, UserInputListener {
 	 */
 	public void showNotification(String message) {
 		notificationPanel.addNotification(message);
-	}
-
-	@Override
-	public void onChatEnter() {
-	}
-
-	@Override
-	public boolean abortChat() {
-		return false;
 	}
 
 	/**

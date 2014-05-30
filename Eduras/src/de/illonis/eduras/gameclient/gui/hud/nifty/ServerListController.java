@@ -6,8 +6,11 @@ import org.newdawn.slick.Color;
 import org.newdawn.slick.state.transition.FadeInTransition;
 import org.newdawn.slick.state.transition.FadeOutTransition;
 
+import de.illonis.eduras.gameclient.ConnectionEstablisher;
+import de.illonis.eduras.gameclient.LoginData;
 import de.illonis.eduras.gameclient.gui.SoundMachine;
 import de.illonis.eduras.gameclient.gui.SoundMachine.SoundType;
+import de.illonis.eduras.networking.ClientRole;
 import de.illonis.eduras.networking.discover.ServerFoundListener;
 import de.illonis.eduras.networking.discover.ServerInfo;
 import de.lessvoid.nifty.controls.ListBox;
@@ -17,6 +20,7 @@ public class ServerListController extends EdurasScreenController implements
 		ServerFoundListener {
 
 	private ListBox<ServerInfo> listBox;
+	private ConnectionEstablisher establisher;
 
 	public ServerListController(GameControllerBridge game) {
 		super(game);
@@ -34,6 +38,12 @@ public class ServerListController extends EdurasScreenController implements
 			ServerInfo current = selected.get(0);
 			game.setServer(current);
 			game.enterState(3);
+			String userName = game.getUsername();
+			ClientRole role = ClientRole.PLAYER;
+			LoginData data = new LoginData(current.getUrl(), current.getPort(),
+					userName, role);
+			game.setLoginData(data);
+			game.enterState(5);
 		}
 	}
 

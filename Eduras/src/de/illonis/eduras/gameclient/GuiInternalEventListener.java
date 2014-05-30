@@ -48,8 +48,7 @@ import de.illonis.eduras.units.Unit;
  * @author illonis
  * 
  */
-public class GuiInternalEventListener implements LoginPanelReactor,
-		ProgressPanelReactor, GamePanelReactor, LoadingPanelReactor {
+public class GuiInternalEventListener implements GamePanelReactor {
 
 	private final static Logger L = EduLog
 			.getLoggerFor(GuiInternalEventListener.class.getName());
@@ -64,26 +63,6 @@ public class GuiInternalEventListener implements LoginPanelReactor,
 	public GuiInternalEventListener(GameClient client) {
 		this.client = client;
 		infoPro = EdurasInitializer.getInstance().getInformationProvider();
-	}
-
-	@Override
-	public void abort() {
-		if (null != establisher && establisher.isAlive())
-			establisher.interrupt();
-
-		client.getFrame().hideProgress();
-		client.getFrame().showLogin();
-	}
-
-	@Override
-	public void login(LoginData data) {
-		client.setClientName(data.getUsername());
-		client.setRole(data.getRole());
-		establisher = new ConnectionEstablisher(data,
-				client.getNetworkManager());
-		establisher.start();
-		client.getFrame().hideLogin();
-		client.getFrame().showProgress(establisher);
 	}
 
 	@Override
@@ -187,11 +166,6 @@ public class GuiInternalEventListener implements LoginPanelReactor,
 	}
 
 	@Override
-	public void onLoadingFinished() {
-		client.getFrame().onDataReady();
-	}
-
-	@Override
 	public void onUnitsSelected(Rectangle2D.Double area) {
 
 		Rectangle r = new Rectangle((float) area.getX(), (float) area.getY(),
@@ -280,8 +254,8 @@ public class GuiInternalEventListener implements LoginPanelReactor,
 		try {
 			hasSufficientResources(player,
 					S.Server.gm_edura_action_respawnplayer_cost);
-		} catch (InsufficientResourceException e1) {
-			client.getFrame().getGamePanel().onActionFailed(e1);
+		} catch (InsufficientResourceException e) {
+			client.getLogic().onActionFailed(e);
 			return;
 		}
 
@@ -289,14 +263,13 @@ public class GuiInternalEventListener implements LoginPanelReactor,
 				client.getOwnerID(), player.getPlayerId(), base.getId());
 		if (player.getPlayerMainFigure() != null
 				&& player.getPlayerMainFigure().isDead() == false) {
-			client.getFrame().getGamePanel()
+			client.getLogic()
 					.showNotification("Player is not dead");
 			return;
 		}
 		try {
 			client.sendEvent(event);
-			client.getFrame()
-					.getGamePanel()
+			client.getLogic()
 					.showNotification(
 							"Resurrecting " + player.getName() + "...");
 		} catch (WrongEventTypeException | MessageNotSupportedException e) {
@@ -326,7 +299,7 @@ public class GuiInternalEventListener implements LoginPanelReactor,
 			hasSufficientResources(player.getPlayer(),
 					S.Server.spell_heal_costs);
 		} catch (InsufficientResourceException e1) {
-			client.getFrame().getGamePanel().onActionFailed(e1);
+			client.getLogic().onActionFailed(e1);
 			return;
 		}
 
@@ -334,13 +307,13 @@ public class GuiInternalEventListener implements LoginPanelReactor,
 				targetUnit.getId());
 
 		if (infoPro.getGameMode().getRelation(targetUnit, player) != Relation.ALLIED) {
-			client.getFrame().getGamePanel()
+			client.getLogic()
 					.showNotification("Player is not friendly");
 			return;
 		}
 		try {
 			client.sendEvent(healEvent);
-			client.getFrame().getGamePanel()
+			client.getLogic()
 					.showNotification("Healing unit...");
 		} catch (WrongEventTypeException | MessageNotSupportedException e) {
 			L.log(Level.SEVERE, "Error sending heal event", e);
@@ -350,7 +323,7 @@ public class GuiInternalEventListener implements LoginPanelReactor,
 
 	@Override
 	public void setClickState(ClickState newState) {
-		client.getFrame().getGamePanel().setClickState(newState);
+		client.getLogic().setClickState(newState);
 	}
 
 	@Override
@@ -367,7 +340,7 @@ public class GuiInternalEventListener implements LoginPanelReactor,
 		try {
 			hasSufficientResources(player, type.getCosts());
 		} catch (InsufficientResourceException e1) {
-			client.getFrame().getGamePanel().onActionFailed(e1);
+			client.getLogic().onActionFailed(e1);
 			return;
 		}
 
@@ -375,7 +348,7 @@ public class GuiInternalEventListener implements LoginPanelReactor,
 				base.getId());
 		try {
 			client.sendEvent(event);
-			client.getFrame().getGamePanel()
+			client.getLogic()
 					.showNotification("Spawning observer...");
 		} catch (WrongEventTypeException | MessageNotSupportedException e) {
 			L.log(Level.SEVERE, "Error sending spawn observer event", e);
@@ -395,7 +368,7 @@ public class GuiInternalEventListener implements LoginPanelReactor,
 		try {
 			hasSufficientResources(player, S.Server.spell_scout_costs);
 		} catch (InsufficientResourceException e1) {
-			client.getFrame().getGamePanel().onActionFailed(e1);
+			client.getLogic().onActionFailed(e1);
 			return;
 		}
 
@@ -403,7 +376,7 @@ public class GuiInternalEventListener implements LoginPanelReactor,
 				target);
 		try {
 			client.sendEvent(event);
-			client.getFrame().getGamePanel()
+			client.getLogic()
 					.showNotification("Vision spell...");
 		} catch (WrongEventTypeException | MessageNotSupportedException e) {
 			L.log(Level.SEVERE, "Error casting vision spell event", e);
@@ -429,7 +402,7 @@ public class GuiInternalEventListener implements LoginPanelReactor,
 		try {
 			hasSufficientResources(player, type.getCosts());
 		} catch (InsufficientResourceException e1) {
-			client.getFrame().getGamePanel().onActionFailed(e1);
+			client.getLogic().onActionFailed(e1);
 			return;
 		}
 
@@ -440,7 +413,7 @@ public class GuiInternalEventListener implements LoginPanelReactor,
 
 		try {
 			client.sendEvent(spawnItemEvent);
-			client.getFrame().getGamePanel()
+			client.getLogic()
 					.showNotification("Spawning " + type.toString());
 		} catch (WrongEventTypeException | MessageNotSupportedException e) {
 			L.log(Level.SEVERE, "Error spawning item", e);

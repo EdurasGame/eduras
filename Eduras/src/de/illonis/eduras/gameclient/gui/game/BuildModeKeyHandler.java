@@ -13,7 +13,7 @@ import de.illonis.eduras.units.InteractMode;
  */
 public class BuildModeKeyHandler extends GuiKeyHandler {
 
-	BuildModeKeyHandler(GamePanelLogic client, GamePanelReactor reactor) {
+	BuildModeKeyHandler(UserInputListener client, GamePanelReactor reactor) {
 		super(client, reactor);
 	}
 
@@ -21,7 +21,7 @@ public class BuildModeKeyHandler extends GuiKeyHandler {
 	void keyPressed(KeyBinding key) throws NotWithinBaseException {
 		switch (key) {
 		case SWITCH_MODE:
-			client.getCamera().reset();
+			client.resetCamera();
 			reactor.onModeSwitch();
 			break;
 		default:
@@ -31,5 +31,10 @@ public class BuildModeKeyHandler extends GuiKeyHandler {
 
 	@Override
 	void keyReleased(KeyBinding key) {
+	}
+
+	@Override
+	boolean isChatEnabled() {
+		return true;
 	}
 }

@@ -438,4 +438,9 @@ public class ServerLogic implements GameLogicInterface {
 		return lgw;
 	}
 
+	@Override
+	public LogicGameWorker getWorker() {
+		return lgw;
+	}
+
 }

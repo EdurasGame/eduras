@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nifty xmlns="nifty.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="nifty.xsd nifty.xsd">
+	<useStyles filename="nifty-default-styles.xml" />
+	<useControls filename="nifty-default-controls.xml" />
+	<screen id="connecting"
+		controller="de.illonis.eduras.gameclient.gui.hud.nifty.ConnectingController">
+		<layer id="connectingLayer" childLayout="center"
+			backgroundColor="#000000">
+			<panel id="loadingpanel" childLayout="vertical" align="center"
+				valign="center" height="" width="*">
+				<control type="label" align="center" valign="center" width="100%"
+					text="Connecting..." />
+				<control id="noteLabel" type="label" align="center" valign="center"
+					width="100%" />
+				<control id="abortButton" type="button" align="center" label="Abort">
+					<interact onClick="abort()" />
+				</control>
+			</panel>
+		</layer>
+	</screen>
+</nifty>

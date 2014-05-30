@@ -23,7 +23,7 @@ public class ConnectionEstablisher extends Thread {
 	private final LoginData data;
 	private String errorMessage;
 
-	ConnectionEstablisher(LoginData data, NetworkManager nwm) {
+	public ConnectionEstablisher(LoginData data, NetworkManager nwm) {
 		super("ConnectionEstablisher");
 		this.nwm = nwm;
 		this.data = data;

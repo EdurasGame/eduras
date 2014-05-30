@@ -11,6 +11,7 @@ import de.illonis.eduras.Player;
 import de.illonis.eduras.exceptions.ActionFailedException;
 import de.illonis.eduras.exceptions.KeyNotBoundException;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
+import de.illonis.eduras.gameclient.ChatCache;
 import de.illonis.eduras.gameclient.GamePanelReactor;
 import de.illonis.eduras.gameclient.userprefs.KeyBindings.KeyBinding;
 import de.illonis.eduras.gameclient.userprefs.Settings;
@@ -41,9 +42,10 @@ public class InputKeyHandler {
 	 */
 	private final HashMap<Integer, Boolean> pressedButtons;
 	private long lastTimePressed;
+	private final ChatCache cache;
 
 	private final Settings settings;
-	private final GamePanelLogic client;
+	private final UserInputListener client;
 	private int currentKey = Input.KEY_UNLABELED;
 
 	/**
@@ -54,11 +56,13 @@ public class InputKeyHandler {
 	 * @param reactor
 	 *            the reactor that passes actions to server.
 	 */
-	public InputKeyHandler(GamePanelLogic client, GamePanelReactor reactor) {
+	public InputKeyHandler(UserInputListener client, GamePanelReactor reactor) {
+		EdurasInitializer init = EdurasInitializer.getInstance();
 		keyHandlers = new HashMap<InteractMode, GuiKeyHandler>();
-		infoPro = EdurasInitializer.getInstance().getInformationProvider();
-		this.settings = EdurasInitializer.getInstance().getSettings();
+		infoPro = init.getInformationProvider();
+		this.settings = init.getSettings();
 		pressedButtons = new HashMap<Integer, Boolean>();
+		cache = init.getInformationProvider().getClientData().getChatCache();
 		this.client = client;
 		lastTimePressed = System.currentTimeMillis();
 		keyHandlers.put(InteractMode.MODE_EGO, new EgoModeKeyHandler(client,
@@ -98,6 +102,23 @@ public class InputKeyHandler {
 	}
 
 	/**
+	 * Handles key input for chat.
+	 * 
+	 * @param key
+	 *            the key number.
+	 * @param c
+	 *            the character.
+	 * @return true if keyevent was consumed.
+	 */
+	public boolean onChatType(int key, char c) {
+		if (cache.isWriting()) {
+			cache.write(key, c);
+			return true;
+		}
+		return false;
+	}
+
+	/**
 	 * Indicates that a key was pressed.
 	 * 
 	 * @param key
@@ -110,7 +131,7 @@ public class InputKeyHandler {
 		if (key != settings.getKeyBindings().getKey(KeyBinding.CHAT)
 				&& key != settings.getKeyBindings().getKey(
 						KeyBinding.EXIT_CLIENT))
-			consumed = client.onKeyType(key, c);
+			consumed = onChatType(key, c);
 
 		if (consumed) {
 			currentKey = key;
@@ -144,9 +165,17 @@ public class InputKeyHandler {
 			GuiKeyHandler handler = keyHandlers.get(player.getCurrentMode());
 			if (handler != null) {
 				try {
+					if (handler.isChatEnabled()) {
+						if (binding == KeyBinding.CHAT)
+							client.onChatEnter();
+						else if (binding == KeyBinding.EXIT_CLIENT) {
+							if (!client.abortChat())
+								client.onGameQuit();
+						}
+					}
 					handler.keyPressed(binding);
 				} catch (ActionFailedException e) {
-					client.onActionFailed(e);
+					L.log(Level.WARNING, "Action failed.", e);
 				}
 			}
 		}

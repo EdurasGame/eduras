@@ -129,12 +129,12 @@ public class ClientGameEventListener implements GameEventListener {
 	@Override
 	public void onInteractModeChanged(SetInteractModeEvent setModeEvent) {
 		ui.onInteractModeChanged(setModeEvent);
-		client.getFrame().getGamePanel().getCamera().reset();
+		client.getLogic().resetCamera();
 	}
 
 	@Override
 	public void onGameReady() {
-		client.getFrame().startAndShowGame();
+		System.out.println("game ready");
 		// Do not notify hud as it is not yet initialized. It will be notified
 		// later on.
 	}

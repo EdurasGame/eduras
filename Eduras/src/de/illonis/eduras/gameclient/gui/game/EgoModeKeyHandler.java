@@ -14,7 +14,7 @@ import de.illonis.eduras.units.InteractMode;
  */
 public class EgoModeKeyHandler extends GuiKeyHandler {
 
-	EgoModeKeyHandler(GamePanelLogic client, GamePanelReactor reactor) {
+	EgoModeKeyHandler(UserInputListener client, GamePanelReactor reactor) {
 		super(client, reactor);
 	}
 
@@ -116,5 +116,10 @@ public class EgoModeKeyHandler extends GuiKeyHandler {
 		default:
 			break;
 		}
+	}
+
+	@Override
+	boolean isChatEnabled() {
+		return true;
 	}
 }

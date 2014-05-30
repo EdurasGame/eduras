@@ -1,5 +1,7 @@
 package de.illonis.eduras.gameclient.gui.game;
 
+import org.newdawn.slick.geom.Vector2f;
+
 /**
  * Listens for user input (e.g. key presses).
  * 
@@ -33,5 +35,31 @@ public interface UserInputListener {
 	 * @return true if user was currently writing.
 	 */
 	boolean abortChat();
+
+	/**
+	 * Calculates current mouse position in gamePanel
+	 * 
+	 * @return mouse position computed to ingame point.
+	 */
+	Vector2f getCurrentMousePos();
+
+	/**
+	 * Sets the item of the given slot number as selected.
+	 * 
+	 * @param i
+	 *            item slot.
+	 */
+	void selectItem(int i);
+
+	/**
+	 * Resets the camera.
+	 */
+	void resetCamera();
+
+	/**
+	 * Quits game.
+	 */
+	void onGameQuit();
+	
 
 }

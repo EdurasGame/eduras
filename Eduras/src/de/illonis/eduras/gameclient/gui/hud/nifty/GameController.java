@@ -10,7 +10,6 @@ public class GameController extends EdurasScreenController {
 
 	@Override
 	protected void initScreen(Screen screen) {
-		// TODO Auto-generated method stub
 
 	}
 

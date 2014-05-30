@@ -68,4 +68,6 @@ public interface GameLogicInterface {
 	 */
 	public ObjectFactory getObjectFactory();
 
+	public LogicGameWorker getWorker();
+
 }

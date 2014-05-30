@@ -3,7 +3,7 @@ package de.illonis.eduras.gameclient;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.swing.JOptionPane;
+import org.newdawn.slick.GameContainer;
 
 import de.eduras.eventingserver.Event;
 import de.illonis.edulog.EduLog;
@@ -11,8 +11,9 @@ import de.illonis.eduras.chat.ChatClientImpl;
 import de.illonis.eduras.events.InitInformationEvent;
 import de.illonis.eduras.exceptions.MessageNotSupportedException;
 import de.illonis.eduras.exceptions.WrongEventTypeException;
-import de.illonis.eduras.gameclient.gui.ClientFrame;
+import de.illonis.eduras.gameclient.gui.GameManager;
 import de.illonis.eduras.gameclient.gui.HudNotifier;
+import de.illonis.eduras.gameclient.gui.game.GamePanelLogic;
 import de.illonis.eduras.locale.Localization;
 import de.illonis.eduras.logicabstraction.EdurasInitializer;
 import de.illonis.eduras.logicabstraction.EventSender;
@@ -36,46 +37,32 @@ public class GameClient {
 	private NetworkManager nwm;
 	private EdurasInitializer initializer;
 	private ClientNetworkEventListener eventHandler;
-	private ClientFrame frame;
+	private final GameManager container;
 	private HudNotifier hudNotifier;
 	private boolean wantsExit = false;
+	private GamePanelLogic logic;
 
 	// private TooltipHandler tooltipHandler;
 
 	private String clientName;
 	private ClientRole role;
 
-	/**
-	 * Creates a new client and initializes all necessary components.
-	 */
-	public GameClient() {
-		loadTools();
+	GameClient(GameManager clientFrame, GameContainer container) {
+		this.container = clientFrame;
+		loadTools(container);
 	}
 
-	/**
-	 * Tells gameclient which frame it should use to display game.
-	 * 
-	 * @param clientFrame
-	 *            target client frame.
-	 */
-	void useFrame(ClientFrame clientFrame) {
-		this.frame = clientFrame;
-		clientFrame.setHudNotifier(hudNotifier);
-	}
+	private void loadTools(GameContainer container) {
 
-	/**
-	 * Initializes and shows up gui.
-	 */
-	void startGui() {
-		frame.setVisible(true);
-	}
-
-	private void loadTools() {
 		initializer = EdurasInitializer.getInstance();
 		eventSender = initializer.getEventSender();
 		infoPro = initializer.getInformationProvider();
 		eventHandler = new ClientNetworkEventListener(this);
 		hudNotifier = new HudNotifier();
+		GuiInternalEventListener guiEventListener = new GuiInternalEventListener(
+				this);
+		logic = new GamePanelLogic(guiEventListener, container);
+		logic.setHudNotifier(hudNotifier);
 		ClientGameEventListener cge = new ClientGameEventListener(this,
 				hudNotifier);
 		infoPro.setGameEventListener(cge);
@@ -83,10 +70,10 @@ public class GameClient {
 		nwm.setNetworkEventHandler(eventHandler);
 	}
 
-	private void initChat() {
+	public void initChat() {
 		ChatClientImpl chat = new ChatClientImpl();
 		chat.setChatActivityListener(new ClientChatReceiver(chat, clientName));
-		frame.getGamePanel().setChat(chat);
+		logic.setChat(chat);
 		chat.connect(nwm.getServerAddress().getHostAddress(), nwm.getPort() + 1);
 	}
 
@@ -98,14 +85,7 @@ public class GameClient {
 	 */
 	public void onClientConnectionLost(int clientId) {
 		if (clientId == getOwnerID()) {
-			if (wantsExit) {
-				frame.onClientDisconnect(clientId, wantsExit);
-			} else {
-				L.warning("Connection lost");
-				frame.onClientConnectionLost(clientId);
-			}
-		} else {
-			// TODO: other client left
+			container.onDisconnect(wantsExit, null);
 		}
 	}
 
@@ -117,13 +97,11 @@ public class GameClient {
 	 */
 	public void onClientKicked(int clientId, String reason) {
 		if (clientId == getOwnerID()) {
-			frame.onClientConnectionLost(clientId);
-			JOptionPane.showMessageDialog(frame,
-					"You have been kicked from the server:\n" + reason,
-					"Kicked from server", JOptionPane.ERROR_MESSAGE);
+			container.onDisconnect(true,
+					"You have been kicked from the server:\n" + reason);
 		} else {
-			frame.notification("Client " + clientId
-					+ " has been kicked. Reason: " + reason);
+			// container.notification("Client " + clientId
+			// + " has been kicked. Reason: " + reason);
 		}
 	}
 
@@ -135,35 +113,26 @@ public class GameClient {
 	 */
 	public void onClientDisconnect(int clientId) {
 		L.info("Client disconnected: " + clientId);
-		frame.onClientDisconnect(clientId, wantsExit);
+		if (clientId == getOwnerID()) {
+			container.onDisconnect(wantsExit, null);
+		}
 	}
 
 	/**
 	 * Indicates that user tries to exit, e.g. when he closes the frame.
 	 */
 	public void tryExit() {
-
-		int result = JOptionPane.showConfirmDialog(frame,
-				Localization.getString("Client.exitconfirm"), "Exiting",
-				JOptionPane.YES_NO_OPTION);
-		if (result == JOptionPane.YES_OPTION) {
-			wantsExit = true;
-			if (nwm.isConnected())
-				nwm.disconnect();
-			else
-				frame.onExit();
-		}
+		wantsExit = true;
+		if (nwm.isConnected())
+			nwm.disconnect();
 	}
 
 	/**
 	 * Handles a full server and returns to login screen.
 	 */
 	public void onServerIsFull() {
-		frame.hideProgress();
-		frame.showLogin();
-		JOptionPane.showMessageDialog(frame,
-				Localization.getString("Client.serverfull"), "Server full",
-				JOptionPane.ERROR_MESSAGE);
+		container.onDisconnect(false,
+				Localization.getString("Client.serverfull"));
 	}
 
 	/**
@@ -233,10 +202,6 @@ public class GameClient {
 		// TODO set role for gui.
 	}
 
-	ClientFrame getFrame() {
-		return frame;
-	}
-
 	/**
 	 * @return the client data.
 	 */
@@ -245,7 +210,7 @@ public class GameClient {
 	}
 
 	void setPing(long latency) {
-		frame.getGamePanel().setPing(latency);
+		logic.setPing(latency);
 	}
 
 	/**
@@ -256,10 +221,10 @@ public class GameClient {
 
 		wantsExit = false;
 		initChat();
+		logic.start();
 		L.info("Connection to server established. OwnerId: "
 				+ infoPro.getOwnerID());
 		nwm.ping();
-		frame.onClientConnected(clientId); // pass to gui
 
 		// FIXME: why this???
 		try {
@@ -267,6 +232,10 @@ public class GameClient {
 		} catch (WrongEventTypeException | MessageNotSupportedException e) {
 			L.log(Level.SEVERE, "Error sending initinformation event", e);
 		}
+	}
+
+	GamePanelLogic getLogic() {
+		return logic;
 	}
 
 }

@@ -369,6 +369,13 @@ public class EdurasInitializer {
 	public Settings getSettings() {
 		return settings;
 	}
+	
+	/**
+	 * @return the client logic.
+	 */
+	public GameLogicInterface getLogic() {
+		return logic;
+	}
 
 	/**
 	 * Starts the logic game worker.

@@ -7,6 +7,9 @@ import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.transition.Transition;
 
+import de.illonis.eduras.gameclient.EdurasGameClient;
+import de.illonis.eduras.gameclient.EdurasGameInterface;
+import de.illonis.eduras.gameclient.LoginData;
 import de.illonis.eduras.networking.discover.ServerInfo;
 import de.lessvoid.nifty.slick2d.NiftyStateBasedGame;
 
@@ -16,14 +19,16 @@ import de.lessvoid.nifty.slick2d.NiftyStateBasedGame;
  * @author illonis
  * 
  */
-public class EdurasClient implements GameControllerBridge {
+public class EdurasSlickClient implements GameControllerBridge {
 
+	private EdurasGameInterface eduras;
 	private AppGameContainer gameContainer;
+	private LoginData loginData;
 	private Game game;
 	private String username = "";
 	private ServerInfo server;
 
-	void startGui() throws SlickException {
+	public void startGui(String betaUser, String betaPassword) throws SlickException {
 		if (game != null)
 			throw new IllegalStateException("Cannot start gui more than once!");
 		game = new Game();
@@ -32,17 +37,6 @@ public class EdurasClient implements GameControllerBridge {
 		gameContainer.setDisplayMode(currentMode.getWidth(),
 				currentMode.getHeight(), true);
 		gameContainer.start();
-	}
-
-	/**
-	 * Starts the nifty test.
-	 * 
-	 * @param args
-	 * @throws Exception
-	 */
-	public static void main(String[] args) throws Exception {
-		EdurasClient client = new EdurasClient();
-		client.startGui();
 	}
 
 	@Override
@@ -55,14 +49,14 @@ public class EdurasClient implements GameControllerBridge {
 		gameContainer.exit();
 
 	}
-	
+
 	@Override
 	public void changeResolution(int width, int height) throws SlickException {
 		gameContainer.setDisplayMode(width, height, true);
 	}
 
 	class Game extends NiftyStateBasedGame {
-		
+
 		protected Game() {
 			super("Eduras? Client");
 		}
@@ -71,11 +65,12 @@ public class EdurasClient implements GameControllerBridge {
 		public void initStatesList(GameContainer container)
 				throws SlickException {
 			// add game states here
-			addState(new LoginState(EdurasClient.this));
-			addState(new SettingsState(EdurasClient.this));
-			addState(new ServerListState(EdurasClient.this));
-			addState(new LoadingState(EdurasClient.this));
-			addState(new GameState(EdurasClient.this));
+			addState(new LoginState(EdurasSlickClient.this));
+			addState(new SettingsState(EdurasSlickClient.this));
+			addState(new ServerListState(EdurasSlickClient.this));
+			addState(new LoadingState(EdurasSlickClient.this));
+			addState(new GameState(EdurasSlickClient.this));
+			addState(new ConnectingState(EdurasSlickClient.this));
 		}
 	}
 
@@ -101,12 +96,43 @@ public class EdurasClient implements GameControllerBridge {
 
 	@Override
 	public void setServer(ServerInfo current) {
-		server = current;		
+		server = current;
 	}
 
 	@Override
 	public ServerInfo getServer() {
 		return server;
+	}
+
+	@Override
+	public void onDisconnect(boolean gracefully, String message) {
+		enterState(2);
+
+	}
+
+	@Override
+	public void initClient() {
+		eduras = new EdurasGameClient(this, gameContainer);
+	}
+
+	@Override
+	public EdurasGameInterface getEduras() {
+		return eduras;
+	}
+
+	@Override
+	public void setLoginData(LoginData data) {
+		loginData = data;
+	}
+
+	@Override
+	public LoginData getLoginData() {
+		return loginData;
+	}
+
+	@Override
+	public GameContainer getContainer() {
+		return gameContainer;
 	}
 
 }

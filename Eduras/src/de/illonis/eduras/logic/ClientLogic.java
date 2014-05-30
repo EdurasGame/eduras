@@ -558,4 +558,9 @@ public class ClientLogic implements GameLogicInterface {
 		return lgw;
 	}
 
+	@Override
+	public LogicGameWorker getWorker() {
+		return lgw;
+	}
+
 }

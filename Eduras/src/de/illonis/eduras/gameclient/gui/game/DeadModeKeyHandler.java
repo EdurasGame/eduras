@@ -18,7 +18,7 @@ public class DeadModeKeyHandler extends GuiKeyHandler {
 	private final static Logger L = EduLog
 			.getLoggerFor(DeadModeKeyHandler.class.getName());
 
-	DeadModeKeyHandler(GamePanelLogic client, GamePanelReactor reactor) {
+	DeadModeKeyHandler(UserInputListener client, GamePanelReactor reactor) {
 		super(client, reactor);
 	}
 
@@ -33,5 +33,10 @@ public class DeadModeKeyHandler extends GuiKeyHandler {
 
 	@Override
 	void keyReleased(KeyBinding key) {
+	}
+
+	@Override
+	boolean isChatEnabled() {
+		return true;
 	}
 }
