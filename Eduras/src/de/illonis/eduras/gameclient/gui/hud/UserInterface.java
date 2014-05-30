@@ -14,7 +14,6 @@ import de.illonis.eduras.gameclient.gui.game.GuiClickReactor;
 import de.illonis.eduras.gameclient.gui.game.GuiResizeListener;
 import de.illonis.eduras.gameclient.gui.game.TooltipHandler;
 import de.illonis.eduras.gameclient.gui.game.TooltipTriggererNotifier;
-import de.illonis.eduras.gameclient.gui.game.UserInputListener;
 import de.illonis.eduras.gameclient.gui.hud.ActionBarPage.PageNumber;
 import de.illonis.eduras.gameclient.gui.hud.actionbar.HealButton;
 import de.illonis.eduras.gameclient.gui.hud.actionbar.ItemPage;

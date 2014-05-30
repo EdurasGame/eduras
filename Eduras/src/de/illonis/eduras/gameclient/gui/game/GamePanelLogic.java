@@ -126,6 +126,7 @@ public class GamePanelLogic implements UserInputListener {
 		initUserInterface();
 		doTimedTasks();
 		notifyGuiSizeChanged();
+		hudNotifier.onGameReady();
 	}
 
 	private void doTimedTasks() {

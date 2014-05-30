@@ -65,6 +65,7 @@ public class LoginController extends EdurasScreenController {
 		nameNote = screen.findNiftyControl("userNameNote", Label.class);
 		passwordNote = screen.findNiftyControl("passwordNote", Label.class);
 		loginButton = screen.findNiftyControl("loginButton", Button.class);
+		nameField.setFocus();
 	}
 
 	public void login() {
@@ -75,11 +76,13 @@ public class LoginController extends EdurasScreenController {
 		if (username.length() < 3) {
 			nameNote.setText("Username too short.");
 			setControlsEnabled(true);
+			nameField.setFocus();
 			return;
 		}
 		if (password.length() < 5) {
 			nameNote.setText("Password too short.");
 			setControlsEnabled(true);
+			passwordField.setFocus();					
 			return;
 		}
 		
@@ -116,14 +119,15 @@ public class LoginController extends EdurasScreenController {
 						game.enterState(2);
 					} else {
 						nameNote.setText("Login failed.");
+						setControlsEnabled(true);
+						passwordField.setText("");
+						passwordField.setFocus();					
 						// login failed
 					}
 				} catch (InterruptedException | ExecutionException e) {
 					nameNote.setText(e.getMessage());
 				}
 				loginFuture = null;
-				passwordField.setText("");
-				setControlsEnabled(true);
 			}
 		}
 	}

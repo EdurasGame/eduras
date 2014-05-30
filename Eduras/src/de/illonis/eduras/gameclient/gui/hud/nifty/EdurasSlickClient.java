@@ -41,13 +41,7 @@ public class EdurasSlickClient implements GameControllerBridge {
 
 	@Override
 	public void exit() {
-		try {
-			gameContainer.setDisplayMode(1920, 1080, true);
-		} catch (SlickException e) {
-
-		}
 		gameContainer.exit();
-
 	}
 
 	@Override
