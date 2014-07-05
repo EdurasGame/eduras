@@ -845,4 +845,25 @@ public class ServerEventTriggerer implements EventTriggerer {
 			return;
 		}
 	}
+
+	@Override
+	public void notifyCooldownFinished(int idOfItem) {
+		Item item = (Item) gameInfo.findObjectById(idOfItem);
+
+		Player player;
+		try {
+			player = gameInfo.getPlayerByOwnerId(item.getOwner());
+		} catch (ObjectNotFoundException e) {
+			L.log(Level.WARNING, "Couldn't find player of item with id "
+					+ idOfItem, e);
+			return;
+		}
+
+		int itemSlot = player.getInventory().findItemSlotOfType(item.getType());
+		ItemEvent event = new ItemEvent(GameEventNumber.ITEM_CD_FINISHED,
+				item.getOwner());
+		event.setSlotNum(itemSlot);
+
+		sendEventToClient(event, item.getOwner());
+	}
 }

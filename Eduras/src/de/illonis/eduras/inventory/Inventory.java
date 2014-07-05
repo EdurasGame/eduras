@@ -170,7 +170,7 @@ public class Inventory {
 	 *            item type to search for.
 	 * @return index of item with given type or -1.
 	 */
-	private int findItemSlotOfType(ObjectType type) {
+	public int findItemSlotOfType(ObjectType type) {
 		return getItemOfTypeBetween(type, 0, MAX_CAPACITY);
 	}
 

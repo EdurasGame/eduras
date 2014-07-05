@@ -350,6 +350,15 @@ public interface EventTriggerer {
 	public void notifyCooldownStarted(ItemEvent event);
 
 	/**
+	 * 
+	 * Notify all clients that a cooldown has finished.
+	 * 
+	 * @param idOfItem
+	 *            The id of the item the cooldown has finished of
+	 */
+	public void notifyCooldownFinished(int idOfItem);
+
+	/**
 	 * Notify all clients that an object's state has changed.
 	 * 
 	 * @param event

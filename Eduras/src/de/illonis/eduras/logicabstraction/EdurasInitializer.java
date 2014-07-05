@@ -302,6 +302,12 @@ public class EdurasInitializer {
 			public void loadSettings(File settingsFile) {
 			}
 
+			@Override
+			public void notifyCooldownFinished(int idOfItem) {
+				// TODO Auto-generated method stub
+
+			}
+
 		});
 
 		networkManager = new NetworkManager(logic);

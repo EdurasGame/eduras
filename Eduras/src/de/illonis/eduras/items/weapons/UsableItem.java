@@ -49,12 +49,18 @@ public abstract class UsableItem extends Item implements Usable {
 
 	@Override
 	public final void reduceCooldown(long value) {
+		boolean hasCooldownBeforeReducing = hasCooldown();
+
 		cooldown = Math.max(0, cooldown - value);
+
+		if (!hasCooldown() && hasCooldownBeforeReducing) {
+			getGame().getEventTriggerer().notifyCooldownFinished(getId());
+		}
 	}
 
 	@Override
 	public final void resetCooldown() {
-		cooldown = 0;
+		reduceCooldown(cooldown);
 	}
 
 	@Override
