@@ -548,10 +548,4 @@ public class ClientLogic implements GameLogicInterface {
 		// stuff.
 		return lgw;
 	}
-
-	@Override
-	public LogicGameWorker getWorker() {
-		return lgw;
-	}
-
 }

@@ -137,9 +137,6 @@ public class EdurasClient {
 			L.log(Level.SEVERE, "Could not extract native libraries.", e);
 		}
 
-		// Note that this is very bad coded due to testing ;)
-		// buildChooserFrame();
-
 		if (!debug)
 			System.setProperty("org.lwjgl.librarypath",
 					(new File(PathFinder.findFile("native"))).getAbsolutePath());

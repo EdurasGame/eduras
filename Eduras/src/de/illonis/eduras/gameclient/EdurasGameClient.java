@@ -10,6 +10,7 @@ import de.illonis.edulog.EduLog;
 import de.illonis.eduras.gameclient.gui.GameManager;
 import de.illonis.eduras.gameclient.gui.game.GuiMouseHandler;
 import de.illonis.eduras.gameclient.gui.game.InputKeyHandler;
+import de.illonis.eduras.logic.LogicGameWorker;
 import de.illonis.eduras.logicabstraction.EdurasInitializer;
 import de.illonis.eduras.logicabstraction.NetworkManager;
 import de.illonis.eduras.networking.ClientRole;
@@ -22,6 +23,7 @@ public class EdurasGameClient implements EdurasGameInterface {
 	private final GameClient client;
 	private final InputKeyHandler keyHandler;
 	private final GuiMouseHandler mouseHandler;
+	private LogicGameWorker worker;
 
 	/**
 	 * Creates a new client and initializes all necessary components.
@@ -33,6 +35,7 @@ public class EdurasGameClient implements EdurasGameInterface {
 		client = new GameClient(clientFrame, container);
 		keyHandler = client.getLogic().getKeyHandler();
 		mouseHandler = client.getLogic().getMouseHandler();
+		worker = EdurasInitializer.getInstance().getLogic().startWorker();
 	}
 
 	@Override
@@ -43,8 +46,7 @@ public class EdurasGameClient implements EdurasGameInterface {
 
 	@Override
 	public void update(GameContainer container, int delta) {
-		EdurasInitializer.getInstance().getLogic().getWorker()
-				.gameUpdate(delta);
+		worker.gameUpdate(delta);
 	}
 
 	@Override

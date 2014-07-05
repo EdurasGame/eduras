@@ -54,7 +54,7 @@ public class EdurasSlickClient implements GameControllerBridge {
 		protected Game() {
 			super("Eduras? Client");
 		}
-
+		
 		@Override
 		public void initStatesList(GameContainer container)
 				throws SlickException {

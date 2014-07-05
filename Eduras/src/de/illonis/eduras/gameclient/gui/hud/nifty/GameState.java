@@ -1,9 +1,13 @@
 package de.illonis.eduras.gameclient.gui.hud.nifty;
 
+import java.awt.Color;
+import java.awt.Font;
+
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.UnicodeFont;
+import org.newdawn.slick.font.effects.ColorEffect;
 import org.newdawn.slick.state.StateBasedGame;
 
 import de.illonis.eduras.gameclient.EdurasGameInterface;
@@ -29,6 +33,20 @@ public class GameState extends NiftyOverlayBasicGameState {
 	@Override
 	protected void initGameAndGUI(GameContainer container, StateBasedGame game) {
 		initNifty(container, game);
+		defaultFont = new UnicodeFont(new Font("Arial", Font.PLAIN, 12));
+		defaultFont.addAsciiGlyphs();
+		container.setMinimumLogicUpdateInterval(10);
+		container.setMaximumLogicUpdateInterval(70);
+		container.setTargetFrameRate(60);
+		container.setAlwaysRender(true);
+		ColorEffect e = new ColorEffect();
+		e.setColor(Color.white);
+		defaultFont.getEffects().add(e);
+		try {
+			defaultFont.loadGlyphs();
+		} catch (SlickException e1) {
+			e1.printStackTrace();
+		}
 	}
 
 	@Override
@@ -43,6 +61,7 @@ public class GameState extends NiftyOverlayBasicGameState {
 	@Override
 	protected void renderGame(GameContainer container, StateBasedGame game,
 			Graphics g) {
+		g.setFont(defaultFont);
 		try {
 			edurasGame.render(container, g);
 		} catch (SlickException e) {
