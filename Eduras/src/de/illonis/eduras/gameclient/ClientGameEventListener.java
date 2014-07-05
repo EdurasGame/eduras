@@ -124,6 +124,7 @@ public class ClientGameEventListener implements GameEventListener {
 	@Override
 	public void onCooldownFinished(ItemEvent event) {
 		ui.onCooldownFinished(event);
+		client.getFrame().getGamePanel().onCooldownFinished(event);
 	}
 
 	@Override
