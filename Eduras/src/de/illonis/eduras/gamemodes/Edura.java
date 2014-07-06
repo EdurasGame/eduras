@@ -13,6 +13,7 @@ import de.illonis.eduras.ObjectFactory.ObjectType;
 import de.illonis.eduras.Player;
 import de.illonis.eduras.Team;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
+import de.illonis.eduras.exceptions.WrongObjectTypeException;
 import de.illonis.eduras.gameclient.userprefs.KeyBindings.KeyBinding;
 import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.gameobjects.NeutralBase;
@@ -322,5 +323,17 @@ public class Edura extends TeamDeathmatch {
 	@Override
 	public boolean doItemsRespawn() {
 		return false;
+	}
+
+	@Override
+	public void onPlayerSpawn(Player player) {
+		try {
+			gameInfo.getEventTriggerer().giveNewItem(player,
+					ObjectType.ASSAULTRIFLE);
+			gameInfo.getEventTriggerer().giveNewItem(player,
+					ObjectType.ITEM_WEAPON_SWORD);
+		} catch (WrongObjectTypeException e) {
+			L.log(Level.SEVERE, "Wrong item type!", e);
+		}
 	}
 }

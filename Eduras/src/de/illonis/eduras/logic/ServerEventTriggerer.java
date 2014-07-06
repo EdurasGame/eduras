@@ -59,6 +59,7 @@ import de.illonis.eduras.exceptions.GameModeNotSupportedByMapException;
 import de.illonis.eduras.exceptions.InvalidNameException;
 import de.illonis.eduras.exceptions.NoSpawnAvailableException;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
+import de.illonis.eduras.exceptions.WrongObjectTypeException;
 import de.illonis.eduras.gamemodes.GameMode;
 import de.illonis.eduras.gameobjects.DynamicPolygonObject;
 import de.illonis.eduras.gameobjects.GameObject;
@@ -879,4 +880,16 @@ public class ServerEventTriggerer implements EventTriggerer {
 
 		sendEventToClient(event, item.getOwner());
 	}
+
+	@Override
+	public void giveNewItem(Player player, ObjectType itemType)
+			throws WrongObjectTypeException {
+		if (!itemType.isItem()) {
+			throw new WrongObjectTypeException(itemType);
+		}
+
+		int itemId = createObject(itemType, GameObject.OWNER_WORLD);
+		lootItem(itemId, player.getPlayerMainFigure().getId());
+	}
+
 }

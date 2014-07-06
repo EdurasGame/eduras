@@ -297,9 +297,21 @@ public class ItemDisplay extends ClickableGuiElement implements
 
 	@Override
 	public void onGameReady() {
+		Inventory playerInventory;
+		try {
+			playerInventory = getInfo().getPlayer().getInventory();
+		} catch (ObjectNotFoundException e1) {
+			L.log(Level.SEVERE, "Cannot find player!", e1);
+			return;
+		}
 		for (int i = 0; i < Inventory.MAX_CAPACITY; i++) {
-			// onItemChanged(i);
+			Item itemInSlot;
+			try {
+				itemInSlot = playerInventory.getItemBySlot(i);
+				onItemChanged(i, itemInSlot);
+			} catch (ItemSlotIsEmptyException e) {
+				// that's okay
+			}
 		}
 	}
-
 }
