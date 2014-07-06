@@ -246,4 +246,9 @@ public class Deathmatch extends BasicGameMode {
 	public boolean doItemsRespawn() {
 		return true;
 	}
+
+	@Override
+	public void onPlayerSpawn(Player player) {
+		System.out.println("Player respawned.");
+	}
 }

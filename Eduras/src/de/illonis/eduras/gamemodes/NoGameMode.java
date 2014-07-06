@@ -133,4 +133,8 @@ public class NoGameMode extends BasicGameMode {
 	public boolean doItemsRespawn() {
 		return true;
 	}
+
+	@Override
+	public void onPlayerSpawn(Player player) {
+	}
 }

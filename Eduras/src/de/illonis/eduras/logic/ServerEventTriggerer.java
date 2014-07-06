@@ -371,13 +371,26 @@ public class ServerEventTriggerer implements EventTriggerer {
 		guaranteeSetPositionOfObject(idOfRespawnedPlayer, spawnPosition);
 	}
 
+	/**
+	 * Respawns the given player. If the player still has a
+	 * {@link PlayerMainFigure} object, it's removed and a new one is created.
+	 * When this method returns, the {@link GameMode#onPlayerSpawn(Player)}
+	 * -method has already been called.
+	 * 
+	 * @param player
+	 *            player to respawn
+	 * @return the object id of the playermainfigure that was respawned.
+	 */
 	private int respawnPlayer(Player player) {
 		if (player.getPlayerMainFigure() != null) {
 			removeObject(player.getPlayerMainFigure().getId());
 		}
 
 		sendEventToAll(new RespawnEvent(player.getPlayerId()));
-		return createObject(ObjectType.PLAYER, player.getPlayerId());
+		int playerMainFigureId = createObject(ObjectType.PLAYER,
+				player.getPlayerId());
+		gameInfo.getGameSettings().getGameMode().onPlayerSpawn(player);
+		return playerMainFigureId;
 	}
 
 	@Override

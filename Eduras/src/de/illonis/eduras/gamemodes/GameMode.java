@@ -180,4 +180,11 @@ public interface GameMode {
 	 */
 	public boolean doItemsRespawn();
 
+	/**
+	 * Determines the behavior when a player spawns.
+	 * 
+	 * @param player
+	 */
+	public void onPlayerSpawn(Player player);
+
 }
