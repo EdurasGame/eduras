@@ -318,4 +318,9 @@ public class Edura extends TeamDeathmatch {
 	public boolean supportsKeyBinding(KeyBinding binding) {
 		return true;
 	}
+
+	@Override
+	public boolean doItemsRespawn() {
+		return false;
+	}
 }

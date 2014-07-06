@@ -241,4 +241,9 @@ public class Deathmatch extends BasicGameMode {
 		// tell clients that all teams have been removed
 		gameInfo.getEventTriggerer().setTeams(new LinkedList<Team>());
 	}
+
+	@Override
+	public boolean doItemsRespawn() {
+		return true;
+	}
 }

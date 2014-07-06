@@ -88,4 +88,9 @@ public class ClientGameMode implements GameMode {
 	public void onGameEnd() {
 	}
 
+	@Override
+	public boolean doItemsRespawn() {
+		return false;
+	}
+
 }

@@ -154,6 +154,10 @@ public abstract class Weapon extends UsableItem implements Lootable {
 
 	@Override
 	public boolean reduceRespawnRemaining(long value) {
+		if (!getGame().getGameSettings().getGameMode().doItemsRespawn()) {
+			return false;
+		}
+
 		if (respawnTimeRemaining == 0)
 			return false;
 		respawnTimeRemaining = Math.max(0, respawnTimeRemaining - value);
