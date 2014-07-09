@@ -1,6 +1,6 @@
 package de.illonis.eduras.gameclient.gui.game;
 
-import de.illonis.eduras.exceptions.NotWithinBaseException;
+import de.illonis.eduras.exceptions.ActionFailedException;
 import de.illonis.eduras.gameclient.GamePanelReactor;
 import de.illonis.eduras.gameclient.userprefs.KeyBindings.KeyBinding;
 import de.illonis.eduras.gameobjects.MoveableGameObject.Direction;
@@ -12,14 +12,16 @@ import de.illonis.eduras.units.InteractMode;
  * @author illonis
  * 
  */
-public class EgoModeKeyHandler extends GuiKeyHandler {
+public class EgoModeKeyHandler extends AnyModeKeyHandler {
 
 	EgoModeKeyHandler(GamePanelLogic client, GamePanelReactor reactor) {
 		super(client, reactor);
 	}
 
 	@Override
-	void keyPressed(KeyBinding key) throws NotWithinBaseException {
+	void keyPressed(KeyBinding key) throws ActionFailedException {
+		super.keyPressed(key);
+
 		switch (key) {
 		case MOVE_UP:
 			reactor.onStartMovement(Direction.TOP);
@@ -75,20 +77,9 @@ public class EgoModeKeyHandler extends GuiKeyHandler {
 				reactor.onItemUse(5, client.getCurrentMousePos());
 			}
 			break;
-		case SHOW_STATS:
-			client.showStatWindow();
-			break;
 		case SWITCH_MODE:
 			reactor.onModeSwitch();
 			break;
-		case CHAT:
-			client.onChatEnter();
-			break;
-		case EXIT_CLIENT:
-			if (!client.abortChat())
-				reactor.onGameQuit();
-			break;
-
 		default:
 			break;
 		}
@@ -97,6 +88,8 @@ public class EgoModeKeyHandler extends GuiKeyHandler {
 
 	@Override
 	void keyReleased(KeyBinding key) {
+		super.keyReleased(key);
+
 		switch (key) {
 		case MOVE_UP:
 			reactor.onStopMovement(Direction.TOP);
@@ -109,9 +102,6 @@ public class EgoModeKeyHandler extends GuiKeyHandler {
 			break;
 		case MOVE_RIGHT:
 			reactor.onStopMovement(Direction.RIGHT);
-			break;
-		case SHOW_STATS:
-			client.hideStatWindow();
 			break;
 		default:
 			break;
