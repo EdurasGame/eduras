@@ -28,6 +28,8 @@ public final class UnitMover {
 	}
 
 	void stopMovement() {
+		motionUnit.startMovingTo(new Vector2f());
+		pathFinder.setTarget(motionUnit.getPosition());
 		active = false;
 	}
 
