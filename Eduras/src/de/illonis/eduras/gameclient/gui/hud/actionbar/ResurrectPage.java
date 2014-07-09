@@ -96,7 +96,8 @@ public class ResurrectPage extends ActionBarPage {
 		if (isPlayerButtonAlreadyAvailable(player)) {
 			return;
 		}
-
+		if (player.equals(infoPro.getPlayer()))
+			return;
 		if (player.getTeam().equals(infoPro.getPlayer().getTeam())) {
 			RezzButton rezzButton = new RezzButton(player, reactor);
 			rezzButton.cacheReady();

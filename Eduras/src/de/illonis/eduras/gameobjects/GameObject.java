@@ -65,7 +65,7 @@ public abstract class GameObject implements Comparable<GameObject> {
 	protected float rotation = 0;
 
 	private float xPosition, yPosition;
-	private float shapeOffsetX = 0, shapeOffsetY = 0;
+	protected float shapeOffsetX = 0, shapeOffsetY = 0;
 
 	/**
 	 * Describes which other objects can see this object.

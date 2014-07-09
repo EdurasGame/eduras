@@ -57,7 +57,8 @@ public class PlayerMainFigure extends Unit implements MovementControlable {
 		// Vector2df thirdEdge = new Vector2df(-10, -10);
 
 		setShape(new Circle(4.5f, 4.5f, 9f, 360));
-
+		// shapeOffsetX = -getShape().getWidth() / 2;
+		// shapeOffsetY = -getShape().getHeight() / 2;
 		// try {
 		// // setShape(new Triangle(firstEdge, secondEdge, thirdEdge));
 		// } catch (ShapeVector2dfsNotApplicableException e) {

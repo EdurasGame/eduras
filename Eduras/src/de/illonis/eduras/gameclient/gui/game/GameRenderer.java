@@ -309,11 +309,16 @@ public class GameRenderer implements TooltipHandler {
 				if (S.Client.debug_render_boundingboxes) {
 					float circleRadius = d.getShape().getBoundingCircleRadius();
 					float[] center = d.getShape().getCenter();
-					Circle c = new Circle(center[0], center[1], circleRadius);
+					Circle c = new Circle(d.getShape().getCenterX(), d
+							.getShape().getCenterY(), circleRadius);
 					g.setColor(Color.yellow);
 					g.draw(c);
 					g.setColor(Color.white);
 					g.fillOval(x, y, 3, 3);
+
+					g.setColor(Color.green);
+					g.fillOval(d.getShape().getCenterX(), d.getShape()
+							.getCenterY(), 3, 3);
 				}
 			}
 		}
@@ -349,22 +354,24 @@ public class GameRenderer implements TooltipHandler {
 	private void drawFace(GameObject obj, Circle shape, Graphics g) {
 		int noseRadius = 3;
 		int eyeRadius = 2;
-
-		Vector2df circleCenter = new Vector2df(shape.getCenter());
-		Vector2df nose = new Vector2df(shape.getPoint(0));
+		Vector2df circleCenter = new Vector2df(shape.getCenterX(),
+				shape.getCenterY());
+		g.drawRect(circleCenter.x, circleCenter.y, 2, 2);
+		Vector2df nose = new Vector2df(circleCenter);
+		nose.x += shape.getWidth() / 1.5f;
 		nose.rotate(obj.getRotation(), circleCenter);
 		g.setColor(Color.yellow);
 		g.fill(new Circle(nose.x, nose.y, noseRadius));
 
 		Vector2df leftEye = nose.copy();
-		leftEye.rotate(-35, circleCenter);
+		leftEye.rotate(-30, circleCenter);
 		Vector2f centerDist = leftEye.copy().sub(circleCenter);
 		centerDist.scale(.5f);
 		leftEye.sub(centerDist);
 		g.fillOval((int) (leftEye.getX()) - eyeRadius, (int) (leftEye.getY())
 				- eyeRadius, 2 * eyeRadius, 2 * eyeRadius);
 
-		leftEye.rotate(70, circleCenter);
+		leftEye.rotate(60, circleCenter);
 		g.fillOval((int) (leftEye.getX()) - eyeRadius, (int) (leftEye.getY())
 				- eyeRadius, 2 * eyeRadius, 2 * eyeRadius);
 
