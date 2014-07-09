@@ -71,9 +71,14 @@ public abstract class TriggerArea extends GameObject implements
 
 		LinkedList<GameObject> leavingObjects = new LinkedList<GameObject>();
 		for (GameObject obj : presentObjects) {
-			synchronized (obj) {
-				if (!obj.getShape().intersects(getShape())) {
-					leavingObjects.add(obj);
+			// check if the object is still in the game at all
+			if (!getGame().getObjects().containsKey(obj.getId())) {
+				leavingObjects.add(obj);
+			} else {
+				synchronized (obj) {
+					if (!obj.getShape().intersects(getShape())) {
+						leavingObjects.add(obj);
+					}
 				}
 			}
 		}
