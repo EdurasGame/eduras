@@ -67,6 +67,7 @@ import de.illonis.eduras.gameobjects.GameObject.Visibility;
 import de.illonis.eduras.gameobjects.NeutralArea;
 import de.illonis.eduras.interfaces.GameLogicInterface;
 import de.illonis.eduras.inventory.InventoryIsFullException;
+import de.illonis.eduras.inventory.NoSuchItemException;
 import de.illonis.eduras.items.Item;
 import de.illonis.eduras.items.Lootable;
 import de.illonis.eduras.items.weapons.Missile;
@@ -243,8 +244,14 @@ public class ServerEventTriggerer implements EventTriggerer {
 			if (i.isUnique()
 					&& gameInfo.getPlayerByObjectId(playerId).getPlayer()
 							.getInventory().hasItemOfType(i.getType())) {
-				Item item = gameInfo.getPlayerByObjectId(playerId).getPlayer()
-						.getInventory().getItemOfType(i.getType());
+				Item item;
+				try {
+					item = gameInfo.getPlayerByObjectId(playerId).getPlayer()
+							.getInventory().getItemOfType(i.getType());
+				} catch (NoSuchItemException e) {
+					// doesn't occur because it was checked before
+					item = null;
+				}
 				if (item instanceof Weapon) {
 					Weapon weapon = (Weapon) item;
 					weapon.refill();
@@ -873,7 +880,13 @@ public class ServerEventTriggerer implements EventTriggerer {
 			return;
 		}
 
-		int itemSlot = player.getInventory().findItemSlotOfType(item.getType());
+		int itemSlot;
+		try {
+			itemSlot = player.getInventory().findItemSlotOfType(item.getType());
+		} catch (NoSuchItemException e) {
+			// the weapon was lost before the cooldown finished
+			return;
+		}
 		ItemEvent event = new ItemEvent(GameEventNumber.ITEM_CD_FINISHED,
 				item.getOwner());
 		event.setSlotNum(itemSlot);
