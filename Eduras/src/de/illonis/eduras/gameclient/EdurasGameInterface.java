@@ -19,8 +19,6 @@ public interface EdurasGameInterface {
 	void render(GameContainer container, Graphics g) throws SlickException;
 
 	void update(GameContainer container, int delta);
-	
-	void init();
 
 	/**
 	 * Quits the game.

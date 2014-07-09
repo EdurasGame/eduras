@@ -68,9 +68,11 @@ public class GamePanelLogic implements UserInputListener {
 	 * 
 	 * @param listener
 	 *            the listener.
-	 * @param container the game container.
+	 * @param container
+	 *            the game container.
 	 */
-	public GamePanelLogic(GuiInternalEventListener listener, GameContainer container) {
+	public GamePanelLogic(GuiInternalEventListener listener,
+			GameContainer container) {
 		this.data = EdurasInitializer.getInstance().getInformationProvider()
 				.getClientData();
 		this.gui = container;
@@ -116,7 +118,7 @@ public class GamePanelLogic implements UserInputListener {
 	float getCurrentScale() {
 		return renderer.getCurrentScale();
 	}
-	
+
 	public GameRenderer getRenderer() {
 		return renderer;
 	}
@@ -126,7 +128,6 @@ public class GamePanelLogic implements UserInputListener {
 		initUserInterface();
 		doTimedTasks();
 		notifyGuiSizeChanged();
-		hudNotifier.onGameReady();
 	}
 
 	private void doTimedTasks() {
@@ -157,8 +158,8 @@ public class GamePanelLogic implements UserInputListener {
 	private void notifyGuiSizeChanged() {
 		L.fine("[GUI] Size changed. New size: " + gui.getWidth() + ", "
 				+ gui.getHeight());
-		System.out.println("[GUI] Size changed. New size: " + gui.getWidth() + ", "
-				+ gui.getHeight());
+		System.out.println("[GUI] Size changed. New size: " + gui.getWidth()
+				+ ", " + gui.getHeight());
 		userInterface.onGuiSizeChanged(gui.getWidth(), gui.getHeight());
 		camera.setSize(gui.getWidth(), gui.getHeight()); // maybe not?
 	}

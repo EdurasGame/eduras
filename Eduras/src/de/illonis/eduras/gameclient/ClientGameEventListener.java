@@ -134,9 +134,7 @@ public class ClientGameEventListener implements GameEventListener {
 
 	@Override
 	public void onGameReady() {
-		System.out.println("game ready");
-		// Do not notify hud as it is not yet initialized. It will be notified
-		// later on.
+		ui.onGameReady();
 	}
 
 	@Override

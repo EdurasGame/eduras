@@ -70,7 +70,7 @@ public class GameClient {
 		nwm.setNetworkEventHandler(eventHandler);
 	}
 
-	public void initChat() {
+	private void initChat() {
 		ChatClientImpl chat = new ChatClientImpl();
 		chat.setChatActivityListener(new ClientChatReceiver(chat, clientName));
 		logic.setChat(chat);

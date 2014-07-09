@@ -50,12 +50,6 @@ public class EdurasGameClient implements EdurasGameInterface {
 	}
 
 	@Override
-	public void init() {
-		client.getLogic().start();
-		client.initChat();
-	}
-
-	@Override
 	public void exit() {
 		client.getLogic().onGameQuit();
 	}

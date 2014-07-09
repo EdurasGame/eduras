@@ -64,7 +64,9 @@ public class PlayerStatBar extends RenderedGuiObject {
 	public void onHealthChanged(SetIntegerGameObjectAttributeEvent event) {
 		PlayerMainFigure mainFigure = player.getPlayerMainFigure();
 		if (mainFigure != null && event.getObjectId() == mainFigure.getId()) {
+
 			health = event.getNewValue();
+			maxHealth = mainFigure.getMaxHealth();
 			recalculate();
 		}
 	}
@@ -87,10 +89,7 @@ public class PlayerStatBar extends RenderedGuiObject {
 	public void onGameReady() {
 		try {
 			player = getInfo().getPlayer();
-			PlayerMainFigure mainFigure = player.getPlayerMainFigure();
-			maxHealth = mainFigure.getMaxHealth();
-			health = mainFigure.getHealth();
-			recalculate();
+
 		} catch (ObjectNotFoundException e) {
 			L.log(Level.SEVERE, "Player received not found", e);
 		}
