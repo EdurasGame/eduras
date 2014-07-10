@@ -3,6 +3,7 @@ package de.illonis.eduras.gameclient.gui.hud.nifty;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
+import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.StateBasedGame;
 
@@ -47,6 +48,15 @@ public class LoginState extends NiftyOverlayBasicGameState {
 
 	@Override
 	protected void leaveState(GameContainer container, StateBasedGame game) {
+	}
+
+	@Override
+	public void keyReleased(int key, char c) {
+		if (key == Input.KEY_ENTER) {
+			controller.login();
+			return;
+		}
+		super.keyReleased(key, c);
 	}
 
 	@Override

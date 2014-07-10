@@ -82,10 +82,10 @@ public class LoginController extends EdurasScreenController {
 		if (password.length() < 5) {
 			nameNote.setText("Password too short.");
 			setControlsEnabled(true);
-			passwordField.setFocus();					
+			passwordField.setFocus();
 			return;
 		}
-		
+
 		loginCallable = new LoginTask(username, password);
 		login = true;
 	}
@@ -121,7 +121,7 @@ public class LoginController extends EdurasScreenController {
 						nameNote.setText("Login failed.");
 						setControlsEnabled(true);
 						passwordField.setText("");
-						passwordField.setFocus();					
+						passwordField.setFocus();
 						// login failed
 					}
 				} catch (InterruptedException | ExecutionException e) {
