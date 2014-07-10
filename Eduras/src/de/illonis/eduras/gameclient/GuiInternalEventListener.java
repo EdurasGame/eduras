@@ -242,9 +242,9 @@ public class GuiInternalEventListener implements GamePanelReactor {
 			return;
 		}
 
-		// fix for rare situation if user moves mouse when player is there but
-		// shape not yet.
-		if (player.getShape() == null)
+		// fix for rare situation if user moves mouse when player is not there
+		// yet.
+		if (player == null)
 			return;
 		Vector2f center = new Vector2f(player.getShape().getCenterX(), player
 				.getShape().getCenterY()).sub(player.getPositionVector());
