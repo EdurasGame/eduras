@@ -168,9 +168,16 @@ public class Inventory {
 	 * 
 	 * @param type
 	 *            item type to search for.
+	 * @throws NoSuchItemException
+	 *             thrown if the inventory doesn't contain an item of the given
+	 *             type
 	 * @return index of item with given type or -1.
 	 */
-	private int findItemSlotOfType(ObjectType type) {
+	public int findItemSlotOfType(ObjectType type) throws NoSuchItemException {
+		int slotNumber = getItemOfTypeBetween(type, 0, MAX_CAPACITY);
+		if (slotNumber == -1) {
+			throw new NoSuchItemException(type);
+		}
 		return getItemOfTypeBetween(type, 0, MAX_CAPACITY);
 	}
 
@@ -198,17 +205,22 @@ public class Inventory {
 	 * @return true if an item of this type exists, false otherwise.
 	 */
 	public boolean hasItemOfType(ObjectType itemType) {
-		int pos = findItemSlotOfType(itemType);
-		return pos != -1;
+		try {
+			findItemSlotOfType(itemType);
+		} catch (NoSuchItemException e) {
+			return false;
+		}
+		return true;
 	}
 
 	/**
 	 * @param itemType
 	 *            the item type.
 	 * @return item of given type in inventory.
+	 * @throws NoSuchItemException
 	 * @see #hasItemOfType(ObjectType)
 	 */
-	public Item getItemOfType(ObjectType itemType) {
+	public Item getItemOfType(ObjectType itemType) throws NoSuchItemException {
 		int slot = findItemSlotOfType(itemType);
 		if (slot >= 0) {
 			try {

@@ -477,7 +477,6 @@ public class ClientLogic implements GameLogicInterface {
 
 			cooldownEvent.setType(GameEventNumber.ITEM_CD_FINISHED);
 			getListener().onCooldownFinished(cooldownEvent);
-
 			break;
 		default:
 			break;

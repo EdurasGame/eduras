@@ -127,7 +127,14 @@ public class NoGameMode extends BasicGameMode {
 
 	@Override
 	public void onGameEnd() {
-		// TODO Auto-generated method stub
+	}
 
+	@Override
+	public boolean doItemsRespawn() {
+		return true;
+	}
+
+	@Override
+	public void onPlayerSpawn(Player player) {
 	}
 }

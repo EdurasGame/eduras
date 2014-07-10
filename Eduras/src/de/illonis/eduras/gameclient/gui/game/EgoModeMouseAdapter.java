@@ -1,19 +1,15 @@
 package de.illonis.eduras.gameclient.gui.game;
 
-import java.util.Timer;
-import java.util.TimerTask;
 import java.util.logging.Logger;
 
 import org.newdawn.slick.Input;
 import org.newdawn.slick.geom.Vector2f;
 
 import de.illonis.edulog.EduLog;
-import de.illonis.eduras.exceptions.ObjectNotFoundException;
+import de.illonis.eduras.gameclient.GameEventAdapter;
 import de.illonis.eduras.gameclient.GuiInternalEventListener;
 import de.illonis.eduras.gameclient.gui.game.GamePanelLogic.ClickState;
 import de.illonis.eduras.inventory.Inventory;
-import de.illonis.eduras.inventory.ItemSlotIsEmptyException;
-import de.illonis.eduras.items.Usable;
 import de.illonis.eduras.logicabstraction.EdurasInitializer;
 import de.illonis.eduras.math.Vector2df;
 import de.illonis.eduras.units.InteractMode;
@@ -29,13 +25,28 @@ public class EgoModeMouseAdapter extends GuiMouseAdapter {
 	private final static Logger L = EduLog
 			.getLoggerFor(EgoModeMouseAdapter.class.getName());
 
-	Timer itemUseTimer;
+	boolean fireButtonHold = false;
 
 	protected EgoModeMouseAdapter(GamePanelLogic logic,
 			GuiInternalEventListener reactor) {
 		super(logic, reactor);
 
-		itemUseTimer = null;
+		logic.registerGameEventListener(new GameEventAdapter() {
+			@Override
+			public void onCooldownFinished(
+					de.illonis.eduras.events.ItemEvent event) {
+				if (fireButtonHold) {
+					int currentItemSelected = getPanelLogic().getClientData()
+							.getCurrentItemSelected();
+					if (currentItemSelected != -1
+							&& EdurasInitializer.getInstance().getSettings()
+									.getBooleanSetting("continuousItemUsage")) {
+						itemUsed(currentItemSelected, getPanelLogic()
+								.getCurrentMousePos(), true);
+					}
+				}
+			}
+		});
 	}
 
 	private void egoModeClick(int button, int x, int y, int clickCount) {
@@ -55,30 +66,8 @@ public class EgoModeMouseAdapter extends GuiMouseAdapter {
 
 					// use it instantly
 					itemUsed(currentItemSelected, new Vector2df(x, y), false);
-
-					// and if the user prefers so, do it continuously until
-					// mouse released.
-					if (EdurasInitializer.getInstance().getSettings()
-							.getBooleanSetting("continuousItemUsage")) {
-
-						itemUseTimer = new Timer();
-						ContinuousItemUser itemUser = new ContinuousItemUser(
-								currentItemSelected);
-						Usable itemToUse = null;
-						try {
-							itemToUse = (Usable) EdurasInitializer
-									.getInstance().getInformationProvider()
-									.getPlayer().getInventory()
-									.getItemBySlot(currentItemSelected);
-						} catch (ItemSlotIsEmptyException
-								| ObjectNotFoundException e1) {
-							return;
-						}
-						itemUseTimer.schedule(itemUser,
-								itemToUse.getCooldownTime(),
-								itemToUse.getCooldownTime());
-					}
 				}
+				fireButtonHold = true;
 				break;
 			case DEFAULT:
 				// TODO: Notify only elements that are really clicked.
@@ -122,10 +111,6 @@ public class EgoModeMouseAdapter extends GuiMouseAdapter {
 		if (i >= 0 && i < Inventory.MAX_CAPACITY) {
 			getPanelLogic().selectItem(i);
 
-			if (i != getPanelLogic().getClientData().getCurrentItemSelected()) {
-				discardItemUseTimer();
-			}
-
 		} else {
 			getPanelLogic().setClickState(ClickState.DEFAULT);
 			getPanelLogic().getClientData().setCurrentItemSelected(-1);
@@ -148,27 +133,6 @@ public class EgoModeMouseAdapter extends GuiMouseAdapter {
 		egoModeMove(oldx, oldy, newx, newy);
 	}
 
-	private void discardItemUseTimer() {
-		if (itemUseTimer != null) {
-			itemUseTimer.cancel();
-			itemUseTimer = null;
-		}
-	}
-
-	class ContinuousItemUser extends TimerTask {
-
-		private final int itemSlotNumber;
-
-		public ContinuousItemUser(int itemSlotNumber) {
-			this.itemSlotNumber = itemSlotNumber;
-		}
-
-		@Override
-		public void run() {
-			itemUsed(itemSlotNumber, getPanelLogic().getCurrentMousePos(), true);
-		}
-	}
-
 	@Override
 	public void mouseDragged(int oldx, int oldy, int newx, int newy) {
 		egoModeMove(oldx, oldy, newx, newy);
@@ -184,10 +148,7 @@ public class EgoModeMouseAdapter extends GuiMouseAdapter {
 
 		switch (button) {
 		case Input.MOUSE_LEFT_BUTTON: {
-			if (EdurasInitializer.getInstance().getSettings()
-					.getBooleanSetting("continuousItemUsage")) {
-				discardItemUseTimer();
-			}
+			fireButtonHold = false;
 			break;
 		}
 		default:

@@ -59,6 +59,7 @@ import de.illonis.eduras.exceptions.GameModeNotSupportedByMapException;
 import de.illonis.eduras.exceptions.InvalidNameException;
 import de.illonis.eduras.exceptions.NoSpawnAvailableException;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
+import de.illonis.eduras.exceptions.WrongObjectTypeException;
 import de.illonis.eduras.gamemodes.GameMode;
 import de.illonis.eduras.gameobjects.DynamicPolygonObject;
 import de.illonis.eduras.gameobjects.GameObject;
@@ -66,6 +67,7 @@ import de.illonis.eduras.gameobjects.GameObject.Visibility;
 import de.illonis.eduras.gameobjects.NeutralArea;
 import de.illonis.eduras.interfaces.GameLogicInterface;
 import de.illonis.eduras.inventory.InventoryIsFullException;
+import de.illonis.eduras.inventory.NoSuchItemException;
 import de.illonis.eduras.items.Item;
 import de.illonis.eduras.items.Lootable;
 import de.illonis.eduras.items.weapons.Missile;
@@ -242,8 +244,14 @@ public class ServerEventTriggerer implements EventTriggerer {
 			if (i.isUnique()
 					&& gameInfo.getPlayerByObjectId(playerId).getPlayer()
 							.getInventory().hasItemOfType(i.getType())) {
-				Item item = gameInfo.getPlayerByObjectId(playerId).getPlayer()
-						.getInventory().getItemOfType(i.getType());
+				Item item;
+				try {
+					item = gameInfo.getPlayerByObjectId(playerId).getPlayer()
+							.getInventory().getItemOfType(i.getType());
+				} catch (NoSuchItemException e) {
+					// doesn't occur because it was checked before
+					item = null;
+				}
 				if (item instanceof Weapon) {
 					Weapon weapon = (Weapon) item;
 					weapon.refill();
@@ -371,13 +379,26 @@ public class ServerEventTriggerer implements EventTriggerer {
 		guaranteeSetPositionOfObject(idOfRespawnedPlayer, spawnPosition);
 	}
 
+	/**
+	 * Respawns the given player. If the player still has a
+	 * {@link PlayerMainFigure} object, it's removed and a new one is created.
+	 * When this method returns, the {@link GameMode#onPlayerSpawn(Player)}
+	 * -method has already been called.
+	 * 
+	 * @param player
+	 *            player to respawn
+	 * @return the object id of the playermainfigure that was respawned.
+	 */
 	private int respawnPlayer(Player player) {
 		if (player.getPlayerMainFigure() != null) {
 			removeObject(player.getPlayerMainFigure().getId());
 		}
 
 		sendEventToAll(new RespawnEvent(player.getPlayerId()));
-		return createObject(ObjectType.PLAYER, player.getPlayerId());
+		int playerMainFigureId = createObject(ObjectType.PLAYER,
+				player.getPlayerId());
+		gameInfo.getGameSettings().getGameMode().onPlayerSpawn(player);
+		return playerMainFigureId;
 	}
 
 	@Override
@@ -845,4 +866,43 @@ public class ServerEventTriggerer implements EventTriggerer {
 			return;
 		}
 	}
+
+	@Override
+	public void notifyCooldownFinished(int idOfItem) {
+		Item item = (Item) gameInfo.findObjectById(idOfItem);
+
+		Player player;
+		try {
+			player = gameInfo.getPlayerByOwnerId(item.getOwner());
+		} catch (ObjectNotFoundException e) {
+			L.log(Level.WARNING, "Couldn't find player of item with id "
+					+ idOfItem, e);
+			return;
+		}
+
+		int itemSlot;
+		try {
+			itemSlot = player.getInventory().findItemSlotOfType(item.getType());
+		} catch (NoSuchItemException e) {
+			// the weapon was lost before the cooldown finished
+			return;
+		}
+		ItemEvent event = new ItemEvent(GameEventNumber.ITEM_CD_FINISHED,
+				item.getOwner());
+		event.setSlotNum(itemSlot);
+
+		sendEventToClient(event, item.getOwner());
+	}
+
+	@Override
+	public void giveNewItem(Player player, ObjectType itemType)
+			throws WrongObjectTypeException {
+		if (!itemType.isItem()) {
+			throw new WrongObjectTypeException(itemType);
+		}
+
+		int itemId = createObject(itemType, GameObject.OWNER_WORLD);
+		lootItem(itemId, player.getPlayerMainFigure().getId());
+	}
+
 }

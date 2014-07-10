@@ -29,6 +29,7 @@ import de.illonis.eduras.events.SetVisibilityEvent;
 import de.illonis.eduras.exceptions.MessageNotSupportedException;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
 import de.illonis.eduras.exceptions.WrongEventTypeException;
+import de.illonis.eduras.exceptions.WrongObjectTypeException;
 import de.illonis.eduras.gameclient.userprefs.Settings;
 import de.illonis.eduras.gamemodes.GameMode;
 import de.illonis.eduras.gameobjects.GameObject;
@@ -299,6 +300,15 @@ public class EdurasInitializer {
 
 			@Override
 			public void loadSettings(File settingsFile) {
+			}
+
+			@Override
+			public void notifyCooldownFinished(int idOfItem) {
+			}
+
+			@Override
+			public void giveNewItem(Player player, ObjectType itemType)
+					throws WrongObjectTypeException {
 			}
 
 		});

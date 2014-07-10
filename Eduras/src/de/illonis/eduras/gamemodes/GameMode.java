@@ -173,4 +173,18 @@ public interface GameMode {
 	 */
 	public boolean canSwitchMode(Player player, InteractMode mode);
 
+	/**
+	 * Determines whether items respawn or not.
+	 * 
+	 * @return true if they respawn after their respawn time or false otherwise.
+	 */
+	public boolean doItemsRespawn();
+
+	/**
+	 * Determines the behavior when a player spawns.
+	 * 
+	 * @param player
+	 */
+	public void onPlayerSpawn(Player player);
+
 }

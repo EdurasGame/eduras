@@ -18,6 +18,7 @@ import de.illonis.eduras.events.ObjectFactoryEvent;
 import de.illonis.eduras.events.SetGameObjectAttributeEvent;
 import de.illonis.eduras.events.SetVisibilityEvent;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
+import de.illonis.eduras.exceptions.WrongObjectTypeException;
 import de.illonis.eduras.gamemodes.GameMode;
 import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.gameobjects.GameObject.Visibility;
@@ -350,6 +351,15 @@ public interface EventTriggerer {
 	public void notifyCooldownStarted(ItemEvent event);
 
 	/**
+	 * 
+	 * Notify all clients that a cooldown has finished.
+	 * 
+	 * @param idOfItem
+	 *            The id of the item the cooldown has finished of
+	 */
+	public void notifyCooldownFinished(int idOfItem);
+
+	/**
 	 * Notify all clients that an object's state has changed.
 	 * 
 	 * @param event
@@ -511,4 +521,15 @@ public interface EventTriggerer {
 	 * @param settingsFile
 	 */
 	void loadSettings(File settingsFile);
+
+	/**
+	 * Adds an item of the given type to the player's inventory.
+	 * 
+	 * @param player
+	 * @param itemType
+	 * @throws WrongObjectTypeException
+	 *             Thrown if the given {@link ObjectType} is not an item.
+	 */
+	void giveNewItem(Player player, ObjectType itemType)
+			throws WrongObjectTypeException;
 }
