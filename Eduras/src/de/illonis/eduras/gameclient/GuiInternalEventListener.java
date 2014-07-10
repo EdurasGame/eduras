@@ -53,7 +53,6 @@ public class GuiInternalEventListener implements GamePanelReactor {
 	private final static Logger L = EduLog
 			.getLoggerFor(GuiInternalEventListener.class.getName());
 	private final GameClient client;
-	private ConnectionEstablisher establisher;
 	private final InformationProvider infoPro;
 
 	/**

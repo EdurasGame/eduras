@@ -22,6 +22,12 @@ import de.lessvoid.nifty.controls.textfield.format.FormatPassword;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.screen.Screen;
 
+/**
+ * Controller for login screen.
+ * 
+ * @author illonis
+ * 
+ */
 public class LoginController extends EdurasScreenController {
 
 	private Callable<LoginResult> loginCallable;
@@ -34,10 +40,9 @@ public class LoginController extends EdurasScreenController {
 	private TextField nameField;
 	private TextField passwordField;
 	private Label nameNote;
-	private Label passwordNote;
 	Element popupElement;
 
-	public LoginController(GameControllerBridge game) {
+	LoginController(GameControllerBridge game) {
 		super(game);
 	}
 
@@ -55,6 +60,7 @@ public class LoginController extends EdurasScreenController {
 			final TextFieldChangedEvent event) {
 	}
 
+	@Override
 	protected void initScreen(Screen screen) {
 		passwordField = screen.findNiftyControl("passwordField",
 				TextField.class);
@@ -63,11 +69,13 @@ public class LoginController extends EdurasScreenController {
 
 		nameField = screen.findNiftyControl("userNameField", TextField.class);
 		nameNote = screen.findNiftyControl("userNameNote", Label.class);
-		passwordNote = screen.findNiftyControl("passwordNote", Label.class);
 		loginButton = screen.findNiftyControl("loginButton", Button.class);
 		nameField.setFocus();
 	}
 
+	/**
+	 * Performs login operation asynchronously.
+	 */
 	public void login() {
 		setControlsEnabled(false);
 		SoundMachine.getSound(SoundType.CLICK).play(2f, 0.1f);
@@ -96,6 +104,9 @@ public class LoginController extends EdurasScreenController {
 		loginButton.setEnabled(enabled);
 	}
 
+	/**
+	 * Handles login result
+	 */
 	public void update() {
 		if (login) {
 			if (loginFuture == null) {
@@ -134,7 +145,6 @@ public class LoginController extends EdurasScreenController {
 
 	private static class LoginResult {
 		boolean success;
-		String message;
 	}
 
 	static class LoginTask implements Callable<LoginResult> {
@@ -174,7 +184,5 @@ public class LoginController extends EdurasScreenController {
 			resultObject.success = obj.getBoolean("success");
 			return resultObject;
 		}
-
 	}
-
 }

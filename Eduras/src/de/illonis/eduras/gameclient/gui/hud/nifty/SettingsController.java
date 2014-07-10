@@ -28,6 +28,12 @@ import de.lessvoid.nifty.controls.Label;
 import de.lessvoid.nifty.controls.ListBox;
 import de.lessvoid.nifty.screen.Screen;
 
+/**
+ * Manages settings.
+ * 
+ * @author illonis
+ * 
+ */
 public class SettingsController extends EdurasScreenController {
 
 	private Label resolutionLabel;
@@ -37,12 +43,15 @@ public class SettingsController extends EdurasScreenController {
 	private CheckBox chooseOnPressBox;
 	private CheckBox continuousItemUsageBox;
 
-	public SettingsController(GameControllerBridge game) {
+	SettingsController(GameControllerBridge game) {
 		super(game);
 		settings = EdurasInitializer.getInstance().getSettings();
 		bindings = settings.getKeyBindings();
 	}
 
+	/**
+	 * returns back to server list.
+	 */
 	public void back() {
 		SoundMachine.getSound(SoundType.CLICK).play(2f, 0.1f);
 		game.enterState(2, new FadeOutTransition(Color.black, 100),
@@ -54,6 +63,14 @@ public class SettingsController extends EdurasScreenController {
 		}
 	}
 
+	/**
+	 * Saves checkbox changes.
+	 * 
+	 * @param checkboxId
+	 *            the changed checkbox.
+	 * @param event
+	 *            the event that contains information.
+	 */
 	@NiftyEventSubscriber(pattern = ".*Box")
 	public void onCheckboxChanged(final String checkboxId,
 			final CheckBoxStateChangedEvent event) {
@@ -61,6 +78,9 @@ public class SettingsController extends EdurasScreenController {
 		settings.setBooleanOption(setting, event.getCheckBox().isChecked());
 	}
 
+	/**
+	 * Resets all keybindings.
+	 */
 	public void resetAllKeyBindings() {
 		for (KeyBinding binding : KeyBinding.values()) {
 			bindings.resetToDefault(binding);
@@ -68,6 +88,9 @@ public class SettingsController extends EdurasScreenController {
 		box.refresh();
 	}
 
+	/**
+	 * Resets the selected key binding.
+	 */
 	public void resetKeyBinding() {
 		List<KeyBinding> selection = box.getSelection();
 		if (selection.size() == 1) {
@@ -77,6 +100,7 @@ public class SettingsController extends EdurasScreenController {
 	}
 
 	private void fillResolutionSelect(Screen screen) {
+		@SuppressWarnings("unchecked")
 		DropDown<DisplayMode> control = (DropDown<DisplayMode>) screen
 				.findNiftyControl("resolutionSelect", DropDown.class);
 
@@ -114,6 +138,7 @@ public class SettingsController extends EdurasScreenController {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	protected void initScreen(Screen screen) {
 		fillResolutionSelect(screen);
@@ -135,6 +160,14 @@ public class SettingsController extends EdurasScreenController {
 				.getBooleanSetting("continuousItemUsage"));
 	}
 
+	/**
+	 * Changes screen resolution on select.
+	 * 
+	 * @param id
+	 *            the select box.
+	 * @param event
+	 *            the event.
+	 */
 	@NiftyEventSubscriber(id = "resolutionSelect")
 	public void onDropDownSelectionChanged(final String id,
 			final DropDownSelectionChangedEvent<DisplayMode> event) {
@@ -148,6 +181,12 @@ public class SettingsController extends EdurasScreenController {
 		}
 	}
 
+	/**
+	 * Listens for new keys.
+	 * 
+	 * @param key
+	 *            the key to be set.
+	 */
 	public void keyPressed(int key) {
 		List<KeyBinding> selection = box.getSelection();
 		if (selection.size() == 1) {

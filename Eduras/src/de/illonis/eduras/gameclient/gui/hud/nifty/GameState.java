@@ -26,7 +26,7 @@ public class GameState extends NiftyOverlayBasicGameState {
 	private EdurasGameInterface edurasGame;
 	private UnicodeFont defaultFont;
 
-	public GameState(GameControllerBridge game) {
+	GameState(GameControllerBridge game) {
 		this.gameBridge = game;
 	}
 

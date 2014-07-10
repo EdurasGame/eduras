@@ -6,6 +6,12 @@ import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.tools.SizeValue;
 
+/**
+ * Handles the loading screen work.
+ * 
+ * @author illonis
+ * 
+ */
 public class LoadingController extends EdurasScreenController {
 
 	private Element progressBarElement;
@@ -13,7 +19,7 @@ public class LoadingController extends EdurasScreenController {
 	private boolean load = false;
 	private int frameCount = 0;
 
-	public LoadingController(GameControllerBridge game) {
+	LoadingController(GameControllerBridge game) {
 		super(game);
 	}
 
@@ -24,8 +30,10 @@ public class LoadingController extends EdurasScreenController {
 				.findNiftyControl("loadingtext", Label.class);
 	}
 
+	/**
+	 * Called from update logic and performs the actual loading each step.
+	 */
 	public void update() {
-
 		if (load) {
 			switch (frameCount) {
 			case 1:
@@ -74,7 +82,6 @@ public class LoadingController extends EdurasScreenController {
 				.getWidth() - MIN_WIDTH) * progress);
 		progressBarElement.setConstraintWidth(new SizeValue(pixelWidth + "px"));
 		progressBarElement.getParent().layoutElements();
-
 		loadingTextDisplay.setText(loadingText);
 	}
 }

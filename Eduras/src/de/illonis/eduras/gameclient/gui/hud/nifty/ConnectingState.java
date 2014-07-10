@@ -18,7 +18,7 @@ public class ConnectingState extends NiftyOverlayBasicGameState {
 	private final GameControllerBridge gameBridge;
 	private ConnectingController controller;
 
-	public ConnectingState(GameControllerBridge game) {
+	ConnectingState(GameControllerBridge game) {
 		this.gameBridge = game;
 	}
 

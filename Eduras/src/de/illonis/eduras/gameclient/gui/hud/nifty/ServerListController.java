@@ -6,7 +6,6 @@ import org.newdawn.slick.Color;
 import org.newdawn.slick.state.transition.FadeInTransition;
 import org.newdawn.slick.state.transition.FadeOutTransition;
 
-import de.illonis.eduras.gameclient.ConnectionEstablisher;
 import de.illonis.eduras.gameclient.LoginData;
 import de.illonis.eduras.gameclient.gui.SoundMachine;
 import de.illonis.eduras.gameclient.gui.SoundMachine.SoundType;
@@ -16,22 +15,31 @@ import de.illonis.eduras.networking.discover.ServerInfo;
 import de.lessvoid.nifty.controls.ListBox;
 import de.lessvoid.nifty.screen.Screen;
 
+/**
+ * Controller for serverlisting.
+ * 
+ * @author illonis
+ * 
+ */
 public class ServerListController extends EdurasScreenController implements
 		ServerFoundListener {
 
 	private ListBox<ServerInfo> listBox;
-	private ConnectionEstablisher establisher;
 
-	public ServerListController(GameControllerBridge game) {
+	ServerListController(GameControllerBridge game) {
 		super(game);
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	protected void initScreen(Screen screen) {
 		listBox = (ListBox<ServerInfo>) screen.findNiftyControl("serverList",
 				ListBox.class);
 	}
 
+	/**
+	 * Joins the selected server.
+	 */
 	public void join() {
 		List<ServerInfo> selected = listBox.getSelection();
 		if (selected.size() == 1) {
@@ -47,6 +55,9 @@ public class ServerListController extends EdurasScreenController implements
 		}
 	}
 
+	/**
+	 * switches to settings view.
+	 */
 	public void showSettings() {
 		SoundMachine.getSound(SoundType.CLICK).play(2f, 0.1f);
 		game.enterState(1, new FadeOutTransition(Color.black, 100),
@@ -67,6 +78,9 @@ public class ServerListController extends EdurasScreenController implements
 		// TODO: implement
 	}
 
+	/**
+	 * Clears the server list.
+	 */
 	public void clearList() {
 		listBox.clear();
 	}

@@ -14,7 +14,7 @@ import de.illonis.eduras.networking.discover.ServerInfo;
 import de.lessvoid.nifty.slick2d.NiftyStateBasedGame;
 
 /**
- * A test application for gui.
+ * The slick implementation part of eduras client.
  * 
  * @author illonis
  * 
@@ -28,7 +28,18 @@ public class EdurasSlickClient implements GameControllerBridge {
 	private String username = "";
 	private ServerInfo server;
 
-	public void startGui(String betaUser, String betaPassword) throws SlickException {
+	/**
+	 * Starts the gui display in fullscreen mode.
+	 * 
+	 * @param betaUser
+	 *            (NYI) the name of the user to login automatically.
+	 * @param betaPassword
+	 *            (NYI) the password of the user to login automatically.
+	 * @throws SlickException
+	 *             if there is a display problem.
+	 */
+	public void startGui(String betaUser, String betaPassword)
+			throws SlickException {
 		if (game != null)
 			throw new IllegalStateException("Cannot start gui more than once!");
 		game = new Game();
@@ -54,7 +65,7 @@ public class EdurasSlickClient implements GameControllerBridge {
 		protected Game() {
 			super("Eduras? Client");
 		}
-		
+
 		@Override
 		public void initStatesList(GameContainer container)
 				throws SlickException {

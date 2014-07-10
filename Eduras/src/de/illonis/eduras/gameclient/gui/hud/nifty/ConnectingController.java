@@ -17,6 +17,12 @@ import de.illonis.eduras.logicabstraction.NetworkManager;
 import de.lessvoid.nifty.controls.Label;
 import de.lessvoid.nifty.screen.Screen;
 
+/**
+ * Controls the connection progress.
+ * 
+ * @author illonis
+ * 
+ */
 public class ConnectingController extends EdurasScreenController {
 
 	private final static Logger L = EduLog
@@ -29,13 +35,17 @@ public class ConnectingController extends EdurasScreenController {
 			2);
 
 	private Label note;
-	
-	public void setConnect(boolean connect) {
-		this.connect = connect;
+
+	ConnectingController(GameControllerBridge game) {
+		super(game);
 	}
 
-	public ConnectingController(GameControllerBridge game) {
-		super(game);
+	/**
+	 * @param connect
+	 *            true if connecting should start.
+	 */
+	public void setConnect(boolean connect) {
+		this.connect = connect;
 	}
 
 	@Override
@@ -43,6 +53,9 @@ public class ConnectingController extends EdurasScreenController {
 		note = screen.findNiftyControl("noteLabel", Label.class);
 	}
 
+	/**
+	 * Aborts connection progress.
+	 */
 	public void abort() {
 		connect = false;
 		if (connectFuture != null)
@@ -50,6 +63,9 @@ public class ConnectingController extends EdurasScreenController {
 		game.enterState(2);
 	}
 
+	/**
+	 * logic update
+	 */
 	public void update() {
 		if (connect) {
 			if (connectFuture == null) {

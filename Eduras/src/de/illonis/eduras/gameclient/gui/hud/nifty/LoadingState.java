@@ -18,7 +18,7 @@ public class LoadingState extends NiftyOverlayBasicGameState {
 	private final GameControllerBridge gameBridge;
 	private LoadingController controller;
 
-	public LoadingState(GameControllerBridge game) {
+	LoadingState(GameControllerBridge game) {
 		this.gameBridge = game;
 	}
 

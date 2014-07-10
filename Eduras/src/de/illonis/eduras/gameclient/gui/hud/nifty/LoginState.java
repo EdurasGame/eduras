@@ -22,7 +22,7 @@ public class LoginState extends NiftyOverlayBasicGameState {
 	private final GameControllerBridge game;
 	private LoginController controller;
 
-	public LoginState(GameControllerBridge game) {
+	LoginState(GameControllerBridge game) {
 		this.game = game;
 	}
 
@@ -32,22 +32,21 @@ public class LoginState extends NiftyOverlayBasicGameState {
 	}
 
 	@Override
-	protected void enterState(GameContainer container, StateBasedGame game) {
+	protected void enterState(GameContainer container, StateBasedGame stateGame) {
 	}
 
 	@Override
-	protected void initGameAndGUI(GameContainer container, StateBasedGame game) {
-		initNifty(container, game);
-
+	protected void initGameAndGUI(GameContainer container,
+			StateBasedGame stateGame) {
+		initNifty(container, stateGame);
 		try {
 			SoundMachine.init();
 		} catch (SlickException e1) {
 		}
-
 	}
 
 	@Override
-	protected void leaveState(GameContainer container, StateBasedGame game) {
+	protected void leaveState(GameContainer container, StateBasedGame stateGame) {
 	}
 
 	@Override
@@ -60,23 +59,20 @@ public class LoginState extends NiftyOverlayBasicGameState {
 	}
 
 	@Override
-	protected void prepareNifty(Nifty nifty, StateBasedGame game) {
-		controller = new LoginController(this.game);
+	protected void prepareNifty(Nifty nifty, StateBasedGame stateGame) {
+		controller = new LoginController(game);
 		nifty.fromXml("/res/hud/login.xml", "login", controller);
 	}
 
 	@Override
-	protected void updateGame(GameContainer container, StateBasedGame game,
-			int delta) {
+	protected void updateGame(GameContainer container,
+			StateBasedGame stateGame, int delta) {
 		controller.update();
-		// Input input = container.getInput();
-		// if (input.isMouseButtonDown(Input.MOUSE_RIGHT_BUTTON))
-		// game.enterState(1);
 	}
 
 	@Override
-	protected void renderGame(GameContainer container, StateBasedGame game,
-			Graphics g) {
+	protected void renderGame(GameContainer container,
+			StateBasedGame stateGame, Graphics g) {
 		g.setColor(Color.white);
 		g.drawString("Welcome to Eduras!", 150, 150);
 	}

@@ -52,7 +52,7 @@ public class GameClient {
 		loadTools(container);
 	}
 
-	private void loadTools(GameContainer container) {
+	private void loadTools(GameContainer gameContainer) {
 
 		initializer = EdurasInitializer.getInstance();
 		eventSender = initializer.getEventSender();
@@ -61,7 +61,7 @@ public class GameClient {
 		hudNotifier = new HudNotifier();
 		GuiInternalEventListener guiEventListener = new GuiInternalEventListener(
 				this);
-		logic = new GamePanelLogic(guiEventListener, container);
+		logic = new GamePanelLogic(guiEventListener, gameContainer);
 		logic.setHudNotifier(hudNotifier);
 		ClientGameEventListener cge = new ClientGameEventListener(this,
 				hudNotifier);

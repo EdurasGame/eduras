@@ -17,7 +17,7 @@ public class SettingsState extends NiftyBasicGameState {
 	private final GameControllerBridge game;
 	private SettingsController controller;
 
-	public SettingsState(GameControllerBridge edurasGame) {
+	SettingsState(GameControllerBridge edurasGame) {
 		super("settings");
 		this.game = edurasGame;
 	}
@@ -28,20 +28,19 @@ public class SettingsState extends NiftyBasicGameState {
 	}
 
 	@Override
-	public void enterState(GameContainer container, StateBasedGame game) {
+	public void enterState(GameContainer container, StateBasedGame stateGame) {
 	}
 
 	@Override
-	public void leaveState(GameContainer container, StateBasedGame game) {
+	public void leaveState(GameContainer container, StateBasedGame stateGame) {
 	}
 
 	@Override
-	protected void prepareNifty(Nifty nifty, StateBasedGame game) {
+	protected void prepareNifty(Nifty nifty, StateBasedGame stateGame) {
 		controller = new SettingsController(this.game);
-		nifty.fromXml("/res/hud/settings.xml", "settings",
-				controller);
+		nifty.fromXml("/res/hud/settings.xml", "settings", controller);
 	}
-	
+
 	@Override
 	public void keyPressed(int key, char c) {
 		controller.keyPressed(key);

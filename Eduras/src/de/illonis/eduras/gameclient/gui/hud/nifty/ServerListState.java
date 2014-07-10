@@ -7,19 +7,25 @@ import de.illonis.eduras.networking.discover.ServerSearcher;
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.slick2d.NiftyBasicGameState;
 
+/**
+ * The state where serverlist is shown. Handles server discovery, too.
+ * 
+ * @author illonis
+ * 
+ */
 public class ServerListState extends NiftyBasicGameState {
 
 	private final GameControllerBridge game;
 	private ServerListController controller;
 	private ServerSearcher searcher;
 
-	public ServerListState(GameControllerBridge game) {
+	ServerListState(GameControllerBridge game) {
 		super("serverlist");
 		this.game = game;
 	}
 
 	@Override
-	protected void prepareNifty(Nifty nifty, StateBasedGame game) {
+	protected void prepareNifty(Nifty nifty, StateBasedGame stateGame) {
 		controller = new ServerListController(this.game);
 		nifty.fromXml("/res/hud/serverlist.xml", "serverlist", controller);
 	}
@@ -30,13 +36,13 @@ public class ServerListState extends NiftyBasicGameState {
 	}
 
 	@Override
-	public void enterState(GameContainer container, StateBasedGame game) {
+	public void enterState(GameContainer container, StateBasedGame stateGame) {
 		startDiscovery();
 		controller.clearList();
 	}
 
 	@Override
-	public void leaveState(GameContainer container, StateBasedGame game) {
+	public void leaveState(GameContainer container, StateBasedGame stateGame) {
 		stopDiscovery();
 	}
 
