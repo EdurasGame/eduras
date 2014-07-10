@@ -51,8 +51,8 @@ public interface EventTriggerer {
 	 * @param speedVector
 	 *            speed of missile.
 	 */
-	void createMissile(ObjectType missileType, int owner, Vector2df position,
-			Vector2df speedVector);
+	void createMissile(ObjectType missileType, int owner, Vector2f position,
+			Vector2f speedVector);
 
 	/**
 	 * Removes given object from game object list.

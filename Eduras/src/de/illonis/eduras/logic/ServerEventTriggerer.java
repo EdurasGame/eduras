@@ -125,7 +125,7 @@ public class ServerEventTriggerer implements EventTriggerer {
 
 	@Override
 	public void createMissile(ObjectType missileType, int owner,
-			Vector2df position, Vector2df speedVector) {
+			Vector2f position, Vector2f speedVector) {
 
 		int missileId = createObjectAt(missileType, position, owner);
 		Missile o = (Missile) gameInfo.findObjectById(missileId);

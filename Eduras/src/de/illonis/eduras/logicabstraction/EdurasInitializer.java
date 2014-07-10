@@ -78,8 +78,7 @@ public class EdurasInitializer {
 
 			@Override
 			public void createMissile(ObjectType missileType, int owner,
-
-			Vector2df position, Vector2df speedVector) {
+					Vector2f position, Vector2f speedVector) {
 
 			}
 
@@ -319,7 +318,7 @@ public class EdurasInitializer {
 
 		settings = new Settings();
 		try {
-			
+
 			settings.load();
 		} catch (FileNotFoundException e) {
 			L.log(Level.WARNING, "Could not load user preferences.", e);
@@ -378,7 +377,7 @@ public class EdurasInitializer {
 	public Settings getSettings() {
 		return settings;
 	}
-	
+
 	/**
 	 * @return the client logic.
 	 */

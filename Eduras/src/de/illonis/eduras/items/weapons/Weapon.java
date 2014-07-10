@@ -1,5 +1,6 @@
 package de.illonis.eduras.items.weapons;
 
+import org.newdawn.slick.geom.GeomUtil;
 import org.newdawn.slick.geom.Vector2f;
 
 import de.illonis.eduras.GameInformation;
@@ -199,19 +200,18 @@ public abstract class Weapon extends UsableItem implements Lootable {
 		Vector2f target = info.getTarget();
 		GameObject triggeringObject = info.getTriggeringObject();
 
-		Vector2df position = new Vector2df(triggeringObject.getShape()
-				.getCenter());
+		Vector2f center = new Vector2f(triggeringObject.getPositionVector());
 
-		Vector2df speedVector = new Vector2df(target);
-		speedVector.sub(position);
+		Vector2f speedVector = new Vector2f(target);
+		speedVector.sub(center);
 
-		Vector2df diag = new Vector2df(triggeringObject.getShape().getWidth(),
+		Vector2f diag = new Vector2df(triggeringObject.getShape().getWidth(),
 				triggeringObject.getShape().getHeight());
 		Vector2f copy = speedVector.copy().normalise().scale(diag.length());
-		position.add(copy);
+		center.add(copy);
 
 		getGame().getEventTriggerer().createMissile(missileType, getOwner(),
-				position, speedVector);
+				center, speedVector);
 	}
 
 	/**
