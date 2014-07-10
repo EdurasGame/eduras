@@ -44,11 +44,14 @@ public class MiniMapPlayer extends MiniMapObject {
 	 * @return the color of players team.
 	 */
 	public Color getColor() {
+		if (player == null)
+			return Color.white;
 		return player.getTeam().getColor();
 	}
 
 	@Override
 	public Vector2f getObjectLocation() {
+
 		return player.getPositionVector();
 	}
 

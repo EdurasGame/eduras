@@ -20,6 +20,8 @@ public interface EdurasGameInterface {
 
 	void update(GameContainer container, int delta);
 
+	void init();
+
 	/**
 	 * Quits the game.
 	 */

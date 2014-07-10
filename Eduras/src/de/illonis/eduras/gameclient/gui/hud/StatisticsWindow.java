@@ -34,7 +34,6 @@ public class StatisticsWindow extends RenderedGuiObject {
 	private final static int LINEHEIGHT = 30;
 	private final static long DISPLAY_TIME = 3000;
 
-	private Image artwork;
 	private final int width, height;
 	private boolean visible;
 
@@ -51,11 +50,6 @@ public class StatisticsWindow extends RenderedGuiObject {
 		screenY = 0;
 		width = 400;
 		height = 300;
-		try {
-			artwork = ImageCache.getGuiImage(ImageKey.STATISTICS_BG);
-		} catch (CacheException e) {
-			L.log(Level.SEVERE, "error loading statwindow background", e);
-		}
 	}
 
 	/**
@@ -76,6 +70,12 @@ public class StatisticsWindow extends RenderedGuiObject {
 			return;
 		// background
 		g2d.setColor(COLOR_BG);
+		Image artwork = null;
+		try {
+			artwork = ImageCache.getGuiImage(ImageKey.STATISTICS_BG);
+		} catch (CacheException e) {
+			L.log(Level.SEVERE, "error loading statwindow background", e);
+		}
 		if (artwork != null)
 			g2d.drawImage(artwork, screenX, screenY, null);
 		else

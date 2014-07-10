@@ -217,8 +217,6 @@ public class GameClient {
 	 * Handles connection of this client.
 	 */
 	public void onConnectionEstablished() {
-		int clientId = infoPro.getOwnerID();
-
 		wantsExit = false;
 		initChat();
 		logic.start();
@@ -226,16 +224,21 @@ public class GameClient {
 				+ infoPro.getOwnerID());
 		nwm.ping();
 
-		// FIXME: why this???
+	}
+
+	GamePanelLogic getLogic() {
+		return logic;
+	}
+
+	void sendInitInformation() {
+		System.out.println("send init");
+		int clientId = infoPro.getOwnerID();
 		try {
 			sendEvent(new InitInformationEvent(role, clientName, clientId));
 		} catch (WrongEventTypeException | MessageNotSupportedException e) {
 			L.log(Level.SEVERE, "Error sending initinformation event", e);
 		}
-	}
 
-	GamePanelLogic getLogic() {
-		return logic;
 	}
 
 }

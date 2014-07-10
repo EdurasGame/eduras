@@ -1,6 +1,5 @@
 package de.illonis.eduras.gameclient.datacache;
 
-import java.beans.PropertyChangeEvent;
 import java.io.IOException;
 import java.net.URL;
 import java.util.HashMap;
@@ -51,49 +50,17 @@ public final class GraphicsPreLoader extends AsyncLoader<Void> {
 		listeners.add(listener);
 	}
 
-	private GraphicsPreLoader() {
-		this(new AsyncLoadCompletedListener() {
-
-			@Override
-			public void propertyChange(PropertyChangeEvent evt) {
-			}
-
-			@Override
-			public void onDataLoaded() {
-			}
-		});
-	}
-
 	/**
 	 * Backdoor for server to load only shapes. Loads shapes synchonous.
 	 */
 	public static void preLoadShapes() {
-		GraphicsPreLoader p = new GraphicsPreLoader();
-		p.loadShapes();
+		loadShapes();
 	}
 
-	/**
-	 * Loads images for client.
-	 */
-	public static void preLoadImages() {
-		GraphicsPreLoader p = new GraphicsPreLoader();
-		p.loadShapes();
-		p.loadGuiGraphics();
-		p.loadIcons();
-		p.loadGraphics();
-		p.loadInventoryIcons();
-
-		for (CacheReadyListener listener : listeners) {
-			listener.cacheReady();
-		}
-	}
-
-	private void loadIcons() {
+	public static void loadIcons() {
 		HashMap<ImageKey, String> shapeInfo = CacheInfo.getAllImageIcons();
 		Iterator<Map.Entry<ImageKey, String>> it = shapeInfo.entrySet()
 				.iterator();
-		int n = shapeInfo.size();
-		int i = 0;
 		while (it.hasNext()) {
 			Map.Entry<ImageKey, String> pair = it.next();
 			try {
@@ -103,20 +70,14 @@ public final class GraphicsPreLoader extends AsyncLoader<Void> {
 				L.log(Level.SEVERE,
 						"Guiimagefile not found: " + pair.getValue(), e);
 			}
-			i++;
-
-			int progress = (int) Math.floor((double) i / n * 25) + 50;
-			setProgress(progress);
 		}
 	}
 
-	private void loadInventoryIcons() {
+	public static void loadInventoryIcons() {
 		HashMap<ObjectType, String> inventoryIconInfo = CacheInfo
 				.getAllInventoryIcons();
 		Iterator<Map.Entry<ObjectType, String>> it = inventoryIconInfo
 				.entrySet().iterator();
-		int n = inventoryIconInfo.size();
-		int i = 0;
 		while (it.hasNext()) {
 			Map.Entry<ObjectType, String> pair = it.next();
 			try {
@@ -126,19 +87,13 @@ public final class GraphicsPreLoader extends AsyncLoader<Void> {
 				L.log(Level.SEVERE,
 						"Inventory icon not found: " + pair.getValue(), e);
 			}
-			i++;
-
-			int progress = (int) Math.floor((double) i / n * 25) + 50;
-			setProgress(progress);
 		}
 	}
 
-	private void loadGuiGraphics() {
+	public static void loadGuiGraphics() {
 		HashMap<ImageKey, String> shapeInfo = CacheInfo.getAllGuiImages();
 		Iterator<Map.Entry<ImageKey, String>> it = shapeInfo.entrySet()
 				.iterator();
-		int n = shapeInfo.size();
-		int i = 0;
 		while (it.hasNext()) {
 			Map.Entry<ImageKey, String> pair = it.next();
 			try {
@@ -148,19 +103,13 @@ public final class GraphicsPreLoader extends AsyncLoader<Void> {
 				L.log(Level.SEVERE,
 						"Guiimagefile not found: " + pair.getValue(), e);
 			}
-			i++;
-
-			int progress = (int) Math.floor((double) i / n * 25) + 75;
-			setProgress(progress);
 		}
 	}
 
-	private void loadShapes() {
+	public static void loadShapes() {
 		HashMap<ShapeType, String> shapeInfo = CacheInfo.getAllShapes();
 		Iterator<Map.Entry<ShapeType, String>> it = shapeInfo.entrySet()
 				.iterator();
-		int n = shapeInfo.size();
-		int i = 0;
 		while (it.hasNext()) {
 			Map.Entry<ShapeType, String> pair = it.next();
 			URL u = ShapeParser.class.getResource(pair.getValue());
@@ -171,20 +120,13 @@ public final class GraphicsPreLoader extends AsyncLoader<Void> {
 				L.log(Level.SEVERE, "Shapefile not found: " + pair.getValue(),
 						e);
 			}
-			i++;
-			// shapes represent the first half of loading, graphics the other
-			int progress = (int) Math.floor((double) i / n * 25);
-			setProgress(progress);
-			// it.remove(); // avoids a ConcurrentModificationException
 		}
 	}
 
-	private void loadGraphics() {
+	public static void loadGraphics() {
 		HashMap<ObjectType, String> shapeInfo = CacheInfo.getAllObjectImages();
 		Iterator<Map.Entry<ObjectType, String>> it = shapeInfo.entrySet()
 				.iterator();
-		int n = shapeInfo.size();
-		int i = 0;
 		while (it.hasNext()) {
 			Map.Entry<ObjectType, String> pair = it.next();
 			try {
@@ -194,10 +136,6 @@ public final class GraphicsPreLoader extends AsyncLoader<Void> {
 				L.log(Level.SEVERE, "Imagefile not found: " + pair.getValue(),
 						e);
 			}
-			i++;
-
-			int progress = (int) Math.floor((double) i / n * 25) + 25;
-			setProgress(progress);
 		}
 	}
 

@@ -109,4 +109,9 @@ public class EdurasGameClient implements EdurasGameInterface {
 		return client.getNetworkManager();
 	}
 
+	@Override
+	public void init() {
+		client.sendInitInformation();
+	}
+
 }

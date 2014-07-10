@@ -241,6 +241,8 @@ public class GuiInternalEventListener implements GamePanelReactor {
 			L.log(Level.SEVERE, "Cannot find player main figure :(", e);
 			return;
 		}
+		if (player.getShape() == null)
+			return;
 		Vector2f center = new Vector2f(player.getShape().getCenter())
 				.sub(player.getPositionVector());
 		Vector2df vPoint = new Vector2df(viewingPoint.sub(
@@ -263,15 +265,13 @@ public class GuiInternalEventListener implements GamePanelReactor {
 				client.getOwnerID(), player.getPlayerId(), base.getId());
 		if (player.getPlayerMainFigure() != null
 				&& player.getPlayerMainFigure().isDead() == false) {
-			client.getLogic()
-					.showNotification("Player is not dead");
+			client.getLogic().showNotification("Player is not dead");
 			return;
 		}
 		try {
 			client.sendEvent(event);
-			client.getLogic()
-					.showNotification(
-							"Resurrecting " + player.getName() + "...");
+			client.getLogic().showNotification(
+					"Resurrecting " + player.getName() + "...");
 		} catch (WrongEventTypeException | MessageNotSupportedException e) {
 			L.log(Level.SEVERE, "Error sending resurrection event", e);
 		}
@@ -307,14 +307,12 @@ public class GuiInternalEventListener implements GamePanelReactor {
 				targetUnit.getId());
 
 		if (infoPro.getGameMode().getRelation(targetUnit, player) != Relation.ALLIED) {
-			client.getLogic()
-					.showNotification("Player is not friendly");
+			client.getLogic().showNotification("Player is not friendly");
 			return;
 		}
 		try {
 			client.sendEvent(healEvent);
-			client.getLogic()
-					.showNotification("Healing unit...");
+			client.getLogic().showNotification("Healing unit...");
 		} catch (WrongEventTypeException | MessageNotSupportedException e) {
 			L.log(Level.SEVERE, "Error sending heal event", e);
 		}
@@ -348,8 +346,7 @@ public class GuiInternalEventListener implements GamePanelReactor {
 				base.getId());
 		try {
 			client.sendEvent(event);
-			client.getLogic()
-					.showNotification("Spawning observer...");
+			client.getLogic().showNotification("Spawning observer...");
 		} catch (WrongEventTypeException | MessageNotSupportedException e) {
 			L.log(Level.SEVERE, "Error sending spawn observer event", e);
 		}
@@ -376,8 +373,7 @@ public class GuiInternalEventListener implements GamePanelReactor {
 				target);
 		try {
 			client.sendEvent(event);
-			client.getLogic()
-					.showNotification("Vision spell...");
+			client.getLogic().showNotification("Vision spell...");
 		} catch (WrongEventTypeException | MessageNotSupportedException e) {
 			L.log(Level.SEVERE, "Error casting vision spell event", e);
 		}
@@ -413,8 +409,7 @@ public class GuiInternalEventListener implements GamePanelReactor {
 
 		try {
 			client.sendEvent(spawnItemEvent);
-			client.getLogic()
-					.showNotification("Spawning " + type.toString());
+			client.getLogic().showNotification("Spawning " + type.toString());
 		} catch (WrongEventTypeException | MessageNotSupportedException e) {
 			L.log(Level.SEVERE, "Error spawning item", e);
 		}
