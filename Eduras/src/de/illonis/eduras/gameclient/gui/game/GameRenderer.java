@@ -148,6 +148,15 @@ public class GameRenderer implements TooltipHandler {
 	 *            the target graphics.
 	 */
 	public void render(GameContainer container, Graphics g) {
+		try {
+			if (info.getPlayer().getPlayerMainFigure() == null) {
+				// wait for player
+				return;
+			}
+		} catch (ObjectNotFoundException e) {
+			L.log(Level.WARNING, "Waiting for player...", e);
+			return;
+		}
 		int width = container.getWidth();
 		int height = container.getHeight();
 		float newScale = calculateScale(width, height);
@@ -193,7 +202,7 @@ public class GameRenderer implements TooltipHandler {
 			c.add(offset);
 			camera.centerAt(c.x, c.y);
 			viewPort.centerAt(c.x * scale, c.y * scale);
-		} catch (ObjectNotFoundException e) {
+		} catch (ObjectNotFoundException | NullPointerException e) {
 			// EduLog.passException(e);
 		}
 	}
@@ -240,7 +249,7 @@ public class GameRenderer implements TooltipHandler {
 	/**
 	 * Draw every object of game-object list that is in camera viewport.
 	 * 
-	 * @param g2d
+	 * @param g
 	 *            the graphics target.
 	 */
 	private void drawObjects(Graphics g) {
