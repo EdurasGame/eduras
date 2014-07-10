@@ -241,10 +241,13 @@ public class GuiInternalEventListener implements GamePanelReactor {
 			L.log(Level.SEVERE, "Cannot find player main figure :(", e);
 			return;
 		}
+
+		// fix for rare situation if user moves mouse when player is there but
+		// shape not yet.
 		if (player.getShape() == null)
 			return;
-		Vector2f center = new Vector2f(player.getShape().getCenter())
-				.sub(player.getPositionVector());
+		Vector2f center = new Vector2f(player.getShape().getCenterX(), player
+				.getShape().getCenterY()).sub(player.getPositionVector());
 		Vector2df vPoint = new Vector2df(viewingPoint.sub(
 				player.getPositionVector()).sub(center));
 		float angle = vPoint.getAngleToXAxis();

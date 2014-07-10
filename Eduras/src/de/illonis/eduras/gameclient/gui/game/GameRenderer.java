@@ -356,7 +356,6 @@ public class GameRenderer implements TooltipHandler {
 		int eyeRadius = 2;
 		Vector2df circleCenter = new Vector2df(shape.getCenterX(),
 				shape.getCenterY());
-		g.drawRect(circleCenter.x, circleCenter.y, 2, 2);
 		Vector2df nose = new Vector2df(circleCenter);
 		nose.x += shape.getWidth() / 1.5f;
 		nose.rotate(obj.getRotation(), circleCenter);
