@@ -30,13 +30,6 @@ public abstract class AnyModeKeyHandler extends GuiKeyHandler {
 		case SHOW_STATS:
 			client.showStatWindow();
 			break;
-		case CHAT:
-			client.onChatEnter();
-			break;
-		case EXIT_CLIENT:
-			if (!client.abortChat())
-				reactor.onGameQuit();
-			break;
 		default:
 			break;
 		}

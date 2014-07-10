@@ -51,7 +51,6 @@ public class ChatCache {
 			deleteChar();
 		} else if (c != Input.KEY_UNLABELED) {
 			input.append(c);
-			startWriting();
 		}
 	}
 
