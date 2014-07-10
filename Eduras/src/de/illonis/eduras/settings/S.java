@@ -632,6 +632,12 @@ public final class S {
 		 * debugging).
 		 */
 		public static boolean debug_render_boundingboxes = false;
+
+		/**
+		 * Starts the game in windowed mode (800x600) when true, otherwise
+		 * fullscreen at current resolution.
+		 */
+		public static boolean windowed = false;
 	}
 
 	/**

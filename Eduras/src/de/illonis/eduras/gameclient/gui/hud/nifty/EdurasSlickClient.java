@@ -11,6 +11,7 @@ import de.illonis.eduras.gameclient.EdurasGameClient;
 import de.illonis.eduras.gameclient.EdurasGameInterface;
 import de.illonis.eduras.gameclient.LoginData;
 import de.illonis.eduras.networking.discover.ServerInfo;
+import de.illonis.eduras.settings.S;
 import de.lessvoid.nifty.slick2d.NiftyStateBasedGame;
 
 /**
@@ -45,8 +46,12 @@ public class EdurasSlickClient implements GameControllerBridge {
 		game = new Game();
 		gameContainer = new AppGameContainer(game);
 		DisplayMode currentMode = Display.getDesktopDisplayMode();
-		gameContainer.setDisplayMode(currentMode.getWidth(),
-				currentMode.getHeight(), true);
+		if (S.Client.windowed) {
+			gameContainer.setDisplayMode(800, 600, false);
+		} else {
+			gameContainer.setDisplayMode(currentMode.getWidth(),
+					currentMode.getHeight(), true);
+		}
 		gameContainer.start();
 	}
 
