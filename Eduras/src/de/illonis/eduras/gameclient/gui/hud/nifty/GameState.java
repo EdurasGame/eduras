@@ -117,7 +117,7 @@ public class GameState extends NiftyOverlayBasicGameState {
 
 	@Override
 	public void keyPressed(int key, char c) {
-		System.out.println("key pressed: " + key);
+		System.out.println("key pressed: " + key +  " t: " + System.currentTimeMillis());
 		edurasGame.keyPressed(key, c);
 	}
 

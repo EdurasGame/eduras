@@ -32,7 +32,7 @@ public class InputKeyHandler {
 			.getName());
 
 	private final InformationProvider infoPro;
-	private static final long KEY_INTERVAL = 20;
+	private static final long KEY_INTERVAL = 5;
 
 	private final HashMap<InteractMode, GuiKeyHandler> keyHandlers;
 
@@ -132,15 +132,19 @@ public class InputKeyHandler {
 		// if already pressed, do not send a new event
 		if (justPressed(keyCode))
 			return;
+		currentKey = key;
+		lastTimePressed = System.currentTimeMillis();
+
+		if (lastTimePressed < KEY_INTERVAL)
+			return;
+		pressedButtons.put(keyCode, true);
 		boolean consumed = false;
 		if (key != settings.getKeyBindings().getKey(KeyBinding.CHAT)
 				&& key != settings.getKeyBindings().getKey(
 						KeyBinding.EXIT_CLIENT))
 			consumed = onChatType(key, c);
-
+		
 		if (consumed) {
-			currentKey = key;
-			lastTimePressed = System.currentTimeMillis();
 			return;
 		}
 
@@ -150,9 +154,6 @@ public class InputKeyHandler {
 		} catch (KeyNotBoundException ex) {
 			return;
 		}
-
-		if (lastTimePressed < KEY_INTERVAL)
-			return;
 
 		pressedButtons.put(keyCode, true);
 		if (infoPro.getGameMode().supportsKeyBinding(binding)) {
@@ -197,20 +198,15 @@ public class InputKeyHandler {
 	 *            the key char.
 	 */
 	public void keyReleased(int key, char c) {
-
-		if (key == currentKey) {
+		// release button
+		pressedButtons.put(key, false);
+		if (key == currentKey && lastTimePressed < KEY_INTERVAL) {
 			currentKey = Input.KEY_UNLABELED;
 			return;
 		}
 		// don't handle other keys
 		if (!settings.getKeyBindings().isBound(key))
 			return;
-
-		if (lastTimePressed < KEY_INTERVAL)
-			return;
-
-		// release button
-		pressedButtons.put(key, false);
 
 		KeyBinding binding;
 		try {
