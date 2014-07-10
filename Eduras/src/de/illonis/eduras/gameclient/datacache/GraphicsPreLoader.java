@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -31,24 +30,10 @@ import de.illonis.eduras.shapes.data.ShapeParser;
  * @author illonis
  * 
  */
-public final class GraphicsPreLoader extends AsyncLoader<Void> {
-
-	private final static LinkedList<CacheReadyListener> listeners = new LinkedList<CacheReadyListener>();
+public final class GraphicsPreLoader {
 
 	private final static Logger L = EduLog.getLoggerFor(GraphicsPreLoader.class
 			.getName());
-
-	/**
-	 * @param listener
-	 *            the listener.
-	 */
-	public GraphicsPreLoader(AsyncLoadCompletedListener listener) {
-		super(listener);
-	}
-
-	public static void addCacheListener(CacheReadyListener listener) {
-		listeners.add(listener);
-	}
 
 	/**
 	 * Backdoor for server to load only shapes. Loads shapes synchonous.
@@ -138,19 +123,4 @@ public final class GraphicsPreLoader extends AsyncLoader<Void> {
 			}
 		}
 	}
-
-	@Override
-	protected Void doInBackground() throws Exception {
-		loadShapes();
-		setProgress(25);
-		loadGraphics();
-		setProgress(50);
-		loadIcons();
-		loadInventoryIcons();
-		setProgress(75);
-		loadGuiGraphics();
-		setProgress(100);
-		return null;
-	}
-
 }

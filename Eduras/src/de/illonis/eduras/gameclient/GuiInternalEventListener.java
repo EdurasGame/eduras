@@ -167,7 +167,7 @@ public class GuiInternalEventListener implements GamePanelReactor {
 
 	@Override
 	public void onUnitsSelected(Rectangle2D.Double area) {
-
+		// FIXME: Use slicks rectangle here
 		Rectangle r = new Rectangle((float) area.getX(), (float) area.getY(),
 				(float) area.getWidth(), (float) area.getHeight());
 

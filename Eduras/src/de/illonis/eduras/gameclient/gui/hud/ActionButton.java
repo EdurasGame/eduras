@@ -10,8 +10,6 @@ import de.illonis.eduras.gameclient.GameEventAdapter;
 import de.illonis.eduras.gameclient.GamePanelReactor;
 import de.illonis.eduras.gameclient.datacache.CacheException;
 import de.illonis.eduras.gameclient.datacache.CacheInfo.ImageKey;
-import de.illonis.eduras.gameclient.datacache.CacheReadyListener;
-import de.illonis.eduras.gameclient.datacache.GraphicsPreLoader;
 import de.illonis.eduras.gameclient.datacache.ImageCache;
 
 /**
@@ -20,8 +18,7 @@ import de.illonis.eduras.gameclient.datacache.ImageCache;
  * @author illonis
  * 
  */
-public abstract class ActionButton extends GameEventAdapter implements
-		CacheReadyListener {
+public abstract class ActionButton extends GameEventAdapter {
 
 	private final static Logger L = EduLog.getLoggerFor(ActionButton.class
 			.getName());
@@ -52,17 +49,6 @@ public abstract class ActionButton extends GameEventAdapter implements
 		this.imageKey = image;
 		enabled = true;
 		this.label = label;
-		GraphicsPreLoader.addCacheListener(this);
-	}
-
-	@Override
-	public final void cacheReady() {
-		try {
-			icon = ImageCache.getGuiImage(imageKey);
-		} catch (CacheException e) {
-			L.log(Level.WARNING, "Could not find image for actionbutton \""
-					+ label + "\".", e);
-		}
 	}
 
 	/**
@@ -71,6 +57,12 @@ public abstract class ActionButton extends GameEventAdapter implements
 	protected abstract void actionPerformed();
 
 	protected final Image getIcon() {
+		try {
+			icon = ImageCache.getGuiImage(imageKey);
+		} catch (CacheException e) {
+			L.log(Level.WARNING, "Could not find image for actionbutton \""
+					+ label + "\".", e);
+		}
 		return icon;
 	}
 

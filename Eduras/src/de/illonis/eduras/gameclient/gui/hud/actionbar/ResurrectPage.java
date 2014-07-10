@@ -100,7 +100,6 @@ public class ResurrectPage extends ActionBarPage {
 			return;
 		if (player.getTeam().equals(infoPro.getPlayer().getTeam())) {
 			RezzButton rezzButton = new RezzButton(player, reactor);
-			rezzButton.cacheReady();
 			addButton(rezzButton);
 			// refresh bar if it is currently visible
 			if (bar.getCurrentPage() == getId())
