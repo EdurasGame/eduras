@@ -2,11 +2,9 @@ package de.illonis.eduras.items.weapons;
 
 import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.ObjectFactory.ObjectType;
-import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.gameobjects.TimingSource;
 import de.illonis.eduras.settings.S;
 import de.illonis.eduras.shapes.Sword;
-import de.illonis.eduras.units.Unit;
 
 /**
  * This is the missile fired by {@link SwordWeapon}. It has a fancy sword-like
@@ -34,13 +32,5 @@ public class SwordMissile extends Missile {
 		setShape(new Sword());
 		setSpeed(S.Server.go_swordmissile_speed);
 		setMaxRange(S.Server.go_swordmissile_maxrange);
-	}
-
-	@Override
-	public void onCollision(GameObject collidingObject) {
-		if (collidingObject.isUnit()) {
-			((Unit) collidingObject).damagedBy(getDamage(), getOwner());
-		}
-		removeSelf();
 	}
 }

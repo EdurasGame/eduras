@@ -13,7 +13,7 @@ import de.illonis.eduras.gameclient.userprefs.KeyBindings.KeyBinding;
  * @author Florian 'Ren' Mai <florian.ren.mai@googlemail.com>
  * 
  */
-public class DeadModeKeyHandler extends GuiKeyHandler {
+public class DeadModeKeyHandler extends AnyModeKeyHandler {
 
 	private final static Logger L = EduLog
 			.getLoggerFor(DeadModeKeyHandler.class.getName());
@@ -25,14 +25,19 @@ public class DeadModeKeyHandler extends GuiKeyHandler {
 	@Override
 	void keyPressed(KeyBinding key) throws ActionFailedException {
 		switch (key) {
+		case SHOW_STATS:
+		case CHAT:
+		case EXIT_CLIENT:
+			super.keyPressed(key);
+			break;
 		default:
-			throw new ActionFailedException(
-					"You cannot do anything. You are dead!");
+			throw new ActionFailedException("You cannot do this. You are dead!");
 		}
 	}
 
 	@Override
 	void keyReleased(KeyBinding key) {
+		super.keyReleased(key);
 	}
 
 	@Override

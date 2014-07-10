@@ -126,7 +126,8 @@ public abstract class Missile extends MoveableGameObject {
 		Relation relation = getGame().getGameSettings().getGameMode()
 				.getRelation(this, collidingObject);
 
-		if (relation == Relation.HOSTILE && collidingObject.isUnit()) {
+		if ((relation == Relation.HOSTILE || (relation == Relation.ALLIED && S.Server.mp_teamattack))
+				&& collidingObject.isUnit()) {
 			((Unit) collidingObject).damagedBy(getDamage(), getOwner());
 		}
 

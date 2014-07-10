@@ -1,6 +1,6 @@
 package de.illonis.eduras.gameclient.gui.game;
 
-import de.illonis.eduras.exceptions.NotWithinBaseException;
+import de.illonis.eduras.exceptions.ActionFailedException;
 import de.illonis.eduras.gameclient.GamePanelReactor;
 import de.illonis.eduras.gameclient.userprefs.KeyBindings.KeyBinding;
 import de.illonis.eduras.units.InteractMode;
@@ -11,14 +11,16 @@ import de.illonis.eduras.units.InteractMode;
  * @author illonis
  * 
  */
-public class BuildModeKeyHandler extends GuiKeyHandler {
+public class BuildModeKeyHandler extends AnyModeKeyHandler {
 
 	BuildModeKeyHandler(UserInputListener client, GamePanelReactor reactor) {
 		super(client, reactor);
 	}
 
 	@Override
-	void keyPressed(KeyBinding key) throws NotWithinBaseException {
+	void keyPressed(KeyBinding key) throws ActionFailedException {
+		super.keyPressed(key);
+
 		switch (key) {
 		case SWITCH_MODE:
 			client.resetCamera();
@@ -31,6 +33,7 @@ public class BuildModeKeyHandler extends GuiKeyHandler {
 
 	@Override
 	void keyReleased(KeyBinding key) {
+		super.keyReleased(key);
 	}
 
 	@Override

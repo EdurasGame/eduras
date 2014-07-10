@@ -1,7 +1,6 @@
 package de.illonis.eduras.gameclient.gui.hud;
 
 import java.util.HashMap;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.newdawn.slick.Color;
@@ -15,7 +14,6 @@ import org.newdawn.slick.geom.Vector2f;
 import de.illonis.edulog.EduLog;
 import de.illonis.eduras.ObjectFactory.ObjectType;
 import de.illonis.eduras.events.ObjectFactoryEvent;
-import de.illonis.eduras.exceptions.ObjectNotFoundException;
 import de.illonis.eduras.gameclient.gui.game.GameCamera;
 import de.illonis.eduras.gameclient.gui.hud.minimap.MiniMapBase;
 import de.illonis.eduras.gameclient.gui.hud.minimap.MiniMapNeutralObject;
@@ -26,7 +24,6 @@ import de.illonis.eduras.gameobjects.NeutralBase;
 import de.illonis.eduras.items.weapons.Missile;
 import de.illonis.eduras.items.weapons.Weapon;
 import de.illonis.eduras.math.Geometry;
-import de.illonis.eduras.units.InteractMode;
 import de.illonis.eduras.units.PlayerMainFigure;
 
 /**
@@ -104,16 +101,9 @@ public class MiniMap extends ClickableGuiElement {
 
 	@Override
 	public boolean onClick(Vector2f p) {
-		try {
-			if (getInfo().getPlayer().getCurrentMode() == InteractMode.MODE_STRATEGY) {
-				Vector2f gamePos = minimapToGamePosition(p);
-				getMouseHandler().mapClicked(gamePos);
-				return true;
-			}
-		} catch (ObjectNotFoundException e) {
-			L.log(Level.WARNING, "Could not determine interaction mode.", e);
-		}
-		return false;
+		Vector2f gamePos = minimapToGamePosition(p);
+		getMouseHandler().mapClicked(gamePos);
+		return true;
 	}
 
 	@Override

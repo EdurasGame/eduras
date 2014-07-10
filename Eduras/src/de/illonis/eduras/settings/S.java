@@ -607,6 +607,11 @@ public final class S {
 		 */
 		public static float go_missile_defaultrange = 5000;
 
+		/**
+		 * Determines if damage can be caused to units of the same team.
+		 */
+		public static boolean mp_teamattack = false;
+
 	}
 
 	/**
