@@ -127,6 +127,10 @@ public class InputKeyHandler {
 	 *            the key char.
 	 */
 	public void keyPressed(int key, char c) {
+		int keyCode = key;
+		// if already pressed, do not send a new event
+		if (justPressed(keyCode))
+			return;
 		boolean consumed = false;
 		if (key != settings.getKeyBindings().getKey(KeyBinding.CHAT)
 				&& key != settings.getKeyBindings().getKey(
@@ -135,20 +139,16 @@ public class InputKeyHandler {
 
 		if (consumed) {
 			currentKey = key;
+			lastTimePressed = System.currentTimeMillis();
 			return;
 		}
 
-		int keyCode = key;
 		KeyBinding binding;
 		try {
 			binding = settings.getKeyBindings().getBindingOf(keyCode);
 		} catch (KeyNotBoundException ex) {
 			return;
 		}
-
-		// if already pressed, do not send a new event
-		if (justPressed(keyCode))
-			return;
 
 		if (lastTimePressed < KEY_INTERVAL)
 			return;
@@ -168,12 +168,15 @@ public class InputKeyHandler {
 					if (handler.isChatEnabled()) {
 						if (binding == KeyBinding.CHAT)
 							client.onChatEnter();
-						else if (binding == KeyBinding.EXIT_CLIENT) {
-							if (!client.abortChat())
-								client.onGameQuit();
+						else if (binding == KeyBinding.EXIT_CLIENT
+								&& !client.abortChat()) {
+							client.onGameQuit();
+						} else {
+							handler.keyPressed(binding);
 						}
+					} else {
+						handler.keyPressed(binding);
 					}
-					handler.keyPressed(binding);
 				} catch (ActionFailedException e) {
 					L.log(Level.WARNING, "Action failed.", e);
 				}

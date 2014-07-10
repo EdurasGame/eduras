@@ -70,7 +70,7 @@ public class ClientGameMode implements GameMode {
 
 	@Override
 	public boolean supportsKeyBinding(KeyBinding binding) {
-		return false;
+		return true;
 	}
 
 	@Override

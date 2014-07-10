@@ -71,6 +71,7 @@ public class GameClient {
 	}
 
 	private void initChat() {
+		System.out.println("init chat");
 		ChatClientImpl chat = new ChatClientImpl();
 		chat.setChatActivityListener(new ClientChatReceiver(chat, clientName));
 		logic.setChat(chat);
@@ -231,7 +232,6 @@ public class GameClient {
 	}
 
 	void sendInitInformation() {
-		System.out.println("send init");
 		int clientId = infoPro.getOwnerID();
 		try {
 			sendEvent(new InitInformationEvent(role, clientName, clientId));
