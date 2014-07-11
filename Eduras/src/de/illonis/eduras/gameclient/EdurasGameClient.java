@@ -5,9 +5,11 @@ import java.util.logging.Logger;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
+import org.newdawn.slick.particles.ParticleSystem;
 
 import de.illonis.edulog.EduLog;
 import de.illonis.eduras.gameclient.gui.GameManager;
+import de.illonis.eduras.gameclient.gui.animation.EffectFactory;
 import de.illonis.eduras.gameclient.gui.game.GuiMouseHandler;
 import de.illonis.eduras.gameclient.gui.game.InputKeyHandler;
 import de.illonis.eduras.logic.LogicGameWorker;
@@ -47,6 +49,11 @@ public class EdurasGameClient implements EdurasGameInterface {
 	@Override
 	public void update(GameContainer container, int delta) {
 		worker.gameUpdate(delta);
+		for (ParticleSystem system : EffectFactory.getSystems().values()) {
+			synchronized (system) {
+				system.update(delta);
+			}
+		}
 	}
 
 	@Override

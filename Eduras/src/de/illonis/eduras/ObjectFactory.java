@@ -12,8 +12,6 @@ import de.illonis.eduras.events.SetGameObjectAttributeEvent;
 import de.illonis.eduras.exceptions.DataMissingException;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
 import de.illonis.eduras.exceptions.ShapeVerticesNotApplicableException;
-import de.illonis.eduras.gameclient.gui.animation.AnimationFactory;
-import de.illonis.eduras.gameclient.gui.animation.AnimationFactory.AnimationNumber;
 import de.illonis.eduras.gameobjects.BigBlock;
 import de.illonis.eduras.gameobjects.BiggerBlock;
 import de.illonis.eduras.gameobjects.Bird;
@@ -330,14 +328,14 @@ public class ObjectFactory {
 				return;
 
 			// rocket splash animation
-			if (objectToRemove.getType() == ObjectType.ROCKET_MISSILE
-					|| objectToRemove.getType() == ObjectType.MINE_MISSILE) {
-				// meeh, this violates the rule to strictly seperate GUI from
-				// logic. We should call a handler here.
-				AnimationFactory.runAt(AnimationNumber.ROCKET_SPLASH,
-						objectToRemove.getPositionVector(),
-						S.Server.go_rocketmissile_damageradius);
-			}
+			// if (objectToRemove.getType() == ObjectType.ROCKET_MISSILE
+			// || objectToRemove.getType() == ObjectType.MINE_MISSILE) {
+			// // meeh, this violates the rule to strictly seperate GUI from
+			// // logic. We should call a handler here.
+			// AnimationFactory.runAt(AnimationNumber.ROCKET_SPLASH,
+			// objectToRemove.getPositionVector(),
+			// S.Server.go_rocketmissile_damageradius);
+			// }
 			logic.getListener().onObjectRemove(event);
 			logic.getGame().removeObject(objectToRemove);
 		}

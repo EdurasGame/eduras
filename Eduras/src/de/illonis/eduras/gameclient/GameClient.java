@@ -11,6 +11,7 @@ import de.illonis.eduras.chat.ChatClientImpl;
 import de.illonis.eduras.events.InitInformationEvent;
 import de.illonis.eduras.exceptions.MessageNotSupportedException;
 import de.illonis.eduras.exceptions.WrongEventTypeException;
+import de.illonis.eduras.gameclient.gui.ClientEffectHandler;
 import de.illonis.eduras.gameclient.gui.GameManager;
 import de.illonis.eduras.gameclient.gui.HudNotifier;
 import de.illonis.eduras.gameclient.gui.game.GamePanelLogic;
@@ -64,7 +65,7 @@ public class GameClient {
 		logic = new GamePanelLogic(guiEventListener, gameContainer);
 		logic.setHudNotifier(hudNotifier);
 		ClientGameEventListener cge = new ClientGameEventListener(this,
-				hudNotifier);
+				hudNotifier, new ClientEffectHandler());
 		infoPro.setGameEventListener(cge);
 		nwm = initializer.getNetworkManager();
 		nwm.setNetworkEventHandler(eventHandler);

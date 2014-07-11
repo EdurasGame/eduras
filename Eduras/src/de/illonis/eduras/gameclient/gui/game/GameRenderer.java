@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.newdawn.slick.Animation;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
@@ -16,6 +17,7 @@ import org.newdawn.slick.Image;
 import org.newdawn.slick.geom.Circle;
 import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.Vector2f;
+import org.newdawn.slick.particles.ParticleSystem;
 
 import de.illonis.edulog.EduLog;
 import de.illonis.eduras.Player;
@@ -25,7 +27,7 @@ import de.illonis.eduras.gameclient.ClientData;
 import de.illonis.eduras.gameclient.VisionInformation;
 import de.illonis.eduras.gameclient.datacache.CacheException;
 import de.illonis.eduras.gameclient.datacache.ImageCache;
-import de.illonis.eduras.gameclient.gui.animation.Animation;
+import de.illonis.eduras.gameclient.gui.animation.EffectFactory;
 import de.illonis.eduras.gameclient.gui.hud.HealthBar;
 import de.illonis.eduras.gameclient.gui.hud.ItemTooltip;
 import de.illonis.eduras.gameclient.gui.hud.RenderedGuiObject;
@@ -179,17 +181,23 @@ public class GameRenderer implements TooltipHandler {
 		drawMap(g);
 		drawObjects(g);
 		drawAnimations(g);
+		drawEffects(g);
 		g.translate(viewPort.getX() / scale, viewPort.getY() / scale);
 		g.scale(1 / scale, 1 / scale);
 
 		drawGui(g);
 	}
 
-	private void drawAnimations(Graphics g) {
-		for (int i = 0; i < data.getAnimations().size(); i++) {
-			Animation animation = data.getAnimations().get(i);
-			animation.draw(g);
+	private void drawEffects(Graphics g) {
+		for (ParticleSystem effect : EffectFactory.getSystems().values()) {
+			synchronized (effect) {
+				effect.render();
+			}
 		}
+	}
+
+	private void drawAnimations(Graphics g) {
+
 	}
 
 	private void adjustCamera() {

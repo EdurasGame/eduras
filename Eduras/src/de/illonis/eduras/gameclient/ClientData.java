@@ -6,7 +6,6 @@ import java.util.TreeSet;
 
 import de.illonis.eduras.ObjectFactory.ObjectType;
 import de.illonis.eduras.Player;
-import de.illonis.eduras.gameclient.gui.animation.Animation;
 import de.illonis.eduras.logicabstraction.InformationProvider;
 
 /**
@@ -18,10 +17,9 @@ import de.illonis.eduras.logicabstraction.InformationProvider;
  * 
  */
 public final class ClientData {
-	
+
 	private final ChatCache chatCache;
 	private final TreeSet<Integer> selectedUnits;
-	private final LinkedList<Animation> animations;
 	private final VisionInformation visionInfo;
 	private int currentItemSelected;
 	private Player currentResurrectTarget;
@@ -34,7 +32,6 @@ public final class ClientData {
 		currentItemSelected = -1;
 		chatCache = new ChatCache();
 		selectedUnits = new TreeSet<Integer>();
-		animations = new LinkedList<Animation>();
 		visionInfo = new VisionInformation();
 	}
 
@@ -43,7 +40,6 @@ public final class ClientData {
 	 */
 	public void reset() {
 		clearSelectedUnits();
-		clearAnimations();
 	}
 
 	/**
@@ -103,40 +99,6 @@ public final class ClientData {
 	}
 
 	/**
-	 * Adds an animation to data so it will be rendered when running.
-	 * 
-	 * @param anim
-	 *            the animation.
-	 */
-	public void addAnimation(Animation anim) {
-		animations.add(anim);
-	}
-
-	/**
-	 * @return the list of active animations.
-	 */
-	public LinkedList<Animation> getAnimations() {
-		return animations;
-	}
-
-	/**
-	 * Removes an ended animation.
-	 * 
-	 * @param animation
-	 *            the animation to remove.
-	 */
-	public void removeAnimation(Animation animation) {
-		animations.remove(animation);
-	}
-
-	/**
-	 * Removes all animations.
-	 */
-	public void clearAnimations() {
-		animations.clear();
-	}
-
-	/**
 	 * @return vision information.
 	 */
 	public VisionInformation getVisionInfo() {
@@ -178,7 +140,7 @@ public final class ClientData {
 	public ObjectType getTypeOfItemToSpawn() {
 		return typeOfItemToSpawn;
 	}
-	
+
 	/**
 	 * @return the chat cache.
 	 */

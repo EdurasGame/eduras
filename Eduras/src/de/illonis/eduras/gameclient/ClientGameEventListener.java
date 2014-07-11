@@ -18,6 +18,7 @@ import de.illonis.eduras.events.SetItemSlotEvent;
 import de.illonis.eduras.events.SetOwnerEvent;
 import de.illonis.eduras.events.SetTeamResourceEvent;
 import de.illonis.eduras.events.SetVisibilityEvent;
+import de.illonis.eduras.gameclient.gui.ClientEffectHandler;
 import de.illonis.eduras.gameclient.gui.HudNotifier;
 import de.illonis.eduras.gamemodes.GameMode;
 import de.illonis.eduras.gameobjects.GameObject;
@@ -36,6 +37,7 @@ public class ClientGameEventListener implements GameEventListener {
 
 	private final HudNotifier ui;
 	private final GameClient client;
+	private final ClientEffectHandler effects;
 
 	/**
 	 * Creates a new reactor.
@@ -44,15 +46,20 @@ public class ClientGameEventListener implements GameEventListener {
 	 *            associated client
 	 * @param ui
 	 *            associated user interface event listener.
+	 * @param effects
+	 *            associated effect handler.
 	 */
-	public ClientGameEventListener(GameClient client, HudNotifier ui) {
+	public ClientGameEventListener(GameClient client, HudNotifier ui,
+			ClientEffectHandler effects) {
 		this.client = client;
 		this.ui = ui;
+		this.effects = effects;
 	}
 
 	@Override
 	public void onNewObjectPosition(GameObject object) {
 		ui.onNewObjectPosition(object);
+		effects.onNewObjectPosition(object);
 	}
 
 	@Override
@@ -63,6 +70,7 @@ public class ClientGameEventListener implements GameEventListener {
 	@Override
 	public void onObjectCreation(ObjectFactoryEvent event) {
 		ui.onObjectCreation(event);
+		effects.onObjectCreation(event);
 	}
 
 	@Override
@@ -73,93 +81,111 @@ public class ClientGameEventListener implements GameEventListener {
 	@Override
 	public void onObjectStateChanged(SetGameObjectAttributeEvent<?> event) {
 		ui.onObjectStateChanged(event);
+		effects.onObjectStateChanged(event);
 	}
 
 	@Override
 	public void onHealthChanged(SetIntegerGameObjectAttributeEvent event) {
 		ui.onHealthChanged(event);
+		effects.onHealthChanged(event);
 	}
 
 	@Override
 	public void onOwnerChanged(SetOwnerEvent event) {
 		ui.onOwnerChanged(event);
+		effects.onOwnerChanged(event);
 	}
 
 	@Override
 	public void onItemSlotChanged(SetItemSlotEvent event) {
 		ui.onItemSlotChanged(event);
+		effects.onItemSlotChanged(event);
 	}
 
 	@Override
 	public void onObjectRemove(ObjectFactoryEvent event) {
 		ui.onObjectRemove(event);
+		effects.onObjectRemove(event);
 	}
 
 	@Override
 	public void onMatchEnd(MatchEndEvent event) {
 		ui.onMatchEnd(event);
+		effects.onMatchEnd(event);
 	}
 
 	@Override
 	public void onGameModeChanged(GameMode newGameMode) {
 		L.info("GameMode changed to " + newGameMode.getName());
 		ui.onGameModeChanged(newGameMode);
+		effects.onGameModeChanged(newGameMode);
 	}
 
 	@Override
 	public void onMaxHealthChanged(SetIntegerGameObjectAttributeEvent event) {
 		ui.onMaxHealthChanged(event);
+		effects.onMaxHealthChanged(event);
 	}
 
 	@Override
 	public void onDeath(DeathEvent event) {
 		ui.onDeath(event);
+		effects.onDeath(event);
 	}
 
 	@Override
 	public void onCooldownStarted(ItemEvent event) {
 		ui.onCooldownStarted(event);
+		effects.onCooldownStarted(event);
 	}
 
 	@Override
 	public void onCooldownFinished(ItemEvent event) {
 		ui.onCooldownFinished(event);
+		effects.onCooldownFinished(event);
 		client.getLogic().onCooldownFinished(event);
 	}
 
 	@Override
 	public void onInteractModeChanged(SetInteractModeEvent setModeEvent) {
 		ui.onInteractModeChanged(setModeEvent);
+		effects.onInteractModeChanged(setModeEvent);
 		client.getLogic().resetCamera();
 	}
 
 	@Override
 	public void onGameReady() {
 		ui.onGameReady();
+		effects.onGameReady();
 	}
 
 	@Override
 	public void onVisibilityChanged(SetVisibilityEvent event) {
 		ui.onVisibilityChanged(event);
+		effects.onVisibilityChanged(event);
 	}
 
 	@Override
 	public void onTeamResourceChanged(SetTeamResourceEvent setTeamResourceEvent) {
 		ui.onTeamResourceChanged(setTeamResourceEvent);
+		effects.onTeamResourceChanged(setTeamResourceEvent);
 	}
 
 	@Override
 	public void onRespawn(RespawnEvent event) {
 		ui.onRespawn(event);
+		effects.onRespawn(event);
 	}
 
 	@Override
 	public void onPlayerJoined(int ownerId) {
 		ui.onPlayerJoined(ownerId);
+		effects.onPlayerJoined(ownerId);
 	}
 
 	@Override
 	public void onPlayerLeft(int ownerId) {
 		ui.onPlayerLeft(ownerId);
+		effects.onPlayerLeft(ownerId);
 	}
 }

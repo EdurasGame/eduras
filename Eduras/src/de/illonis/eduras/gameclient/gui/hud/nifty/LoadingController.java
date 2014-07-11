@@ -1,6 +1,8 @@
 package de.illonis.eduras.gameclient.gui.hud.nifty;
 
 import de.illonis.eduras.gameclient.datacache.GraphicsPreLoader;
+import de.illonis.eduras.gameclient.gui.animation.EffectFactory;
+import de.illonis.eduras.logicabstraction.EdurasInitializer;
 import de.lessvoid.nifty.controls.Label;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.screen.Screen;
@@ -37,29 +39,33 @@ public class LoadingController extends EdurasScreenController {
 		if (load) {
 			switch (frameCount) {
 			case 1:
-				setProgress(0.2f, "Loading shapes");
+				setProgress(0.1f, "Loading shapes");
 				GraphicsPreLoader.loadShapes();
 				break;
 			case 2:
-				setProgress(0.4f, "Loading objects");
+				setProgress(0.3f, "Loading objects");
 				GraphicsPreLoader.loadGraphics();
 				break;
 			case 3:
-				setProgress(0.6f, "Loading interface");
+				setProgress(0.5f, "Loading interface");
 				GraphicsPreLoader.loadGuiGraphics();
 				break;
 			case 4:
-				setProgress(0.8f, "Loading items");
+				setProgress(0.6f, "Loading items");
 				GraphicsPreLoader.loadInventoryIcons();
 				break;
 			case 5:
-				setProgress(0.9f, "Loading other icons");
+				setProgress(0.8f, "Loading other icons");
 				GraphicsPreLoader.loadIcons();
 				break;
 			case 6:
-				setProgress(1f, "Loading complete");
+				setProgress(0.9f, "Loading animations");
+				EffectFactory.init();
 				break;
 			case 7:
+				setProgress(1f, "Loading complete");
+				break;
+			case 8:
 				game.getEduras().init();
 				game.enterState(4);
 				break;
