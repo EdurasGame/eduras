@@ -28,6 +28,7 @@ public final class UnitMover {
 	}
 
 	void stopMovement() {
+		motionUnit.stopMoving();
 		active = false;
 	}
 
