@@ -37,6 +37,14 @@ import de.illonis.eduras.logicabstraction.InformationProvider;
 import de.illonis.eduras.logicabstraction.NetworkManager;
 import de.illonis.eduras.networking.ClientRole;
 
+/**
+ * This class is an Eduras? client that works automatically without any user
+ * input. After the connection to the server is established, it starts a thread
+ * running {@link EdurasBotWorker}.
+ * 
+ * @author Florian 'Ren' Mai <florian.ren.mai@googlemail.com>
+ * 
+ */
 public class EdurasBotClient {
 	private final static Logger L = EduLog.getLoggerFor(EdurasBotClient.class
 			.getName());
@@ -49,6 +57,14 @@ public class EdurasBotClient {
 	private String name;
 	private int clientId;
 
+	/**
+	 * Creates a new bot.
+	 * 
+	 * @param name
+	 *            The bot's name to be displayed in game.
+	 * @param botWorker
+	 *            The thread to run when the connection has been established
+	 */
 	public EdurasBotClient(String name, EdurasBotWorker botWorker) {
 		eventSender = EdurasInitializer.getInstance().getEventSender();
 		networkManager = EdurasInitializer.getInstance().getNetworkManager();
@@ -216,6 +232,22 @@ public class EdurasBotClient {
 		});
 	}
 
+	/**
+	 * Starts a {@link RandomBotWorker}-bot and connects it to a server.
+	 * 
+	 * @param args
+	 *            Arguments passed from console. Put them in the form
+	 *            "parametername1=parametervalue1 parametername2=parametervalue2 ..."
+	 *            where parameternameX is one of the following
+	 *            <ul>
+	 *            <li><b>port:</b> Port of the Eduras? bot client.</li>
+	 *            <li><b>loglimit:</b> Determines the finest log level to
+	 *            capture.</li>
+	 *            <li><b>serveraddress:</b> The address of the server to connect
+	 *            to.</li>
+	 *            <li><b>serverport:</b> Port of the server to connect to.</li>
+	 *            </ul>
+	 */
 	public static void main(String[] args) {
 		SimpleDateFormat simpleDate = new SimpleDateFormat("y-M-d-H-m-s");
 
@@ -227,6 +259,9 @@ public class EdurasBotClient {
 		}
 
 		Level logLimit = Level.INFO;
+		String serverAddress = "";
+		int remotePort = 0;
+		String botName = "ferde";
 
 		// arguments are of form <parametername>=<parametervalue>
 		String[][] parametersWithValues = new String[args.length][2];
@@ -255,23 +290,48 @@ public class EdurasBotClient {
 					return;
 				}
 			}
+
+			if (parameterName.equalsIgnoreCase("serveraddress")) {
+				serverAddress = parameterValue;
+			}
+
+			if (parameterName.equalsIgnoreCase("serverport")) {
+				remotePort = Integer.parseInt(parameterValue);
+			}
+
+			if (parameterName.equalsIgnoreCase("botname")) {
+				botName = parameterValue;
+			}
 		}
 
 		EduLog.setBasicLogLimit(logLimit);
 		EduLog.setConsoleLogLimit(logLimit);
 		EduLog.setFileLogLimit(logLimit);
 
-		EdurasBotClient client = new EdurasBotClient("ferde",
+		if (serverAddress.isEmpty() || remotePort == 0) {
+			L.severe("Did not specify serveraddress or port!");
+			return;
+		}
+
+		EdurasBotClient botClient = new EdurasBotClient(botName,
 				new RandomBotWorker());
 		try {
-			client.connect("localhost", 4387);
-		} catch (UnknownHostException e) {
-			L.log(Level.WARNING, "TODO: message", e);
+			botClient.connect(serverAddress, remotePort);
 		} catch (IOException e) {
-			L.log(Level.WARNING, "TODO: message", e);
+			L.log(Level.SEVERE, "Cannot connect to server!", e);
 		}
 	}
 
+	/**
+	 * Connects the bot to the specified server.
+	 * 
+	 * @param serverAddress
+	 * @param port
+	 * @throws UnknownHostException
+	 *             Thrown if the server address cannot be found.
+	 * @throws IOException
+	 *             Thrown if something goes wrong during connection.
+	 */
 	public void connect(String serverAddress, int port)
 			throws UnknownHostException, IOException {
 		networkManager.connect(InetAddress.getByName(serverAddress), port);

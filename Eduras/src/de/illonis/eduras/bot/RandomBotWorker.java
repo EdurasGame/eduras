@@ -16,6 +16,12 @@ import de.illonis.eduras.exceptions.WrongEventTypeException;
 import de.illonis.eduras.logicabstraction.EventSender;
 import de.illonis.eduras.logicabstraction.InformationProvider;
 
+/**
+ * The random bot worker generates random input.
+ * 
+ * @author Florian 'Ren' Mai <florian.ren.mai@googlemail.com>
+ * 
+ */
 public class RandomBotWorker implements EdurasBotWorker {
 	private final static Logger L = EduLog.getLoggerFor(RandomBotWorker.class
 			.getName());
