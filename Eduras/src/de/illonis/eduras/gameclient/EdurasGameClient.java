@@ -48,7 +48,7 @@ public class EdurasGameClient implements EdurasGameInterface {
 
 	@Override
 	public void update(GameContainer container, int delta) {
-		worker.gameUpdate(delta);
+		worker.update(delta);
 		for (ParticleSystem system : EffectFactory.getSystems().values()) {
 			synchronized (system) {
 				system.update(delta);

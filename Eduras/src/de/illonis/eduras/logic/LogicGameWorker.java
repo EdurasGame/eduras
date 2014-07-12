@@ -162,7 +162,7 @@ public abstract class LogicGameWorker implements Runnable, TimingSource {
 	 *            the time elapsed since last update in ms.
 	 * 
 	 */
-	public abstract void gameUpdate(long delta);
+	abstract void gameUpdate(long delta);
 
 	protected final boolean hasRotated(GameObject o) {
 		if (!oldRotation.containsKey(o.getId())) {
