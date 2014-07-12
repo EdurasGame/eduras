@@ -190,6 +190,7 @@ public class EdurasBotClient {
 
 			@Override
 			public void onGameReady() {
+				EdurasInitializer.getInstance().startLogicWorker(true);
 				new Thread(botWorker).start();
 			}
 

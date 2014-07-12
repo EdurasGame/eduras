@@ -384,8 +384,8 @@ public class EdurasInitializer {
 	 * 
 	 * @return the worker.
 	 */
-	public LogicGameWorker startLogicWorker() {
-		return logic.startWorker();
+	public LogicGameWorker startLogicWorker(boolean useInternal) {
+		return logic.startWorker(useInternal);
 	}
 
 	/**

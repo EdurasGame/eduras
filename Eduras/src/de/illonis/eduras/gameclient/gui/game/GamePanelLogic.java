@@ -180,7 +180,7 @@ public class GamePanelLogic extends ClientGuiStepLogic implements
 	public void onShown() {
 		camera.reset();
 		LogicGameWorker worker = EdurasInitializer.getInstance()
-				.startLogicWorker();
+				.startLogicWorker(false);
 		initUserInterface();
 		gui.addComponentListener(resizeMonitor);
 		startGame(worker, renderer);

@@ -50,9 +50,13 @@ public interface GameLogicInterface {
 	/**
 	 * Starts the {@link LogicGameWorker}.
 	 * 
+	 * @param useInternal
+	 *            Determines whether a thread is started to use the gameworker
+	 *            or not. If not, the caller has to do it himself.
+	 * 
 	 * @return the worker.
 	 */
-	public LogicGameWorker startWorker();
+	public LogicGameWorker startWorker(boolean useInternal);
 
 	/**
 	 * Indicates shutdown of server/client and stops the gameworker.

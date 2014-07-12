@@ -527,8 +527,8 @@ public class ClientLogic implements GameLogicInterface {
 
 	@Override
 	public void stopWorker() {
-		// we don't need to do anything, because slick is responsible for
-		// updates
+		// only need to stop the thread if we have created and started it before
+		lgw.stop();
 	}
 
 	@Override
@@ -542,9 +542,12 @@ public class ClientLogic implements GameLogicInterface {
 	}
 
 	@Override
-	public LogicGameWorker startWorker() {
-		// we don't need to start the thread, because slick does the updating
-		// stuff.
+	public LogicGameWorker startWorker(boolean useInternal) {
+		// we don't need to start the thread, if the user doesn't want to
+		if (useInternal) {
+			workerThread = new Thread(lgw);
+			workerThread.start();
+		}
 		return lgw;
 	}
 
