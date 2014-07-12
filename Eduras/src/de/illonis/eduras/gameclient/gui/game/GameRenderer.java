@@ -9,7 +9,6 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.newdawn.slick.Animation;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
@@ -325,17 +324,15 @@ public class GameRenderer implements TooltipHandler {
 				g.fill(d.getShape());
 				if (S.Client.debug_render_boundingboxes) {
 					float circleRadius = d.getShape().getBoundingCircleRadius();
-					float[] center = d.getShape().getCenter();
 					Circle c = new Circle(d.getShape().getCenterX(), d
 							.getShape().getCenterY(), circleRadius);
 					g.setColor(Color.yellow);
 					g.draw(c);
 					g.setColor(Color.white);
-					g.fillOval(x, y, 3, 3);
-
+					g.fillOval(x, y, 2, 2);
 					g.setColor(Color.green);
 					g.fillOval(d.getShape().getCenterX(), d.getShape()
-							.getCenterY(), 3, 3);
+							.getCenterY(), 2, 2);
 				}
 			}
 		}

@@ -21,7 +21,7 @@ import de.illonis.edulog.EduLog;
 import de.illonis.eduras.gameclient.gui.animation.EffectFactory.EffectNumber;
 
 /**
- * A tool to test effects.
+ * A tool to preview effects visually.
  * 
  * @author illonis
  * 

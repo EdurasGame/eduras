@@ -1,14 +1,10 @@
-package de.illonis.eduras.gameclient.gui;
+package de.illonis.eduras.gameclient.gui.animation;
 
-import java.util.logging.Level;
 import java.util.logging.Logger;
-
-import org.newdawn.slick.SlickException;
 
 import de.illonis.edulog.EduLog;
 import de.illonis.eduras.events.ObjectFactoryEvent;
 import de.illonis.eduras.gameclient.GameEventAdapter;
-import de.illonis.eduras.gameclient.gui.animation.EffectFactory;
 import de.illonis.eduras.gameclient.gui.animation.EffectFactory.EffectNumber;
 import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.items.weapons.RocketMissile;
@@ -16,16 +12,21 @@ import de.illonis.eduras.logicabstraction.EdurasInitializer;
 import de.illonis.eduras.logicabstraction.InformationProvider;
 
 /**
- * Renders effects on client.
+ * Renders effects on client based on events.
  * 
  * @author illonis
  * 
  */
 public class ClientEffectHandler extends GameEventAdapter {
+
 	private final static Logger L = EduLog
 			.getLoggerFor(ClientEffectHandler.class.getName());
+
 	private final InformationProvider infos;
 
+	/**
+	 * Creates a new effect handler.
+	 */
 	public ClientEffectHandler() {
 		infos = EdurasInitializer.getInstance().getInformationProvider();
 	}
@@ -34,12 +35,8 @@ public class ClientEffectHandler extends GameEventAdapter {
 	public void onObjectRemove(ObjectFactoryEvent event) {
 		GameObject o = infos.findObjectById(event.getId());
 		if (o instanceof RocketMissile) {
-			try {
-				EffectFactory.createEffectAt(EffectNumber.ROCKET,
-						o.getPositionVector());
-			} catch (SlickException e) {
-				L.log(Level.WARNING, "Could not create effect onremove", e);
-			}
+			EffectFactory.createEffectAt(EffectNumber.ROCKET,
+					o.getPositionVector());
 		}
 	}
 }

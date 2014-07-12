@@ -6,7 +6,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.newdawn.slick.Image;
-import org.newdawn.slick.SlickException;
 import org.newdawn.slick.geom.Vector2f;
 import org.newdawn.slick.particles.ConfigurableEmitter;
 import org.newdawn.slick.particles.ParticleIO;
@@ -26,29 +25,55 @@ public class EffectFactory {
 
 	private final static HashMap<EffectNumber, ParticleSystem> systems = new HashMap<EffectNumber, ParticleSystem>();
 
+	/**
+	 * Identifier for an effect.<br>
+	 * Each effect will be initializied at gamestart and is then available to
+	 * {@link ClientEffectHandler}.
+	 * 
+	 * @author illonis
+	 * 
+	 */
+	@SuppressWarnings("javadoc")
 	public enum EffectNumber {
-		TEST("res/images/particles/explosion.png",
-				"res/particles/explosion.xml"), ROCKET(
-				"res/images/particles/explosion.png",
-				"res/particles/rocket_explosion.xml");
+		TEST("explosion.png", "explosion.xml"), ROCKET("explosion.png",
+				"rocket_explosion.xml");
 
 		private final String image;
 		private final String configuration;
 
+		/**
+		 * Creates a new type of effect.
+		 * 
+		 * @param imagePath
+		 *            the path to the particle image. Relative to
+		 *            <code>/res/images/particles</code>
+		 * @param configuration
+		 *            the path to the configuration file for effect. Relative to
+		 *            <code>/res/particles</code>
+		 */
 		private EffectNumber(String imagePath, String configuration) {
 			this.image = imagePath;
 			this.configuration = configuration;
 		}
 
+		/**
+		 * @return the path to config file.
+		 */
 		public String getConfiguration() {
-			return configuration;
+			return "res/particles/" + configuration;
 		}
 
+		/**
+		 * @return the image path.
+		 */
 		public String getImage() {
-			return image;
+			return "res/images/particles/" + image;
 		}
 	}
 
+	/**
+	 * Loads effects and sets them up.
+	 */
 	public static void init() {
 		for (EffectNumber effect : EffectNumber.values()) {
 			try {
@@ -70,14 +95,20 @@ public class EffectFactory {
 		}
 	}
 
-	public static void createEffectAt(EffectNumber effect, Vector2f position)
-			throws SlickException {
+	/**
+	 * Creates an effect at given position.
+	 * 
+	 * @param effect
+	 *            type of effect.
+	 * @param position
+	 *            the topleft position to spawn this effect at.
+	 */
+	static void createEffectAt(EffectNumber effect, Vector2f position) {
 		ParticleSystem source = systems.get(effect);
 		if (source == null) {
 			return;
 		}
 		synchronized (source) {
-
 			ConfigurableEmitter emitter = (ConfigurableEmitter) source
 					.getEmitter(0);
 			ConfigurableEmitter newEmitter = emitter.duplicate();
@@ -87,6 +118,9 @@ public class EffectFactory {
 		}
 	}
 
+	/**
+	 * @return a list of all effect systems to be rendered.
+	 */
 	public static HashMap<EffectNumber, ParticleSystem> getSystems() {
 		return systems;
 	}
