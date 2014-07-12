@@ -6,10 +6,10 @@
   <initialSize enabled="true" max="50.0" min="30.0"/>
   <xOffset enabled="true" max="30.0" min="-30.0"/>
   <yOffset enabled="true" max="30.0" min="-30.0"/>
-  <initialDistance enabled="false" max="0.0" min="0.0"/>
-  <speed enabled="true" max="50.0" min="50.0"/>
+  <initialDistance enabled="true" max="20.0" min="10.0"/>
+  <speed enabled="false" max="50.0" min="50.0"/>
   <length enabled="true" max="500.0" min="300.0"/>
-  <emitCount enabled="true" max="1000.0" min="1000.0"/>
+  <emitCount enabled="false" max="300.0" min="300.0"/>
   <spread value="360.0"/>
   <angularOffset type="simple" value="0.0"/>
   <growthFactor type="simple" value="104.0"/>

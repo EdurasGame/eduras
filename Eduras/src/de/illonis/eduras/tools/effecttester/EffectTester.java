@@ -123,12 +123,12 @@ public class EffectTester extends BasicGame {
 			IOException {
 		Image image = new Image(effect.getImage(), false);
 		system = new ParticleSystem(image, 1500);
+		system.setRemoveCompletedEmitters(false);
 		File xmlFile = new File(effect.getConfiguration());
 		emitter = ParticleIO.loadEmitter(xmlFile);
 		emitter.setPosition(400, 300);
-		system.addEmitter(emitter);
-		system.setRemoveCompletedEmitters(false);
 		system.setBlendingMode(ParticleSystem.BLEND_ADDITIVE);
+		system.addEmitter(emitter);
 	}
 
 	private void reload() {
