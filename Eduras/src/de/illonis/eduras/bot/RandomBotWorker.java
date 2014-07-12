@@ -48,7 +48,7 @@ public class RandomBotWorker implements EdurasBotWorker {
 	}
 
 	private GameEvent createRandomInput() {
-		int inputChooser = (int) (Math.random() * 3);
+		int inputChooser = (int) (Math.random() * 4);
 		switch (inputChooser) {
 		case 0: {
 			return startMoving();
@@ -59,11 +59,26 @@ public class RandomBotWorker implements EdurasBotWorker {
 		case 2: {
 			return useItem();
 		}
+		case 3: {
+			return setRotation();
+		}
 		default:
 			break;
 		}
 
 		// just don't do anything in default case
+		return null;
+	}
+
+	private GameEvent setRotation() {
+		try {
+			float newRotation = (float) (Math.random() * 360);
+			infoProvider.getPlayer().getPlayerMainFigure()
+					.setRotation(newRotation);
+			L.info("Set rotation to " + newRotation);
+		} catch (ObjectNotFoundException e) {
+			L.log(Level.SEVERE, "Cannot find player!", e);
+		}
 		return null;
 	}
 
