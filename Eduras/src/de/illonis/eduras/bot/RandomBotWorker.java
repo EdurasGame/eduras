@@ -20,6 +20,8 @@ public class RandomBotWorker implements EdurasBotWorker {
 	private final static Logger L = EduLog.getLoggerFor(RandomBotWorker.class
 			.getName());
 
+	private static final long INPUT_INTERVAL = 250;
+
 	private InformationProvider infoProvider;
 	private EventSender eventSender;
 
@@ -38,7 +40,7 @@ public class RandomBotWorker implements EdurasBotWorker {
 				}
 			}
 			try {
-				Thread.sleep(1000);
+				Thread.sleep(INPUT_INTERVAL);
 			} catch (InterruptedException e) {
 				L.log(Level.WARNING, "TODO: message", e);
 			}
