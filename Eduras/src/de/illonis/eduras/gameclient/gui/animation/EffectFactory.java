@@ -36,7 +36,8 @@ public class EffectFactory {
 	@SuppressWarnings("javadoc")
 	public enum EffectNumber {
 		TEST("explosion.png", "explosion.xml"), ROCKET("explosion.png",
-				"rocket_explosion.xml");
+				"rocket_explosion.xml"), ROCKET_MISSILE("explosion.png",
+				"rocket_missile.xml");
 
 		private final String image;
 		private final String configuration;
@@ -103,18 +104,38 @@ public class EffectFactory {
 	 * @param position
 	 *            the topleft position to spawn this effect at.
 	 */
-	static void createEffectAt(EffectNumber effect, Vector2f position) {
+	static ConfigurableEmitter createEffectAt(EffectNumber effect, Vector2f position) {
+		return createEffectAt(effect, position, 0f);
+	}
+
+	/**
+	 * Creates an effect at given position.
+	 * 
+	 * @param effect
+	 *            type of effect.
+	 * @param position
+	 *            the topleft position to spawn this effect at.
+	 * @param angle
+	 *            the rotation offset in degree.
+	 */
+	static ConfigurableEmitter createEffectAt(EffectNumber effect, Vector2f position,
+			float angle) {
 		ParticleSystem source = systems.get(effect);
 		if (source == null) {
-			return;
+			return null;
 		}
 		synchronized (source) {
 			ConfigurableEmitter emitter = (ConfigurableEmitter) source
 					.getEmitter(0);
 			ConfigurableEmitter newEmitter = emitter.duplicate();
-			newEmitter.setPosition(position.x, position.y);
+			if (angle != 0f) {
+				newEmitter.angularOffset.setValue(newEmitter.angularOffset
+						.getValue(0) + angle);
+			}
+			newEmitter.setPosition(position.x, position.y, true);
 			newEmitter.setEnabled(true);
 			source.addEmitter(newEmitter);
+			return newEmitter;
 		}
 	}
 

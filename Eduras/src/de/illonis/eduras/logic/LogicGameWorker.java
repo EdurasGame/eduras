@@ -112,7 +112,7 @@ public abstract class LogicGameWorker implements Runnable, TimingSource {
 	 * 
 	 * @param delta
 	 */
-	public void update(long delta) {
+	public final void update(long delta) {
 		// check game settings
 		long gameRemainingTime = gameInformation.getGameSettings()
 				.getRemainingTime();

@@ -181,9 +181,9 @@ public class GameRenderer implements TooltipHandler {
 		drawObjects(g);
 		drawAnimations(g);
 		drawEffects(g);
-		g.translate(viewPort.getX() / scale, viewPort.getY() / scale);
-		g.scale(1 / scale, 1 / scale);
-
+		g.resetTransform();
+		// g.translate(viewPort.getX() / scale, viewPort.getY() / scale);
+		// g.scale(1 / scale, 1 / scale);
 		drawGui(g);
 	}
 

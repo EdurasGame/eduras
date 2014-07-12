@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<emitter imageName="" name="rocket_missile" renderType="inherit" useAdditive="false" useOriented="true">
+  <spawnInterval enabled="true" max="100.0" min="100.0"/>
+  <spawnCount enabled="true" max="12.0" min="10.0"/>
+  <initialLife enabled="false" max="500.0" min="300.0"/>
+  <initialSize enabled="true" max="20.0" min="10.0"/>
+  <xOffset enabled="true" max="6" min="0.0"/>
+  <yOffset enabled="true" max="6" min="0.0"/>
+  <initialDistance enabled="false" max="0" min="0"/>
+  <speed enabled="true" max="150.0" min="50.0"/>
+  <length enabled="false" max="500.0" min="300.0"/>
+  <emitCount enabled="false" max="300.0" min="300.0"/>
+  <spread type="random" value="5.0"/>
+  <angularOffset type="simple" value="-90.0"/>
+  <gravityFactor type="simple" value="0"/>
+  <windFactor type="simple" value="0"/>
+  <startAlpha type="simple" value="255.0"/>
+  <endAlpha type="simple" value="0.0"/>
+  <color>
+    <step b="0.14" g=".35" offset="0.0" r=".89"/>
+    <step b="0.38" g="0.6" offset="0.816" r="1.0"/>
+    <step b=".5" g=".5" offset="1.0" r="1.0"/>
+  </color>
+</emitter>
