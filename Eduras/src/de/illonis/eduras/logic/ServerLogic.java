@@ -72,7 +72,7 @@ public class ServerLogic implements GameLogicInterface {
 	public ServerLogic(GameInformation g) {
 		listenerHolder = new ListenerHolder<GameEventListener>();
 		this.gameInfo = g;
-		startWorker();
+		startWorker(true);
 		objectFactory = new ObjectFactory(this, lgw);
 	}
 
@@ -430,11 +430,13 @@ public class ServerLogic implements GameLogicInterface {
 	}
 
 	@Override
-	public LogicGameWorker startWorker() {
+	public LogicGameWorker startWorker(boolean useInternal) {
 		lgw = new ServerLogicGameWorker(gameInfo, listenerHolder);
-		Thread gameWorker = new Thread(lgw);
-		gameWorker.setName("ServerLogicGameWorker");
-		gameWorker.start();
+		if (useInternal) {
+			Thread gameWorker = new Thread(lgw);
+			gameWorker.setName("ServerLogicGameWorker");
+			gameWorker.start();
+		}
 		return lgw;
 	}
 

@@ -109,4 +109,9 @@ public abstract class GameEvent extends Event {
 		return GameEventNumber.NO_EVENT;
 	}
 
+	@Override
+	public String toString() {
+		return type.toString();
+	}
+
 }

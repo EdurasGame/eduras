@@ -39,6 +39,7 @@ import de.illonis.eduras.interfaces.GameLogicInterface;
 import de.illonis.eduras.items.Item;
 import de.illonis.eduras.logic.ClientLogic;
 import de.illonis.eduras.logic.EventTriggerer;
+import de.illonis.eduras.logic.LogicGameWorker;
 import de.illonis.eduras.maps.Map;
 import de.illonis.eduras.math.Vector2df;
 import de.illonis.eduras.units.InteractMode;
@@ -379,7 +380,20 @@ public class EdurasInitializer {
 	}
 
 	/**
-	 * @return the client logic.
+	 * Starts the logic game worker.
+	 * 
+	 * @param useInternal
+	 *            if using a inbuild thread.
+	 * 
+	 * @return the worker.
+	 */
+	public LogicGameWorker startLogicWorker(boolean useInternal) {
+		return logic.startWorker(useInternal);
+	}
+
+	/**
+	 * @return the logic.
+	 * 
 	 */
 	public GameLogicInterface getLogic() {
 		return logic;

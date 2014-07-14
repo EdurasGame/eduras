@@ -37,7 +37,7 @@ public class EdurasGameClient implements EdurasGameInterface {
 		client = new GameClient(clientFrame, container);
 		keyHandler = client.getLogic().getKeyHandler();
 		mouseHandler = client.getLogic().getMouseHandler();
-		worker = EdurasInitializer.getInstance().getLogic().startWorker();
+		worker = EdurasInitializer.getInstance().getLogic().startWorker(false);
 	}
 
 	@Override
