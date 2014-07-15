@@ -1,7 +1,5 @@
 package de.illonis.eduras.gameclient.gui;
 
-import org.newdawn.slick.GameContainer;
-
 import de.illonis.eduras.gameclient.EdurasGameInterface;
 
 /**
@@ -21,9 +19,4 @@ public interface GameManager {
 	 *            an optional error message.
 	 */
 	void onDisconnect(boolean gracefully, String message);
-	
-	/**
-	 * @return the gamecontainer used.
-	 */
-	GameContainer getContainer();
 }

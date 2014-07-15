@@ -1,6 +1,3 @@
-/**
- * 
- */
 package de.illonis.eduras.logicabstraction;
 
 import java.io.IOException;
@@ -9,7 +6,6 @@ import java.net.InetAddress;
 import de.eduras.eventingserver.Client;
 import de.eduras.eventingserver.ClientInterface;
 import de.eduras.eventingserver.ClientNetworkEventHandler;
-import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.interfaces.GameLogicInterface;
 
 /**
@@ -21,7 +17,6 @@ import de.illonis.eduras.interfaces.GameLogicInterface;
 public class NetworkManager {
 	private ClientInterface client;
 	private ClientNetworkEventHandler edurasGUINetworkHandler;
-	private GameInformation gameInfo;
 
 	/**
 	 * Creates a new NetworkManager with the given logic.
@@ -31,9 +26,7 @@ public class NetworkManager {
 	 * 
 	 */
 	NetworkManager(GameLogicInterface logic) {
-
 		client = new Client();
-		gameInfo = logic.getGame();
 		client.setNetworkEventHandler(new ClientNetworkEventHandler() {
 
 			@Override

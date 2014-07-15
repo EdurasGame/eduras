@@ -1,11 +1,13 @@
 package de.illonis.eduras.gameclient;
 
+import java.io.IOException;
+import java.net.InetAddress;
+
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 
-import de.illonis.eduras.logicabstraction.NetworkManager;
 import de.illonis.eduras.networking.ClientRole;
 
 /**
@@ -63,6 +65,6 @@ public interface EdurasGameInterface {
 
 	void setRole(ClientRole role);
 
-	NetworkManager getNetworkManager();
+	void connect(InetAddress addr, int port) throws IOException;
 
 }

@@ -139,9 +139,4 @@ public class EdurasSlickClient implements GameControllerBridge {
 		return loginData;
 	}
 
-	@Override
-	public GameContainer getContainer() {
-		return gameContainer;
-	}
-
 }

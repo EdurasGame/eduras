@@ -12,8 +12,6 @@ import java.util.logging.Logger;
 import de.illonis.edulog.EduLog;
 import de.illonis.eduras.gameclient.EdurasGameInterface;
 import de.illonis.eduras.gameclient.LoginData;
-import de.illonis.eduras.logicabstraction.EdurasInitializer;
-import de.illonis.eduras.logicabstraction.NetworkManager;
 import de.lessvoid.nifty.controls.Label;
 import de.lessvoid.nifty.screen.Screen;
 
@@ -104,12 +102,10 @@ public class ConnectingController extends EdurasScreenController {
 	}
 
 	class ConnectionEstablisher implements Callable<Boolean> {
-		private final NetworkManager nwm;
 		private final LoginData data;
 		private String errorMessage;
 
 		public ConnectionEstablisher(LoginData data) {
-			this.nwm = EdurasInitializer.getInstance().getNetworkManager();
 			this.data = data;
 		}
 
@@ -117,7 +113,7 @@ public class ConnectingController extends EdurasScreenController {
 		public Boolean call() throws Exception {
 			errorMessage = "";
 			try {
-				nwm.connect(data.getAddress(), data.getPort());
+				game.getEduras().connect(data.getAddress(), data.getPort());
 				return true;
 			} catch (SocketTimeoutException e) {
 				errorMessage = "Connection timeout";

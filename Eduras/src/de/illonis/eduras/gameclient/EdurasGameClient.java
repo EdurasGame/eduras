@@ -1,5 +1,7 @@
 package de.illonis.eduras.gameclient;
 
+import java.io.IOException;
+import java.net.InetAddress;
 import java.util.logging.Logger;
 
 import org.newdawn.slick.GameContainer;
@@ -14,7 +16,6 @@ import de.illonis.eduras.gameclient.gui.game.GuiMouseHandler;
 import de.illonis.eduras.gameclient.gui.game.InputKeyHandler;
 import de.illonis.eduras.logic.LogicGameWorker;
 import de.illonis.eduras.logicabstraction.EdurasInitializer;
-import de.illonis.eduras.logicabstraction.NetworkManager;
 import de.illonis.eduras.networking.ClientRole;
 
 public class EdurasGameClient implements EdurasGameInterface {
@@ -32,6 +33,8 @@ public class EdurasGameClient implements EdurasGameInterface {
 	 * 
 	 * @param clientFrame
 	 *            the parent frame.
+	 * @param container
+	 *            the gamecontainer.
 	 */
 	public EdurasGameClient(GameManager clientFrame, GameContainer container) {
 		client = new GameClient(clientFrame, container);
@@ -112,13 +115,13 @@ public class EdurasGameClient implements EdurasGameInterface {
 	}
 
 	@Override
-	public NetworkManager getNetworkManager() {
-		return client.getNetworkManager();
+	public void init() {
+		client.sendInitInformation();
 	}
 
 	@Override
-	public void init() {
-		client.sendInitInformation();
+	public void connect(InetAddress addr, int port) throws IOException {
+		client.getNetworkManager().connect(addr, port);
 	}
 
 }

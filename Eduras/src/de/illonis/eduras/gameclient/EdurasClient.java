@@ -144,7 +144,7 @@ public class EdurasClient {
 		try {
 			client.startGui(betaUser, betaPassword);
 		} catch (SlickException e) {
-			L.log(Level.WARNING, "Slick error", e);
+			L.log(Level.SEVERE, "Slick error at startup", e);
 		}
 	}
 
