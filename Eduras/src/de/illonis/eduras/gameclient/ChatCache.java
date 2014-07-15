@@ -190,7 +190,6 @@ public class ChatCache {
 	 * Indicates that user is currently writing a chat message.
 	 */
 	public void startWriting() {
-		System.out.println("start writing");
 		writing = true;
 	}
 

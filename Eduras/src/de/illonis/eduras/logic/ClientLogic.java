@@ -390,7 +390,6 @@ public class ClientLogic implements GameLogicInterface {
 				gameInfo.getGameSettings().changeTime(remainingTime);
 				break;
 			case GAME_READY:
-				System.out.println("ongameready");
 				getListener().onGameReady();
 				break;
 			case BASE_CONQUERED:

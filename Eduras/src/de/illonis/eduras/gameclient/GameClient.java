@@ -72,7 +72,6 @@ public class GameClient {
 	}
 
 	private void initChat() {
-		System.out.println("init chat");
 		ChatClientImpl chat = new ChatClientImpl();
 		chat.setChatActivityListener(new ClientChatReceiver(chat, clientName));
 		logic.setChat(chat);

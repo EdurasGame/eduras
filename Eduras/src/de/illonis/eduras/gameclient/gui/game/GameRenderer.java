@@ -155,7 +155,7 @@ public class GameRenderer implements TooltipHandler {
 				return;
 			}
 		} catch (ObjectNotFoundException e) {
-			L.log(Level.WARNING, "Waiting for player...", e);
+			// Waiting for player
 			return;
 		}
 		int width = container.getWidth();

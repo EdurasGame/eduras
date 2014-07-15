@@ -112,7 +112,6 @@ public class InputKeyHandler {
 	 */
 	public boolean onChatType(int key, char c) {
 		if (cache.isWriting()) {
-			System.out.println("type");
 			cache.write(key, c);
 			return true;
 		}
