@@ -13,9 +13,12 @@ import org.newdawn.slick.geom.Vector2f;
 import de.illonis.edulog.EduLog;
 import de.illonis.eduras.ObjectFactory.ObjectType;
 import de.illonis.eduras.Player;
+import de.illonis.eduras.exceptions.InsufficientResourceException;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
 import de.illonis.eduras.exceptions.WrongObjectTypeException;
 import de.illonis.eduras.gameclient.GuiInternalEventListener;
+import de.illonis.eduras.gameclient.audio.SoundMachine;
+import de.illonis.eduras.gameclient.audio.SoundMachine.SoundType;
 import de.illonis.eduras.gameclient.gui.game.GamePanelLogic.ClickState;
 import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.gameobjects.GameObject.Relation;
@@ -129,18 +132,26 @@ public class BuildModeMouseAdapter extends ScrollModeMouseAdapter {
 							"Player not found while selecting healtarget.", e);
 					return;
 				}
+				if (obs.isEmpty()) {
+					SoundMachine.play(SoundType.ERROR);
+					return;
+				}
 				for (GameObject gameObject : obs) {
 					if (gameObject.isUnit()
 							&& infoPro.getGameMode().getRelation(gameObject,
 									player) == Relation.ALLIED) {
-						getListener().onUnitHeal((Unit) gameObject);
-						getPanelLogic().setClickState(ClickState.DEFAULT);
+						try {
+							getListener().onUnitHeal((Unit) gameObject);
+							getPanelLogic().setClickState(ClickState.DEFAULT);
+						} catch (InsufficientResourceException e) {
+							getPanelLogic().onActionFailed(e);
+							return;
+						}
 						return;
 					}
 				}
-			} else {
-				getPanelLogic().setClickState(ClickState.DEFAULT);
 			}
+			getPanelLogic().setClickState(ClickState.DEFAULT);
 		}
 	}
 
@@ -171,7 +182,12 @@ public class BuildModeMouseAdapter extends ScrollModeMouseAdapter {
 			break;
 		case SELECT_POSITION_FOR_SCOUT:
 			if (button == Input.MOUSE_LEFT_BUTTON) {
-				getListener().onSpawnScout(clickGamePoint);
+				try {
+					getListener().onSpawnScout(clickGamePoint);
+				} catch (InsufficientResourceException e) {
+					getPanelLogic().onActionFailed(e);
+					return;
+				}
 			}
 			getListener().setClickState(ClickState.DEFAULT);
 			break;
@@ -182,14 +198,16 @@ public class BuildModeMouseAdapter extends ScrollModeMouseAdapter {
 							EdurasInitializer.getInstance()
 									.getInformationProvider().getClientData()
 									.getTypeOfItemToSpawn(), clickGamePoint);
-					getListener().setClickState(ClickState.DEFAULT);
 				} catch (WrongObjectTypeException e) {
 					L.log(Level.WARNING, "Cannot spawn this object type!!", e);
 					return;
+				} catch (InsufficientResourceException e) {
+					getPanelLogic().onActionFailed(e);
+					return;
 				}
-			} else {
-				getListener().setClickState(ClickState.DEFAULT);
 			}
+			getListener().setClickState(ClickState.DEFAULT);
+
 			break;
 		case SELECT_POSITION_FOR_OBSERVERUNIT:
 			if (button == Input.MOUSE_LEFT_BUTTON) {
@@ -214,14 +232,22 @@ public class BuildModeMouseAdapter extends ScrollModeMouseAdapter {
 
 						if (((NeutralBase) gameObject).getCurrentOwnerTeam() == player
 								.getTeam()) {
-							getListener().onUnitSpawned(ObjectType.OBSERVER,
-									(NeutralBase) gameObject);
-							getPanelLogic().setClickState(ClickState.DEFAULT);
+							try {
+								getListener().onUnitSpawned(
+										ObjectType.OBSERVER,
+										(NeutralBase) gameObject);
+
+								getPanelLogic().setClickState(
+										ClickState.DEFAULT);
+							} catch (InsufficientResourceException e) {
+								getPanelLogic().onActionFailed(e);
+							}
 							return;
 						} else {
 							getPanelLogic()
 									.showNotification(
 											"You can only spawn observers in bases your team owns.");
+							SoundMachine.play(SoundType.ERROR);
 							return;
 						}
 					}
@@ -229,6 +255,7 @@ public class BuildModeMouseAdapter extends ScrollModeMouseAdapter {
 				getPanelLogic()
 						.showNotification(
 								"Please select a base owned by your team to spawn a observer");
+				SoundMachine.play(SoundType.ERROR);
 				return;
 			}
 			getPanelLogic().setClickState(ClickState.DEFAULT);
@@ -245,16 +272,22 @@ public class BuildModeMouseAdapter extends ScrollModeMouseAdapter {
 						if (((NeutralBase) gameObject).getCurrentOwnerTeam() == getPanelLogic()
 								.getClientData().getCurrentResurrectTarget()
 								.getTeam()) {
-							getListener().onPlayerRezz(
-									getPanelLogic().getClientData()
-											.getCurrentResurrectTarget(),
-									(NeutralBase) gameObject);
-							getPanelLogic().setClickState(ClickState.DEFAULT);
+							try {
+								getListener().onPlayerRezz(
+										getPanelLogic().getClientData()
+												.getCurrentResurrectTarget(),
+										(NeutralBase) gameObject);
+								getPanelLogic().setClickState(
+										ClickState.DEFAULT);
+							} catch (InsufficientResourceException e) {
+								getPanelLogic().onActionFailed(e);
+							}
 							return;
 						} else {
 							getPanelLogic()
 									.showNotification(
 											"You can only resurrect on bases your team owns.");
+							SoundMachine.play(SoundType.ERROR);
 							return;
 						}
 					}
@@ -263,6 +296,7 @@ public class BuildModeMouseAdapter extends ScrollModeMouseAdapter {
 						"Please select a base owned by your team to resurrect "
 								+ getPanelLogic().getClientData()
 										.getCurrentResurrectTarget().getName());
+				SoundMachine.play(SoundType.ERROR);
 				return;
 			}
 			getPanelLogic().setClickState(ClickState.DEFAULT);

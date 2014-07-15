@@ -254,14 +254,11 @@ public class GuiInternalEventListener implements GamePanelReactor {
 	}
 
 	@Override
-	public void onPlayerRezz(Player player, NeutralBase base) {
-		try {
-			hasSufficientResources(player,
-					S.Server.gm_edura_action_respawnplayer_cost);
-		} catch (InsufficientResourceException e) {
-			client.getLogic().onActionFailed(e);
-			return;
-		}
+	public void onPlayerRezz(Player player, NeutralBase base)
+			throws InsufficientResourceException {
+
+		checkSufficientResources(player,
+				S.Server.gm_edura_action_respawnplayer_cost);
 
 		ResurrectPlayerEvent event = new ResurrectPlayerEvent(
 				client.getOwnerID(), player.getPlayerId(), base.getId());
@@ -279,7 +276,7 @@ public class GuiInternalEventListener implements GamePanelReactor {
 		}
 	}
 
-	private void hasSufficientResources(Player player, int neededAmount)
+	private void checkSufficientResources(Player player, int neededAmount)
 			throws InsufficientResourceException {
 		if (player.getTeam().getResource() < neededAmount) {
 			throw new InsufficientResourceException(neededAmount);
@@ -287,7 +284,8 @@ public class GuiInternalEventListener implements GamePanelReactor {
 	}
 
 	@Override
-	public void onUnitHeal(Unit targetUnit) {
+	public void onUnitHeal(Unit targetUnit)
+			throws InsufficientResourceException {
 
 		PlayerMainFigure player;
 		try {
@@ -296,14 +294,7 @@ public class GuiInternalEventListener implements GamePanelReactor {
 			L.log(Level.SEVERE, "Player not found while healing unit.", e);
 			return;
 		}
-
-		try {
-			hasSufficientResources(player.getPlayer(),
-					S.Server.spell_heal_costs);
-		} catch (InsufficientResourceException e1) {
-			client.getLogic().onActionFailed(e1);
-			return;
-		}
+		checkSufficientResources(player.getPlayer(), S.Server.spell_heal_costs);
 
 		HealActionEvent healEvent = new HealActionEvent(client.getOwnerID(),
 				targetUnit.getId());
@@ -327,7 +318,8 @@ public class GuiInternalEventListener implements GamePanelReactor {
 	}
 
 	@Override
-	public void onUnitSpawned(ObjectType type, NeutralBase base) {
+	public void onUnitSpawned(ObjectType type, NeutralBase base)
+			throws InsufficientResourceException {
 
 		Player player;
 		try {
@@ -337,12 +329,7 @@ public class GuiInternalEventListener implements GamePanelReactor {
 			return;
 		}
 
-		try {
-			hasSufficientResources(player, type.getCosts());
-		} catch (InsufficientResourceException e1) {
-			client.getLogic().onActionFailed(e1);
-			return;
-		}
+		checkSufficientResources(player, type.getCosts());
 
 		CreateUnitEvent event = new CreateUnitEvent(player.getPlayerId(), type,
 				base.getId());
@@ -355,7 +342,8 @@ public class GuiInternalEventListener implements GamePanelReactor {
 	}
 
 	@Override
-	public void onSpawnScout(Vector2f target) {
+	public void onSpawnScout(Vector2f target)
+			throws InsufficientResourceException {
 		Player player;
 		try {
 			player = infoPro.getPlayer();
@@ -364,12 +352,7 @@ public class GuiInternalEventListener implements GamePanelReactor {
 			return;
 		}
 
-		try {
-			hasSufficientResources(player, S.Server.spell_scout_costs);
-		} catch (InsufficientResourceException e1) {
-			client.getLogic().onActionFailed(e1);
-			return;
-		}
+		checkSufficientResources(player, S.Server.spell_scout_costs);
 
 		ScoutSpellEvent event = new ScoutSpellEvent(player.getPlayerId(),
 				target);
@@ -384,7 +367,7 @@ public class GuiInternalEventListener implements GamePanelReactor {
 
 	@Override
 	public void onSpawnItem(ObjectType type, Vector2f locationToSpawnAt)
-			throws WrongObjectTypeException {
+			throws WrongObjectTypeException, InsufficientResourceException {
 		Player player;
 		try {
 			player = infoPro.getPlayer();
@@ -397,12 +380,7 @@ public class GuiInternalEventListener implements GamePanelReactor {
 			throw new WrongObjectTypeException(type);
 		}
 
-		try {
-			hasSufficientResources(player, type.getCosts());
-		} catch (InsufficientResourceException e1) {
-			client.getLogic().onActionFailed(e1);
-			return;
-		}
+		checkSufficientResources(player, type.getCosts());
 
 		// TODO: only allow to spawn where you have vision...
 

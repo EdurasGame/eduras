@@ -32,6 +32,8 @@ import de.illonis.eduras.exceptions.ActionFailedException;
 import de.illonis.eduras.gameclient.ChatCache;
 import de.illonis.eduras.gameclient.ClientData;
 import de.illonis.eduras.gameclient.GuiInternalEventListener;
+import de.illonis.eduras.gameclient.audio.SoundMachine;
+import de.illonis.eduras.gameclient.audio.SoundMachine.SoundType;
 import de.illonis.eduras.gameclient.gui.CameraMouseListener;
 import de.illonis.eduras.gameclient.gui.HudNotifier;
 import de.illonis.eduras.gameclient.gui.TimedTasksHolderGUI;
@@ -355,6 +357,7 @@ public class GamePanelLogic implements UserInputListener, GameEventListener {
 	 */
 	public void onActionFailed(ActionFailedException e) {
 		showNotification(e.getMessage());
+		SoundMachine.play(SoundType.ERROR);
 	}
 
 	@Override
