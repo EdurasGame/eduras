@@ -78,7 +78,7 @@ public class LoginController extends EdurasScreenController {
 	 */
 	public void login() {
 		setControlsEnabled(false);
-		SoundMachine.getSound(SoundType.CLICK).play(2f, 0.1f);
+		SoundMachine.play(SoundType.CLICK, 2f);
 		String username = nameField.getRealText();
 		String password = passwordField.getRealText();
 		if (username.length() < 3) {
