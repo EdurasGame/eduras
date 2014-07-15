@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="build" default="docs">
+
+	<description>
+		Generates Javadoc for eduras
+	</description>
+
+	<property name="base" value="../" />
+	<property name="src" value="src" />
+	<property name="libs" value="lib" />
+	<property name="ant" value="ant" />
+	<property name="maps" value="src/de/illonis/eduras/maps/data" />
+	<property name="build" value="bin" />
+	<property name="jars" value="${base}../dist/jars" />
+	<property name="exclude" value="**/unittests/*" />
+
+	<path id="classpath">
+		<fileset dir="${base}${libs}" includes="*.jar" />
+		<pathelement path="${base}${build}" />
+	</path>
+
+	<target name="docs" description="Creates the javadoc thing.">
+		<javadoc excludepackagenames="" access="private" destdir="${base}/doc"
+			author="true" version="true" use="true" windowtitle="Eduras Javadoc"
+			useexternalfile="true">
+			<classpath refid="classpath" />
+			<fileset dir="${base}${src}" defaultexcludes="yes">
+				<include name="**/*.java" />
+			</fileset>
+			<bottom><![CDATA[<i>Copyright &#169; 2014 eduras.de. All Rights Reserved.</i>]]></bottom>
+			<link href="http://slick.ninjacave.com/javadoc/" />
+			<link href="http://docs.oracle.com/javase/7/docs/api/" />
+		</javadoc>
+	</target>
+</project> 
