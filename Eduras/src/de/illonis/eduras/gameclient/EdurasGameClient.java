@@ -2,14 +2,12 @@ package de.illonis.eduras.gameclient;
 
 import java.io.IOException;
 import java.net.InetAddress;
-import java.util.logging.Logger;
 
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.particles.ParticleSystem;
 
-import de.illonis.edulog.EduLog;
 import de.illonis.eduras.gameclient.gui.GameManager;
 import de.illonis.eduras.gameclient.gui.animation.EffectFactory;
 import de.illonis.eduras.gameclient.gui.game.GuiMouseHandler;
@@ -18,10 +16,13 @@ import de.illonis.eduras.logic.LogicGameWorker;
 import de.illonis.eduras.logicabstraction.EdurasInitializer;
 import de.illonis.eduras.networking.ClientRole;
 
+/**
+ * The game client for Eduras.
+ * 
+ * @author illonis
+ * 
+ */
 public class EdurasGameClient implements EdurasGameInterface {
-
-	private final static Logger L = EduLog.getLoggerFor(EdurasGameClient.class
-			.getName());
 
 	private final GameClient client;
 	private final InputKeyHandler keyHandler;

@@ -59,7 +59,7 @@ public class ServerListController extends EdurasScreenController implements
 	 * switches to settings view.
 	 */
 	public void showSettings() {
-		SoundMachine.getSound(SoundType.CLICK).play(2f, 0.1f);
+		SoundMachine.play(SoundType.CLICK, 2f);
 		game.enterState(1, new FadeOutTransition(Color.black, 100),
 				new FadeInTransition(Color.black, 300));
 	}

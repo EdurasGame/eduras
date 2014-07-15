@@ -54,7 +54,7 @@ public abstract class EdurasScreenController implements ScreenController {
 	 * Quits the game.
 	 */
 	public void exit() {
-		SoundMachine.getSound(SoundType.CLICK).play(2f, 0.1f);
+		SoundMachine.play(SoundType.CLICK, 2f);
 		game.exit();
 	}
 

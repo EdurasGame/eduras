@@ -2,7 +2,6 @@ package de.illonis.eduras.gameclient.gui.hud.nifty;
 
 import de.illonis.eduras.gameclient.datacache.GraphicsPreLoader;
 import de.illonis.eduras.gameclient.gui.animation.EffectFactory;
-import de.illonis.eduras.logicabstraction.EdurasInitializer;
 import de.lessvoid.nifty.controls.Label;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.screen.Screen;

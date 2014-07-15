@@ -20,6 +20,9 @@ public class KeyBindingsViewConverter implements
 
 	private final KeyBindings bindings;
 
+	/**
+	 * init.
+	 */
 	public KeyBindingsViewConverter() {
 		bindings = EdurasInitializer.getInstance().getSettings()
 				.getKeyBindings();

@@ -53,7 +53,7 @@ public class SettingsController extends EdurasScreenController {
 	 * returns back to server list.
 	 */
 	public void back() {
-		SoundMachine.getSound(SoundType.CLICK).play(2f, 0.1f);
+		SoundMachine.play(SoundType.CLICK, 2f);
 		game.enterState(2, new FadeOutTransition(Color.black, 100),
 				new FadeInTransition(Color.black, 300));
 		try {
