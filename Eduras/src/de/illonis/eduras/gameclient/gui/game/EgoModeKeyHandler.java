@@ -1,6 +1,6 @@
 package de.illonis.eduras.gameclient.gui.game;
 
-import de.illonis.eduras.exceptions.ActionFailedException;
+import de.illonis.eduras.exceptions.NotWithinBaseException;
 import de.illonis.eduras.gameclient.GamePanelReactor;
 import de.illonis.eduras.gameclient.userprefs.KeyBindings.KeyBinding;
 import de.illonis.eduras.gameobjects.MoveableGameObject.Direction;
@@ -19,7 +19,7 @@ public class EgoModeKeyHandler extends AnyModeKeyHandler {
 	}
 
 	@Override
-	void keyPressed(KeyBinding key) throws ActionFailedException {
+	void keyPressed(KeyBinding key) {
 		super.keyPressed(key);
 
 		switch (key) {
@@ -78,7 +78,11 @@ public class EgoModeKeyHandler extends AnyModeKeyHandler {
 			}
 			break;
 		case SWITCH_MODE:
-			reactor.onModeSwitch();
+			try {
+				reactor.onModeSwitch();
+			} catch (NotWithinBaseException e) {
+				client.onActionFailed(e);
+			}
 			break;
 		default:
 			break;

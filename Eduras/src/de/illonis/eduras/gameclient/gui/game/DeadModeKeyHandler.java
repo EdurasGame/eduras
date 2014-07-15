@@ -23,7 +23,7 @@ public class DeadModeKeyHandler extends AnyModeKeyHandler {
 	}
 
 	@Override
-	void keyPressed(KeyBinding key) throws ActionFailedException {
+	void keyPressed(KeyBinding key) {
 		switch (key) {
 		case SHOW_STATS:
 		case CHAT:
@@ -31,7 +31,8 @@ public class DeadModeKeyHandler extends AnyModeKeyHandler {
 			super.keyPressed(key);
 			break;
 		default:
-			throw new ActionFailedException("You cannot do this. You are dead!");
+			client.onActionFailed(new ActionFailedException(
+					"You cannot do this. You are dead!"));
 		}
 	}
 

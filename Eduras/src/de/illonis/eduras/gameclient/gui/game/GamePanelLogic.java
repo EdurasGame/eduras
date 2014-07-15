@@ -348,13 +348,7 @@ public class GamePanelLogic implements UserInputListener, GameEventListener {
 		currentClickState = ClickState.ITEM_SELECTED;
 	}
 
-	/**
-	 * Called when an RTS action fails. Displays an error message on the
-	 * notification panel.
-	 * 
-	 * @param e
-	 *            the related {@link ActionFailedException}.
-	 */
+	@Override
 	public void onActionFailed(ActionFailedException e) {
 		showNotification(e.getMessage());
 		SoundMachine.play(SoundType.ERROR);

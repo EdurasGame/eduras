@@ -8,7 +8,6 @@ import org.newdawn.slick.Input;
 
 import de.illonis.edulog.EduLog;
 import de.illonis.eduras.Player;
-import de.illonis.eduras.exceptions.ActionFailedException;
 import de.illonis.eduras.exceptions.KeyNotBoundException;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
 import de.illonis.eduras.gameclient.ChatCache;
@@ -142,7 +141,7 @@ public class InputKeyHandler {
 				&& key != settings.getKeyBindings().getKey(
 						KeyBinding.EXIT_CLIENT))
 			consumed = onChatType(key, c);
-		
+
 		if (consumed) {
 			return;
 		}
@@ -165,21 +164,17 @@ public class InputKeyHandler {
 			}
 			GuiKeyHandler handler = keyHandlers.get(player.getCurrentMode());
 			if (handler != null) {
-				try {
-					if (handler.isChatEnabled()) {
-						if (binding == KeyBinding.CHAT)
-							client.onChatEnter();
-						else if (binding == KeyBinding.EXIT_CLIENT
-								&& !client.abortChat()) {
-							client.onGameQuit();
-						} else {
-							handler.keyPressed(binding);
-						}
+				if (handler.isChatEnabled()) {
+					if (binding == KeyBinding.CHAT)
+						client.onChatEnter();
+					else if (binding == KeyBinding.EXIT_CLIENT
+							&& !client.abortChat()) {
+						client.onGameQuit();
 					} else {
 						handler.keyPressed(binding);
 					}
-				} catch (ActionFailedException e) {
-					L.log(Level.WARNING, "Action failed.", e);
+				} else {
+					handler.keyPressed(binding);
 				}
 			}
 		}
