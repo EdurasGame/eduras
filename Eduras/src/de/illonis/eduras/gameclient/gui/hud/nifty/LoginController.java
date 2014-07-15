@@ -10,8 +10,8 @@ import java.util.concurrent.ScheduledThreadPoolExecutor;
 
 import org.json.JSONObject;
 
-import de.illonis.eduras.gameclient.gui.SoundMachine;
-import de.illonis.eduras.gameclient.gui.SoundMachine.SoundType;
+import de.illonis.eduras.gameclient.audio.SoundMachine;
+import de.illonis.eduras.gameclient.audio.SoundMachine.SoundType;
 import de.illonis.eduras.utils.WebFetcher;
 import de.lessvoid.nifty.NiftyEventSubscriber;
 import de.lessvoid.nifty.controls.Button;

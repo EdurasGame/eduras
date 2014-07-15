@@ -7,7 +7,7 @@ import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.StateBasedGame;
 
-import de.illonis.eduras.gameclient.gui.SoundMachine;
+import de.illonis.eduras.gameclient.audio.SoundMachine;
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.slick2d.NiftyOverlayBasicGameState;
 

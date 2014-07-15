@@ -13,8 +13,8 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.transition.FadeInTransition;
 import org.newdawn.slick.state.transition.FadeOutTransition;
 
-import de.illonis.eduras.gameclient.gui.SoundMachine;
-import de.illonis.eduras.gameclient.gui.SoundMachine.SoundType;
+import de.illonis.eduras.gameclient.audio.SoundMachine;
+import de.illonis.eduras.gameclient.audio.SoundMachine.SoundType;
 import de.illonis.eduras.gameclient.userprefs.KeyBindings;
 import de.illonis.eduras.gameclient.userprefs.KeyBindings.KeyBinding;
 import de.illonis.eduras.gameclient.userprefs.Settings;

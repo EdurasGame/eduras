@@ -1,4 +1,4 @@
-package de.illonis.eduras.gameclient.gui;
+package de.illonis.eduras.gameclient.audio;
 
 import java.util.HashMap;
 

@@ -1,7 +1,7 @@
 package de.illonis.eduras.gameclient.gui.hud.nifty;
 
-import de.illonis.eduras.gameclient.gui.SoundMachine;
-import de.illonis.eduras.gameclient.gui.SoundMachine.SoundType;
+import de.illonis.eduras.gameclient.audio.SoundMachine;
+import de.illonis.eduras.gameclient.audio.SoundMachine.SoundType;
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;

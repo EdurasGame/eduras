@@ -7,8 +7,8 @@ import org.newdawn.slick.state.transition.FadeInTransition;
 import org.newdawn.slick.state.transition.FadeOutTransition;
 
 import de.illonis.eduras.gameclient.LoginData;
-import de.illonis.eduras.gameclient.gui.SoundMachine;
-import de.illonis.eduras.gameclient.gui.SoundMachine.SoundType;
+import de.illonis.eduras.gameclient.audio.SoundMachine;
+import de.illonis.eduras.gameclient.audio.SoundMachine.SoundType;
 import de.illonis.eduras.networking.ClientRole;
 import de.illonis.eduras.networking.discover.ServerFoundListener;
 import de.illonis.eduras.networking.discover.ServerInfo;
