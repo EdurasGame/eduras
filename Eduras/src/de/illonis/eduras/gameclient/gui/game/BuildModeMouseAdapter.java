@@ -50,9 +50,7 @@ public class BuildModeMouseAdapter extends ScrollModeMouseAdapter {
 
 		switch (getPanelLogic().getClickState()) {
 		case DEFAULT:
-			if (button == Input.MOUSE_RIGHT_BUTTON) {
-				getListener().sendSelectedUnits(clickGamePoint);
-			} else if (button == Input.MOUSE_LEFT_BUTTON) {
+			if (button == Input.MOUSE_LEFT_BUTTON) {
 				getListener().selectOrDeselectAt(clickGamePoint);
 			}
 			break;
@@ -242,6 +240,13 @@ public class BuildModeMouseAdapter extends ScrollModeMouseAdapter {
 
 	@Override
 	public void mouseReleased(int button, int x, int y) {
+		Vector2f clickGamePoint = getPanelLogic()
+				.computeGuiPointToGameCoordinate(new Vector2f(x, y));
+
+		if (getPanelLogic().getClickState() == ClickState.DEFAULT
+				&& button == Input.MOUSE_RIGHT_BUTTON) {
+			getListener().sendSelectedUnits(clickGamePoint);
+		}
 		if (getPanelLogic().getClickState() == ClickState.UNITSELECT_DRAGGING) {
 			if (button == Input.MOUSE_LEFT_BUTTON) {
 				getPanelLogic().setClickState(ClickState.DEFAULT);
