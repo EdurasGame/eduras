@@ -30,7 +30,7 @@ public class SoundMachine {
 	 * @throws SlickException
 	 */
 	public static void init() throws SlickException {
-		sounds.put(SoundType.CLICK, new Sound("/res/sound/click.ogg"));
+		sounds.put(SoundType.CLICK, new Sound("/res/audio/sound/click.ogg"));
 	}
 
 	private static final HashMap<SoundType, Sound> sounds;
