@@ -80,6 +80,12 @@ public class Edura extends TeamDeathmatch {
 	public void onGameStart() {
 		super.onGameStart();
 
+		// make sure all players are in EGO_MODE
+		for (Player player : gameInfo.getPlayers()) {
+			gameInfo.getEventTriggerer().changeInteractMode(
+					player.getPlayerId(), InteractMode.MODE_EGO);
+		}
+
 		loadNodes();
 	}
 
