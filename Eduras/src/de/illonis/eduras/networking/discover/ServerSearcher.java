@@ -225,11 +225,15 @@ public class ServerSearcher extends Thread {
 			String ipOfEdurasServer = (String) event.getArgument(i + 1);
 			int portOfEdurasServer = (Integer) event.getArgument(i + 2);
 			String versionOfEdurasServer = (String) event.getArgument(i + 3);
+			int numberOfPlayers = (Integer) event.getArgument(i + 4);
+			String gameMode = (String) event.getArgument(i + 5);
+			String map = (String) event.getArgument(i + 6);
 
-			L.fine("Metaserver reported the following server. name : "
+			L.info("Metaserver reported the following server. name : "
 					+ nameOfEdurasServer + " ; address : " + ipOfEdurasServer
 					+ ":" + portOfEdurasServer + " ; version : "
-					+ versionOfEdurasServer);
+					+ versionOfEdurasServer + " ; players: " + numberOfPlayers
+					+ " ; game mode :" + gameMode + " ; map: " + map);
 
 			try {
 				ServerInfo serverInfo = new ServerInfo(nameOfEdurasServer,

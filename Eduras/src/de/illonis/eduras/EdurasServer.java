@@ -349,7 +349,7 @@ public class EdurasServer {
 		}
 
 		ServerDiscoveryListener sdl = new ServerDiscoveryListener(
-				server.getName(), edurasPort);
+				server.getName(), edurasPort, eventTriggerer.getGameInfo());
 		sdl.start();
 
 		if (registerAtMetaserver) {
