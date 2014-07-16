@@ -52,8 +52,6 @@ public class ServerDiscoveryListener extends Thread {
 	 */
 	public final static String ANSWER_MSG = "EDURAS_SERVER_ANSWER";
 
-	private static String answer = "";
-
 	private final int CONNECT_ATTEMPTS = 10;
 
 	private final String name;
@@ -69,6 +67,9 @@ public class ServerDiscoveryListener extends Thread {
 	 *            name of this server.
 	 * @param serverPort
 	 *            port this server allows connections on.
+	 * @param gameInfo
+	 *            the gameinfo to derive number of players, gamemode and map
+	 *            from
 	 */
 	public ServerDiscoveryListener(String serverName, int serverPort,
 			GameInformation gameInfo) {
@@ -107,8 +108,6 @@ public class ServerDiscoveryListener extends Thread {
 
 		@Override
 		public void run() {
-			answer = createDiscoveryAnswer(name, port, gameInfo);
-
 			// Keep a socket open to listen to all the UDP traffic that is
 			// destined for this port
 			L.info("Initializing DiscoveryListening on port " + myPort);
@@ -177,6 +176,7 @@ public class ServerDiscoveryListener extends Thread {
 				InetSocketAddress isa) {
 			// See if the packet holds the right command (message)
 			if (aSingleMessage.equals(ServerDiscoveryListener.REQUEST_MSG)) {
+				String answer = createDiscoveryAnswer(name, port, gameInfo);
 				// Send a response
 				try {
 					channel.send(answer, isa);
