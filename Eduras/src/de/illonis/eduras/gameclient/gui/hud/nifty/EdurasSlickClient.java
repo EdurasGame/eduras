@@ -67,6 +67,38 @@ public class EdurasSlickClient implements GameControllerBridge {
 
 	class Game extends NiftyStateBasedGame {
 
+		@Override
+		public void keyPressed(int key, char c) {
+		}
+
+		@Override
+		public void keyReleased(int key, char c) {
+		}
+
+		@Override
+		public void mousePressed(int button, int x, int y) {
+		}
+
+		@Override
+		public void mouseReleased(int button, int x, int y) {
+		}
+
+		@Override
+		public void mouseDragged(int oldx, int oldy, int newx, int newy) {
+		}
+
+		@Override
+		public void mouseMoved(int oldx, int oldy, int newx, int newy) {
+		}
+
+		@Override
+		public void mouseClicked(int button, int x, int y, int clickCount) {
+		}
+
+		@Override
+		public void mouseWheelMoved(int newValue) {
+		}
+
 		protected Game() {
 			super("Eduras? Client");
 		}

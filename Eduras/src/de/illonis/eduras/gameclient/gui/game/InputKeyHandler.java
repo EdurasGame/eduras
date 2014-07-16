@@ -126,6 +126,7 @@ public class InputKeyHandler {
 	 *            the key char.
 	 */
 	public void keyPressed(int key, char c) {
+		System.out.println("key");
 		int keyCode = key;
 		// if already pressed, do not send a new event
 		if (justPressed(keyCode))

@@ -55,7 +55,6 @@ public class LoginState extends NiftyOverlayBasicGameState {
 			controller.login();
 			return;
 		}
-		super.keyReleased(key, c);
 	}
 
 	@Override
