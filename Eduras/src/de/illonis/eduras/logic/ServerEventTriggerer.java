@@ -705,6 +705,15 @@ public class ServerEventTriggerer implements EventTriggerer {
 
 	@Override
 	public void changeInteractMode(int ownerId, InteractMode newMode) {
+		Player playerToChangeModeOf;
+		try {
+			playerToChangeModeOf = gameInfo.getPlayerByOwnerId(ownerId);
+		} catch (ObjectNotFoundException e) {
+			L.log(Level.SEVERE, "Cannot find player!", e);
+			return;
+		}
+		playerToChangeModeOf.setMode(newMode);
+
 		SetInteractModeEvent event = new SetInteractModeEvent(ownerId, newMode);
 		sendEventToClient(event, ownerId);
 	}
