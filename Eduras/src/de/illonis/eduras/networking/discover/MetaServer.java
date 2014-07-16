@@ -217,7 +217,8 @@ public class MetaServer {
 				try {
 					serverInfos.put(clientId, new ServerInfo(serverName,
 							InetAddress.getByName(ipOfEdurasServer),
-							portOfEdurasServer, versionOfEdurasServer));
+							portOfEdurasServer, versionOfEdurasServer, 0, "",
+							""));
 					L.fine("Renewing lease of server with id #" + clientId);
 					serverLeases.put(clientId, System.currentTimeMillis());
 				} catch (UnknownHostException e) {

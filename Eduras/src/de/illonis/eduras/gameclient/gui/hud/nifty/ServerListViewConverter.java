@@ -17,7 +17,8 @@ public class ServerListViewConverter implements
 	private static final String SERVER_ADDRESS = "#serverAddress";
 	private static final String SERVER_PLAYERS = "#serverPlayers";
 	private static final String SERVER_STATUS = "#serverStatus";
-	
+	private static final String SERVER_MAP = "#serverMap";
+	private static final String SERVER_GAMEMODE = "#serverGamemode";
 
 	/**
 	 * Default constructor.
@@ -37,16 +38,27 @@ public class ServerListViewConverter implements
 		final Element text3 = listBoxItem.findElementById(SERVER_STATUS);
 		final TextRenderer textRenderer3 = text3
 				.getRenderer(TextRenderer.class);
-		
+
 		final Element text4 = listBoxItem.findElementById(SERVER_PLAYERS);
 		final TextRenderer textRenderer4 = text4
 				.getRenderer(TextRenderer.class);
 
+		final Element text5 = listBoxItem.findElementById(SERVER_MAP);
+		final TextRenderer textRenderer5 = text5
+				.getRenderer(TextRenderer.class);
+
+		final Element text6 = listBoxItem.findElementById(SERVER_GAMEMODE);
+		final TextRenderer textRenderer6 = text6
+				.getRenderer(TextRenderer.class);
+
 		if (item != null) {
 			textRenderer.setText(item.getName());
-			textRenderer2.setText(item.getUrl().getHostAddress() + ":" + item.getPort());
+			textRenderer2.setText(item.getUrl().getHostAddress() + ":"
+					+ item.getPort());
 			textRenderer3.setText(item.getVersion());
-			textRenderer4.setText("0 players");
+			textRenderer4.setText("" + item.getNumberOfPlayers());
+			textRenderer5.setText(item.getMap());
+			textRenderer6.setText(item.getGameMode());
 		} else {
 			textRenderer.setText("");
 			textRenderer2.setText("");

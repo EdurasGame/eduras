@@ -9,13 +9,17 @@
 		<panel childLayout="horizontal" width="100%" align="center"
 			padding="5px,5px,5px,5px">
 			<control id="#serverName" name="label" align="left"
-				textHAlign="left" height="23px" width="25%" />
+				textHAlign="left" height="23px" width="20%" />
 			<control id="#serverAddress" name="label" align="left"
-				textHAlign="left" height="23px" width="25%" />
-			<control id="#serverPlayers" name="label" align="left"
-				textHAlign="left" height="23px" width="25%" />
+				textHAlign="left" height="23px" width="20%" />
 			<control id="#serverStatus" name="label" align="left"
-				textHAlign="right" height="23px" width="*" />
+				textHAlign="left" height="23px" width="10%" />
+			<control id="#serverPlayers" name="label" align="left"
+				textHAlign="left" height="23px" width="5%" />
+			<control id="#serverMap" name="label" align="left"
+				textHAlign="left" height="23px" width="20%" />
+			<control id="#serverGamemode" name="label" align="left"
+				textHAlign="left" height="23px" width="20%" />
 		</panel>
 		<interact onClick="listBoxItemClicked()" />
 		<effect>

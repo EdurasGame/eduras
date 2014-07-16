@@ -238,7 +238,8 @@ public class ServerSearcher extends Thread {
 			try {
 				ServerInfo serverInfo = new ServerInfo(nameOfEdurasServer,
 						InetAddress.getByName(ipOfEdurasServer),
-						portOfEdurasServer, versionOfEdurasServer);
+						portOfEdurasServer, versionOfEdurasServer,
+						numberOfPlayers, gameMode, map);
 				return serverInfo;
 			} catch (UnknownHostException e) {
 				throw new UnknownHostException("Cannot genereate IP out of "

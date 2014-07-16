@@ -15,6 +15,9 @@ public class ServerInfo {
 	private final String name;
 	private final InetAddress url;
 	private final String version;
+	private final String map;
+	private final String gameMode;
+	private final int numberOfPlayers;
 
 	/**
 	 * Creates a new serverinfo object.
@@ -27,13 +30,23 @@ public class ServerInfo {
 	 *            port of server.
 	 * @param version
 	 *            version the server is running on
+	 * @param numberOfPlayers
+	 *            number of players on the server
+	 * @param gameMode
+	 *            game mode being played on the server
+	 * @param mapName
+	 *            name of the map being played on the server
 	 */
 	public ServerInfo(final String name, final InetAddress url, final int port,
-			final String version) {
+			final String version, int numberOfPlayers, String gameMode,
+			String mapName) {
 		this.name = name;
 		this.url = url;
 		this.port = port;
 		this.version = version;
+		this.map = mapName;
+		this.numberOfPlayers = numberOfPlayers;
+		this.gameMode = gameMode;
 	}
 
 	/**
@@ -64,6 +77,27 @@ public class ServerInfo {
 	 */
 	public InetAddress getUrl() {
 		return url;
+	}
+
+	/**
+	 * @return name of map being played
+	 */
+	public String getMap() {
+		return map;
+	}
+
+	/**
+	 * @return name of game mode being played
+	 */
+	public String getGameMode() {
+		return gameMode;
+	}
+
+	/**
+	 * @return number of players
+	 */
+	public int getNumberOfPlayers() {
+		return numberOfPlayers;
 	}
 
 	@Override

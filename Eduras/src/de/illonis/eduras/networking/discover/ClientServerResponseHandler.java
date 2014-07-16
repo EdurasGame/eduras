@@ -94,8 +94,9 @@ public class ClientServerResponseHandler extends Thread {
 			InetSocketAddress fsocket) throws NumberFormatException {
 		// handle server
 		int port = Integer.parseInt(msgparts[2]);
+		int numberOfPlayers = Integer.parseInt(msgparts[4]);
 		ServerInfo info = new ServerInfo(msgparts[1], fsocket.getAddress(),
-				port, msgparts[3]);
+				port, msgparts[3], numberOfPlayers, msgparts[5], msgparts[6]);
 		return info;
 	}
 
