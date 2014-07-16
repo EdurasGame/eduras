@@ -103,8 +103,7 @@ public class ServerDiscoveryListener extends Thread {
 
 		@Override
 		public void run() {
-			answer = "##" + ServerDiscoveryListener.ANSWER_MSG + "#" + name
-					+ "#" + port + "#" + EdurasVersion.getVersion() + "##";
+			answer = createDiscoveryAnswer(name, port);
 
 			// Keep a socket open to listen to all the UDP traffic that is
 			// destined for this port
@@ -189,5 +188,19 @@ public class ServerDiscoveryListener extends Thread {
 			}
 
 		}
+	}
+
+	/**
+	 * Creates a server's discovery answer.
+	 * 
+	 * @param name
+	 *            The server's name to answer with
+	 * @param port
+	 *            The port that server is running on
+	 * @return the answer as string
+	 */
+	public static String createDiscoveryAnswer(String name, int port) {
+		return "##" + ServerDiscoveryListener.ANSWER_MSG + "#" + name + "#"
+				+ port + "#" + EdurasVersion.getVersion() + "##";
 	}
 }
