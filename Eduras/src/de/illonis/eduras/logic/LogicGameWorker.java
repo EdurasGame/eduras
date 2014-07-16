@@ -2,6 +2,7 @@ package de.illonis.eduras.logic;
 
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -131,7 +132,9 @@ public abstract class LogicGameWorker implements Runnable, TimingSource {
 		Collection<Entry<TimedEventHandler, Long>> timingTargetsCopy = new LinkedList<Entry<TimedEventHandler, Long>>(
 				timingTargets.entrySet());
 
-		for (Entry<TimedEventHandler, Long> element : timingTargetsCopy) {
+		for (Iterator<Entry<TimedEventHandler, Long>> iterator = timingTargetsCopy
+				.iterator(); iterator.hasNext();) {
+			Entry<TimedEventHandler, Long> element = iterator.next();
 			long value = element.getValue();
 			value += delta;
 			if (value > element.getKey().getInterval()) {
