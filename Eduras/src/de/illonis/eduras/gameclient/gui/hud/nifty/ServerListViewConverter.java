@@ -27,43 +27,43 @@ public class ServerListViewConverter implements
 	}
 
 	@Override
-	public final void display(final Element listBoxItem, final ServerInfo item) {
-		final Element text = listBoxItem.findElementById(SERVER_NAME);
-		final TextRenderer textRenderer = text.getRenderer(TextRenderer.class);
+	public final void display(final Element listBoxItem, final ServerInfo serverInfo) {
+		final Element serverNameElement = listBoxItem.findElementById(SERVER_NAME);
+		final TextRenderer serverNameRenderer = serverNameElement.getRenderer(TextRenderer.class);
 
-		final Element text2 = listBoxItem.findElementById(SERVER_ADDRESS);
-		final TextRenderer textRenderer2 = text2
+		final Element serverAddressElement = listBoxItem.findElementById(SERVER_ADDRESS);
+		final TextRenderer serverAddressRenderer = serverAddressElement
 				.getRenderer(TextRenderer.class);
 
-		final Element text3 = listBoxItem.findElementById(SERVER_STATUS);
-		final TextRenderer textRenderer3 = text3
+		final Element serverStatusElement = listBoxItem.findElementById(SERVER_STATUS);
+		final TextRenderer serverStatusRenderer = serverStatusElement
 				.getRenderer(TextRenderer.class);
 
-		final Element text4 = listBoxItem.findElementById(SERVER_PLAYERS);
-		final TextRenderer textRenderer4 = text4
+		final Element serverPlayersElement = listBoxItem.findElementById(SERVER_PLAYERS);
+		final TextRenderer serverPlayersRenderer = serverPlayersElement
 				.getRenderer(TextRenderer.class);
 
-		final Element text5 = listBoxItem.findElementById(SERVER_MAP);
-		final TextRenderer textRenderer5 = text5
+		final Element mapNameElement = listBoxItem.findElementById(SERVER_MAP);
+		final TextRenderer mapNameRenderer = mapNameElement
 				.getRenderer(TextRenderer.class);
 
-		final Element text6 = listBoxItem.findElementById(SERVER_GAMEMODE);
-		final TextRenderer textRenderer6 = text6
+		final Element gameModeElement = listBoxItem.findElementById(SERVER_GAMEMODE);
+		final TextRenderer gameModeNameRenderer = gameModeElement
 				.getRenderer(TextRenderer.class);
 
-		if (item != null) {
-			textRenderer.setText(item.getName());
-			textRenderer2.setText(item.getUrl().getHostAddress() + ":"
-					+ item.getPort());
-			textRenderer3.setText(item.getVersion());
-			textRenderer4.setText("" + item.getNumberOfPlayers());
-			textRenderer5.setText(item.getMap());
-			textRenderer6.setText(item.getGameMode());
+		if (serverInfo != null) {
+			serverNameRenderer.setText(serverInfo.getName());
+			serverAddressRenderer.setText(serverInfo.getUrl().getHostAddress() + ":"
+					+ serverInfo.getPort());
+			serverStatusRenderer.setText(serverInfo.getVersion());
+			serverPlayersRenderer.setText("" + serverInfo.getNumberOfPlayers());
+			mapNameRenderer.setText(serverInfo.getMap());
+			gameModeNameRenderer.setText(serverInfo.getGameMode());
 		} else {
-			textRenderer.setText("");
-			textRenderer2.setText("");
-			textRenderer3.setText("");
-			textRenderer4.setText("");
+			serverNameRenderer.setText("");
+			serverAddressRenderer.setText("");
+			serverStatusRenderer.setText("");
+			serverPlayersRenderer.setText("");
 		}
 	}
 
