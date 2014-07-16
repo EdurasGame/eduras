@@ -1,6 +1,5 @@
 package de.illonis.eduras.gameclient.gui.hud;
 
-import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -30,15 +29,26 @@ public class NotificationPanel extends RenderedGuiObject {
 	private final static Logger L = EduLog.getLoggerFor(NotificationPanel.class
 			.getName());
 
-	private final static int Y_INSET = 80;
-
-	private final ConcurrentLinkedQueue<String> notifications;
-	private String currentMessage;
+	private final static int Y_INSET = 50;
+	private final static int BUFFER_SIZE = 5;
+	private final static long DEFAULT_DISPLAY_TIME = 3000;
 	private int y = 0;
 	private int x = 0;
 	private int screenWidth = 0;
-	private long lastChanged = System.currentTimeMillis();
-	private static long DISPLAY_TIME = 3000;
+	private DisplayMessage[] messageBuffer;
+	private long step, last;
+
+	private static class DisplayMessage {
+		private String message;
+		private long remaining;
+		private float alpha;
+
+		public DisplayMessage(String message) {
+			this.message = message;
+			remaining = DEFAULT_DISPLAY_TIME;
+			alpha = 1f;
+		}
+	}
 
 	/**
 	 * @param gui
@@ -46,25 +56,44 @@ public class NotificationPanel extends RenderedGuiObject {
 	 */
 	public NotificationPanel(UserInterface gui) {
 		super(gui);
+		messageBuffer = new DisplayMessage[BUFFER_SIZE];
 		setVisibleForSpectator(true);
-		currentMessage = "";
-		notifications = new ConcurrentLinkedQueue<String>();
+		last = System.currentTimeMillis();
 	}
 
 	@Override
 	public void render(Graphics g2d) {
-		if (currentMessage.isEmpty()) {
-			nextNotification();
-			return;
+		checkRemaining();
+		for (int i = 0; i < BUFFER_SIZE; i++) {
+			if (messageBuffer[i] != null) {
+				int stringWidth = g2d.getFont().getWidth(
+						messageBuffer[i].message);
+				x = (screenWidth - stringWidth) / 2;
+				Color color = new Color(1f, 1f, 1f, messageBuffer[i].alpha);
+				g2d.setColor(color);
+				g2d.drawString(messageBuffer[i].message, x, y + i * 20);
+			}
 		}
-		long now = System.currentTimeMillis();
-		if (lastChanged + DISPLAY_TIME < now) {
-			nextNotification();
+
+	}
+
+	private void checkRemaining() {
+		step = System.currentTimeMillis() - last;
+		for (int i = 0; i < BUFFER_SIZE; i++) {
+			if (messageBuffer[i] == null)
+				continue;
+			if (messageBuffer[i].remaining <= 0) {
+				if (messageBuffer[i].alpha <= 0.1f) {
+					messageBuffer[i] = null;
+				} else {
+					messageBuffer[i].alpha = Math.max(0f,
+							messageBuffer[i].alpha - 0.05f);
+				}
+			} else {
+				messageBuffer[i].remaining -= step;
+			}
 		}
-		int stringWidth = g2d.getFont().getWidth(currentMessage);
-		x = (screenWidth - stringWidth) / 2;
-		g2d.setColor(Color.white);
-		g2d.drawString(currentMessage, x, y);
+		last = System.currentTimeMillis();
 	}
 
 	/**
@@ -75,17 +104,14 @@ public class NotificationPanel extends RenderedGuiObject {
 	 *            the message.
 	 */
 	public void addNotification(String message) {
-		notifications.add(message);
+		DisplayMessage msg = new DisplayMessage(message);
+		bufferStep(0);
+		messageBuffer[BUFFER_SIZE - 1] = msg;
 	}
 
-	private void nextNotification() {
-		String next = notifications.poll();
-		if (next == null)
-			currentMessage = "";
-		else {
-			currentMessage = next;
-
-			lastChanged = System.currentTimeMillis();
+	private void bufferStep(int from) {
+		for (int i = from; i < BUFFER_SIZE - 1; i++) {
+			messageBuffer[i] = messageBuffer[i + 1];
 		}
 	}
 
