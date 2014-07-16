@@ -9,12 +9,12 @@ import de.illonis.eduras.gameclient.GuiInternalEventListener;
 import de.illonis.eduras.gameclient.datacache.CacheInfo.ImageKey;
 import de.illonis.eduras.gameclient.gui.HudNotifier;
 import de.illonis.eduras.gameclient.gui.TimedTasksHolderGUI;
+import de.illonis.eduras.gameclient.gui.game.GamePanelLogic.ClickState;
 import de.illonis.eduras.gameclient.gui.game.GameRenderer;
 import de.illonis.eduras.gameclient.gui.game.GuiClickReactor;
 import de.illonis.eduras.gameclient.gui.game.GuiResizeListener;
 import de.illonis.eduras.gameclient.gui.game.TooltipHandler;
 import de.illonis.eduras.gameclient.gui.game.TooltipTriggererNotifier;
-import de.illonis.eduras.gameclient.gui.game.GamePanelLogic.ClickState;
 import de.illonis.eduras.gameclient.gui.hud.ActionBarPage.PageNumber;
 import de.illonis.eduras.gameclient.gui.hud.actionbar.HealButton;
 import de.illonis.eduras.gameclient.gui.hud.actionbar.ItemPage;
@@ -45,6 +45,7 @@ public class UserInterface implements GuiResizeListener {
 	private DragSelectionRectangle dragRect;
 	private boolean spectator;
 	private NotificationPanel notificationPanel;
+	private TipPanel tipPanel;
 	private PingDisplay pingDisplay;
 	private final ChatCache cache;
 	private GameRenderer renderer;
@@ -111,6 +112,7 @@ public class UserInterface implements GuiResizeListener {
 		new ResourceDisplay(this);
 		pingDisplay = new PingDisplay(this);
 		notificationPanel = new NotificationPanel(this);
+		tipPanel = new TipPanel(this);
 		dragRect = new DragSelectionRectangle(this);
 		statWindow = new StatisticsWindow(this);
 		new ChatDisplay(cache, this);
@@ -291,11 +293,23 @@ public class UserInterface implements GuiResizeListener {
 	}
 
 	/**
+	 * Shows a notification to the user.
+	 * 
 	 * @param message
 	 *            the message.
 	 */
 	public void showNotification(String message) {
 		notificationPanel.addNotification(message);
+	}
+
+	/**
+	 * Shows a tip at the action bar.
+	 * 
+	 * @param message
+	 *            the message.
+	 */
+	public void showTip(String message) {
+		tipPanel.addMessage(message);
 	}
 
 	/**

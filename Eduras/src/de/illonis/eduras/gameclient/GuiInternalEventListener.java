@@ -315,6 +315,25 @@ public class GuiInternalEventListener implements GamePanelReactor {
 	@Override
 	public void setClickState(ClickState newState) {
 		client.getLogic().setClickState(newState);
+		switch (newState) {
+		case SELECT_TARGET_FOR_HEAL:
+			client.getLogic().showTip("Select a unit that should be healed.");
+			break;
+		case SELECT_BASE_FOR_REZZ:
+			client.getLogic().showTip(
+					"Select a base where your teammate should be rezzed.");
+			break;
+		case SELECT_POSITION_FOR_ITEMSPAWN:
+			client.getLogic().showTip(
+					"Select a position in the world to spawn this item.");
+			break;
+		case SELECT_POSITION_FOR_OBSERVERUNIT:
+			client.getLogic().showTip(
+					"Select a base where observer should be spawned.");
+			break;
+		default:
+			break;
+		}
 	}
 
 	@Override
