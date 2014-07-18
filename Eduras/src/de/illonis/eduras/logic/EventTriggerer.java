@@ -80,7 +80,8 @@ public interface EventTriggerer {
 			Vector2f[] polygonVector2fs, Vector2f position, int owner);
 
 	/**
-	 * Creates an object at given position.
+	 * Creates an object at given position such that the top left corner of the
+	 * newly created object's shape is at that position.
 	 * 
 	 * @param object
 	 *            type of object.
@@ -92,6 +93,22 @@ public interface EventTriggerer {
 	 * @see #createDynamicPolygonObjectAt(ObjectType, Vector2f[], Vector2f, int)
 	 */
 	public int createObjectAt(ObjectType object, Vector2f position, int owner);
+
+	/**
+	 * Creates an object at given position such that the center of the newly
+	 * created object is at that position.
+	 * 
+	 * @param object
+	 *            type of object.
+	 * @param position
+	 *            position of new object
+	 * @param owner
+	 *            owner id of new object.
+	 * @return the id of the created object.
+	 * @see #createDynamicPolygonObjectAt(ObjectType, Vector2f[], Vector2f, int)
+	 */
+	public int createObjectWithCenterAt(ObjectType object, Vector2f position,
+			int owner);
 
 	/**
 	 * Sets polygon data of a polygon with given id.
