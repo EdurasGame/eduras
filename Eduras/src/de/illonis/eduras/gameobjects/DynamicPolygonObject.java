@@ -91,4 +91,9 @@ public class DynamicPolygonObject extends GameObject {
 		// just block
 	}
 
+	@Override
+	protected boolean isCollidableWith(GameObject otherObject) {
+		return true;
+	}
+
 }

@@ -114,4 +114,9 @@ public abstract class TriggerArea extends GameObject implements
 	 *            the object that left area.
 	 */
 	public abstract void onObjectLeft(GameObject object);
+
+	@Override
+	protected boolean isCollidableWith(GameObject otherObject) {
+		return false;
+	}
 }

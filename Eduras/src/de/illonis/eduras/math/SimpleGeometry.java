@@ -34,13 +34,12 @@ public class SimpleGeometry implements ShapeGeometry {
 	@Override
 	public Collection<GameObject> getTouchingObjects(GameObject object) {
 		LinkedList<GameObject> touching = new LinkedList<GameObject>();
-		boolean objCollidable = object.isCollidable();
 		Shape s = object.getShape();
 
 		for (Iterator<GameObject> iterator = objects.values().iterator(); iterator
 				.hasNext();) {
 			GameObject o = iterator.next();
-			if (objCollidable && o.isCollidable())
+			if (GameObject.canCollideWithEachOther(object, o))
 				continue;
 
 			if (Geometry.shapeCollides(s, o.getShape())) {
@@ -88,7 +87,7 @@ public class SimpleGeometry implements ShapeGeometry {
 				continue;
 			}
 			if (Geometry.shapeCollides(shape, o.getShape())) {
-				if (o.isCollidable())
+				if (o.isCollidable(null))
 					collided.add(o);
 				else
 					touched.add(o);

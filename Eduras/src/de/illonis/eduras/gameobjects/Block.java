@@ -72,4 +72,9 @@ public abstract class Block extends GameObject {
 	public void onCollision(GameObject collidingObject) {
 		// do nothing
 	}
+
+	@Override
+	protected boolean isCollidableWith(GameObject otherObject) {
+		return true;
+	}
 }

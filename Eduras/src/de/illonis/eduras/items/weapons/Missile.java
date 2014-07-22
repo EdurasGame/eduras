@@ -137,7 +137,8 @@ public abstract class Missile extends MoveableGameObject {
 							getDamageRadius());
 			for (GameObject nearObject : nearObjects) {
 				// do not handle collided object twice.
-				if (nearObject.equals(collidingObject) || nearObject.equals(this))
+				if (nearObject.equals(collidingObject)
+						|| nearObject.equals(this))
 					continue;
 				Relation nearRelation = getGame().getGameSettings()
 						.getGameMode().getRelation(this, nearObject);
@@ -151,4 +152,12 @@ public abstract class Missile extends MoveableGameObject {
 		removeSelf();
 	}
 
+	@Override
+	protected boolean isCollidableWith(GameObject otherObject) {
+		if (otherObject instanceof Weapon || otherObject instanceof Missile) {
+			return false;
+		} else {
+			return true;
+		}
+	}
 }

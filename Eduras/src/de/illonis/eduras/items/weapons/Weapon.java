@@ -223,4 +223,13 @@ public abstract class Weapon extends UsableItem implements Lootable {
 			return;
 		currentAmmunition--;
 	}
+
+	@Override
+	protected boolean isCollidableWith(GameObject otherObject) {
+		if (otherObject.getType() == ObjectType.PLAYER) {
+			return true;
+		} else {
+			return false;
+		}
+	}
 }
