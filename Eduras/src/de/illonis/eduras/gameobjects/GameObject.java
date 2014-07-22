@@ -421,7 +421,7 @@ public abstract class GameObject implements Comparable<GameObject> {
 	 * 
 	 * @return True if it is collidable and false otherwise.
 	 */
-	public boolean isCollidable(GameObject otherObject) {
+	public final boolean isCollidable(GameObject otherObject) {
 		if (otherObject == null) {
 			return collidable;
 		} else {
