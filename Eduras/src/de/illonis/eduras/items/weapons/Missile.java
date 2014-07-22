@@ -154,7 +154,7 @@ public abstract class Missile extends MoveableGameObject {
 
 	@Override
 	protected boolean isCollidableWith(GameObject otherObject) {
-		if (otherObject instanceof Weapon || otherObject instanceof Missile) {
+		if (otherObject instanceof Weapon) {
 			return false;
 		} else {
 			return true;
