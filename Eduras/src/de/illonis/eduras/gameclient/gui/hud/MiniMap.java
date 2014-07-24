@@ -99,6 +99,8 @@ public class MiniMap extends ClickableGuiElement {
 
 		// if it IS null, some game mode other than Edura is running
 		if (nodes != null) {
+			g.setLineWidth(1f);
+			g.setColor(Color.yellow);
 			for (Integer nodeId : nodes.keySet()) {
 				NodeData someNode = nodes.get(nodeId);
 
