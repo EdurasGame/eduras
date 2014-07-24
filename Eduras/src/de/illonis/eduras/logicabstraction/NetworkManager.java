@@ -6,7 +6,6 @@ import java.net.InetAddress;
 import de.eduras.eventingserver.Client;
 import de.eduras.eventingserver.ClientInterface;
 import de.eduras.eventingserver.ClientNetworkEventHandler;
-import de.illonis.eduras.interfaces.GameLogicInterface;
 
 /**
  * This class provides a connection between the GUI and the network.
@@ -17,6 +16,7 @@ import de.illonis.eduras.interfaces.GameLogicInterface;
 public class NetworkManager {
 	private ClientInterface client;
 	private ClientNetworkEventHandler edurasGUINetworkHandler;
+	private EdurasInitializer edurasInitializer;
 
 	/**
 	 * Creates a new NetworkManager with the given logic.
@@ -25,7 +25,8 @@ public class NetworkManager {
 	 *            The logic the client shall use.
 	 * 
 	 */
-	NetworkManager(GameLogicInterface logic) {
+	NetworkManager(EdurasInitializer edurasInitializer) {
+		this.edurasInitializer = edurasInitializer;
 		client = new Client();
 		client.setNetworkEventHandler(new ClientNetworkEventHandler() {
 

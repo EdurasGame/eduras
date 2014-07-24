@@ -55,11 +55,11 @@ import de.illonis.eduras.units.Unit;
  */
 public class EdurasInitializer {
 
-	private final NetworkManager networkManager;
-	private final EventSender eventSender;
-	private final InformationProvider informationProvider;
+	final NetworkManager networkManager;
+	final EventSender eventSender;
+	final InformationProvider informationProvider;
 	private final Settings settings;
-	private final GameLogicInterface logic;
+	final GameLogicInterface logic;
 	private static EdurasInitializer instance;
 
 	private final static Logger L = EduLog.getLoggerFor(EdurasServer.class
@@ -319,7 +319,7 @@ public class EdurasInitializer {
 
 		});
 
-		networkManager = new NetworkManager(logic);
+		networkManager = new NetworkManager(this);
 
 		ClientInterface client = networkManager.getClient();
 
@@ -331,9 +331,9 @@ public class EdurasInitializer {
 			L.log(Level.WARNING, "Could not load user preferences.", e);
 		}
 
-		eventSender = new EventSender(client, logic);
+		eventSender = new EventSender(this);
 
-		informationProvider = new InformationProvider(logic, networkManager);
+		informationProvider = new InformationProvider(this);
 
 	}
 

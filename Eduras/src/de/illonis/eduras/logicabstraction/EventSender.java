@@ -13,7 +13,6 @@ import de.illonis.eduras.events.GameEvent;
 import de.illonis.eduras.events.GameEvent.GameEventNumber;
 import de.illonis.eduras.exceptions.MessageNotSupportedException;
 import de.illonis.eduras.exceptions.WrongEventTypeException;
-import de.illonis.eduras.interfaces.GameLogicInterface;
 import de.illonis.eduras.logic.ServerEventTriggerer;
 import de.illonis.eduras.networking.EventParser;
 import de.illonis.eduras.networking.InetPolizei;
@@ -29,29 +28,28 @@ import de.illonis.eduras.networking.InetPolizei;
  */
 public class EventSender {
 
-	ClientInterface client;
-	GameLogicInterface logic;
-
+	private EdurasInitializer edurasInitializer;
 	private final static Logger L = EduLog
 			.getLoggerFor(ServerEventTriggerer.class.getName());
 
 	/**
-	 * Creates an EventSender that uses the given client to forward events via
-	 * network and to the client's game logic.
+	 * Creates an EventSender that uses the {@link NetworkManager}'s client to
+	 * forward events via network and to the client's game logic.
 	 * 
-	 * @param client
-	 *            The client to use.
-	 * @param logic
-	 *            The logic to use.
+	 * @param edurasInitializer
+	 *            the {@link EdurasInitializer} containing the NetworkManager.
 	 */
-	EventSender(ClientInterface client, GameLogicInterface logic) {
+	EventSender(EdurasInitializer edurasInitializer) {
 
-		this.client = client;
-		client.setEventHandler(new EventParser(logic));
+		this.edurasInitializer = edurasInitializer;
+
+		ClientInterface client = this.edurasInitializer.getNetworkManager()
+				.getClient();
+		client.setEventHandler(new EventParser(this.edurasInitializer
+				.getLogic()));
 
 		// TODO: Replace inet polizei with something better!
 		client.setNetworkPolicy(new InetPolizei());
-		this.logic = logic;
 	}
 
 	/**
@@ -78,12 +76,14 @@ public class EventSender {
 			throw new WrongEventTypeException(gameEvent);
 		}
 
+		ClientInterface client = this.edurasInitializer.getNetworkManager()
+				.getClient();
 		try {
 			client.sendEvent(gameEvent);
 		} catch (IllegalArgumentException | TooFewArgumentsExceptions e) {
 			L.warning("EventSender: " + e.getMessage());
 		}
 		if (gameEvent.getType() == GameEventNumber.SET_POS_UDP)
-			logic.onGameEventAppeared(gameEvent);
+			edurasInitializer.getLogic().onGameEventAppeared(gameEvent);
 	}
 }

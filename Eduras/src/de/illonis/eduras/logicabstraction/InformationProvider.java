@@ -15,7 +15,6 @@ import de.illonis.eduras.gameclient.ClientData;
 import de.illonis.eduras.gamemodes.GameMode;
 import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.interfaces.GameEventListener;
-import de.illonis.eduras.interfaces.GameLogicInterface;
 import de.illonis.eduras.interfaces.InfoInterface;
 import de.illonis.eduras.maps.EduraMap;
 import de.illonis.eduras.maps.NodeData;
@@ -29,9 +28,8 @@ import de.illonis.eduras.maps.NodeData;
  * 
  */
 public class InformationProvider implements InfoInterface {
-	private final GameLogicInterface logic;
-	private final NetworkManager networkManager;
 	private ClientData clientData;
+	private EdurasInitializer edurasInitializer;
 
 	/**
 	 * Creates a new InformationProvider that gains information with the given
@@ -40,15 +38,14 @@ public class InformationProvider implements InfoInterface {
 	 * @param logic
 	 *            The logic to gain information from.
 	 */
-	InformationProvider(GameLogicInterface logic, NetworkManager networkManager) {
-		this.logic = logic;
-		this.networkManager = networkManager;
+	InformationProvider(EdurasInitializer edurasInitializer) {
+		this.edurasInitializer = edurasInitializer;
 		this.clientData = new ClientData();
 	}
 
 	@Override
 	public Rectangle getMapBounds() {
-		return logic.getGame().getMap().getBounds();
+		return edurasInitializer.logic.getGame().getMap().getBounds();
 	}
 
 	/**
@@ -57,7 +54,7 @@ public class InformationProvider implements InfoInterface {
 	 * @return owner id.
 	 */
 	public int getOwnerID() {
-		return networkManager.getClient().getClientId();
+		return edurasInitializer.networkManager.getClient().getClientId();
 	}
 
 	/**
@@ -68,7 +65,8 @@ public class InformationProvider implements InfoInterface {
 	 *             Thrown if the running map is NOT an Edura! map.
 	 */
 	public Collection<NodeData> getNodes() throws IllegalArgumentException {
-		de.illonis.eduras.maps.Map map = logic.getGame().getMap();
+		de.illonis.eduras.maps.Map map = edurasInitializer.logic.getGame()
+				.getMap();
 		if (!(map instanceof EduraMap)) {
 			throw new IllegalArgumentException(
 					"The current map is no Edura! map, so there are no nodes");
@@ -86,17 +84,18 @@ public class InformationProvider implements InfoInterface {
 	 * @author illonis
 	 */
 	public String getMapName() {
-		return logic.getGame().getMap().getName();
+		return edurasInitializer.logic.getGame().getMap().getName();
 	}
 
 	@Override
 	public Player getPlayer() throws ObjectNotFoundException {
-		return logic.getGame().getPlayerByOwnerId(getOwnerID());
+		return edurasInitializer.logic.getGame().getPlayerByOwnerId(
+				getOwnerID());
 	}
 
 	@Override
 	public Map<Integer, GameObject> getGameObjects() {
-		return logic.getGame().getObjects();
+		return edurasInitializer.logic.getGame().getObjects();
 	}
 
 	/**
@@ -106,43 +105,45 @@ public class InformationProvider implements InfoInterface {
 	 *            The listener.
 	 */
 	public void setGameEventListener(GameEventListener listener) {
-		logic.setGameEventListener(listener);
+		edurasInitializer.logic.setGameEventListener(listener);
 	}
 
 	@Override
 	public Statistic getStatistics() {
-		return logic.getGame().getGameSettings().getStats();
+		return edurasInitializer.logic.getGame().getGameSettings().getStats();
 	}
 
 	@Override
 	public GameMode getGameMode() {
-		return logic.getGame().getGameSettings().getGameMode();
+		return edurasInitializer.logic.getGame().getGameSettings()
+				.getGameMode();
 	}
 
 	@Override
 	public Collection<Player> getPlayers() {
-		return logic.getGame().getPlayers();
+		return edurasInitializer.logic.getGame().getPlayers();
 	}
 
 	@Override
 	public GameObject findObjectById(int id) {
-		return logic.getGame().findObjectById(id);
+		return edurasInitializer.logic.getGame().findObjectById(id);
 	}
 
 	@Override
 	public Player getPlayerByOwnerId(int ownerId)
 			throws ObjectNotFoundException {
-		return logic.getGame().getPlayerByOwnerId(ownerId);
+		return edurasInitializer.logic.getGame().getPlayerByOwnerId(ownerId);
 	}
 
 	@Override
 	public long getRemainingTime() {
-		return logic.getGame().getGameSettings().getRemainingTime();
+		return edurasInitializer.logic.getGame().getGameSettings()
+				.getRemainingTime();
 	}
 
 	@Override
 	public Collection<Team> getTeams() {
-		return logic.getGame().getTeams();
+		return edurasInitializer.logic.getGame().getTeams();
 	}
 
 	@Override
@@ -152,11 +153,11 @@ public class InformationProvider implements InfoInterface {
 
 	@Override
 	public Collection<GameObject> findObjectsByType(ObjectType type) {
-		return logic.getGame().findObjectsByType(type);
+		return edurasInitializer.logic.getGame().findObjectsByType(type);
 	}
 
 	@Override
 	public Collection<GameObject> findObjectsAt(Vector2f point) {
-		return logic.getGame().findObjectsAt(point);
+		return edurasInitializer.logic.getGame().findObjectsAt(point);
 	}
 }
