@@ -87,6 +87,10 @@ public class LoginController extends EdurasScreenController {
 		nameNote = screen.findNiftyControl("userNameNote", Label.class);
 		loginButton = screen.findNiftyControl("loginButton", Button.class);
 		nameField.setFocus();
+
+		if (!presetAccountName.isEmpty() && !presetAccountPassword.isEmpty()) {
+			login();
+		}
 	}
 
 	/**
