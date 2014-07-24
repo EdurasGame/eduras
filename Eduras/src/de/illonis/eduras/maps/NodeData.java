@@ -1,5 +1,7 @@
 package de.illonis.eduras.maps;
 
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.logging.Logger;
 
@@ -91,4 +93,22 @@ public class NodeData {
 		return isMainNode;
 	}
 
+	/**
+	 * Given a collection of NodeData this function returns a HashMap that maps
+	 * a nodes id onto the node.
+	 * 
+	 * @param nodeData
+	 *            the collection of node data
+	 * @return the HashMap
+	 */
+	public static HashMap<Integer, NodeData> nodeDataToVertices(
+			Collection<NodeData> nodeData) {
+		HashMap<Integer, NodeData> nodeIdToVertex = new HashMap<Integer, NodeData>();
+
+		// initialize vertices
+		for (NodeData node : nodeData) {
+			nodeIdToVertex.put(node.getId(), node);
+		}
+		return nodeIdToVertex;
+	}
 }

@@ -18,11 +18,13 @@ import de.illonis.eduras.gameclient.gui.game.GameCamera;
 import de.illonis.eduras.gameclient.gui.hud.minimap.MiniMapBase;
 import de.illonis.eduras.gameclient.gui.hud.minimap.MiniMapNeutralObject;
 import de.illonis.eduras.gameclient.gui.hud.minimap.MiniMapPlayer;
+import de.illonis.eduras.gamemodes.GameMode.GameModeNumber;
 import de.illonis.eduras.gameobjects.DynamicPolygonObject;
 import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.gameobjects.NeutralBase;
 import de.illonis.eduras.items.weapons.Missile;
 import de.illonis.eduras.items.weapons.Weapon;
+import de.illonis.eduras.maps.NodeData;
 import de.illonis.eduras.math.Geometry;
 import de.illonis.eduras.units.PlayerMainFigure;
 
@@ -42,6 +44,7 @@ public class MiniMap extends ClickableGuiElement {
 	private HashMap<Integer, MiniMapPlayer> players;
 	private GameCamera viewPort;
 	private float scale;
+	private HashMap<Integer, NodeData> nodes;
 
 	final static int SIZE = 150;
 	private static final Color NEUTRAL_OBJECTS_FILL_COLOR = Color.gray;
@@ -91,6 +94,49 @@ public class MiniMap extends ClickableGuiElement {
 		}
 	}
 
+	private void renderNodeConnections(Graphics g) {
+		checkIfNodesInitialized();
+
+		// if it IS null, some game mode other than Edura is running
+		if (nodes != null) {
+			for (Integer nodeId : nodes.keySet()) {
+				NodeData someNode = nodes.get(nodeId);
+
+				for (Integer adjacentOfSomeNodeId : someNode.getAdjacentNodes()) {
+					NodeData adjacentOfSomeNode = nodes
+							.get(adjacentOfSomeNodeId);
+
+					// draw a line from some node to his adjacent
+					Vector2f someNodePositionOnMinimap = gameToMinimapPosition(new Vector2f(
+							someNode.getX(), someNode.getY()));
+					Vector2f adjacentOfSomeNodePositionOnMinimap = gameToMinimapPosition(new Vector2f(
+							adjacentOfSomeNode.getX(),
+							adjacentOfSomeNode.getY()));
+
+					g.drawLine(someNodePositionOnMinimap.getX(),
+							someNodePositionOnMinimap.getY(),
+							adjacentOfSomeNodePositionOnMinimap.getX(),
+							adjacentOfSomeNodePositionOnMinimap.getY());
+				}
+			}
+		}
+
+	}
+
+	private void checkIfNodesInitialized() {
+		if (nodes == null) {
+			if (getInfo().getGameMode().getNumber() == GameModeNumber.EDURA) {
+
+				try {
+					nodes = NodeData.nodeDataToVertices(getInfo().getNodes());
+				} catch (IllegalArgumentException e) {
+					L.warning("This map is running Edura! game mode although it's not an Edura! map!");
+					return;
+				}
+			}
+		}
+	}
+
 	private void renderPlayers(Graphics g) {
 		for (MiniMapPlayer object : players.values()) {
 			g.setColor(object.getColor());
@@ -130,6 +176,7 @@ public class MiniMap extends ClickableGuiElement {
 		g.fill(bounds);
 		renderNeutral(g);
 		renderBases(g);
+		renderNodeConnections(g);
 		renderPlayers(g);
 		renderViewPort(g);
 	}
@@ -137,7 +184,8 @@ public class MiniMap extends ClickableGuiElement {
 	private void renderViewPort(Graphics g) {
 		g.setLineWidth(1f);
 		g.setColor(Color.white);
-		Vector2f pos = gameToMinimapPosition(new Vector2f (viewPort.getX(), viewPort.getY()));
+		Vector2f pos = gameToMinimapPosition(new Vector2f(viewPort.getX(),
+				viewPort.getY()));
 		g.drawRect(pos.x, pos.y, viewPort.getWidth() * scale,
 				viewPort.getHeight() * scale);
 	}
@@ -184,6 +232,7 @@ public class MiniMap extends ClickableGuiElement {
 			players.remove(o.getId());
 		else if (o instanceof NeutralBase) {
 			bases.remove(o.getId());
+			resetNodeData();
 		} else if (o.getOwner() == -1) {
 			neutralObjects.remove(o.getId());
 		}
@@ -207,6 +256,7 @@ public class MiniMap extends ClickableGuiElement {
 			float w = o.getShape().getWidth() * scale;
 			float h = o.getShape().getHeight() * scale;
 			bases.put(o.getId(), new MiniMapBase((NeutralBase) o, x, y, w, h));
+			resetNodeData();
 		} else if (o.getOwner() == -1 && !(o instanceof Weapon)) {
 
 			float w = o.getShape().getWidth() * scale;
@@ -231,6 +281,10 @@ public class MiniMap extends ClickableGuiElement {
 			}
 			neutralObjects.put(o.getId(), newNeutralObject);
 		}
+	}
+
+	private void resetNodeData() {
+		nodes = null;
 	}
 
 	private boolean isTracked(GameObject o) {
