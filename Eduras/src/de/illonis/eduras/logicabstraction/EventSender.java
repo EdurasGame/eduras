@@ -14,7 +14,6 @@ import de.illonis.eduras.events.GameEvent.GameEventNumber;
 import de.illonis.eduras.exceptions.MessageNotSupportedException;
 import de.illonis.eduras.exceptions.WrongEventTypeException;
 import de.illonis.eduras.logic.ServerEventTriggerer;
-import de.illonis.eduras.networking.EventParser;
 import de.illonis.eduras.networking.InetPolizei;
 
 /**
@@ -45,8 +44,6 @@ public class EventSender {
 
 		ClientInterface client = this.edurasInitializer.getNetworkManager()
 				.getClient();
-		client.setEventHandler(new EventParser(this.edurasInitializer
-				.getLogic()));
 
 		// TODO: Replace inet polizei with something better!
 		client.setNetworkPolicy(new InetPolizei());

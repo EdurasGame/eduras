@@ -41,6 +41,7 @@ import de.illonis.eduras.logic.EventTriggerer;
 import de.illonis.eduras.logic.LogicGameWorker;
 import de.illonis.eduras.maps.Map;
 import de.illonis.eduras.math.Vector2df;
+import de.illonis.eduras.networking.EventParser;
 import de.illonis.eduras.units.InteractMode;
 import de.illonis.eduras.units.PlayerMainFigure;
 import de.illonis.eduras.units.Unit;
@@ -67,8 +68,6 @@ public class EdurasInitializer {
 	private EdurasInitializer() {
 		instance = this;
 
-		initGame();
-
 		networkManager = new NetworkManager(this);
 		settings = new Settings();
 		try {
@@ -79,6 +78,8 @@ public class EdurasInitializer {
 		}
 		eventSender = new EventSender(this);
 		informationProvider = new InformationProvider(this);
+
+		initGame();
 
 	}
 
@@ -403,5 +404,6 @@ public class EdurasInitializer {
 
 		});
 
+		networkManager.getClient().setEventHandler(new EventParser(logic));
 	}
 }

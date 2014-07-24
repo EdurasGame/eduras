@@ -38,7 +38,6 @@ public class NetworkManager {
 			@Override
 			public void onClientConnected(int clientId) {
 				edurasGUINetworkHandler.onClientConnected(clientId);
-
 			}
 
 			@Override
