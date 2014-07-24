@@ -151,7 +151,7 @@ public class EdurasInitializer {
 		return logic;
 	}
 
-	void initGame() {
+	public void initGame() {
 		GameInformation game = new GameInformation();
 
 		// needed because all the game game mode action shall be performed on

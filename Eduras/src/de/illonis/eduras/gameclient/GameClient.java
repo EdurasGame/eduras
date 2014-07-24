@@ -56,6 +56,7 @@ public class GameClient {
 	private void loadTools(GameContainer gameContainer) {
 
 		initializer = EdurasInitializer.getInstance();
+		initializer.initGame();
 		eventSender = initializer.getEventSender();
 		infoPro = initializer.getInformationProvider();
 		eventHandler = new ClientNetworkEventListener(this);
