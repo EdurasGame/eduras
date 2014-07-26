@@ -49,7 +49,7 @@
 				<panel backgroundColor="#333f" height="50px" width="*"
 					padding="15px,15px,15px,15px" childLayout="center">
 					<control type="textfield" id="customIpTextField" font="aurulent-sans-16.fnt"
-					 text="localhost:4387" maxLenght="21" align="left" width="25%"/>
+					 text="custom address" maxLenght="30" align="left" width="25%"/>
 					<control type="button" id="joinButton" font="aurulent-sans-16.fnt"
 						color="#ffff" label="Join" align="center">
 						<interact onClick="join()" />
