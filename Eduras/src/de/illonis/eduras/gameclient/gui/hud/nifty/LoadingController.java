@@ -78,7 +78,6 @@ public class LoadingController extends EdurasScreenController {
 	@Override
 	public void onStartScreen() {
 		super.onStartScreen();
-		load = true;
 	}
 
 	private void setProgress(final float progress, final String loadingText) {
@@ -88,5 +87,14 @@ public class LoadingController extends EdurasScreenController {
 		progressBarElement.setConstraintWidth(new SizeValue(pixelWidth + "px"));
 		progressBarElement.getParent().layoutElements();
 		loadingTextDisplay.setText(loadingText);
+	}
+
+	/**
+	 * Resets the loading progress.
+	 */
+	public void reset() {
+		setProgress(0, "Start loading...");
+		frameCount = 0;
+		load = true;
 	}
 }
