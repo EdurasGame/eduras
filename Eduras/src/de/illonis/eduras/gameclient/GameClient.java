@@ -123,7 +123,7 @@ public class GameClient {
 
 	private void tearDownConnection() {
 		logic.stop();
-		logic.getChat();
+		logic.getChat().disconnect();
 		// initializer.tearDown();
 		container.onDisconnect(wantsExit, null);
 	}
