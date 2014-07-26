@@ -116,6 +116,8 @@ public class GameClient {
 	public void onClientDisconnect(int clientId) {
 		L.info("Client disconnected: " + clientId);
 		if (clientId == getOwnerID()) {
+			logic.stop();
+			// initializer.tearDown();
 			container.onDisconnect(wantsExit, null);
 		}
 	}

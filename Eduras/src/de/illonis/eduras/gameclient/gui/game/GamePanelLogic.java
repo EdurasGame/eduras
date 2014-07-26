@@ -172,7 +172,6 @@ public class GamePanelLogic implements UserInputListener, GameEventListener {
 	}
 
 	public void stop() {
-		gui.exit();
 		cml.stop();
 		stopTimedTasks();
 	}
@@ -384,6 +383,7 @@ public class GamePanelLogic implements UserInputListener, GameEventListener {
 		reactor.onGameQuit();
 	}
 
+	@Override
 	public void onNewObjectPosition(GameObject object) {
 	}
 
