@@ -11,7 +11,7 @@ import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.geom.Vector2f;
 
 import de.illonis.edulog.EduLog;
-import de.illonis.eduras.chat.ChatClientImpl;
+import de.illonis.eduras.chat.ChatClient;
 import de.illonis.eduras.chat.NotConnectedException;
 import de.illonis.eduras.chat.UserNotInRoomException;
 import de.illonis.eduras.events.ClientRenameEvent;
@@ -68,7 +68,7 @@ public class GamePanelLogic implements UserInputListener, GameEventListener {
 	private final InformationProvider infoPro;
 	private ClickState currentClickState;
 	private final ClientData data;
-	private ChatClientImpl chat;
+	private ChatClient chat;
 	private ChatCache cache;
 	private LinkedList<GameEventListener> gameEventListeners;
 
@@ -295,7 +295,7 @@ public class GamePanelLogic implements UserInputListener, GameEventListener {
 	 * @param chat
 	 *            the chat implementation.
 	 */
-	public void setChat(ChatClientImpl chat) {
+	public void setChat(ChatClient chat) {
 		this.chat = chat;
 		this.cache = infoPro.getClientData().getChatCache();
 	}
@@ -488,6 +488,11 @@ public class GamePanelLogic implements UserInputListener, GameEventListener {
 
 	@Override
 	public void onPlayerLeft(int ownerId) {
+
+	}
+
+	public ChatClient getChat() {
+		return chat;
 
 	}
 }
