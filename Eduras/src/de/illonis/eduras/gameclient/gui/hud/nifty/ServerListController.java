@@ -18,6 +18,7 @@ import de.illonis.eduras.networking.ClientRole;
 import de.illonis.eduras.networking.discover.ServerFoundListener;
 import de.illonis.eduras.networking.discover.ServerInfo;
 import de.lessvoid.nifty.controls.ListBox;
+import de.lessvoid.nifty.controls.TextField;
 import de.lessvoid.nifty.screen.Screen;
 
 /**
@@ -33,6 +34,7 @@ public class ServerListController extends EdurasScreenController implements
 			.getLoggerFor(ServerListController.class.getName());
 
 	private ListBox<ServerInfo> listBox;
+	private TextField customIpTextField;
 	private final String presetServerIp;
 	private final int presetServerPort;
 
@@ -51,12 +53,13 @@ public class ServerListController extends EdurasScreenController implements
 	@Override
 	protected void initScreen(Screen screen) {
 		listBox = screen.findNiftyControl("serverList", ListBox.class);
+		customIpTextField = screen.findNiftyControl("customIpTextField",
+				TextField.class);
 
 		if (!presetServerIp.isEmpty() && presetServerPort != 0) {
 			try {
-				joinServer(new ServerInfo("",
-						InetAddress.getByName(presetServerIp),
-						presetServerPort, "", 0, "", ""));
+				joinServer(new ServerInfo(
+						InetAddress.getByName(presetServerIp), presetServerPort));
 			} catch (UnknownHostException e) {
 				L.log(Level.WARNING, "Cannot find specified IP '"
 						+ presetServerIp + "'", e);
@@ -73,6 +76,18 @@ public class ServerListController extends EdurasScreenController implements
 		if (selected.size() == 1) {
 			ServerInfo current = selected.get(0);
 			joinServer(current);
+		} else {
+			try {
+				String serverAddressAndPort = customIpTextField
+						.getDisplayedText();
+				String hostAddress = serverAddressAndPort.split(":")[0];
+				int port = Integer.parseInt(serverAddressAndPort.split(":")[1]);
+				joinServer(new ServerInfo(InetAddress.getByName(hostAddress),
+						port));
+			} catch (NumberFormatException | UnknownHostException e) {
+				// TODO: Show a notification or something
+				return;
+			}
 		}
 	}
 

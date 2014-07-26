@@ -48,10 +48,8 @@
 				childLayout="vertical">
 				<panel backgroundColor="#333f" height="50px" width="*"
 					padding="15px,15px,15px,15px" childLayout="center">
-					<control type="button" id="customButton" font="aurulent-sans-16.fnt"
-						color="#ffff" label="Connect to IP..." align="left">
-						<interact onClick="custom()" />
-					</control>
+					<control type="textfield" id="customIpTextField" font="aurulent-sans-16.fnt"
+					 text="localhost:4387" maxLenght="21" align="left" width="25%"/>
 					<control type="button" id="joinButton" font="aurulent-sans-16.fnt"
 						color="#ffff" label="Join" align="center">
 						<interact onClick="join()" />
@@ -60,11 +58,10 @@
 						color="#ffff" label="Settings" align="right">
 						<interact onClick="showSettings()" />
 					</control>
-
 				</panel>
-
+				
 				<control id="serverList" name="listBox" height="*" vertical="optional"
-					forceSelection="true" horizontal="off" displayItems="10" selection="Single"
+					forceSelection="false" horizontal="off" displayItems="10" selection="Single"
 					viewConverterClass="de.illonis.eduras.gameclient.gui.hud.nifty.ServerListViewConverter">
 					<control name="serverEntry"
 						controller="de.lessvoid.nifty.controls.listbox.ListBoxItemController">
