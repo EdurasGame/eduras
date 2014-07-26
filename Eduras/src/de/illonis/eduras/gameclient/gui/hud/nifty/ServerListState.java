@@ -18,15 +18,26 @@ public class ServerListState extends NiftyBasicGameState {
 	private final GameControllerBridge game;
 	private ServerListController controller;
 	private ServerSearcher searcher;
+	private final String presetServerAddress;
+	private final int presetServerPort;
 
 	ServerListState(GameControllerBridge game) {
+		this(game, "", 0);
+	}
+
+	ServerListState(GameControllerBridge game, String serverIpToConnectTo,
+			int serverPort) {
 		super("serverlist");
 		this.game = game;
+
+		presetServerAddress = serverIpToConnectTo;
+		presetServerPort = serverPort;
 	}
 
 	@Override
 	protected void prepareNifty(Nifty nifty, StateBasedGame stateGame) {
-		controller = new ServerListController(this.game);
+		controller = new ServerListController(this.game, presetServerAddress,
+				presetServerPort);
 		nifty.fromXml("/res/hud/serverlist.xml", "serverlist", controller);
 	}
 

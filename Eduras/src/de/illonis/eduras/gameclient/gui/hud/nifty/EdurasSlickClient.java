@@ -30,6 +30,8 @@ public class EdurasSlickClient implements GameControllerBridge {
 	private ServerInfo server;
 	private String betaAccountName;
 	private String betaAccountPassword;
+	private String serverIpToConnectTo;
+	private int serverPort;
 
 	/**
 	 * Starts the gui display in fullscreen mode.
@@ -38,13 +40,21 @@ public class EdurasSlickClient implements GameControllerBridge {
 	 *            (NYI) the name of the user to login automatically.
 	 * @param betaPassword
 	 *            (NYI) the password of the user to login automatically.
+	 * @param serverPort
+	 *            the port of the server to connect to directly. Is ignored if
+	 *            it's zero.
+	 * @param serverIp
+	 *            the address of the server to connect to directly. Is ignored
+	 *            if empty.
 	 * @throws SlickException
 	 *             if there is a display problem.
 	 */
-	public void startGui(String betaUser, String betaPassword)
-			throws SlickException {
+	public void startGui(String betaUser, String betaPassword, String serverIp,
+			int serverPort) throws SlickException {
 		betaAccountName = betaUser;
 		betaAccountPassword = betaPassword;
+		serverIpToConnectTo = serverIp;
+		this.serverPort = serverPort;
 
 		if (game != null)
 			throw new IllegalStateException("Cannot start gui more than once!");
@@ -83,7 +93,8 @@ public class EdurasSlickClient implements GameControllerBridge {
 			addState(new LoginState(EdurasSlickClient.this, betaAccountName,
 					betaAccountPassword));
 			addState(new SettingsState(EdurasSlickClient.this));
-			addState(new ServerListState(EdurasSlickClient.this));
+			addState(new ServerListState(EdurasSlickClient.this,
+					serverIpToConnectTo, serverPort));
 			addState(new LoadingState(EdurasSlickClient.this));
 			addState(new GameState(EdurasSlickClient.this));
 			addState(new ConnectingState(EdurasSlickClient.this));

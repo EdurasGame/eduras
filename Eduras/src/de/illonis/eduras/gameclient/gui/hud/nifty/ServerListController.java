@@ -1,11 +1,16 @@
 package de.illonis.eduras.gameclient.gui.hud.nifty;
 
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.newdawn.slick.Color;
 import org.newdawn.slick.state.transition.FadeInTransition;
 import org.newdawn.slick.state.transition.FadeOutTransition;
 
+import de.illonis.edulog.EduLog;
 import de.illonis.eduras.gameclient.LoginData;
 import de.illonis.eduras.gameclient.audio.SoundMachine;
 import de.illonis.eduras.gameclient.audio.SoundMachine.SoundType;
@@ -24,17 +29,40 @@ import de.lessvoid.nifty.screen.Screen;
 public class ServerListController extends EdurasScreenController implements
 		ServerFoundListener {
 
+	private final static Logger L = EduLog
+			.getLoggerFor(ServerListController.class.getName());
+
 	private ListBox<ServerInfo> listBox;
+	private final String presetServerIp;
+	private final int presetServerPort;
 
 	ServerListController(GameControllerBridge game) {
+		this(game, "", 0);
+	}
+
+	ServerListController(GameControllerBridge game, String presetServerAddress,
+			int presetServerPort) {
 		super(game);
+		presetServerIp = presetServerAddress;
+		this.presetServerPort = presetServerPort;
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
 	protected void initScreen(Screen screen) {
-		listBox = (ListBox<ServerInfo>) screen.findNiftyControl("serverList",
-				ListBox.class);
+		listBox = screen.findNiftyControl("serverList", ListBox.class);
+
+		if (!presetServerIp.isEmpty() && presetServerPort != 0) {
+			try {
+				joinServer(new ServerInfo("",
+						InetAddress.getByName(presetServerIp),
+						presetServerPort, "", 0, "", ""));
+			} catch (UnknownHostException e) {
+				L.log(Level.WARNING, "Cannot find specified IP '"
+						+ presetServerIp + "'", e);
+				return;
+			}
+		}
 	}
 
 	/**
@@ -44,15 +72,19 @@ public class ServerListController extends EdurasScreenController implements
 		List<ServerInfo> selected = listBox.getSelection();
 		if (selected.size() == 1) {
 			ServerInfo current = selected.get(0);
-			game.setServer(current);
-			game.enterState(3);
-			String userName = game.getUsername();
-			ClientRole role = ClientRole.PLAYER;
-			LoginData data = new LoginData(current.getUrl(), current.getPort(),
-					userName, role);
-			game.setLoginData(data);
-			game.enterState(5);
+			joinServer(current);
 		}
+	}
+
+	private void joinServer(ServerInfo server) {
+		game.setServer(server);
+		game.enterState(3);
+		String userName = game.getUsername();
+		ClientRole role = ClientRole.PLAYER;
+		LoginData data = new LoginData(server.getUrl(), server.getPort(),
+				userName, role);
+		game.setLoginData(data);
+		game.enterState(5);
 	}
 
 	/**
