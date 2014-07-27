@@ -33,6 +33,8 @@ public abstract class ActionButton extends GameEventAdapter {
 	protected final GamePanelReactor reactor;
 	private ImageKey imageKey;
 	private Image icon;
+	private boolean autoCancel;
+	private boolean clearSelection;
 
 	/**
 	 * Creates a new action button.
@@ -49,6 +51,19 @@ public abstract class ActionButton extends GameEventAdapter {
 		this.imageKey = image;
 		enabled = true;
 		this.label = label;
+		autoCancel = false;
+	}
+
+	protected final void clearSelection() {
+		clearSelection = true;
+	}
+
+	final boolean isAutoCancel() {
+		return autoCancel;
+	}
+
+	protected final void setAutoCancel(boolean autoCancel) {
+		this.autoCancel = autoCancel;
 	}
 
 	/**
@@ -96,5 +111,11 @@ public abstract class ActionButton extends GameEventAdapter {
 	public final void click() {
 		if (enabled)
 			actionPerformed();
+	}
+
+	final boolean isCleared() {
+		boolean selected = clearSelection;
+		clearSelection = false;
+		return selected;
 	}
 }

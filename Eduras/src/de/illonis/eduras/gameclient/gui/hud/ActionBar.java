@@ -5,7 +5,9 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.Vector2f;
 
+import de.illonis.eduras.gameclient.ClientData;
 import de.illonis.eduras.gameclient.gui.hud.ActionBarPage.PageNumber;
+import de.illonis.eduras.logicabstraction.EdurasInitializer;
 import de.illonis.eduras.units.InteractMode;
 
 /**
@@ -23,9 +25,12 @@ public class ActionBar extends ClickableGuiElement implements TooltipTriggerer {
 
 	private ActionBarPage currentPage;
 	private int numButtons;
+	private final ClientData data;
 
 	protected ActionBar(UserInterface gui) {
 		super(gui);
+		data = EdurasInitializer.getInstance().getInformationProvider()
+				.getClientData();
 		screenX = MiniMap.SIZE + 5;
 		bounds = new Rectangle(screenX, screenY, 0, 0);
 		registerAsTooltipTriggerer(this);
@@ -48,7 +53,13 @@ public class ActionBar extends ClickableGuiElement implements TooltipTriggerer {
 		float x = p.x - screenX;
 		if (x < ActionButton.BUTTON_SIZE * numButtons) {
 			int button = (int) (x / ActionButton.BUTTON_SIZE);
-			currentPage.getButtons().get(button).click();
+			ActionButton theButton = currentPage.getButtons().get(button);
+			if (!theButton.isAutoCancel()) {
+				data.setCurrentActionSelected(button);
+			} else {
+				data.setCurrentActionSelected(-1);
+			}
+			theButton.click();
 			return true;
 		}
 		return false;
@@ -65,14 +76,24 @@ public class ActionBar extends ClickableGuiElement implements TooltipTriggerer {
 			return;
 
 		float x = screenX;
-		g.setColor(DISABLED_COLOR);
 		for (int i = 0; i < numButtons; i++) {
 			ActionButton button = currentPage.getButtons().get(i);
 			if (button.getIcon() != null) {
 				g.drawImage(button.getIcon(), x, screenY);
 				if (!button.isEnabled()) {
+					g.setColor(DISABLED_COLOR);
 					g.fillRect(x, screenY, ActionButton.BUTTON_SIZE,
 							ActionButton.BUTTON_SIZE);
+				}
+				if (data.getCurrentActionSelected() == i) {
+					if (button.isCleared()) {
+						data.setCurrentActionSelected(-1);
+					} else {
+						g.setColor(Color.yellow);
+						g.setLineWidth(3f);
+						g.drawRect(x, screenY, ActionButton.BUTTON_SIZE - 2,
+								ActionButton.BUTTON_SIZE - 2);
+					}
 				}
 			}
 			x += ActionButton.BUTTON_SIZE;
@@ -96,6 +117,7 @@ public class ActionBar extends ClickableGuiElement implements TooltipTriggerer {
 	 *            the new page.
 	 */
 	public void setPage(PageNumber page) {
+		data.setCurrentActionSelected(-1);
 		if (currentPage != null)
 			currentPage.onHidden();
 		currentPage = ActionBarPage.getPage(page);

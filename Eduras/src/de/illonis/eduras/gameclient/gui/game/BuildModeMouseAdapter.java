@@ -142,6 +142,7 @@ public class BuildModeMouseAdapter extends ScrollModeMouseAdapter {
 									player) == Relation.ALLIED) {
 						try {
 							getListener().onUnitHeal((Unit) gameObject);
+							actionDone();
 							getPanelLogic().setClickState(ClickState.DEFAULT);
 						} catch (InsufficientResourceException e) {
 							getPanelLogic().onActionFailed(e);
@@ -184,6 +185,7 @@ public class BuildModeMouseAdapter extends ScrollModeMouseAdapter {
 			if (button == Input.MOUSE_LEFT_BUTTON) {
 				try {
 					getListener().onSpawnScout(clickGamePoint);
+					actionDone();
 				} catch (InsufficientResourceException e) {
 					getPanelLogic().onActionFailed(e);
 					return;
@@ -198,6 +200,7 @@ public class BuildModeMouseAdapter extends ScrollModeMouseAdapter {
 							EdurasInitializer.getInstance()
 									.getInformationProvider().getClientData()
 									.getTypeOfItemToSpawn(), clickGamePoint);
+					actionDone();
 				} catch (WrongObjectTypeException e) {
 					L.log(Level.WARNING, "Cannot spawn this object type!!", e);
 					return;
@@ -237,7 +240,7 @@ public class BuildModeMouseAdapter extends ScrollModeMouseAdapter {
 								getListener().onUnitSpawned(
 										ObjectType.OBSERVER,
 										(NeutralBase) gameObject);
-
+								actionDone();
 								getPanelLogic().setClickState(
 										ClickState.DEFAULT);
 							} catch (InsufficientResourceException e) {
@@ -278,6 +281,7 @@ public class BuildModeMouseAdapter extends ScrollModeMouseAdapter {
 										getPanelLogic().getClientData()
 												.getCurrentResurrectTarget(),
 										(NeutralBase) gameObject);
+								actionDone();
 								getPanelLogic().setClickState(
 										ClickState.DEFAULT);
 							} catch (InsufficientResourceException e) {
@@ -305,6 +309,11 @@ public class BuildModeMouseAdapter extends ScrollModeMouseAdapter {
 		default:
 			break;
 		}
+	}
+
+	private void actionDone() {
+		EdurasInitializer.getInstance().getInformationProvider()
+				.getClientData().setCurrentActionSelected(-1);
 	}
 
 	@Override
