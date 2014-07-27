@@ -32,4 +32,9 @@ public class Building extends GameObject {
 	public void onCollision(GameObject collidingObject) {
 	}
 
+	@Override
+	protected boolean isCollidableWith(GameObject otherObject) {
+		return true;
+	}
+
 }

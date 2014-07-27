@@ -79,15 +79,25 @@ public class ClientServerResponseHandler extends Thread {
 		if (singleMessage.contains(ServerDiscoveryListener.ANSWER_MSG)) {
 			String[] msgparts = singleMessage.split("#");
 
-			// handle server
 			try {
-				int port = Integer.parseInt(msgparts[2]);
-				ServerInfo info = new ServerInfo(msgparts[1],
-						fsocket.getAddress(), port, msgparts[3]);
+				ServerInfo info = handleServerAnswer(msgparts, fsocket);
 				listener.onServerFound(info);
-			} catch (NumberFormatException ne) {
+			} catch (NumberFormatException e) {
+				L.log(Level.WARNING, "Got corrupted server answer: "
+						+ singleMessage, e);
 			}
+
 		}
+	}
+
+	private ServerInfo handleServerAnswer(String[] msgparts,
+			InetSocketAddress fsocket) throws NumberFormatException {
+		// handle server
+		int port = Integer.parseInt(msgparts[2]);
+		int numberOfPlayers = Integer.parseInt(msgparts[4]);
+		ServerInfo info = new ServerInfo(msgparts[1], fsocket.getAddress(),
+				port, msgparts[3], numberOfPlayers, msgparts[5], msgparts[6]);
+		return info;
 	}
 
 	@Override

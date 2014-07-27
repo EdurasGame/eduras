@@ -28,6 +28,8 @@ public class EdurasSlickClient implements GameControllerBridge {
 	private Game game;
 	private String username = "";
 	private ServerInfo server;
+	private String betaAccountName;
+	private String betaAccountPassword;
 
 	/**
 	 * Starts the gui display in fullscreen mode.
@@ -41,6 +43,9 @@ public class EdurasSlickClient implements GameControllerBridge {
 	 */
 	public void startGui(String betaUser, String betaPassword)
 			throws SlickException {
+		betaAccountName = betaUser;
+		betaAccountPassword = betaPassword;
+
 		if (game != null)
 			throw new IllegalStateException("Cannot start gui more than once!");
 		game = new Game();
@@ -107,7 +112,8 @@ public class EdurasSlickClient implements GameControllerBridge {
 		public void initStatesList(GameContainer container)
 				throws SlickException {
 			// add game states here
-			addState(new LoginState(EdurasSlickClient.this));
+			addState(new LoginState(EdurasSlickClient.this, betaAccountName,
+					betaAccountPassword));
 			addState(new SettingsState(EdurasSlickClient.this));
 			addState(new ServerListState(EdurasSlickClient.this));
 			addState(new LoadingState(EdurasSlickClient.this));

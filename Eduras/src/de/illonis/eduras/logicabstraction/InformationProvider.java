@@ -17,6 +17,8 @@ import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.interfaces.GameEventListener;
 import de.illonis.eduras.interfaces.GameLogicInterface;
 import de.illonis.eduras.interfaces.InfoInterface;
+import de.illonis.eduras.maps.EduraMap;
+import de.illonis.eduras.maps.NodeData;
 
 /**
  * This class provides a connection between GUI and logic. GUI developers can
@@ -56,6 +58,24 @@ public class InformationProvider implements InfoInterface {
 	 */
 	public int getOwnerID() {
 		return networkManager.getClient().getClientId();
+	}
+
+	/**
+	 * If the running map is an Edura! map, it's NodeData are returned.
+	 * 
+	 * @return node data
+	 * @throws IllegalArgumentException
+	 *             Thrown if the running map is NOT an Edura! map.
+	 */
+	public Collection<NodeData> getNodes() throws IllegalArgumentException {
+		de.illonis.eduras.maps.Map map = logic.getGame().getMap();
+		if (!(map instanceof EduraMap)) {
+			throw new IllegalArgumentException(
+					"The current map is no Edura! map, so there are no nodes");
+		}
+
+		EduraMap eduraMap = (EduraMap) map;
+		return eduraMap.getNodes();
 	}
 
 	/**

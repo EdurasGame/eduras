@@ -43,4 +43,9 @@ public class ScoutSpell extends DisposableUnit {
 	@Override
 	public void onCollision(GameObject collidingObject) {
 	}
+
+	@Override
+	protected boolean isCollidableWith(GameObject otherObject) {
+		return false;
+	}
 }

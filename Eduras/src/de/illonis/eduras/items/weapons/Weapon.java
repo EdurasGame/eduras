@@ -1,6 +1,5 @@
 package de.illonis.eduras.items.weapons;
 
-import org.newdawn.slick.geom.GeomUtil;
 import org.newdawn.slick.geom.Vector2f;
 
 import de.illonis.eduras.GameInformation;
@@ -200,7 +199,9 @@ public abstract class Weapon extends UsableItem implements Lootable {
 		Vector2f target = info.getTarget();
 		GameObject triggeringObject = info.getTriggeringObject();
 
-		Vector2f center = new Vector2f(triggeringObject.getPositionVector());
+		Vector2f center = new Vector2f(
+				triggeringObject.getShape().getCenterX(), triggeringObject
+						.getShape().getCenterY());
 
 		Vector2f speedVector = new Vector2f(target);
 		speedVector.sub(center);
@@ -221,5 +222,14 @@ public abstract class Weapon extends UsableItem implements Lootable {
 		if (ammuType == AmmunitionLimit.INFINITE)
 			return;
 		currentAmmunition--;
+	}
+
+	@Override
+	protected boolean isCollidableWith(GameObject otherObject) {
+		if (otherObject.getType() == ObjectType.PLAYER) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 }

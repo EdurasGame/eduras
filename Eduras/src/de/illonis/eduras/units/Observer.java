@@ -53,4 +53,9 @@ public class Observer extends ControlledUnit {
 		return MotionType.FOOT;
 	}
 
+	@Override
+	protected boolean isCollidableWith(GameObject otherObject) {
+		return true;
+	}
+
 }

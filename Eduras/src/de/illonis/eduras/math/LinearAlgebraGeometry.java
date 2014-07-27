@@ -119,7 +119,7 @@ public class LinearAlgebraGeometry extends SimpleGeometry {
 				continue;
 			}
 
-			if (movingObject.isCollidable() && singleObject.isCollidable()) {
+			if (GameObject.canCollideWithEachOther(movingObject, singleObject)) {
 				// remember the gameObject that had a collision
 				collisionObject = singleObject;
 			} else {
@@ -131,7 +131,7 @@ public class LinearAlgebraGeometry extends SimpleGeometry {
 
 		touched.addAll(touchedObjects);
 
-		if (!movingObject.isCollidable()) {
+		if (!movingObject.isCollidable(null)) {
 			return result;
 		}
 

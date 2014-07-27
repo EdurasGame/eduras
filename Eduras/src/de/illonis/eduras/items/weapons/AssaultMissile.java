@@ -2,6 +2,7 @@ package de.illonis.eduras.items.weapons;
 
 import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.ObjectFactory.ObjectType;
+import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.gameobjects.TimingSource;
 import de.illonis.eduras.settings.S;
 
@@ -31,5 +32,15 @@ public class AssaultMissile extends Missile {
 		setSpeed(S.Server.go_assaultmissile_speed);
 		setMaxRange(S.Server.go_assaultmissile_maxrange);
 		// setShape(new Circle(S.go_assaultmissile_shape_size));
+	}
+
+	@Override
+	protected boolean isCollidableWith(GameObject otherObject) {
+		if (otherObject.getType() == ObjectType.MISSILE_SPLASH
+				&& otherObject.getOwner() == getOwner()) {
+			return true;
+		} else {
+			return super.isCollidableWith(otherObject);
+		}
 	}
 }

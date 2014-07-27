@@ -311,6 +311,12 @@ public class EdurasInitializer {
 					throws WrongObjectTypeException {
 			}
 
+			@Override
+			public int createObjectWithCenterAt(ObjectType object,
+					Vector2f position, int owner) {
+				return -1;
+			}
+
 		});
 
 		networkManager = new NetworkManager(logic);

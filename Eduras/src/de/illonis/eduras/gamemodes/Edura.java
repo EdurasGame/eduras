@@ -80,6 +80,12 @@ public class Edura extends TeamDeathmatch {
 	public void onGameStart() {
 		super.onGameStart();
 
+		// make sure all players are in EGO_MODE
+		for (Player player : gameInfo.getPlayers()) {
+			gameInfo.getEventTriggerer().changeInteractMode(
+					player.getPlayerId(), InteractMode.MODE_EGO);
+		}
+
 		loadNodes();
 	}
 
@@ -214,9 +220,27 @@ public class Edura extends TeamDeathmatch {
 
 		if (killedUnit instanceof PlayerMainFigure) {
 			PlayerMainFigure mainFigure = (PlayerMainFigure) killedUnit;
-			eventTriggerer.clearInventoryOfPlayer(mainFigure.getPlayer());
-			eventTriggerer.changeInteractMode(mainFigure.getPlayer()
-					.getPlayerId(), InteractMode.MODE_DEAD);
+			Player deadPlayer = mainFigure.getPlayer();
+			eventTriggerer.clearInventoryOfPlayer(deadPlayer);
+			eventTriggerer.changeInteractMode(deadPlayer.getPlayerId(),
+					InteractMode.MODE_DEAD);
+
+			checkAllPlayersOfTeamDead(deadPlayer);
+		}
+	}
+
+	private void checkAllPlayersOfTeamDead(Player player) {
+		boolean allPlayersDead = true;
+		for (Player aPlayerOfSameTeam : player.getTeam().getPlayers()) {
+			// if there is a player who is alive, the team can still win
+			if (aPlayerOfSameTeam.getCurrentMode() != InteractMode.MODE_DEAD) {
+				allPlayersDead = false;
+				break;
+			}
+		}
+
+		if (allPlayersDead) {
+			gameInfo.getEventTriggerer().onMatchEnd();
 		}
 	}
 

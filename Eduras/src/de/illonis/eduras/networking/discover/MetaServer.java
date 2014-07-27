@@ -170,6 +170,12 @@ public class MetaServer {
 							.getPort());
 					metaserverAnswer.putArgument(serverInfoForEdurasServer
 							.getVersion());
+					metaserverAnswer.putArgument(serverInfoForEdurasServer
+							.getNumberOfPlayers());
+					metaserverAnswer.putArgument(serverInfoForEdurasServer
+							.getGameMode());
+					metaserverAnswer.putArgument(serverInfoForEdurasServer
+							.getMap());
 				}
 
 				try {
@@ -190,12 +196,18 @@ public class MetaServer {
 				String ipOfEdurasServer = "";
 				int portOfEdurasServer = 0;
 				String versionOfEdurasServer = "";
+				int numberOfPlayers = 0;
+				String gamemode;
+				String map;
 				try {
 					clientId = (Integer) event.getArgument(0);
 					serverName = (String) event.getArgument(1);
 					ipOfEdurasServer = (String) event.getArgument(2);
 					portOfEdurasServer = (Integer) event.getArgument(3);
 					versionOfEdurasServer = (String) event.getArgument(4);
+					numberOfPlayers = (Integer) event.getArgument(5);
+					gamemode = (String) event.getArgument(6);
+					map = (String) event.getArgument(7);
 				} catch (TooFewArgumentsExceptions e) {
 					L.log(Level.WARNING,
 							"Error when accessing arguments of REGISTER_REQUEST",
@@ -217,7 +229,8 @@ public class MetaServer {
 				try {
 					serverInfos.put(clientId, new ServerInfo(serverName,
 							InetAddress.getByName(ipOfEdurasServer),
-							portOfEdurasServer, versionOfEdurasServer));
+							portOfEdurasServer, versionOfEdurasServer,
+							numberOfPlayers, gamemode, map));
 					L.fine("Renewing lease of server with id #" + clientId);
 					serverLeases.put(clientId, System.currentTimeMillis());
 				} catch (UnknownHostException e) {

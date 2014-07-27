@@ -10,6 +10,7 @@ import java.util.logging.Logger;
 
 import de.illonis.edulog.EduLog;
 import de.illonis.eduras.EdurasVersion;
+import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.utils.Pair;
 
 /**
@@ -51,12 +52,11 @@ public class ServerDiscoveryListener extends Thread {
 	 */
 	public final static String ANSWER_MSG = "EDURAS_SERVER_ANSWER";
 
-	private static String answer = "";
-
 	private final int CONNECT_ATTEMPTS = 10;
 
 	private final String name;
 	private final int port;
+	private final GameInformation gameInfo;
 
 	private DiscoveryChannel channel;
 
@@ -67,11 +67,16 @@ public class ServerDiscoveryListener extends Thread {
 	 *            name of this server.
 	 * @param serverPort
 	 *            port this server allows connections on.
+	 * @param gameInfo
+	 *            the gameinfo to derive number of players, gamemode and map
+	 *            from
 	 */
-	public ServerDiscoveryListener(String serverName, int serverPort) {
+	public ServerDiscoveryListener(String serverName, int serverPort,
+			GameInformation gameInfo) {
 		super("ServerDiscoveryListener");
 		this.name = serverName;
 		this.port = serverPort;
+		this.gameInfo = gameInfo;
 	}
 
 	@Override
@@ -103,9 +108,6 @@ public class ServerDiscoveryListener extends Thread {
 
 		@Override
 		public void run() {
-			answer = "##" + ServerDiscoveryListener.ANSWER_MSG + "#" + name
-					+ "#" + port + "#" + EdurasVersion.getVersion() + "##";
-
 			// Keep a socket open to listen to all the UDP traffic that is
 			// destined for this port
 			L.info("Initializing DiscoveryListening on port " + myPort);
@@ -174,6 +176,7 @@ public class ServerDiscoveryListener extends Thread {
 				InetSocketAddress isa) {
 			// See if the packet holds the right command (message)
 			if (aSingleMessage.equals(ServerDiscoveryListener.REQUEST_MSG)) {
+				String answer = createDiscoveryAnswer(name, port, gameInfo);
 				// Send a response
 				try {
 					channel.send(answer, isa);
@@ -189,5 +192,26 @@ public class ServerDiscoveryListener extends Thread {
 			}
 
 		}
+	}
+
+	/**
+	 * Creates a server's discovery answer.
+	 * 
+	 * @param name
+	 *            The server's name to answer with
+	 * @param port
+	 *            The port that server is running on
+	 * @param gameInfo
+	 *            game information to derive the number of players, gamemode and
+	 *            map from
+	 * @return the answer as string
+	 */
+	public static String createDiscoveryAnswer(String name, int port,
+			GameInformation gameInfo) {
+		return "##" + ServerDiscoveryListener.ANSWER_MSG + "#" + name + "#"
+				+ port + "#" + EdurasVersion.getVersion() + "#"
+				+ gameInfo.getPlayers().size() + "#"
+				+ gameInfo.getGameSettings().getGameMode().getName() + "#"
+				+ gameInfo.getMap().getName() + "##";
 	}
 }

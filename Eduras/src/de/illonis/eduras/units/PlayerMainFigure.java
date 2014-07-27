@@ -137,4 +137,9 @@ public class PlayerMainFigure extends Unit implements MovementControlable {
 	public Team getTeam() {
 		return player.getTeam();
 	}
+
+	@Override
+	protected boolean isCollidableWith(GameObject otherObject) {
+		return true;
+	}
 }

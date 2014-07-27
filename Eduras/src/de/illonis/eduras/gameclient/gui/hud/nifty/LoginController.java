@@ -42,8 +42,22 @@ public class LoginController extends EdurasScreenController {
 	private Label nameNote;
 	Element popupElement;
 
+	private final String presetAccountName;
+	private final String presetAccountPassword;
+
 	LoginController(GameControllerBridge game) {
 		super(game);
+
+		presetAccountName = "";
+		presetAccountPassword = "";
+	}
+
+	LoginController(GameControllerBridge game, String betaAccountName,
+			String betaAccountPassword) {
+		super(game);
+
+		presetAccountName = betaAccountName;
+		presetAccountPassword = betaAccountPassword;
 	}
 
 	/**
@@ -65,12 +79,18 @@ public class LoginController extends EdurasScreenController {
 		passwordField = screen.findNiftyControl("passwordField",
 				TextField.class);
 		passwordField.setFormat(new FormatPassword());
+		passwordField.setText(presetAccountPassword);
 		popupElement = nifty.createPopup("niftyPopupMenu");
 
 		nameField = screen.findNiftyControl("userNameField", TextField.class);
+		nameField.setText(presetAccountName);
 		nameNote = screen.findNiftyControl("userNameNote", Label.class);
 		loginButton = screen.findNiftyControl("loginButton", Button.class);
 		nameField.setFocus();
+
+		if (!presetAccountName.isEmpty() && !presetAccountPassword.isEmpty()) {
+			login();
+		}
 	}
 
 	/**

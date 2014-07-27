@@ -349,7 +349,7 @@ public class EdurasServer {
 		}
 
 		ServerDiscoveryListener sdl = new ServerDiscoveryListener(
-				server.getName(), edurasPort);
+				server.getName(), edurasPort, eventTriggerer.getGameInfo());
 		sdl.start();
 
 		if (registerAtMetaserver) {
@@ -371,7 +371,8 @@ public class EdurasServer {
 			}
 
 		}
-		new MetaServerRegisterer(name, serverHostAddress, edurasPort).start();
+		new MetaServerRegisterer(name, serverHostAddress, edurasPort,
+				eventTriggerer.getGameInfo()).start();
 
 	}
 
@@ -685,12 +686,15 @@ class MetaServerRegisterer extends Thread {
 	private final int port;
 	private final String version;
 	private final ClientInterface metaServerClient;
+	private final GameInformation gameInfo;
 
-	public MetaServerRegisterer(String name, String ip, int port) {
+	public MetaServerRegisterer(String name, String ip, int port,
+			GameInformation gameInfo) {
 		this.name = name;
 		this.ip = ip;
 		this.port = port;
 		this.version = EdurasVersion.getVersion();
+		this.gameInfo = gameInfo;
 
 		metaServerClient = new Client();
 		metaServerClient
@@ -778,6 +782,10 @@ class MetaServerRegisterer extends Thread {
 		registerEvent.putArgument(ipOfServer);
 		registerEvent.putArgument(portOfServer);
 		registerEvent.putArgument(versionOfServer);
+		registerEvent.putArgument(gameInfo.getPlayers().size());
+		registerEvent.putArgument(gameInfo.getGameSettings().getGameMode()
+				.getName());
+		registerEvent.putArgument(gameInfo.getMap().getName());
 		try {
 			metaServerClient.sendEvent(registerEvent);
 		} catch (IllegalArgumentException | TooFewArgumentsExceptions e) {

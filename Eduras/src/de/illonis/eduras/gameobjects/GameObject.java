@@ -389,7 +389,7 @@ public abstract class GameObject implements Comparable<GameObject> {
 	 * @param collidingObject
 	 *            The object colliding with this object.
 	 * 
-	 * @see #isCollidable()
+	 * @see #isCollidable(GameObject)
 	 * @see #onTouch(GameObject)
 	 */
 	public abstract void onCollision(GameObject collidingObject);
@@ -409,13 +409,33 @@ public abstract class GameObject implements Comparable<GameObject> {
 	}
 
 	/**
-	 * Returns wether this object is collidable or not.
+	 * Returns whether this object can collide with another given object. If
+	 * this object is set to not be collidable at all via
+	 * {@link #setCollidable(boolean)}, false is returned immediately. If it is
+	 * collidable in general, {@link #isCollidableWith(GameObject)} is called in
+	 * order to determine whether it collides with the given object. If null is
+	 * passed as argument, the argument is not considered.
+	 * 
+	 * @param otherObject
+	 *            may be null.
 	 * 
 	 * @return True if it is collidable and false otherwise.
 	 */
-	public boolean isCollidable() {
-		return collidable;
+	public final boolean isCollidable(GameObject otherObject) {
+		if (otherObject == null) {
+			return collidable;
+		} else {
+			return collidable && isCollidableWith(otherObject);
+		}
 	}
+
+	/**
+	 * Determines if this object can collide with the other given object.
+	 * 
+	 * @param otherObject
+	 * @return True if yes, false otherwise
+	 */
+	protected abstract boolean isCollidableWith(GameObject otherObject);
 
 	/**
 	 * Sets the collidable status of the object.
@@ -604,6 +624,21 @@ public abstract class GameObject implements Comparable<GameObject> {
 		// } else {
 		rotation = newValue;
 		// }
+	}
+
+	/**
+	 * Returns true if the given objects are collidable with each other.
+	 * 
+	 * @param first
+	 *            first object
+	 * @param second
+	 *            second object
+	 * @return true if the given objects are collidable with each other, false
+	 *         otherwise
+	 */
+	public static boolean canCollideWithEachOther(GameObject first,
+			GameObject second) {
+		return first.isCollidable(second) && second.isCollidable(first);
 	}
 
 	/**

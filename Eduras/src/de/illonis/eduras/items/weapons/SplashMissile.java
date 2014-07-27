@@ -81,4 +81,14 @@ public class SplashMissile extends Missile {
 					ObjectType.MISSILE_SPLASHED, getOwner(), pos, speed[i]);
 		}
 	}
+
+	@Override
+	public boolean isCollidableWith(GameObject otherObject) {
+		if (otherObject instanceof Missile
+				&& otherObject.getOwner() == getOwner()) {
+			return true;
+		} else {
+			return super.isCollidableWith(otherObject);
+		}
+	}
 }

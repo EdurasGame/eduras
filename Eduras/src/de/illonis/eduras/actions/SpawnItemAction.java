@@ -78,8 +78,8 @@ public class SpawnItemAction extends RTSAction {
 
 	@Override
 	protected void executeAction(GameInformation info) {
-		// check for visibility of position is performed on client
-		info.getEventTriggerer().createObjectAt(itemType, spawnPos,
+		// TODO: check for visibility of position is performed on client
+		info.getEventTriggerer().createObjectWithCenterAt(itemType, spawnPos,
 				GameObject.OWNER_WORLD);
 	}
 }

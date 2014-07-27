@@ -301,7 +301,8 @@ public class Geometry {
 
 			Vector2f[] interceptionPoints = Geometry
 					.getCircleLineSegmentInterceptPoints(circle, new Vector2f(
-							circle.getCenter()), singleLine);
+							circle.getCenterX(), circle.getCenterY()),
+							singleLine);
 
 			if (interceptionPoints[0] == null && interceptionPoints[1] == null) {
 				continue;

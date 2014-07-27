@@ -74,7 +74,7 @@ public class ServerSearcher extends Thread {
 					InetAddress.getByName("255.255.255.255"),
 					ServerDiscoveryListener.SERVER_PORT);
 
-			c.send(ServerDiscoveryListener.REQUEST_MSG, target);
+			sendRequestTo(target);
 			L.fine("[ServerSearcher] Sent request packet via 255.255.255.255.");
 			// Broadcast the message over all the network interfaces
 			Enumeration<NetworkInterface> interfaces = NetworkInterface
@@ -196,34 +196,11 @@ public class ServerSearcher extends Thread {
 							+ numberOfEdurasServers + " servers.");
 
 					for (int i = 1; i < numberOfEdurasServers * 4; i = i + 4) {
-						String nameOfEdurasServer = (String) event
-								.getArgument(i);
-						String ipOfEdurasServer = (String) event
-								.getArgument(i + 1);
-						int portOfEdurasServer = (Integer) event
-								.getArgument(i + 2);
-						String versionOfEdurasServer = (String) event
-								.getArgument(i + 3);
-
-						L.fine("Metaserver reported the following server. name : "
-								+ nameOfEdurasServer
-								+ " ; address : "
-								+ ipOfEdurasServer
-								+ ":"
-								+ portOfEdurasServer
-								+ " ; version : " + versionOfEdurasServer);
-
 						try {
-							ServerInfo serverInfo = new ServerInfo(
-									nameOfEdurasServer,
-									InetAddress.getByName(ipOfEdurasServer),
-									portOfEdurasServer, versionOfEdurasServer);
-							listener.onServerFound(serverInfo);
+							ServerInfo info = parseServerInfo(event, i);
+							listener.onServerFound(info);
 						} catch (UnknownHostException e) {
-							L.log(Level.WARNING,
-									"Cannot generate InetAddress out of IP "
-											+ ipOfEdurasServer, e);
-							continue;
+							L.log(Level.WARNING, "", e);
 						}
 					}
 
@@ -233,10 +210,41 @@ public class ServerSearcher extends Thread {
 							e1);
 					return;
 				}
-			}
 				break;
 			}
+			default:
+				L.warning("Received event we cannot handle. Eventnumber: "
+						+ event.getEventNumber());
+			}
 
+		}
+
+		private ServerInfo parseServerInfo(Event event, int i)
+				throws TooFewArgumentsExceptions, UnknownHostException {
+			String nameOfEdurasServer = (String) event.getArgument(i);
+			String ipOfEdurasServer = (String) event.getArgument(i + 1);
+			int portOfEdurasServer = (Integer) event.getArgument(i + 2);
+			String versionOfEdurasServer = (String) event.getArgument(i + 3);
+			int numberOfPlayers = (Integer) event.getArgument(i + 4);
+			String gameMode = (String) event.getArgument(i + 5);
+			String map = (String) event.getArgument(i + 6);
+
+			L.fine("Metaserver reported the following server. name : "
+					+ nameOfEdurasServer + " ; address : " + ipOfEdurasServer
+					+ ":" + portOfEdurasServer + " ; version : "
+					+ versionOfEdurasServer + " ; players: " + numberOfPlayers
+					+ " ; game mode :" + gameMode + " ; map: " + map);
+
+			try {
+				ServerInfo serverInfo = new ServerInfo(nameOfEdurasServer,
+						InetAddress.getByName(ipOfEdurasServer),
+						portOfEdurasServer, versionOfEdurasServer,
+						numberOfPlayers, gameMode, map);
+				return serverInfo;
+			} catch (UnknownHostException e) {
+				throw new UnknownHostException("Cannot genereate IP out of "
+						+ ipOfEdurasServer + ". " + e.getMessage());
+			}
 		}
 
 		@Override

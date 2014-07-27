@@ -127,7 +127,7 @@ public class ServerEventTriggerer implements EventTriggerer {
 	public void createMissile(ObjectType missileType, int owner,
 			Vector2f position, Vector2f speedVector) {
 
-		int missileId = createObjectAt(missileType, position, owner);
+		int missileId = createObjectWithCenterAt(missileType, position, owner);
 		Missile o = (Missile) gameInfo.findObjectById(missileId);
 
 		o.setSpeedVector(speedVector);
@@ -705,6 +705,15 @@ public class ServerEventTriggerer implements EventTriggerer {
 
 	@Override
 	public void changeInteractMode(int ownerId, InteractMode newMode) {
+		Player playerToChangeModeOf;
+		try {
+			playerToChangeModeOf = gameInfo.getPlayerByOwnerId(ownerId);
+		} catch (ObjectNotFoundException e) {
+			L.log(Level.SEVERE, "Cannot find player!", e);
+			return;
+		}
+		playerToChangeModeOf.setMode(newMode);
+
 		SetInteractModeEvent event = new SetInteractModeEvent(ownerId, newMode);
 		sendEventToClient(event, ownerId);
 	}
@@ -905,4 +914,23 @@ public class ServerEventTriggerer implements EventTriggerer {
 		lootItem(itemId, player.getPlayerMainFigure().getId());
 	}
 
+	@Override
+	public int createObjectWithCenterAt(ObjectType objectType,
+			Vector2f position, int owner) {
+		int objectId = createObjectAt(objectType, position, owner);
+
+		GameObject object = gameInfo.findObjectById(objectId);
+		if (object == null) {
+			L.severe("Cannot find the object that was just created!");
+			return -1;
+
+		}
+
+		object.getShape().setCenterX(position.x);
+		object.getShape().setCenterY(position.y);
+		guaranteeSetPositionOfObject(objectId, new Vector2df(object.getShape()
+				.getX(), object.getShape().getY()));
+
+		return objectId;
+	}
 }

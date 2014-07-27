@@ -468,7 +468,7 @@ public class GameInformation {
 					object.getId(), object.getVisibility());
 			SetBooleanGameObjectAttributeEvent colEvent = new SetBooleanGameObjectAttributeEvent(
 					GameEventNumber.SET_COLLIDABLE, object.getId(),
-					object.isCollidable());
+					object.isCollidable(null));
 			infos.add(colEvent);
 			infos.add(visEvent);
 
