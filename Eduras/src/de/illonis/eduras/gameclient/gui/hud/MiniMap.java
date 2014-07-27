@@ -138,11 +138,14 @@ public class MiniMap extends ClickableGuiElement {
 	private void renderViewPort(Graphics g) {
 		g.setLineWidth(1f);
 		g.setColor(Color.white);
-		g.pushTransform();
-		g.translate(-scale, (height - SIZE) - scale);
-		g.scale(scale, scale);
-		g.drawRect(0, 0, viewPort.getWidth(), viewPort.getHeight());
-		g.popTransform();
+		Vector2f pos = gameToMinimapPosition(new Vector2f (viewPort.getX(), viewPort.getY()));
+		g.drawRect(pos.x, pos.y, viewPort.getWidth() * scale,
+				viewPort.getHeight() * scale);
+//		g.pushTransform();
+//		g.translate(-scale, (height - SIZE) - scale);
+//		g.scale(scale, scale);
+//		g.drawRect(0, 0, viewPort.getWidth(), viewPort.getHeight());
+//		g.popTransform();
 	}
 
 	@Override
