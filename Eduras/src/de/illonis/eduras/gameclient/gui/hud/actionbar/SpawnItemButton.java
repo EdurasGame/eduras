@@ -32,8 +32,9 @@ public class SpawnItemButton extends ActionButton {
 	 *            GUI logic to call when clicked
 	 */
 	public SpawnItemButton(ObjectType type, GamePanelReactor reactor) {
-		super("Spawn item " + type.toString(), ImageKey.typeToImageKey(type),
-				reactor);
+		super(
+				"Spawn item " + type.name() + " [Costs: " + type.getCosts()
+						+ "]", ImageKey.typeToImageKey(type), reactor);
 		this.typeOfItemToSpawn = type;
 	}
 

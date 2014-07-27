@@ -10,6 +10,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.newdawn.slick.Color;
+import org.newdawn.slick.Font;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
@@ -68,6 +69,7 @@ public class GameRenderer implements TooltipHandler {
 	private final InformationProvider info;
 	private final ClientData data;
 	private final static Color FOG_OF_WAR = new Color(0, 0, 0, 200);
+	private Font font;
 
 	/**
 	 * Creates a new renderer.
@@ -149,6 +151,8 @@ public class GameRenderer implements TooltipHandler {
 	 *            the target graphics.
 	 */
 	public void render(GameContainer container, Graphics g) {
+		if (font == null)
+			font = g.getFont();
 		try {
 			if (info.getPlayer().getPlayerMainFigure() == null) {
 				// wait for player
@@ -168,7 +172,7 @@ public class GameRenderer implements TooltipHandler {
 			gui.onGuiSizeChanged(width, height);
 			// camera.setSize(width, height); // maybe not?
 		}
-		
+
 		g.translate(-viewPort.getX(), -viewPort.getY());
 		g.scale(newScale, newScale);
 
@@ -208,7 +212,7 @@ public class GameRenderer implements TooltipHandler {
 					camera.getCameraMovement());
 			c.add(offset);
 			camera.centerAt(c.x, c.y);
-			viewPort.centerAt(c.x * scale, c.y* scale);
+			viewPort.centerAt(c.x * scale, c.y * scale);
 		} catch (ObjectNotFoundException | NullPointerException e) {
 			// EduLog.passException(e);
 		}
@@ -459,9 +463,9 @@ public class GameRenderer implements TooltipHandler {
 	@Override
 	public void showTooltip(Vector2f p, String text) {
 		if (tooltip == null || !(tooltip instanceof TextTooltip)) {
-			tooltip = new TextTooltip(text);
+			tooltip = new TextTooltip(text, font);
 		} else {
-			((TextTooltip) tooltip).setText(text);
+			((TextTooltip) tooltip).setText(text, font);
 		}
 		tooltip.moveTo(p);
 		tooltipShown = true;

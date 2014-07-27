@@ -4,6 +4,7 @@ import de.illonis.eduras.gameclient.GamePanelReactor;
 import de.illonis.eduras.gameclient.datacache.CacheInfo.ImageKey;
 import de.illonis.eduras.gameclient.gui.game.GamePanelLogic.ClickState;
 import de.illonis.eduras.gameclient.gui.hud.ActionButton;
+import de.illonis.eduras.settings.S;
 
 /**
  * A button that spawns an observer unit.
@@ -18,7 +19,8 @@ public class SpawnObserverButton extends ActionButton {
 	 *            the reactor.
 	 */
 	public SpawnObserverButton(GamePanelReactor reactor) {
-		super("Spawn observer", ImageKey.ACTION_SPAWN_OBSERVER, reactor);
+		super("Spawn observer [Costs: " + S.Server.unit_observer_costs + "]",
+				ImageKey.ACTION_SPAWN_OBSERVER, reactor);
 	}
 
 	@Override
