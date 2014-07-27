@@ -5,6 +5,10 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.Vector2f;
 
+import de.illonis.eduras.events.DeathEvent;
+import de.illonis.eduras.events.MatchEndEvent;
+import de.illonis.eduras.events.RespawnEvent;
+import de.illonis.eduras.events.SetInteractModeEvent;
 import de.illonis.eduras.gameclient.ClientData;
 import de.illonis.eduras.gameclient.gui.hud.ActionBarPage.PageNumber;
 import de.illonis.eduras.logicabstraction.EdurasInitializer;
@@ -144,5 +148,20 @@ public class ActionBar extends ClickableGuiElement implements TooltipTriggerer {
 	@Override
 	public Rectangle getTriggerArea() {
 		return bounds;
+	}
+	
+	@Override
+	public void onInteractModeChanged(SetInteractModeEvent setModeEvent) {
+		data.setCurrentActionSelected(-1);
+	}
+	
+	@Override
+	public void onDeath(DeathEvent event) {
+		data.setCurrentActionSelected(-1);
+	}
+	
+	@Override
+	public void onMatchEnd(MatchEndEvent event) {
+		data.setCurrentActionSelected(-1);
 	}
 }

@@ -3,6 +3,9 @@ package de.illonis.eduras.gameclient.gui.hud;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 
+import de.illonis.eduras.events.DeathEvent;
+import de.illonis.eduras.events.MatchEndEvent;
+
 /**
  * Displays a single line of text above the action bar to provide some hints.
  * 
@@ -61,6 +64,16 @@ public class TipPanel extends RenderedGuiObject {
 	@Override
 	public void onGuiSizeChanged(int newWidth, int newHeight) {
 		y = newHeight - ActionButton.BUTTON_SIZE - 30 - Y_INSET;
+	}
+	
+	@Override
+	public void onDeath(DeathEvent event) {
+		message = "";
+	}
+	
+	@Override
+	public void onMatchEnd(MatchEndEvent event) {
+		message = "";
 	}
 
 }
