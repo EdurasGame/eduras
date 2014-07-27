@@ -79,6 +79,9 @@ public class EdurasClient {
 		String betaUser = "";
 		String betaPassword = "";
 
+		String serverIp = "";
+		int serverPort = 0;
+
 		final String sClassName = S.class.getSimpleName();
 
 		// read arguments
@@ -88,25 +91,7 @@ public class EdurasClient {
 			String parameterName = parametersWithValues[i][0];
 			String parameterValue = parametersWithValues[i][1];
 
-			if (parameterName.equalsIgnoreCase("port")) {
-				try {
-					PORT = Integer.parseInt(parameterValue);
-					if (PORT < 1024 || PORT > 49151) {
-						throw new Exception();
-					}
-				} catch (Exception e) {
-					L.severe("Given port is not a valid value!");
-					return;
-				}
-			} else if (parameterName.equalsIgnoreCase("betaUser")) {
-				betaUser = parameterValue;
-			} else if (parameterName.equalsIgnoreCase("betaPassword")) {
-				betaPassword = parameterValue;
-			} else if (parameterName.equalsIgnoreCase("loglimit")) {
-				logLimit = Level.parse(parameterValue);
-			} else if (parameterName.equalsIgnoreCase("debug")) {
-				debug = true;
-			} else if (parameterName.startsWith(sClassName + ".")) {
+			if (parameterName.startsWith(sClassName + ".")) {
 				try {
 					Field f = S.Client.class.getField(parameterName
 							.substring(sClassName.length() + 1));
@@ -121,6 +106,50 @@ public class EdurasClient {
 							"Failed to set S field from command line, argument: "
 									+ parameterName + "=" + parameterValue, e);
 				}
+				continue;
+			}
+
+			switch (parameterName.toLowerCase()) {
+			case "port":
+				try {
+					PORT = Integer.parseInt(parameterValue);
+					if (PORT < 1024 || PORT > 49151) {
+						throw new Exception();
+					}
+				} catch (Exception e) {
+					L.severe("Given port is not a valid value!");
+					return;
+				}
+				break;
+			case "betauser":
+				betaUser = parameterValue;
+				break;
+			case "betapassword":
+				betaPassword = parameterValue;
+				break;
+			case "loglimit":
+				logLimit = Level.parse(parameterValue);
+				break;
+			case "debug":
+				debug = true;
+				break;
+			case "serverip":
+				serverIp = parameterValue;
+				break;
+			case "serverport":
+				try {
+					serverPort = Integer.parseInt(parameterValue);
+					if (serverPort < 1024 || serverPort > 49151) {
+						throw new Exception();
+					}
+				} catch (Exception e) {
+					L.severe("Given port is not a valid value!");
+					return;
+				}
+				break;
+			default:
+				L.warning("Unknown parametername '" + parameterName + "'");
+				continue;
 			}
 		}
 		EduLog.setBasicLogLimit(logLimit);
@@ -142,7 +171,7 @@ public class EdurasClient {
 					(new File(PathFinder.findFile("native"))).getAbsolutePath());
 		EdurasSlickClient client = new EdurasSlickClient();
 		try {
-			client.startGui(betaUser, betaPassword);
+			client.startGui(betaUser, betaPassword, serverIp, serverPort);
 		} catch (SlickException e) {
 			L.log(Level.SEVERE, "Slick error at startup", e);
 		}

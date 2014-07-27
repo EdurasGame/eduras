@@ -50,6 +50,17 @@ public class ServerInfo {
 	}
 
 	/**
+	 * Creates a new serverinfo object where only the InetAddress and the port
+	 * are known and the rest is left blank.
+	 * 
+	 * @param url
+	 * @param port
+	 */
+	public ServerInfo(final InetAddress url, final int port) {
+		this("", url, port, "", 0, "", "");
+	}
+
+	/**
 	 * @return the name of the discovered server.
 	 */
 	public String getName() {
