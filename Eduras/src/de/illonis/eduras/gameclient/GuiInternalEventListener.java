@@ -331,6 +331,10 @@ public class GuiInternalEventListener implements GamePanelReactor {
 			client.getLogic().showTip(
 					"Select a base where observer should be spawned.");
 			break;
+		case SELECT_POSITION_FOR_SCOUT:
+			client.getLogic().showTip(
+					"Select a position in the world to make vision.");
+			break;
 		default:
 			break;
 		}

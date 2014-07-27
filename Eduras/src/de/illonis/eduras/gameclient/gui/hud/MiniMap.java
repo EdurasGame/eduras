@@ -42,6 +42,7 @@ public class MiniMap extends ClickableGuiElement {
 	private HashMap<Integer, MiniMapPlayer> players;
 	private GameCamera viewPort;
 	private float scale;
+	private int height;
 
 	final static int SIZE = 150;
 	private static final Color NEUTRAL_OBJECTS_FILL_COLOR = Color.gray;
@@ -137,14 +138,17 @@ public class MiniMap extends ClickableGuiElement {
 	private void renderViewPort(Graphics g) {
 		g.setLineWidth(1f);
 		g.setColor(Color.white);
-		Vector2f pos = gameToMinimapPosition(new Vector2f (viewPort.getX(), viewPort.getY()));
-		g.drawRect(pos.x, pos.y, viewPort.getWidth() * scale,
-				viewPort.getHeight() * scale);
+		g.pushTransform();
+		g.translate(-scale, (height - SIZE) - scale);
+		g.scale(scale, scale);
+		g.drawRect(0, 0, viewPort.getWidth(), viewPort.getHeight());
+		g.popTransform();
 	}
 
 	@Override
 	public void onGuiSizeChanged(int newWidth, int newHeight) {
 		screenY = newHeight - SIZE;
+		this.height = newHeight;
 		bounds.setLocation(screenX, screenY);
 		relocateObjects();
 	}

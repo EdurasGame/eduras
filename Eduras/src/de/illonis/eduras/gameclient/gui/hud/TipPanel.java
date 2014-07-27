@@ -12,7 +12,7 @@ import org.newdawn.slick.Graphics;
 public class TipPanel extends RenderedGuiObject {
 
 	private final static int Y_INSET = 50;
-	private final static long DEFAULT_DISPLAY_TIME = 2000;
+	private final static long DEFAULT_DISPLAY_TIME = 3000;
 	private int y = 0;
 	private final int x = MiniMap.SIZE + 20;
 	private String message;
@@ -32,7 +32,7 @@ public class TipPanel extends RenderedGuiObject {
 	@Override
 	public void render(Graphics g2d) {
 		if (!message.isEmpty()) {
-			step = last - System.currentTimeMillis();
+			step = System.currentTimeMillis() -last; 
 			remaining -= step;
 			g2d.setColor(Color.white);
 			g2d.drawString(message, x, y);
@@ -52,7 +52,7 @@ public class TipPanel extends RenderedGuiObject {
 	 * @param text
 	 *            the message.
 	 */
-	public void addMessage(String text) {
+	public void setMessage(String text) {
 		this.message = text;
 		remaining = DEFAULT_DISPLAY_TIME;
 		last = System.currentTimeMillis();

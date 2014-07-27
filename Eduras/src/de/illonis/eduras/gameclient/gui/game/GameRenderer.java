@@ -485,4 +485,8 @@ public class GameRenderer implements TooltipHandler {
 		return info.getPlayer();
 	}
 
+	public GameCamera getCamera() {
+		return camera;
+	}
+
 }

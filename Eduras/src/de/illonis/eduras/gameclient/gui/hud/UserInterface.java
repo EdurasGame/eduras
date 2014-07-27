@@ -309,7 +309,7 @@ public class UserInterface implements GuiResizeListener {
 	 *            the message.
 	 */
 	public void showTip(String message) {
-		tipPanel.addMessage(message);
+		tipPanel.setMessage(message);
 	}
 
 	/**
@@ -320,6 +320,6 @@ public class UserInterface implements GuiResizeListener {
 	 */
 	public void setRenderer(GameRenderer renderer) {
 		this.renderer = renderer;
-		minimap.setCamera(renderer.getViewport());
+		minimap.setCamera(renderer.getCamera());
 	}
 }
