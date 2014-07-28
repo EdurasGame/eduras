@@ -6,6 +6,7 @@ import org.newdawn.slick.geom.Vector2f;
 
 import de.illonis.eduras.ObjectFactory.ObjectType;
 import de.illonis.eduras.Player;
+import de.illonis.eduras.exceptions.InsufficientResourceException;
 import de.illonis.eduras.exceptions.NotWithinBaseException;
 import de.illonis.eduras.exceptions.WrongObjectTypeException;
 import de.illonis.eduras.gameclient.gui.game.GamePanelLogic.ClickState;
@@ -72,16 +73,21 @@ public interface GamePanelReactor {
 	 *            the player to resurrect.
 	 * @param base
 	 *            the base to resurrect at.
+	 * @throws InsufficientResourceException
+	 *             when resources are too low.
 	 */
-	void onPlayerRezz(Player player, NeutralBase base);
+	void onPlayerRezz(Player player, NeutralBase base)
+			throws InsufficientResourceException;
 
 	/**
 	 * Heals a unit.
 	 * 
 	 * @param targetUnit
 	 *            the unit to heal.
+	 * @throws InsufficientResourceException
+	 *             if not enough resources available
 	 */
-	void onUnitHeal(Unit targetUnit);
+	void onUnitHeal(Unit targetUnit) throws InsufficientResourceException;
 
 	/**
 	 * Triggers users wish of quitting the game.
@@ -93,8 +99,10 @@ public interface GamePanelReactor {
 	 * 
 	 * @param target
 	 *            target location.
+	 * @throws InsufficientResourceException
+	 *             if not enough resources available
 	 */
-	void onSpawnScout(Vector2f target);
+	void onSpawnScout(Vector2f target) throws InsufficientResourceException;
 
 	/**
 	 * Indicates that the player wants to spawn an item of the given type at the
@@ -104,9 +112,11 @@ public interface GamePanelReactor {
 	 * @param locationToSpawnAt
 	 * @throws WrongObjectTypeException
 	 *             thrown if the given type isn't an item
+	 * @throws InsufficientResourceException
+	 *             if not enough resources available.
 	 */
 	void onSpawnItem(ObjectType type, Vector2f locationToSpawnAt)
-			throws WrongObjectTypeException;
+			throws WrongObjectTypeException, InsufficientResourceException;
 
 	/**
 	 * Indicates a mode switch.
@@ -140,8 +150,11 @@ public interface GamePanelReactor {
 	 *            the type of unit to spawn.
 	 * @param base
 	 *            the base to spawn unit at.
+	 * @throws InsufficientResourceException
+	 *             if not enough resources available
 	 */
-	void onUnitSpawned(ObjectType type, NeutralBase base);
+	void onUnitSpawned(ObjectType type, NeutralBase base)
+			throws InsufficientResourceException;
 
 	/**
 	 * Sets current click state in gui.

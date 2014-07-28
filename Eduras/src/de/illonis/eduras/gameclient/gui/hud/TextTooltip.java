@@ -1,6 +1,7 @@
 package de.illonis.eduras.gameclient.gui.hud;
 
 import org.newdawn.slick.Color;
+import org.newdawn.slick.Font;
 import org.newdawn.slick.Graphics;
 
 /**
@@ -18,10 +19,10 @@ public class TextTooltip extends Tooltip {
 	 * @param text
 	 *            contained text.
 	 */
-	public TextTooltip(String text) {
+	public TextTooltip(String text, Font font) {
 		height = 30;
 		width = 100;
-		setText(text);
+		setText(text, font);
 	}
 
 	/**
@@ -30,7 +31,8 @@ public class TextTooltip extends Tooltip {
 	 * @param text
 	 *            new text.
 	 */
-	public void setText(String text) {
+	public void setText(String text, Font font) {
+		width = 20 + font.getWidth(text);		
 		this.text = text;
 	}
 

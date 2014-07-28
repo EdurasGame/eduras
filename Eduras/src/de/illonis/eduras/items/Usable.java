@@ -1,5 +1,7 @@
 package de.illonis.eduras.items;
 
+import de.illonis.eduras.exceptions.InsufficientResourceException;
+
 /**
  * Indicates that an item is usable and has a cooldown.
  * 
@@ -16,8 +18,11 @@ public interface Usable {
 	 * 
 	 * @author illonis
 	 * @return true if usage was successful, false if usage failed.
+	 * @throws InsufficientResourceException
+	 *             if user has not enough resources to use this item.
 	 */
-	public boolean use(ItemUseInformation info);
+	public boolean use(ItemUseInformation info)
+			throws InsufficientResourceException;
 
 	/**
 	 * Starts cooldown. This should be called on every use.

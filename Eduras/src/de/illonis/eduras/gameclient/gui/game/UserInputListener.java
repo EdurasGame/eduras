@@ -2,8 +2,10 @@ package de.illonis.eduras.gameclient.gui.game;
 
 import org.newdawn.slick.geom.Vector2f;
 
+import de.illonis.eduras.exceptions.ActionFailedException;
+
 /**
- * Listens for user input (e.g. key presses).
+ * Provides key- and mouselisteners access to the user interface.
  * 
  * @author illonis
  * 
@@ -60,6 +62,30 @@ public interface UserInputListener {
 	 * Quits game.
 	 */
 	void onGameQuit();
-	
+
+	/**
+	 * Called when an action fails. Displays an error message on the
+	 * notification panel and plays an error sound.
+	 * 
+	 * @param e
+	 *            the related {@link ActionFailedException}.
+	 */
+	void onActionFailed(ActionFailedException e);
+
+	/**
+	 * Shows a notification to the user.
+	 * 
+	 * @param message
+	 *            the message.
+	 */
+	void showNotification(String message);
+
+	/**
+	 * Shows a tip above action bar to the user.
+	 * 
+	 * @param message
+	 *            the message.
+	 */
+	void showTip(String message);
 
 }

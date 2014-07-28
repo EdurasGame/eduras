@@ -4,6 +4,7 @@ import de.illonis.eduras.gameclient.GamePanelReactor;
 import de.illonis.eduras.gameclient.datacache.CacheInfo.ImageKey;
 import de.illonis.eduras.gameclient.gui.game.GamePanelLogic.ClickState;
 import de.illonis.eduras.gameclient.gui.hud.ActionButton;
+import de.illonis.eduras.settings.S;
 
 /**
  * Heals a unit that is clicked after clicking this button.
@@ -13,7 +14,8 @@ import de.illonis.eduras.gameclient.gui.hud.ActionButton;
  */
 public class HealButton extends ActionButton {
 
-	private final static String BASE_STRING = "Heal a unit";
+	private final static String BASE_STRING = "Heal a unit [Costs: "
+			+ S.Server.spell_heal_costs + "]";
 
 	/**
 	 * Creates a new healbutton.

@@ -33,6 +33,8 @@ import de.illonis.eduras.events.GameEvent;
 import de.illonis.eduras.events.GameEvent.GameEventNumber;
 import de.illonis.eduras.events.GameReadyEvent;
 import de.illonis.eduras.events.ItemEvent;
+import de.illonis.eduras.events.ItemUseFailedEvent;
+import de.illonis.eduras.events.ItemUseFailedEvent.Reason;
 import de.illonis.eduras.events.MatchEndEvent;
 import de.illonis.eduras.events.MovementEvent;
 import de.illonis.eduras.events.ObjectFactoryEvent;
@@ -932,5 +934,11 @@ public class ServerEventTriggerer implements EventTriggerer {
 				.getX(), object.getShape().getY()));
 
 		return objectId;
+	}
+
+	@Override
+	public void notifyWeaponAmmoEmpty(int clientId, int slotNum) {
+		ItemUseFailedEvent event = new ItemUseFailedEvent(clientId, slotNum, Reason.AMMO_EMPTY);
+		sendEventToClient(event, clientId);
 	}
 }

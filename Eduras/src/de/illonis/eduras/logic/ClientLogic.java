@@ -15,6 +15,7 @@ import de.illonis.eduras.events.DeathEvent;
 import de.illonis.eduras.events.GameEvent;
 import de.illonis.eduras.events.GameEvent.GameEventNumber;
 import de.illonis.eduras.events.ItemEvent;
+import de.illonis.eduras.events.ItemUseFailedEvent;
 import de.illonis.eduras.events.MatchEndEvent;
 import de.illonis.eduras.events.MovementEvent;
 import de.illonis.eduras.events.ObjectFactoryEvent;
@@ -285,6 +286,10 @@ public class ClientLogic implements GameLogicInterface {
 
 				getListener().onClientRename(e);
 
+				break;
+			case ITEM_USE_FAILED:
+				ItemUseFailedEvent itemFailedEvent = (ItemUseFailedEvent) event;
+				getListener().onItemUseFailed(itemFailedEvent);
 				break;
 			case ITEM_CD_START:
 			case ITEM_CD_FINISHED:

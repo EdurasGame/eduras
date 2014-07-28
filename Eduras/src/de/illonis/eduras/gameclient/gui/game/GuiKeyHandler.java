@@ -1,6 +1,5 @@
 package de.illonis.eduras.gameclient.gui.game;
 
-import de.illonis.eduras.exceptions.ActionFailedException;
 import de.illonis.eduras.gameclient.GamePanelReactor;
 import de.illonis.eduras.gameclient.userprefs.KeyBindings.KeyBinding;
 import de.illonis.eduras.gameclient.userprefs.Settings;
@@ -30,7 +29,7 @@ public abstract class GuiKeyHandler {
 	 * @param key
 	 *            the pressed binding.
 	 */
-	abstract void keyPressed(KeyBinding key) throws ActionFailedException;
+	abstract void keyPressed(KeyBinding key);
 
 	/**
 	 * Indicates that a key was released.

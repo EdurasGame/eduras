@@ -44,6 +44,7 @@ public class MiniMap extends ClickableGuiElement {
 	private HashMap<Integer, MiniMapPlayer> players;
 	private GameCamera viewPort;
 	private float scale;
+	private int height;
 	private HashMap<Integer, NodeData> nodes;
 
 	final static int SIZE = 150;
@@ -190,11 +191,17 @@ public class MiniMap extends ClickableGuiElement {
 				viewPort.getY()));
 		g.drawRect(pos.x, pos.y, viewPort.getWidth() * scale,
 				viewPort.getHeight() * scale);
+//		g.pushTransform();
+//		g.translate(-scale, (height - SIZE) - scale);
+//		g.scale(scale, scale);
+//		g.drawRect(0, 0, viewPort.getWidth(), viewPort.getHeight());
+//		g.popTransform();
 	}
 
 	@Override
 	public void onGuiSizeChanged(int newWidth, int newHeight) {
 		screenY = newHeight - SIZE;
+		this.height = newHeight;
 		bounds.setLocation(screenX, screenY);
 		relocateObjects();
 	}

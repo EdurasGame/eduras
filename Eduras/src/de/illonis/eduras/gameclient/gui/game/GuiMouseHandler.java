@@ -190,6 +190,14 @@ public final class GuiMouseHandler extends GuiMouseAdapter implements
 
 	@Override
 	public void mouseDragged(int oldx, int oldy, int newx, int newy) {
+		for (Iterator<ClickableGuiElementInterface> iterator = clickListeners
+				.iterator(); iterator.hasNext();) {
+			ClickableGuiElementInterface nextReactor = iterator.next();
+			if (nextReactor.isActive()
+					&& (nextReactor.getBounds().contains(oldx, oldy) || nextReactor
+							.getBounds().contains(newx, newy)))
+				return;
+		}
 		Player player;
 		try {
 			player = infoPro.getPlayer();
@@ -214,6 +222,13 @@ public final class GuiMouseHandler extends GuiMouseAdapter implements
 
 	@Override
 	public void mouseReleased(int button, int x, int y) {
+		for (Iterator<ClickableGuiElementInterface> iterator = clickListeners
+				.iterator(); iterator.hasNext();) {
+			ClickableGuiElementInterface nextReactor = iterator.next();
+			if (nextReactor.isActive()
+					&& nextReactor.getBounds().contains(x, y))
+				return;
+		}
 		Player player;
 		try {
 			player = infoPro.getPlayer();
@@ -242,6 +257,13 @@ public final class GuiMouseHandler extends GuiMouseAdapter implements
 
 	@Override
 	public void mousePressed(int button, int x, int y) {
+		for (Iterator<ClickableGuiElementInterface> iterator = clickListeners
+				.iterator(); iterator.hasNext();) {
+			ClickableGuiElementInterface nextReactor = iterator.next();
+			if (nextReactor.isActive()
+					&& nextReactor.getBounds().contains(x, y))
+				return;
+		}
 		Player player;
 		try {
 			player = infoPro.getPlayer();

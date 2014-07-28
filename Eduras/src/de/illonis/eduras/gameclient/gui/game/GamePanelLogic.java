@@ -23,15 +23,16 @@ import de.illonis.eduras.events.ObjectFactoryEvent;
 import de.illonis.eduras.events.RespawnEvent;
 import de.illonis.eduras.events.SetGameObjectAttributeEvent;
 import de.illonis.eduras.events.SetIntegerGameObjectAttributeEvent;
-import de.illonis.eduras.events.SetInteractModeEvent;
 import de.illonis.eduras.events.SetItemSlotEvent;
 import de.illonis.eduras.events.SetOwnerEvent;
-import de.illonis.eduras.events.SetTeamResourceEvent;
 import de.illonis.eduras.events.SetVisibilityEvent;
 import de.illonis.eduras.exceptions.ActionFailedException;
 import de.illonis.eduras.gameclient.ChatCache;
 import de.illonis.eduras.gameclient.ClientData;
+import de.illonis.eduras.gameclient.GameEventAdapter;
 import de.illonis.eduras.gameclient.GuiInternalEventListener;
+import de.illonis.eduras.gameclient.audio.SoundMachine;
+import de.illonis.eduras.gameclient.audio.SoundMachine.SoundType;
 import de.illonis.eduras.gameclient.gui.CameraMouseListener;
 import de.illonis.eduras.gameclient.gui.HudNotifier;
 import de.illonis.eduras.gameclient.gui.TimedTasksHolderGUI;
@@ -51,7 +52,8 @@ import de.illonis.eduras.logicabstraction.InformationProvider;
  * 
  */
 
-public class GamePanelLogic implements UserInputListener, GameEventListener {
+public class GamePanelLogic extends GameEventAdapter implements
+		UserInputListener {
 	private final static Logger L = EduLog.getLoggerFor(GamePanelLogic.class
 			.getName());
 
@@ -279,14 +281,14 @@ public class GamePanelLogic implements UserInputListener, GameEventListener {
 		return userInterface.getDragRect();
 	}
 
-	/**
-	 * Shows a notification to the user in gamepanel.
-	 * 
-	 * @param msg
-	 *            the message.
-	 */
+	@Override
 	public void showNotification(String msg) {
 		userInterface.showNotification(msg);
+	}
+
+	@Override
+	public void showTip(String msg) {
+		userInterface.showTip(msg);
 	}
 
 	/**
@@ -345,15 +347,10 @@ public class GamePanelLogic implements UserInputListener, GameEventListener {
 		currentClickState = ClickState.ITEM_SELECTED;
 	}
 
-	/**
-	 * Called when an RTS action fails. Displays an error message on the
-	 * notification panel.
-	 * 
-	 * @param e
-	 *            the related {@link ActionFailedException}.
-	 */
+	@Override
 	public void onActionFailed(ActionFailedException e) {
 		showNotification(e.getMessage());
+		SoundMachine.play(SoundType.ERROR);
 	}
 
 	@Override
@@ -464,31 +461,6 @@ public class GamePanelLogic implements UserInputListener, GameEventListener {
 		for (GameEventListener gameEventListener : gameEventListeners) {
 			gameEventListener.onCooldownFinished(event);
 		}
-	}
-
-	@Override
-	public void onInteractModeChanged(SetInteractModeEvent setModeEvent) {
-
-	}
-
-	@Override
-	public void onTeamResourceChanged(SetTeamResourceEvent setTeamResourceEvent) {
-
-	}
-
-	@Override
-	public void onGameReady() {
-
-	}
-
-	@Override
-	public void onPlayerJoined(int ownerId) {
-
-	}
-
-	@Override
-	public void onPlayerLeft(int ownerId) {
-
 	}
 
 	public ChatClient getChat() {

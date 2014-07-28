@@ -8,6 +8,7 @@ import de.illonis.eduras.events.ClientRenameEvent;
 import de.illonis.eduras.events.DeathEvent;
 import de.illonis.eduras.events.GameEvent;
 import de.illonis.eduras.events.ItemEvent;
+import de.illonis.eduras.events.ItemUseFailedEvent;
 import de.illonis.eduras.events.MatchEndEvent;
 import de.illonis.eduras.events.ObjectFactoryEvent;
 import de.illonis.eduras.events.RespawnEvent;
@@ -187,5 +188,11 @@ public class ClientGameEventListener implements GameEventListener {
 	public void onPlayerLeft(int ownerId) {
 		ui.onPlayerLeft(ownerId);
 		effects.onPlayerLeft(ownerId);
+	}
+
+	@Override
+	public void onItemUseFailed(ItemUseFailedEvent itemFailedEvent) {
+		ui.onItemUseFailed(itemFailedEvent);
+		effects.onItemUseFailed(itemFailedEvent);
 	}
 }

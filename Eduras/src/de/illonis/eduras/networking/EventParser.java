@@ -28,6 +28,8 @@ import de.illonis.eduras.events.GameReadyEvent;
 import de.illonis.eduras.events.HealActionEvent;
 import de.illonis.eduras.events.InitInformationEvent;
 import de.illonis.eduras.events.ItemEvent;
+import de.illonis.eduras.events.ItemUseFailedEvent;
+import de.illonis.eduras.events.ItemUseFailedEvent.Reason;
 import de.illonis.eduras.events.MatchEndEvent;
 import de.illonis.eduras.events.MovementEvent;
 import de.illonis.eduras.events.ObjectFactoryEvent;
@@ -306,6 +308,11 @@ public class EventParser implements EventHandler {
 			case SET_REMAININGTIME:
 				logic.onGameEventAppeared(new SetRemainingTimeEvent(
 						(Long) event.getArgument(0)));
+				break;
+			case ITEM_USE_FAILED:
+				logic.onGameEventAppeared(new ItemUseFailedEvent((int) event
+						.getArgument(0), (int) event.getArgument(1), Reason
+						.valueOf((String) event.getArgument(2))));
 				break;
 			case MATCH_END:
 				logic.onGameEventAppeared(new MatchEndEvent((Integer) event

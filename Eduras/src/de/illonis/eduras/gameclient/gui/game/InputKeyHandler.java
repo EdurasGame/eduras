@@ -8,7 +8,6 @@ import org.newdawn.slick.Input;
 
 import de.illonis.edulog.EduLog;
 import de.illonis.eduras.Player;
-import de.illonis.eduras.exceptions.ActionFailedException;
 import de.illonis.eduras.exceptions.KeyNotBoundException;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
 import de.illonis.eduras.gameclient.ChatCache;
@@ -32,21 +31,14 @@ public class InputKeyHandler {
 			.getName());
 
 	private final InformationProvider infoPro;
-	private static final long KEY_INTERVAL = 5;
 
 	private final HashMap<InteractMode, GuiKeyHandler> keyHandlers;
 
-	/**
-	 * Used to support linux os. If a key is hold down on a linux system, it
-	 * sends repeatedly pressed- and released-events. So we need a timeout.
-	 */
 	private final HashMap<Integer, Boolean> pressedButtons;
-	private long lastTimePressed;
 	private final ChatCache cache;
 
 	private final Settings settings;
 	private final UserInputListener client;
-	private int currentKey = Input.KEY_UNLABELED;
 
 	/**
 	 * Creates a new input key handler.
@@ -64,28 +56,12 @@ public class InputKeyHandler {
 		pressedButtons = new HashMap<Integer, Boolean>();
 		cache = init.getInformationProvider().getClientData().getChatCache();
 		this.client = client;
-		lastTimePressed = System.currentTimeMillis();
 		keyHandlers.put(InteractMode.MODE_EGO, new EgoModeKeyHandler(client,
 				reactor));
 		keyHandlers.put(InteractMode.MODE_STRATEGY, new BuildModeKeyHandler(
 				client, reactor));
 		keyHandlers.put(InteractMode.MODE_DEAD, new DeadModeKeyHandler(client,
 				reactor));
-	}
-
-	/**
-	 * Checks if given key was pressed recently. If given key is not assigned,
-	 * false will be returned.
-	 * 
-	 * @param key
-	 *            key to check.
-	 * @return true if key was pressed recently, false otherwise.
-	 */
-	private boolean justPressed(int key) {
-		if (pressedButtons.containsKey(key))
-			return pressedButtons.get(key);
-		else
-			return false;
 	}
 
 	/**
@@ -128,21 +104,12 @@ public class InputKeyHandler {
 	 */
 	public void keyPressed(int key, char c) {
 		int keyCode = key;
-		// if already pressed, do not send a new event
-		if (justPressed(keyCode))
-			return;
-		currentKey = key;
-		lastTimePressed = System.currentTimeMillis();
-
-		if (lastTimePressed < KEY_INTERVAL)
-			return;
-		pressedButtons.put(keyCode, true);
 		boolean consumed = false;
 		if (key != settings.getKeyBindings().getKey(KeyBinding.CHAT)
 				&& key != settings.getKeyBindings().getKey(
 						KeyBinding.EXIT_CLIENT))
 			consumed = onChatType(key, c);
-		
+
 		if (consumed) {
 			return;
 		}
@@ -154,7 +121,6 @@ public class InputKeyHandler {
 			return;
 		}
 
-		pressedButtons.put(keyCode, true);
 		if (infoPro.getGameMode().supportsKeyBinding(binding)) {
 			Player player;
 			try {
@@ -165,26 +131,20 @@ public class InputKeyHandler {
 			}
 			GuiKeyHandler handler = keyHandlers.get(player.getCurrentMode());
 			if (handler != null) {
-				try {
-					if (handler.isChatEnabled()) {
-						if (binding == KeyBinding.CHAT)
-							client.onChatEnter();
-						else if (binding == KeyBinding.EXIT_CLIENT
-								&& !client.abortChat()) {
-							client.onGameQuit();
-						} else {
-							handler.keyPressed(binding);
-						}
+				if (handler.isChatEnabled()) {
+					if (binding == KeyBinding.CHAT)
+						client.onChatEnter();
+					else if (binding == KeyBinding.EXIT_CLIENT
+							&& !client.abortChat()) {
+						client.onGameQuit();
 					} else {
 						handler.keyPressed(binding);
 					}
-				} catch (ActionFailedException e) {
-					L.log(Level.WARNING, "Action failed.", e);
+				} else {
+					handler.keyPressed(binding);
 				}
 			}
 		}
-
-		lastTimePressed = System.currentTimeMillis();
 		L.fine("Bound key pressed: " + keyCode);
 	}
 
@@ -199,10 +159,6 @@ public class InputKeyHandler {
 	public void keyReleased(int key, char c) {
 		// release button
 		pressedButtons.put(key, false);
-		if (key == currentKey && lastTimePressed < KEY_INTERVAL) {
-			currentKey = Input.KEY_UNLABELED;
-			return;
-		}
 		// don't handle other keys
 		if (!settings.getKeyBindings().isBound(key))
 			return;

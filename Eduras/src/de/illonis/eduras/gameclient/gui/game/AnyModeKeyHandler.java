@@ -3,7 +3,6 @@ package de.illonis.eduras.gameclient.gui.game;
 import java.util.logging.Logger;
 
 import de.illonis.edulog.EduLog;
-import de.illonis.eduras.exceptions.ActionFailedException;
 import de.illonis.eduras.gameclient.GamePanelReactor;
 import de.illonis.eduras.gameclient.userprefs.KeyBindings.KeyBinding;
 
@@ -25,7 +24,7 @@ public abstract class AnyModeKeyHandler extends GuiKeyHandler {
 	}
 
 	@Override
-	void keyPressed(KeyBinding key) throws ActionFailedException {
+	void keyPressed(KeyBinding key) {
 		switch (key) {
 		case SHOW_STATS:
 			client.showStatWindow();

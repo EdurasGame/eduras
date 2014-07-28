@@ -10,6 +10,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.newdawn.slick.Color;
+import org.newdawn.slick.Font;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
@@ -68,6 +69,7 @@ public class GameRenderer implements TooltipHandler {
 	private final InformationProvider info;
 	private final ClientData data;
 	private final static Color FOG_OF_WAR = new Color(0, 0, 0, 200);
+	private Font font;
 
 	/**
 	 * Creates a new renderer.
@@ -149,6 +151,8 @@ public class GameRenderer implements TooltipHandler {
 	 *            the target graphics.
 	 */
 	public void render(GameContainer container, Graphics g) {
+		if (font == null)
+			font = g.getFont();
 		try {
 			if (info.getPlayer().getPlayerMainFigure() == null) {
 				// wait for player
@@ -163,28 +167,28 @@ public class GameRenderer implements TooltipHandler {
 		float newScale = calculateScale(width, height);
 
 		clear(g, width, height);
-
-		if (newScale != 1.0f) {
-			g.scale(newScale, newScale);
-		}
-
 		if (scale != newScale) {
 			viewPort.setSize(width, height);
 			gui.onGuiSizeChanged(width, height);
-			camera.setSize(width, height); // maybe not?
+			// camera.setSize(width, height); // maybe not?
 		}
+
+		g.translate(-viewPort.getX(), -viewPort.getY());
+		g.scale(newScale, newScale);
 
 		scale = newScale;
 		adjustCamera();
-		g.translate(-viewPort.getX() / scale, -viewPort.getY() / scale);
+		// g.translate(-viewPort.getX() / scale, -viewPort.getY() / scale);
 		drawMap(g);
 		drawObjects(g);
 		drawAnimations(g);
 		drawEffects(g);
-		g.resetTransform();
 		// g.translate(viewPort.getX() / scale, viewPort.getY() / scale);
 		// g.scale(1 / scale, 1 / scale);
+		g.pushTransform();
+		g.resetTransform();
 		drawGui(g);
+		g.popTransform();
 	}
 
 	private void drawEffects(Graphics g) {
@@ -459,9 +463,9 @@ public class GameRenderer implements TooltipHandler {
 	@Override
 	public void showTooltip(Vector2f p, String text) {
 		if (tooltip == null || !(tooltip instanceof TextTooltip)) {
-			tooltip = new TextTooltip(text);
+			tooltip = new TextTooltip(text, font);
 		} else {
-			((TextTooltip) tooltip).setText(text);
+			((TextTooltip) tooltip).setText(text, font);
 		}
 		tooltip.moveTo(p);
 		tooltipShown = true;
@@ -483,6 +487,10 @@ public class GameRenderer implements TooltipHandler {
 
 	private Player getClientPlayer() throws ObjectNotFoundException {
 		return info.getPlayer();
+	}
+
+	public GameCamera getCamera() {
+		return camera;
 	}
 
 }

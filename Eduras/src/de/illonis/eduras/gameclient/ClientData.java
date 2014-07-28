@@ -24,12 +24,14 @@ public final class ClientData {
 	private int currentItemSelected;
 	private Player currentResurrectTarget;
 	private ObjectType typeOfItemToSpawn;
+	private int currentActionSelected;
 
 	/**
 	 * Creates a new storage.
 	 */
 	public ClientData() {
 		currentItemSelected = -1;
+		currentActionSelected = -1;
 		chatCache = new ChatCache();
 		selectedUnits = new TreeSet<Integer>();
 		visionInfo = new VisionInformation();
@@ -88,6 +90,16 @@ public final class ClientData {
 	public int getCurrentItemSelected() {
 		return currentItemSelected;
 	}
+	
+	/**
+	 * Returns the currently selected action slot number.
+	 * 
+	 * @return slotnumber
+	 */
+	public int getCurrentActionSelected() {
+		return currentActionSelected;
+	}
+
 
 	/**
 	 * Sets the currently selected item's slot number.
@@ -96,6 +108,15 @@ public final class ClientData {
 	 */
 	public void setCurrentItemSelected(int currentItemSelected) {
 		this.currentItemSelected = currentItemSelected;
+	}
+	
+	/**
+	 * Sets the currently selected action slot number.
+	 * 
+	 * @param currentActionSelected
+	 */
+	public void setCurrentActionSelected(int currentActionSelected) {
+		this.currentActionSelected = currentActionSelected;
 	}
 
 	/**

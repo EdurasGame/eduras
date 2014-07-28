@@ -13,9 +13,12 @@ import org.newdawn.slick.geom.Vector2f;
 import de.illonis.edulog.EduLog;
 import de.illonis.eduras.ObjectFactory.ObjectType;
 import de.illonis.eduras.Player;
+import de.illonis.eduras.exceptions.InsufficientResourceException;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
 import de.illonis.eduras.exceptions.WrongObjectTypeException;
 import de.illonis.eduras.gameclient.GuiInternalEventListener;
+import de.illonis.eduras.gameclient.audio.SoundMachine;
+import de.illonis.eduras.gameclient.audio.SoundMachine.SoundType;
 import de.illonis.eduras.gameclient.gui.game.GamePanelLogic.ClickState;
 import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.gameobjects.GameObject.Relation;
@@ -50,135 +53,8 @@ public class BuildModeMouseAdapter extends ScrollModeMouseAdapter {
 
 		switch (getPanelLogic().getClickState()) {
 		case DEFAULT:
-			if (button == Input.MOUSE_RIGHT_BUTTON) {
-				getListener().sendSelectedUnits(clickGamePoint);
-			} else if (button == Input.MOUSE_LEFT_BUTTON) {
+			if (button == Input.MOUSE_LEFT_BUTTON) {
 				getListener().selectOrDeselectAt(clickGamePoint);
-			}
-			break;
-		case SELECT_POSITION_FOR_SCOUT:
-			if (button == Input.MOUSE_LEFT_BUTTON) {
-				getListener().onSpawnScout(clickGamePoint);
-			}
-			getListener().setClickState(ClickState.DEFAULT);
-			break;
-		case SELECT_TARGET_FOR_HEAL:
-			if (button == Input.MOUSE_LEFT_BUTTON) {
-				InformationProvider infoPro = EdurasInitializer.getInstance()
-						.getInformationProvider();
-
-				LinkedList<GameObject> obs = new LinkedList<GameObject>(
-						infoPro.findObjectsAt(clickGamePoint));
-				PlayerMainFigure player;
-				try {
-					player = infoPro.getPlayer().getPlayerMainFigure();
-				} catch (ObjectNotFoundException e) {
-					L.log(Level.SEVERE,
-							"Player not found while selecting healtarget.", e);
-					return;
-				}
-				for (GameObject gameObject : obs) {
-
-					if (gameObject.isUnit()
-							&& infoPro.getGameMode().getRelation(gameObject,
-									player) == Relation.ALLIED) {
-						getListener().onUnitHeal((Unit) gameObject);
-						getPanelLogic().setClickState(ClickState.DEFAULT);
-						return;
-					}
-				}
-
-			} else {
-				getPanelLogic().setClickState(ClickState.DEFAULT);
-			}
-			break;
-		case SELECT_POSITION_FOR_OBSERVERUNIT:
-			if (button == Input.MOUSE_LEFT_BUTTON) {
-				InformationProvider infoPro = EdurasInitializer.getInstance()
-						.getInformationProvider();
-				Player player;
-				try {
-					player = infoPro.getPlayer();
-				} catch (ObjectNotFoundException e) {
-					L.log(Level.SEVERE,
-							"Could not find player while spawning observer unit.",
-							e);
-					return;
-				}
-				LinkedList<GameObject> obs = new LinkedList<GameObject>(
-						EdurasInitializer.getInstance()
-								.getInformationProvider()
-								.findObjectsAt(clickGamePoint));
-
-				for (GameObject gameObject : obs) {
-					if (gameObject instanceof NeutralBase) {
-
-						if (((NeutralBase) gameObject).getCurrentOwnerTeam() == player
-								.getTeam()) {
-							getListener().onUnitSpawned(ObjectType.OBSERVER,
-									(NeutralBase) gameObject);
-							getPanelLogic().setClickState(ClickState.DEFAULT);
-							return;
-						} else {
-							getPanelLogic()
-									.showNotification(
-											"You can only spawn observers in bases your team owns.");
-							return;
-						}
-					}
-				}
-				getPanelLogic()
-						.showNotification(
-								"Please select a base owned by your team to spawn a observer");
-			} else {
-				getPanelLogic().setClickState(ClickState.DEFAULT);
-			}
-			break;
-		case SELECT_POSITION_FOR_ITEMSPAWN:
-			if (button == Input.MOUSE_LEFT_BUTTON) {
-				try {
-					getListener().onSpawnItem(
-							EdurasInitializer.getInstance()
-									.getInformationProvider().getClientData()
-									.getTypeOfItemToSpawn(), clickGamePoint);
-				} catch (WrongObjectTypeException e) {
-					L.log(Level.WARNING, "Cannot spawn this object type!!", e);
-					return;
-				}
-			}
-			break;
-		case SELECT_BASE_FOR_REZZ:
-			if (button == Input.MOUSE_LEFT_BUTTON) {
-				LinkedList<GameObject> obs = new LinkedList<GameObject>(
-						EdurasInitializer.getInstance()
-								.getInformationProvider()
-								.findObjectsAt(clickGamePoint));
-
-				for (GameObject gameObject : obs) {
-					if (gameObject instanceof NeutralBase) {
-						if (((NeutralBase) gameObject).getCurrentOwnerTeam() == getPanelLogic()
-								.getClientData().getCurrentResurrectTarget()
-								.getTeam()) {
-							getListener().onPlayerRezz(
-									getPanelLogic().getClientData()
-											.getCurrentResurrectTarget(),
-									(NeutralBase) gameObject);
-							getPanelLogic().setClickState(ClickState.DEFAULT);
-							return;
-						} else {
-							getPanelLogic()
-									.showNotification(
-											"You can only resurrect on bases your team owns.");
-							return;
-						}
-					}
-				}
-				getPanelLogic().showNotification(
-						"Please select a base owned by your team to resurrect "
-								+ getPanelLogic().getClientData()
-										.getCurrentResurrectTarget().getName());
-			} else {
-				getPanelLogic().setClickState(ClickState.DEFAULT);
 			}
 			break;
 		default:
@@ -237,12 +113,61 @@ public class BuildModeMouseAdapter extends ScrollModeMouseAdapter {
 				&& getPanelLogic().getClickState() == ClickState.DEFAULT) {
 			getPanelLogic().setClickState(ClickState.UNITSELECT_DRAGGING);
 			startPoint = new Point(x, y);
+			return;
+		}
+		if (getPanelLogic().getClickState() == ClickState.SELECT_TARGET_FOR_HEAL) {
+			if (button == Input.MOUSE_LEFT_BUTTON) {
+				Vector2f clickGamePoint = getPanelLogic()
+						.computeGuiPointToGameCoordinate(new Vector2f(x, y));
+				InformationProvider infoPro = EdurasInitializer.getInstance()
+						.getInformationProvider();
+
+				LinkedList<GameObject> obs = new LinkedList<GameObject>(
+						infoPro.findObjectsAt(clickGamePoint));
+				PlayerMainFigure player;
+				try {
+					player = infoPro.getPlayer().getPlayerMainFigure();
+				} catch (ObjectNotFoundException e) {
+					L.log(Level.SEVERE,
+							"Player not found while selecting healtarget.", e);
+					return;
+				}
+				if (obs.isEmpty()) {
+					SoundMachine.play(SoundType.ERROR);
+					return;
+				}
+				for (GameObject gameObject : obs) {
+					if (gameObject.isUnit()
+							&& infoPro.getGameMode().getRelation(gameObject,
+									player) == Relation.ALLIED) {
+						try {
+							getListener().onUnitHeal((Unit) gameObject);
+							actionDone();
+							getPanelLogic().setClickState(ClickState.DEFAULT);
+						} catch (InsufficientResourceException e) {
+							getPanelLogic().onActionFailed(e);
+							return;
+						}
+						return;
+					}
+				}
+			}
+			getPanelLogic().setClickState(ClickState.DEFAULT);
 		}
 	}
 
 	@Override
 	public void mouseReleased(int button, int x, int y) {
-		if (getPanelLogic().getClickState() == ClickState.UNITSELECT_DRAGGING) {
+		Vector2f clickGamePoint = getPanelLogic()
+				.computeGuiPointToGameCoordinate(new Vector2f(x, y));
+
+		switch (getPanelLogic().getClickState()) {
+		case DEFAULT:
+			if (button == Input.MOUSE_RIGHT_BUTTON) {
+				getListener().sendSelectedUnits(clickGamePoint);
+			}
+			break;
+		case UNITSELECT_DRAGGING:
 			if (button == Input.MOUSE_LEFT_BUTTON) {
 				getPanelLogic().setClickState(ClickState.DEFAULT);
 
@@ -255,7 +180,140 @@ public class BuildModeMouseAdapter extends ScrollModeMouseAdapter {
 				getListener().onUnitsSelected(r);
 				getPanelLogic().getDragRect().clear();
 			}
+			break;
+		case SELECT_POSITION_FOR_SCOUT:
+			if (button == Input.MOUSE_LEFT_BUTTON) {
+				try {
+					getListener().onSpawnScout(clickGamePoint);
+					actionDone();
+				} catch (InsufficientResourceException e) {
+					getPanelLogic().onActionFailed(e);
+					return;
+				}
+			}
+			getListener().setClickState(ClickState.DEFAULT);
+			break;
+		case SELECT_POSITION_FOR_ITEMSPAWN:
+			if (button == Input.MOUSE_LEFT_BUTTON) {
+				try {
+					getListener().onSpawnItem(
+							EdurasInitializer.getInstance()
+									.getInformationProvider().getClientData()
+									.getTypeOfItemToSpawn(), clickGamePoint);
+					actionDone();
+				} catch (WrongObjectTypeException e) {
+					L.log(Level.WARNING, "Cannot spawn this object type!!", e);
+					return;
+				} catch (InsufficientResourceException e) {
+					getPanelLogic().onActionFailed(e);
+					return;
+				}
+			}
+			getListener().setClickState(ClickState.DEFAULT);
+
+			break;
+		case SELECT_POSITION_FOR_OBSERVERUNIT:
+			if (button == Input.MOUSE_LEFT_BUTTON) {
+				System.out.println("release");
+				InformationProvider infoPro = EdurasInitializer.getInstance()
+						.getInformationProvider();
+				Player player;
+				try {
+					player = infoPro.getPlayer();
+				} catch (ObjectNotFoundException e) {
+					L.log(Level.SEVERE,
+							"Could not find player while spawning observer unit.",
+							e);
+					return;
+				}
+				LinkedList<GameObject> obs = new LinkedList<GameObject>(
+						EdurasInitializer.getInstance()
+								.getInformationProvider()
+								.findObjectsAt(clickGamePoint));
+
+				for (GameObject gameObject : obs) {
+					if (gameObject instanceof NeutralBase) {
+
+						if (((NeutralBase) gameObject).getCurrentOwnerTeam() == player
+								.getTeam()) {
+							try {
+								getListener().onUnitSpawned(
+										ObjectType.OBSERVER,
+										(NeutralBase) gameObject);
+								actionDone();
+								getPanelLogic().setClickState(
+										ClickState.DEFAULT);
+							} catch (InsufficientResourceException e) {
+								getPanelLogic().onActionFailed(e);
+							}
+							return;
+						} else {
+							getPanelLogic()
+									.showNotification(
+											"You can only spawn observers in bases your team owns.");
+							SoundMachine.play(SoundType.ERROR);
+							return;
+						}
+					}
+				}
+				getPanelLogic()
+						.showNotification(
+								"Please select a base owned by your team to spawn a observer");
+				SoundMachine.play(SoundType.ERROR);
+				return;
+			}
+			getPanelLogic().setClickState(ClickState.DEFAULT);
+			break;
+		case SELECT_BASE_FOR_REZZ:
+			if (button == Input.MOUSE_LEFT_BUTTON) {
+				LinkedList<GameObject> obs = new LinkedList<GameObject>(
+						EdurasInitializer.getInstance()
+								.getInformationProvider()
+								.findObjectsAt(clickGamePoint));
+
+				for (GameObject gameObject : obs) {
+					if (gameObject instanceof NeutralBase) {
+						if (((NeutralBase) gameObject).getCurrentOwnerTeam() == getPanelLogic()
+								.getClientData().getCurrentResurrectTarget()
+								.getTeam()) {
+							try {
+								getListener().onPlayerRezz(
+										getPanelLogic().getClientData()
+												.getCurrentResurrectTarget(),
+										(NeutralBase) gameObject);
+								actionDone();
+								getPanelLogic().setClickState(
+										ClickState.DEFAULT);
+							} catch (InsufficientResourceException e) {
+								getPanelLogic().onActionFailed(e);
+							}
+							return;
+						} else {
+							getPanelLogic()
+									.showNotification(
+											"You can only resurrect on bases your team owns.");
+							SoundMachine.play(SoundType.ERROR);
+							return;
+						}
+					}
+				}
+				getPanelLogic().showNotification(
+						"Please select a base owned by your team to resurrect "
+								+ getPanelLogic().getClientData()
+										.getCurrentResurrectTarget().getName());
+				SoundMachine.play(SoundType.ERROR);
+				return;
+			}
+			getPanelLogic().setClickState(ClickState.DEFAULT);
+			break;
+		default:
+			break;
 		}
+	}
+
+	private void actionDone() {
+		EdurasInitializer.getInstance().getInformationProvider()
+				.getClientData().setCurrentActionSelected(-1);
 	}
 
 	@Override

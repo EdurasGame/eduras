@@ -8,6 +8,7 @@ import de.illonis.eduras.gameclient.datacache.CacheInfo.ImageKey;
 import de.illonis.eduras.gameclient.gui.game.GamePanelLogic.ClickState;
 import de.illonis.eduras.gameclient.gui.hud.ActionButton;
 import de.illonis.eduras.logicabstraction.EdurasInitializer;
+import de.illonis.eduras.settings.S;
 
 /**
  * Resurrects a player.
@@ -16,7 +17,8 @@ import de.illonis.eduras.logicabstraction.EdurasInitializer;
  * 
  */
 public class RezzButton extends ActionButton {
-	private final static String BASE_STRING = "Resurrect %s";
+	private final static String BASE_STRING = "Resurrect %s [Costs: "
+			+ " [Costs: " + S.Server.gm_edura_action_respawnplayer_cost + "]";
 	private final Player target;
 
 	/**

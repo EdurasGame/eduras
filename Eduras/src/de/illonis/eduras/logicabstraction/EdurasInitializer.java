@@ -402,6 +402,10 @@ public class EdurasInitializer {
 				return -1;
 			}
 
+			@Override
+			public void notifyWeaponAmmoEmpty(int clientId, int slotNum) {
+			}
+
 		});
 
 		networkManager.getClient().setEventHandler(new EventParser(logic));

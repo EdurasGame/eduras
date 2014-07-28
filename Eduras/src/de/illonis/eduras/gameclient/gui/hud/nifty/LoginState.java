@@ -21,9 +21,22 @@ public class LoginState extends NiftyOverlayBasicGameState {
 
 	private final GameControllerBridge game;
 	private LoginController controller;
+	private final String betaAccountName;
+	private final String betaAccountPassword;
 
 	LoginState(GameControllerBridge game) {
 		this.game = game;
+
+		betaAccountName = "";
+		betaAccountPassword = "";
+	}
+
+	LoginState(GameControllerBridge game, String betaAccountName,
+			String betaAccountPassword) {
+		this.game = game;
+
+		this.betaAccountName = betaAccountName;
+		this.betaAccountPassword = betaAccountPassword;
 	}
 
 	@Override
@@ -55,12 +68,12 @@ public class LoginState extends NiftyOverlayBasicGameState {
 			controller.login();
 			return;
 		}
-		super.keyReleased(key, c);
 	}
 
 	@Override
 	protected void prepareNifty(Nifty nifty, StateBasedGame stateGame) {
-		controller = new LoginController(game);
+		controller = new LoginController(game, betaAccountName,
+				betaAccountPassword);
 		nifty.fromXml("/res/hud/login.xml", "login", controller);
 	}
 

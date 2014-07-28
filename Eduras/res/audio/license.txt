@@ -6,6 +6,7 @@
 #                                                                            #
 # Example for an entry:                                                      #
 # - sound/click.ogg                                                          #
-#	  from xyz.org (CC0).                                                    #
+#     from xyz.org (CC0).                                                    #
 ##############################################################################
-
+- sound/error.ogg
+      original named misc_menu_3.wav from Lokif on http://opengameart.org/content/gui-sound-effects (CC0)

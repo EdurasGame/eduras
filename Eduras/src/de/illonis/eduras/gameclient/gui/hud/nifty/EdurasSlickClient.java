@@ -28,6 +28,10 @@ public class EdurasSlickClient implements GameControllerBridge {
 	private Game game;
 	private String username = "";
 	private ServerInfo server;
+	private String betaAccountName;
+	private String betaAccountPassword;
+	private String serverIpToConnectTo;
+	private int serverPort;
 
 	/**
 	 * Starts the gui display in fullscreen mode.
@@ -36,11 +40,22 @@ public class EdurasSlickClient implements GameControllerBridge {
 	 *            (NYI) the name of the user to login automatically.
 	 * @param betaPassword
 	 *            (NYI) the password of the user to login automatically.
+	 * @param serverPort
+	 *            the port of the server to connect to directly. Is ignored if
+	 *            it's zero.
+	 * @param serverIp
+	 *            the address of the server to connect to directly. Is ignored
+	 *            if empty.
 	 * @throws SlickException
 	 *             if there is a display problem.
 	 */
-	public void startGui(String betaUser, String betaPassword)
-			throws SlickException {
+	public void startGui(String betaUser, String betaPassword, String serverIp,
+			int serverPort) throws SlickException {
+		betaAccountName = betaUser;
+		betaAccountPassword = betaPassword;
+		serverIpToConnectTo = serverIp;
+		this.serverPort = serverPort;
+
 		if (game != null)
 			throw new IllegalStateException("Cannot start gui more than once!");
 		game = new Game();
@@ -67,6 +82,38 @@ public class EdurasSlickClient implements GameControllerBridge {
 
 	class Game extends NiftyStateBasedGame {
 
+		@Override
+		public void keyPressed(int key, char c) {
+		}
+
+		@Override
+		public void keyReleased(int key, char c) {
+		}
+
+		@Override
+		public void mousePressed(int button, int x, int y) {
+		}
+
+		@Override
+		public void mouseReleased(int button, int x, int y) {
+		}
+
+		@Override
+		public void mouseDragged(int oldx, int oldy, int newx, int newy) {
+		}
+
+		@Override
+		public void mouseMoved(int oldx, int oldy, int newx, int newy) {
+		}
+
+		@Override
+		public void mouseClicked(int button, int x, int y, int clickCount) {
+		}
+
+		@Override
+		public void mouseWheelMoved(int newValue) {
+		}
+
 		protected Game() {
 			super("Eduras? Client");
 		}
@@ -75,9 +122,11 @@ public class EdurasSlickClient implements GameControllerBridge {
 		public void initStatesList(GameContainer container)
 				throws SlickException {
 			// add game states here
-			addState(new LoginState(EdurasSlickClient.this));
+			addState(new LoginState(EdurasSlickClient.this, betaAccountName,
+					betaAccountPassword));
 			addState(new SettingsState(EdurasSlickClient.this));
-			addState(new ServerListState(EdurasSlickClient.this));
+			addState(new ServerListState(EdurasSlickClient.this,
+					serverIpToConnectTo, serverPort));
 			addState(new LoadingState(EdurasSlickClient.this));
 			addState(new GameState(EdurasSlickClient.this));
 			addState(new ConnectingState(EdurasSlickClient.this));

@@ -7,8 +7,12 @@ import org.newdawn.slick.particles.ConfigurableEmitter;
 
 import de.illonis.edulog.EduLog;
 import de.illonis.eduras.ObjectFactory.ObjectType;
+import de.illonis.eduras.events.ItemUseFailedEvent;
 import de.illonis.eduras.events.ObjectFactoryEvent;
+import de.illonis.eduras.events.ItemUseFailedEvent.Reason;
 import de.illonis.eduras.gameclient.GameEventAdapter;
+import de.illonis.eduras.gameclient.audio.SoundMachine;
+import de.illonis.eduras.gameclient.audio.SoundMachine.SoundType;
 import de.illonis.eduras.gameclient.gui.animation.EffectFactory.EffectNumber;
 import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.logicabstraction.EdurasInitializer;
@@ -43,6 +47,13 @@ public class ClientEffectHandler extends GameEventAdapter {
 		if (o.getType().equals(ObjectType.ROCKET_MISSILE)) {
 			EffectFactory.createEffectAt(EffectNumber.ROCKET,
 					o.getPositionVector());
+		}
+	}
+
+	@Override
+	public void onItemUseFailed(ItemUseFailedEvent itemFailedEvent) {
+		if (itemFailedEvent.getReason() == Reason.AMMO_EMPTY) {
+			SoundMachine.play(SoundType.AMMO_EMPTY, 1f, .7f);
 		}
 	}
 }
