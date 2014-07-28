@@ -46,6 +46,9 @@ public class LoadingState extends NiftyOverlayBasicGameState {
 
 	@Override
 	protected void enterState(GameContainer container, StateBasedGame game) {
+		// TODO: It seems that every state has a respective controller. Can't we
+		// let every controller have an enterState() / enterScreen() method too?
+		controller.reset();
 	}
 
 	@Override

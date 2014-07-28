@@ -7,6 +7,7 @@ import org.newdawn.slick.GameContainer;
 
 import de.eduras.eventingserver.Event;
 import de.illonis.edulog.EduLog;
+import de.illonis.eduras.chat.ChatClient;
 import de.illonis.eduras.chat.ChatClientImpl;
 import de.illonis.eduras.events.InitInformationEvent;
 import de.illonis.eduras.exceptions.MessageNotSupportedException;
@@ -56,6 +57,7 @@ public class GameClient {
 	private void loadTools(GameContainer gameContainer) {
 
 		initializer = EdurasInitializer.getInstance();
+		initializer.initGame();
 		eventSender = initializer.getEventSender();
 		infoPro = initializer.getInformationProvider();
 		eventHandler = new ClientNetworkEventListener(this);
@@ -72,7 +74,7 @@ public class GameClient {
 	}
 
 	private void initChat() {
-		ChatClientImpl chat = new ChatClientImpl();
+		ChatClient chat = new ChatClientImpl();
 		chat.setChatActivityListener(new ClientChatReceiver(chat, clientName));
 		logic.setChat(chat);
 		chat.connect(nwm.getServerAddress().getHostAddress(), nwm.getPort() + 1);
@@ -115,8 +117,15 @@ public class GameClient {
 	public void onClientDisconnect(int clientId) {
 		L.info("Client disconnected: " + clientId);
 		if (clientId == getOwnerID()) {
-			container.onDisconnect(wantsExit, null);
+			tearDownConnection();
 		}
+	}
+
+	private void tearDownConnection() {
+		logic.stop();
+		logic.getChat().disconnect();
+		// initializer.tearDown();
+		container.onDisconnect(wantsExit, null);
 	}
 
 	/**

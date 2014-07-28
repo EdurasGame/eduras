@@ -63,7 +63,17 @@ public class ChatClientImpl implements ChatClient {
 			public void onDisconnected() {
 				L.info("You disconnected from chat.");
 				connected = false;
+				reset();
 				chatActivityListener.onConnectionAborted();
+			}
+
+			private void reset() {
+				for (ChatRoom room : allRooms) {
+					removeRoom(room);
+				}
+				for (ChatUser aUser : allUsers) {
+					removeUser(aUser);
+				}
 			}
 
 			@Override
@@ -229,5 +239,10 @@ public class ChatClientImpl implements ChatClient {
 
 	protected void setUser(ChatUser me) {
 		user = me;
+	}
+
+	@Override
+	public void disconnect() {
+		client.disconnect();
 	}
 }

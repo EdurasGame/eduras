@@ -9,7 +9,6 @@ import java.util.logging.Logger;
 
 import org.newdawn.slick.geom.Vector2f;
 
-import de.eduras.eventingserver.ClientInterface;
 import de.illonis.edulog.EduLog;
 import de.illonis.eduras.ClientGameMode;
 import de.illonis.eduras.EdurasServer;
@@ -42,6 +41,7 @@ import de.illonis.eduras.logic.EventTriggerer;
 import de.illonis.eduras.logic.LogicGameWorker;
 import de.illonis.eduras.maps.Map;
 import de.illonis.eduras.math.Vector2df;
+import de.illonis.eduras.networking.EventParser;
 import de.illonis.eduras.units.InteractMode;
 import de.illonis.eduras.units.PlayerMainFigure;
 import de.illonis.eduras.units.Unit;
@@ -55,11 +55,11 @@ import de.illonis.eduras.units.Unit;
  */
 public class EdurasInitializer {
 
-	private final NetworkManager networkManager;
-	private final EventSender eventSender;
-	private final InformationProvider informationProvider;
+	final NetworkManager networkManager;
+	final EventSender eventSender;
+	final InformationProvider informationProvider;
 	private final Settings settings;
-	private final GameLogicInterface logic;
+	GameLogicInterface logic;
 	private static EdurasInitializer instance;
 
 	private final static Logger L = EduLog.getLoggerFor(EdurasServer.class
@@ -67,6 +67,91 @@ public class EdurasInitializer {
 
 	private EdurasInitializer() {
 		instance = this;
+
+		networkManager = new NetworkManager(this);
+		settings = new Settings();
+		try {
+
+			settings.load();
+		} catch (FileNotFoundException e) {
+			L.log(Level.WARNING, "Could not load user preferences.", e);
+		}
+		eventSender = new EventSender(this);
+		informationProvider = new InformationProvider(this);
+
+		initGame();
+
+	}
+
+	/**
+	 * Returns the {@link NetworkManager}.
+	 * 
+	 * @return The NetworkManager
+	 */
+	public NetworkManager getNetworkManager() {
+		return networkManager;
+	}
+
+	/**
+	 * Returns the unique {@link EdurasInitializer} instance.
+	 * 
+	 * @return The EdurasInitializer instance
+	 */
+	public static EdurasInitializer getInstance() {
+		if (instance == null) {
+			return new EdurasInitializer();
+		}
+		return instance;
+	}
+
+	/**
+	 * Returns the {@link EventSender}.
+	 * 
+	 * @return The EventSender
+	 */
+	public EventSender getEventSender() {
+		return eventSender;
+	}
+
+	/**
+	 * Returns the {@link InformationProvider}
+	 * 
+	 * @return The InformationProvider
+	 */
+	public InformationProvider getInformationProvider() {
+		return informationProvider;
+	}
+
+	/**
+	 * Returns the current {@link Settings} of the current game.
+	 * 
+	 * @return the settings
+	 */
+	public Settings getSettings() {
+		return settings;
+	}
+
+	/**
+	 * Starts the logic game worker.
+	 * 
+	 * @param useInternal
+	 *            if using a inbuild thread.
+	 * 
+	 * @return the worker.
+	 */
+	public LogicGameWorker startLogicWorker(boolean useInternal) {
+		return logic.startWorker(useInternal);
+	}
+
+	/**
+	 * @return the logic.
+	 * 
+	 */
+	public GameLogicInterface getLogic() {
+		return logic;
+	}
+
+	public void initGame() {
 		GameInformation game = new GameInformation();
 
 		// needed because all the game game mode action shall be performed on
@@ -323,89 +408,6 @@ public class EdurasInitializer {
 
 		});
 
-		networkManager = new NetworkManager(logic);
-
-		ClientInterface client = networkManager.getClient();
-
-		settings = new Settings();
-		try {
-
-			settings.load();
-		} catch (FileNotFoundException e) {
-			L.log(Level.WARNING, "Could not load user preferences.", e);
-		}
-
-		eventSender = new EventSender(client, logic);
-
-		informationProvider = new InformationProvider(logic, networkManager);
-
-	}
-
-	/**
-	 * Returns the {@link NetworkManager}.
-	 * 
-	 * @return The NetworkManager
-	 */
-	public NetworkManager getNetworkManager() {
-		return networkManager;
-	}
-
-	/**
-	 * Returns the unique {@link EdurasInitializer} instance.
-	 * 
-	 * @return The EdurasInitializer instance
-	 */
-	public static EdurasInitializer getInstance() {
-		if (instance == null) {
-			return new EdurasInitializer();
-		}
-		return instance;
-	}
-
-	/**
-	 * Returns the {@link EventSender}.
-	 * 
-	 * @return The EventSender
-	 */
-	public EventSender getEventSender() {
-		return eventSender;
-	}
-
-	/**
-	 * Returns the {@link InformationProvider}
-	 * 
-	 * @return The InformationProvider
-	 */
-	public InformationProvider getInformationProvider() {
-		return informationProvider;
-	}
-
-	/**
-	 * Returns the current {@link Settings} of the current game.
-	 * 
-	 * @return the settings
-	 */
-	public Settings getSettings() {
-		return settings;
-	}
-
-	/**
-	 * Starts the logic game worker.
-	 * 
-	 * @param useInternal
-	 *            if using a inbuild thread.
-	 * 
-	 * @return the worker.
-	 */
-	public LogicGameWorker startLogicWorker(boolean useInternal) {
-		return logic.startWorker(useInternal);
-	}
-
-	/**
-	 * @return the logic.
-	 * 
-	 */
-	public GameLogicInterface getLogic() {
-		return logic;
+		networkManager.getClient().setEventHandler(new EventParser(logic));
 	}
 }

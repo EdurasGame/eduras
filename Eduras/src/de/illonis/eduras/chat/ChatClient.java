@@ -95,6 +95,12 @@ public interface ChatClient {
 	public void connect(String hostname, int port);
 
 	/**
+	 * Disconnect from the chat server currently connected to. If the client
+	 * isn't connected to any server, nothing happens.
+	 */
+	public void disconnect();
+
+	/**
 	 * Returns the respective user.
 	 * 
 	 * @return The user

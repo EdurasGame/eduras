@@ -66,5 +66,7 @@ public class TimedTasksHolder {
 		for (Pair<TimerTask, Long> task : myTasks) {
 			task.getFirst().cancel();
 		}
+
+		myTasks.clear();
 	}
 }
