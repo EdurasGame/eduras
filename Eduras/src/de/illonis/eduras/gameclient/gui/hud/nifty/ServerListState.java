@@ -38,7 +38,7 @@ public class ServerListState extends NiftyBasicGameState {
 	protected void prepareNifty(Nifty nifty, StateBasedGame stateGame) {
 		controller = new ServerListController(this.game, presetServerAddress,
 				presetServerPort);
-		nifty.fromXml("/res/hud/serverlist.xml", "serverlist", controller);
+		nifty.fromXml("res/hud/serverlist.xml", "serverlist", controller);
 	}
 
 	@Override

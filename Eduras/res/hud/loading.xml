@@ -4,9 +4,9 @@
 	<useStyles filename="nifty-default-styles.xml" />
 	<useControls filename="nifty-default-controls.xml" />
 	<controlDefinition name="loadingbar">
-		<image filename="/res/images/loading_border.png" childLayout="absolute"
+		<image filename="res/images/loading_border.png" childLayout="absolute"
 			imageMode="resize:15,2,15,15,15,2,15,2,15,2,15,15">
-			<image id="progressbar" x="0" y="0" filename="/res/images/loading_inner.png"
+			<image id="progressbar" x="0" y="0" filename="res/images/loading_inner.png"
 				width="32px" height="100%" imageMode="resize:15,2,15,15,15,2,15,2,15,2,15,15" />
 		</image>
 	</controlDefinition>

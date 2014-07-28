@@ -74,7 +74,7 @@ public class LoginState extends NiftyOverlayBasicGameState {
 	protected void prepareNifty(Nifty nifty, StateBasedGame stateGame) {
 		controller = new LoginController(game, betaAccountName,
 				betaAccountPassword);
-		nifty.fromXml("/res/hud/login.xml", "login", controller);
+		nifty.fromXml("res/hud/login.xml", "login", controller);
 	}
 
 	@Override

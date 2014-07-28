@@ -30,7 +30,7 @@ public class ConnectingState extends NiftyOverlayBasicGameState {
 	@Override
 	protected void prepareNifty(Nifty nifty, StateBasedGame game) {
 		controller = new ConnectingController(this.gameBridge);
-		nifty.fromXml("/res/hud/connecting.xml", "connecting", controller);
+		nifty.fromXml("res/hud/connecting.xml", "connecting", controller);
 	}
 
 	@Override

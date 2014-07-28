@@ -18,7 +18,7 @@ import de.illonis.edulog.EduLog;
 public class SoundMachine {
 
 	private static final HashMap<SoundType, Sound> sounds = new HashMap<SoundType, Sound>();
-	private final static String baseFolder = "/res/audio/sound/";
+	private final static String baseFolder = "res/audio/sound/";
 	private final static Logger L = EduLog.getLoggerFor(SoundMachine.class
 			.getName());
 
