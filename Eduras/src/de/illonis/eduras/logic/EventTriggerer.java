@@ -549,4 +549,14 @@ public interface EventTriggerer {
 	 */
 	void giveNewItem(Player player, ObjectType itemType)
 			throws WrongObjectTypeException;
+
+	/**
+	 * Notifies a client that he cannot use a wepon because it has no ammo.
+	 * 
+	 * @param clientId
+	 *            the client id.
+	 * @param slotNum
+	 *            the item slot that he tried to use.
+	 */
+	void notifyWeaponAmmoEmpty(int clientId, int slotNum);
 }

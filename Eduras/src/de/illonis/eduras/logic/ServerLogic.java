@@ -32,6 +32,7 @@ import de.illonis.eduras.events.SetFloatGameObjectAttributeEvent;
 import de.illonis.eduras.events.SpawnItemEvent;
 import de.illonis.eduras.events.SwitchInteractModeEvent;
 import de.illonis.eduras.events.UserMovementEvent;
+import de.illonis.eduras.exceptions.InsufficientResourceException;
 import de.illonis.eduras.exceptions.InvalidNameException;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
 import de.illonis.eduras.exceptions.WrongObjectTypeException;
@@ -339,13 +340,18 @@ public class ServerLogic implements GameLogicInterface {
 		switch (itemEvent.getType()) {
 		case ITEM_USE:
 			if (item.isUsable() && !((Usable) item).hasCooldown()) {
-				if (((Usable) item).use(useInfo)) {
-					ItemEvent cooldownEvent = new ItemEvent(
-							GameEventNumber.ITEM_CD_START,
-							itemEvent.getOwner(), itemEvent.getSlotNum());
+				try {
+					if (((Usable) item).use(useInfo)) {
+						ItemEvent cooldownEvent = new ItemEvent(
+								GameEventNumber.ITEM_CD_START,
+								itemEvent.getOwner(), itemEvent.getSlotNum());
 
-					gameInfo.getEventTriggerer().notifyCooldownStarted(
-							cooldownEvent);
+						gameInfo.getEventTriggerer().notifyCooldownStarted(
+								cooldownEvent);
+					}
+				} catch (InsufficientResourceException e) {
+					getGame().getEventTriggerer().notifyWeaponAmmoEmpty(
+							itemEvent.getOwner(), itemEvent.getSlotNum());
 				}
 			}
 			break;

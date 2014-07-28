@@ -4,6 +4,7 @@ import org.newdawn.slick.geom.Vector2f;
 
 import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.ObjectFactory.ObjectType;
+import de.illonis.eduras.exceptions.InsufficientResourceException;
 import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.gameobjects.TimingSource;
 import de.illonis.eduras.items.ItemUseInformation;
@@ -49,13 +50,15 @@ public abstract class Weapon extends UsableItem implements Lootable {
 	}
 
 	@Override
-	public final boolean use(ItemUseInformation info) {
+	public final boolean use(ItemUseInformation info) throws InsufficientResourceException {
 		if (!hasCooldown()) {
 			if (hasAmmo()) {
 				startCooldown();
 				currentAmmunition--;
 				doIfReady(info);
 				return true;
+			} else {
+				throw new InsufficientResourceException(1);
 			}
 		}
 		return false;

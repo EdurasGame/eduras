@@ -7,6 +7,7 @@ import de.illonis.eduras.events.ClientRenameEvent;
 import de.illonis.eduras.events.DeathEvent;
 import de.illonis.eduras.events.GameEvent;
 import de.illonis.eduras.events.ItemEvent;
+import de.illonis.eduras.events.ItemUseFailedEvent;
 import de.illonis.eduras.events.MatchEndEvent;
 import de.illonis.eduras.events.ObjectFactoryEvent;
 import de.illonis.eduras.events.RespawnEvent;
@@ -292,6 +293,16 @@ public class HudNotifier implements GameEventListener {
 		}
 		for (GameEventListener obj : otherObjects) {
 			obj.onPlayerLeft(ownerId);
+		}
+	}
+
+	@Override
+	public void onItemUseFailed(ItemUseFailedEvent itemFailedEvent) {
+		for (GameEventListener obj : uiObjects) {
+			obj.onItemUseFailed(itemFailedEvent);
+		}
+		for (GameEventListener obj : otherObjects) {
+			obj.onItemUseFailed(itemFailedEvent);
 		}
 	}
 }

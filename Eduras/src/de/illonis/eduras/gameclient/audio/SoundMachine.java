@@ -30,7 +30,7 @@ public class SoundMachine {
 	 */
 	@SuppressWarnings("javadoc")
 	public enum SoundType {
-		CLICK("click.ogg"), ERROR("error.ogg");
+		CLICK("click.ogg"), ERROR("error.ogg"), AMMO_EMPTY("out_of_ammo.ogg");
 
 		private final String file;
 

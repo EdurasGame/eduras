@@ -6,6 +6,7 @@ import de.illonis.eduras.events.ClientRenameEvent;
 import de.illonis.eduras.events.DeathEvent;
 import de.illonis.eduras.events.GameEvent;
 import de.illonis.eduras.events.ItemEvent;
+import de.illonis.eduras.events.ItemUseFailedEvent;
 import de.illonis.eduras.events.MatchEndEvent;
 import de.illonis.eduras.events.ObjectFactoryEvent;
 import de.illonis.eduras.events.RespawnEvent;
@@ -210,4 +211,12 @@ public interface GameEventListener {
 	 *            the owner id of left player.
 	 */
 	void onPlayerLeft(int ownerId);
+
+	/**
+	 * Called when usage of an item failed.
+	 * 
+	 * @param itemFailedEvent
+	 *            the event data.
+	 */
+	void onItemUseFailed(ItemUseFailedEvent itemFailedEvent);
 }
