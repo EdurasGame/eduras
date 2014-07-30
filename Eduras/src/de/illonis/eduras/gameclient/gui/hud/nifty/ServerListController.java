@@ -55,7 +55,13 @@ public class ServerListController extends EdurasScreenController implements
 		listBox = screen.findNiftyControl("serverList", ListBox.class);
 		customIpTextField = screen.findNiftyControl("customIpTextField",
 				TextField.class);
+	}
 
+	/**
+	 * This methods triggers joining a server, if a valid server IP and port
+	 * have been set on initialization.
+	 */
+	public void connectIfPreset() {
 		if (!presetServerIp.isEmpty() && presetServerPort != 0) {
 			try {
 				joinServer(new ServerInfo(
