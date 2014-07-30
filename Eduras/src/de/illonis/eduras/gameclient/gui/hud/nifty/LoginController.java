@@ -169,7 +169,7 @@ public class LoginController extends EdurasScreenController {
 
 	static class LoginTask implements Callable<LoginResult> {
 
-		private final static URL AUTH_URL = createAuthURL("http://illonis.de/eduras/auth/");
+		private final static URL AUTH_URL = createAuthURL("https://illonis.de/eduras/beta/auth");
 
 		private static URL createAuthURL(final String name) {
 			try {
