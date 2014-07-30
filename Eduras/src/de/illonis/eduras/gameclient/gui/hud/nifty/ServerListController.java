@@ -37,6 +37,8 @@ public class ServerListController extends EdurasScreenController implements
 	private TextField customIpTextField;
 	private final String presetServerIp;
 	private final int presetServerPort;
+	
+	private boolean firstTime = true;
 
 	ServerListController(GameControllerBridge game) {
 		this(game, "", 0);
@@ -61,8 +63,8 @@ public class ServerListController extends EdurasScreenController implements
 	 * This methods triggers joining a server, if a valid server IP and port
 	 * have been set on initialization.
 	 */
-	public void connectIfPreset() {
-		if (!presetServerIp.isEmpty() && presetServerPort != 0) {
+	public void connectIfPresetAndFirstTime() {
+		if (!presetServerIp.isEmpty() && presetServerPort != 0 && firstTime) {
 			try {
 				joinServer(new ServerInfo(
 						InetAddress.getByName(presetServerIp), presetServerPort));
@@ -72,6 +74,7 @@ public class ServerListController extends EdurasScreenController implements
 				return;
 			}
 		}
+		firstTime = false;
 	}
 
 	/**

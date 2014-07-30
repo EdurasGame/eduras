@@ -48,7 +48,7 @@ public class ServerListState extends NiftyBasicGameState {
 
 	@Override
 	public void enterState(GameContainer container, StateBasedGame stateGame) {
-		controller.connectIfPreset();
+		controller.connectIfPresetAndFirstTime();
 		startDiscovery();
 		controller.clearList();
 	}
