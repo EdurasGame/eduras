@@ -493,7 +493,7 @@ public class EdurasServer {
 		SimpleDateFormat simpleDate = new SimpleDateFormat("y-M-d-H-m-s");
 
 		try {
-			EduLog.init(simpleDate.format(new Date()) + "-server.log", 2097152);
+			EduLog.init(new File("logs").getAbsolutePath(), simpleDate.format(new Date()) + "-server.log", 2097152);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

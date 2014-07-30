@@ -19,7 +19,7 @@
 		controller="de.illonis.eduras.gameclient.gui.hud.nifty.LoginController">
 		<layer id="progressLayer" childLayout="vertical">
 			<panel childLayout="center" width="*">
-				<image filename="/res/images/logo.png" margin="15px,0,0,0" />
+				<image filename="res/images/logo.png" margin="15px,0,0,0" />
 			</panel>
 		</layer>
 		<layer id="closeLayer" childLayout="vertical">

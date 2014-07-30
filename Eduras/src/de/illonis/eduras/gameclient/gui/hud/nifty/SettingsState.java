@@ -38,7 +38,7 @@ public class SettingsState extends NiftyBasicGameState {
 	@Override
 	protected void prepareNifty(Nifty nifty, StateBasedGame stateGame) {
 		controller = new SettingsController(this.game);
-		nifty.fromXml("/res/hud/settings.xml", "settings", controller);
+		nifty.fromXml("res/hud/settings.xml", "settings", controller);
 	}
 
 	@Override

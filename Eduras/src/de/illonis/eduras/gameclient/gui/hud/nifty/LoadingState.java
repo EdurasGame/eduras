@@ -30,7 +30,7 @@ public class LoadingState extends NiftyOverlayBasicGameState {
 	@Override
 	protected void prepareNifty(Nifty nifty, StateBasedGame game) {
 		controller = new LoadingController(this.gameBridge);
-		nifty.fromXml("/res/hud/loading.xml", "loading", controller);
+		nifty.fromXml("res/hud/loading.xml", "loading", controller);
 	}
 
 	@Override

@@ -76,8 +76,8 @@ public class GameState extends NiftyOverlayBasicGameState {
 
 	@Override
 	protected void prepareNifty(Nifty nifty, StateBasedGame game) {
-		nifty.fromXml("/res/hud/game.xml", "game", new GameController(
-				gameBridge));
+		nifty.fromXml("res/hud/game.xml", "game",
+				new GameController(gameBridge));
 	}
 
 	@Override
