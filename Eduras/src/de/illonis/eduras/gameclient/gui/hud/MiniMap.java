@@ -1,6 +1,7 @@
 package de.illonis.eduras.gameclient.gui.hud;
 
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.logging.Logger;
 
 import org.newdawn.slick.Color;
@@ -63,7 +64,9 @@ public class MiniMap extends ClickableGuiElement {
 
 	private void renderNeutral(Graphics g) {
 		g.setColor(NEUTRAL_OBJECTS_FILL_COLOR);
-		for (MiniMapNeutralObject object : neutralObjects.values()) {
+		LinkedList<MiniMapNeutralObject> objectsToRender = new LinkedList<MiniMapNeutralObject>(
+				neutralObjects.values());
+		for (MiniMapNeutralObject object : objectsToRender) {
 			if (object.isDynamicShape()) {
 				g.draw(new Polygon(
 						Geometry.vectorsToFloat(object.getVertices())),
@@ -95,7 +98,7 @@ public class MiniMap extends ClickableGuiElement {
 		}
 	}
 
-	private void renderNodeConnections(Graphics g) {
+	private synchronized void renderNodeConnections(Graphics g) {
 		checkIfNodesInitialized();
 
 		// if it IS null, some game mode other than Edura is running
@@ -123,7 +126,6 @@ public class MiniMap extends ClickableGuiElement {
 				}
 			}
 		}
-
 	}
 
 	private void checkIfNodesInitialized() {
@@ -191,11 +193,11 @@ public class MiniMap extends ClickableGuiElement {
 				viewPort.getY()));
 		g.drawRect(pos.x, pos.y, viewPort.getWidth() * scale,
 				viewPort.getHeight() * scale);
-//		g.pushTransform();
-//		g.translate(-scale, (height - SIZE) - scale);
-//		g.scale(scale, scale);
-//		g.drawRect(0, 0, viewPort.getWidth(), viewPort.getHeight());
-//		g.popTransform();
+		// g.pushTransform();
+		// g.translate(-scale, (height - SIZE) - scale);
+		// g.scale(scale, scale);
+		// g.drawRect(0, 0, viewPort.getWidth(), viewPort.getHeight());
+		// g.popTransform();
 	}
 
 	@Override
@@ -292,7 +294,7 @@ public class MiniMap extends ClickableGuiElement {
 		}
 	}
 
-	private void resetNodeData() {
+	private synchronized void resetNodeData() {
 		nodes = null;
 	}
 
