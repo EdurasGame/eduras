@@ -51,6 +51,9 @@
 				<include name="**/*.esh"></include>
 				<include name="**/*.properties"></include>
 			</fileset>
+			<fileset dir="${base}">
+				<include name="/licenses/**"></include>
+			</fileset>
 			<zipgroupfileset dir="${base}${libs}" includes="*.jar" />
 			<fileset dir="${base}${libs}" includes="native/**" />
 			<fileset file="gitversion" />
@@ -84,6 +87,9 @@
 				<include name="**/*.erm"></include>
 				<include name="**/*.esh"></include>
 				<include name="**/*.properties"></include>
+			</fileset>
+			<fileset dir="${base}">
+				<include name="/licenses/**"></include>
 			</fileset>
 			<fileset file="version" />
 			<zipgroupfileset dir="${base}${libs}" includes="**/*.jar" />
