@@ -167,28 +167,28 @@ public class GameRenderer implements TooltipHandler {
 		float newScale = calculateScale(width, height);
 
 		clear(g, width, height);
+
+		if (newScale != 1.0f) {
+			g.scale(newScale, newScale);
+		}
+
 		if (scale != newScale) {
 			viewPort.setSize(width, height);
 			gui.onGuiSizeChanged(width, height);
-			// camera.setSize(width, height); // maybe not?
+			camera.setSize(width, height); // maybe not?
 		}
-
-		g.translate(-viewPort.getX(), -viewPort.getY());
-		g.scale(newScale, newScale);
 
 		scale = newScale;
 		adjustCamera();
-		// g.translate(-viewPort.getX() / scale, -viewPort.getY() / scale);
+		g.translate(-viewPort.getX() / scale, -viewPort.getY() / scale);
 		drawMap(g);
 		drawObjects(g);
 		drawAnimations(g);
 		drawEffects(g);
+		g.resetTransform();
 		// g.translate(viewPort.getX() / scale, viewPort.getY() / scale);
 		// g.scale(1 / scale, 1 / scale);
-		g.pushTransform();
-		g.resetTransform();
 		drawGui(g);
-		g.popTransform();
 	}
 
 	private void drawEffects(Graphics g) {
