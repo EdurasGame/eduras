@@ -19,4 +19,10 @@ public interface GameManager {
 	 *            an optional error message.
 	 */
 	void onDisconnect(boolean gracefully, String message);
+
+	/**
+	 * This is called when the game's initialization is completed so starting to
+	 * render the game is legit
+	 */
+	void onGameReady();
 }

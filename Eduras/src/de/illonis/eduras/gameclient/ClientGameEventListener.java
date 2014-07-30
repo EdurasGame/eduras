@@ -158,6 +158,7 @@ public class ClientGameEventListener implements GameEventListener {
 	public void onGameReady() {
 		ui.onGameReady();
 		effects.onGameReady();
+		client.onGameReady();
 	}
 
 	@Override

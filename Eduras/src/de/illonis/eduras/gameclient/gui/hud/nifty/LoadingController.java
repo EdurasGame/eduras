@@ -42,31 +42,28 @@ public class LoadingController extends EdurasScreenController {
 				GraphicsPreLoader.loadShapes();
 				break;
 			case 2:
-				setProgress(0.3f, "Loading objects");
+				setProgress(0.2f, "Loading objects");
 				GraphicsPreLoader.loadGraphics();
 				break;
 			case 3:
-				setProgress(0.5f, "Loading interface");
+				setProgress(0.3f, "Loading interface");
 				GraphicsPreLoader.loadGuiGraphics();
 				break;
 			case 4:
-				setProgress(0.6f, "Loading items");
+				setProgress(0.4f, "Loading items");
 				GraphicsPreLoader.loadInventoryIcons();
 				break;
 			case 5:
-				setProgress(0.8f, "Loading other icons");
+				setProgress(0.5f, "Loading other icons");
 				GraphicsPreLoader.loadIcons();
 				break;
 			case 6:
-				setProgress(0.9f, "Loading animations");
+				setProgress(0.6f, "Loading animations");
 				EffectFactory.init();
 				break;
 			case 7:
-				setProgress(1f, "Loading complete");
-				break;
-			case 8:
 				game.getEduras().init();
-				game.enterState(4);
+				setProgress(0.7f, "Retrieving server data.");
 				break;
 			default:
 				break;
