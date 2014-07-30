@@ -1,5 +1,6 @@
 package de.illonis.eduras.gameclient.gui.hud.nifty;
 
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashMap;
@@ -113,7 +114,7 @@ public class LoginController extends EdurasScreenController {
 			passwordField.setFocus();
 			return;
 		}
-
+		nameNote.setText("Connecting...");
 		loginCallable = new LoginTask(username, password);
 		login = true;
 	}
@@ -150,7 +151,6 @@ public class LoginController extends EdurasScreenController {
 						game.enterState(2);
 					} else {
 						nameNote.setText("Login failed.");
-						setControlsEnabled(true);
 						passwordField.setText("");
 						passwordField.setFocus();
 						// login failed
@@ -158,6 +158,7 @@ public class LoginController extends EdurasScreenController {
 				} catch (InterruptedException | ExecutionException e) {
 					nameNote.setText(e.getMessage());
 				}
+				setControlsEnabled(true);
 				loginFuture = null;
 			}
 		}
@@ -198,11 +199,17 @@ public class LoginController extends EdurasScreenController {
 			data.put(USERNAME_FIELD, username);
 			data.put(PASSWORD_FIELD, password);
 			data.put(CHANNEL_FIELD, CHANNEL_VALUE);
-			String result = WebFetcher.post(AUTH_URL, data);
-			JSONObject obj = new JSONObject(result);
 			LoginResult resultObject = new LoginResult();
-			resultObject.success = obj.getBoolean("success");
+			try {
+				String result = WebFetcher.post(AUTH_URL, data);
+				JSONObject obj = new JSONObject(result);
+
+				resultObject.success = obj.getBoolean("success");
+			} catch (IOException e) {
+				throw new ExecutionException("Login server not available.", e);				
+			}
 			return resultObject;
+
 		}
 	}
 }
