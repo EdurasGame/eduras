@@ -188,4 +188,9 @@ public class EdurasSlickClient implements GameControllerBridge {
 		return loginData;
 	}
 
+	@Override
+	public void onGameReady() {
+		enterState(4);
+	}
+
 }

@@ -250,4 +250,11 @@ public class GameClient {
 
 	}
 
+	/**
+	 * Notifies the {@link GameManager} that the game is ready to be rendered.
+	 */
+	public void onGameReady() {
+		container.onGameReady();
+	}
+
 }
