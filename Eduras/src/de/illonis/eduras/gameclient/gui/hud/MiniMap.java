@@ -205,14 +205,12 @@ public class MiniMap extends ClickableGuiElement {
 	private void renderViewPort(Graphics g) {
 		g.setLineWidth(1f);
 		g.setColor(Color.white);
-		float minimapScale = (float) SIZE
-				/ getInfo().getMapBounds().getHeight();
+		float minimapScale = SIZE / getInfo().getMapBounds().getHeight();
 		g.pushTransform();
 		float rectWidth = 800f;
 		float ratio = viewPort.getHeight() / viewPort.getWidth();
 		float rectHeight = rectWidth * ratio;
 		g.translate(0, (height - SIZE));
-		System.out.println(viewPort.getX());
 		// g.scale(minimapScale, minimapScale);
 		// g.translate(-viewPort.getX() - 400, -viewPort.getY() - 300);
 		g.drawRect(viewPort.getX() * minimapScale, viewPort.getY()
