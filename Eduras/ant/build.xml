@@ -11,7 +11,6 @@
 	<property name="src" value="src" />
 	<property name="libs" value="lib" />
 	<property name="ant" value="ant" />
-	<property name="maps" value="src/de/illonis/eduras/maps/data" />
 	<property name="build" value="bin" />
 	<property name="jars" value="${base}../dist/jars" />
 	<property name="exclude" value="**/unittests/*" />
