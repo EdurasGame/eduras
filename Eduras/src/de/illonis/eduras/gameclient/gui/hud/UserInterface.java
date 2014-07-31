@@ -124,13 +124,18 @@ public class UserInterface implements GuiResizeListener {
 	private void initActionBar() {
 
 		ActionBarPage mainPage = new ActionBarPage(PageNumber.MAIN);
-		ActionButton abortButton = new ActionButton("abort",
-				ImageKey.ACTION_ABORT, guiReactor) {
+		ActionButton abortButton = new ActionButton(ImageKey.ACTION_ABORT,
+				guiReactor) {
 
 			@Override
 			public void actionPerformed() {
 				guiReactor.setClickState(ClickState.DEFAULT);
 				actionBar.setPage(PageNumber.MAIN);
+			}
+
+			@Override
+			public String getLabel() {
+				return "abort";
 			}
 		};
 		SpawnObserverButton spawnButton = new SpawnObserverButton(guiReactor);
@@ -140,11 +145,16 @@ public class UserInterface implements GuiResizeListener {
 
 		ScoutSpellButton scoutButton = new ScoutSpellButton(guiReactor);
 		mainPage.addButton(scoutButton);
-		ActionButton resurrectButton = new ActionButton("resurrect",
+		ActionButton resurrectButton = new ActionButton(
 				ImageKey.ACTION_RESURRECT, guiReactor) {
 			@Override
 			public void actionPerformed() {
 				actionBar.setPage(PageNumber.RESURRECT);
+			}
+
+			@Override
+			public String getLabel() {
+				return "resurrect";
 			}
 		};
 		mainPage.addButton(resurrectButton);
@@ -154,11 +164,16 @@ public class UserInterface implements GuiResizeListener {
 		hudNotifier.addListener(resurrectPage);
 		resurrectPage.addButton(abortButton);
 
-		ActionButton spawnItemButton = new ActionButton("spawn item",
+		ActionButton spawnItemButton = new ActionButton(
 				ImageKey.ACTION_SPAWN_ITEMS, guiReactor) {
 			@Override
 			public void actionPerformed() {
 				actionBar.setPage(PageNumber.ITEMS);
+			}
+
+			@Override
+			public String getLabel() {
+				return "spawn item";
 			}
 		};
 		mainPage.addButton(spawnItemButton);

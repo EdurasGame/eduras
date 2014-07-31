@@ -17,8 +17,6 @@ import de.illonis.eduras.settings.S;
  * 
  */
 public class RezzButton extends ActionButton {
-	private final static String BASE_STRING = "Resurrect %s [Costs: "
-			+ " [Costs: " + S.Server.gm_edura_action_respawnplayer_cost + "]";
 	private final Player target;
 
 	/**
@@ -30,8 +28,7 @@ public class RezzButton extends ActionButton {
 	 *            the reactor.
 	 */
 	public RezzButton(Player player, GamePanelReactor reactor) {
-		super(String.format(BASE_STRING, player.getName()),
-				ImageKey.ACTION_RESURRECT_PLAYER, reactor);
+		super(ImageKey.ACTION_RESURRECT_PLAYER, reactor);
 		this.target = player;
 	}
 
@@ -61,5 +58,13 @@ public class RezzButton extends ActionButton {
 	 */
 	public Player getTarget() {
 		return target;
+	}
+
+	@Override
+	public String getLabel() {
+		String label = "Resurrect %s [Costs: " + " [Costs: "
+				+ S.Server.gm_edura_action_respawnplayer_cost + "]";
+
+		return String.format(label, target.getName());
 	}
 }

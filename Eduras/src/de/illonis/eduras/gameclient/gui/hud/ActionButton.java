@@ -29,7 +29,6 @@ public abstract class ActionButton extends GameEventAdapter {
 	public final static int BUTTON_SIZE = 48;
 
 	private boolean enabled;
-	private String label;
 	protected final GamePanelReactor reactor;
 	private ImageKey imageKey;
 	private Image icon;
@@ -39,18 +38,15 @@ public abstract class ActionButton extends GameEventAdapter {
 	/**
 	 * Creates a new action button.
 	 * 
-	 * @param label
-	 *            the button label.
 	 * @param image
 	 *            the key for the image used to display on this button.
 	 * @param reactor
 	 *            the reactor.
 	 */
-	public ActionButton(String label, ImageKey image, GamePanelReactor reactor) {
+	public ActionButton(ImageKey image, GamePanelReactor reactor) {
 		this.reactor = reactor;
 		this.imageKey = image;
 		enabled = true;
-		this.label = label;
 		autoCancel = false;
 	}
 
@@ -76,7 +72,7 @@ public abstract class ActionButton extends GameEventAdapter {
 			icon = ImageCache.getGuiImage(imageKey);
 		} catch (CacheException e) {
 			L.log(Level.WARNING, "Could not find image for actionbutton \""
-					+ label + "\".", e);
+					+ imageKey.toString() + "\".", e);
 		}
 		return icon;
 	}
@@ -84,9 +80,7 @@ public abstract class ActionButton extends GameEventAdapter {
 	/**
 	 * @return the display text.
 	 */
-	public final String getLabel() {
-		return label;
-	}
+	public abstract String getLabel();
 
 	/**
 	 * @return true if this button is enabled.
