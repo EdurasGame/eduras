@@ -199,4 +199,16 @@ public class ChatCache {
 	public ChatRoom getCurrentRoom() {
 		return currentRoom;
 	}
+
+	/**
+	 * Clears all information from cache and results in a freshly created state.
+	 */
+	public void reset() {
+		writing = false;
+		messages.clear();
+		input = new StringBuilder();
+		self = -1;
+		users.clear();
+		currentRoom = null;
+	}
 }

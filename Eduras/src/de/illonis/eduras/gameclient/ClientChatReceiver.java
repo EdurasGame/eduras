@@ -65,6 +65,7 @@ public class ClientChatReceiver implements ChatActivityListener {
 
 	@Override
 	public void onConnectionEstablished() {
+		cache.reset();
 		try {
 			chat.setName(clientName);
 		} catch (NotConnectedException e) {
