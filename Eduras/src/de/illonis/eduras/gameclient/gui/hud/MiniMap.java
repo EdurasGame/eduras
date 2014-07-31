@@ -2,6 +2,7 @@ package de.illonis.eduras.gameclient.gui.hud;
 
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.logging.Logger;
 
 import org.newdawn.slick.Color;
@@ -145,7 +146,9 @@ public class MiniMap extends ClickableGuiElement {
 	}
 
 	private void renderPlayers(Graphics g) {
-		for (MiniMapPlayer object : players.values()) {
+		List<MiniMapPlayer> ps = new LinkedList<MiniMapPlayer>(players.values());
+		for (int i = 0; i < ps.size(); i++) {
+			MiniMapPlayer object = ps.get(i);
 			g.setColor(object.getColor());
 			g.fillOval(object.getX(), object.getY(), object.getWidth(),
 					object.getHeight());
@@ -191,15 +194,20 @@ public class MiniMap extends ClickableGuiElement {
 	private void renderViewPort(Graphics g) {
 		g.setLineWidth(1f);
 		g.setColor(Color.white);
-		Vector2f pos = gameToMinimapPosition(new Vector2f(viewPort.getX(),
-				viewPort.getY()));
-		g.drawRect(pos.x, pos.y, viewPort.getWidth() * scale,
-				viewPort.getHeight() * scale);
-		// g.pushTransform();
-		// g.translate(-scale, (height - SIZE) - scale);
-		// g.scale(scale, scale);
-		// g.drawRect(0, 0, viewPort.getWidth(), viewPort.getHeight());
-		// g.popTransform();
+		float minimapScale = (float) SIZE
+				/ getInfo().getMapBounds().getHeight();
+		g.pushTransform();
+		float rectWidth = 800f;
+		float ratio = viewPort.getHeight() / viewPort.getWidth();
+		float rectHeight = rectWidth * ratio;
+		g.translate(0, (height - SIZE));
+		System.out.println(viewPort.getX());
+		// g.scale(minimapScale, minimapScale);
+		// g.translate(-viewPort.getX() - 400, -viewPort.getY() - 300);
+		g.drawRect(viewPort.getX() * minimapScale, viewPort.getY()
+				* minimapScale, rectWidth * minimapScale, rectHeight
+				* minimapScale);
+		g.popTransform();
 	}
 
 	@Override
