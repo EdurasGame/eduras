@@ -198,7 +198,8 @@ public class ServerSearcher extends Thread {
 					for (int i = 1; i < numberOfEdurasServers * 4; i = i + 4) {
 						try {
 							ServerInfo info = parseServerInfo(event, i);
-							listener.onServerFound(info);
+							if (info != null)
+								listener.onServerFound(info);
 						} catch (UnknownHostException e) {
 							L.log(Level.WARNING, "", e);
 						}
@@ -221,30 +222,38 @@ public class ServerSearcher extends Thread {
 
 		private ServerInfo parseServerInfo(Event event, int i)
 				throws TooFewArgumentsExceptions, UnknownHostException {
-			String nameOfEdurasServer = (String) event.getArgument(i);
-			String ipOfEdurasServer = (String) event.getArgument(i + 1);
-			int portOfEdurasServer = (Integer) event.getArgument(i + 2);
-			String versionOfEdurasServer = (String) event.getArgument(i + 3);
-			int numberOfPlayers = (Integer) event.getArgument(i + 4);
-			String gameMode = (String) event.getArgument(i + 5);
-			String map = (String) event.getArgument(i + 6);
-
-			L.fine("Metaserver reported the following server. name : "
-					+ nameOfEdurasServer + " ; address : " + ipOfEdurasServer
-					+ ":" + portOfEdurasServer + " ; version : "
-					+ versionOfEdurasServer + " ; players: " + numberOfPlayers
-					+ " ; game mode :" + gameMode + " ; map: " + map);
-
 			try {
-				ServerInfo serverInfo = new ServerInfo(nameOfEdurasServer,
-						InetAddress.getByName(ipOfEdurasServer),
-						portOfEdurasServer, versionOfEdurasServer,
-						numberOfPlayers, gameMode, map);
-				return serverInfo;
-			} catch (UnknownHostException e) {
-				throw new UnknownHostException("Cannot genereate IP out of "
-						+ ipOfEdurasServer + ". " + e.getMessage());
+				String nameOfEdurasServer = (String) event.getArgument(i);
+				String ipOfEdurasServer = (String) event.getArgument(i + 1);
+				int portOfEdurasServer = (Integer) event.getArgument(i + 2);
+				String versionOfEdurasServer = (String) event
+						.getArgument(i + 3);
+				int numberOfPlayers = (Integer) event.getArgument(i + 4);
+				String gameMode = (String) event.getArgument(i + 5);
+				String map = (String) event.getArgument(i + 6);
+
+				L.fine("Metaserver reported the following server. name : "
+						+ nameOfEdurasServer + " ; address : "
+						+ ipOfEdurasServer + ":" + portOfEdurasServer
+						+ " ; version : " + versionOfEdurasServer
+						+ " ; players: " + numberOfPlayers + " ; game mode :"
+						+ gameMode + " ; map: " + map);
+
+				try {
+					ServerInfo serverInfo = new ServerInfo(nameOfEdurasServer,
+							InetAddress.getByName(ipOfEdurasServer),
+							portOfEdurasServer, versionOfEdurasServer,
+							numberOfPlayers, gameMode, map);
+					return serverInfo;
+				} catch (UnknownHostException e) {
+					throw new UnknownHostException(
+							"Cannot genereate IP out of " + ipOfEdurasServer
+									+ ". " + e.getMessage());
+				}
+			} catch (ClassCastException e) {
+				L.log(Level.WARNING, "Got an invalid serverInfo response", e);
 			}
+			return null;
 		}
 
 		@Override
