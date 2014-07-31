@@ -64,6 +64,7 @@ public class MiniMap extends ClickableGuiElement {
 
 	private void renderNeutral(Graphics g) {
 		g.setColor(NEUTRAL_OBJECTS_FILL_COLOR);
+		g.setLineWidth(1f);
 		LinkedList<MiniMapNeutralObject> objectsToRender = new LinkedList<MiniMapNeutralObject>(
 				neutralObjects.values());
 		for (MiniMapNeutralObject object : objectsToRender) {
@@ -91,6 +92,7 @@ public class MiniMap extends ClickableGuiElement {
 	}
 
 	private void renderBases(Graphics g) {
+		g.setLineWidth(1f);
 		for (MiniMapBase object : bases.values()) {
 			g.setColor(object.getColor());
 			g.fillRect(object.getX(), object.getY(), object.getWidth(),
