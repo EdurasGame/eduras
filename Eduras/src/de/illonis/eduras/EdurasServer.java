@@ -90,6 +90,7 @@ public class EdurasServer {
 	private Map startMap;
 	private String startGameMode;
 	private File startSettings;
+	private int maxNumberOfClients;
 
 	private ServerEventTriggerer eventTriggerer;
 
@@ -115,6 +116,8 @@ public class EdurasServer {
 		remoteConsoleOn = true;
 		remoteConsolePort = EncryptedRemoteServer.DEFAULT_REMOTE_SERVER_PORT;
 		remoteConsolePassword = "password";
+
+		maxNumberOfClients = 11;
 	}
 
 	/**
@@ -153,6 +156,25 @@ public class EdurasServer {
 	 */
 	public void setRegisterAtMetaserver(boolean registerAtMetaserver) {
 		this.registerAtMetaserver = registerAtMetaserver;
+	}
+
+	/**
+	 * Sets the maximum number of players that are allowed to join the server.
+	 * 
+	 * @param maxPlayers
+	 */
+	public void setMaxPlayers(int maxPlayers) {
+		this.maxNumberOfClients = maxPlayers;
+	}
+
+	/**
+	 * Returns the maximum number of players that are allowed to connect to the
+	 * server.
+	 * 
+	 * @return max number of players
+	 */
+	public int getMaxPlayers() {
+		return maxNumberOfClients;
 	}
 
 	/**
@@ -419,6 +441,7 @@ public class EdurasServer {
 		eventTriggerer = new ServerEventTriggerer(logic, server);
 		gameInfo.setEventTriggerer(eventTriggerer);
 
+		server.setMaximumClients(maxNumberOfClients);
 		server.setEventHandler(new EventParser(logic));
 		server.setNetworkEventHandler(new ServerNetworker(gameInfo));
 		server.setPolicy(new InetPolizei());
@@ -493,7 +516,8 @@ public class EdurasServer {
 		SimpleDateFormat simpleDate = new SimpleDateFormat("y-M-d-H-m-s");
 
 		try {
-			EduLog.init(new File("logs").getAbsolutePath(), simpleDate.format(new Date()) + "-server.log", 2097152);
+			EduLog.init(new File("logs").getAbsolutePath(),
+					simpleDate.format(new Date()) + "-server.log", 2097152);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
