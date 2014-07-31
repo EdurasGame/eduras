@@ -181,10 +181,21 @@ public class MiniMap extends ClickableGuiElement {
 	public void render(Graphics g) {
 		g.setColor(Color.black);
 		g.fill(bounds);
-		renderNeutral(g);
-		renderBases(g);
+
+		synchronized (neutralObjects) {
+			renderNeutral(g);
+		}
+
+		synchronized (bases) {
+			renderBases(g);
+		}
+
 		renderNodeConnections(g);
-		renderPlayers(g);
+
+		synchronized (players) {
+			renderPlayers(g);
+		}
+
 		renderViewPort(g);
 	}
 
@@ -211,17 +222,28 @@ public class MiniMap extends ClickableGuiElement {
 	}
 
 	private void relocateObjects() {
-		for (MiniMapPlayer player : players.values()) {
-			Vector2f miniPos = gameToMinimapPosition(player.getObjectLocation());
-			player.setLocation(miniPos.x, miniPos.y);
+		synchronized (players) {
+			for (MiniMapPlayer player : players.values()) {
+				Vector2f miniPos = gameToMinimapPosition(player
+						.getObjectLocation());
+				player.setLocation(miniPos.x, miniPos.y);
+			}
 		}
-		for (MiniMapBase base : bases.values()) {
-			Vector2f miniPos = gameToMinimapPosition(base.getObjectLocation());
-			base.setLocation(miniPos.x, miniPos.y);
+
+		synchronized (bases) {
+			for (MiniMapBase base : bases.values()) {
+				Vector2f miniPos = gameToMinimapPosition(base
+						.getObjectLocation());
+				base.setLocation(miniPos.x, miniPos.y);
+			}
 		}
-		for (MiniMapNeutralObject object : neutralObjects.values()) {
-			Vector2f miniPos = gameToMinimapPosition(object.getObjectLocation());
-			object.setLocation(miniPos.x, miniPos.y);
+
+		synchronized (neutralObjects) {
+			for (MiniMapNeutralObject object : neutralObjects.values()) {
+				Vector2f miniPos = gameToMinimapPosition(object
+						.getObjectLocation());
+				object.setLocation(miniPos.x, miniPos.y);
+			}
 		}
 	}
 
@@ -241,13 +263,19 @@ public class MiniMap extends ClickableGuiElement {
 			return;
 		}
 
-		if (o instanceof PlayerMainFigure)
-			players.remove(o.getId());
-		else if (o instanceof NeutralBase) {
-			bases.remove(o.getId());
+		if (o instanceof PlayerMainFigure) {
+			synchronized (players) {
+				players.remove(o.getId());
+			}
+		} else if (o instanceof NeutralBase) {
+			synchronized (bases) {
+				bases.remove(o.getId());
+			}
 			resetNodeData();
 		} else if (o.getOwner() == -1) {
-			neutralObjects.remove(o.getId());
+			synchronized (neutralObjects) {
+				neutralObjects.remove(o.getId());
+			}
 		}
 	}
 
@@ -263,12 +291,20 @@ public class MiniMap extends ClickableGuiElement {
 		if (o instanceof PlayerMainFigure) {
 			float w = o.getShape().getWidth() * scale;
 			float h = o.getShape().getHeight() * scale;
-			players.put(o.getId(), new MiniMapPlayer((PlayerMainFigure) o, x,
-					y, w, h));
+
+			synchronized (players) {
+				players.put(o.getId(), new MiniMapPlayer((PlayerMainFigure) o,
+						x, y, w, h));
+			}
 		} else if (o instanceof NeutralBase) {
 			float w = o.getShape().getWidth() * scale;
 			float h = o.getShape().getHeight() * scale;
-			bases.put(o.getId(), new MiniMapBase((NeutralBase) o, x, y, w, h));
+
+			synchronized (bases) {
+				bases.put(o.getId(), new MiniMapBase((NeutralBase) o, x, y, w,
+						h));
+			}
+
 			resetNodeData();
 		} else if (o.getOwner() == -1 && !(o instanceof Weapon)) {
 
@@ -292,7 +328,10 @@ public class MiniMap extends ClickableGuiElement {
 			} else {
 				newNeutralObject = new MiniMapNeutralObject(o, x, y, w, h);
 			}
-			neutralObjects.put(o.getId(), newNeutralObject);
+
+			synchronized (neutralObjects) {
+				neutralObjects.put(o.getId(), newNeutralObject);
+			}
 		}
 	}
 
