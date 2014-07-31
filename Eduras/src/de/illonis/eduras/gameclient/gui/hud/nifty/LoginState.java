@@ -1,5 +1,7 @@
 package de.illonis.eduras.gameclient.gui.hud.nifty;
 
+import java.awt.SplashScreen;
+
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
@@ -46,6 +48,10 @@ public class LoginState extends NiftyOverlayBasicGameState {
 
 	@Override
 	protected void enterState(GameContainer container, StateBasedGame stateGame) {
+		SplashScreen splash = SplashScreen.getSplashScreen();
+		if (splash != null) {
+			splash.close();
+		}
 	}
 
 	@Override
