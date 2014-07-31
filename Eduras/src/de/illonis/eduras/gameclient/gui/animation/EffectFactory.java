@@ -1,6 +1,6 @@
 package de.illonis.eduras.gameclient.gui.animation;
 
-import java.io.File;
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -61,7 +61,8 @@ public class EffectFactory {
 		 * @return the path to config file.
 		 */
 		public String getConfiguration() {
-			return "res/particles/" + configuration;
+			// leading slash is required here as this is loaded in another way
+			return "/res/particles/" + configuration;
 		}
 
 		/**
@@ -80,7 +81,8 @@ public class EffectFactory {
 			try {
 				Image image = new Image(effect.getImage(), false);
 				ParticleSystem system = new ParticleSystem(image, 1500);
-				File xmlFile = new File(effect.getConfiguration());
+				InputStream xmlFile = EffectFactory.class
+						.getResourceAsStream(effect.getConfiguration());
 				ConfigurableEmitter emitter = ParticleIO.loadEmitter(xmlFile);
 				emitter.setEnabled(false);
 				system.setPosition(0, 0);
@@ -104,7 +106,8 @@ public class EffectFactory {
 	 * @param position
 	 *            the topleft position to spawn this effect at.
 	 */
-	static ConfigurableEmitter createEffectAt(EffectNumber effect, Vector2f position) {
+	static ConfigurableEmitter createEffectAt(EffectNumber effect,
+			Vector2f position) {
 		return createEffectAt(effect, position, 0f);
 	}
 
@@ -118,8 +121,8 @@ public class EffectFactory {
 	 * @param angle
 	 *            the rotation offset in degree.
 	 */
-	static ConfigurableEmitter createEffectAt(EffectNumber effect, Vector2f position,
-			float angle) {
+	static ConfigurableEmitter createEffectAt(EffectNumber effect,
+			Vector2f position, float angle) {
 		ParticleSystem source = systems.get(effect);
 		if (source == null) {
 			return null;
