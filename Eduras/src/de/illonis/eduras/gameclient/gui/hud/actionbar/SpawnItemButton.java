@@ -32,9 +32,7 @@ public class SpawnItemButton extends ActionButton {
 	 *            GUI logic to call when clicked
 	 */
 	public SpawnItemButton(ObjectType type, GamePanelReactor reactor) {
-		super(
-				"Spawn item " + type.name() + " [Costs: " + type.getCosts()
-						+ "]", ImageKey.typeToImageKey(type), reactor);
+		super(ImageKey.typeToImageKey(type), reactor);
 		this.typeOfItemToSpawn = type;
 	}
 
@@ -43,5 +41,11 @@ public class SpawnItemButton extends ActionButton {
 		reactor.setClickState(ClickState.SELECT_POSITION_FOR_ITEMSPAWN);
 		EdurasInitializer.getInstance().getInformationProvider()
 				.getClientData().setCurrentItemSpawnType(typeOfItemToSpawn);
+	}
+
+	@Override
+	public String getLabel() {
+		return "Spawn item " + typeOfItemToSpawn.name() + " [Costs: "
+				+ typeOfItemToSpawn.getCosts() + "]";
 	}
 }

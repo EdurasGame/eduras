@@ -19,12 +19,16 @@ public class SpawnObserverButton extends ActionButton {
 	 *            the reactor.
 	 */
 	public SpawnObserverButton(GamePanelReactor reactor) {
-		super("Spawn observer [Costs: " + S.Server.unit_observer_costs + "]",
-				ImageKey.ACTION_SPAWN_OBSERVER, reactor);
+		super(ImageKey.ACTION_SPAWN_OBSERVER, reactor);
 	}
 
 	@Override
 	protected void actionPerformed() {
 		reactor.setClickState(ClickState.SELECT_POSITION_FOR_OBSERVERUNIT);
+	}
+
+	@Override
+	public String getLabel() {
+		return "Spawn observer [Costs: " + S.Server.unit_observer_costs + "]";
 	}
 }

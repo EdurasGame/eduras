@@ -22,12 +22,16 @@ public class ScoutSpellButton extends ActionButton {
 	 *            element to react on click.
 	 */
 	public ScoutSpellButton(GamePanelReactor reactor) {
-		super("Vision spell [Costs: " + S.Server.spell_scout_costs + "]",
-				ImageKey.ACTION_SPELL_SCOUT, reactor);
+		super(ImageKey.ACTION_SPELL_SCOUT, reactor);
 	}
 
 	@Override
 	protected void actionPerformed() {
 		reactor.setClickState(ClickState.SELECT_POSITION_FOR_SCOUT);
+	}
+
+	@Override
+	public String getLabel() {
+		return "Vision spell [Costs: " + S.Server.spell_scout_costs + "]";
 	}
 }

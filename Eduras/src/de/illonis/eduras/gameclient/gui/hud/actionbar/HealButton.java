@@ -14,9 +14,6 @@ import de.illonis.eduras.settings.S;
  */
 public class HealButton extends ActionButton {
 
-	private final static String BASE_STRING = "Heal a unit [Costs: "
-			+ S.Server.spell_heal_costs + "]";
-
 	/**
 	 * Creates a new healbutton.
 	 * 
@@ -24,11 +21,18 @@ public class HealButton extends ActionButton {
 	 *            the reactor.
 	 */
 	public HealButton(GamePanelReactor reactor) {
-		super(BASE_STRING, ImageKey.ACTION_HEAL, reactor);
+		super(ImageKey.ACTION_HEAL, reactor);
 	}
 
 	@Override
 	public void actionPerformed() {
 		reactor.setClickState(ClickState.SELECT_TARGET_FOR_HEAL);
+	}
+
+	@Override
+	public String getLabel() {
+		final String BASE_STRING = "Heal a unit [Costs: "
+				+ S.Server.spell_heal_costs + "]";
+		return BASE_STRING;
 	}
 }
