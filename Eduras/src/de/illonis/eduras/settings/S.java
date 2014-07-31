@@ -612,6 +612,12 @@ public final class S {
 		 */
 		public static boolean mp_teamattack = false;
 
+		/**
+		 * Determines how far a {@link SplashedMissile} can go before it
+		 * disappears.
+		 */
+		public static float go_splashedmissile_maxrange = 150;
+
 	}
 
 	/**

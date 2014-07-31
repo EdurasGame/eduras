@@ -35,5 +35,6 @@ public class SplashedMissile extends Missile {
 				S.Server.go_splashedmissile_shape_radius,
 				S.Server.go_splashedmissile_shape_radius));
 		setSpeed(S.Server.go_splashedmissile_speed);
+		setMaxRange(S.Server.go_splashedmissile_maxrange);
 	}
 }
