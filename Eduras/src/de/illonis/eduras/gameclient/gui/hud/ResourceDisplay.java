@@ -67,6 +67,10 @@ public class ResourceDisplay extends RenderedGuiObject {
 
 	@Override
 	public void onTeamResourceChanged(SetTeamResourceEvent setTeamResourceEvent) {
+		if (player == null) {
+			return;
+		}
+
 		try {
 			resAmount = player.getTeam().getResource();
 		} catch (PlayerHasNoTeamException e) {
