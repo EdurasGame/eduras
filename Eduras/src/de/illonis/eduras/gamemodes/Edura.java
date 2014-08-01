@@ -13,6 +13,7 @@ import de.illonis.eduras.ObjectFactory.ObjectType;
 import de.illonis.eduras.Player;
 import de.illonis.eduras.Team;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
+import de.illonis.eduras.exceptions.PlayerHasNoTeamException;
 import de.illonis.eduras.exceptions.WrongObjectTypeException;
 import de.illonis.eduras.gameclient.userprefs.KeyBindings.KeyBinding;
 import de.illonis.eduras.gameobjects.GameObject;
@@ -231,7 +232,14 @@ public class Edura extends TeamDeathmatch {
 
 	private void checkAllPlayersOfTeamDead(Player player) {
 		boolean allPlayersDead = true;
-		for (Player aPlayerOfSameTeam : player.getTeam().getPlayers()) {
+		Team teamOfDeadPlayer = null;
+		try {
+			teamOfDeadPlayer = player.getTeam();
+		} catch (PlayerHasNoTeamException e) {
+			L.log(Level.SEVERE, "Every player MUST have a team in Edura!", e);
+		}
+
+		for (Player aPlayerOfSameTeam : teamOfDeadPlayer.getPlayers()) {
 			// if there is a player who is alive, the team can still win
 			if (aPlayerOfSameTeam.getCurrentMode() != InteractMode.MODE_DEAD) {
 				allPlayersDead = false;
@@ -325,11 +333,18 @@ public class Edura extends TeamDeathmatch {
 					.doesAnyOfOtherObjectsIntersect(
 							player.getPlayerMainFigure(), neutralBases);
 
+			Team teamOfSwitchingPlayer = null;
+			try {
+				teamOfSwitchingPlayer = player.getTeam();
+			} catch (PlayerHasNoTeamException e) {
+				L.log(Level.SEVERE,
+						"At this point the player should belong to a team!", e);
+			}
 			for (GameObject intersectingGameObject : intersectingObjects) {
 				NeutralBase intersectingBase = (NeutralBase) intersectingGameObject;
 				if (intersectingBase.getCurrentOwnerTeam() != null
 						&& intersectingBase.getCurrentOwnerTeam().equals(
-								player.getTeam())) {
+								teamOfSwitchingPlayer)) {
 					return true;
 				}
 			}

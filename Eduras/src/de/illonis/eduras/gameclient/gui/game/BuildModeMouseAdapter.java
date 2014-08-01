@@ -15,6 +15,7 @@ import de.illonis.eduras.ObjectFactory.ObjectType;
 import de.illonis.eduras.Player;
 import de.illonis.eduras.exceptions.InsufficientResourceException;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
+import de.illonis.eduras.exceptions.PlayerHasNoTeamException;
 import de.illonis.eduras.exceptions.WrongObjectTypeException;
 import de.illonis.eduras.gameclient.GuiInternalEventListener;
 import de.illonis.eduras.gameclient.audio.SoundMachine;
@@ -234,25 +235,31 @@ public class BuildModeMouseAdapter extends ScrollModeMouseAdapter {
 				for (GameObject gameObject : obs) {
 					if (gameObject instanceof NeutralBase) {
 
-						if (((NeutralBase) gameObject).getCurrentOwnerTeam() == player
-								.getTeam()) {
-							try {
+						try {
+							if (((NeutralBase) gameObject)
+									.getCurrentOwnerTeam().equals(
+											player.getTeam())) {
 								getListener().onUnitSpawned(
 										ObjectType.OBSERVER,
 										(NeutralBase) gameObject);
 								actionDone();
 								getPanelLogic().setClickState(
 										ClickState.DEFAULT);
-							} catch (InsufficientResourceException e) {
-								getPanelLogic().onActionFailed(e);
+
+								return;
+							} else {
+								getPanelLogic()
+										.showNotification(
+												"You can only spawn observers in bases your team owns.");
+								SoundMachine.play(SoundType.ERROR);
+								return;
 							}
-							return;
-						} else {
-							getPanelLogic()
-									.showNotification(
-											"You can only spawn observers in bases your team owns.");
-							SoundMachine.play(SoundType.ERROR);
-							return;
+						} catch (PlayerHasNoTeamException e) {
+							L.log(Level.WARNING,
+									"Player doesn't have a team when trying to select position for observer unit!",
+									e);
+						} catch (InsufficientResourceException e) {
+							getPanelLogic().onActionFailed(e);
 						}
 					}
 				}
@@ -273,10 +280,13 @@ public class BuildModeMouseAdapter extends ScrollModeMouseAdapter {
 
 				for (GameObject gameObject : obs) {
 					if (gameObject instanceof NeutralBase) {
-						if (((NeutralBase) gameObject).getCurrentOwnerTeam() == getPanelLogic()
-								.getClientData().getCurrentResurrectTarget()
-								.getTeam()) {
-							try {
+						try {
+							if (((NeutralBase) gameObject)
+									.getCurrentOwnerTeam()
+									.equals(getPanelLogic().getClientData()
+											.getCurrentResurrectTarget()
+											.getTeam())) {
+
 								getListener().onPlayerRezz(
 										getPanelLogic().getClientData()
 												.getCurrentResurrectTarget(),
@@ -284,16 +294,21 @@ public class BuildModeMouseAdapter extends ScrollModeMouseAdapter {
 								actionDone();
 								getPanelLogic().setClickState(
 										ClickState.DEFAULT);
-							} catch (InsufficientResourceException e) {
-								getPanelLogic().onActionFailed(e);
+
+								return;
+							} else {
+								getPanelLogic()
+										.showNotification(
+												"You can only resurrect on bases your team owns.");
+								SoundMachine.play(SoundType.ERROR);
+								return;
 							}
-							return;
-						} else {
-							getPanelLogic()
-									.showNotification(
-											"You can only resurrect on bases your team owns.");
-							SoundMachine.play(SoundType.ERROR);
-							return;
+						} catch (PlayerHasNoTeamException e) {
+							L.log(Level.WARNING,
+									"Player doesn't have a team when selecting base for a player to be resurrected",
+									e);
+						} catch (InsufficientResourceException e) {
+							getPanelLogic().onActionFailed(e);
 						}
 					}
 				}

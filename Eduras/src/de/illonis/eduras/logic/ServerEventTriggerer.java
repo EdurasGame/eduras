@@ -61,6 +61,7 @@ import de.illonis.eduras.exceptions.GameModeNotSupportedByMapException;
 import de.illonis.eduras.exceptions.InvalidNameException;
 import de.illonis.eduras.exceptions.NoSpawnAvailableException;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
+import de.illonis.eduras.exceptions.PlayerHasNoTeamException;
 import de.illonis.eduras.exceptions.WrongObjectTypeException;
 import de.illonis.eduras.gamemodes.GameMode;
 import de.illonis.eduras.gameobjects.DynamicPolygonObject;
@@ -616,8 +617,12 @@ public class ServerEventTriggerer implements EventTriggerer {
 			return;
 		}
 
-		if (newPlayer.getTeam() != null) {
-			newPlayer.getTeam().removePlayer(newPlayer);
+		Team previousTeamOfNewPlayer;
+		try {
+			previousTeamOfNewPlayer = newPlayer.getTeam();
+			previousTeamOfNewPlayer.removePlayer(newPlayer);
+		} catch (PlayerHasNoTeamException e) {
+			// do nothing here
 		}
 		team.addPlayer(newPlayer);
 
@@ -640,7 +645,12 @@ public class ServerEventTriggerer implements EventTriggerer {
 	public void removePlayer(int ownerId) {
 		try {
 			Player player = gameInfo.getPlayerByOwnerId(ownerId);
-			player.getTeam().removePlayer(player);
+			try {
+				player.getTeam().removePlayer(player);
+			} catch (PlayerHasNoTeamException e) {
+				L.log(Level.SEVERE, "Player should have a team at this point!",
+						e);
+			}
 
 			int objectId = -1;
 			PlayerMainFigure mainFigure;
@@ -938,7 +948,8 @@ public class ServerEventTriggerer implements EventTriggerer {
 
 	@Override
 	public void notifyWeaponAmmoEmpty(int clientId, int slotNum) {
-		ItemUseFailedEvent event = new ItemUseFailedEvent(clientId, slotNum, Reason.AMMO_EMPTY);
+		ItemUseFailedEvent event = new ItemUseFailedEvent(clientId, slotNum,
+				Reason.AMMO_EMPTY);
 		sendEventToClient(event, clientId);
 	}
 }

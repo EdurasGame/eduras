@@ -5,16 +5,17 @@ import java.util.logging.Logger;
 
 import de.illonis.edulog.EduLog;
 import de.illonis.eduras.Player;
+import de.illonis.eduras.Team;
 import de.illonis.eduras.events.DeathEvent;
 import de.illonis.eduras.events.RespawnEvent;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
+import de.illonis.eduras.exceptions.PlayerHasNoTeamException;
 import de.illonis.eduras.gameclient.GamePanelReactor;
 import de.illonis.eduras.gameclient.gui.hud.ActionBar;
 import de.illonis.eduras.gameclient.gui.hud.ActionBarPage;
 import de.illonis.eduras.gameclient.gui.hud.ActionButton;
 import de.illonis.eduras.logicabstraction.EdurasInitializer;
 import de.illonis.eduras.logicabstraction.InformationProvider;
-import de.illonis.eduras.settings.S;
 
 /**
  * Displays resurrection buttons.<br>
@@ -97,9 +98,23 @@ public class ResurrectPage extends ActionBarPage {
 		if (isPlayerButtonAlreadyAvailable(player)) {
 			return;
 		}
-		if (player.equals(infoPro.getPlayer()))
+
+		if (player.equals(infoPro.getPlayer())) {
 			return;
-		if (player.getTeam().equals(infoPro.getPlayer().getTeam())) {
+		}
+
+		Team teamOfPlayer;
+		Team teamOfClientsPlayer;
+		try {
+			teamOfPlayer = player.getTeam();
+			teamOfClientsPlayer = infoPro.getPlayer().getTeam();
+		} catch (PlayerHasNoTeamException e) {
+			L.log(Level.SEVERE,
+					"Both players should have a team at this point!", e);
+			return;
+		}
+
+		if (teamOfPlayer.equals(teamOfClientsPlayer)) {
 			RezzButton rezzButton = new RezzButton(player, reactor);
 			addButton(rezzButton);
 			// refresh bar if it is currently visible

@@ -3,6 +3,7 @@ package de.illonis.eduras;
 import java.util.logging.Logger;
 
 import de.illonis.edulog.EduLog;
+import de.illonis.eduras.exceptions.PlayerHasNoTeamException;
 import de.illonis.eduras.inventory.Inventory;
 import de.illonis.eduras.units.InteractMode;
 import de.illonis.eduras.units.PlayerMainFigure;
@@ -136,8 +137,13 @@ public class Player {
 	 * Returns the team the player is in.
 	 * 
 	 * @return player's team
+	 * @throws PlayerHasNoTeamException
+	 *             thrown if the player doesn't have a team
 	 */
-	public Team getTeam() {
+	public Team getTeam() throws PlayerHasNoTeamException {
+		if (team == null) {
+			throw new PlayerHasNoTeamException(this);
+		}
 		return team;
 	}
 

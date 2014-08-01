@@ -12,6 +12,7 @@ import org.newdawn.slick.geom.Vector2f;
 import de.illonis.edulog.EduLog;
 import de.illonis.eduras.ObjectFactory.ObjectType;
 import de.illonis.eduras.Player;
+import de.illonis.eduras.Team;
 import de.illonis.eduras.events.CreateUnitEvent;
 import de.illonis.eduras.events.GameEvent.GameEventNumber;
 import de.illonis.eduras.events.HealActionEvent;
@@ -26,6 +27,7 @@ import de.illonis.eduras.exceptions.InsufficientResourceException;
 import de.illonis.eduras.exceptions.MessageNotSupportedException;
 import de.illonis.eduras.exceptions.NotWithinBaseException;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
+import de.illonis.eduras.exceptions.PlayerHasNoTeamException;
 import de.illonis.eduras.exceptions.WrongEventTypeException;
 import de.illonis.eduras.exceptions.WrongObjectTypeException;
 import de.illonis.eduras.gameclient.gui.game.GamePanelLogic.ClickState;
@@ -278,7 +280,14 @@ public class GuiInternalEventListener implements GamePanelReactor {
 
 	private void checkSufficientResources(Player player, int neededAmount)
 			throws InsufficientResourceException {
-		if (player.getTeam().getResource() < neededAmount) {
+		Team playersTeam = null;
+		try {
+			playersTeam = player.getTeam();
+		} catch (PlayerHasNoTeamException e) {
+			L.log(Level.SEVERE, "At this point the player should have a team!",
+					e);
+		}
+		if (playersTeam.getResource() < neededAmount) {
 			throw new InsufficientResourceException(neededAmount);
 		}
 	}

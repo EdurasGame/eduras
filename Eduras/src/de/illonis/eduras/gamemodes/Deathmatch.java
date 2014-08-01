@@ -12,6 +12,7 @@ import de.illonis.eduras.Player;
 import de.illonis.eduras.Statistic.StatsProperty;
 import de.illonis.eduras.Team;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
+import de.illonis.eduras.exceptions.PlayerHasNoTeamException;
 import de.illonis.eduras.gameclient.userprefs.KeyBindings.KeyBinding;
 import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.gameobjects.GameObject.Relation;
@@ -185,7 +186,13 @@ public class Deathmatch extends BasicGameMode {
 		// remove it to the statistic
 		gameInfo.getGameSettings().getStats().removePlayerFromStats(ownerId);
 
-		Team playersTeam = gonePlayer.getTeam();
+		Team playersTeam = null;
+		try {
+			playersTeam = gonePlayer.getTeam();
+		} catch (PlayerHasNoTeamException e) {
+			L.log(Level.SEVERE, "At this point the player should have a team!",
+					e);
+		}
 		// remove the actual player (also removes the player from its team)
 		gameInfo.getEventTriggerer().removePlayer(ownerId);
 

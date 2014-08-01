@@ -11,6 +11,7 @@ import de.illonis.edulog.EduLog;
 import de.illonis.eduras.Player;
 import de.illonis.eduras.events.SetTeamResourceEvent;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
+import de.illonis.eduras.exceptions.PlayerHasNoTeamException;
 import de.illonis.eduras.gameclient.datacache.CacheException;
 import de.illonis.eduras.gameclient.datacache.CacheInfo.ImageKey;
 import de.illonis.eduras.gameclient.datacache.ImageCache;
@@ -66,6 +67,12 @@ public class ResourceDisplay extends RenderedGuiObject {
 
 	@Override
 	public void onTeamResourceChanged(SetTeamResourceEvent setTeamResourceEvent) {
-		resAmount = player.getTeam().getResource();
+		try {
+			resAmount = player.getTeam().getResource();
+		} catch (PlayerHasNoTeamException e) {
+			L.log(Level.WARNING,
+					"Player doesn't have a team (yet). Won't draw the resources",
+					e);
+		}
 	}
 }

@@ -40,6 +40,7 @@ import de.illonis.eduras.events.SetVisibilityEvent;
 import de.illonis.eduras.exceptions.NoSuchGameModeException;
 import de.illonis.eduras.exceptions.NoSuchMapException;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
+import de.illonis.eduras.exceptions.PlayerHasNoTeamException;
 import de.illonis.eduras.gameclient.GameEventAdapter;
 import de.illonis.eduras.gamemodes.BasicGameMode;
 import de.illonis.eduras.gamemodes.GameMode;
@@ -240,8 +241,9 @@ public class ClientLogic implements GameLogicInterface {
 				break;
 			case ADD_PLAYER_TO_TEAM:
 				AddPlayerToTeamEvent pteEvent = (AddPlayerToTeamEvent) event;
-				Team team = gameInfo.findTeamById(pteEvent.getTeam());
-				if (team == null) {
+				Team teamToAddPlayerTo = gameInfo.findTeamById(pteEvent
+						.getTeam());
+				if (teamToAddPlayerTo == null) {
 					L.severe("Could not find a team with id "
 							+ pteEvent.getTeam()
 							+ " while adding player with ownerid "
@@ -256,9 +258,18 @@ public class ClientLogic implements GameLogicInterface {
 							+ pteEvent.getOwner(), e);
 					return;
 				}
-				if (player.getTeam() != null)
-					player.getTeam().removePlayer(player);
-				team.addPlayer(player);
+
+				// remove from current team
+
+				try {
+					Team currentTeam;
+					currentTeam = player.getTeam();
+					currentTeam.removePlayer(player);
+				} catch (PlayerHasNoTeamException e2) {
+					// do nothing here
+				}
+
+				teamToAddPlayerTo.addPlayer(player);
 				break;
 			case DEATH:
 				DeathEvent de = (DeathEvent) event;

@@ -1,11 +1,13 @@
 package de.illonis.eduras.actions;
 
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import de.illonis.edulog.EduLog;
 import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.Player;
 import de.illonis.eduras.Team;
+import de.illonis.eduras.exceptions.PlayerHasNoTeamException;
 import de.illonis.eduras.logic.EventTriggerer;
 
 /**
@@ -45,7 +47,14 @@ public abstract class RTSAction {
 	 * @param info
 	 */
 	public void execute(GameInformation info) {
-		Team executingTeam = executingPlayer.getTeam();
+		Team executingTeam = null;
+		try {
+			executingTeam = executingPlayer.getTeam();
+		} catch (PlayerHasNoTeamException e) {
+			L.log(Level.SEVERE,
+					"The executing player MUST have a team at this point.", e);
+			return;
+		}
 
 		if (executingTeam.getResource() >= costs) {
 

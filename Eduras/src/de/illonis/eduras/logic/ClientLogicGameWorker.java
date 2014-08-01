@@ -13,6 +13,7 @@ import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.Player;
 import de.illonis.eduras.Team;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
+import de.illonis.eduras.exceptions.PlayerHasNoTeamException;
 import de.illonis.eduras.gameclient.VisionInformation;
 import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.gameobjects.MoveableGameObject;
@@ -80,9 +81,12 @@ public class ClientLogicGameWorker extends LogicGameWorker {
 			return;
 		}
 
-		Team team = player.getTeam();
-		if (team == null)
+		Team team;
+		try {
+			team = player.getTeam();
+		} catch (PlayerHasNoTeamException e) {
 			return;
+		}
 
 		LinkedList<Integer> teamOwners = new LinkedList<Integer>();
 		LinkedList<GameObject> teamObjects = new LinkedList<GameObject>();

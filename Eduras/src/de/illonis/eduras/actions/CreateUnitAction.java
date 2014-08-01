@@ -6,6 +6,8 @@ import de.illonis.edulog.EduLog;
 import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.ObjectFactory.ObjectType;
 import de.illonis.eduras.Player;
+import de.illonis.eduras.Team;
+import de.illonis.eduras.exceptions.PlayerHasNoTeamException;
 import de.illonis.eduras.exceptions.WrongObjectTypeException;
 import de.illonis.eduras.gameobjects.NeutralBase;
 import de.illonis.eduras.settings.S;
@@ -57,9 +59,17 @@ public class CreateUnitAction extends RTSAction {
 
 	@Override
 	protected void executeAction(GameInformation info) {
+		Team teamOfExecutingPlayer;
+		try {
+			teamOfExecutingPlayer = getExecutingPlayer().getTeam();
+		} catch (PlayerHasNoTeamException e) {
+			L.warning("Player doesn't have a team although he should as he's creating a unit!");
+			return;
+		}
+
 		if (baseToSpawnAt.getCurrentOwnerTeam() == null
 				|| !baseToSpawnAt.getCurrentOwnerTeam().equals(
-						getExecutingPlayer().getTeam())) {
+						teamOfExecutingPlayer)) {
 			L.warning("Player tried to spawn a unit at a base that is not his own. Should already be caught on client.");
 			return;
 		}

@@ -39,6 +39,7 @@ import de.illonis.eduras.exceptions.GameModeNotSupportedByMapException;
 import de.illonis.eduras.exceptions.InvalidNameException;
 import de.illonis.eduras.exceptions.NoSpawnAvailableException;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
+import de.illonis.eduras.exceptions.PlayerHasNoTeamException;
 import de.illonis.eduras.gameobjects.DynamicPolygonObject;
 import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.gameobjects.NeutralBase;
@@ -562,7 +563,13 @@ public class GameInformation {
 			throws GameModeNotSupportedByMapException,
 			NoSpawnAvailableException {
 
-		SpawnType spawnType = spawnGroups.get(player.getTeam());
+		SpawnType spawnType;
+		try {
+			Team team = player.getTeam();
+			spawnType = spawnGroups.get(team);
+		} catch (PlayerHasNoTeamException e1) {
+			spawnType = SpawnType.ANY;
+		}
 
 		LinkedList<SpawnPosition> availableSpawnings = new LinkedList<SpawnPosition>();
 

@@ -1,5 +1,6 @@
 package de.illonis.eduras.units;
 
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.newdawn.slick.geom.Circle;
@@ -10,6 +11,7 @@ import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.ObjectFactory.ObjectType;
 import de.illonis.eduras.Player;
 import de.illonis.eduras.Team;
+import de.illonis.eduras.exceptions.PlayerHasNoTeamException;
 import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.gameobjects.TimingSource;
 import de.illonis.eduras.interfaces.MovementControlable;
@@ -135,7 +137,13 @@ public class PlayerMainFigure extends Unit implements MovementControlable {
 
 	@Override
 	public Team getTeam() {
-		return player.getTeam();
+		try {
+			return player.getTeam();
+		} catch (PlayerHasNoTeamException e) {
+			L.log(Level.SEVERE,
+					"The player doesn't have a team at this point!!", e);
+			return null;
+		}
 	}
 
 	@Override
