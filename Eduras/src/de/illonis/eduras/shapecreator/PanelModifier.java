@@ -1,5 +1,7 @@
 package de.illonis.eduras.shapecreator;
 
+import java.awt.Image;
+
 import de.illonis.eduras.math.Vector2df;
 import de.illonis.eduras.shapecreator.PanelInteractor.InteractMode;
 
@@ -75,5 +77,7 @@ public interface PanelModifier {
 	 * @return current displayed shape.
 	 */
 	EditablePolygon getShape();
+	
+	void setBackgroundImage(Image image);
 
 }

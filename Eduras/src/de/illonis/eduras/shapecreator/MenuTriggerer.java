@@ -1,11 +1,13 @@
 package de.illonis.eduras.shapecreator;
 
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.imageio.ImageIO;
 import javax.swing.JOptionPane;
 
 import de.illonis.edulog.EduLog;
@@ -136,5 +138,15 @@ public class MenuTriggerer implements MenuActionReactor {
 	@Override
 	public void modZoom(float modifier) {
 		panel.modZoom(modifier);
+	}
+
+	@Override
+	public void loadBackgroundImage(File f) {
+		try {
+			BufferedImage image = ImageIO.read(f);
+			panel.setBackgroundImage(image);
+		} catch (IOException e) {
+			L.log(Level.WARNING, "Could not load file", e);
+		}		
 	}
 }
