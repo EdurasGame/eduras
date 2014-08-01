@@ -42,6 +42,11 @@ public final class KeyBindings implements ResettableSetting {
 		setDefaultKeyBinding(KeyBinding.ITEM_4, Input.KEY_4);
 		setDefaultKeyBinding(KeyBinding.ITEM_5, Input.KEY_5);
 		setDefaultKeyBinding(KeyBinding.ITEM_6, Input.KEY_6);
+		setDefaultKeyBinding(KeyBinding.ITEM_7, Input.KEY_7);
+		setDefaultKeyBinding(KeyBinding.ITEM_8, Input.KEY_8);
+		setDefaultKeyBinding(KeyBinding.ITEM_9, Input.KEY_9);
+		setDefaultKeyBinding(KeyBinding.ITEM_10, Input.KEY_0);
+		setDefaultKeyBinding(KeyBinding.PAGE_UP, Input.KEY_Q);
 		setDefaultKeyBinding(KeyBinding.CHAT, Input.KEY_ENTER);
 		setDefaultKeyBinding(KeyBinding.SWITCH_MODE, Input.KEY_M);
 		setDefaultKeyBinding(KeyBinding.EXIT_CLIENT, Input.KEY_ESCAPE);
@@ -56,7 +61,7 @@ public final class KeyBindings implements ResettableSetting {
 	 */
 	@SuppressWarnings("javadoc")
 	public enum KeyBinding {
-		MOVE_LEFT, MOVE_UP, MOVE_DOWN, MOVE_RIGHT, ITEM_1, ITEM_2, ITEM_3, ITEM_4, ITEM_5, ITEM_6, EXIT_CLIENT, SHOW_STATS, SWITCH_MODE, CHAT;
+		MOVE_LEFT, MOVE_UP, MOVE_DOWN, MOVE_RIGHT, ITEM_1, ITEM_2, ITEM_3, ITEM_4, ITEM_5, ITEM_6, ITEM_7, ITEM_8, ITEM_9, ITEM_10, EXIT_CLIENT, SHOW_STATS, SWITCH_MODE, CHAT, PAGE_UP;
 	}
 
 	/**

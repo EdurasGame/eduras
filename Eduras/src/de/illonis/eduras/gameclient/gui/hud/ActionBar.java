@@ -7,7 +7,6 @@ import org.newdawn.slick.geom.Vector2f;
 
 import de.illonis.eduras.events.DeathEvent;
 import de.illonis.eduras.events.MatchEndEvent;
-import de.illonis.eduras.events.RespawnEvent;
 import de.illonis.eduras.events.SetInteractModeEvent;
 import de.illonis.eduras.gameclient.ClientData;
 import de.illonis.eduras.gameclient.gui.hud.ActionBarPage.PageNumber;
@@ -57,13 +56,7 @@ public class ActionBar extends ClickableGuiElement implements TooltipTriggerer {
 		float x = p.x - screenX;
 		if (x < ActionButton.BUTTON_SIZE * numButtons) {
 			int button = (int) (x / ActionButton.BUTTON_SIZE);
-			ActionButton theButton = currentPage.getButtons().get(button);
-			if (!theButton.isAutoCancel()) {
-				data.setCurrentActionSelected(button);
-			} else {
-				data.setCurrentActionSelected(-1);
-			}
-			theButton.click();
+			selectButton(button);
 			return true;
 		}
 		return false;
@@ -149,19 +142,37 @@ public class ActionBar extends ClickableGuiElement implements TooltipTriggerer {
 	public Rectangle getTriggerArea() {
 		return bounds;
 	}
-	
+
 	@Override
 	public void onInteractModeChanged(SetInteractModeEvent setModeEvent) {
 		data.setCurrentActionSelected(-1);
 	}
-	
+
 	@Override
 	public void onDeath(DeathEvent event) {
 		data.setCurrentActionSelected(-1);
 	}
-	
+
 	@Override
 	public void onMatchEnd(MatchEndEvent event) {
 		data.setCurrentActionSelected(-1);
+	}
+
+	/**
+	 * Selects a button on action bar.
+	 * 
+	 * @param i
+	 *            the button index. if out of bounds, nothing will happen.
+	 */
+	public void selectButton(int i) {
+		if (i >= currentPage.getButtons().size())
+			return;
+		ActionButton theButton = currentPage.getButtons().get(i);
+		if (!theButton.isAutoCancel()) {
+			data.setCurrentActionSelected(i);
+		} else {
+			data.setCurrentActionSelected(-1);
+		}
+		theButton.click();
 	}
 }

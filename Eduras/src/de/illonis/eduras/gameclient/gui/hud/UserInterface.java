@@ -53,6 +53,10 @@ public class UserInterface implements GuiResizeListener {
 	private HudNotifier hudNotifier;
 	private final GuiInternalEventListener guiReactor;
 	private MiniMap minimap;
+	
+	public ActionBar getActionBar() {
+		return actionBar;
+	}
 
 	/**
 	 * Creates the user interface. The tooltip handler will be set manually

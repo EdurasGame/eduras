@@ -38,6 +38,7 @@ import de.illonis.eduras.gameclient.gui.HudNotifier;
 import de.illonis.eduras.gameclient.gui.TimedTasksHolderGUI;
 import de.illonis.eduras.gameclient.gui.hud.DragSelectionRectangle;
 import de.illonis.eduras.gameclient.gui.hud.UserInterface;
+import de.illonis.eduras.gameclient.gui.hud.ActionBarPage.PageNumber;
 import de.illonis.eduras.gamemodes.GameMode;
 import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.interfaces.GameEventListener;
@@ -466,5 +467,15 @@ public class GamePanelLogic extends GameEventAdapter implements
 	public ChatClient getChat() {
 		return chat;
 
+	}
+
+	@Override
+	public void selectActionButton(int i) {
+		userInterface.getActionBar().selectButton(i);
+	}
+
+	@Override
+	public void pageUp() {
+		userInterface.getActionBar().setPage(PageNumber.MAIN);
 	}
 }

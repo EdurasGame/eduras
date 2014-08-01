@@ -88,4 +88,18 @@ public interface UserInputListener {
 	 */
 	void showTip(String message);
 
+	/**
+	 * Selectes given action button.
+	 * 
+	 * @param i
+	 *            the button index.
+	 */
+	void selectActionButton(int i);
+
+	
+	/**
+	 * Returns to main action bar in buildmode.
+	 */
+	void pageUp();
+
 }
