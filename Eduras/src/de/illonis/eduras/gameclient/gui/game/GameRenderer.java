@@ -3,6 +3,7 @@ package de.illonis.eduras.gameclient.gui.game;
 import java.awt.Polygon;
 import java.awt.geom.Area;
 import java.awt.image.BufferedImage;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Map;
@@ -69,6 +70,8 @@ public class GameRenderer implements TooltipHandler {
 	private final InformationProvider info;
 	private final ClientData data;
 	private final static Color FOG_OF_WAR = new Color(0, 0, 0, 200);
+
+	private static final Color OUTLINE_COLOR = Color.black;
 	private Font font;
 
 	/**
@@ -175,7 +178,7 @@ public class GameRenderer implements TooltipHandler {
 		if (scale != newScale) {
 			viewPort.setSize(width, height);
 			gui.onGuiSizeChanged(width, height);
-			//camera.setSize(width, height); // maybe not?
+			// camera.setSize(width, height); // maybe not?
 		}
 
 		scale = newScale;
@@ -281,7 +284,11 @@ public class GameRenderer implements TooltipHandler {
 			visionMask = vinfo.getVisionMask();
 		}
 
-		for (Iterator<GameObject> iterator = objs.values().iterator(); iterator
+		LinkedList<GameObject> objectsInDrawOrder = new LinkedList<GameObject>(
+				objs.values());
+		Collections.sort(objectsInDrawOrder);
+
+		for (Iterator<GameObject> iterator = objectsInDrawOrder.iterator(); iterator
 				.hasNext();) {
 			GameObject d = iterator.next();
 			if (!d.isVisibleFor(myPlayer)) {
@@ -294,6 +301,7 @@ public class GameRenderer implements TooltipHandler {
 			}
 			Area a = new Area(p);
 			a.intersect(visionArea);
+
 			// draw only if in current view point
 			if (Geometry.shapeCollides(camera, d.getShape())) {
 				if (S.Server.vision_disabled
@@ -301,8 +309,9 @@ public class GameRenderer implements TooltipHandler {
 								&& d.getOwner() == -1 || d.equals(myPlayer) || !a
 									.isEmpty())) {
 					drawObject(d, g);
-					if (d instanceof PlayerMainFigure)
+					if (d instanceof PlayerMainFigure) {
 						drawFace(d, (Circle) d.getShape(), g);
+					}
 				}
 			}
 
@@ -324,6 +333,8 @@ public class GameRenderer implements TooltipHandler {
 			g.drawImage(image, x, y);
 		} catch (CacheException e) {
 			if (d.getShape() != null) {
+				g.setColor(OUTLINE_COLOR);
+				g.draw(d.getShape());
 				g.setColor(getColorForObject(d));
 				g.fill(d.getShape());
 				if (S.Client.debug_render_boundingboxes) {
