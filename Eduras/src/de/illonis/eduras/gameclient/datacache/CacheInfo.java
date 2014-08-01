@@ -62,6 +62,7 @@ public final class CacheInfo {
 		shapes.put(ShapeType.BIRD, "bird.esh");
 		shapes.put(ShapeType.ROCKET, "rocket.esh");
 		shapes.put(ShapeType.STAR, "mine.esh");
+		shapes.put(ShapeType.WEAPON_SNIPER, "sniper.esh");
 
 		objectImages = new HashMap<ObjectType, String>();
 		inventoryIcons = new HashMap<ObjectType, String>();
