@@ -1,7 +1,5 @@
 package de.illonis.eduras.gameclient.gui.game;
 
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
 import java.util.LinkedList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -50,7 +48,6 @@ public class GamePanelLogic extends GameEventAdapter implements
 	private GameContainer gui;
 	private final GuiInternalEventListener reactor;
 	private final InputKeyHandler keyHandler;
-	private final ResizeMonitor resizeMonitor;
 	private HudNotifier hudNotifier;
 	private final GuiMouseHandler mouseHandler;
 	private UserInterface userInterface;
@@ -89,7 +86,6 @@ public class GamePanelLogic extends GameEventAdapter implements
 		this.reactor = listener;
 		infoPro = EdurasInitializer.getInstance().getInformationProvider();
 
-		resizeMonitor = new ResizeMonitor();
 		keyHandler = new InputKeyHandler(this, reactor);
 		camera = new GameCamera();
 		gameEventListeners = new LinkedList<GameEventListener>();
@@ -183,20 +179,6 @@ public class GamePanelLogic extends GameEventAdapter implements
 				+ ", " + gui.getHeight());
 		userInterface.onGuiSizeChanged(gui.getWidth(), gui.getHeight());
 		camera.setSize(gui.getWidth(), gui.getHeight()); // maybe not?
-	}
-
-	/**
-	 * Resizes camera on frame size change.
-	 * 
-	 * @author illonis
-	 * 
-	 */
-	private class ResizeMonitor extends ComponentAdapter {
-		@Override
-		public void componentResized(ComponentEvent e) {
-			super.componentResized(e);
-			notifyGuiSizeChanged();
-		}
 	}
 
 	public GameContainer getGui() {
