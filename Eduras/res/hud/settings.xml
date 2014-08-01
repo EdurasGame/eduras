@@ -72,7 +72,7 @@
 							<control type="label" id="hintLabel" font="aurulent-sans-16.fnt"
 								color="#000f" width="*" text="" />
 							<control id="#keyBindingsList" name="listBox" vertical="optional"
-								horizontal="off" selection="Single" displayItems="15" height="*"
+								horizontal="off" selection="Single" displayItems="20" height="*"
 								viewConverterClass="de.illonis.eduras.gameclient.gui.hud.nifty.KeyBindingsViewConverter">
 								<control name="keybindingsEntry"
 									controller="de.lessvoid.nifty.controls.listbox.ListBoxItemController" />
