@@ -2,7 +2,6 @@ package de.illonis.eduras.gameclient.gui.game;
 
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -14,18 +13,7 @@ import de.illonis.edulog.EduLog;
 import de.illonis.eduras.chat.ChatClient;
 import de.illonis.eduras.chat.NotConnectedException;
 import de.illonis.eduras.chat.UserNotInRoomException;
-import de.illonis.eduras.events.ClientRenameEvent;
-import de.illonis.eduras.events.DeathEvent;
-import de.illonis.eduras.events.GameEvent;
 import de.illonis.eduras.events.ItemEvent;
-import de.illonis.eduras.events.MatchEndEvent;
-import de.illonis.eduras.events.ObjectFactoryEvent;
-import de.illonis.eduras.events.RespawnEvent;
-import de.illonis.eduras.events.SetGameObjectAttributeEvent;
-import de.illonis.eduras.events.SetIntegerGameObjectAttributeEvent;
-import de.illonis.eduras.events.SetItemSlotEvent;
-import de.illonis.eduras.events.SetOwnerEvent;
-import de.illonis.eduras.events.SetVisibilityEvent;
 import de.illonis.eduras.exceptions.ActionFailedException;
 import de.illonis.eduras.gameclient.ChatCache;
 import de.illonis.eduras.gameclient.ClientData;
@@ -36,11 +24,9 @@ import de.illonis.eduras.gameclient.audio.SoundMachine.SoundType;
 import de.illonis.eduras.gameclient.gui.CameraMouseListener;
 import de.illonis.eduras.gameclient.gui.HudNotifier;
 import de.illonis.eduras.gameclient.gui.TimedTasksHolderGUI;
+import de.illonis.eduras.gameclient.gui.hud.ActionBarPage.PageNumber;
 import de.illonis.eduras.gameclient.gui.hud.DragSelectionRectangle;
 import de.illonis.eduras.gameclient.gui.hud.UserInterface;
-import de.illonis.eduras.gameclient.gui.hud.ActionBarPage.PageNumber;
-import de.illonis.eduras.gamemodes.GameMode;
-import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.interfaces.GameEventListener;
 import de.illonis.eduras.logicabstraction.EdurasInitializer;
 import de.illonis.eduras.logicabstraction.InformationProvider;
@@ -382,82 +368,6 @@ public class GamePanelLogic extends GameEventAdapter implements
 	}
 
 	@Override
-	public void onNewObjectPosition(GameObject object) {
-	}
-
-	@Override
-	public void onInformationRequested(ArrayList<GameEvent> infos,
-			int targetOwner) {
-	}
-
-	@Override
-	public void onObjectCreation(ObjectFactoryEvent event) {
-	}
-
-	@Override
-	public void onClientRename(ClientRenameEvent event) {
-	}
-
-	@Override
-	public void onObjectStateChanged(SetGameObjectAttributeEvent<?> event) {
-	}
-
-	@Override
-	public void onVisibilityChanged(SetVisibilityEvent event) {
-
-	}
-
-	@Override
-	public void onGameModeChanged(GameMode newGameMode) {
-
-	}
-
-	@Override
-	public void onHealthChanged(SetIntegerGameObjectAttributeEvent event) {
-
-	}
-
-	@Override
-	public void onMaxHealthChanged(SetIntegerGameObjectAttributeEvent event) {
-
-	}
-
-	@Override
-	public void onOwnerChanged(SetOwnerEvent event) {
-
-	}
-
-	@Override
-	public void onItemSlotChanged(SetItemSlotEvent event) {
-
-	}
-
-	@Override
-	public void onObjectRemove(ObjectFactoryEvent event) {
-
-	}
-
-	@Override
-	public void onMatchEnd(MatchEndEvent event) {
-
-	}
-
-	@Override
-	public void onDeath(DeathEvent event) {
-
-	}
-
-	@Override
-	public void onRespawn(RespawnEvent event) {
-
-	}
-
-	@Override
-	public void onCooldownStarted(ItemEvent event) {
-
-	}
-
-	@Override
 	public void onCooldownFinished(ItemEvent event) {
 		for (GameEventListener gameEventListener : gameEventListeners) {
 			gameEventListener.onCooldownFinished(event);
@@ -477,5 +387,10 @@ public class GamePanelLogic extends GameEventAdapter implements
 	@Override
 	public void pageUp() {
 		userInterface.getActionBar().setPage(PageNumber.MAIN);
+	}
+
+	@Override
+	public void showBigMessage(String message) {
+		userInterface.showBigMessage(message);
 	}
 }

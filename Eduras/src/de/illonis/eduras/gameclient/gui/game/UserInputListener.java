@@ -87,6 +87,14 @@ public interface UserInputListener {
 	 *            the message.
 	 */
 	void showTip(String message);
+	
+	/**
+	 * Shows a big prominent message.
+	 * 
+	 * @param message
+	 *            the message.
+	 */
+	void showBigMessage(String message);
 
 	/**
 	 * Selectes given action button.

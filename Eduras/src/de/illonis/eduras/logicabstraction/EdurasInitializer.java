@@ -222,7 +222,7 @@ public class EdurasInitializer {
 			}
 
 			@Override
-			public void onMatchEnd() {
+			public void onMatchEnd(int winner) {
 			}
 
 			@Override

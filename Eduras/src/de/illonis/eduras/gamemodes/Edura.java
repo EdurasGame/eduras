@@ -39,6 +39,8 @@ public class Edura extends TeamDeathmatch {
 	private HashMap<NeutralBase, Vertex> baseToVertex;
 	private HashMap<Team, NeutralBase> mainBaseOfTeam;
 	private HashMap<NeutralBase, ResourceGenerator> baseToResourceGenerator;
+	private Team teamA;
+	private Team teamB;
 
 	private final static Logger L = EduLog.getLoggerFor(Edura.class.getName());
 
@@ -109,8 +111,8 @@ public class Edura extends TeamDeathmatch {
 		// TODO: At the moment we rely on the assumption that there are always
 		// two main nodes in the map and that there is only two teams.
 		Iterator<Team> iterator = gameInfo.getTeams().iterator();
-		Team teamA = iterator.next();
-		Team teamB = iterator.next();
+		teamA = iterator.next();
+		teamB = iterator.next();
 		boolean teamAHasMainNode = false;
 
 		for (NodeData nodeData : eduraMap.getNodes()) {
@@ -240,8 +242,17 @@ public class Edura extends TeamDeathmatch {
 		}
 
 		if (allPlayersDead) {
-			gameInfo.getEventTriggerer().onMatchEnd();
+			if (player.getTeam().equals(teamA)) {
+				endRound(teamB);
+			} else {
+				endRound(teamA);
+			}
+			
 		}
+	}
+
+	private void endRound(Team winnerTeam) {
+		gameInfo.getEventTriggerer().onMatchEnd(winnerTeam.getTeamId());
 	}
 
 	@Override
@@ -257,7 +268,7 @@ public class Edura extends TeamDeathmatch {
 		}
 
 		if (matchEnd) {
-			gameInfo.getEventTriggerer().onMatchEnd();
+			endRound(occupyingTeam);
 		} else {
 			baseToVertex.get(base).setColor(occupyingTeam.getTeamId());
 		}

@@ -226,8 +226,11 @@ public interface EventTriggerer {
 
 	/**
 	 * Called when the match ends.
+	 * 
+	 * @param winnerId
+	 *            id of the winner.
 	 */
-	void onMatchEnd();
+	void onMatchEnd(int winnerId);
 
 	/**
 	 * Resets statistics, respawns each player, resets health, and loads initial

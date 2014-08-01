@@ -24,10 +24,15 @@ public class GameState extends NiftyOverlayBasicGameState {
 
 	private final GameControllerBridge gameBridge;
 	private EdurasGameInterface edurasGame;
-	private UnicodeFont defaultFont;
+	private static UnicodeFont defaultFont;
+	private static UnicodeFont bigNoteFont;
 
 	GameState(GameControllerBridge game) {
 		this.gameBridge = game;
+	}
+
+	public static UnicodeFont getBigNoteFont() {
+		return bigNoteFont;
 	}
 
 	@Override
@@ -35,6 +40,8 @@ public class GameState extends NiftyOverlayBasicGameState {
 		initNifty(container, game);
 		defaultFont = new UnicodeFont(new Font("Arial", Font.PLAIN, 12));
 		defaultFont.addAsciiGlyphs();
+		bigNoteFont = new UnicodeFont(new Font("Arial", Font.PLAIN, 30));
+		bigNoteFont.addAsciiGlyphs();
 		container.setMinimumLogicUpdateInterval(10);
 		container.setMaximumLogicUpdateInterval(70);
 		container.setTargetFrameRate(60);
@@ -42,8 +49,10 @@ public class GameState extends NiftyOverlayBasicGameState {
 		ColorEffect e = new ColorEffect();
 		e.setColor(Color.white);
 		defaultFont.getEffects().add(e);
+		bigNoteFont.getEffects().add(e);
 		try {
 			defaultFont.loadGlyphs();
+			bigNoteFont.loadGlyphs();
 		} catch (SlickException e1) {
 			e1.printStackTrace();
 		}
@@ -123,6 +132,10 @@ public class GameState extends NiftyOverlayBasicGameState {
 	@Override
 	public void keyReleased(int key, char c) {
 		edurasGame.keyReleased(key, c);
+	}
+
+	public static org.newdawn.slick.Font getDefaultFont() {
+		return defaultFont;
 	}
 
 }

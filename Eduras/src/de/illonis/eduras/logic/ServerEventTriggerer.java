@@ -417,9 +417,8 @@ public class ServerEventTriggerer implements EventTriggerer {
 	}
 
 	@Override
-	public void onMatchEnd() {
-		MatchEndEvent matchEndEvent = new MatchEndEvent(gameInfo
-				.getGameSettings().getStats().findPlayerWithMostFrags());
+	public void onMatchEnd(int winner) {
+		MatchEndEvent matchEndEvent = new MatchEndEvent(winner);
 
 		sendEvents(matchEndEvent);
 

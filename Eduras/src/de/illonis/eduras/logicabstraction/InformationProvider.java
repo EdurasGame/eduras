@@ -160,4 +160,9 @@ public class InformationProvider implements InfoInterface {
 	public Collection<GameObject> findObjectsAt(Vector2f point) {
 		return edurasInitializer.logic.getGame().findObjectsAt(point);
 	}
+
+	@Override
+	public Team findTeamById(int teamId) {
+		return edurasInitializer.logic.getGame().findTeamById(teamId);
+	}
 }
