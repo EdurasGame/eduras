@@ -127,7 +127,7 @@ public class UserInterface implements GuiResizeListener {
 		new BugReportButton(this);
 		actionBar = new ActionBar(this);
 		initActionBar();
-		
+
 	}
 
 	private void initActionBar() {
@@ -151,6 +151,11 @@ public class UserInterface implements GuiResizeListener {
 			public String getLabel() {
 				return "abort";
 			}
+
+			@Override
+			public int getCosts() {
+				return 0;
+			}
 		};
 		SpawnObserverButton spawnButton = new SpawnObserverButton(guiReactor);
 		mainPage.addButton(spawnButton);
@@ -170,6 +175,11 @@ public class UserInterface implements GuiResizeListener {
 			public String getLabel() {
 				return "resurrect";
 			}
+
+			@Override
+			public int getCosts() {
+				return 0;
+			}
 		};
 		mainPage.addButton(resurrectButton);
 		hudNotifier.addListener(resurrectButton);
@@ -188,6 +198,11 @@ public class UserInterface implements GuiResizeListener {
 			@Override
 			public String getLabel() {
 				return "spawn item";
+			}
+
+			@Override
+			public int getCosts() {
+				return 0;
 			}
 		};
 		mainPage.addButton(spawnItemButton);
@@ -340,7 +355,7 @@ public class UserInterface implements GuiResizeListener {
 	public void showTip(String message) {
 		tipPanel.setMessage(message);
 	}
-	
+
 	/**
 	 * Shows a big message.
 	 * 
@@ -350,7 +365,7 @@ public class UserInterface implements GuiResizeListener {
 	public void showBigMessage(String message) {
 		bigPanel.setMessage(message);
 	}
-	
+
 	public void showExitPopup() {
 		exitPopup.setVisible(true);
 	}

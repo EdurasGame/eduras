@@ -29,6 +29,11 @@ public class SpawnObserverButton extends ActionButton {
 
 	@Override
 	public String getLabel() {
-		return "Spawn observer [Costs: " + S.Server.unit_observer_costs + "]";
+		return "Spawn observer [Costs: " + getCosts() + "]";
+	}
+
+	@Override
+	public int getCosts() {
+		return S.Server.unit_observer_costs;
 	}
 }

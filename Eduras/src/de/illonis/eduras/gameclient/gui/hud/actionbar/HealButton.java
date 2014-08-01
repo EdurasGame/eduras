@@ -31,8 +31,12 @@ public class HealButton extends ActionButton {
 
 	@Override
 	public String getLabel() {
-		final String BASE_STRING = "Heal a unit [Costs: "
-				+ S.Server.spell_heal_costs + "]";
+		final String BASE_STRING = "Heal a unit [Costs: " + getCosts() + "]";
 		return BASE_STRING;
+	}
+
+	@Override
+	public int getCosts() {
+		return S.Server.spell_heal_costs;
 	}
 }

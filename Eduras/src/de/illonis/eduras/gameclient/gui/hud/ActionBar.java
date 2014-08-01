@@ -1,14 +1,21 @@
 package de.illonis.eduras.gameclient.gui.hud;
 
+import java.util.logging.Level;
+
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
+import org.newdawn.slick.Image;
 import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.Vector2f;
 
 import de.illonis.eduras.events.DeathEvent;
 import de.illonis.eduras.events.MatchEndEvent;
 import de.illonis.eduras.events.SetInteractModeEvent;
+import de.illonis.eduras.exceptions.ObjectNotFoundException;
 import de.illonis.eduras.gameclient.ClientData;
+import de.illonis.eduras.gameclient.datacache.CacheException;
+import de.illonis.eduras.gameclient.datacache.ImageCache;
+import de.illonis.eduras.gameclient.datacache.CacheInfo.ImageKey;
 import de.illonis.eduras.gameclient.gui.hud.ActionBarPage.PageNumber;
 import de.illonis.eduras.gameclient.userprefs.KeyBindings;
 import de.illonis.eduras.gameclient.userprefs.KeyBindings.KeyBinding;
@@ -32,6 +39,7 @@ public class ActionBar extends ClickableGuiElement implements TooltipTriggerer {
 	private int numButtons;
 	private final ClientData data;
 	private KeyBindings bindings;
+	private Image resIcon;
 
 	protected ActionBar(UserInterface gui) {
 		super(gui);
@@ -76,9 +84,21 @@ public class ActionBar extends ClickableGuiElement implements TooltipTriggerer {
 	public void render(Graphics g) {
 		if (currentPage == null)
 			return;
-
+		int resources = 0;
+		try {
+			resources = getInfo().getPlayer().getTeam().getResource();
+		} catch (ObjectNotFoundException e) {
+		}
+		if (resIcon == null) {
+			try {
+				resIcon = ImageCache.getGuiImage(ImageKey.RESOURCE_ICON_SMALL);
+			} catch (CacheException e) {
+			}
+		}
 		float x = screenX;
 		String label;
+		g.setColor(Color.black);
+		g.fillRect(x, screenY, numButtons * ActionButton.BUTTON_SIZE, ActionButton.BUTTON_SIZE+15);
 		for (int i = 0; i < numButtons; i++) {
 			ActionButton button = currentPage.getButtons().get(i);
 			if (button.getIcon() != null) {
@@ -104,6 +124,18 @@ public class ActionBar extends ClickableGuiElement implements TooltipTriggerer {
 				else {
 					label = bindings.getBindingString(KeyBinding
 							.valueOf("ITEM_" + (1 + i)));
+					if (button.getCosts() > 0) {
+						if (button.getCosts() > resources) {
+							g.setColor(Color.red);
+						} else {
+							g.setColor(Color.green);
+						}
+						if (resIcon != null)
+							g.drawImage(resIcon, x, screenY
+									+ ActionButton.BUTTON_SIZE);
+						g.drawString(button.getCosts() + "", x+15, screenY
+								+ ActionButton.BUTTON_SIZE );
+					}
 				}
 				g.setColor(Color.black);
 				g.fillRect(x + 3, screenY + 3, 15, 15);

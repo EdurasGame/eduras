@@ -62,9 +62,12 @@ public class RezzButton extends ActionButton {
 
 	@Override
 	public String getLabel() {
-		String label = "Resurrect %s [Costs: " + " [Costs: "
-				+ S.Server.gm_edura_action_respawnplayer_cost + "]";
+		String label = "Resurrect %s [Costs: %d]";
+		return String.format(label, target.getName(), getCosts());
+	}
 
-		return String.format(label, target.getName());
+	@Override
+	public int getCosts() {
+		return S.Server.gm_edura_action_respawnplayer_cost;
 	}
 }
