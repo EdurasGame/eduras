@@ -87,7 +87,7 @@ public interface UserInputListener {
 	 *            the message.
 	 */
 	void showTip(String message);
-	
+
 	/**
 	 * Shows a big prominent message.
 	 * 
@@ -104,10 +104,14 @@ public interface UserInputListener {
 	 */
 	void selectActionButton(int i);
 
-	
 	/**
 	 * Returns to main action bar in buildmode.
 	 */
 	void pageUp();
+
+	/**
+	 * Ask the user to quit the game.
+	 */
+	void askGameQuit();
 
 }

@@ -54,6 +54,7 @@ public class UserInterface implements GuiResizeListener {
 	private HudNotifier hudNotifier;
 	private final GuiInternalEventListener guiReactor;
 	private MiniMap minimap;
+	private ExitPopup exitPopup;
 
 	public ActionBar getActionBar() {
 		return actionBar;
@@ -121,10 +122,12 @@ public class UserInterface implements GuiResizeListener {
 		bigPanel = new BigPanel(this);
 		dragRect = new DragSelectionRectangle(this);
 		statWindow = new StatisticsWindow(this);
+		exitPopup = new ExitPopup(this);
 		new ChatDisplay(cache, this);
 		new BugReportButton(this);
 		actionBar = new ActionBar(this);
 		initActionBar();
+		
 	}
 
 	private void initActionBar() {
@@ -346,6 +349,10 @@ public class UserInterface implements GuiResizeListener {
 	 */
 	public void showBigMessage(String message) {
 		bigPanel.setMessage(message);
+	}
+	
+	public void showExitPopup() {
+		exitPopup.setVisible(true);
 	}
 
 	/**

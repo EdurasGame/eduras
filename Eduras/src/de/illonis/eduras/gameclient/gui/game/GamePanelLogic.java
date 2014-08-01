@@ -375,4 +375,9 @@ public class GamePanelLogic extends GameEventAdapter implements
 	public void showBigMessage(String message) {
 		userInterface.showBigMessage(message);
 	}
+
+	@Override
+	public void askGameQuit() {
+		userInterface.showExitPopup();
+	}
 }

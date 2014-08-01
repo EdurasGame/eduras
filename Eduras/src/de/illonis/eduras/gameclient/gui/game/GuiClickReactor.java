@@ -44,4 +44,6 @@ public interface GuiClickReactor {
 	 *            the target location on map.
 	 */
 	void mapClicked(Vector2f gamePos);
+
+	void exitRequested();
 }
