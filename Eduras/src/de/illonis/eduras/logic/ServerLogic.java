@@ -38,7 +38,7 @@ import de.illonis.eduras.exceptions.ObjectNotFoundException;
 import de.illonis.eduras.exceptions.WrongObjectTypeException;
 import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.gameobjects.MoveableGameObject.Direction;
-import de.illonis.eduras.gameobjects.NeutralBase;
+import de.illonis.eduras.gameobjects.Base;
 import de.illonis.eduras.interfaces.GameEventListener;
 import de.illonis.eduras.interfaces.GameLogicInterface;
 import de.illonis.eduras.inventory.ItemSlotIsEmptyException;
@@ -214,7 +214,7 @@ public class ServerLogic implements GameLogicInterface {
 				Player playerToRespawn = gameInfo
 						.getPlayerByOwnerId(respawnPlayerEvent
 								.getIdOfPlayerToRespawn());
-				NeutralBase baseToRespawnAt = (NeutralBase) gameInfo
+				Base baseToRespawnAt = (Base) gameInfo
 						.findObjectById(respawnPlayerEvent
 								.getIdOfBaseToRespawnAt());
 
@@ -285,7 +285,7 @@ public class ServerLogic implements GameLogicInterface {
 				executingPlayer = gameInfo.getPlayerByOwnerId(createUnitEvent
 						.getExecutingPlayer());
 
-				NeutralBase baseToCreateAt = (NeutralBase) gameInfo
+				Base baseToCreateAt = (Base) gameInfo
 						.findObjectById(createUnitEvent.getIdOfBaseToSpawnAt());
 
 				CreateUnitAction createUnitAction = new CreateUnitAction(

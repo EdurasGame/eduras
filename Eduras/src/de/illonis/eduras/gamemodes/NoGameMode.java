@@ -9,7 +9,7 @@ import de.illonis.eduras.Team;
 import de.illonis.eduras.gameclient.userprefs.KeyBindings.KeyBinding;
 import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.gameobjects.GameObject.Relation;
-import de.illonis.eduras.gameobjects.NeutralBase;
+import de.illonis.eduras.gameobjects.Base;
 import de.illonis.eduras.logic.EventTriggerer;
 import de.illonis.eduras.maps.SpawnPosition.SpawnType;
 import de.illonis.eduras.units.InteractMode;
@@ -99,19 +99,19 @@ public class NoGameMode extends BasicGameMode {
 	}
 
 	@Override
-	public Team determineProgressingTeam(NeutralBase base, GameObject object,
+	public Team determineProgressingTeam(Base base, GameObject object,
 			boolean objectEntered, Set<GameObject> presentObjects) {
 		// don't care about neutral bases
 		return null;
 	}
 
 	@Override
-	public void onBaseOccupied(NeutralBase base, Team occupyingTeam) {
+	public void onBaseOccupied(Base base, Team occupyingTeam) {
 		// don't care about neutral bases
 	}
 
 	@Override
-	public void onBaseLost(NeutralBase base, Team losingTeam) {
+	public void onBaseLost(Base base, Team losingTeam) {
 		// don't care about neutral bases
 	}
 

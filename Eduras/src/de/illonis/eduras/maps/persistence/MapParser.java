@@ -17,7 +17,7 @@ import org.newdawn.slick.geom.Rectangle;
 
 import de.illonis.eduras.ObjectFactory.ObjectType;
 import de.illonis.eduras.gamemodes.GameMode.GameModeNumber;
-import de.illonis.eduras.gameobjects.NeutralBase;
+import de.illonis.eduras.gameobjects.Base;
 import de.illonis.eduras.maps.EduraMap;
 import de.illonis.eduras.maps.InitialObjectData;
 import de.illonis.eduras.maps.LoadedMap;
@@ -219,7 +219,7 @@ public class MapParser {
 					String[] nodeData = line.split(",");
 					int nodeId = 0;
 					float w, h = 0;
-					NeutralBase.NeutralBaseType baseType;
+					Base.BaseType baseType;
 					LinkedList<Integer> adjacentNodes = new LinkedList<Integer>();
 
 					try {
@@ -237,7 +237,7 @@ public class MapParser {
 								"Invalid math expression: " + e.getMessage());
 					}
 
-					baseType = NeutralBase.NeutralBaseType.valueOf(nodeData[3]);
+					baseType = Base.BaseType.valueOf(nodeData[3]);
 
 					for (int i = 4; i < nodeData.length; i++) {
 						try {

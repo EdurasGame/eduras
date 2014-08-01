@@ -23,7 +23,7 @@ import de.illonis.eduras.gameclient.gui.hud.minimap.MiniMapPlayer;
 import de.illonis.eduras.gamemodes.GameMode.GameModeNumber;
 import de.illonis.eduras.gameobjects.DynamicPolygonObject;
 import de.illonis.eduras.gameobjects.GameObject;
-import de.illonis.eduras.gameobjects.NeutralBase;
+import de.illonis.eduras.gameobjects.Base;
 import de.illonis.eduras.items.weapons.Missile;
 import de.illonis.eduras.items.weapons.Weapon;
 import de.illonis.eduras.maps.NodeData;
@@ -273,7 +273,7 @@ public class MiniMap extends ClickableGuiElement {
 			synchronized (players) {
 				players.remove(o.getId());
 			}
-		} else if (o instanceof NeutralBase) {
+		} else if (o instanceof Base) {
 			synchronized (bases) {
 				bases.remove(o.getId());
 			}
@@ -302,12 +302,12 @@ public class MiniMap extends ClickableGuiElement {
 				players.put(o.getId(), new MiniMapPlayer((PlayerMainFigure) o,
 						x, y, w, h));
 			}
-		} else if (o instanceof NeutralBase) {
+		} else if (o instanceof Base) {
 			float w = o.getShape().getWidth() * scale;
 			float h = o.getShape().getHeight() * scale;
 
 			synchronized (bases) {
-				bases.put(o.getId(), new MiniMapBase((NeutralBase) o, x, y, w,
+				bases.put(o.getId(), new MiniMapBase((Base) o, x, y, w,
 						h));
 			}
 

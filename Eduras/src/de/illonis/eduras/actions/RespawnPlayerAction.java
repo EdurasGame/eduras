@@ -8,7 +8,7 @@ import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.Player;
 import de.illonis.eduras.Team;
 import de.illonis.eduras.exceptions.PlayerHasNoTeamException;
-import de.illonis.eduras.gameobjects.NeutralBase;
+import de.illonis.eduras.gameobjects.Base;
 import de.illonis.eduras.logic.EventTriggerer;
 import de.illonis.eduras.settings.S;
 import de.illonis.eduras.units.InteractMode;
@@ -23,7 +23,7 @@ import de.illonis.eduras.units.InteractMode;
 public class RespawnPlayerAction extends RTSAction {
 
 	private Player playerToRespawn;
-	private NeutralBase base;
+	private Base base;
 
 	/**
 	 * Create a new RespawnPlayerAction.
@@ -36,7 +36,7 @@ public class RespawnPlayerAction extends RTSAction {
 	 *            the base to respawn the player at
 	 */
 	public RespawnPlayerAction(Player executingPlayer, Player playerToRespawn,
-			NeutralBase base) {
+			Base base) {
 		super(executingPlayer, S.Server.gm_edura_action_respawnplayer_cost);
 
 		this.playerToRespawn = playerToRespawn;

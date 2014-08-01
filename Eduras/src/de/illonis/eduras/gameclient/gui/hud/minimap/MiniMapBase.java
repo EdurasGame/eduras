@@ -3,7 +3,7 @@ package de.illonis.eduras.gameclient.gui.hud.minimap;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.geom.Vector2f;
 
-import de.illonis.eduras.gameobjects.NeutralBase;
+import de.illonis.eduras.gameobjects.Base;
 
 /**
  * The minimap representation of a base.
@@ -13,11 +13,11 @@ import de.illonis.eduras.gameobjects.NeutralBase;
  */
 public class MiniMapBase extends MiniMapObject {
 
-	private final NeutralBase base;
+	private final Base base;
 
 	/**
 	 * @param base
-	 *            the {@link NeutralBase}
+	 *            the {@link Base}
 	 * @param x
 	 *            x position in gui.
 	 * @param y
@@ -27,7 +27,7 @@ public class MiniMapBase extends MiniMapObject {
 	 * @param h
 	 *            height.
 	 */
-	public MiniMapBase(NeutralBase base, float x, float y, float w, float h) {
+	public MiniMapBase(Base base, float x, float y, float w, float h) {
 		super(x, y, w, h);
 		this.base = base;
 	}

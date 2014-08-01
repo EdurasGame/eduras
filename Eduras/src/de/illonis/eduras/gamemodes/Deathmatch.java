@@ -16,7 +16,7 @@ import de.illonis.eduras.exceptions.PlayerHasNoTeamException;
 import de.illonis.eduras.gameclient.userprefs.KeyBindings.KeyBinding;
 import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.gameobjects.GameObject.Relation;
-import de.illonis.eduras.gameobjects.NeutralBase;
+import de.illonis.eduras.gameobjects.Base;
 import de.illonis.eduras.logic.EventTriggerer;
 import de.illonis.eduras.maps.SpawnPosition.SpawnType;
 import de.illonis.eduras.units.InteractMode;
@@ -202,7 +202,7 @@ public class Deathmatch extends BasicGameMode {
 	}
 
 	@Override
-	public Team determineProgressingTeam(NeutralBase base, GameObject object,
+	public Team determineProgressingTeam(Base base, GameObject object,
 			boolean objectEntered, Set<GameObject> presentObjects) {
 		if (presentObjects.size() == 1) {
 			Unit onlyUnitInside = (Unit) presentObjects.iterator().next();
@@ -212,13 +212,13 @@ public class Deathmatch extends BasicGameMode {
 	}
 
 	@Override
-	public void onBaseOccupied(NeutralBase base, Team occupyingTeam) {
+	public void onBaseOccupied(Base base, Team occupyingTeam) {
 		L.info("Team " + occupyingTeam.getName()
 				+ " occupied the base with id " + base.getId() + "!");
 	}
 
 	@Override
-	public void onBaseLost(NeutralBase base, Team losingTeam) {
+	public void onBaseLost(Base base, Team losingTeam) {
 		L.info("Team " + losingTeam.getName() + " lost the base with id "
 				+ base.getId() + "!");
 	}

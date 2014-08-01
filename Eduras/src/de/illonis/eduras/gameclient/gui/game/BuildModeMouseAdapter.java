@@ -23,7 +23,7 @@ import de.illonis.eduras.gameclient.audio.SoundMachine.SoundType;
 import de.illonis.eduras.gameclient.gui.game.GamePanelLogic.ClickState;
 import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.gameobjects.GameObject.Relation;
-import de.illonis.eduras.gameobjects.NeutralBase;
+import de.illonis.eduras.gameobjects.Base;
 import de.illonis.eduras.logicabstraction.EdurasInitializer;
 import de.illonis.eduras.logicabstraction.InformationProvider;
 import de.illonis.eduras.units.InteractMode;
@@ -233,15 +233,15 @@ public class BuildModeMouseAdapter extends ScrollModeMouseAdapter {
 								.findObjectsAt(clickGamePoint));
 
 				for (GameObject gameObject : obs) {
-					if (gameObject instanceof NeutralBase) {
+					if (gameObject instanceof Base) {
 
 						try {
-							if (((NeutralBase) gameObject)
+							if (((Base) gameObject)
 									.getCurrentOwnerTeam().equals(
 											player.getTeam())) {
 								getListener().onUnitSpawned(
 										ObjectType.OBSERVER,
-										(NeutralBase) gameObject);
+										(Base) gameObject);
 								actionDone();
 								getPanelLogic().setClickState(
 										ClickState.DEFAULT);
@@ -279,9 +279,9 @@ public class BuildModeMouseAdapter extends ScrollModeMouseAdapter {
 								.findObjectsAt(clickGamePoint));
 
 				for (GameObject gameObject : obs) {
-					if (gameObject instanceof NeutralBase) {
+					if (gameObject instanceof Base) {
 						try {
-							if (((NeutralBase) gameObject)
+							if (((Base) gameObject)
 									.getCurrentOwnerTeam()
 									.equals(getPanelLogic().getClientData()
 											.getCurrentResurrectTarget()
@@ -290,7 +290,7 @@ public class BuildModeMouseAdapter extends ScrollModeMouseAdapter {
 								getListener().onPlayerRezz(
 										getPanelLogic().getClientData()
 												.getCurrentResurrectTarget(),
-										(NeutralBase) gameObject);
+										(Base) gameObject);
 								actionDone();
 								getPanelLogic().setClickState(
 										ClickState.DEFAULT);

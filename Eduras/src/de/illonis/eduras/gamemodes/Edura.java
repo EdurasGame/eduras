@@ -16,8 +16,8 @@ import de.illonis.eduras.exceptions.PlayerHasNoTeamException;
 import de.illonis.eduras.exceptions.WrongObjectTypeException;
 import de.illonis.eduras.gameclient.userprefs.KeyBindings.KeyBinding;
 import de.illonis.eduras.gameobjects.GameObject;
-import de.illonis.eduras.gameobjects.NeutralBase;
-import de.illonis.eduras.gameobjects.NeutralBase.NeutralBaseType;
+import de.illonis.eduras.gameobjects.Base;
+import de.illonis.eduras.gameobjects.Base.BaseType;
 import de.illonis.eduras.gameobjects.TimedEventHandler;
 import de.illonis.eduras.logic.EventTriggerer;
 import de.illonis.eduras.maps.EduraMap;
@@ -37,9 +37,9 @@ import de.illonis.eduras.units.Unit;
  */
 public class Edura extends TeamDeathmatch {
 
-	private HashMap<NeutralBase, Vertex> baseToVertex;
-	private HashMap<Team, NeutralBase> mainBaseOfTeam;
-	private HashMap<NeutralBase, ResourceGenerator> baseToResourceGenerator;
+	private HashMap<Base, Vertex> baseToVertex;
+	private HashMap<Team, Base> mainBaseOfTeam;
+	private HashMap<Base, ResourceGenerator> baseToResourceGenerator;
 
 	private final static Logger L = EduLog.getLoggerFor(Edura.class.getName());
 
@@ -51,9 +51,9 @@ public class Edura extends TeamDeathmatch {
 	public Edura(GameInformation gameInfo) {
 		super(gameInfo);
 
-		baseToVertex = new HashMap<NeutralBase, Vertex>();
-		mainBaseOfTeam = new HashMap<Team, NeutralBase>();
-		baseToResourceGenerator = new HashMap<NeutralBase, ResourceGenerator>();
+		baseToVertex = new HashMap<Base, Vertex>();
+		mainBaseOfTeam = new HashMap<Team, Base>();
+		baseToResourceGenerator = new HashMap<Base, ResourceGenerator>();
 	}
 
 	@Override
@@ -71,7 +71,7 @@ public class Edura extends TeamDeathmatch {
 		gameInfo.getEventTriggerer().setRemainingTime(
 				gameInfo.getGameSettings().getRoundTime());
 
-		for (NeutralBase aNeutralBase : baseToVertex.keySet()) {
+		for (Base aNeutralBase : baseToVertex.keySet()) {
 			aNeutralBase.setResourceGenerateMultiplicator(aNeutralBase
 					.getResourceGenerateMultiplicator() + 1);
 		}
@@ -91,7 +91,7 @@ public class Edura extends TeamDeathmatch {
 	}
 
 	private void loadNodes() {
-		HashMap<Integer, NeutralBase> nodeIdToBase = new HashMap<Integer, NeutralBase>();
+		HashMap<Integer, Base> nodeIdToBase = new HashMap<Integer, Base>();
 		EduraMap eduraMap = (EduraMap) gameInfo.getMap();
 
 		clear();
@@ -102,7 +102,7 @@ public class Edura extends TeamDeathmatch {
 					ObjectType.NEUTRAL_BASE,
 					new Vector2df(nodeData.getX(), nodeData.getY()), -1);
 
-			NeutralBase base = (NeutralBase) gameInfo.findObjectById(objectId);
+			Base base = (Base) gameInfo.findObjectById(objectId);
 			nodeIdToBase.put(nodeid, base);
 			baseToVertex.put(base, new Vertex());
 		}
@@ -123,7 +123,7 @@ public class Edura extends TeamDeathmatch {
 				vertexForNode.addAdjacentVertex(vertexForAdjacent);
 			}
 
-			if (nodeData.isMainNode() != NeutralBaseType.NEUTRAL) {
+			if (nodeData.isMainNode() != BaseType.NEUTRAL) {
 				Team teamOfMainNode;
 				switch (nodeData.isMainNode()) {
 				case TEAM_B:
@@ -137,7 +137,7 @@ public class Edura extends TeamDeathmatch {
 				}
 
 				vertexForNode.setColor(teamOfMainNode.getTeamId());
-				NeutralBase mainBase = nodeIdToBase.get(nodeid);
+				Base mainBase = nodeIdToBase.get(nodeid);
 				mainBaseOfTeam.put(teamOfMainNode, mainBase);
 				mainBase.setCurrentOwnerTeam(teamOfMainNode);
 				gameInfo.getEventTriggerer().notifyAreaConquered(mainBase,
@@ -155,13 +155,13 @@ public class Edura extends TeamDeathmatch {
 		}
 	}
 
-	private Vertex nodeIdToVertex(HashMap<Integer, NeutralBase> nodeIdToBase,
+	private Vertex nodeIdToVertex(HashMap<Integer, Base> nodeIdToBase,
 			int nodeid) {
 		return baseToVertex.get(nodeIdToBase.get(nodeid));
 	}
 
 	@Override
-	public Team determineProgressingTeam(NeutralBase base, GameObject object,
+	public Team determineProgressingTeam(Base base, GameObject object,
 			boolean objectEntered, Set<GameObject> presentObjects) {
 		Team team = determineOnlyContainingTeam(presentObjects);
 
@@ -251,9 +251,9 @@ public class Edura extends TeamDeathmatch {
 	}
 
 	@Override
-	public void onBaseOccupied(NeutralBase base, Team occupyingTeam) {
+	public void onBaseOccupied(Base base, Team occupyingTeam) {
 		boolean matchEnd = false;
-		for (NeutralBase aMainBase : mainBaseOfTeam.values()) {
+		for (Base aMainBase : mainBaseOfTeam.values()) {
 			if (base.equals(aMainBase)) {
 				// TODO: we're assuming that a main base cannot be conquered by
 				// the own team for any reason. put a check if the conquered
@@ -271,7 +271,7 @@ public class Edura extends TeamDeathmatch {
 		startGeneratingResourcesInBaseForTeam(base, occupyingTeam);
 	}
 
-	private void startGeneratingResourcesInBaseForTeam(NeutralBase base,
+	private void startGeneratingResourcesInBaseForTeam(Base base,
 			Team team) {
 		// generate resources
 		if (baseToResourceGenerator.containsKey(base)) {
@@ -286,10 +286,10 @@ public class Edura extends TeamDeathmatch {
 
 	class ResourceGenerator implements TimedEventHandler {
 
-		private NeutralBase base;
+		private Base base;
 		private Team team;
 
-		public ResourceGenerator(NeutralBase base, Team team) {
+		public ResourceGenerator(Base base, Team team) {
 			this.base = base;
 			this.team = team;
 		}
@@ -307,7 +307,7 @@ public class Edura extends TeamDeathmatch {
 	}
 
 	@Override
-	public void onBaseLost(NeutralBase base, Team losingTeam) {
+	public void onBaseLost(Base base, Team losingTeam) {
 		// stop generating resources for the team
 		base.getTimingSource().removeTimedEventHandler(
 				baseToResourceGenerator.get(base));
@@ -339,7 +339,7 @@ public class Edura extends TeamDeathmatch {
 						"At this point the player should belong to a team!", e);
 			}
 			for (GameObject intersectingGameObject : intersectingObjects) {
-				NeutralBase intersectingBase = (NeutralBase) intersectingGameObject;
+				Base intersectingBase = (Base) intersectingGameObject;
 				if (intersectingBase.getCurrentOwnerTeam() != null
 						&& intersectingBase.getCurrentOwnerTeam().equals(
 								teamOfSwitchingPlayer)) {

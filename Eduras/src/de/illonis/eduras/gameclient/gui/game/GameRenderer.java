@@ -36,7 +36,7 @@ import de.illonis.eduras.gameclient.gui.hud.TextTooltip;
 import de.illonis.eduras.gameclient.gui.hud.Tooltip;
 import de.illonis.eduras.gameclient.gui.hud.UserInterface;
 import de.illonis.eduras.gameobjects.GameObject;
-import de.illonis.eduras.gameobjects.NeutralBase;
+import de.illonis.eduras.gameobjects.Base;
 import de.illonis.eduras.items.Item;
 import de.illonis.eduras.logicabstraction.InformationProvider;
 import de.illonis.eduras.math.BasicMath;
@@ -449,7 +449,7 @@ public class GameRenderer implements TooltipHandler {
 		case MAPBOUNDS:
 			return new Color(0, 0, 0, 0);
 		case NEUTRAL_BASE:
-			NeutralBase base = (NeutralBase) d;
+			Base base = (Base) d;
 			if (base.getCurrentOwnerTeam() == null) {
 				return Color.white;
 			} else {

@@ -6,8 +6,8 @@ import java.util.LinkedList;
 import java.util.logging.Logger;
 
 import de.illonis.edulog.EduLog;
-import de.illonis.eduras.gameobjects.NeutralBase;
-import de.illonis.eduras.gameobjects.NeutralBase.NeutralBaseType;
+import de.illonis.eduras.gameobjects.Base;
+import de.illonis.eduras.gameobjects.Base.BaseType;
 
 /**
  * Represents Edura! nodes on a map as they are read from a file.
@@ -23,7 +23,7 @@ public class NodeData {
 	private final float y;
 	private final int id;
 	private final LinkedList<Integer> adjacentNodes;
-	private final NeutralBase.NeutralBaseType isMainNode;
+	private final Base.BaseType isMainNode;
 
 	/**
 	 * Create a new node data wrapper instance.
@@ -42,7 +42,7 @@ public class NodeData {
 	 *            the teams
 	 */
 	public NodeData(float x, float y, int id,
-			LinkedList<Integer> adjacentNodes, NeutralBaseType baseType) {
+			LinkedList<Integer> adjacentNodes, BaseType baseType) {
 		this.x = x;
 		this.y = y;
 		this.id = id;
@@ -87,11 +87,11 @@ public class NodeData {
 	}
 
 	/**
-	 * Determines what {@link NeutralBaseType} this node is of.
+	 * Determines what {@link BaseType} this node is of.
 	 * 
 	 * @return base type.
 	 */
-	public NeutralBaseType isMainNode() {
+	public BaseType isMainNode() {
 		return isMainNode;
 	}
 

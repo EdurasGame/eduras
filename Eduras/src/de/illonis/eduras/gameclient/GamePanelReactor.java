@@ -11,7 +11,7 @@ import de.illonis.eduras.exceptions.NotWithinBaseException;
 import de.illonis.eduras.exceptions.WrongObjectTypeException;
 import de.illonis.eduras.gameclient.gui.game.GamePanelLogic.ClickState;
 import de.illonis.eduras.gameobjects.MoveableGameObject.Direction;
-import de.illonis.eduras.gameobjects.NeutralBase;
+import de.illonis.eduras.gameobjects.Base;
 import de.illonis.eduras.units.PlayerMainFigure;
 import de.illonis.eduras.units.Unit;
 
@@ -76,7 +76,7 @@ public interface GamePanelReactor {
 	 * @throws InsufficientResourceException
 	 *             when resources are too low.
 	 */
-	void onPlayerRezz(Player player, NeutralBase base)
+	void onPlayerRezz(Player player, Base base)
 			throws InsufficientResourceException;
 
 	/**
@@ -153,7 +153,7 @@ public interface GamePanelReactor {
 	 * @throws InsufficientResourceException
 	 *             if not enough resources available
 	 */
-	void onUnitSpawned(ObjectType type, NeutralBase base)
+	void onUnitSpawned(ObjectType type, Base base)
 			throws InsufficientResourceException;
 
 	/**

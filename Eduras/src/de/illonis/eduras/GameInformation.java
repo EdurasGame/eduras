@@ -42,7 +42,7 @@ import de.illonis.eduras.exceptions.ObjectNotFoundException;
 import de.illonis.eduras.exceptions.PlayerHasNoTeamException;
 import de.illonis.eduras.gameobjects.DynamicPolygonObject;
 import de.illonis.eduras.gameobjects.GameObject;
-import de.illonis.eduras.gameobjects.NeutralBase;
+import de.illonis.eduras.gameobjects.Base;
 import de.illonis.eduras.logic.EventTriggerer;
 import de.illonis.eduras.maps.FunMap;
 import de.illonis.eduras.maps.Map;
@@ -341,7 +341,7 @@ public class GameInformation {
 
 		announceAllPlayers(infos);
 
-		ArrayList<NeutralBase> neutralBases = new ArrayList<NeutralBase>();
+		ArrayList<Base> neutralBases = new ArrayList<Base>();
 		putObjectInfos(infos, neutralBases);
 
 		putCurrentSettings(infos);
@@ -382,8 +382,8 @@ public class GameInformation {
 	}
 
 	private void putNeutralBaseOwnerInfos(ArrayList<GameEvent> infos,
-			ArrayList<NeutralBase> neutralBases) {
-		for (NeutralBase base : neutralBases) {
+			ArrayList<Base> neutralBases) {
+		for (Base base : neutralBases) {
 			if (base.getCurrentOwnerTeam() != null) {
 				AreaConqueredEvent baseConqueredNotification = new AreaConqueredEvent(
 						base.getId(), base.getCurrentOwnerTeam().getTeamId());
@@ -437,7 +437,7 @@ public class GameInformation {
 	}
 
 	private void putObjectInfos(ArrayList<GameEvent> infos,
-			ArrayList<NeutralBase> neutralBases) {
+			ArrayList<Base> neutralBases) {
 		for (GameObject object : objects.values()) {
 			ObjectFactoryEvent objectEvent = new ObjectFactoryEvent(
 					GameEventNumber.OBJECT_CREATE, object.getType(),
@@ -454,7 +454,7 @@ public class GameInformation {
 			}
 
 			if (object.getType() == ObjectType.NEUTRAL_BASE) {
-				neutralBases.add((NeutralBase) object);
+				neutralBases.add((Base) object);
 			}
 
 			// send position immediately

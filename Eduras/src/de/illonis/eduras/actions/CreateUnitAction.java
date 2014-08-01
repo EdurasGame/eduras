@@ -9,7 +9,7 @@ import de.illonis.eduras.Player;
 import de.illonis.eduras.Team;
 import de.illonis.eduras.exceptions.PlayerHasNoTeamException;
 import de.illonis.eduras.exceptions.WrongObjectTypeException;
-import de.illonis.eduras.gameobjects.NeutralBase;
+import de.illonis.eduras.gameobjects.Base;
 import de.illonis.eduras.settings.S;
 
 /**
@@ -22,7 +22,7 @@ public class CreateUnitAction extends RTSAction {
 	private final static Logger L = EduLog.getLoggerFor(CreateUnitAction.class
 			.getName());
 
-	private NeutralBase baseToSpawnAt;
+	private Base baseToSpawnAt;
 	private ObjectType typeOfUnitToSpawn;
 
 	/**
@@ -38,7 +38,7 @@ public class CreateUnitAction extends RTSAction {
 	 *             Thrown if the given object type cannot be spawned.
 	 */
 	public CreateUnitAction(Player executingPlayer, ObjectType typeOfUnit,
-			NeutralBase baseToSpawnAt) throws WrongObjectTypeException {
+			Base baseToSpawnAt) throws WrongObjectTypeException {
 		super(executingPlayer, -1);
 
 		this.baseToSpawnAt = baseToSpawnAt;

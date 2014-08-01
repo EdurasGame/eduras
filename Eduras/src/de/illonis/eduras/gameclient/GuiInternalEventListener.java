@@ -34,7 +34,7 @@ import de.illonis.eduras.gameclient.gui.game.GamePanelLogic.ClickState;
 import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.gameobjects.GameObject.Relation;
 import de.illonis.eduras.gameobjects.MoveableGameObject.Direction;
-import de.illonis.eduras.gameobjects.NeutralBase;
+import de.illonis.eduras.gameobjects.Base;
 import de.illonis.eduras.logicabstraction.EdurasInitializer;
 import de.illonis.eduras.logicabstraction.InformationProvider;
 import de.illonis.eduras.math.Geometry;
@@ -256,7 +256,7 @@ public class GuiInternalEventListener implements GamePanelReactor {
 	}
 
 	@Override
-	public void onPlayerRezz(Player player, NeutralBase base)
+	public void onPlayerRezz(Player player, Base base)
 			throws InsufficientResourceException {
 
 		checkSufficientResources(player,
@@ -350,7 +350,7 @@ public class GuiInternalEventListener implements GamePanelReactor {
 	}
 
 	@Override
-	public void onUnitSpawned(ObjectType type, NeutralBase base)
+	public void onUnitSpawned(ObjectType type, Base base)
 			throws InsufficientResourceException {
 
 		Player player;

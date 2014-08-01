@@ -18,7 +18,7 @@ import de.illonis.eduras.gameobjects.Bird;
 import de.illonis.eduras.gameobjects.Building;
 import de.illonis.eduras.gameobjects.DynamicPolygonObject;
 import de.illonis.eduras.gameobjects.GameObject;
-import de.illonis.eduras.gameobjects.NeutralBase;
+import de.illonis.eduras.gameobjects.Base;
 import de.illonis.eduras.gameobjects.TimingSource;
 import de.illonis.eduras.interfaces.GameLogicInterface;
 import de.illonis.eduras.items.weapons.AssaultMissile;
@@ -289,7 +289,7 @@ public class ObjectFactory {
 				go = new AssaultMissile(logic.getGame(), timingSource, id);
 				break;
 			case NEUTRAL_BASE:
-				go = new NeutralBase(logic.getGame(), timingSource, id, 1);
+				go = new Base(logic.getGame(), timingSource, id, 1);
 				break;
 			case DYNAMIC_POLYGON_BLOCK:
 				go = new DynamicPolygonObject(ObjectType.DYNAMIC_POLYGON_BLOCK,

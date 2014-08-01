@@ -7,7 +7,7 @@ import de.illonis.eduras.Team;
 import de.illonis.eduras.gameclient.userprefs.KeyBindings.KeyBinding;
 import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.gameobjects.GameObject.Relation;
-import de.illonis.eduras.gameobjects.NeutralBase;
+import de.illonis.eduras.gameobjects.Base;
 import de.illonis.eduras.maps.SpawnPosition.SpawnType;
 import de.illonis.eduras.units.InteractMode;
 import de.illonis.eduras.units.Unit;
@@ -115,7 +115,7 @@ public interface GameMode {
 	public SpawnType getSpawnTypeForTeam(Team team);
 
 	/**
-	 * When an object is entering a {@link NeutralBase}, this method is called
+	 * When an object is entering a {@link Base}, this method is called
 	 * to determine which team becomes the base overtaking team.
 	 * 
 	 * @param base
@@ -128,28 +128,28 @@ public interface GameMode {
 	 *            All objects that are currently in the area.
 	 * @return The team that is determined to be overtaking the base.
 	 */
-	public Team determineProgressingTeam(NeutralBase base, GameObject object,
+	public Team determineProgressingTeam(Base base, GameObject object,
 			boolean objectEntered, Set<GameObject> presentObjects);
 
 	/**
-	 * Called when a team has occupied a {@link NeutralBase}.
+	 * Called when a team has occupied a {@link Base}.
 	 * 
 	 * @param base
 	 *            the base that was occupied
 	 * @param occupyingTeam
-	 *            The team that has occupied the {@link NeutralBase}.
+	 *            The team that has occupied the {@link Base}.
 	 */
-	public void onBaseOccupied(NeutralBase base, Team occupyingTeam);
+	public void onBaseOccupied(Base base, Team occupyingTeam);
 
 	/**
-	 * Called when a team loses a {@link NeutralBase}.
+	 * Called when a team loses a {@link Base}.
 	 * 
 	 * @param base
 	 *            the base that was lost
 	 * @param losingTeam
-	 *            The team that has lost the {@link NeutralBase}.
+	 *            The team that has lost the {@link Base}.
 	 */
-	public void onBaseLost(NeutralBase base, Team losingTeam);
+	public void onBaseLost(Base base, Team losingTeam);
 
 	/**
 	 * Checks whether given binding is supported by this gamemode. If a key is

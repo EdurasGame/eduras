@@ -17,9 +17,9 @@ import de.illonis.eduras.settings.S;
  * @author Florian 'Ren' Mai <florian.ren.mai@googlemail.com>
  * 
  */
-public class NeutralBase extends NeutralArea {
+public class Base extends NeutralArea {
 
-	private final static Logger L = EduLog.getLoggerFor(NeutralBase.class
+	private final static Logger L = EduLog.getLoggerFor(Base.class
 			.getName());
 
 	private final long resourceGenerateTimeInterval;
@@ -33,7 +33,7 @@ public class NeutralBase extends NeutralArea {
 	 * @author Florian 'Ren' Mai
 	 * 
 	 */
-	public enum NeutralBaseType {
+	public enum BaseType {
 		NEUTRAL, TEAM_A, TEAM_B;
 	}
 
@@ -47,7 +47,7 @@ public class NeutralBase extends NeutralArea {
 	 * @param mult
 	 *            multiplcator for resource generation amount.
 	 */
-	public NeutralBase(GameInformation game, TimingSource timingSource, int id,
+	public Base(GameInformation game, TimingSource timingSource, int id,
 			int mult) {
 		super(game, timingSource, id);
 		setTimeNeeded(S.Server.neutralbase_overtaketime_default);

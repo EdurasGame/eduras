@@ -10,7 +10,7 @@ import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.Player;
 import de.illonis.eduras.Statistic.StatsProperty;
 import de.illonis.eduras.Team;
-import de.illonis.eduras.gameobjects.NeutralBase;
+import de.illonis.eduras.gameobjects.Base;
 import de.illonis.eduras.settings.S;
 import de.illonis.eduras.units.PlayerMainFigure;
 
@@ -23,7 +23,7 @@ import de.illonis.eduras.units.PlayerMainFigure;
  */
 public class KingOfTheHill extends Deathmatch {
 
-	private HashMap<NeutralBase, Timer> neutralBasePointsAdderTimer;
+	private HashMap<Base, Timer> neutralBasePointsAdderTimer;
 
 	/**
 	 * Create a new KingOfTheHill mode.
@@ -34,7 +34,7 @@ public class KingOfTheHill extends Deathmatch {
 	public KingOfTheHill(GameInformation gameInfo) {
 		super(gameInfo);
 
-		neutralBasePointsAdderTimer = new HashMap<NeutralBase, Timer>();
+		neutralBasePointsAdderTimer = new HashMap<Base, Timer>();
 	}
 
 	private final static Logger L = EduLog.getLoggerFor(KingOfTheHill.class
@@ -51,7 +51,7 @@ public class KingOfTheHill extends Deathmatch {
 	}
 
 	@Override
-	public void onBaseOccupied(NeutralBase base, Team occupyingTeam) {
+	public void onBaseOccupied(Base base, Team occupyingTeam) {
 		Player player = occupyingTeam.getPlayers().getFirst();
 		Timer timerForBase = new Timer();
 		neutralBasePointsAdderTimer.put(base, timerForBase);
@@ -80,7 +80,7 @@ public class KingOfTheHill extends Deathmatch {
 	}
 
 	@Override
-	public void onBaseLost(NeutralBase base, Team losingTeam) {
+	public void onBaseLost(Base base, Team losingTeam) {
 		Timer timerForBase = neutralBasePointsAdderTimer.get(base);
 		L.info("Team " + losingTeam.getName() + " lost the base with id "
 				+ base.getId() + "!");
