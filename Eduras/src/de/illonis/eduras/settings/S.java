@@ -621,7 +621,7 @@ public final class S {
 		/**
 		 * Determines the round time of a match in milliseconds.
 		 */
-		public static long sv_roundtime;
+		public static long sv_roundtime = 300000;
 
 	}
 
