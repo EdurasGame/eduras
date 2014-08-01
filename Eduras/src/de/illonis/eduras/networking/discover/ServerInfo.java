@@ -11,6 +11,7 @@ import java.net.InetAddress;
  */
 public class ServerInfo {
 
+	private static final int NUMBER_OF_COMPONENTS = 7;
 	private final int port;
 	private final String name;
 	private final InetAddress url;
@@ -119,5 +120,15 @@ public class ServerInfo {
 					&& getPort() == other.getPort();
 		}
 		return false;
+	}
+
+	/**
+	 * This method always returns the number of components a ServerInfo consists
+	 * of and as such, how it is transmitted via network.
+	 * 
+	 * @return number of ServerInfo components
+	 */
+	public static int getNumberOfServerInfoComponents() {
+		return NUMBER_OF_COMPONENTS;
 	}
 }

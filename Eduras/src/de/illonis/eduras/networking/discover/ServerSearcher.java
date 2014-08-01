@@ -195,7 +195,9 @@ public class ServerSearcher extends Thread {
 					L.fine("Received metaserver GET_SERVERS_RESPONSE. It reported "
 							+ numberOfEdurasServers + " servers.");
 
-					for (int i = 1; i < numberOfEdurasServers * 4; i = i + 4) {
+					for (int i = 1; i < numberOfEdurasServers
+							* ServerInfo.getNumberOfServerInfoComponents(); i = i
+							+ ServerInfo.getNumberOfServerInfoComponents()) {
 						try {
 							ServerInfo info = parseServerInfo(event, i);
 							if (info != null)
