@@ -53,7 +53,7 @@ public class UserInterface implements GuiResizeListener {
 	private HudNotifier hudNotifier;
 	private final GuiInternalEventListener guiReactor;
 	private MiniMap minimap;
-	
+
 	public ActionBar getActionBar() {
 		return actionBar;
 	}
@@ -135,6 +135,11 @@ public class UserInterface implements GuiResizeListener {
 			public void actionPerformed() {
 				guiReactor.setClickState(ClickState.DEFAULT);
 				actionBar.setPage(PageNumber.MAIN);
+			}
+
+			@Override
+			protected boolean isBackButton() {
+				return true;
 			}
 
 			@Override

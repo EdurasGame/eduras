@@ -10,6 +10,8 @@ import de.illonis.eduras.events.MatchEndEvent;
 import de.illonis.eduras.events.SetInteractModeEvent;
 import de.illonis.eduras.gameclient.ClientData;
 import de.illonis.eduras.gameclient.gui.hud.ActionBarPage.PageNumber;
+import de.illonis.eduras.gameclient.userprefs.KeyBindings;
+import de.illonis.eduras.gameclient.userprefs.KeyBindings.KeyBinding;
 import de.illonis.eduras.logicabstraction.EdurasInitializer;
 import de.illonis.eduras.units.InteractMode;
 
@@ -29,11 +31,14 @@ public class ActionBar extends ClickableGuiElement implements TooltipTriggerer {
 	private ActionBarPage currentPage;
 	private int numButtons;
 	private final ClientData data;
+	private KeyBindings bindings;
 
 	protected ActionBar(UserInterface gui) {
 		super(gui);
 		data = EdurasInitializer.getInstance().getInformationProvider()
 				.getClientData();
+		bindings = EdurasInitializer.getInstance().getSettings()
+				.getKeyBindings();
 		screenX = MiniMap.SIZE + 5;
 		bounds = new Rectangle(screenX, screenY, 0, 0);
 		registerAsTooltipTriggerer(this);
@@ -73,6 +78,7 @@ public class ActionBar extends ClickableGuiElement implements TooltipTriggerer {
 			return;
 
 		float x = screenX;
+		String label;
 		for (int i = 0; i < numButtons; i++) {
 			ActionButton button = currentPage.getButtons().get(i);
 			if (button.getIcon() != null) {
@@ -92,6 +98,17 @@ public class ActionBar extends ClickableGuiElement implements TooltipTriggerer {
 								ActionButton.BUTTON_SIZE - 2);
 					}
 				}
+
+				if (button.isBackButton())
+					label = bindings.getBindingString(KeyBinding.PAGE_UP);
+				else {
+					label = bindings.getBindingString(KeyBinding
+							.valueOf("ITEM_" + (1 + i)));
+				}
+				g.setColor(Color.black);
+				g.fillRect(x + 3, screenY + 3, 15, 15);
+				g.setColor(Color.white);
+				g.drawString(label, x + 6, screenY + 3);
 			}
 			x += ActionButton.BUTTON_SIZE;
 		}

@@ -53,6 +53,10 @@ public abstract class ActionButton extends GameEventAdapter {
 	protected final void clearSelection() {
 		clearSelection = true;
 	}
+	
+	protected boolean isBackButton() {
+		return false;
+	}
 
 	final boolean isAutoCancel() {
 		return autoCancel;
