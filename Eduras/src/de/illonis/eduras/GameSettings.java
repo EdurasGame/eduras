@@ -3,6 +3,7 @@ package de.illonis.eduras;
 import de.illonis.eduras.gamemodes.GameMode;
 import de.illonis.eduras.gamemodes.NoGameMode;
 import de.illonis.eduras.gamemodes.TeamDeathmatch;
+import de.illonis.eduras.settings.S;
 
 /**
  * Holds all current game settings and statistics.
@@ -28,7 +29,7 @@ public class GameSettings {
 	public GameSettings(GameInformation gameInfo) {
 
 		maxPlayers = 10;
-		roundTime = 300000;
+		roundTime = S.Server.sv_roundtime;
 		gameMode = new TeamDeathmatch(gameInfo);
 		remainingTime = roundTime;
 		stats = new Statistic();

@@ -618,6 +618,11 @@ public final class S {
 		 */
 		public static float go_splashedmissile_maxrange = 150;
 
+		/**
+		 * Determines the round time of a match in milliseconds.
+		 */
+		public static long sv_roundtime;
+
 	}
 
 	/**
