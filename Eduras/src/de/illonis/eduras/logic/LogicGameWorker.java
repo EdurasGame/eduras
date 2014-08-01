@@ -128,7 +128,7 @@ public abstract class LogicGameWorker implements Runnable, TimingSource {
 		gameUpdate(delta);
 	}
 
-	private void notifyTimingTargets(long delta) {
+	private synchronized void notifyTimingTargets(long delta) {
 		Collection<Entry<TimedEventHandler, Long>> timingTargetsCopy = new LinkedList<Entry<TimedEventHandler, Long>>(
 				timingTargets.entrySet());
 
@@ -181,13 +181,15 @@ public abstract class LogicGameWorker implements Runnable, TimingSource {
 	}
 
 	@Override
-	public final void addTimedEventHandler(TimedEventHandler eventHandler) {
-		timingTargets.put(eventHandler, 0L);
+	public synchronized final void addTimedEventHandler(
+			TimedEventHandler eventHandler) {
 
+		timingTargets.put(eventHandler, 0L);
 	}
 
 	@Override
-	public final void removeTimedEventHandler(TimedEventHandler eventHandler) {
+	public synchronized final void removeTimedEventHandler(
+			TimedEventHandler eventHandler) {
 		timingTargets.remove(eventHandler);
 	}
 }
