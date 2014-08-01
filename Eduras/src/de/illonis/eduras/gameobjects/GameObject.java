@@ -361,6 +361,25 @@ public abstract class GameObject implements Comparable<GameObject> {
 	}
 
 	/**
+	 * Get the zLayer of this object.
+	 * 
+	 * @return zlayer
+	 */
+	public int getzLayer() {
+		return zLayer;
+	}
+
+	/**
+	 * Set the zLayer of this object.
+	 * 
+	 * @param newVal
+	 *            the value to set to
+	 */
+	public void setzLayer(int newVal) {
+		this.zLayer = newVal;
+	}
+
+	/**
 	 * Check wether the given object is the same by comparing the ids.
 	 * 
 	 * @param object

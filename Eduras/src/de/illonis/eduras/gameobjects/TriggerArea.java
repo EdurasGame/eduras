@@ -41,6 +41,7 @@ public abstract class TriggerArea extends GameObject implements
 		super(game, timingSource, id);
 		setObjectType(ObjectType.TRIGGER_AREA);
 		setCollidable(false);
+		setzLayer(0);
 		presentObjects = new TreeSet<GameObject>(new GameObjectIdComparator());
 		timingSource.addTimedEventHandler(this);
 	}
