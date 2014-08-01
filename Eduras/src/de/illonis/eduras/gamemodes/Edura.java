@@ -2,7 +2,6 @@ package de.illonis.eduras.gamemodes;
 
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -18,6 +17,7 @@ import de.illonis.eduras.exceptions.WrongObjectTypeException;
 import de.illonis.eduras.gameclient.userprefs.KeyBindings.KeyBinding;
 import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.gameobjects.NeutralBase;
+import de.illonis.eduras.gameobjects.NeutralBase.NeutralBaseType;
 import de.illonis.eduras.gameobjects.TimedEventHandler;
 import de.illonis.eduras.logic.EventTriggerer;
 import de.illonis.eduras.maps.EduraMap;
@@ -109,10 +109,8 @@ public class Edura extends TeamDeathmatch {
 
 		// TODO: At the moment we rely on the assumption that there are always
 		// two main nodes in the map and that there is only two teams.
-		Iterator<Team> iterator = gameInfo.getTeams().iterator();
-		Team teamA = iterator.next();
-		Team teamB = iterator.next();
-		boolean teamAHasMainNode = false;
+		Team teamA = getTeamA();
+		Team teamB = getTeamB();
 
 		for (NodeData nodeData : eduraMap.getNodes()) {
 			int nodeid = nodeData.getId();
@@ -125,27 +123,27 @@ public class Edura extends TeamDeathmatch {
 				vertexForNode.addAdjacentVertex(vertexForAdjacent);
 			}
 
-			if (nodeData.isMainNode()) {
-				if (teamAHasMainNode) {
-					vertexForNode.setColor(teamB.getTeamId());
-					NeutralBase mainBase = nodeIdToBase.get(nodeid);
-					mainBaseOfTeam.put(teamB, mainBase);
-					mainBase.setCurrentOwnerTeam(teamB);
-					gameInfo.getEventTriggerer().notifyAreaConquered(mainBase,
-							teamB);
-
-					startGeneratingResourcesInBaseForTeam(mainBase, teamB);
-				} else {
-					vertexForNode.setColor(teamA.getTeamId());
-					NeutralBase mainBase = nodeIdToBase.get(nodeid);
-					mainBaseOfTeam.put(teamA, mainBase);
-					mainBase.setCurrentOwnerTeam(teamA);
-					teamAHasMainNode = true;
-					gameInfo.getEventTriggerer().notifyAreaConquered(mainBase,
-							teamA);
-
-					startGeneratingResourcesInBaseForTeam(mainBase, teamA);
+			if (nodeData.isMainNode() != NeutralBaseType.NEUTRAL) {
+				Team teamOfMainNode;
+				switch (nodeData.isMainNode()) {
+				case TEAM_B:
+					teamOfMainNode = teamB;
+					break;
+				case TEAM_A:
+					teamOfMainNode = teamA;
+					break;
+				default:
+					return;
 				}
+
+				vertexForNode.setColor(teamOfMainNode.getTeamId());
+				NeutralBase mainBase = nodeIdToBase.get(nodeid);
+				mainBaseOfTeam.put(teamOfMainNode, mainBase);
+				mainBase.setCurrentOwnerTeam(teamOfMainNode);
+				gameInfo.getEventTriggerer().notifyAreaConquered(mainBase,
+						teamOfMainNode);
+
+				startGeneratingResourcesInBaseForTeam(mainBase, teamOfMainNode);
 			}
 		}
 

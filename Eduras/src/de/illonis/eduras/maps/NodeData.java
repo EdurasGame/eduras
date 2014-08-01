@@ -6,6 +6,8 @@ import java.util.LinkedList;
 import java.util.logging.Logger;
 
 import de.illonis.edulog.EduLog;
+import de.illonis.eduras.gameobjects.NeutralBase;
+import de.illonis.eduras.gameobjects.NeutralBase.NeutralBaseType;
 
 /**
  * Represents Edura! nodes on a map as they are read from a file.
@@ -21,7 +23,7 @@ public class NodeData {
 	private final float y;
 	private final int id;
 	private final LinkedList<Integer> adjacentNodes;
-	private final boolean isMainNode;
+	private final NeutralBase.NeutralBaseType isMainNode;
 
 	/**
 	 * Create a new node data wrapper instance.
@@ -35,17 +37,17 @@ public class NodeData {
 	 *            nodes
 	 * @param adjacentNodes
 	 *            adjacent nodes
-	 * @param isMainNode
+	 * @param baseType
 	 *            tells whether this node may be used as a main node of one of
 	 *            the teams
 	 */
 	public NodeData(float x, float y, int id,
-			LinkedList<Integer> adjacentNodes, boolean isMainNode) {
+			LinkedList<Integer> adjacentNodes, NeutralBaseType baseType) {
 		this.x = x;
 		this.y = y;
 		this.id = id;
 		this.adjacentNodes = adjacentNodes;
-		this.isMainNode = isMainNode;
+		this.isMainNode = baseType;
 	}
 
 	/**
@@ -85,11 +87,11 @@ public class NodeData {
 	}
 
 	/**
-	 * Determines if this node may be used as a main node for one of the teams.
+	 * Determines what {@link NeutralBaseType} this node is of.
 	 * 
-	 * @return true if so.
+	 * @return base type.
 	 */
-	public boolean isMainNode() {
+	public NeutralBaseType isMainNode() {
 		return isMainNode;
 	}
 

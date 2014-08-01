@@ -27,6 +27,17 @@ public class NeutralBase extends NeutralArea {
 	private int resourceGenerateMultiplicator;
 
 	/**
+	 * Denotes whether a base belongs to team a, team b or is neutral when
+	 * created.
+	 * 
+	 * @author Florian 'Ren' Mai
+	 * 
+	 */
+	public enum NeutralBaseType {
+		NEUTRAL, TEAM_A, TEAM_B;
+	}
+
+	/**
 	 * @param game
 	 *            game info.
 	 * @param timingSource

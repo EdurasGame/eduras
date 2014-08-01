@@ -158,4 +158,12 @@ public class TeamDeathmatch extends Deathmatch {
 		return true;
 	}
 
+	protected Team getTeamA() {
+		return teamA;
+	}
+
+	protected Team getTeamB() {
+		return teamB;
+	}
+
 }
