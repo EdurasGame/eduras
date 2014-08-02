@@ -30,6 +30,9 @@ public class PreviewPanel extends JPanel {
 	private CoordinateSystem coordinateSystem;
 	private final DataHolder data;
 
+	/**
+	 * Creates a new previewpanel.
+	 */
 	public PreviewPanel() {
 		data = DataHolder.getInstance();
 		Dimension size = new Dimension(150, 150);
