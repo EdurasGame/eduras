@@ -1,6 +1,7 @@
 package de.illonis.eduras.shapecreator;
 
 import java.awt.Color;
+import java.awt.Image;
 
 import de.illonis.eduras.math.Vector2df;
 import de.illonis.eduras.shapecreator.gui.DrawPanel;
@@ -18,6 +19,7 @@ public class DataHolder {
 	private RecordTableModel tableModel;
 	private DrawPanel drawPanel;
 	private EditablePolygon polygon;
+	private Image backgroundImage;
 
 	private final Settings settings;
 
@@ -30,6 +32,14 @@ public class DataHolder {
 		if (instance == null)
 			instance = new DataHolder();
 		return instance;
+	}
+	
+	public Image getBackgroundImage() {
+		return backgroundImage;
+	}
+	
+	public void setBackgroundImage(Image backgroundImage) {
+		this.backgroundImage = backgroundImage;
 	}
 
 	/**

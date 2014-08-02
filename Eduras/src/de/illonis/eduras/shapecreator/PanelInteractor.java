@@ -1,6 +1,7 @@
 package de.illonis.eduras.shapecreator;
 
 import java.awt.Cursor;
+import java.awt.Image;
 import java.awt.Point;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -284,5 +285,10 @@ public class PanelInteractor extends MouseAdapter implements PanelModifier {
 	@Override
 	public EditablePolygon getShape() {
 		return data.getPolygon();
+	}
+	
+	@Override
+	public void setBackgroundImage(Image image) {
+		data.setBackgroundImage(image);
 	}
 }

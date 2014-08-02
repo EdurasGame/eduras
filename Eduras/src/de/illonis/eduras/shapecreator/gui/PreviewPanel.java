@@ -56,7 +56,12 @@ public class PreviewPanel extends JPanel {
 	private void drawPreview(Graphics2D g2d) {
 		Color shapeLineColor = data.getSettings().getShapeLineColor();
 		Color shapeLastLineColor = data.getSettings().getShapeLastLineColor();
-
+		if (data.getBackgroundImage() != null)
+			g2d.drawImage(
+					data.getBackgroundImage(),
+					(getWidth() - data.getBackgroundImage().getWidth(null)) / 2,
+					(getHeight() - data.getBackgroundImage().getHeight(null)) / 2,
+					null);
 		Collection<Vector2df> vertices = data.getPolygon().getVector2dfs();
 		boolean first = true;
 		Vector2df firstVector2df = null;
