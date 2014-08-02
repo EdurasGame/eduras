@@ -7,6 +7,8 @@ import de.illonis.eduras.ObjectFactory.ObjectType;
 import de.illonis.eduras.gameobjects.TimingSource;
 import de.illonis.eduras.items.ItemUseInformation;
 import de.illonis.eduras.settings.S;
+import de.illonis.eduras.shapes.ShapeFactory;
+import de.illonis.eduras.shapes.ShapeFactory.ShapeType;
 
 /**
  * The spawn weapon is a short-range weapon with small cooldown and damage.
@@ -29,9 +31,7 @@ public class SwordWeapon extends Weapon {
 	public SwordWeapon(GameInformation gi, TimingSource timingSource, int id) {
 		super(ObjectType.ITEM_WEAPON_SWORD, gi, timingSource, id);
 		setName("Sword");
-		setShape(new Circle(S.Server.go_swordweapon_shape_radius,
-				S.Server.go_swordweapon_shape_radius,
-				S.Server.go_swordweapon_shape_radius));
+		setShape(ShapeFactory.createShape(ShapeType.SWORD));
 		defaultCooldown = S.Server.go_swordweapon_cooldown;
 	}
 
