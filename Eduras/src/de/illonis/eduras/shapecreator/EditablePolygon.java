@@ -39,10 +39,8 @@ public class EditablePolygon {
 	 *            the vertice to be removed.
 	 */
 	public void removeVector2df(Vector2df v) {
-		if (vertices.size() > 1) {
-			vertices.remove(v);
-			DataHolder.getInstance().notifyVector2dfsChanged();
-		}
+		vertices.remove(v);
+		DataHolder.getInstance().notifyVector2dfsChanged();
 	}
 
 	/**
