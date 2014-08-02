@@ -191,7 +191,11 @@ public class EditablePolygon {
 	 *            the vertice before that given vertice should be added.
 	 */
 	public void addVerticeBefore(Vector2df vert, Vector2df nearest) {
-		vertices.add(vertices.indexOf(nearest), vert);
+		int index = vertices.indexOf(nearest);
+		if (index < 0) {
+			index = 0;
+		}
+		vertices.add(index, vert);
 		DataHolder.getInstance().notifyVector2dfsChanged();
 
 	}
