@@ -64,8 +64,7 @@ public class CreateUnitAction extends RTSAction {
 			return;
 		}
 
-		info.getEventTriggerer().createObjectAt(typeOfUnitToSpawn,
-				baseToSpawnAt.getPositionVector(),
-				getExecutingPlayer().getPlayerId());
+		info.getEventTriggerer().createObjectIn(typeOfUnitToSpawn,
+				baseToSpawnAt.getShape(), getExecutingPlayer().getPlayerId());
 	}
 }
