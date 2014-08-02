@@ -175,7 +175,7 @@ public class GameRenderer implements TooltipHandler {
 		if (scale != newScale) {
 			viewPort.setSize(width, height);
 			gui.onGuiSizeChanged(width, height);
-			//camera.setSize(width, height); // maybe not?
+			// camera.setSize(width, height); // maybe not?
 		}
 
 		scale = newScale;
@@ -322,23 +322,23 @@ public class GameRenderer implements TooltipHandler {
 		try {
 			Image image = ImageCache.getObjectImage(d.getType());
 			g.drawImage(image, x, y);
-		} catch (CacheException e) {
-			if (d.getShape() != null) {
-				g.setColor(getColorForObject(d));
-				g.fill(d.getShape());
-				if (S.Client.debug_render_boundingboxes) {
-					float circleRadius = d.getShape().getBoundingCircleRadius();
-					Circle c = new Circle(d.getShape().getCenterX(), d
-							.getShape().getCenterY(), circleRadius);
-					g.setColor(Color.yellow);
-					g.draw(c);
-					g.setColor(Color.white);
-					g.fillOval(x, y, 2, 2);
-					g.setColor(Color.green);
-					g.fillOval(d.getShape().getCenterX(), d.getShape()
-							.getCenterY(), 2, 2);
-				}
+			if (S.Client.debug_render_shapes) {
+				renderShape(d, g);
 			}
+		} catch (CacheException e) {
+			renderShape(d, g);
+		}
+		if (S.Client.debug_render_boundingboxes) {
+			float circleRadius = d.getShape().getBoundingCircleRadius();
+			Circle c = new Circle(d.getShape().getCenterX(), d.getShape()
+					.getCenterY(), circleRadius);
+			g.setColor(Color.yellow);
+			g.draw(c);
+			g.setColor(Color.white);
+			g.fillOval(x, y, 2, 2);
+			g.setColor(Color.green);
+			g.fillOval(d.getShape().getCenterX(), d.getShape().getCenterY(), 2,
+					2);
 		}
 
 		if (d.isUnit()) {
@@ -350,6 +350,13 @@ public class GameRenderer implements TooltipHandler {
 		 * dbg.drawString(d.getId() + "", d.getDrawX() - camera.x, d.getDrawY()
 		 * - camera.y - 15);
 		 */
+	}
+
+	private void renderShape(GameObject d, Graphics g) {
+		if (d.getShape() != null) {
+			g.setColor(getColorForObject(d));
+			g.fill(d.getShape());
+		}
 	}
 
 	private boolean isSelected(GameObject object) {
