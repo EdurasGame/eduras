@@ -69,6 +69,7 @@ public final class CacheInfo {
 		shapes.put(ShapeType.STAR, "mine.esh");
 		shapes.put(ShapeType.WEAPON_SNIPER, "sniper.esh");
 		shapes.put(ShapeType.WEAPON_1, "weapon1.esh");
+		shapes.put(ShapeType.SWORD, "sword.esh");
 
 		objectImages = new HashMap<ObjectType, String>();
 		inventoryIcons = new HashMap<ObjectType, String>();
@@ -94,6 +95,7 @@ public final class CacheInfo {
 				"gameobjects/sniper.png");
 		objectImages.put(ObjectType.ITEM_WEAPON_SIMPLE,
 				"gameobjects/icon-weapon1.png");
+		objectImages.put(ObjectType.ITEM_WEAPON_SWORD, "gameobjects/sword.png");
 		guiImages = new HashMap<ImageKey, String>();
 		guiImages.put(ImageKey.STATISTICS_BG, "gui/artwork/statwindow.png");
 		guiImages.put(ImageKey.MINIMAP_DUMMY, "gui/artwork/minimap.png");
