@@ -9,7 +9,6 @@ import de.illonis.eduras.gameclient.GuiInternalEventListener;
 import de.illonis.eduras.gameclient.datacache.CacheInfo.ImageKey;
 import de.illonis.eduras.gameclient.gui.HudNotifier;
 import de.illonis.eduras.gameclient.gui.TimedTasksHolderGUI;
-import de.illonis.eduras.gameclient.gui.game.GamePanelLogic.ClickState;
 import de.illonis.eduras.gameclient.gui.game.GameRenderer;
 import de.illonis.eduras.gameclient.gui.game.GuiClickReactor;
 import de.illonis.eduras.gameclient.gui.game.GuiResizeListener;
@@ -124,20 +123,6 @@ public class UserInterface implements GuiResizeListener {
 	private void initActionBar() {
 
 		ActionBarPage mainPage = new ActionBarPage(PageNumber.MAIN);
-		ActionButton abortButton = new ActionButton(ImageKey.ACTION_ABORT,
-				guiReactor) {
-
-			@Override
-			public void actionPerformed() {
-				guiReactor.setClickState(ClickState.DEFAULT);
-				actionBar.setPage(PageNumber.MAIN);
-			}
-
-			@Override
-			public String getLabel() {
-				return "abort";
-			}
-		};
 		SpawnObserverButton spawnButton = new SpawnObserverButton(guiReactor);
 		mainPage.addButton(spawnButton);
 		HealButton healButton = new HealButton(guiReactor);
@@ -162,7 +147,6 @@ public class UserInterface implements GuiResizeListener {
 
 		ActionBarPage resurrectPage = new ResurrectPage(actionBar, guiReactor);
 		hudNotifier.addListener(resurrectPage);
-		resurrectPage.addButton(abortButton);
 
 		ActionButton spawnItemButton = new ActionButton(
 				ImageKey.ACTION_SPAWN_ITEMS, guiReactor) {
@@ -177,7 +161,7 @@ public class UserInterface implements GuiResizeListener {
 			}
 		};
 		mainPage.addButton(spawnItemButton);
-		new ItemPage(guiReactor).addButton(abortButton);
+		new ItemPage(guiReactor, actionBar);
 
 		actionBar.setPage(PageNumber.MAIN);
 	}

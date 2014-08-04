@@ -72,6 +72,13 @@ public class ActionBarPage extends GameEventAdapter {
 	}
 
 	/**
+	 * Removes all buttons from this page.
+	 */
+	public void removeAllButtons() {
+		buttons.clear();
+	}
+
+	/**
 	 * @return a list of all contained buttons.
 	 */
 	public final LinkedList<ActionButton> getButtons() {

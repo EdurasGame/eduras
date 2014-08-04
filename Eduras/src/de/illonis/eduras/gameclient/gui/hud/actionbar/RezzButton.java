@@ -1,8 +1,6 @@
 package de.illonis.eduras.gameclient.gui.hud.actionbar;
 
 import de.illonis.eduras.Player;
-import de.illonis.eduras.events.DeathEvent;
-import de.illonis.eduras.events.RespawnEvent;
 import de.illonis.eduras.gameclient.GamePanelReactor;
 import de.illonis.eduras.gameclient.datacache.CacheInfo.ImageKey;
 import de.illonis.eduras.gameclient.gui.game.GamePanelLogic.ClickState;
@@ -30,6 +28,10 @@ public class RezzButton extends ActionButton {
 	public RezzButton(Player player, GamePanelReactor reactor) {
 		super(ImageKey.ACTION_RESURRECT_PLAYER, reactor);
 		this.target = player;
+		if (target.getPlayerMainFigure() != null
+				&& !target.getPlayerMainFigure().isDead()) {
+			setEnabled(false);
+		}
 	}
 
 	@Override
@@ -37,18 +39,6 @@ public class RezzButton extends ActionButton {
 		reactor.setClickState(ClickState.SELECT_BASE_FOR_REZZ);
 		EdurasInitializer.getInstance().getInformationProvider()
 				.getClientData().setCurrentResurrectTarget(target);
-	}
-
-	@Override
-	public void onDeath(DeathEvent event) {
-		if (event.getKilled() == target.getPlayerId())
-			setEnabled(true);
-	}
-
-	@Override
-	public void onRespawn(RespawnEvent event) {
-		if (event.getOwner() == target.getPlayerId())
-			setEnabled(false);
 	}
 
 	/**
