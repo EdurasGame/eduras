@@ -711,47 +711,12 @@ public final class S {
 			String settingName = readSettings.get(i)[0];
 			String settingValue = readSettings.get(i)[1];
 
-			Field setting;
 			try {
-				if (type == SettingType.CLIENT) {
-					setting = S.Client.class.getField(settingName);
-				} else {
-					setting = S.Server.class.getField(settingName);
-				}
+				setSetting(type, settingName, settingValue);
 			} catch (NoSuchFieldException | SecurityException e) {
 				L.severe("Couldn't find a value for setting '" + settingName
 						+ "'.");
 				continue;
-			}
-
-			try {
-				L.info("Setting " + setting.getName() + "="
-						+ setting.get(null).toString());
-			} catch (IllegalArgumentException | IllegalAccessException e1) {
-				L.log(Level.WARNING, "Cannot read field", e1);
-			}
-
-			try {
-
-				if (setting.getType().equals(boolean.class)) {
-					setting.setBoolean(null, Boolean.parseBoolean(settingValue));
-				}
-				if (setting.getType().equals(String.class)) {
-					setting.set(null, settingValue);
-				}
-				if (setting.getType().equals(int.class)) {
-					setting.setInt(null, Integer.parseInt(settingValue));
-				}
-				if (setting.getType().equals(long.class)) {
-					setting.setLong(null, Long.parseLong(settingValue));
-				}
-				if (setting.getType().equals(double.class)) {
-					setting.setDouble(null, Double.parseDouble(settingValue));
-				}
-				if (setting.getType().equals(float.class)) {
-					setting.setFloat(null, Float.parseFloat(settingValue));
-				}
-
 			} catch (IllegalAccessException e) {
 				L.log(Level.SEVERE, "Error while trying to set setting "
 						+ settingName + " to value " + settingValue, e);
@@ -763,8 +728,85 @@ public final class S {
 						e);
 				continue;
 			}
+
 		}
 
+	}
+
+	private static void setSetting(SettingType type, String settingName,
+			String settingValue) throws NoSuchFieldException,
+			SecurityException, IllegalArgumentException, IllegalAccessException {
+		Field setting;
+		if (type == SettingType.CLIENT) {
+			setting = S.Client.class.getField(settingName);
+		} else {
+			setting = S.Server.class.getField(settingName);
+		}
+
+		L.info("Setting " + setting.getName() + "="
+				+ setting.get(null).toString());
+
+		if (setting.getType().equals(boolean.class)) {
+			setting.setBoolean(null, Boolean.parseBoolean(settingValue));
+		}
+		if (setting.getType().equals(String.class)) {
+			setting.set(null, settingValue);
+		}
+		if (setting.getType().equals(int.class)) {
+			setting.setInt(null, Integer.parseInt(settingValue));
+		}
+		if (setting.getType().equals(long.class)) {
+			setting.setLong(null, Long.parseLong(settingValue));
+		}
+		if (setting.getType().equals(double.class)) {
+			setting.setDouble(null, Double.parseDouble(settingValue));
+		}
+		if (setting.getType().equals(float.class)) {
+			setting.setFloat(null, Float.parseFloat(settingValue));
+		}
+
+	}
+
+	/**
+	 * Sets a single client setting value.
+	 * 
+	 * @param settingName
+	 *            the setting property's name
+	 * @param settingValue
+	 *            the value to set it to
+	 * @throws NoSuchFieldException
+	 *             thrown if there is no such property
+	 * @throws SecurityException
+	 * @throws IllegalArgumentException
+	 *             thrown if given value's type doesn't apply the specified
+	 *             field.
+	 * @throws IllegalAccessException
+	 */
+	public static void setClientSetting(String settingName, String settingValue)
+			throws NoSuchFieldException, SecurityException,
+			IllegalArgumentException, IllegalAccessException {
+		setSetting(SettingType.CLIENT, settingName, settingValue);
+	}
+
+	/**
+	 * Sets a single server setting value.
+	 * 
+	 * @param settingName
+	 *            the setting property's name
+	 * @param settingValue
+	 *            the value to set it to
+	 * @throws NoSuchFieldException
+	 *             thrown if there is no such property
+	 * @throws SecurityException
+	 * @throws IllegalArgumentException
+	 *             thrown if given value's type doesn't apply the specified
+	 *             field.
+	 * @throws IllegalAccessException
+	 */
+	public static void setServerSetting(String settingName, String settingValue)
+			throws NoSuchFieldException, SecurityException,
+			IllegalArgumentException, IllegalAccessException {
+		setSetting(SettingType.SERVER, settingName, settingValue);
 	}
 
 	private static LinkedList<String[]> parseFileToSettings(File file) {
