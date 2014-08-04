@@ -15,9 +15,9 @@ import de.illonis.eduras.exceptions.ObjectNotFoundException;
 import de.illonis.eduras.exceptions.PlayerHasNoTeamException;
 import de.illonis.eduras.exceptions.WrongObjectTypeException;
 import de.illonis.eduras.gameclient.userprefs.KeyBindings.KeyBinding;
-import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.gameobjects.Base;
 import de.illonis.eduras.gameobjects.Base.BaseType;
+import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.gameobjects.TimedEventHandler;
 import de.illonis.eduras.logic.EventTriggerer;
 import de.illonis.eduras.maps.EduraMap;
@@ -40,7 +40,6 @@ public class Edura extends TeamDeathmatch {
 	private HashMap<Base, Vertex> baseToVertex;
 	private HashMap<Team, Base> mainBaseOfTeam;
 	private HashMap<Base, ResourceGenerator> baseToResourceGenerator;
-
 	private final static Logger L = EduLog.getLoggerFor(Edura.class.getName());
 
 	/**
@@ -246,8 +245,26 @@ public class Edura extends TeamDeathmatch {
 		}
 
 		if (allPlayersDead) {
-			gameInfo.getEventTriggerer().onMatchEnd();
+			Team playersTeam;
+			try {
+				playersTeam = player.getTeam();
+			} catch (PlayerHasNoTeamException e) {
+				L.log(Level.SEVERE,
+						"When checking if all players are dead, a player doesn't have a team!",
+						e);
+				return;
+			}
+			if (playersTeam.equals(getTeamA())) {
+				endRound(getTeamB());
+			} else {
+				endRound(getTeamA());
+			}
+
 		}
+	}
+
+	private void endRound(Team winnerTeam) {
+		gameInfo.getEventTriggerer().onMatchEnd(winnerTeam.getTeamId());
 	}
 
 	@Override
@@ -263,7 +280,7 @@ public class Edura extends TeamDeathmatch {
 		}
 
 		if (matchEnd) {
-			gameInfo.getEventTriggerer().onMatchEnd();
+			endRound(occupyingTeam);
 		} else {
 			baseToVertex.get(base).setColor(occupyingTeam.getTeamId());
 		}
@@ -271,8 +288,7 @@ public class Edura extends TeamDeathmatch {
 		startGeneratingResourcesInBaseForTeam(base, occupyingTeam);
 	}
 
-	private void startGeneratingResourcesInBaseForTeam(Base base,
-			Team team) {
+	private void startGeneratingResourcesInBaseForTeam(Base base, Team team) {
 		// generate resources
 		if (baseToResourceGenerator.containsKey(base)) {
 			L.severe("Base got occupied although it's already generating resources.");

@@ -6,6 +6,7 @@ import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Image;
 import java.awt.RenderingHints;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
@@ -61,7 +62,18 @@ public class DrawPanel extends JPanel {
 				RenderingHints.VALUE_RENDER_QUALITY);
 		g2d.setColor(data.getSettings().getBackgroundColor());
 		g2d.fillRect(0, 0, getWidth(), getHeight());
-
+		if (data.getBackgroundImage() != null) {
+			int iw = (int) (data.getBackgroundImage().getWidth(null) * coordinateSystem
+					.getZoom());
+			int ih = (int) (data.getBackgroundImage().getHeight(null) * coordinateSystem
+					.getZoom());
+			Image image = data.getBackgroundImage();
+			if (coordinateSystem.getZoom() != 1f) {
+				image = image.getScaledInstance(iw, ih, Image.SCALE_FAST);
+			}
+			g2d.drawImage(image, (getWidth() - iw) / 2, (getHeight() - ih) / 2,
+					null);
+		}
 		coordinateSystem.draw(g2d);
 		paintVector2dfs(g2d);
 	}

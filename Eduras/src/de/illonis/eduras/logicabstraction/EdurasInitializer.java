@@ -7,6 +7,7 @@ import java.util.Collection;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.newdawn.slick.geom.Shape;
 import org.newdawn.slick.geom.Vector2f;
 
 import de.illonis.edulog.EduLog;
@@ -222,7 +223,7 @@ public class EdurasInitializer {
 			}
 
 			@Override
-			public void onMatchEnd() {
+			public void onMatchEnd(int winner) {
 			}
 
 			@Override
@@ -404,6 +405,11 @@ public class EdurasInitializer {
 
 			@Override
 			public void notifyWeaponAmmoEmpty(int clientId, int slotNum) {
+			}
+
+			@Override
+			public int createObjectIn(ObjectType object, Shape shape, int owner) {
+				return -1;
 			}
 
 		});

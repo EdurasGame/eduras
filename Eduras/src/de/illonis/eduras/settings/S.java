@@ -649,6 +649,8 @@ public final class S {
 		 * fullscreen at current resolution.
 		 */
 		public static boolean windowed = false;
+
+		public static boolean debug_render_shapes = false;
 	}
 
 	/**

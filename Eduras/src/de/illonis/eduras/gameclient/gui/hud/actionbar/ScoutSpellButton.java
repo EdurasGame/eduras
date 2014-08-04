@@ -32,6 +32,11 @@ public class ScoutSpellButton extends ActionButton {
 
 	@Override
 	public String getLabel() {
-		return "Vision spell [Costs: " + S.Server.spell_scout_costs + "]";
+		return "Vision spell [Costs: " + getCosts() + "]";
+	}
+
+	@Override
+	public int getCosts() {
+		return S.Server.spell_scout_costs;
 	}
 }

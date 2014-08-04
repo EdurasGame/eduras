@@ -215,7 +215,6 @@ public class BuildModeMouseAdapter extends ScrollModeMouseAdapter {
 			break;
 		case SELECT_POSITION_FOR_OBSERVERUNIT:
 			if (button == Input.MOUSE_LEFT_BUTTON) {
-				System.out.println("release");
 				InformationProvider infoPro = EdurasInitializer.getInstance()
 						.getInformationProvider();
 				Player player;

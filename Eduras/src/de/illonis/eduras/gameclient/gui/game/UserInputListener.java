@@ -88,4 +88,30 @@ public interface UserInputListener {
 	 */
 	void showTip(String message);
 
+	/**
+	 * Shows a big prominent message.
+	 * 
+	 * @param message
+	 *            the message.
+	 */
+	void showBigMessage(String message);
+
+	/**
+	 * Selectes given action button.
+	 * 
+	 * @param i
+	 *            the button index.
+	 */
+	void selectActionButton(int i);
+
+	/**
+	 * Returns to main action bar in buildmode.
+	 */
+	void pageUp();
+
+	/**
+	 * Ask the user to quit the game.
+	 */
+	void askGameQuit();
+
 }

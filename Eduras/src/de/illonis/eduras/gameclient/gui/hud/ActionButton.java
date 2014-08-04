@@ -53,6 +53,10 @@ public abstract class ActionButton extends GameEventAdapter {
 	protected final void clearSelection() {
 		clearSelection = true;
 	}
+	
+	protected boolean isBackButton() {
+		return false;
+	}
 
 	final boolean isAutoCancel() {
 		return autoCancel;
@@ -81,6 +85,11 @@ public abstract class ActionButton extends GameEventAdapter {
 	 * @return the display text.
 	 */
 	public abstract String getLabel();
+	
+	/**
+	 * @return the costs.
+	 */
+	public abstract int getCosts();
 
 	/**
 	 * @return true if this button is enabled.

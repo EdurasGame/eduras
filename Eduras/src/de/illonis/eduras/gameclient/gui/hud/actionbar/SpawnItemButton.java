@@ -1,8 +1,5 @@
 package de.illonis.eduras.gameclient.gui.hud.actionbar;
 
-import java.util.logging.Logger;
-
-import de.illonis.edulog.EduLog;
 import de.illonis.eduras.ObjectFactory.ObjectType;
 import de.illonis.eduras.gameclient.GamePanelReactor;
 import de.illonis.eduras.gameclient.datacache.CacheInfo.ImageKey;
@@ -16,9 +13,6 @@ import de.illonis.eduras.logicabstraction.EdurasInitializer;
  * 
  */
 public class SpawnItemButton extends ActionButton {
-
-	private final static Logger L = EduLog.getLoggerFor(SpawnItemButton.class
-			.getName());
 
 	private ObjectType typeOfItemToSpawn;
 
@@ -46,6 +40,11 @@ public class SpawnItemButton extends ActionButton {
 	@Override
 	public String getLabel() {
 		return "Spawn item " + typeOfItemToSpawn.name() + " [Costs: "
-				+ typeOfItemToSpawn.getCosts() + "]";
+				+ getCosts() + "]";
+	}
+
+	@Override
+	public int getCosts() {
+		return typeOfItemToSpawn.getCosts();
 	}
 }

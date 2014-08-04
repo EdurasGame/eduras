@@ -57,7 +57,7 @@ public abstract class RTSAction {
 		}
 
 		if (executingTeam.getResource() >= costs) {
-
+			// TODO: If executeAction failed, refund costs.
 			EventTriggerer eventTriggerer = info.getEventTriggerer();
 			eventTriggerer.changeResourcesOfTeamByAmount(executingTeam, -costs);
 			executeAction(info);

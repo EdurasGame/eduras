@@ -1,10 +1,11 @@
 package de.illonis.eduras.gameclient.gui.hud.nifty;
 
 import org.newdawn.slick.GameContainer;
+import org.newdawn.slick.Graphics;
 import org.newdawn.slick.state.StateBasedGame;
 
 import de.lessvoid.nifty.Nifty;
-import de.lessvoid.nifty.slick2d.NiftyBasicGameState;
+import de.lessvoid.nifty.slick2d.NiftyOverlayBasicGameState;
 
 /**
  * Login game state.
@@ -12,13 +13,12 @@ import de.lessvoid.nifty.slick2d.NiftyBasicGameState;
  * @author illonis
  * 
  */
-public class SettingsState extends NiftyBasicGameState {
+public class SettingsState extends NiftyOverlayBasicGameState {
 
 	private final GameControllerBridge game;
 	private SettingsController controller;
 
 	SettingsState(GameControllerBridge edurasGame) {
-		super("settings");
 		this.game = edurasGame;
 	}
 
@@ -44,6 +44,22 @@ public class SettingsState extends NiftyBasicGameState {
 	@Override
 	public void keyPressed(int key, char c) {
 		controller.keyPressed(key);
+	}
+
+	@Override
+	protected void initGameAndGUI(GameContainer container,
+			StateBasedGame stateGame) {
+		initNifty(container, stateGame);
+	}
+
+	@Override
+	protected void renderGame(GameContainer container,
+			StateBasedGame stateGame, Graphics g) {
+	}
+
+	@Override
+	protected void updateGame(GameContainer container,
+			StateBasedGame stateGame, int delta) {
 	}
 
 }

@@ -5,9 +5,12 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedList;
+import java.util.List;
+import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.newdawn.slick.geom.Shape;
 import org.newdawn.slick.geom.Vector2f;
 
 import de.eduras.eventingserver.Event;
@@ -418,9 +421,8 @@ public class ServerEventTriggerer implements EventTriggerer {
 	}
 
 	@Override
-	public void onMatchEnd() {
-		MatchEndEvent matchEndEvent = new MatchEndEvent(gameInfo
-				.getGameSettings().getStats().findPlayerWithMostFrags());
+	public void onMatchEnd(int winner) {
+		MatchEndEvent matchEndEvent = new MatchEndEvent(winner);
 
 		sendEvents(matchEndEvent);
 
@@ -951,5 +953,59 @@ public class ServerEventTriggerer implements EventTriggerer {
 		ItemUseFailedEvent event = new ItemUseFailedEvent(clientId, slotNum,
 				Reason.AMMO_EMPTY);
 		sendEventToClient(event, clientId);
+	}
+
+	@Override
+	public int createObjectIn(ObjectType object, Shape shape, int owner) {
+		int id = createObjectAt(object,
+				new Vector2f(shape.getX(), shape.getY()), owner);
+
+		GameObject o = gameInfo.findObjectById(id);
+		setVisibility(id, Visibility.INVISIBLE);
+		List<GameObject> gameobjects = gameInfo.findObjectsInDistance(
+				new Vector2f(shape.getCenterX(), shape.getCenterY()),
+				shape.getBoundingCircleRadius() * 2);
+		List<GameObject> remove = new LinkedList<GameObject>();
+
+		for (int i = 0; i < gameobjects.size(); i++) {
+			GameObject current = gameobjects.get(i);
+			if (!GameObject.canCollideWithEachOther(current, o)) {
+				remove.add(current);
+			}
+		}
+		for (int i = 0; i < remove.size(); i++) {
+			gameobjects.remove(remove.get(i));
+		}
+		Random r = new Random();
+		int maxTries = 10000;
+		do {
+			float x = r.nextFloat() * shape.getWidth() + shape.getMinX();
+			float y = r.nextFloat() * shape.getHeight() + shape.getMinY();
+			if (shape.contains(x, y)) {
+				o.setPosition(x, y);
+			}
+			maxTries--;
+		} while (maxTries >= 0
+				&& !getGameInfo()
+						.doesAnyOfOtherObjectsIntersect(o, gameobjects)
+						.isEmpty());
+		if (maxTries <= 0) {
+			ObjectFactoryEvent event = new ObjectFactoryEvent(
+					GameEventNumber.OBJECT_REMOVE, null, owner);
+			event.setId(id);
+			System.out.println("no point found");
+			logic.getObjectFactory().onObjectFactoryEventAppeared(event);
+			return -1;
+		}
+		setVisibility(id, Visibility.ALL);
+		MovementEvent setPos = new MovementEvent(GameEventNumber.SET_POS_TCP,
+				id);
+		setPos.setNewXPos(o.getXPosition());
+		setPos.setNewYPos(o.getYPosition());
+
+		System.out.println("spawn at " + o.getXPosition() + ", "
+				+ o.getYPosition());
+		sendEvents(setPos);
+		return id;
 	}
 }

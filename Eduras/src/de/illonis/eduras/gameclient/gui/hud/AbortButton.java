@@ -46,4 +46,14 @@ public class AbortButton extends ActionButton {
 	public String getLabel() {
 		return "abort";
 	}
+
+	@Override
+	protected boolean isBackButton() {
+		return true;
+	}
+
+	@Override
+	public int getCosts() {
+		return 0;
+	}
 }

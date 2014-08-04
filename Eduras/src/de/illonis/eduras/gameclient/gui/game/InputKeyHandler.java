@@ -136,7 +136,7 @@ public class InputKeyHandler {
 						client.onChatEnter();
 					else if (binding == KeyBinding.EXIT_CLIENT
 							&& !client.abortChat()) {
-						client.onGameQuit();
+						client.askGameQuit();
 					} else {
 						handler.keyPressed(binding);
 					}

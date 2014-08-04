@@ -33,7 +33,7 @@ public final class ShapeFactory {
 	 */
 	@SuppressWarnings("javadoc")
 	public enum ShapeType {
-		BIRD, HOUSE, SWORD, TRIANGLE, ROCKET, STAR;
+		BIRD, HOUSE, SWORD, TRIANGLE, ROCKET, STAR, WEAPON_SNIPER, WEAPON_1;
 	}
 
 	private static Vector2f[] getVerticesForShape(ShapeType shapeType) {

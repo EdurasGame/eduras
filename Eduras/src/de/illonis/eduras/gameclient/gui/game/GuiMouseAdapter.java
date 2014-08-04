@@ -35,6 +35,11 @@ public abstract class GuiMouseAdapter implements GuiClickReactor {
 	@Override
 	public void removeClickableGuiElement(ClickableGuiElementInterface elem) {
 	}
+	
+	@Override
+	public void exitRequested() {
+		panelLogic.onGameQuit();
+	}
 
 	public abstract void mouseClicked(int button, int x, int y, int clickCount);
 

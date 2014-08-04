@@ -90,9 +90,18 @@ public interface InfoInterface {
 	 *            id of object.
 	 * @return the game object.
 	 * 
-	 * @author illonis
 	 */
 	public GameObject findObjectById(int id);
+
+	/**
+	 * Returns the team with given id.
+	 * 
+	 * @param teamId
+	 *            id of team.
+	 * @return the team.
+	 * 
+	 */
+	public Team findTeamById(int teamId);
 
 	/**
 	 * Returns all objects of the given type.

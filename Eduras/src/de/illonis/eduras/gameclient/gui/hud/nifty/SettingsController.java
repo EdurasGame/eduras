@@ -144,7 +144,7 @@ public class SettingsController extends EdurasScreenController {
 		fillResolutionSelect(screen);
 		Label hintLabel = screen.findNiftyControl("hintLabel", Label.class);
 		hintLabel.setText("Select a keybinding and press a key to bind it.");
-		box = (ListBox<KeyBinding>) screen.findNiftyControl("keyBindingsList",
+		box = (ListBox<KeyBinding>) screen.findNiftyControl("#keyBindingsList",
 				ListBox.class);
 		chooseOnPressBox = screen.findNiftyControl("chooseOnPressBox",
 				CheckBox.class);

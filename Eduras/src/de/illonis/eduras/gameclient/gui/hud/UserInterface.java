@@ -45,6 +45,7 @@ public class UserInterface implements GuiResizeListener {
 	private boolean spectator;
 	private NotificationPanel notificationPanel;
 	private TipPanel tipPanel;
+	private BigPanel bigPanel;
 	private PingDisplay pingDisplay;
 	private final ChatCache cache;
 	private GameRenderer renderer;
@@ -52,6 +53,11 @@ public class UserInterface implements GuiResizeListener {
 	private HudNotifier hudNotifier;
 	private final GuiInternalEventListener guiReactor;
 	private MiniMap minimap;
+	private ExitPopup exitPopup;
+
+	public ActionBar getActionBar() {
+		return actionBar;
+	}
 
 	/**
 	 * Creates the user interface. The tooltip handler will be set manually
@@ -112,12 +118,15 @@ public class UserInterface implements GuiResizeListener {
 		pingDisplay = new PingDisplay(this);
 		notificationPanel = new NotificationPanel(this);
 		tipPanel = new TipPanel(this);
+		bigPanel = new BigPanel(this);
 		dragRect = new DragSelectionRectangle(this);
 		statWindow = new StatisticsWindow(this);
+		exitPopup = new ExitPopup(this);
 		new ChatDisplay(cache, this);
 		new BugReportButton(this);
 		actionBar = new ActionBar(this);
 		initActionBar();
+
 	}
 
 	private void initActionBar() {
@@ -141,6 +150,11 @@ public class UserInterface implements GuiResizeListener {
 			public String getLabel() {
 				return "resurrect";
 			}
+
+			@Override
+			public int getCosts() {
+				return 0;
+			}
 		};
 		mainPage.addButton(resurrectButton);
 		hudNotifier.addListener(resurrectButton);
@@ -158,6 +172,11 @@ public class UserInterface implements GuiResizeListener {
 			@Override
 			public String getLabel() {
 				return "spawn item";
+			}
+
+			@Override
+			public int getCosts() {
+				return 0;
 			}
 		};
 		mainPage.addButton(spawnItemButton);
@@ -309,6 +328,20 @@ public class UserInterface implements GuiResizeListener {
 	 */
 	public void showTip(String message) {
 		tipPanel.setMessage(message);
+	}
+
+	/**
+	 * Shows a big message.
+	 * 
+	 * @param message
+	 *            the message.
+	 */
+	public void showBigMessage(String message) {
+		bigPanel.setMessage(message);
+	}
+
+	public void showExitPopup() {
+		exitPopup.setVisible(true);
 	}
 
 	/**

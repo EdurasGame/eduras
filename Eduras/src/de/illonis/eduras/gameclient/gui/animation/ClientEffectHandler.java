@@ -7,13 +7,16 @@ import org.newdawn.slick.particles.ConfigurableEmitter;
 
 import de.illonis.edulog.EduLog;
 import de.illonis.eduras.ObjectFactory.ObjectType;
+import de.illonis.eduras.Team;
 import de.illonis.eduras.events.ItemUseFailedEvent;
-import de.illonis.eduras.events.ObjectFactoryEvent;
 import de.illonis.eduras.events.ItemUseFailedEvent.Reason;
+import de.illonis.eduras.events.MatchEndEvent;
+import de.illonis.eduras.events.ObjectFactoryEvent;
 import de.illonis.eduras.gameclient.GameEventAdapter;
 import de.illonis.eduras.gameclient.audio.SoundMachine;
 import de.illonis.eduras.gameclient.audio.SoundMachine.SoundType;
 import de.illonis.eduras.gameclient.gui.animation.EffectFactory.EffectNumber;
+import de.illonis.eduras.gamemodes.GameMode.GameModeNumber;
 import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.logicabstraction.EdurasInitializer;
 import de.illonis.eduras.logicabstraction.InformationProvider;
@@ -49,6 +52,7 @@ public class ClientEffectHandler extends GameEventAdapter {
 					o.getPositionVector());
 		}
 	}
+
 
 	@Override
 	public void onItemUseFailed(ItemUseFailedEvent itemFailedEvent) {

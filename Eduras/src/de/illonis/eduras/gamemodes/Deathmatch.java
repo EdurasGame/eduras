@@ -97,7 +97,9 @@ public class Deathmatch extends BasicGameMode {
 	@Override
 	public void onTimeUp() {
 		try {
-			gameInfo.getEventTriggerer().onMatchEnd();
+			gameInfo.getEventTriggerer().onMatchEnd(
+					gameInfo.getGameSettings().getStats()
+							.findPlayerWithMostFrags());
 		} catch (NullPointerException e) {
 			// FIXME: Client should never trigger this.
 		}

@@ -22,7 +22,7 @@ public final class CacheInfo {
 	 */
 	@SuppressWarnings("javadoc")
 	public enum ImageKey {
-		STATISTICS_BG, MINIMAP_DUMMY, RESOURCE_ICON, ACTION_HEAL, ACTION_RESURRECT, ACTION_RESURRECT_PLAYER, ACTION_ABORT, ACTION_SPAWN_OBSERVER, ACTION_SPELL_SCOUT, ACTION_SPAWN_ITEMS, ITEM_DUMMY, ITEM_SIMPLEWEAPON, ITEM_SNIPERWEAPON, ITEM_SPLASHWEAPON, ITEM_SWORDWEAPON, ITEM_ROCKETLAUNCHER, ITEM_MINELAUNCHER, ITEM_ASSAULTRIFLE;
+		STATISTICS_BG, MINIMAP_DUMMY, RESOURCE_ICON, RESOURCE_ICON_SMALL, ACTION_HEAL, ACTION_RESURRECT, ACTION_RESURRECT_PLAYER, ACTION_ABORT, ACTION_SPAWN_OBSERVER, ACTION_SPELL_SCOUT, ACTION_SPAWN_ITEMS, ITEM_DUMMY, ITEM_SIMPLEWEAPON, ITEM_SNIPERWEAPON, ITEM_SPLASHWEAPON, ITEM_SWORDWEAPON, ITEM_ROCKETLAUNCHER, ITEM_MINELAUNCHER, ITEM_ASSAULTRIFLE;
 
 		public static ImageKey typeToImageKey(ObjectType type) {
 			switch (type) {
@@ -62,6 +62,9 @@ public final class CacheInfo {
 		shapes.put(ShapeType.BIRD, "bird.esh");
 		shapes.put(ShapeType.ROCKET, "rocket.esh");
 		shapes.put(ShapeType.STAR, "mine.esh");
+		shapes.put(ShapeType.WEAPON_SNIPER, "sniper.esh");
+		shapes.put(ShapeType.WEAPON_1, "weapon1.esh");
+		shapes.put(ShapeType.SWORD, "sword.esh");
 
 		objectImages = new HashMap<ObjectType, String>();
 		inventoryIcons = new HashMap<ObjectType, String>();
@@ -85,10 +88,15 @@ public final class CacheInfo {
 		objectImages.put(ObjectType.BIGBLOCK, "gameobjects/bigblock.png");
 		objectImages.put(ObjectType.ITEM_WEAPON_SNIPER,
 				"gameobjects/sniper.png");
+		objectImages.put(ObjectType.ITEM_WEAPON_SIMPLE,
+				"gameobjects/icon-weapon1.png");
+		objectImages.put(ObjectType.ITEM_WEAPON_SWORD, "gameobjects/sword.png");
 		guiImages = new HashMap<ImageKey, String>();
 		guiImages.put(ImageKey.STATISTICS_BG, "gui/artwork/statwindow.png");
 		guiImages.put(ImageKey.MINIMAP_DUMMY, "gui/artwork/minimap.png");
 		guiImages.put(ImageKey.RESOURCE_ICON, "gui/artwork/resource.png");
+		guiImages.put(ImageKey.RESOURCE_ICON_SMALL,
+				"gui/artwork/resource_small.png");
 		guiImages.put(ImageKey.ACTION_HEAL, "gui/icons/icon-heal.png");
 		guiImages
 				.put(ImageKey.ACTION_RESURRECT, "gui/icons/icon-resurrect.png");

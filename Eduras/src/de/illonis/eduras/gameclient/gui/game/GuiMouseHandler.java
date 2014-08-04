@@ -120,15 +120,12 @@ public final class GuiMouseHandler extends GuiMouseAdapter implements
 
 	@Override
 	public void mouseClicked(int button, int x, int y, int clickCount) {
-		Vector2f p = new Vector2f(x, y);
-		L.fine("Click at " + x + ", " + y);
 		for (Iterator<ClickableGuiElementInterface> iterator = clickListeners
 				.iterator(); iterator.hasNext();) {
 			ClickableGuiElementInterface nextReactor = iterator.next();
 			if (nextReactor.isActive()
 					&& nextReactor.getBounds().contains(x, y))
-				if (nextReactor.onClick(p))
-					return;
+				return;
 		}
 
 		Player player;
@@ -190,6 +187,15 @@ public final class GuiMouseHandler extends GuiMouseAdapter implements
 
 	@Override
 	public void mouseDragged(int oldx, int oldy, int newx, int newy) {
+		getPanelLogic().getTooltipHandler().hideTooltip();
+		Vector2f p = new Vector2f(newx, newy);
+
+		for (TooltipTriggerer t : triggerers) {
+			if (t.isActive() && t.getTriggerArea().contains(newx, newy)) {
+				t.onMouseOver(p);
+				break;
+			}
+		}
 		for (Iterator<ClickableGuiElementInterface> iterator = clickListeners
 				.iterator(); iterator.hasNext();) {
 			ClickableGuiElementInterface nextReactor = iterator.next();
@@ -222,12 +228,14 @@ public final class GuiMouseHandler extends GuiMouseAdapter implements
 
 	@Override
 	public void mouseReleased(int button, int x, int y) {
+		Vector2f p = new Vector2f(x, y);
 		for (Iterator<ClickableGuiElementInterface> iterator = clickListeners
 				.iterator(); iterator.hasNext();) {
 			ClickableGuiElementInterface nextReactor = iterator.next();
 			if (nextReactor.isActive()
 					&& nextReactor.getBounds().contains(x, y))
-				return;
+				if (nextReactor.onClick(p))
+					return;
 		}
 		Player player;
 		try {
