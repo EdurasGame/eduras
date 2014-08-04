@@ -16,7 +16,6 @@ public abstract class ActionBarSubPage extends ActionBarPage {
 			GamePanelReactor reactor, ActionBar actionBar) {
 		super(id);
 		abortButton = new AbortButton(reactor, actionBar, superiorPage);
-		addButton(abortButton);
 	}
 
 	@Override
@@ -24,4 +23,14 @@ public abstract class ActionBarSubPage extends ActionBarPage {
 		super.removeAllButtons();
 		addButton(abortButton);
 	}
+
+	@Override
+	public void onShown() {
+		super.onShown();
+
+		// we want the action button to be at the end of the button list
+		removeButton(abortButton);
+		addButton(abortButton);
+	}
+
 }
