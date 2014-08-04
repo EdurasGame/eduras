@@ -12,7 +12,8 @@ public class SetSettingPropertyCommand extends ConsoleCommand {
 			.getLoggerFor(SetSettingPropertyCommand.class.getName());
 
 	public SetSettingPropertyCommand() {
-		super("set", "Sets a property to a ");
+		super("set",
+				"Sets a property to a specific value. Usage: set <property name> <value>");
 		setExactNumArgs(2);
 	}
 

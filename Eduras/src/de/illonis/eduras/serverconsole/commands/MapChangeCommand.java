@@ -24,6 +24,7 @@ public class MapChangeCommand extends ConsoleCommand {
 			ConsoleEventTriggerer triggerer) {
 		console.println("Chan");
 		if (triggerer.changeMap(args[1])) {
+			triggerer.restartRound();
 			console.printlnf("Changed map to %s", args[1]);
 		} else {
 			console.printlnf("%s is no valid map name.", args[1]);
