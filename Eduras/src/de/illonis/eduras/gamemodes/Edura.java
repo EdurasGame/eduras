@@ -24,6 +24,7 @@ import de.illonis.eduras.maps.EduraMap;
 import de.illonis.eduras.maps.NodeData;
 import de.illonis.eduras.math.Vector2df;
 import de.illonis.eduras.math.graphs.Vertex;
+import de.illonis.eduras.settings.S;
 import de.illonis.eduras.units.InteractMode;
 import de.illonis.eduras.units.PlayerMainFigure;
 import de.illonis.eduras.units.Unit;
@@ -87,6 +88,14 @@ public class Edura extends TeamDeathmatch {
 		}
 
 		loadNodes();
+		giveStartResources();
+	}
+
+	private void giveStartResources() {
+		gameInfo.getEventTriggerer().changeResourcesOfTeamByAmount(getTeamA(),
+				S.Server.gm_edura_startmoney);
+		gameInfo.getEventTriggerer().changeResourcesOfTeamByAmount(getTeamB(),
+				S.Server.gm_edura_startmoney);
 	}
 
 	private void loadNodes() {

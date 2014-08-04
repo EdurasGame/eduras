@@ -623,6 +623,12 @@ public final class S {
 		 */
 		public static long sv_roundtime = 300000;
 
+		/**
+		 * Determines the amount of resources that each team is given at the
+		 * beginning of an Edura! round.
+		 */
+		public static int gm_edura_startmoney = 100;
+
 	}
 
 	/**
