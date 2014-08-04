@@ -14,6 +14,7 @@ import de.illonis.eduras.events.SetGameObjectAttributeEvent;
 import de.illonis.eduras.events.SetIntegerGameObjectAttributeEvent;
 import de.illonis.eduras.events.SetInteractModeEvent;
 import de.illonis.eduras.events.SetItemSlotEvent;
+import de.illonis.eduras.events.SetMapEvent;
 import de.illonis.eduras.events.SetOwnerEvent;
 import de.illonis.eduras.events.SetTeamResourceEvent;
 import de.illonis.eduras.events.SetVisibilityEvent;
@@ -219,4 +220,11 @@ public interface GameEventListener {
 	 *            the event data.
 	 */
 	void onItemUseFailed(ItemUseFailedEvent itemFailedEvent);
+
+	/**
+	 * Called when the map changed.
+	 * 
+	 * @param setMapEvent
+	 */
+	void onMapChanged(SetMapEvent setMapEvent);
 }

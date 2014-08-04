@@ -364,6 +364,7 @@ public class ClientLogic implements GameLogicInterface {
 					gameInfo.setMap(Map.getMapByName(setMapEvent
 							.getNameOfNewMap()));
 					L.info("Set map to " + setMapEvent.getNameOfNewMap());
+					getListener().onMapChanged(setMapEvent);
 				} catch (NoSuchMapException e1) {
 					L.log(Level.SEVERE,
 							"Cannot find map " + setMapEvent.getNameOfNewMap(),

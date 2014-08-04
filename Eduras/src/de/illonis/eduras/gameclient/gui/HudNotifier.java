@@ -15,6 +15,7 @@ import de.illonis.eduras.events.SetGameObjectAttributeEvent;
 import de.illonis.eduras.events.SetIntegerGameObjectAttributeEvent;
 import de.illonis.eduras.events.SetInteractModeEvent;
 import de.illonis.eduras.events.SetItemSlotEvent;
+import de.illonis.eduras.events.SetMapEvent;
 import de.illonis.eduras.events.SetOwnerEvent;
 import de.illonis.eduras.events.SetTeamResourceEvent;
 import de.illonis.eduras.events.SetVisibilityEvent;
@@ -303,6 +304,16 @@ public class HudNotifier implements GameEventListener {
 		}
 		for (GameEventListener obj : otherObjects) {
 			obj.onItemUseFailed(itemFailedEvent);
+		}
+	}
+
+	@Override
+	public void onMapChanged(SetMapEvent setMapEvent) {
+		for (GameEventListener obj : uiObjects) {
+			obj.onMapChanged(setMapEvent);
+		}
+		for (GameEventListener obj : otherObjects) {
+			obj.onMapChanged(setMapEvent);
 		}
 	}
 }
