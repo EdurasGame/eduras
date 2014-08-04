@@ -55,7 +55,6 @@ public class ResurrectPage extends ActionBarSubPage {
 	public void onShown() {
 		super.onShown();
 
-		updateRezzButtons();
 	}
 
 	@Override
@@ -117,7 +116,7 @@ public class ResurrectPage extends ActionBarSubPage {
 	}
 
 	private void updateRezzButtons() {
-		// removeAllButtons();
+		removeAllButtons();
 
 		InformationProvider infoPro = EdurasInitializer.getInstance()
 				.getInformationProvider();
