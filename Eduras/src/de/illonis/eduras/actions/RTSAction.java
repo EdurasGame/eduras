@@ -48,7 +48,7 @@ public abstract class RTSAction {
 		Team executingTeam = executingPlayer.getTeam();
 
 		if (executingTeam.getResource() >= costs) {
-
+			// TODO: If executeAction failed, refund costs.
 			EventTriggerer eventTriggerer = info.getEventTriggerer();
 			eventTriggerer.changeResourcesOfTeamByAmount(executingTeam, -costs);
 			executeAction(info);

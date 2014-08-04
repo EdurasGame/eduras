@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import org.newdawn.slick.geom.Shape;
 import org.newdawn.slick.geom.Vector2f;
 
 import de.illonis.eduras.GameInformation;
@@ -93,6 +94,24 @@ public interface EventTriggerer {
 	 * @see #createDynamicPolygonObjectAt(ObjectType, Vector2f[], Vector2f, int)
 	 */
 	public int createObjectAt(ObjectType object, Vector2f position, int owner);
+
+	/**
+	 * Creates an object at random position within given shape.<br>
+	 * Guarantees that a created objects location (topleft) will be within given
+	 * shape and does not collide with any other existing game object. However
+	 * it is not guaranteed that the created object is completely within given
+	 * shape.
+	 * 
+	 * @param object
+	 *            type of object.
+	 * @param shape
+	 *            area where the new object will be placed in.
+	 * @param owner
+	 *            owner id of new object.
+	 * @return the id of the created object or -1 if not enough space to spawn
+	 *         that object.
+	 */
+	public int createObjectIn(ObjectType object, Shape shape, int owner);
 
 	/**
 	 * Creates an object at given position such that the center of the newly

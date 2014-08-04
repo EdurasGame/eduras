@@ -39,7 +39,7 @@ public class MenuPanel extends JMenuBar implements ActionListener {
 	private final MenuTriggerer triggerer;
 	private final TemplateSelector selector;
 	private final RotationSelector rotationSelector;
-	private final JFileChooser fileChooser;
+	private final JFileChooser fileChooser, imageChooser;
 	private final JFrame frame;
 
 	private JMenuItem openItem, saveItem, newEmptyItem, newTemplateItem,
@@ -48,7 +48,7 @@ public class MenuPanel extends JMenuBar implements ActionListener {
 			zoomFourItem, zoomFiveItem, zoomHalfItem, zoomCustomItem,
 			zoomIncreaseItem, zoomDecreaseItem, preferencesItem,
 			modeSelectItem, modeAddItem, modeDeleteItem, modeDragItem,
-			modeScaleItem, collisionCheckItem, validateItem;
+			modeScaleItem, collisionCheckItem, validateItem, blendImage;
 
 	/**
 	 * Creates a new menu panel.
@@ -68,6 +68,13 @@ public class MenuPanel extends JMenuBar implements ActionListener {
 				ShapeFiler.FILE_EXT);
 		fileChooser.setFileFilter(filter);
 		fileChooser.setAcceptAllFileFilterUsed(false);
+		imageChooser = new JFileChooser();
+		imageChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+		imageChooser.setMultiSelectionEnabled(false);
+		FileNameExtensionFilter imageFilter = new FileNameExtensionFilter(
+				"Image file (*.png)", "png");
+		imageChooser.setFileFilter(imageFilter);
+		imageChooser.setAcceptAllFileFilterUsed(false);
 		this.triggerer = triggerer;
 		selector = new TemplateSelector(frame);
 		rotationSelector = new RotationSelector(frame);
@@ -171,6 +178,8 @@ public class MenuPanel extends JMenuBar implements ActionListener {
 		testMenu.add(new JSeparator());
 		validateItem = addItemToMenu("Validate", KeyEvent.VK_V, 0, testMenu);
 		validateItem.setEnabled(false);
+		blendImage = addItemToMenu("Load background image", KeyEvent.VK_I, 0,
+				viewMenu);
 	}
 
 	private JMenuItem addItemToMenu(String label, JMenu menu) {
@@ -311,6 +320,24 @@ public class MenuPanel extends JMenuBar implements ActionListener {
 			System.out.println("validate");
 		else if (source == collisionCheckItem)
 			System.out.println("collision");
+		else if (source == blendImage) {
+			loadBackgroundImage();
+		}
+	}
+
+	private void loadBackgroundImage() {
+
+		int result = imageChooser.showDialog(frame, "load");
+		if (result == JFileChooser.APPROVE_OPTION) {
+			File file = imageChooser.getSelectedFile();
+			if (!file.getAbsolutePath().endsWith(".png"))
+				file = new File(file.getAbsolutePath() + ".png");
+			if (file.exists())
+				triggerer.loadBackgroundImage(file);
+			else
+				JOptionPane.showMessageDialog(frame,
+						"File not found: " + file.getAbsolutePath());
+		}
 	}
 
 	private void customZoom() {

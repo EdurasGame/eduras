@@ -210,7 +210,7 @@ public class GameInformation {
 	 *            the search radius.
 	 * @return a list of nearby objects.
 	 */
-	public LinkedList<GameObject> findObjectsInDistance(Vector2df point,
+	public LinkedList<GameObject> findObjectsInDistance(Vector2f point,
 			float radius) {
 		// TODO: improve (using position is rather incorrect due to object's
 		// dimensions)
@@ -539,6 +539,8 @@ public class GameInformation {
 		Collection<GameObject> intersectingGameObjects = new LinkedList<GameObject>();
 
 		for (GameObject o : otherObjects) {
+			if (o.equals(object))
+				continue;
 			if (Geometry.shapeCollides(o.getShape(), object.getShape()))
 				intersectingGameObjects.add(o);
 		}
