@@ -344,7 +344,7 @@ public class ServerEventTriggerer implements EventTriggerer {
 	@Override
 	public void init() {
 
-		changeMap(logic.getGame().getMap());
+		restartRound();
 
 	}
 
@@ -424,21 +424,20 @@ public class ServerEventTriggerer implements EventTriggerer {
 	@Override
 	public void onMatchEnd(int winner) {
 		MatchEndEvent matchEndEvent = new MatchEndEvent(winner);
-
 		sendEvents(matchEndEvent);
-
-		gameInfo.getGameSettings().getGameMode().onGameEnd();
 		restartRound();
 	}
 
 	@Override
 	public void restartRound() {
 
+		gameInfo.getGameSettings().getGameMode().onGameEnd();
 		for (Player player : gameInfo.getPlayers()) {
 			resetStats(player);
 		}
 		changeMap(gameInfo.getMap());
 		resetSettings();
+		gameInfo.getGameSettings().getGameMode().onGameStart();
 	}
 
 	@Override
@@ -485,7 +484,6 @@ public class ServerEventTriggerer implements EventTriggerer {
 			}
 		}
 
-		gameInfo.getGameSettings().getGameMode().onGameStart();
 	}
 
 	private void removeAllObjects() {
