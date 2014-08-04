@@ -581,4 +581,22 @@ public interface EventTriggerer {
 	 *            the item slot that he tried to use.
 	 */
 	void notifyWeaponAmmoEmpty(int clientId, int slotNum);
+
+	/**
+	 * Set a setting property to a certain value and notify the clients about
+	 * it.
+	 * 
+	 * @param settingName
+	 * @param settingValue
+	 * @throws IllegalAccessException
+	 * @throws IllegalArgumentException
+	 *             thrown if the value given doesn't apply to the property's
+	 *             type
+	 * @throws SecurityException
+	 * @throws NoSuchFieldException
+	 *             thrown if there is no such property
+	 */
+	void setSetting(String settingName, String settingValue)
+			throws NoSuchFieldException, SecurityException,
+			IllegalArgumentException, IllegalAccessException;
 }

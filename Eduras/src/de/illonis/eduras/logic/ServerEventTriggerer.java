@@ -55,6 +55,7 @@ import de.illonis.eduras.events.SetMapEvent;
 import de.illonis.eduras.events.SetOwnerEvent;
 import de.illonis.eduras.events.SetPolygonDataEvent;
 import de.illonis.eduras.events.SetRemainingTimeEvent;
+import de.illonis.eduras.events.SetSettingPropertyEvent;
 import de.illonis.eduras.events.SetSettingsEvent;
 import de.illonis.eduras.events.SetStatsEvent;
 import de.illonis.eduras.events.SetTeamResourceEvent;
@@ -1007,5 +1008,14 @@ public class ServerEventTriggerer implements EventTriggerer {
 				+ o.getYPosition());
 		sendEvents(setPos);
 		return id;
+	}
+
+	@Override
+	public void setSetting(String settingName, String settingValue)
+			throws NoSuchFieldException, SecurityException,
+			IllegalArgumentException, IllegalAccessException {
+		S.setServerSetting(settingName, settingValue);
+
+		sendEventToAll(new SetSettingPropertyEvent(settingName, settingValue));
 	}
 }

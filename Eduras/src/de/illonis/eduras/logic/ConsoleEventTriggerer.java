@@ -178,4 +178,24 @@ public class ConsoleEventTriggerer {
 		triggerer.loadSettings(settingsFile);
 		restartRound();
 	}
+
+	/**
+	 * Set a setting property to a certain value and notify the clients about
+	 * it.
+	 * 
+	 * @param propertyName
+	 * @param propertyValue
+	 * @throws IllegalAccessException
+	 * @throws IllegalArgumentException
+	 *             thrown if the value given doesn't apply to the property's
+	 *             type
+	 * @throws SecurityException
+	 * @throws NoSuchFieldException
+	 *             thrown if there is no such property
+	 */
+	public void setSetting(String propertyName, String propertyValue)
+			throws NoSuchFieldException, SecurityException,
+			IllegalArgumentException, IllegalAccessException {
+		triggerer.setSetting(propertyName, propertyValue);
+	}
 }

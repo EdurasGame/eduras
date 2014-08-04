@@ -32,6 +32,7 @@ import de.illonis.eduras.events.SetMapEvent;
 import de.illonis.eduras.events.SetOwnerEvent;
 import de.illonis.eduras.events.SetPolygonDataEvent;
 import de.illonis.eduras.events.SetRemainingTimeEvent;
+import de.illonis.eduras.events.SetSettingPropertyEvent;
 import de.illonis.eduras.events.SetSettingsEvent;
 import de.illonis.eduras.events.SetStatsEvent;
 import de.illonis.eduras.events.SetTeamResourceEvent;
@@ -441,6 +442,19 @@ public class ClientLogic implements GameLogicInterface {
 			case SET_SETTINGS: {
 				S.loadSettings(((SetSettingsEvent) event).getSettingsFile(),
 						SettingType.SERVER);
+				break;
+			}
+			case SET_SETTINGPROPERTY: {
+				try {
+					S.setServerSetting(
+							((SetSettingPropertyEvent) event).getSettingName(),
+							((SetSettingPropertyEvent) event).getSettingValue());
+				} catch (NoSuchFieldException | SecurityException
+						| IllegalArgumentException | IllegalAccessException e1) {
+					L.log(Level.WARNING,
+							"An exception occured when trying to set a setting property!",
+							e1);
+				}
 				break;
 			}
 			default:

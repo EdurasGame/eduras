@@ -49,6 +49,7 @@ import de.illonis.eduras.events.SetMapEvent;
 import de.illonis.eduras.events.SetOwnerEvent;
 import de.illonis.eduras.events.SetPolygonDataEvent;
 import de.illonis.eduras.events.SetRemainingTimeEvent;
+import de.illonis.eduras.events.SetSettingPropertyEvent;
 import de.illonis.eduras.events.SetSettingsEvent;
 import de.illonis.eduras.events.SetStatsEvent;
 import de.illonis.eduras.events.SetTeamResourceEvent;
@@ -408,6 +409,11 @@ public class EventParser implements EventHandler {
 				} catch (IOException e) {
 					L.log(Level.WARNING, "TODO: message", e);
 				}
+				break;
+			case SET_SETTINGPROPERTY:
+				logic.onGameEventAppeared(new SetSettingPropertyEvent(
+						(String) event.getArgument(0), (String) event
+								.getArgument(1)));
 				break;
 			default:
 				L.warning("Cannot handle event with event number "
