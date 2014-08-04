@@ -13,6 +13,7 @@ import org.newdawn.slick.geom.Vector2f;
 import de.illonis.edulog.EduLog;
 import de.illonis.eduras.ObjectFactory.ObjectType;
 import de.illonis.eduras.Player;
+import de.illonis.eduras.Team;
 import de.illonis.eduras.exceptions.InsufficientResourceException;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
 import de.illonis.eduras.exceptions.PlayerHasNoTeamException;
@@ -21,9 +22,9 @@ import de.illonis.eduras.gameclient.GuiInternalEventListener;
 import de.illonis.eduras.gameclient.audio.SoundMachine;
 import de.illonis.eduras.gameclient.audio.SoundMachine.SoundType;
 import de.illonis.eduras.gameclient.gui.game.GamePanelLogic.ClickState;
+import de.illonis.eduras.gameobjects.Base;
 import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.gameobjects.GameObject.Relation;
-import de.illonis.eduras.gameobjects.Base;
 import de.illonis.eduras.logicabstraction.EdurasInitializer;
 import de.illonis.eduras.logicabstraction.InformationProvider;
 import de.illonis.eduras.units.InteractMode;
@@ -235,12 +236,12 @@ public class BuildModeMouseAdapter extends ScrollModeMouseAdapter {
 					if (gameObject instanceof Base) {
 
 						try {
-							if (((Base) gameObject)
-									.getCurrentOwnerTeam().equals(
-											player.getTeam())) {
+							Team ownerTeamOfBase = ((Base) gameObject)
+									.getCurrentOwnerTeam();
+							if (ownerTeamOfBase != null
+									&& ownerTeamOfBase.equals(player.getTeam())) {
 								getListener().onUnitSpawned(
-										ObjectType.OBSERVER,
-										(Base) gameObject);
+										ObjectType.OBSERVER, (Base) gameObject);
 								actionDone();
 								getPanelLogic().setClickState(
 										ClickState.DEFAULT);
@@ -280,8 +281,7 @@ public class BuildModeMouseAdapter extends ScrollModeMouseAdapter {
 				for (GameObject gameObject : obs) {
 					if (gameObject instanceof Base) {
 						try {
-							if (((Base) gameObject)
-									.getCurrentOwnerTeam()
+							if (((Base) gameObject).getCurrentOwnerTeam()
 									.equals(getPanelLogic().getClientData()
 											.getCurrentResurrectTarget()
 											.getTeam())) {
