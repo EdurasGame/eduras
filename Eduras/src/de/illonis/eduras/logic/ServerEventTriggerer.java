@@ -397,10 +397,10 @@ public class ServerEventTriggerer implements EventTriggerer {
 			removeObject(player.getPlayerMainFigure().getId());
 		}
 
-		sendEventToAll(new RespawnEvent(player.getPlayerId()));
 		int playerMainFigureId = createObject(ObjectType.PLAYER,
 				player.getPlayerId());
 		gameInfo.getGameSettings().getGameMode().onPlayerSpawn(player);
+		sendEventToAll(new RespawnEvent(player.getPlayerId()));
 		return playerMainFigureId;
 	}
 
