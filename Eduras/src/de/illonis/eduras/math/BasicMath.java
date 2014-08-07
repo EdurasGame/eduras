@@ -178,6 +178,21 @@ public class BasicMath {
 	}
 
 	/**
+	 * Implements the REAL modulo a mod b.
+	 * 
+	 * @param a
+	 * @param b
+	 * @return a mod b
+	 */
+	public static int calcModulo(int a, int b) {
+		int r = (a % b);
+		if (r < 0) {
+			r += b;
+		}
+		return r;
+	}
+
+	/**
 	 * Tells whether b is in between a and c for a natural number n. We say a <
 	 * b < c if ((b - a) mod n) + ((c - b) mod n) <= (c - a) mod n. Unlike how %
 	 * is implemented in Java, for us -1 % 2 == 1 instead of -1 % 2 == -1.

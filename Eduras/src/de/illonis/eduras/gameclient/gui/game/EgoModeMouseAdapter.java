@@ -11,6 +11,7 @@ import de.illonis.eduras.gameclient.GuiInternalEventListener;
 import de.illonis.eduras.gameclient.gui.game.GamePanelLogic.ClickState;
 import de.illonis.eduras.inventory.Inventory;
 import de.illonis.eduras.logicabstraction.EdurasInitializer;
+import de.illonis.eduras.math.BasicMath;
 import de.illonis.eduras.math.Vector2df;
 import de.illonis.eduras.units.InteractMode;
 
@@ -51,8 +52,7 @@ public class EgoModeMouseAdapter extends GuiMouseAdapter {
 
 	private void egoModeClick(int button, int x, int y, int clickCount) {
 		ClickState currentClickState = getPanelLogic().getClickState();
-		int currentItemSelected = getPanelLogic().getClientData()
-				.getCurrentItemSelected();
+		int currentItemSelected = getCurrentSelectedItemIndex();
 
 		// which mouse button?
 		switch (button) {
@@ -159,6 +159,22 @@ public class EgoModeMouseAdapter extends GuiMouseAdapter {
 
 	@Override
 	public void mouseWheelMoved(int change) {
+		System.out.println("LOAL");
+		int currentSelectedItem = getCurrentSelectedItemIndex();
+		int itemToSelect;
+
+		if (currentSelectedItem == -1) {
+			itemToSelect = 0;
+		} else {
+			itemToSelect = BasicMath.calcModulo(currentSelectedItem + change,
+					Inventory.MAX_CAPACITY);
+		}
+
+		itemClicked(itemToSelect);
+	}
+
+	private int getCurrentSelectedItemIndex() {
+		return getPanelLogic().getClientData().getCurrentItemSelected();
 	}
 
 	@Override

@@ -261,6 +261,27 @@ public final class GuiMouseHandler extends GuiMouseAdapter implements
 
 	@Override
 	public void mouseWheelMoved(int change) {
+		Player player;
+		try {
+			player = infoPro.getPlayer();
+		} catch (ObjectNotFoundException e) {
+			L.log(Level.SEVERE, "Something terribly bad happened.", e);
+			return;
+		}
+
+		switch (player.getCurrentMode()) {
+		case MODE_EGO:
+			egoModeHandler.mouseWheelMoved(change);
+			break;
+		case MODE_STRATEGY:
+			buildModeHandler.mouseWheelMoved(change);
+			break;
+		case MODE_DEAD:
+			deadModeHandler.mouseWheelMoved(change);
+			break;
+		default:
+			break;
+		}
 	}
 
 	@Override
