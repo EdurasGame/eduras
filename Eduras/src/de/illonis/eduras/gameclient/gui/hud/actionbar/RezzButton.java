@@ -28,8 +28,7 @@ public class RezzButton extends ActionButton {
 	public RezzButton(Player player, GamePanelReactor reactor) {
 		super(ImageKey.ACTION_RESURRECT_PLAYER, reactor);
 		this.target = player;
-		if (target.getPlayerMainFigure() != null
-				&& !target.getPlayerMainFigure().isDead()) {
+		if (!target.isDead()) {
 			setEnabled(false);
 		}
 	}

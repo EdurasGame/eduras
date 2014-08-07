@@ -147,4 +147,14 @@ public class Player {
 		return team;
 	}
 
+	/**
+	 * Returns whether the player is currently dead in the game's sense. That is
+	 * , if either he doesn't have a {@link PlayerMainFigure} or the
+	 * {@link PlayerMainFigure #isDead()}.
+	 * 
+	 * @return if the player is dead
+	 */
+	public boolean isDead() {
+		return (playerMainFigure == null || playerMainFigure.isDead());
+	}
 }
