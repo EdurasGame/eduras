@@ -30,6 +30,7 @@ import de.illonis.eduras.maps.NodeData;
 public class InformationProvider implements InfoInterface {
 	private ClientData clientData;
 	private EdurasInitializer edurasInitializer;
+	private long timeTillRespawn;
 
 	/**
 	 * Creates a new InformationProvider that gains information with the given
@@ -164,5 +165,14 @@ public class InformationProvider implements InfoInterface {
 	@Override
 	public Team findTeamById(int teamId) {
 		return edurasInitializer.logic.getGame().findTeamById(teamId);
+	}
+
+	@Override
+	public long getRespawnTime() {
+		return timeTillRespawn;
+	}
+
+	public void setRespawnTime(long time) {
+		timeTillRespawn = time;
 	}
 }

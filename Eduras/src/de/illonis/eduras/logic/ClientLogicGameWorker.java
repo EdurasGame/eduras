@@ -20,6 +20,7 @@ import de.illonis.eduras.gameobjects.MoveableGameObject;
 import de.illonis.eduras.interfaces.GameEventListener;
 import de.illonis.eduras.items.Usable;
 import de.illonis.eduras.logicabstraction.EdurasInitializer;
+import de.illonis.eduras.logicabstraction.InformationProvider;
 import de.illonis.eduras.math.Geometry;
 import de.illonis.eduras.math.Vector2df;
 import de.illonis.eduras.settings.S;
@@ -45,6 +46,12 @@ public class ClientLogicGameWorker extends LogicGameWorker {
 
 	@Override
 	public void gameUpdate(long delta) {
+
+		if (S.Server.gm_edura_automatic_respawn) {
+			InformationProvider infoPro = EdurasInitializer.getInstance()
+					.getInformationProvider();
+			infoPro.setRespawnTime(infoPro.getRespawnTime() - delta);
+		}
 
 		for (GameObject o : gameInformation.getObjects().values()) {
 			if (o instanceof Usable) {

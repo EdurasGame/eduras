@@ -139,4 +139,11 @@ public interface InfoInterface {
 	 * @return remaining time in milliseconds.
 	 */
 	public long getRemainingTime();
+
+	/**
+	 * Returns the remaining time until the next respawn wave.
+	 * 
+	 * @return remaining time in milliseconds
+	 */
+	public long getRespawnTime();
 }
