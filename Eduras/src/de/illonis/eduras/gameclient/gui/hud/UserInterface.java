@@ -113,7 +113,8 @@ public class UserInterface implements GuiResizeListener {
 		new GameModeBar(this);
 		new PlayerStatBar(this);
 		minimap = new MiniMap(this);
-		new TimeFrame(this);
+		new RemainingTimeFrame(this);
+		new RespawnTimeFrame(this);
 		new ResourceDisplay(this);
 		pingDisplay = new PingDisplay(this);
 		notificationPanel = new NotificationPanel(this);
