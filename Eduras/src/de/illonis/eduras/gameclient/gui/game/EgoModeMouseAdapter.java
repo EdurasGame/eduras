@@ -1,11 +1,13 @@
 package de.illonis.eduras.gameclient.gui.game;
 
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.newdawn.slick.Input;
 import org.newdawn.slick.geom.Vector2f;
 
 import de.illonis.edulog.EduLog;
+import de.illonis.eduras.exceptions.ObjectNotFoundException;
 import de.illonis.eduras.gameclient.GameEventAdapter;
 import de.illonis.eduras.gameclient.GuiInternalEventListener;
 import de.illonis.eduras.gameclient.audio.SoundMachine;
@@ -169,6 +171,16 @@ public class EgoModeMouseAdapter extends GuiMouseAdapter {
 		if (EdurasInitializer.getInstance().getSettings()
 				.getBooleanSetting(Settings.MOUSE_WHEEL_SWITCH)) {
 
+			int numItemsInInventory;
+			try {
+				numItemsInInventory = EdurasInitializer.getInstance()
+						.getInformationProvider().getPlayer().getInventory()
+						.getNumItems();
+			} catch (ObjectNotFoundException e) {
+				L.log(Level.SEVERE,
+						"Cannot find player when moving the mouse wheel!", e);
+				return;
+			}
 			int currentSelectedItem = getCurrentSelectedItemIndex();
 			int itemToSelect;
 
@@ -176,7 +188,7 @@ public class EgoModeMouseAdapter extends GuiMouseAdapter {
 				itemToSelect = 0;
 			} else {
 				itemToSelect = BasicMath.calcModulo(currentSelectedItem
-						+ change, Inventory.MAX_CAPACITY);
+						+ change, numItemsInInventory);
 			}
 
 			itemClicked(itemToSelect);
