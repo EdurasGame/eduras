@@ -646,6 +646,16 @@ public final class S {
 		 */
 		public static long gm_edura_respawn_time = 30000;
 
+		/**
+		 * Determines the radius of a healingpotion.
+		 */
+		public static float go_healingpotion_radius_size = 5;
+
+		/**
+		 * Determines by how much a healingpotion heals.
+		 */
+		public static int go_healingpotion_healamount = 25;
+
 	}
 
 	/**
