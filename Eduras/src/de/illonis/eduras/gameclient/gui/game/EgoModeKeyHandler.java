@@ -80,6 +80,34 @@ public class EgoModeKeyHandler extends AnyModeKeyHandler {
 					reactor.onItemUse(5, client.getCurrentMousePos());
 				}
 				break;
+			case ITEM_7:
+				if (settings.getBooleanSetting("chooseOnPress")) {
+					client.selectItem(6);
+				} else {
+					reactor.onItemUse(6, client.getCurrentMousePos());
+				}
+				break;
+			case ITEM_8:
+				if (settings.getBooleanSetting("chooseOnPress")) {
+					client.selectItem(7);
+				} else {
+					reactor.onItemUse(7, client.getCurrentMousePos());
+				}
+				break;
+			case ITEM_9:
+				if (settings.getBooleanSetting("chooseOnPress")) {
+					client.selectItem(8);
+				} else {
+					reactor.onItemUse(8, client.getCurrentMousePos());
+				}
+				break;
+			case ITEM_10:
+				if (settings.getBooleanSetting("chooseOnPress")) {
+					client.selectItem(9);
+				} else {
+					reactor.onItemUse(9, client.getCurrentMousePos());
+				}
+				break;
 			case SWITCH_MODE:
 				try {
 					reactor.onModeSwitch();

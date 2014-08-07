@@ -105,7 +105,7 @@ public final class S {
 		/**
 		 * Max number of items a {@link PlayerMainFigure} can carry.
 		 */
-		public static int player_max_item_capacity = 6;
+		public static int player_max_item_capacity = 10;
 
 		/**
 		 * Denotes the size of a {@link Missile} object.
