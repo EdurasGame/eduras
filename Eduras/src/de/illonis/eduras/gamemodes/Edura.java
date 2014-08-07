@@ -389,13 +389,15 @@ public class Edura extends TeamDeathmatch {
 
 	@Override
 	public void onPlayerSpawn(Player player) {
-		try {
-			gameInfo.getEventTriggerer().giveNewItem(player,
-					ObjectType.ASSAULTRIFLE);
-			gameInfo.getEventTriggerer().giveNewItem(player,
-					ObjectType.ITEM_WEAPON_SWORD);
-		} catch (WrongObjectTypeException e) {
-			L.log(Level.SEVERE, "Wrong item type!", e);
+		if (S.Server.gm_edura_startweapons) {
+			try {
+				gameInfo.getEventTriggerer().giveNewItem(player,
+						ObjectType.ASSAULTRIFLE);
+				gameInfo.getEventTriggerer().giveNewItem(player,
+						ObjectType.ITEM_WEAPON_SWORD);
+			} catch (WrongObjectTypeException e) {
+				L.log(Level.SEVERE, "Wrong item type!", e);
+			}
 		}
 	}
 }

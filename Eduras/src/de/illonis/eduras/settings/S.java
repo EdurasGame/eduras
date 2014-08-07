@@ -629,6 +629,12 @@ public final class S {
 		 */
 		public static int gm_edura_startmoney = 100;
 
+		/**
+		 * Determines if players are given {@link AssaultRifle} and
+		 * {@link SwordWeapon} when they spawn.
+		 */
+		public static boolean gm_edura_startweapons = true;
+
 	}
 
 	/**
