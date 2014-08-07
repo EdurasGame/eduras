@@ -7,6 +7,7 @@ import org.newdawn.slick.Color;
 import de.illonis.edulog.EduLog;
 import de.illonis.eduras.gamemodes.GameMode;
 import de.illonis.eduras.gamemodes.GameMode.GameModeNumber;
+import de.illonis.eduras.settings.S;
 
 public class RespawnTimeFrame extends TimeFrame {
 
@@ -24,7 +25,8 @@ public class RespawnTimeFrame extends TimeFrame {
 
 	@Override
 	public boolean isEnabledInGameMode(GameMode gameMode) {
-		if (gameMode.getNumber() == GameModeNumber.EDURA) {
+		if (gameMode.getNumber() == GameModeNumber.EDURA
+				&& S.Server.gm_edura_automatic_respawn) {
 			return true;
 		} else {
 			return false;
