@@ -635,6 +635,17 @@ public final class S {
 		 */
 		public static boolean gm_edura_startweapons = true;
 
+		/**
+		 * Determines whether a player automatically respawns after some time.
+		 */
+		public static boolean gm_edura_automatic_respawn = true;
+
+		/**
+		 * The time that elapses before a player is respawned if automatic
+		 * respawing is turned on.
+		 */
+		public static long gm_edura_respawn_time = 5000;
+
 	}
 
 	/**

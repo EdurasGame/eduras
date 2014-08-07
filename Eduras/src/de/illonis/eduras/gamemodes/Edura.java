@@ -19,6 +19,7 @@ import de.illonis.eduras.gameobjects.Base;
 import de.illonis.eduras.gameobjects.Base.BaseType;
 import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.gameobjects.TimedEventHandler;
+import de.illonis.eduras.gameobjects.TimingSource;
 import de.illonis.eduras.logic.EventTriggerer;
 import de.illonis.eduras.maps.EduraMap;
 import de.illonis.eduras.maps.NodeData;
@@ -38,9 +39,14 @@ import de.illonis.eduras.units.Unit;
  */
 public class Edura extends TeamDeathmatch {
 
+	private TimingSource timingSource;
+
 	private HashMap<Base, Vertex> baseToVertex;
 	private HashMap<Team, Base> mainBaseOfTeam;
 	private HashMap<Base, ResourceGenerator> baseToResourceGenerator;
+
+	private RespawnTimer respawnTimer;
+
 	private final static Logger L = EduLog.getLoggerFor(Edura.class.getName());
 
 	/**
@@ -89,6 +95,9 @@ public class Edura extends TeamDeathmatch {
 
 		loadNodes();
 		giveStartResources();
+		if (S.Server.gm_edura_automatic_respawn) {
+			setUpRespawnTimer();
+		}
 	}
 
 	private void giveStartResources() {
@@ -233,6 +242,33 @@ public class Edura extends TeamDeathmatch {
 					InteractMode.MODE_DEAD);
 
 			checkAllPlayersOfTeamDead(deadPlayer);
+		}
+	}
+
+	private void setUpRespawnTimer() {
+		// TODO: assuming that there is a main base at this point and that its
+		// timing source is valid is very bad design. change this some day :D
+		timingSource = mainBaseOfTeam.get(getTeamA()).getTimingSource();
+
+		respawnTimer = new RespawnTimer();
+		timingSource.addTimedEventHandler(respawnTimer);
+	}
+
+	class RespawnTimer implements TimedEventHandler {
+
+		@Override
+		public long getInterval() {
+			return S.Server.gm_edura_respawn_time;
+		}
+
+		@Override
+		public void onIntervalElapsed(long delta) {
+			for (Player player : gameInfo.getPlayers()) {
+				if (player.isDead()) {
+					gameInfo.getEventTriggerer()
+							.respawnPlayerAtRandomSpawnpoint(player);
+				}
+			}
 		}
 	}
 
@@ -389,6 +425,9 @@ public class Edura extends TeamDeathmatch {
 
 	@Override
 	public void onPlayerSpawn(Player player) {
+		gameInfo.getEventTriggerer().changeInteractMode(player.getPlayerId(),
+				InteractMode.MODE_EGO);
+
 		if (S.Server.gm_edura_startweapons) {
 			try {
 				gameInfo.getEventTriggerer().giveNewItem(player,
@@ -398,6 +437,16 @@ public class Edura extends TeamDeathmatch {
 			} catch (WrongObjectTypeException e) {
 				L.log(Level.SEVERE, "Wrong item type!", e);
 			}
+		}
+	}
+
+	@Override
+	public void onGameEnd() {
+		super.onGameEnd();
+
+		if (S.Server.gm_edura_automatic_respawn && timingSource != null) {
+			timingSource.removeTimedEventHandler(respawnTimer);
+			respawnTimer = null;
 		}
 	}
 }
