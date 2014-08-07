@@ -133,36 +133,19 @@ public class UserInterface implements GuiResizeListener {
 	private void initActionBar() {
 
 		ActionBarPage mainPage = new ActionBarPage(PageNumber.MAIN);
-		SpawnObserverButton spawnButton = new SpawnObserverButton(guiReactor);
-		mainPage.addButton(spawnButton);
-		HealButton healButton = new HealButton(guiReactor);
-		mainPage.addButton(healButton);
-
-		ScoutSpellButton scoutButton = new ScoutSpellButton(guiReactor);
-		mainPage.addButton(scoutButton);
-		ActionButton resurrectButton = new ActionButton(
-				ImageKey.ACTION_RESURRECT, guiReactor) {
-			@Override
-			public void actionPerformed() {
-				actionBar.setPage(PageNumber.RESURRECT);
-			}
-
-			@Override
-			public String getLabel() {
-				return "resurrect";
-			}
-
-			@Override
-			public int getCosts() {
-				return 0;
-			}
-		};
-		mainPage.addButton(resurrectButton);
-		hudNotifier.addListener(resurrectButton);
 
 		ActionBarPage resurrectPage = new ResurrectPage(actionBar, guiReactor);
 		hudNotifier.addListener(resurrectPage);
 
+		new ItemPage(guiReactor, actionBar);
+
+		addButtonsForMainPage(mainPage);
+
+		actionBar.setPage(PageNumber.MAIN);
+	}
+
+	private void addButtonsForMainPage(ActionBarPage mainPage) {
+		// ITEMBUTTON
 		ActionButton spawnItemButton = new ActionButton(
 				ImageKey.ACTION_SPAWN_ITEMS, guiReactor) {
 			@Override
@@ -180,10 +163,38 @@ public class UserInterface implements GuiResizeListener {
 				return 0;
 			}
 		};
-		mainPage.addButton(spawnItemButton);
-		new ItemPage(guiReactor, actionBar);
 
-		actionBar.setPage(PageNumber.MAIN);
+		// RESURRECTBUTTON
+		ActionButton resurrectButton = new ActionButton(
+				ImageKey.ACTION_RESURRECT, guiReactor) {
+			@Override
+			public void actionPerformed() {
+				actionBar.setPage(PageNumber.RESURRECT);
+			}
+
+			@Override
+			public String getLabel() {
+				return "resurrect";
+			}
+
+			@Override
+			public int getCosts() {
+				return 0;
+			}
+		};
+
+		SpawnObserverButton observerButton = new SpawnObserverButton(guiReactor);
+		HealButton healButton = new HealButton(guiReactor);
+		ScoutSpellButton scoutButton = new ScoutSpellButton(guiReactor);
+
+		mainPage.addButton(spawnItemButton);
+		mainPage.addButton(healButton);
+		mainPage.addButton(resurrectButton);
+		mainPage.addButton(observerButton);
+		mainPage.addButton(scoutButton);
+
+		hudNotifier.addListener(resurrectButton);
+
 	}
 
 	/**
