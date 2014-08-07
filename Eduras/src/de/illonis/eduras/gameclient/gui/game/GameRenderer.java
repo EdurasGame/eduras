@@ -237,12 +237,16 @@ public class GameRenderer implements TooltipHandler {
 			L.log(Level.WARNING, "Player not found", e);
 			return;
 		}
+
 		for (int i = 0; i < uiObjects.size(); i++) {
 			RenderedGuiObject o = uiObjects.get(i);
-			if (o.isEnabledIn(mode)
-					&& (!gui.isSpectator() || o.isVisibleForSpectator()))
+			if (o.isEnabledInInteractMode(mode)
+					&& o.isEnabledInGameMode(info.getGameMode())
+					&& (!gui.isSpectator() || o.isVisibleForSpectator())) {
 				o.render(g);
+			}
 		}
+
 		if (tooltipShown) {
 			tooltip.render(g);
 		}

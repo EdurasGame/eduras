@@ -5,9 +5,9 @@ import java.util.LinkedList;
 import org.newdawn.slick.Graphics;
 
 import de.illonis.eduras.gameclient.GameEventAdapter;
-import de.illonis.eduras.gameclient.gui.game.GameCamera;
 import de.illonis.eduras.gameclient.gui.game.GuiClickReactor;
 import de.illonis.eduras.gameclient.gui.game.TooltipHandler;
+import de.illonis.eduras.gamemodes.GameMode;
 import de.illonis.eduras.logicabstraction.InformationProvider;
 import de.illonis.eduras.units.InteractMode;
 
@@ -121,7 +121,7 @@ public abstract class RenderedGuiObject extends GameEventAdapter {
 	 * @return true if this element is enabled for given {@link InteractMode},
 	 *         false otherwise.
 	 */
-	public final boolean isEnabledIn(InteractMode interactMode) {
+	public final boolean isEnabledInInteractMode(InteractMode interactMode) {
 		return enabledModes.isEmpty() || enabledModes.contains(interactMode);
 	}
 
@@ -143,5 +143,17 @@ public abstract class RenderedGuiObject extends GameEventAdapter {
 	 *            new gui height.
 	 */
 	public abstract void onGuiSizeChanged(int newWidth, int newHeight);
+
+	/**
+	 * Tells whether this GUI object shall be rendered in the given mode. The
+	 * default is true in all modes. An inheriting GUI object can overwrite
+	 * this.
+	 * 
+	 * @param gameMode
+	 * @return true if it shall be enabled
+	 */
+	public boolean isEnabledInGameMode(GameMode gameMode) {
+		return true;
+	}
 
 }
