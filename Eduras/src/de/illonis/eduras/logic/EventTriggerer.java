@@ -265,6 +265,13 @@ public interface EventTriggerer {
 	void setRemainingTime(long remainingTime);
 
 	/**
+	 * Tells the clients when the next respawn wave is going to take place.
+	 * 
+	 * @param respawnTime
+	 */
+	void notififyRespawnTime(long respawnTime);
+
+	/**
 	 * Changes current map to given map.
 	 * 
 	 * @param map

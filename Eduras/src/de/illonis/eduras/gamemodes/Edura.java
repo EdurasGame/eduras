@@ -252,23 +252,39 @@ public class Edura extends TeamDeathmatch {
 
 		respawnTimer = new RespawnTimer();
 		timingSource.addTimedEventHandler(respawnTimer);
+		gameInfo.getEventTriggerer().notififyRespawnTime(
+				respawnTimer.getTimeTillRespawn());
 	}
 
 	class RespawnTimer implements TimedEventHandler {
 
+		private long timeTillRespawn = S.Server.gm_edura_respawn_time;
+
 		@Override
 		public long getInterval() {
-			return S.Server.gm_edura_respawn_time;
+			return 1000;
 		}
 
 		@Override
 		public void onIntervalElapsed(long delta) {
-			for (Player player : gameInfo.getPlayers()) {
-				if (player.isDead()) {
-					gameInfo.getEventTriggerer()
-							.respawnPlayerAtRandomSpawnpoint(player);
+			timeTillRespawn = Math.max(0, timeTillRespawn - delta);
+
+			if (timeTillRespawn == 0) {
+				for (Player player : gameInfo.getPlayers()) {
+					if (player.isDead()) {
+						gameInfo.getEventTriggerer()
+								.respawnPlayerAtRandomSpawnpoint(player);
+					}
 				}
+
+				timeTillRespawn = S.Server.gm_edura_respawn_time;
+				gameInfo.getEventTriggerer().notififyRespawnTime(
+						timeTillRespawn);
 			}
+		}
+
+		public long getTimeTillRespawn() {
+			return timeTillRespawn;
 		}
 	}
 
@@ -419,6 +435,16 @@ public class Edura extends TeamDeathmatch {
 	}
 
 	@Override
+	public void onConnect(int ownerId) {
+		super.onConnect(ownerId);
+
+		if (S.Server.gm_edura_automatic_respawn) {
+			gameInfo.getEventTriggerer().notififyRespawnTime(
+					respawnTimer.getTimeTillRespawn());
+		}
+	}
+
+	@Override
 	public boolean doItemsRespawn() {
 		return false;
 	}
@@ -438,6 +464,7 @@ public class Edura extends TeamDeathmatch {
 				L.log(Level.SEVERE, "Wrong item type!", e);
 			}
 		}
+
 	}
 
 	@Override

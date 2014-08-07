@@ -37,6 +37,7 @@ import de.illonis.eduras.events.SetSettingsEvent;
 import de.illonis.eduras.events.SetStatsEvent;
 import de.illonis.eduras.events.SetTeamResourceEvent;
 import de.illonis.eduras.events.SetTeamsEvent;
+import de.illonis.eduras.events.SetTimeEvent;
 import de.illonis.eduras.events.SetVisibilityEvent;
 import de.illonis.eduras.exceptions.NoSuchGameModeException;
 import de.illonis.eduras.exceptions.NoSuchMapException;
@@ -54,6 +55,7 @@ import de.illonis.eduras.inventory.ItemSlotIsEmptyException;
 import de.illonis.eduras.items.Item;
 import de.illonis.eduras.items.Usable;
 import de.illonis.eduras.items.weapons.Weapon;
+import de.illonis.eduras.logicabstraction.EdurasInitializer;
 import de.illonis.eduras.maps.Map;
 import de.illonis.eduras.settings.S;
 import de.illonis.eduras.settings.S.SettingType;
@@ -406,6 +408,13 @@ public class ClientLogic implements GameLogicInterface {
 				SetRemainingTimeEvent remainingTimeEvent = (SetRemainingTimeEvent) event;
 				long remainingTime = remainingTimeEvent.getRemainingTime();
 				gameInfo.getGameSettings().changeTime(remainingTime);
+				break;
+			case SET_RESPAWNTIME:
+				EdurasInitializer
+						.getInstance()
+						.getInformationProvider()
+						.setRespawnTime(
+								((SetTimeEvent) event).getRemainingTime());
 				break;
 			case GAME_READY:
 				getListener().onGameReady();

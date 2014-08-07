@@ -60,6 +60,7 @@ import de.illonis.eduras.events.SetSettingsEvent;
 import de.illonis.eduras.events.SetStatsEvent;
 import de.illonis.eduras.events.SetTeamResourceEvent;
 import de.illonis.eduras.events.SetTeamsEvent;
+import de.illonis.eduras.events.SetTimeEvent;
 import de.illonis.eduras.events.SetVisibilityEvent;
 import de.illonis.eduras.exceptions.GameModeNotSupportedByMapException;
 import de.illonis.eduras.exceptions.InvalidNameException;
@@ -1015,5 +1016,11 @@ public class ServerEventTriggerer implements EventTriggerer {
 		S.setServerSetting(settingName, settingValue);
 
 		sendEventToAll(new SetSettingPropertyEvent(settingName, settingValue));
+	}
+
+	@Override
+	public void notififyRespawnTime(long respawnTime) {
+		sendEventToAll(new SetTimeEvent(GameEventNumber.SET_RESPAWNTIME,
+				respawnTime));
 	}
 }

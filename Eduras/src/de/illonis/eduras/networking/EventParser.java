@@ -54,6 +54,7 @@ import de.illonis.eduras.events.SetSettingsEvent;
 import de.illonis.eduras.events.SetStatsEvent;
 import de.illonis.eduras.events.SetTeamResourceEvent;
 import de.illonis.eduras.events.SetTeamsEvent;
+import de.illonis.eduras.events.SetTimeEvent;
 import de.illonis.eduras.events.SetVisibilityEvent;
 import de.illonis.eduras.events.SpawnItemEvent;
 import de.illonis.eduras.events.SwitchInteractModeEvent;
@@ -309,6 +310,11 @@ public class EventParser implements EventHandler {
 			case SET_REMAININGTIME:
 				logic.onGameEventAppeared(new SetRemainingTimeEvent(
 						(Long) event.getArgument(0)));
+				break;
+			case SET_RESPAWNTIME:
+				logic.onGameEventAppeared(new SetTimeEvent(
+						GameEventNumber.SET_RESPAWNTIME, (Long) event
+								.getArgument(0)));
 				break;
 			case ITEM_USE_FAILED:
 				logic.onGameEventAppeared(new ItemUseFailedEvent((int) event

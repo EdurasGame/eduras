@@ -644,7 +644,7 @@ public final class S {
 		 * The time that elapses before a player is respawned if automatic
 		 * respawing is turned on.
 		 */
-		public static long gm_edura_respawn_time = 5000;
+		public static long gm_edura_respawn_time = 30000;
 
 	}
 

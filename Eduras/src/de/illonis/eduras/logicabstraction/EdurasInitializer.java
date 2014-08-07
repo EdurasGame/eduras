@@ -416,6 +416,10 @@ public class EdurasInitializer {
 			public void setSetting(String settingName, String settingValue) {
 			}
 
+			@Override
+			public void notififyRespawnTime(long respawnTime) {
+			}
+
 		});
 
 		networkManager.getClient().setEventHandler(new EventParser(logic));
