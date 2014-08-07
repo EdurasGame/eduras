@@ -33,6 +33,8 @@ public class ItemDisplay extends ClickableGuiElement implements
 	private final static Logger L = EduLog.getLoggerFor(ItemDisplay.class
 			.getName());
 
+	private static final String EMPTY_NAME = "EMPTY";
+
 	private final static int ITEM_GAP = 15;
 	private final static int BLOCKSIZE = 48;
 	private int currentItem = -1;
@@ -72,6 +74,11 @@ public class ItemDisplay extends ClickableGuiElement implements
 	public void render(Graphics g) {
 		currentItem = getInfo().getClientData().getCurrentItemSelected();
 		for (GuiItem item : itemSlots) {
+
+			if (item.isEmpty()) {
+				continue;
+			}
+
 			// TODO: make nicer
 			if (item.getSlotId() == currentItem) {
 				g.setColor(Color.yellow);
@@ -161,7 +168,7 @@ public class ItemDisplay extends ClickableGuiElement implements
 	 */
 	private void onItemChanged(int slot, Item newItem) {
 		if (newItem == null) {
-			itemSlots[slot].setName("EMPTY");
+			itemSlots[slot].setName(EMPTY_NAME);
 			itemSlots[slot].setItemImage(null);
 		} else {
 			String newName = newItem.getName();
@@ -198,7 +205,7 @@ public class ItemDisplay extends ClickableGuiElement implements
 			this.y = OUTER_GAP[0] + (BLOCKSIZE + ITEM_GAP)
 					* (slotId / (Inventory.MAX_CAPACITY / 2));
 			this.slotId = slotId;
-			setName("?");
+			setName(EMPTY_NAME);
 		}
 
 		public void setItem(Item newItem) {
@@ -219,6 +226,10 @@ public class ItemDisplay extends ClickableGuiElement implements
 
 		public boolean isWeapon() {
 			return (item instanceof Weapon);
+		}
+
+		public boolean isEmpty() {
+			return name.equals(EMPTY_NAME) && getItemImage() == null;
 		}
 
 		public int getWeaponAmmu() {
