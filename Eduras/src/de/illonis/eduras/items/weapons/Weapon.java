@@ -9,6 +9,7 @@ import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.gameobjects.TimingSource;
 import de.illonis.eduras.items.ItemUseInformation;
 import de.illonis.eduras.items.Lootable;
+import de.illonis.eduras.items.Respawnable;
 import de.illonis.eduras.math.Vector2df;
 import de.illonis.eduras.settings.S;
 import de.illonis.eduras.units.PlayerMainFigure;
@@ -19,7 +20,8 @@ import de.illonis.eduras.units.PlayerMainFigure;
  * @author illonis
  * 
  */
-public abstract class Weapon extends UsableItem implements Lootable {
+public abstract class Weapon extends UsableItem implements Lootable,
+		Respawnable {
 
 	protected enum AmmunitionLimit {
 		INFINITE, CAPPED;
@@ -50,7 +52,8 @@ public abstract class Weapon extends UsableItem implements Lootable {
 	}
 
 	@Override
-	public final boolean use(ItemUseInformation info) throws InsufficientResourceException {
+	public final boolean use(ItemUseInformation info)
+			throws InsufficientResourceException {
 		if (!hasCooldown()) {
 			if (hasAmmo()) {
 				startCooldown();

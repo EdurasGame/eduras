@@ -11,7 +11,7 @@ import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.gameobjects.GameObject.Visibility;
 import de.illonis.eduras.gameobjects.MoveableGameObject;
 import de.illonis.eduras.interfaces.GameEventListener;
-import de.illonis.eduras.items.Lootable;
+import de.illonis.eduras.items.Respawnable;
 import de.illonis.eduras.items.Usable;
 
 /**
@@ -38,8 +38,8 @@ public class ServerLogicGameWorker extends LogicGameWorker {
 			if (o instanceof Usable) {
 				((Usable) o).reduceCooldown(delta);
 			}
-			if (o instanceof Lootable) {
-				boolean rs = ((Lootable) o).reduceRespawnRemaining(delta);
+			if (o instanceof Respawnable) {
+				boolean rs = ((Respawnable) o).reduceRespawnRemaining(delta);
 				if (rs) {
 					SetBooleanGameObjectAttributeEvent sc = new SetBooleanGameObjectAttributeEvent(
 							GameEventNumber.SET_COLLIDABLE, o.getId(), true);
