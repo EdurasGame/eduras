@@ -656,6 +656,16 @@ public final class S {
 		 */
 		public static int go_healingpotion_healamount = 25;
 
+		/**
+		 * Determines how long it takes for a healingpotion to respawn.
+		 */
+		public static long go_healingpotion_respawntime = 15000;
+
+		/**
+		 * The defaul respawn time for powerups.
+		 */
+		public static long go_powerup_respawntime_default = 15000;
+
 	}
 
 	/**

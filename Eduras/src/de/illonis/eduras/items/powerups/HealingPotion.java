@@ -8,16 +8,16 @@ import de.illonis.edulog.EduLog;
 import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.ObjectFactory.ObjectType;
 import de.illonis.eduras.gameobjects.TimingSource;
-import de.illonis.eduras.items.PowerUpItem;
 import de.illonis.eduras.settings.S;
 import de.illonis.eduras.units.PlayerMainFigure;
 
-public class HealingPotion extends PowerUpItem {
+public class HealingPotion extends RespawnablePowerUp {
 
 	private final static Logger L = EduLog.getLoggerFor(HealingPotion.class
 			.getName());
 
 	private int healAmount;
+	private long respawnTimeRemaining;
 
 	public HealingPotion(TimingSource timingSource, GameInformation gi, int id) {
 		super(ObjectType.HEALING_POTION, timingSource, gi, id);
