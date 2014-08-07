@@ -6,9 +6,7 @@ package de.illonis.eduras.events;
  * @author Florian Mai <florian.ren.mai@googlemail.com>
  * 
  */
-public class SetRemainingTimeEvent extends GameEvent {
-
-	private final long remainingTime;
+public class SetRemainingTimeEvent extends SetTimeEvent {
 
 	/**
 	 * Creates a new SetRemainingTimeEvent.
@@ -17,18 +15,6 @@ public class SetRemainingTimeEvent extends GameEvent {
 	 *            the remaining time in milliseconds.
 	 */
 	public SetRemainingTimeEvent(long remainingTime) {
-		super(GameEventNumber.SET_REMAININGTIME);
-		this.remainingTime = remainingTime;
-		putArgument(remainingTime);
+		super(GameEventNumber.SET_REMAININGTIME, remainingTime);
 	}
-
-	/**
-	 * Returns the remaining time.
-	 * 
-	 * @return The remaining time in milliseconds.
-	 */
-	public long getRemainingTime() {
-		return remainingTime;
-	}
-
 }
