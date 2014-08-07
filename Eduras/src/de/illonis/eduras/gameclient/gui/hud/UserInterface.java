@@ -124,7 +124,7 @@ public class UserInterface implements GuiResizeListener {
 		statWindow = new StatisticsWindow(this);
 		exitPopup = new ExitPopup(this);
 		new ChatDisplay(cache, this);
-		new BugReportButton(this);
+		// new BugReportButton(this);
 		actionBar = new ActionBar(this);
 		initActionBar();
 
