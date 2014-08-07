@@ -5,6 +5,8 @@ import java.util.logging.Logger;
 import org.newdawn.slick.Color;
 
 import de.illonis.edulog.EduLog;
+import de.illonis.eduras.gamemodes.GameMode;
+import de.illonis.eduras.gamemodes.GameMode.GameModeNumber;
 
 public class RespawnTimeFrame extends TimeFrame {
 
@@ -18,5 +20,14 @@ public class RespawnTimeFrame extends TimeFrame {
 	@Override
 	protected long getTimeToDisplay() {
 		return getInfo().getRespawnTime();
+	}
+
+	@Override
+	public boolean isEnabledInGameMode(GameMode gameMode) {
+		if (gameMode.getNumber() == GameModeNumber.EDURA) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 }
