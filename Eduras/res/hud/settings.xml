@@ -52,6 +52,11 @@
 								<control type="label" font="aurulent-sans-16.fnt" color="#000f"
 									text="continuous Item Usage" margin="5px" />
 							</panel>
+							<panel childLayout="horizontal" width="*">
+								<control id="mouseWheelSwitchBox" name="checkbox" margin="5px" />
+								<control type="label" font="aurulent-sans-16.fnt" color="#000f"
+									text="Switch item when moving mouse wheel" margin="5px" />
+							</panel>
 						</panel>
 					</control>
 					<control id="#tab_2" name="tab" caption="Keybindings"

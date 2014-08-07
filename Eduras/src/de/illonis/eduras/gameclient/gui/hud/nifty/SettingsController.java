@@ -42,6 +42,7 @@ public class SettingsController extends EdurasScreenController {
 	private final Settings settings;
 	private CheckBox chooseOnPressBox;
 	private CheckBox continuousItemUsageBox;
+	private CheckBox mouseWheelSwitchBox;
 
 	SettingsController(GameControllerBridge game) {
 		super(game);
@@ -101,8 +102,8 @@ public class SettingsController extends EdurasScreenController {
 
 	private void fillResolutionSelect(Screen screen) {
 		@SuppressWarnings("unchecked")
-		DropDown<DisplayMode> control = (DropDown<DisplayMode>) screen
-				.findNiftyControl("resolutionSelect", DropDown.class);
+		DropDown<DisplayMode> control = screen.findNiftyControl(
+				"resolutionSelect", DropDown.class);
 
 		resolutionLabel = screen.findNiftyControl("currentResolution",
 				Label.class);
@@ -144,12 +145,13 @@ public class SettingsController extends EdurasScreenController {
 		fillResolutionSelect(screen);
 		Label hintLabel = screen.findNiftyControl("hintLabel", Label.class);
 		hintLabel.setText("Select a keybinding and press a key to bind it.");
-		box = (ListBox<KeyBinding>) screen.findNiftyControl("#keyBindingsList",
-				ListBox.class);
+		box = screen.findNiftyControl("#keyBindingsList", ListBox.class);
 		chooseOnPressBox = screen.findNiftyControl("chooseOnPressBox",
 				CheckBox.class);
 		continuousItemUsageBox = screen.findNiftyControl(
 				"continuousItemUsageBox", CheckBox.class);
+		mouseWheelSwitchBox = screen.findNiftyControl("mouseWheelSwitchBox",
+				CheckBox.class);
 
 		for (KeyBinding binding : KeyBinding.values()) {
 			box.addItem(binding);
@@ -158,6 +160,9 @@ public class SettingsController extends EdurasScreenController {
 				.setChecked(settings.getBooleanSetting("chooseOnPress"));
 		continuousItemUsageBox.setChecked(settings
 				.getBooleanSetting("continuousItemUsage"));
+		mouseWheelSwitchBox.setChecked(settings
+				.getBooleanSetting(Settings.MOUSE_WHEEL_SWITCH));
+
 	}
 
 	/**

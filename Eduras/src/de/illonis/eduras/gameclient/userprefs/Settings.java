@@ -32,6 +32,10 @@ public class Settings implements ResettableSetting {
 	private final File settingsFile;
 	private final HashMap<String, Boolean> booleanSettings;
 
+	public static final String CONTINUOUS_ITEM_USAGE = "continuousItemUsage";
+	public static final String CHOOSE_ON_PRESS = "chooseOnPress";
+	public static final String MOUSE_WHEEL_SWITCH = "mouseWheelSwitch";
+
 	/**
 	 * Creates new settings. This should be called only once each runtime and be
 	 * done by {@link EdurasInitializer}.
@@ -133,6 +137,7 @@ public class Settings implements ResettableSetting {
 	private void loadBooleanDefaults() {
 		booleanSettings.put("chooseOnPress", true);
 		booleanSettings.put("continuousItemUsage", true);
+		booleanSettings.put(MOUSE_WHEEL_SWITCH, true);
 	}
 
 	/**

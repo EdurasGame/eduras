@@ -9,6 +9,7 @@ import de.illonis.edulog.EduLog;
 import de.illonis.eduras.gameclient.GameEventAdapter;
 import de.illonis.eduras.gameclient.GuiInternalEventListener;
 import de.illonis.eduras.gameclient.gui.game.GamePanelLogic.ClickState;
+import de.illonis.eduras.gameclient.userprefs.Settings;
 import de.illonis.eduras.inventory.Inventory;
 import de.illonis.eduras.logicabstraction.EdurasInitializer;
 import de.illonis.eduras.math.BasicMath;
@@ -159,18 +160,24 @@ public class EgoModeMouseAdapter extends GuiMouseAdapter {
 
 	@Override
 	public void mouseWheelMoved(int change) {
-		System.out.println("LOAL");
-		int currentSelectedItem = getCurrentSelectedItemIndex();
-		int itemToSelect;
+		if (EdurasInitializer.getInstance().getSettings()
+				.getBooleanSetting(Settings.MOUSE_WHEEL_SWITCH)) {
 
-		if (currentSelectedItem == -1) {
-			itemToSelect = 0;
+			int currentSelectedItem = getCurrentSelectedItemIndex();
+			int itemToSelect;
+
+			if (currentSelectedItem == -1) {
+				itemToSelect = 0;
+			} else {
+				itemToSelect = BasicMath.calcModulo(currentSelectedItem
+						+ change, Inventory.MAX_CAPACITY);
+			}
+
+			itemClicked(itemToSelect);
+
 		} else {
-			itemToSelect = BasicMath.calcModulo(currentSelectedItem + change,
-					Inventory.MAX_CAPACITY);
+			// do nothing
 		}
-
-		itemClicked(itemToSelect);
 	}
 
 	private int getCurrentSelectedItemIndex() {
