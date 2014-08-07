@@ -8,9 +8,12 @@ import org.newdawn.slick.geom.Vector2f;
 import de.illonis.edulog.EduLog;
 import de.illonis.eduras.gameclient.GameEventAdapter;
 import de.illonis.eduras.gameclient.GuiInternalEventListener;
+import de.illonis.eduras.gameclient.audio.SoundMachine;
+import de.illonis.eduras.gameclient.audio.SoundMachine.SoundType;
 import de.illonis.eduras.gameclient.gui.game.GamePanelLogic.ClickState;
 import de.illonis.eduras.gameclient.userprefs.Settings;
 import de.illonis.eduras.inventory.Inventory;
+import de.illonis.eduras.inventory.ItemSlotIsEmptyException;
 import de.illonis.eduras.logicabstraction.EdurasInitializer;
 import de.illonis.eduras.math.BasicMath;
 import de.illonis.eduras.math.Vector2df;
@@ -110,8 +113,11 @@ public class EgoModeMouseAdapter extends GuiMouseAdapter {
 	@Override
 	public void itemClicked(int i) {
 		if (i >= 0 && i < Inventory.MAX_CAPACITY) {
-			getPanelLogic().selectItem(i);
-
+			try {
+				getPanelLogic().selectItem(i);
+			} catch (ItemSlotIsEmptyException e) {
+				SoundMachine.play(SoundType.ERROR);
+			}
 		} else {
 			getPanelLogic().setClickState(ClickState.DEFAULT);
 			getPanelLogic().getClientData().setCurrentItemSelected(-1);

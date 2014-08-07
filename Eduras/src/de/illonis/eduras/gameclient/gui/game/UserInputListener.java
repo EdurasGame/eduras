@@ -3,6 +3,7 @@ package de.illonis.eduras.gameclient.gui.game;
 import org.newdawn.slick.geom.Vector2f;
 
 import de.illonis.eduras.exceptions.ActionFailedException;
+import de.illonis.eduras.inventory.ItemSlotIsEmptyException;
 
 /**
  * Provides key- and mouselisteners access to the user interface.
@@ -46,12 +47,13 @@ public interface UserInputListener {
 	Vector2f getCurrentMousePos();
 
 	/**
-	 * Sets the item of the given slot number as selected.
+	 * Sets the item of the given slot number as selected if the respective slot
+	 * contains an item
 	 * 
 	 * @param i
 	 *            item slot.
 	 */
-	void selectItem(int i);
+	void selectItem(int i) throws ItemSlotIsEmptyException;
 
 	/**
 	 * Resets the camera.
