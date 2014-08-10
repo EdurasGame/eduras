@@ -24,7 +24,6 @@ public class SpeedPowerUp extends RespawnablePowerUp {
 
 	@Override
 	public void onActivation(final PlayerMainFigure touchingPlayer) {
-		final float oldSpeed = touchingPlayer.getSpeed();
 		getGame().getEventTriggerer().changeSpeedBy(touchingPlayer,
 				S.Server.go_speedpowerup_amount);
 
@@ -37,8 +36,8 @@ public class SpeedPowerUp extends RespawnablePowerUp {
 
 			@Override
 			public void intervalElapsed() {
-				getGame().getEventTriggerer()
-						.setSpeed(touchingPlayer, oldSpeed);
+				getGame().getEventTriggerer().changeSpeedBy(touchingPlayer,
+						S.Server.go_speedpowerup_amount * -1);
 			}
 		};
 	}
