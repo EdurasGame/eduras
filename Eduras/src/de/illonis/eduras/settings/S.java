@@ -668,9 +668,11 @@ public final class S {
 
 		public static float go_speedpowerup_amount = 50;
 
-		public static long go_speedpowerup_duration = 90000;
+		public static long go_speedpowerup_duration = 20000;
 
 		public static float go_speedpowerup_radius = 6f;
+
+		public static long go_speedpowerup_respawntime = 90000;
 
 	}
 

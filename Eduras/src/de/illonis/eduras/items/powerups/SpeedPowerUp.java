@@ -42,4 +42,9 @@ public class SpeedPowerUp extends RespawnablePowerUp {
 			}
 		};
 	}
+
+	@Override
+	public long getRespawnTime() {
+		return S.Server.go_speedpowerup_respawntime;
+	}
 }
