@@ -360,7 +360,7 @@ public class ServerEventTriggerer implements EventTriggerer {
 
 			// announce to network
 			SetIntegerGameObjectAttributeEvent event = new SetIntegerGameObjectAttributeEvent(
-					GameEventNumber.SET_HEALTH, id, newHealth);
+					GameEventNumber.SET_HEALTH, id, unit.getHealth());
 			sendEvents(event);
 		}
 	}
@@ -838,10 +838,7 @@ public class ServerEventTriggerer implements EventTriggerer {
 	@Override
 	public void changeHealthByAmount(Unit unitToHeal, int healAmount) {
 		synchronized (unitToHeal) {
-			setHealth(
-					unitToHeal.getId(),
-					Math.max(unitToHeal.getMaxHealth(), unitToHeal.getHealth()
-							+ healAmount));
+			setHealth(unitToHeal.getId(), unitToHeal.getHealth() + healAmount);
 		}
 
 	}
