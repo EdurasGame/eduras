@@ -10,6 +10,7 @@ import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.Shape;
 import org.newdawn.slick.geom.Vector2f;
 
@@ -69,6 +70,7 @@ import de.illonis.eduras.exceptions.ObjectNotFoundException;
 import de.illonis.eduras.exceptions.PlayerHasNoTeamException;
 import de.illonis.eduras.exceptions.WrongObjectTypeException;
 import de.illonis.eduras.gamemodes.GameMode;
+import de.illonis.eduras.gameobjects.Base;
 import de.illonis.eduras.gameobjects.DynamicPolygonObject;
 import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.gameobjects.GameObject.Visibility;
@@ -82,6 +84,7 @@ import de.illonis.eduras.items.weapons.Missile;
 import de.illonis.eduras.items.weapons.Weapon;
 import de.illonis.eduras.maps.InitialObjectData;
 import de.illonis.eduras.maps.Map;
+import de.illonis.eduras.maps.SpawnPosition;
 import de.illonis.eduras.math.Vector2df;
 import de.illonis.eduras.settings.S;
 import de.illonis.eduras.settings.S.SettingType;
@@ -1019,5 +1022,35 @@ public class ServerEventTriggerer implements EventTriggerer {
 	public void notififyRespawnTime(long respawnTime) {
 		sendEventToAll(new SetTimeEvent(GameEventNumber.SET_RESPAWNTIME,
 				respawnTime));
+	}
+
+	@Override
+	public int createObjectAtBase(ObjectType objectType, Base base, int owner) {
+		int objectId = createObject(objectType, owner);
+
+		GameObject object = gameInfo.findObjectById(objectId);
+		if (object == null) {
+			L.severe("Can't find the object I just created! ObjectId: "
+					+ objectId);
+			return -1;
+		}
+
+		SpawnPosition spawnPosition = new SpawnPosition(
+				(Rectangle) base.getShape(), SpawnPosition.SpawnType.ANY);
+		Collection<GameObject> allObjectsExceptBaseAndThisObject = new LinkedList<GameObject>(
+				gameInfo.getObjects().values());
+		allObjectsExceptBaseAndThisObject.remove(object);
+		allObjectsExceptBaseAndThisObject.remove(base);
+
+		try {
+			Vector2df positionToSpawnAt = GameInformation
+					.findFreePointWithinSpawnPositionForShape(spawnPosition,
+							object.getShape(),
+							allObjectsExceptBaseAndThisObject);
+			guaranteeSetPositionOfObject(objectId, positionToSpawnAt);
+		} catch (NoSpawnAvailableException e) {
+			L.log(Level.SEVERE, "Cannot find a place to spawn this object!", e);
+		}
+		return objectId;
 	}
 }

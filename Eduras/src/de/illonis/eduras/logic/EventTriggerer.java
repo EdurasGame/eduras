@@ -21,6 +21,7 @@ import de.illonis.eduras.events.SetVisibilityEvent;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
 import de.illonis.eduras.exceptions.WrongObjectTypeException;
 import de.illonis.eduras.gamemodes.GameMode;
+import de.illonis.eduras.gameobjects.Base;
 import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.gameobjects.GameObject.Visibility;
 import de.illonis.eduras.gameobjects.NeutralArea;
@@ -112,6 +113,22 @@ public interface EventTriggerer {
 	 *         that object.
 	 */
 	public int createObjectIn(ObjectType object, Shape shape, int owner);
+
+	/**
+	 * Creates an object at random position within given base. Guarantees that a
+	 * created objects location (topleft) will be within given shape and does
+	 * not collide with any other existing game object. It is also guaranteed
+	 * that the created object is completely within given shape.
+	 * 
+	 * @param object
+	 *            type of object to create
+	 * @param base
+	 *            base to create it in
+	 * @param owner
+	 *            owner id of object to create
+	 * @return id of newly created object
+	 */
+	public int createObjectAtBase(ObjectType object, Base base, int owner);
 
 	/**
 	 * Creates an object at given position such that the center of the newly
