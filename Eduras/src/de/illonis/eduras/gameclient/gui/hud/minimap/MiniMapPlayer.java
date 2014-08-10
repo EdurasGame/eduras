@@ -44,7 +44,7 @@ public class MiniMapPlayer extends MiniMapObject {
 	 * @return the color of players team.
 	 */
 	public Color getColor() {
-		if (player == null)
+		if (player == null || player.getTeam() == null)
 			return Color.white;
 		return player.getTeam().getColor();
 	}
