@@ -40,9 +40,9 @@ import de.illonis.eduras.exceptions.InvalidNameException;
 import de.illonis.eduras.exceptions.NoSpawnAvailableException;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
 import de.illonis.eduras.exceptions.PlayerHasNoTeamException;
+import de.illonis.eduras.gameobjects.Base;
 import de.illonis.eduras.gameobjects.DynamicPolygonObject;
 import de.illonis.eduras.gameobjects.GameObject;
-import de.illonis.eduras.gameobjects.Base;
 import de.illonis.eduras.logic.EventTriggerer;
 import de.illonis.eduras.maps.FunMap;
 import de.illonis.eduras.maps.Map;
@@ -516,7 +516,7 @@ public class GameInformation {
 
 	}
 
-	private boolean isAnyOfObjectsWithinBounds(Rectangle bounds,
+	private static boolean isAnyOfObjectsWithinBounds(Rectangle bounds,
 			Collection<GameObject> gameObjects) {
 		for (GameObject o : gameObjects) {
 			if (o.getShape().intersects(bounds))
@@ -592,48 +592,62 @@ public class GameInformation {
 		Collections.shuffle(availableSpawnings, new Random(System.nanoTime()));
 
 		Shape playerShape = player.getPlayerMainFigure().getShape();
-		Rectangle boundings = new Rectangle(0, 0, playerShape.getWidth(),
-				playerShape.getHeight());
 
 		for (SpawnPosition spawnPos : availableSpawnings) {
-
-			boolean spawnPositionOkay = false;
-			Vector2df newPos;
 			try {
-				int i = 0;
-				do {
-					i++;
-					newPos = spawnPos.getAPoint(playerShape);
-
-					boundings.setX(newPos.x);
-					boundings.setY(newPos.y);
-
-					if (i > ATTEMPT_PER_SPAWNPOINT) {
-						break;
-					}
-
-					spawnPositionOkay = !isAnyOfObjectsWithinBounds(boundings,
-							objects.values());
-				} while (!spawnPositionOkay);
-
-				if (spawnPositionOkay) {
-					return new Vector2df(boundings.getX(), boundings.getY());
-				} else {
-					L.warning("There is no spawnpoint in the spawnposition at x : "
-							+ spawnPos.getArea().getX()
-							+ " y : "
-							+ spawnPos.getArea().getY()
-							+ " after "
-							+ ATTEMPT_PER_SPAWNPOINT + " attempts.");
-				}
-			} catch (IllegalArgumentException e) {
-				L.log(Level.SEVERE, e.getMessage(), e);
+				return findFreePointWithinSpawnPositionForShape(spawnPos,
+						playerShape, objects.values());
+			} catch (NoSpawnAvailableException e) {
+				// try next spawn
+				continue;
 			}
-
 		}
 
 		throw new NoSpawnAvailableException();
 
+	}
+
+	/**
+	 * Tries to find a completely unoccupied spot within the given
+	 * {@link SpawnPosition}, that can fit the given shape entirely. Unoccupied
+	 * means that there is no object from the collection of
+	 * possiblyOccupyingObjects being located on this spot.
+	 * 
+	 * @param spawnPos
+	 * @param shape
+	 * @param possiblyOccupyingObjects
+	 * @return the 'free' spot
+	 * @throws NoSpawnAvailableException
+	 */
+	public static Vector2df findFreePointWithinSpawnPositionForShape(
+			SpawnPosition spawnPos, Shape shape,
+			Collection<GameObject> possiblyOccupyingObjects)
+			throws NoSpawnAvailableException {
+		Rectangle boundings = new Rectangle(0, 0, shape.getWidth(),
+				shape.getHeight());
+		boolean spawnPositionOkay = false;
+		Vector2df newPos;
+		int i = 0;
+		do {
+			i++;
+			newPos = spawnPos.getAPoint(shape);
+
+			boundings.setX(newPos.x);
+			boundings.setY(newPos.y);
+
+			if (i > ATTEMPT_PER_SPAWNPOINT) {
+				L.warning("There is no spawnpoint in the spawnposition at x : "
+						+ spawnPos.getArea().getX() + " y : "
+						+ spawnPos.getArea().getY() + " after "
+						+ ATTEMPT_PER_SPAWNPOINT + " attempts.");
+				throw new NoSpawnAvailableException();
+			}
+
+			spawnPositionOkay = !isAnyOfObjectsWithinBounds(boundings,
+					possiblyOccupyingObjects);
+		} while (!spawnPositionOkay);
+
+		return new Vector2df(boundings.getX(), boundings.getY());
 	}
 
 	/**
