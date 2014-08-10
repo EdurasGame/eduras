@@ -32,10 +32,10 @@ public abstract class ClickableGuiElement extends RenderedGuiObject implements
 	}
 
 	@Override
-	public boolean isActive() {
+	public final boolean isActive() {
 		try {
 			return isEnabledInInteractMode(getInfo().getPlayer()
-					.getCurrentMode());
+					.getCurrentMode()) && isVisible();
 		} catch (ObjectNotFoundException e) {
 			L.log(Level.SEVERE, "Player not found here!!", e);
 		}

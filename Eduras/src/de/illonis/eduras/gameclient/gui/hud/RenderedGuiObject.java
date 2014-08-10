@@ -27,6 +27,7 @@ public abstract class RenderedGuiObject extends GameEventAdapter {
 	protected float screenX, screenY;
 	protected boolean visibleForSpectator;
 	private final LinkedList<InteractMode> enabledModes;
+	private boolean visible;
 
 	/**
 	 * Creates a new {@link RenderedGuiObject} that is attached to given
@@ -41,6 +42,7 @@ public abstract class RenderedGuiObject extends GameEventAdapter {
 		visibleForSpectator = false;
 		enabledModes = new LinkedList<InteractMode>();
 		screenX = screenY = 0;
+		visible = true;
 		gui.addElement(this);
 	}
 
@@ -154,6 +156,24 @@ public abstract class RenderedGuiObject extends GameEventAdapter {
 	 */
 	public boolean isEnabledInGameMode(GameMode gameMode) {
 		return true;
+	}
+
+	/**
+	 * Sets if this GUI object is visible.
+	 * 
+	 * @param visible
+	 */
+	public void setVisible(boolean visible) {
+		this.visible = visible;
+	}
+
+	/**
+	 * Tells whether this gui object is set to be visible.
+	 * 
+	 * @return true if visible
+	 */
+	public boolean isVisible() {
+		return visible;
 	}
 
 }

@@ -12,7 +12,6 @@ public class ExitPopup extends ClickableGuiElement {
 	private final Rectangle bounds;
 	private final Rectangle yesRect;
 	private final Rectangle noRect;
-	private boolean visible;
 	private final String text = "Do you really want to exit?";
 
 	UserInterface ui;
@@ -23,23 +22,19 @@ public class ExitPopup extends ClickableGuiElement {
 		bounds = new Rectangle(0, 0, WIDTH, HEIGHT);
 		yesRect = new Rectangle(0, 0, 100, 30);
 		noRect = new Rectangle(0, 0, 100, 30);
-		visible = false;
-	}
-
-	public void setVisible(boolean visible) {
-		this.visible = visible;
+		setVisible(false);
 	}
 
 	@Override
 	public boolean onClick(Vector2f p) {
-		if (!visible)
+		if (!isVisible())
 			return false;
 
 		if (yesRect.contains(p.x, p.y)) {
 			// exit
 			getMouseHandler().exitRequested();
 		} else if (noRect.contains(p.x, p.y)) {
-			visible = false;
+			setVisible(false);
 		}
 		return true;
 	}
@@ -52,7 +47,7 @@ public class ExitPopup extends ClickableGuiElement {
 
 	@Override
 	public void render(Graphics g) {
-		if (visible) {
+		if (isVisible()) {
 			g.setColor(Color.white);
 			g.fill(bounds);
 			g.setColor(Color.black);
@@ -75,8 +70,4 @@ public class ExitPopup extends ClickableGuiElement {
 		noRect.setLocation(screenX + WIDTH - 150, screenY + HEIGHT - 50);
 	}
 
-	@Override
-	public boolean isActive() {
-		return super.isActive() && visible;
-	}
 }
