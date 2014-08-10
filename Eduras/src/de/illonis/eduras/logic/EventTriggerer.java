@@ -24,6 +24,7 @@ import de.illonis.eduras.gamemodes.GameMode;
 import de.illonis.eduras.gameobjects.Base;
 import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.gameobjects.GameObject.Visibility;
+import de.illonis.eduras.gameobjects.MoveableGameObject;
 import de.illonis.eduras.gameobjects.NeutralArea;
 import de.illonis.eduras.items.Item;
 import de.illonis.eduras.maps.Map;
@@ -632,4 +633,21 @@ public interface EventTriggerer {
 	void setSetting(String settingName, String settingValue)
 			throws NoSuchFieldException, SecurityException,
 			IllegalArgumentException, IllegalAccessException;
+
+	/**
+	 * Sets the speed of the given {@link MoveableGameObject} to oldSpeed +
+	 * amount.
+	 * 
+	 * @param objectToChangeSpeedOf
+	 * @param amount
+	 */
+	void changeSpeedBy(MoveableGameObject objectToChangeSpeedOf, float amount);
+
+	/**
+	 * Sets the speed of the given {@link MoveableGameObject} to newValue.
+	 * 
+	 * @param object
+	 * @param newValue
+	 */
+	void setSpeed(MoveableGameObject object, float newValue);
 }

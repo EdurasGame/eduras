@@ -22,6 +22,7 @@ import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.gameobjects.TimingSource;
 import de.illonis.eduras.interfaces.GameLogicInterface;
 import de.illonis.eduras.items.powerups.HealingPotion;
+import de.illonis.eduras.items.powerups.SpeedPowerUp;
 import de.illonis.eduras.items.weapons.AssaultMissile;
 import de.illonis.eduras.items.weapons.AssaultRifle;
 import de.illonis.eduras.items.weapons.MineMissile;
@@ -72,7 +73,7 @@ public class ObjectFactory {
 				15), SWORDMISSILE(16), BIRD(17), ROCKETLAUNCHER(18), ROCKET_MISSILE(
 				19), MINELAUNCHER(20), MINE_MISSILE(21), ASSAULTRIFLE(22), ASSAULT_MISSILE(
 				23), MAPBOUNDS(24), TRIGGER_AREA(25), NEUTRAL_BASE(26), OBSERVER(
-				30), SPELL_SCOUT(31), HEALING_POTION(32);
+				30), SPELL_SCOUT(31), HEALING_POTION(32), SPEED_POWERUP(33);
 
 		private int number;
 
@@ -305,6 +306,9 @@ public class ObjectFactory {
 				break;
 			case HEALING_POTION:
 				go = new HealingPotion(timingSource, logic.getGame(), id);
+				break;
+			case SPEED_POWERUP:
+				go = new SpeedPowerUp(timingSource, logic.getGame(), id);
 				break;
 			case SPELL_SCOUT:
 				go = new ScoutSpell(logic.getGame(), timingSource, id, owner);

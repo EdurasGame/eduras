@@ -74,6 +74,7 @@ import de.illonis.eduras.gameobjects.Base;
 import de.illonis.eduras.gameobjects.DynamicPolygonObject;
 import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.gameobjects.GameObject.Visibility;
+import de.illonis.eduras.gameobjects.MoveableGameObject;
 import de.illonis.eduras.gameobjects.NeutralArea;
 import de.illonis.eduras.interfaces.GameLogicInterface;
 import de.illonis.eduras.inventory.InventoryIsFullException;
@@ -1069,5 +1070,26 @@ public class ServerEventTriggerer implements EventTriggerer {
 		gameInfo.getGameSettings().getGameMode().onPlayerSpawn(player);
 		sendEventToAll(new RespawnEvent(player.getPlayerId()));
 		return playerMainFigureId;
+	}
+
+	@Override
+	public void changeSpeedBy(MoveableGameObject objectToChangeSpeedOf,
+			float amount) {
+		synchronized (objectToChangeSpeedOf) {
+			setSpeed(objectToChangeSpeedOf, objectToChangeSpeedOf.getSpeed()
+					+ amount);
+		}
+
+	}
+
+	@Override
+	public void setSpeed(MoveableGameObject object, float newValue) {
+		synchronized (object) {
+			object.setSpeed(Math.max(0f, newValue));
+		}
+
+		sendEventToAll(new SetFloatGameObjectAttributeEvent(
+				GameEventNumber.SET_SPEED, object.getId(), object.getSpeed()));
+
 	}
 }

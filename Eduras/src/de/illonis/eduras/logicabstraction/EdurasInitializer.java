@@ -35,6 +35,7 @@ import de.illonis.eduras.gamemodes.GameMode;
 import de.illonis.eduras.gameobjects.Base;
 import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.gameobjects.GameObject.Visibility;
+import de.illonis.eduras.gameobjects.MoveableGameObject;
 import de.illonis.eduras.gameobjects.NeutralArea;
 import de.illonis.eduras.interfaces.GameLogicInterface;
 import de.illonis.eduras.items.Item;
@@ -430,6 +431,15 @@ public class EdurasInitializer {
 			@Override
 			public int respawnPlayerAtBase(Player player, Base base) {
 				return -1;
+			}
+
+			@Override
+			public void changeSpeedBy(MoveableGameObject objectToChangeSpeedOf,
+					float amount) {
+			}
+
+			@Override
+			public void setSpeed(MoveableGameObject object, float newValue) {
 			}
 
 		});

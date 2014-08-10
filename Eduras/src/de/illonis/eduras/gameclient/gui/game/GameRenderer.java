@@ -458,6 +458,7 @@ public class GameRenderer implements TooltipHandler {
 		case ASSAULTRIFLE:
 			return Color.pink;
 		case HEALING_POTION:
+		case SPEED_POWERUP:
 			return Color.darkGray;
 		case MAPBOUNDS:
 			return new Color(0, 0, 0, 0);

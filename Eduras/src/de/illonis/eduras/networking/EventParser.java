@@ -160,9 +160,9 @@ public class EventParser implements EventHandler {
 						(int) event.getArgument(0)));
 				break;
 			case SET_SPEED:
-				logic.onGameEventAppeared(new SetIntegerGameObjectAttributeEvent(
+				logic.onGameEventAppeared(new SetFloatGameObjectAttributeEvent(
 						GameEventNumber.SET_SPEED, (Integer) event
-								.getArgument(0), (Integer) event.getArgument(1)));
+								.getArgument(0), (Float) event.getArgument(1)));
 				break;
 			case SPELL_SCOUT:
 				System.out.println("scout!");
