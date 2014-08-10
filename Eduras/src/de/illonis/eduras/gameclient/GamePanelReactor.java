@@ -10,8 +10,8 @@ import de.illonis.eduras.exceptions.InsufficientResourceException;
 import de.illonis.eduras.exceptions.NotWithinBaseException;
 import de.illonis.eduras.exceptions.WrongObjectTypeException;
 import de.illonis.eduras.gameclient.gui.game.GamePanelLogic.ClickState;
-import de.illonis.eduras.gameobjects.MoveableGameObject.Direction;
 import de.illonis.eduras.gameobjects.Base;
+import de.illonis.eduras.gameobjects.MoveableGameObject.Direction;
 import de.illonis.eduras.units.PlayerMainFigure;
 import de.illonis.eduras.units.Unit;
 
@@ -152,9 +152,12 @@ public interface GamePanelReactor {
 	 *            the base to spawn unit at.
 	 * @throws InsufficientResourceException
 	 *             if not enough resources available
+	 * @throws CantSpawnHereException
+	 *             thrown if there is no room for the object to spawn at that
+	 *             position
 	 */
 	void onUnitSpawned(ObjectType type, Base base)
-			throws InsufficientResourceException;
+			throws InsufficientResourceException, CantSpawnHereException;
 
 	/**
 	 * Sets current click state in gui.

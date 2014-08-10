@@ -18,6 +18,7 @@ import de.illonis.eduras.exceptions.InsufficientResourceException;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
 import de.illonis.eduras.exceptions.PlayerHasNoTeamException;
 import de.illonis.eduras.exceptions.WrongObjectTypeException;
+import de.illonis.eduras.gameclient.CantSpawnHereException;
 import de.illonis.eduras.gameclient.GuiInternalEventListener;
 import de.illonis.eduras.gameclient.audio.SoundMachine;
 import de.illonis.eduras.gameclient.audio.SoundMachine.SoundType;
@@ -258,15 +259,14 @@ public class BuildModeMouseAdapter extends ScrollModeMouseAdapter {
 							L.log(Level.WARNING,
 									"Player doesn't have a team when trying to select position for observer unit!",
 									e);
-						} catch (InsufficientResourceException e) {
+						} catch (InsufficientResourceException
+								| CantSpawnHereException e) {
 							getPanelLogic().onActionFailed(e);
+							SoundMachine.play(SoundType.ERROR);
+							return;
 						}
 					}
 				}
-				getPanelLogic()
-						.showNotification(
-								"Please select a base owned by your team to spawn a observer");
-				SoundMachine.play(SoundType.ERROR);
 				return;
 			}
 			getPanelLogic().setClickState(ClickState.DEFAULT);

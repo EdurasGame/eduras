@@ -1,23 +1,29 @@
 package de.illonis.eduras.logicabstraction;
 
 import java.util.Collection;
+import java.util.LinkedList;
 import java.util.Map;
 
 import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.Vector2f;
 
+import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.ObjectFactory.ObjectType;
 import de.illonis.eduras.Player;
 import de.illonis.eduras.Statistic;
 import de.illonis.eduras.Team;
+import de.illonis.eduras.exceptions.NoSpawnAvailableException;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
 import de.illonis.eduras.gameclient.ClientData;
 import de.illonis.eduras.gamemodes.GameMode;
+import de.illonis.eduras.gameobjects.Base;
 import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.interfaces.GameEventListener;
 import de.illonis.eduras.interfaces.InfoInterface;
 import de.illonis.eduras.maps.EduraMap;
 import de.illonis.eduras.maps.NodeData;
+import de.illonis.eduras.maps.SpawnPosition;
+import de.illonis.eduras.units.Observer;
 
 /**
  * This class provides a connection between GUI and logic. GUI developers can
@@ -174,5 +180,32 @@ public class InformationProvider implements InfoInterface {
 
 	public void setRespawnTime(long time) {
 		timeTillRespawn = time;
+	}
+
+	@Override
+	public boolean fitsObjectInBase(ObjectType type, Base base) {
+		GameObject unitToSpawn;
+		switch (type) {
+		case OBSERVER:
+			unitToSpawn = new Observer(null, null, -1, -1);
+			break;
+		default:
+			return false;
+		}
+
+		SpawnPosition spawnPosition = new SpawnPosition(
+				(Rectangle) base.getShape(), SpawnPosition.SpawnType.ANY);
+		Collection<GameObject> allObjectsExceptBase = new LinkedList<GameObject>(
+				edurasInitializer.getLogic().getGame().getObjects().values());
+		allObjectsExceptBase.remove(base);
+		try {
+			GameInformation
+					.findFreePointWithinSpawnPositionForShape(spawnPosition,
+							unitToSpawn.getShape(), allObjectsExceptBase);
+			return true;
+		} catch (NoSpawnAvailableException e) {
+			return false;
+		}
+
 	}
 }

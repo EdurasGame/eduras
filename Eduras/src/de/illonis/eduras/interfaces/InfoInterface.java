@@ -12,6 +12,7 @@ import de.illonis.eduras.Team;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
 import de.illonis.eduras.gameclient.ClientData;
 import de.illonis.eduras.gamemodes.GameMode;
+import de.illonis.eduras.gameobjects.Base;
 import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.maps.Map;
 
@@ -146,4 +147,13 @@ public interface InfoInterface {
 	 * @return remaining time in milliseconds
 	 */
 	public long getRespawnTime();
+
+	/**
+	 * Tells whether an object of a given type would fit into the given base.
+	 * 
+	 * @param type
+	 * @param base
+	 * @return true if it fits
+	 */
+	public boolean fitsObjectInBase(ObjectType type, Base base);
 }

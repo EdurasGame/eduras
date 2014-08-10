@@ -31,10 +31,10 @@ import de.illonis.eduras.exceptions.PlayerHasNoTeamException;
 import de.illonis.eduras.exceptions.WrongEventTypeException;
 import de.illonis.eduras.exceptions.WrongObjectTypeException;
 import de.illonis.eduras.gameclient.gui.game.GamePanelLogic.ClickState;
+import de.illonis.eduras.gameobjects.Base;
 import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.gameobjects.GameObject.Relation;
 import de.illonis.eduras.gameobjects.MoveableGameObject.Direction;
-import de.illonis.eduras.gameobjects.Base;
 import de.illonis.eduras.logicabstraction.EdurasInitializer;
 import de.illonis.eduras.logicabstraction.InformationProvider;
 import de.illonis.eduras.math.Geometry;
@@ -351,7 +351,7 @@ public class GuiInternalEventListener implements GamePanelReactor {
 
 	@Override
 	public void onUnitSpawned(ObjectType type, Base base)
-			throws InsufficientResourceException {
+			throws InsufficientResourceException, CantSpawnHereException {
 
 		Player player;
 		try {
@@ -362,6 +362,9 @@ public class GuiInternalEventListener implements GamePanelReactor {
 		}
 
 		checkSufficientResources(player, type.getCosts());
+		if (!infoPro.fitsObjectInBase(type, base)) {
+			throw new CantSpawnHereException(type);
+		}
 
 		CreateUnitEvent event = new CreateUnitEvent(player.getPlayerId(), type,
 				base.getId());
