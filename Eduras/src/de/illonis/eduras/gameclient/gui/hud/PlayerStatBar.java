@@ -27,6 +27,7 @@ public class PlayerStatBar extends RenderedGuiObject {
 	private final static int HEIGHT = 20;
 	private final static Color COLOR_BAR = Color.yellow;
 	private final static Color COLOR_BG = Color.black;
+	private static final Color COLOR_TEXT = Color.black;
 
 	private int health;
 	private int maxHealth;
@@ -53,6 +54,8 @@ public class PlayerStatBar extends RenderedGuiObject {
 		g2d.fillRect(screenX, screenY, MAX_WIDTH, HEIGHT);
 		g2d.setColor(COLOR_BAR);
 		g2d.fillRect(screenX, screenY, barWidth, HEIGHT);
+		g2d.setColor(COLOR_TEXT);
+		g2d.drawString(health + " / " + maxHealth, screenX, screenY);
 	}
 
 	@Override
