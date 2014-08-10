@@ -5,9 +5,6 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.Vector2f;
 
-import de.illonis.edulog.EduLog;
-import de.illonis.eduras.logicabstraction.EdurasInitializer;
-
 public class ExitPopup extends ClickableGuiElement {
 
 	private final static int WIDTH = 300;
@@ -19,6 +16,7 @@ public class ExitPopup extends ClickableGuiElement {
 	private final String text = "Do you really want to exit?";
 
 	UserInterface ui;
+
 	protected ExitPopup(UserInterface gui) {
 		super(gui);
 		this.ui = gui;
@@ -36,7 +34,7 @@ public class ExitPopup extends ClickableGuiElement {
 	public boolean onClick(Vector2f p) {
 		if (!visible)
 			return false;
-		
+
 		if (yesRect.contains(p.x, p.y)) {
 			// exit
 			getMouseHandler().exitRequested();
@@ -57,7 +55,8 @@ public class ExitPopup extends ClickableGuiElement {
 		if (visible) {
 			g.setColor(Color.white);
 			g.fill(bounds);
-			g.setColor(Color.black);g.fill(yesRect);
+			g.setColor(Color.black);
+			g.fill(yesRect);
 			g.fill(noRect);
 			g.setColor(Color.black);
 			g.drawString(text, screenX + 5, screenY + 5);
@@ -73,6 +72,11 @@ public class ExitPopup extends ClickableGuiElement {
 		screenY = (newHeight - HEIGHT) / 2;
 		bounds.setLocation(screenX, screenY);
 		yesRect.setLocation(screenX + 30, screenY + HEIGHT - 50);
-		noRect.setLocation(screenX + WIDTH -150, screenY + HEIGHT - 50);
+		noRect.setLocation(screenX + WIDTH - 150, screenY + HEIGHT - 50);
+	}
+
+	@Override
+	public boolean isActive() {
+		return super.isActive() && visible;
 	}
 }
