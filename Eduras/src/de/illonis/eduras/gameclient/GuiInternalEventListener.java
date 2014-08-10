@@ -257,10 +257,13 @@ public class GuiInternalEventListener implements GamePanelReactor {
 
 	@Override
 	public void onPlayerRezz(Player player, Base base)
-			throws InsufficientResourceException {
+			throws InsufficientResourceException, CantSpawnHereException {
 
 		checkSufficientResources(player,
 				S.Server.gm_edura_action_respawnplayer_cost);
+		if (!infoPro.fitsObjectInBase(ObjectType.PLAYER, base)) {
+			throw new CantSpawnHereException(ObjectType.PLAYER);
+		}
 
 		ResurrectPlayerEvent event = new ResurrectPlayerEvent(
 				client.getOwnerID(), player.getPlayerId(), base.getId());

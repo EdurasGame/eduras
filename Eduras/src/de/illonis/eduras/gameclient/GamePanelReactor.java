@@ -75,9 +75,12 @@ public interface GamePanelReactor {
 	 *            the base to resurrect at.
 	 * @throws InsufficientResourceException
 	 *             when resources are too low.
+	 * @throws CantSpawnHereException
+	 *             thrown if there is no room in the base to spawn the player
+	 *             there
 	 */
 	void onPlayerRezz(Player player, Base base)
-			throws InsufficientResourceException;
+			throws InsufficientResourceException, CantSpawnHereException;
 
 	/**
 	 * Heals a unit.

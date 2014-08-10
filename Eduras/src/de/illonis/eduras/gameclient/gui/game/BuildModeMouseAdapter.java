@@ -266,6 +266,10 @@ public class BuildModeMouseAdapter extends ScrollModeMouseAdapter {
 							return;
 						}
 					}
+					getPanelLogic()
+							.showNotification(
+									"Please select a base owned by your team to spawn the unit");
+					SoundMachine.play(SoundType.ERROR);
 				}
 				return;
 			}
@@ -306,8 +310,10 @@ public class BuildModeMouseAdapter extends ScrollModeMouseAdapter {
 							L.log(Level.WARNING,
 									"Player doesn't have a team when selecting base for a player to be resurrected",
 									e);
-						} catch (InsufficientResourceException e) {
+						} catch (InsufficientResourceException
+								| CantSpawnHereException e) {
 							getPanelLogic().onActionFailed(e);
+							return;
 						}
 					}
 				}
