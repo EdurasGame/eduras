@@ -65,8 +65,9 @@ public class RespawnPlayerAction extends RTSAction {
 
 		EventTriggerer eventTriggerer = info.getEventTriggerer();
 
-		eventTriggerer.respawnPlayerAtPosition(playerToRespawn,
-				base.getPositionVector());
+		// eventTriggerer.respawnPlayerAtPosition(playerToRespawn,
+		// base.getPositionVector());
+		eventTriggerer.respawnPlayerAtBase(playerToRespawn, base);
 		eventTriggerer.changeInteractMode(playerToRespawn.getPlayerId(),
 				InteractMode.MODE_EGO);
 	}

@@ -427,6 +427,11 @@ public class EdurasInitializer {
 				return -1;
 			}
 
+			@Override
+			public int respawnPlayerAtBase(Player player, Base base) {
+				return -1;
+			}
+
 		});
 
 		networkManager.getClient().setEventHandler(new EventParser(logic));

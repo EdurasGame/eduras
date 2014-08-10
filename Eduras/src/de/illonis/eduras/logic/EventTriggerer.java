@@ -607,6 +607,15 @@ public interface EventTriggerer {
 	void notifyWeaponAmmoEmpty(int clientId, int slotNum);
 
 	/**
+	 * Respawns the given player at the given base, if there's room.
+	 * 
+	 * @param player
+	 * @param base
+	 * @return returns the id of the object that just spawned
+	 */
+	int respawnPlayerAtBase(Player player, Base base);
+
+	/**
 	 * Set a setting property to a certain value and notify the clients about
 	 * it.
 	 * 

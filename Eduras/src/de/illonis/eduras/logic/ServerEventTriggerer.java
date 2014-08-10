@@ -1053,4 +1053,21 @@ public class ServerEventTriggerer implements EventTriggerer {
 		}
 		return objectId;
 	}
+
+	@Override
+	public int respawnPlayerAtBase(Player player, Base base) {
+		// TODO: grmpflll... if we ever switch to Java 8, we should consider
+		// doing making the exact method to create an object a parameter, as
+		// this method differs to respawnPlayer only in the method used for
+		// object creation x)
+		if (player.getPlayerMainFigure() != null) {
+			removeObject(player.getPlayerMainFigure().getId());
+		}
+
+		int playerMainFigureId = createObjectAtBase(ObjectType.PLAYER, base,
+				player.getPlayerId());
+		gameInfo.getGameSettings().getGameMode().onPlayerSpawn(player);
+		sendEventToAll(new RespawnEvent(player.getPlayerId()));
+		return playerMainFigureId;
+	}
 }
