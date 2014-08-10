@@ -93,6 +93,12 @@ public class PlayerStatBar extends RenderedGuiObject {
 		try {
 			player = getInfo().getPlayer();
 
+			PlayerMainFigure mainFigure = player.getPlayerMainFigure();
+			if (mainFigure != null) {
+				maxHealth = mainFigure.getMaxHealth();
+				health = mainFigure.getHealth();
+			}
+			recalculate();
 		} catch (ObjectNotFoundException e) {
 			L.log(Level.SEVERE, "Player received not found", e);
 		}
