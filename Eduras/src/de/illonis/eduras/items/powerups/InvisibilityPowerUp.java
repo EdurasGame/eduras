@@ -26,7 +26,7 @@ public class InvisibilityPowerUp extends RespawnablePowerUp {
 	@Override
 	public void onActivation(final PlayerMainFigure touchingPlayer) {
 		getGame().getEventTriggerer().setVisibility(touchingPlayer.getId(),
-				Visibility.OWNER_ALLIED);
+				Visibility.OWNER_TEAM);
 
 		new OneTimeTimedEventHandler(getTimingSource()) {
 
