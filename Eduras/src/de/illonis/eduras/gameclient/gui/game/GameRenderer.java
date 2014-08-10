@@ -369,7 +369,22 @@ public class GameRenderer implements TooltipHandler {
 		if (d.getShape() != null) {
 			g.setColor(OUTLINE_COLOR);
 			g.draw(d.getShape());
-			g.setColor(getColorForObject(d));
+
+			Color colorOfObject = getColorForObject(d);
+			switch (d.getVisibility()) {
+			case ALL:
+				break;
+			case OWNER:
+			case OWNER_ALLIED:
+			case OWNER_TEAM:
+			case TEAM:
+				colorOfObject = new Color(colorOfObject.r, colorOfObject.g,
+						colorOfObject.b, 0.33f);
+				break;
+			default:
+				break;
+			}
+			g.setColor(colorOfObject);
 			g.fill(d.getShape());
 		}
 	}
