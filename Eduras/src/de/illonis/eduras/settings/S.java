@@ -674,6 +674,12 @@ public final class S {
 
 		public static long go_speedpowerup_respawntime = 90000;
 
+		public static float go_invisibility_powerup_radius = 7f;
+
+		public static long go_invisibility_powerup_respawntime = 90000;
+
+		public static long go_invisibility_powerup_duration = 15000;
+
 	}
 
 	/**
