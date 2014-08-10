@@ -64,7 +64,7 @@ public class GameInformation {
 	private final static Logger L = EduLog.getLoggerFor(GameInformation.class
 			.getName());
 
-	private static final int ATTEMPT_PER_SPAWNPOINT = 100;
+	private static final int ATTEMPT_PER_SPAWNPOINT = 10000;
 
 	private static final Random RANDOM = new Random();
 
