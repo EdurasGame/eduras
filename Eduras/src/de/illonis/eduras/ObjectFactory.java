@@ -19,6 +19,7 @@ import de.illonis.eduras.gameobjects.Bird;
 import de.illonis.eduras.gameobjects.Building;
 import de.illonis.eduras.gameobjects.DynamicPolygonObject;
 import de.illonis.eduras.gameobjects.GameObject;
+import de.illonis.eduras.gameobjects.Portal;
 import de.illonis.eduras.gameobjects.TimingSource;
 import de.illonis.eduras.interfaces.GameLogicInterface;
 import de.illonis.eduras.items.powerups.HealingPotion;
@@ -75,7 +76,7 @@ public class ObjectFactory {
 				19), MINELAUNCHER(20), MINE_MISSILE(21), ASSAULTRIFLE(22), ASSAULT_MISSILE(
 				23), MAPBOUNDS(24), TRIGGER_AREA(25), NEUTRAL_BASE(26), OBSERVER(
 				30), SPELL_SCOUT(31), HEALING_POTION(32), SPEED_POWERUP(33), INVISIBILITY_POWERUP(
-				34);
+				34), PORTAL(35);
 
 		private int number;
 
@@ -317,6 +318,9 @@ public class ObjectFactory {
 				break;
 			case SPELL_SCOUT:
 				go = new ScoutSpell(logic.getGame(), timingSource, id, owner);
+				break;
+			case PORTAL:
+				go = new Portal(logic.getGame(), timingSource, id);
 				break;
 			default:
 				return;

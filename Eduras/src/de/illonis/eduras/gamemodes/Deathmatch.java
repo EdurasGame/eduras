@@ -5,6 +5,8 @@ import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.newdawn.slick.geom.Vector2f;
+
 import de.illonis.edulog.EduLog;
 import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.ObjectFactory.ObjectType;
@@ -14,9 +16,10 @@ import de.illonis.eduras.Team;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
 import de.illonis.eduras.exceptions.PlayerHasNoTeamException;
 import de.illonis.eduras.gameclient.userprefs.KeyBindings.KeyBinding;
+import de.illonis.eduras.gameobjects.Base;
 import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.gameobjects.GameObject.Relation;
-import de.illonis.eduras.gameobjects.Base;
+import de.illonis.eduras.gameobjects.Portal;
 import de.illonis.eduras.logic.EventTriggerer;
 import de.illonis.eduras.maps.SpawnPosition.SpawnType;
 import de.illonis.eduras.units.InteractMode;
@@ -155,6 +158,17 @@ public class Deathmatch extends BasicGameMode {
 					.createObject(ObjectType.PLAYER, player.getPlayerId());
 			eventTriggerer.respawnPlayerAtRandomSpawnpoint(player);
 		}
+
+		// TODO: This is test code.. remove!
+		int portalOneId = eventTriggerer.createObjectAt(ObjectType.PORTAL,
+				new Vector2f(100, 100), GameObject.OWNER_WORLD);
+		int portalTwoId = eventTriggerer.createObjectAt(ObjectType.PORTAL,
+				new Vector2f(400, 400), GameObject.OWNER_WORLD);
+
+		Portal portalOne = (Portal) gameInfo.findObjectById(portalOneId);
+		Portal portalTwo = (Portal) gameInfo.findObjectById(portalTwoId);
+		portalOne.setPartnerPortal(portalTwo);
+		portalTwo.setPartnerPortal(portalOne);
 
 	}
 

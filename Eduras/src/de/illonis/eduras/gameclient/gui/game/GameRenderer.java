@@ -485,6 +485,8 @@ public class GameRenderer implements TooltipHandler {
 			} else {
 				return base.getCurrentOwnerTeam().getColor();
 			}
+		case PORTAL:
+			return Color.orange;
 		default:
 			return Color.white;
 		}
