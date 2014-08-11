@@ -122,8 +122,8 @@ public class EdurasSlickClient implements GameControllerBridge {
 		public void initStatesList(GameContainer container)
 				throws SlickException {
 			// add game states here
-			// addState(new LoginState(EdurasSlickClient.this, betaAccountName,
-			// betaAccountPassword));
+			addState(new LoginState(EdurasSlickClient.this, betaAccountName,
+					betaAccountPassword));
 			addState(new SettingsState(EdurasSlickClient.this));
 			addState(new ServerListState(EdurasSlickClient.this,
 					serverIpToConnectTo, serverPort));
