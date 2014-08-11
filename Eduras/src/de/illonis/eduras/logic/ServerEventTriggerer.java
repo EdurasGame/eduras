@@ -332,6 +332,10 @@ public class ServerEventTriggerer implements EventTriggerer {
 		e.setNewYPos(newPosition.y);
 
 		GameObject o = gameInfo.findObjectById(objectId);
+		if (o == null) {
+			L.warning("Couldn't find object to change position of!");
+			return;
+		}
 		o.setPosition(newPosition);
 		sendEvents(e);
 	}
