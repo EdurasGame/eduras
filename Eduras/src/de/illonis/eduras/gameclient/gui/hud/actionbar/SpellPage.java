@@ -20,5 +20,6 @@ public class SpellPage extends ActionBarSubPage {
 	private void generateButtonsForSpells(GamePanelReactor reactor) {
 		addButton(new HealButton(reactor));
 		addButton(new SpeedSpellButton(reactor));
+		addButton(new InvisibilitySpellButton(reactor));
 	}
 }

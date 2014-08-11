@@ -318,6 +318,9 @@ public class GuiInternalEventListener implements GamePanelReactor {
 		case SPEED_SPELL:
 			requiredResources = S.Server.spell_speed_costs;
 			break;
+		case INVISIBILITY_SPELL:
+			requiredResources = S.Server.spell_invisibility_costs;
+			break;
 		default:
 			L.severe("Spell " + spellNumber + " is not supported!!");
 			return;
