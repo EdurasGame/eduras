@@ -91,6 +91,12 @@ public final class CacheInfo {
 		objectImages.put(ObjectType.ITEM_WEAPON_SIMPLE,
 				"gameobjects/icon-weapon1.png");
 		objectImages.put(ObjectType.ITEM_WEAPON_SWORD, "gameobjects/sword.png");
+		objectImages.put(ObjectType.HEALING_POTION,
+				"gameobjects/healthpotion.png");
+		objectImages.put(ObjectType.INVISIBILITY_POWERUP,
+				"gameobjects/invisibilitypowerup.png");
+		objectImages.put(ObjectType.SPEED_POWERUP,
+				"gameobjects/speedpowerup.png");
 		guiImages = new HashMap<ImageKey, String>();
 		guiImages.put(ImageKey.STATISTICS_BG, "gui/artwork/statwindow.png");
 		guiImages.put(ImageKey.MINIMAP_DUMMY, "gui/artwork/minimap.png");

@@ -649,7 +649,7 @@ public final class S {
 		/**
 		 * Determines the radius of a healingpotion.
 		 */
-		public static float go_healingpotion_radius_size = 5;
+		public static float go_healingpotion_radius_size = 10f;
 
 		/**
 		 * Determines by how much a healingpotion heals.
@@ -670,11 +670,11 @@ public final class S {
 
 		public static long go_speedpowerup_duration = 20000;
 
-		public static float go_speedpowerup_radius = 6f;
+		public static float go_speedpowerup_radius = 10f;
 
 		public static long go_speedpowerup_respawntime = 90000;
 
-		public static float go_invisibility_powerup_radius = 7f;
+		public static float go_invisibility_powerup_radius = 10f;
 
 		public static long go_invisibility_powerup_respawntime = 90000;
 
