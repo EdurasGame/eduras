@@ -14,7 +14,7 @@ public class SpeedSpellButton extends UnitSpellButton {
 			.getName());
 
 	public SpeedSpellButton(GamePanelReactor reactor) {
-		super(ImageKey.ITEM_DUMMY, reactor, GameEventNumber.SPEED_SPELL);
+		super(ImageKey.ACTION_SPELL_SPEED, reactor, GameEventNumber.SPEED_SPELL);
 	}
 
 	@Override

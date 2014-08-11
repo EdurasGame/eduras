@@ -185,7 +185,7 @@ public class UserInterface implements GuiResizeListener {
 		};
 
 		// SPELLBUTTON
-		ActionButton spellButton = new ActionButton(ImageKey.ITEM_DUMMY,
+		ActionButton spellButton = new ActionButton(ImageKey.SPELLS_PAGE,
 				guiReactor) {
 			@Override
 			public void actionPerformed() {

@@ -14,7 +14,8 @@ public class InvisibilitySpellButton extends UnitSpellButton {
 			.getLoggerFor(InvisibilitySpellButton.class.getName());
 
 	public InvisibilitySpellButton(GamePanelReactor reactor) {
-		super(ImageKey.ITEM_DUMMY, reactor, GameEventNumber.INVISIBILITY_SPELL);
+		super(ImageKey.ACTION_SPELL_INVISIBILITY, reactor,
+				GameEventNumber.INVISIBILITY_SPELL);
 	}
 
 	@Override
