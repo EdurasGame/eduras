@@ -315,6 +315,9 @@ public class GuiInternalEventListener implements GamePanelReactor {
 		case HEAL_ACTION:
 			requiredResources = S.Server.spell_heal_costs;
 			break;
+		case SPEED_SPELL:
+			requiredResources = S.Server.spell_speed_costs;
+			break;
 		default:
 			L.severe("Spell " + spellNumber + " is not supported!!");
 			return;
