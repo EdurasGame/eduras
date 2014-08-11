@@ -268,7 +268,7 @@ public class ServerLogic implements GameLogicInterface {
 				HealSpellAction healSpellAction = new HealSpellAction(
 						executingPlayer,
 						(Unit) gameInfo.findObjectById(healEvent
-								.getIdOfUnitToHeal()));
+								.getIdOfUnitToCastSpellOn()));
 				healSpellAction.execute(gameInfo);
 			} catch (ObjectNotFoundException ex) {
 				L.log(Level.WARNING,

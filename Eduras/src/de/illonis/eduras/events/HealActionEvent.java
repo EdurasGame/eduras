@@ -10,12 +10,10 @@ import de.illonis.edulog.EduLog;
  * @author Florian 'Ren' Mai <florian.ren.mai@googlemail.com>
  * 
  */
-public class HealActionEvent extends RTSActionEvent {
+public class HealActionEvent extends UnitSpellActionEvent {
 
 	private final static Logger L = EduLog.getLoggerFor(HealActionEvent.class
 			.getName());
-
-	private int idOfUnitToHeal;
 
 	/**
 	 * Create a new HealActionEvent.
@@ -26,18 +24,8 @@ public class HealActionEvent extends RTSActionEvent {
 	 *            id of the unit to heal.
 	 */
 	public HealActionEvent(int executingPlayer, int idOfUnitToHeal) {
-		super(GameEventNumber.HEAL_ACTION, executingPlayer);
+		super(GameEventNumber.HEAL_ACTION, executingPlayer, idOfUnitToHeal);
 
 		putArgument(idOfUnitToHeal);
-		this.idOfUnitToHeal = idOfUnitToHeal;
-	}
-
-	/**
-	 * Returns the id of the unit to heal
-	 * 
-	 * @return id
-	 */
-	public int getIdOfUnitToHeal() {
-		return idOfUnitToHeal;
 	}
 }
