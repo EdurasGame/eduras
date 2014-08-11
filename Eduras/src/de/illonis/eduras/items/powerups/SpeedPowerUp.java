@@ -7,7 +7,6 @@ import org.newdawn.slick.geom.Circle;
 import de.illonis.edulog.EduLog;
 import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.ObjectFactory.ObjectType;
-import de.illonis.eduras.gameobjects.OneTimeTimedEventHandler;
 import de.illonis.eduras.gameobjects.TimingSource;
 import de.illonis.eduras.settings.S;
 import de.illonis.eduras.units.PlayerMainFigure;
@@ -24,22 +23,10 @@ public class SpeedPowerUp extends RespawnablePowerUp {
 
 	@Override
 	public void onActivation(final PlayerMainFigure touchingPlayer) {
-		getGame().getEventTriggerer().changeSpeedBy(touchingPlayer,
+
+		getGame().getEventTriggerer().speedUpObjectForSomeTime(touchingPlayer,
+				S.Server.go_speedpowerup_duration,
 				S.Server.go_speedpowerup_amount);
-
-		new OneTimeTimedEventHandler(getTimingSource()) {
-
-			@Override
-			public long getInterval() {
-				return S.Server.go_speedpowerup_duration;
-			}
-
-			@Override
-			public void intervalElapsed() {
-				getGame().getEventTriggerer().changeSpeedBy(touchingPlayer,
-						S.Server.go_speedpowerup_amount * -1);
-			}
-		};
 	}
 
 	@Override

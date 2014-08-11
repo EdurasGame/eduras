@@ -442,6 +442,12 @@ public class EdurasInitializer {
 			public void setSpeed(MoveableGameObject object, float newValue) {
 			}
 
+			@Override
+			public void speedUpObjectForSomeTime(
+					MoveableGameObject objectToSpeedUp, long timeInMiliseconds,
+					float speedUpValue) {
+			}
+
 		});
 
 		networkManager.getClient().setEventHandler(new EventParser(logic));

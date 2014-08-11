@@ -76,6 +76,7 @@ import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.gameobjects.GameObject.Visibility;
 import de.illonis.eduras.gameobjects.MoveableGameObject;
 import de.illonis.eduras.gameobjects.NeutralArea;
+import de.illonis.eduras.gameobjects.OneTimeTimedEventHandler;
 import de.illonis.eduras.interfaces.GameLogicInterface;
 import de.illonis.eduras.inventory.InventoryIsFullException;
 import de.illonis.eduras.inventory.NoSuchItemException;
@@ -1090,6 +1091,28 @@ public class ServerEventTriggerer implements EventTriggerer {
 
 		sendEventToAll(new SetFloatGameObjectAttributeEvent(
 				GameEventNumber.SET_SPEED, object.getId(), object.getSpeed()));
+
+	}
+
+	@Override
+	public void speedUpObjectForSomeTime(
+			final MoveableGameObject objectToSpeedUp,
+			final long timeInMiliseconds, final float speedUpValue) {
+
+		changeSpeedBy(objectToSpeedUp, speedUpValue);
+
+		new OneTimeTimedEventHandler(objectToSpeedUp.getTimingSource()) {
+
+			@Override
+			public long getInterval() {
+				return timeInMiliseconds;
+			}
+
+			@Override
+			public void intervalElapsed() {
+				changeSpeedBy(objectToSpeedUp, speedUpValue * -1);
+			}
+		};
 
 	}
 }

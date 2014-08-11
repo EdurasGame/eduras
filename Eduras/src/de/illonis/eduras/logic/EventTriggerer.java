@@ -650,4 +650,15 @@ public interface EventTriggerer {
 	 * @param newValue
 	 */
 	void setSpeed(MoveableGameObject object, float newValue);
+
+	/**
+	 * Speeds up a {@link MoveableGameObject} by some value for some time.
+	 * 
+	 * @param objectToSpeedUp
+	 * @param timeInMiliseconds
+	 *            duration of speed up
+	 * @param speedUpValue
+	 */
+	void speedUpObjectForSomeTime(MoveableGameObject objectToSpeedUp,
+			long timeInMiliseconds, float speedUpValue);
 }
