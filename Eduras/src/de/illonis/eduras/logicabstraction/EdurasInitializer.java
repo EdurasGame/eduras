@@ -329,8 +329,9 @@ public class EdurasInitializer {
 			}
 
 			@Override
-			public void createDynamicPolygonObjectAt(ObjectType type,
+			public int createDynamicPolygonObjectAt(ObjectType type,
 					Vector2f[] polygonVector2fs, Vector2f position, int owner) {
+				return -1;
 			}
 
 			@Override

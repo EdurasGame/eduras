@@ -49,6 +49,12 @@ HEALING_POTION, W / 4, (3 * H) / 4
 SPEED_POWERUP, W / 4, H / 2
 INVISIBILITY_POWERUP, 3 * (W / 4), H / 2
 
+PORTAL, 3 * (W / 8), (H / 4)
+PORTAL, 5 * (W / 8), 3 * (H / 4)
+
+PORTAL, W - 27, 3 * (H / 8) - 10
+PORTAL, 2, 3 * (H / 4)
+
 BUILDING,		80,	80
 BUILDING,		W-80,	80
 BUILDING,		80,	H-80

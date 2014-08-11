@@ -77,6 +77,7 @@ import de.illonis.eduras.gameobjects.GameObject.Visibility;
 import de.illonis.eduras.gameobjects.MoveableGameObject;
 import de.illonis.eduras.gameobjects.NeutralArea;
 import de.illonis.eduras.gameobjects.OneTimeTimedEventHandler;
+import de.illonis.eduras.gameobjects.Portal;
 import de.illonis.eduras.interfaces.GameLogicInterface;
 import de.illonis.eduras.inventory.InventoryIsFullException;
 import de.illonis.eduras.inventory.NoSuchItemException;
@@ -480,18 +481,34 @@ public class ServerEventTriggerer implements EventTriggerer {
 		SetMapEvent setMapEvent = new SetMapEvent(map.getName());
 		sendEvents(setMapEvent);
 
+		LinkedList<Portal> portals = new LinkedList<Portal>();
 		// send objects to client
 		for (InitialObjectData initialObject : map.getInitialObjects()) {
 
+			int objectId;
+
 			if (initialObject.getType() == ObjectType.DYNAMIC_POLYGON_BLOCK
 					|| initialObject.getType() == ObjectType.MAPBOUNDS) {
-				createDynamicPolygonObjectAt(initialObject.getType(),
+				objectId = createDynamicPolygonObjectAt(
+						initialObject.getType(),
 						initialObject.getPolygonVector2dfs(),
 						initialObject.getPosition(), -1);
 			} else {
-				createObjectAt(initialObject.getType(),
+				objectId = createObjectAt(initialObject.getType(),
 						initialObject.getPosition(), -1);
 			}
+
+			if (initialObject.getType() == ObjectType.PORTAL) {
+				portals.add((Portal) gameInfo.findObjectById(objectId));
+			}
+		}
+
+		for (int i = 0; i < portals.size(); i = i + 2) {
+			Portal portalOne = portals.get(i);
+			Portal portalTwo = portals.get(i + 1);
+
+			portalOne.setPartnerPortal(portalTwo);
+			portalTwo.setPartnerPortal(portalOne);
 		}
 
 	}
@@ -581,10 +598,11 @@ public class ServerEventTriggerer implements EventTriggerer {
 	}
 
 	@Override
-	public void createDynamicPolygonObjectAt(ObjectType type,
+	public int createDynamicPolygonObjectAt(ObjectType type,
 			Vector2f[] polygonVector2fs, Vector2f position, int owner) {
 		int objId = createObjectAt(type, position, owner);
 		setPolygonData(objId, polygonVector2fs);
+		return objId;
 	}
 
 	@Override

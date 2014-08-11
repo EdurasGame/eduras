@@ -690,9 +690,9 @@ public final class S {
 
 		public static long spell_invisibility_duration = 15000;
 
-		public static float go_portal_width = 60;
+		public static float go_portal_width = 25;
 
-		public static float go_portal_height = 60;
+		public static float go_portal_height = 25;
 
 	}
 

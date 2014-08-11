@@ -76,10 +76,11 @@ public interface EventTriggerer {
 	 *            position of polygon.
 	 * @param owner
 	 *            owner id of new polygon.
+	 * @return returns the id of the newly created object
 	 * 
 	 * @author illonis
 	 */
-	void createDynamicPolygonObjectAt(ObjectType type,
+	int createDynamicPolygonObjectAt(ObjectType type,
 			Vector2f[] polygonVector2fs, Vector2f position, int owner);
 
 	/**
