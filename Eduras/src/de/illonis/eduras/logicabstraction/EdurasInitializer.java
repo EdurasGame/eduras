@@ -448,6 +448,11 @@ public class EdurasInitializer {
 					float speedUpValue) {
 			}
 
+			@Override
+			public void makeInvisibleForSomeTime(
+					GameObject objectToMakeInvisible, long timeInMiliseconds) {
+			}
+
 		});
 
 		networkManager.getClient().setEventHandler(new EventParser(logic));

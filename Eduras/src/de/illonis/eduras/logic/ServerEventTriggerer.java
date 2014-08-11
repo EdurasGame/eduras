@@ -1115,4 +1115,23 @@ public class ServerEventTriggerer implements EventTriggerer {
 		};
 
 	}
+
+	@Override
+	public void makeInvisibleForSomeTime(
+			final GameObject objectToMakeInvisible, final long timeInMiliseconds) {
+		setVisibility(objectToMakeInvisible.getId(), Visibility.OWNER_TEAM);
+
+		new OneTimeTimedEventHandler(objectToMakeInvisible.getTimingSource()) {
+
+			@Override
+			public long getInterval() {
+				return timeInMiliseconds;
+			}
+
+			@Override
+			public void intervalElapsed() {
+				setVisibility(objectToMakeInvisible.getId(), Visibility.ALL);
+			}
+		};
+	}
 }

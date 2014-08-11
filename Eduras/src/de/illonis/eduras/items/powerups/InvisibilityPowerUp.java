@@ -7,7 +7,6 @@ import org.newdawn.slick.geom.Circle;
 import de.illonis.edulog.EduLog;
 import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.ObjectFactory.ObjectType;
-import de.illonis.eduras.gameobjects.OneTimeTimedEventHandler;
 import de.illonis.eduras.gameobjects.TimingSource;
 import de.illonis.eduras.settings.S;
 import de.illonis.eduras.units.PlayerMainFigure;
@@ -25,22 +24,8 @@ public class InvisibilityPowerUp extends RespawnablePowerUp {
 
 	@Override
 	public void onActivation(final PlayerMainFigure touchingPlayer) {
-		getGame().getEventTriggerer().setVisibility(touchingPlayer.getId(),
-				Visibility.OWNER_TEAM);
-
-		new OneTimeTimedEventHandler(getTimingSource()) {
-
-			@Override
-			public long getInterval() {
-				return S.Server.go_invisibility_powerup_duration;
-			}
-
-			@Override
-			public void intervalElapsed() {
-				getGame().getEventTriggerer().setVisibility(
-						touchingPlayer.getId(), Visibility.ALL);
-			}
-		};
+		getGame().getEventTriggerer().makeInvisibleForSomeTime(touchingPlayer,
+				S.Server.go_invisibility_powerup_duration);
 
 	}
 

@@ -661,4 +661,13 @@ public interface EventTriggerer {
 	 */
 	void speedUpObjectForSomeTime(MoveableGameObject objectToSpeedUp,
 			long timeInMiliseconds, float speedUpValue);
+
+	/**
+	 * Makes a {@link GameObject} invisible for some time.
+	 * 
+	 * @param objectToMakeInvisible
+	 * @param timeInMiliseconds
+	 */
+	void makeInvisibleForSomeTime(GameObject objectToMakeInvisible,
+			long timeInMiliseconds);
 }
