@@ -680,6 +680,12 @@ public final class S {
 
 		public static long go_invisibility_powerup_duration = 15000;
 
+		public static int spell_speed_costs = 50;
+
+		public static float spell_speed_amount = 50;
+
+		public static long spell_speed_duration = 15000;
+
 	}
 
 	/**

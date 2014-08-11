@@ -25,7 +25,5 @@ public class HealActionEvent extends UnitSpellActionEvent {
 	 */
 	public HealActionEvent(int executingPlayer, int idOfUnitToHeal) {
 		super(GameEventNumber.HEAL_ACTION, executingPlayer, idOfUnitToHeal);
-
-		putArgument(idOfUnitToHeal);
 	}
 }
