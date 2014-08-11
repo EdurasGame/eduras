@@ -393,6 +393,7 @@ public class EventParser implements EventHandler {
 				break;
 			case HEAL_ACTION:
 			case SPEED_SPELL:
+			case INVISIBILITY_SPELL:
 				logic.onGameEventAppeared(new UnitSpellActionEvent(
 						gameEventNumber, (Integer) event.getArgument(0),
 						(Integer) event.getArgument(1)));

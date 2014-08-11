@@ -13,6 +13,7 @@ import de.illonis.eduras.ObjectFactory;
 import de.illonis.eduras.Player;
 import de.illonis.eduras.actions.CreateUnitAction;
 import de.illonis.eduras.actions.HealSpellAction;
+import de.illonis.eduras.actions.InvisibilitySpellAction;
 import de.illonis.eduras.actions.RespawnPlayerAction;
 import de.illonis.eduras.actions.ScoutSpellAction;
 import de.illonis.eduras.actions.SpawnItemAction;
@@ -279,17 +280,36 @@ public class ServerLogic implements GameLogicInterface {
 			break;
 		}
 		case SPEED_SPELL: {
-			UnitSpellActionEvent healEvent = (UnitSpellActionEvent) event;
+			UnitSpellActionEvent speedEvent = (UnitSpellActionEvent) event;
 
 			Player executingPlayer;
 			try {
-				executingPlayer = gameInfo.getPlayerByOwnerId(healEvent
+				executingPlayer = gameInfo.getPlayerByOwnerId(speedEvent
 						.getExecutingPlayer());
 				SpeedSpellAction speedSpellAction = new SpeedSpellAction(
 						executingPlayer,
-						(Unit) gameInfo.findObjectById(healEvent
+						(Unit) gameInfo.findObjectById(speedEvent
 								.getIdOfUnitToCastSpellOn()));
 				speedSpellAction.execute(gameInfo);
+			} catch (ObjectNotFoundException ex) {
+				L.log(Level.WARNING,
+						"Cannot find player when receiving heal action.", ex);
+				break;
+			}
+			break;
+		}
+		case INVISIBILITY_SPELL: {
+			UnitSpellActionEvent invisibilityEvent = (UnitSpellActionEvent) event;
+
+			Player executingPlayer;
+			try {
+				executingPlayer = gameInfo.getPlayerByOwnerId(invisibilityEvent
+						.getExecutingPlayer());
+				InvisibilitySpellAction invisibilitySpellAction = new InvisibilitySpellAction(
+						executingPlayer,
+						(Unit) gameInfo.findObjectById(invisibilityEvent
+								.getIdOfUnitToCastSpellOn()));
+				invisibilitySpellAction.execute(gameInfo);
 			} catch (ObjectNotFoundException ex) {
 				L.log(Level.WARNING,
 						"Cannot find player when receiving heal action.", ex);

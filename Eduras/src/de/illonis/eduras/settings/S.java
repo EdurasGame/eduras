@@ -686,6 +686,10 @@ public final class S {
 
 		public static long spell_speed_duration = 15000;
 
+		public static int spell_invisibility_costs = 50;
+
+		public static long spell_invisibility_duration = 15000;
+
 	}
 
 	/**
