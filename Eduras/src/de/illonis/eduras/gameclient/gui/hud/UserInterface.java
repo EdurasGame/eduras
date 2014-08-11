@@ -15,11 +15,11 @@ import de.illonis.eduras.gameclient.gui.game.GuiResizeListener;
 import de.illonis.eduras.gameclient.gui.game.TooltipHandler;
 import de.illonis.eduras.gameclient.gui.game.TooltipTriggererNotifier;
 import de.illonis.eduras.gameclient.gui.hud.ActionBarPage.PageNumber;
-import de.illonis.eduras.gameclient.gui.hud.actionbar.HealButton;
 import de.illonis.eduras.gameclient.gui.hud.actionbar.ItemPage;
 import de.illonis.eduras.gameclient.gui.hud.actionbar.ResurrectPage;
 import de.illonis.eduras.gameclient.gui.hud.actionbar.ScoutSpellButton;
 import de.illonis.eduras.gameclient.gui.hud.actionbar.SpawnObserverButton;
+import de.illonis.eduras.gameclient.gui.hud.actionbar.SpellPage;
 import de.illonis.eduras.logicabstraction.EdurasInitializer;
 import de.illonis.eduras.logicabstraction.InformationProvider;
 import de.illonis.eduras.networking.ClientRole;
@@ -138,6 +138,7 @@ public class UserInterface implements GuiResizeListener {
 		hudNotifier.addListener(resurrectPage);
 
 		new ItemPage(guiReactor, actionBar);
+		new SpellPage(guiReactor, actionBar);
 
 		addButtonsForMainPage(mainPage);
 
@@ -183,13 +184,31 @@ public class UserInterface implements GuiResizeListener {
 			}
 		};
 
+		// SPELLBUTTON
+		ActionButton spellButton = new ActionButton(ImageKey.ITEM_DUMMY,
+				guiReactor) {
+			@Override
+			public void actionPerformed() {
+				actionBar.setPage(PageNumber.SPELL);
+			}
+
+			@Override
+			public String getLabel() {
+				return "spells";
+			}
+
+			@Override
+			public int getCosts() {
+				return 0;
+			}
+		};
+
 		SpawnObserverButton observerButton = new SpawnObserverButton(guiReactor);
-		HealButton healButton = new HealButton(guiReactor);
 		ScoutSpellButton scoutButton = new ScoutSpellButton(guiReactor);
 
 		mainPage.addButton(spawnItemButton);
-		mainPage.addButton(healButton);
 		mainPage.addButton(resurrectButton);
+		mainPage.addButton(spellButton);
 		mainPage.addButton(observerButton);
 		mainPage.addButton(scoutButton);
 
