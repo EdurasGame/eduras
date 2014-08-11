@@ -16,13 +16,13 @@ import de.illonis.eduras.actions.HealSpellAction;
 import de.illonis.eduras.actions.RespawnPlayerAction;
 import de.illonis.eduras.actions.ScoutSpellAction;
 import de.illonis.eduras.actions.SpawnItemAction;
+import de.illonis.eduras.actions.SpeedSpellAction;
 import de.illonis.eduras.ai.movement.UnitNotControllableException;
 import de.illonis.eduras.events.ClientRenameEvent;
 import de.illonis.eduras.events.CreateUnitEvent;
 import de.illonis.eduras.events.GameEvent;
 import de.illonis.eduras.events.GameEvent.GameEventNumber;
 import de.illonis.eduras.events.GameInfoRequest;
-import de.illonis.eduras.events.HealActionEvent;
 import de.illonis.eduras.events.InitInformationEvent;
 import de.illonis.eduras.events.ItemEvent;
 import de.illonis.eduras.events.ResurrectPlayerEvent;
@@ -31,14 +31,15 @@ import de.illonis.eduras.events.SendUnitsEvent;
 import de.illonis.eduras.events.SetFloatGameObjectAttributeEvent;
 import de.illonis.eduras.events.SpawnItemEvent;
 import de.illonis.eduras.events.SwitchInteractModeEvent;
+import de.illonis.eduras.events.UnitSpellActionEvent;
 import de.illonis.eduras.events.UserMovementEvent;
 import de.illonis.eduras.exceptions.InsufficientResourceException;
 import de.illonis.eduras.exceptions.InvalidNameException;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
 import de.illonis.eduras.exceptions.WrongObjectTypeException;
+import de.illonis.eduras.gameobjects.Base;
 import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.gameobjects.MoveableGameObject.Direction;
-import de.illonis.eduras.gameobjects.Base;
 import de.illonis.eduras.interfaces.GameEventListener;
 import de.illonis.eduras.interfaces.GameLogicInterface;
 import de.illonis.eduras.inventory.ItemSlotIsEmptyException;
@@ -259,7 +260,7 @@ public class ServerLogic implements GameLogicInterface {
 			break;
 		}
 		case HEAL_ACTION: {
-			HealActionEvent healEvent = (HealActionEvent) event;
+			UnitSpellActionEvent healEvent = (UnitSpellActionEvent) event;
 
 			Player executingPlayer;
 			try {
@@ -270,6 +271,25 @@ public class ServerLogic implements GameLogicInterface {
 						(Unit) gameInfo.findObjectById(healEvent
 								.getIdOfUnitToCastSpellOn()));
 				healSpellAction.execute(gameInfo);
+			} catch (ObjectNotFoundException ex) {
+				L.log(Level.WARNING,
+						"Cannot find player when receiving heal action.", ex);
+				break;
+			}
+			break;
+		}
+		case SPEED_SPELL: {
+			UnitSpellActionEvent healEvent = (UnitSpellActionEvent) event;
+
+			Player executingPlayer;
+			try {
+				executingPlayer = gameInfo.getPlayerByOwnerId(healEvent
+						.getExecutingPlayer());
+				SpeedSpellAction speedSpellAction = new SpeedSpellAction(
+						executingPlayer,
+						(Unit) gameInfo.findObjectById(healEvent
+								.getIdOfUnitToCastSpellOn()));
+				speedSpellAction.execute(gameInfo);
 			} catch (ObjectNotFoundException ex) {
 				L.log(Level.WARNING,
 						"Cannot find player when receiving heal action.", ex);

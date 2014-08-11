@@ -15,13 +15,13 @@ import de.illonis.eduras.Player;
 import de.illonis.eduras.Team;
 import de.illonis.eduras.events.CreateUnitEvent;
 import de.illonis.eduras.events.GameEvent.GameEventNumber;
-import de.illonis.eduras.events.HealActionEvent;
 import de.illonis.eduras.events.ItemEvent;
 import de.illonis.eduras.events.ResurrectPlayerEvent;
 import de.illonis.eduras.events.ScoutSpellEvent;
 import de.illonis.eduras.events.SendUnitsEvent;
 import de.illonis.eduras.events.SpawnItemEvent;
 import de.illonis.eduras.events.SwitchInteractModeEvent;
+import de.illonis.eduras.events.UnitSpellActionEvent;
 import de.illonis.eduras.events.UserMovementEvent;
 import de.illonis.eduras.exceptions.InsufficientResourceException;
 import de.illonis.eduras.exceptions.MessageNotSupportedException;
@@ -296,8 +296,11 @@ public class GuiInternalEventListener implements GamePanelReactor {
 	}
 
 	@Override
-	public void onUnitHeal(Unit targetUnit)
+	public void onUnitSpell(Unit targetUnit)
 			throws InsufficientResourceException {
+
+		GameEventNumber spellNumber = infoPro.getClientData()
+				.getCurrentSpellSelected();
 
 		PlayerMainFigure player;
 		try {
@@ -306,10 +309,20 @@ public class GuiInternalEventListener implements GamePanelReactor {
 			L.log(Level.SEVERE, "Player not found while healing unit.", e);
 			return;
 		}
-		checkSufficientResources(player.getPlayer(), S.Server.spell_heal_costs);
 
-		HealActionEvent healEvent = new HealActionEvent(client.getOwnerID(),
-				targetUnit.getId());
+		int requiredResources;
+		switch (spellNumber) {
+		case HEAL_ACTION:
+			requiredResources = S.Server.spell_heal_costs;
+			break;
+		default:
+			L.severe("Spell " + spellNumber + " is not supported!!");
+			return;
+		}
+		checkSufficientResources(player.getPlayer(), requiredResources);
+
+		UnitSpellActionEvent healEvent = new UnitSpellActionEvent(spellNumber,
+				client.getOwnerID(), targetUnit.getId());
 
 		if (infoPro.getGameMode().getRelation(targetUnit, player) != Relation.ALLIED) {
 			client.getLogic().showNotification("Player is not friendly");

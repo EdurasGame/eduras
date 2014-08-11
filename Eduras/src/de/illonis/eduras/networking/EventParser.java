@@ -25,7 +25,6 @@ import de.illonis.eduras.events.DeathEvent;
 import de.illonis.eduras.events.GameEvent.GameEventNumber;
 import de.illonis.eduras.events.GameInfoRequest;
 import de.illonis.eduras.events.GameReadyEvent;
-import de.illonis.eduras.events.HealActionEvent;
 import de.illonis.eduras.events.InitInformationEvent;
 import de.illonis.eduras.events.ItemEvent;
 import de.illonis.eduras.events.ItemUseFailedEvent;
@@ -58,6 +57,7 @@ import de.illonis.eduras.events.SetTimeEvent;
 import de.illonis.eduras.events.SetVisibilityEvent;
 import de.illonis.eduras.events.SpawnItemEvent;
 import de.illonis.eduras.events.SwitchInteractModeEvent;
+import de.illonis.eduras.events.UnitSpellActionEvent;
 import de.illonis.eduras.events.UserMovementEvent;
 import de.illonis.eduras.exceptions.InvalidNameException;
 import de.illonis.eduras.gameobjects.GameObject.Visibility;
@@ -392,8 +392,10 @@ public class EventParser implements EventHandler {
 								(Float) event.getArgument(3))));
 				break;
 			case HEAL_ACTION:
-				logic.onGameEventAppeared(new HealActionEvent((Integer) event
-						.getArgument(0), (Integer) event.getArgument(1)));
+			case SPEED_SPELL:
+				logic.onGameEventAppeared(new UnitSpellActionEvent(
+						gameEventNumber, (Integer) event.getArgument(0),
+						(Integer) event.getArgument(1)));
 				break;
 			case CREATE_UNIT:
 				logic.onGameEventAppeared(new CreateUnitEvent((Integer) event

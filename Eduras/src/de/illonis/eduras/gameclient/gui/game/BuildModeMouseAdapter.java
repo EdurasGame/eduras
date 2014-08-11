@@ -118,7 +118,7 @@ public class BuildModeMouseAdapter extends ScrollModeMouseAdapter {
 			startPoint = new Point(x, y);
 			return;
 		}
-		if (getPanelLogic().getClickState() == ClickState.SELECT_TARGET_FOR_HEAL) {
+		if (getPanelLogic().getClickState() == ClickState.SELECT_TARGET_FOR_SPELL) {
 			if (button == Input.MOUSE_LEFT_BUTTON) {
 				Vector2f clickGamePoint = getPanelLogic()
 						.computeGuiPointToGameCoordinate(new Vector2f(x, y));
@@ -144,7 +144,7 @@ public class BuildModeMouseAdapter extends ScrollModeMouseAdapter {
 							&& infoPro.getGameMode().getRelation(gameObject,
 									player) == Relation.ALLIED) {
 						try {
-							getListener().onUnitHeal((Unit) gameObject);
+							getListener().onUnitSpell((Unit) gameObject);
 							actionDone();
 							getPanelLogic().setClickState(ClickState.DEFAULT);
 						} catch (InsufficientResourceException e) {

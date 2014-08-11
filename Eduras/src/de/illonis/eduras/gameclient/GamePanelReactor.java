@@ -83,14 +83,14 @@ public interface GamePanelReactor {
 			throws InsufficientResourceException, CantSpawnHereException;
 
 	/**
-	 * Heals a unit.
+	 * Casts a spell on a unit.
 	 * 
 	 * @param targetUnit
-	 *            the unit to heal.
+	 *            the unit to cast the spell on.
 	 * @throws InsufficientResourceException
 	 *             if not enough resources available
 	 */
-	void onUnitHeal(Unit targetUnit) throws InsufficientResourceException;
+	void onUnitSpell(Unit targetUnit) throws InsufficientResourceException;
 
 	/**
 	 * Triggers users wish of quitting the game.

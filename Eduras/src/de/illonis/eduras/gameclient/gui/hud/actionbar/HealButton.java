@@ -1,9 +1,8 @@
 package de.illonis.eduras.gameclient.gui.hud.actionbar;
 
+import de.illonis.eduras.events.GameEvent.GameEventNumber;
 import de.illonis.eduras.gameclient.GamePanelReactor;
 import de.illonis.eduras.gameclient.datacache.CacheInfo.ImageKey;
-import de.illonis.eduras.gameclient.gui.game.GamePanelLogic.ClickState;
-import de.illonis.eduras.gameclient.gui.hud.ActionButton;
 import de.illonis.eduras.settings.S;
 
 /**
@@ -12,7 +11,7 @@ import de.illonis.eduras.settings.S;
  * @author illonis
  * 
  */
-public class HealButton extends ActionButton {
+public class HealButton extends UnitSpellButton {
 
 	/**
 	 * Creates a new healbutton.
@@ -21,12 +20,7 @@ public class HealButton extends ActionButton {
 	 *            the reactor.
 	 */
 	public HealButton(GamePanelReactor reactor) {
-		super(ImageKey.ACTION_HEAL, reactor);
-	}
-
-	@Override
-	public void actionPerformed() {
-		reactor.setClickState(ClickState.SELECT_TARGET_FOR_HEAL);
+		super(ImageKey.ACTION_HEAL, reactor, GameEventNumber.HEAL_ACTION);
 	}
 
 	@Override

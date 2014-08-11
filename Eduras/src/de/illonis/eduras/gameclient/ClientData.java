@@ -6,6 +6,7 @@ import java.util.TreeSet;
 
 import de.illonis.eduras.ObjectFactory.ObjectType;
 import de.illonis.eduras.Player;
+import de.illonis.eduras.events.GameEvent.GameEventNumber;
 import de.illonis.eduras.logicabstraction.InformationProvider;
 
 /**
@@ -25,6 +26,7 @@ public final class ClientData {
 	private Player currentResurrectTarget;
 	private ObjectType typeOfItemToSpawn;
 	private int currentActionSelected;
+	private GameEventNumber currentSpellSelected;
 
 	/**
 	 * Creates a new storage.
@@ -90,7 +92,7 @@ public final class ClientData {
 	public int getCurrentItemSelected() {
 		return currentItemSelected;
 	}
-	
+
 	/**
 	 * Returns the currently selected action slot number.
 	 * 
@@ -100,7 +102,6 @@ public final class ClientData {
 		return currentActionSelected;
 	}
 
-
 	/**
 	 * Sets the currently selected item's slot number.
 	 * 
@@ -109,7 +110,7 @@ public final class ClientData {
 	public void setCurrentItemSelected(int currentItemSelected) {
 		this.currentItemSelected = currentItemSelected;
 	}
-	
+
 	/**
 	 * Sets the currently selected action slot number.
 	 * 
@@ -167,6 +168,14 @@ public final class ClientData {
 	 */
 	public ChatCache getChatCache() {
 		return chatCache;
+	}
+
+	public GameEventNumber getCurrentSpellSelected() {
+		return currentSpellSelected;
+	}
+
+	public void setCurrentSpellSelected(GameEventNumber spell) {
+		currentSpellSelected = spell;
 	}
 
 }
