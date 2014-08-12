@@ -231,6 +231,10 @@ public class ServerEventTriggerer implements EventTriggerer {
 	@Override
 	public void setVisibility(int objectId, Visibility newVal) {
 		GameObject object = gameInfo.findObjectById(objectId);
+		if (object == null) {
+			L.warning("This object doesn't exist anymore. You might want to check whether this is okay.");
+			return;
+		}
 		SetVisibilityEvent setVisibleEvent = new SetVisibilityEvent(objectId,
 				newVal);
 		object.setVisible(newVal);
