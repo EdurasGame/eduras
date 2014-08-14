@@ -142,7 +142,13 @@ public class ServerEventTriggerer implements EventTriggerer {
 			Vector2f position, Vector2f speedVector) {
 
 		int missileId = createObjectWithCenterAt(missileType, position, owner);
-		Missile o = (Missile) gameInfo.findObjectById(missileId);
+		Missile o;
+		try {
+			o = (Missile) gameInfo.findObjectById(missileId);
+		} catch (ObjectNotFoundException e) {
+			L.log(Level.WARNING, "Cannot find missile object!", e);
+			return;
+		}
 
 		o.setSpeedVector(speedVector);
 		MovementEvent me = new MovementEvent(GameEventNumber.SET_SPEEDVECTOR,
@@ -215,7 +221,13 @@ public class ServerEventTriggerer implements EventTriggerer {
 
 		logic.getObjectFactory().onObjectFactoryEventAppeared(newObjectEvent);
 
-		GameObject o = gameInfo.findObjectById(id);
+		GameObject o;
+		try {
+			o = gameInfo.findObjectById(id);
+		} catch (ObjectNotFoundException e) {
+			L.log(Level.WARNING, "Cannot find object that was just created!", e);
+			return -1;
+		}
 		o.setXPosition(position.getX());
 		o.setYPosition(position.getY());
 		MovementEvent setPos = new MovementEvent(GameEventNumber.SET_POS_TCP,
@@ -230,11 +242,14 @@ public class ServerEventTriggerer implements EventTriggerer {
 
 	@Override
 	public void setVisibility(int objectId, Visibility newVal) {
-		GameObject object = gameInfo.findObjectById(objectId);
-		if (object == null) {
+		GameObject object;
+		try {
+			object = gameInfo.findObjectById(objectId);
+		} catch (ObjectNotFoundException e) {
 			L.warning("This object doesn't exist anymore. You might want to check whether this is okay.");
 			return;
 		}
+
 		SetVisibilityEvent setVisibleEvent = new SetVisibilityEvent(objectId,
 				newVal);
 		object.setVisible(newVal);
@@ -244,7 +259,14 @@ public class ServerEventTriggerer implements EventTriggerer {
 	@Override
 	public void lootItem(int objectId, int playerId) {
 
-		Item i = (Item) gameInfo.findObjectById(objectId);
+		Item i;
+		try {
+			i = (Item) gameInfo.findObjectById(objectId);
+		} catch (ObjectNotFoundException e2) {
+			L.log(Level.WARNING,
+					"Cannot find find item that is about to be looted!", e2);
+			return;
+		}
 
 		SetBooleanGameObjectAttributeEvent bo = new SetBooleanGameObjectAttributeEvent(
 				GameEventNumber.SET_COLLIDABLE, objectId, false);
@@ -336,8 +358,10 @@ public class ServerEventTriggerer implements EventTriggerer {
 		e.setNewXPos(newPosition.x);
 		e.setNewYPos(newPosition.y);
 
-		GameObject o = gameInfo.findObjectById(objectId);
-		if (o == null) {
+		GameObject o;
+		try {
+			o = gameInfo.findObjectById(objectId);
+		} catch (ObjectNotFoundException e1) {
 			L.warning("Couldn't find object to change position of!");
 			return;
 		}
@@ -365,7 +389,13 @@ public class ServerEventTriggerer implements EventTriggerer {
 
 	@Override
 	public void setHealth(int id, int newHealth) {
-		GameObject object = gameInfo.findObjectById(id);
+		GameObject object;
+		try {
+			object = gameInfo.findObjectById(id);
+		} catch (ObjectNotFoundException e) {
+			L.log(Level.WARNING, "Cannot find object!", e);
+			return;
+		}
 
 		if (object instanceof Unit) {
 			Unit unit = (Unit) object;
@@ -503,7 +533,13 @@ public class ServerEventTriggerer implements EventTriggerer {
 			}
 
 			if (initialObject.getType() == ObjectType.PORTAL) {
-				portals.add((Portal) gameInfo.findObjectById(objectId));
+				try {
+					portals.add((Portal) gameInfo.findObjectById(objectId));
+				} catch (ObjectNotFoundException e) {
+					L.log(Level.WARNING,
+							"Cannot find object that was just created from map file!",
+							e);
+				}
 			}
 		}
 
@@ -611,7 +647,14 @@ public class ServerEventTriggerer implements EventTriggerer {
 
 	@Override
 	public void setPolygonData(int objectId, Vector2f[] polygonVertices) {
-		GameObject object = gameInfo.findObjectById(objectId);
+		GameObject object;
+		try {
+			object = gameInfo.findObjectById(objectId);
+		} catch (ObjectNotFoundException e) {
+			L.log(Level.WARNING, "Cannot find object to set polygon data of!",
+					e);
+			return;
+		}
 		if (object instanceof DynamicPolygonObject) {
 			DynamicPolygonObject block = (DynamicPolygonObject) object;
 			block.setPolygonVertices(polygonVertices);
@@ -797,7 +840,13 @@ public class ServerEventTriggerer implements EventTriggerer {
 
 	@Override
 	public void setCollidability(int objectId, boolean newVal) {
-		GameObject object = gameInfo.findObjectById(objectId);
+		GameObject object;
+		try {
+			object = gameInfo.findObjectById(objectId);
+		} catch (ObjectNotFoundException e) {
+			L.log(Level.WARNING, "Cannot find object!", e);
+			return;
+		}
 
 		SetBooleanGameObjectAttributeEvent setCollidableEvent = new SetBooleanGameObjectAttributeEvent(
 				GameEventNumber.SET_COLLIDABLE, objectId, newVal);
@@ -920,7 +969,13 @@ public class ServerEventTriggerer implements EventTriggerer {
 
 	@Override
 	public void notifyCooldownFinished(int idOfItem) {
-		Item item = (Item) gameInfo.findObjectById(idOfItem);
+		Item item;
+		try {
+			item = (Item) gameInfo.findObjectById(idOfItem);
+		} catch (ObjectNotFoundException e1) {
+			L.log(Level.WARNING, "Cannot find item object!", e1);
+			return;
+		}
 
 		Player player;
 		try {
@@ -961,11 +1016,12 @@ public class ServerEventTriggerer implements EventTriggerer {
 			Vector2f position, int owner) {
 		int objectId = createObjectAt(objectType, position, owner);
 
-		GameObject object = gameInfo.findObjectById(objectId);
-		if (object == null) {
+		GameObject object;
+		try {
+			object = gameInfo.findObjectById(objectId);
+		} catch (ObjectNotFoundException e) {
 			L.severe("Cannot find the object that was just created!");
 			return -1;
-
 		}
 
 		object.getShape().setCenterX(position.x);
@@ -988,7 +1044,13 @@ public class ServerEventTriggerer implements EventTriggerer {
 		int id = createObjectAt(object,
 				new Vector2f(shape.getX(), shape.getY()), owner);
 
-		GameObject o = gameInfo.findObjectById(id);
+		GameObject o;
+		try {
+			o = gameInfo.findObjectById(id);
+		} catch (ObjectNotFoundException e) {
+			L.severe("Cannot find the object that was just created!");
+			return -1;
+		}
 		setVisibility(id, Visibility.INVISIBLE);
 		List<GameObject> gameobjects = gameInfo.findObjectsInDistance(
 				new Vector2f(shape.getCenterX(), shape.getCenterY()),
@@ -1056,8 +1118,10 @@ public class ServerEventTriggerer implements EventTriggerer {
 	public int createObjectAtBase(ObjectType objectType, Base base, int owner) {
 		int objectId = createObject(objectType, owner);
 
-		GameObject object = gameInfo.findObjectById(objectId);
-		if (object == null) {
+		GameObject object;
+		try {
+			object = gameInfo.findObjectById(objectId);
+		} catch (ObjectNotFoundException e1) {
 			L.severe("Can't find the object I just created! ObjectId: "
 					+ objectId);
 			return -1;

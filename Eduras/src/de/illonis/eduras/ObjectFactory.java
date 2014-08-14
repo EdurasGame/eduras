@@ -368,7 +368,13 @@ public class ObjectFactory {
 		int h = logic.getGame().getMap().getHeight() / 2;
 		onObjectFactoryEventAppeared(birdEvent);
 
-		GameObject o = logic.getGame().findObjectById(999);
+		GameObject o;
+		try {
+			o = logic.getGame().findObjectById(999);
+		} catch (ObjectNotFoundException e) {
+			L.log(Level.WARNING, "Cannot find bird!", e);
+			return;
+		}
 		o.setPosition(w, h);
 		LinkedList<Integer> units = new LinkedList<Integer>();
 		units.add(999);

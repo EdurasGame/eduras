@@ -119,7 +119,13 @@ public class Edura extends TeamDeathmatch {
 					ObjectType.NEUTRAL_BASE,
 					new Vector2df(nodeData.getX(), nodeData.getY()), -1);
 
-			Base base = (Base) gameInfo.findObjectById(objectId);
+			Base base;
+			try {
+				base = (Base) gameInfo.findObjectById(objectId);
+			} catch (ObjectNotFoundException e) {
+				L.log(Level.WARNING, "Cannot find object!", e);
+				return;
+			}
 			nodeIdToBase.put(nodeid, base);
 			baseToVertex.put(base, new Vertex());
 		}

@@ -107,9 +107,14 @@ public class ClientLogic implements GameLogicInterface {
 				MovementEvent moveEvent = (MovementEvent) event;
 				float newXPos = moveEvent.getNewXPos();
 				float newYPos = moveEvent.getNewYPos();
-				GameObject o = gameInfo.findObjectById(moveEvent.getObjectId());
-				if (o == null)
+				GameObject o;
+				try {
+					o = gameInfo.findObjectById(moveEvent.getObjectId());
+				} catch (ObjectNotFoundException e3) {
+					L.log(Level.WARNING,
+							"Object to set position of cannot be found!", e3);
 					break;
+				}
 				o.setYPosition(newYPos);
 				o.setXPosition(newXPos);
 				getListener().onNewObjectPosition(o);
@@ -119,10 +124,13 @@ public class ClientLogic implements GameLogicInterface {
 				break;
 			case SET_HEALTH:
 				SetIntegerGameObjectAttributeEvent healthEvent = (SetIntegerGameObjectAttributeEvent) event;
-				GameObject obj = gameInfo.findObjectById(healthEvent
-						.getObjectId());
-				if (obj == null)
+				GameObject obj;
+				try {
+					obj = gameInfo.findObjectById(healthEvent.getObjectId());
+				} catch (ObjectNotFoundException e3) {
+					L.log(Level.WARNING, "Object cannot be found!", e3);
 					break;
+				}
 				Unit unit = (Unit) obj;
 				unit.setHealth(healthEvent.getNewValue());
 
@@ -131,9 +139,10 @@ public class ClientLogic implements GameLogicInterface {
 				break;
 			case SET_POLYGON_DATA:
 				SetPolygonDataEvent polyEvent = (SetPolygonDataEvent) event;
-				GameObject gameObj = gameInfo.findObjectById(polyEvent
-						.getObjectId());
-				if (gameObj == null) {
+				GameObject gameObj;
+				try {
+					gameObj = gameInfo.findObjectById(polyEvent.getObjectId());
+				} catch (ObjectNotFoundException e3) {
 					L.warning("Received polygon data for object with id "
 							+ polyEvent.getObjectId()
 							+ " which couldn't be found.");
@@ -149,9 +158,17 @@ public class ClientLogic implements GameLogicInterface {
 				break;
 			case SET_AMMU:
 				SetAmmunitionEvent setAmmuEvent = (SetAmmunitionEvent) event;
-				GameObject weapon = gameInfo.findObjectById(setAmmuEvent
-						.getObjectId());
-				if (weapon == null || !(weapon instanceof Weapon)) {
+				GameObject weapon;
+				try {
+					weapon = gameInfo
+							.findObjectById(setAmmuEvent.getObjectId());
+				} catch (ObjectNotFoundException e3) {
+					L.log(Level.WARNING, "Cannot find object.", e3);
+					break;
+				}
+				if (!(weapon instanceof Weapon)) {
+					L.warning("Object to set ammu of is of type "
+							+ weapon.getType());
 					break;
 				}
 				Weapon w = (Weapon) weapon;
@@ -170,9 +187,12 @@ public class ClientLogic implements GameLogicInterface {
 					break;
 				}
 				SetFloatGameObjectAttributeEvent setAngleEvent = (SetFloatGameObjectAttributeEvent) event;
-				GameObject angleGameObject = gameInfo
-						.findObjectById(setAngleEvent.getObjectId());
-				if (angleGameObject == null) {
+				GameObject angleGameObject;
+				try {
+					angleGameObject = gameInfo.findObjectById(setAngleEvent
+							.getObjectId());
+				} catch (ObjectNotFoundException e3) {
+					L.log(Level.WARNING, "Cannot find object!", e3);
 					break;
 				}
 				angleGameObject.setVisionAngle(setAngleEvent.getNewValue());
@@ -182,9 +202,12 @@ public class ClientLogic implements GameLogicInterface {
 					break;
 				}
 				SetFloatGameObjectAttributeEvent setRangeEvent = (SetFloatGameObjectAttributeEvent) event;
-				GameObject rangeGameObject = gameInfo
-						.findObjectById(setRangeEvent.getObjectId());
-				if (rangeGameObject == null) {
+				GameObject rangeGameObject;
+				try {
+					rangeGameObject = gameInfo.findObjectById(setRangeEvent
+							.getObjectId());
+				} catch (ObjectNotFoundException e3) {
+					L.log(Level.WARNING, "Cannot find object!", e3);
 					break;
 				}
 				rangeGameObject.setVisionAngle(setRangeEvent.getNewValue());
@@ -202,9 +225,12 @@ public class ClientLogic implements GameLogicInterface {
 					break;
 				}
 				SetFloatGameObjectAttributeEvent setRotationEvent = (SetFloatGameObjectAttributeEvent) event;
-				GameObject gameObject = gameInfo
-						.findObjectById(setRotationEvent.getObjectId());
-				if (gameObject == null) {
+				GameObject gameObject;
+				try {
+					gameObject = gameInfo.findObjectById(setRotationEvent
+							.getObjectId());
+				} catch (ObjectNotFoundException e3) {
+					L.log(Level.WARNING, "Cannot find object!", e3);
 					break;
 				}
 				gameObject.setRotation(setRotationEvent.getNewValue());
@@ -225,10 +251,13 @@ public class ClientLogic implements GameLogicInterface {
 				break;
 			case SET_MAXHEALTH:
 				SetIntegerGameObjectAttributeEvent mhealthEvent = (SetIntegerGameObjectAttributeEvent) event;
-				GameObject gobj = gameInfo.findObjectById(mhealthEvent
-						.getObjectId());
-				if (gobj == null)
+				GameObject gobj;
+				try {
+					gobj = gameInfo.findObjectById(mhealthEvent.getObjectId());
+				} catch (ObjectNotFoundException e3) {
+					L.log(Level.WARNING, "Cannot find object!", e3);
 					break;
+				}
 				Unit u = (Unit) gobj;
 				u.setMaxHealth(mhealthEvent.getNewValue());
 
@@ -276,7 +305,14 @@ public class ClientLogic implements GameLogicInterface {
 				break;
 			case DEATH:
 				DeathEvent de = (DeathEvent) event;
-				GameObject killed = gameInfo.findObjectById(de.getKilled());
+				GameObject killed;
+				try {
+					killed = gameInfo.findObjectById(de.getKilled());
+				} catch (ObjectNotFoundException e2) {
+					L.log(Level.WARNING,
+							"Cannot find object that was just killed!!", e2);
+					break;
+				}
 				if (killed.isUnit()) {
 					getListener().onDeath(de);
 				}
@@ -316,12 +352,16 @@ public class ClientLogic implements GameLogicInterface {
 				break;
 			case SET_VISIBLE:
 				SetVisibilityEvent visionEvent = (SetVisibilityEvent) event;
-				GameObject vObject = gameInfo.findObjectById(visionEvent
-						.getObjectId());
-				if (vObject != null) {
-					vObject.setVisible(visionEvent.getNewVisibility());
-					getListener().onVisibilityChanged(visionEvent);
+				GameObject vObject;
+				try {
+					vObject = gameInfo
+							.findObjectById(visionEvent.getObjectId());
+				} catch (ObjectNotFoundException e2) {
+					L.log(Level.WARNING, "Cannot find object!", e2);
+					break;
 				}
+				vObject.setVisible(visionEvent.getNewVisibility());
+				getListener().onVisibilityChanged(visionEvent);
 				break;
 			case SET_ITEM_SLOT:
 				SetItemSlotEvent slotEvent = (SetItemSlotEvent) event;
@@ -376,8 +416,14 @@ public class ClientLogic implements GameLogicInterface {
 			}
 			case SET_OWNER:
 				SetOwnerEvent setownerEvent = (SetOwnerEvent) event;
-				Item item = (Item) gameInfo.findObjectById(setownerEvent
-						.getObjectId());
+				Item item;
+				try {
+					item = (Item) gameInfo.findObjectById(setownerEvent
+							.getObjectId());
+				} catch (ObjectNotFoundException e2) {
+					L.log(Level.WARNING, "Cannot find item object!", e2);
+					break;
+				}
 				item.setOwner(setownerEvent.getOwner());
 				getListener().onOwnerChanged(setownerEvent);
 
@@ -429,9 +475,11 @@ public class ClientLogic implements GameLogicInterface {
 							+ baseConqueredEvent.getConqueringTeam());
 				}
 
-				NeutralArea conqueredArea = (NeutralArea) gameInfo
-						.findObjectById(baseConqueredEvent.getBaseId());
-				if (conqueredArea == null) {
+				NeutralArea conqueredArea;
+				try {
+					conqueredArea = (NeutralArea) gameInfo
+							.findObjectById(baseConqueredEvent.getBaseId());
+				} catch (ObjectNotFoundException e2) {
 					L.severe("Cannot find base with id "
 							+ baseConqueredEvent.getBaseId());
 					break;
@@ -532,9 +580,13 @@ public class ClientLogic implements GameLogicInterface {
 	private void handleObjectAttributeEvent(
 			SetBooleanGameObjectAttributeEvent event) {
 
-		GameObject object = getGame().findObjectById(event.getObjectId());
-		if (object == null)
+		GameObject object;
+		try {
+			object = getGame().findObjectById(event.getObjectId());
+		} catch (ObjectNotFoundException e) {
+			L.log(Level.WARNING, "Cannot find object!!", e);
 			return;
+		}
 		// FIXME: fix null objects.
 
 		switch (event.getType()) {

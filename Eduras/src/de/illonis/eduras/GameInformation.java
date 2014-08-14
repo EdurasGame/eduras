@@ -186,9 +186,15 @@ public class GameInformation {
 	 * @param id
 	 *            id to search for.
 	 * @return object with given id.
+	 * @throws ObjectNotFoundException
+	 *             thrown if there is no object with the given id
 	 */
-	public GameObject findObjectById(int id) {
-		return objects.get(id);
+	public GameObject findObjectById(int id) throws ObjectNotFoundException {
+		GameObject object = objects.get(id);
+		if (object == null) {
+			throw new ObjectNotFoundException(id);
+		}
+		return object;
 	}
 
 	/**

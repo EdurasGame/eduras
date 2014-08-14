@@ -199,9 +199,12 @@ public class ServerLogic implements GameLogicInterface {
 				break;
 			}
 			SetFloatGameObjectAttributeEvent setRotationEvent = (SetFloatGameObjectAttributeEvent) event;
-			GameObject gameObject = gameInfo.findObjectById(setRotationEvent
-					.getObjectId());
-			if (gameObject == null) {
+			GameObject gameObject;
+			try {
+				gameObject = gameInfo.findObjectById(setRotationEvent
+						.getObjectId());
+			} catch (ObjectNotFoundException e2) {
+				L.log(Level.WARNING, "Cannot find object!", e2);
 				break;
 			}
 
