@@ -739,6 +739,8 @@ public class ServerEventTriggerer implements EventTriggerer {
 			logic.getObjectFactory().onObjectFactoryEventAppeared(
 					gonePlayerEvent);
 
+			gameInfo.removePlayer(ownerId);
+
 			OwnerGameEvent playerLeftEvent = new OwnerGameEvent(
 					GameEventNumber.PLAYER_LEFT, ownerId);
 			OwnerGameEvent playerLeftEventInfo = new OwnerGameEvent(
