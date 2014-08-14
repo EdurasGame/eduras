@@ -111,8 +111,9 @@ public class ClientLogic implements GameLogicInterface {
 				try {
 					o = gameInfo.findObjectById(moveEvent.getObjectId());
 				} catch (ObjectNotFoundException e3) {
-					L.log(Level.WARNING,
-							"Object to set position of cannot be found!", e3);
+					L.log(Level.FINE,
+							"Object to set position of cannot be found! Probably because it has been regularily removed before.",
+							e3);
 					break;
 				}
 				o.setYPosition(newYPos);
@@ -230,7 +231,9 @@ public class ClientLogic implements GameLogicInterface {
 					gameObject = gameInfo.findObjectById(setRotationEvent
 							.getObjectId());
 				} catch (ObjectNotFoundException e3) {
-					L.log(Level.WARNING, "Cannot find object!", e3);
+					L.log(Level.FINE,
+							"Cannot find object probably because it was just removed before and this is a UDP event.!",
+							e3);
 					break;
 				}
 				gameObject.setRotation(setRotationEvent.getNewValue());

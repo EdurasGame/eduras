@@ -204,7 +204,9 @@ public class ServerLogic implements GameLogicInterface {
 				gameObject = gameInfo.findObjectById(setRotationEvent
 						.getObjectId());
 			} catch (ObjectNotFoundException e2) {
-				L.log(Level.WARNING, "Cannot find object!", e2);
+				L.log(Level.FINE,
+						"Cannot find object! Probably because it was removed before and this event was late because of UDP",
+						e2);
 				break;
 			}
 
