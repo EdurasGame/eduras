@@ -311,15 +311,19 @@ public class GuiInternalEventListener implements GamePanelReactor {
 		}
 
 		int requiredResources;
+		String spellNotification = "";
 		switch (spellNumber) {
 		case HEAL_ACTION:
 			requiredResources = S.Server.spell_heal_costs;
+			spellNotification = "Healing unit...";
 			break;
 		case SPEED_SPELL:
 			requiredResources = S.Server.spell_speed_costs;
+			spellNotification = "Speeding up unit...";
 			break;
 		case INVISIBILITY_SPELL:
 			requiredResources = S.Server.spell_invisibility_costs;
+			spellNotification = "Making unit invisible...";
 			break;
 		default:
 			L.severe("Spell " + spellNumber + " is not supported!!");
@@ -327,7 +331,7 @@ public class GuiInternalEventListener implements GamePanelReactor {
 		}
 		checkSufficientResources(player.getPlayer(), requiredResources);
 
-		UnitSpellActionEvent healEvent = new UnitSpellActionEvent(spellNumber,
+		UnitSpellActionEvent spellEvent = new UnitSpellActionEvent(spellNumber,
 				client.getOwnerID(), targetUnit.getId());
 
 		if (infoPro.getGameMode().getRelation(targetUnit, player) != Relation.ALLIED) {
@@ -335,8 +339,8 @@ public class GuiInternalEventListener implements GamePanelReactor {
 			return;
 		}
 		try {
-			client.sendEvent(healEvent);
-			client.getLogic().showNotification("Healing unit...");
+			client.sendEvent(spellEvent);
+			client.getLogic().showNotification(spellNotification);
 		} catch (WrongEventTypeException | MessageNotSupportedException e) {
 			L.log(Level.SEVERE, "Error sending heal event", e);
 		}
