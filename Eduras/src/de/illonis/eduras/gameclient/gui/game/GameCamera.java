@@ -15,7 +15,7 @@ public class GameCamera extends Rectangle {
 	private Vector2f cameraMovement;
 	private Vector2f cameraOffset;
 
-	GameCamera() {
+	public GameCamera() {
 		super(0, 0, 10, 10);
 		reset();
 	}
