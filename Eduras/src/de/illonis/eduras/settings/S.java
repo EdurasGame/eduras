@@ -711,6 +711,10 @@ public final class S {
 		 */
 		public static long sv_performance_tickrate = 33;
 
+		public static int gm_edura_money_per_kill = 150;
+
+		public static int gm_edura_money_per_selfkill = -150;
+
 	}
 
 	/**

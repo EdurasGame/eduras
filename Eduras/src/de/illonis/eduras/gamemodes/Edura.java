@@ -247,7 +247,35 @@ public class Edura extends TeamDeathmatch {
 			eventTriggerer.changeInteractMode(deadPlayer.getPlayerId(),
 					InteractMode.MODE_DEAD);
 
+			try {
+				rewardForDeath(killedUnit,
+						gameInfo.getPlayerByOwnerId(killingPlayer));
+			} catch (ObjectNotFoundException e) {
+				L.log(Level.WARNING, "Cannot find id of killing player.", e);
+			}
+
 			checkAllPlayersOfTeamDead(deadPlayer);
+		}
+	}
+
+	private void rewardForDeath(Unit killedUnit, Player killingPlayer) {
+		try {
+			if (killedUnit.getTeam() != null) {
+				if (killedUnit.getTeam().equals(killingPlayer.getTeam())) {
+					// team/self killers get punished
+					gameInfo.getEventTriggerer().changeResourcesOfTeamByAmount(
+							killedUnit.getTeam(),
+							S.Server.gm_edura_money_per_selfkill);
+				} else {
+					// get reward for killing someone
+					gameInfo.getEventTriggerer().changeResourcesOfTeamByAmount(
+							killingPlayer.getTeam(),
+							S.Server.gm_edura_money_per_kill);
+				}
+			}
+		} catch (PlayerHasNoTeamException e) {
+			L.log(Level.WARNING, "Cannot find team of player " + killingPlayer,
+					e);
 		}
 	}
 
