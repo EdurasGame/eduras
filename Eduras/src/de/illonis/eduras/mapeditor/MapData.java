@@ -9,6 +9,7 @@ import de.illonis.eduras.ObjectFactory;
 import de.illonis.eduras.gamemodes.GameMode.GameModeNumber;
 import de.illonis.eduras.gameobjects.Base;
 import de.illonis.eduras.gameobjects.GameObject;
+import de.illonis.eduras.items.weapons.SniperWeapon;
 import de.illonis.eduras.maps.InitialObjectData;
 import de.illonis.eduras.maps.Map;
 import de.illonis.eduras.maps.SpawnPosition;
@@ -46,6 +47,8 @@ public final class MapData {
 
 	public void reset() {
 		gameObjects = new LinkedList<GameObject>();
+		SniperWeapon w = new SniperWeapon(null, null, 1);
+		gameObjects.add(w);
 		bases = new LinkedList<Base>();
 		spawnPoints = new LinkedList<SpawnPosition>();
 		supportedGameModes = new HashSet<GameModeNumber>();

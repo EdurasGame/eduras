@@ -3,6 +3,7 @@ package de.illonis.eduras.mapeditor;
 import org.newdawn.slick.geom.Vector2f;
 
 import de.illonis.eduras.gameclient.gui.game.GameCamera;
+import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.gameobjects.MoveableGameObject.Direction;
 
 public class MapPanelLogic implements MapInteractor {
@@ -11,6 +12,7 @@ public class MapPanelLogic implements MapInteractor {
 	private float zoom = 1f;
 	private Vector2f scrollVector;
 	private final static float SCROLL_SPEED = 5;
+	private final MapData data = MapData.getInstance();
 
 	public MapPanelLogic() {
 		viewPort = new GameCamera();
@@ -84,5 +86,39 @@ public class MapPanelLogic implements MapInteractor {
 		float x = viewPort.getX();
 		float y = viewPort.getY();
 		viewPort.setLocation(x + scrollVector.x, scrollVector.y + y);
+	}
+
+	@Override
+	public void dragObjectAt(int guiX, int guiY, int xDiff, int yDiff) {
+		GameObject o = getObjectAt(guiX, guiY);
+		if (o != null) {
+			o.modifyXPosition(xDiff);
+			o.modifyYPosition(yDiff);
+		}
+	}
+
+	@Override
+	public void showPropertiesOfObjectAt(int guiX, int guiY) {
+		GameObject o = getObjectAt(guiX, guiY);
+		if (o != null) {
+			System.out.println("properties for " + o.getType());
+		}
+	}
+
+	@Override
+	public boolean isObjectAt(int guiX, int guiY) {
+		return (getObjectAt(guiX, guiY) != null);
+	}
+
+	@Override
+	public GameObject getObjectAt(int guiX, int guiY) {
+		Vector2f mapPos = computeGuiPointToGameCoordinate(new Vector2f(guiX,
+				guiY));
+		for (GameObject o : data.getGameObjects()) {
+			if (o.getShape().contains(mapPos.x, mapPos.y)) {
+				return o;
+			}
+		}
+		return null;
 	}
 }

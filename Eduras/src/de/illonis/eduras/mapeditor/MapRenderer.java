@@ -35,7 +35,11 @@ public class MapRenderer {
 	 *            the target graphics.
 	 */
 	public void render(GameContainer container, Graphics g) {
-
+		g.setColor(Color.gray);
+		g.fillRect(0, 0, container.getWidth(), container.getHeight());
+		g.setColor(Color.black);
+		g.fillRect(-camera.getX(), -camera.getY(), data.getWidth(),
+				data.getHeight());
 		g.translate(-camera.getX(), -camera.getY());
 
 		// map bounds

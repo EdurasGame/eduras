@@ -8,16 +8,42 @@ import de.illonis.eduras.gameobjects.MoveableGameObject.Direction;
 
 public class MapInputHandler extends InputAdapter {
 
+	public enum InteractMode {
+		SCROLL, DRAG, NONE;
+	}
+
+	private InteractMode mode;
+
 	private final StatusListener status;
 	private final MapInteractor interactor;
 
 	public MapInputHandler(MapInteractor interactor, StatusListener status) {
 		this.status = status;
 		this.interactor = interactor;
+		mode = InteractMode.NONE;
 	}
-	
-	private void updateCoordinateStatus() {
-		
+
+	@Override
+	public void mousePressed(int button, int x, int y) {
+		if (button == Input.MOUSE_RIGHT_BUTTON) {
+			mode = InteractMode.SCROLL;
+		} else if (button == Input.MOUSE_LEFT_BUTTON) {
+			if (interactor.isObjectAt(x, y)) {
+				mode = InteractMode.DRAG;
+			}
+		}
+	}
+
+	@Override
+	public void mouseClicked(int button, int x, int y, int clickCount) {
+		if (button == Input.MOUSE_RIGHT_BUTTON) {
+			interactor.showPropertiesOfObjectAt(x, y);
+		}
+	}
+
+	@Override
+	public void mouseReleased(int button, int x, int y) {
+		mode = InteractMode.NONE;
 	}
 
 	@Override
@@ -29,7 +55,11 @@ public class MapInputHandler extends InputAdapter {
 
 	@Override
 	public void mouseDragged(int oldx, int oldy, int newx, int newy) {
-		interactor.scroll(oldx - newx, oldy - newy);
+		if (mode == InteractMode.SCROLL)
+			interactor.scroll(oldx - newx, oldy - newy);
+		else if (mode == InteractMode.DRAG) {
+			interactor.dragObjectAt(oldx, oldy, newx - oldx, newy - oldy);
+		}
 	}
 
 	@Override
