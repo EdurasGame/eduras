@@ -27,11 +27,6 @@ import de.illonis.eduras.settings.S;
  */
 public abstract class LogicGameWorker implements Runnable, TimingSource {
 
-	/**
-	 * Tells how much time shall be between two updates in nanoseconds.
-	 */
-	private static final long TICKRATE = 15000000L;
-
 	private static final int NO_DELAYS_PER_YIELD = 16;
 
 	private boolean running = false;
@@ -86,7 +81,8 @@ public abstract class LogicGameWorker implements Runnable, TimingSource {
 			afterTime = System.nanoTime();
 			timeDiff = afterTime - beforeTime;
 
-			sleepTime = (TICKRATE - timeDiff) - overSleepTime;
+			sleepTime = (1000000000l / S.Server.sv_performance_tickrate - timeDiff)
+					- overSleepTime;
 
 			if (sleepTime > 0) {
 				try {

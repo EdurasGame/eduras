@@ -11,6 +11,7 @@ import org.newdawn.slick.geom.Shape;
 import org.newdawn.slick.geom.Vector2f;
 
 import de.illonis.eduras.exceptions.ShapeNotSupportedException;
+import de.illonis.eduras.settings.S;
 
 /**
  * A math class that provides useful functions that are used in two-dimensional
@@ -20,12 +21,6 @@ import de.illonis.eduras.exceptions.ShapeNotSupportedException;
  * 
  */
 public class Geometry {
-
-	/**
-	 * Determines how exactly collisions are calculated. The higher this value,
-	 * the less will gameobjects of type triangle will be able to overlap.
-	 */
-	private static final int SHAPE_ACCURACY = 20;
 
 	/**
 	 * Return length of a hypotenuse in a right-angled triangle.
@@ -546,8 +541,8 @@ public class Geometry {
 
 		if (shape instanceof Ellipse) {
 			Vector2f[] result = new Vector2f[0];
-			result = Geometry
-					.getPointsOnCirlce((Ellipse) shape, SHAPE_ACCURACY)
+			result = Geometry.getPointsOnCirlce((Ellipse) shape,
+					S.Server.sv_performance_collision_accuracy_ellipse)
 					.toArray(result);
 			return result;
 		}
@@ -560,14 +555,17 @@ public class Geometry {
 
 		LinkedList<Line> borderLines = Geometry.getBorderLines(vertices);
 
-		Vector2f[] movementPoints = new Vector2f[SHAPE_ACCURACY
+		Vector2f[] movementPoints = new Vector2f[S.Server.sv_performance_collision_accuracy_polygon
 				* vertices.length];
 
 		int j = 0;
 		for (Line singleBorderLine : borderLines) {
-			for (int i = 0; i < SHAPE_ACCURACY; i++) {
-				movementPoints[j] = Geometry.getPointOnLineAt(singleBorderLine,
-						(1f / SHAPE_ACCURACY) * i);
+			for (int i = 0; i < S.Server.sv_performance_collision_accuracy_polygon; i++) {
+				movementPoints[j] = Geometry
+						.getPointOnLineAt(
+								singleBorderLine,
+								(1f / S.Server.sv_performance_collision_accuracy_polygon)
+										* i);
 				j++;
 			}
 		}
