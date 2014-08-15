@@ -12,39 +12,12 @@ import de.illonis.eduras.events.SetGameObjectAttributeEvent;
 import de.illonis.eduras.exceptions.DataMissingException;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
 import de.illonis.eduras.exceptions.ShapeVerticesNotApplicableException;
-import de.illonis.eduras.gameobjects.Base;
-import de.illonis.eduras.gameobjects.BigBlock;
-import de.illonis.eduras.gameobjects.BiggerBlock;
-import de.illonis.eduras.gameobjects.Bird;
-import de.illonis.eduras.gameobjects.Building;
-import de.illonis.eduras.gameobjects.DynamicPolygonObject;
 import de.illonis.eduras.gameobjects.GameObject;
-import de.illonis.eduras.gameobjects.Portal;
 import de.illonis.eduras.gameobjects.TimingSource;
 import de.illonis.eduras.interfaces.GameLogicInterface;
-import de.illonis.eduras.items.powerups.HealingPotion;
-import de.illonis.eduras.items.powerups.InvisibilityPowerUp;
-import de.illonis.eduras.items.powerups.SpeedPowerUp;
-import de.illonis.eduras.items.weapons.AssaultMissile;
-import de.illonis.eduras.items.weapons.AssaultRifle;
-import de.illonis.eduras.items.weapons.MineMissile;
-import de.illonis.eduras.items.weapons.MineWeapon;
-import de.illonis.eduras.items.weapons.RocketLauncher;
-import de.illonis.eduras.items.weapons.RocketMissile;
-import de.illonis.eduras.items.weapons.SimpleMissile;
-import de.illonis.eduras.items.weapons.SimpleWeapon;
-import de.illonis.eduras.items.weapons.SniperMissile;
-import de.illonis.eduras.items.weapons.SniperWeapon;
-import de.illonis.eduras.items.weapons.SplashMissile;
-import de.illonis.eduras.items.weapons.SplashWeapon;
-import de.illonis.eduras.items.weapons.SplashedMissile;
-import de.illonis.eduras.items.weapons.SwordMissile;
-import de.illonis.eduras.items.weapons.SwordWeapon;
 import de.illonis.eduras.math.Vector2df;
 import de.illonis.eduras.settings.S;
-import de.illonis.eduras.units.Observer;
 import de.illonis.eduras.units.PlayerMainFigure;
-import de.illonis.eduras.units.ScoutSpell;
 
 /**
  * ObjectFactory is in charge of handling Objectfactory events and creating and
@@ -68,15 +41,16 @@ public class ObjectFactory {
 	 */
 	@SuppressWarnings("javadoc")
 	public enum ObjectType {
-		PLAYER(1), YELLOWCIRCLE(2), SIMPLEMISSILE(3), ITEM_WEAPON_SIMPLE(4), NO_OBJECT(
-				0), BIGBLOCK(5), SMALLCIRCLEDBLOCK(6), SNIPERMISSILE(7), ITEM_WEAPON_SNIPER(
-				8), BUILDING(9), BIGGERBLOCK(10), ITEM_WEAPON_SPLASH(11), MISSILE_SPLASH(
-				12), MISSILE_SPLASHED(13), DYNAMIC_POLYGON_BLOCK(14), ITEM_WEAPON_SWORD(
-				15), SWORDMISSILE(16), BIRD(17), ROCKETLAUNCHER(18), ROCKET_MISSILE(
-				19), MINELAUNCHER(20), MINE_MISSILE(21), ASSAULTRIFLE(22), ASSAULT_MISSILE(
-				23), MAPBOUNDS(24), TRIGGER_AREA(25), NEUTRAL_BASE(26), OBSERVER(
-				30), SPELL_SCOUT(31), HEALING_POTION(32), SPEED_POWERUP(33), INVISIBILITY_POWERUP(
-				34), PORTAL(35);
+		PLAYER(1), YELLOWCIRCLE(2), SIMPLEMISSILE(3), ITEM_WEAPON_SIMPLE(4),
+		NO_OBJECT(0), BIGBLOCK(5), SMALLCIRCLEDBLOCK(6), SNIPERMISSILE(7),
+		ITEM_WEAPON_SNIPER(8), BUILDING(9), BIGGERBLOCK(10),
+		ITEM_WEAPON_SPLASH(11), MISSILE_SPLASH(12), MISSILE_SPLASHED(13),
+		DYNAMIC_POLYGON_BLOCK(14), ITEM_WEAPON_SWORD(15), SWORDMISSILE(16),
+		BIRD(17), ROCKETLAUNCHER(18), ROCKET_MISSILE(19), MINELAUNCHER(20),
+		MINE_MISSILE(21), ASSAULTRIFLE(22), ASSAULT_MISSILE(23), MAPBOUNDS(24),
+		TRIGGER_AREA(25), NEUTRAL_BASE(26), OBSERVER(30), SPELL_SCOUT(31),
+		HEALING_POTION(32), SPEED_POWERUP(33), INVISIBILITY_POWERUP(34),
+		PORTAL(35);
 
 		private int number;
 
@@ -226,106 +200,17 @@ public class ObjectFactory {
 				L.info("Player " + event.getOwner() + " created");
 				// testSpawnBird();
 				break;
-			case SIMPLEMISSILE:
-				go = new SimpleMissile(logic.getGame(), timingSource, id);
-				break;
-			case BUILDING:
-				go = new Building(logic.getGame(), timingSource, id);
-				break;
-			case BIRD:
-				go = new Bird(logic.getGame(), timingSource, id);
-				break;
-			case BIGGERBLOCK:
-				try {
-					go = new BiggerBlock(logic.getGame(), timingSource, id);
-				} catch (ShapeVerticesNotApplicableException e) {
-					L.log(Level.SEVERE, "shape vertices not applicable", e);
-					return;
-				}
-				break;
-			case ITEM_WEAPON_SIMPLE:
-				go = new SimpleWeapon(logic.getGame(), timingSource, id);
-				break;
-			case BIGBLOCK:
-				try {
-					go = new BigBlock(logic.getGame(), timingSource, id);
-				} catch (ShapeVerticesNotApplicableException e) {
-					L.log(Level.SEVERE, "shape vertices not applicable", e);
-					return;
-				}
-				break;
-			case SNIPERMISSILE:
-				go = new SniperMissile(logic.getGame(), timingSource, id);
-				break;
-			case MISSILE_SPLASH:
-				go = new SplashMissile(logic.getGame(), timingSource, id);
-				break;
-			case MISSILE_SPLASHED:
-				go = new SplashedMissile(logic.getGame(), timingSource, id);
-				break;
-			case SWORDMISSILE:
-				go = new SwordMissile(logic.getGame(), timingSource, id);
-				break;
-			case ITEM_WEAPON_SPLASH:
-				go = new SplashWeapon(logic.getGame(), timingSource, id);
-				break;
-			case ITEM_WEAPON_SNIPER:
-				go = new SniperWeapon(logic.getGame(), timingSource, id);
-				break;
-			case ITEM_WEAPON_SWORD:
-				go = new SwordWeapon(logic.getGame(), timingSource, id);
-				break;
-			case ROCKETLAUNCHER:
-				go = new RocketLauncher(logic.getGame(), timingSource, id);
-				break;
-			case ROCKET_MISSILE:
-				go = new RocketMissile(logic.getGame(), timingSource, id);
-				break;
-			case MINELAUNCHER:
-				go = new MineWeapon(logic.getGame(), timingSource, id);
-				break;
-			case MINE_MISSILE:
-				go = new MineMissile(logic.getGame(), timingSource, id);
-				break;
-			case ASSAULTRIFLE:
-				go = new AssaultRifle(logic.getGame(), timingSource, id);
-				break;
-			case ASSAULT_MISSILE:
-				go = new AssaultMissile(logic.getGame(), timingSource, id);
-				break;
-			case NEUTRAL_BASE:
-				go = new Base(logic.getGame(), timingSource, id, 1);
-				break;
-			case DYNAMIC_POLYGON_BLOCK:
-				go = new DynamicPolygonObject(ObjectType.DYNAMIC_POLYGON_BLOCK,
-						logic.getGame(), timingSource, id);
-				break;
-			case MAPBOUNDS:
-				go = new DynamicPolygonObject(ObjectType.MAPBOUNDS,
-						logic.getGame(), timingSource, id);
-				break;
-			case OBSERVER:
-				go = new Observer(logic.getGame(), timingSource, id, owner);
-				break;
-			case HEALING_POTION:
-				go = new HealingPotion(timingSource, logic.getGame(), id);
-				break;
-			case SPEED_POWERUP:
-				go = new SpeedPowerUp(timingSource, logic.getGame(), id);
-				break;
-			case INVISIBILITY_POWERUP:
-				go = new InvisibilityPowerUp(timingSource, logic.getGame(), id);
-				break;
-			case SPELL_SCOUT:
-				go = new ScoutSpell(logic.getGame(), timingSource, id, owner);
-				break;
-			case PORTAL:
-				go = new Portal(logic.getGame(), timingSource, id);
-				break;
 			default:
-				return;
+				try {
+					go = ObjectCreator.createObject(event.getObjectType(),
+							logic.getGame(), timingSource, id);
+				} catch (FactoryException | ShapeVerticesNotApplicableException e) {
+					L.log(Level.SEVERE, "Could not create object", e);
+				}
+				if (owner != -1)
+					go.setOwner(owner);
+				break;
 			}
-
 			if (go != null) {
 				go.setId(id);
 				go.setOwner(owner);
