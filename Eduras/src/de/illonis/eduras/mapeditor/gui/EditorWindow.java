@@ -12,6 +12,7 @@ import org.newdawn.slick.CanvasGameContainer;
 import org.newdawn.slick.SlickException;
 
 import de.illonis.eduras.mapeditor.EditorGame;
+import de.illonis.eduras.mapeditor.MapData;
 import de.illonis.eduras.mapeditor.StatusListener;
 
 public class EditorWindow extends JFrame implements StatusListener {
@@ -20,9 +21,10 @@ public class EditorWindow extends JFrame implements StatusListener {
 	private CanvasGameContainer gameContainer;
 	private QuickMenuBar quickMenu;
 	private StatusBar statusBar;
+	public final static String BASE_TITLE = " - Eduras? Map Editor";
 
 	public EditorWindow() throws SlickException {
-		super("Eduras? Map Editor");
+		super(BASE_TITLE);
 		setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
 		addWindowListener(new FrameListener());
 	}
@@ -49,7 +51,7 @@ public class EditorWindow extends JFrame implements StatusListener {
 	public void initGui(EditorGame game) throws SlickException {
 		JPanel content = (JPanel) getContentPane();
 		content.setLayout(new BorderLayout());
-		objectListing = new ObjectPlacingSelectionPanel();
+		objectListing = new ObjectPlacingSelectionPanel(game.getPanelLogic());
 		content.add(objectListing, BorderLayout.WEST);
 		gameContainer = new CanvasGameContainer(game);
 		gameContainer.setSize(800, 600);

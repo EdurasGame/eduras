@@ -38,6 +38,8 @@ public class MapInputHandler extends InputAdapter {
 	public void mouseClicked(int button, int x, int y, int clickCount) {
 		if (button == Input.MOUSE_RIGHT_BUTTON) {
 			interactor.showPropertiesOfObjectAt(x, y);
+		} else if (button == Input.MOUSE_LEFT_BUTTON) {
+			interactor.spawnAt(x, y);
 		}
 	}
 
@@ -48,6 +50,10 @@ public class MapInputHandler extends InputAdapter {
 
 	@Override
 	public void mouseMoved(int oldx, int oldy, int newx, int newy) {
+		updateCoordinateStatus(newx, newy);
+	}
+
+	private void updateCoordinateStatus(int newx, int newy) {
 		Vector2f mapCoord = interactor
 				.computeGuiPointToGameCoordinate(new Vector2f(newx, newy));
 		status.setStatus(mapCoord.x + ", " + mapCoord.y);
@@ -60,6 +66,7 @@ public class MapInputHandler extends InputAdapter {
 		else if (mode == InteractMode.DRAG) {
 			interactor.dragObjectAt(oldx, oldy, newx - oldx, newy - oldy);
 		}
+		updateCoordinateStatus(newx, newy);
 	}
 
 	@Override

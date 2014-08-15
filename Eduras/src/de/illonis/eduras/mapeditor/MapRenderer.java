@@ -9,6 +9,7 @@ import de.illonis.eduras.gameclient.datacache.CacheException;
 import de.illonis.eduras.gameclient.datacache.ImageCache;
 import de.illonis.eduras.gameclient.gui.game.GameCamera;
 import de.illonis.eduras.gameobjects.Base;
+import de.illonis.eduras.gameobjects.DynamicPolygonObject;
 import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.math.Geometry;
 import de.illonis.eduras.units.PlayerMainFigure;
@@ -93,8 +94,9 @@ public class MapRenderer {
 		case BIGGERBLOCK:
 		case BUILDING:
 		case SMALLCIRCLEDBLOCK:
-		case DYNAMIC_POLYGON_BLOCK:
 			return Color.pink;
+		case DYNAMIC_POLYGON_BLOCK:
+			return ((DynamicPolygonObject) d).getColor();
 		case PLAYER:
 			PlayerMainFigure p = (PlayerMainFigure) d;
 			if (p.getTeam() == null) {

@@ -2,9 +2,12 @@ package de.illonis.eduras.mapeditor;
 
 import org.newdawn.slick.geom.Vector2f;
 
+import de.illonis.eduras.ObjectFactory.ObjectType;
 import de.illonis.eduras.gameclient.gui.game.GameCamera;
 import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.gameobjects.MoveableGameObject.Direction;
+import de.illonis.eduras.mapeditor.gui.EditorWindow;
+import de.illonis.eduras.mapeditor.gui.dialog.PropertiesDialog;
 
 public class MapPanelLogic implements MapInteractor {
 
@@ -13,8 +16,11 @@ public class MapPanelLogic implements MapInteractor {
 	private Vector2f scrollVector;
 	private final static float SCROLL_SPEED = 5;
 	private final MapData data = MapData.getInstance();
+	private ObjectType currentSpawnType = ObjectType.NO_OBJECT;
+	private final EditorWindow window;
 
-	public MapPanelLogic() {
+	public MapPanelLogic(EditorWindow window) {
+		this.window = window;
 		viewPort = new GameCamera();
 		viewPort.setSize(800, 600);
 		scrollVector = new Vector2f();
@@ -101,6 +107,8 @@ public class MapPanelLogic implements MapInteractor {
 	public void showPropertiesOfObjectAt(int guiX, int guiY) {
 		GameObject o = getObjectAt(guiX, guiY);
 		if (o != null) {
+			PropertiesDialog dialog = new PropertiesDialog(window, o);
+			dialog.setVisible(true);
 			System.out.println("properties for " + o.getType());
 		}
 	}
@@ -120,5 +128,17 @@ public class MapPanelLogic implements MapInteractor {
 			}
 		}
 		return null;
+	}
+
+	@Override
+	public void setSpawnType(ObjectType selectedValue) {
+		currentSpawnType = selectedValue;
+	}
+
+	@Override
+	public void spawnAt(int guiX, int guiY) {
+		if (currentSpawnType != ObjectType.NO_OBJECT) {
+			// TODO: create object
+		}
 	}
 }

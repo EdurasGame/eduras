@@ -5,9 +5,12 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
-import de.illonis.eduras.ObjectFactory;
+import org.newdawn.slick.geom.Vector2f;
+
+import de.illonis.eduras.ObjectFactory.ObjectType;
 import de.illonis.eduras.gamemodes.GameMode.GameModeNumber;
 import de.illonis.eduras.gameobjects.Base;
+import de.illonis.eduras.gameobjects.DynamicPolygonObject;
 import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.items.weapons.SniperWeapon;
 import de.illonis.eduras.maps.InitialObjectData;
@@ -52,6 +55,17 @@ public final class MapData {
 		bases = new LinkedList<Base>();
 		spawnPoints = new LinkedList<SpawnPosition>();
 		supportedGameModes = new HashSet<GameModeNumber>();
+		DynamicPolygonObject o = new DynamicPolygonObject(
+				ObjectType.DYNAMIC_POLYGON_BLOCK, null, null, -1);
+		Vector2f[] verts = new Vector2f[4];
+		verts[0] = new Vector2f(5, 5);
+		verts[1] = new Vector2f(15, 15);
+		verts[2] = new Vector2f(50, 10);
+		verts[3] = new Vector2f(50, 40);
+		o.setPolygonVertices(verts);
+		o.setXPosition(30);
+		o.setYPosition(130);
+		gameObjects.add(o);
 		mapName = "unnamed Map";
 		author = "unknown";
 		width = 500;
@@ -66,11 +80,11 @@ public final class MapData {
 		mapName = map.getName();
 		spawnPoints.addAll(map.getSpawnAreas());
 		supportedGameModes.addAll(map.getSupportedGameModes());
-		
+
 		List<InitialObjectData> objects = new LinkedList<InitialObjectData>(
 				map.getInitialObjects());
 		for (InitialObjectData object : objects) {
-			
+
 		}
 	}
 

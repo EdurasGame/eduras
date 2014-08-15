@@ -6,6 +6,7 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
 
 import de.illonis.eduras.gameclient.datacache.GraphicsPreLoader;
+import de.illonis.eduras.mapeditor.gui.EditorWindow;
 
 public class EditorGame extends BasicGame {
 
@@ -13,11 +14,11 @@ public class EditorGame extends BasicGame {
 	private final MapPanelLogic panelLogic;
 	private final MapInputHandler inputHandler;
 
-	EditorGame(StatusListener statusListener) {
+	EditorGame(EditorWindow window) {
 		super("Eduras? Map Editor");
-		panelLogic = new MapPanelLogic();
+		panelLogic = new MapPanelLogic(window);
 		renderer = new MapRenderer(panelLogic);
-		inputHandler = new MapInputHandler(panelLogic, statusListener);
+		inputHandler = new MapInputHandler(panelLogic, window);
 	}
 
 	@Override
@@ -29,6 +30,9 @@ public class EditorGame extends BasicGame {
 	@Override
 	public void init(GameContainer container) throws SlickException {
 		container.setAlwaysRender(true);
+		container.setClearEachFrame(false);
+		container.setSoundOn(false);
+		container.setUpdateOnlyWhenVisible(false);
 		container.setTargetFrameRate(60);
 		container.setMinimumLogicUpdateInterval(15);
 		container.setMaximumLogicUpdateInterval(100);
@@ -82,6 +86,10 @@ public class EditorGame extends BasicGame {
 	@Override
 	public void keyReleased(int key, char c) {
 		inputHandler.keyReleased(key, c);
+	}
+
+	public MapPanelLogic getPanelLogic() {
+		return panelLogic;
 	}
 
 }
