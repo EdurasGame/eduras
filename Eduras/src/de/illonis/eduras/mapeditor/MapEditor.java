@@ -16,6 +16,14 @@ import de.illonis.eduras.mapeditor.gui.EditorWindow;
  */
 public class MapEditor {
 
+	public enum EditorMode {
+		PLACING, SHAPEDITING;
+	}
+
+	private EditorMode editMode;
+	private EditorGame game;
+	private EditorWindow window;
+
 	public static void main(String[] args) {
 		try {
 			MapEditor editor = new MapEditor();
@@ -27,10 +35,8 @@ public class MapEditor {
 		}
 	}
 
-	private EditorGame game;
-	private EditorWindow window;
-
 	private MapEditor() throws SlickException {
+		editMode = EditorMode.PLACING;
 		init();
 	}
 

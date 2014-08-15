@@ -26,6 +26,9 @@ import de.illonis.eduras.maps.SpawnPosition;
 public final class MapData {
 	private static MapData instance;
 
+	/**
+	 * @return mapdata instance.
+	 */
 	public static MapData getInstance() {
 		if (instance == null) {
 			instance = new MapData();
@@ -48,6 +51,9 @@ public final class MapData {
 	private List<Base> bases;
 	private List<SpawnPosition> spawnPoints;
 
+	/**
+	 * Resets data to provide an empty default map.
+	 */
 	public void reset() {
 		gameObjects = new LinkedList<GameObject>();
 		SniperWeapon w = new SniperWeapon(null, null, 1);
@@ -72,6 +78,12 @@ public final class MapData {
 		height = 500;
 	}
 
+	/**
+	 * Imports data from given map. This clears all previously existing data.
+	 * 
+	 * @param map
+	 *            the map to import.
+	 */
 	public void importMap(Map map) {
 		reset();
 		width = map.getWidth();
@@ -124,32 +136,20 @@ public final class MapData {
 		return supportedGameModes;
 	}
 
-	public void setSupportedGameModes(Set<GameModeNumber> supportedGameModes) {
-		this.supportedGameModes = supportedGameModes;
-	}
-
 	public List<GameObject> getGameObjects() {
 		return gameObjects;
-	}
-
-	public void setGameObjects(List<GameObject> gameObjects) {
-		this.gameObjects = gameObjects;
 	}
 
 	public List<Base> getBases() {
 		return bases;
 	}
 
-	public void setBases(List<Base> bases) {
-		this.bases = bases;
-	}
-
 	public List<SpawnPosition> getSpawnPoints() {
 		return spawnPoints;
 	}
 
-	public void setSpawnPoints(List<SpawnPosition> spawnPoints) {
-		this.spawnPoints = spawnPoints;
+	public void addGameObject(GameObject o) {
+		gameObjects.add(o);
 	}
 
 }

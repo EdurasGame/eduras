@@ -1,8 +1,15 @@
 package de.illonis.eduras.mapeditor;
 
+import java.util.logging.Level;
+
+import javax.swing.JOptionPane;
+
 import org.newdawn.slick.geom.Vector2f;
 
+import de.illonis.eduras.FactoryException;
+import de.illonis.eduras.ObjectCreator;
 import de.illonis.eduras.ObjectFactory.ObjectType;
+import de.illonis.eduras.exceptions.ShapeVerticesNotApplicableException;
 import de.illonis.eduras.gameclient.gui.game.GameCamera;
 import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.gameobjects.MoveableGameObject.Direction;
@@ -138,7 +145,15 @@ public class MapPanelLogic implements MapInteractor {
 	@Override
 	public void spawnAt(int guiX, int guiY) {
 		if (currentSpawnType != ObjectType.NO_OBJECT) {
-			// TODO: create object
+			try {
+				GameObject o = ObjectCreator.createObject(currentSpawnType,
+						null, null);
+				o.setPosition(guiX, guiY);
+				data.addGameObject(o);
+			} catch (FactoryException | ShapeVerticesNotApplicableException e) {
+				JOptionPane.showMessageDialog(window, "Object "
+						+ currentSpawnType + " not supported");
+			}
 		}
 	}
 }
