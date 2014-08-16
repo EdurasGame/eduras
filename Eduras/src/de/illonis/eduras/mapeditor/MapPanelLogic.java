@@ -148,6 +148,12 @@ public class MapPanelLogic implements MapInteractor {
 			try {
 				GameObject o = ObjectCreator.createObject(currentSpawnType,
 						null, null);
+				if (o.getShape() != null) {
+					float width = o.getShape().getWidth();
+					float height = o.getShape().getHeight();
+					guiX -= width / 2;
+					guiY -= height / 2;
+				}
 				o.setPosition(guiX, guiY);
 				data.addGameObject(o);
 			} catch (FactoryException | ShapeVerticesNotApplicableException e) {

@@ -119,8 +119,10 @@ public class PropertiesDialog extends JDialog implements ItemListener,
 	}
 
 	private void addPropertiesTab() {
+		Border border = BorderFactory.createEmptyBorder(8, 8, 8, 8);
 		JPanel propertiesPanel = new JPanel();
-		propertiesPanel.setLayout(new SpringLayout());
+		propertiesPanel.setLayout(new BoxLayout(propertiesPanel,
+				BoxLayout.PAGE_AXIS));
 		visibleNone = new JRadioButton("Never");
 		visibleOwner = new JRadioButton("Owner");
 		visibleTeam = new JRadioButton("Team");
@@ -144,8 +146,19 @@ public class PropertiesDialog extends JDialog implements ItemListener,
 		JPanel visSection = new JPanel(new BorderLayout());
 		visSection.add(new JLabel("Visibility"), BorderLayout.NORTH);
 		visSection.add(visibilityPanel, BorderLayout.CENTER);
-		visSection.setBorder(BorderFactory.createEmptyBorder(8, 8, 8, 8));
+		visSection.setBorder(border);
+		JPanel zindexPanel = new JPanel(new BorderLayout());
+		zindexPanel.add(new JLabel("z-index"), BorderLayout.NORTH);
+		JSlider zindexSlider = new JSlider(-10, 10, object.getzLayer());
+		zindexSlider.setPaintLabels(true);
+		zindexSlider.setPaintTicks(true);
+		zindexSlider.setMajorTickSpacing(5);
+		zindexSlider.setMinorTickSpacing(1);
+		zindexSlider.setSnapToTicks(true);
+		zindexPanel.add(zindexSlider, BorderLayout.CENTER);
+		zindexPanel.setBorder(border);
 		propertiesPanel.add(visSection);
+		propertiesPanel.add(zindexPanel);
 		addTab("Properties", propertiesPanel);
 	}
 

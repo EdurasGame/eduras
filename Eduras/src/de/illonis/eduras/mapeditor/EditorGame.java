@@ -32,6 +32,7 @@ public class EditorGame extends BasicGame {
 		container.setAlwaysRender(true);
 		container.setClearEachFrame(false);
 		container.setSoundOn(false);
+		container.setMouseGrabbed(false);
 		container.setTargetFrameRate(60);
 		container.setMinimumLogicUpdateInterval(15);
 		container.setMaximumLogicUpdateInterval(100);
