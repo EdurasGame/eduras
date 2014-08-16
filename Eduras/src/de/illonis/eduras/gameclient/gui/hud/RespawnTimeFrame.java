@@ -8,6 +8,7 @@ import de.illonis.edulog.EduLog;
 import de.illonis.eduras.gamemodes.GameMode;
 import de.illonis.eduras.gamemodes.GameMode.GameModeNumber;
 import de.illonis.eduras.settings.S;
+import de.illonis.eduras.units.InteractMode;
 
 public class RespawnTimeFrame extends TimeFrame {
 
@@ -16,6 +17,9 @@ public class RespawnTimeFrame extends TimeFrame {
 
 	public RespawnTimeFrame(UserInterface gui) {
 		super(gui, Color.yellow, 20f);
+
+		setActiveInteractModes(InteractMode.MODE_DEAD,
+				InteractMode.MODE_STRATEGY);
 	}
 
 	@Override

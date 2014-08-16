@@ -45,7 +45,7 @@ public class PlayerStatBar extends RenderedGuiObject {
 		health = maxHealth = 10;
 		screenX = 0;
 		recalculate();
-		setActiveInteractModes(InteractMode.MODE_EGO);
+		setActiveInteractModes(InteractMode.MODE_STRATEGY);
 	}
 
 	@Override
