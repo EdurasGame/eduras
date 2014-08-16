@@ -10,6 +10,7 @@ import javax.swing.JMenuItem;
 import javax.swing.KeyStroke;
 
 import de.illonis.eduras.mapeditor.gui.dialog.MapPropertiesDialog;
+import de.illonis.eduras.shapecreator.ShapeCreator;
 
 public class EditorMenu extends JMenuBar implements ActionListener {
 	private JMenuItem mapProperties, newMap, saveMap, loadMap, shapeCreator;
@@ -54,9 +55,12 @@ public class EditorMenu extends JMenuBar implements ActionListener {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		if (e.getSource() == mapProperties) {
+		JMenuItem item = (JMenuItem) e.getSource();
+		if (item == mapProperties) {
 			MapPropertiesDialog dialog = new MapPropertiesDialog(null);
 			dialog.setVisible(true);
+		} else if (item == shapeCreator) {
+			ShapeCreator.main(new String[] {});
 		}
 	}
 }
