@@ -9,6 +9,7 @@ import de.illonis.eduras.gameclient.GuiInternalEventListener;
 import de.illonis.eduras.gameclient.datacache.CacheInfo.ImageKey;
 import de.illonis.eduras.gameclient.gui.HudNotifier;
 import de.illonis.eduras.gameclient.gui.TimedTasksHolderGUI;
+import de.illonis.eduras.gameclient.gui.game.GameCamera;
 import de.illonis.eduras.gameclient.gui.game.GameRenderer;
 import de.illonis.eduras.gameclient.gui.game.GuiClickReactor;
 import de.illonis.eduras.gameclient.gui.game.GuiResizeListener;
@@ -143,6 +144,10 @@ public class UserInterface implements GuiResizeListener {
 		addButtonsForMainPage(mainPage);
 
 		actionBar.setPage(PageNumber.MAIN);
+	}
+
+	GameCamera getGameCamera() {
+		return renderer.getCamera();
 	}
 
 	private void addButtonsForMainPage(ActionBarPage mainPage) {
