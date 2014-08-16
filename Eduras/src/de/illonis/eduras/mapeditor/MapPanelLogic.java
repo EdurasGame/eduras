@@ -12,9 +12,10 @@ import de.illonis.eduras.ObjectCreator;
 import de.illonis.eduras.ObjectFactory.ObjectType;
 import de.illonis.eduras.exceptions.ShapeVerticesNotApplicableException;
 import de.illonis.eduras.gameclient.gui.game.GameCamera;
-import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.gameobjects.Base.BaseType;
+import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.gameobjects.MoveableGameObject.Direction;
+import de.illonis.eduras.gameobjects.NeutralArea;
 import de.illonis.eduras.mapeditor.gui.EditorWindow;
 import de.illonis.eduras.mapeditor.gui.dialog.PropertiesDialog;
 import de.illonis.eduras.maps.NodeData;
@@ -234,6 +235,10 @@ public class MapPanelLogic implements MapInteractor {
 
 	@Override
 	public void createBaseAt(int guiX, int guiY) {
+		float width = NeutralArea.DEFAULT_SIZE;
+		float height = NeutralArea.DEFAULT_SIZE;
+		guiX -= width / 2;
+		guiY -= height / 2;
 		Vector2f mapPos = computeGuiPointToGameCoordinate(new Vector2f(guiX,
 				guiY));
 		NodeData node = new NodeData(mapPos.x, mapPos.y, -1,
@@ -243,6 +248,10 @@ public class MapPanelLogic implements MapInteractor {
 
 	@Override
 	public void createSpawnPointAt(int guiX, int guiY) {
+		float width = 40;
+		float height = 40;
+		guiX -= width / 2;
+		guiY -= height / 2;
 		Vector2f mapPos = computeGuiPointToGameCoordinate(new Vector2f(guiX,
 				guiY));
 		SpawnPosition spawn = new SpawnPosition(new Rectangle(mapPos.x,

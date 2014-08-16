@@ -18,6 +18,7 @@ import javax.swing.event.ListSelectionListener;
 import de.illonis.eduras.ObjectFactory.ObjectType;
 import de.illonis.eduras.mapeditor.MapEditor;
 import de.illonis.eduras.mapeditor.MapInteractor;
+import de.illonis.eduras.mapeditor.MapInteractor.InteractType;
 
 public class ObjectPlacingSelectionPanel extends JPanel implements
 		ListSelectionListener {
@@ -25,6 +26,7 @@ public class ObjectPlacingSelectionPanel extends JPanel implements
 	private final DefaultListModel<ObjectType> typeListModel;
 	private final JList<ObjectType> typesList;
 	private final MapInteractor interactor;
+	private final QuickMenuBar quickMenu;
 
 	private final class TypeComparator implements Comparator<ObjectType> {
 
@@ -35,8 +37,10 @@ public class ObjectPlacingSelectionPanel extends JPanel implements
 
 	}
 
-	public ObjectPlacingSelectionPanel(MapInteractor interactor) {
+	public ObjectPlacingSelectionPanel(MapInteractor interactor,
+			QuickMenuBar quickMenu) {
 		super(new BorderLayout());
+		this.quickMenu = quickMenu;
 		this.interactor = interactor;
 		Dimension dimension = new Dimension(200, 100);
 		setPreferredSize(dimension);
@@ -67,9 +71,15 @@ public class ObjectPlacingSelectionPanel extends JPanel implements
 			if (typesList.getSelectedIndex() == -1) {
 				interactor.setSpawnType(ObjectType.NO_OBJECT);
 			} else {
+				quickMenu.deselectAll();
+				interactor.setInteractType(InteractType.PLACE_OBJECT);
 				interactor.setSpawnType(typesList.getSelectedValue());
 			}
 		}
+	}
+
+	public void deselect() {
+		typesList.clearSelection();
 	}
 
 }

@@ -50,13 +50,16 @@ public class EditorWindow extends JFrame implements StatusListener {
 	public void initGui(EditorGame game) throws SlickException {
 		JPanel content = (JPanel) getContentPane();
 		content.setLayout(new BorderLayout());
-		objectListing = new ObjectPlacingSelectionPanel(game.getPanelLogic());
+
+		quickMenu = new QuickMenuBar(game.getPanelLogic());
+		objectListing = new ObjectPlacingSelectionPanel(game.getPanelLogic(),
+				quickMenu);
+		quickMenu.setOther(objectListing);
 		content.add(objectListing, BorderLayout.WEST);
 		gameContainer = new CanvasGameContainer(game);
 		gameContainer.setSize(800, 600);
 		content.add(gameContainer, BorderLayout.CENTER);
 		setJMenuBar(new EditorMenu());
-		quickMenu = new QuickMenuBar(game.getPanelLogic());
 		content.add(quickMenu, BorderLayout.NORTH);
 		statusBar = new StatusBar();
 		content.add(statusBar, BorderLayout.SOUTH);

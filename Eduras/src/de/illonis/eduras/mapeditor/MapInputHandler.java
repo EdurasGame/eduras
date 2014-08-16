@@ -28,7 +28,7 @@ public class MapInputHandler extends InputAdapter {
 		if (button == Input.MOUSE_RIGHT_BUTTON) {
 			mode = InteractMode.SCROLL;
 		} else if (button == Input.MOUSE_LEFT_BUTTON) {
-			if (interactor.isAnythingAt(x,y)) {
+			if (interactor.isAnythingAt(x, y)) {
 				mode = InteractMode.DRAG;
 			}
 		}
@@ -38,8 +38,6 @@ public class MapInputHandler extends InputAdapter {
 	public void mouseClicked(int button, int x, int y, int clickCount) {
 		if (button == Input.MOUSE_RIGHT_BUTTON) {
 			interactor.showPropertiesOfThingAt(x, y);
-		} else if (button == Input.MOUSE_LEFT_BUTTON) {
-			interactor.spawnAt(x, y);
 		}
 	}
 
@@ -47,6 +45,9 @@ public class MapInputHandler extends InputAdapter {
 	public void mouseReleased(int button, int x, int y) {
 		if (mode == InteractMode.NONE) {
 			switch (interactor.getInteractType()) {
+			case PLACE_OBJECT:
+				interactor.spawnAt(x, y);
+				break;
 			case PLACE_BASE:
 				interactor.createBaseAt(x, y);
 				break;

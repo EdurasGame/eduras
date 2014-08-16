@@ -52,7 +52,7 @@ public class PropertiesDialog extends JDialog implements ItemListener,
 	private JRadioButton visibleOwner;
 	private final JTabbedPane tabbedPane;
 	private JColorChooser chooser;
-	private JSlider sliderX, sliderY;
+	private JSlider sliderX, sliderY, sliderZ;
 	private JLabel currentX, currentY;
 	private JRadioButton baseTeamA;
 	private JRadioButton baseTeamB;
@@ -266,13 +266,14 @@ public class PropertiesDialog extends JDialog implements ItemListener,
 		visSection.setBorder(border);
 		JPanel zindexPanel = new JPanel(new BorderLayout());
 		zindexPanel.add(new JLabel("z-index"), BorderLayout.NORTH);
-		JSlider zindexSlider = new JSlider(-10, 10, object.getzLayer());
-		zindexSlider.setPaintLabels(true);
-		zindexSlider.setPaintTicks(true);
-		zindexSlider.setMajorTickSpacing(5);
-		zindexSlider.setMinorTickSpacing(1);
-		zindexSlider.setSnapToTicks(true);
-		zindexPanel.add(zindexSlider, BorderLayout.CENTER);
+		sliderZ = new JSlider(-10, 10, object.getzLayer());
+		sliderZ.setPaintLabels(true);
+		sliderZ.setPaintTicks(true);
+		sliderZ.setMajorTickSpacing(5);
+		sliderZ.setMinorTickSpacing(1);
+		sliderZ.setSnapToTicks(true);
+		sliderZ.addChangeListener(this);
+		zindexPanel.add(sliderZ, BorderLayout.CENTER);
 		zindexPanel.setBorder(border);
 		propertiesPanel.add(visSection);
 		propertiesPanel.add(zindexPanel);
@@ -336,6 +337,8 @@ public class PropertiesDialog extends JDialog implements ItemListener,
 			} else if (source == sliderY) {
 				setItemY(sliderY.getValue());
 				currentY.setText(sliderY.getValue() + "");
+			} else if (source == sliderZ) {
+				object.setzLayer(sliderZ.getValue());
 			}
 		} else {
 			java.awt.Color newColor = chooser.getColor();
@@ -345,5 +348,4 @@ public class PropertiesDialog extends JDialog implements ItemListener,
 			o.setColor(color);
 		}
 	}
-
 }
