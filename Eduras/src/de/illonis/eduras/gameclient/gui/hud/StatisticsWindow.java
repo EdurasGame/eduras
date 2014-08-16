@@ -11,6 +11,8 @@ import de.illonis.edulog.EduLog;
 import de.illonis.eduras.Player;
 import de.illonis.eduras.Team;
 import de.illonis.eduras.events.MatchEndEvent;
+import de.illonis.eduras.exceptions.ObjectNotFoundException;
+import de.illonis.eduras.exceptions.PlayerHasNoTeamException;
 import de.illonis.eduras.gameclient.datacache.CacheException;
 import de.illonis.eduras.gameclient.datacache.CacheInfo.ImageKey;
 import de.illonis.eduras.gameclient.datacache.ImageCache;
@@ -29,7 +31,7 @@ public class StatisticsWindow extends RenderedGuiObject {
 	private final static Color COLOR_BG = new Color(0, 0, 0, 200);
 	private final static Color COLOR_TEXT = Color.white;
 	private final static Color COLOR_HEADER = Color.yellow;
-	private final static int[] COLUMN_X = { 80, 180, 280 };
+	private final static int[] COLUMN_X = { 80, 180, 280, 380 };
 	private final static int PADDING_Y = 80;
 	private final static int LINEHEIGHT = 30;
 	private final static long DISPLAY_TIME = 3000;
@@ -60,6 +62,7 @@ public class StatisticsWindow extends RenderedGuiObject {
 	 * 
 	 * @author illonis
 	 */
+	@Override
 	public void setVisible(boolean visible) {
 		this.visible = visible;
 	}
@@ -86,6 +89,7 @@ public class StatisticsWindow extends RenderedGuiObject {
 		g2d.drawString("Player", screenX + COLUMN_X[0], screenY + PADDING_Y);
 		g2d.drawString("Kills", screenX + COLUMN_X[1], screenY + PADDING_Y);
 		g2d.drawString("Deaths", screenX + COLUMN_X[2], screenY + PADDING_Y);
+		g2d.drawString("Status", screenX + COLUMN_X[3], screenY + PADDING_Y);
 		// players
 		g2d.setColor(COLOR_TEXT);
 		int i = 1;
@@ -117,6 +121,18 @@ public class StatisticsWindow extends RenderedGuiObject {
 		// kills
 		g2d.drawString(getInfo().getStatistics().getDeathsOfPlayer(p) + "",
 				screenX + COLUMN_X[2], screenY + PADDING_Y + i * LINEHEIGHT);
+
+		// player's status, only show to own team
+		String status = "unknown";
+		try {
+			if (p.getTeam().equals(getInfo().getPlayer().getTeam())) {
+				status = p.getCurrentMode() + "";
+			}
+		} catch (PlayerHasNoTeamException | ObjectNotFoundException e) {
+			L.log(Level.WARNING, "Problem when rendering the stats window!", e);
+		}
+		g2d.drawString(status, screenX + COLUMN_X[3], screenY + PADDING_Y + i
+				* LINEHEIGHT);
 	}
 
 	@Override
