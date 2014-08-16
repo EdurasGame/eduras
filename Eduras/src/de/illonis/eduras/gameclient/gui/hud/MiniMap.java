@@ -30,6 +30,7 @@ import de.illonis.eduras.items.weapons.Missile;
 import de.illonis.eduras.items.weapons.Weapon;
 import de.illonis.eduras.maps.NodeData;
 import de.illonis.eduras.math.Geometry;
+import de.illonis.eduras.units.InteractMode;
 import de.illonis.eduras.units.PlayerMainFigure;
 
 /**
@@ -63,6 +64,9 @@ public class MiniMap extends ClickableGuiElement {
 		bases = new HashMap<Integer, MiniMapBase>();
 		players = new HashMap<Integer, MiniMapPlayer>();
 		scale = 1f;
+
+		setActiveInteractModes(InteractMode.MODE_STRATEGY,
+				InteractMode.MODE_DEAD);
 	}
 
 	private void renderNeutral(Graphics g) {
