@@ -9,12 +9,12 @@ import org.newdawn.slick.geom.Vector2f;
 
 import de.illonis.eduras.ObjectFactory.ObjectType;
 import de.illonis.eduras.gamemodes.GameMode.GameModeNumber;
-import de.illonis.eduras.gameobjects.Base;
 import de.illonis.eduras.gameobjects.DynamicPolygonObject;
 import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.items.weapons.SniperWeapon;
 import de.illonis.eduras.maps.InitialObjectData;
 import de.illonis.eduras.maps.Map;
+import de.illonis.eduras.maps.NodeData;
 import de.illonis.eduras.maps.SpawnPosition;
 
 /**
@@ -48,7 +48,7 @@ public final class MapData {
 	private Set<GameModeNumber> supportedGameModes;
 
 	private List<GameObject> gameObjects;
-	private List<Base> bases;
+	private List<NodeData> bases;
 	private List<SpawnPosition> spawnPoints;
 
 	/**
@@ -58,7 +58,7 @@ public final class MapData {
 		gameObjects = new LinkedList<GameObject>();
 		SniperWeapon w = new SniperWeapon(null, null, 1);
 		gameObjects.add(w);
-		bases = new LinkedList<Base>();
+		bases = new LinkedList<NodeData>();
 		spawnPoints = new LinkedList<SpawnPosition>();
 		supportedGameModes = new HashSet<GameModeNumber>();
 		DynamicPolygonObject o = new DynamicPolygonObject(
@@ -140,7 +140,7 @@ public final class MapData {
 		return gameObjects;
 	}
 
-	public List<Base> getBases() {
+	public List<NodeData> getBases() {
 		return bases;
 	}
 
@@ -150,6 +150,14 @@ public final class MapData {
 
 	public void addGameObject(GameObject o) {
 		gameObjects.add(o);
+	}
+
+	public void addBase(NodeData node) {
+		bases.add(node);
+	}
+
+	public void addSpawnPoint(SpawnPosition spawn) {
+		spawnPoints.add(spawn);
 	}
 
 }

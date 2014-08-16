@@ -69,8 +69,6 @@ public class MapEditor {
 		case HEALING_POTION:
 		case SPEED_POWERUP:
 		case INVISIBILITY_POWERUP:
-		case SMALLCIRCLEDBLOCK:
-		case NEUTRAL_BASE:
 			return true;
 		default:
 			return false;

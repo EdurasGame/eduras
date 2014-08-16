@@ -11,12 +11,15 @@ import de.illonis.eduras.gameclient.gui.game.GameCamera;
 import de.illonis.eduras.gameobjects.Base;
 import de.illonis.eduras.gameobjects.DynamicPolygonObject;
 import de.illonis.eduras.gameobjects.GameObject;
+import de.illonis.eduras.maps.NodeData;
+import de.illonis.eduras.maps.SpawnPosition;
 import de.illonis.eduras.math.Geometry;
 import de.illonis.eduras.units.PlayerMainFigure;
 
 public class MapRenderer {
 
 	private static final Color OUTLINE_COLOR = Color.black;
+	private final static Color SPAWN_COLOR = new Color(0f, 1f, 0f, 0.5f);
 
 	private final MapData data = MapData.getInstance();
 	private final MapInteractor interactor;
@@ -46,9 +49,36 @@ public class MapRenderer {
 		// map bounds
 		g.setColor(Color.red);
 		g.drawRect(0, 0, data.getWidth(), data.getHeight());
+		for (SpawnPosition spawn : data.getSpawnPoints()) {
+			renderSpawn(spawn, g);
+		}
+		for (NodeData node : data.getBases()) {
+			renderNode(node, g);
+		}
 		for (GameObject o : data.getGameObjects()) {
 			renderObject(o, g);
 		}
+	}
+
+	private void renderSpawn(SpawnPosition spawn, Graphics g) {
+		g.setColor(SPAWN_COLOR);
+		g.fill(spawn.getArea());
+	}
+
+	private void renderNode(NodeData node, Graphics g) {
+		Color color;
+		switch (node.isMainNode()) {
+		case TEAM_A:
+			color = Color.red;
+			break;
+		case TEAM_B:
+			color = Color.blue;
+			break;
+		default:
+			color = Color.white;
+		}
+		g.setColor(color);
+		g.fillRect(node.getX(), node.getY(), node.getWidth(), node.getHeight());
 	}
 
 	private void renderObject(GameObject o, Graphics g) {

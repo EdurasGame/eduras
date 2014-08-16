@@ -17,6 +17,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JSlider;
+import javax.swing.JSpinner;
 import javax.swing.JTabbedPane;
 import javax.swing.SpringLayout;
 import javax.swing.border.Border;
@@ -25,17 +26,25 @@ import javax.swing.event.ChangeListener;
 
 import org.newdawn.slick.Color;
 
+import de.illonis.eduras.gameobjects.Base;
+import de.illonis.eduras.gameobjects.Base.BaseType;
 import de.illonis.eduras.gameobjects.DynamicPolygonObject;
 import de.illonis.eduras.gameobjects.GameObject;
+import de.illonis.eduras.gameobjects.GameObject.Visibility;
+import de.illonis.eduras.gameobjects.Portal;
 import de.illonis.eduras.mapeditor.MapData;
 import de.illonis.eduras.mapeditor.gui.EditorWindow;
+import de.illonis.eduras.maps.NodeData;
+import de.illonis.eduras.maps.SpawnPosition;
 
 public class PropertiesDialog extends JDialog implements ItemListener,
 		ActionListener, ChangeListener {
 
 	private final static Dimension MIN_SIZE = new Dimension(600, 400);
 
-	protected final GameObject object;
+	protected GameObject object;
+	protected NodeData node;
+	protected SpawnPosition spawn;
 
 	private JRadioButton visibleNone;
 	private JRadioButton visibleAlways;
@@ -45,13 +54,45 @@ public class PropertiesDialog extends JDialog implements ItemListener,
 	private JColorChooser chooser;
 	private JSlider sliderX, sliderY;
 	private JLabel currentX, currentY;
+	private JRadioButton baseTeamA;
+	private JRadioButton baseTeamB;
+	private JRadioButton baseNone;
+	private JSpinner baseMult;
+
+	public PropertiesDialog(EditorWindow parent, NodeData node) {
+		this(parent);
+		this.node = node;
+		setTitle("Properties of Base #" + node.getId());
+		addPositionTab();
+		addNeutralBaseTab();
+	}
+
+	public PropertiesDialog(EditorWindow window, SpawnPosition spawn) {
+		this(window);
+		this.spawn = spawn;
+		setTitle("Properties of Spawnarea");
+		addPositionTab();
+		addSpawnTab();
+	}
 
 	public PropertiesDialog(EditorWindow parent, GameObject object) {
-		super(parent);
+		this(parent);
 		this.object = object;
+		setTitle("Properties of " + object.getType() + " #" + object.getId());
+
+		addPropertiesTab();
+		addPositionTab();
+		if (object instanceof DynamicPolygonObject) {
+			addColorTab(((DynamicPolygonObject) object).getColor());
+		} else if (object instanceof Portal) {
+			addPortalTab();
+		}
+	}
+
+	private PropertiesDialog(EditorWindow parent) {
+		super(parent);
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		setModal(false);
-		setTitle("Properties of " + object.getType() + " #" + object.getId());
 		tabbedPane = new JTabbedPane();
 		SpringLayout sl = new SpringLayout();
 		getContentPane().setLayout(sl);
@@ -63,25 +104,97 @@ public class PropertiesDialog extends JDialog implements ItemListener,
 				getContentPane());
 		sl.putConstraint(SpringLayout.SOUTH, tabbedPane, 2, SpringLayout.SOUTH,
 				getContentPane());
-
-		addPropertiesTab();
-		addPositionTab();
-		if (object instanceof DynamicPolygonObject) {
-			addColorTab(((DynamicPolygonObject) object).getColor());
-		}
 		getContentPane().add(tabbedPane);
 		setMinimumSize(MIN_SIZE);
 	}
 
+	private void addSpawnTab() {
+		JPanel spawnPanel = new JPanel();
+		spawnPanel.setLayout(new BoxLayout(spawnPanel, BoxLayout.PAGE_AXIS));
+		addTab("Spawnarea", spawnPanel);
+	}
+
+	private void addNeutralBaseTab() {
+		JPanel basePanel = new JPanel();
+		basePanel.setLayout(new BoxLayout(basePanel, BoxLayout.PAGE_AXIS));
+
+		ButtonGroup group = new ButtonGroup();
+		JPanel baseOwnerPanel = new JPanel();
+		baseNone = new JRadioButton("None",
+				(node.isMainNode() == Base.BaseType.NEUTRAL));
+		baseTeamA = new JRadioButton("Team A",
+				(node.isMainNode() == Base.BaseType.TEAM_A));
+		baseTeamB = new JRadioButton("Team B",
+				(node.isMainNode() == Base.BaseType.TEAM_B));
+		group.add(baseNone);
+		group.add(baseTeamA);
+		group.add(baseTeamB);
+		baseOwnerPanel.add(baseNone);
+		baseOwnerPanel.add(baseTeamA);
+		baseOwnerPanel.add(baseTeamB);
+		basePanel.add(baseOwnerPanel);
+		addTab("Base", basePanel);
+	}
+
+	private void addPortalTab() {
+		JPanel portalPanel = new JPanel();
+		portalPanel.setLayout(new BoxLayout(portalPanel, BoxLayout.PAGE_AXIS));
+		addTab("Portal", portalPanel);
+	}
+
+	private int getItemX() {
+		if (object != null)
+			return (int) object.getXPosition();
+		if (node != null)
+			return (int) node.getX();
+		if (spawn != null) {
+			return (int) spawn.getArea().getX();
+		}
+		return 0;
+	}
+
+	private int getItemY() {
+		if (object != null)
+			return (int) object.getYPosition();
+		if (node != null)
+			return (int) node.getY();
+		if (spawn != null) {
+			return (int) spawn.getArea().getY();
+		}
+		return 0;
+	}
+
+	private void setItemX(float x) {
+		if (object != null)
+			object.setXPosition(x);
+		if (node != null)
+			node.setX(x);
+		if (spawn != null) {
+			spawn.getArea().setX(x);
+		}
+	}
+
+	private void setItemY(float y) {
+		if (object != null)
+			object.setYPosition(y);
+		if (node != null)
+			node.setY(y);
+		if (spawn != null) {
+			spawn.getArea().setY(y);
+		}
+	}
+
 	private void addPositionTab() {
+		int x = getItemX();
+		int y = getItemY();
 		MapData data = MapData.getInstance();
 		JPanel positionTab = new JPanel();
 		positionTab.setLayout(new BoxLayout(positionTab, BoxLayout.PAGE_AXIS));
 		JPanel xPanel = new JPanel(new BorderLayout());
 		JPanel yPanel = new JPanel(new BorderLayout());
-		sliderX = new JSlider(0, data.getWidth(), (int) object.getXPosition());
+		sliderX = new JSlider(0, data.getWidth(), x);
 		sliderX.addChangeListener(this);
-		sliderY = new JSlider(0, data.getHeight(), (int) object.getYPosition());
+		sliderY = new JSlider(0, data.getHeight(), y);
 		sliderY.addChangeListener(this);
 		Border border = BorderFactory.createEmptyBorder(15, 15, 15, 15);
 		sliderX.setBorder(border);
@@ -92,8 +205,8 @@ public class PropertiesDialog extends JDialog implements ItemListener,
 		labelX.setLabelFor(sliderX);
 		JLabel labelY = new JLabel("Vertical position");
 		labelY.setLabelFor(sliderY);
-		currentX = new JLabel((int) object.getXPosition() + "");
-		currentY = new JLabel((int) object.getYPosition() + "");
+		currentX = new JLabel(x + "");
+		currentY = new JLabel(y + "");
 
 		Hashtable<Integer, JLabel> labelTable = new Hashtable<Integer, JLabel>();
 		labelTable.put(new Integer(0), new JLabel("Left"));
@@ -123,12 +236,16 @@ public class PropertiesDialog extends JDialog implements ItemListener,
 		JPanel propertiesPanel = new JPanel();
 		propertiesPanel.setLayout(new BoxLayout(propertiesPanel,
 				BoxLayout.PAGE_AXIS));
-		visibleNone = new JRadioButton("Never");
-		visibleOwner = new JRadioButton("Owner");
-		visibleTeam = new JRadioButton("Team");
+		visibleNone = new JRadioButton("Invisible",
+				object.getVisibility() == Visibility.INVISIBLE);
+		visibleOwner = new JRadioButton("Owner",
+				object.getVisibility() == Visibility.OWNER);
+		visibleTeam = new JRadioButton("Team",
+				object.getVisibility() == Visibility.TEAM);
 		visibleOwner.setEnabled(false);
 		visibleTeam.setEnabled(false);
-		visibleAlways = new JRadioButton("Always", true);
+		visibleAlways = new JRadioButton("Everybody",
+				object.getVisibility() == Visibility.ALL);
 		ButtonGroup group = new ButtonGroup();
 		group.add(visibleAlways);
 		group.add(visibleNone);
@@ -185,14 +302,27 @@ public class PropertiesDialog extends JDialog implements ItemListener,
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
-
+		JRadioButton button = (JRadioButton) e.getSource();
+		if (button == baseNone) {
+			node.setIsMainNode(BaseType.NEUTRAL);
+		} else if (button == baseTeamA) {
+			node.setIsMainNode(BaseType.TEAM_A);
+		} else if (button == baseTeamB) {
+			node.setIsMainNode(BaseType.TEAM_B);
+		} else if (button == visibleTeam) {
+			object.setVisible(Visibility.TEAM);
+		} else if (button == visibleOwner) {
+			object.setVisible(Visibility.OWNER);
+		} else if (button == visibleNone) {
+			object.setVisible(Visibility.INVISIBLE);
+		} else if (button == visibleAlways) {
+			object.setVisible(Visibility.ALL);
+		}
 	}
 
 	@Override
 	public void itemStateChanged(ItemEvent event) {
 		// TODO Auto-generated method stub
-
 	}
 
 	@Override
@@ -201,10 +331,10 @@ public class PropertiesDialog extends JDialog implements ItemListener,
 			JSlider source = (JSlider) event.getSource();
 
 			if (source == sliderX) {
-				object.setXPosition(sliderX.getValue());
+				setItemX(sliderX.getValue());
 				currentX.setText(sliderX.getValue() + "");
 			} else if (source == sliderY) {
-				object.setYPosition(sliderY.getValue());
+				setItemY(sliderY.getValue());
 				currentY.setText(sliderY.getValue() + "");
 			}
 		} else {

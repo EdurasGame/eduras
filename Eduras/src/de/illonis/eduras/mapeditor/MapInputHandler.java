@@ -28,7 +28,7 @@ public class MapInputHandler extends InputAdapter {
 		if (button == Input.MOUSE_RIGHT_BUTTON) {
 			mode = InteractMode.SCROLL;
 		} else if (button == Input.MOUSE_LEFT_BUTTON) {
-			if (interactor.isObjectAt(x, y)) {
+			if (interactor.isAnythingAt(x,y)) {
 				mode = InteractMode.DRAG;
 			}
 		}
@@ -37,7 +37,7 @@ public class MapInputHandler extends InputAdapter {
 	@Override
 	public void mouseClicked(int button, int x, int y, int clickCount) {
 		if (button == Input.MOUSE_RIGHT_BUTTON) {
-			interactor.showPropertiesOfObjectAt(x, y);
+			interactor.showPropertiesOfThingAt(x, y);
 		} else if (button == Input.MOUSE_LEFT_BUTTON) {
 			interactor.spawnAt(x, y);
 		}
@@ -45,6 +45,21 @@ public class MapInputHandler extends InputAdapter {
 
 	@Override
 	public void mouseReleased(int button, int x, int y) {
+		if (mode == InteractMode.NONE) {
+			switch (interactor.getInteractType()) {
+			case PLACE_BASE:
+				interactor.createBaseAt(x, y);
+				break;
+			case PLACE_SPAWN:
+				interactor.createSpawnPointAt(x, y);
+				break;
+			case PLACE_SHAPE:
+				interactor.placeShapeAt(x, y);
+				break;
+			default:
+				break;
+			}
+		}
 		mode = InteractMode.NONE;
 	}
 
@@ -64,7 +79,7 @@ public class MapInputHandler extends InputAdapter {
 		if (mode == InteractMode.SCROLL)
 			interactor.scroll(oldx - newx, oldy - newy);
 		else if (mode == InteractMode.DRAG) {
-			interactor.dragObjectAt(oldx, oldy, newx - oldx, newy - oldy);
+			interactor.dragThingAt(oldx, oldy, newx - oldx, newy - oldy);
 		}
 		updateCoordinateStatus(newx, newy);
 	}

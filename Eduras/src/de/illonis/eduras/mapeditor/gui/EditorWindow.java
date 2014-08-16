@@ -12,7 +12,6 @@ import org.newdawn.slick.CanvasGameContainer;
 import org.newdawn.slick.SlickException;
 
 import de.illonis.eduras.mapeditor.EditorGame;
-import de.illonis.eduras.mapeditor.MapData;
 import de.illonis.eduras.mapeditor.StatusListener;
 
 public class EditorWindow extends JFrame implements StatusListener {
@@ -57,7 +56,7 @@ public class EditorWindow extends JFrame implements StatusListener {
 		gameContainer.setSize(800, 600);
 		content.add(gameContainer, BorderLayout.CENTER);
 		setJMenuBar(new EditorMenu());
-		quickMenu = new QuickMenuBar();
+		quickMenu = new QuickMenuBar(game.getPanelLogic());
 		content.add(quickMenu, BorderLayout.NORTH);
 		statusBar = new StatusBar();
 		content.add(statusBar, BorderLayout.SOUTH);

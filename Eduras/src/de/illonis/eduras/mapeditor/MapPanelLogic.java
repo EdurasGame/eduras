@@ -1,9 +1,10 @@
 package de.illonis.eduras.mapeditor;
 
-import java.util.logging.Level;
+import java.util.LinkedList;
 
 import javax.swing.JOptionPane;
 
+import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.Vector2f;
 
 import de.illonis.eduras.FactoryException;
@@ -12,13 +13,18 @@ import de.illonis.eduras.ObjectFactory.ObjectType;
 import de.illonis.eduras.exceptions.ShapeVerticesNotApplicableException;
 import de.illonis.eduras.gameclient.gui.game.GameCamera;
 import de.illonis.eduras.gameobjects.GameObject;
+import de.illonis.eduras.gameobjects.Base.BaseType;
 import de.illonis.eduras.gameobjects.MoveableGameObject.Direction;
 import de.illonis.eduras.mapeditor.gui.EditorWindow;
 import de.illonis.eduras.mapeditor.gui.dialog.PropertiesDialog;
+import de.illonis.eduras.maps.NodeData;
+import de.illonis.eduras.maps.SpawnPosition;
+import de.illonis.eduras.maps.SpawnPosition.SpawnType;
 
 public class MapPanelLogic implements MapInteractor {
 
 	private final GameCamera viewPort;
+	private InteractType interactType;
 	private float zoom = 1f;
 	private Vector2f scrollVector;
 	private final static float SCROLL_SPEED = 5;
@@ -28,6 +34,7 @@ public class MapPanelLogic implements MapInteractor {
 
 	public MapPanelLogic(EditorWindow window) {
 		this.window = window;
+		interactType = InteractType.DEFAULT;
 		viewPort = new GameCamera();
 		viewPort.setSize(800, 600);
 		scrollVector = new Vector2f();
@@ -102,27 +109,61 @@ public class MapPanelLogic implements MapInteractor {
 	}
 
 	@Override
-	public void dragObjectAt(int guiX, int guiY, int xDiff, int yDiff) {
+	public void dragThingAt(int guiX, int guiY, int xDiff, int yDiff) {
 		GameObject o = getObjectAt(guiX, guiY);
 		if (o != null) {
 			o.modifyXPosition(xDiff);
 			o.modifyYPosition(yDiff);
+		} else {
+			NodeData node = getBaseAt(guiX, guiY);
+			if (node != null) {
+				node.setX(node.getX() + xDiff);
+				node.setY(node.getY() + yDiff);
+			} else {
+				SpawnPosition spawn = getSpawnPointAt(guiX, guiY);
+				if (spawn != null) {
+					spawn.getArea().setLocation(spawn.getArea().getX() + xDiff,
+							spawn.getArea().getY() + yDiff);
+				}
+			}
 		}
 	}
 
 	@Override
-	public void showPropertiesOfObjectAt(int guiX, int guiY) {
+	public void showPropertiesOfThingAt(int guiX, int guiY) {
 		GameObject o = getObjectAt(guiX, guiY);
+		PropertiesDialog dialog = null;
 		if (o != null) {
-			PropertiesDialog dialog = new PropertiesDialog(window, o);
-			dialog.setVisible(true);
-			System.out.println("properties for " + o.getType());
+			dialog = new PropertiesDialog(window, o);
+		} else {
+			NodeData node = getBaseAt(guiX, guiY);
+			if (node != null) {
+				dialog = new PropertiesDialog(window, node);
+			} else {
+				SpawnPosition spawn = getSpawnPointAt(guiX, guiY);
+				if (spawn != null) {
+					dialog = new PropertiesDialog(window, spawn);
+				}
+			}
 		}
+
+		if (dialog != null)
+			dialog.setVisible(true);
 	}
 
 	@Override
 	public boolean isObjectAt(int guiX, int guiY) {
 		return (getObjectAt(guiX, guiY) != null);
+	}
+
+	@Override
+	public boolean isBaseAt(int guiX, int guiY) {
+		return (getBaseAt(guiX, guiY) != null);
+	}
+
+	@Override
+	public boolean isSpawnPointAt(int guiX, int guiY) {
+		return (getSpawnPointAt(guiX, guiY) != null);
 	}
 
 	@Override
@@ -154,12 +195,80 @@ public class MapPanelLogic implements MapInteractor {
 					guiX -= width / 2;
 					guiY -= height / 2;
 				}
-				o.setPosition(guiX, guiY);
+				Vector2f mapPos = computeGuiPointToGameCoordinate(new Vector2f(
+						guiX, guiY));
+				o.setPosition(mapPos.x, mapPos.y);
 				data.addGameObject(o);
 			} catch (FactoryException | ShapeVerticesNotApplicableException e) {
 				JOptionPane.showMessageDialog(window, "Object "
 						+ currentSpawnType + " not supported");
 			}
 		}
+	}
+
+	@Override
+	public NodeData getBaseAt(int guiX, int guiY) {
+		Vector2f mapPos = computeGuiPointToGameCoordinate(new Vector2f(guiX,
+				guiY));
+		for (NodeData o : data.getBases()) {
+			Rectangle r = new Rectangle(o.getX(), o.getY(), o.getWidth(),
+					o.getHeight());
+			if (r.contains(mapPos.x, mapPos.y)) {
+				return o;
+			}
+		}
+		return null;
+	}
+
+	@Override
+	public SpawnPosition getSpawnPointAt(int guiX, int guiY) {
+		Vector2f mapPos = computeGuiPointToGameCoordinate(new Vector2f(guiX,
+				guiY));
+		for (SpawnPosition o : data.getSpawnPoints()) {
+			if (o.getArea().contains(mapPos.x, mapPos.y)) {
+				return o;
+			}
+		}
+		return null;
+	}
+
+	@Override
+	public void createBaseAt(int guiX, int guiY) {
+		Vector2f mapPos = computeGuiPointToGameCoordinate(new Vector2f(guiX,
+				guiY));
+		NodeData node = new NodeData(mapPos.x, mapPos.y, -1,
+				new LinkedList<Integer>(), BaseType.NEUTRAL);
+		data.addBase(node);
+	}
+
+	@Override
+	public void createSpawnPointAt(int guiX, int guiY) {
+		Vector2f mapPos = computeGuiPointToGameCoordinate(new Vector2f(guiX,
+				guiY));
+		SpawnPosition spawn = new SpawnPosition(new Rectangle(mapPos.x,
+				mapPos.y, 40, 40), SpawnType.ANY);
+		data.addSpawnPoint(spawn);
+	}
+
+	@Override
+	public void setInteractType(InteractType type) {
+		interactType = type;
+	}
+
+	@Override
+	public InteractType getInteractType() {
+		return interactType;
+	}
+
+	@Override
+	public void placeShapeAt(int guiX, int guiY) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public boolean isAnythingAt(int guiX, int guiY) {
+		return (isObjectAt(guiX, guiY) || isBaseAt(guiX, guiY) || isSpawnPointAt(
+				guiX, guiY));
 	}
 }
