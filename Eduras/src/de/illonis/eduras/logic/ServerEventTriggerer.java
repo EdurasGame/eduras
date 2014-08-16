@@ -805,7 +805,7 @@ public class ServerEventTriggerer implements EventTriggerer {
 		playerToChangeModeOf.setMode(newMode);
 
 		SetInteractModeEvent event = new SetInteractModeEvent(ownerId, newMode);
-		sendEventToClient(event, ownerId);
+		sendEvents(event);
 	}
 
 	@Override
