@@ -427,6 +427,10 @@ public class Edura extends TeamDeathmatch {
 
 	@Override
 	public boolean canSwitchMode(Player player, InteractMode mode) {
+		if (!(player.getModeSwitchCooldown() <= 0)) {
+			return false;
+		}
+
 		switch (mode) {
 		case MODE_EGO:
 			return true;

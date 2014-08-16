@@ -715,6 +715,12 @@ public final class S {
 
 		public static int gm_edura_money_per_selfkill = -150;
 
+		public static long sv_modeswitch_rts_cooldown = 0;
+
+		public static long sv_modeswitch_ego_cooldown = 0;
+
+		public static long sv_modeswitch_dead_cooldown = 0;
+
 	}
 
 	/**

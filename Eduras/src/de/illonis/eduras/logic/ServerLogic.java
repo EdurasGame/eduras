@@ -152,8 +152,7 @@ public class ServerLogic implements GameLogicInterface {
 					.canSwitchMode(mf, switchEvent.getRequestedMode());
 
 			if (switchAllowed
-					&& mf.getCurrentMode() != switchEvent.getRequestedMode()
-					&& mf.getModeSwitchCooldown() <= 0) {
+					&& mf.getCurrentMode() != switchEvent.getRequestedMode()) {
 				mf.getPlayerMainFigure().stopMoving();
 				mf.setMode(switchEvent.getRequestedMode());
 				getGame().getEventTriggerer().changeInteractMode(
