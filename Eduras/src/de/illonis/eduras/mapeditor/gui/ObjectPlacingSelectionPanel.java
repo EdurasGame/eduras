@@ -20,13 +20,20 @@ import de.illonis.eduras.mapeditor.MapEditor;
 import de.illonis.eduras.mapeditor.MapInteractor;
 import de.illonis.eduras.mapeditor.MapInteractor.InteractType;
 
+/**
+ * Displays list of objecttypes that can be placed in editor.
+ * 
+ * @author illonis
+ * 
+ */
 public class ObjectPlacingSelectionPanel extends JPanel implements
 		ListSelectionListener {
 
+	private static final long serialVersionUID = 1L;
 	private final DefaultListModel<ObjectType> typeListModel;
 	private final JList<ObjectType> typesList;
 	private final MapInteractor interactor;
-	private final QuickMenuBar quickMenu;
+	private final ToolMenuBar quickMenu;
 
 	private final class TypeComparator implements Comparator<ObjectType> {
 
@@ -37,8 +44,7 @@ public class ObjectPlacingSelectionPanel extends JPanel implements
 
 	}
 
-	public ObjectPlacingSelectionPanel(MapInteractor interactor,
-			QuickMenuBar quickMenu) {
+	ObjectPlacingSelectionPanel(MapInteractor interactor, ToolMenuBar quickMenu) {
 		super(new BorderLayout());
 		this.quickMenu = quickMenu;
 		this.interactor = interactor;
@@ -78,7 +84,7 @@ public class ObjectPlacingSelectionPanel extends JPanel implements
 		}
 	}
 
-	public void deselect() {
+	void deselect() {
 		typesList.clearSelection();
 	}
 

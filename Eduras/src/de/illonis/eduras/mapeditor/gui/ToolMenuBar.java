@@ -14,7 +14,15 @@ import javax.swing.JToggleButton;
 import de.illonis.eduras.mapeditor.MapInteractor;
 import de.illonis.eduras.mapeditor.MapInteractor.InteractType;
 
-public class QuickMenuBar extends JPanel implements ActionListener {
+/**
+ * Toolbar with buttons for special actions.
+ * 
+ * @author illonis
+ * 
+ */
+public class ToolMenuBar extends JPanel implements ActionListener {
+
+	private static final long serialVersionUID = 1L;
 	private final MapInteractor interactor;
 	private JToggleButton addBaseButton, addSpawnButton;
 	private JButton importShapeButton;
@@ -22,7 +30,7 @@ public class QuickMenuBar extends JPanel implements ActionListener {
 
 	private final List<JToggleButton> buttons = new LinkedList<JToggleButton>();
 
-	public QuickMenuBar(MapInteractor interactor) {
+	ToolMenuBar(MapInteractor interactor) {
 		super();
 		this.interactor = interactor;
 		// setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
@@ -62,7 +70,7 @@ public class QuickMenuBar extends JPanel implements ActionListener {
 		}
 	}
 
-	public void deselectOthers(JToggleButton me) {
+	void deselectOthers(JToggleButton me) {
 		if (me != null)
 			listing.deselect();
 		for (JToggleButton button : buttons) {
@@ -72,11 +80,11 @@ public class QuickMenuBar extends JPanel implements ActionListener {
 		}
 	}
 
-	public void deselectAll() {
+	void deselectAll() {
 		deselectOthers(null);
 	}
 
-	public void setOther(ObjectPlacingSelectionPanel objectListing) {
+	void setOther(ObjectPlacingSelectionPanel objectListing) {
 		this.listing = objectListing;
 	}
 

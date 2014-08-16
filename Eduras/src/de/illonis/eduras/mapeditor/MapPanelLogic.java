@@ -22,6 +22,12 @@ import de.illonis.eduras.maps.NodeData;
 import de.illonis.eduras.maps.SpawnPosition;
 import de.illonis.eduras.maps.SpawnPosition.SpawnType;
 
+/**
+ * Manages access to edited map.
+ * 
+ * @author illonis
+ * 
+ */
 public class MapPanelLogic implements MapInteractor {
 
 	private final GameCamera viewPort;
@@ -33,7 +39,7 @@ public class MapPanelLogic implements MapInteractor {
 	private ObjectType currentSpawnType = ObjectType.NO_OBJECT;
 	private final EditorWindow window;
 
-	public MapPanelLogic(EditorWindow window) {
+	MapPanelLogic(EditorWindow window) {
 		this.window = window;
 		interactType = InteractType.DEFAULT;
 		viewPort = new GameCamera();
@@ -41,13 +47,7 @@ public class MapPanelLogic implements MapInteractor {
 		scrollVector = new Vector2f();
 	}
 
-	/**
-	 * Computes a point that is relative to gui into game coordinates.
-	 * 
-	 * @param v
-	 *            point to convert.
-	 * @return game-coordinate point.
-	 */
+	@Override
 	public Vector2f computeGuiPointToGameCoordinate(Vector2f v) {
 		float scale = zoom;
 		Vector2f vec = new Vector2f(v);
@@ -103,6 +103,12 @@ public class MapPanelLogic implements MapInteractor {
 			scrollVector.y = 0;
 	}
 
+	/**
+	 * logic updates
+	 * 
+	 * @param delta
+	 *            time span.
+	 */
 	public void update(int delta) {
 		float x = viewPort.getX();
 		float y = viewPort.getY();

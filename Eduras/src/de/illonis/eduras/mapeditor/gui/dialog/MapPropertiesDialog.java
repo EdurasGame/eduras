@@ -39,6 +39,10 @@ public class MapPropertiesDialog extends JDialog implements ActionListener {
 	private JSpinner widthField, heightField;
 	private JButton okButton, abortButton;
 
+	/**
+	 * @param window
+	 *            the parent frame.
+	 */
 	public MapPropertiesDialog(EditorWindow window) {
 		super(window);
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);

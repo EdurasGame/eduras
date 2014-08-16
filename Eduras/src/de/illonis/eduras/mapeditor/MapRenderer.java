@@ -16,6 +16,12 @@ import de.illonis.eduras.maps.SpawnPosition;
 import de.illonis.eduras.math.Geometry;
 import de.illonis.eduras.units.PlayerMainFigure;
 
+/**
+ * Renders the map in editor.
+ * 
+ * @author illonis
+ * 
+ */
 public class MapRenderer {
 
 	private static final Color OUTLINE_COLOR = Color.black;
@@ -25,7 +31,7 @@ public class MapRenderer {
 	private final MapInteractor interactor;
 	private final GameCamera camera;
 
-	public MapRenderer(MapInteractor interactor) {
+	MapRenderer(MapInteractor interactor) {
 		this.interactor = interactor;
 		camera = interactor.getViewPort();
 	}

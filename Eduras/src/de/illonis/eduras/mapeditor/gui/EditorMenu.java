@@ -12,10 +12,19 @@ import javax.swing.KeyStroke;
 import de.illonis.eduras.mapeditor.gui.dialog.MapPropertiesDialog;
 import de.illonis.eduras.shapecreator.ShapeCreator;
 
+/**
+ * The menu bar for Eduras? map editor.
+ * 
+ * @author illonis
+ * 
+ */
 public class EditorMenu extends JMenuBar implements ActionListener {
+	
+	private static final long serialVersionUID = 1L;
+	
 	private JMenuItem mapProperties, newMap, saveMap, loadMap, shapeCreator;
 
-	public EditorMenu() {
+	EditorMenu() {
 		JMenu file = new JMenu("File");
 		file.setMnemonic(KeyEvent.VK_F);
 		newMap = addItem("New...", KeyEvent.VK_N, KeyEvent.VK_N,

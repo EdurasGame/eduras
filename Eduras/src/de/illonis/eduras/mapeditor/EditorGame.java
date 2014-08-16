@@ -8,6 +8,12 @@ import org.newdawn.slick.SlickException;
 import de.illonis.eduras.gameclient.datacache.GraphicsPreLoader;
 import de.illonis.eduras.mapeditor.gui.EditorWindow;
 
+/**
+ * Pseudo game for displaying map in editor.
+ * 
+ * @author illonis
+ * 
+ */
 public class EditorGame extends BasicGame {
 
 	private final MapRenderer renderer;
@@ -88,6 +94,9 @@ public class EditorGame extends BasicGame {
 		inputHandler.keyReleased(key, c);
 	}
 
+	/**
+	 * @return the panel logic.
+	 */
 	public MapPanelLogic getPanelLogic() {
 		return panelLogic;
 	}

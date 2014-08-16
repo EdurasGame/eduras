@@ -16,14 +16,13 @@ import de.illonis.eduras.mapeditor.gui.EditorWindow;
  */
 public class MapEditor {
 
-	public enum EditorMode {
-		PLACING, SHAPEDITING;
-	}
-
-	private EditorMode editMode;
 	private EditorGame game;
 	private EditorWindow window;
 
+	/**
+	 * @param args
+	 *            <i>unused</i>
+	 */
 	public static void main(String[] args) {
 		try {
 			MapEditor editor = new MapEditor();
@@ -36,7 +35,6 @@ public class MapEditor {
 	}
 
 	private MapEditor() throws SlickException {
-		editMode = EditorMode.PLACING;
 		init();
 	}
 
@@ -75,6 +73,9 @@ public class MapEditor {
 		}
 	}
 
+	/**
+	 * Updates window title with new map name.
+	 */
 	public void onMapChanged() {
 		window.setTitle(MapData.getInstance().getMapName()
 				+ EditorWindow.BASE_TITLE);

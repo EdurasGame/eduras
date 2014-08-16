@@ -9,8 +9,19 @@ import de.illonis.eduras.gameobjects.MoveableGameObject.Direction;
 import de.illonis.eduras.maps.NodeData;
 import de.illonis.eduras.maps.SpawnPosition;
 
+/**
+ * Provides interaction with the edited map.
+ * 
+ * @author illonis
+ * 
+ */
 public interface MapInteractor {
 
+	/**
+	 * Types of interaction
+	 * 
+	 */
+	@SuppressWarnings("javadoc")
 	public enum InteractType {
 		PLACE_BASE, PLACE_SPAWN, PLACE_OBJECT, DEFAULT, PLACE_SHAPE;
 	}
@@ -25,6 +36,13 @@ public interface MapInteractor {
 
 	void stopScrolling(Direction dir);
 
+	/**
+	 * Computes a point that is relative to gui into game coordinates.
+	 * 
+	 * @param guiPoint
+	 *            point to convert.
+	 * @return game-coordinate point.
+	 */
 	Vector2f computeGuiPointToGameCoordinate(Vector2f guiPoint);
 
 	GameCamera getViewPort();

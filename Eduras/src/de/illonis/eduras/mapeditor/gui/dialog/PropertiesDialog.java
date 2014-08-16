@@ -19,6 +19,8 @@ import javax.swing.JRadioButton;
 import javax.swing.JSlider;
 import javax.swing.JSpinner;
 import javax.swing.JTabbedPane;
+import javax.swing.SpinnerModel;
+import javax.swing.SpinnerNumberModel;
 import javax.swing.SpringLayout;
 import javax.swing.border.Border;
 import javax.swing.event.ChangeEvent;
@@ -37,8 +39,16 @@ import de.illonis.eduras.mapeditor.gui.EditorWindow;
 import de.illonis.eduras.maps.NodeData;
 import de.illonis.eduras.maps.SpawnPosition;
 
+/**
+ * Allows change of object or base properties.
+ * 
+ * @author illonis
+ * 
+ */
 public class PropertiesDialog extends JDialog implements ItemListener,
 		ActionListener, ChangeListener {
+
+	private static final long serialVersionUID = 1L;
 
 	private final static Dimension MIN_SIZE = new Dimension(600, 400);
 
@@ -59,6 +69,14 @@ public class PropertiesDialog extends JDialog implements ItemListener,
 	private JRadioButton baseNone;
 	private JSpinner baseMult;
 
+	/**
+	 * Creates a properties dialog for a node.
+	 * 
+	 * @param parent
+	 *            the parent window.
+	 * @param node
+	 *            the node.
+	 */
 	public PropertiesDialog(EditorWindow parent, NodeData node) {
 		this(parent);
 		this.node = node;
@@ -67,6 +85,14 @@ public class PropertiesDialog extends JDialog implements ItemListener,
 		addNeutralBaseTab();
 	}
 
+	/**
+	 * Create a properties dialog for a spawnarea.
+	 * 
+	 * @param window
+	 *            parent window.
+	 * @param spawn
+	 *            the spawnarea.
+	 */
 	public PropertiesDialog(EditorWindow window, SpawnPosition spawn) {
 		this(window);
 		this.spawn = spawn;
@@ -75,6 +101,14 @@ public class PropertiesDialog extends JDialog implements ItemListener,
 		addSpawnTab();
 	}
 
+	/**
+	 * Creates a properties dialog for a gameobject.
+	 * 
+	 * @param parent
+	 *            parent window.
+	 * @param object
+	 *            the object.
+	 */
 	public PropertiesDialog(EditorWindow parent, GameObject object) {
 		this(parent);
 		this.object = object;
@@ -133,6 +167,13 @@ public class PropertiesDialog extends JDialog implements ItemListener,
 		baseOwnerPanel.add(baseTeamA);
 		baseOwnerPanel.add(baseTeamB);
 		basePanel.add(baseOwnerPanel);
+		JPanel multPanel = new JPanel();
+		multPanel.add(new JLabel("Resource multiplicator"), BorderLayout.NORTH);
+		SpinnerModel model = new SpinnerNumberModel(1, 0, 30, .5);
+		baseMult = new JSpinner(model);
+		baseMult.addChangeListener(this);
+		multPanel.add(baseMult, BorderLayout.CENTER);
+		basePanel.add(multPanel);
 		addTab("Base", basePanel);
 	}
 
@@ -340,6 +381,9 @@ public class PropertiesDialog extends JDialog implements ItemListener,
 			} else if (source == sliderZ) {
 				object.setzLayer(sliderZ.getValue());
 			}
+		} else if (event.getSource() instanceof JSpinner) {
+			JSpinner spinner = (JSpinner) event.getSource();
+			// TODO: set node attribute
 		} else {
 			java.awt.Color newColor = chooser.getColor();
 			Color color = new Color(newColor.getRed(), newColor.getGreen(),

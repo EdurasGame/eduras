@@ -14,15 +14,29 @@ import org.newdawn.slick.SlickException;
 import de.illonis.eduras.mapeditor.EditorGame;
 import de.illonis.eduras.mapeditor.StatusListener;
 
+/**
+ * Window for map editor.
+ * 
+ * @author illonis
+ * 
+ */
 public class EditorWindow extends JFrame implements StatusListener {
+
+	private static final long serialVersionUID = 1L;
+	/**
+	 * Basic window title.
+	 */
+	public final static String BASE_TITLE = " - Eduras? Map Editor";
 
 	private ObjectPlacingSelectionPanel objectListing;
 	private CanvasGameContainer gameContainer;
-	private QuickMenuBar quickMenu;
+	private ToolMenuBar quickMenu;
 	private StatusBar statusBar;
-	public final static String BASE_TITLE = " - Eduras? Map Editor";
 
-	public EditorWindow() throws SlickException {
+	/**
+	 * Creates the window.
+	 */
+	public EditorWindow() {
 		super(BASE_TITLE);
 		setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
 		addWindowListener(new FrameListener());
@@ -47,11 +61,19 @@ public class EditorWindow extends JFrame implements StatusListener {
 		}
 	}
 
+	/**
+	 * Setup the gui.
+	 * 
+	 * @param game
+	 *            the editor pseudo-game.
+	 * @throws SlickException
+	 *             if initialization failed.
+	 */
 	public void initGui(EditorGame game) throws SlickException {
 		JPanel content = (JPanel) getContentPane();
 		content.setLayout(new BorderLayout());
 
-		quickMenu = new QuickMenuBar(game.getPanelLogic());
+		quickMenu = new ToolMenuBar(game.getPanelLogic());
 		objectListing = new ObjectPlacingSelectionPanel(game.getPanelLogic(),
 				quickMenu);
 		quickMenu.setOther(objectListing);
@@ -65,12 +87,18 @@ public class EditorWindow extends JFrame implements StatusListener {
 		content.add(statusBar, BorderLayout.SOUTH);
 	}
 
+	/**
+	 * Starts map rendering.
+	 * 
+	 * @throws SlickException
+	 *             on error.
+	 */
 	public void startRendering() throws SlickException {
 		gameContainer.start();
 	}
 
 	@Override
 	public void setStatus(String text) {
-		statusBar.setText(text);
+		statusBar.setStatus(text);
 	}
 }

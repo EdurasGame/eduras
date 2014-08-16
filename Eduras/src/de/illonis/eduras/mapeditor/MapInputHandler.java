@@ -6,9 +6,15 @@ import org.newdawn.slick.util.InputAdapter;
 
 import de.illonis.eduras.gameobjects.MoveableGameObject.Direction;
 
+/**
+ * Handles user input in map editor.
+ * 
+ * @author illonis
+ * 
+ */
 public class MapInputHandler extends InputAdapter {
 
-	public enum InteractMode {
+	enum InteractMode {
 		SCROLL, DRAG, NONE;
 	}
 
@@ -17,7 +23,7 @@ public class MapInputHandler extends InputAdapter {
 	private final StatusListener status;
 	private final MapInteractor interactor;
 
-	public MapInputHandler(MapInteractor interactor, StatusListener status) {
+	MapInputHandler(MapInteractor interactor, StatusListener status) {
 		this.status = status;
 		this.interactor = interactor;
 		mode = InteractMode.NONE;
