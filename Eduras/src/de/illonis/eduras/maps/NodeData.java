@@ -3,6 +3,7 @@ package de.illonis.eduras.maps;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.Set;
 
 import org.newdawn.slick.geom.Rectangle;
 
@@ -21,7 +22,7 @@ public class NodeData {
 	private final Rectangle area;
 	private final int id;
 	private final LinkedList<Integer> adjacentNodes;
-	private final Base.BaseType isMainNode;
+	private Base.BaseType isMainNode;
 
 	/**
 	 * Create a new node data wrapper instance with default node size.
@@ -80,6 +81,22 @@ public class NodeData {
 		return area.getX();
 	}
 
+	public void setX(float x) {
+		area.setX(x);
+	}
+
+	public void setY(float y) {
+		area.setY(y);
+	}
+
+	public void setWidth(float width) {
+		area.setWidth(width);
+	}
+
+	public void setHeight(float height) {
+		area.setHeight(height);
+	}
+
 	/**
 	 * Returns the y coordinate of the nodes position.
 	 * 
@@ -101,6 +118,10 @@ public class NodeData {
 	 */
 	public float getHeight() {
 		return area.getHeight();
+	}
+
+	public void setIsMainNode(Base.BaseType isMainNode) {
+		this.isMainNode = isMainNode;
 	}
 
 	/**
