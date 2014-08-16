@@ -43,7 +43,8 @@ public abstract class TriggerArea extends GameObject implements
 		setCollidable(false);
 		setzLayer(0);
 		presentObjects = new TreeSet<GameObject>(new GameObjectIdComparator());
-		timingSource.addTimedEventHandler(this);
+		if (timingSource != null)
+			timingSource.addTimedEventHandler(this);
 	}
 
 	/**

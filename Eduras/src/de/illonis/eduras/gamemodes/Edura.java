@@ -6,6 +6,8 @@ import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.newdawn.slick.geom.Rectangle;
+
 import de.illonis.edulog.EduLog;
 import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.ObjectFactory.ObjectType;
@@ -120,6 +122,10 @@ public class Edura extends TeamDeathmatch {
 					new Vector2df(nodeData.getX(), nodeData.getY()), -1);
 
 			Base base = (Base) gameInfo.findObjectById(objectId);
+			Rectangle baseRect = (Rectangle) base.getShape();
+			// TODO: announce size (event!)
+			baseRect.setWidth(nodeData.getWidth());
+			baseRect.setHeight(nodeData.getHeight());
 			nodeIdToBase.put(nodeid, base);
 			baseToVertex.put(base, new Vertex());
 		}
