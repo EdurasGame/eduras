@@ -27,6 +27,7 @@ import de.illonis.eduras.exceptions.ObjectNotFoundException;
 import de.illonis.eduras.gameclient.ClientData;
 import de.illonis.eduras.gameclient.VisionInformation;
 import de.illonis.eduras.gameclient.datacache.CacheException;
+import de.illonis.eduras.gameclient.datacache.CacheInfo.ImageKey;
 import de.illonis.eduras.gameclient.datacache.ImageCache;
 import de.illonis.eduras.gameclient.gui.animation.EffectFactory;
 import de.illonis.eduras.gameclient.gui.hud.HealthBar;
@@ -70,6 +71,7 @@ public class GameRenderer implements TooltipHandler {
 	private final InformationProvider info;
 	private final ClientData data;
 	private final static Color FOG_OF_WAR = new Color(0, 0, 0, 200);
+	private static final float INTERACTMODE_OFFSET_Y = 25;
 
 	private static final Color OUTLINE_COLOR = Color.black;
 	private Font font;
@@ -203,7 +205,6 @@ public class GameRenderer implements TooltipHandler {
 	}
 
 	private void drawAnimations(Graphics g) {
-
 	}
 
 	private void adjustCamera() {
@@ -313,9 +314,6 @@ public class GameRenderer implements TooltipHandler {
 								&& d.getOwner() == -1 || d.equals(myPlayer) || !a
 									.isEmpty())) {
 					drawObject(d, g);
-					if (d instanceof PlayerMainFigure) {
-						drawFace(d, (Circle) d.getShape(), g);
-					}
 				}
 			}
 
@@ -358,11 +356,34 @@ public class GameRenderer implements TooltipHandler {
 			drawHealthBarFor((Unit) d, g);
 		}
 
+		if (d instanceof PlayerMainFigure) {
+			drawPlayerSpecifics((PlayerMainFigure) d, g);
+		}
+
 		// draws unit id next to unit for testing purpose
 		/*
 		 * dbg.drawString(d.getId() + "", d.getDrawX() - camera.x, d.getDrawY()
 		 * - camera.y - 15);
 		 */
+	}
+
+	private void drawPlayerSpecifics(PlayerMainFigure d, Graphics g) {
+		drawFace(d, (Circle) d.getShape(), g);
+		drawInteractModeIndication(d, g);
+	}
+
+	private void drawInteractModeIndication(PlayerMainFigure d, Graphics g) {
+		if (d.getPlayer().getCurrentMode().equals(InteractMode.MODE_STRATEGY)) {
+			try {
+				g.drawImage(
+						ImageCache.getGuiImage(ImageKey.STRATEGY_MODE_ICON), d
+								.getPositionVector().getX(), d
+								.getPositionVector().getY()
+								- INTERACTMODE_OFFSET_Y);
+			} catch (CacheException e) {
+				L.log(Level.WARNING, "Cannot load image!", e);
+			}
+		}
 	}
 
 	private void renderShape(GameObject d, Graphics g) {
