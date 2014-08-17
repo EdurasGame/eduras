@@ -24,6 +24,7 @@ import de.illonis.edulog.EduLog;
 import de.illonis.eduras.Player;
 import de.illonis.eduras.Team;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
+import de.illonis.eduras.exceptions.PlayerHasNoTeamException;
 import de.illonis.eduras.gameclient.ClientData;
 import de.illonis.eduras.gameclient.VisionInformation;
 import de.illonis.eduras.gameclient.datacache.CacheException;
@@ -373,17 +374,22 @@ public class GameRenderer implements TooltipHandler {
 	}
 
 	private void drawInteractModeIndication(PlayerMainFigure d, Graphics g) {
-		if (d.getPlayer().getCurrentMode().equals(InteractMode.MODE_STRATEGY)) {
-			try {
+		try {
+			if (d.getPlayer().getCurrentMode()
+					.equals(InteractMode.MODE_STRATEGY)
+					&& d.getTeam().equals(info.getPlayer().getTeam())) {
+
 				g.drawImage(
 						ImageCache.getGuiImage(ImageKey.STRATEGY_MODE_ICON), d
 								.getPositionVector().getX(), d
 								.getPositionVector().getY()
 								- INTERACTMODE_OFFSET_Y);
-			} catch (CacheException e) {
-				L.log(Level.WARNING, "Cannot load image!", e);
 			}
+		} catch (CacheException | PlayerHasNoTeamException
+				| ObjectNotFoundException e) {
+			L.log(Level.WARNING, "Cannot load image!", e);
 		}
+
 	}
 
 	private void renderShape(GameObject d, Graphics g) {
