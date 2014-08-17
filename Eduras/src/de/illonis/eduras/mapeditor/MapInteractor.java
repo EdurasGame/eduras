@@ -77,4 +77,6 @@ public interface MapInteractor {
 
 	boolean isSpawnPointAt(int guiX, int guiY);
 
+	void deleteAtMouse();
+
 }

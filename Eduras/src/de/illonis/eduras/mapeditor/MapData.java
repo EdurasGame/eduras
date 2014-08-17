@@ -160,4 +160,16 @@ public final class MapData {
 		spawnPoints.add(spawn);
 	}
 
+	public void remove(GameObject o) {
+		gameObjects.remove(o);
+	}
+
+	public void remove(NodeData node) {
+		bases.remove(node);
+	}
+
+	public void remove(SpawnPosition spawn) {
+		spawnPoints.remove(spawn);
+	}
+
 }

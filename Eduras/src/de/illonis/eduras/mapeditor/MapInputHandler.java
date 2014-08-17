@@ -106,6 +106,9 @@ public class MapInputHandler extends InputAdapter {
 		case Input.KEY_S:
 			interactor.startScrolling(Direction.BOTTOM);
 			break;
+		case Input.KEY_X:
+			interactor.deleteAtMouse();
+			break;
 		default:
 			break;
 		}

@@ -46,6 +46,7 @@ public class EditorGame extends BasicGame {
 		GraphicsPreLoader.loadShapes();
 		GraphicsPreLoader.loadGraphics();
 		GraphicsPreLoader.loadIcons();
+		panelLogic.setInput(container.getInput());
 	}
 
 	@Override

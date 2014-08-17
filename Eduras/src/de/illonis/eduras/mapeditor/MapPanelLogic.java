@@ -4,6 +4,7 @@ import java.util.LinkedList;
 
 import javax.swing.JOptionPane;
 
+import org.newdawn.slick.Input;
 import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.Vector2f;
 
@@ -38,6 +39,7 @@ public class MapPanelLogic implements MapInteractor {
 	private final MapData data = MapData.getInstance();
 	private ObjectType currentSpawnType = ObjectType.NO_OBJECT;
 	private final EditorWindow window;
+	private Input input;
 
 	MapPanelLogic(EditorWindow window) {
 		this.window = window;
@@ -45,6 +47,10 @@ public class MapPanelLogic implements MapInteractor {
 		viewPort = new GameCamera();
 		viewPort.setSize(800, 600);
 		scrollVector = new Vector2f();
+	}
+
+	public void setInput(Input input) {
+		this.input = input;
 	}
 
 	@Override
@@ -285,5 +291,26 @@ public class MapPanelLogic implements MapInteractor {
 	public boolean isAnythingAt(int guiX, int guiY) {
 		return (isObjectAt(guiX, guiY) || isBaseAt(guiX, guiY) || isSpawnPointAt(
 				guiX, guiY));
+	}
+
+	@Override
+	public void deleteAtMouse() {
+		int x = input.getMouseX();
+		int y = input.getMouseY();
+		GameObject o = getObjectAt(x, y);
+		if (o != null) {
+			data.remove(o);
+		} else {
+			NodeData node = getBaseAt(x, y);
+			if (node != null) {
+				data.remove(node);
+			} else {
+				SpawnPosition spawn = getSpawnPointAt(x, y);
+				if (spawn != null) {
+					data.remove(spawn);
+				}
+			}
+		}
+
 	}
 }
