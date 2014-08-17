@@ -29,6 +29,7 @@ import de.illonis.eduras.events.OwnerGameEvent;
 import de.illonis.eduras.events.SetBooleanGameObjectAttributeEvent;
 import de.illonis.eduras.events.SetGameModeEvent;
 import de.illonis.eduras.events.SetIntegerGameObjectAttributeEvent;
+import de.illonis.eduras.events.SetInteractModeEvent;
 import de.illonis.eduras.events.SetMapEvent;
 import de.illonis.eduras.events.SetPolygonDataEvent;
 import de.illonis.eduras.events.SetRemainingTimeEvent;
@@ -384,6 +385,8 @@ public class GameInformation {
 		for (Player player : players.values()) {
 			infos.add(new OwnerGameEvent(GameEventNumber.PLAYER_JOINED, player
 					.getPlayerId()));
+			infos.add(new SetInteractModeEvent(player.getPlayerId(), player
+					.getCurrentMode()));
 		}
 	}
 
