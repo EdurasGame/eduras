@@ -44,6 +44,7 @@ public final class MapData {
 	private String author;
 	private int width;
 	private int height;
+	private DynamicPolygonObject placingObject;
 
 	private Set<GameModeNumber> supportedGameModes;
 
@@ -73,9 +74,18 @@ public final class MapData {
 		o.setYPosition(130);
 		gameObjects.add(o);
 		mapName = "unnamed Map";
+		placingObject = null;
 		author = "unknown";
 		width = 500;
 		height = 500;
+	}
+
+	public DynamicPolygonObject getPlacingObject() {
+		return placingObject;
+	}
+
+	public void setPlacingObject(DynamicPolygonObject placingObject) {
+		this.placingObject = placingObject;
 	}
 
 	/**

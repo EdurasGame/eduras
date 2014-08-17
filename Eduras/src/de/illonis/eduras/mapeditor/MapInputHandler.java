@@ -5,6 +5,7 @@ import org.newdawn.slick.geom.Vector2f;
 import org.newdawn.slick.util.InputAdapter;
 
 import de.illonis.eduras.gameobjects.MoveableGameObject.Direction;
+import de.illonis.eduras.mapeditor.MapInteractor.InteractType;
 
 /**
  * Handles user input in map editor.
@@ -43,7 +44,18 @@ public class MapInputHandler extends InputAdapter {
 	@Override
 	public void mouseClicked(int button, int x, int y, int clickCount) {
 		if (button == Input.MOUSE_RIGHT_BUTTON) {
-			interactor.showPropertiesOfThingAt(x, y);
+			if (interactor.getInteractType() == InteractType.PLACE_SHAPE) {
+				interactor.setInteractType(InteractType.DEFAULT);
+				MapData.getInstance().setPlacingObject(null);
+			} else {
+				interactor.showPropertiesOfThingAt(x, y);
+			}
+		} else if (button == Input.MOUSE_LEFT_BUTTON) {
+			if (mode == InteractMode.NONE) {
+				if (interactor.getInteractType() == InteractType.PLACE_SHAPE) {
+					interactor.placeShapeAt(x, y);
+				}
+			}
 		}
 	}
 
@@ -61,7 +73,11 @@ public class MapInputHandler extends InputAdapter {
 				interactor.createSpawnPointAt(x, y);
 				break;
 			case PLACE_SHAPE:
-				interactor.placeShapeAt(x, y);
+				if (button == Input.MOUSE_LEFT_BUTTON) {
+
+				} else if (button == Input.MOUSE_RIGHT_BUTTON) {
+
+				}
 				break;
 			default:
 				break;

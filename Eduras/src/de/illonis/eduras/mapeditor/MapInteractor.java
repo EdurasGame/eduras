@@ -1,5 +1,8 @@
 package de.illonis.eduras.mapeditor;
 
+import java.io.File;
+
+import org.newdawn.slick.geom.Point;
 import org.newdawn.slick.geom.Vector2f;
 
 import de.illonis.eduras.ObjectFactory.ObjectType;
@@ -80,5 +83,9 @@ public interface MapInteractor {
 	void deleteAtMouse();
 
 	void editShapeAtMouse();
+
+	void importShape(File file);
+	
+	Point getMouseLocation();
 
 }

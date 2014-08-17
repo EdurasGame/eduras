@@ -4,6 +4,8 @@ import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
+import org.newdawn.slick.geom.Point;
+import org.newdawn.slick.geom.Shape;
 
 import de.illonis.eduras.gameclient.datacache.CacheException;
 import de.illonis.eduras.gameclient.datacache.ImageCache;
@@ -11,6 +13,7 @@ import de.illonis.eduras.gameclient.gui.game.GameCamera;
 import de.illonis.eduras.gameobjects.Base;
 import de.illonis.eduras.gameobjects.DynamicPolygonObject;
 import de.illonis.eduras.gameobjects.GameObject;
+import de.illonis.eduras.mapeditor.MapInteractor.InteractType;
 import de.illonis.eduras.maps.NodeData;
 import de.illonis.eduras.maps.SpawnPosition;
 import de.illonis.eduras.math.Geometry;
@@ -25,7 +28,8 @@ import de.illonis.eduras.units.PlayerMainFigure;
 public class MapRenderer {
 
 	private static final Color OUTLINE_COLOR = Color.black;
-	private final static Color SPAWN_COLOR = new Color(0f, 1f, 0f, 0.5f);
+	private final static Color SPAWN_COLOR = Color.green;
+	private final static Color SHAPE_PLACE_COLOR = new Color(0f, 0f, 1f, 0.7f);
 
 	private final MapData data = MapData.getInstance();
 	private final MapInteractor interactor;
@@ -63,6 +67,18 @@ public class MapRenderer {
 		}
 		for (GameObject o : data.getGameObjects()) {
 			renderObject(o, g);
+		}
+		if (interactor.getInteractType() == InteractType.PLACE_SHAPE) {
+			DynamicPolygonObject poly = data.getPlacingObject();
+			if (poly != null) {
+				Shape shape = poly.getShape();
+				g.setColor(SHAPE_PLACE_COLOR);
+				Point mouse = interactor.getMouseLocation();
+				g.translate(camera.getX(), camera.getY());
+				g.translate(mouse.getX() - shape.getWidth() / 2, mouse.getY()
+						- shape.getHeight() / 2);
+				g.fill(shape);
+			}
 		}
 	}
 

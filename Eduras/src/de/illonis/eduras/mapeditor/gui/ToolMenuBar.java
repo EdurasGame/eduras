@@ -3,16 +3,21 @@ package de.illonis.eduras.mapeditor.gui;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.util.LinkedList;
 import java.util.List;
 
 import javax.swing.AbstractButton;
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JToggleButton;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 import de.illonis.eduras.mapeditor.MapInteractor;
 import de.illonis.eduras.mapeditor.MapInteractor.InteractType;
+import de.illonis.eduras.shapecreator.ShapeFiler;
 
 /**
  * Toolbar with buttons for special actions.
@@ -27,11 +32,20 @@ public class ToolMenuBar extends JPanel implements ActionListener {
 	private JToggleButton addBaseButton, addSpawnButton;
 	private JButton importShapeButton;
 	private ObjectPlacingSelectionPanel listing;
+	private final JFileChooser fileChooser;
 
 	private final List<JToggleButton> buttons = new LinkedList<JToggleButton>();
 
 	ToolMenuBar(MapInteractor interactor) {
 		super();
+		fileChooser = new JFileChooser();
+		fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+		fileChooser.setMultiSelectionEnabled(false);
+		FileNameExtensionFilter filter = new FileNameExtensionFilter(
+				"Eduras? shape file (*." + ShapeFiler.FILE_EXT + ")",
+				ShapeFiler.FILE_EXT);
+		fileChooser.setFileFilter(filter);
+		fileChooser.setAcceptAllFileFilterUsed(false);
 		this.interactor = interactor;
 		// setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
 		setPreferredSize(new Dimension(100, 50));
@@ -66,7 +80,18 @@ public class ToolMenuBar extends JPanel implements ActionListener {
 			interactor.setInteractType(InteractType.PLACE_SPAWN);
 		} else if (button == importShapeButton) {
 			deselectAll();
-			// TODO: Show import dialog.
+			int result = fileChooser.showDialog(this, "import");
+			if (result == JFileChooser.APPROVE_OPTION) {
+				File file = fileChooser.getSelectedFile();
+				if (!file.getAbsolutePath().endsWith("." + ShapeFiler.FILE_EXT))
+					file = new File(file.getAbsolutePath() + "."
+							+ ShapeFiler.FILE_EXT);
+				if (file.exists())
+					interactor.importShape(file);
+				else
+					JOptionPane.showMessageDialog(this, "File not found: "
+							+ file.getAbsolutePath());
+			}
 		}
 	}
 

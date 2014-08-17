@@ -1,10 +1,14 @@
 package de.illonis.eduras.mapeditor;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.LinkedList;
 
 import javax.swing.JOptionPane;
 
 import org.newdawn.slick.Input;
+import org.newdawn.slick.geom.Point;
+import org.newdawn.slick.geom.Polygon;
 import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.Vector2f;
 
@@ -14,6 +18,7 @@ import de.illonis.eduras.ObjectFactory.ObjectType;
 import de.illonis.eduras.exceptions.ShapeVerticesNotApplicableException;
 import de.illonis.eduras.gameclient.gui.game.GameCamera;
 import de.illonis.eduras.gameobjects.Base.BaseType;
+import de.illonis.eduras.gameobjects.DynamicPolygonObject;
 import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.gameobjects.MoveableGameObject.Direction;
 import de.illonis.eduras.gameobjects.NeutralArea;
@@ -22,6 +27,9 @@ import de.illonis.eduras.mapeditor.gui.dialog.PropertiesDialog;
 import de.illonis.eduras.maps.NodeData;
 import de.illonis.eduras.maps.SpawnPosition;
 import de.illonis.eduras.maps.SpawnPosition.SpawnType;
+import de.illonis.eduras.math.Vector2df;
+import de.illonis.eduras.shapecreator.FileCorruptException;
+import de.illonis.eduras.shapes.data.ShapeParser;
 
 /**
  * Manages access to edited map.
@@ -42,6 +50,7 @@ public class MapPanelLogic implements MapInteractor {
 	private ObjectType currentSpawnType = ObjectType.NO_OBJECT;
 	private final EditorWindow window;
 	private Input input;
+	private Polygon importedShape;
 
 	MapPanelLogic(EditorWindow window) {
 		this.window = window;
@@ -286,7 +295,14 @@ public class MapPanelLogic implements MapInteractor {
 
 	@Override
 	public void placeShapeAt(int guiX, int guiY) {
-		// TODO Auto-generated method stub
+		DynamicPolygonObject shape = data.getPlacingObject();
+		data.addGameObject(shape);
+		Vector2f mapPos = computeGuiPointToGameCoordinate(new Vector2f(guiX,
+				guiY));
+		shape.setPosition(mapPos.x - shape.getShape().getWidth() / 2, mapPos.y
+				- shape.getShape().getHeight() / 2);
+		data.setPlacingObject(null);
+		setInteractType(InteractType.DEFAULT);
 	}
 
 	@Override
@@ -323,5 +339,35 @@ public class MapPanelLogic implements MapInteractor {
 		if (o.getType() == ObjectType.DYNAMIC_POLYGON_BLOCK) {
 
 		}
+	}
+
+	@Override
+	public void importShape(File file) {
+		try {
+			Vector2df[] verts = ShapeParser.readShape(file.toURI().toURL());
+			GameObject o;
+			try {
+				o = ObjectCreator.createObject(
+						ObjectType.DYNAMIC_POLYGON_BLOCK, null, null);
+				o.setId(nextId++);
+				DynamicPolygonObject poly = (DynamicPolygonObject) o;
+				poly.setPolygonVertices(verts);
+				data.setPlacingObject(poly);
+				setInteractType(InteractType.PLACE_SHAPE);
+			} catch (FactoryException | ShapeVerticesNotApplicableException e) {
+				JOptionPane.showMessageDialog(window, "Error creating object.");
+			}
+
+		} catch (FileCorruptException | IOException e) {
+			JOptionPane.showMessageDialog(
+					window,
+					"An error occured while reading file "
+							+ file.getAbsolutePath() + ": " + e.getMessage());
+		}
+	}
+
+	@Override
+	public Point getMouseLocation() {
+		return new Point(input.getMouseX(), input.getMouseY());
 	}
 }

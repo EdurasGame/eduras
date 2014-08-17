@@ -28,7 +28,9 @@ public class ControlsInfo extends JDialog {
 				+ "Hover a shape and press V to edit it\n\n"
 				+ "Hover an object and press X to delete it\n\n"
 				+ "Press WASD or hold right mousebutton to drag the map.\n\n"
-				+ "drag objects by holding left mousebutton\n\n" + "");
+				+ "drag objects by holding left mousebutton\n\n"
+				+ "Rightclick to abort shape import");
+		area.setCaretPosition(0);
 		JScrollPane scroller = new JScrollPane(area);
 		content.add(scroller, BorderLayout.CENTER);
 	}
