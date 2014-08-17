@@ -694,6 +694,33 @@ public final class S {
 
 		public static float go_portal_height = 25;
 
+		/**
+		 * Determines the accuracy during collision detection where the moving
+		 * object has an elliptical shape.
+		 */
+		public static int sv_performance_collision_accuracy_ellipse = 10;
+
+		/**
+		 * Determines the accuracy during collision detection where the moving
+		 * object has a polygon shape.
+		 */
+		public static int sv_performance_collision_accuracy_polygon = 10;
+
+		/**
+		 * Tells how many times per second the game shall be updated.
+		 */
+		public static long sv_performance_tickrate = 33;
+
+		public static int gm_edura_money_per_kill = 150;
+
+		public static int gm_edura_money_per_selfkill = -150;
+
+		public static long sv_modeswitch_rts_cooldown = 0;
+
+		public static long sv_modeswitch_ego_cooldown = 0;
+
+		public static long sv_modeswitch_dead_cooldown = 0;
+
 	}
 
 	/**

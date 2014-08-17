@@ -132,7 +132,7 @@ public class InformationProvider implements InfoInterface {
 	}
 
 	@Override
-	public GameObject findObjectById(int id) {
+	public GameObject findObjectById(int id) throws ObjectNotFoundException {
 		return edurasInitializer.logic.getGame().findObjectById(id);
 	}
 

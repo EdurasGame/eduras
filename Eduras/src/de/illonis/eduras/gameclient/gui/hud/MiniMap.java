@@ -3,6 +3,7 @@ package de.illonis.eduras.gameclient.gui.hud;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.newdawn.slick.Color;
@@ -16,14 +17,15 @@ import org.newdawn.slick.geom.Vector2f;
 import de.illonis.edulog.EduLog;
 import de.illonis.eduras.ObjectFactory.ObjectType;
 import de.illonis.eduras.events.ObjectFactoryEvent;
+import de.illonis.eduras.exceptions.ObjectNotFoundException;
 import de.illonis.eduras.gameclient.gui.game.GameCamera;
 import de.illonis.eduras.gameclient.gui.hud.minimap.MiniMapBase;
 import de.illonis.eduras.gameclient.gui.hud.minimap.MiniMapNeutralObject;
 import de.illonis.eduras.gameclient.gui.hud.minimap.MiniMapPlayer;
 import de.illonis.eduras.gamemodes.GameMode.GameModeNumber;
+import de.illonis.eduras.gameobjects.Base;
 import de.illonis.eduras.gameobjects.DynamicPolygonObject;
 import de.illonis.eduras.gameobjects.GameObject;
-import de.illonis.eduras.gameobjects.Base;
 import de.illonis.eduras.items.weapons.Missile;
 import de.illonis.eduras.items.weapons.Weapon;
 import de.illonis.eduras.maps.NodeData;
@@ -255,15 +257,25 @@ public class MiniMap extends ClickableGuiElement {
 
 	@Override
 	public void onObjectCreation(ObjectFactoryEvent event) {
-		GameObject o = getInfo().findObjectById(event.getId());
+		GameObject o;
+		try {
+			o = getInfo().findObjectById(event.getId());
+		} catch (ObjectNotFoundException e) {
+			L.log(Level.WARNING, "Cannot find object that was just created!", e);
+			return;
+		}
 		maybeAddObject(o);
 	}
 
 	@Override
 	public void onObjectRemove(ObjectFactoryEvent event) {
-		GameObject o = getInfo().findObjectById(event.getId());
-		if (o == null)
+		GameObject o;
+		try {
+			o = getInfo().findObjectById(event.getId());
+		} catch (ObjectNotFoundException e) {
+			L.log(Level.WARNING, "Cannot find object to remove!", e);
 			return;
+		}
 
 		if (!isTracked(o)) {
 			return;
@@ -307,8 +319,7 @@ public class MiniMap extends ClickableGuiElement {
 			float h = o.getShape().getHeight() * scale;
 
 			synchronized (bases) {
-				bases.put(o.getId(), new MiniMapBase((Base) o, x, y, w,
-						h));
+				bases.put(o.getId(), new MiniMapBase((Base) o, x, y, w, h));
 			}
 
 			resetNodeData();

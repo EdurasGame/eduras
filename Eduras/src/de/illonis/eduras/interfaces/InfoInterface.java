@@ -90,9 +90,10 @@ public interface InfoInterface {
 	 * @param id
 	 *            id of object.
 	 * @return the game object.
+	 * @throws ObjectNotFoundException
 	 * 
 	 */
-	public GameObject findObjectById(int id);
+	public GameObject findObjectById(int id) throws ObjectNotFoundException;
 
 	/**
 	 * Returns the team with given id.

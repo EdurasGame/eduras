@@ -121,11 +121,17 @@ public class Edura extends TeamDeathmatch {
 					ObjectType.NEUTRAL_BASE,
 					new Vector2df(nodeData.getX(), nodeData.getY()), -1);
 
-			Base base = (Base) gameInfo.findObjectById(objectId);
-			Rectangle baseRect = (Rectangle) base.getShape();
-			// TODO: announce size (event!)
-			baseRect.setWidth(nodeData.getWidth());
-			baseRect.setHeight(nodeData.getHeight());
+			Base base;
+			try {
+				base = (Base) gameInfo.findObjectById(objectId);
+				Rectangle baseRect = (Rectangle) base.getShape();
+				// TODO: announce size (event!)
+				baseRect.setWidth(nodeData.getWidth());
+				baseRect.setHeight(nodeData.getHeight());
+			} catch (ObjectNotFoundException e) {
+				L.log(Level.WARNING, "Cannot find object!", e);
+				return;
+			}
 			nodeIdToBase.put(nodeid, base);
 			baseToVertex.put(base, new Vertex());
 		}
@@ -247,7 +253,35 @@ public class Edura extends TeamDeathmatch {
 			eventTriggerer.changeInteractMode(deadPlayer.getPlayerId(),
 					InteractMode.MODE_DEAD);
 
+			try {
+				rewardForDeath(killedUnit,
+						gameInfo.getPlayerByOwnerId(killingPlayer));
+			} catch (ObjectNotFoundException e) {
+				L.log(Level.WARNING, "Cannot find id of killing player.", e);
+			}
+
 			checkAllPlayersOfTeamDead(deadPlayer);
+		}
+	}
+
+	private void rewardForDeath(Unit killedUnit, Player killingPlayer) {
+		try {
+			if (killedUnit.getTeam() != null) {
+				if (killedUnit.getTeam().equals(killingPlayer.getTeam())) {
+					// team/self killers get punished
+					gameInfo.getEventTriggerer().changeResourcesOfTeamByAmount(
+							killedUnit.getTeam(),
+							S.Server.gm_edura_money_per_selfkill);
+				} else {
+					// get reward for killing someone
+					gameInfo.getEventTriggerer().changeResourcesOfTeamByAmount(
+							killingPlayer.getTeam(),
+							S.Server.gm_edura_money_per_kill);
+				}
+			}
+		} catch (PlayerHasNoTeamException e) {
+			L.log(Level.WARNING, "Cannot find team of player " + killingPlayer,
+					e);
 		}
 	}
 
@@ -399,6 +433,10 @@ public class Edura extends TeamDeathmatch {
 
 	@Override
 	public boolean canSwitchMode(Player player, InteractMode mode) {
+		if (!(player.getModeSwitchCooldown() <= 0)) {
+			return false;
+		}
+
 		switch (mode) {
 		case MODE_EGO:
 			return true;

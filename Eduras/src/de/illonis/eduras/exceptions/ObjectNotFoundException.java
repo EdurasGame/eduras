@@ -25,6 +25,7 @@ public class ObjectNotFoundException extends Exception {
 	 *            The object's id.
 	 */
 	public ObjectNotFoundException(int id) {
+		super("Object id was: " + id);
 		this.id = id;
 	}
 

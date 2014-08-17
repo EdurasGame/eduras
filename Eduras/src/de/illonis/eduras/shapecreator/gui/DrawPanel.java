@@ -14,6 +14,8 @@ import java.util.Collection;
 
 import javax.swing.JPanel;
 
+import org.newdawn.slick.geom.Line;
+
 import de.illonis.eduras.math.Vector2df;
 import de.illonis.eduras.shapecreator.DataHolder;
 
@@ -75,7 +77,26 @@ public class DrawPanel extends JPanel {
 					null);
 		}
 		coordinateSystem.draw(g2d);
+		drawTempLines(g2d);
 		paintVector2dfs(g2d);
+	}
+
+	private void drawLine(Line line, Graphics2D g2d) {
+		GuiPoint start = coordinateSystem.coordinateToGui(line.getStart());
+		GuiPoint end = coordinateSystem.coordinateToGui(line.getEnd());
+		g2d.drawLine(start.x, start.y, end.x, end.y);
+	}
+
+	private void drawTempLines(Graphics2D g2d) {
+		g2d.setColor(Color.green);
+		Line a = data.getTempLineA();
+		Line b = data.getTempLineB();
+		if (a != null) {
+			drawLine(a, g2d);
+		}
+		if (b != null) {
+			drawLine(b, g2d);
+		}
 	}
 
 	private void paintVector2dfs(Graphics2D g2d) {

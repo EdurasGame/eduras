@@ -1,5 +1,7 @@
 package de.illonis.eduras.math;
 
+import de.illonis.eduras.exceptions.InvalidValueEnteredException;
+
 /**
  * A math class that provides useful functions relating basic math.
  * 
@@ -183,8 +185,15 @@ public class BasicMath {
 	 * @param a
 	 * @param b
 	 * @return a mod b
+	 * @throws InvalidValueEnteredException
+	 *             thrown if b <= 0
 	 */
-	public static int calcModulo(int a, int b) {
+	public static int calcModulo(int a, int b)
+			throws InvalidValueEnteredException {
+		if (b <= 0) {
+			throw new InvalidValueEnteredException("b must be greater zero");
+		}
+
 		int r = (a % b);
 		if (r < 0) {
 			r += b;

@@ -152,8 +152,7 @@ public class ServerLogic implements GameLogicInterface {
 					.canSwitchMode(mf, switchEvent.getRequestedMode());
 
 			if (switchAllowed
-					&& mf.getCurrentMode() != switchEvent.getRequestedMode()
-					&& mf.getModeSwitchCooldown() <= 0) {
+					&& mf.getCurrentMode() != switchEvent.getRequestedMode()) {
 				mf.getPlayerMainFigure().stopMoving();
 				mf.setMode(switchEvent.getRequestedMode());
 				getGame().getEventTriggerer().changeInteractMode(
@@ -199,9 +198,14 @@ public class ServerLogic implements GameLogicInterface {
 				break;
 			}
 			SetFloatGameObjectAttributeEvent setRotationEvent = (SetFloatGameObjectAttributeEvent) event;
-			GameObject gameObject = gameInfo.findObjectById(setRotationEvent
-					.getObjectId());
-			if (gameObject == null) {
+			GameObject gameObject;
+			try {
+				gameObject = gameInfo.findObjectById(setRotationEvent
+						.getObjectId());
+			} catch (ObjectNotFoundException e2) {
+				L.log(Level.FINE,
+						"Cannot find object! Probably because it was removed before and this event was late because of UDP",
+						e2);
 				break;
 			}
 

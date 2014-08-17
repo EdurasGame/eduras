@@ -7,6 +7,7 @@ import org.newdawn.slick.Input;
 import org.newdawn.slick.geom.Vector2f;
 
 import de.illonis.edulog.EduLog;
+import de.illonis.eduras.exceptions.InvalidValueEnteredException;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
 import de.illonis.eduras.gameclient.GameEventAdapter;
 import de.illonis.eduras.gameclient.GuiInternalEventListener;
@@ -187,8 +188,12 @@ public class EgoModeMouseAdapter extends GuiMouseAdapter {
 			if (currentSelectedItem == -1) {
 				itemToSelect = 0;
 			} else {
-				itemToSelect = BasicMath.calcModulo(currentSelectedItem
-						+ change, numItemsInInventory);
+				try {
+					itemToSelect = BasicMath.calcModulo(currentSelectedItem
+							+ change, numItemsInInventory);
+				} catch (InvalidValueEnteredException e) {
+					itemToSelect = 0;
+				}
 			}
 
 			itemClicked(itemToSelect);

@@ -39,10 +39,8 @@ public class EditablePolygon {
 	 *            the vertice to be removed.
 	 */
 	public void removeVector2df(Vector2df v) {
-		if (vertices.size() > 1) {
-			vertices.remove(v);
-			DataHolder.getInstance().notifyVector2dfsChanged();
-		}
+		vertices.remove(v);
+		DataHolder.getInstance().notifyVector2dfsChanged();
 	}
 
 	/**
@@ -111,6 +109,36 @@ public class EditablePolygon {
 	}
 
 	/**
+	 * Returns the vertice that is before this one.
+	 * 
+	 * @param vector
+	 *            the vector.
+	 * @return the vector before given vector.
+	 */
+	public Vector2df findBefore(Vector2df vector) {
+		int i = vertices.indexOf(vector);
+		if (i == 0) {
+			return vertices.get(vertices.size() - 1);
+		} else
+			return vertices.get(i - 1);
+	}
+
+	/**
+	 * Returns the vertice that is after this one.
+	 * 
+	 * @param vector
+	 *            the vector.
+	 * @return the vector after given vector.
+	 */
+	public Vector2df findAfter(Vector2df vector) {
+		int i = vertices.indexOf(vector);
+		if (i == vertices.size() - 1) {
+			return vertices.get(0);
+		} else
+			return vertices.get(i + 1);
+	}
+
+	/**
 	 * Imports vertices from given template.
 	 * 
 	 * @param templateName
@@ -132,5 +160,41 @@ public class EditablePolygon {
 	 */
 	public Collection<Vector2df> getVector2dfs() {
 		return vertices;
+	}
+
+	/**
+	 * Adds a vertice after another one.
+	 * 
+	 * @param vert
+	 *            the vertice to add.
+	 * @param nearest
+	 *            the vertice after that given vertice should be added.
+	 */
+	public void addVerticeAfter(Vector2df vert, Vector2df nearest) {
+		int index = vertices.indexOf(nearest);
+		if (index == vertices.size() - 1) {
+			vertices.add(vert);
+		} else
+			vertices.add(vertices.indexOf(nearest) + 1, vert);
+		DataHolder.getInstance().notifyVector2dfsChanged();
+
+	}
+
+	/**
+	 * Adds a vertice before another one.
+	 * 
+	 * @param vert
+	 *            the vertice to add.
+	 * @param nearest
+	 *            the vertice before that given vertice should be added.
+	 */
+	public void addVerticeBefore(Vector2df vert, Vector2df nearest) {
+		int index = vertices.indexOf(nearest);
+		if (index < 0) {
+			index = 0;
+		}
+		vertices.add(index, vert);
+		DataHolder.getInstance().notifyVector2dfsChanged();
+
 	}
 }

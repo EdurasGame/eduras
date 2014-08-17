@@ -1,10 +1,15 @@
 package de.illonis.eduras.actions;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import org.newdawn.slick.geom.Vector2f;
 
+import de.illonis.edulog.EduLog;
 import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.ObjectFactory.ObjectType;
 import de.illonis.eduras.Player;
+import de.illonis.eduras.exceptions.ObjectNotFoundException;
 import de.illonis.eduras.logic.EventTriggerer;
 import de.illonis.eduras.logic.delayedactions.RemoveObjectLaterAction;
 import de.illonis.eduras.settings.S;
@@ -17,6 +22,9 @@ import de.illonis.eduras.settings.S;
  * 
  */
 public class ScoutSpellAction extends RTSAction {
+
+	private static final Logger L = EduLog.getLoggerFor(ScoutSpellAction.class
+			.getName());
 
 	private final Vector2f target;
 
@@ -39,8 +47,15 @@ public class ScoutSpellAction extends RTSAction {
 		int objectId = triggerer.createObjectAt(ObjectType.SPELL_SCOUT, target,
 				executingPlayer.getPlayerId());
 
-		RemoveObjectLaterAction action = new RemoveObjectLaterAction(
-				info.findObjectById(objectId), S.Server.spell_scout_duration);
+		RemoveObjectLaterAction action;
+		try {
+			action = new RemoveObjectLaterAction(info.findObjectById(objectId),
+					S.Server.spell_scout_duration);
+		} catch (ObjectNotFoundException e) {
+			L.log(Level.WARNING,
+					"Cannot find scout object that was just created!", e);
+			return;
+		}
 		action.schedule();
 	}
 }
