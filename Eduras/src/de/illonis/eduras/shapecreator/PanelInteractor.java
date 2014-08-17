@@ -7,6 +7,8 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
 
+import org.newdawn.slick.geom.Line;
+
 import de.illonis.eduras.math.Vector2df;
 import de.illonis.eduras.shapecreator.gui.DrawPanel;
 import de.illonis.eduras.shapecreator.gui.GuiPoint;
@@ -28,6 +30,8 @@ public class PanelInteractor extends MouseAdapter implements PanelModifier {
 	private final DrawPanel panel;
 	private InteractMode mode = InteractMode.DRAG_EDGE;
 	private InteractMode lastMode = InteractMode.NONE;
+	private boolean addBefore = false;
+	private Vector2df nearest;
 
 	/**
 	 * Describes the mode that is used to interact with the panel.
@@ -37,7 +41,8 @@ public class PanelInteractor extends MouseAdapter implements PanelModifier {
 	 */
 	@SuppressWarnings("javadoc")
 	public enum InteractMode {
-		NONE, DRAG_EDGE, ZOOM, SCROLL, ADD_VERT, REM_VERT, DRAG_SHAPE, SCALE_SHAPE;
+		NONE, DRAG_EDGE, ZOOM, SCROLL, ADD_VERT, REM_VERT, DRAG_SHAPE,
+		SCALE_SHAPE;
 	}
 
 	PanelInteractor(DrawPanel panel) {
@@ -48,6 +53,7 @@ public class PanelInteractor extends MouseAdapter implements PanelModifier {
 	@Override
 	public void setMode(InteractMode mode) {
 		this.mode = mode;
+		data.clearTempLines();
 	}
 
 	@Override
@@ -60,14 +66,33 @@ public class PanelInteractor extends MouseAdapter implements PanelModifier {
 		try {
 			Vector2df vert = data.getPolygon().findNearestVector2df(v);
 			GuiPoint result = panel.getCoordinateSystem().coordinateToGui(vert);
+			nearest = vert;
 			if (result.distance(guiPoint) < 10) {
+				data.clearTempLines();
 				panel.onVector2dfHover(vert);
 				hoverVector2df = vert;
 			} else {
 				verticeLeft();
+				if (mode == InteractMode.ADD_VERT) {
+					Vector2df before = data.getPolygon().findBefore(vert);
+					Vector2df after = data.getPolygon().findAfter(vert);
+					float afterDistance = after.distance(searchPoint);
+					float beforeDistance = before.distance(searchPoint);
+					data.setTempLineA(new Line(searchPoint, vert));
+					Line l;
+					if (afterDistance < beforeDistance) {
+						l = new Line(searchPoint, after);
+						addBefore = false;
+					} else {
+						l = new Line(searchPoint, before);
+						addBefore = true;
+					}
+					data.setTempLineB(l);
+				}
 			}
 		} catch (NoVerticeFoundException e1) {
 			verticeLeft();
+			data.clearTempLines();
 		}
 	}
 
@@ -94,7 +119,11 @@ public class PanelInteractor extends MouseAdapter implements PanelModifier {
 			GuiPoint p = new GuiPoint(clickPoint.x, clickPoint.y);
 			Vector2df v = panel.getCoordinateSystem().guiToCoordinate(p);
 			Vector2df vert = new Vector2df(v.getX(), v.getY());
-			data.getPolygon().addVector2df(vert);
+			if (addBefore) {
+				data.getPolygon().addVerticeBefore(vert, nearest);
+			} else {
+				data.getPolygon().addVerticeAfter(vert, nearest);
+			}
 			panel.selectVector2df(vert);
 			break;
 		case REM_VERT:
@@ -286,7 +315,7 @@ public class PanelInteractor extends MouseAdapter implements PanelModifier {
 	public EditablePolygon getShape() {
 		return data.getPolygon();
 	}
-	
+
 	@Override
 	public void setBackgroundImage(Image image) {
 		data.setBackgroundImage(image);

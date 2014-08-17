@@ -2,6 +2,8 @@ package de.illonis.eduras.shapecreator.gui;
 
 import java.awt.Graphics;
 
+import org.newdawn.slick.geom.Vector2f;
+
 import de.illonis.eduras.interfaces.Drawable;
 import de.illonis.eduras.math.Vector2df;
 import de.illonis.eduras.shapecreator.DataHolder;
@@ -77,7 +79,7 @@ public class CoordinateSystem implements Drawable {
 	 * 
 	 * @author illonis
 	 */
-	public GuiPoint coordinateToGui(Vector2df point) {
+	public GuiPoint coordinateToGui(Vector2f point) {
 		int coordX = (int) Math.round(point.getX() * zoomFactor);
 		int coordY = (int) Math.round(point.getY() * zoomFactor);
 
@@ -132,6 +134,9 @@ public class CoordinateSystem implements Drawable {
 				GuiPoint.SIZE, GuiPoint.SIZE);
 	}
 
+	/**
+	 * @return the current zoom factor.
+	 */
 	public float getZoom() {
 		return zoomFactor;
 	}
