@@ -8,6 +8,7 @@ import org.newdawn.slick.particles.ConfigurableEmitter;
 
 import de.illonis.edulog.EduLog;
 import de.illonis.eduras.ObjectFactory.ObjectType;
+import de.illonis.eduras.Team;
 import de.illonis.eduras.events.ItemUseFailedEvent;
 import de.illonis.eduras.events.ItemUseFailedEvent.Reason;
 import de.illonis.eduras.events.ObjectFactoryEvent;
@@ -17,6 +18,7 @@ import de.illonis.eduras.gameclient.GameEventAdapter;
 import de.illonis.eduras.gameclient.audio.SoundMachine;
 import de.illonis.eduras.gameclient.audio.SoundMachine.SoundType;
 import de.illonis.eduras.gameclient.gui.animation.EffectFactory.EffectNumber;
+import de.illonis.eduras.gameobjects.Base;
 import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.logicabstraction.EdurasInitializer;
 import de.illonis.eduras.logicabstraction.InformationProvider;
@@ -91,5 +93,11 @@ public class ClientEffectHandler extends GameEventAdapter {
 		if (itemFailedEvent.getReason() == Reason.AMMO_EMPTY) {
 			SoundMachine.play(SoundType.AMMO_EMPTY, 1f, .7f);
 		}
+	}
+
+	@Override
+	public void onBaseConquered(Base base, Team conqueringTeam) {
+		// TODO: Change sound to some special sound.
+		SoundMachine.play(SoundType.CLICK);
 	}
 }

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.logging.Logger;
 
 import de.illonis.edulog.EduLog;
+import de.illonis.eduras.Team;
 import de.illonis.eduras.events.ClientRenameEvent;
 import de.illonis.eduras.events.DeathEvent;
 import de.illonis.eduras.events.GameEvent;
@@ -23,6 +24,7 @@ import de.illonis.eduras.events.SetVisibilityEvent;
 import de.illonis.eduras.gameclient.gui.HudNotifier;
 import de.illonis.eduras.gameclient.gui.animation.ClientEffectHandler;
 import de.illonis.eduras.gamemodes.GameMode;
+import de.illonis.eduras.gameobjects.Base;
 import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.interfaces.GameEventListener;
 import de.illonis.eduras.units.Unit;
@@ -203,5 +205,11 @@ public class ClientGameEventListener implements GameEventListener {
 	public void onMapChanged(SetMapEvent setMapEvent) {
 		ui.onMapChanged(setMapEvent);
 		effects.onMapChanged(setMapEvent);
+	}
+
+	@Override
+	public void onBaseConquered(Base base, Team conqueringTeam) {
+		ui.onBaseConquered(base, conqueringTeam);
+		effects.onBaseConquered(base, conqueringTeam);
 	}
 }

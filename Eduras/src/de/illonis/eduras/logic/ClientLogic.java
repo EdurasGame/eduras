@@ -46,6 +46,7 @@ import de.illonis.eduras.exceptions.PlayerHasNoTeamException;
 import de.illonis.eduras.gameclient.GameEventAdapter;
 import de.illonis.eduras.gamemodes.BasicGameMode;
 import de.illonis.eduras.gamemodes.GameMode;
+import de.illonis.eduras.gameobjects.Base;
 import de.illonis.eduras.gameobjects.DynamicPolygonObject;
 import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.gameobjects.NeutralArea;
@@ -493,6 +494,8 @@ public class ClientLogic implements GameLogicInterface {
 				}
 				conqueredArea.setCurrentOwnerTeam(conqueringTeam);
 
+				getListener().onBaseConquered((Base) conqueredArea,
+						conqueringTeam);
 				break;
 			case PLAYER_JOINED: {
 				OwnerGameEvent ownerEvent = (OwnerGameEvent) event;
