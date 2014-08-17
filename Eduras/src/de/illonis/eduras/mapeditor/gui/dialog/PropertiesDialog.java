@@ -38,6 +38,7 @@ import de.illonis.eduras.mapeditor.MapData;
 import de.illonis.eduras.mapeditor.gui.EditorWindow;
 import de.illonis.eduras.maps.NodeData;
 import de.illonis.eduras.maps.SpawnPosition;
+import de.illonis.eduras.maps.SpawnPosition.SpawnType;
 
 /**
  * Allows change of object or base properties.
@@ -67,6 +68,7 @@ public class PropertiesDialog extends JDialog implements ItemListener,
 	private JRadioButton baseTeamA;
 	private JRadioButton baseTeamB;
 	private JRadioButton baseNone;
+	private JRadioButton spawnTeamA, spawnTeamB, spawnSingle, spawnAny;
 	private JSpinner baseMult;
 
 	/**
@@ -145,6 +147,30 @@ public class PropertiesDialog extends JDialog implements ItemListener,
 	private void addSpawnTab() {
 		JPanel spawnPanel = new JPanel();
 		spawnPanel.setLayout(new BoxLayout(spawnPanel, BoxLayout.PAGE_AXIS));
+		Border border = BorderFactory.createEmptyBorder(8, 8, 8, 8);
+		JPanel propertiesPanel = new JPanel();
+		propertiesPanel.setBorder(border);
+		spawnTeamA = new JRadioButton("Team A",
+				spawn.getTeaming() == SpawnType.TEAM_A);
+		spawnTeamB = new JRadioButton("Team B",
+				spawn.getTeaming() == SpawnType.TEAM_B);
+		spawnAny = new JRadioButton("Any", spawn.getTeaming() == SpawnType.ANY);
+		spawnSingle = new JRadioButton("Single",
+				spawn.getTeaming() == SpawnType.SINGLE);
+		ButtonGroup group = new ButtonGroup();
+		group.add(spawnTeamA);
+		group.add(spawnTeamB);
+		group.add(spawnAny);
+		group.add(spawnSingle);
+		spawnTeamA.addActionListener(this);
+		spawnTeamB.addActionListener(this);
+		spawnAny.addActionListener(this);
+		spawnSingle.addActionListener(this);
+		propertiesPanel.add(spawnTeamA);
+		propertiesPanel.add(spawnTeamB);
+		propertiesPanel.add(spawnAny);
+		propertiesPanel.add(spawnSingle);
+		spawnPanel.add(propertiesPanel);
 		addTab("Spawnarea", spawnPanel);
 	}
 
@@ -359,6 +385,14 @@ public class PropertiesDialog extends JDialog implements ItemListener,
 			object.setVisible(Visibility.INVISIBLE);
 		} else if (button == visibleAlways) {
 			object.setVisible(Visibility.ALL);
+		} else if (button == spawnAny) {
+			spawn.setTeaming(SpawnType.ANY);
+		} else if (button == spawnSingle) {
+			spawn.setTeaming(SpawnType.SINGLE);
+		} else if (button == spawnTeamA) {
+			spawn.setTeaming(SpawnType.TEAM_A);
+		} else if (button == spawnTeamB) {
+			spawn.setTeaming(SpawnType.TEAM_B);
 		}
 	}
 

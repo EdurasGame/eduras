@@ -23,7 +23,7 @@ public class SpawnPosition {
 	private final static Random RANDOM = new Random();
 
 	private final Rectangle area;
-	private final SpawnType teaming;
+	private SpawnType teaming;
 
 	/**
 	 * Indicates in which role this spawnposition can be used. This let the map
@@ -103,11 +103,19 @@ public class SpawnPosition {
 
 	/**
 	 * @return the spawn configuration for this position.
-	 * 
-	 * @author illonis
 	 */
 	public SpawnType getTeaming() {
 		return teaming;
+	}
+
+	/**
+	 * Sets the spawn configuration from editor.
+	 * 
+	 * @param teaming
+	 *            new configuration.
+	 */
+	public void setTeaming(SpawnType teaming) {
+		this.teaming = teaming;
 	}
 
 	/**
