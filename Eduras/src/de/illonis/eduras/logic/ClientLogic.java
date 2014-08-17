@@ -133,9 +133,11 @@ public class ClientLogic implements GameLogicInterface {
 					break;
 				}
 				Unit unit = (Unit) obj;
+				int oldValue = unit.getHealth();
 				unit.setHealth(healthEvent.getNewValue());
 
-				getListener().onHealthChanged(healthEvent);
+				getListener().onHealthChanged(unit, oldValue,
+						healthEvent.getNewValue());
 
 				break;
 			case SET_POLYGON_DATA:
@@ -262,9 +264,11 @@ public class ClientLogic implements GameLogicInterface {
 					break;
 				}
 				Unit u = (Unit) gobj;
+				int oldVal = u.getMaxHealth();
 				u.setMaxHealth(mhealthEvent.getNewValue());
 
-				getListener().onHealthChanged(mhealthEvent);
+				getListener().onHealthChanged(u, oldVal,
+						mhealthEvent.getNewValue());
 
 				break;
 			case SET_TEAMS:

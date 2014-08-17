@@ -20,6 +20,7 @@ import de.illonis.eduras.events.SetTeamResourceEvent;
 import de.illonis.eduras.events.SetVisibilityEvent;
 import de.illonis.eduras.gamemodes.GameMode;
 import de.illonis.eduras.gameobjects.GameObject;
+import de.illonis.eduras.units.Unit;
 
 /**
  * Reacts on game events and performs action.
@@ -90,12 +91,14 @@ public interface GameEventListener {
 	void onGameModeChanged(GameMode newGameMode);
 
 	/**
-	 * Called when health of an object has changed.
+	 * Called when health of a unit has changed.
 	 * 
-	 * @param event
-	 *            the event holding information.
+	 * @param unit
+	 * @param oldValue
+	 * @param newValue
+	 * 
 	 */
-	void onHealthChanged(SetIntegerGameObjectAttributeEvent event);
+	void onHealthChanged(Unit unit, int oldValue, int newValue);
 
 	/**
 	 * Called when maximum health of an object has changed.

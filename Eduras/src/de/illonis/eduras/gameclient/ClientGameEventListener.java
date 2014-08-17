@@ -25,6 +25,7 @@ import de.illonis.eduras.gameclient.gui.animation.ClientEffectHandler;
 import de.illonis.eduras.gamemodes.GameMode;
 import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.interfaces.GameEventListener;
+import de.illonis.eduras.units.Unit;
 
 /**
  * Reacts on game events on client side and passes them to gui.
@@ -87,9 +88,9 @@ public class ClientGameEventListener implements GameEventListener {
 	}
 
 	@Override
-	public void onHealthChanged(SetIntegerGameObjectAttributeEvent event) {
-		ui.onHealthChanged(event);
-		effects.onHealthChanged(event);
+	public void onHealthChanged(Unit unit, int oldValue, int newValue) {
+		ui.onHealthChanged(unit, oldValue, newValue);
+		effects.onHealthChanged(unit, oldValue, newValue);
 	}
 
 	@Override

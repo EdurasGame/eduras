@@ -23,6 +23,7 @@ import de.illonis.eduras.gameclient.gui.hud.RenderedGuiObject;
 import de.illonis.eduras.gamemodes.GameMode;
 import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.interfaces.GameEventListener;
+import de.illonis.eduras.units.Unit;
 
 /**
  * The eventlistener that listens for new events and passes them to all
@@ -148,12 +149,12 @@ public class HudNotifier implements GameEventListener {
 	}
 
 	@Override
-	public void onHealthChanged(SetIntegerGameObjectAttributeEvent event) {
+	public void onHealthChanged(Unit unit, int oldValue, int newValue) {
 		for (GameEventListener obj : uiObjects) {
-			obj.onHealthChanged(event);
+			obj.onHealthChanged(unit, oldValue, newValue);
 		}
 		for (GameEventListener obj : otherObjects) {
-			obj.onHealthChanged(event);
+			obj.onHealthChanged(unit, oldValue, newValue);
 		}
 	}
 

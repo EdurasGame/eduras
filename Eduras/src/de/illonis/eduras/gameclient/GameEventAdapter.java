@@ -21,6 +21,7 @@ import de.illonis.eduras.events.SetVisibilityEvent;
 import de.illonis.eduras.gamemodes.GameMode;
 import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.interfaces.GameEventListener;
+import de.illonis.eduras.units.Unit;
 
 /**
  * A simple implementation of {@link GameEventListener} that does nothing.
@@ -71,7 +72,7 @@ public class GameEventAdapter implements GameEventListener {
 	}
 
 	@Override
-	public void onHealthChanged(SetIntegerGameObjectAttributeEvent event) {
+	public void onHealthChanged(Unit unit, int oldValue, int newValue) {
 	}
 
 	@Override

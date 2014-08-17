@@ -12,6 +12,7 @@ import de.illonis.eduras.events.SetIntegerGameObjectAttributeEvent;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
 import de.illonis.eduras.units.InteractMode;
 import de.illonis.eduras.units.PlayerMainFigure;
+import de.illonis.eduras.units.Unit;
 
 /**
  * Displays player details like stats, health, etc.
@@ -64,11 +65,11 @@ public class PlayerStatBar extends RenderedGuiObject {
 	}
 
 	@Override
-	public void onHealthChanged(SetIntegerGameObjectAttributeEvent event) {
+	public void onHealthChanged(Unit unit, int oldValue, int newValue) {
 		PlayerMainFigure mainFigure = player.getPlayerMainFigure();
-		if (mainFigure != null && event.getObjectId() == mainFigure.getId()) {
+		if (mainFigure != null && unit.equals(mainFigure)) {
 
-			health = event.getNewValue();
+			health = newValue;
 			maxHealth = mainFigure.getMaxHealth();
 			recalculate();
 		}
