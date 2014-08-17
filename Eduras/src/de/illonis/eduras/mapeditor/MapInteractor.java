@@ -79,4 +79,6 @@ public interface MapInteractor {
 
 	void deleteAtMouse();
 
+	void editShapeAtMouse();
+
 }

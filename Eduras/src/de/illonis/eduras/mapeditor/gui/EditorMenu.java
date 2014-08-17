@@ -9,6 +9,7 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.KeyStroke;
 
+import de.illonis.eduras.mapeditor.gui.dialog.ControlsInfo;
 import de.illonis.eduras.mapeditor.gui.dialog.MapPropertiesDialog;
 import de.illonis.eduras.shapecreator.ShapeCreator;
 
@@ -19,10 +20,11 @@ import de.illonis.eduras.shapecreator.ShapeCreator;
  * 
  */
 public class EditorMenu extends JMenuBar implements ActionListener {
-	
+
 	private static final long serialVersionUID = 1L;
-	
-	private JMenuItem mapProperties, newMap, saveMap, loadMap, shapeCreator;
+
+	private JMenuItem mapProperties, newMap, saveMap, loadMap, shapeCreator,
+			controls;
 
 	EditorMenu() {
 		JMenu file = new JMenu("File");
@@ -53,6 +55,11 @@ public class EditorMenu extends JMenuBar implements ActionListener {
 				ActionEvent.CTRL_MASK);
 		tools.add(shapeCreator);
 		add(tools);
+		JMenu help = new JMenu("Help");
+		help.setMnemonic(KeyEvent.VK_H);
+		controls = addItem("Controls", KeyEvent.VK_C, KeyEvent.VK_F1, 0);
+		help.add(controls);
+		add(help);
 	}
 
 	private JMenuItem addItem(String text, int key, int accKey, int accMask) {
@@ -70,6 +77,9 @@ public class EditorMenu extends JMenuBar implements ActionListener {
 			dialog.setVisible(true);
 		} else if (item == shapeCreator) {
 			ShapeCreator.main(new String[] {});
+		} else if (item == controls) {
+			ControlsInfo info = new ControlsInfo();
+			info.setVisible(true);
 		}
 	}
 }

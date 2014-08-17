@@ -109,6 +109,9 @@ public class MapInputHandler extends InputAdapter {
 		case Input.KEY_X:
 			interactor.deleteAtMouse();
 			break;
+		case Input.KEY_V:
+			interactor.editShapeAtMouse();
+			break;
 		default:
 			break;
 		}

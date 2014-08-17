@@ -311,6 +311,15 @@ public class MapPanelLogic implements MapInteractor {
 				}
 			}
 		}
+	}
 
+	@Override
+	public void editShapeAtMouse() {
+		int x = input.getMouseX();
+		int y = input.getMouseY();
+		GameObject o = getObjectAt(x, y);
+		if (o.getType() == ObjectType.DYNAMIC_POLYGON_BLOCK) {
+
+		}
 	}
 }
