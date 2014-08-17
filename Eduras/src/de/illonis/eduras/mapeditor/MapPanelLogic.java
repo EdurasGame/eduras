@@ -31,6 +31,8 @@ import de.illonis.eduras.maps.SpawnPosition.SpawnType;
  */
 public class MapPanelLogic implements MapInteractor {
 
+	private int nextId = 1;
+
 	private final GameCamera viewPort;
 	private InteractType interactType;
 	private float zoom = 1f;
@@ -211,6 +213,7 @@ public class MapPanelLogic implements MapInteractor {
 				Vector2f mapPos = computeGuiPointToGameCoordinate(new Vector2f(
 						guiX, guiY));
 				o.setPosition(mapPos.x, mapPos.y);
+				o.setId(nextId++);
 				data.addGameObject(o);
 			} catch (FactoryException | ShapeVerticesNotApplicableException e) {
 				JOptionPane.showMessageDialog(window, "Object "
@@ -253,7 +256,7 @@ public class MapPanelLogic implements MapInteractor {
 		guiY -= height / 2;
 		Vector2f mapPos = computeGuiPointToGameCoordinate(new Vector2f(guiX,
 				guiY));
-		NodeData node = new NodeData(mapPos.x, mapPos.y, -1,
+		NodeData node = new NodeData(mapPos.x, mapPos.y, nextId++,
 				new LinkedList<Integer>(), BaseType.NEUTRAL);
 		data.addBase(node);
 	}
@@ -284,7 +287,6 @@ public class MapPanelLogic implements MapInteractor {
 	@Override
 	public void placeShapeAt(int guiX, int guiY) {
 		// TODO Auto-generated method stub
-
 	}
 
 	@Override
