@@ -52,6 +52,8 @@ public interface MapInteractor {
 
 	float getZoom();
 
+	void setZoom(float factor);
+
 	void dragThingAt(int guiX, int guiY, int xDiff, int yDiff);
 
 	void showPropertiesOfThingAt(int guiX, int guiY);
@@ -85,7 +87,7 @@ public interface MapInteractor {
 	void editShapeAtMouse();
 
 	void importShape(File file);
-	
+
 	Point getMouseLocation();
 
 }

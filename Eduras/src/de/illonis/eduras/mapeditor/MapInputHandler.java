@@ -42,6 +42,17 @@ public class MapInputHandler extends InputAdapter {
 	}
 
 	@Override
+	public void mouseWheelMoved(int change) {
+		float amount;
+		if (change > 0) {
+			amount = 0.2f;
+		} else {
+			amount = -0.2f;
+		}
+		interactor.setZoom(interactor.getZoom() + amount);
+	}
+
+	@Override
 	public void mouseClicked(int button, int x, int y, int clickCount) {
 		if (button == Input.MOUSE_RIGHT_BUTTON) {
 			if (interactor.getInteractType() == InteractType.PLACE_SHAPE) {

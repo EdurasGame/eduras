@@ -6,6 +6,7 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.geom.Point;
 import org.newdawn.slick.geom.Shape;
+import org.newdawn.slick.geom.Vector2f;
 
 import de.illonis.eduras.gameclient.datacache.CacheException;
 import de.illonis.eduras.gameclient.datacache.ImageCache;
@@ -16,7 +17,6 @@ import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.mapeditor.MapInteractor.InteractType;
 import de.illonis.eduras.maps.NodeData;
 import de.illonis.eduras.maps.SpawnPosition;
-import de.illonis.eduras.math.Geometry;
 import de.illonis.eduras.units.PlayerMainFigure;
 
 /**
@@ -51,12 +51,13 @@ public class MapRenderer {
 	public void render(GameContainer container, Graphics g) {
 		g.setColor(Color.gray);
 		g.fillRect(0, 0, container.getWidth(), container.getHeight());
-		g.setColor(Color.black);
-		g.fillRect(-camera.getX(), -camera.getY(), data.getWidth(),
-				data.getHeight());
+
 		g.translate(-camera.getX(), -camera.getY());
+		g.scale(interactor.getZoom(), interactor.getZoom());
 
 		// map bounds
+		g.setColor(Color.black);
+		g.fillRect(0, 0, data.getWidth(), data.getHeight());
 		g.setColor(Color.red);
 		g.drawRect(0, 0, data.getWidth(), data.getHeight());
 		for (SpawnPosition spawn : data.getSpawnPoints()) {
@@ -74,9 +75,11 @@ public class MapRenderer {
 				Shape shape = poly.getShape();
 				g.setColor(SHAPE_PLACE_COLOR);
 				Point mouse = interactor.getMouseLocation();
-				g.translate(camera.getX(), camera.getY());
-				g.translate(mouse.getX() - shape.getWidth() / 2, mouse.getY()
-						- shape.getHeight() / 2);
+				Vector2f mapPoint = interactor
+						.computeGuiPointToGameCoordinate(new Vector2f(mouse
+								.getX(), mouse.getY()));
+				g.translate(mapPoint.getX() - shape.getWidth() / 2,
+						mapPoint.getY() - shape.getHeight() / 2);
 				g.fill(shape);
 			}
 		}
@@ -104,15 +107,13 @@ public class MapRenderer {
 	}
 
 	private void renderObject(GameObject o, Graphics g) {
-		if (Geometry.shapeCollides(o.getShape(), camera)) {
-			final float x = o.getXPosition();
-			final float y = o.getYPosition();
-			try {
-				Image image = ImageCache.getObjectImage(o.getType());
-				g.drawImage(image, x, y);
-			} catch (CacheException e) {
-				renderShape(o, g);
-			}
+		final float x = o.getXPosition();
+		final float y = o.getYPosition();
+		try {
+			Image image = ImageCache.getObjectImage(o.getType());
+			g.drawImage(image, x, y);
+		} catch (CacheException e) {
+			renderShape(o, g);
 		}
 	}
 

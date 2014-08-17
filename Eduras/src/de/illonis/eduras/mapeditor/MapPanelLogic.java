@@ -136,8 +136,8 @@ public class MapPanelLogic implements MapInteractor {
 	public void dragThingAt(int guiX, int guiY, int xDiff, int yDiff) {
 		GameObject o = getObjectAt(guiX, guiY);
 		if (o != null) {
-			o.modifyXPosition(xDiff);
-			o.modifyYPosition(yDiff);
+			o.modifyXPosition(xDiff / zoom);
+			o.modifyYPosition(yDiff / zoom);
 		} else {
 			NodeData node = getBaseAt(guiX, guiY);
 			if (node != null) {
@@ -369,5 +369,10 @@ public class MapPanelLogic implements MapInteractor {
 	@Override
 	public Point getMouseLocation() {
 		return new Point(input.getMouseX(), input.getMouseY());
+	}
+
+	@Override
+	public void setZoom(float factor) {
+		this.zoom = factor;
 	}
 }
