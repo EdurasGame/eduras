@@ -141,7 +141,7 @@ public final class ObjectCreator {
 			go = new AssaultMissile(logic, timingSource, id);
 			break;
 		case NEUTRAL_BASE:
-			go = new Base(logic, timingSource, id, 1);
+			go = new Base(logic, timingSource, id, 1f);
 			break;
 		case DYNAMIC_POLYGON_BLOCK:
 			go = new DynamicPolygonObject(ObjectType.DYNAMIC_POLYGON_BLOCK,

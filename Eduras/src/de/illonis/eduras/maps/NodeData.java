@@ -3,7 +3,6 @@ package de.illonis.eduras.maps;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedList;
-import java.util.Set;
 
 import org.newdawn.slick.geom.Rectangle;
 
@@ -23,6 +22,7 @@ public class NodeData {
 	private final int id;
 	private final LinkedList<Integer> adjacentNodes;
 	private Base.BaseType isMainNode;
+	private float resourceMultiplicator;
 
 	/**
 	 * Create a new node data wrapper instance with default node size.
@@ -70,6 +70,24 @@ public class NodeData {
 		this.id = id;
 		this.adjacentNodes = adjacentNodes;
 		this.isMainNode = baseType;
+		resourceMultiplicator = 1f;
+	}
+
+	/**
+	 * Sets the resource multiplicator for this node.
+	 * 
+	 * @param resourceMultiplicator
+	 *            new value.
+	 */
+	public void setResourceMultiplicator(float resourceMultiplicator) {
+		this.resourceMultiplicator = resourceMultiplicator;
+	}
+
+	/**
+	 * @return the resource multiplicator for this node.
+	 */
+	public float getResourceMultiplicator() {
+		return resourceMultiplicator;
 	}
 
 	/**

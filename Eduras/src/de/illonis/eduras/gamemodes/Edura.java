@@ -128,6 +128,8 @@ public class Edura extends TeamDeathmatch {
 				// TODO: announce size (event!)
 				baseRect.setWidth(nodeData.getWidth());
 				baseRect.setHeight(nodeData.getHeight());
+				base.setResourceGenerateMultiplicator(nodeData
+						.getResourceMultiplicator());
 			} catch (ObjectNotFoundException e) {
 				L.log(Level.WARNING, "Cannot find object!", e);
 				return;

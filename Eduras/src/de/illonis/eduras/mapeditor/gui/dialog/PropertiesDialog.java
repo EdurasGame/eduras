@@ -195,7 +195,8 @@ public class PropertiesDialog extends JDialog implements ItemListener,
 		basePanel.add(baseOwnerPanel);
 		JPanel multPanel = new JPanel();
 		multPanel.add(new JLabel("Resource multiplicator"), BorderLayout.NORTH);
-		SpinnerModel model = new SpinnerNumberModel(1, 0, 30, .5);
+		SpinnerModel model = new SpinnerNumberModel(
+				node.getResourceMultiplicator(), 0, 30, .5);
 		baseMult = new JSpinner(model);
 		baseMult.addChangeListener(this);
 		multPanel.add(baseMult, BorderLayout.CENTER);
@@ -417,7 +418,8 @@ public class PropertiesDialog extends JDialog implements ItemListener,
 			}
 		} else if (event.getSource() instanceof JSpinner) {
 			JSpinner spinner = (JSpinner) event.getSource();
-			// TODO: set node attribute
+			float val = (float) (double) spinner.getValue();
+			node.setResourceMultiplicator(val);
 		} else {
 			java.awt.Color newColor = chooser.getColor();
 			Color color = new Color(newColor.getRed(), newColor.getGreen(),
