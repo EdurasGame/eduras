@@ -50,54 +50,24 @@ BIGGERBLOCK,		       7 * W/8 + 80, 15 * H/16
 
 :nodes
 #main base A
-&mainA
-W/2, H/8, 40, 40, TEAM_A
+0, W/2, H/8,TEAM_A,3,6,9
 
 #middle base
-&middle
-W/2, H/2,40,40,NEUTRAL
+1, W/2, H/2,NEUTRAL,3,5,6,8
 
 #left bases
-&lefttop
-W/4, H/4,40,40,NEUTRAL
-
-&left
-W/4, H/2,40,40, NEUTRAL
-
-&leftbottom
-W/4, 3*H/4,40,40,NEUTRAL
+3, W/4, H/4,NEUTRAL,0,1,4
+4, W/4, H/2,NEUTRAL,3,5
+5, W/4, 3*H/4,NEUTRAL,4,1,2
 
 #right bases
-&righttop
-3*W/4, H/4,40,40,NEUTRAL
-&right
-3*W/4, H/2,40, 40,NEUTRAL
-&rightbottom
-3*W/4, 3*H/4,40,40,NEUTRAL
+6, 3*W/4, H/4,NEUTRAL,0,7,1
+7, 3*W/4, H/2,NEUTRAL,6,8
+8, 3*W/4, 3*H/4,NEUTRAL,7,2,1
 
 #outer bases
-&out1
-7 * W/8, H/8,40,40,NEUTRAL
-&out2
-7*W/8, 7*H/8,40,40,NEUTRAL
+9, 7 * W/8, H/8,NEUTRAL,0,10
+10, 7*W/8, 7*H/8,NEUTRAL,2,9
 
 #main base B
-&mainB
-W/2, 7 * H/8,40,40,TEAM_B
-
-:nodeconnections
-*mainA, *lefttop
-*mainA, *righttop
-*mainA, *out1
-*middle, *lefttop
-*middle, *leftbottom
-*middle, *righttop
-*middle, *rightbottom
-*lefttop, *left
-*leftbottom, *left
-*righttop, *right
-*rightbottom, *right
-*out1, *out2
-*mainB, *out2
-*mainB, *leftbottom
-*mainB, *rightbottom
+2, W/2, 7 * H/8,TEAM_B,5,8,10

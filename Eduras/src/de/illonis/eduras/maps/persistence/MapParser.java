@@ -7,6 +7,7 @@ import java.net.URL;
 import java.nio.file.Path;
 import java.text.ParseException;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.LinkedList;
 
 import javax.script.ScriptEngine;
@@ -40,9 +41,10 @@ public class MapParser {
 	 * erm stands for "eduras? readable mapfile".
 	 */
 	public final static String FILE_EXTENSION = ".erm";
+	private static final String IDENTIFIER_REGEX = "^[a-zA-Z]+[A-Za-z0-9]*$";
 
 	private enum ReadMode {
-		NONE, SPAWNPOINTS, OBJECTS, NODES;
+		NONE, SPAWNPOINTS, OBJECTS, NODES, NODECONNECTIONS;
 	}
 
 	/**
@@ -60,7 +62,9 @@ public class MapParser {
 	 */
 	public static Map readMap(URL inputFile) throws InvalidDataException,
 			IOException {
-
+		String currentIdentifier = "";
+		int currentNodeId = 1;
+		HashMap<String, NodeData> nodeIds = new HashMap<String, NodeData>();
 		String mapName = "";
 		String author = "";
 		int width = 0;
@@ -78,12 +82,24 @@ public class MapParser {
 				inputFile.openStream()));
 
 		String line = null;
+		int lineNumber = 0;
 		while ((line = reader.readLine()) != null) {
+			lineNumber++;
 			if (line.trim().isEmpty())
 				continue;
 			if (line.startsWith("#"))
 				continue;
-
+			if (line.startsWith("&")) {
+				String identifier = line.substring(1).trim();
+				if (identifier.matches(IDENTIFIER_REGEX)) {
+					currentIdentifier = identifier;
+				} else {
+					throw new InvalidDataException(
+							"Found invalid reference name: " + identifier,
+							lineNumber);
+				}
+				continue;
+			}
 			if (line.startsWith("@")) {
 				String[] data = line.substring(1).split("=");
 				String key = data[0].trim();
@@ -106,7 +122,8 @@ public class MapParser {
 						created = Map.DATE_FORMAT.parse(value);
 					} catch (ParseException e) {
 						throw new InvalidDataException(
-								"Date format is invalid: " + e.getMessage());
+								"Date format is invalid: " + e.getMessage(),
+								lineNumber);
 					}
 					break;
 				case "gamemodes":
@@ -117,12 +134,14 @@ public class MapParser {
 									.trim().toUpperCase()));
 						} catch (IllegalArgumentException e) {
 							throw new InvalidDataException(
-									"Gamemode does not exist: " + modes[i]);
+									"Gamemode does not exist: " + modes[i],
+									lineNumber);
 						}
 					}
 					break;
 				default:
-					throw new InvalidDataException("Unknown tag found: @" + key);
+					throw new InvalidDataException(
+							"Unknown tag found: @" + key, lineNumber);
 				}
 			} else if (line.startsWith(":")) {
 				String mode = line.substring(1).trim();
@@ -130,25 +149,24 @@ public class MapParser {
 				case "spawnpoints":
 					currentMode = ReadMode.SPAWNPOINTS;
 					break;
+				case "nodeconnections":
+					currentMode = ReadMode.NODECONNECTIONS;
+					break;
 				case "objects":
 					currentMode = ReadMode.OBJECTS;
 					break;
 				case "nodes":
-					if (!gameModes.contains(GameModeNumber.EDURA)) {
-						throw new InvalidDataException(
-								"Nodes are defined although the map doesn't support Edura! mode.");
-					}
 					currentMode = ReadMode.NODES;
 					break;
 				default:
 					throw new InvalidDataException("Invalid control point: "
-							+ mode);
+							+ mode, lineNumber);
 				}
 			} else {
 				switch (currentMode) {
 				case NONE:
 					throw new InvalidDataException("Invalid line found: "
-							+ line);
+							+ line, lineNumber);
 				case OBJECTS: {
 					String[] objectData = line.split(",");
 					float objX = 0, objY = 0;
@@ -166,7 +184,8 @@ public class MapParser {
 							if ((numOfVertexCoordinates % 2) != 0
 									|| numOfVertexCoordinates < 4) {
 								throw new InvalidDataException(
-										"Number of vertices either odd or not at least 2 vertices.");
+										"Number of vertices either odd or not at least 2 vertices.",
+										lineNumber);
 							} else {
 								Vector2df[] vertices = readVertices(objectData,
 										width, height,
@@ -182,11 +201,12 @@ public class MapParser {
 						gameObjects.add(oData);
 					} catch (ScriptException e) {
 						throw new InvalidDataException(
-								"Invalid math expression: " + e.getMessage());
+								"Invalid math expression: " + e.getMessage(),
+								lineNumber);
 					} catch (IllegalArgumentException e) {
 						throw new InvalidDataException(
 								"Illegal game object type: "
-										+ objectData[0].trim());
+										+ objectData[0].trim(), lineNumber);
 					}
 
 					break;
@@ -200,59 +220,96 @@ public class MapParser {
 						y = evaluateString(spawnData[1].trim(), width, height);
 					} catch (ScriptException e) {
 						throw new InvalidDataException(
-								"Invalid math expression: " + e.getMessage());
+								"Invalid math expression: " + e.getMessage(),
+								lineNumber);
 					}
 					try {
 						w = Integer.parseInt(spawnData[2].trim());
 						h = Integer.parseInt(spawnData[3].trim());
 					} catch (NumberFormatException e) {
 						throw new InvalidDataException(
-								"Invalid width/height value: " + e.getMessage());
+								"Invalid width/height value: " + e.getMessage(),
+								lineNumber);
 					}
 					SpawnType type = SpawnType.valueOf(spawnData[4].trim());
 					Rectangle area = new Rectangle(x, y, w, h);
 					spawnPositions.add(new SpawnPosition(area, type));
 					break;
 				}
-				case NODES: {
+				case NODES:
 					String[] nodeData = line.split(",");
-					int nodeId = 0;
-					float w, h = 0;
-					Base.BaseType baseType;
-					LinkedList<Integer> adjacentNodes = new LinkedList<Integer>();
-
-					try {
-						nodeId = Integer.parseInt(nodeData[0]);
-					} catch (NumberFormatException e) {
-						throw new InvalidDataException("Cannot read node-id: "
-								+ e.getMessage());
+					if (nodeData.length < 5) {
+						throw new InvalidDataException(
+								"Not enough arguments for node: " + line,
+								lineNumber);
 					}
+					float nodeX = 0,
+					nodeY = 0;
+					float nodeWidth = 0,
+					nodeHeight = 0;
+					Base.BaseType baseType;
 
 					try {
-						w = evaluateString(nodeData[1], width, height);
-						h = evaluateString(nodeData[2], width, height);
+						nodeX = evaluateString(nodeData[0], width, height);
+						nodeY = evaluateString(nodeData[1], width, height);
+						nodeWidth = evaluateString(nodeData[2], width, height);
+						nodeHeight = evaluateString(nodeData[3], width, height);
 					} catch (ScriptException e) {
 						throw new InvalidDataException(
-								"Invalid math expression: " + e.getMessage());
+								"Invalid math expression in line: " + line,
+								lineNumber);
 					}
 
-					baseType = Base.BaseType.valueOf(nodeData[3]);
-
-					for (int i = 4; i < nodeData.length; i++) {
-						try {
-							adjacentNodes.add(Integer.parseInt(nodeData[i]));
-						} catch (NumberFormatException e) {
-							throw new InvalidDataException(
-									"Cannot read node-id: " + e.getMessage());
-						}
+					try {
+						baseType = Base.BaseType.valueOf(nodeData[4].trim());
+					} catch (IllegalArgumentException e) {
+						throw new InvalidDataException("Invalid base teaming: "
+								+ nodeData[4].trim(), lineNumber);
 					}
-					nodes.add(new NodeData(w, h, nodeId, adjacentNodes,
-							baseType));
+
+					NodeData node = new NodeData(nodeX, nodeY, nodeWidth,
+							nodeHeight, currentNodeId++,
+							new LinkedList<Integer>(), baseType);
+					nodeIds.put(currentIdentifier, node);
+					nodes.add(node);
 					break;
-				}
+				case NODECONNECTIONS:
+					String[] connectedNodes = line.split(",");
+					if (connectedNodes.length != 2) {
+						throw new InvalidDataException(
+								"Invalid node connection: " + line, lineNumber);
+					}
+					String firstIdentifier = connectedNodes[0].trim();
+					String secondIdentifier = connectedNodes[1].trim();
+					if (firstIdentifier.startsWith("*")
+							&& secondIdentifier.startsWith("*")) {
+						firstIdentifier = firstIdentifier.substring(1);
+						secondIdentifier = secondIdentifier.substring(1);
+						NodeData firstNode = nodeIds.get(firstIdentifier);
+						if (firstNode == null) {
+							throw new InvalidDataException(
+									"Could not find reference \""
+											+ firstIdentifier + "\"",
+									lineNumber);
+						}
+						NodeData secondNode = nodeIds.get(secondIdentifier);
+						if (secondNode == null) {
+							throw new InvalidDataException(
+									"Could not find reference \""
+											+ secondIdentifier + "\"",
+									lineNumber);
+						}
+						firstNode.addAdjacentNode(secondNode);
+						secondNode.addAdjacentNode(firstNode);
+					} else {
+						throw new InvalidDataException(
+								"Invalid node connection: " + line, lineNumber);
+					}
+					break;
 				default:
 					break;
 				}
+				currentIdentifier = "";
 			}
 		}
 		reader.close();
@@ -305,7 +362,7 @@ public class MapParser {
 	 */
 	private static float evaluateString(String expression, int w, int h)
 			throws ScriptException {
-
+		expression = expression.trim();
 		expression = expression.replaceAll("H", h + "").replaceAll("W", w + "");
 
 		ScriptEngineManager mgr = new ScriptEngineManager();

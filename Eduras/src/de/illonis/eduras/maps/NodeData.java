@@ -160,6 +160,10 @@ public class NodeData {
 		return adjacentNodes;
 	}
 
+	public void addAdjacentNode(NodeData node) {
+		adjacentNodes.add(node.getId());
+	}
+
 	/**
 	 * Determines what {@link BaseType} this node is of.
 	 * 
