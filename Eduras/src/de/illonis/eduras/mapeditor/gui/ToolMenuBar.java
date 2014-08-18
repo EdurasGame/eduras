@@ -68,6 +68,7 @@ public class ToolMenuBar extends JPanel implements ActionListener {
 		if (e.getSource() instanceof JToggleButton) {
 			JToggleButton toggle = (JToggleButton) button;
 			if (!toggle.isSelected()) {
+				interactor.setInteractType(InteractType.DEFAULT);
 				return;
 			}
 		}

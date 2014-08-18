@@ -139,13 +139,14 @@ public class MapPanelLogic implements MapInteractor {
 		} else {
 			NodeData node = getBaseAt(guiX, guiY);
 			if (node != null) {
-				node.setX(node.getX() + xDiff);
-				node.setY(node.getY() + yDiff);
+				node.setX(node.getX() + xDiff / zoom);
+				node.setY(node.getY() + yDiff / zoom);
 			} else {
 				SpawnPosition spawn = getSpawnPointAt(guiX, guiY);
 				if (spawn != null) {
-					spawn.getArea().setLocation(spawn.getArea().getX() + xDiff,
-							spawn.getArea().getY() + yDiff);
+					spawn.getArea().setLocation(
+							spawn.getArea().getX() + xDiff / zoom,
+							spawn.getArea().getY() + yDiff / zoom);
 				}
 			}
 		}
@@ -212,8 +213,8 @@ public class MapPanelLogic implements MapInteractor {
 				GameObject o = ObjectCreator.createObject(currentSpawnType,
 						null, null);
 				if (o.getShape() != null) {
-					float width = o.getShape().getWidth();
-					float height = o.getShape().getHeight();
+					float width = o.getShape().getWidth() * zoom;
+					float height = o.getShape().getHeight() * zoom;
 					guiX -= width / 2;
 					guiY -= height / 2;
 				}
@@ -259,8 +260,8 @@ public class MapPanelLogic implements MapInteractor {
 	public void createBaseAt(int guiX, int guiY) {
 		float width = NeutralArea.DEFAULT_SIZE;
 		float height = NeutralArea.DEFAULT_SIZE;
-		guiX -= width / 2;
-		guiY -= height / 2;
+		guiX -= width * zoom / 2;
+		guiY -= height * zoom / 2;
 		Vector2f mapPos = computeGuiPointToGameCoordinate(new Vector2f(guiX,
 				guiY));
 		NodeData node = new NodeData(mapPos.x, mapPos.y, nextId++,
@@ -272,8 +273,8 @@ public class MapPanelLogic implements MapInteractor {
 	public void createSpawnPointAt(int guiX, int guiY) {
 		float width = 40;
 		float height = 40;
-		guiX -= width / 2;
-		guiY -= height / 2;
+		guiX -= width * zoom / 2;
+		guiY -= height * zoom / 2;
 		Vector2f mapPos = computeGuiPointToGameCoordinate(new Vector2f(guiX,
 				guiY));
 		SpawnPosition spawn = new SpawnPosition(new Rectangle(mapPos.x,
