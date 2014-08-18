@@ -196,7 +196,7 @@ public class PropertiesDialog extends JDialog implements ItemListener,
 		JPanel multPanel = new JPanel();
 		multPanel.add(new JLabel("Resource multiplicator"), BorderLayout.NORTH);
 		SpinnerModel model = new SpinnerNumberModel(
-				node.getResourceMultiplicator(), 0, 30, .5);
+				node.getResourceMultiplicator(), -10, 30, .5);
 		baseMult = new JSpinner(model);
 		baseMult.addChangeListener(this);
 		multPanel.add(baseMult, BorderLayout.CENTER);

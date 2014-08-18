@@ -92,7 +92,7 @@ public final class MapData {
 
 		spawnPoints.addAll(map.getSpawnAreas());
 		supportedGameModes.addAll(map.getSupportedGameModes());
-
+		bases.addAll(map.getNodes());
 		List<InitialObjectData> objects = new LinkedList<InitialObjectData>(
 				map.getInitialObjects());
 		for (InitialObjectData object : objects) {
