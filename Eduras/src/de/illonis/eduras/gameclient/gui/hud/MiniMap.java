@@ -22,7 +22,6 @@ import de.illonis.eduras.gameclient.gui.game.GameCamera;
 import de.illonis.eduras.gameclient.gui.hud.minimap.MiniMapBase;
 import de.illonis.eduras.gameclient.gui.hud.minimap.MiniMapNeutralObject;
 import de.illonis.eduras.gameclient.gui.hud.minimap.MiniMapPlayer;
-import de.illonis.eduras.gamemodes.GameMode.GameModeNumber;
 import de.illonis.eduras.gameobjects.Base;
 import de.illonis.eduras.gameobjects.DynamicPolygonObject;
 import de.illonis.eduras.gameobjects.GameObject;
@@ -107,7 +106,7 @@ public class MiniMap extends ClickableGuiElement {
 		checkIfNodesInitialized();
 
 		// if it IS null, some game mode other than Edura is running
-		if (nodes != null) {
+		if (nodes != null && !nodes.isEmpty()) {
 			g.setLineWidth(1f);
 			g.setColor(Color.yellow);
 			for (Integer nodeId : nodes.keySet()) {
@@ -135,15 +134,7 @@ public class MiniMap extends ClickableGuiElement {
 
 	private void checkIfNodesInitialized() {
 		if (nodes == null) {
-			if (getInfo().getGameMode().getNumber() == GameModeNumber.EDURA) {
-
-				try {
-					nodes = NodeData.nodeDataToVertices(getInfo().getNodes());
-				} catch (IllegalArgumentException e) {
-					L.warning("This map is running Edura! game mode although it's not an Edura! map!");
-					return;
-				}
-			}
+			nodes = NodeData.nodeDataToVertices(getInfo().getNodes());
 		}
 	}
 
