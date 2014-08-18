@@ -8,10 +8,12 @@ import java.util.Set;
 import de.illonis.eduras.FactoryException;
 import de.illonis.eduras.ObjectCreator;
 import de.illonis.eduras.ObjectFactory.ObjectType;
+import de.illonis.eduras.exceptions.ObjectNotFoundException;
 import de.illonis.eduras.exceptions.ShapeVerticesNotApplicableException;
 import de.illonis.eduras.gamemodes.GameMode.GameModeNumber;
 import de.illonis.eduras.gameobjects.DynamicPolygonObject;
 import de.illonis.eduras.gameobjects.GameObject;
+import de.illonis.eduras.gameobjects.Portal;
 import de.illonis.eduras.maps.InitialObjectData;
 import de.illonis.eduras.maps.Map;
 import de.illonis.eduras.maps.NodeData;
@@ -99,6 +101,7 @@ public final class MapData {
 		height = map.getHeight();
 		author = map.getAuthor();
 		mapName = map.getName();
+		LinkedList<InitialObjectData> portalData = new LinkedList<InitialObjectData>();
 
 		spawnPoints.addAll(map.getSpawnAreas());
 		supportedGameModes.addAll(map.getSupportedGameModes());
@@ -111,14 +114,40 @@ public final class MapData {
 					continue;
 				GameObject o = ObjectCreator.createObject(object.getType(),
 						null, null);
+				o.setRefName(object.getRefName());
 				o.setPosition(object.getX(), object.getY());
 				if (object.getType() == ObjectType.DYNAMIC_POLYGON_BLOCK) {
-					((DynamicPolygonObject) o).setPolygonVertices(object
-							.getPolygonVector2dfs());
+					DynamicPolygonObject dyno = (DynamicPolygonObject) o;
+					dyno.setPolygonVertices(object.getPolygonVector2dfs());
+					dyno.setColor(object.getColor());
 				}
 				gameObjects.add(o);
+				if (object.getType() == ObjectType.PORTAL) {
+					portalData.add(object);
+				}
 			} catch (FactoryException | ShapeVerticesNotApplicableException e) {
 			}
+		}
+		for (int i = 0; i < portalData.size(); i++) {
+			InitialObjectData portal = portalData.get(i);
+			Portal portalOne;
+			try {
+				System.out.println(portal.getRefName());
+				portalOne = (Portal) findByRef(portal.getRefName());
+			} catch (ObjectNotFoundException e) {
+				e.printStackTrace();
+				continue;
+			}
+
+			Portal portalTwo;
+			try {
+				portalTwo = (Portal) findByRef(portal
+						.getReference(Portal.OTHER_PORTAL_REFERENCE));
+			} catch (ObjectNotFoundException e) {
+				e.printStackTrace();
+				continue;
+			}
+			portalOne.setPartnerPortal(portalTwo);
 		}
 	}
 
@@ -197,6 +226,14 @@ public final class MapData {
 
 	public void remove(SpawnPosition spawn) {
 		spawnPoints.remove(spawn);
+	}
+
+	public GameObject findByRef(String name) throws ObjectNotFoundException {
+		for (GameObject o : gameObjects) {
+			if (o.getRefName().equals(name))
+				return o;
+		}
+		throw new ObjectNotFoundException(-1);
 	}
 
 }

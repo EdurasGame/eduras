@@ -265,7 +265,7 @@ public class MapPanelLogic implements MapInteractor {
 		Vector2f mapPos = computeGuiPointToGameCoordinate(new Vector2f(guiX,
 				guiY));
 		NodeData node = new NodeData(mapPos.x, mapPos.y, nextId++,
-				new LinkedList<NodeData>(), BaseType.NEUTRAL);
+				new LinkedList<NodeData>(), BaseType.NEUTRAL, "");
 		data.addBase(node);
 	}
 

@@ -11,14 +11,17 @@ import java.util.Hashtable;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
+import javax.swing.JButton;
 import javax.swing.JColorChooser;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JSlider;
 import javax.swing.JSpinner;
 import javax.swing.JTabbedPane;
+import javax.swing.JTextField;
 import javax.swing.SpinnerModel;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.SpringLayout;
@@ -28,6 +31,7 @@ import javax.swing.event.ChangeListener;
 
 import org.newdawn.slick.Color;
 
+import de.illonis.eduras.ReferencedEntity;
 import de.illonis.eduras.gameobjects.Base;
 import de.illonis.eduras.gameobjects.Base.BaseType;
 import de.illonis.eduras.gameobjects.DynamicPolygonObject;
@@ -39,6 +43,7 @@ import de.illonis.eduras.mapeditor.gui.EditorWindow;
 import de.illonis.eduras.maps.NodeData;
 import de.illonis.eduras.maps.SpawnPosition;
 import de.illonis.eduras.maps.SpawnPosition.SpawnType;
+import de.illonis.eduras.maps.persistence.MapParser;
 
 /**
  * Allows change of object or base properties.
@@ -56,6 +61,7 @@ public class PropertiesDialog extends JDialog implements ItemListener,
 	protected GameObject object;
 	protected NodeData node;
 	protected SpawnPosition spawn;
+	private ReferencedEntity entity;
 
 	private JRadioButton visibleNone;
 	private JRadioButton visibleAlways;
@@ -70,6 +76,7 @@ public class PropertiesDialog extends JDialog implements ItemListener,
 	private JRadioButton baseNone;
 	private JRadioButton spawnTeamA, spawnTeamB, spawnSingle, spawnAny;
 	private JSpinner baseMult;
+	private JTextField refName;
 
 	/**
 	 * Creates a properties dialog for a node.
@@ -82,6 +89,7 @@ public class PropertiesDialog extends JDialog implements ItemListener,
 	public PropertiesDialog(EditorWindow parent, NodeData node) {
 		this(parent);
 		this.node = node;
+		this.entity = node;
 		setTitle("Properties of Base #" + node.getId());
 		addPositionTab();
 		addNeutralBaseTab();
@@ -98,6 +106,7 @@ public class PropertiesDialog extends JDialog implements ItemListener,
 	public PropertiesDialog(EditorWindow window, SpawnPosition spawn) {
 		this(window);
 		this.spawn = spawn;
+		this.entity = spawn;
 		setTitle("Properties of Spawnarea");
 		addPositionTab();
 		addSpawnTab();
@@ -114,6 +123,7 @@ public class PropertiesDialog extends JDialog implements ItemListener,
 	public PropertiesDialog(EditorWindow parent, GameObject object) {
 		this(parent);
 		this.object = object;
+		this.entity = object;
 		setTitle("Properties of " + object.getType() + " #" + object.getId());
 
 		addPropertiesTab();
@@ -206,8 +216,16 @@ public class PropertiesDialog extends JDialog implements ItemListener,
 
 	private void addPortalTab() {
 		JPanel portalPanel = new JPanel();
+		Portal portal = (Portal) object;
 		portalPanel.setLayout(new BoxLayout(portalPanel, BoxLayout.PAGE_AXIS));
 		addTab("Portal", portalPanel);
+		Portal partner = portal.getPartnerPortal();
+		String partnerName = "<none>";
+		if (partner != null) {
+			partnerName = partner.getRefName();
+		}
+		JLabel otherRef = new JLabel("linked portal: " + partnerName);
+		portalPanel.add(otherRef);
 	}
 
 	private int getItemX() {
@@ -296,6 +314,20 @@ public class PropertiesDialog extends JDialog implements ItemListener,
 		yPanel.add(currentY, BorderLayout.EAST);
 		positionTab.add(xPanel);
 		positionTab.add(yPanel);
+
+		JPanel refSection = new JPanel(new BorderLayout());
+		refSection.setBorder(border);
+		refSection.add(new JLabel("ReferenceName"), BorderLayout.NORTH);
+		JPanel refPanel = new JPanel();
+		refSection.add(refPanel, BorderLayout.CENTER);
+		refName = new JTextField(entity.getRefName());
+		refName.setColumns(20);
+		JButton saveButton = new JButton("Save");
+		saveButton.addActionListener(this);
+		refPanel.add(refName);
+		refPanel.add(saveButton);
+		refSection.setBorder(border);
+		positionTab.add(refSection);
 		addTab("Position", positionTab);
 	}
 
@@ -341,6 +373,7 @@ public class PropertiesDialog extends JDialog implements ItemListener,
 		sliderZ.setMinorTickSpacing(1);
 		sliderZ.setSnapToTicks(true);
 		sliderZ.addChangeListener(this);
+		sliderZ.setEnabled(false);
 		zindexPanel.add(sliderZ, BorderLayout.CENTER);
 		zindexPanel.setBorder(border);
 		propertiesPanel.add(visSection);
@@ -371,6 +404,14 @@ public class PropertiesDialog extends JDialog implements ItemListener,
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
+		if (e.getSource() instanceof JButton) {
+			if (refName.getText().matches(MapParser.IDENTIFIER_REGEX))
+				entity.setRefName(refName.getText());
+			else {
+				JOptionPane.showMessageDialog(this, "Invalid name");
+			}
+			return;
+		}
 		JRadioButton button = (JRadioButton) e.getSource();
 		if (button == baseNone) {
 			node.setIsMainNode(BaseType.NEUTRAL);

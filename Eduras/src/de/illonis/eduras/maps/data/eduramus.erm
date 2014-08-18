@@ -13,7 +13,7 @@ W / 2 - 75, 7 * H / 8 + 50 ,	150,	150,	TEAM_B
 :objects
 
 # middle base
-DYNAMIC_POLYGON_BLOCK, (W / 2) - 110, (H / 2) - 80, [0 0], [0 200], [100 100], 0xff808080
+DYNAMIC_POLYGON_BLOCK, (W / 2) - 110, (H / 2) - 80, [0 0], [0 200], [100 100], 0xff80ff80
 DYNAMIC_POLYGON_BLOCK, (W / 2) + 50, (H / 2) - 80, [0 0], [0 200], [-100 100]
 DYNAMIC_POLYGON_BLOCK, (W / 2) - 80, (H / 2) + 50, [0 0], [200 0], [100 -100]
 DYNAMIC_POLYGON_BLOCK, (W / 2) - 80, (H / 2) -110, [0 0], [200 0], [100 100]

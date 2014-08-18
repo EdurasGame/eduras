@@ -7,6 +7,7 @@ import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.Shape;
 
 import de.illonis.edulog.EduLog;
+import de.illonis.eduras.ReferencedEntity;
 import de.illonis.eduras.math.Vector2df;
 
 /**
@@ -15,7 +16,7 @@ import de.illonis.eduras.math.Vector2df;
  * @author illonis
  * 
  */
-public class SpawnPosition {
+public class SpawnPosition extends ReferencedEntity {
 
 	private final static Logger L = EduLog.getLoggerFor(SpawnPosition.class
 			.getName());
@@ -64,6 +65,7 @@ public class SpawnPosition {
 	public SpawnPosition(Rectangle area, SpawnType teaming) {
 		this.area = area;
 		this.teaming = teaming;
+		setRefName("");
 	}
 
 	/**

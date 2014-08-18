@@ -44,7 +44,7 @@ public class MapParser {
 	 * erm stands for "eduras? readable mapfile".
 	 */
 	public final static String FILE_EXTENSION = ".erm";
-	private static final String IDENTIFIER_REGEX = "^[a-zA-Z]+[A-Za-z0-9]*$";
+	public static final String IDENTIFIER_REGEX = "^[a-zA-Z]+[A-Za-z0-9]*$";
 
 	private enum ReadMode {
 		NONE, SPAWNPOINTS, OBJECTS, NODES, NODECONNECTIONS;
@@ -314,7 +314,8 @@ public class MapParser {
 
 					NodeData node = new NodeData(nodeX, nodeY, nodeWidth,
 							nodeHeight, currentNodeId++,
-							new LinkedList<NodeData>(), baseType);
+							new LinkedList<NodeData>(), baseType,
+							currentIdentifier);
 					if (nodeData.length > 5) {
 						try {
 							float resourceMult = evaluateString(nodeData[5],

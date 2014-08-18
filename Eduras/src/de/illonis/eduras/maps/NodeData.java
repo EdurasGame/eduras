@@ -6,6 +6,7 @@ import java.util.LinkedList;
 
 import org.newdawn.slick.geom.Rectangle;
 
+import de.illonis.eduras.ReferencedEntity;
 import de.illonis.eduras.gameobjects.Base;
 import de.illonis.eduras.gameobjects.Base.BaseType;
 import de.illonis.eduras.gameobjects.NeutralArea;
@@ -16,7 +17,7 @@ import de.illonis.eduras.gameobjects.NeutralArea;
  * @author Florian 'Ren' Mai <florian.ren.mai@googlemail.com>
  * 
  */
-public class NodeData {
+public class NodeData extends ReferencedEntity {
 
 	private final Rectangle area;
 	private final int id;
@@ -39,11 +40,14 @@ public class NodeData {
 	 * @param baseType
 	 *            tells whether this node may be used as a main node of one of
 	 *            the teams
+	 * @param refName
+	 *            reference name.
 	 */
 	public NodeData(float x, float y, int id,
-			LinkedList<NodeData> adjacentNodes, BaseType baseType) {
+			LinkedList<NodeData> adjacentNodes, BaseType baseType,
+			String refName) {
 		this(x, y, NeutralArea.DEFAULT_SIZE, NeutralArea.DEFAULT_SIZE, id,
-				adjacentNodes, baseType);
+				adjacentNodes, baseType, refName);
 	}
 
 	/**
@@ -63,14 +67,18 @@ public class NodeData {
 	 * @param baseType
 	 *            tells whether this node may be used as a main node of one of
 	 *            the teams.
+	 * @param refName
+	 *            reference name.
 	 */
 	public NodeData(float x, float y, float width, float height, int id,
-			LinkedList<NodeData> adjacentNodes, BaseType baseType) {
+			LinkedList<NodeData> adjacentNodes, BaseType baseType,
+			String refName) {
 		area = new Rectangle(x, y, width, height);
 		this.id = id;
 		this.adjacentNodes = adjacentNodes;
 		this.isMainNode = baseType;
 		resourceMultiplicator = 1f;
+		super.setRefName(refName);
 	}
 
 	/**
