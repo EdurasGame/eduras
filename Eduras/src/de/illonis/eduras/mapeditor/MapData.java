@@ -5,13 +5,13 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
-import org.newdawn.slick.geom.Vector2f;
-
+import de.illonis.eduras.FactoryException;
+import de.illonis.eduras.ObjectCreator;
 import de.illonis.eduras.ObjectFactory.ObjectType;
+import de.illonis.eduras.exceptions.ShapeVerticesNotApplicableException;
 import de.illonis.eduras.gamemodes.GameMode.GameModeNumber;
 import de.illonis.eduras.gameobjects.DynamicPolygonObject;
 import de.illonis.eduras.gameobjects.GameObject;
-import de.illonis.eduras.items.weapons.SniperWeapon;
 import de.illonis.eduras.maps.InitialObjectData;
 import de.illonis.eduras.maps.Map;
 import de.illonis.eduras.maps.NodeData;
@@ -38,6 +38,7 @@ public final class MapData {
 
 	private MapData() {
 		reset();
+		supportedGameModes.add(GameModeNumber.DEATHMATCH);
 	}
 
 	private String mapName;
@@ -57,22 +58,9 @@ public final class MapData {
 	 */
 	public void reset() {
 		gameObjects = new LinkedList<GameObject>();
-		SniperWeapon w = new SniperWeapon(null, null, 1);
-		gameObjects.add(w);
 		bases = new LinkedList<NodeData>();
 		spawnPoints = new LinkedList<SpawnPosition>();
 		supportedGameModes = new HashSet<GameModeNumber>();
-		DynamicPolygonObject o = new DynamicPolygonObject(
-				ObjectType.DYNAMIC_POLYGON_BLOCK, null, null, -1);
-		Vector2f[] verts = new Vector2f[4];
-		verts[0] = new Vector2f(5, 5);
-		verts[1] = new Vector2f(15, 15);
-		verts[2] = new Vector2f(50, 10);
-		verts[3] = new Vector2f(50, 40);
-		o.setPolygonVertices(verts);
-		o.setXPosition(30);
-		o.setYPosition(130);
-		gameObjects.add(o);
 		mapName = "unnamed Map";
 		placingObject = null;
 		author = "unknown";
@@ -96,17 +84,31 @@ public final class MapData {
 	 */
 	public void importMap(Map map) {
 		reset();
+		placingObject = null;
 		width = map.getWidth();
 		height = map.getHeight();
 		author = map.getAuthor();
 		mapName = map.getName();
+
 		spawnPoints.addAll(map.getSpawnAreas());
 		supportedGameModes.addAll(map.getSupportedGameModes());
 
 		List<InitialObjectData> objects = new LinkedList<InitialObjectData>(
 				map.getInitialObjects());
 		for (InitialObjectData object : objects) {
-
+			try {
+				if (object.getType() == ObjectType.MAPBOUNDS)
+					continue;
+				GameObject o = ObjectCreator.createObject(object.getType(),
+						null, null);
+				o.setPosition(object.getX(), object.getY());
+				if (object.getType() == ObjectType.DYNAMIC_POLYGON_BLOCK) {
+					((DynamicPolygonObject) o).setPolygonVertices(object
+							.getPolygonVector2dfs());
+				}
+				gameObjects.add(o);
+			} catch (FactoryException | ShapeVerticesNotApplicableException e) {
+			}
 		}
 	}
 

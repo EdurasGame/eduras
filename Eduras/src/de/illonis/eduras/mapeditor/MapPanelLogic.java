@@ -373,6 +373,8 @@ public class MapPanelLogic implements MapInteractor {
 
 	@Override
 	public void setZoom(float factor) {
+		if (factor < 0.1f)
+			return;
 		this.zoom = factor;
 	}
 }

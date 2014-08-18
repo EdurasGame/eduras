@@ -81,7 +81,7 @@ public class EditorWindow extends JFrame implements StatusListener {
 		gameContainer = new CanvasGameContainer(game);
 		gameContainer.setSize(800, 600);
 		content.add(gameContainer, BorderLayout.CENTER);
-		setJMenuBar(new EditorMenu());
+		setJMenuBar(new EditorMenu(game.getPanelLogic()));
 		content.add(quickMenu, BorderLayout.NORTH);
 		statusBar = new StatusBar();
 		content.add(statusBar, BorderLayout.SOUTH);

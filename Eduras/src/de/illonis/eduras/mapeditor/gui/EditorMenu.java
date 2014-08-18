@@ -3,15 +3,26 @@ package de.illonis.eduras.mapeditor.gui;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.io.File;
+import java.io.IOException;
 
+import javax.swing.JFileChooser;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.KeyStroke;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
+import de.illonis.eduras.mapeditor.MapData;
+import de.illonis.eduras.mapeditor.MapInteractor;
+import de.illonis.eduras.mapeditor.MapInteractor.InteractType;
 import de.illonis.eduras.mapeditor.gui.dialog.ControlsInfo;
 import de.illonis.eduras.mapeditor.gui.dialog.MapPropertiesDialog;
 import de.illonis.eduras.mapeditor.gui.dialog.ValidateDialog;
+import de.illonis.eduras.maps.Map;
+import de.illonis.eduras.maps.persistence.InvalidDataException;
+import de.illonis.eduras.maps.persistence.MapParser;
 import de.illonis.eduras.shapecreator.ShapeCreator;
 
 /**
@@ -23,11 +34,22 @@ import de.illonis.eduras.shapecreator.ShapeCreator;
 public class EditorMenu extends JMenuBar implements ActionListener {
 
 	private static final long serialVersionUID = 1L;
+	private final MapInteractor interactor;
+	private final JFileChooser mapChooser;
 
 	private JMenuItem mapProperties, newMap, saveMap, loadMap, shapeCreator,
 			validate, controls;
 
-	EditorMenu() {
+	EditorMenu(MapInteractor interactor) {
+		this.interactor = interactor;
+		mapChooser = new JFileChooser();
+		mapChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+		mapChooser.setMultiSelectionEnabled(false);
+		FileNameExtensionFilter filter = new FileNameExtensionFilter(
+				"Eduras? map file (*" + MapParser.FILE_EXTENSION + ")",
+				MapParser.FILE_EXTENSION.substring(1));
+		mapChooser.setFileFilter(filter);
+		mapChooser.setAcceptAllFileFilterUsed(false);
 		JMenu file = new JMenu("File");
 		file.setMnemonic(KeyEvent.VK_F);
 		newMap = addItem("New...", KeyEvent.VK_N, KeyEvent.VK_N,
@@ -46,7 +68,7 @@ public class EditorMenu extends JMenuBar implements ActionListener {
 		mapProperties = addItem("Properties", KeyEvent.VK_P, KeyEvent.VK_M,
 				ActionEvent.CTRL_MASK);
 		map.add(mapProperties);
-		validate = addItem("Validate", KeyEvent.VK_V, KeyEvent.VK_UNDEFINED, 0);
+		validate = addItem("Validate", KeyEvent.VK_V, KeyEvent.VK_F5, 0);
 		map.addSeparator();
 		map.add(validate);
 		add(map);
@@ -87,6 +109,26 @@ public class EditorMenu extends JMenuBar implements ActionListener {
 		} else if (item == validate) {
 			ValidateDialog dialog = new ValidateDialog();
 			dialog.setVisible(true);
+		} else if (item == loadMap) {
+			int result = mapChooser.showDialog(this, "Load");
+			if (result == JFileChooser.APPROVE_OPTION) {
+				File file = mapChooser.getSelectedFile();
+				if (!file.getAbsolutePath().endsWith(MapParser.FILE_EXTENSION))
+					file = new File(file.getAbsolutePath()
+							+ MapParser.FILE_EXTENSION);
+				if (file.exists()) {
+					Map map;
+					try {
+						map = MapParser.readMap(file.toURI().toURL());
+						interactor.setInteractType(InteractType.DEFAULT);
+						MapData.getInstance().importMap(map);
+					} catch (InvalidDataException | IOException ex) {
+						JOptionPane.showMessageDialog(this,
+								"Could not load mapfile.");
+						ex.printStackTrace();
+					}
+				}
+			}
 		}
 	}
 }

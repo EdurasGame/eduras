@@ -45,9 +45,9 @@ public class MapInputHandler extends InputAdapter {
 	public void mouseWheelMoved(int change) {
 		float amount;
 		if (change > 0) {
-			amount = 0.2f;
+			amount = 0.1f;
 		} else {
-			amount = -0.2f;
+			amount = -0.1f;
 		}
 		interactor.setZoom(interactor.getZoom() + amount);
 	}
