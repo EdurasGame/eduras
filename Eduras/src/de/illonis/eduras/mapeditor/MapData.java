@@ -146,6 +146,11 @@ public final class MapData {
 		return supportedGameModes;
 	}
 
+	public void setSupportedGameModes(List<GameModeNumber> supportedGameModes) {
+		this.supportedGameModes = new HashSet<GameModeNumber>(
+				supportedGameModes);
+	}
+
 	public List<GameObject> getGameObjects() {
 		return gameObjects;
 	}

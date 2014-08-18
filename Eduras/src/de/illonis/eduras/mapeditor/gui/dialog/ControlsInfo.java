@@ -40,7 +40,8 @@ public class ControlsInfo extends JDialog {
 				+ "Hover an object and press X to delete it\n\n"
 				+ "Press WASD or hold right mousebutton to drag the map.\n\n"
 				+ "drag objects by holding left mousebutton\n\n"
-				+ "Rightclick to abort shape import");
+				+ "Rightclick to abort shape import\n\n" +
+				"Use CTRL to select multiple gamemodes in map properties.");
 		area.setCaretPosition(0);
 		JScrollPane scroller = new JScrollPane(area);
 		content.add(scroller, BorderLayout.CENTER);
