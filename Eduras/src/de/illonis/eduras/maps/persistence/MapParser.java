@@ -270,6 +270,17 @@ public class MapParser {
 					NodeData node = new NodeData(nodeX, nodeY, nodeWidth,
 							nodeHeight, currentNodeId++,
 							new LinkedList<Integer>(), baseType);
+					if (nodeData.length > 5) {
+						try {
+							float resourceMult = evaluateString(nodeData[5],
+									width, height);
+							node.setResourceMultiplicator(resourceMult);
+						} catch (ScriptException e) {
+							throw new InvalidDataException(
+									"Invalid base resource multiplicator: "
+											+ nodeData[5], lineNumber);
+						}
+					}
 					nodeIds.put(currentIdentifier, node);
 					nodes.add(node);
 					break;
