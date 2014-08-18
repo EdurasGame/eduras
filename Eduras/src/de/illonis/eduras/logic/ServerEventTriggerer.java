@@ -515,7 +515,7 @@ public class ServerEventTriggerer implements EventTriggerer {
 		SetMapEvent setMapEvent = new SetMapEvent(map.getName());
 		sendEvents(setMapEvent);
 
-		LinkedList<Portal> portals = new LinkedList<Portal>();
+		LinkedList<InitialObjectData> portalData = new LinkedList<InitialObjectData>();
 		// send objects to client
 		for (InitialObjectData initialObject : map.getInitialObjects()) {
 
@@ -531,24 +531,42 @@ public class ServerEventTriggerer implements EventTriggerer {
 				objectId = createObjectAt(initialObject.getType(),
 						initialObject.getPosition(), -1);
 			}
-
+			try {
+				GameObject o = gameInfo.findObjectById(objectId);
+				o.setRefName(initialObject.getRefName());
+			} catch (ObjectNotFoundException e) {
+				L.log(Level.SEVERE,
+						"Cannot find object that was just created from map file!",
+						e);
+			}
 			if (initialObject.getType() == ObjectType.PORTAL) {
-				try {
-					portals.add((Portal) gameInfo.findObjectById(objectId));
-				} catch (ObjectNotFoundException e) {
-					L.log(Level.WARNING,
-							"Cannot find object that was just created from map file!",
-							e);
-				}
+				portalData.add(initialObject);
 			}
 		}
 
-		for (int i = 0; i < portals.size(); i = i + 2) {
-			Portal portalOne = portals.get(i);
-			Portal portalTwo = portals.get(i + 1);
+		for (int i = 0; i < portalData.size(); i++) {
+			InitialObjectData portal = portalData.get(i);
+			Portal portalOne;
+			try {
+				portalOne = (Portal) gameInfo.findObjectByReference(portal
+						.getRefName());
+			} catch (ObjectNotFoundException e) {
+				L.log(Level.SEVERE, "Could not find recently created portal.",
+						e);
+				continue;
+			}
 
+			Portal portalTwo;
+			try {
+				portalTwo = (Portal) gameInfo.findObjectByReference(portal
+						.getReference(Portal.OTHER_PORTAL_REFERENCE));
+			} catch (ObjectNotFoundException e) {
+				L.log(Level.SEVERE,
+						"Could not find referenced portal of created portal.",
+						e);
+				continue;
+			}
 			portalOne.setPartnerPortal(portalTwo);
-			portalTwo.setPartnerPortal(portalOne);
 		}
 
 	}

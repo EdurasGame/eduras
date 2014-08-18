@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Random;
 import java.util.concurrent.ConcurrentHashMap;
@@ -196,6 +197,28 @@ public class GameInformation {
 			throw new ObjectNotFoundException(id);
 		}
 		return object;
+	}
+
+	/**
+	 * Returns gameobject with given reference. If no object is found, null is
+	 * returned.
+	 * 
+	 * @param ref
+	 *            the reference to search for.
+	 * @return object with given reference.
+	 * @throws ObjectNotFoundException
+	 *             thrown if there is no object with the given reference
+	 */
+	public GameObject findObjectByReference(String ref)
+			throws ObjectNotFoundException {
+		for (Iterator<GameObject> iterator = objects.values().iterator(); iterator
+				.hasNext();) {
+			GameObject obj = iterator.next();
+			if (obj.getRefName().equals(ref)) {
+				return obj;
+			}
+		}
+		return null;
 	}
 
 	/**

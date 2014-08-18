@@ -1,5 +1,7 @@
 package de.illonis.eduras.maps;
 
+import java.util.HashMap;
+
 import de.illonis.eduras.ObjectFactory.ObjectType;
 import de.illonis.eduras.math.Vector2df;
 
@@ -11,8 +13,10 @@ import de.illonis.eduras.math.Vector2df;
  */
 public class InitialObjectData {
 	private final ObjectType type;
+	private final String refName;
 	private final float x, y;
 	private final Vector2df[] polygonShapeVector2dfs;
+	private final java.util.Map<String, String> references;
 
 	/**
 	 * Creates a new dataset holding given information for a new object.
@@ -25,10 +29,7 @@ public class InitialObjectData {
 	 *            the y-coordinate of the new object.
 	 */
 	public InitialObjectData(ObjectType type, float xPos, float yPos) {
-		this.type = type;
-		this.x = xPos;
-		this.y = yPos;
-		polygonShapeVector2dfs = null;
+		this(type, xPos, yPos, null, "");
 	}
 
 	/**
@@ -43,10 +44,17 @@ public class InitialObjectData {
 	 *            the vertices of the dynamic polygon.
 	 */
 	public InitialObjectData(float xPos, float yPos, Vector2df[] vertices) {
-		this.type = ObjectType.DYNAMIC_POLYGON_BLOCK;
-		this.x = xPos;
-		this.y = yPos;
-		polygonShapeVector2dfs = vertices;
+		this(xPos, yPos, vertices, "");
+
+	}
+
+	public InitialObjectData(float xPos, float yPos, String refName) {
+		this(xPos, yPos, null, refName);
+	}
+
+	public InitialObjectData(float xPos, float yPos, Vector2df[] vertices,
+			String refName) {
+		this(ObjectType.DYNAMIC_POLYGON_BLOCK, xPos, yPos, vertices, refName);
 	}
 
 	/**
@@ -64,10 +72,26 @@ public class InitialObjectData {
 	 */
 	public InitialObjectData(ObjectType type, float xPos, float yPos,
 			Vector2df[] vertices) {
+		this(type, xPos, yPos, vertices, "");
+	}
+
+	public InitialObjectData(ObjectType type, float xPos, float yPos,
+			Vector2df[] vertices, String refName) {
 		this.type = type;
 		this.x = xPos;
 		this.y = yPos;
 		polygonShapeVector2dfs = vertices;
+		this.refName = refName;
+		references = new HashMap<String, String>();
+	}
+
+	public InitialObjectData(ObjectType objectType, float objX, float objY,
+			String currentIdentifier) {
+		this(objectType, objX, objY, null, currentIdentifier);
+	}
+
+	public String getRefName() {
+		return refName;
 	}
 
 	/**
@@ -99,6 +123,14 @@ public class InitialObjectData {
 	 */
 	public float getY() {
 		return y;
+	}
+
+	public void addReference(String key, String reference) {
+		references.put(key, reference);
+	}
+
+	public String getReference(String key) {
+		return references.get(key);
 	}
 
 	/**

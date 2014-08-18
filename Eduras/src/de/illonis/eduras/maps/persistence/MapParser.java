@@ -8,6 +8,7 @@ import java.nio.file.Path;
 import java.text.ParseException;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 
 import javax.script.ScriptEngine;
@@ -19,6 +20,7 @@ import org.newdawn.slick.geom.Rectangle;
 import de.illonis.eduras.ObjectFactory.ObjectType;
 import de.illonis.eduras.gamemodes.GameMode.GameModeNumber;
 import de.illonis.eduras.gameobjects.Base;
+import de.illonis.eduras.gameobjects.Portal;
 import de.illonis.eduras.maps.InitialObjectData;
 import de.illonis.eduras.maps.LoadedMap;
 import de.illonis.eduras.maps.Map;
@@ -65,6 +67,8 @@ public class MapParser {
 		String currentIdentifier = "";
 		int currentNodeId = 1;
 		HashMap<String, NodeData> nodeIds = new HashMap<String, NodeData>();
+		HashMap<String, InitialObjectData> objectIds = new HashMap<String, InitialObjectData>();
+		HashSet<String> existingIdentifiers = new HashSet<String>();
 		String mapName = "";
 		String author = "";
 		int width = 0;
@@ -92,7 +96,12 @@ public class MapParser {
 			if (line.startsWith("&")) {
 				String identifier = line.substring(1).trim();
 				if (identifier.matches(IDENTIFIER_REGEX)) {
+					if (existingIdentifiers.contains(identifier)) {
+						throw new InvalidDataException("Reference "
+								+ identifier + " already exists.", lineNumber);
+					}
 					currentIdentifier = identifier;
+					existingIdentifiers.add(identifier);
 				} else {
 					throw new InvalidDataException(
 							"Found invalid reference name: " + identifier,
@@ -191,12 +200,37 @@ public class MapParser {
 										width, height,
 										numOfVertexCoordinates / 2);
 								oData = new InitialObjectData(objectType, objX,
-										objY, vertices);
+										objY, vertices, currentIdentifier);
 							}
 						} else {
 							// handle normal objects
 							oData = new InitialObjectData(objectType, objX,
-									objY);
+									objY, currentIdentifier);
+							if (objectType == ObjectType.PORTAL) {
+								if (objectData.length > 3) {
+									String refPortal = objectData[3].trim();
+									if (refPortal.startsWith("*")
+											&& refPortal.substring(1).matches(
+													IDENTIFIER_REGEX)) {
+										oData.addReference(
+												Portal.OTHER_PORTAL_REFERENCE,
+												refPortal.substring(1));
+									} else {
+										throw new InvalidDataException(
+												refPortal
+														+ " is no valid reference",
+												lineNumber);
+									}
+								} else {
+									throw new InvalidDataException(
+											"Missing reference to other portal",
+											lineNumber);
+								}
+							}
+						}
+
+						if (!currentIdentifier.isEmpty()) {
+							objectIds.put(currentIdentifier, oData);
 						}
 						gameObjects.add(oData);
 					} catch (ScriptException e) {
@@ -281,7 +315,8 @@ public class MapParser {
 											+ nodeData[5], lineNumber);
 						}
 					}
-					nodeIds.put(currentIdentifier, node);
+					if (!currentIdentifier.isEmpty())
+						nodeIds.put(currentIdentifier, node);
 					nodes.add(node);
 					break;
 				case NODECONNECTIONS:

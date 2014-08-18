@@ -58,6 +58,7 @@ public abstract class GameObject implements Comparable<GameObject> {
 	private float visionAngle = 90;
 	private boolean isVisionBlocking = false;
 	private int zLayer = 1;
+	private String refName;
 
 	private int id;
 	private int owner = OWNER_WORLD;
@@ -113,8 +114,16 @@ public abstract class GameObject implements Comparable<GameObject> {
 	public GameObject(GameInformation game, TimingSource timingSource, int id) {
 		this.game = game;
 		this.id = id;
+		refName = "";
 		this.timingSource = timingSource;
 		setObjectType(ObjectType.NO_OBJECT);
+	}
+	
+	public final String getRefName() {
+		return refName;
+	}
+	public final void setRefName(String refName) {
+		this.refName = refName;
 	}
 
 	/**
