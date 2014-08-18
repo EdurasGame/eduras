@@ -79,11 +79,11 @@ public abstract class Map {
 		verticalBoundShape[2] = new Vector2df(0, height);
 		verticalBoundShape[3] = new Vector2df(-10, height);
 		InitialObjectData boundsData = new InitialObjectData(
-				ObjectType.DYNAMIC_POLYGON_BLOCK, -10, 0, verticalBoundShape);
+				ObjectType.MAPBOUNDS, -10, 0, verticalBoundShape);
 		addObject(boundsData);
 
-		boundsData = new InitialObjectData(ObjectType.DYNAMIC_POLYGON_BLOCK,
-				width, 0, verticalBoundShape);
+		boundsData = new InitialObjectData(ObjectType.MAPBOUNDS, width, 0,
+				verticalBoundShape);
 		addObject(boundsData);
 
 		Vector2df[] horizontalBoundShape = new Vector2df[4];
@@ -91,12 +91,12 @@ public abstract class Map {
 		horizontalBoundShape[1] = new Vector2df(width, -10);
 		horizontalBoundShape[2] = new Vector2df(width, 0);
 		horizontalBoundShape[3] = new Vector2df(0, 0);
-		boundsData = new InitialObjectData(ObjectType.DYNAMIC_POLYGON_BLOCK, 0,
-				-10, horizontalBoundShape);
+		boundsData = new InitialObjectData(ObjectType.MAPBOUNDS, 0, -10,
+				horizontalBoundShape);
 		addObject(boundsData);
 
-		boundsData = new InitialObjectData(ObjectType.DYNAMIC_POLYGON_BLOCK, 0,
-				height, horizontalBoundShape);
+		boundsData = new InitialObjectData(ObjectType.MAPBOUNDS, 0, height,
+				horizontalBoundShape);
 		addObject(boundsData);
 	}
 
