@@ -299,7 +299,7 @@ public class MapParser {
 						nodeY = evaluateString(nodeData[1], width, height);
 						nodeWidth = evaluateString(nodeData[2], width, height);
 						nodeHeight = evaluateString(nodeData[3], width, height);
-					} catch (ScriptException e) {
+					} catch (ScriptException | NumberFormatException e) {
 						throw new InvalidDataException(
 								"Invalid math expression in line: " + line,
 								lineNumber);
@@ -447,7 +447,7 @@ public class MapParser {
 	 *             if there is a syntax error in expression.
 	 */
 	private static float evaluateString(String expression, int w, int h)
-			throws ScriptException {
+			throws ScriptException, NumberFormatException {
 		expression = expression.trim();
 		expression = expression.replaceAll("H", h + "").replaceAll("W", w + "");
 

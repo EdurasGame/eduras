@@ -140,7 +140,7 @@ public class EditorMenu extends JMenuBar implements ActionListener {
 						MapData.getInstance().importMap(map);
 					} catch (InvalidDataException | IOException ex) {
 						JOptionPane.showMessageDialog(this,
-								"Could not load mapfile.");
+								"Could not load mapfile: " + ex.getMessage());
 						ex.printStackTrace();
 					}
 				}
