@@ -11,6 +11,7 @@ import javax.swing.KeyStroke;
 
 import de.illonis.eduras.mapeditor.gui.dialog.ControlsInfo;
 import de.illonis.eduras.mapeditor.gui.dialog.MapPropertiesDialog;
+import de.illonis.eduras.mapeditor.gui.dialog.ValidateDialog;
 import de.illonis.eduras.shapecreator.ShapeCreator;
 
 /**
@@ -24,7 +25,7 @@ public class EditorMenu extends JMenuBar implements ActionListener {
 	private static final long serialVersionUID = 1L;
 
 	private JMenuItem mapProperties, newMap, saveMap, loadMap, shapeCreator,
-			controls;
+			validate, controls;
 
 	EditorMenu() {
 		JMenu file = new JMenu("File");
@@ -45,6 +46,9 @@ public class EditorMenu extends JMenuBar implements ActionListener {
 		mapProperties = addItem("Properties", KeyEvent.VK_P, KeyEvent.VK_M,
 				ActionEvent.CTRL_MASK);
 		map.add(mapProperties);
+		validate = addItem("Validate", KeyEvent.VK_V, KeyEvent.VK_UNDEFINED, 0);
+		map.addSeparator();
+		map.add(validate);
 		add(map);
 		JMenu edit = new JMenu("Edit");
 		edit.setMnemonic(KeyEvent.VK_E);
@@ -80,6 +84,9 @@ public class EditorMenu extends JMenuBar implements ActionListener {
 		} else if (item == controls) {
 			ControlsInfo info = new ControlsInfo();
 			info.setVisible(true);
+		} else if (item == validate) {
+			ValidateDialog dialog = new ValidateDialog();
+			dialog.setVisible(true);
 		}
 	}
 }

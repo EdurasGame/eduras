@@ -6,6 +6,7 @@ import org.newdawn.slick.SlickException;
 
 import de.illonis.eduras.ObjectFactory.ObjectType;
 import de.illonis.eduras.mapeditor.gui.EditorWindow;
+import de.illonis.eduras.mapeditor.validate.MapValidator;
 
 /**
  * A map editor for Eduras?-maps that supports easy placing of objects on the
@@ -24,6 +25,7 @@ public class MapEditor {
 	 *            <i>unused</i>
 	 */
 	public static void main(String[] args) {
+		MapValidator.init();
 		try {
 			MapEditor editor = new MapEditor();
 			editor.showWindow();

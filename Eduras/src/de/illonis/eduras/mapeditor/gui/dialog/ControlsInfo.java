@@ -8,8 +8,19 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
+/**
+ * A simple help dialog that shows some static help text.
+ * 
+ * @author illonis
+ * 
+ */
 public class ControlsInfo extends JDialog {
 
+	private static final long serialVersionUID = 1L;
+
+	/**
+	 * Creates the dialog.
+	 */
 	public ControlsInfo() {
 		setTitle("Help: Controls");
 		JPanel content = (JPanel) getContentPane();
