@@ -20,7 +20,7 @@ public class NodeData {
 
 	private final Rectangle area;
 	private final int id;
-	private final LinkedList<Integer> adjacentNodes;
+	private final LinkedList<NodeData> adjacentNodes;
 	private Base.BaseType isMainNode;
 	private float resourceMultiplicator;
 
@@ -41,7 +41,7 @@ public class NodeData {
 	 *            the teams
 	 */
 	public NodeData(float x, float y, int id,
-			LinkedList<Integer> adjacentNodes, BaseType baseType) {
+			LinkedList<NodeData> adjacentNodes, BaseType baseType) {
 		this(x, y, NeutralArea.DEFAULT_SIZE, NeutralArea.DEFAULT_SIZE, id,
 				adjacentNodes, baseType);
 	}
@@ -65,7 +65,7 @@ public class NodeData {
 	 *            the teams.
 	 */
 	public NodeData(float x, float y, float width, float height, int id,
-			LinkedList<Integer> adjacentNodes, BaseType baseType) {
+			LinkedList<NodeData> adjacentNodes, BaseType baseType) {
 		area = new Rectangle(x, y, width, height);
 		this.id = id;
 		this.adjacentNodes = adjacentNodes;
@@ -156,12 +156,12 @@ public class NodeData {
 	 * 
 	 * @return adjacent nodes
 	 */
-	public LinkedList<Integer> getAdjacentNodes() {
+	public LinkedList<NodeData> getAdjacentNodes() {
 		return adjacentNodes;
 	}
 
 	public void addAdjacentNode(NodeData node) {
-		adjacentNodes.add(node.getId());
+		adjacentNodes.add(node);
 	}
 
 	/**

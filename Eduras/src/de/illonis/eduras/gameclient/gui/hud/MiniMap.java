@@ -109,12 +109,9 @@ public class MiniMap extends ClickableGuiElement {
 		if (nodes != null && !nodes.isEmpty()) {
 			g.setLineWidth(1f);
 			g.setColor(Color.yellow);
-			for (Integer nodeId : nodes.keySet()) {
-				NodeData someNode = nodes.get(nodeId);
+			for (NodeData someNode : nodes.values()) {
 
-				for (Integer adjacentOfSomeNodeId : someNode.getAdjacentNodes()) {
-					NodeData adjacentOfSomeNode = nodes
-							.get(adjacentOfSomeNodeId);
+				for (NodeData adjacentOfSomeNode : someNode.getAdjacentNodes()) {
 
 					// draw a line from some node to his adjacent
 					Vector2f someNodePositionOnMinimap = gameToMinimapPosition(new Vector2f(

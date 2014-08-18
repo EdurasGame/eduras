@@ -269,7 +269,7 @@ public class MapParser {
 
 					NodeData node = new NodeData(nodeX, nodeY, nodeWidth,
 							nodeHeight, currentNodeId++,
-							new LinkedList<Integer>(), baseType);
+							new LinkedList<NodeData>(), baseType);
 					if (nodeData.length > 5) {
 						try {
 							float resourceMult = evaluateString(nodeData[5],

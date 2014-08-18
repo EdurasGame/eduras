@@ -148,9 +148,9 @@ public class Edura extends TeamDeathmatch {
 			int nodeid = nodeData.getId();
 			Vertex vertexForNode = nodeIdToVertex(nodeIdToBase, nodeid);
 
-			for (Integer adjacentNode : nodeData.getAdjacentNodes()) {
+			for (NodeData adjacentNode : nodeData.getAdjacentNodes()) {
 				Vertex vertexForAdjacent = nodeIdToVertex(nodeIdToBase,
-						adjacentNode);
+						adjacentNode.getId());
 
 				vertexForNode.addAdjacentVertex(vertexForAdjacent);
 			}
