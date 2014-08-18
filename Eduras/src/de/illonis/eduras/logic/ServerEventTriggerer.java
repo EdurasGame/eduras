@@ -507,7 +507,6 @@ public class ServerEventTriggerer implements EventTriggerer {
 
 	@Override
 	public void changeMap(Map map) {
-
 		gameInfo.setMap(map);
 		removeAllObjects();
 
@@ -534,6 +533,10 @@ public class ServerEventTriggerer implements EventTriggerer {
 			try {
 				GameObject o = gameInfo.findObjectById(objectId);
 				o.setRefName(initialObject.getRefName());
+				if (initialObject.getType() == ObjectType.DYNAMIC_POLYGON_BLOCK) {
+					((DynamicPolygonObject) o).setColor(initialObject
+							.getColor());
+				}
 			} catch (ObjectNotFoundException e) {
 				L.log(Level.SEVERE,
 						"Cannot find object that was just created from map file!",

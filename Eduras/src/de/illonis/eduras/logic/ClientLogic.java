@@ -57,6 +57,7 @@ import de.illonis.eduras.items.Usable;
 import de.illonis.eduras.items.weapons.Weapon;
 import de.illonis.eduras.logicabstraction.EdurasInitializer;
 import de.illonis.eduras.maps.Map;
+import de.illonis.eduras.maps.persistence.InvalidDataException;
 import de.illonis.eduras.settings.S;
 import de.illonis.eduras.settings.S.SettingType;
 import de.illonis.eduras.units.Unit;
@@ -410,10 +411,9 @@ public class ClientLogic implements GameLogicInterface {
 							.getNameOfNewMap()));
 					L.info("Set map to " + setMapEvent.getNameOfNewMap());
 					getListener().onMapChanged(setMapEvent);
-				} catch (NoSuchMapException e1) {
-					L.log(Level.SEVERE,
-							"Cannot find map " + setMapEvent.getNameOfNewMap(),
-							e1);
+				} catch (NoSuchMapException | InvalidDataException e1) {
+					L.log(Level.SEVERE, "Cannot find or load map "
+							+ setMapEvent.getNameOfNewMap(), e1);
 				}
 				break;
 			}

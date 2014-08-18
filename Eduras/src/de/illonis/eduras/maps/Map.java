@@ -70,7 +70,6 @@ public abstract class Map {
 		supportedGameModes = new LinkedList<GameModeNumber>();
 		spawnPositions = new LinkedList<SpawnPosition>();
 		nodes = new LinkedList<NodeData>();
-		buildMap();
 	}
 
 	private void addBoundsObjects() {
@@ -113,7 +112,7 @@ public abstract class Map {
 	 * @param height
 	 *            height of the map.
 	 * @param created
-	 *            the date of creation.
+	 *            the date of creation
 	 */
 	public Map(String name, String author, int width, int height, Date created) {
 		this(name, author, width, height);
@@ -358,7 +357,7 @@ public abstract class Map {
 	/**
 	 * Initializes and loads all map data.
 	 */
-	protected abstract void buildMap();
+	protected abstract void buildMap() throws InvalidDataException;
 
 	/**
 	 * Get the map that has the given name if it exists.
@@ -368,23 +367,35 @@ public abstract class Map {
 	 * @return The map of the given name.
 	 * @throws NoSuchMapException
 	 *             Thrown if the map of the given name cannot be found.
+	 * @throws InvalidDataException
+	 *             if loading from file failed due to syntax error in mapfile.
 	 */
-	public static Map getMapByName(String mapName) throws NoSuchMapException {
+	public static Map getMapByName(String mapName) throws NoSuchMapException,
+			InvalidDataException {
+		Map map;
 		switch (mapName.toLowerCase()) {
 		case "funmap":
-			return new FunMap();
+			map = new FunMap();
+			break;
 		case "simple":
-			return new SimpleMap();
+			map = new SimpleMap();
+			break;
 		case "manyblocks":
-			return new ManyBlocks();
+			map = new ManyBlocks();
+			break;
 		case "testmap":
-			return new TestMap();
+			map = new TestMap();
+			break;
 		case "eduratestmap":
-			return new EduraTestMap();
+			map = new EduraTestMap();
+			break;
 		case "eduramus":
-			return new Eduramus();
+			map = new Eduramus();
+			break;
 		default:
 			throw new NoSuchMapException(mapName);
 		}
+		map.buildMap();
+		return map;
 	}
 }

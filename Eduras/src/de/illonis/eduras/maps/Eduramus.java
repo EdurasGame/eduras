@@ -26,13 +26,11 @@ public class Eduramus extends Map {
 	}
 
 	@Override
-	protected void buildMap() {
+	protected void buildMap() throws InvalidDataException {
 		try {
 			loadFromFile("eduramus.erm");
-		} catch (InvalidDataException e) {
-			L.log(Level.WARNING, "TODO: message", e);
 		} catch (IOException e) {
-			L.log(Level.WARNING, "TODO: message", e);
+			L.log(Level.WARNING, "Could not open eduramus mapfile.", e);
 		}
 	}
 }

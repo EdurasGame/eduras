@@ -14,6 +14,7 @@ import de.illonis.eduras.exceptions.ObjectNotFoundException;
 import de.illonis.eduras.gamemodes.BasicGameMode;
 import de.illonis.eduras.gamemodes.GameMode;
 import de.illonis.eduras.maps.Map;
+import de.illonis.eduras.maps.persistence.InvalidDataException;
 
 /**
  * Triggers events from console.
@@ -132,6 +133,10 @@ public class ConsoleEventTriggerer {
 		} catch (NoSuchMapException e) {
 			L.log(Level.INFO, "Tried to change map to " + mapName
 					+ " which doesn't exist", e);
+			return false;
+		} catch (InvalidDataException e) {
+			L.log(Level.SEVERE, "Mapfile for map  " + mapName
+					+ " contains errors.", e);
 			return false;
 		}
 

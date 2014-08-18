@@ -15,6 +15,7 @@ import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
 
+import org.newdawn.slick.Color;
 import org.newdawn.slick.geom.Rectangle;
 
 import de.illonis.eduras.ObjectFactory.ObjectType;
@@ -189,18 +190,28 @@ public class MapParser {
 
 						if (objectType.equals(ObjectType.DYNAMIC_POLYGON_BLOCK)) {
 							// handle dynamic blocks
-							int numOfVertexCoordinates = objectData.length - 3;
-							if ((numOfVertexCoordinates % 2) != 0
-									|| numOfVertexCoordinates < 4) {
+							int numOfVertexVectors = objectData.length - 3;
+							String last = objectData[objectData.length - 1]
+									.trim();
+							boolean lastColor = false;
+							if (last.startsWith("0x")) {
+								lastColor = true;
+								numOfVertexVectors--;
+								// last value is color.
+							}
+							if (numOfVertexVectors < 3) {
 								throw new InvalidDataException(
-										"Number of vertices either odd or not at least 2 vertices.",
+										"Dynamic polygon must have at least three points.",
 										lineNumber);
 							} else {
 								Vector2df[] vertices = readVertices(objectData,
-										width, height,
-										numOfVertexCoordinates / 2);
+										width, height, numOfVertexVectors,
+										lineNumber);
 								oData = new InitialObjectData(objectType, objX,
 										objY, vertices, currentIdentifier);
+								if (lastColor) {
+									oData.setColor(readColor(last, lineNumber));
+								}
 							}
 						} else {
 							// handle normal objects
@@ -364,14 +375,42 @@ public class MapParser {
 				spawnPositions, gameObjects, gameModes, nodes);
 	}
 
+	private static Color readColor(String last, final int lineNumber)
+			throws InvalidDataException {
+		if (!last.startsWith("0x")) {
+			throw new InvalidDataException("Invalid color: " + last, lineNumber);
+		}
+		String colorString = last.substring(2);
+		try {
+			int alpha = Integer.parseInt(colorString.substring(0, 2), 16);
+			int r = Integer.parseInt(colorString.substring(2, 4), 16);
+			int g = Integer.parseInt(colorString.substring(4, 6), 16);
+			int b = Integer.parseInt(colorString.substring(6, 8), 16);
+			return new Color(r, g, b, alpha);
+		} catch (NumberFormatException e) {
+			throw new InvalidDataException("Invalid color: " + last, lineNumber);
+		}
+	}
+
 	private static Vector2df[] readVertices(String[] objectData, int width,
-			int height, int numberOfVertices) throws ScriptException {
+			int height, int numberOfVertices, final int lineNumber)
+			throws ScriptException, InvalidDataException {
 		Vector2df[] vertices = new Vector2df[numberOfVertices];
 		for (int i = 0; i < numberOfVertices; i++) {
-			float vertexXCoordinate = evaluateString(objectData[3 + 2 * i],
-					width, height);
-			float vertexYCoordinate = evaluateString(objectData[3 + 2 * i + 1],
-					width, height);
+			String coord = objectData[3 + i].trim();
+			if (!coord.startsWith("[") || !coord.endsWith("]")) {
+				throw new InvalidDataException("Invalid coordinate: " + coord,
+						lineNumber);
+			}
+			coord = coord.substring(1, coord.length() - 1);
+			String[] parts = coord.split(" ");
+			if (parts.length != 2) {
+				throw new InvalidDataException("Invalid coordinate: " + coord,
+						lineNumber);
+			}
+
+			float vertexXCoordinate = evaluateString(parts[0], width, height);
+			float vertexYCoordinate = evaluateString(parts[1], width, height);
 			vertices[i] = new Vector2df(vertexXCoordinate, vertexYCoordinate);
 		}
 
