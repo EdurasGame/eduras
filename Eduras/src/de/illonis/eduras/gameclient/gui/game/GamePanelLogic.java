@@ -12,6 +12,7 @@ import de.illonis.eduras.chat.ChatClient;
 import de.illonis.eduras.chat.NotConnectedException;
 import de.illonis.eduras.chat.UserNotInRoomException;
 import de.illonis.eduras.events.ItemEvent;
+import de.illonis.eduras.events.SetInteractModeEvent;
 import de.illonis.eduras.exceptions.ActionFailedException;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
 import de.illonis.eduras.gameclient.ChatCache;
@@ -361,6 +362,13 @@ public class GamePanelLogic extends GameEventAdapter implements
 	public void onCooldownFinished(ItemEvent event) {
 		for (GameEventListener gameEventListener : gameEventListeners) {
 			gameEventListener.onCooldownFinished(event);
+		}
+	}
+
+	@Override
+	public void onInteractModeChanged(SetInteractModeEvent setModeEvent) {
+		if (setModeEvent.getOwner() == infoPro.getOwnerID()) {
+			resetCamera();
 		}
 	}
 

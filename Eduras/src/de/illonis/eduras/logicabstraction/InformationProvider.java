@@ -23,6 +23,7 @@ import de.illonis.eduras.interfaces.InfoInterface;
 import de.illonis.eduras.maps.NodeData;
 import de.illonis.eduras.maps.SpawnPosition;
 import de.illonis.eduras.units.Observer;
+import de.illonis.eduras.units.PlayerMainFigure;
 
 /**
  * This class provides a connection between GUI and logic. GUI developers can
@@ -179,6 +180,9 @@ public class InformationProvider implements InfoInterface {
 		switch (type) {
 		case OBSERVER:
 			unitToSpawn = new Observer(null, null, -1, -1);
+			break;
+		case PLAYER:
+			unitToSpawn = new PlayerMainFigure(null, null, -1, -1, null);
 			break;
 		default:
 			return false;
