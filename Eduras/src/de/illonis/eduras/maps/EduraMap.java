@@ -1,15 +1,9 @@
 package de.illonis.eduras.maps;
 
-import java.io.IOException;
 import java.util.Collection;
 import java.util.Date;
-import java.util.LinkedList;
-import java.util.logging.Logger;
 
-import de.illonis.edulog.EduLog;
 import de.illonis.eduras.gamemodes.GameMode.GameModeNumber;
-import de.illonis.eduras.maps.persistence.InvalidDataException;
-import de.illonis.eduras.maps.persistence.MapParser;
 
 /**
  * An EduraMap is a map that contains nodes which are used for Edura! game mode.
@@ -18,11 +12,6 @@ import de.illonis.eduras.maps.persistence.MapParser;
  * 
  */
 public class EduraMap extends LoadedMap {
-
-	private final static Logger L = EduLog.getLoggerFor(EduraMap.class
-			.getName());
-
-	private Collection<NodeData> nodes;
 
 	/**
 	 * Create an EduraMap.
@@ -42,6 +31,7 @@ public class EduraMap extends LoadedMap {
 	 * @param initialObjects
 	 *            The objects on the map when it's created.
 	 * @param supportedGameModes
+	 *            the supported game modes.
 	 * @param nodes
 	 *            The map's nodes
 	 */
@@ -51,32 +41,6 @@ public class EduraMap extends LoadedMap {
 			Collection<GameModeNumber> supportedGameModes,
 			Collection<NodeData> nodes) {
 		super(name, author, width, height, created, spawnPositions,
-				initialObjects, supportedGameModes);
-
-		if (nodes != null)
-			this.nodes = nodes;
-	}
-
-	@Override
-	protected void loadFromFile(String mapFileName)
-			throws InvalidDataException, IOException {
-		super.loadFromFile(mapFileName);
-
-		EduraMap map = (EduraMap) MapParser.readMap(getClass().getResource(
-				"data/" + mapFileName));
-
-		if (nodes == null) {
-			nodes = new LinkedList<NodeData>();
-		}
-		nodes.addAll(map.getNodes());
-	}
-
-	/**
-	 * Returns the map's nodes.
-	 * 
-	 * @return nodes
-	 */
-	public Collection<NodeData> getNodes() {
-		return nodes;
+				initialObjects, supportedGameModes, nodes);
 	}
 }

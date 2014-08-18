@@ -18,7 +18,6 @@ import org.newdawn.slick.geom.Rectangle;
 import de.illonis.eduras.ObjectFactory.ObjectType;
 import de.illonis.eduras.gamemodes.GameMode.GameModeNumber;
 import de.illonis.eduras.gameobjects.Base;
-import de.illonis.eduras.maps.EduraMap;
 import de.illonis.eduras.maps.InitialObjectData;
 import de.illonis.eduras.maps.LoadedMap;
 import de.illonis.eduras.maps.Map;
@@ -258,13 +257,8 @@ public class MapParser {
 		}
 		reader.close();
 
-		if (gameModes.contains(GameModeNumber.EDURA)) {
-			return new EduraMap(mapName, author, width, height, created,
-					spawnPositions, gameObjects, gameModes, nodes);
-		} else {
-			return new LoadedMap(mapName, author, width, height, created,
-					spawnPositions, gameObjects, gameModes);
-		}
+		return new LoadedMap(mapName, author, width, height, created,
+				spawnPositions, gameObjects, gameModes, nodes);
 	}
 
 	private static Vector2df[] readVertices(String[] objectData, int width,

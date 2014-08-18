@@ -23,7 +23,7 @@ import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.gameobjects.TimedEventHandler;
 import de.illonis.eduras.gameobjects.TimingSource;
 import de.illonis.eduras.logic.EventTriggerer;
-import de.illonis.eduras.maps.EduraMap;
+import de.illonis.eduras.maps.Map;
 import de.illonis.eduras.maps.NodeData;
 import de.illonis.eduras.math.Vector2df;
 import de.illonis.eduras.math.graphs.Vertex;
@@ -110,8 +110,9 @@ public class Edura extends TeamDeathmatch {
 	}
 
 	private void loadNodes() {
+		// TODO: make this a general map thing
 		HashMap<Integer, Base> nodeIdToBase = new HashMap<Integer, Base>();
-		EduraMap eduraMap = (EduraMap) gameInfo.getMap();
+		Map eduraMap = gameInfo.getMap();
 
 		clear();
 

@@ -15,7 +15,6 @@ import de.illonis.edulog.EduLog;
 import de.illonis.eduras.ObjectFactory.ObjectType;
 import de.illonis.eduras.exceptions.NoSuchMapException;
 import de.illonis.eduras.gamemodes.GameMode.GameModeNumber;
-import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.maps.SpawnPosition.SpawnType;
 import de.illonis.eduras.maps.persistence.InvalidDataException;
 import de.illonis.eduras.maps.persistence.MapParser;
@@ -37,15 +36,16 @@ public abstract class Map {
 	public final static SimpleDateFormat DATE_FORMAT = new SimpleDateFormat(
 			"yyyy-MM-dd");
 
-	private final String name;
-	private final String author;
+	private String name;
+	private String author;
 	private Date created;
 	private int width;
 	private int height;
 	protected final LinkedList<InitialObjectData> initialObjects;
 	protected final LinkedList<GameModeNumber> supportedGameModes;
 	protected final LinkedList<SpawnPosition> spawnPositions;
-	private GameObject boundsObject;
+
+	private Collection<NodeData> nodes;
 
 	/**
 	 * Creates a new map with the given name and size.
@@ -69,6 +69,7 @@ public abstract class Map {
 		addBoundsObjects();
 		supportedGameModes = new LinkedList<GameModeNumber>();
 		spawnPositions = new LinkedList<SpawnPosition>();
+		nodes = new LinkedList<NodeData>();
 		buildMap();
 	}
 
@@ -98,8 +99,6 @@ public abstract class Map {
 		boundsData = new InitialObjectData(ObjectType.DYNAMIC_POLYGON_BLOCK, 0,
 				height, horizontalBoundShape);
 		addObject(boundsData);
-
-		boundsObject = null;
 	}
 
 	/**
@@ -258,6 +257,16 @@ public abstract class Map {
 	}
 
 	/**
+	 * Adds a node to the map.
+	 * 
+	 * @param node
+	 *            the new node.
+	 */
+	protected final void addNode(NodeData node) {
+		nodes.add(node);
+	}
+
+	/**
 	 * Adds a new object to the map.
 	 * 
 	 * @param objectData
@@ -293,17 +302,21 @@ public abstract class Map {
 	 * @see #addSpawnArea(double, double, double, double, SpawnType)
 	 * @see #addSupportedGameMode(GameModeNumber)
 	 */
-	protected void loadFromFile(String mapFileName)
+	protected final void loadFromFile(String mapFileName)
 			throws InvalidDataException, IOException {
 		Map map = MapParser.readMap(getClass().getResource(
 				"data/" + mapFileName));
 		initialObjects.clear();
 		initialObjects.addAll(map.getInitialObjects());
+		spawnPositions.clear();
 		spawnPositions.addAll(map.getSpawnAreas());
+		supportedGameModes.clear();
 		supportedGameModes.addAll(map.getSupportedGameModes());
-
+		nodes.addAll(map.getNodes());
 		width = map.getWidth();
 		height = map.getHeight();
+		name = map.getName();
+		author = map.getAuthor();
 	}
 
 	/**
@@ -325,6 +338,15 @@ public abstract class Map {
 	}
 
 	/**
+	 * Returns a list of nodes of this map.
+	 * 
+	 * @return The nodes.
+	 */
+	public final Collection<NodeData> getNodes() {
+		return new LinkedList<NodeData>(nodes);
+	}
+
+	/**
 	 * Lists all gamemodes supported by this map.
 	 * 
 	 * @return a list of supported gamemodes.
@@ -337,24 +359,6 @@ public abstract class Map {
 	 * Initializes and loads all map data.
 	 */
 	protected abstract void buildMap();
-
-	/**
-	 * Returns the bounds object if set already, null otherwise.
-	 * 
-	 * @return boundsobject
-	 */
-	public GameObject getBoundsObject() {
-		return boundsObject;
-	}
-
-	/**
-	 * Sets the bounds object of this map.
-	 * 
-	 * @param boundsObject
-	 */
-	public void setBoundsObject(GameObject boundsObject) {
-		this.boundsObject = boundsObject;
-	}
 
 	/**
 	 * Get the map that has the given name if it exists.
