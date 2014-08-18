@@ -46,7 +46,7 @@ public class MapParser {
 	public final static String FILE_EXTENSION = ".erm";
 	public static final String IDENTIFIER_REGEX = "^[a-zA-Z]+[A-Za-z0-9]*$";
 
-	private enum ReadMode {
+	public enum MapFileSection {
 		NONE, SPAWNPOINTS, OBJECTS, NODES, NODECONNECTIONS;
 	}
 
@@ -74,7 +74,7 @@ public class MapParser {
 		String author = "";
 		int width = 0;
 		int height = 0;
-		ReadMode currentMode = ReadMode.NONE;
+		MapFileSection currentMode = MapFileSection.NONE;
 		Date created = new Date();
 		final LinkedList<GameModeNumber> gameModes = new LinkedList<GameModeNumber>();
 		final LinkedList<SpawnPosition> spawnPositions = new LinkedList<SpawnPosition>();
@@ -157,16 +157,16 @@ public class MapParser {
 				String mode = line.substring(1).trim();
 				switch (mode) {
 				case "spawnpoints":
-					currentMode = ReadMode.SPAWNPOINTS;
+					currentMode = MapFileSection.SPAWNPOINTS;
 					break;
 				case "nodeconnections":
-					currentMode = ReadMode.NODECONNECTIONS;
+					currentMode = MapFileSection.NODECONNECTIONS;
 					break;
 				case "objects":
-					currentMode = ReadMode.OBJECTS;
+					currentMode = MapFileSection.OBJECTS;
 					break;
 				case "nodes":
-					currentMode = ReadMode.NODES;
+					currentMode = MapFileSection.NODES;
 					break;
 				default:
 					throw new InvalidDataException("Invalid control point: "

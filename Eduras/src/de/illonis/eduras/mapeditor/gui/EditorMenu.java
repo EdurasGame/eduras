@@ -18,6 +18,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import de.illonis.eduras.mapeditor.MapData;
 import de.illonis.eduras.mapeditor.MapInteractor;
 import de.illonis.eduras.mapeditor.MapInteractor.InteractType;
+import de.illonis.eduras.mapeditor.MapSaver;
 import de.illonis.eduras.mapeditor.gui.dialog.ControlsInfo;
 import de.illonis.eduras.mapeditor.gui.dialog.MapPropertiesDialog;
 import de.illonis.eduras.mapeditor.gui.dialog.ValidateDialog;
@@ -143,6 +144,27 @@ public class EditorMenu extends JMenuBar implements ActionListener {
 								"Could not load mapfile: " + ex.getMessage());
 						ex.printStackTrace();
 					}
+				}
+			}
+		} else if (item == saveMap) {
+			int result = mapChooser.showDialog(this, "Save");
+			if (result == JFileChooser.APPROVE_OPTION) {
+				File file = mapChooser.getSelectedFile();
+				if (!file.getAbsolutePath().endsWith(MapParser.FILE_EXTENSION))
+					file = new File(file.getAbsolutePath()
+							+ MapParser.FILE_EXTENSION);
+				if (file.exists()) {
+
+				}
+
+				MapSaver saver;
+				try {
+					saver = new MapSaver(file);
+					saver.save();
+				} catch (IOException ex) {
+					JOptionPane.showMessageDialog(this, "Could not save map: "
+							+ ex.getMessage());
+					ex.printStackTrace();
 				}
 			}
 		}
