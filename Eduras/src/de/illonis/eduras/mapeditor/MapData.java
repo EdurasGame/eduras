@@ -46,6 +46,7 @@ public final class MapData {
 	private int width;
 	private int height;
 	private DynamicPolygonObject placingObject;
+	private boolean showNodeConnections;
 
 	private Set<GameModeNumber> supportedGameModes;
 
@@ -66,10 +67,19 @@ public final class MapData {
 		author = "unknown";
 		width = 500;
 		height = 500;
+		showNodeConnections = false;
 	}
 
 	public DynamicPolygonObject getPlacingObject() {
 		return placingObject;
+	}
+
+	public void setShowNodeConnections(boolean showNodeConnections) {
+		this.showNodeConnections = showNodeConnections;
+	}
+
+	public boolean isShowNodeConnections() {
+		return showNodeConnections;
 	}
 
 	public void setPlacingObject(DynamicPolygonObject placingObject) {

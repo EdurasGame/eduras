@@ -8,7 +8,6 @@ import javax.swing.JOptionPane;
 
 import org.newdawn.slick.Input;
 import org.newdawn.slick.geom.Point;
-import org.newdawn.slick.geom.Polygon;
 import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.Vector2f;
 
@@ -50,7 +49,6 @@ public class MapPanelLogic implements MapInteractor {
 	private ObjectType currentSpawnType = ObjectType.NO_OBJECT;
 	private final EditorWindow window;
 	private Input input;
-	private Polygon importedShape;
 
 	MapPanelLogic(EditorWindow window) {
 		this.window = window;
@@ -266,7 +264,7 @@ public class MapPanelLogic implements MapInteractor {
 		Vector2f mapPos = computeGuiPointToGameCoordinate(new Vector2f(guiX,
 				guiY));
 		NodeData node = new NodeData(mapPos.x, mapPos.y, nextId++,
-				new LinkedList<Integer>(), BaseType.NEUTRAL);
+				new LinkedList<NodeData>(), BaseType.NEUTRAL);
 		data.addBase(node);
 	}
 

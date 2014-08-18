@@ -6,6 +6,7 @@ import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.IOException;
 
+import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JFileChooser;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -38,7 +39,7 @@ public class EditorMenu extends JMenuBar implements ActionListener {
 	private final JFileChooser mapChooser;
 
 	private JMenuItem mapProperties, newMap, saveMap, loadMap, shapeCreator,
-			validate, controls;
+			validate, controls, showNodeConnections;
 
 	EditorMenu(MapInteractor interactor) {
 		this.interactor = interactor;
@@ -75,6 +76,17 @@ public class EditorMenu extends JMenuBar implements ActionListener {
 		JMenu edit = new JMenu("Edit");
 		edit.setMnemonic(KeyEvent.VK_E);
 		add(edit);
+
+		JMenu view = new JMenu("View");
+		showNodeConnections = new JCheckBoxMenuItem("Show node connections");
+		showNodeConnections.setMnemonic(KeyEvent.VK_N);
+		showNodeConnections.setAccelerator(KeyStroke.getKeyStroke(
+				KeyEvent.VK_F8, 0));
+		showNodeConnections.addActionListener(this);
+
+		view.add(showNodeConnections);
+		add(view);
+
 		JMenu tools = new JMenu("Tools");
 		tools.setMnemonic(KeyEvent.VK_T);
 		shapeCreator = addItem("ShapeCreator", KeyEvent.VK_S, KeyEvent.VK_E,
@@ -109,6 +121,10 @@ public class EditorMenu extends JMenuBar implements ActionListener {
 		} else if (item == validate) {
 			ValidateDialog dialog = new ValidateDialog();
 			dialog.setVisible(true);
+		} else if (item == showNodeConnections) {
+			JCheckBoxMenuItem checkItem = (JCheckBoxMenuItem) item;
+			MapData.getInstance()
+					.setShowNodeConnections(checkItem.isSelected());
 		} else if (item == loadMap) {
 			int result = mapChooser.showDialog(this, "Load");
 			if (result == JFileChooser.APPROVE_OPTION) {

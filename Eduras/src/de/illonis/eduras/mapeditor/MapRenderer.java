@@ -83,6 +83,18 @@ public class MapRenderer {
 				g.fill(shape);
 			}
 		}
+		if (data.isShowNodeConnections()) {
+			g.setLineWidth(1f);
+			g.setColor(Color.yellow);
+			for (NodeData node : data.getBases()) {
+				for (NodeData linkedNode : node.getAdjacentNodes()) {
+					g.drawLine(node.getX() + node.getWidth() / 2, node.getY()
+							+ node.getHeight() / 2, linkedNode.getX()
+							+ linkedNode.getWidth() / 2, linkedNode.getY()
+							+ linkedNode.getHeight() / 2);
+				}
+			}
+		}
 	}
 
 	private void renderSpawn(SpawnPosition spawn, Graphics g) {
