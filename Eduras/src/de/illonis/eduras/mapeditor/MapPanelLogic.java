@@ -21,6 +21,7 @@ import de.illonis.eduras.gameobjects.DynamicPolygonObject;
 import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.gameobjects.MoveableGameObject.Direction;
 import de.illonis.eduras.gameobjects.NeutralArea;
+import de.illonis.eduras.gameobjects.Portal;
 import de.illonis.eduras.mapeditor.gui.EditorWindow;
 import de.illonis.eduras.mapeditor.gui.dialog.PropertiesDialog;
 import de.illonis.eduras.maps.NodeData;
@@ -223,6 +224,9 @@ public class MapPanelLogic implements MapInteractor {
 				o.setPosition(mapPos.x, mapPos.y);
 				o.setId(nextId++);
 				data.addGameObject(o);
+				if (o instanceof Portal) {
+					o.setRefName("Portal" + o.getId());
+				}
 			} catch (FactoryException | ShapeVerticesNotApplicableException e) {
 				JOptionPane.showMessageDialog(window, "Object "
 						+ currentSpawnType + " not supported");

@@ -1,20 +1,25 @@
 package de.illonis.eduras.mapeditor.gui.dialog;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.util.Hashtable;
+import java.util.LinkedList;
+import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JColorChooser;
+import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
@@ -22,6 +27,7 @@ import javax.swing.JSlider;
 import javax.swing.JSpinner;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
+import javax.swing.ListCellRenderer;
 import javax.swing.SpinnerModel;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.SpringLayout;
@@ -32,6 +38,7 @@ import javax.swing.event.ChangeListener;
 import org.newdawn.slick.Color;
 
 import de.illonis.eduras.ReferencedEntity;
+import de.illonis.eduras.exceptions.ObjectNotFoundException;
 import de.illonis.eduras.gameobjects.Base;
 import de.illonis.eduras.gameobjects.Base.BaseType;
 import de.illonis.eduras.gameobjects.DynamicPolygonObject;
@@ -77,6 +84,7 @@ public class PropertiesDialog extends JDialog implements ItemListener,
 	private JRadioButton spawnTeamA, spawnTeamB, spawnSingle, spawnAny;
 	private JSpinner baseMult;
 	private JTextField refName;
+	private JComboBox<Portal> otherPortals;
 
 	/**
 	 * Creates a properties dialog for a node.
@@ -90,7 +98,8 @@ public class PropertiesDialog extends JDialog implements ItemListener,
 		this(parent);
 		this.node = node;
 		this.entity = node;
-		setTitle("Properties of Base #" + node.getId());
+		setTitle("Properties of Base #" + node.getId() + " ["
+				+ entity.getRefName() + "]");
 		addPositionTab();
 		addNeutralBaseTab();
 	}
@@ -107,7 +116,7 @@ public class PropertiesDialog extends JDialog implements ItemListener,
 		this(window);
 		this.spawn = spawn;
 		this.entity = spawn;
-		setTitle("Properties of Spawnarea");
+		setTitle("Properties of Spawnarea " + " [" + entity.getRefName() + "]");
 		addPositionTab();
 		addSpawnTab();
 	}
@@ -124,7 +133,8 @@ public class PropertiesDialog extends JDialog implements ItemListener,
 		this(parent);
 		this.object = object;
 		this.entity = object;
-		setTitle("Properties of " + object.getType() + " #" + object.getId());
+		setTitle("Properties of " + object.getType() + " #" + object.getId()
+				+ " [" + entity.getRefName() + "]");
 
 		addPropertiesTab();
 		addPositionTab();
@@ -224,8 +234,59 @@ public class PropertiesDialog extends JDialog implements ItemListener,
 		if (partner != null) {
 			partnerName = partner.getRefName();
 		}
-		JLabel otherRef = new JLabel("linked portal: " + partnerName);
+
+		List<Portal> portals = new LinkedList<Portal>();
+		for (GameObject o : MapData.getInstance().getGameObjects()) {
+			if (o instanceof Portal) {
+				if (portal.equals(o))
+					continue;
+				portals.add((Portal) o);
+			}
+		}
+		otherPortals = new JComboBox<Portal>(portals.toArray(new Portal[] {}));
+		otherPortals.setRenderer(new PortalListRenderer());
+		try {
+			otherPortals.setSelectedItem(MapData.getInstance().findByRef(
+					partnerName));
+		} catch (ObjectNotFoundException e) {
+			otherPortals.setSelectedIndex(-1);
+		}
+		otherPortals.addActionListener(this);
+		JPanel portPanel = new JPanel();
+		JLabel otherRef = new JLabel("Target portal: ");
 		portalPanel.add(otherRef);
+		portPanel.add(otherPortals);
+		portalPanel.add(portPanel);
+	}
+
+	private class PortalListRenderer extends JLabel implements
+			ListCellRenderer<Portal> {
+		private static final long serialVersionUID = 1L;
+
+		public PortalListRenderer() {
+			setOpaque(true);
+			setHorizontalAlignment(CENTER);
+			setVerticalAlignment(CENTER);
+		}
+
+		@Override
+		public Component getListCellRendererComponent(
+				JList<? extends Portal> list, Portal value, int index,
+				boolean isSelected, boolean cellHasFocus) {
+
+			if (isSelected) {
+				setForeground(java.awt.Color.white);
+				setBackground(java.awt.Color.blue);
+			} else {
+				setForeground(otherPortals.getForeground());
+				setBackground(otherPortals.getBackground());
+			}
+			if (value == null)
+				setText("");
+			else
+				setText(value.getRefName());
+			return this;
+		}
 	}
 
 	private int getItemX() {
@@ -404,6 +465,11 @@ public class PropertiesDialog extends JDialog implements ItemListener,
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
+		if (e.getSource() instanceof JComboBox) {
+			Portal portal = (Portal) otherPortals.getSelectedItem();
+			((Portal) object).setPartnerPortal(portal);
+			return;
+		}
 		if (e.getSource() instanceof JButton) {
 			if (refName.getText().matches(MapParser.IDENTIFIER_REGEX))
 				entity.setRefName(refName.getText());
