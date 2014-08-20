@@ -4,7 +4,8 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.LinkedList;
 
-import de.illonis.eduras.math.Vector2df;
+import org.newdawn.slick.geom.Vector2f;
+
 import de.illonis.eduras.shapecreator.EditablePolygon;
 import de.illonis.eduras.shapecreator.FileCorruptException;
 import de.illonis.eduras.shapecreator.ShapeFiler;
@@ -38,15 +39,15 @@ public class ShapeParser {
 	 * @throws IOException
 	 *             if an I/O error occurs while reading the file.
 	 */
-	public static Vector2df[] readShape(URL inputFile)
+	public static Vector2f[] readShape(URL inputFile)
 			throws FileCorruptException, IOException {
 
 		EditablePolygon poly = ShapeFiler.loadShape(inputFile);
 
-		LinkedList<Vector2df> vertices = new LinkedList<Vector2df>();
-		for (Vector2df vertice : poly.getVector2dfs()) {
-			vertices.add(new Vector2df(vertice.getX(), vertice.getY()));
+		LinkedList<Vector2f> vertices = new LinkedList<Vector2f>();
+		for (Vector2f vertice : poly.getVector2dfs()) {
+			vertices.add(new Vector2f(vertice.getX(), vertice.getY()));
 		}
-		return vertices.toArray(new Vector2df[] {});
+		return vertices.toArray(new Vector2f[] {});
 	}
 }

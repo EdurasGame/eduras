@@ -12,7 +12,8 @@ import java.util.Collection;
 
 import javax.swing.JPanel;
 
-import de.illonis.eduras.math.Vector2df;
+import org.newdawn.slick.geom.Vector2f;
+
 import de.illonis.eduras.shapecreator.DataHolder;
 
 /**
@@ -65,12 +66,12 @@ public class PreviewPanel extends JPanel {
 					(getWidth() - data.getBackgroundImage().getWidth(null)) / 2,
 					(getHeight() - data.getBackgroundImage().getHeight(null)) / 2,
 					null);
-		Collection<Vector2df> vertices = data.getPolygon().getVector2dfs();
+		Collection<Vector2f> vertices = data.getPolygon().getVector2dfs();
 		boolean first = true;
-		Vector2df firstVector2df = null;
-		Vector2df last = null;
+		Vector2f firstVector2df = null;
+		Vector2f last = null;
 		GuiPoint p = null;
-		for (Vector2df vertice : vertices) {
+		for (Vector2f vertice : vertices) {
 
 			p = coordinateSystem.coordinateToGui(vertice);
 

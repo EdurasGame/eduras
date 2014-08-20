@@ -6,6 +6,7 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
 
 import de.illonis.eduras.gameclient.datacache.GraphicsPreLoader;
+import de.illonis.eduras.mapeditor.MapInteractor.InteractType;
 import de.illonis.eduras.mapeditor.gui.EditorWindow;
 
 /**
@@ -19,12 +20,14 @@ public class EditorGame extends BasicGame {
 	private final MapRenderer renderer;
 	private final MapPanelLogic panelLogic;
 	private final MapInputHandler inputHandler;
+	private final ShapeEditInputHandler shapeInputHandler;
 
 	EditorGame(EditorWindow window) {
 		super("Eduras? Map Editor");
 		panelLogic = new MapPanelLogic(window);
 		renderer = new MapRenderer(panelLogic);
 		inputHandler = new MapInputHandler(panelLogic, window);
+		shapeInputHandler = new ShapeEditInputHandler(panelLogic, window);
 	}
 
 	@Override
@@ -57,27 +60,42 @@ public class EditorGame extends BasicGame {
 
 	@Override
 	public void mouseDragged(int oldx, int oldy, int newx, int newy) {
-		inputHandler.mouseDragged(oldx, oldy, newx, newy);
+		if (panelLogic.getInteractType() == InteractType.EDIT_SHAPE) {
+			shapeInputHandler.mouseDragged(oldx, oldy, newx, newy);
+		} else
+			inputHandler.mouseDragged(oldx, oldy, newx, newy);
 	}
 
 	@Override
 	public void mouseClicked(int button, int x, int y, int clickCount) {
-		inputHandler.mouseClicked(button, x, y, clickCount);
+		if (panelLogic.getInteractType() == InteractType.EDIT_SHAPE) {
+			shapeInputHandler.mouseClicked(button, x, y, clickCount);
+		} else
+			inputHandler.mouseClicked(button, x, y, clickCount);
 	}
 
 	@Override
 	public void mouseMoved(int oldx, int oldy, int newx, int newy) {
-		inputHandler.mouseMoved(oldx, oldy, newx, newy);
+		if (panelLogic.getInteractType() == InteractType.EDIT_SHAPE) {
+			shapeInputHandler.mouseMoved(oldx, oldy, newx, newy);
+		} else
+			inputHandler.mouseMoved(oldx, oldy, newx, newy);
 	}
 
 	@Override
 	public void mousePressed(int button, int x, int y) {
-		inputHandler.mousePressed(button, x, y);
+		if (panelLogic.getInteractType() == InteractType.EDIT_SHAPE) {
+			shapeInputHandler.mousePressed(button, x, y);
+		} else
+			inputHandler.mousePressed(button, x, y);
 	}
 
 	@Override
 	public void mouseReleased(int button, int x, int y) {
-		inputHandler.mouseReleased(button, x, y);
+		if (panelLogic.getInteractType() == InteractType.EDIT_SHAPE) {
+			shapeInputHandler.mouseReleased(button, x, y);
+		} else
+			inputHandler.mouseReleased(button, x, y);
 	}
 
 	@Override
@@ -87,12 +105,18 @@ public class EditorGame extends BasicGame {
 
 	@Override
 	public void keyPressed(int key, char c) {
-		inputHandler.keyPressed(key, c);
+		if (panelLogic.getInteractType() == InteractType.EDIT_SHAPE) {
+			shapeInputHandler.keyPressed(key, c);
+		} else
+			inputHandler.keyPressed(key, c);
 	}
 
 	@Override
 	public void keyReleased(int key, char c) {
-		inputHandler.keyReleased(key, c);
+		if (panelLogic.getInteractType() == InteractType.EDIT_SHAPE) {
+			shapeInputHandler.keyReleased(key, c);
+		} else
+			inputHandler.keyReleased(key, c);
 	}
 
 	/**

@@ -119,14 +119,61 @@ public class MapRenderer {
 	}
 
 	private void renderObject(GameObject o, Graphics g) {
+		g.setLineWidth(1f);
 		final float x = o.getXPosition();
 		final float y = o.getYPosition();
+		if (interactor.getInteractType() == InteractType.EDIT_SHAPE) {
+			if (o.equals(data.getEditObject())) {
+				drawEditShape(g);
+				return;
+			}
+		}
 		try {
 			Image image = ImageCache.getObjectImage(o.getType());
 			g.drawImage(image, x, y);
 		} catch (CacheException e) {
 			renderShape(o, g);
 		}
+	}
+
+	private void drawEditShape(Graphics g) {
+		boolean first = true;
+		Vector2f firstVector = null;
+		Vector2f last = null;
+		g.setColor(Color.white);
+		g.setLineWidth(1.5f);
+		for (Vector2f v : data.getEditShape().getVector2dfs()) {
+			g.setColor(Color.white);
+			g.fillRect(v.x - 2, v.y - 2, 4, 4);
+			if (first) {
+				firstVector = v;
+				first = false;
+			} else {
+				if (isRemovingLine(last, v))
+					g.setColor(Color.gray);
+				g.drawLine(last.x, last.y, v.x, v.y);
+			}
+			last = v;
+		}
+		if (data.getEditShape().getVector2dfs().size() > 1) {
+			// connect last point with first one
+			g.drawLine(last.x, last.y, firstVector.x, firstVector.y);
+		}
+		if (data.getTempLineB() != null) {
+			g.setColor(Color.green);
+			g.draw(data.getTempLineA());
+			g.draw(data.getTempLineB());
+		}
+	}
+
+	private boolean isRemovingLine(Vector2f last, Vector2f v) {
+		if (data.getTempLineB() == null)
+			return false;
+		return (data.getRemovedLine().getStart().equals(last) && data
+				.getRemovedLine().getEnd().equals(v))
+				|| (data.getRemovedLine().getStart().equals(v) && data
+						.getRemovedLine().getEnd().equals(last));
+
 	}
 
 	private void renderShape(GameObject o, Graphics g) {

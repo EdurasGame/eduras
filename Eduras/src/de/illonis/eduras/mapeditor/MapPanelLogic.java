@@ -27,7 +27,7 @@ import de.illonis.eduras.mapeditor.gui.dialog.PropertiesDialog;
 import de.illonis.eduras.maps.NodeData;
 import de.illonis.eduras.maps.SpawnPosition;
 import de.illonis.eduras.maps.SpawnPosition.SpawnType;
-import de.illonis.eduras.math.Vector2df;
+import de.illonis.eduras.shapecreator.EditablePolygon;
 import de.illonis.eduras.shapecreator.FileCorruptException;
 import de.illonis.eduras.shapes.data.ShapeParser;
 
@@ -59,6 +59,12 @@ public class MapPanelLogic implements MapInteractor {
 		scrollVector = new Vector2f();
 	}
 
+	/**
+	 * Sets input to provide mouse location.
+	 * 
+	 * @param input
+	 *            the input.
+	 */
 	public void setInput(Input input) {
 		this.input = input;
 	}
@@ -339,15 +345,24 @@ public class MapPanelLogic implements MapInteractor {
 		int x = input.getMouseX();
 		int y = input.getMouseY();
 		GameObject o = getObjectAt(x, y);
+		if (o == null)
+			return;
 		if (o.getType() == ObjectType.DYNAMIC_POLYGON_BLOCK) {
-
+			EditablePolygon poly = new EditablePolygon();
+			for (int i = 0; i < o.getShape().getPointCount(); i++) {
+				Vector2f point = new Vector2f(o.getShape().getPoint(i));
+				poly.addVector2df(point);
+			}
+			data.setEditShape(poly);
+			data.setEditObject((DynamicPolygonObject) o);
+			setInteractType(InteractType.EDIT_SHAPE);
 		}
 	}
 
 	@Override
 	public void importShape(File file) {
 		try {
-			Vector2df[] verts = ShapeParser.readShape(file.toURI().toURL());
+			Vector2f[] verts = ShapeParser.readShape(file.toURI().toURL());
 			GameObject o;
 			try {
 				o = ObjectCreator.createObject(

@@ -8,6 +8,8 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.URL;
 
+import org.newdawn.slick.geom.Vector2f;
+
 import de.illonis.eduras.math.Vector2df;
 
 /**
@@ -82,7 +84,7 @@ public class ShapeFiler {
 		BufferedWriter writer = new BufferedWriter(new PrintWriter(outputFile,
 				ENCODING));
 
-		for (Vector2df v : shape.getVector2dfs()) {
+		for (Vector2f v : shape.getVector2dfs()) {
 			writer.write(v.getX() + "," + v.getY());
 			writer.newLine();
 		}

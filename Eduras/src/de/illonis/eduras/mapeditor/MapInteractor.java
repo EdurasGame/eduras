@@ -26,7 +26,7 @@ public interface MapInteractor {
 	 */
 	@SuppressWarnings("javadoc")
 	public enum InteractType {
-		PLACE_BASE, PLACE_SPAWN, PLACE_OBJECT, DEFAULT, PLACE_SHAPE;
+		PLACE_BASE, PLACE_SPAWN, PLACE_OBJECT, DEFAULT, PLACE_SHAPE, EDIT_SHAPE;
 	}
 
 	void setInteractType(InteractType type);

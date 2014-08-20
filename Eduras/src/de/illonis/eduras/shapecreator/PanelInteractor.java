@@ -8,6 +8,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
 
 import org.newdawn.slick.geom.Line;
+import org.newdawn.slick.geom.Vector2f;
 
 import de.illonis.eduras.math.Vector2df;
 import de.illonis.eduras.shapecreator.gui.DrawPanel;
@@ -25,13 +26,13 @@ public class PanelInteractor extends MouseAdapter implements PanelModifier {
 	private static final Cursor CURSOR_ZOOM = new Cursor(
 			Cursor.NE_RESIZE_CURSOR);
 	private Point clickPoint;
-	private Vector2df hoverVector2df;
+	private Vector2f hoverVector2df;
 	private final DataHolder data;
 	private final DrawPanel panel;
 	private InteractMode mode = InteractMode.DRAG_EDGE;
 	private InteractMode lastMode = InteractMode.NONE;
 	private boolean addBefore = false;
-	private Vector2df nearest;
+	private Vector2f nearest;
 
 	/**
 	 * Describes the mode that is used to interact with the panel.
@@ -60,11 +61,11 @@ public class PanelInteractor extends MouseAdapter implements PanelModifier {
 	public void mouseMoved(MouseEvent e) {
 		Point p = e.getPoint();
 		GuiPoint guiPoint = new GuiPoint(p.x, p.y);
-		Vector2df searchPoint = panel.getCoordinateSystem().guiToCoordinate(
+		Vector2f searchPoint = panel.getCoordinateSystem().guiToCoordinate(
 				guiPoint);
-		Vector2df v = new Vector2df(searchPoint.getX(), searchPoint.getY());
+		Vector2f v = new Vector2df(searchPoint.getX(), searchPoint.getY());
 		try {
-			Vector2df vert = data.getPolygon().findNearestVector2df(v);
+			Vector2f vert = data.getPolygon().findNearestVector2df(v);
 			GuiPoint result = panel.getCoordinateSystem().coordinateToGui(vert);
 			nearest = vert;
 			if (result.distance(guiPoint) < 10) {
@@ -74,8 +75,8 @@ public class PanelInteractor extends MouseAdapter implements PanelModifier {
 			} else {
 				verticeLeft();
 				if (mode == InteractMode.ADD_VERT) {
-					Vector2df before = data.getPolygon().findBefore(vert);
-					Vector2df after = data.getPolygon().findAfter(vert);
+					Vector2f before = data.getPolygon().findBefore(vert);
+					Vector2f after = data.getPolygon().findAfter(vert);
 					float afterDistance = after.distance(searchPoint);
 					float beforeDistance = before.distance(searchPoint);
 					data.setTempLineA(new Line(searchPoint, vert));
@@ -227,15 +228,15 @@ public class PanelInteractor extends MouseAdapter implements PanelModifier {
 			GuiPoint guiPoint = new GuiPoint(p.x, p.y);
 			GuiPoint formerPoint = new GuiPoint(clickPoint.x, clickPoint.y);
 
-			Vector2df oldPoint = panel.getCoordinateSystem().guiToCoordinate(
+			Vector2f oldPoint = panel.getCoordinateSystem().guiToCoordinate(
 					formerPoint);
 
-			Vector2df newPoint = panel.getCoordinateSystem().guiToCoordinate(
+			Vector2f newPoint = panel.getCoordinateSystem().guiToCoordinate(
 					guiPoint);
 			float dx = newPoint.getX() - oldPoint.getX();
 			float dy = newPoint.getY() - oldPoint.getY();
-			Vector2df diffVector = new Vector2df(dx, dy);
-			for (Vector2df v : getShape().getVector2dfs()) {
+			Vector2f diffVector = new Vector2df(dx, dy);
+			for (Vector2f v : getShape().getVector2dfs()) {
 				v.add(diffVector);
 			}
 			data.notifyVector2dfsChanged();
@@ -254,7 +255,7 @@ public class PanelInteractor extends MouseAdapter implements PanelModifier {
 				multipler = 0.9f;
 			} else
 				multipler = 1.1f;
-			for (Vector2df v : getShape().getVector2dfs()) {
+			for (Vector2f v : getShape().getVector2dfs()) {
 				v.scale(multipler);
 			}
 			data.notifyVector2dfsChanged();

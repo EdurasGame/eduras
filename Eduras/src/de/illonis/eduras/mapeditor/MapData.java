@@ -5,6 +5,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
+import org.newdawn.slick.geom.Line;
+
 import de.illonis.eduras.FactoryException;
 import de.illonis.eduras.ObjectCreator;
 import de.illonis.eduras.ObjectFactory.ObjectType;
@@ -18,6 +20,7 @@ import de.illonis.eduras.maps.InitialObjectData;
 import de.illonis.eduras.maps.Map;
 import de.illonis.eduras.maps.NodeData;
 import de.illonis.eduras.maps.SpawnPosition;
+import de.illonis.eduras.shapecreator.EditablePolygon;
 
 /**
  * Holds all information about the currently edited map.
@@ -49,12 +52,17 @@ public final class MapData {
 	private int height;
 	private DynamicPolygonObject placingObject;
 	private boolean showNodeConnections;
+	private EditablePolygon editShape;
 
 	private Set<GameModeNumber> supportedGameModes;
 
 	private List<GameObject> gameObjects;
 	private List<NodeData> bases;
 	private List<SpawnPosition> spawnPoints;
+	private Line tempLineA;
+	private Line tempLineB;
+	private Line removedLine;
+	private DynamicPolygonObject editObject;
 
 	/**
 	 * Resets data to provide an empty default map.
@@ -70,6 +78,15 @@ public final class MapData {
 		width = 500;
 		height = 500;
 		showNodeConnections = false;
+		editShape = null;
+	}
+
+	public EditablePolygon getEditShape() {
+		return editShape;
+	}
+
+	public void setEditShape(EditablePolygon editShape) {
+		this.editShape = editShape;
 	}
 
 	public DynamicPolygonObject getPlacingObject() {
@@ -236,4 +253,40 @@ public final class MapData {
 		throw new ObjectNotFoundException(-1);
 	}
 
+	public void clearTempLines() {
+		tempLineA = null;
+		tempLineB = null;
+	}
+
+	public Line getTempLineA() {
+		return tempLineA;
+	}
+
+	public Line getTempLineB() {
+		return tempLineB;
+	}
+
+	public void setTempLineA(Line line) {
+		tempLineB = line;
+	}
+
+	public void setTempLineB(Line l) {
+		tempLineA = l;
+	}
+
+	public void setEditObject(DynamicPolygonObject o) {
+		this.editObject = o;
+	}
+
+	public Line getRemovedLine() {
+		return removedLine;
+	}
+
+	public void setRemovedLine(Line removedLine) {
+		this.removedLine = removedLine;
+	}
+
+	public DynamicPolygonObject getEditObject() {
+		return editObject;
+	}
 }

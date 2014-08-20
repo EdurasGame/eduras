@@ -4,8 +4,8 @@ import java.awt.Color;
 import java.awt.Image;
 
 import org.newdawn.slick.geom.Line;
+import org.newdawn.slick.geom.Vector2f;
 
-import de.illonis.eduras.math.Vector2df;
 import de.illonis.eduras.shapecreator.gui.DrawPanel;
 import de.illonis.eduras.shapecreator.gui.RecordTableModel;
 
@@ -283,7 +283,7 @@ public class DataHolder {
 	 * @param selectedVector2df
 	 *            the selected vertice.
 	 */
-	public void verticeSelectedOnGui(Vector2df selectedVector2df) {
+	public void verticeSelectedOnGui(Vector2f selectedVector2df) {
 		tableModel.selectVector2df(selectedVector2df);
 	}
 
@@ -293,7 +293,7 @@ public class DataHolder {
 	 * @param selectedVector2df
 	 *            the selected vertice.
 	 */
-	public void verticeSelectedOnTable(Vector2df selectedVector2df) {
+	public void verticeSelectedOnTable(Vector2f selectedVector2df) {
 		drawPanel.onVector2dfSelected(selectedVector2df);
 	}
 }

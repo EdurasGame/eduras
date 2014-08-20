@@ -7,8 +7,9 @@ import javax.swing.Icon;
 import javax.swing.JTable;
 import javax.swing.table.AbstractTableModel;
 
+import org.newdawn.slick.geom.Vector2f;
+
 import de.illonis.eduras.images.ImageFiler;
-import de.illonis.eduras.math.Vector2df;
 import de.illonis.eduras.shapecreator.DataHolder;
 
 /**
@@ -37,7 +38,7 @@ public class RecordTableModel extends AbstractTableModel {
 	public void fireTableDataChanged() {
 		lstRecords.clear();
 		DataHolder data = DataHolder.getInstance();
-		for (Vector2df v : data.getPolygon().getVector2dfs()) {
+		for (Vector2f v : data.getPolygon().getVector2dfs()) {
 			lstRecords.add(new TableRecord(v));
 		}
 		super.fireTableDataChanged();
@@ -136,7 +137,7 @@ public class RecordTableModel extends AbstractTableModel {
 	 *            the row index.
 	 * @return the vertice that is represented by given row.
 	 */
-	public Vector2df getVector2df(int row) {
+	public Vector2f getVector2df(int row) {
 		return lstRecords.get(row).getVector2df();
 	}
 
@@ -174,7 +175,7 @@ public class RecordTableModel extends AbstractTableModel {
 	 * @param selectedVector2df
 	 *            the vertice of row that should selected.
 	 */
-	public void selectVector2df(Vector2df selectedVector2df) {
+	public void selectVector2df(Vector2f selectedVector2df) {
 		for (int i = 0; i < lstRecords.size(); i++) {
 			TableRecord record = lstRecords.get(i);
 			if (record.getVector2df().equals(selectedVector2df))

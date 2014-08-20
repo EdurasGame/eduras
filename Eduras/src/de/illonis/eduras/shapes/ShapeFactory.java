@@ -12,7 +12,6 @@ import de.illonis.edulog.EduLog;
 import de.illonis.eduras.gameclient.datacache.CacheException;
 import de.illonis.eduras.gameclient.datacache.CacheInfo;
 import de.illonis.eduras.gameclient.datacache.ImageCache;
-import de.illonis.eduras.math.Vector2df;
 import de.illonis.eduras.shapecreator.FileCorruptException;
 import de.illonis.eduras.shapes.data.ShapeParser;
 
@@ -44,7 +43,7 @@ public final class ShapeFactory {
 					+ " from cache, loading directly", e);
 			String shapeFile = CacheInfo.getShapeFileName(shapeType);
 			try {
-				Vector2df[] verts = ShapeParser.readShape(ShapeParser.class
+				Vector2f[] verts = ShapeParser.readShape(ShapeParser.class
 						.getResource(shapeFile));
 				return verts;
 			} catch (FileCorruptException | IOException e1) {
