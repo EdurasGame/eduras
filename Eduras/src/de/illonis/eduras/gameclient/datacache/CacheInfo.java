@@ -74,6 +74,8 @@ public final class CacheInfo {
 				"LinLibertine_R.ttf", 12));
 		fonts.put(FontKey.TOOLTIP_FONT, new Pair<String, Integer>(
 				"LinLibertine_R.ttf", 14));
+		fonts.put(FontKey.NAMEPLATE, new Pair<String, Integer>(
+				"LinLibertine_R.ttf", 10));
 		shapes = new HashMap<ShapeType, String>();
 		shapes.put(ShapeType.BIRD, "bird.esh");
 		shapes.put(ShapeType.ROCKET, "rocket.esh");

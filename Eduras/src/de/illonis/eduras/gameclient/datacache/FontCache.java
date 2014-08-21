@@ -22,7 +22,7 @@ public class FontCache {
 	 */
 	@SuppressWarnings("javadoc")
 	public enum FontKey {
-		TOOLTIP_FONT, DEFAULT_FONT, BIG_FONT, SMALL_FONT, HUGE_FONT, CHAT_FONT;
+		TOOLTIP_FONT, DEFAULT_FONT, BIG_FONT, SMALL_FONT, HUGE_FONT, CHAT_FONT, NAMEPLATE;
 	}
 
 	private final static HashMap<FontKey, TrueTypeFont> fontData = new HashMap<FontKey, TrueTypeFont>();

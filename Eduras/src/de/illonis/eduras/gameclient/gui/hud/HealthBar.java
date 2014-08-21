@@ -58,8 +58,9 @@ public class HealthBar {
 		g.fillRect(instance.x, instance.y, instance.w, instance.h);
 		if (unit instanceof PlayerMainFigure) {
 			PlayerMainFigure player = (PlayerMainFigure) unit;
-			g.drawString(player.getPlayer().getName(), instance.x, instance.y
-					- HEALTHBAR_HEIGHT - UNIT_GAP - NAME_GAP);
+			g.getFont().drawString(instance.x,
+					instance.y - HEALTHBAR_HEIGHT - UNIT_GAP - NAME_GAP,
+					player.getPlayer().getName(), Color.yellow);
 		}
 	}
 }
