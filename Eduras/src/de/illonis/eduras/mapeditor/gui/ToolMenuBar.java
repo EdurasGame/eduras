@@ -15,9 +15,15 @@ import javax.swing.JPanel;
 import javax.swing.JToggleButton;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
+import org.newdawn.slick.geom.Vector2f;
+
+import de.illonis.eduras.ObjectFactory.ObjectType;
+import de.illonis.eduras.gameobjects.DynamicPolygonObject;
+import de.illonis.eduras.mapeditor.MapData;
 import de.illonis.eduras.mapeditor.MapInteractor;
 import de.illonis.eduras.mapeditor.MapInteractor.InteractType;
 import de.illonis.eduras.shapecreator.ShapeFiler;
+import de.illonis.eduras.shapecreator.templates.RectangleTemplate;
 
 /**
  * Toolbar with buttons for special actions.
@@ -30,7 +36,7 @@ public class ToolMenuBar extends JPanel implements ActionListener {
 	private static final long serialVersionUID = 1L;
 	private final MapInteractor interactor;
 	private JToggleButton addBaseButton, addSpawnButton;
-	private JButton importShapeButton;
+	private JButton importShapeButton, addShapeButton;
 	private ObjectPlacingSelectionPanel listing;
 	private final JFileChooser fileChooser;
 
@@ -53,12 +59,15 @@ public class ToolMenuBar extends JPanel implements ActionListener {
 		addBaseButton.addActionListener(this);
 		addSpawnButton = new JToggleButton("Add spawnarea");
 		addSpawnButton.addActionListener(this);
+		addShapeButton = new JButton("Add DynamicPolygon");
+		addShapeButton.addActionListener(this);
 		importShapeButton = new JButton("Import shape");
 		importShapeButton.addActionListener(this);
 		buttons.add(addBaseButton);
 		buttons.add(addSpawnButton);
 		add(addBaseButton);
 		add(addSpawnButton);
+		add(addShapeButton);
 		add(importShapeButton);
 	}
 
@@ -72,7 +81,20 @@ public class ToolMenuBar extends JPanel implements ActionListener {
 				return;
 			}
 		}
-		if (button == addBaseButton) {
+		if (button == addShapeButton) {
+			deselectAll();
+			List<Vector2f> vertices = new RectangleTemplate()
+					.getDefaultVector2dfs();
+			Vector2f[] verts = new Vector2f[vertices.size()];
+			for (int i = 0; i < verts.length; i++) {
+				verts[i] = vertices.get(i);
+			}
+
+			MapData.getInstance().setPlacingObject(
+					new DynamicPolygonObject(ObjectType.DYNAMIC_POLYGON_BLOCK,
+							null, null, -1, verts));
+			interactor.setInteractType(InteractType.PLACE_SHAPE);
+		} else if (button == addBaseButton) {
 			deselectOthers(addBaseButton);
 			interactor.setInteractType(InteractType.PLACE_BASE);
 		} else if (button == addSpawnButton) {

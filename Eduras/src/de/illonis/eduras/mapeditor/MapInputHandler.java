@@ -105,7 +105,7 @@ public class MapInputHandler extends InputAdapter {
 	private void updateCoordinateStatus(int newx, int newy) {
 		Vector2f mapCoord = interactor
 				.computeGuiPointToGameCoordinate(new Vector2f(newx, newy));
-		status.setStatus(mapCoord.x + ", " + mapCoord.y);
+		status.setCoordinate(mapCoord.x, mapCoord.y);
 	}
 
 	@Override

@@ -12,6 +12,7 @@ import org.newdawn.slick.CanvasGameContainer;
 import org.newdawn.slick.SlickException;
 
 import de.illonis.eduras.mapeditor.EditorGame;
+import de.illonis.eduras.mapeditor.MapData;
 import de.illonis.eduras.mapeditor.StatusListener;
 
 /**
@@ -44,20 +45,21 @@ public class EditorWindow extends JFrame implements StatusListener {
 
 	private class FrameListener extends WindowAdapter {
 
-		public void tryExit() {
-			int result = JOptionPane
-					.showConfirmDialog(
-							EditorWindow.this,
-							"Do you really want to exit?\nUnsaved changes will be lost.",
-							"Exiting", JOptionPane.YES_NO_OPTION);
-			if (result == JOptionPane.YES_OPTION) {
-				System.exit(0);
-			}
-		}
-
 		@Override
 		public void windowClosing(WindowEvent e) {
 			tryExit();
+		}
+	}
+
+	/**
+	 * Shows a confirm dialog to exit mapeditor.
+	 */
+	public void tryExit() {
+		int result = JOptionPane.showConfirmDialog(this,
+				"Do you really want to exit?\nUnsaved changes will be lost.",
+				"Exiting", JOptionPane.YES_NO_OPTION);
+		if (result == JOptionPane.YES_OPTION) {
+			System.exit(0);
 		}
 	}
 
@@ -81,7 +83,7 @@ public class EditorWindow extends JFrame implements StatusListener {
 		gameContainer = new CanvasGameContainer(game);
 		gameContainer.setSize(800, 600);
 		content.add(gameContainer, BorderLayout.CENTER);
-		setJMenuBar(new EditorMenu(game.getPanelLogic()));
+		setJMenuBar(new EditorMenu(game.getPanelLogic(), this));
 		content.add(quickMenu, BorderLayout.NORTH);
 		statusBar = new StatusBar();
 		content.add(statusBar, BorderLayout.SOUTH);
@@ -100,5 +102,15 @@ public class EditorWindow extends JFrame implements StatusListener {
 	@Override
 	public void setStatus(String text) {
 		statusBar.setStatus(text);
+	}
+
+	@Override
+	public void setCoordinate(float x, float y) {
+		statusBar.setCoordinate(x, y);
+	}
+
+	public void refreshTitle() {
+		setTitle(MapData.getInstance().getMapName() + BASE_TITLE);
+
 	}
 }

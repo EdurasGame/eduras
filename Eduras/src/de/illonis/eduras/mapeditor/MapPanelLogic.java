@@ -305,6 +305,7 @@ public class MapPanelLogic implements MapInteractor {
 	@Override
 	public void placeShapeAt(int guiX, int guiY) {
 		DynamicPolygonObject shape = data.getPlacingObject();
+		shape.setId(nextId++);
 		data.addGameObject(shape);
 		Vector2f mapPos = computeGuiPointToGameCoordinate(new Vector2f(guiX,
 				guiY));
@@ -367,7 +368,6 @@ public class MapPanelLogic implements MapInteractor {
 			try {
 				o = ObjectCreator.createObject(
 						ObjectType.DYNAMIC_POLYGON_BLOCK, null, null);
-				o.setId(nextId++);
 				DynamicPolygonObject poly = (DynamicPolygonObject) o;
 				poly.setPolygonVertices(verts);
 				data.setPlacingObject(poly);

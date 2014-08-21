@@ -27,7 +27,7 @@ public class EditorGame extends BasicGame {
 		panelLogic = new MapPanelLogic(window);
 		renderer = new MapRenderer(panelLogic);
 		inputHandler = new MapInputHandler(panelLogic, window);
-		shapeInputHandler = new ShapeEditInputHandler(panelLogic, window);
+		shapeInputHandler = new ShapeEditInputHandler(panelLogic);
 	}
 
 	@Override

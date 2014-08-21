@@ -15,4 +15,14 @@ public interface StatusListener {
 	 *            new text.
 	 */
 	void setStatus(String text);
+
+	/**
+	 * Sets statustext to coordinate display.
+	 * 
+	 * @param x
+	 *            x-coordinate.
+	 * @param y
+	 *            y-coordinate.
+	 */
+	void setCoordinate(float x, float y);
 }

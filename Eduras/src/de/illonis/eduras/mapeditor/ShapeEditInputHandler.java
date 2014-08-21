@@ -10,7 +10,6 @@ import org.newdawn.slick.util.InputAdapter;
 
 import de.illonis.eduras.gameobjects.MoveableGameObject.Direction;
 import de.illonis.eduras.mapeditor.MapInteractor.InteractType;
-import de.illonis.eduras.mapeditor.gui.EditorWindow;
 import de.illonis.eduras.math.Vector2df;
 import de.illonis.eduras.shapecreator.NoVerticeFoundException;
 
@@ -23,7 +22,6 @@ import de.illonis.eduras.shapecreator.NoVerticeFoundException;
 public class ShapeEditInputHandler extends InputAdapter {
 
 	private final MapInteractor interactor;
-	private final EditorWindow window;
 	private final MapData data;
 	private boolean dragging;
 
@@ -32,9 +30,8 @@ public class ShapeEditInputHandler extends InputAdapter {
 
 	private Vector2f hover;
 
-	public ShapeEditInputHandler(MapInteractor panelLogic, EditorWindow window) {
+	ShapeEditInputHandler(MapInteractor panelLogic) {
 		this.interactor = panelLogic;
-		this.window = window;
 		dragging = false;
 		data = MapData.getInstance();
 	}

@@ -30,4 +30,9 @@ public class StatusBar extends JPanel implements StatusListener {
 	public void setStatus(String text) {
 		label.setText(text);
 	}
+
+	@Override
+	public void setCoordinate(float x, float y) {
+		label.setText(String.format("Mouse at %.0f, %.0f", x, y));
+	}
 }

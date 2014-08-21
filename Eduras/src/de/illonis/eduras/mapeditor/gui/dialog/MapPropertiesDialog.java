@@ -46,13 +46,15 @@ public class MapPropertiesDialog extends JDialog implements ActionListener {
 	private JSpinner widthField, heightField;
 	private JButton okButton, abortButton;
 	private JList<GameModeNumber> gameModes;
+	private final EditorWindow window;
 
 	/**
-	 * @param window
+	 * @param parent
 	 *            the parent frame.
 	 */
-	public MapPropertiesDialog(EditorWindow window) {
-		super(window);
+	public MapPropertiesDialog(EditorWindow parent) {
+		super(parent);
+		this.window = parent;
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		data = MapData.getInstance();
 		setTitle("Map properties");
@@ -153,6 +155,7 @@ public class MapPropertiesDialog extends JDialog implements ActionListener {
 			data.setHeight((int) heightField.getValue());
 			List<GameModeNumber> modes = gameModes.getSelectedValuesList();
 			data.setSupportedGameModes(modes);
+			window.refreshTitle();
 		}
 	}
 

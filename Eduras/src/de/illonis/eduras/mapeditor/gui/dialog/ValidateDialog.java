@@ -13,6 +13,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import de.illonis.eduras.images.ImageFiler;
+import de.illonis.eduras.mapeditor.gui.EditorWindow;
 import de.illonis.eduras.mapeditor.validate.MapValidator;
 import de.illonis.eduras.mapeditor.validate.ValidateTask;
 
@@ -38,8 +39,12 @@ public class ValidateDialog extends JDialog implements ComponentListener {
 
 	/**
 	 * Create a new dialog.
+	 * 
+	 * @param parent
+	 *            parent window.
 	 */
-	public ValidateDialog() {
+	public ValidateDialog(EditorWindow parent) {
+		super(parent);
 		setTitle("Map validation");
 		setModal(true);
 		JPanel content = (JPanel) getContentPane();

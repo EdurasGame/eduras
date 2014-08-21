@@ -38,11 +38,13 @@ public class EditorMenu extends JMenuBar implements ActionListener {
 	private static final long serialVersionUID = 1L;
 	private final MapInteractor interactor;
 	private final JFileChooser mapChooser;
+	private final EditorWindow window;
 
 	private JMenuItem mapProperties, newMap, saveMap, loadMap, shapeCreator,
-			validate, controls, showNodeConnections;
+			validate, controls, showNodeConnections, exit;
 
-	EditorMenu(MapInteractor interactor) {
+	EditorMenu(MapInteractor interactor, EditorWindow editorWindow) {
+		this.window = editorWindow;
 		this.interactor = interactor;
 		mapChooser = new JFileChooser();
 		mapChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
@@ -58,12 +60,16 @@ public class EditorMenu extends JMenuBar implements ActionListener {
 				ActionEvent.CTRL_MASK);
 		loadMap = addItem("Load...", KeyEvent.VK_L, KeyEvent.VK_O,
 				ActionEvent.CTRL_MASK);
-		saveMap = addItem("Save...", KeyEvent.VK_S, KeyEvent.VK_S,
+		saveMap = addItem("Save as...", KeyEvent.VK_S, KeyEvent.VK_S,
 				ActionEvent.CTRL_MASK);
+		exit = addItem("Exit", KeyEvent.VK_X, KeyEvent.VK_F4,
+				ActionEvent.ALT_MASK);
 		file.add(newMap);
 		file.add(loadMap);
 		file.addSeparator();
 		file.add(saveMap);
+		file.addSeparator();
+		file.add(exit);
 		add(file);
 		JMenu map = new JMenu("Map");
 		map.setMnemonic(KeyEvent.VK_M);
@@ -75,6 +81,7 @@ public class EditorMenu extends JMenuBar implements ActionListener {
 		map.add(validate);
 		add(map);
 		JMenu edit = new JMenu("Edit");
+		edit.setEnabled(false);
 		edit.setMnemonic(KeyEvent.VK_E);
 		add(edit);
 
@@ -111,8 +118,18 @@ public class EditorMenu extends JMenuBar implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		JMenuItem item = (JMenuItem) e.getSource();
-		if (item == mapProperties) {
-			MapPropertiesDialog dialog = new MapPropertiesDialog(null);
+		if (item == newMap) {
+			int result = JOptionPane.showConfirmDialog(window,
+					"This will discard any unsaved changes to current map.",
+					"New map", JOptionPane.OK_CANCEL_OPTION,
+					JOptionPane.WARNING_MESSAGE);
+			if (result == JOptionPane.OK_OPTION) {
+				MapData.getInstance().reset();
+				window.refreshTitle();
+				interactor.setInteractType(InteractType.DEFAULT);
+			}
+		} else if (item == mapProperties) {
+			MapPropertiesDialog dialog = new MapPropertiesDialog(window);
 			dialog.setVisible(true);
 		} else if (item == shapeCreator) {
 			ShapeCreator.main(new String[] {});
@@ -120,14 +137,24 @@ public class EditorMenu extends JMenuBar implements ActionListener {
 			ControlsInfo info = new ControlsInfo();
 			info.setVisible(true);
 		} else if (item == validate) {
-			ValidateDialog dialog = new ValidateDialog();
+			ValidateDialog dialog = new ValidateDialog(window);
 			dialog.setVisible(true);
 		} else if (item == showNodeConnections) {
 			JCheckBoxMenuItem checkItem = (JCheckBoxMenuItem) item;
 			MapData.getInstance()
 					.setShowNodeConnections(checkItem.isSelected());
 		} else if (item == loadMap) {
-			int result = mapChooser.showDialog(this, "Load");
+			if (!MapData.getInstance().getGameObjects().isEmpty()) {
+				int result = JOptionPane
+						.showConfirmDialog(
+								window,
+								"This will discard any unsaved changes to current map.",
+								"Load map", JOptionPane.OK_CANCEL_OPTION,
+								JOptionPane.WARNING_MESSAGE);
+				if (result != JOptionPane.OK_OPTION)
+					return;
+			}
+			int result = mapChooser.showDialog(window, "Load");
 			if (result == JFileChooser.APPROVE_OPTION) {
 				File file = mapChooser.getSelectedFile();
 				if (!file.getAbsolutePath().endsWith(MapParser.FILE_EXTENSION))
@@ -139,22 +166,28 @@ public class EditorMenu extends JMenuBar implements ActionListener {
 						map = MapParser.readMap(file.toURI().toURL());
 						interactor.setInteractType(InteractType.DEFAULT);
 						MapData.getInstance().importMap(map);
+						window.refreshTitle();
 					} catch (InvalidDataException | IOException ex) {
-						JOptionPane.showMessageDialog(this,
+						JOptionPane.showMessageDialog(window,
 								"Could not load mapfile: " + ex.getMessage());
 						ex.printStackTrace();
 					}
 				}
 			}
 		} else if (item == saveMap) {
-			int result = mapChooser.showDialog(this, "Save");
+			int result = mapChooser.showDialog(window, "Save");
 			if (result == JFileChooser.APPROVE_OPTION) {
 				File file = mapChooser.getSelectedFile();
 				if (!file.getAbsolutePath().endsWith(MapParser.FILE_EXTENSION))
 					file = new File(file.getAbsolutePath()
 							+ MapParser.FILE_EXTENSION);
 				if (file.exists()) {
-
+					int overwriteResult = JOptionPane.showConfirmDialog(window,
+							"This will overwrite existing file.", "Save map",
+							JOptionPane.OK_CANCEL_OPTION,
+							JOptionPane.WARNING_MESSAGE);
+					if (overwriteResult != JOptionPane.OK_OPTION)
+						return;
 				}
 
 				MapSaver saver;
@@ -162,11 +195,13 @@ public class EditorMenu extends JMenuBar implements ActionListener {
 					saver = new MapSaver(file);
 					saver.save();
 				} catch (IOException ex) {
-					JOptionPane.showMessageDialog(this, "Could not save map: "
-							+ ex.getMessage());
+					JOptionPane.showMessageDialog(window,
+							"Could not save map: " + ex.getMessage());
 					ex.printStackTrace();
 				}
 			}
+		} else if (item == exit) {
+			window.tryExit();
 		}
 	}
 }
