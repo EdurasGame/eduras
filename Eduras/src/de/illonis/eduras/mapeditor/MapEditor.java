@@ -1,12 +1,18 @@
 package de.illonis.eduras.mapeditor;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.logging.Level;
+
 import javax.swing.JOptionPane;
 
 import org.newdawn.slick.SlickException;
 
 import de.illonis.eduras.ObjectFactory.ObjectType;
+import de.illonis.eduras.gameclient.EdurasClient;
 import de.illonis.eduras.mapeditor.gui.EditorWindow;
 import de.illonis.eduras.mapeditor.validate.MapValidator;
+import de.illonis.eduras.utils.PathFinder;
 
 /**
  * A map editor for Eduras?-maps that supports easy placing of objects on the
@@ -22,9 +28,21 @@ public class MapEditor {
 
 	/**
 	 * @param args
-	 *            <i>unused</i>
+	 *            <i>run with arguments if starting from eclipse</i>
 	 */
 	public static void main(String[] args) {
+		try {
+			EdurasClient.extractNatives();
+			if (args.length == 0) {
+				System.setProperty("org.lwjgl.librarypath", (new File(
+						PathFinder.findFile("native"))).getAbsolutePath());
+			}
+		} catch (UnsatisfiedLinkError | IOException e) {
+			JOptionPane.showMessageDialog(null, "Could not extract natives.",
+					"Error", JOptionPane.ERROR_MESSAGE);
+			System.exit(-1);
+		}
+
 		MapValidator.init();
 		try {
 			MapEditor editor = new MapEditor();
