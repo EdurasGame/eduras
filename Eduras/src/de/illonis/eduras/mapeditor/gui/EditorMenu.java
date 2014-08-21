@@ -110,7 +110,7 @@ public class EditorMenu extends JMenuBar implements ActionListener {
 		showNodeConnections.addActionListener(this);
 		fit = addItem("Fit map in window", KeyEvent.VK_F, KeyEvent.VK_F7, 0);
 		view.add(showNodeConnections);
-		view.add(fit);
+		// view.add(fit);
 		add(view);
 
 		JMenu tools = new JMenu("Tools");
