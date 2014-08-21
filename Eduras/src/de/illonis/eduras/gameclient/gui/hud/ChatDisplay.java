@@ -1,10 +1,13 @@
 package de.illonis.eduras.gameclient.gui.hud;
 
 import org.newdawn.slick.Color;
+import org.newdawn.slick.Font;
 import org.newdawn.slick.Graphics;
 
 import de.illonis.eduras.chat.ChatMessage;
 import de.illonis.eduras.gameclient.ChatCache;
+import de.illonis.eduras.gameclient.datacache.FontCache;
+import de.illonis.eduras.gameclient.datacache.FontCache.FontKey;
 
 /**
  * Displays a chat.
@@ -14,7 +17,7 @@ import de.illonis.eduras.gameclient.ChatCache;
  */
 public class ChatDisplay extends RenderedGuiObject {
 
-	private final static int HEIGHT = 150;
+	private final static int MAX_LINES = 5;
 	private final static int WIDTH = 280;
 	private final ChatCache data;
 
@@ -27,34 +30,36 @@ public class ChatDisplay extends RenderedGuiObject {
 
 	@Override
 	public void render(Graphics g) {
+		Font font = FontCache.getFont(FontKey.CHAT_FONT, g);
 		g.setColor(Color.white);
-		g.drawString("Room: " + data.getRoomName(), screenX + WIDTH - 130,
-				screenY + 10);
-		ChatMessage msg;
-		int i = 15;
-		if (data.isWriting())
-			i = 30;
 
-		while (i < HEIGHT - 15 && null != (msg = data.popMessage())) {
+		ChatMessage msg;
+		int i = font.getLineHeight();
+		if (data.isWriting())
+			i += font.getLineHeight();
+
+		int height = (MAX_LINES + 1) * font.getLineHeight();
+		font.drawString(screenX + WIDTH - 130, screenY - height, "Room: "
+				+ data.getRoomName());
+		while (i < height && null != (msg = data.popMessage())) {
 			if (msg.isSystemMessage())
 				g.setColor(Color.yellow);
 			else
 				g.setColor(Color.white);
-			g.drawString(msg.toChatWindowString(), screenX + 5, screenY
-					+ HEIGHT - i);
-			i += 15;
+			font.drawString(screenX + 5, screenY - i, msg.toChatWindowString());
+			i += font.getLineHeight();
 		}
 		if (data.isWriting()) {
 			g.setColor(Color.white);
-			g.drawString(data.getInput() + "_", screenX + 5, screenY + HEIGHT
-					- 15);
+			font.drawString(screenX + 5, screenY - font.getLineHeight(),
+					data.getInput() + "_");
 		}
 		data.resetPop();
 	}
 
 	@Override
 	public void onGuiSizeChanged(int newWidth, int newHeight) {
-		screenY = newHeight - HEIGHT;
-		screenX = newWidth - WIDTH;
+		screenY = newHeight;
+		screenX = newWidth * 2 / 3;
 	}
 }

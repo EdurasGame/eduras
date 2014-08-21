@@ -5,6 +5,8 @@ import org.newdawn.slick.Graphics;
 
 import de.illonis.eduras.events.DeathEvent;
 import de.illonis.eduras.events.MatchEndEvent;
+import de.illonis.eduras.gameclient.datacache.FontCache;
+import de.illonis.eduras.gameclient.datacache.FontCache.FontKey;
 
 /**
  * Displays a single line of text above the action bar to provide some hints.
@@ -16,18 +18,19 @@ public class TipPanel extends RenderedGuiObject {
 
 	private final static int Y_INSET = 50;
 	private final static long DEFAULT_DISPLAY_TIME = 3000;
-	private int y = 0;
-	private final int x = MiniMap.SIZE + 20;
 	private String message;
 	private long step, last, remaining;
 
 	/**
 	 * @param gui
 	 *            the gui.
+	 * @param map
+	 *            minimap to calculate left offset.
 	 */
-	public TipPanel(UserInterface gui) {
+	public TipPanel(UserInterface gui, MiniMap map) {
 		super(gui);
 		message = "";
+		screenX = map.getSize() + 15;
 		setVisibleForSpectator(false);
 		last = System.currentTimeMillis();
 	}
@@ -35,10 +38,11 @@ public class TipPanel extends RenderedGuiObject {
 	@Override
 	public void render(Graphics g2d) {
 		if (!message.isEmpty()) {
-			step = System.currentTimeMillis() -last; 
+			step = System.currentTimeMillis() - last;
 			remaining -= step;
 			g2d.setColor(Color.white);
-			g2d.drawString(message, x, y);
+			FontCache.getFont(FontKey.SMALL_FONT, g2d).drawString(screenX,
+					screenY, message);
 			if (remaining <= 0) {
 				message = "";
 			} else {
@@ -63,14 +67,14 @@ public class TipPanel extends RenderedGuiObject {
 
 	@Override
 	public void onGuiSizeChanged(int newWidth, int newHeight) {
-		y = newHeight - ActionButton.BUTTON_SIZE - 30 - Y_INSET;
+		screenY = newHeight - ActionButton.BUTTON_SIZE - 30 - Y_INSET;
 	}
-	
+
 	@Override
 	public void onDeath(DeathEvent event) {
 		message = "";
 	}
-	
+
 	@Override
 	public void onMatchEnd(MatchEndEvent event) {
 		message = "";

@@ -1,6 +1,8 @@
 package de.illonis.eduras.gameclient.datacache;
 
+import java.awt.Font;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -12,15 +14,19 @@ import javax.swing.ImageIcon;
 
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
+import org.newdawn.slick.TrueTypeFont;
 import org.newdawn.slick.geom.Vector2f;
+import org.newdawn.slick.util.ResourceLoader;
 
 import de.illonis.edulog.EduLog;
 import de.illonis.eduras.ObjectFactory.ObjectType;
 import de.illonis.eduras.gameclient.datacache.CacheInfo.ImageKey;
+import de.illonis.eduras.gameclient.datacache.FontCache.FontKey;
 import de.illonis.eduras.images.ImageFiler;
 import de.illonis.eduras.shapecreator.FileCorruptException;
 import de.illonis.eduras.shapes.ShapeFactory.ShapeType;
 import de.illonis.eduras.shapes.data.ShapeParser;
+import de.illonis.eduras.utils.Pair;
 
 /**
  * Prefetches graphics and shapes and loads them into cache.<br>
@@ -40,6 +46,28 @@ public final class GraphicsPreLoader {
 	 */
 	public static void preLoadShapes() {
 		loadShapes();
+	}
+
+	public static void loadFonts(float scale) {
+		Iterator<Map.Entry<FontKey, Pair<String, Integer>>> it = CacheInfo
+				.getAllFonts().entrySet().iterator();
+		while (it.hasNext()) {
+			Map.Entry<FontKey, Pair<String, Integer>> pair = it.next();
+			try {
+				InputStream inputStream = ResourceLoader
+						.getResourceAsStream("res/fonts/"
+								+ pair.getValue().getFirst());
+				Font awtFont2 = Font
+						.createFont(Font.TRUETYPE_FONT, inputStream);
+				awtFont2 = awtFont2.deriveFont(pair.getValue().getSecond()
+						* scale); // set font size
+				TrueTypeFont font2 = new TrueTypeFont(awtFont2, false);
+				FontCache.addFont(pair.getKey(), font2);
+
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
 	}
 
 	public static void loadIcons() {

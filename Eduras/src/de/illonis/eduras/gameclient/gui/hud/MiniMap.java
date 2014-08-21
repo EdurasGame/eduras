@@ -6,12 +6,11 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.lwjgl.opengl.Display;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
-import org.newdawn.slick.ShapeFill;
 import org.newdawn.slick.geom.Polygon;
 import org.newdawn.slick.geom.Rectangle;
-import org.newdawn.slick.geom.Shape;
 import org.newdawn.slick.geom.Vector2f;
 
 import de.illonis.edulog.EduLog;
@@ -49,6 +48,7 @@ public class MiniMap extends ClickableGuiElement {
 	private float scale;
 	private int height;
 	private HashMap<Integer, NodeData> nodes;
+	float windowScale;
 
 	final static int SIZE = 150;
 	private static final Color NEUTRAL_OBJECTS_FILL_COLOR = Color.gray;
@@ -57,7 +57,8 @@ public class MiniMap extends ClickableGuiElement {
 
 	protected MiniMap(UserInterface gui) {
 		super(gui);
-		bounds = new Rectangle(0, 0, SIZE, SIZE);
+		windowScale = Display.getWidth() / 800;
+		bounds = new Rectangle(0, 0, SIZE * windowScale, SIZE * windowScale);
 		neutralObjects = new HashMap<Integer, MiniMapNeutralObject>();
 		bases = new HashMap<Integer, MiniMapBase>();
 		players = new HashMap<Integer, MiniMapPlayer>();
@@ -71,26 +72,17 @@ public class MiniMap extends ClickableGuiElement {
 				neutralObjects.values());
 		for (MiniMapNeutralObject object : objectsToRender) {
 			if (object.isDynamicShape()) {
-				g.draw(new Polygon(
-						Geometry.vectorsToFloat(object.getVertices())),
-						new ShapeFill() {
-
-							@Override
-							public Vector2f getOffsetAt(Shape shape, float x,
-									float y) {
-								return new Vector2f();
-							}
-
-							@Override
-							public Color colorAt(Shape shape, float x, float y) {
-								return NEUTRAL_OBJECTS_FILL_COLOR;
-							}
-						});
+				g.fill(new Polygon(
+						Geometry.vectorsToFloat(object.getVertices())));
 			} else {
 				g.fillRect(object.getX(), object.getY(), object.getWidth(),
 						object.getHeight());
 			}
 		}
+	}
+
+	float getSize() {
+		return SIZE * windowScale;
 	}
 
 	private void renderBases(Graphics g) {
@@ -105,7 +97,6 @@ public class MiniMap extends ClickableGuiElement {
 	private synchronized void renderNodeConnections(Graphics g) {
 		checkIfNodesInitialized();
 
-		// if it IS null, some game mode other than Edura is running
 		if (nodes != null && !nodes.isEmpty()) {
 			g.setLineWidth(1f);
 			g.setColor(Color.yellow);
@@ -195,12 +186,13 @@ public class MiniMap extends ClickableGuiElement {
 	private void renderViewPort(Graphics g) {
 		g.setLineWidth(1f);
 		g.setColor(Color.white);
-		float minimapScale = SIZE / getInfo().getMapBounds().getHeight();
+		float minimapScale = (SIZE * windowScale)
+				/ getInfo().getMapBounds().getHeight();
 		g.pushTransform();
 		float rectWidth = 800f;
 		float ratio = viewPort.getHeight() / viewPort.getWidth();
 		float rectHeight = rectWidth * ratio;
-		g.translate(0, (height - SIZE));
+		g.translate(0, (height - SIZE * windowScale));
 		// g.scale(minimapScale, minimapScale);
 		// g.translate(-viewPort.getX() - 400, -viewPort.getY() - 300);
 		g.drawRect(viewPort.getX() * minimapScale, viewPort.getY()
@@ -211,7 +203,7 @@ public class MiniMap extends ClickableGuiElement {
 
 	@Override
 	public void onGuiSizeChanged(int newWidth, int newHeight) {
-		screenY = newHeight - SIZE;
+		screenY = newHeight - SIZE * windowScale;
 		this.height = newHeight;
 		bounds.setLocation(screenX, screenY);
 		relocateObjects();
@@ -383,8 +375,9 @@ public class MiniMap extends ClickableGuiElement {
 	public void onGameReady() {
 		Rectangle r = getInfo().getMapBounds();
 		float size = Math.min(r.getWidth(), r.getHeight());
-		scale = SIZE / size;
 
+		scale = (SIZE * windowScale) / size;
+		bounds.setSize(SIZE * windowScale, SIZE * windowScale);
 		for (GameObject o : getInfo().getGameObjects().values()) {
 			maybeAddObject(o);
 		}

@@ -3,7 +3,9 @@ package de.illonis.eduras.gameclient.datacache;
 import java.util.HashMap;
 
 import de.illonis.eduras.ObjectFactory.ObjectType;
+import de.illonis.eduras.gameclient.datacache.FontCache.FontKey;
 import de.illonis.eduras.shapes.ShapeFactory.ShapeType;
+import de.illonis.eduras.utils.Pair;
 
 /**
  * Contains lists of cachable files and their location.<br>
@@ -56,8 +58,22 @@ public final class CacheInfo {
 	private final static HashMap<ImageKey, String> guiImages;
 	private final static HashMap<ImageKey, String> imageIcons;
 	private final static HashMap<ObjectType, String> inventoryIcons;
+	private final static HashMap<FontKey, Pair<String, Integer>> fonts;
 
 	static {
+		fonts = new HashMap<FontKey, Pair<String, Integer>>();
+		fonts.put(FontKey.DEFAULT_FONT, new Pair<String, Integer>(
+				"LinLibertine_R.ttf", 16));
+		fonts.put(FontKey.SMALL_FONT, new Pair<String, Integer>(
+				"LinLibertine_R.ttf", 10));
+		fonts.put(FontKey.BIG_FONT, new Pair<String, Integer>(
+				"LinLibertine_R.ttf", 20));
+		fonts.put(FontKey.HUGE_FONT, new Pair<String, Integer>(
+				"LinLibertine_R.ttf", 24));
+		fonts.put(FontKey.CHAT_FONT, new Pair<String, Integer>(
+				"LinLibertine_R.ttf", 12));
+		fonts.put(FontKey.TOOLTIP_FONT, new Pair<String, Integer>(
+				"LinLibertine_R.ttf", 14));
 		shapes = new HashMap<ShapeType, String>();
 		shapes.put(ShapeType.BIRD, "bird.esh");
 		shapes.put(ShapeType.ROCKET, "rocket.esh");
@@ -208,6 +224,10 @@ public final class CacheInfo {
 
 	static HashMap<ImageKey, String> getAllGuiImages() {
 		return new HashMap<ImageKey, String>(guiImages);
+	}
+
+	static HashMap<FontKey, Pair<String, Integer>> getAllFonts() {
+		return new HashMap<FontKey, Pair<String, Integer>>(fonts);
 	}
 
 	static HashMap<ImageKey, String> getAllImageIcons() {

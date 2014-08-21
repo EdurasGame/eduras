@@ -59,9 +59,12 @@ public class ItemDisplay extends ClickableGuiElement implements
 	 * 
 	 * @param gui
 	 *            associated gui.
+	 * @param map
+	 *            minimap to calculate left inset.
 	 */
-	public ItemDisplay(UserInterface gui) {
+	public ItemDisplay(UserInterface gui, MiniMap map) {
 		super(gui);
+		screenX = map.getSize() + 5;
 		itemSlots = new GuiItem[Inventory.MAX_CAPACITY];
 		for (int i = 0; i < Inventory.MAX_CAPACITY; i++) {
 			itemSlots[i] = new GuiItem(i);
@@ -114,7 +117,6 @@ public class ItemDisplay extends ClickableGuiElement implements
 
 	@Override
 	public void onGuiSizeChanged(int newWidth, int newHeight) {
-		screenX = MiniMap.SIZE;
 		screenY = newHeight - HEIGHT;
 	}
 

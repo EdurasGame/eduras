@@ -47,13 +47,13 @@ public class ActionBar extends ClickableGuiElement implements TooltipTriggerer {
 	private KeyBindings bindings;
 	private Image resIcon;
 
-	protected ActionBar(UserInterface gui) {
+	protected ActionBar(UserInterface gui, MiniMap map) {
 		super(gui);
 		data = EdurasInitializer.getInstance().getInformationProvider()
 				.getClientData();
 		bindings = EdurasInitializer.getInstance().getSettings()
 				.getKeyBindings();
-		screenX = MiniMap.SIZE + 5;
+		screenX = map.getSize() + 5;
 		bounds = new Rectangle(screenX, screenY, 0, 0);
 		registerAsTooltipTriggerer(this);
 		setActiveInteractModes(InteractMode.MODE_STRATEGY);
@@ -94,6 +94,7 @@ public class ActionBar extends ClickableGuiElement implements TooltipTriggerer {
 		try {
 			resources = getInfo().getPlayer().getTeam().getResource();
 		} catch (ObjectNotFoundException e) {
+			return;
 		} catch (PlayerHasNoTeamException e) {
 			L.log(Level.SEVERE, "Cannot find team!!", e);
 		}

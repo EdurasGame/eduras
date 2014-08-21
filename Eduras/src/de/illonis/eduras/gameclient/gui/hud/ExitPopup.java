@@ -1,10 +1,20 @@
 package de.illonis.eduras.gameclient.gui.hud;
 
 import org.newdawn.slick.Color;
+import org.newdawn.slick.Font;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.Vector2f;
 
+import de.illonis.eduras.gameclient.datacache.FontCache;
+import de.illonis.eduras.gameclient.datacache.FontCache.FontKey;
+
+/**
+ * An exit confirmation popup.
+ * 
+ * @author illonis
+ * 
+ */
 public class ExitPopup extends ClickableGuiElement {
 
 	private final static int WIDTH = 300;
@@ -48,16 +58,19 @@ public class ExitPopup extends ClickableGuiElement {
 	@Override
 	public void render(Graphics g) {
 		if (isVisible()) {
+			Font font = FontCache.getFont(FontKey.DEFAULT_FONT, g);
+			bounds.setWidth(font.getWidth(text) + 10);
 			g.setColor(Color.white);
 			g.fill(bounds);
 			g.setColor(Color.black);
 			g.fill(yesRect);
 			g.fill(noRect);
-			g.setColor(Color.black);
-			g.drawString(text, screenX + 5, screenY + 5);
+			font.drawString(screenX + 5, screenY + 5, text, Color.black);
 			g.setColor(Color.yellow);
-			g.drawString("Yes", yesRect.getX() + 5, yesRect.getY() + 5);
-			g.drawString("No", noRect.getX() + 5, noRect.getY() + 5);
+			yesRect.setHeight(font.getLineHeight() + 10);
+			noRect.setHeight(font.getLineHeight() + 10);
+			font.drawString(yesRect.getX() + 5, yesRect.getY() + 5, "Yes");
+			font.drawString(noRect.getX() + 5, noRect.getY() + 5, "No");
 		}
 	}
 

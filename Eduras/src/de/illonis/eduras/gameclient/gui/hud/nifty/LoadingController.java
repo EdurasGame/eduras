@@ -1,5 +1,7 @@
 package de.illonis.eduras.gameclient.gui.hud.nifty;
 
+import org.lwjgl.opengl.Display;
+
 import de.illonis.eduras.gameclient.datacache.GraphicsPreLoader;
 import de.illonis.eduras.gameclient.gui.animation.EffectFactory;
 import de.lessvoid.nifty.controls.Label;
@@ -40,6 +42,8 @@ public class LoadingController extends EdurasScreenController {
 			case 1:
 				setProgress(0.1f, "Loading shapes");
 				GraphicsPreLoader.loadShapes();
+				float scale = Display.getWidth() / 800;
+				GraphicsPreLoader.loadFonts(scale);
 				break;
 			case 2:
 				setProgress(0.2f, "Loading objects");

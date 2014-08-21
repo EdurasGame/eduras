@@ -4,9 +4,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.newdawn.slick.Color;
+import org.newdawn.slick.Font;
 import org.newdawn.slick.Graphics;
-
-import com.jcraft.jorbis.Info;
 
 import de.illonis.edulog.EduLog;
 import de.illonis.eduras.Player;
@@ -14,6 +13,8 @@ import de.illonis.eduras.Team;
 import de.illonis.eduras.events.DeathEvent;
 import de.illonis.eduras.events.MatchEndEvent;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
+import de.illonis.eduras.gameclient.datacache.FontCache;
+import de.illonis.eduras.gameclient.datacache.FontCache.FontKey;
 import de.illonis.eduras.gameclient.gui.hud.nifty.GameState;
 import de.illonis.eduras.gamemodes.Deathmatch;
 import de.illonis.eduras.gamemodes.TeamDeathmatch;
@@ -25,14 +26,16 @@ import de.illonis.eduras.gamemodes.TeamDeathmatch;
  * 
  */
 public class BigPanel extends RenderedGuiObject {
-	private final static Logger L = EduLog.getLoggerFor(BigPanel.class.getName());
+	private final static Logger L = EduLog.getLoggerFor(BigPanel.class
+			.getName());
 
-	private final static int Y_INSET = 150;
 	private final static long DEFAULT_DISPLAY_TIME = 5000;
 	private String message;
 	private long step, last, remaining;
 	private int width;
 	private float alpha;
+	private Font font;
+	private boolean fontLoaded = false;
 
 	/**
 	 * @param gui
@@ -43,16 +46,19 @@ public class BigPanel extends RenderedGuiObject {
 		message = "";
 		setVisibleForSpectator(true);
 		last = System.currentTimeMillis();
+		font = GameState.getBigNoteFont();
 	}
 
 	@Override
 	public void render(Graphics g2d) {
+		if (!fontLoaded) {
+			fontLoaded = true;
+			font = FontCache.getFont(FontKey.HUGE_FONT, g2d);
+		}
 		checkRemaining();
 		if (!message.isEmpty()) {
 			g2d.setColor(new Color(1f, 1f, 1f, alpha));
-			g2d.setFont(GameState.getBigNoteFont());
-			g2d.drawString(message, screenX, Y_INSET);
-			g2d.setFont(GameState.getDefaultFont());
+			font.drawString(screenX, screenY, message);
 		}
 	}
 
@@ -68,7 +74,7 @@ public class BigPanel extends RenderedGuiObject {
 		this.message = text;
 		remaining = DEFAULT_DISPLAY_TIME;
 		last = System.currentTimeMillis();
-		int w = GameState.getBigNoteFont().getWidth(message);
+		int w = font.getWidth(message);
 		screenX = (width - w) / 2;
 		alpha = 1f;
 	}
@@ -109,13 +115,15 @@ public class BigPanel extends RenderedGuiObject {
 				L.log(Level.WARNING, "Could not find winning player", e);
 			}
 		} else {
-			System.out.println("other mode??" + getInfo().getGameMode().getName());
+			System.out.println("other mode??"
+					+ getInfo().getGameMode().getName());
 		}
 	}
 
 	@Override
 	public void onGuiSizeChanged(int newWidth, int newHeight) {
 		this.width = newWidth;
+		screenY = newHeight / 3;
 	}
 
 }

@@ -4,6 +4,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.newdawn.slick.Color;
+import org.newdawn.slick.Font;
 import org.newdawn.slick.Graphics;
 
 import de.illonis.edulog.EduLog;
@@ -13,6 +14,8 @@ import de.illonis.eduras.events.DeathEvent;
 import de.illonis.eduras.events.SetInteractModeEvent;
 import de.illonis.eduras.events.SetItemSlotEvent;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
+import de.illonis.eduras.gameclient.datacache.FontCache;
+import de.illonis.eduras.gameclient.datacache.FontCache.FontKey;
 import de.illonis.eduras.inventory.ItemSlotIsEmptyException;
 import de.illonis.eduras.items.Item;
 import de.illonis.eduras.locale.Localization;
@@ -64,14 +67,15 @@ public class NotificationPanel extends RenderedGuiObject {
 	@Override
 	public void render(Graphics g2d) {
 		checkRemaining();
+		Font font = FontCache.getFont(FontKey.DEFAULT_FONT, g2d);
 		for (int i = 0; i < BUFFER_SIZE; i++) {
 			if (messageBuffer[i] != null) {
-				int stringWidth = g2d.getFont().getWidth(
-						messageBuffer[i].message);
+				int stringWidth = font.getWidth(messageBuffer[i].message);
 				x = (screenWidth - stringWidth) / 2;
 				Color color = new Color(1f, 1f, 1f, messageBuffer[i].alpha);
 				g2d.setColor(color);
-				g2d.drawString(messageBuffer[i].message, x, y + i * 20);
+				font.drawString(x, y + i * font.getLineHeight(),
+						messageBuffer[i].message);
 			}
 		}
 

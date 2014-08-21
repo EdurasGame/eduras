@@ -533,9 +533,9 @@ public class GameRenderer implements TooltipHandler {
 	@Override
 	public void showTooltip(Vector2f p, String text) {
 		if (tooltip == null || !(tooltip instanceof TextTooltip)) {
-			tooltip = new TextTooltip(text, font);
+			tooltip = new TextTooltip(text);
 		} else {
-			((TextTooltip) tooltip).setText(text, font);
+			((TextTooltip) tooltip).setText(text);
 		}
 		tooltip.moveTo(p);
 		tooltipShown = true;

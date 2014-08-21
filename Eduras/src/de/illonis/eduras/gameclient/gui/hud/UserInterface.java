@@ -109,23 +109,24 @@ public class UserInterface implements GuiResizeListener {
 	}
 
 	private void createElements() {
-		new ItemDisplay(this);
+		
 		new GameModeBar(this);
 		new PlayerStatBar(this);
 		minimap = new MiniMap(this);
 		new RemainingTimeFrame(this);
+		new ItemDisplay(this, minimap);
 		new RespawnTimeFrame(this);
 		new ResourceDisplay(this);
 		pingDisplay = new PingDisplay(this);
 		notificationPanel = new NotificationPanel(this);
-		tipPanel = new TipPanel(this);
+		tipPanel = new TipPanel(this, minimap);
 		bigPanel = new BigPanel(this);
 		dragRect = new DragSelectionRectangle(this);
 		statWindow = new StatisticsWindow(this);
 		exitPopup = new ExitPopup(this);
 		new ChatDisplay(cache, this);
 		// new BugReportButton(this);
-		actionBar = new ActionBar(this);
+		actionBar = new ActionBar(this, minimap);
 		initActionBar();
 
 	}

@@ -6,6 +6,8 @@ import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 
 import de.illonis.edulog.EduLog;
+import de.illonis.eduras.gameclient.datacache.FontCache;
+import de.illonis.eduras.gameclient.datacache.FontCache.FontKey;
 import de.illonis.eduras.gamemodes.GameMode;
 
 /**
@@ -38,7 +40,8 @@ public class GameModeBar extends RenderedGuiObject {
 	@Override
 	public void render(Graphics g) {
 		g.setColor(Color.white);
-		g.drawString(mode, screenX + 10, screenY + 10);
+		FontCache.getFont(FontKey.DEFAULT_FONT, g).drawString(screenX + 10,
+				screenY + 10, mode);
 	}
 
 	@Override
