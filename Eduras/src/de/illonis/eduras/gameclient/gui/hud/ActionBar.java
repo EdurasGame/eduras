@@ -205,6 +205,7 @@ public class ActionBar extends ClickableGuiElement implements TooltipTriggerer {
 	@Override
 	public void onInteractModeChanged(SetInteractModeEvent setModeEvent) {
 		data.setCurrentActionSelected(-1);
+		setPage(PageNumber.MAIN);
 	}
 
 	@Override
