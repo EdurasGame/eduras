@@ -199,4 +199,9 @@ public class NodeData extends ReferencedEntity {
 		}
 		return nodeIdToVertex;
 	}
+
+	@Override
+	public String toString() {
+		return getRefName();
+	}
 }

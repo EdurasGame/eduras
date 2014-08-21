@@ -10,7 +10,7 @@ import org.newdawn.slick.geom.Line;
 import de.illonis.eduras.FactoryException;
 import de.illonis.eduras.ObjectCreator;
 import de.illonis.eduras.ObjectFactory.ObjectType;
-import de.illonis.eduras.exceptions.ObjectNotFoundException;
+import de.illonis.eduras.ReferencedEntity;
 import de.illonis.eduras.exceptions.ShapeVerticesNotApplicableException;
 import de.illonis.eduras.gamemodes.GameMode.GameModeNumber;
 import de.illonis.eduras.gameobjects.DynamicPolygonObject;
@@ -147,23 +147,15 @@ public final class MapData {
 		}
 		for (int i = 0; i < portalData.size(); i++) {
 			InitialObjectData portal = portalData.get(i);
-			Portal portalOne;
-			try {
-				System.out.println(portal.getRefName());
-				portalOne = (Portal) findByRef(portal.getRefName());
-			} catch (ObjectNotFoundException e) {
-				e.printStackTrace();
+			GameObject ref = findObjectByRef(portal.getRefName());
+			if (ref == null)
 				continue;
-			}
-
-			Portal portalTwo;
-			try {
-				portalTwo = (Portal) findByRef(portal
-						.getReference(Portal.OTHER_PORTAL_REFERENCE));
-			} catch (ObjectNotFoundException e) {
-				e.printStackTrace();
+			Portal portalOne = (Portal) ref;
+			GameObject refTwo = findObjectByRef(portal
+					.getReference(Portal.OTHER_PORTAL_REFERENCE));
+			if (refTwo == null)
 				continue;
-			}
+			Portal portalTwo = (Portal) refTwo;
 			portalOne.setPartnerPortal(portalTwo);
 		}
 	}
@@ -245,12 +237,39 @@ public final class MapData {
 		spawnPoints.remove(spawn);
 	}
 
-	public GameObject findByRef(String name) throws ObjectNotFoundException {
+	public ReferencedEntity findByRef(String name) {
+		GameObject o = findObjectByRef(name);
+		if (o != null)
+			return o;
+		NodeData node = findBaseByRef(name);
+		if (node != null)
+			return node;
+		SpawnPosition spawn = findSpawnByRef(name);
+		return spawn;
+	}
+
+	public GameObject findObjectByRef(String name) {
 		for (GameObject o : gameObjects) {
 			if (o.getRefName().equals(name))
 				return o;
 		}
-		throw new ObjectNotFoundException(-1);
+		return null;
+	}
+
+	public SpawnPosition findSpawnByRef(String name) {
+		for (SpawnPosition o : spawnPoints) {
+			if (o.getRefName().equals(name))
+				return o;
+		}
+		return null;
+	}
+
+	public NodeData findBaseByRef(String name) {
+		for (NodeData o : bases) {
+			if (o.getRefName().equals(name))
+				return o;
+		}
+		return null;
 	}
 
 	public void clearTempLines() {

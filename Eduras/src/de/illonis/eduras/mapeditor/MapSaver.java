@@ -68,26 +68,6 @@ public final class MapSaver {
 		writer.close();
 	}
 
-	private class NodeConnection {
-		private final NodeData a;
-		private final NodeData b;
-
-		public NodeConnection(NodeData a, NodeData b) {
-			this.a = a;
-			this.b = b;
-		}
-
-		@Override
-		public boolean equals(Object obj) {
-			if (obj instanceof NodeConnection) {
-				NodeConnection conn = (NodeConnection) obj;
-				return (conn.a.equals(a) && conn.b.equals(b))
-						|| (conn.a.equals(b) && conn.b.equals(a));
-			}
-			return super.equals(obj);
-		}
-	}
-
 	private void writeNodeConnections() {
 		beginSection(MapFileSection.NODECONNECTIONS);
 		List<NodeConnection> existing = new LinkedList<NodeConnection>();
@@ -144,7 +124,7 @@ public final class MapSaver {
 	}
 
 	private String buildVert(float x, float y) {
-		return String.format("[%d %d]", (int)x, (int)y);
+		return String.format("[%d %d]", (int) x, (int) y);
 	}
 
 	private String toColorString(Color color) {

@@ -15,11 +15,13 @@ import javax.swing.JOptionPane;
 import javax.swing.KeyStroke;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
+import de.illonis.eduras.mapeditor.EditorException;
 import de.illonis.eduras.mapeditor.MapData;
 import de.illonis.eduras.mapeditor.MapInteractor;
 import de.illonis.eduras.mapeditor.MapInteractor.InteractType;
 import de.illonis.eduras.mapeditor.MapSaver;
 import de.illonis.eduras.mapeditor.gui.dialog.ControlsInfo;
+import de.illonis.eduras.mapeditor.gui.dialog.ManageNodesDialog;
 import de.illonis.eduras.mapeditor.gui.dialog.MapPropertiesDialog;
 import de.illonis.eduras.mapeditor.gui.dialog.ValidateDialog;
 import de.illonis.eduras.maps.Map;
@@ -41,7 +43,8 @@ public class EditorMenu extends JMenuBar implements ActionListener {
 	private final EditorWindow window;
 
 	private JMenuItem mapProperties, newMap, saveMap, loadMap, shapeCreator,
-			validate, controls, showNodeConnections, exit;
+			validate, controls, showNodeConnections, exit,
+			manageNodeConnections, undo, redo, fit;
 
 	EditorMenu(MapInteractor interactor, EditorWindow editorWindow) {
 		this.window = editorWindow;
@@ -81,8 +84,22 @@ public class EditorMenu extends JMenuBar implements ActionListener {
 		map.add(validate);
 		add(map);
 		JMenu edit = new JMenu("Edit");
-		edit.setEnabled(false);
 		edit.setMnemonic(KeyEvent.VK_E);
+		manageNodeConnections = addItem("Node connections...", KeyEvent.VK_N,
+				KeyEvent.VK_F3, 0);
+
+		undo = addItem("Undo", KeyEvent.VK_U, KeyEvent.VK_Z,
+				ActionEvent.CTRL_MASK);
+
+		redo = addItem("Redo", KeyEvent.VK_R, KeyEvent.VK_Z,
+				ActionEvent.CTRL_MASK | ActionEvent.SHIFT_MASK);
+
+		edit.add(undo);
+		edit.add(redo);
+		undo.setEnabled(false);
+		redo.setEnabled(false);
+		edit.addSeparator();
+		edit.add(manageNodeConnections);
 		add(edit);
 
 		JMenu view = new JMenu("View");
@@ -91,8 +108,9 @@ public class EditorMenu extends JMenuBar implements ActionListener {
 		showNodeConnections.setAccelerator(KeyStroke.getKeyStroke(
 				KeyEvent.VK_F8, 0));
 		showNodeConnections.addActionListener(this);
-
+		fit = addItem("Fit map in window", KeyEvent.VK_F, KeyEvent.VK_F7, 0);
 		view.add(showNodeConnections);
+		view.add(fit);
 		add(view);
 
 		JMenu tools = new JMenu("Tools");
@@ -200,6 +218,15 @@ public class EditorMenu extends JMenuBar implements ActionListener {
 					ex.printStackTrace();
 				}
 			}
+		} else if (item == manageNodeConnections) {
+			try {
+				new ManageNodesDialog(window).setVisible(true);
+			} catch (EditorException ex) {
+				JOptionPane.showMessageDialog(window, ex.getMessage(),
+						"Node error", JOptionPane.ERROR_MESSAGE);
+			}
+		} else if (item == fit) {
+
 		} else if (item == exit) {
 			window.tryExit();
 		}

@@ -34,11 +34,12 @@ import javax.swing.SpringLayout;
 import javax.swing.border.Border;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 
 import org.newdawn.slick.Color;
 
 import de.illonis.eduras.ReferencedEntity;
-import de.illonis.eduras.exceptions.ObjectNotFoundException;
 import de.illonis.eduras.gameobjects.Base;
 import de.illonis.eduras.gameobjects.Base.BaseType;
 import de.illonis.eduras.gameobjects.DynamicPolygonObject;
@@ -84,6 +85,7 @@ public class PropertiesDialog extends JDialog implements ItemListener,
 	private JRadioButton spawnTeamA, spawnTeamB, spawnSingle, spawnAny;
 	private JSpinner baseMult;
 	private JTextField refName;
+	private JButton saveButton;
 	private JComboBox<Portal> otherPortals;
 
 	/**
@@ -98,8 +100,6 @@ public class PropertiesDialog extends JDialog implements ItemListener,
 		this(parent);
 		this.node = node;
 		this.entity = node;
-		setTitle("Properties of Base #" + node.getId() + " ["
-				+ entity.getRefName() + "]");
 		addPositionTab();
 		addNeutralBaseTab();
 	}
@@ -116,7 +116,6 @@ public class PropertiesDialog extends JDialog implements ItemListener,
 		this(window);
 		this.spawn = spawn;
 		this.entity = spawn;
-		setTitle("Properties of Spawnarea " + " [" + entity.getRefName() + "]");
 		addPositionTab();
 		addSpawnTab();
 	}
@@ -133,9 +132,6 @@ public class PropertiesDialog extends JDialog implements ItemListener,
 		this(parent);
 		this.object = object;
 		this.entity = object;
-		setTitle("Properties of " + object.getType() + " #" + object.getId()
-				+ " [" + entity.getRefName() + "]");
-
 		addPropertiesTab();
 		addPositionTab();
 		if (object instanceof DynamicPolygonObject) {
@@ -162,6 +158,21 @@ public class PropertiesDialog extends JDialog implements ItemListener,
 				getContentPane());
 		getContentPane().add(tabbedPane);
 		setMinimumSize(MIN_SIZE);
+	}
+
+	private void updateTitle() {
+		if (object != null) {
+			setTitle("Properties of " + object.getType() + " #"
+					+ object.getId() + " [" + entity.getRefName() + "]");
+		} else if (spawn != null) {
+			setTitle("Properties of Spawnarea " + " [" + entity.getRefName()
+					+ "]");
+		} else if (node != null) {
+			setTitle("Properties of Base #" + node.getId() + " ["
+					+ entity.getRefName() + "]");
+		} else {
+			setTitle("Properties of " + entity.getRefName());
+		}
 	}
 
 	private void addSpawnTab() {
@@ -245,10 +256,11 @@ public class PropertiesDialog extends JDialog implements ItemListener,
 		}
 		otherPortals = new JComboBox<Portal>(portals.toArray(new Portal[] {}));
 		otherPortals.setRenderer(new PortalListRenderer());
-		try {
-			otherPortals.setSelectedItem(MapData.getInstance().findByRef(
-					partnerName));
-		} catch (ObjectNotFoundException e) {
+		GameObject otherObject = MapData.getInstance().findObjectByRef(
+				partnerName);
+		if (otherObject != null) {
+			otherPortals.setSelectedItem((Portal) otherObject);
+		} else {
 			otherPortals.setSelectedIndex(-1);
 		}
 		otherPortals.addActionListener(this);
@@ -382,14 +394,39 @@ public class PropertiesDialog extends JDialog implements ItemListener,
 		JPanel refPanel = new JPanel();
 		refSection.add(refPanel, BorderLayout.CENTER);
 		refName = new JTextField(entity.getRefName());
+		refName.addActionListener(this);
 		refName.setColumns(20);
-		JButton saveButton = new JButton("Save");
+
+		saveButton = new JButton("Save");
+		saveButton.setEnabled(false);
 		saveButton.addActionListener(this);
+		refName.getDocument().addDocumentListener(new DocumentListener() {
+
+			@Override
+			public void removeUpdate(DocumentEvent arg0) {
+				check();
+			}
+
+			@Override
+			public void insertUpdate(DocumentEvent arg0) {
+				check();
+			}
+
+			@Override
+			public void changedUpdate(DocumentEvent arg0) {
+				check();
+			}
+
+			private void check() {
+				saveButton.setEnabled(!(refName.getText().isEmpty() || refName
+						.getText().equals(entity.getRefName())));
+			}
+		});
 		refPanel.add(refName);
 		refPanel.add(saveButton);
 		refSection.setBorder(border);
 		positionTab.add(refSection);
-		addTab("Position", positionTab);
+		addTab("General", positionTab);
 	}
 
 	private void addPropertiesTab() {
@@ -460,6 +497,7 @@ public class PropertiesDialog extends JDialog implements ItemListener,
 	public void setVisible(boolean b) {
 		pack();
 		setLocationRelativeTo(getParent());
+		updateTitle();
 		super.setVisible(b);
 	}
 
@@ -470,14 +508,35 @@ public class PropertiesDialog extends JDialog implements ItemListener,
 			((Portal) object).setPartnerPortal(portal);
 			return;
 		}
-		if (e.getSource() instanceof JButton) {
-			if (refName.getText().matches(MapParser.IDENTIFIER_REGEX))
+		if (e.getSource().equals(saveButton) || e.getSource().equals(refName)) {
+			if (refName.getText().matches(MapParser.IDENTIFIER_REGEX)) {
+
+				ReferencedEntity o = MapData.getInstance().findByRef(
+						refName.getText());
+				if (o != null) {
+					if (o.equals(entity)) {
+						// name did not change
+						saveButton.setEnabled(false);
+						return;
+					} else {
+						JOptionPane.showMessageDialog(this,
+								"Object with name \"" + refName.getText()
+										+ "\" already exists.",
+								"Error setting reference name.",
+								JOptionPane.ERROR_MESSAGE);
+						return;
+					}
+				}
 				entity.setRefName(refName.getText());
-			else {
-				JOptionPane.showMessageDialog(this, "Invalid name");
+				updateTitle();
+				saveButton.setEnabled(false);
+			} else {
+				JOptionPane.showMessageDialog(this, "Invalid reference name",
+						"Error", JOptionPane.ERROR_MESSAGE);
 			}
 			return;
 		}
+
 		JRadioButton button = (JRadioButton) e.getSource();
 		if (button == baseNone) {
 			node.setIsMainNode(BaseType.NEUTRAL);
@@ -506,7 +565,6 @@ public class PropertiesDialog extends JDialog implements ItemListener,
 
 	@Override
 	public void itemStateChanged(ItemEvent event) {
-		// TODO Auto-generated method stub
 	}
 
 	@Override
