@@ -3,6 +3,7 @@ package de.illonis.eduras.mapeditor.gui.dialog;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Iterator;
 
 import javax.swing.BorderFactory;
 import javax.swing.DefaultListModel;
@@ -156,6 +157,13 @@ public class ManageNodesDialog extends JDialog implements ActionListener {
 						"Error adding connection", JOptionPane.ERROR_MESSAGE);
 			}
 		} else if (button == saveButton) {
+			for (NodeData node : data.getBases()) {
+				node.getAdjacentNodes().clear();
+			}
+			for (int i = 0; i < connectionData.size(); i++) {
+				NodeConnection connection = connectionData.get(i);
+				connection.getA().addAdjacentNode(connection.getB());
+			}
 		} else if (button == removeButton) {
 			if (connections.getSelectedIndex() != -1)
 				connectionData.remove(connections.getSelectedIndex());

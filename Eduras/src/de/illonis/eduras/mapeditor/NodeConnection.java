@@ -9,8 +9,8 @@ import de.illonis.eduras.maps.NodeData;
  * 
  */
 public final class NodeConnection {
-	final NodeData a;
-	final NodeData b;
+	private final NodeData a;
+	private final NodeData b;
 
 	/**
 	 * @param a
@@ -36,5 +36,13 @@ public final class NodeConnection {
 					|| (conn.a.equals(b) && conn.b.equals(a));
 		}
 		return super.equals(obj);
+	}
+
+	public NodeData getA() {
+		return a;
+	}
+
+	public NodeData getB() {
+		return b;
 	}
 }
