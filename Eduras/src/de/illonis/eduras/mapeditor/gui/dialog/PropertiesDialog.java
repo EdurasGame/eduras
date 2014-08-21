@@ -217,6 +217,9 @@ public class PropertiesDialog extends JDialog implements ItemListener,
 				(node.isMainNode() == Base.BaseType.TEAM_A));
 		baseTeamB = new JRadioButton("Team B",
 				(node.isMainNode() == Base.BaseType.TEAM_B));
+		baseNone.addActionListener(this);
+		baseTeamA.addActionListener(this);
+		baseTeamB.addActionListener(this);
 		group.add(baseNone);
 		group.add(baseTeamA);
 		group.add(baseTeamB);
@@ -541,6 +544,7 @@ public class PropertiesDialog extends JDialog implements ItemListener,
 		if (button == baseNone) {
 			node.setIsMainNode(BaseType.NEUTRAL);
 		} else if (button == baseTeamA) {
+			System.out.println("i");
 			node.setIsMainNode(BaseType.TEAM_A);
 		} else if (button == baseTeamB) {
 			node.setIsMainNode(BaseType.TEAM_B);
