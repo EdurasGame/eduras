@@ -46,7 +46,6 @@ public class MiniMap extends ClickableGuiElement {
 	private HashMap<Integer, MiniMapPlayer> players;
 	private GameCamera viewPort;
 	private float scale;
-	private int height;
 	private HashMap<Integer, NodeData> nodes;
 	float windowScale;
 
@@ -196,25 +195,19 @@ public class MiniMap extends ClickableGuiElement {
 	private void renderViewPort(Graphics g) {
 		g.setLineWidth(1f);
 		g.setColor(Color.white);
-		float minimapScale = (SIZE * windowScale)
-				/ getInfo().getMapBounds().getHeight();
-		g.pushTransform();
+		float minimapScale = getSize() / getInfo().getMapBounds().getHeight();
 		float rectWidth = 800f;
-		float ratio = viewPort.getHeight() / viewPort.getWidth();
+		float ratio = (float) Display.getHeight() / Display.getWidth();
 		float rectHeight = rectWidth * ratio;
-		g.translate(0, (height - SIZE * windowScale));
-		// g.scale(minimapScale, minimapScale);
-		// g.translate(-viewPort.getX() - 400, -viewPort.getY() - 300);
-		g.drawRect(viewPort.getX() * minimapScale, viewPort.getY()
-				* minimapScale, rectWidth * minimapScale, rectHeight
+		float yDiff = (600 - rectHeight) / 2;
+		g.drawRect(viewPort.getX() * minimapScale, (viewPort.getY() + yDiff)
+				* minimapScale + screenY, rectWidth * minimapScale, rectHeight
 				* minimapScale);
-		g.popTransform();
 	}
 
 	@Override
 	public void onGuiSizeChanged(int newWidth, int newHeight) {
-		screenY = newHeight - SIZE * windowScale;
-		this.height = newHeight;
+		screenY = newHeight - getSize();
 		bounds.setLocation(screenX, screenY);
 		relocateObjects();
 	}
@@ -393,7 +386,7 @@ public class MiniMap extends ClickableGuiElement {
 		}
 	}
 
-	public void setCamera(GameCamera viewport) {
+	void setCamera(GameCamera viewport) {
 		this.viewPort = viewport;
 	}
 

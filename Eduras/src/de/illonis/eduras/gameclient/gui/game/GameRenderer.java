@@ -144,7 +144,7 @@ public class GameRenderer implements TooltipHandler {
 		float diffW = (float) currentWidth / DEFAULT_WIDTH;
 		float diffH = (float) currentHeight / DEFAULT_HEIGHT;
 
-		float newScale = BasicMath.avg(diffW, diffH);
+		float newScale = Math.max(diffW, diffH);
 		return newScale;
 	}
 
