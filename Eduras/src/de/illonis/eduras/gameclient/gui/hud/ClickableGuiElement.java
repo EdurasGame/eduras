@@ -32,6 +32,36 @@ public abstract class ClickableGuiElement extends RenderedGuiObject implements
 	}
 
 	@Override
+	public boolean mousePressed(int button, int x, int y) {
+		return false;
+	}
+
+	@Override
+	public boolean mouseReleased(int button, int x, int y) {
+		return false;
+	}
+
+	@Override
+	public boolean mouseMoved(int oldx, int oldy, int newx, int newy) {
+		return false;
+	}
+
+	@Override
+	public boolean mouseClicked(int button, int x, int y, int clickCount) {
+		return false;
+	}
+
+	@Override
+	public boolean mouseWheelMoved(int change) {
+		return false;
+	}
+
+	@Override
+	public boolean mouseDragged(int oldx, int oldy, int newx, int newy) {
+		return false;
+	}
+
+	@Override
 	public final boolean isActive() {
 		try {
 			return isEnabledInInteractMode(getInfo().getPlayer()

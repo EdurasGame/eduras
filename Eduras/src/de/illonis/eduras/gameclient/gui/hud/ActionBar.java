@@ -69,13 +69,13 @@ public class ActionBar extends ClickableGuiElement implements TooltipTriggerer {
 	}
 
 	@Override
-	public boolean onClick(Vector2f p) {
+	public boolean mouseReleased(int button, int x, int y) {
 		if (currentPage == null)
 			return false;
-		float x = p.x - screenX;
-		if (x < ActionButton.BUTTON_SIZE * numButtons) {
-			int button = (int) (x / ActionButton.BUTTON_SIZE);
-			selectButton(button);
+		float mouseX = x - screenX;
+		if (mouseX < ActionButton.BUTTON_SIZE * numButtons) {
+			int actionButton = (int) (mouseX / ActionButton.BUTTON_SIZE);
+			selectButton(actionButton);
 			return true;
 		}
 		return false;

@@ -137,10 +137,20 @@ public class MiniMap extends ClickableGuiElement {
 	}
 
 	@Override
-	public boolean onClick(Vector2f p) {
-		Vector2f gamePos = minimapToGamePosition(p);
-		getMouseHandler().mapClicked(gamePos);
+	public boolean mouseReleased(int button, int x, int y) {
+		centerAtMouse(x, y);
 		return true;
+	}
+
+	@Override
+	public boolean mouseDragged(int oldx, int oldy, int newx, int newy) {
+		centerAtMouse(newx, newy);
+		return true;
+	}
+
+	private void centerAtMouse(int x, int y) {
+		Vector2f gamePos = minimapToGamePosition(new Vector2f(x, y));
+		getMouseHandler().mapClicked(gamePos);
 	}
 
 	@Override
