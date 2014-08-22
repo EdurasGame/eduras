@@ -1,8 +1,6 @@
 package de.illonis.eduras.gameclient.gui.hud;
 
-
 import org.newdawn.slick.geom.Rectangle;
-import org.newdawn.slick.geom.Vector2f;
 
 /**
  * A clickable gui element.
@@ -13,15 +11,96 @@ import org.newdawn.slick.geom.Vector2f;
 public interface ClickableGuiElementInterface {
 
 	/**
-	 * Fired on a click in gui that was within the are returned by
-	 * {@link #getBounds()}. Returns whether event is consumed or not. If event
-	 * is consumed, no other elements are notified.
+	 * Fired on a click in gui that was within {@link #getBounds()}. Returns
+	 * whether event is consumed or not. If event is consumed, no other elements
+	 * are notified.
 	 * 
-	 * @param p
-	 *            click position.
+	 * @param button
+	 *            the mouse button clicked.
+	 * @param x
+	 *            the x-coordinate of clicked point.
+	 * @param y
+	 *            the y-coordinate of clicked point.
+	 * @param clickCount
+	 *            number of clicks.
+	 * 
 	 * @return true if event is consumed, false otherwise.
 	 */
-	boolean onClick(Vector2f p);
+	public boolean mouseClicked(int button, int x, int y, int clickCount);
+
+	/**
+	 * Fired when mouse is dragged on this element. Returns whether event is
+	 * consumed or not. If event is consumed, no other elements are notified.
+	 * 
+	 * @param oldx
+	 *            old x-position.
+	 * @param oldy
+	 *            old y-position.
+	 * @param newx
+	 *            new x-position.
+	 * @param newy
+	 *            new y-position.
+	 * @return true if event is consumed, false otherwise.
+	 */
+	public boolean mouseDragged(int oldx, int oldy, int newx, int newy);
+
+	/**
+	 * Fired when mouse is moved above this element. Returns whether event is
+	 * consumed or not. If event is consumed, no other elements are notified.
+	 * 
+	 * @param oldx
+	 *            old x-position.
+	 * @param oldy
+	 *            old y-position.
+	 * @param newx
+	 *            new x-position.
+	 * @param newy
+	 *            new y-position.
+	 * @return true if event is consumed, false otherwise.
+	 */
+	public boolean mouseMoved(int oldx, int oldy, int newx, int newy);
+
+	/**
+	 * Fired when mouse is pressed on this element. Returns whether event is
+	 * consumed or not. If event is consumed, no other elements are notified.
+	 * 
+	 * @param button
+	 *            the mouse button used.
+	 * @param x
+	 *            the x-coordinate of mouse point.
+	 * @param y
+	 *            the y-coordinate of mouse point.
+	 * 
+	 * @return true if event is consumed, false otherwise.
+	 */
+	public boolean mousePressed(int button, int x, int y);
+
+	/**
+	 * Fired when mouse is released on this element. Returns whether event is
+	 * consumed or not. If event is consumed, no other elements are notified.
+	 * 
+	 * @param button
+	 *            the mouse button used.
+	 * @param x
+	 *            the x-coordinate of mouse point.
+	 * @param y
+	 *            the y-coordinate of mouse point.
+	 * 
+	 * @return true if event is consumed, false otherwise.
+	 */
+	public boolean mouseReleased(int button, int x, int y);
+
+	/**
+	 * Fired if mouse wheel was moved while mouse is on this element. Returns
+	 * whether event is consumed or not. If event is consumed, no other elements
+	 * are notified.
+	 * 
+	 * @param change
+	 *            the scroll amount.
+	 * 
+	 * @return true if event is consumed, false otherwise.
+	 */
+	public boolean mouseWheelMoved(int change);
 
 	/**
 	 * Returns bounds of the clickable element relative to game screen. This

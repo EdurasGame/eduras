@@ -1,5 +1,8 @@
 package de.illonis.eduras.gameclient.gui.game;
 
+import org.newdawn.slick.Input;
+import org.newdawn.slick.MouseListener;
+
 import de.illonis.eduras.gameclient.GamePanelReactor;
 import de.illonis.eduras.gameclient.GuiInternalEventListener;
 import de.illonis.eduras.gameclient.gui.hud.ClickableGuiElementInterface;
@@ -11,7 +14,7 @@ import de.illonis.eduras.gameclient.gui.hud.ClickableGuiElementInterface;
  * @author illonis
  * 
  */
-public abstract class GuiMouseAdapter implements GuiClickReactor {
+public abstract class GuiMouseAdapter implements GuiClickReactor, MouseListener {
 	private final GamePanelLogic panelLogic;
 	private final GuiInternalEventListener listener;
 
@@ -35,22 +38,26 @@ public abstract class GuiMouseAdapter implements GuiClickReactor {
 	@Override
 	public void removeClickableGuiElement(ClickableGuiElementInterface elem) {
 	}
-	
+
 	@Override
 	public void exitRequested() {
 		panelLogic.onGameQuit();
 	}
 
-	public abstract void mouseClicked(int button, int x, int y, int clickCount);
+	@Override
+	public final void inputEnded() {
+	}
 
-	public abstract void mouseMoved(int oldx, int oldy, int newx, int newy);
+	@Override
+	public final void inputStarted() {
+	}
 
-	public abstract void mouseDragged(int oldx, int oldy, int newx, int newy);
+	@Override
+	public final boolean isAcceptingInput() {
+		return true;
+	}
 
-	public abstract void mousePressed(int button, int x, int y);
-
-	public abstract void mouseReleased(int button, int x, int y);
-
-	public abstract void mouseWheelMoved(int change);
-
+	@Override
+	public final void setInput(Input input) {
+	}
 }

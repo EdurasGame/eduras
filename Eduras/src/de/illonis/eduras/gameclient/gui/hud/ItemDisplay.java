@@ -119,9 +119,9 @@ public class ItemDisplay extends ClickableGuiElement implements
 	}
 
 	@Override
-	public boolean onClick(Vector2f p) {
+	public boolean mouseReleased(int button, int x, int y) {
 		for (int i = 0; i < Inventory.MAX_CAPACITY; i++) {
-			if (itemSlots[i].getClickableRect().contains(p.x, p.y)) {
+			if (itemSlots[i].getClickableRect().contains(x, y)) {
 				L.info("User clicked on item " + i);
 				itemClicked(i);
 				return true;
