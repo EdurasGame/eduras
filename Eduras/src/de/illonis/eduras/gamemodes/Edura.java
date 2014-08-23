@@ -1,12 +1,8 @@
 package de.illonis.eduras.gamemodes;
 
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
-import org.newdawn.slick.geom.Rectangle;
 
 import de.illonis.edulog.EduLog;
 import de.illonis.eduras.GameInformation;
@@ -18,15 +14,10 @@ import de.illonis.eduras.exceptions.PlayerHasNoTeamException;
 import de.illonis.eduras.exceptions.WrongObjectTypeException;
 import de.illonis.eduras.gameclient.userprefs.KeyBindings.KeyBinding;
 import de.illonis.eduras.gameobjects.Base;
-import de.illonis.eduras.gameobjects.Base.BaseType;
 import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.gameobjects.TimedEventHandler;
 import de.illonis.eduras.gameobjects.TimingSource;
 import de.illonis.eduras.logic.EventTriggerer;
-import de.illonis.eduras.maps.Map;
-import de.illonis.eduras.maps.NodeData;
-import de.illonis.eduras.math.Vector2df;
-import de.illonis.eduras.math.graphs.Vertex;
 import de.illonis.eduras.settings.S;
 import de.illonis.eduras.units.InteractMode;
 import de.illonis.eduras.units.PlayerMainFigure;
@@ -43,10 +34,6 @@ public class Edura extends TeamDeathmatch {
 
 	private TimingSource timingSource;
 
-	private HashMap<Base, Vertex> baseToVertex;
-	private HashMap<Team, Base> mainBaseOfTeam;
-	private HashMap<Base, ResourceGenerator> baseToResourceGenerator;
-
 	private RespawnTimer respawnTimer;
 
 	private final static Logger L = EduLog.getLoggerFor(Edura.class.getName());
@@ -58,10 +45,6 @@ public class Edura extends TeamDeathmatch {
 	 */
 	public Edura(GameInformation gameInfo) {
 		super(gameInfo);
-
-		baseToVertex = new HashMap<Base, Vertex>();
-		mainBaseOfTeam = new HashMap<Team, Base>();
-		baseToResourceGenerator = new HashMap<Base, ResourceGenerator>();
 	}
 
 	@Override
@@ -79,7 +62,7 @@ public class Edura extends TeamDeathmatch {
 		gameInfo.getEventTriggerer().setRemainingTime(
 				gameInfo.getGameSettings().getRoundTime());
 
-		for (Base aNeutralBase : baseToVertex.keySet()) {
+		for (Base aNeutralBase : getAllBases()) {
 			aNeutralBase.setResourceGenerateMultiplicator(aNeutralBase
 					.getResourceGenerateMultiplicator() + 1);
 		}
@@ -107,134 +90,6 @@ public class Edura extends TeamDeathmatch {
 				S.Server.gm_edura_startmoney);
 		gameInfo.getEventTriggerer().changeResourcesOfTeamByAmount(getTeamB(),
 				S.Server.gm_edura_startmoney);
-	}
-
-	private void loadNodes() {
-		// TODO: make this a general map thing
-		HashMap<Integer, Base> nodeIdToBase = new HashMap<Integer, Base>();
-		Map eduraMap = gameInfo.getMap();
-
-		clear();
-
-		for (NodeData nodeData : eduraMap.getNodes()) {
-			int nodeid = nodeData.getId();
-			int objectId = gameInfo.getEventTriggerer().createObjectAt(
-					ObjectType.NEUTRAL_BASE,
-					new Vector2df(nodeData.getX(), nodeData.getY()), -1);
-
-			Base base;
-			try {
-				base = (Base) gameInfo.findObjectById(objectId);
-				Rectangle baseRect = (Rectangle) base.getShape();
-				// TODO: announce size (event!)
-				baseRect.setWidth(nodeData.getWidth());
-				baseRect.setHeight(nodeData.getHeight());
-				base.setResourceGenerateMultiplicator(nodeData
-						.getResourceMultiplicator());
-			} catch (ObjectNotFoundException e) {
-				L.log(Level.WARNING, "Cannot find object!", e);
-				return;
-			}
-			nodeIdToBase.put(nodeid, base);
-			baseToVertex.put(base, new Vertex());
-		}
-
-		// TODO: At the moment we rely on the assumption that there are always
-		// two main nodes in the map and that there is only two teams.
-		Team teamA = getTeamA();
-		Team teamB = getTeamB();
-
-		for (NodeData nodeData : eduraMap.getNodes()) {
-			int nodeid = nodeData.getId();
-			Vertex vertexForNode = nodeIdToVertex(nodeIdToBase, nodeid);
-
-			for (NodeData adjacentNode : nodeData.getAdjacentNodes()) {
-				Vertex vertexForAdjacent = nodeIdToVertex(nodeIdToBase,
-						adjacentNode.getId());
-
-				vertexForNode.addAdjacentVertex(vertexForAdjacent);
-			}
-
-			if (nodeData.isMainNode() != BaseType.NEUTRAL) {
-				Team teamOfMainNode;
-				switch (nodeData.isMainNode()) {
-				case TEAM_B:
-					teamOfMainNode = teamB;
-					break;
-				case TEAM_A:
-					teamOfMainNode = teamA;
-					break;
-				default:
-					return;
-				}
-
-				vertexForNode.setColor(teamOfMainNode.getTeamId());
-				Base mainBase = nodeIdToBase.get(nodeid);
-				mainBaseOfTeam.put(teamOfMainNode, mainBase);
-				mainBase.setCurrentOwnerTeam(teamOfMainNode);
-				gameInfo.getEventTriggerer().notifyAreaConquered(mainBase,
-						teamOfMainNode);
-
-				startGeneratingResourcesInBaseForTeam(mainBase, teamOfMainNode);
-			}
-		}
-
-	}
-
-	private void clear() {
-		for (GameObject neutralBase : baseToVertex.keySet()) {
-			gameInfo.getEventTriggerer().removeObject(neutralBase.getId());
-		}
-	}
-
-	private Vertex nodeIdToVertex(HashMap<Integer, Base> nodeIdToBase,
-			int nodeid) {
-		return baseToVertex.get(nodeIdToBase.get(nodeid));
-	}
-
-	@Override
-	public Team determineProgressingTeam(Base base, GameObject object,
-			boolean objectEntered, Set<GameObject> presentObjects) {
-		Team team = determineOnlyContainingTeam(presentObjects);
-
-		if (team == null) {
-			return team;
-		}
-		if (baseToVertex.get(base).hasAdjacentNodeOfColor(team.getTeamId())) {
-			return team;
-		} else {
-			return null;
-		}
-
-	}
-
-	private Team determineOnlyContainingTeam(Set<GameObject> presentObjects) {
-
-		if (presentObjects.size() == 0) {
-			return null;
-		}
-
-		for (Team team : gameInfo.getTeams()) {
-			boolean ofThisTeam = true;
-			for (GameObject go : presentObjects) {
-				Unit unit = (Unit) go;
-				if (unit.getTeam() == null) {
-					ofThisTeam = false;
-					break;
-				}
-				if (!unit.getTeam().equals(team)) {
-					ofThisTeam = false;
-					break;
-				}
-			}
-
-			if (ofThisTeam) {
-				return team;
-			} else {
-				continue;
-			}
-		}
-		return null;
 	}
 
 	@Override
@@ -291,7 +146,7 @@ public class Edura extends TeamDeathmatch {
 	private void setUpRespawnTimer() {
 		// TODO: assuming that there is a main base at this point and that its
 		// timing source is valid is very bad design. change this some day :D
-		timingSource = mainBaseOfTeam.get(getTeamA()).getTimingSource();
+		timingSource = getMainbaseOfTeam(getTeamA()).getTimingSource();
 
 		respawnTimer = new RespawnTimer();
 		timingSource.addTimedEventHandler(respawnTimer);
@@ -374,7 +229,7 @@ public class Edura extends TeamDeathmatch {
 	@Override
 	public void onBaseOccupied(Base base, Team occupyingTeam) {
 		boolean matchEnd = false;
-		for (Base aMainBase : mainBaseOfTeam.values()) {
+		for (Base aMainBase : getMainBases()) {
 			if (base.equals(aMainBase)) {
 				// TODO: we're assuming that a main base cannot be conquered by
 				// the own team for any reason. put a check if the conquered
@@ -386,52 +241,15 @@ public class Edura extends TeamDeathmatch {
 		if (matchEnd) {
 			endRound(occupyingTeam);
 		} else {
-			baseToVertex.get(base).setColor(occupyingTeam.getTeamId());
+			setTeamOfNode(base, occupyingTeam);
 		}
 
 		startGeneratingResourcesInBaseForTeam(base, occupyingTeam);
 	}
 
-	private void startGeneratingResourcesInBaseForTeam(Base base, Team team) {
-		// generate resources
-		if (baseToResourceGenerator.containsKey(base)) {
-			L.severe("Base got occupied although it's already generating resources.");
-		} else {
-			ResourceGenerator newGenerator = new ResourceGenerator(base, team);
-			base.getTimingSource().addTimedEventHandler(newGenerator);
-			baseToResourceGenerator.put(base, newGenerator);
-		}
-
-	}
-
-	class ResourceGenerator implements TimedEventHandler {
-
-		private Base base;
-		private Team team;
-
-		public ResourceGenerator(Base base, Team team) {
-			this.base = base;
-			this.team = team;
-		}
-
-		@Override
-		public long getInterval() {
-			return base.getResourceGenerateTimeInterval();
-		}
-
-		@Override
-		public void onIntervalElapsed(long delta) {
-			gameInfo.getEventTriggerer().changeResourcesOfTeamByAmount(team,
-					base.getResourceGenerateAmountPerTimeInterval());
-		}
-	}
-
 	@Override
 	public void onBaseLost(Base base, Team losingTeam) {
-		// stop generating resources for the team
-		base.getTimingSource().removeTimedEventHandler(
-				baseToResourceGenerator.get(base));
-		baseToResourceGenerator.put(base, null);
+		stopGeneratingResourcesInBaseForTeam(base, losingTeam);
 	}
 
 	@Override
