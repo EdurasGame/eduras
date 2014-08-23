@@ -3,6 +3,8 @@ package de.illonis.eduras.logic;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.newdawn.slick.geom.Rectangle;
+
 import de.illonis.edulog.EduLog;
 import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.ObjectFactory;
@@ -34,6 +36,7 @@ import de.illonis.eduras.events.SetPolygonDataEvent;
 import de.illonis.eduras.events.SetRemainingTimeEvent;
 import de.illonis.eduras.events.SetSettingPropertyEvent;
 import de.illonis.eduras.events.SetSettingsEvent;
+import de.illonis.eduras.events.SetSizeEvent;
 import de.illonis.eduras.events.SetStatsEvent;
 import de.illonis.eduras.events.SetTeamResourceEvent;
 import de.illonis.eduras.events.SetTeamsEvent;
@@ -49,6 +52,7 @@ import de.illonis.eduras.gamemodes.GameMode;
 import de.illonis.eduras.gameobjects.DynamicPolygonObject;
 import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.gameobjects.NeutralArea;
+import de.illonis.eduras.gameobjects.TriggerArea;
 import de.illonis.eduras.interfaces.GameEventListener;
 import de.illonis.eduras.interfaces.GameLogicInterface;
 import de.illonis.eduras.inventory.ItemSlotIsEmptyException;
@@ -175,6 +179,27 @@ public class ClientLogic implements GameLogicInterface {
 				}
 				Weapon w = (Weapon) weapon;
 				w.setCurrentAmmunition(setAmmuEvent.getNewValue());
+				break;
+			case SET_SIZE:
+				SetSizeEvent setSizeEvent = (SetSizeEvent) event;
+				try {
+					GameObject sizeObject = gameInfo
+							.findObjectById(setSizeEvent.getObjectId());
+					if (sizeObject instanceof TriggerArea) {
+						TriggerArea trigger = (TriggerArea) sizeObject;
+						((Rectangle) trigger.getShape()).setSize(
+								setSizeEvent.getWidth(),
+								setSizeEvent.getHeight());
+					} else {
+						L.log(Level.SEVERE,
+								"Tried to change size of an object that is no triggerarea.");
+					}
+				} catch (ObjectNotFoundException e4) {
+					L.log(Level.WARNING,
+							"Tried to change object size but object does not exist.",
+							e4);
+				}
+
 				break;
 			case SET_TEAM_RESOURCE:
 				SetTeamResourceEvent setTeamResEvent = (SetTeamResourceEvent) event;
