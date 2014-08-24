@@ -5,6 +5,12 @@ import java.util.Set;
 
 import de.illonis.eduras.ReferencedEntity;
 
+/**
+ * Checks if any reference name occurs more than once.
+ * 
+ * @author illonis
+ * 
+ */
 public class NamingValidation extends ValidateTask {
 
 	private final Set<String> names = new HashSet<String>();
@@ -13,7 +19,7 @@ public class NamingValidation extends ValidateTask {
 		super("Reference naming");
 	}
 
-	private boolean exists(String refName) {
+	private boolean checkExists(String refName) {
 		if (refName.isEmpty())
 			return false;
 		if (names.contains(refName)) {
@@ -30,17 +36,17 @@ public class NamingValidation extends ValidateTask {
 		names.clear();
 		boolean ok = true;
 		for (ReferencedEntity o : data.getGameObjects()) {
-			if (exists(o.getRefName())) {
+			if (checkExists(o.getRefName())) {
 				ok = false;
 			}
 		}
 		for (ReferencedEntity o : data.getBases()) {
-			if (exists(o.getRefName())) {
+			if (checkExists(o.getRefName())) {
 				ok = false;
 			}
 		}
 		for (ReferencedEntity o : data.getSpawnPoints()) {
-			if (exists(o.getRefName())) {
+			if (checkExists(o.getRefName())) {
 				ok = false;
 			}
 		}

@@ -109,8 +109,10 @@ public class EditorWindow extends JFrame implements StatusListener {
 		statusBar.setCoordinate(x, y);
 	}
 
+	/**
+	 * Refreshs window title to represent new map name.
+	 */
 	public void refreshTitle() {
 		setTitle(MapData.getInstance().getMapName() + BASE_TITLE);
-
 	}
 }

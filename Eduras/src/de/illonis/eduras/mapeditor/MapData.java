@@ -77,7 +77,6 @@ public final class MapData {
 		author = "unknown";
 		width = 500;
 		height = 500;
-		showNodeConnections = false;
 		editShape = null;
 	}
 
