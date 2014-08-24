@@ -71,7 +71,7 @@ public final class CacheInfo {
 		fonts.put(FontKey.HUGE_FONT, new Pair<String, Integer>(
 				"LinLibertine_R.ttf", 24));
 		fonts.put(FontKey.CHAT_FONT, new Pair<String, Integer>(
-				"LinLibertine_R.ttf", 12));
+				"LinLibertine_R.ttf", 14));
 		fonts.put(FontKey.TOOLTIP_FONT, new Pair<String, Integer>(
 				"LinLibertine_R.ttf", 14));
 		fonts.put(FontKey.NAMEPLATE, new Pair<String, Integer>(

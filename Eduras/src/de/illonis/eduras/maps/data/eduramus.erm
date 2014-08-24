@@ -51,7 +51,7 @@ BIGGERBLOCK,		       7 * W/8 + 80, 15 * H/16
 :nodes
 #main base A
 &mainA
-W/2, H/8, 40, 40, TEAM_A
+W/2, H/8, 80, 40, TEAM_A
 
 #middle base
 &middle
@@ -83,7 +83,7 @@ W/4, 3*H/4,40,40,NEUTRAL
 
 #main base B
 &mainB
-W/2, 7 * H/8,40,40,TEAM_B
+W/2, 7 * H/8,80,40,TEAM_B
 
 :nodeconnections
 *mainA, *lefttop

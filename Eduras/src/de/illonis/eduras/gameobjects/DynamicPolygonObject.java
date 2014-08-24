@@ -1,5 +1,8 @@
 package de.illonis.eduras.gameobjects;
 
+import java.util.Collection;
+import java.util.Iterator;
+
 import org.newdawn.slick.Color;
 import org.newdawn.slick.geom.Polygon;
 import org.newdawn.slick.geom.Vector2f;
@@ -67,10 +70,26 @@ public class DynamicPolygonObject extends GameObject {
 	 * Replaces the current polygon points by given ones
 	 * 
 	 * @param vertices
+	 *            new vertices of shape
+	 */
+	public void setPolygonVertices(Collection<Vector2f> vertices) {
+		float[] points = new float[vertices.size() * 2];
+		int i = 0;
+		for (Iterator<Vector2f> iterator = vertices.iterator(); iterator
+				.hasNext();) {
+			Vector2f v = (Vector2f) iterator.next();
+			points[2 * i] = v.x;
+			points[2 * i + 1] = v.y;
+			i++;
+		}
+		setShape(new Polygon(points));
+	}
+
+	/**
+	 * Replaces the current polygon points by given ones
+	 * 
+	 * @param vertices
 	 *            new vertices of shape.
-	 * 
-	 * 
-	 * @author illonis
 	 */
 	public void setPolygonVertices(Vector2f[] vertices) {
 		float[] points = new float[vertices.length * 2];

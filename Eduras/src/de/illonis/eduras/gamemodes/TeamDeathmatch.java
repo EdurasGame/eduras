@@ -53,7 +53,7 @@ public class TeamDeathmatch extends Deathmatch {
 
 		teamA = new Team("Red Team", Team.getNextTeamId(), Color.red);
 		teamB = new Team("Blue Team", Team.getNextTeamId(), Color.blue);
-		LinkedList<Team> teams = new LinkedList<Team>();
+		teams.clear();
 		teams.add(teamA);
 		teams.add(teamB);
 		eventTriggerer.setTeams(teams);

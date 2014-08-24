@@ -19,6 +19,7 @@ public class ChatDisplay extends RenderedGuiObject {
 
 	private final static int MAX_LINES = 5;
 	private final static int WIDTH = 280;
+	private static final long MESSAGE_FADE_TIME = 15000;
 	private final ChatCache data;
 
 	protected ChatDisplay(ChatCache chatData, UserInterface gui) {
@@ -31,30 +32,34 @@ public class ChatDisplay extends RenderedGuiObject {
 	@Override
 	public void render(Graphics g) {
 		Font font = FontCache.getFont(FontKey.CHAT_FONT, g);
-		g.setColor(Color.white);
-
-		ChatMessage msg;
-		int i = font.getLineHeight();
-		if (data.isWriting())
-			i += font.getLineHeight();
-
-		int height = (MAX_LINES + 1) * font.getLineHeight();
-		font.drawString(screenX + WIDTH - 130, screenY - height, "Room: "
-				+ data.getRoomName());
-		while (i < height && null != (msg = data.popMessage())) {
-			if (msg.isSystemMessage())
-				g.setColor(Color.yellow);
-			else
-				g.setColor(Color.white);
-			font.drawString(screenX + 5, screenY - i, msg.toChatWindowString());
-			i += font.getLineHeight();
+		if (data.isEnabled()) {
+			int height = (MAX_LINES + 1) * font.getLineHeight();
+			font.drawString(screenX + WIDTH - 130, screenY - height, "Room: "
+					+ data.getRoomName(), Color.white);
+			ChatMessage msg;
+			int i = font.getLineHeight();
+			if (data.isWriting())
+				i += font.getLineHeight();
+			while (i < height && null != (msg = data.popMessage())) {
+				if (!data.isWriting()
+						&& System.currentTimeMillis() - msg.getTimeStamp() > MESSAGE_FADE_TIME) {
+					break;
+				}
+				font.drawString(screenX + 5, screenY - i, msg
+						.toChatWindowString(),
+						(msg.isSystemMessage()) ? Color.yellow : Color.white);
+				i += font.getLineHeight();
+			}
+			if (data.isWriting()) {
+				font.drawString(screenX + 5, screenY - font.getLineHeight(),
+						data.getInput() + "_", Color.white);
+			}
+			data.resetPop();
+		} else {
+			font.drawString(screenX + WIDTH / 2,
+					screenY - font.getLineHeight(), "Chat is disabled.",
+					Color.yellow);
 		}
-		if (data.isWriting()) {
-			g.setColor(Color.white);
-			font.drawString(screenX + 5, screenY - font.getLineHeight(),
-					data.getInput() + "_");
-		}
-		data.resetPop();
 	}
 
 	@Override

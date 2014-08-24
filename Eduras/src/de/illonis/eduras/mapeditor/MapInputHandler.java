@@ -6,6 +6,7 @@ import org.newdawn.slick.util.InputAdapter;
 
 import de.illonis.eduras.gameobjects.MoveableGameObject.Direction;
 import de.illonis.eduras.mapeditor.MapInteractor.InteractType;
+import de.illonis.eduras.shapecreator.EditablePolygon;
 
 /**
  * Handles user input in map editor.
@@ -43,13 +44,28 @@ public class MapInputHandler extends InputAdapter {
 
 	@Override
 	public void mouseWheelMoved(int change) {
-		float amount;
-		if (change > 0) {
-			amount = 0.1f;
-		} else {
-			amount = -0.1f;
+		boolean rotated = false;
+		if (interactor.getInput().isKeyDown(Input.KEY_LCONTROL)) {
+			float amount;
+			if (change < 0) {
+				amount = 1f;
+			} else {
+				amount = -1f;
+			}
+			if (interactor.getInput().isKeyDown(Input.KEY_LSHIFT)) {
+				amount *= 10;
+			}
+			rotated = interactor.rotateShapeAtMouse(amount);
 		}
-		interactor.setZoom(interactor.getZoom() + amount);
+		if (!rotated) {
+			float amount;
+			if (change > 0) {
+				amount = 0.1f;
+			} else {
+				amount = -0.1f;
+			}
+			interactor.setZoom(interactor.getZoom() + amount);
+		}
 	}
 
 	@Override
@@ -138,6 +154,15 @@ public class MapInputHandler extends InputAdapter {
 			break;
 		case Input.KEY_V:
 			interactor.editShapeAtMouse();
+			break;
+		case Input.KEY_M:
+			interactor.mirrorShapeAtMouse(EditablePolygon.X_AXIS);
+			break;
+		case Input.KEY_N:
+			interactor.mirrorShapeAtMouse(EditablePolygon.Y_AXIS);
+			break;
+		case Input.KEY_C:
+			interactor.copyElementAtMouse();
 			break;
 		default:
 			break;

@@ -35,6 +35,7 @@ import de.illonis.eduras.events.SetMapEvent;
 import de.illonis.eduras.events.SetPolygonDataEvent;
 import de.illonis.eduras.events.SetRemainingTimeEvent;
 import de.illonis.eduras.events.SetSettingsEvent;
+import de.illonis.eduras.events.SetSizeEvent;
 import de.illonis.eduras.events.SetTeamsEvent;
 import de.illonis.eduras.events.SetVisibilityEvent;
 import de.illonis.eduras.exceptions.GameModeNotSupportedByMapException;
@@ -421,6 +422,8 @@ public class GameInformation {
 						base.getId(), base.getCurrentOwnerTeam().getTeamId());
 				infos.add(baseConqueredNotification);
 			}
+			infos.add(new SetSizeEvent(base.getId(),
+					base.getShape().getWidth(), base.getShape().getHeight()));
 		}
 	}
 
