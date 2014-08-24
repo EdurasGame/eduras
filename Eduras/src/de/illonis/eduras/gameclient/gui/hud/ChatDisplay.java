@@ -38,7 +38,8 @@ public class ChatDisplay extends RenderedGuiObject {
 				i = 30;
 
 			while (i < HEIGHT - 15 && null != (msg = data.popMessage())) {
-				if (System.currentTimeMillis() - msg.getTimeStamp() > MESSAGE_FADE_TIME) {
+				if (!data.isWriting()
+						&& System.currentTimeMillis() - msg.getTimeStamp() > MESSAGE_FADE_TIME) {
 					break;
 				}
 
