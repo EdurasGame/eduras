@@ -1,9 +1,13 @@
 package de.illonis.eduras.mapeditor;
 
+import java.util.LinkedList;
+import java.util.List;
+
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
+import org.newdawn.slick.geom.Line;
 import org.newdawn.slick.geom.Point;
 import org.newdawn.slick.geom.Shape;
 import org.newdawn.slick.geom.Vector2f;
@@ -14,10 +18,15 @@ import de.illonis.eduras.gameclient.gui.game.GameCamera;
 import de.illonis.eduras.gameobjects.Base;
 import de.illonis.eduras.gameobjects.DynamicPolygonObject;
 import de.illonis.eduras.gameobjects.GameObject;
+import de.illonis.eduras.gameobjects.Portal;
 import de.illonis.eduras.mapeditor.MapInteractor.InteractType;
 import de.illonis.eduras.maps.NodeData;
 import de.illonis.eduras.maps.SpawnPosition;
+import de.illonis.eduras.math.BasicMath;
+import de.illonis.eduras.math.Geometry;
+import de.illonis.eduras.math.Vector2df;
 import de.illonis.eduras.units.PlayerMainFigure;
+import de.illonis.eduras.unittests.MathUtilsTest;
 
 /**
  * Renders the map in editor.
@@ -66,8 +75,12 @@ public class MapRenderer {
 		for (NodeData node : data.getBases()) {
 			renderNode(node, g);
 		}
+		List<Portal> portals = new LinkedList<Portal>();
 		for (GameObject o : data.getGameObjects()) {
 			renderObject(o, g);
+			if (o instanceof Portal) {
+				portals.add((Portal) o);
+			}
 		}
 		if (interactor.getInteractType() == InteractType.PLACE_SHAPE) {
 			DynamicPolygonObject poly = data.getPlacingObject();
@@ -92,6 +105,33 @@ public class MapRenderer {
 							+ node.getHeight() / 2, linkedNode.getX()
 							+ linkedNode.getWidth() / 2, linkedNode.getY()
 							+ linkedNode.getHeight() / 2);
+				}
+			}
+		}
+		if (data.isShowPortalLinks()) {
+			g.setLineWidth(2f);
+			g.setColor(Color.blue);
+			for (Portal portal : portals) {
+				Portal partner = portal.getPartnerPortal();
+				if (partner != null) {
+					Vector2f start = new Vector2f(portal.getShape()
+							.getCenterX(), portal.getShape().getCenterY());
+					Vector2df end = new Vector2df(
+							partner.getShape().getCenterX(), partner.getShape()
+									.getCenterY());
+					Line l = new Line(start, end);
+					g.draw(l);
+					double angle = Math.atan2(l.getY2() - l.getY1(), l.getX2()
+							- l.getX1());
+					angle = angle - 4 * Math.PI / 3d;
+					Vector2df right = new Vector2df(0, 5 * interactor.getZoom());
+					right.rotate((float) Geometry.toDegree(angle));
+					right.add(end);
+					Vector2df left = right.copy();
+					left.rotate(300, end);
+					g.drawLine(end.x, end.y, right.x, right.y);
+					g.drawLine(end.x, end.y, left.x, left.y);
+
 				}
 			}
 		}
