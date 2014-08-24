@@ -59,8 +59,7 @@
 			<manifest>
 				<attribute name="Main-Class"
 					value="de.illonis.eduras.gameclient.EdurasClient" />
-				<attribute name="SplashScreen-Image"
-									value="res/images/splash.png" />
+				<attribute name="SplashScreen-Image" value="res/images/splash.png" />
 			</manifest>
 		</jar>
 	</target>
@@ -84,8 +83,7 @@
 			<fileset dir="${base}${libs}" includes="native/**" />
 			<fileset file="gitversion" />
 			<manifest>
-				<attribute name="Main-Class"
-					value="de.illonis.eduras.mapeditor.MapEditor" />
+				<attribute name="Main-Class" value="de.illonis.eduras.mapeditor.MapEditor" />
 			</manifest>
 		</jar>
 	</target>
@@ -116,7 +114,8 @@
 				<include name="/licenses/**"></include>
 			</fileset>
 			<fileset file="version" />
-			<zipgroupfileset dir="${base}${libs}" includes="**/*.jar" />
+			<zipgroupfileset dir="${base}${libs}" includes="**/*.jar"
+				excludes="nifty-*,lwjgl.jar, jorbis-*, jogg-*,eventbus-*,xpp*" />
 			<manifest>
 				<attribute name="Main-Class" value="de.illonis.eduras.EdurasServer" />
 			</manifest>
