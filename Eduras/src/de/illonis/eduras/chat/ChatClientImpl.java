@@ -201,8 +201,8 @@ public class ChatClientImpl implements ChatClient {
 	}
 
 	@Override
-	public void connect(String hostname, int port) {
-		client.connect(hostname, port);
+	public boolean connect(String hostname, int port) {
+		return client.connect(hostname, port);
 	}
 
 	@Override
