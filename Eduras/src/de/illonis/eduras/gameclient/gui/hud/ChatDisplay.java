@@ -16,6 +16,7 @@ public class ChatDisplay extends RenderedGuiObject {
 
 	private final static int HEIGHT = 150;
 	private final static int WIDTH = 280;
+	private static final long MESSAGE_FADE_TIME = 15000;
 	private final ChatCache data;
 
 	protected ChatDisplay(ChatCache chatData, UserInterface gui) {
@@ -37,6 +38,10 @@ public class ChatDisplay extends RenderedGuiObject {
 				i = 30;
 
 			while (i < HEIGHT - 15 && null != (msg = data.popMessage())) {
+				if (System.currentTimeMillis() - msg.getTimeStamp() > MESSAGE_FADE_TIME) {
+					break;
+				}
+
 				if (msg.isSystemMessage())
 					g.setColor(Color.yellow);
 				else

@@ -161,7 +161,8 @@ public class ChatCache {
 	 *            the room.
 	 */
 	public void pushSystemMessage(String string, ChatRoom chatRoom) {
-		pushMessage(new SystemMessage(string, chatRoom));
+		pushMessage(new SystemMessage(string, chatRoom,
+				System.currentTimeMillis()));
 	}
 
 	/**
