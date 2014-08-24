@@ -2,6 +2,7 @@ package de.illonis.eduras.mapeditor;
 
 import java.io.File;
 
+import org.newdawn.slick.Input;
 import org.newdawn.slick.geom.Point;
 import org.newdawn.slick.geom.Vector2f;
 
@@ -26,7 +27,8 @@ public interface MapInteractor {
 	 */
 	@SuppressWarnings("javadoc")
 	public enum InteractType {
-		PLACE_BASE, PLACE_SPAWN, PLACE_OBJECT, DEFAULT, PLACE_SHAPE, EDIT_SHAPE;
+		PLACE_BASE, PLACE_SPAWN, ROTATE_SHAPE, PLACE_OBJECT, DEFAULT,
+		PLACE_SHAPE, EDIT_SHAPE;
 	}
 
 	void setInteractType(InteractType type);
@@ -89,5 +91,11 @@ public interface MapInteractor {
 	void importShape(File file);
 
 	Point getMouseLocation();
+
+	Input getInput();
+
+	boolean rotateShapeAtMouse(float degree);
+
+	boolean mirrorShapeAtMouse(int axis);
 
 }

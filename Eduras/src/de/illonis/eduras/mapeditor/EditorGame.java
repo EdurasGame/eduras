@@ -100,7 +100,10 @@ public class EditorGame extends BasicGame {
 
 	@Override
 	public void mouseWheelMoved(int change) {
-		inputHandler.mouseWheelMoved(change);
+		if (panelLogic.getInteractType() == InteractType.EDIT_SHAPE) {
+			shapeInputHandler.mouseWheelMoved(change);
+		} else
+			inputHandler.mouseWheelMoved(change);
 	}
 
 	@Override

@@ -349,11 +349,7 @@ public class MapPanelLogic implements MapInteractor {
 		if (o == null)
 			return;
 		if (o.getType() == ObjectType.DYNAMIC_POLYGON_BLOCK) {
-			EditablePolygon poly = new EditablePolygon();
-			for (int i = 0; i < o.getShape().getPointCount(); i++) {
-				Vector2f point = new Vector2f(o.getShape().getPoint(i));
-				poly.addVector2df(point);
-			}
+			EditablePolygon poly = EditablePolygon.fromShape(o.getShape());
 			data.setEditShape(poly);
 			data.setEditObject((DynamicPolygonObject) o);
 			setInteractType(InteractType.EDIT_SHAPE);
@@ -394,5 +390,42 @@ public class MapPanelLogic implements MapInteractor {
 		if (factor < 0.1f)
 			return;
 		this.zoom = factor;
+	}
+
+	@Override
+	public Input getInput() {
+		return input;
+	}
+
+	@Override
+	public boolean rotateShapeAtMouse(float degree) {
+		int x = input.getMouseX();
+		int y = input.getMouseY();
+		GameObject o = getObjectAt(x, y);
+		if (o == null)
+			return false;
+		if (o.getType() == ObjectType.DYNAMIC_POLYGON_BLOCK) {
+			EditablePolygon poly = EditablePolygon.fromShape(o.getShape());
+			poly.rotate(degree);
+			((DynamicPolygonObject) o).setPolygonVertices(poly.getVector2dfs());
+			return true;
+		}
+		return false;
+	}
+	
+	@Override
+	public boolean mirrorShapeAtMouse(int axis) {
+		int x = input.getMouseX();
+		int y = input.getMouseY();
+		GameObject o = getObjectAt(x, y);
+		if (o == null)
+			return false;
+		if (o.getType() == ObjectType.DYNAMIC_POLYGON_BLOCK) {
+			EditablePolygon poly = EditablePolygon.fromShape(o.getShape());
+			poly.mirror(axis);
+			((DynamicPolygonObject) o).setPolygonVertices(poly.getVector2dfs());
+			return true;
+		}
+		return false;
 	}
 }
