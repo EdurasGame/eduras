@@ -161,6 +161,9 @@ public class MapInputHandler extends InputAdapter {
 		case Input.KEY_N:
 			interactor.mirrorShapeAtMouse(EditablePolygon.Y_AXIS);
 			break;
+		case Input.KEY_C:
+			interactor.copyElementAtMouse();
+			break;
 		default:
 			break;
 		}

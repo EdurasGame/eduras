@@ -97,5 +97,7 @@ public interface MapInteractor {
 	boolean rotateShapeAtMouse(float degree);
 
 	boolean mirrorShapeAtMouse(int axis);
+	
+	void copyElementAtMouse();
 
 }
