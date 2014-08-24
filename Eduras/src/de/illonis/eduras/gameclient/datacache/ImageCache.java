@@ -9,7 +9,6 @@ import org.newdawn.slick.geom.Vector2f;
 
 import de.illonis.eduras.ObjectFactory.ObjectType;
 import de.illonis.eduras.gameclient.datacache.CacheInfo.ImageKey;
-import de.illonis.eduras.math.Vector2df;
 import de.illonis.eduras.shapes.ShapeFactory.ShapeType;
 
 /**
@@ -26,7 +25,7 @@ public final class ImageCache {
 	private final static HashMap<ImageKey, ImageIcon> imageIcons = new HashMap<ImageKey, ImageIcon>();
 	private final static HashMap<ObjectType, Image> inventoryIcons = new HashMap<ObjectType, Image>();
 
-	static void addShape(ShapeType shapeType, Vector2df[] verts) {
+	static void addShape(ShapeType shapeType, Vector2f[] verts) {
 		shapeData.put(shapeType, verts);
 	}
 

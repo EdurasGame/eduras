@@ -3,6 +3,8 @@ package de.illonis.eduras.logic;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.newdawn.slick.geom.Rectangle;
+
 import de.illonis.edulog.EduLog;
 import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.ObjectFactory;
@@ -34,6 +36,7 @@ import de.illonis.eduras.events.SetPolygonDataEvent;
 import de.illonis.eduras.events.SetRemainingTimeEvent;
 import de.illonis.eduras.events.SetSettingPropertyEvent;
 import de.illonis.eduras.events.SetSettingsEvent;
+import de.illonis.eduras.events.SetSizeEvent;
 import de.illonis.eduras.events.SetStatsEvent;
 import de.illonis.eduras.events.SetTeamResourceEvent;
 import de.illonis.eduras.events.SetTeamsEvent;
@@ -50,6 +53,7 @@ import de.illonis.eduras.gameobjects.Base;
 import de.illonis.eduras.gameobjects.DynamicPolygonObject;
 import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.gameobjects.NeutralArea;
+import de.illonis.eduras.gameobjects.TriggerArea;
 import de.illonis.eduras.interfaces.GameEventListener;
 import de.illonis.eduras.interfaces.GameLogicInterface;
 import de.illonis.eduras.inventory.ItemSlotIsEmptyException;
@@ -58,6 +62,7 @@ import de.illonis.eduras.items.Usable;
 import de.illonis.eduras.items.weapons.Weapon;
 import de.illonis.eduras.logicabstraction.EdurasInitializer;
 import de.illonis.eduras.maps.Map;
+import de.illonis.eduras.maps.persistence.InvalidDataException;
 import de.illonis.eduras.settings.S;
 import de.illonis.eduras.settings.S.SettingType;
 import de.illonis.eduras.units.Unit;
@@ -177,6 +182,27 @@ public class ClientLogic implements GameLogicInterface {
 				}
 				Weapon w = (Weapon) weapon;
 				w.setCurrentAmmunition(setAmmuEvent.getNewValue());
+				break;
+			case SET_SIZE:
+				SetSizeEvent setSizeEvent = (SetSizeEvent) event;
+				try {
+					GameObject sizeObject = gameInfo
+							.findObjectById(setSizeEvent.getObjectId());
+					if (sizeObject instanceof TriggerArea) {
+						TriggerArea trigger = (TriggerArea) sizeObject;
+						((Rectangle) trigger.getShape()).setSize(
+								setSizeEvent.getWidth(),
+								setSizeEvent.getHeight());
+					} else {
+						L.log(Level.SEVERE,
+								"Tried to change size of an object that is no triggerarea.");
+					}
+				} catch (ObjectNotFoundException e4) {
+					L.log(Level.WARNING,
+							"Tried to change object size but object does not exist.",
+							e4);
+				}
+
 				break;
 			case SET_TEAM_RESOURCE:
 				SetTeamResourceEvent setTeamResEvent = (SetTeamResourceEvent) event;
@@ -415,10 +441,9 @@ public class ClientLogic implements GameLogicInterface {
 							.getNameOfNewMap()));
 					L.info("Set map to " + setMapEvent.getNameOfNewMap());
 					getListener().onMapChanged(setMapEvent);
-				} catch (NoSuchMapException e1) {
-					L.log(Level.SEVERE,
-							"Cannot find map " + setMapEvent.getNameOfNewMap(),
-							e1);
+				} catch (NoSuchMapException | InvalidDataException e1) {
+					L.log(Level.SEVERE, "Cannot find or load map "
+							+ setMapEvent.getNameOfNewMap(), e1);
 				}
 				break;
 			}

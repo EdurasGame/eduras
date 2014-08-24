@@ -454,6 +454,11 @@ public class EdurasInitializer {
 					GameObject objectToMakeInvisible, long timeInMiliseconds) {
 			}
 
+			@Override
+			public void setTriggerAreaSize(int objectId, float newWidth,
+					float newHeight) throws ObjectNotFoundException {
+			}
+
 		});
 
 		networkManager.getClient().setEventHandler(new EventParser(logic));

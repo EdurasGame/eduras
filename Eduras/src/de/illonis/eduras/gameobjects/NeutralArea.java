@@ -25,6 +25,10 @@ public abstract class NeutralArea extends TriggerArea {
 	private final static Logger L = EduLog.getLoggerFor(NeutralArea.class
 			.getName());
 
+	/**
+	 * Default node size.
+	 */
+	public final static int DEFAULT_SIZE = 40;
 	private Team currentOwnerTeam;
 	private Team currentProgressingTeam;
 	private double progress = 0;
@@ -41,7 +45,7 @@ public abstract class NeutralArea extends TriggerArea {
 	public NeutralArea(GameInformation game, TimingSource timingSource, int id) {
 		super(game, timingSource, id);
 		setObjectType(ObjectType.NEUTRAL_BASE);
-		setShape(new Rectangle(0, 0, 40, 40));
+		setShape(new Rectangle(0, 0, DEFAULT_SIZE, DEFAULT_SIZE));
 		currentOwnerTeam = null;
 		currentProgressingTeam = null;
 	}

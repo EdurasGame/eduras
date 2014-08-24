@@ -8,6 +8,7 @@ import org.newdawn.slick.particles.ConfigurableEmitter;
 
 import de.illonis.edulog.EduLog;
 import de.illonis.eduras.ObjectFactory.ObjectType;
+import de.illonis.eduras.Player;
 import de.illonis.eduras.Team;
 import de.illonis.eduras.events.ItemUseFailedEvent;
 import de.illonis.eduras.events.ItemUseFailedEvent.Reason;
@@ -20,6 +21,7 @@ import de.illonis.eduras.gameclient.audio.SoundMachine.SoundType;
 import de.illonis.eduras.gameclient.gui.animation.EffectFactory.EffectNumber;
 import de.illonis.eduras.gameobjects.Base;
 import de.illonis.eduras.gameobjects.GameObject;
+import de.illonis.eduras.inventory.ItemSlotIsEmptyException;
 import de.illonis.eduras.logicabstraction.EdurasInitializer;
 import de.illonis.eduras.logicabstraction.InformationProvider;
 import de.illonis.eduras.units.Unit;
@@ -48,23 +50,14 @@ public class ClientEffectHandler extends GameEventAdapter {
 	}
 
 	@Override
-	public void onItemSlotChanged(SetItemSlotEvent event) {
-		if (event.getOwner() == infos.getOwnerID() && event.getObjectId() != -1) {
-			// TODO: Change sound to a new one.
-			SoundMachine.play(SoundType.CLICK);
-		}
-	}
-
-	@Override
 	public void onHealthChanged(Unit unit, int oldValue, int newValue) {
 		try {
 			if (unit.equals(infos.getPlayer().getPlayerMainFigure())) {
 				if (newValue > oldValue) {
-					// TODO: Change the sounds here
-					SoundMachine.play(SoundType.CLICK);
+					SoundMachine.play(SoundType.LOOT);
 				} else {
 					if (newValue < oldValue) {
-						SoundMachine.play(SoundType.ERROR);
+						SoundMachine.play(SoundType.HURT);
 					}
 				}
 			}
@@ -99,5 +92,19 @@ public class ClientEffectHandler extends GameEventAdapter {
 	public void onBaseConquered(Base base, Team conqueringTeam) {
 		// TODO: Change sound to some special sound.
 		SoundMachine.play(SoundType.CLICK);
+	}
+
+	@Override
+	public void onItemSlotChanged(SetItemSlotEvent event) {
+
+		try {
+			Player player = infos.getPlayer();
+			if (event.getOwner() == player.getPlayerId()) {
+				player.getInventory().getItemBySlot(event.getItemSlot());
+				SoundMachine.play(SoundType.LOOT, 1f, .8f);
+			}
+		} catch (ItemSlotIsEmptyException | ObjectNotFoundException e) {
+			// item lost or something like that
+		}
 	}
 }

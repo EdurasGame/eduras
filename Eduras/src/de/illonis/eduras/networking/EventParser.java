@@ -50,6 +50,7 @@ import de.illonis.eduras.events.SetPolygonDataEvent;
 import de.illonis.eduras.events.SetRemainingTimeEvent;
 import de.illonis.eduras.events.SetSettingPropertyEvent;
 import de.illonis.eduras.events.SetSettingsEvent;
+import de.illonis.eduras.events.SetSizeEvent;
 import de.illonis.eduras.events.SetStatsEvent;
 import de.illonis.eduras.events.SetTeamResourceEvent;
 import de.illonis.eduras.events.SetTeamsEvent;
@@ -123,6 +124,11 @@ public class EventParser implements EventHandler {
 				logic.onGameEventAppeared(new UserMovementEvent(
 						GameEventNumber.MOVE_RIGHT_PRESSED, (Integer) event
 								.getArgument(0)));
+				break;
+			case SET_SIZE:
+				logic.onGameEventAppeared(new SetSizeEvent((int) event
+						.getArgument(0), (float) event.getArgument(1),
+						(float) event.getArgument(2)));
 				break;
 			case MOVE_UP_PRESSED:
 				logic.onGameEventAppeared(new UserMovementEvent(

@@ -45,6 +45,7 @@ import de.illonis.eduras.logic.ServerGameEventListener;
 import de.illonis.eduras.logic.ServerLogic;
 import de.illonis.eduras.maps.FunMap;
 import de.illonis.eduras.maps.Map;
+import de.illonis.eduras.maps.persistence.InvalidDataException;
 import de.illonis.eduras.networking.EventParser;
 import de.illonis.eduras.networking.InetPolizei;
 import de.illonis.eduras.networking.ServerNetworker;
@@ -301,8 +302,11 @@ public class EdurasServer {
 	 *            Name of the map.
 	 * @throws NoSuchMapException
 	 *             Thrown if the map is unknown.
+	 * @throws InvalidDataException
+	 *             if loading from file failed due to syntax error in mapfile.
 	 */
-	public void setStartMap(String startMap) throws NoSuchMapException {
+	public void setStartMap(String startMap) throws NoSuchMapException,
+			InvalidDataException {
 		this.startMap = Map.getMapByName(startMap);
 	}
 
@@ -601,6 +605,10 @@ public class EdurasServer {
 				} catch (NoSuchMapException e) {
 					System.out
 							.println("There is no such map " + parameterValue);
+					System.exit(-1);
+				} catch (InvalidDataException e) {
+					L.log(Level.SEVERE, "Could not load map " + parameterValue
+							+ ".", e);
 					System.exit(-1);
 				}
 				break;

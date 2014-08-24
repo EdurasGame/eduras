@@ -1,5 +1,6 @@
 package de.illonis.eduras.gameobjects;
 
+import org.newdawn.slick.Color;
 import org.newdawn.slick.geom.Polygon;
 import org.newdawn.slick.geom.Vector2f;
 
@@ -15,6 +16,8 @@ import de.illonis.eduras.math.Geometry;
  * 
  */
 public class DynamicPolygonObject extends GameObject {
+
+	private Color fillColor;
 
 	/**
 	 * Creates a new polygon block with an empty polygon shape.
@@ -34,6 +37,7 @@ public class DynamicPolygonObject extends GameObject {
 		setObjectType(type);
 		float[] nullPolygon = new float[6];
 		setShape(new Polygon(nullPolygon));
+		fillColor = Color.gray;
 	}
 
 	/**
@@ -94,6 +98,23 @@ public class DynamicPolygonObject extends GameObject {
 	@Override
 	protected boolean isCollidableWith(GameObject otherObject) {
 		return true;
+	}
+
+	/**
+	 * @return the fill color.
+	 */
+	public Color getColor() {
+		return fillColor;
+	}
+
+	/**
+	 * Sets the fill color of this polygon.
+	 * 
+	 * @param color
+	 *            the fill color.
+	 */
+	public void setColor(Color color) {
+		fillColor = color;
 	}
 
 }

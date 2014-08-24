@@ -18,6 +18,7 @@ public class Portal extends TriggerArea {
 
 	private final static Logger L = EduLog.getLoggerFor(Portal.class.getName());
 
+	public final static String OTHER_PORTAL_REFERENCE = "otherPortal";
 	private Portal partnerPortal;
 	private LinkedList<MoveableGameObject> justPortedObjects;
 

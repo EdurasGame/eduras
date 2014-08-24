@@ -155,7 +155,7 @@ public class ClientGameEventListener implements GameEventListener {
 	public void onInteractModeChanged(SetInteractModeEvent setModeEvent) {
 		ui.onInteractModeChanged(setModeEvent);
 		effects.onInteractModeChanged(setModeEvent);
-		client.getLogic().resetCamera();
+		client.getLogic().onInteractModeChanged(setModeEvent);
 	}
 
 	@Override

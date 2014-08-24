@@ -120,13 +120,19 @@ public final class GuiMouseHandler extends GuiMouseAdapter implements
 
 	@Override
 	public void mouseClicked(int button, int x, int y, int clickCount) {
+		boolean elementAt = false;
 		for (Iterator<ClickableGuiElementInterface> iterator = clickListeners
 				.iterator(); iterator.hasNext();) {
 			ClickableGuiElementInterface nextReactor = iterator.next();
 			if (nextReactor.isActive()
-					&& nextReactor.getBounds().contains(x, y))
-				return;
+					&& nextReactor.getBounds().contains(x, y)) {
+				elementAt = true;
+				if (nextReactor.mouseClicked(button, x, y, clickCount))
+					break;
+			}
 		}
+		if (elementAt)
+			return;
 
 		Player player;
 		try {
@@ -162,6 +168,19 @@ public final class GuiMouseHandler extends GuiMouseAdapter implements
 				break;
 			}
 		}
+		boolean elementAt = false;
+		for (Iterator<ClickableGuiElementInterface> iterator = clickListeners
+				.iterator(); iterator.hasNext();) {
+			ClickableGuiElementInterface nextReactor = iterator.next();
+			if (nextReactor.isActive()
+					&& (nextReactor.getBounds().contains(newx, newy))) {
+				elementAt = true;
+				if (nextReactor.mouseMoved(oldx, oldy, newx, newy))
+					break;
+			}
+		}
+		if (elementAt)
+			return;
 
 		Player player;
 		try {
@@ -196,14 +215,20 @@ public final class GuiMouseHandler extends GuiMouseAdapter implements
 				break;
 			}
 		}
+		boolean elementAt = false;
 		for (Iterator<ClickableGuiElementInterface> iterator = clickListeners
 				.iterator(); iterator.hasNext();) {
 			ClickableGuiElementInterface nextReactor = iterator.next();
 			if (nextReactor.isActive()
-					&& (nextReactor.getBounds().contains(oldx, oldy) || nextReactor
-							.getBounds().contains(newx, newy)))
-				return;
+					&& (nextReactor.getBounds().contains(newx, newy))) {
+				elementAt = true;
+				if (nextReactor.mouseDragged(oldx, oldy, newx, newy)) {
+					break;
+				}
+			}
 		}
+		if (elementAt)
+			return;
 		Player player;
 		try {
 			player = infoPro.getPlayer();
@@ -228,15 +253,19 @@ public final class GuiMouseHandler extends GuiMouseAdapter implements
 
 	@Override
 	public void mouseReleased(int button, int x, int y) {
-		Vector2f p = new Vector2f(x, y);
+		boolean elementAt = false;
 		for (Iterator<ClickableGuiElementInterface> iterator = clickListeners
 				.iterator(); iterator.hasNext();) {
 			ClickableGuiElementInterface nextReactor = iterator.next();
 			if (nextReactor.isActive()
-					&& nextReactor.getBounds().contains(x, y))
-				if (nextReactor.onClick(p))
-					return;
+					&& nextReactor.getBounds().contains(x, y)) {
+				elementAt = true;
+				if (nextReactor.mouseReleased(button, x, y))
+					break;
+			}
 		}
+		if (elementAt)
+			return;
 		Player player;
 		try {
 			player = infoPro.getPlayer();
@@ -261,6 +290,20 @@ public final class GuiMouseHandler extends GuiMouseAdapter implements
 
 	@Override
 	public void mouseWheelMoved(int change) {
+		Vector2f mouse = getPanelLogic().getCurrentMousePos();
+		boolean elementAt = false;
+		for (Iterator<ClickableGuiElementInterface> iterator = clickListeners
+				.iterator(); iterator.hasNext();) {
+			ClickableGuiElementInterface nextReactor = iterator.next();
+			if (nextReactor.isActive()
+					&& nextReactor.getBounds().contains(mouse.x, mouse.y)) {
+				elementAt = true;
+				if (nextReactor.mouseWheelMoved(change))
+					break;
+			}
+		}
+		if (elementAt)
+			return;
 		Player player;
 		try {
 			player = infoPro.getPlayer();
@@ -286,13 +329,20 @@ public final class GuiMouseHandler extends GuiMouseAdapter implements
 
 	@Override
 	public void mousePressed(int button, int x, int y) {
+		boolean elementAt = false;
 		for (Iterator<ClickableGuiElementInterface> iterator = clickListeners
 				.iterator(); iterator.hasNext();) {
 			ClickableGuiElementInterface nextReactor = iterator.next();
 			if (nextReactor.isActive()
-					&& nextReactor.getBounds().contains(x, y))
-				return;
+					&& nextReactor.getBounds().contains(x, y)) {
+				elementAt = true;
+				if (nextReactor.mousePressed(button, x, y)) {
+					break;
+				}
+			}
 		}
+		if (elementAt)
+			return;
 		Player player;
 		try {
 			player = infoPro.getPlayer();

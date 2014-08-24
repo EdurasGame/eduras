@@ -19,12 +19,11 @@ import de.illonis.eduras.settings.S;
  */
 public class Base extends NeutralArea {
 
-	private final static Logger L = EduLog.getLoggerFor(Base.class
-			.getName());
+	private final static Logger L = EduLog.getLoggerFor(Base.class.getName());
 
 	private final long resourceGenerateTimeInterval;
 	private final int resourceGenerateAmount;
-	private int resourceGenerateMultiplicator;
+	private float resourceGenerateMultiplicator;
 
 	/**
 	 * Denotes whether a base belongs to team a, team b or is neutral when
@@ -48,7 +47,7 @@ public class Base extends NeutralArea {
 	 *            multiplcator for resource generation amount.
 	 */
 	public Base(GameInformation game, TimingSource timingSource, int id,
-			int mult) {
+			float mult) {
 		super(game, timingSource, id);
 		setTimeNeeded(S.Server.neutralbase_overtaketime_default);
 		resourceGenerateAmount = S.Server.neutralbase_resource_baseamount;
@@ -103,7 +102,8 @@ public class Base extends NeutralArea {
 	 * @return amount of resources
 	 */
 	public int getResourceGenerateAmountPerTimeInterval() {
-		return resourceGenerateAmount * resourceGenerateMultiplicator;
+		return Math.round(resourceGenerateAmount
+				* resourceGenerateMultiplicator);
 	}
 
 	/**
@@ -120,7 +120,7 @@ public class Base extends NeutralArea {
 	 * 
 	 * @return multiplicator
 	 */
-	public int getResourceGenerateMultiplicator() {
+	public float getResourceGenerateMultiplicator() {
 		return resourceGenerateMultiplicator;
 	}
 
@@ -130,7 +130,7 @@ public class Base extends NeutralArea {
 	 * @param resourceGenerateMultiplicator
 	 */
 	public void setResourceGenerateMultiplicator(
-			int resourceGenerateMultiplicator) {
+			float resourceGenerateMultiplicator) {
 		this.resourceGenerateMultiplicator = resourceGenerateMultiplicator;
 	}
 }

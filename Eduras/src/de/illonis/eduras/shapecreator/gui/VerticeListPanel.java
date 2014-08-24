@@ -13,7 +13,8 @@ import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
-import de.illonis.eduras.math.Vector2df;
+import org.newdawn.slick.geom.Vector2f;
+
 import de.illonis.eduras.shapecreator.DataHolder;
 import de.illonis.eduras.shapecreator.VerticeListException;
 
@@ -55,7 +56,7 @@ public class VerticeListPanel extends ScrollablePanel implements
 			public void actionPerformed(ActionEvent e) {
 				JTable table = (JTable) e.getSource();
 				int modelRow = Integer.valueOf(e.getActionCommand());
-				Vector2df v = ((RecordTableModel) table.getModel())
+				Vector2f v = ((RecordTableModel) table.getModel())
 						.getVector2df(modelRow);
 				try {
 					data.getPolygon().moveUpVector2df(v);
@@ -72,7 +73,7 @@ public class VerticeListPanel extends ScrollablePanel implements
 			public void actionPerformed(ActionEvent e) {
 				JTable table = (JTable) e.getSource();
 				int modelRow = Integer.valueOf(e.getActionCommand());
-				Vector2df v = ((RecordTableModel) table.getModel())
+				Vector2f v = ((RecordTableModel) table.getModel())
 						.getVector2df(modelRow);
 				try {
 
@@ -90,7 +91,7 @@ public class VerticeListPanel extends ScrollablePanel implements
 			public void actionPerformed(ActionEvent e) {
 				JTable table = (JTable) e.getSource();
 				int modelRow = Integer.valueOf(e.getActionCommand());
-				Vector2df v = ((RecordTableModel) table.getModel())
+				Vector2f v = ((RecordTableModel) table.getModel())
 						.getVector2df(modelRow);
 
 				m.remove(modelRow);
@@ -131,7 +132,7 @@ public class VerticeListPanel extends ScrollablePanel implements
 	@Override
 	public void valueChanged(ListSelectionEvent e) {
 		if (!e.getValueIsAdjusting()) {
-			LinkedList<Vector2df> l = new LinkedList<Vector2df>(data.getPolygon()
+			LinkedList<Vector2f> l = new LinkedList<Vector2f>(data.getPolygon()
 					.getVector2dfs());
 			int selection = verticeList.getSelectedRow();
 			if (selection >= 0)

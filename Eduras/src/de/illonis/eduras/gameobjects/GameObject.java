@@ -11,6 +11,7 @@ import org.newdawn.slick.geom.Vector2f;
 import de.illonis.edulog.EduLog;
 import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.ObjectFactory.ObjectType;
+import de.illonis.eduras.ReferencedEntity;
 import de.illonis.eduras.ai.AIControllable;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
 import de.illonis.eduras.exceptions.ShapeNotSupportedException;
@@ -26,7 +27,8 @@ import de.illonis.eduras.units.Unit;
  * @author Florian Mai <florian.ren.mai@googlemail.com>
  * 
  */
-public abstract class GameObject implements Comparable<GameObject> {
+public abstract class GameObject extends ReferencedEntity implements
+		Comparable<GameObject> {
 
 	private final static Logger L = EduLog.getLoggerFor(GameObject.class
 			.getName());
@@ -113,6 +115,7 @@ public abstract class GameObject implements Comparable<GameObject> {
 	public GameObject(GameInformation game, TimingSource timingSource, int id) {
 		this.game = game;
 		this.id = id;
+		setRefName("");
 		this.timingSource = timingSource;
 		setObjectType(ObjectType.NO_OBJECT);
 	}

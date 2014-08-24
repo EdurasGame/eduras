@@ -114,7 +114,13 @@ public interface MenuActionReactor {
 	 *            new mode.
 	 */
 	void setMode(InteractMode mode);
-	
+
+	/**
+	 * Loads given file as background image.
+	 * 
+	 * @param file
+	 *            the file.
+	 */
 	void loadBackgroundImage(File file);
 
 }

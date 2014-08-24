@@ -3,7 +3,8 @@ package de.illonis.eduras.shapecreator;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import de.illonis.eduras.math.Vector2df;
+import org.newdawn.slick.geom.Vector2f;
+
 import de.illonis.eduras.shapecreator.templates.TemplateManager;
 import de.illonis.eduras.shapecreator.templates.TemplateNotFoundException;
 
@@ -15,10 +16,10 @@ import de.illonis.eduras.shapecreator.templates.TemplateNotFoundException;
  */
 public class EditablePolygon {
 
-	private final ArrayList<Vector2df> vertices;
+	private final ArrayList<Vector2f> vertices;
 
-	protected EditablePolygon() {
-		vertices = new ArrayList<Vector2df>();
+	public EditablePolygon() {
+		vertices = new ArrayList<Vector2f>();
 	}
 
 	/**
@@ -27,7 +28,7 @@ public class EditablePolygon {
 	 * @param v
 	 *            the new vertice.
 	 */
-	public void addVector2df(Vector2df v) {
+	public void addVector2df(Vector2f v) {
 		vertices.add(v);
 		DataHolder.getInstance().notifyVector2dfsChanged();
 	}
@@ -38,11 +39,9 @@ public class EditablePolygon {
 	 * @param v
 	 *            the vertice to be removed.
 	 */
-	public void removeVector2df(Vector2df v) {
-		if (vertices.size() > 1) {
-			vertices.remove(v);
-			DataHolder.getInstance().notifyVector2dfsChanged();
-		}
+	public void removeVector2df(Vector2f v) {
+		vertices.remove(v);
+		DataHolder.getInstance().notifyVector2dfsChanged();
 	}
 
 	/**
@@ -53,7 +52,7 @@ public class EditablePolygon {
 	 * @throws VerticeListException
 	 *             if vertice is at bottom list position.
 	 */
-	public void moveDownVector2df(Vector2df v) throws VerticeListException {
+	public void moveDownVector2df(Vector2f v) throws VerticeListException {
 		int index = vertices.indexOf(v);
 		if (index == vertices.size() - 1)
 			throw new VerticeListException("Cannot move vertice down.");
@@ -68,7 +67,7 @@ public class EditablePolygon {
 	 * @throws VerticeListException
 	 *             if vertice is at top list position.
 	 */
-	public void moveUpVector2df(Vector2df v) throws VerticeListException {
+	public void moveUpVector2df(Vector2f v) throws VerticeListException {
 		int index = vertices.indexOf(v);
 		if (index == 0)
 			throw new VerticeListException("Cannot move vertice up.");
@@ -76,8 +75,8 @@ public class EditablePolygon {
 	}
 
 	private void exchangeVector2dfs(int firstIndex, int secondIndex) {
-		Vector2df first = vertices.get(firstIndex);
-		Vector2df second = vertices.get(secondIndex);
+		Vector2f first = vertices.get(firstIndex);
+		Vector2f second = vertices.get(secondIndex);
 		vertices.set(firstIndex, second);
 		vertices.set(secondIndex, first);
 		DataHolder.getInstance().notifyVector2dfsChanged();
@@ -94,13 +93,13 @@ public class EditablePolygon {
 	 *             if no vertice is near the point (this is when vertice list is
 	 *             empty).
 	 */
-	public Vector2df findNearestVector2df(Vector2df searchPoint)
+	public Vector2f findNearestVector2df(Vector2f searchPoint)
 			throws NoVerticeFoundException {
 		if (vertices.size() == 0)
 			throw new NoVerticeFoundException();
 		float distance = Float.MAX_VALUE;
-		Vector2df result = null;
-		for (Vector2df thisVert : vertices) {
+		Vector2f result = null;
+		for (Vector2f thisVert : vertices) {
 			float thisDistance = thisVert.distance(searchPoint);
 			if (thisDistance < distance) {
 				result = thisVert;
@@ -108,6 +107,36 @@ public class EditablePolygon {
 			}
 		}
 		return result;
+	}
+
+	/**
+	 * Returns the vertice that is before this one.
+	 * 
+	 * @param vector
+	 *            the vector.
+	 * @return the vector before given vector.
+	 */
+	public Vector2f findBefore(Vector2f vector) {
+		int i = vertices.indexOf(vector);
+		if (i == 0) {
+			return vertices.get(vertices.size() - 1);
+		} else
+			return vertices.get(i - 1);
+	}
+
+	/**
+	 * Returns the vertice that is after this one.
+	 * 
+	 * @param vector
+	 *            the vector.
+	 * @return the vector after given vector.
+	 */
+	public Vector2f findAfter(Vector2f vector) {
+		int i = vertices.indexOf(vector);
+		if (i == vertices.size() - 1) {
+			return vertices.get(0);
+		} else
+			return vertices.get(i + 1);
 	}
 
 	/**
@@ -130,7 +159,43 @@ public class EditablePolygon {
 	 * 
 	 * @return the vertices of this polygon.
 	 */
-	public Collection<Vector2df> getVector2dfs() {
+	public Collection<Vector2f> getVector2dfs() {
 		return vertices;
+	}
+
+	/**
+	 * Adds a vertice after another one.
+	 * 
+	 * @param vert
+	 *            the vertice to add.
+	 * @param nearest
+	 *            the vertice after that given vertice should be added.
+	 */
+	public void addVerticeAfter(Vector2f vert, Vector2f nearest) {
+		int index = vertices.indexOf(nearest);
+		if (index == vertices.size() - 1) {
+			vertices.add(vert);
+		} else
+			vertices.add(vertices.indexOf(nearest) + 1, vert);
+		DataHolder.getInstance().notifyVector2dfsChanged();
+
+	}
+
+	/**
+	 * Adds a vertice before another one.
+	 * 
+	 * @param vert
+	 *            the vertice to add.
+	 * @param nearest
+	 *            the vertice before that given vertice should be added.
+	 */
+	public void addVerticeBefore(Vector2f vert, Vector2f nearest) {
+		int index = vertices.indexOf(nearest);
+		if (index < 0) {
+			index = 0;
+		}
+		vertices.add(index, vert);
+		DataHolder.getInstance().notifyVector2dfsChanged();
+
 	}
 }
