@@ -27,29 +27,34 @@ public class ChatDisplay extends RenderedGuiObject {
 
 	@Override
 	public void render(Graphics g) {
-		g.setColor(Color.white);
-		g.drawString("Room: " + data.getRoomName(), screenX + WIDTH - 130,
-				screenY + 10);
-		ChatMessage msg;
-		int i = 15;
-		if (data.isWriting())
-			i = 30;
-
-		while (i < HEIGHT - 15 && null != (msg = data.popMessage())) {
-			if (msg.isSystemMessage())
-				g.setColor(Color.yellow);
-			else
-				g.setColor(Color.white);
-			g.drawString(msg.toChatWindowString(), screenX + 5, screenY
-					+ HEIGHT - i);
-			i += 15;
-		}
-		if (data.isWriting()) {
+		if (data.isEnabled()) {
 			g.setColor(Color.white);
-			g.drawString(data.getInput() + "_", screenX + 5, screenY + HEIGHT
-					- 15);
+			g.drawString("Room: " + data.getRoomName(), screenX + WIDTH - 130,
+					screenY + 10);
+			ChatMessage msg;
+			int i = 15;
+			if (data.isWriting())
+				i = 30;
+
+			while (i < HEIGHT - 15 && null != (msg = data.popMessage())) {
+				if (msg.isSystemMessage())
+					g.setColor(Color.yellow);
+				else
+					g.setColor(Color.white);
+				g.drawString(msg.toChatWindowString(), screenX + 5, screenY
+						+ HEIGHT - i);
+				i += 15;
+			}
+			if (data.isWriting()) {
+				g.setColor(Color.white);
+				g.drawString(data.getInput() + "_", screenX + 5, screenY
+						+ HEIGHT - 15);
+			}
+			data.resetPop();
+		} else {
+			g.drawString("Chat is disabled.", screenX + WIDTH / 2, screenY
+					+ HEIGHT / 2);
 		}
-		data.resetPop();
 	}
 
 	@Override
