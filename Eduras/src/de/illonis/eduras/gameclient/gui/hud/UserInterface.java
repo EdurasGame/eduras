@@ -109,7 +109,7 @@ public class UserInterface implements GuiResizeListener {
 	}
 
 	private void createElements() {
-		
+
 		new GameModeBar(this);
 		new PlayerStatBar(this);
 		minimap = new MiniMap(this);
@@ -120,9 +120,9 @@ public class UserInterface implements GuiResizeListener {
 		pingDisplay = new PingDisplay(this);
 		notificationPanel = new NotificationPanel(this);
 		tipPanel = new TipPanel(this, minimap);
+		statWindow = new StatisticsWindow(this);
 		bigPanel = new BigPanel(this);
 		dragRect = new DragSelectionRectangle(this);
-		statWindow = new StatisticsWindow(this);
 		exitPopup = new ExitPopup(this);
 		new ChatDisplay(cache, this);
 		// new BugReportButton(this);
