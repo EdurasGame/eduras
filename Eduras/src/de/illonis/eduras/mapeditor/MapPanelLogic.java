@@ -328,9 +328,24 @@ public class MapPanelLogic implements MapInteractor {
 		GameObject o = getObjectAt(x, y);
 		if (o != null) {
 			data.remove(o);
+			if (o instanceof Portal) {
+				Portal portal = (Portal) o;
+				for (GameObject obj : data.getGameObjects()) {
+					if (obj instanceof Portal) {
+						Portal parent = (Portal) obj;
+						if (parent.getPartnerPortal() != null
+								&& portal.equals(parent.getPartnerPortal())) {
+							parent.setPartnerPortal(null);
+						}
+					}
+				}
+			}
 		} else {
 			NodeData node = getBaseAt(x, y);
 			if (node != null) {
+				for (NodeData subNode : data.getBases()) {
+					subNode.getAdjacentNodes().remove(node);
+				}
 				data.remove(node);
 			} else {
 				SpawnPosition spawn = getSpawnPointAt(x, y);

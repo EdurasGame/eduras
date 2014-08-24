@@ -22,11 +22,9 @@ import de.illonis.eduras.gameobjects.Portal;
 import de.illonis.eduras.mapeditor.MapInteractor.InteractType;
 import de.illonis.eduras.maps.NodeData;
 import de.illonis.eduras.maps.SpawnPosition;
-import de.illonis.eduras.math.BasicMath;
 import de.illonis.eduras.math.Geometry;
 import de.illonis.eduras.math.Vector2df;
 import de.illonis.eduras.units.PlayerMainFigure;
-import de.illonis.eduras.unittests.MathUtilsTest;
 
 /**
  * Renders the map in editor.
@@ -116,9 +114,8 @@ public class MapRenderer {
 				if (partner != null) {
 					Vector2f start = new Vector2f(portal.getShape()
 							.getCenterX(), portal.getShape().getCenterY());
-					Vector2df end = new Vector2df(
-							partner.getShape().getCenterX(), partner.getShape()
-									.getCenterY());
+					Vector2df end = new Vector2df(partner.getShape()
+							.getCenterX(), partner.getShape().getCenterY());
 					Line l = new Line(start, end);
 					g.draw(l);
 					double angle = Math.atan2(l.getY2() - l.getY1(), l.getX2()
