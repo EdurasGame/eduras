@@ -2,7 +2,6 @@ package de.illonis.eduras.mapeditor;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.logging.Level;
 
 import javax.swing.JOptionPane;
 

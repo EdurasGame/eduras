@@ -3,8 +3,10 @@ package de.illonis.eduras.shapecreator;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import org.newdawn.slick.geom.Shape;
 import org.newdawn.slick.geom.Vector2f;
 
+import de.illonis.eduras.math.Vector2df;
 import de.illonis.eduras.shapecreator.templates.TemplateManager;
 import de.illonis.eduras.shapecreator.templates.TemplateNotFoundException;
 
@@ -16,8 +18,20 @@ import de.illonis.eduras.shapecreator.templates.TemplateNotFoundException;
  */
 public class EditablePolygon {
 
+	/**
+	 * Mirror at x-axis.
+	 */
+	public final static int X_AXIS = 1;
+	/**
+	 * Mirror at y-axis.
+	 */
+	public final static int Y_AXIS = 0;
+
 	private final ArrayList<Vector2f> vertices;
 
+	/**
+	 * Creates a new empty polygon.
+	 */
 	public EditablePolygon() {
 		vertices = new ArrayList<Vector2f>();
 	}
@@ -182,6 +196,54 @@ public class EditablePolygon {
 	}
 
 	/**
+	 * Rotates this polygon around its center by given angle.
+	 * 
+	 * @param angle
+	 *            angle in degree.
+	 */
+	public void rotate(float angle) {
+		Vector2f center = getCenter();
+		Vector2df centerPos = new Vector2df(center);
+		for (Vector2f v : vertices) {
+			Vector2df vec = new Vector2df(v);
+			vec.rotate(angle, centerPos);
+			v.set(vec);
+		}
+	}
+
+	/**
+	 * Mirrors the polygon at either x- or y-axis.
+	 * 
+	 * @param axis
+	 *            either {@link #X_AXIS} or {@link #Y_AXIS}.
+	 */
+	public void mirror(int axis) {
+		Vector2f center = getCenter();
+		for (Vector2f v : vertices) {
+			if (axis == Y_AXIS) {
+				float diff = v.x - center.x;
+				v.x -= 2 * diff;
+			}
+			if (axis == X_AXIS) {
+				float diff = v.y - center.y;
+				v.y -= 2 * diff;
+			}
+		}
+	}
+
+	private Vector2f getCenter() {
+		float x = 0;
+		float y = 0;
+		for (Vector2f v : vertices) {
+			x += v.x;
+			y += v.y;
+		}
+		x = x / vertices.size();
+		y = y / vertices.size();
+		return new Vector2f(x, y);
+	}
+
+	/**
 	 * Adds a vertice before another one.
 	 * 
 	 * @param vert
@@ -197,5 +259,21 @@ public class EditablePolygon {
 		vertices.add(index, vert);
 		DataHolder.getInstance().notifyVector2dfsChanged();
 
+	}
+
+	/**
+	 * Creates an editable polygon from given shape.
+	 * 
+	 * @param shape
+	 *            the shape.
+	 * @return a polygon containing the same vertices as given shape.
+	 */
+	public static EditablePolygon fromShape(Shape shape) {
+		EditablePolygon poly = new EditablePolygon();
+		for (int i = 0; i < shape.getPointCount(); i++) {
+			Vector2f point = new Vector2f(shape.getPoint(i));
+			poly.addVector2df(point);
+		}
+		return poly;
 	}
 }

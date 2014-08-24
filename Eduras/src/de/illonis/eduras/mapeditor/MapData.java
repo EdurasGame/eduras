@@ -52,6 +52,7 @@ public final class MapData {
 	private int height;
 	private DynamicPolygonObject placingObject;
 	private boolean showNodeConnections;
+	private boolean showPortalLinks;
 	private EditablePolygon editShape;
 
 	private Set<GameModeNumber> supportedGameModes;
@@ -77,7 +78,6 @@ public final class MapData {
 		author = "unknown";
 		width = 500;
 		height = 500;
-		showNodeConnections = false;
 		editShape = null;
 	}
 
@@ -91,6 +91,14 @@ public final class MapData {
 
 	public DynamicPolygonObject getPlacingObject() {
 		return placingObject;
+	}
+
+	public void setShowPortalLinks(boolean showPortalLinks) {
+		this.showPortalLinks = showPortalLinks;
+	}
+
+	public boolean isShowPortalLinks() {
+		return showPortalLinks;
 	}
 
 	public void setShowNodeConnections(boolean showNodeConnections) {

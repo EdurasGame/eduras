@@ -11,6 +11,7 @@ import org.newdawn.slick.util.InputAdapter;
 import de.illonis.eduras.gameobjects.MoveableGameObject.Direction;
 import de.illonis.eduras.mapeditor.MapInteractor.InteractType;
 import de.illonis.eduras.math.Vector2df;
+import de.illonis.eduras.shapecreator.EditablePolygon;
 import de.illonis.eduras.shapecreator.NoVerticeFoundException;
 
 /**
@@ -138,6 +139,39 @@ public class ShapeEditInputHandler extends InputAdapter {
 		case Input.KEY_S:
 			interactor.stopScrolling(Direction.BOTTOM);
 			break;
+		case Input.KEY_M:
+			data.getEditShape().mirror(EditablePolygon.X_AXIS);
+			break;
+		case Input.KEY_N:
+			data.getEditShape().mirror(EditablePolygon.Y_AXIS);
+			break;
+		}
+	}
+
+	@Override
+	public void mouseWheelMoved(int change) {
+		boolean rotated = false;
+		if (interactor.getInput().isKeyDown(Input.KEY_LCONTROL)) {
+			rotated = true;
+			float amount;
+			if (change < 0) {
+				amount = 1f;
+			} else {
+				amount = -1f;
+			}
+			if (interactor.getInput().isKeyDown(Input.KEY_LSHIFT)) {
+				amount *= 10;
+			}
+			data.getEditShape().rotate(amount);
+		}
+		if (!rotated) {
+			float amount;
+			if (change > 0) {
+				amount = 0.1f;
+			} else {
+				amount = -0.1f;
+			}
+			interactor.setZoom(interactor.getZoom() + amount);
 		}
 	}
 
