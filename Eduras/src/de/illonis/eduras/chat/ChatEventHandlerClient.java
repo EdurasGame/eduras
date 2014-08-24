@@ -39,7 +39,7 @@ class ChatEventHandlerClient implements EventHandler {
 				}
 				ChatUser user = room.findUserById(sendingUser);
 				chatClient.chatActivityListener.onNewMessage(new ChatMessage(
-						user, room, message));
+						user, room, message, System.currentTimeMillis()));
 
 				L.finest("Received message " + message + " by user "
 						+ user.getNickName() + " in room " + room.getName()
