@@ -414,7 +414,9 @@ public class ClientLogic implements GameLogicInterface {
 				break;
 			case MATCH_END:
 				getListener().onMatchEnd((MatchEndEvent) event);
-
+				break;
+			case START_ROUND:
+				getListener().onStartRound();
 				break;
 			case SET_GAMEMODE:
 				SetGameModeEvent modeChangeEvent = (SetGameModeEvent) event;

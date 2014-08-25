@@ -329,4 +329,14 @@ public class HudNotifier implements GameEventListener {
 			obj.onBaseConquered(base, conqueringTeam);
 		}
 	}
+
+	@Override
+	public void onStartRound() {
+		for (GameEventListener obj : uiObjects) {
+			obj.onStartRound();
+		}
+		for (GameEventListener obj : otherObjects) {
+			obj.onStartRound();
+		}
+	}
 }

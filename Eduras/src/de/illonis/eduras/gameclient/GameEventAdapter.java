@@ -132,4 +132,8 @@ public class GameEventAdapter implements GameEventListener {
 	@Override
 	public void onBaseConquered(Base base, Team conqueringTeam) {
 	}
+
+	@Override
+	public void onStartRound() {
+	}
 }

@@ -212,4 +212,10 @@ public class ClientGameEventListener implements GameEventListener {
 		ui.onBaseConquered(base, conqueringTeam);
 		effects.onBaseConquered(base, conqueringTeam);
 	}
+
+	@Override
+	public void onStartRound() {
+		ui.onStartRound();
+		effects.onStartRound();
+	}
 }

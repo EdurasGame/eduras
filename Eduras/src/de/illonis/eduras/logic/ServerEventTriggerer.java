@@ -64,6 +64,7 @@ import de.illonis.eduras.events.SetTeamResourceEvent;
 import de.illonis.eduras.events.SetTeamsEvent;
 import de.illonis.eduras.events.SetTimeEvent;
 import de.illonis.eduras.events.SetVisibilityEvent;
+import de.illonis.eduras.events.StartRoundEvent;
 import de.illonis.eduras.exceptions.GameModeNotSupportedByMapException;
 import de.illonis.eduras.exceptions.InvalidNameException;
 import de.illonis.eduras.exceptions.NoSpawnAvailableException;
@@ -492,6 +493,7 @@ public class ServerEventTriggerer implements EventTriggerer {
 		changeMap(gameInfo.getMap());
 		resetSettings();
 		gameInfo.getGameSettings().getGameMode().onGameStart();
+		sendEvents(new StartRoundEvent());
 	}
 
 	@Override

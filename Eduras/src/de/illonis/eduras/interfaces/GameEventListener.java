@@ -240,4 +240,9 @@ public interface GameEventListener {
 	 * @param setMapEvent
 	 */
 	void onMapChanged(SetMapEvent setMapEvent);
+
+	/**
+	 * Called when a new round starts.
+	 */
+	void onStartRound();
 }

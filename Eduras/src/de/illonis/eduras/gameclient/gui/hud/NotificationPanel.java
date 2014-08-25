@@ -197,6 +197,8 @@ public class NotificationPanel extends RenderedGuiObject {
 
 	@Override
 	public void onBaseConquered(Base base, Team conqueringTeam) {
-		addNotification(conqueringTeam.getName() + " conquered a base!");
+		if (conqueringTeam != null) {
+			addNotification(conqueringTeam.getName() + " conquered a base!");
+		}
 	}
 }
