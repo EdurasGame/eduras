@@ -98,19 +98,16 @@ public class ImageFiler {
 
 		float factor = resolution.getSecond();
 		Image image;
-		System.out.println("Loading image for " + resolution.getFirst().name()
-				+ " at " + resolution.getSecond());
 		try {
 			image = new Image(CacheInfo.BASE_URL + fileName
 					+ resolution.getFirst().getSuffix());
 		} catch (RuntimeException | SlickException e) {
 			factor = getScaleFactor(ImageResolution.FULLHD);
-			System.out.println("Falling back to "
-					+ ImageResolution.FULLHD.name() + " at " + factor);
 			image = new Image(CacheInfo.BASE_URL + fileName
 					+ ImageResolution.FULLHD.getSuffix());
 			L.log(Level.WARNING, "Could not load image " + fileName + " for "
-					+ resolution.getFirst().name(), e);
+					+ resolution.getFirst().name()
+					+ ", falling back to fullHD at " + factor, e);
 		}
 
 		if (factor == 1f) {
