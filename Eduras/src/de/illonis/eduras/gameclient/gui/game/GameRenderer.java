@@ -212,12 +212,19 @@ public class GameRenderer implements TooltipHandler {
 		try {
 			PlayerMainFigure p = getClientPlayer().getPlayerMainFigure();
 			Vector2f c = p.getPositionVector();
+			Vector2f cameraPos = new Vector2f(camera.getX(), camera.getY());
+			Vector2f viewportPos = new Vector2f(viewPort.getX(), viewPort.getY());
 			// get offset and increase offset by movement
 			Vector2f offset = camera.getCameraOffset().add(
 					camera.getCameraMovement());
 			c.add(offset);
 			camera.centerAt(c.x, c.y);
 			viewPort.centerAt(c.x * scale, c.y * scale);
+			if (!info.getMapBounds().intersects(camera)) {
+				camera.getCameraMovement().set(0, 0);
+				camera.setLocation(cameraPos);
+				viewPort.setLocation(viewportPos);
+			}
 		} catch (ObjectNotFoundException | NullPointerException e) {
 			// EduLog.passException(e);
 		}

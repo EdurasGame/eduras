@@ -148,10 +148,12 @@ public abstract class BasicGameMode implements GameMode {
 		}
 	}
 
-	private void clear() {
+	private void clearNodes() {
 		for (Base neutralBase : baseToVertex.keySet()) {
 			gameInfo.getEventTriggerer().removeObject(neutralBase.getId());
 		}
+		baseToVertex.clear();
+		baseToResourceGenerator.clear();
 	}
 
 	/**
@@ -161,7 +163,7 @@ public abstract class BasicGameMode implements GameMode {
 		HashMap<Integer, Base> nodeIdToBase = new HashMap<Integer, Base>();
 		Map eduraMap = gameInfo.getMap();
 
-		clear();
+		clearNodes();
 
 		for (NodeData nodeData : eduraMap.getNodes()) {
 			int nodeid = nodeData.getId();
