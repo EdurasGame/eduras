@@ -68,10 +68,10 @@ public class ImageFiler {
 	private static Pair<ImageResolution, Float> calculateResolution() {
 		int width = Display.getWidth();
 		int height = Display.getHeight();
-		if (width >= 1900 && height >= 1000) {
+		if (width > 1366 && height > 768) {
 			return new Pair<ImageResolution, Float>(ImageResolution.FULLHD,
 					getScaleFactor(ImageResolution.FULLHD));
-		} else if (width < 1366 && height < 768) {
+		} else if (width > 800 && height > 600) {
 			return new Pair<ImageResolution, Float>(ImageResolution.WINDOWED,
 					getScaleFactor(ImageResolution.WINDOWED));
 		} else {

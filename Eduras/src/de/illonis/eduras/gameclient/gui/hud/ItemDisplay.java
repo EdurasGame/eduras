@@ -126,7 +126,7 @@ public class ItemDisplay extends ClickableGuiElement implements
 
 	@Override
 	public void onGuiSizeChanged(int newWidth, int newHeight) {
-		screenY = newHeight - HEIGHT;
+		screenY = newHeight - buttonSize * 3;
 	}
 
 	@Override

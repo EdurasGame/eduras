@@ -107,6 +107,9 @@ public final class ImageCache {
 	 * Clears all buffered images.
 	 */
 	public static void dispose() {
-		// TODO: implement
+		inventoryIcons.clear();
+		shapeData.clear();
+		objectImages.clear();
+		guiImages.clear();
 	}
 }
