@@ -24,7 +24,13 @@ public final class CacheInfo {
 	 */
 	@SuppressWarnings("javadoc")
 	public enum ImageKey {
-		STATISTICS_BG, MINIMAP_DUMMY, RESOURCE_ICON, RESOURCE_ICON_SMALL, SPELLS_PAGE, ACTION_HEAL, ACTION_RESURRECT, ACTION_RESURRECT_PLAYER, ACTION_ABORT, ACTION_SPAWN_OBSERVER, ACTION_SPELL_SCOUT, ACTION_SPAWN_ITEMS, ITEM_DUMMY, ITEM_SIMPLEWEAPON, ITEM_SNIPERWEAPON, ITEM_SPLASHWEAPON, ITEM_SWORDWEAPON, ITEM_ROCKETLAUNCHER, ITEM_MINELAUNCHER, ITEM_ASSAULTRIFLE, ACTION_SPELL_SPEED, ACTION_SPELL_INVISIBILITY, STRATEGY_MODE_ICON, ;
+		STATISTICS_BG, MINIMAP_DUMMY, RESOURCE_ICON, RESOURCE_ICON_SMALL,
+		SPELLS_PAGE, ACTION_HEAL, ACTION_RESURRECT, ACTION_RESURRECT_PLAYER,
+		ACTION_ABORT, ACTION_SPAWN_OBSERVER, ACTION_SPELL_SCOUT,
+		ACTION_SPAWN_ITEMS, ITEM_DUMMY, ITEM_SIMPLEWEAPON, ITEM_SNIPERWEAPON,
+		ITEM_SPLASHWEAPON, ITEM_SWORDWEAPON, ITEM_ROCKETLAUNCHER,
+		ITEM_MINELAUNCHER, ITEM_ASSAULTRIFLE, ACTION_SPELL_SPEED,
+		ACTION_SPELL_INVISIBILITY, STRATEGY_MODE_ICON, ;
 
 		public static ImageKey typeToImageKey(ObjectType type) {
 			switch (type) {
@@ -118,9 +124,9 @@ public final class CacheInfo {
 		guiImages = new HashMap<ImageKey, String>();
 		guiImages.put(ImageKey.STATISTICS_BG, "gui/artwork/statwindow.png");
 		guiImages.put(ImageKey.MINIMAP_DUMMY, "gui/artwork/minimap.png");
-		guiImages.put(ImageKey.RESOURCE_ICON, "gui/artwork/resource.png");
+		guiImages.put(ImageKey.RESOURCE_ICON, "gui/icons/resource.png");
 		guiImages.put(ImageKey.RESOURCE_ICON_SMALL,
-				"gui/artwork/resource_small.png");
+				"gui/icons/resource_small.png");
 		guiImages.put(ImageKey.STRATEGY_MODE_ICON,
 				"gui/artwork/strategymode.png");
 		guiImages.put(ImageKey.ACTION_HEAL, "gui/icons/icon-heal.png");
