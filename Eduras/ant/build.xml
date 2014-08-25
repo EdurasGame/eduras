@@ -59,8 +59,31 @@
 			<manifest>
 				<attribute name="Main-Class"
 					value="de.illonis.eduras.gameclient.EdurasClient" />
-				<attribute name="SplashScreen-Image"
-									value="res/images/splash.png" />
+				<attribute name="SplashScreen-Image" value="res/images/splash.png" />
+			</manifest>
+		</jar>
+	</target>
+	<target name="jar-mapeditor" depends="compile, current-commit"
+		description="Creates map editor executable.">
+
+		<jar destfile="${jars}/tools/mapeditor.jar" excludes="**/*.svg, **/unittests/**"
+			basedir="${base}${build}">
+			<fileset dir="${base}">
+				<include name="res/**" />
+			</fileset>
+			<fileset dir="${base}${src}">
+				<include name="**/*.png"></include>
+				<include name="**/*.erm"></include>
+				<include name="**/*.esh"></include>
+			</fileset>
+			<fileset dir="${base}">
+				<include name="/licenses/**"></include>
+			</fileset>
+			<zipgroupfileset dir="${base}${libs}" includes="*.jar" />
+			<fileset dir="${base}${libs}" includes="native/**" />
+			<fileset file="gitversion" />
+			<manifest>
+				<attribute name="Main-Class" value="de.illonis.eduras.mapeditor.MapEditor" />
 			</manifest>
 		</jar>
 	</target>
@@ -91,7 +114,8 @@
 				<include name="/licenses/**"></include>
 			</fileset>
 			<fileset file="version" />
-			<zipgroupfileset dir="${base}${libs}" includes="**/*.jar" />
+			<zipgroupfileset dir="${base}${libs}" includes="**/*.jar"
+				excludes="nifty-*,lwjgl.jar, jorbis-*, jogg-*,eventbus-*,xpp*" />
 			<manifest>
 				<attribute name="Main-Class" value="de.illonis.eduras.EdurasServer" />
 			</manifest>
@@ -131,7 +155,7 @@
 	</target>
 
 	<target name="jars"
-		depends="clean,jar-server,jar-client, jar-remoteclient, jar-shapecreator, jar-metaserver"
+		depends="clean,jar-server,jar-client, jar-remoteclient, jar-shapecreator, jar-metaserver, jar-mapeditor"
 		description="Creates clean executables.">
 	</target>
 

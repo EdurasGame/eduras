@@ -77,7 +77,13 @@ public interface PanelModifier {
 	 * @return current displayed shape.
 	 */
 	EditablePolygon getShape();
-	
+
+	/**
+	 * Sets given image as background image.
+	 * 
+	 * @param image
+	 *            the new image.
+	 */
 	void setBackgroundImage(Image image);
 
 }

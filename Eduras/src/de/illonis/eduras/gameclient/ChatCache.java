@@ -25,6 +25,7 @@ public class ChatCache {
 	private StringBuilder input;
 	private int n = 1;
 	private boolean writing;
+	private boolean enabled;
 
 	ChatCache() {
 		messages = new LinkedList<ChatMessage>();
@@ -57,6 +58,24 @@ public class ChatCache {
 	private void deleteChar() {
 		if (writing && input.length() > 0)
 			input.deleteCharAt(input.length() - 1);
+	}
+
+	/**
+	 * Tells whether the chat is currently enabled.
+	 * 
+	 * @return true if so
+	 */
+	public boolean isEnabled() {
+		return enabled;
+	}
+
+	/**
+	 * Set if the chat is enabled.
+	 * 
+	 * @param enabled
+	 */
+	public void setEnabled(boolean enabled) {
+		this.enabled = enabled;
 	}
 
 	/**
@@ -142,7 +161,8 @@ public class ChatCache {
 	 *            the room.
 	 */
 	public void pushSystemMessage(String string, ChatRoom chatRoom) {
-		pushMessage(new SystemMessage(string, chatRoom));
+		pushMessage(new SystemMessage(string, chatRoom,
+				System.currentTimeMillis()));
 	}
 
 	/**

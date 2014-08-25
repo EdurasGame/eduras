@@ -13,7 +13,7 @@ public class SystemMessage extends ChatMessage {
 	 *            the message string.
 	 */
 	public SystemMessage(String message) {
-		this(message, null);
+		this(message, null, 0);
 	}
 
 	/**
@@ -21,9 +21,11 @@ public class SystemMessage extends ChatMessage {
 	 *            the message string.
 	 * @param room
 	 *            the room this message belongs to.
+	 * @param timeStamp
+	 *            this messages timestamp
 	 */
-	public SystemMessage(String message, ChatRoom room) {
-		super(null, room, message);
+	public SystemMessage(String message, ChatRoom room, long timeStamp) {
+		super(null, room, message, timeStamp);
 	}
 
 	@Override

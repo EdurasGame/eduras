@@ -365,6 +365,22 @@ public interface EventTriggerer {
 	void setTeams(Collection<Team> teams);
 
 	/**
+	 * Sets the size of a triggerarea.
+	 * 
+	 * @param objectId
+	 *            id of that trigger area.
+	 * @param newWidth
+	 *            new width.
+	 * @param newHeight
+	 *            new height.
+	 * @throws ObjectNotFoundException
+	 *             if no object with given id exists or that object is no
+	 *             trigger area.
+	 */
+	void setTriggerAreaSize(int objectId, float newWidth, float newHeight)
+			throws ObjectNotFoundException;
+
+	/**
 	 * Adds a player to given team.
 	 * 
 	 * @param ownerId

@@ -178,7 +178,7 @@ public class EdurasClient {
 		}
 	}
 
-	private static void extractNatives() throws UnsatisfiedLinkError,
+	public static void extractNatives() throws UnsatisfiedLinkError,
 			IOException {
 		URI nativeDir = PathFinder.findFile("native/");
 		Path nativePath = Paths.get(nativeDir);

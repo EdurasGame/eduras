@@ -1,6 +1,6 @@
 package de.illonis.eduras.shapecreator.gui;
 
-import de.illonis.eduras.math.Vector2df;
+import org.newdawn.slick.geom.Vector2f;
 
 /**
  * Represents a row in the vertice table.
@@ -9,7 +9,7 @@ import de.illonis.eduras.math.Vector2df;
  * 
  */
 public class TableRecord {
-	private Vector2df vertice;
+	private Vector2f vertice;
 
 	/**
 	 * Creates a new record that holds given vertice.
@@ -17,7 +17,7 @@ public class TableRecord {
 	 * @param vertice
 	 *            the vertice for this row.
 	 */
-	public TableRecord(Vector2df vertice) {
+	public TableRecord(Vector2f vertice) {
 		this.vertice = vertice;
 	}
 
@@ -64,7 +64,7 @@ public class TableRecord {
 	 * 
 	 * @return the vertices of this row.
 	 */
-	public Vector2df getVector2df() {
+	public Vector2f getVector2df() {
 		return vertice;
 	}
 }

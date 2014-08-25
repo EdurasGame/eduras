@@ -3,7 +3,9 @@ package de.illonis.eduras.shapecreator;
 import java.awt.Color;
 import java.awt.Image;
 
-import de.illonis.eduras.math.Vector2df;
+import org.newdawn.slick.geom.Line;
+import org.newdawn.slick.geom.Vector2f;
+
 import de.illonis.eduras.shapecreator.gui.DrawPanel;
 import de.illonis.eduras.shapecreator.gui.RecordTableModel;
 
@@ -20,6 +22,8 @@ public class DataHolder {
 	private DrawPanel drawPanel;
 	private EditablePolygon polygon;
 	private Image backgroundImage;
+	private Line tempLineA;
+	private Line tempLineB;
 
 	private final Settings settings;
 
@@ -33,11 +37,42 @@ public class DataHolder {
 			instance = new DataHolder();
 		return instance;
 	}
-	
+
+	public Line getTempLineA() {
+		return tempLineA;
+	}
+
+	/**
+	 * Removes both templines.
+	 */
+	public void clearTempLines() {
+		tempLineA = null;
+		tempLineB = null;
+	}
+
+	public Line getTempLineB() {
+		return tempLineB;
+	}
+
+	public void setTempLineA(Line tempLineA) {
+		this.tempLineA = tempLineA;
+	}
+
+	public void setTempLineB(Line tempLineB) {
+		this.tempLineB = tempLineB;
+	}
+
+	/**
+	 * @return the current background image.
+	 */
 	public Image getBackgroundImage() {
 		return backgroundImage;
 	}
-	
+
+	/**
+	 * @param backgroundImage
+	 *            new background image.
+	 */
 	public void setBackgroundImage(Image backgroundImage) {
 		this.backgroundImage = backgroundImage;
 	}
@@ -248,7 +283,7 @@ public class DataHolder {
 	 * @param selectedVector2df
 	 *            the selected vertice.
 	 */
-	public void verticeSelectedOnGui(Vector2df selectedVector2df) {
+	public void verticeSelectedOnGui(Vector2f selectedVector2df) {
 		tableModel.selectVector2df(selectedVector2df);
 	}
 
@@ -258,7 +293,7 @@ public class DataHolder {
 	 * @param selectedVector2df
 	 *            the selected vertice.
 	 */
-	public void verticeSelectedOnTable(Vector2df selectedVector2df) {
+	public void verticeSelectedOnTable(Vector2f selectedVector2df) {
 		drawPanel.onVector2dfSelected(selectedVector2df);
 	}
 }

@@ -8,11 +8,13 @@ import org.newdawn.slick.Graphics;
 
 import de.illonis.edulog.EduLog;
 import de.illonis.eduras.Player;
+import de.illonis.eduras.Team;
 import de.illonis.eduras.events.ClientRenameEvent;
 import de.illonis.eduras.events.DeathEvent;
 import de.illonis.eduras.events.SetInteractModeEvent;
 import de.illonis.eduras.events.SetItemSlotEvent;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
+import de.illonis.eduras.gameobjects.Base;
 import de.illonis.eduras.inventory.ItemSlotIsEmptyException;
 import de.illonis.eduras.items.Item;
 import de.illonis.eduras.locale.Localization;
@@ -191,5 +193,12 @@ public class NotificationPanel extends RenderedGuiObject {
 		if (setModeEvent.getOwner() != getInfo().getOwnerID())
 			return;
 		addNotification("entered " + setModeEvent.getNewMode());
+	}
+
+	@Override
+	public void onBaseConquered(Base base, Team conqueringTeam) {
+		if (conqueringTeam != null) {
+			addNotification(conqueringTeam.getName() + " conquered a base!");
+		}
 	}
 }

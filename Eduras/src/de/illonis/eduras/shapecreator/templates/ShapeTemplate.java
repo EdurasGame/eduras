@@ -2,6 +2,8 @@ package de.illonis.eduras.shapecreator.templates;
 
 import java.util.LinkedList;
 
+import org.newdawn.slick.geom.Vector2f;
+
 import de.illonis.eduras.math.Vector2df;
 
 /**
@@ -11,10 +13,10 @@ import de.illonis.eduras.math.Vector2df;
  * 
  */
 public abstract class ShapeTemplate {
-	private final LinkedList<Vector2df> vertices;
+	private final LinkedList<Vector2f> vertices;
 
 	protected ShapeTemplate() {
-		vertices = new LinkedList<Vector2df>();
+		vertices = new LinkedList<Vector2f>();
 	}
 
 	/**
@@ -22,7 +24,7 @@ public abstract class ShapeTemplate {
 	 */
 	public abstract String getName();
 
-	protected final void addVector2df(Vector2df v) {
+	protected final void addVector2df(Vector2f v) {
 		vertices.add(v);
 	}
 
@@ -30,7 +32,7 @@ public abstract class ShapeTemplate {
 		vertices.add(new Vector2df(x, y));
 	}
 
-	final LinkedList<Vector2df> getDefaultVector2dfs() {
+	public final LinkedList<Vector2f> getDefaultVector2dfs() {
 		return vertices;
 	}
 

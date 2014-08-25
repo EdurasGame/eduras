@@ -22,7 +22,6 @@ import de.illonis.eduras.gameclient.gui.game.GameCamera;
 import de.illonis.eduras.gameclient.gui.hud.minimap.MiniMapBase;
 import de.illonis.eduras.gameclient.gui.hud.minimap.MiniMapNeutralObject;
 import de.illonis.eduras.gameclient.gui.hud.minimap.MiniMapPlayer;
-import de.illonis.eduras.gamemodes.GameMode.GameModeNumber;
 import de.illonis.eduras.gameobjects.Base;
 import de.illonis.eduras.gameobjects.DynamicPolygonObject;
 import de.illonis.eduras.gameobjects.GameObject;
@@ -111,15 +110,12 @@ public class MiniMap extends ClickableGuiElement {
 		checkIfNodesInitialized();
 
 		// if it IS null, some game mode other than Edura is running
-		if (nodes != null) {
+		if (nodes != null && !nodes.isEmpty()) {
 			g.setLineWidth(1f);
 			g.setColor(Color.yellow);
-			for (Integer nodeId : nodes.keySet()) {
-				NodeData someNode = nodes.get(nodeId);
+			for (NodeData someNode : nodes.values()) {
 
-				for (Integer adjacentOfSomeNodeId : someNode.getAdjacentNodes()) {
-					NodeData adjacentOfSomeNode = nodes
-							.get(adjacentOfSomeNodeId);
+				for (NodeData adjacentOfSomeNode : someNode.getAdjacentNodes()) {
 
 					// draw a line from some node to his adjacent
 					Vector2f someNodePositionOnMinimap = gameToMinimapPosition(new Vector2f(
@@ -139,15 +135,7 @@ public class MiniMap extends ClickableGuiElement {
 
 	private void checkIfNodesInitialized() {
 		if (nodes == null) {
-			if (getInfo().getGameMode().getNumber() == GameModeNumber.EDURA) {
-
-				try {
-					nodes = NodeData.nodeDataToVertices(getInfo().getNodes());
-				} catch (IllegalArgumentException e) {
-					L.warning("This map is running Edura! game mode although it's not an Edura! map!");
-					return;
-				}
-			}
+			nodes = NodeData.nodeDataToVertices(getInfo().getNodes());
 		}
 	}
 
@@ -162,10 +150,20 @@ public class MiniMap extends ClickableGuiElement {
 	}
 
 	@Override
-	public boolean onClick(Vector2f p) {
-		Vector2f gamePos = minimapToGamePosition(p);
-		getMouseHandler().mapClicked(gamePos);
+	public boolean mouseReleased(int button, int x, int y) {
+		centerAtMouse(x, y);
 		return true;
+	}
+
+	@Override
+	public boolean mouseDragged(int oldx, int oldy, int newx, int newy) {
+		centerAtMouse(newx, newy);
+		return true;
+	}
+
+	private void centerAtMouse(int x, int y) {
+		Vector2f gamePos = minimapToGamePosition(new Vector2f(x, y));
+		getMouseHandler().mapClicked(gamePos);
 	}
 
 	@Override

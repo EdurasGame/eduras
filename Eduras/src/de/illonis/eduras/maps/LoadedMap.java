@@ -33,11 +33,14 @@ public class LoadedMap extends Map {
 	 *            the initial objects of this map.
 	 * @param supportedGameModes
 	 *            the supported game modes of this map.
+	 * @param nodes
+	 *            the nodes on this map.
 	 */
 	public LoadedMap(String name, String author, int width, int height,
 			Date created, Collection<SpawnPosition> spawnPositions,
 			Collection<InitialObjectData> initialObjects,
-			Collection<GameModeNumber> supportedGameModes) {
+			Collection<GameModeNumber> supportedGameModes,
+			Collection<NodeData> nodes) {
 		super(name, author, width, height, created);
 
 		for (GameModeNumber gameModeNumber : supportedGameModes)
@@ -48,6 +51,10 @@ public class LoadedMap extends Map {
 
 		for (SpawnPosition position : spawnPositions)
 			addSpawnArea(position);
+
+		for (NodeData node : nodes) {
+			addNode(node);
+		}
 	}
 
 	@Override

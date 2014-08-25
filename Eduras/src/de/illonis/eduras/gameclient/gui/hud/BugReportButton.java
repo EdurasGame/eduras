@@ -5,7 +5,6 @@ import java.util.logging.Logger;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.geom.Rectangle;
-import org.newdawn.slick.geom.Vector2f;
 
 import de.illonis.edulog.EduLog;
 import de.illonis.eduras.gameclient.bugreport.BugReportFrame;
@@ -38,7 +37,7 @@ public class BugReportButton extends ClickableGuiElement {
 	}
 
 	@Override
-	public boolean onClick(Vector2f p) {
+	public boolean mouseClicked(int button, int x, int y, int clickCount) {
 		openBugWindow();
 		return true;
 	}

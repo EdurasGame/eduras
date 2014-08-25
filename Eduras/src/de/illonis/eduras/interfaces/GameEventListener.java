@@ -2,6 +2,7 @@ package de.illonis.eduras.interfaces;
 
 import java.util.ArrayList;
 
+import de.illonis.eduras.Team;
 import de.illonis.eduras.events.ClientRenameEvent;
 import de.illonis.eduras.events.DeathEvent;
 import de.illonis.eduras.events.GameEvent;
@@ -19,7 +20,9 @@ import de.illonis.eduras.events.SetOwnerEvent;
 import de.illonis.eduras.events.SetTeamResourceEvent;
 import de.illonis.eduras.events.SetVisibilityEvent;
 import de.illonis.eduras.gamemodes.GameMode;
+import de.illonis.eduras.gameobjects.Base;
 import de.illonis.eduras.gameobjects.GameObject;
+import de.illonis.eduras.units.Unit;
 
 /**
  * Reacts on game events and performs action.
@@ -90,12 +93,14 @@ public interface GameEventListener {
 	void onGameModeChanged(GameMode newGameMode);
 
 	/**
-	 * Called when health of an object has changed.
+	 * Called when health of a unit has changed.
 	 * 
-	 * @param event
-	 *            the event holding information.
+	 * @param unit
+	 * @param oldValue
+	 * @param newValue
+	 * 
 	 */
-	void onHealthChanged(SetIntegerGameObjectAttributeEvent event);
+	void onHealthChanged(Unit unit, int oldValue, int newValue);
 
 	/**
 	 * Called when maximum health of an object has changed.
@@ -154,6 +159,14 @@ public interface GameEventListener {
 	 *            the event holding information.
 	 */
 	void onRespawn(RespawnEvent event);
+
+	/**
+	 * Called when a team conquers a base.
+	 * 
+	 * @param base
+	 * @param conqueringTeam
+	 */
+	void onBaseConquered(Base base, Team conqueringTeam);
 
 	/**
 	 * Called when cooldown of an item has finished.
@@ -227,4 +240,9 @@ public interface GameEventListener {
 	 * @param setMapEvent
 	 */
 	void onMapChanged(SetMapEvent setMapEvent);
+
+	/**
+	 * Called when a new round starts.
+	 */
+	void onStartRound();
 }

@@ -1,6 +1,5 @@
 package de.illonis.eduras.gamemodes;
 
-import java.util.LinkedList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -53,7 +52,7 @@ public class TeamDeathmatch extends Deathmatch {
 
 		teamA = new Team("Red Team", Team.getNextTeamId(), Color.red);
 		teamB = new Team("Blue Team", Team.getNextTeamId(), Color.blue);
-		LinkedList<Team> teams = new LinkedList<Team>();
+		teams.clear();
 		teams.add(teamA);
 		teams.add(teamB);
 		eventTriggerer.setTeams(teams);
@@ -83,12 +82,6 @@ public class TeamDeathmatch extends Deathmatch {
 	public void onConnect(int ownerId) {
 
 		Player newPlayer = handleNewPlayer(ownerId);
-
-		// have to reimplement this unfortunately
-		if (gameInfo.getPlayers().size() >= gameInfo.getGameSettings()
-				.getMaxPlayers()) {
-			gameInfo.getEventTriggerer().kickPlayer(ownerId);
-		}
 
 		// simply create the player and respawn it somewhere
 		gameInfo.getEventTriggerer().createObject(ObjectType.PLAYER, ownerId);

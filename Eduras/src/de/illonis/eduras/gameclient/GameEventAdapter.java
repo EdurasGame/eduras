@@ -2,6 +2,7 @@ package de.illonis.eduras.gameclient;
 
 import java.util.ArrayList;
 
+import de.illonis.eduras.Team;
 import de.illonis.eduras.events.ClientRenameEvent;
 import de.illonis.eduras.events.DeathEvent;
 import de.illonis.eduras.events.GameEvent;
@@ -19,8 +20,10 @@ import de.illonis.eduras.events.SetOwnerEvent;
 import de.illonis.eduras.events.SetTeamResourceEvent;
 import de.illonis.eduras.events.SetVisibilityEvent;
 import de.illonis.eduras.gamemodes.GameMode;
+import de.illonis.eduras.gameobjects.Base;
 import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.interfaces.GameEventListener;
+import de.illonis.eduras.units.Unit;
 
 /**
  * A simple implementation of {@link GameEventListener} that does nothing.
@@ -71,7 +74,7 @@ public class GameEventAdapter implements GameEventListener {
 	}
 
 	@Override
-	public void onHealthChanged(SetIntegerGameObjectAttributeEvent event) {
+	public void onHealthChanged(Unit unit, int oldValue, int newValue) {
 	}
 
 	@Override
@@ -124,5 +127,13 @@ public class GameEventAdapter implements GameEventListener {
 
 	@Override
 	public void onMapChanged(SetMapEvent setMapEvent) {
+	}
+
+	@Override
+	public void onBaseConquered(Base base, Team conqueringTeam) {
+	}
+
+	@Override
+	public void onStartRound() {
 	}
 }

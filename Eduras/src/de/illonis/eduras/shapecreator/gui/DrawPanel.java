@@ -14,7 +14,9 @@ import java.util.Collection;
 
 import javax.swing.JPanel;
 
-import de.illonis.eduras.math.Vector2df;
+import org.newdawn.slick.geom.Line;
+import org.newdawn.slick.geom.Vector2f;
+
 import de.illonis.eduras.shapecreator.DataHolder;
 
 /**
@@ -31,7 +33,7 @@ public class DrawPanel extends JPanel {
 
 	private CoordinateSystem coordinateSystem;
 	private final DataHolder data;
-	private Vector2df hoverVector2df, selectedVector2df;
+	private Vector2f hoverVector2df, selectedVector2df;
 
 	/**
 	 * Creates an new drawpanel.
@@ -75,7 +77,26 @@ public class DrawPanel extends JPanel {
 					null);
 		}
 		coordinateSystem.draw(g2d);
+		drawTempLines(g2d);
 		paintVector2dfs(g2d);
+	}
+
+	private void drawLine(Line line, Graphics2D g2d) {
+		GuiPoint start = coordinateSystem.coordinateToGui(line.getStart());
+		GuiPoint end = coordinateSystem.coordinateToGui(line.getEnd());
+		g2d.drawLine(start.x, start.y, end.x, end.y);
+	}
+
+	private void drawTempLines(Graphics2D g2d) {
+		g2d.setColor(Color.green);
+		Line a = data.getTempLineA();
+		Line b = data.getTempLineB();
+		if (a != null) {
+			drawLine(a, g2d);
+		}
+		if (b != null) {
+			drawLine(b, g2d);
+		}
 	}
 
 	private void paintVector2dfs(Graphics2D g2d) {
@@ -83,12 +104,12 @@ public class DrawPanel extends JPanel {
 		Color shapeDotColor = data.getSettings().getShapeDotColor();
 		Color shapeLastLineColor = data.getSettings().getShapeLastLineColor();
 
-		Collection<Vector2df> vertices = data.getPolygon().getVector2dfs();
+		Collection<Vector2f> vertices = data.getPolygon().getVector2dfs();
 		boolean first = true;
-		Vector2df firstVector2df = null;
-		Vector2df last = null;
+		Vector2f firstVector2df = null;
+		Vector2f last = null;
 		GuiPoint p = null;
-		for (Vector2df vertice : vertices) {
+		for (Vector2f vertice : vertices) {
 
 			p = coordinateSystem.coordinateToGui(vertice);
 			if (vertice == hoverVector2df)
@@ -140,7 +161,7 @@ public class DrawPanel extends JPanel {
 	 * @param vert
 	 *            the hovered vertice.
 	 */
-	public void onVector2dfHover(Vector2df vert) {
+	public void onVector2dfHover(Vector2f vert) {
 		setCursor(MOVE_CURSOR);
 		hoverVector2df = vert;
 	}
@@ -159,7 +180,7 @@ public class DrawPanel extends JPanel {
 	 * @param v
 	 *            the selected vertice.
 	 */
-	public void selectVector2df(Vector2df v) {
+	public void selectVector2df(Vector2f v) {
 		data.verticeSelectedOnGui(v);
 		onVector2dfSelected(v);
 	}
@@ -170,7 +191,7 @@ public class DrawPanel extends JPanel {
 	 * @param vertice
 	 *            the selected vertice.
 	 */
-	public void onVector2dfSelected(Vector2df vertice) {
+	public void onVector2dfSelected(Vector2f vertice) {
 		this.selectedVector2df = vertice;
 	}
 

@@ -58,11 +58,13 @@ import de.illonis.eduras.events.SetPolygonDataEvent;
 import de.illonis.eduras.events.SetRemainingTimeEvent;
 import de.illonis.eduras.events.SetSettingPropertyEvent;
 import de.illonis.eduras.events.SetSettingsEvent;
+import de.illonis.eduras.events.SetSizeEvent;
 import de.illonis.eduras.events.SetStatsEvent;
 import de.illonis.eduras.events.SetTeamResourceEvent;
 import de.illonis.eduras.events.SetTeamsEvent;
 import de.illonis.eduras.events.SetTimeEvent;
 import de.illonis.eduras.events.SetVisibilityEvent;
+import de.illonis.eduras.events.StartRoundEvent;
 import de.illonis.eduras.exceptions.GameModeNotSupportedByMapException;
 import de.illonis.eduras.exceptions.InvalidNameException;
 import de.illonis.eduras.exceptions.NoSpawnAvailableException;
@@ -78,6 +80,7 @@ import de.illonis.eduras.gameobjects.MoveableGameObject;
 import de.illonis.eduras.gameobjects.NeutralArea;
 import de.illonis.eduras.gameobjects.OneTimeTimedEventHandler;
 import de.illonis.eduras.gameobjects.Portal;
+import de.illonis.eduras.gameobjects.TriggerArea;
 import de.illonis.eduras.interfaces.GameLogicInterface;
 import de.illonis.eduras.inventory.InventoryIsFullException;
 import de.illonis.eduras.inventory.NoSuchItemException;
@@ -156,7 +159,7 @@ public class ServerEventTriggerer implements EventTriggerer {
 		me.setNewXPos(speedVector.getX());
 		me.setNewYPos(speedVector.getY());
 
-		sendEvents(me);
+		sendEventToAll(me);
 
 	}
 
@@ -207,19 +210,27 @@ public class ServerEventTriggerer implements EventTriggerer {
 				GameEventNumber.OBJECT_CREATE, object, owner);
 		newObjectEvent.setId(getNextId());
 		logic.getObjectFactory().onObjectFactoryEventAppeared(newObjectEvent);
-
+		GameObject o;
+		try {
+			o = gameInfo.findObjectById(newObjectEvent.getId());
+			if (o instanceof TriggerArea) {
+				System.out.println("set size of " + o.getClass() + " to "
+						+ o.getShape().getWidth() + ", "
+						+ o.getShape().getHeight());
+				setTriggerAreaSize(newObjectEvent.getId(), o.getShape()
+						.getWidth(), o.getShape().getHeight());
+			}
+		} catch (ObjectNotFoundException e) {
+			L.log(Level.SEVERE, "Cannot find object that was just created!", e);
+			return -1;
+		}
 		return newObjectEvent.getId();
 	}
 
 	@Override
 	public int createObjectAt(ObjectType object, Vector2f position, int owner) {
 
-		ObjectFactoryEvent newObjectEvent = new ObjectFactoryEvent(
-				GameEventNumber.OBJECT_CREATE, object, owner);
-		int id = getNextId();
-		newObjectEvent.setId(id);
-
-		logic.getObjectFactory().onObjectFactoryEventAppeared(newObjectEvent);
+		int id = createObject(object, owner);
 
 		GameObject o;
 		try {
@@ -235,9 +246,8 @@ public class ServerEventTriggerer implements EventTriggerer {
 		setPos.setNewXPos(position.getX());
 		setPos.setNewYPos(position.getY());
 
-		sendEvents(newObjectEvent, setPos);
-		return newObjectEvent.getId();
-
+		sendEventToAll(setPos);
+		return id;
 	}
 
 	@Override
@@ -483,6 +493,7 @@ public class ServerEventTriggerer implements EventTriggerer {
 		changeMap(gameInfo.getMap());
 		resetSettings();
 		gameInfo.getGameSettings().getGameMode().onGameStart();
+		sendEvents(new StartRoundEvent());
 	}
 
 	@Override
@@ -507,7 +518,6 @@ public class ServerEventTriggerer implements EventTriggerer {
 
 	@Override
 	public void changeMap(Map map) {
-
 		gameInfo.setMap(map);
 		removeAllObjects();
 
@@ -515,7 +525,7 @@ public class ServerEventTriggerer implements EventTriggerer {
 		SetMapEvent setMapEvent = new SetMapEvent(map.getName());
 		sendEvents(setMapEvent);
 
-		LinkedList<Portal> portals = new LinkedList<Portal>();
+		LinkedList<InitialObjectData> portalData = new LinkedList<InitialObjectData>();
 		// send objects to client
 		for (InitialObjectData initialObject : map.getInitialObjects()) {
 
@@ -531,24 +541,46 @@ public class ServerEventTriggerer implements EventTriggerer {
 				objectId = createObjectAt(initialObject.getType(),
 						initialObject.getPosition(), -1);
 			}
-
-			if (initialObject.getType() == ObjectType.PORTAL) {
-				try {
-					portals.add((Portal) gameInfo.findObjectById(objectId));
-				} catch (ObjectNotFoundException e) {
-					L.log(Level.WARNING,
-							"Cannot find object that was just created from map file!",
-							e);
+			try {
+				GameObject o = gameInfo.findObjectById(objectId);
+				o.setRefName(initialObject.getRefName());
+				if (initialObject.getType() == ObjectType.DYNAMIC_POLYGON_BLOCK) {
+					((DynamicPolygonObject) o).setColor(initialObject
+							.getColor());
 				}
+			} catch (ObjectNotFoundException e) {
+				L.log(Level.SEVERE,
+						"Cannot find object that was just created from map file!",
+						e);
+			}
+			if (initialObject.getType() == ObjectType.PORTAL) {
+				portalData.add(initialObject);
 			}
 		}
 
-		for (int i = 0; i < portals.size(); i = i + 2) {
-			Portal portalOne = portals.get(i);
-			Portal portalTwo = portals.get(i + 1);
+		for (int i = 0; i < portalData.size(); i++) {
+			InitialObjectData portal = portalData.get(i);
+			Portal portalOne;
+			try {
+				portalOne = (Portal) gameInfo.findObjectByReference(portal
+						.getRefName());
+			} catch (ObjectNotFoundException e) {
+				L.log(Level.SEVERE, "Could not find recently created portal.",
+						e);
+				continue;
+			}
 
+			Portal portalTwo;
+			try {
+				portalTwo = (Portal) gameInfo.findObjectByReference(portal
+						.getReference(Portal.OTHER_PORTAL_REFERENCE));
+			} catch (ObjectNotFoundException e) {
+				L.log(Level.SEVERE,
+						"Could not find referenced portal of created portal.",
+						e);
+				continue;
+			}
 			portalOne.setPartnerPortal(portalTwo);
-			portalTwo.setPartnerPortal(portalOne);
 		}
 
 	}
@@ -730,22 +762,23 @@ public class ServerEventTriggerer implements EventTriggerer {
 
 			int objectId = -1;
 			PlayerMainFigure mainFigure;
-			ObjectFactoryEvent gonePlayerEvent = new ObjectFactoryEvent(
-					GameEventNumber.OBJECT_REMOVE, ObjectType.PLAYER, 0);
-
 			mainFigure = player.getPlayerMainFigure();
-			objectId = mainFigure.getId();
-			gonePlayerEvent.setId(objectId);
-			logic.getObjectFactory().onObjectFactoryEventAppeared(
-					gonePlayerEvent);
+			if (mainFigure != null) {
+				ObjectFactoryEvent gonePlayerEvent = new ObjectFactoryEvent(
+						GameEventNumber.OBJECT_REMOVE, ObjectType.PLAYER, 0);
+				objectId = mainFigure.getId();
+				gonePlayerEvent.setId(objectId);
+				logic.getObjectFactory().onObjectFactoryEventAppeared(
+						gonePlayerEvent);
+				sendEvents(gonePlayerEvent);
+			}
 
 			gameInfo.removePlayer(ownerId);
-
 			OwnerGameEvent playerLeftEvent = new OwnerGameEvent(
 					GameEventNumber.PLAYER_LEFT, ownerId);
 			OwnerGameEvent playerLeftEventInfo = new OwnerGameEvent(
 					GameEventNumber.INFO_PLAYER_LEFT, ownerId);
-			sendEvents(gonePlayerEvent, playerLeftEvent, playerLeftEventInfo);
+			sendEvents(playerLeftEvent, playerLeftEventInfo);
 		} catch (ObjectNotFoundException e) {
 			// if there is no mainfigure, this function is used to prevent
 			// someone to join the server
@@ -805,7 +838,7 @@ public class ServerEventTriggerer implements EventTriggerer {
 		playerToChangeModeOf.setMode(newMode);
 
 		SetInteractModeEvent event = new SetInteractModeEvent(ownerId, newMode);
-		sendEventToClient(event, ownerId);
+		sendEvents(event);
 	}
 
 	@Override
@@ -1094,9 +1127,6 @@ public class ServerEventTriggerer implements EventTriggerer {
 				id);
 		setPos.setNewXPos(o.getXPosition());
 		setPos.setNewYPos(o.getYPosition());
-
-		System.out.println("spawn at " + o.getXPosition() + ", "
-				+ o.getYPosition());
 		sendEvents(setPos);
 		return id;
 	}
@@ -1225,5 +1255,18 @@ public class ServerEventTriggerer implements EventTriggerer {
 				setVisibility(objectToMakeInvisible.getId(), Visibility.ALL);
 			}
 		};
+	}
+
+	@Override
+	public void setTriggerAreaSize(int objectId, float newWidth, float newHeight)
+			throws ObjectNotFoundException {
+		GameObject o = gameInfo.findObjectById(objectId);
+		if (o instanceof TriggerArea) {
+			((Rectangle) o.getShape()).setSize(newWidth, newHeight);
+			SetSizeEvent sizeEvent = new SetSizeEvent(objectId, newWidth,
+					newHeight);
+			sendEventToAll(sizeEvent);
+		} else
+			throw new ObjectNotFoundException(objectId);
 	}
 }

@@ -20,10 +20,10 @@ import de.illonis.eduras.gameobjects.Base;
 import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.interfaces.GameEventListener;
 import de.illonis.eduras.interfaces.InfoInterface;
-import de.illonis.eduras.maps.EduraMap;
 import de.illonis.eduras.maps.NodeData;
 import de.illonis.eduras.maps.SpawnPosition;
 import de.illonis.eduras.units.Observer;
+import de.illonis.eduras.units.PlayerMainFigure;
 
 /**
  * This class provides a connection between GUI and logic. GUI developers can
@@ -65,22 +65,14 @@ public class InformationProvider implements InfoInterface {
 	}
 
 	/**
-	 * If the running map is an Edura! map, it's NodeData are returned.
+	 * Returns map's NodeData.
 	 * 
 	 * @return node data
-	 * @throws IllegalArgumentException
-	 *             Thrown if the running map is NOT an Edura! map.
 	 */
-	public Collection<NodeData> getNodes() throws IllegalArgumentException {
+	public Collection<NodeData> getNodes() {
 		de.illonis.eduras.maps.Map map = edurasInitializer.logic.getGame()
 				.getMap();
-		if (!(map instanceof EduraMap)) {
-			throw new IllegalArgumentException(
-					"The current map is no Edura! map, so there are no nodes");
-		}
-
-		EduraMap eduraMap = (EduraMap) map;
-		return eduraMap.getNodes();
+		return map.getNodes();
 	}
 
 	/**
@@ -188,6 +180,9 @@ public class InformationProvider implements InfoInterface {
 		switch (type) {
 		case OBSERVER:
 			unitToSpawn = new Observer(null, null, -1, -1);
+			break;
+		case PLAYER:
+			unitToSpawn = new PlayerMainFigure(null, null, -1, -1, null);
 			break;
 		default:
 			return false;

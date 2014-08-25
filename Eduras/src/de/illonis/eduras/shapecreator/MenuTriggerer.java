@@ -10,8 +10,9 @@ import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.JOptionPane;
 
+import org.newdawn.slick.geom.Vector2f;
+
 import de.illonis.edulog.EduLog;
-import de.illonis.eduras.math.Vector2df;
 import de.illonis.eduras.shapecreator.PanelInteractor.InteractMode;
 import de.illonis.eduras.shapecreator.ShapeCreator.FrameListener;
 import de.illonis.eduras.shapecreator.gui.ToolPanel;
@@ -120,7 +121,7 @@ public class MenuTriggerer implements MenuActionReactor {
 
 	@Override
 	public void mirrorShape(Axis axis) {
-		for (Vector2df v : panel.getShape().getVector2dfs()) {
+		for (Vector2f v : panel.getShape().getVector2dfs()) {
 			if (axis == Axis.VERTICAL) {
 				v.x = -v.x;
 			} else {
@@ -147,6 +148,6 @@ public class MenuTriggerer implements MenuActionReactor {
 			panel.setBackgroundImage(image);
 		} catch (IOException e) {
 			L.log(Level.WARNING, "Could not load file", e);
-		}		
+		}
 	}
 }

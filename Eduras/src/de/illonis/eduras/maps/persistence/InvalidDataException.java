@@ -15,8 +15,10 @@ public class InvalidDataException extends Exception {
 	 * 
 	 * @param msg
 	 *            the error message.
+	 * @param line
+	 *            the line in file the error occured.
 	 */
-	public InvalidDataException(String msg) {
-		super(msg);
+	public InvalidDataException(String msg, int line) {
+		super(msg + " at line " + line);
 	}
 }

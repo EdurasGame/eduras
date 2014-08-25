@@ -12,6 +12,7 @@ import de.illonis.eduras.chat.ChatClient;
 import de.illonis.eduras.chat.NotConnectedException;
 import de.illonis.eduras.chat.UserNotInRoomException;
 import de.illonis.eduras.events.ItemEvent;
+import de.illonis.eduras.events.SetInteractModeEvent;
 import de.illonis.eduras.exceptions.ActionFailedException;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
 import de.illonis.eduras.gameclient.ChatCache;
@@ -286,10 +287,12 @@ public class GamePanelLogic extends GameEventAdapter implements
 
 	@Override
 	public void onChatEnter() {
-		if (cache.isWriting())
-			sendChat();
-		else
-			cache.startWriting();
+		if (cache.isEnabled()) {
+			if (cache.isWriting())
+				sendChat();
+			else
+				cache.startWriting();
+		}
 	}
 
 	private void sendChat() {
@@ -337,9 +340,11 @@ public class GamePanelLogic extends GameEventAdapter implements
 
 	@Override
 	public boolean abortChat() {
-		if (cache.isWriting()) {
-			cache.stopWriting();
-			return true;
+		if (cache.isEnabled()) {
+			if (cache.isWriting()) {
+				cache.stopWriting();
+				return true;
+			}
 		}
 		return false;
 	}
@@ -361,6 +366,13 @@ public class GamePanelLogic extends GameEventAdapter implements
 	public void onCooldownFinished(ItemEvent event) {
 		for (GameEventListener gameEventListener : gameEventListeners) {
 			gameEventListener.onCooldownFinished(event);
+		}
+	}
+
+	@Override
+	public void onInteractModeChanged(SetInteractModeEvent setModeEvent) {
+		if (setModeEvent.getOwner() == infoPro.getOwnerID()) {
+			resetCamera();
 		}
 	}
 
@@ -387,5 +399,9 @@ public class GamePanelLogic extends GameEventAdapter implements
 	@Override
 	public void askGameQuit() {
 		userInterface.showExitPopup();
+	}
+
+	public void enableChat(boolean enabled) {
+		cache.setEnabled(enabled);
 	}
 }

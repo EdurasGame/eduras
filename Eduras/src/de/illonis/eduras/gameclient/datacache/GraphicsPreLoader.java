@@ -12,12 +12,12 @@ import javax.swing.ImageIcon;
 
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
+import org.newdawn.slick.geom.Vector2f;
 
 import de.illonis.edulog.EduLog;
 import de.illonis.eduras.ObjectFactory.ObjectType;
 import de.illonis.eduras.gameclient.datacache.CacheInfo.ImageKey;
 import de.illonis.eduras.images.ImageFiler;
-import de.illonis.eduras.math.Vector2df;
 import de.illonis.eduras.shapecreator.FileCorruptException;
 import de.illonis.eduras.shapes.ShapeFactory.ShapeType;
 import de.illonis.eduras.shapes.data.ShapeParser;
@@ -99,7 +99,7 @@ public final class GraphicsPreLoader {
 			Map.Entry<ShapeType, String> pair = it.next();
 			URL u = ShapeParser.class.getResource(pair.getValue());
 			try {
-				Vector2df[] verts = ShapeParser.readShape(u);
+				Vector2f[] verts = ShapeParser.readShape(u);
 				ImageCache.addShape(pair.getKey(), verts);
 			} catch (FileCorruptException | IOException e) {
 				L.log(Level.SEVERE, "Shapefile not found: " + pair.getValue(),
