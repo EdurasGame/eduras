@@ -77,7 +77,12 @@ public class GameClient {
 		ChatClient chat = new ChatClientImpl();
 		chat.setChatActivityListener(new ClientChatReceiver(chat, clientName));
 		logic.setChat(chat);
-		chat.connect(nwm.getServerAddress().getHostAddress(), nwm.getPort() + 1);
+		if (chat.connect(nwm.getServerAddress().getHostAddress(),
+				nwm.getPort() + 1)) {
+			logic.enableChat(true);
+		} else {
+			logic.enableChat(false);
+		}
 	}
 
 	/**

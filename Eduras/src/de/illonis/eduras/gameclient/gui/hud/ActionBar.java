@@ -4,6 +4,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.newdawn.slick.Color;
+import org.newdawn.slick.Font;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.geom.Rectangle;
@@ -18,7 +19,10 @@ import de.illonis.eduras.exceptions.PlayerHasNoTeamException;
 import de.illonis.eduras.gameclient.ClientData;
 import de.illonis.eduras.gameclient.datacache.CacheException;
 import de.illonis.eduras.gameclient.datacache.CacheInfo.ImageKey;
+import de.illonis.eduras.gameclient.datacache.FontCache;
+import de.illonis.eduras.gameclient.datacache.FontCache.FontKey;
 import de.illonis.eduras.gameclient.datacache.ImageCache;
+import de.illonis.eduras.gameclient.gui.game.GameRenderer;
 import de.illonis.eduras.gameclient.gui.hud.ActionBarPage.PageNumber;
 import de.illonis.eduras.gameclient.userprefs.KeyBindings;
 import de.illonis.eduras.gameclient.userprefs.KeyBindings.KeyBinding;
@@ -38,6 +42,10 @@ public class ActionBar extends ClickableGuiElement implements TooltipTriggerer {
 			.getName());
 
 	private final static Color DISABLED_COLOR = new Color(0, 0, 0, 0.5f);
+	/**
+	 * Distance from screen bottom to action bar.
+	 */
+	public final static int YOFFSET = 50;
 
 	private Rectangle bounds;
 
@@ -46,9 +54,12 @@ public class ActionBar extends ClickableGuiElement implements TooltipTriggerer {
 	private final ClientData data;
 	private KeyBindings bindings;
 	private Image resIcon;
+	private final float buttonSize;
 
 	protected ActionBar(UserInterface gui, MiniMap map) {
 		super(gui);
+		buttonSize = (float) ActionButton.BUTTON_SIZE
+				* GameRenderer.getRenderScale();
 		data = EdurasInitializer.getInstance().getInformationProvider()
 				.getClientData();
 		bindings = EdurasInitializer.getInstance().getSettings()
@@ -73,8 +84,8 @@ public class ActionBar extends ClickableGuiElement implements TooltipTriggerer {
 		if (currentPage == null)
 			return false;
 		float mouseX = x - screenX;
-		if (mouseX < ActionButton.BUTTON_SIZE * numButtons) {
-			int actionButton = (int) (mouseX / ActionButton.BUTTON_SIZE);
+		if (mouseX < buttonSize * numButtons) {
+			int actionButton = (int) (mouseX / buttonSize);
 			selectButton(actionButton);
 			return true;
 		}
@@ -90,6 +101,8 @@ public class ActionBar extends ClickableGuiElement implements TooltipTriggerer {
 	public void render(Graphics g) {
 		if (currentPage == null)
 			return;
+		Font font = FontCache.getFont(FontKey.DEFAULT_FONT, g);
+		Font smallFont = FontCache.getFont(FontKey.SMALL_FONT, g);
 		int resources = 0;
 		try {
 			resources = getInfo().getPlayer().getTeam().getResource();
@@ -107,16 +120,14 @@ public class ActionBar extends ClickableGuiElement implements TooltipTriggerer {
 		float x = screenX;
 		String label;
 		g.setColor(Color.black);
-		g.fillRect(x, screenY, numButtons * ActionButton.BUTTON_SIZE,
-				ActionButton.BUTTON_SIZE + 15);
+		g.fillRect(x, screenY, numButtons * buttonSize, buttonSize + 15);
 		for (int i = 0; i < numButtons; i++) {
 			ActionButton button = currentPage.getButtons().get(i);
 			if (button.getIcon() != null) {
 				g.drawImage(button.getIcon(), x, screenY);
 				if (!button.isEnabled()) {
 					g.setColor(DISABLED_COLOR);
-					g.fillRect(x, screenY, ActionButton.BUTTON_SIZE,
-							ActionButton.BUTTON_SIZE);
+					g.fillRect(x, screenY, buttonSize, buttonSize);
 				}
 				if (data.getCurrentActionSelected() == i) {
 					if (button.isCleared()) {
@@ -124,8 +135,7 @@ public class ActionBar extends ClickableGuiElement implements TooltipTriggerer {
 					} else {
 						g.setColor(Color.yellow);
 						g.setLineWidth(3f);
-						g.drawRect(x, screenY, ActionButton.BUTTON_SIZE - 2,
-								ActionButton.BUTTON_SIZE - 2);
+						g.drawRect(x, screenY, buttonSize - 2, buttonSize - 2);
 					}
 				}
 
@@ -135,30 +145,35 @@ public class ActionBar extends ClickableGuiElement implements TooltipTriggerer {
 					label = bindings.getBindingString(KeyBinding
 							.valueOf("ITEM_" + (1 + i)));
 					if (button.getCosts() > 0) {
-						if (button.getCosts() > resources) {
-							g.setColor(Color.red);
-						} else {
-							g.setColor(Color.green);
-						}
 						if (resIcon != null)
-							g.drawImage(resIcon, x, screenY
-									+ ActionButton.BUTTON_SIZE);
-						g.drawString(button.getCosts() + "", x + 15, screenY
-								+ ActionButton.BUTTON_SIZE);
+							g.drawImage(
+									resIcon,
+									x,
+									screenY
+											+ buttonSize
+											+ (font.getLineHeight() - resIcon
+													.getHeight()) / 2);
+						font.drawString(x + resIcon.getWidth() + 3, screenY
+								+ buttonSize, button.getCosts() + "", (button
+								.getCosts() > resources) ? Color.red
+								: Color.green);
 					}
 				}
-				g.setColor(Color.black);
-				g.fillRect(x + 3, screenY + 3, 15, 15);
-				g.setColor(Color.white);
-				g.drawString(label, x + 6, screenY + 3);
+				g.setColor(DISABLED_COLOR);
+				int w = font.getWidth(label);
+				int h = font.getHeight(label);
+				int bgSize = Math.max(w, h) + 1;
+				g.fillRect(x+2, screenY+2 , bgSize, bgSize);
+				font.drawString(x +2 + (bgSize - w) / 2, screenY +2, label,
+						Color.white);
 			}
-			x += ActionButton.BUTTON_SIZE;
+			x += buttonSize;
 		}
 	}
 
 	@Override
 	public void onGuiSizeChanged(int newWidth, int newHeight) {
-		screenY = newHeight - ActionButton.BUTTON_SIZE - 30;
+		screenY = newHeight - buttonSize - YOFFSET;
 		bounds.setLocation(screenX, screenY);
 	}
 
@@ -181,8 +196,8 @@ public class ActionBar extends ClickableGuiElement implements TooltipTriggerer {
 			return;
 		currentPage.onShown();
 		numButtons = currentPage.getButtons().size();
-		bounds.setWidth(ActionButton.BUTTON_SIZE * numButtons);
-		bounds.setHeight(ActionButton.BUTTON_SIZE);
+		bounds.setWidth(buttonSize * numButtons);
+		bounds.setHeight(buttonSize);
 	}
 
 	@Override
@@ -191,7 +206,7 @@ public class ActionBar extends ClickableGuiElement implements TooltipTriggerer {
 			return;
 		float x = p.x - screenX;
 		if (x < ActionButton.BUTTON_SIZE * numButtons) {
-			int button = (int) (x / ActionButton.BUTTON_SIZE);
+			int button = (int) (x / buttonSize);
 			getTooltipHandler().showTooltip(p,
 					currentPage.getButtons().get(button).getLabel());
 		}

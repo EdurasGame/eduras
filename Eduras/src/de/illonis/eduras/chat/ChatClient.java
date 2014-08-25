@@ -91,8 +91,9 @@ public interface ChatClient {
 	 * 
 	 * @param hostname
 	 * @param port
+	 * @return true, if the connecting process was successful, false otherwise
 	 */
-	public void connect(String hostname, int port);
+	public boolean connect(String hostname, int port);
 
 	/**
 	 * Disconnect from the chat server currently connected to. If the client

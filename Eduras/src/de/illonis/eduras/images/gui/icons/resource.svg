@@ -15,9 +15,9 @@
    version="1.1"
    inkscape:version="0.48.3.1 r9886"
    sodipodi:docname="resource.svg"
-   inkscape:export-filename="/home/illonis/git/eduras/Eduras/src/de/illonis/eduras/images/gui/artwork/resource.png"
-   inkscape:export-xdpi="5.6500001"
-   inkscape:export-ydpi="5.6500001">
+   inkscape:export-filename="/home/illonis/git/eduras/Eduras/src/de/illonis/eduras/images/gui/artwork/resource_small.png"
+   inkscape:export-xdpi="8.7600002"
+   inkscape:export-ydpi="8.7600002">
   <defs
      id="defs4">
     <filter
@@ -97,9 +97,9 @@
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
-     inkscape:window-width="1280"
+     inkscape:window-width="1301"
      inkscape:window-height="744"
-     inkscape:window-x="0"
+     inkscape:window-x="65"
      inkscape:window-y="24"
      inkscape:window-maximized="1"
      fit-margin-top="0"

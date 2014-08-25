@@ -14,10 +14,22 @@ public class ChatMessage {
 
 	private final String message;
 
-	ChatMessage(ChatUser user, ChatRoom room, String message) {
+	private final long timeStamp;
+
+	ChatMessage(ChatUser user, ChatRoom room, String message, long timeStamp) {
 		postingUser = user;
 		roomPostedIn = room;
 		this.message = message;
+		this.timeStamp = timeStamp;
+	}
+
+	/**
+	 * Returns the time stamp of this chat message.
+	 * 
+	 * @return timestamp
+	 */
+	public long getTimeStamp() {
+		return timeStamp;
 	}
 
 	/**

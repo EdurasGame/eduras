@@ -7,6 +7,7 @@ import de.illonis.eduras.events.DeathEvent;
 import de.illonis.eduras.events.MatchEndEvent;
 import de.illonis.eduras.gameclient.datacache.FontCache;
 import de.illonis.eduras.gameclient.datacache.FontCache.FontKey;
+import de.illonis.eduras.gameclient.gui.game.GameRenderer;
 
 /**
  * Displays a single line of text above the action bar to provide some hints.
@@ -67,7 +68,8 @@ public class TipPanel extends RenderedGuiObject {
 
 	@Override
 	public void onGuiSizeChanged(int newWidth, int newHeight) {
-		screenY = newHeight - ActionButton.BUTTON_SIZE - 30 - Y_INSET;
+		screenY = newHeight - ActionButton.BUTTON_SIZE
+				* GameRenderer.getRenderScale() - ActionBar.YOFFSET - Y_INSET;
 	}
 
 	@Override

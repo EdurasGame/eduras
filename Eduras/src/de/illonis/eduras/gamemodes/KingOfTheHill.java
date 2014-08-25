@@ -1,6 +1,7 @@
 package de.illonis.eduras.gamemodes;
 
 import java.util.HashMap;
+import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.logging.Logger;
@@ -11,8 +12,10 @@ import de.illonis.eduras.Player;
 import de.illonis.eduras.Statistic.StatsProperty;
 import de.illonis.eduras.Team;
 import de.illonis.eduras.gameobjects.Base;
+import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.settings.S;
 import de.illonis.eduras.units.PlayerMainFigure;
+import de.illonis.eduras.units.Unit;
 
 /**
  * A game mode like deathmatch, but the user gets extra points when he conquers
@@ -60,6 +63,16 @@ public class KingOfTheHill extends Deathmatch {
 				S.Server.gm_koth_gain_points_interval,
 				S.Server.gm_koth_gain_points_interval);
 		L.info("Team " + occupyingTeam.getName() + " occupied the base!");
+	}
+
+	@Override
+	public Team determineProgressingTeam(Base base, GameObject object,
+			boolean objectEntered, Set<GameObject> presentObjects) {
+		if (presentObjects.size() == 1) {
+			Unit onlyUnitInside = (Unit) presentObjects.iterator().next();
+			return onlyUnitInside.getTeam();
+		}
+		return null;
 	}
 
 	class NeutralBasePointsAdder extends TimerTask {

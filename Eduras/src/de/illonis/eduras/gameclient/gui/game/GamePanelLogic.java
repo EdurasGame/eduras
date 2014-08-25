@@ -288,10 +288,12 @@ public class GamePanelLogic extends GameEventAdapter implements
 
 	@Override
 	public void onChatEnter() {
-		if (cache.isWriting())
-			sendChat();
-		else
-			cache.startWriting();
+		if (cache.isEnabled()) {
+			if (cache.isWriting())
+				sendChat();
+			else
+				cache.startWriting();
+		}
 	}
 
 	private void sendChat() {
@@ -339,9 +341,11 @@ public class GamePanelLogic extends GameEventAdapter implements
 
 	@Override
 	public boolean abortChat() {
-		if (cache.isWriting()) {
-			cache.stopWriting();
-			return true;
+		if (cache.isEnabled()) {
+			if (cache.isWriting()) {
+				cache.stopWriting();
+				return true;
+			}
 		}
 		return false;
 	}
@@ -396,5 +400,9 @@ public class GamePanelLogic extends GameEventAdapter implements
 	@Override
 	public void askGameQuit() {
 		userInterface.showExitPopup();
+	}
+
+	public void enableChat(boolean enabled) {
+		cache.setEnabled(enabled);
 	}
 }

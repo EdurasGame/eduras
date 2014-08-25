@@ -62,6 +62,7 @@ public class MapValidator extends SwingWorker<ValidateTask[], Void> {
 		tasks.add(new BasicValidation());
 		tasks.add(new SpawnValidation());
 		tasks.add(new PortalValidation());
+		tasks.add(new NamingValidation());
 	}
 
 }

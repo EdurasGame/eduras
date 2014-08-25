@@ -18,6 +18,7 @@ import de.illonis.eduras.ObjectFactory.ObjectType;
 import de.illonis.eduras.events.ObjectFactoryEvent;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
 import de.illonis.eduras.gameclient.gui.game.GameCamera;
+import de.illonis.eduras.gameclient.gui.game.GameRenderer;
 import de.illonis.eduras.gameclient.gui.hud.minimap.MiniMapBase;
 import de.illonis.eduras.gameclient.gui.hud.minimap.MiniMapNeutralObject;
 import de.illonis.eduras.gameclient.gui.hud.minimap.MiniMapPlayer;
@@ -56,7 +57,7 @@ public class MiniMap extends ClickableGuiElement {
 
 	protected MiniMap(UserInterface gui) {
 		super(gui);
-		windowScale = Display.getWidth() / 800;
+		windowScale = GameRenderer.getRenderScale();
 		bounds = new Rectangle(0, 0, SIZE * windowScale, SIZE * windowScale);
 		neutralObjects = new HashMap<Integer, MiniMapNeutralObject>();
 		bases = new HashMap<Integer, MiniMapBase>();

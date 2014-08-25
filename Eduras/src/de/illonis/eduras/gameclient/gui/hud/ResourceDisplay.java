@@ -30,8 +30,6 @@ public class ResourceDisplay extends RenderedGuiObject {
 	private final static Logger L = EduLog.getLoggerFor(ResourceDisplay.class
 			.getName());
 
-	private final static int ICON_WIDTH = 20;
-
 	private Player player;
 	private int resAmount;
 
@@ -54,12 +52,12 @@ public class ResourceDisplay extends RenderedGuiObject {
 		g.drawImage(i, screenX, screenY
 				+ (font.getLineHeight() - i.getHeight()) / 2);
 		g.setColor(Color.white);
-		font.drawString(screenX + ICON_WIDTH + 3, screenY, resAmount + "");
+		font.drawString(screenX + i.getWidth() + 3, screenY, resAmount + "");
 	}
 
 	@Override
 	public void onGuiSizeChanged(int newWidth, int newHeight) {
-		screenX = newWidth - 250;
+		screenX = newWidth - 300;
 		screenY = 10;
 	}
 

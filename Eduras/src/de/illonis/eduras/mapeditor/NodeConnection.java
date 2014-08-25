@@ -38,10 +38,16 @@ public final class NodeConnection {
 		return super.equals(obj);
 	}
 
+	/**
+	 * @return first node.
+	 */
 	public NodeData getA() {
 		return a;
 	}
 
+	/**
+	 * @return second node.
+	 */
 	public NodeData getB() {
 		return b;
 	}

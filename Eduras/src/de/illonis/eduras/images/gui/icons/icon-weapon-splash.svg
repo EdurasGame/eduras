@@ -15,9 +15,9 @@
    version="1.1"
    inkscape:version="0.48.3.1 r9886"
    sodipodi:docname="icon-weapon-splash.svg"
-   inkscape:export-filename="/home/illonis/git/eduras/Eduras/src/de/illonis/eduras/images/gui/icons/icon-weapon-splash.png"
-   inkscape:export-xdpi="27.25"
-   inkscape:export-ydpi="27.25">
+   inkscape:export-filename="icon-weapon-splash.png"
+   inkscape:export-xdpi="65.290001"
+   inkscape:export-ydpi="65.290001">
   <defs
      id="defs4">
     <filter
@@ -62,9 +62,9 @@
      fit-margin-bottom="0"
      fit-margin-left="0"
      fit-margin-right="0"
-     inkscape:window-width="1280"
+     inkscape:window-width="1301"
      inkscape:window-height="744"
-     inkscape:window-x="0"
+     inkscape:window-x="65"
      inkscape:window-y="24"
      inkscape:window-maximized="1" />
   <metadata
@@ -131,7 +131,7 @@
        sodipodi:cy="82.284882"
        sodipodi:rx="5.5357141"
        sodipodi:ry="5.8928571"
-       d="m 88.214288,82.284882 a 5.5357141,5.8928571 0 1 1 -11.071429,0 5.5357141,5.8928571 0 1 1 11.071429,0 z"
+       d="m 88.214288,82.284882 c 0,3.254535 -2.478424,5.892857 -5.535714,5.892857 -3.057291,0 -5.535715,-2.638322 -5.535715,-5.892857 0,-3.254536 2.478424,-5.892857 5.535715,-5.892857 3.05729,0 5.535714,2.638321 5.535714,5.892857 z"
        transform="translate(171.14197,311.56462)" />
   </g>
 </svg>
