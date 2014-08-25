@@ -102,7 +102,6 @@ public class ActionBar extends ClickableGuiElement implements TooltipTriggerer {
 		if (currentPage == null)
 			return;
 		Font font = FontCache.getFont(FontKey.DEFAULT_FONT, g);
-		Font smallFont = FontCache.getFont(FontKey.SMALL_FONT, g);
 		int resources = 0;
 		try {
 			resources = getInfo().getPlayer().getTeam().getResource();
@@ -163,8 +162,8 @@ public class ActionBar extends ClickableGuiElement implements TooltipTriggerer {
 				int w = font.getWidth(label);
 				int h = font.getHeight(label);
 				int bgSize = Math.max(w, h) + 1;
-				g.fillRect(x+2, screenY+2 , bgSize, bgSize);
-				font.drawString(x +2 + (bgSize - w) / 2, screenY +2, label,
+				g.fillRect(x + 2, screenY + 2, bgSize, bgSize);
+				font.drawString(x + 2 + (bgSize - w) / 2, screenY + 2, label,
 						Color.white);
 			}
 			x += buttonSize;
@@ -205,7 +204,7 @@ public class ActionBar extends ClickableGuiElement implements TooltipTriggerer {
 		if (currentPage == null)
 			return;
 		float x = p.x - screenX;
-		if (x < ActionButton.BUTTON_SIZE * numButtons) {
+		if (x < buttonSize * numButtons) {
 			int button = (int) (x / buttonSize);
 			getTooltipHandler().showTooltip(p,
 					currentPage.getButtons().get(button).getLabel());
