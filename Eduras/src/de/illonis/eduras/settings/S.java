@@ -721,6 +721,8 @@ public final class S {
 
 		public static long sv_modeswitch_dead_cooldown = 0;
 
+		public static boolean sv_minimap_egomode = true;
+
 	}
 
 	/**
