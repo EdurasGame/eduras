@@ -2,8 +2,6 @@ package de.illonis.eduras.gameclient.datacache;
 
 import java.util.HashMap;
 
-import javax.swing.ImageIcon;
-
 import org.newdawn.slick.Image;
 import org.newdawn.slick.geom.Vector2f;
 
@@ -22,7 +20,6 @@ public final class ImageCache {
 	private final static HashMap<ShapeType, Vector2f[]> shapeData = new HashMap<ShapeType, Vector2f[]>();
 	private final static HashMap<ObjectType, Image> objectImages = new HashMap<ObjectType, Image>();
 	private final static HashMap<ImageKey, Image> guiImages = new HashMap<ImageKey, Image>();
-	private final static HashMap<ImageKey, ImageIcon> imageIcons = new HashMap<ImageKey, ImageIcon>();
 	private final static HashMap<ObjectType, Image> inventoryIcons = new HashMap<ObjectType, Image>();
 
 	static void addShape(ShapeType shapeType, Vector2f[] verts) {
@@ -31,10 +28,6 @@ public final class ImageCache {
 
 	static void addImage(ObjectType objectType, Image image) {
 		objectImages.put(objectType, image);
-	}
-
-	static void addImageIcon(ImageKey key, ImageIcon icon) {
-		imageIcons.put(key, icon);
 	}
 
 	static void addGuiImage(ImageKey key, Image image) {
@@ -91,22 +84,6 @@ public final class ImageCache {
 		if (image == null)
 			throw new CacheException("No cached image found for " + key);
 		return image;
-	}
-
-	/**
-	 * Retrieves an icon by given key.
-	 * 
-	 * @param key
-	 *            the key of the icon.
-	 * @return the image icon.
-	 * @throws CacheException
-	 *             if imagedata for that key are not cached.
-	 */
-	public static ImageIcon getImageIcon(ImageKey key) throws CacheException {
-		ImageIcon icon = imageIcons.get(key);
-		if (icon == null)
-			throw new CacheException("No cached image found for " + key);
-		return icon;
 	}
 
 	/**

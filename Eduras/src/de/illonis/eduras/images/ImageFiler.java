@@ -14,6 +14,7 @@ import org.newdawn.slick.SlickException;
 import de.illonis.edulog.EduLog;
 import de.illonis.eduras.gameclient.datacache.CacheInfo;
 import de.illonis.eduras.locale.Localization;
+import de.illonis.eduras.utils.Pair;
 
 /**
  * Provides utility features to load or interact with images stored in game
@@ -24,40 +25,73 @@ import de.illonis.eduras.locale.Localization;
  */
 public class ImageFiler {
 
+	/**
+	 * Eduras provides different files for different resolutions and scales on
+	 * resolutions between them.<br>
+	 * Always use the next higher value if you are on a resolution not listed.
+	 */
+	@SuppressWarnings("javadoc")
+	public enum ImageResolution {
+		WINDOWED(".low"), LAPTOP(".medium"), FULLHD("");
+
+		private ImageResolution(String suffix) {
+			this.suffix = suffix;
+		}
+
+		private String suffix;
+
+		public String getSuffix() {
+			return suffix;
+		}
+	}
+
+	private static Pair<ImageResolution, Float> calculateResolution() {
+		return new Pair<ImageResolution, Float>(ImageResolution.FULLHD, 1f);
+	}
+
 	private final static Logger L = EduLog.getLoggerFor(ImageFiler.class
 			.getName());
 
 	/**
-	 * Loads an image from internal filesystem and returns its
-	 * {@link BufferedImage}.
+	 * Loads an image scaled for current resolution from internal filesystem and
+	 * returns its {@link BufferedImage}.
 	 * 
 	 * @param fileName
 	 *            file name of image. Must be relative to images-package.
 	 * @return image.
 	 * @throws SlickException
 	 *             when image could not be loaded.
-	 * @throws IllegalArgumentException
 	 */
 	public static Image load(String fileName) throws SlickException {
-		return new Image(CacheInfo.BASE_URL + fileName);
+		Pair<ImageResolution, Float> resolution = calculateResolution();
+		Image image = new Image(CacheInfo.BASE_URL + fileName
+				+ resolution.getFirst().getSuffix());
+		float factor = resolution.getSecond();
+		if (factor == 1f) {
+			return image;
+		} else {
+			return image.getScaledCopy(factor);
+		}
 	}
 
 	/**
-	 * Loads an icon from internal filesystem.
+	 * Loads an icon for swing GUI  from internal filesystem.
 	 * 
-	 * @param path
+	 * @param fileName
 	 *            file name of icon. Must be relative to images-package.
 	 * @return an {@link ImageIcon} from given file.
 	 */
-	public static ImageIcon loadIcon(String path) {
-		URL imgURL = ImageFiler.class.getResource(path);
+	public static ImageIcon loadIcon(String fileName) {
+		URL imgURL = ImageFiler.class.getResource(fileName);
+		ImageIcon icon;
 		if (imgURL != null) {
-			return new ImageIcon(imgURL);
+			icon = new ImageIcon(imgURL);
 		} else {
 			L.severe(Localization.getStringF("Client.errors.io.imagenotfound",
-					path));
+					fileName));
 			return null;
 		}
+		return icon;
 	}
 
 	/**
