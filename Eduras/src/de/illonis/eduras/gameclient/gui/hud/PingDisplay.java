@@ -14,13 +14,12 @@ import de.illonis.eduras.gameclient.datacache.FontCache.FontKey;
  * 
  */
 public class PingDisplay extends RenderedGuiObject implements PingListener {
-	private final static int HEIGHT = 20;
 	private String latency;
 
 	protected PingDisplay(UserInterface gui) {
 		super(gui);
 		screenX = 0;
-		screenY = 60;
+		screenY = 80;
 		latency = "999 ms";
 	}
 
@@ -29,7 +28,7 @@ public class PingDisplay extends RenderedGuiObject implements PingListener {
 		g2d.setColor(Color.white);
 		Font font = FontCache.getFont(FontKey.SMALL_FONT, g2d);
 		float x = screenX - font.getWidth(latency) - 5;
-		font.drawString(x, screenY + HEIGHT - 5, latency);
+		font.drawString(x, screenY + font.getLineHeight(), latency);
 	}
 
 	@Override
