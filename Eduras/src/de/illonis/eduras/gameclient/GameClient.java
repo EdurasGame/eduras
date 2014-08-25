@@ -128,7 +128,10 @@ public class GameClient {
 
 	private void tearDownConnection() {
 		logic.stop();
-		logic.getChat().disconnect();
+		ChatClient chat = logic.getChat();
+		if (chat != null) {
+			chat.disconnect();
+		}
 		// initializer.tearDown();
 		container.onDisconnect(wantsExit, null);
 	}
