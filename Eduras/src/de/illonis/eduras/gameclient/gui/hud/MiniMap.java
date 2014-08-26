@@ -106,15 +106,15 @@ public class MiniMap extends ClickableGuiElement {
 
 					// draw a line from some node to his adjacent
 					Vector2f someNodePositionOnMinimap = gameToMinimapPosition(new Vector2f(
-							someNode.getX(), someNode.getY()));
+							someNode.getCenterX(), someNode.getCenterY()));
 					Vector2f adjacentOfSomeNodePositionOnMinimap = gameToMinimapPosition(new Vector2f(
-							adjacentOfSomeNode.getX(),
-							adjacentOfSomeNode.getY()));
+							adjacentOfSomeNode.getCenterX(),
+							adjacentOfSomeNode.getCenterY()));
 
 					g.drawLine(someNodePositionOnMinimap.getX(),
-							someNodePositionOnMinimap.getY(),
-							adjacentOfSomeNodePositionOnMinimap.getX(),
-							adjacentOfSomeNodePositionOnMinimap.getY());
+							someNodePositionOnMinimap.y,
+							adjacentOfSomeNodePositionOnMinimap.x,
+							adjacentOfSomeNodePositionOnMinimap.y);
 				}
 			}
 		}
