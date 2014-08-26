@@ -6,6 +6,7 @@ import java.util.logging.Logger;
 
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
+import org.newdawn.slick.Input;
 import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.Vector2f;
 
@@ -13,8 +14,12 @@ import de.illonis.edulog.EduLog;
 import de.illonis.eduras.Player;
 import de.illonis.eduras.events.SetIntegerGameObjectAttributeEvent;
 import de.illonis.eduras.events.SetInteractModeEvent;
+import de.illonis.eduras.exceptions.InsufficientResourceException;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
 import de.illonis.eduras.exceptions.PlayerHasNoTeamException;
+import de.illonis.eduras.gameclient.gui.game.GamePanelLogic;
+import de.illonis.eduras.gameclient.gui.game.GamePanelLogic.ClickState;
+import de.illonis.eduras.logicabstraction.EdurasInitializer;
 import de.illonis.eduras.units.InteractMode;
 import de.illonis.eduras.units.PlayerMainFigure;
 import de.illonis.eduras.units.Unit;
@@ -132,7 +137,23 @@ public class PlayerStatBar extends RenderedGuiObject {
 
 			if (!player.isDead()) {
 				PlayerMainFigure mainFigure = player.getPlayerMainFigure();
-				if (mainFigure != null) {
+
+				GamePanelLogic logic = userInterface.getLogic();
+				switch (logic.getClickState()) {
+				case SELECT_TARGET_FOR_SPELL:
+					// select player for a spell
+					if (button == Input.MOUSE_LEFT_BUTTON) {
+						try {
+							userInterface.getListener().onUnitSpell(mainFigure);
+							actionDone();
+							logic.setClickState(ClickState.DEFAULT);
+						} catch (InsufficientResourceException e) {
+							logic.onActionFailed(e);
+						}
+					}
+					break;
+				default:
+					// center the camera on the clicked player
 					Vector2f gamePos = new Vector2f(mainFigure.getShape()
 							.getX(), mainFigure.getShape().getY());
 					Vector2f newPos;
@@ -158,6 +179,11 @@ public class PlayerStatBar extends RenderedGuiObject {
 		public Rectangle getBounds() {
 			return new Rectangle(screenX, screenY + offset, WIDTH, HEIGHT);
 		}
+	}
+
+	private void actionDone() {
+		EdurasInitializer.getInstance().getInformationProvider()
+				.getClientData().setCurrentActionSelected(-1);
 	}
 
 	@Override

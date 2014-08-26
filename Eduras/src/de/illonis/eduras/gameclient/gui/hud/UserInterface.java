@@ -10,6 +10,7 @@ import de.illonis.eduras.gameclient.datacache.CacheInfo.ImageKey;
 import de.illonis.eduras.gameclient.gui.HudNotifier;
 import de.illonis.eduras.gameclient.gui.TimedTasksHolderGUI;
 import de.illonis.eduras.gameclient.gui.game.GameCamera;
+import de.illonis.eduras.gameclient.gui.game.GamePanelLogic;
 import de.illonis.eduras.gameclient.gui.game.GameRenderer;
 import de.illonis.eduras.gameclient.gui.game.GuiClickReactor;
 import de.illonis.eduras.gameclient.gui.game.GuiResizeListener;
@@ -55,6 +56,7 @@ public class UserInterface implements GuiResizeListener {
 	private final GuiInternalEventListener guiReactor;
 	private MiniMap minimap;
 	private ExitPopup exitPopup;
+	private GamePanelLogic logic;
 
 	public ActionBar getActionBar() {
 		return actionBar;
@@ -80,7 +82,8 @@ public class UserInterface implements GuiResizeListener {
 	public UserInterface(InformationProvider infos,
 			TooltipTriggererNotifier tooltipNotifier,
 			GuiClickReactor clickReactor, HudNotifier hudNotifier,
-			GuiInternalEventListener reactor, ChatCache cache) {
+			GuiInternalEventListener reactor, ChatCache cache,
+			GamePanelLogic logic) {
 		this.uiObjects = new LinkedList<RenderedGuiObject>();
 		this.infos = infos;
 		this.hudNotifier = hudNotifier;
@@ -89,6 +92,7 @@ public class UserInterface implements GuiResizeListener {
 		this.reactor = clickReactor;
 		this.tooltipNotifier = tooltipNotifier;
 		this.cache = cache;
+		this.logic = logic;
 		createElements();
 		hudNotifier.setUiObjects(this.uiObjects);
 
@@ -148,6 +152,10 @@ public class UserInterface implements GuiResizeListener {
 
 	GameCamera getGameCamera() {
 		return renderer.getCamera();
+	}
+
+	public GamePanelLogic getLogic() {
+		return logic;
 	}
 
 	private void addButtonsForMainPage(ActionBarPage mainPage) {
@@ -389,5 +397,9 @@ public class UserInterface implements GuiResizeListener {
 	public void setRenderer(GameRenderer renderer) {
 		this.renderer = renderer;
 		minimap.setCamera(renderer.getCamera());
+	}
+
+	public GuiInternalEventListener getListener() {
+		return guiReactor;
 	}
 }
