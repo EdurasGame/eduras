@@ -122,11 +122,10 @@ public class LinearAlgebraGeometry extends SimpleGeometry {
 			if (GameObject.canCollideWithEachOther(movingObject, singleObject)) {
 				// remember the gameObject that had a collision
 				collisionObject = singleObject;
+				collisions.add(nearestCollision);
 			} else {
 				touchedObjects.add(singleObject);
 			}
-
-			collisions.add(nearestCollision);
 		}
 
 		touched.addAll(touchedObjects);
