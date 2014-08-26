@@ -3,7 +3,9 @@ package de.illonis.eduras.gameclient.datacache;
 import java.util.HashMap;
 
 import de.illonis.eduras.ObjectFactory.ObjectType;
+import de.illonis.eduras.gameclient.datacache.FontCache.FontKey;
 import de.illonis.eduras.shapes.ShapeFactory.ShapeType;
+import de.illonis.eduras.utils.Pair;
 
 /**
  * Contains lists of cachable files and their location.<br>
@@ -22,7 +24,7 @@ public final class CacheInfo {
 	 */
 	@SuppressWarnings("javadoc")
 	public enum ImageKey {
-		STATISTICS_BG, MINIMAP_DUMMY, RESOURCE_ICON, RESOURCE_ICON_SMALL, SPELLS_PAGE, ACTION_HEAL, ACTION_RESURRECT, ACTION_RESURRECT_PLAYER, ACTION_ABORT, ACTION_SPAWN_OBSERVER, ACTION_SPELL_SCOUT, ACTION_SPAWN_ITEMS, ITEM_DUMMY, ITEM_SIMPLEWEAPON, ITEM_SNIPERWEAPON, ITEM_SPLASHWEAPON, ITEM_SWORDWEAPON, ITEM_ROCKETLAUNCHER, ITEM_MINELAUNCHER, ITEM_ASSAULTRIFLE, ACTION_SPELL_SPEED, ACTION_SPELL_INVISIBILITY, STRATEGY_MODE_ICON, ;
+		STATISTICS_BG, RESOURCE_ICON, RESOURCE_ICON_SMALL, SPELLS_PAGE, ACTION_HEAL, ACTION_RESURRECT, ACTION_RESURRECT_PLAYER, ACTION_ABORT, ACTION_SPAWN_OBSERVER, ACTION_SPELL_SCOUT, ACTION_SPAWN_ITEMS, ITEM_DUMMY, ITEM_SIMPLEWEAPON, ITEM_SNIPERWEAPON, ITEM_SPLASHWEAPON, ITEM_SWORDWEAPON, ITEM_ROCKETLAUNCHER, ITEM_MINELAUNCHER, ITEM_ASSAULTRIFLE, ACTION_SPELL_SPEED, ACTION_SPELL_INVISIBILITY, STRATEGY_MODE_ICON, ;
 
 		public static ImageKey typeToImageKey(ObjectType type) {
 			switch (type) {
@@ -56,8 +58,24 @@ public final class CacheInfo {
 	private final static HashMap<ImageKey, String> guiImages;
 	private final static HashMap<ImageKey, String> imageIcons;
 	private final static HashMap<ObjectType, String> inventoryIcons;
+	private final static HashMap<FontKey, Pair<String, Integer>> fonts;
 
 	static {
+		fonts = new HashMap<FontKey, Pair<String, Integer>>();
+		fonts.put(FontKey.DEFAULT_FONT, new Pair<String, Integer>(
+				"LinLibertine_R.ttf", 16));
+		fonts.put(FontKey.SMALL_FONT, new Pair<String, Integer>(
+				"LinLibertine_R.ttf", 10));
+		fonts.put(FontKey.BIG_FONT, new Pair<String, Integer>(
+				"LinLibertine_R.ttf", 20));
+		fonts.put(FontKey.HUGE_FONT, new Pair<String, Integer>(
+				"LinLibertine_R.ttf", 24));
+		fonts.put(FontKey.CHAT_FONT, new Pair<String, Integer>(
+				"LinLibertine_R.ttf", 14));
+		fonts.put(FontKey.TOOLTIP_FONT, new Pair<String, Integer>(
+				"LinLibertine_R.ttf", 14));
+		fonts.put(FontKey.NAMEPLATE, new Pair<String, Integer>(
+				"LinLibertine_R.ttf", 10));
 		shapes = new HashMap<ShapeType, String>();
 		shapes.put(ShapeType.BIRD, "bird.esh");
 		shapes.put(ShapeType.ROCKET, "rocket.esh");
@@ -99,10 +117,9 @@ public final class CacheInfo {
 				"gameobjects/speedpowerup.png");
 		guiImages = new HashMap<ImageKey, String>();
 		guiImages.put(ImageKey.STATISTICS_BG, "gui/artwork/statwindow.png");
-		guiImages.put(ImageKey.MINIMAP_DUMMY, "gui/artwork/minimap.png");
-		guiImages.put(ImageKey.RESOURCE_ICON, "gui/artwork/resource.png");
+		guiImages.put(ImageKey.RESOURCE_ICON, "gui/icons/resource.png");
 		guiImages.put(ImageKey.RESOURCE_ICON_SMALL,
-				"gui/artwork/resource_small.png");
+				"gui/icons/resource_small.png");
 		guiImages.put(ImageKey.STRATEGY_MODE_ICON,
 				"gui/artwork/strategymode.png");
 		guiImages.put(ImageKey.ACTION_HEAL, "gui/icons/icon-heal.png");
@@ -208,6 +225,10 @@ public final class CacheInfo {
 
 	static HashMap<ImageKey, String> getAllGuiImages() {
 		return new HashMap<ImageKey, String>(guiImages);
+	}
+
+	static HashMap<FontKey, Pair<String, Integer>> getAllFonts() {
+		return new HashMap<FontKey, Pair<String, Integer>>(fonts);
 	}
 
 	static HashMap<ImageKey, String> getAllImageIcons() {

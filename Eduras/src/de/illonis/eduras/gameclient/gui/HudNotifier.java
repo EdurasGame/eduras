@@ -91,7 +91,8 @@ public class HudNotifier implements GameEventListener {
 
 	@Override
 	public void onNewObjectPosition(GameObject object) {
-		for (GameEventListener obj : uiObjects) {
+		for (int i = 0; i < uiObjects.size(); i++) {
+			GameEventListener obj = uiObjects.get(i);
 			obj.onNewObjectPosition(object);
 		}
 		for (GameEventListener obj : otherObjects) {

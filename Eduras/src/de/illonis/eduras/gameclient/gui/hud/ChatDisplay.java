@@ -1,10 +1,13 @@
 package de.illonis.eduras.gameclient.gui.hud;
 
 import org.newdawn.slick.Color;
+import org.newdawn.slick.Font;
 import org.newdawn.slick.Graphics;
 
 import de.illonis.eduras.chat.ChatMessage;
 import de.illonis.eduras.gameclient.ChatCache;
+import de.illonis.eduras.gameclient.datacache.FontCache;
+import de.illonis.eduras.gameclient.datacache.FontCache.FontKey;
 
 /**
  * Displays a chat.
@@ -14,7 +17,7 @@ import de.illonis.eduras.gameclient.ChatCache;
  */
 public class ChatDisplay extends RenderedGuiObject {
 
-	private final static int HEIGHT = 150;
+	private final static int MAX_LINES = 5;
 	private final static int WIDTH = 280;
 	private static final long MESSAGE_FADE_TIME = 15000;
 	private final ChatCache data;
@@ -28,44 +31,40 @@ public class ChatDisplay extends RenderedGuiObject {
 
 	@Override
 	public void render(Graphics g) {
+		Font font = FontCache.getFont(FontKey.CHAT_FONT, g);
 		if (data.isEnabled()) {
-			g.setColor(Color.white);
-			g.drawString("Room: " + data.getRoomName(), screenX + WIDTH - 130,
-					screenY + 10);
+			int height = (MAX_LINES + 1) * font.getLineHeight();
+			font.drawString(screenX + WIDTH - 130, screenY - height, "Room: "
+					+ data.getRoomName(), Color.white);
 			ChatMessage msg;
-			int i = 15;
+			int i = font.getLineHeight();
 			if (data.isWriting())
-				i = 30;
-
-			while (i < HEIGHT - 15 && null != (msg = data.popMessage())) {
+				i += font.getLineHeight();
+			while (i < height && null != (msg = data.popMessage())) {
 				if (!data.isWriting()
 						&& System.currentTimeMillis() - msg.getTimeStamp() > MESSAGE_FADE_TIME) {
 					break;
 				}
-
-				if (msg.isSystemMessage())
-					g.setColor(Color.yellow);
-				else
-					g.setColor(Color.white);
-				g.drawString(msg.toChatWindowString(), screenX + 5, screenY
-						+ HEIGHT - i);
-				i += 15;
+				font.drawString(screenX + 5, screenY - i, msg
+						.toChatWindowString(),
+						(msg.isSystemMessage()) ? Color.yellow : Color.white);
+				i += font.getLineHeight();
 			}
 			if (data.isWriting()) {
-				g.setColor(Color.white);
-				g.drawString(data.getInput() + "_", screenX + 5, screenY
-						+ HEIGHT - 15);
+				font.drawString(screenX + 5, screenY - font.getLineHeight(),
+						data.getInput() + "_", Color.white);
 			}
 			data.resetPop();
 		} else {
-			g.drawString("Chat is disabled.", screenX + WIDTH / 2, screenY
-					+ HEIGHT / 2);
+			font.drawString(screenX + WIDTH / 2,
+					screenY - font.getLineHeight(), "Chat is disabled.",
+					Color.yellow);
 		}
 	}
 
 	@Override
 	public void onGuiSizeChanged(int newWidth, int newHeight) {
-		screenY = newHeight - HEIGHT;
-		screenX = newWidth - WIDTH;
+		screenY = newHeight;
+		screenX = newWidth * 2 / 3;
 	}
 }

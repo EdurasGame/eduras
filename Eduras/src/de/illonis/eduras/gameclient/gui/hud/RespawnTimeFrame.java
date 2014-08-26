@@ -5,6 +5,9 @@ import java.util.logging.Logger;
 import org.newdawn.slick.Color;
 
 import de.illonis.edulog.EduLog;
+import de.illonis.eduras.gameclient.datacache.CacheException;
+import de.illonis.eduras.gameclient.datacache.FontCache;
+import de.illonis.eduras.gameclient.datacache.FontCache.FontKey;
 import de.illonis.eduras.gamemodes.GameMode;
 import de.illonis.eduras.gamemodes.GameMode.GameModeNumber;
 import de.illonis.eduras.settings.S;
@@ -16,7 +19,7 @@ public class RespawnTimeFrame extends TimeFrame {
 			.getName());
 
 	public RespawnTimeFrame(UserInterface gui) {
-		super(gui, Color.yellow, 20f);
+		super(gui, Color.yellow, 5f);
 
 		setActiveInteractModes(InteractMode.MODE_DEAD,
 				InteractMode.MODE_STRATEGY);
@@ -25,6 +28,15 @@ public class RespawnTimeFrame extends TimeFrame {
 	@Override
 	protected long getTimeToDisplay() {
 		return getInfo().getRespawnTime();
+	}
+
+	@Override
+	public void onGameReady() {
+		super.onGameReady();
+		try {
+			screenY = FontCache.getFont(FontKey.DEFAULT_FONT).getLineHeight();
+		} catch (CacheException e) {
+		}
 	}
 
 	@Override

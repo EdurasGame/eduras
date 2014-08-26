@@ -91,6 +91,7 @@ public class GamePanelLogic extends GameEventAdapter implements
 
 		keyHandler = new InputKeyHandler(this, reactor);
 		camera = new GameCamera();
+		camera.setSize(800, 600);
 		gameEventListeners = new LinkedList<GameEventListener>();
 		mouseHandler = new GuiMouseHandler(this, reactor);
 		cml = new CameraMouseListener(camera);
@@ -181,7 +182,7 @@ public class GamePanelLogic extends GameEventAdapter implements
 		System.out.println("[GUI] Size changed. New size: " + gui.getWidth()
 				+ ", " + gui.getHeight());
 		userInterface.onGuiSizeChanged(gui.getWidth(), gui.getHeight());
-		camera.setSize(gui.getWidth(), gui.getHeight()); // maybe not?
+		//camera.setSize(gui.getWidth(), gui.getHeight()); // maybe not?
 	}
 
 	public GameContainer getGui() {

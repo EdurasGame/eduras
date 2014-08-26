@@ -15,6 +15,7 @@ import org.newdawn.slick.state.transition.FadeOutTransition;
 
 import de.illonis.eduras.gameclient.audio.SoundMachine;
 import de.illonis.eduras.gameclient.audio.SoundMachine.SoundType;
+import de.illonis.eduras.gameclient.datacache.ImageCache;
 import de.illonis.eduras.gameclient.userprefs.KeyBindings;
 import de.illonis.eduras.gameclient.userprefs.KeyBindings.KeyBinding;
 import de.illonis.eduras.gameclient.userprefs.Settings;
@@ -179,7 +180,7 @@ public class SettingsController extends EdurasScreenController {
 		DisplayMode selected = event.getSelection();
 		try {
 			game.changeResolution(selected.getWidth(), selected.getHeight());
-
+			ImageCache.dispose();
 			resolutionLabel.setText("Current resolution: "
 					+ selected.toString());
 		} catch (SlickException e) {

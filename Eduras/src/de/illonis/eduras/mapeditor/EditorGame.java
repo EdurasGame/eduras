@@ -48,7 +48,6 @@ public class EditorGame extends BasicGame {
 		container.setShowFPS(false);
 		GraphicsPreLoader.loadShapes();
 		GraphicsPreLoader.loadGraphics();
-		GraphicsPreLoader.loadIcons();
 		panelLogic.setInput(container.getInput());
 	}
 
