@@ -56,7 +56,7 @@ public final class CacheInfo {
 	 */
 	@SuppressWarnings("javadoc")
 	public enum TextureKey {
-		GRASS, REDROCK, BASE, BASE_RED, BASE_BLUE;
+		DUST_GRASS, GRASS, REDROCK, BASE, BASE_RED, BASE_BLUE, PORTAL, BRICK, ROCK, ROOF;
 	}
 
 	/**
@@ -74,11 +74,16 @@ public final class CacheInfo {
 
 	static {
 		textures = new HashMap<TextureKey, String>();
-		textures.put(TextureKey.GRASS, "textures/green.png");
+		textures.put(TextureKey.DUST_GRASS, "textures/grass2.png");
 		textures.put(TextureKey.REDROCK, "textures/testtexture.png");
 		textures.put(TextureKey.BASE, "textures/base.png");
 		textures.put(TextureKey.BASE_RED, "textures/base_red.png");
 		textures.put(TextureKey.BASE_BLUE, "textures/base_blue.png");
+		textures.put(TextureKey.PORTAL, "textures/portal.png");
+		textures.put(TextureKey.BRICK, "textures/brick.png");
+		textures.put(TextureKey.ROCK, "textures/rock.png");
+		textures.put(TextureKey.GRASS, "textures/grass.png");
+		textures.put(TextureKey.ROOF, "textures/roof.png");
 		fonts = new HashMap<FontKey, Pair<String, Integer>>();
 		fonts.put(FontKey.DEFAULT_FONT, new Pair<String, Integer>(
 				"LinLibertine_R.ttf", 16));

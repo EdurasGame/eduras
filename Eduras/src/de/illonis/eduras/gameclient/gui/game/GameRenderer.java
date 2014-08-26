@@ -354,9 +354,9 @@ public class GameRenderer implements TooltipHandler {
 
 		try {
 			Image image = ImageCache.getObjectImage(d);
-			if (ImageCache.isTexture(d)) {
+			if (ImageCache.isTextured(d)) {
 				g.setColor(Color.white);
-				g.texture(d.getShape(), image);
+				g.texture(d.getShape(), image, ImageCache.shouldFit(d));
 			} else {
 				g.drawImage(image, x, y);
 			}

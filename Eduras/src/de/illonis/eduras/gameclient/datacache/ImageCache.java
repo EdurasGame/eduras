@@ -88,7 +88,7 @@ public final class ImageCache {
 	 *             if imagedata for that object are not cached.
 	 */
 	public static Image getObjectImage(GameObject o) throws CacheException {
-		if (isTexture(o)) {
+		if (isTextured(o)) {
 			return getTexture(objectToTexture(o));
 		}
 		Image image = objectImages.get(o.getType());
@@ -99,7 +99,7 @@ public final class ImageCache {
 
 	/**
 	 * Retrieves the appropriate texture key for given game object. This returns
-	 * null if {@link #isTexture(GameObject)} returns false.
+	 * null if {@link #isTextured(GameObject)} returns false.
 	 * 
 	 * @param o
 	 *            the game object.
@@ -117,6 +117,13 @@ public final class ImageCache {
 				} else
 					return TextureKey.BASE_BLUE;
 			}
+		case PORTAL:
+			return TextureKey.PORTAL;
+		case DYNAMIC_POLYGON_BLOCK:
+			return TextureKey.ROCK;
+		case BIGBLOCK:
+		case BIGGERBLOCK:
+			return TextureKey.ROOF;
 		default:
 			return null;
 		}
@@ -174,9 +181,29 @@ public final class ImageCache {
 	 * @return true if the image returned by {@link #getObjectImage(GameObject)}
 	 *         is a texture for this type, false otherwise.
 	 */
-	public static boolean isTexture(GameObject o) {
+	public static boolean isTextured(GameObject o) {
 		switch (o.getType()) {
+		case PORTAL:
+		case DYNAMIC_POLYGON_BLOCK:
+		case BIGBLOCK:
+		case BIGGERBLOCK:
 		case NEUTRAL_BASE:
+			return true;
+		default:
+			return false;
+		}
+	}
+
+	/**
+	 * Checks if the texture for this object should fit.
+	 * 
+	 * @param o
+	 *            the game object.
+	 * @return true if the texture should fit, false otherwise.
+	 */
+	public static boolean shouldFit(GameObject o) {
+		switch (o.getType()) {
+		case PORTAL:
 			return true;
 		default:
 			return false;
