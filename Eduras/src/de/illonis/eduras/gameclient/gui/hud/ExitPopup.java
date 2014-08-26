@@ -5,6 +5,7 @@ import org.newdawn.slick.Font;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.geom.Rectangle;
 
+import de.illonis.eduras.gameclient.datacache.CacheException;
 import de.illonis.eduras.gameclient.datacache.FontCache;
 import de.illonis.eduras.gameclient.datacache.FontCache.FontKey;
 
@@ -16,8 +17,6 @@ import de.illonis.eduras.gameclient.datacache.FontCache.FontKey;
  */
 public class ExitPopup extends ClickableGuiElement {
 
-	private final static int WIDTH = 300;
-	private final static int HEIGHT = 100;
 	private final Rectangle bounds;
 	private final Rectangle yesRect;
 	private final Rectangle noRect;
@@ -28,7 +27,7 @@ public class ExitPopup extends ClickableGuiElement {
 	protected ExitPopup(UserInterface gui) {
 		super(gui);
 		this.ui = gui;
-		bounds = new Rectangle(0, 0, WIDTH, HEIGHT);
+		bounds = new Rectangle(0, 0, 300, 60);
 		yesRect = new Rectangle(0, 0, 100, 30);
 		noRect = new Rectangle(0, 0, 100, 30);
 		setVisible(false);
@@ -59,16 +58,14 @@ public class ExitPopup extends ClickableGuiElement {
 	public void render(Graphics g) {
 		if (isVisible()) {
 			Font font = FontCache.getFont(FontKey.DEFAULT_FONT, g);
-			bounds.setWidth(font.getWidth(text) + 10);
+
 			g.setColor(Color.white);
 			g.fill(bounds);
 			g.setColor(Color.black);
 			g.fill(yesRect);
 			g.fill(noRect);
-			font.drawString(screenX + 5, screenY + 5, text, Color.black);
+			font.drawString(screenX + 10, screenY + 5, text, Color.black);
 			g.setColor(Color.yellow);
-			yesRect.setHeight(font.getLineHeight() + 10);
-			noRect.setHeight(font.getLineHeight() + 10);
 			font.drawString(yesRect.getX() + 5, yesRect.getY() + 5, "Yes");
 			font.drawString(noRect.getX() + 5, noRect.getY() + 5, "No");
 		}
@@ -76,11 +73,27 @@ public class ExitPopup extends ClickableGuiElement {
 
 	@Override
 	public void onGuiSizeChanged(int newWidth, int newHeight) {
-		screenX = (newWidth - WIDTH) / 2;
-		screenY = (newHeight - HEIGHT) / 2;
-		bounds.setLocation(screenX, screenY);
-		yesRect.setLocation(screenX + 30, screenY + HEIGHT - 50);
-		noRect.setLocation(screenX + WIDTH - 150, screenY + HEIGHT - 50);
+		try {
+			Font font = FontCache.getFont(FontKey.DEFAULT_FONT);
+			yesRect.setSize(font.getWidth("Yes") + 10,
+					font.getLineHeight() + 10);
+			noRect.setSize(font.getWidth("Yes") + 10, font.getLineHeight() + 10);
+			int width = Math.max((int) yesRect.getWidth(), font.getWidth(text)) + 30;
+			bounds.setWidth(width);
+			int height = font.getLineHeight() * 2 + 30;
+			bounds.setHeight(height);
+			screenX = (newWidth - width) / 2;
+			screenY = (newHeight - height) / 2;
+			bounds.setLocation(screenX, screenY);
+			yesRect.setLocation(screenX + 10,
+					screenY + height - yesRect.getHeight() - 10);
+			noRect.setLocation(screenX + width - noRect.getWidth() - 10,
+					screenY + height - noRect.getHeight() - 10);
+
+		} catch (CacheException e) {
+			return;
+		}
+
 	}
 
 }
