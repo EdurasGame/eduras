@@ -57,6 +57,7 @@ import de.illonis.eduras.events.SetTeamsEvent;
 import de.illonis.eduras.events.SetTimeEvent;
 import de.illonis.eduras.events.SetVisibilityEvent;
 import de.illonis.eduras.events.SpawnItemEvent;
+import de.illonis.eduras.events.StartRoundEvent;
 import de.illonis.eduras.events.SwitchInteractModeEvent;
 import de.illonis.eduras.events.UnitSpellActionEvent;
 import de.illonis.eduras.events.UserMovementEvent;
@@ -330,6 +331,9 @@ public class EventParser implements EventHandler {
 			case MATCH_END:
 				logic.onGameEventAppeared(new MatchEndEvent((Integer) event
 						.getArgument(0)));
+				break;
+			case START_ROUND:
+				logic.onGameEventAppeared(new StartRoundEvent());
 				break;
 			case SET_TEAMS:
 				SetTeamsEvent setTeamsEvent = new SetTeamsEvent();

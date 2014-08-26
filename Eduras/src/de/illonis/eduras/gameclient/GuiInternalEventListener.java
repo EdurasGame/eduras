@@ -251,8 +251,11 @@ public class GuiInternalEventListener implements GamePanelReactor {
 				.getShape().getCenterY()).sub(player.getPositionVector());
 		Vector2df vPoint = new Vector2df(viewingPoint.sub(
 				player.getPositionVector()).sub(center));
-		float angle = vPoint.getAngleToXAxis();
-		player.setRotation(angle);
+		try {
+			float angle = vPoint.getAngleToXAxis();
+			player.setRotation(angle);
+		} catch (IllegalArgumentException e) {
+		}
 	}
 
 	@Override

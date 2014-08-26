@@ -3,6 +3,7 @@ package de.illonis.eduras.gameclient.gui;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
+import de.illonis.eduras.Team;
 import de.illonis.eduras.events.ClientRenameEvent;
 import de.illonis.eduras.events.DeathEvent;
 import de.illonis.eduras.events.GameEvent;
@@ -21,8 +22,10 @@ import de.illonis.eduras.events.SetTeamResourceEvent;
 import de.illonis.eduras.events.SetVisibilityEvent;
 import de.illonis.eduras.gameclient.gui.hud.RenderedGuiObject;
 import de.illonis.eduras.gamemodes.GameMode;
+import de.illonis.eduras.gameobjects.Base;
 import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.interfaces.GameEventListener;
+import de.illonis.eduras.units.Unit;
 
 /**
  * The eventlistener that listens for new events and passes them to all
@@ -148,12 +151,12 @@ public class HudNotifier implements GameEventListener {
 	}
 
 	@Override
-	public void onHealthChanged(SetIntegerGameObjectAttributeEvent event) {
+	public void onHealthChanged(Unit unit, int oldValue, int newValue) {
 		for (GameEventListener obj : uiObjects) {
-			obj.onHealthChanged(event);
+			obj.onHealthChanged(unit, oldValue, newValue);
 		}
 		for (GameEventListener obj : otherObjects) {
-			obj.onHealthChanged(event);
+			obj.onHealthChanged(unit, oldValue, newValue);
 		}
 	}
 
@@ -314,6 +317,26 @@ public class HudNotifier implements GameEventListener {
 		}
 		for (GameEventListener obj : otherObjects) {
 			obj.onMapChanged(setMapEvent);
+		}
+	}
+
+	@Override
+	public void onBaseConquered(Base base, Team conqueringTeam) {
+		for (GameEventListener obj : uiObjects) {
+			obj.onBaseConquered(base, conqueringTeam);
+		}
+		for (GameEventListener obj : otherObjects) {
+			obj.onBaseConquered(base, conqueringTeam);
+		}
+	}
+
+	@Override
+	public void onStartRound() {
+		for (GameEventListener obj : uiObjects) {
+			obj.onStartRound();
+		}
+		for (GameEventListener obj : otherObjects) {
+			obj.onStartRound();
 		}
 	}
 }

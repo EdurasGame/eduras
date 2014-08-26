@@ -31,7 +31,8 @@ public class SoundMachine {
 	@SuppressWarnings("javadoc")
 	public enum SoundType {
 		CLICK("click.ogg"), ERROR("error.ogg"), AMMO_EMPTY("out_of_ammo.ogg"), SHOOT(
-				"shoot.ogg"), HURT("hurt.ogg"), LOOT("loot.ogg");
+				"shoot.ogg"), HURT("hurt.ogg"), LOOT("loot.ogg"), TADA(
+				"tueduelue.ogg");
 
 		private final String file;
 

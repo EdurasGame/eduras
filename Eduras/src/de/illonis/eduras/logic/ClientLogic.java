@@ -49,6 +49,7 @@ import de.illonis.eduras.exceptions.PlayerHasNoTeamException;
 import de.illonis.eduras.gameclient.GameEventAdapter;
 import de.illonis.eduras.gamemodes.BasicGameMode;
 import de.illonis.eduras.gamemodes.GameMode;
+import de.illonis.eduras.gameobjects.Base;
 import de.illonis.eduras.gameobjects.DynamicPolygonObject;
 import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.gameobjects.NeutralArea;
@@ -138,9 +139,11 @@ public class ClientLogic implements GameLogicInterface {
 					break;
 				}
 				Unit unit = (Unit) obj;
+				int oldValue = unit.getHealth();
 				unit.setHealth(healthEvent.getNewValue());
 
-				getListener().onHealthChanged(healthEvent);
+				getListener().onHealthChanged(unit, oldValue,
+						healthEvent.getNewValue());
 
 				break;
 			case SET_POLYGON_DATA:
@@ -288,9 +291,11 @@ public class ClientLogic implements GameLogicInterface {
 					break;
 				}
 				Unit u = (Unit) gobj;
+				int oldVal = u.getMaxHealth();
 				u.setMaxHealth(mhealthEvent.getNewValue());
 
-				getListener().onHealthChanged(mhealthEvent);
+				getListener().onHealthChanged(u, oldVal,
+						mhealthEvent.getNewValue());
 
 				break;
 			case SET_TEAMS:
@@ -409,7 +414,9 @@ public class ClientLogic implements GameLogicInterface {
 				break;
 			case MATCH_END:
 				getListener().onMatchEnd((MatchEndEvent) event);
-
+				break;
+			case START_ROUND:
+				getListener().onStartRound();
 				break;
 			case SET_GAMEMODE:
 				SetGameModeEvent modeChangeEvent = (SetGameModeEvent) event;
@@ -514,6 +521,8 @@ public class ClientLogic implements GameLogicInterface {
 				}
 				conqueredArea.setCurrentOwnerTeam(conqueringTeam);
 
+				getListener().onBaseConquered((Base) conqueredArea,
+						conqueringTeam);
 				break;
 			case PLAYER_JOINED: {
 				OwnerGameEvent ownerEvent = (OwnerGameEvent) event;
