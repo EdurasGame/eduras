@@ -19,6 +19,7 @@ import org.newdawn.slick.util.ResourceLoader;
 import de.illonis.edulog.EduLog;
 import de.illonis.eduras.ObjectFactory.ObjectType;
 import de.illonis.eduras.gameclient.datacache.CacheInfo.ImageKey;
+import de.illonis.eduras.gameclient.datacache.CacheInfo.TextureKey;
 import de.illonis.eduras.gameclient.datacache.FontCache.FontKey;
 import de.illonis.eduras.gameclient.gui.game.GameRenderer;
 import de.illonis.eduras.images.ImageFiler;
@@ -45,6 +46,23 @@ public final class GraphicsPreLoader {
 	 */
 	public static void preLoadShapes() {
 		loadShapes();
+	}
+
+	public static void loadTextures() {
+		HashMap<TextureKey, String> textureInfo = CacheInfo.getAllTextures();
+		Iterator<Map.Entry<TextureKey, String>> it = textureInfo.entrySet()
+				.iterator();
+		while (it.hasNext()) {
+			Map.Entry<TextureKey, String> pair = it.next();
+			try {
+				Image image = ImageFiler.load(pair.getValue());
+				ImageCache.addTexture(pair.getKey(), image);
+			} catch (SlickException e) {
+				L.log(Level.SEVERE,
+						"Texture file not found: " + pair.getValue(), e);
+			}
+		}
+
 	}
 
 	public static void loadFonts() {

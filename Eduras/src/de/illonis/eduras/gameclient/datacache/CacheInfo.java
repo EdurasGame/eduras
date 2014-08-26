@@ -24,13 +24,7 @@ public final class CacheInfo {
 	 */
 	@SuppressWarnings("javadoc")
 	public enum ImageKey {
-		STATISTICS_BG, MINIMAP_DUMMY, RESOURCE_ICON, RESOURCE_ICON_SMALL,
-		SPELLS_PAGE, ACTION_HEAL, ACTION_RESURRECT, ACTION_RESURRECT_PLAYER,
-		ACTION_ABORT, ACTION_SPAWN_OBSERVER, ACTION_SPELL_SCOUT,
-		ACTION_SPAWN_ITEMS, ITEM_DUMMY, ITEM_SIMPLEWEAPON, ITEM_SNIPERWEAPON,
-		ITEM_SPLASHWEAPON, ITEM_SWORDWEAPON, ITEM_ROCKETLAUNCHER,
-		ITEM_MINELAUNCHER, ITEM_ASSAULTRIFLE, ACTION_SPELL_SPEED,
-		ACTION_SPELL_INVISIBILITY, STRATEGY_MODE_ICON, ;
+		STATISTICS_BG, MINIMAP_DUMMY, RESOURCE_ICON, RESOURCE_ICON_SMALL, SPELLS_PAGE, ACTION_HEAL, ACTION_RESURRECT, ACTION_RESURRECT_PLAYER, ACTION_ABORT, ACTION_SPAWN_OBSERVER, ACTION_SPELL_SCOUT, ACTION_SPAWN_ITEMS, ITEM_DUMMY, ITEM_SIMPLEWEAPON, ITEM_SNIPERWEAPON, ITEM_SPLASHWEAPON, ITEM_SWORDWEAPON, ITEM_ROCKETLAUNCHER, ITEM_MINELAUNCHER, ITEM_ASSAULTRIFLE, ACTION_SPELL_SPEED, ACTION_SPELL_INVISIBILITY, STRATEGY_MODE_ICON, ;
 
 		public static ImageKey typeToImageKey(ObjectType type) {
 			switch (type) {
@@ -55,6 +49,17 @@ public final class CacheInfo {
 	}
 
 	/**
+	 * Key for identifying textures.
+	 * 
+	 * @author illonis
+	 * 
+	 */
+	@SuppressWarnings("javadoc")
+	public enum TextureKey {
+		GRASS, REDROCK, BASE, BASE_RED, BASE_BLUE;
+	}
+
+	/**
 	 * Absolute base url to resolve path for Slick.
 	 */
 	public final static String BASE_URL = "de/illonis/eduras/images/";
@@ -65,8 +70,15 @@ public final class CacheInfo {
 	private final static HashMap<ImageKey, String> imageIcons;
 	private final static HashMap<ObjectType, String> inventoryIcons;
 	private final static HashMap<FontKey, Pair<String, Integer>> fonts;
+	private final static HashMap<TextureKey, String> textures;
 
 	static {
+		textures = new HashMap<TextureKey, String>();
+		textures.put(TextureKey.GRASS, "textures/green.png");
+		textures.put(TextureKey.REDROCK, "textures/testtexture.png");
+		textures.put(TextureKey.BASE, "textures/base.png");
+		textures.put(TextureKey.BASE_RED, "textures/base_red.png");
+		textures.put(TextureKey.BASE_BLUE, "textures/base_blue.png");
 		fonts = new HashMap<FontKey, Pair<String, Integer>>();
 		fonts.put(FontKey.DEFAULT_FONT, new Pair<String, Integer>(
 				"LinLibertine_R.ttf", 16));
@@ -244,5 +256,9 @@ public final class CacheInfo {
 
 	static HashMap<ObjectType, String> getAllInventoryIcons() {
 		return new HashMap<ObjectType, String>(inventoryIcons);
+	}
+
+	static HashMap<TextureKey, String> getAllTextures() {
+		return new HashMap<TextureKey, String>(textures);
 	}
 }

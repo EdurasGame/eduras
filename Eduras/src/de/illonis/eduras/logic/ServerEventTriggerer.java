@@ -213,9 +213,6 @@ public class ServerEventTriggerer implements EventTriggerer {
 		try {
 			o = gameInfo.findObjectById(newObjectEvent.getId());
 			if (o instanceof TriggerArea) {
-				System.out.println("set size of " + o.getClass() + " to "
-						+ o.getShape().getWidth() + ", "
-						+ o.getShape().getHeight());
 				setTriggerAreaSize(newObjectEvent.getId(), o.getShape()
 						.getWidth(), o.getShape().getHeight());
 			}

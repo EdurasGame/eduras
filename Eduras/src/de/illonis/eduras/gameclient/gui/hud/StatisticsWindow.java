@@ -38,7 +38,6 @@ public class StatisticsWindow extends RenderedGuiObject {
 			.getName());
 
 	private final static Color COLOR_TEXT = Color.yellow;
-	private final static Color COLOR_TEAM = Color.white;
 	private final static Color COLOR_HEADER = Color.yellow;
 	private int[] xPositions = new int[4];
 	private int topInset;
