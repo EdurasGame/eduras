@@ -9,20 +9,23 @@ import org.newdawn.slick.particles.ConfigurableEmitter;
 import de.illonis.edulog.EduLog;
 import de.illonis.eduras.ObjectFactory.ObjectType;
 import de.illonis.eduras.Player;
+import de.illonis.eduras.Team;
 import de.illonis.eduras.events.ItemUseFailedEvent;
 import de.illonis.eduras.events.ItemUseFailedEvent.Reason;
+import de.illonis.eduras.events.MatchEndEvent;
 import de.illonis.eduras.events.ObjectFactoryEvent;
-import de.illonis.eduras.events.SetIntegerGameObjectAttributeEvent;
 import de.illonis.eduras.events.SetItemSlotEvent;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
 import de.illonis.eduras.gameclient.GameEventAdapter;
 import de.illonis.eduras.gameclient.audio.SoundMachine;
 import de.illonis.eduras.gameclient.audio.SoundMachine.SoundType;
 import de.illonis.eduras.gameclient.gui.animation.EffectFactory.EffectNumber;
+import de.illonis.eduras.gameobjects.Base;
 import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.inventory.ItemSlotIsEmptyException;
 import de.illonis.eduras.logicabstraction.EdurasInitializer;
 import de.illonis.eduras.logicabstraction.InformationProvider;
+import de.illonis.eduras.units.Unit;
 
 /**
  * Renders effects on client based on events.
@@ -39,12 +42,34 @@ public class ClientEffectHandler extends GameEventAdapter {
 
 	private final InformationProvider infos;
 
+	private boolean playSounds;
+
 	/**
 	 * Creates a new effect handler.
 	 */
 	public ClientEffectHandler() {
+		playSounds = false;
 		infos = EdurasInitializer.getInstance().getInformationProvider();
 		objectEffects = new HashMap<Integer, ConfigurableEmitter>();
+	}
+
+	@Override
+	public void onHealthChanged(Unit unit, int oldValue, int newValue) {
+		if (playSounds) {
+			try {
+				if (unit.equals(infos.getPlayer().getPlayerMainFigure())) {
+					if (newValue > oldValue) {
+						SoundMachine.play(SoundType.LOOT);
+					} else {
+						if (newValue < oldValue) {
+							SoundMachine.play(SoundType.HURT);
+						}
+					}
+				}
+			} catch (ObjectNotFoundException e) {
+				L.log(Level.WARNING, "Cannot find player main figure.", e);
+			}
+		}
 	}
 
 	@Override
@@ -70,28 +95,40 @@ public class ClientEffectHandler extends GameEventAdapter {
 	}
 
 	@Override
-	public void onItemSlotChanged(SetItemSlotEvent event) {
-
-		try {
-			Player player = infos.getPlayer();
-			if (event.getOwner() == player.getPlayerId()) {
-				player.getInventory().getItemBySlot(event.getItemSlot());
-				SoundMachine.play(SoundType.LOOT, 1f, .8f);
-			}
-		} catch (ItemSlotIsEmptyException | ObjectNotFoundException e) {
-			// item lost or something like that
+	public void onBaseConquered(Base base, Team conqueringTeam) {
+		if (playSounds) {
+			SoundMachine.play(SoundType.TADA);
 		}
 	}
 
 	@Override
-	public void onHealthChanged(SetIntegerGameObjectAttributeEvent event) {
-		try {
-			if (infos.getPlayer().getPlayerMainFigure().getId() == event
-					.getObjectId()) {
-				SoundMachine.play(SoundType.HURT);
+	public void onGameReady() {
+		playSounds = true;
+	}
+
+	@Override
+	public void onMatchEnd(MatchEndEvent event) {
+		playSounds = false;
+	}
+
+	@Override
+	public void onItemSlotChanged(SetItemSlotEvent event) {
+
+		if (playSounds) {
+			try {
+				Player player = infos.getPlayer();
+				if (event.getOwner() == player.getPlayerId()) {
+					player.getInventory().getItemBySlot(event.getItemSlot());
+					SoundMachine.play(SoundType.LOOT, 1f, .8f);
+				}
+			} catch (ItemSlotIsEmptyException | ObjectNotFoundException e) {
+				// item lost or something like that
 			}
-		} catch (ObjectNotFoundException e) {
-			L.log(Level.WARNING, "TODO: message", e);
 		}
+	}
+
+	@Override
+	public void onStartRound() {
+		playSounds = true;
 	}
 }

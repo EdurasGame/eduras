@@ -57,7 +57,7 @@ public class ResourceDisplay extends RenderedGuiObject {
 
 	@Override
 	public void onGuiSizeChanged(int newWidth, int newHeight) {
-		screenX = newWidth - 300;
+		screenX = newWidth * 3 / 4;
 		screenY = 10;
 	}
 

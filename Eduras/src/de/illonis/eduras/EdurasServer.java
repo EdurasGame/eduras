@@ -43,7 +43,6 @@ import de.illonis.eduras.logic.ConsoleEventTriggerer;
 import de.illonis.eduras.logic.ServerEventTriggerer;
 import de.illonis.eduras.logic.ServerGameEventListener;
 import de.illonis.eduras.logic.ServerLogic;
-import de.illonis.eduras.maps.FunMap;
 import de.illonis.eduras.maps.Map;
 import de.illonis.eduras.maps.persistence.InvalidDataException;
 import de.illonis.eduras.networking.EventParser;
@@ -470,10 +469,17 @@ public class EdurasServer {
 
 	private void switchToStartMap() {
 		if (startMap == null) {
-			startMap = new FunMap();
-		} else {
-			eventTriggerer.changeMap(startMap);
+			try {
+				setStartMap("funmap");
+			} catch (NoSuchMapException e) {
+				L.log(Level.SEVERE, "Could not find default map (funmap)", e);
+				System.exit(-1);
+			} catch (InvalidDataException e) {
+				L.log(Level.SEVERE, "Could not load default map (funmap)", e);
+				System.exit(-1);
+			}
 		}
+		eventTriggerer.changeMap(startMap);
 	}
 
 	private void switchToStartGameMode() throws NoSuchGameModeException {
@@ -603,8 +609,8 @@ public class EdurasServer {
 				try {
 					edurasServer.setStartMap(parameterValue);
 				} catch (NoSuchMapException e) {
-					System.out
-							.println("There is no such map " + parameterValue);
+					L.log(Level.SEVERE, "There is no such map: "
+							+ parameterValue, e);
 					System.exit(-1);
 				} catch (InvalidDataException e) {
 					L.log(Level.SEVERE, "Could not load map " + parameterValue

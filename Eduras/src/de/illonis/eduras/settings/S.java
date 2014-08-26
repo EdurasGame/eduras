@@ -721,6 +721,12 @@ public final class S {
 
 		public static long sv_modeswitch_dead_cooldown = 0;
 
+		/**
+		 * Determines whether the winning condition in edura mode is to conquer
+		 * all bases or to conquer only the opponent's main base.
+		 */
+		public static boolean gm_edura_conquer_all_bases = true;
+
 	}
 
 	/**

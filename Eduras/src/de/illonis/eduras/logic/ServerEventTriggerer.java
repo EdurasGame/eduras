@@ -64,6 +64,7 @@ import de.illonis.eduras.events.SetTeamResourceEvent;
 import de.illonis.eduras.events.SetTeamsEvent;
 import de.illonis.eduras.events.SetTimeEvent;
 import de.illonis.eduras.events.SetVisibilityEvent;
+import de.illonis.eduras.events.StartRoundEvent;
 import de.illonis.eduras.exceptions.GameModeNotSupportedByMapException;
 import de.illonis.eduras.exceptions.InvalidNameException;
 import de.illonis.eduras.exceptions.NoSpawnAvailableException;
@@ -489,6 +490,7 @@ public class ServerEventTriggerer implements EventTriggerer {
 		changeMap(gameInfo.getMap());
 		resetSettings();
 		gameInfo.getGameSettings().getGameMode().onGameStart();
+		sendEvents(new StartRoundEvent());
 	}
 
 	@Override
@@ -757,22 +759,23 @@ public class ServerEventTriggerer implements EventTriggerer {
 
 			int objectId = -1;
 			PlayerMainFigure mainFigure;
-			ObjectFactoryEvent gonePlayerEvent = new ObjectFactoryEvent(
-					GameEventNumber.OBJECT_REMOVE, ObjectType.PLAYER, 0);
-
 			mainFigure = player.getPlayerMainFigure();
-			objectId = mainFigure.getId();
-			gonePlayerEvent.setId(objectId);
-			logic.getObjectFactory().onObjectFactoryEventAppeared(
-					gonePlayerEvent);
+			if (mainFigure != null) {
+				ObjectFactoryEvent gonePlayerEvent = new ObjectFactoryEvent(
+						GameEventNumber.OBJECT_REMOVE, ObjectType.PLAYER, 0);
+				objectId = mainFigure.getId();
+				gonePlayerEvent.setId(objectId);
+				logic.getObjectFactory().onObjectFactoryEventAppeared(
+						gonePlayerEvent);
+				sendEvents(gonePlayerEvent);
+			}
 
 			gameInfo.removePlayer(ownerId);
-
 			OwnerGameEvent playerLeftEvent = new OwnerGameEvent(
 					GameEventNumber.PLAYER_LEFT, ownerId);
 			OwnerGameEvent playerLeftEventInfo = new OwnerGameEvent(
 					GameEventNumber.INFO_PLAYER_LEFT, ownerId);
-			sendEvents(gonePlayerEvent, playerLeftEvent, playerLeftEventInfo);
+			sendEvents(playerLeftEvent, playerLeftEventInfo);
 		} catch (ObjectNotFoundException e) {
 			// if there is no mainfigure, this function is used to prevent
 			// someone to join the server

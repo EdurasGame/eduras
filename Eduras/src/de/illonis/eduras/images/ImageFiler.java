@@ -15,6 +15,7 @@ import org.newdawn.slick.SlickException;
 
 import de.illonis.edulog.EduLog;
 import de.illonis.eduras.gameclient.datacache.CacheInfo;
+import de.illonis.eduras.gameclient.gui.game.GameRenderer;
 import de.illonis.eduras.locale.Localization;
 import de.illonis.eduras.utils.Pair;
 
@@ -60,23 +61,24 @@ public class ImageFiler {
 	}
 
 	private static float getScaleFactor(ImageResolution res) {
-		float diffW = (float) Display.getWidth() / res.getWidth();
-		float diffH = (float) Display.getHeight() / res.getHeight();
-		return Math.max(diffW, diffH);
+		if (Display.getWidth() == res.getWidth()
+				&& Display.getHeight() == res.getHeight())
+			return 1f;
+		return GameRenderer.getRenderScale()/ GameRenderer.getRenderScale(res);
 	}
 
 	private static Pair<ImageResolution, Float> calculateResolution() {
 		int width = Display.getWidth();
 		int height = Display.getHeight();
-		if (width >= 1900 && height >= 1000) {
+		if (width > 1366 && height > 768) {
 			return new Pair<ImageResolution, Float>(ImageResolution.FULLHD,
 					getScaleFactor(ImageResolution.FULLHD));
-		} else if (width < 1366 && height < 768) {
-			return new Pair<ImageResolution, Float>(ImageResolution.WINDOWED,
-					getScaleFactor(ImageResolution.WINDOWED));
-		} else {
+		} else if (width > 800 && height > 600) {
 			return new Pair<ImageResolution, Float>(ImageResolution.LAPTOP,
 					getScaleFactor(ImageResolution.LAPTOP));
+		} else {
+			return new Pair<ImageResolution, Float>(ImageResolution.WINDOWED,
+					getScaleFactor(ImageResolution.WINDOWED));
 		}
 	}
 

@@ -16,19 +16,15 @@ import de.illonis.eduras.gameclient.datacache.FontCache.FontKey;
  */
 public class ExitPopup extends ClickableGuiElement {
 
-	private final static int WIDTH = 300;
-	private final static int HEIGHT = 100;
 	private final Rectangle bounds;
 	private final Rectangle yesRect;
 	private final Rectangle noRect;
 	private final String text = "Do you really want to exit?";
-
-	UserInterface ui;
+	private Font font;
 
 	protected ExitPopup(UserInterface gui) {
 		super(gui);
-		this.ui = gui;
-		bounds = new Rectangle(0, 0, WIDTH, HEIGHT);
+		bounds = new Rectangle(0, 0, 300, 60);
 		yesRect = new Rectangle(0, 0, 100, 30);
 		noRect = new Rectangle(0, 0, 100, 30);
 		setVisible(false);
@@ -58,17 +54,30 @@ public class ExitPopup extends ClickableGuiElement {
 	@Override
 	public void render(Graphics g) {
 		if (isVisible()) {
-			Font font = FontCache.getFont(FontKey.DEFAULT_FONT, g);
-			bounds.setWidth(font.getWidth(text) + 10);
+			if (font == null) {
+				font = FontCache.getFont(FontKey.DEFAULT_FONT, g);
+				yesRect.setSize(font.getWidth("Yes") + 10,
+						font.getLineHeight() + 10);
+				noRect.setSize(font.getWidth("Yes") + 10,
+						font.getLineHeight() + 10);
+				int width = Math.max((int) yesRect.getWidth(),
+						font.getWidth(text)) + 30;
+				bounds.setWidth(width);
+				int height = font.getLineHeight() * 2 + 30;
+				bounds.setHeight(height);
+				bounds.setLocation(screenX, screenY);
+				yesRect.setLocation(screenX + 10,
+						screenY + height - yesRect.getHeight() - 10);
+				noRect.setLocation(screenX + width - noRect.getWidth() - 10,
+						screenY + height - noRect.getHeight() - 10);
+			}
 			g.setColor(Color.white);
 			g.fill(bounds);
 			g.setColor(Color.black);
 			g.fill(yesRect);
 			g.fill(noRect);
-			font.drawString(screenX + 5, screenY + 5, text, Color.black);
+			font.drawString(screenX + 10, screenY + 5, text, Color.black);
 			g.setColor(Color.yellow);
-			yesRect.setHeight(font.getLineHeight() + 10);
-			noRect.setHeight(font.getLineHeight() + 10);
 			font.drawString(yesRect.getX() + 5, yesRect.getY() + 5, "Yes");
 			font.drawString(noRect.getX() + 5, noRect.getY() + 5, "No");
 		}
@@ -76,11 +85,8 @@ public class ExitPopup extends ClickableGuiElement {
 
 	@Override
 	public void onGuiSizeChanged(int newWidth, int newHeight) {
-		screenX = (newWidth - WIDTH) / 2;
-		screenY = (newHeight - HEIGHT) / 2;
-		bounds.setLocation(screenX, screenY);
-		yesRect.setLocation(screenX + 30, screenY + HEIGHT - 50);
-		noRect.setLocation(screenX + WIDTH - 150, screenY + HEIGHT - 50);
+		screenX = (newWidth - bounds.getWidth()) / 2;
+		screenY = (newHeight - bounds.getHeight()) / 2;
 	}
 
 }

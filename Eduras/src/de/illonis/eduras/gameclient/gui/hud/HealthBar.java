@@ -48,7 +48,7 @@ public class HealthBar {
 			GameCamera camera) {
 		int maxHealth = unit.getMaxHealth();
 		int health = unit.getHealth();
-
+		g.setLineWidth(1f);
 		instance.w = Math.round((float) health / maxHealth * HEALTHBAR_WIDTH);
 		double unitHalfWidth = unit.getShape().getWidth() / 2;
 		instance.x = Math.round(unit.getXPosition() + unitHalfWidth
@@ -58,6 +58,7 @@ public class HealthBar {
 		g.fillRect(instance.x, instance.y, instance.w, instance.h);
 		if (unit instanceof PlayerMainFigure) {
 			PlayerMainFigure player = (PlayerMainFigure) unit;
+
 			g.getFont().drawString(instance.x,
 					instance.y - HEALTHBAR_HEIGHT - UNIT_GAP - NAME_GAP,
 					player.getPlayer().getName(), Color.yellow);

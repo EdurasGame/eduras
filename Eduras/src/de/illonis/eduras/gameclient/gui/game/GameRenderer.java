@@ -41,6 +41,7 @@ import de.illonis.eduras.gameclient.gui.hud.Tooltip;
 import de.illonis.eduras.gameclient.gui.hud.UserInterface;
 import de.illonis.eduras.gameobjects.Base;
 import de.illonis.eduras.gameobjects.GameObject;
+import de.illonis.eduras.images.ImageFiler.ImageResolution;
 import de.illonis.eduras.items.Item;
 import de.illonis.eduras.logicabstraction.InformationProvider;
 import de.illonis.eduras.math.Geometry;
@@ -137,6 +138,12 @@ public class GameRenderer implements TooltipHandler {
 	public static float getRenderScale() {
 		float diffW = (float) Display.getWidth() / DEFAULT_WIDTH;
 		float diffH = (float) Display.getHeight() / DEFAULT_HEIGHT;
+		return Math.max(diffW, diffH);
+	}
+
+	public static float getRenderScale(ImageResolution res) {
+		float diffW = res.getWidth() / DEFAULT_WIDTH;
+		float diffH = res.getHeight() / DEFAULT_HEIGHT;
 		return Math.max(diffW, diffH);
 	}
 
