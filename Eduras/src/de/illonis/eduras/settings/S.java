@@ -727,6 +727,11 @@ public final class S {
 		 */
 		public static boolean gm_edura_conquer_all_bases = true;
 
+		/**
+		 * Determines the maximum blink distance.
+		 */
+		public static float sv_blink_distance = 100;
+
 	}
 
 	/**

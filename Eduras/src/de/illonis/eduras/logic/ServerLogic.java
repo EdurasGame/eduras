@@ -53,6 +53,8 @@ import de.illonis.eduras.items.Usable;
 import de.illonis.eduras.locale.Localization;
 import de.illonis.eduras.maps.SpawnPosition;
 import de.illonis.eduras.maps.SpawnPosition.SpawnType;
+import de.illonis.eduras.math.Geometry;
+import de.illonis.eduras.settings.S;
 import de.illonis.eduras.units.PlayerMainFigure;
 import de.illonis.eduras.units.Unit;
 
@@ -338,19 +340,37 @@ public class ServerLogic implements GameLogicInterface {
 							"Received blink event although there is no blink available or the player is dead!");
 					break;
 				}
+				PlayerMainFigure blinkingMainFigure = blinkingPlayer
+						.getPlayerMainFigure();
 
 				blinkingPlayer.setBlinksAvailable(blinkingPlayer
 						.getBlinksAvailable() - 1);
+
+				// check if the player tried to blink too far
+				Vector2f blinkTarget = blinkEvent.getBlinkTarget();
+				Vector2f distanceVectorToBlinkTarget = Geometry
+						.calculateDistanceVector(
+								blinkingMainFigure.getCenterPosition(),
+								blinkTarget);
+				float scale = distanceVectorToBlinkTarget.length()
+						/ S.Server.sv_blink_distance;
+				if (scale > 1) {
+					distanceVectorToBlinkTarget.scale(1 / scale);
+					Vector2f centerOfObject = blinkingMainFigure
+							.getCenterPosition();
+					centerOfObject.add(distanceVectorToBlinkTarget);
+					blinkTarget = centerOfObject;
+				}
 
 				// find the spot to blink to
 				float playerSize = blinkingPlayer.getPlayerMainFigure()
 						.getShape().getBoundingCircleRadius();
 				Rectangle blinkTargetArea = new Rectangle(0, 0, 2 * playerSize,
 						2 * playerSize);
-				blinkTargetArea.setCenterX(blinkEvent.getBlinkTarget().x);
-				blinkTargetArea.setCenterY(blinkEvent.getBlinkTarget().y);
+				blinkTargetArea.setCenterX(blinkTarget.x);
+				blinkTargetArea.setCenterY(blinkTarget.y);
 				try {
-					Vector2f blinkTarget = GameInformation
+					blinkTarget = GameInformation
 							.findFreePointWithinSpawnPositionForShape(
 									new SpawnPosition(blinkTargetArea,
 											SpawnType.ANY),
