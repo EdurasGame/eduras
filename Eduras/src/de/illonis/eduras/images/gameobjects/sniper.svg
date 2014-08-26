@@ -14,11 +14,11 @@
    height="158.53488"
    id="svg2"
    version="1.1"
-   inkscape:version="0.48.3.1 r9886"
+   inkscape:version="0.48.4 r9939"
    sodipodi:docname="sniper.svg"
    inkscape:export-filename="sniper.png"
-   inkscape:export-xdpi="17.030001"
-   inkscape:export-ydpi="17.030001">
+   inkscape:export-xdpi="40.869999"
+   inkscape:export-ydpi="40.869999">
   <defs
      id="defs4">
     <linearGradient
@@ -292,7 +292,7 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="1.8848602"
-     inkscape:cx="24.002317"
+     inkscape:cx="25.063404"
      inkscape:cy="48.20804"
      inkscape:document-units="px"
      inkscape:current-layer="layer2"
@@ -301,10 +301,10 @@
      fit-margin-bottom="0"
      fit-margin-left="0"
      fit-margin-right="0"
-     inkscape:window-width="1280"
-     inkscape:window-height="744"
+     inkscape:window-width="1920"
+     inkscape:window-height="1014"
      inkscape:window-x="0"
-     inkscape:window-y="24"
+     inkscape:window-y="27"
      inkscape:window-maximized="1" />
   <metadata
      id="metadata7">
@@ -378,7 +378,7 @@
       <path
          inkscape:transform-center-y="-3"
          transform="matrix(0.38163518,-0.69222377,0.73830628,0.81995528,8.057726,45.059339)"
-         d="m 80.5,72.034882 a 5.25,6 0 1 1 -10.5,0 5.25,6 0 1 1 10.5,0 z"
+         d="m 80.5,72.034882 c 0,3.313708 -2.350505,6 -5.25,6 -2.899495,0 -5.25,-2.686292 -5.25,-6 0,-3.313709 2.350505,-6 5.25,-6 2.899495,0 5.25,2.686291 5.25,6 z"
          sodipodi:ry="6"
          sodipodi:rx="5.25"
          sodipodi:cy="72.034882"
