@@ -136,15 +136,16 @@ public class LinearAlgebraGeometry extends SimpleGeometry {
 		}
 
 		// Figure out which collision is the nearest
-		// CollisionPoint resultingCollisionPoint = null;
-		// if (collisions.size() > 1) {
-		// resultingCollisionPoint = CollisionPoint
-		// .findNearestCollision(collisions);
-		// } else {
-		// if (collisions.size() > 0) {
-		// resultingCollisionPoint = collisions.getFirst();
-		// }
-		// }
+		CollisionPoint resultingCollisionPoint = null;
+		if (collisions.size() > 1) {
+			resultingCollisionPoint = CollisionPoint
+					.findNearestCollision(collisions);
+			System.out.println("Multiple collisions!");
+		} else {
+			if (collisions.size() > 0) {
+				resultingCollisionPoint = collisions.getFirst();
+			}
+		}
 
 		// if there was a collision, notify the involved objects and calculate
 		// the new position
@@ -154,11 +155,16 @@ public class LinearAlgebraGeometry extends SimpleGeometry {
 			// Use the following code as an alternative. Gives more accurate
 			// results, but is visually ugly and can lead to stucking at edges
 			// more easily
-			// Vector2D targetResult = new Vector2D(positionVector);
-			// resultingCollisionPoint.getDistanceVector().invert();
-			// targetResult.add(resultingCollisionPoint.getDistanceVector());
-			// result = targetResult;
-			result = positionVector;
+			Vector2df targetResult = new Vector2df(
+					resultingCollisionPoint.getInterceptPoint());
+			Vector2f addOnVector = Geometry.invert(
+					resultingCollisionPoint.getDistanceVector()).getNormal();
+			addOnVector.add(Geometry.calculateDistanceVector(
+					resultingCollisionPoint.getInterceptPointOnShape(),
+					positionVector));
+			targetResult.add(addOnVector);
+			result = targetResult;
+			// result = positionVector;
 		}
 
 		L.finest("Skipped "

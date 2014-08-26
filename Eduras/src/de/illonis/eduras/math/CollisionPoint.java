@@ -25,6 +25,7 @@ public class CollisionPoint {
 
 	private final Vector2f interceptPoint;
 	private final Vector2f distanceVector;
+	private final Vector2f interceptPointOnShape;
 
 	/**
 	 * Creates a new point of collision.
@@ -33,10 +34,23 @@ public class CollisionPoint {
 	 *            The point of collision.
 	 * @param distanceVector
 	 *            The distancevector to this collision
+	 * @param interceptPointOnShape
 	 */
-	public CollisionPoint(Vector2f interceptPoint, Vector2f distanceVector) {
+	public CollisionPoint(Vector2f interceptPoint, Vector2f distanceVector,
+			Vector2f interceptPointOnShape) {
 		this.interceptPoint = interceptPoint;
 		this.distanceVector = distanceVector;
+		this.interceptPointOnShape = interceptPointOnShape;
+	}
+
+	/**
+	 * Returns the point on the original shape that is involved in the
+	 * collision.
+	 * 
+	 * @return the point
+	 */
+	public Vector2f getInterceptPointOnShape() {
+		return interceptPointOnShape;
 	}
 
 	/**
@@ -110,12 +124,14 @@ public class CollisionPoint {
 		float distanceVectorY = interceptPoint.getY() - line.getY1();
 		Vector2f distanceVector = new Vector2df(distanceVectorX,
 				distanceVectorY);
+		Vector2f interceptingPointOnShape = new Vector2f(line.getX1(),
+				line.getY1());
 
 		L.finest("[LOGIC][TRIANGLE] Collision at " + interceptPoint.getX()
 				+ " , " + interceptPoint.getY());
 
 		CollisionPoint interception = new CollisionPoint(interceptPoint,
-				distanceVector);
+				distanceVector, interceptingPointOnShape);
 		return interception;
 	}
 }
