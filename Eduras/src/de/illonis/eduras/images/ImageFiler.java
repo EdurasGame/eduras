@@ -15,6 +15,7 @@ import org.newdawn.slick.SlickException;
 
 import de.illonis.edulog.EduLog;
 import de.illonis.eduras.gameclient.datacache.CacheInfo;
+import de.illonis.eduras.gameclient.gui.game.GameRenderer;
 import de.illonis.eduras.locale.Localization;
 import de.illonis.eduras.utils.Pair;
 
@@ -63,9 +64,7 @@ public class ImageFiler {
 		if (Display.getWidth() == res.getWidth()
 				&& Display.getHeight() == res.getHeight())
 			return 1f;
-		float diffW = (float) Display.getWidth() / res.getWidth();
-		float diffH = (float) Display.getHeight() / res.getHeight();
-		return Math.max(diffW, diffH);
+		return GameRenderer.getRenderScale()/ GameRenderer.getRenderScale(res);
 	}
 
 	private static Pair<ImageResolution, Float> calculateResolution() {
