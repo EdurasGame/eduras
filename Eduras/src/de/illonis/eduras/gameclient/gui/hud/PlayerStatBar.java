@@ -19,6 +19,7 @@ import de.illonis.eduras.exceptions.ObjectNotFoundException;
 import de.illonis.eduras.exceptions.PlayerHasNoTeamException;
 import de.illonis.eduras.gameclient.gui.game.GamePanelLogic;
 import de.illonis.eduras.gameclient.gui.game.GamePanelLogic.ClickState;
+import de.illonis.eduras.gameclient.gui.game.GameRenderer;
 import de.illonis.eduras.logicabstraction.EdurasInitializer;
 import de.illonis.eduras.units.InteractMode;
 import de.illonis.eduras.units.PlayerMainFigure;
@@ -36,14 +37,14 @@ public class PlayerStatBar extends RenderedGuiObject {
 
 	private UserInterface userInterface;
 	private LinkedList<GUIPlayerBar> players;
+	private float statBarSize;
 
-	private final static int WIDTH = 50;
-	private final static int HEIGHT = 50;
+	private final static int PLAYER_BAR_SIZE = 30;
 	private final static Color COLOR_BAR = Color.yellow;
 	private final static Color COLOR_BG = Color.black;
 	private static final Color COLOR_TEXT = Color.black;
 
-	private static final int GAP_BETWEEN_PLAYERS = 15;
+	private static final int GAP_BETWEEN_PLAYERS = 10;
 
 	/**
 	 * Creates a new player stat bar.
@@ -55,6 +56,7 @@ public class PlayerStatBar extends RenderedGuiObject {
 		super(gui);
 		userInterface = gui;
 		players = new LinkedList<GUIPlayerBar>();
+		statBarSize = PLAYER_BAR_SIZE * GameRenderer.getRenderScale();
 	}
 
 	class GUIPlayerBar extends ClickableGuiElement {
@@ -71,7 +73,6 @@ public class PlayerStatBar extends RenderedGuiObject {
 			health = maxHealth = 10;
 			screenX = 5;
 			this.offset = offset;
-			recalculate();
 			setActiveInteractModes(InteractMode.MODE_STRATEGY);
 
 			PlayerMainFigure mainFigure = player.getPlayerMainFigure();
@@ -90,21 +91,24 @@ public class PlayerStatBar extends RenderedGuiObject {
 
 			// draw frame
 			g2d.setColor(Color.white);
-			g2d.draw(new Rectangle(screenX, yPosition, WIDTH, HEIGHT));
+			g2d.draw(new Rectangle(screenX, yPosition, statBarSize, statBarSize));
 
 			g2d.setColor(Color.white);
 			g2d.drawString(player.getName(), screenX, yPosition);
 			g2d.setColor(COLOR_BG);
-			g2d.fillRect(screenX, yPosition + 20, WIDTH, HEIGHT - 20);
+			g2d.fillRect(screenX, yPosition + statBarSize / 3, statBarSize,
+					statBarSize - statBarSize / 3);
 			g2d.setColor(COLOR_BAR);
-			g2d.fillRect(screenX, yPosition + 20, barWidth, HEIGHT - 20);
+			g2d.fillRect(screenX, yPosition + statBarSize / 3, barWidth,
+					statBarSize / 3 * 2);
 			g2d.setColor(COLOR_TEXT);
-			g2d.drawString(health + " / " + maxHealth, screenX, yPosition + 20);
+			g2d.drawString(health + " / " + maxHealth, screenX, yPosition
+					+ statBarSize / 3);
 		}
 
 		@Override
 		public void onGuiSizeChanged(int newWidth, int newHeight) {
-			screenY = newHeight - HEIGHT - ItemDisplay.HEIGHT;
+			screenY = newHeight - statBarSize - ItemDisplay.HEIGHT;
 		}
 
 		@Override
@@ -129,7 +133,7 @@ public class PlayerStatBar extends RenderedGuiObject {
 
 		private void recalculate() {
 			float percent = (float) health / maxHealth;
-			barWidth = Math.round(percent * WIDTH);
+			barWidth = Math.round(percent * statBarSize);
 		}
 
 		@Override
@@ -177,7 +181,8 @@ public class PlayerStatBar extends RenderedGuiObject {
 
 		@Override
 		public Rectangle getBounds() {
-			return new Rectangle(screenX, screenY + offset, WIDTH, HEIGHT);
+			return new Rectangle(screenX, screenY + offset, statBarSize,
+					statBarSize);
 		}
 	}
 
@@ -204,11 +209,12 @@ public class PlayerStatBar extends RenderedGuiObject {
 
 		if (setModeEvent.getNewMode().equals(InteractMode.MODE_STRATEGY)) {
 			try {
-				int offset = 30;
+				int offset = (int) (30 * GameRenderer.getRenderScale());
 				for (Player teamMate : getInfo().getPlayer().getTeam()
 						.getPlayers()) {
 					new GUIPlayerBar(teamMate, offset);
-					offset += HEIGHT + GAP_BETWEEN_PLAYERS;
+					offset += statBarSize + GAP_BETWEEN_PLAYERS
+							* GameRenderer.getRenderScale();
 				}
 			} catch (PlayerHasNoTeamException | ObjectNotFoundException e) {
 				L.log(Level.WARNING, "Cannot find player or his team!", e);
