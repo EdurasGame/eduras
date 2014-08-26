@@ -2,6 +2,7 @@ package de.illonis.eduras.gameclient.gui.game;
 
 import de.illonis.eduras.exceptions.NotWithinBaseException;
 import de.illonis.eduras.gameclient.GamePanelReactor;
+import de.illonis.eduras.gameclient.InsufficientChargesException;
 import de.illonis.eduras.gameclient.audio.SoundMachine;
 import de.illonis.eduras.gameclient.audio.SoundMachine.SoundType;
 import de.illonis.eduras.gameclient.userprefs.KeyBindings.KeyBinding;
@@ -112,6 +113,13 @@ public class EgoModeKeyHandler extends AnyModeKeyHandler {
 				try {
 					reactor.onModeSwitch();
 				} catch (NotWithinBaseException e) {
+					client.onActionFailed(e);
+				}
+				break;
+			case BLINK:
+				try {
+					reactor.onBlink(client.getCurrentMousePos());
+				} catch (InsufficientChargesException e) {
 					client.onActionFailed(e);
 				}
 				break;

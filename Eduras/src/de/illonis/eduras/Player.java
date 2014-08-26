@@ -24,6 +24,7 @@ public class Player {
 	private final Inventory inventory = new Inventory();
 	private PlayerMainFigure playerMainFigure;
 	private Team team;
+	private int blinksAvailable;
 
 	/**
 	 * 
@@ -35,6 +36,8 @@ public class Player {
 		this.playerId = playerId;
 		lastModeSwitch = 0;
 		currentMode = InteractMode.MODE_EGO;
+
+		blinksAvailable = 100;
 	}
 
 	/**
@@ -156,5 +159,17 @@ public class Player {
 	 */
 	public boolean isDead() {
 		return (playerMainFigure == null || playerMainFigure.isDead());
+	}
+
+	public int getBlinksAvailable() {
+		synchronized (this) {
+			return blinksAvailable;
+		}
+	}
+
+	public void setBlinksAvailable(int blinksAvailable) {
+		synchronized (this) {
+			this.blinksAvailable = blinksAvailable;
+		}
 	}
 }

@@ -5,6 +5,7 @@ import java.util.LinkedList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.Vector2f;
 
 import de.illonis.edulog.EduLog;
@@ -19,6 +20,7 @@ import de.illonis.eduras.actions.ScoutSpellAction;
 import de.illonis.eduras.actions.SpawnItemAction;
 import de.illonis.eduras.actions.SpeedSpellAction;
 import de.illonis.eduras.ai.movement.UnitNotControllableException;
+import de.illonis.eduras.events.BlinkEvent;
 import de.illonis.eduras.events.ClientRenameEvent;
 import de.illonis.eduras.events.CreateUnitEvent;
 import de.illonis.eduras.events.GameEvent;
@@ -36,6 +38,7 @@ import de.illonis.eduras.events.UnitSpellActionEvent;
 import de.illonis.eduras.events.UserMovementEvent;
 import de.illonis.eduras.exceptions.InsufficientResourceException;
 import de.illonis.eduras.exceptions.InvalidNameException;
+import de.illonis.eduras.exceptions.NoSpawnAvailableException;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
 import de.illonis.eduras.exceptions.WrongObjectTypeException;
 import de.illonis.eduras.gameobjects.Base;
@@ -48,6 +51,8 @@ import de.illonis.eduras.items.Item;
 import de.illonis.eduras.items.ItemUseInformation;
 import de.illonis.eduras.items.Usable;
 import de.illonis.eduras.locale.Localization;
+import de.illonis.eduras.maps.SpawnPosition;
+import de.illonis.eduras.maps.SpawnPosition.SpawnType;
 import de.illonis.eduras.units.PlayerMainFigure;
 import de.illonis.eduras.units.Unit;
 
@@ -232,7 +237,7 @@ public class ServerLogic implements GameLogicInterface {
 				return;
 			}
 			break;
-		case SPELL_SCOUT:
+		case SPELL_SCOUT: {
 			ScoutSpellEvent scoutEvent = (ScoutSpellEvent) event;
 			Player player;
 			try {
@@ -246,6 +251,7 @@ public class ServerLogic implements GameLogicInterface {
 				return;
 			}
 			break;
+		}
 		case SPAWN_ITEM: {
 			SpawnItemEvent spawnItemEvent = (SpawnItemEvent) event;
 
@@ -317,6 +323,55 @@ public class ServerLogic implements GameLogicInterface {
 			} catch (ObjectNotFoundException ex) {
 				L.log(Level.WARNING,
 						"Cannot find player when receiving heal action.", ex);
+				break;
+			}
+			break;
+		}
+		case BLINK: {
+			BlinkEvent blinkEvent = (BlinkEvent) event;
+			try {
+				Player blinkingPlayer = gameInfo.getPlayerByOwnerId(blinkEvent
+						.getOwner());
+				if (blinkingPlayer.getBlinksAvailable() < 1
+						|| blinkingPlayer.isDead()) {
+					L.log(Level.WARNING,
+							"Received blink event although there is no blink available or the player is dead!");
+					break;
+				}
+
+				blinkingPlayer.setBlinksAvailable(blinkingPlayer
+						.getBlinksAvailable() - 1);
+
+				// find the spot to blink to
+				float playerSize = blinkingPlayer.getPlayerMainFigure()
+						.getShape().getBoundingCircleRadius();
+				Rectangle blinkTargetArea = new Rectangle(0, 0, 2 * playerSize,
+						2 * playerSize);
+				blinkTargetArea.setCenterX(blinkEvent.getBlinkTarget().x);
+				blinkTargetArea.setCenterY(blinkEvent.getBlinkTarget().y);
+				try {
+					Vector2f blinkTarget = GameInformation
+							.findFreePointWithinSpawnPositionForShape(
+									new SpawnPosition(blinkTargetArea,
+											SpawnType.ANY),
+									blinkingPlayer.getPlayerMainFigure()
+											.getShape(),
+									gameInfo.getAllCollidableObjects(blinkingPlayer
+											.getPlayerMainFigure()));
+
+					// set player to the target
+					gameInfo.getEventTriggerer()
+							.guaranteeSetPositionOfObjectAtCenter(
+									blinkingPlayer.getPlayerMainFigure()
+											.getId(), blinkTarget);
+
+				} catch (NoSpawnAvailableException e1) {
+					System.out.println("Cannot spawn here.");
+				}
+
+			} catch (ObjectNotFoundException e1) {
+				L.log(Level.SEVERE,
+						"Player not found when receiving blinking event!", e1);
 				break;
 			}
 			break;

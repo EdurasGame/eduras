@@ -459,6 +459,11 @@ public class EdurasInitializer {
 					float newHeight) throws ObjectNotFoundException {
 			}
 
+			@Override
+			public void guaranteeSetPositionOfObjectAtCenter(int objectId,
+					Vector2f newPosition) {
+			}
+
 		});
 
 		networkManager.getClient().setEventHandler(new EventParser(logic));

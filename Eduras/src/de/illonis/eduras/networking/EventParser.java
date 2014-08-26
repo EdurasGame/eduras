@@ -19,6 +19,7 @@ import de.illonis.eduras.Statistic.StatsProperty;
 import de.illonis.eduras.Team;
 import de.illonis.eduras.events.AddPlayerToTeamEvent;
 import de.illonis.eduras.events.AreaConqueredEvent;
+import de.illonis.eduras.events.BlinkEvent;
 import de.illonis.eduras.events.ClientRenameEvent;
 import de.illonis.eduras.events.CreateUnitEvent;
 import de.illonis.eduras.events.DeathEvent;
@@ -322,6 +323,11 @@ public class EventParser implements EventHandler {
 				logic.onGameEventAppeared(new SetTimeEvent(
 						GameEventNumber.SET_RESPAWNTIME, (Long) event
 								.getArgument(0)));
+				break;
+			case BLINK:
+				logic.onGameEventAppeared(new BlinkEvent((int) event
+						.getArgument(0), new Vector2f((float) event
+						.getArgument(1), (float) event.getArgument(2))));
 				break;
 			case ITEM_USE_FAILED:
 				logic.onGameEventAppeared(new ItemUseFailedEvent((int) event

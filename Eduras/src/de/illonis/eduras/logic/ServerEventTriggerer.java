@@ -1269,4 +1269,22 @@ public class ServerEventTriggerer implements EventTriggerer {
 		} else
 			throw new ObjectNotFoundException(objectId);
 	}
+
+	@Override
+	public void guaranteeSetPositionOfObjectAtCenter(int objectId,
+			Vector2f newPosition) {
+		GameObject object;
+		try {
+			object = gameInfo.findObjectById(objectId);
+		} catch (ObjectNotFoundException e) {
+			L.log(Level.WARNING, "Cannot find object", e);
+			return;
+		}
+
+		object.getShape().setCenterX(newPosition.x);
+		object.getShape().setCenterY(newPosition.y);
+
+		guaranteeSetPositionOfObject(objectId, new Vector2df(object.getShape()
+				.getCenterX(), object.getShape().getCenterY()));
+	}
 }

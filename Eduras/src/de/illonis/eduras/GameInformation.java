@@ -742,4 +742,16 @@ public class GameInformation {
 		}
 		return objs;
 	}
+
+	public Collection<GameObject> getAllCollidableObjects(GameObject someObject) {
+		LinkedList<GameObject> collidableObjects = new LinkedList<GameObject>();
+
+		for (GameObject otherObject : objects.values()) {
+			if (GameObject.canCollideWithEachOther(otherObject, someObject)) {
+				collidableObjects.add(otherObject);
+			}
+		}
+
+		return collidableObjects;
+	}
 }
