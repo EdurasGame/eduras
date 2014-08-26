@@ -3,6 +3,7 @@ package de.illonis.eduras.gameclient.gui.hud;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.lwjgl.opengl.Display;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Font;
 import org.newdawn.slick.Graphics;
@@ -39,17 +40,15 @@ public class ItemDisplay extends ClickableGuiElement implements
 
 	private static final String EMPTY_NAME = "EMPTY";
 
-	private final static int ITEM_GAP = 15;
+	private final static int ITEM_GAP = 10;
 	private final static int BLOCKSIZE = 48;
 	private int currentItem = -1;
 	private final static Color COLOR_SEMITRANSPARENT = new Color(0, 0, 0, 120);
 	private final float buttonSize;
+	private Rectangle bounds;
 
 	// top, right, bottom, left
-	private final static int OUTER_GAP[] = { 20, 5, 10, 15 };
-
-	final static int HEIGHT = OUTER_GAP[0] + 2 * BLOCKSIZE + OUTER_GAP[2]
-			+ ITEM_GAP;
+	private final static int OUTER_GAP[] = { 10, 5, 10, 10 };
 
 	/**
 	 * Width of the total inventory.
@@ -76,6 +75,9 @@ public class ItemDisplay extends ClickableGuiElement implements
 			itemSlots[i] = new GuiItem(i);
 		}
 		registerAsTooltipTriggerer(this);
+		bounds = new Rectangle(screenX, screenY, buttonSize
+				* Inventory.MAX_CAPACITY / 2 + OUTER_GAP[1] + OUTER_GAP[3]
+				+ ITEM_GAP * (Inventory.MAX_CAPACITY / 2 - 1), buttonSize * 2);
 		setActiveInteractModes(InteractMode.MODE_EGO);
 	}
 
@@ -83,24 +85,25 @@ public class ItemDisplay extends ClickableGuiElement implements
 	public void render(Graphics g) {
 		Font font = FontCache.getFont(FontKey.DEFAULT_FONT, g);
 		currentItem = getInfo().getClientData().getCurrentItemSelected();
+		g.setLineWidth(rectStroke);
 		for (GuiItem item : itemSlots) {
 
 			if (item.isEmpty()) {
 				continue;
 			}
-			g.setLineWidth(rectStroke);
 			Rectangle itemRect = new Rectangle(item.getX() + screenX,
 					item.getY() + screenY, buttonSize, buttonSize);
 			String idString = "#" + (item.getSlotId() + 1);
-			font.drawString(item.getX() + screenX + 1, item.getY()
-					+ screenY - font.getLineHeight(), idString);
+			font.drawString(item.getX() + screenX + 1, item.getY() + screenY
+					- font.getLineHeight(), idString);
 
 			if (item.isWeapon()) {
 				int ammo = item.getWeaponAmmu();
 				String ammoString = "*" + ammo;
-				font.drawString(item.getX() + screenX + buttonSize
-						- font.getWidth(ammoString) - 3, item.getY()
-						+ screenY - font.getLineHeight(), ammoString);
+				font.drawString(
+						item.getX() + screenX + buttonSize
+								- font.getWidth(ammoString) - 3, item.getY()
+								+ screenY - font.getLineHeight(), ammoString);
 			}
 			g.setColor(Color.white);
 			if (item.hasImage())
@@ -114,7 +117,6 @@ public class ItemDisplay extends ClickableGuiElement implements
 						itemRect.getWidth(), itemRect.getHeight(), -90 - a
 								* 360, -90);
 			}
-			// TODO: make nicer
 			if (item.getSlotId() == currentItem) {
 				g.setColor(Color.yellow);
 			} else {
@@ -122,11 +124,12 @@ public class ItemDisplay extends ClickableGuiElement implements
 			}
 			g.draw(itemRect);
 		}
+
 	}
 
 	@Override
 	public void onGuiSizeChanged(int newWidth, int newHeight) {
-		screenY = newHeight - buttonSize * 3;
+
 	}
 
 	@Override
@@ -208,16 +211,20 @@ public class ItemDisplay extends ClickableGuiElement implements
 		private String name;
 		private Item item;
 		private Image itemImage;
-		private final Rectangle clickRect;
+		private Rectangle clickRect;
 
 		GuiItem(int slotId) {
 
-			this.x = OUTER_GAP[3] + ((int) buttonSize + ITEM_GAP)
-					* (slotId % (Inventory.MAX_CAPACITY / 2));
-			this.y = OUTER_GAP[0] + ((int) buttonSize + ITEM_GAP)
-					* (slotId / (Inventory.MAX_CAPACITY / 2));
 			this.slotId = slotId;
 			setName(EMPTY_NAME);
+			updateClickRect(0);
+		}
+
+		void updateClickRect(int lineHeight) {
+			this.x = OUTER_GAP[3] + ((int) buttonSize + ITEM_GAP)
+					* (slotId % (Inventory.MAX_CAPACITY / 2));
+			this.y = lineHeight + OUTER_GAP[0] + ((int) buttonSize + lineHeight + ITEM_GAP)
+					* (slotId / (Inventory.MAX_CAPACITY / 2));
 			clickRect = new Rectangle(x + screenX, y + screenY, buttonSize,
 					buttonSize);
 		}
@@ -317,11 +324,26 @@ public class ItemDisplay extends ClickableGuiElement implements
 
 	@Override
 	public Rectangle getTriggerArea() {
-		return new Rectangle(screenX, screenY, WIDTH, HEIGHT);
+		return bounds;
 	}
 
 	@Override
 	public void onGameReady() {
+		try {
+			int lineHeight = FontCache.getFont(FontKey.DEFAULT_FONT)
+					.getLineHeight();
+			bounds.setHeight(buttonSize * 2 + lineHeight * 2 + OUTER_GAP[0]
+					+ OUTER_GAP[2] + ITEM_GAP);
+			bounds.setWidth(buttonSize * Inventory.MAX_CAPACITY / 2
+					+ OUTER_GAP[1] + OUTER_GAP[3] + ITEM_GAP
+					* (Inventory.MAX_CAPACITY / 2 - 1));
+			screenY = Display.getHeight() - bounds.getHeight();
+			bounds.setY(screenY);
+			for (int i = 0; i < itemSlots.length; i++) {
+				itemSlots[i].updateClickRect(lineHeight);
+			}
+		} catch (CacheException e) {
+		}
 		Inventory playerInventory;
 		try {
 			playerInventory = getInfo().getPlayer().getInventory();
