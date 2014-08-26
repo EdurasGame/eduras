@@ -60,6 +60,9 @@ public class ImageFiler {
 	}
 
 	private static float getScaleFactor(ImageResolution res) {
+		if (Display.getWidth() == res.getWidth()
+				&& Display.getHeight() == res.getHeight())
+			return 1f;
 		float diffW = (float) Display.getWidth() / res.getWidth();
 		float diffH = (float) Display.getHeight() / res.getHeight();
 		return Math.max(diffW, diffH);
@@ -72,11 +75,11 @@ public class ImageFiler {
 			return new Pair<ImageResolution, Float>(ImageResolution.FULLHD,
 					getScaleFactor(ImageResolution.FULLHD));
 		} else if (width > 800 && height > 600) {
-			return new Pair<ImageResolution, Float>(ImageResolution.WINDOWED,
-					getScaleFactor(ImageResolution.WINDOWED));
-		} else {
 			return new Pair<ImageResolution, Float>(ImageResolution.LAPTOP,
 					getScaleFactor(ImageResolution.LAPTOP));
+		} else {
+			return new Pair<ImageResolution, Float>(ImageResolution.WINDOWED,
+					getScaleFactor(ImageResolution.WINDOWED));
 		}
 	}
 
