@@ -118,7 +118,9 @@ public class Edura extends TeamDeathmatch {
 				L.log(Level.WARNING, "Cannot find id of killing player.", e);
 			}
 
-			checkAllPlayersOfTeamDead(deadPlayer);
+			if (!S.Server.gm_edura_automatic_respawn) {
+				checkAllPlayersOfTeamDead(deadPlayer);
+			}
 		}
 	}
 
