@@ -231,19 +231,39 @@ public class Edura extends TeamDeathmatch {
 	@Override
 	public void onBaseOccupied(Base base, Team occupyingTeam) {
 		boolean matchEnd = false;
-		for (Base aMainBase : getMainBases()) {
-			if (base.equals(aMainBase)) {
-				// TODO: we're assuming that a main base cannot be conquered by
-				// the own team for any reason. put a check if the conquered
-				// main base belongs to the opponent.
-				matchEnd = true;
+
+		setTeamOfNode(base, occupyingTeam);
+		if (S.Server.gm_edura_conquer_all_bases) {
+			Collection<GameObject> allBases = gameInfo
+					.findObjectsByType(ObjectType.NEUTRAL_BASE);
+
+			boolean allBasesConquered = true;
+			for (GameObject object : allBases) {
+				if ((object instanceof Base)) {
+					Base aBase = (Base) object;
+					allBasesConquered = allBasesConquered
+							&& (aBase.getCurrentOwnerTeam() == null || aBase
+									.getCurrentOwnerTeam()
+									.equals(occupyingTeam));
+				}
 			}
+			matchEnd = allBasesConquered;
+		} else {
+			for (Base aMainBase : getMainBases()) {
+				if (base.equals(aMainBase)) {
+					// TODO: we're assuming that a main base cannot be conquered
+					// by
+					// the own team for any reason. put a check if the conquered
+					// main base belongs to the opponent.
+					matchEnd = true;
+				}
+			}
+
 		}
 
 		if (matchEnd) {
 			endRound(occupyingTeam);
-		} else {
-			setTeamOfNode(base, occupyingTeam);
+			return;
 		}
 
 		startGeneratingResourcesInBaseForTeam(base, occupyingTeam);
