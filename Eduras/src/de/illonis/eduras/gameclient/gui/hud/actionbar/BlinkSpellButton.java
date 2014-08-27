@@ -14,7 +14,7 @@ public class BlinkSpellButton extends UnitSpellButton {
 			.getName());
 
 	public BlinkSpellButton(GamePanelReactor reactor) {
-		super(ImageKey.ITEM_DUMMY, reactor, GameEventNumber.BLINK_SPELL);
+		super(ImageKey.ACTION_SPELL_BLINK, reactor, GameEventNumber.BLINK_SPELL);
 	}
 
 	@Override
