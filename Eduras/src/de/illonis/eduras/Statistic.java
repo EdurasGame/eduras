@@ -196,4 +196,19 @@ public class Statistic {
 			aStat.remove(ownerId);
 		}
 	}
+
+	/**
+	 * Returns number of kills of a team.
+	 * 
+	 * @param team
+	 *            the team.
+	 * @return kills of all players of given team summarized.
+	 */
+	public int getKillsByTeam(Team team) {
+		int kills = 0;
+		for (Player player : team.getPlayers()) {
+			kills += getKillsOfPlayer(player);
+		}
+		return kills;
+	}
 }

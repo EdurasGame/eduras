@@ -123,6 +123,14 @@ public class NodeData extends ReferencedEntity {
 		area.setHeight(height);
 	}
 
+	public float getCenterX() {
+		return area.getCenterX();
+	}
+
+	public float getCenterY() {
+		return area.getCenterY();
+	}
+
 	/**
 	 * Returns the y coordinate of the nodes position.
 	 * 

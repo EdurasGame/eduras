@@ -54,8 +54,8 @@ public class LoadingController extends EdurasScreenController {
 				GraphicsPreLoader.loadInventoryIcons();
 				break;
 			case 5:
-				setProgress(0.5f, "Loading other icons");
-				GraphicsPreLoader.loadIcons();
+				setProgress(0.5f, "Loading fonts");
+				GraphicsPreLoader.loadFonts();
 				break;
 			case 6:
 				setProgress(0.6f, "Loading animations");

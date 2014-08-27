@@ -1,7 +1,11 @@
 package de.illonis.eduras.gameclient.gui.hud;
 
 import org.newdawn.slick.Color;
+import org.newdawn.slick.Font;
 import org.newdawn.slick.Graphics;
+
+import de.illonis.eduras.gameclient.datacache.FontCache;
+import de.illonis.eduras.gameclient.datacache.FontCache.FontKey;
 
 /**
  * A time frame that shows some indication of time on the right side of the gui
@@ -35,12 +39,12 @@ public abstract class TimeFrame extends RenderedGuiObject {
 
 	@Override
 	public void render(Graphics g2d) {
-
+		Font font = FontCache.getFont(FontKey.DEFAULT_FONT, g2d);
 		String timeString = getRemainingTimeString();
-		int textWidth = g2d.getFont().getWidth(timeString);
+		int textWidth = font.getWidth(timeString);
 		g2d.setColor(stringColor);
-		g2d.drawString(getRemainingTimeString(), screenX + WIDTH - textWidth
-				- 5, screenY + yOffset);
+		font.drawString(screenX + WIDTH - textWidth - 5, screenY + yOffset,
+				getRemainingTimeString());
 	}
 
 	private String getRemainingTimeString() {

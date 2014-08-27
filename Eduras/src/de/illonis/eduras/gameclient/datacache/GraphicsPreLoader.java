@@ -1,6 +1,8 @@
 package de.illonis.eduras.gameclient.datacache;
 
+import java.awt.Font;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -8,19 +10,22 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.swing.ImageIcon;
-
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
+import org.newdawn.slick.TrueTypeFont;
 import org.newdawn.slick.geom.Vector2f;
+import org.newdawn.slick.util.ResourceLoader;
 
 import de.illonis.edulog.EduLog;
 import de.illonis.eduras.ObjectFactory.ObjectType;
 import de.illonis.eduras.gameclient.datacache.CacheInfo.ImageKey;
+import de.illonis.eduras.gameclient.datacache.FontCache.FontKey;
+import de.illonis.eduras.gameclient.gui.game.GameRenderer;
 import de.illonis.eduras.images.ImageFiler;
 import de.illonis.eduras.shapecreator.FileCorruptException;
 import de.illonis.eduras.shapes.ShapeFactory.ShapeType;
 import de.illonis.eduras.shapes.data.ShapeParser;
+import de.illonis.eduras.utils.Pair;
 
 /**
  * Prefetches graphics and shapes and loads them into cache.<br>
@@ -42,18 +47,25 @@ public final class GraphicsPreLoader {
 		loadShapes();
 	}
 
-	public static void loadIcons() {
-		HashMap<ImageKey, String> shapeInfo = CacheInfo.getAllImageIcons();
-		Iterator<Map.Entry<ImageKey, String>> it = shapeInfo.entrySet()
-				.iterator();
+	public static void loadFonts() {
+		Iterator<Map.Entry<FontKey, Pair<String, Integer>>> it = CacheInfo
+				.getAllFonts().entrySet().iterator();
+		float scale = GameRenderer.getRenderScale();
 		while (it.hasNext()) {
-			Map.Entry<ImageKey, String> pair = it.next();
+			Map.Entry<FontKey, Pair<String, Integer>> pair = it.next();
 			try {
-				ImageIcon image = ImageFiler.loadIcon(pair.getValue());
-				ImageCache.addImageIcon(pair.getKey(), image);
-			} catch (IllegalArgumentException e) {
-				L.log(Level.SEVERE,
-						"Guiimagefile not found: " + pair.getValue(), e);
+				InputStream inputStream = ResourceLoader
+						.getResourceAsStream("res/fonts/"
+								+ pair.getValue().getFirst());
+				Font awtFont2 = Font
+						.createFont(Font.TRUETYPE_FONT, inputStream);
+				awtFont2 = awtFont2.deriveFont(pair.getValue().getSecond()
+						* scale); // set font size
+				TrueTypeFont font2 = new TrueTypeFont(awtFont2, true);
+				FontCache.addFont(pair.getKey(), font2);
+
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
 		}
 	}

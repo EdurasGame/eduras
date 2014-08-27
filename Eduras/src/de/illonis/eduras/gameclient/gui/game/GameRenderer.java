@@ -10,6 +10,7 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.lwjgl.opengl.Display;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Font;
 import org.newdawn.slick.GameContainer;
@@ -39,9 +40,9 @@ import de.illonis.eduras.gameclient.gui.hud.Tooltip;
 import de.illonis.eduras.gameclient.gui.hud.UserInterface;
 import de.illonis.eduras.gameobjects.Base;
 import de.illonis.eduras.gameobjects.GameObject;
+import de.illonis.eduras.images.ImageFiler.ImageResolution;
 import de.illonis.eduras.items.Item;
 import de.illonis.eduras.logicabstraction.InformationProvider;
-import de.illonis.eduras.math.BasicMath;
 import de.illonis.eduras.math.Geometry;
 import de.illonis.eduras.math.Vector2df;
 import de.illonis.eduras.settings.S;
@@ -67,8 +68,8 @@ public class GameRenderer implements TooltipHandler {
 	private float scale;
 	private boolean tooltipShown = false;
 	private final LinkedList<RenderedGuiObject> uiObjects;
-	private final static int DEFAULT_WIDTH = 798;
-	private final static int DEFAULT_HEIGHT = 571;
+	private final static int DEFAULT_WIDTH = 800;
+	private final static int DEFAULT_HEIGHT = 600;
 	private final InformationProvider info;
 	private final ClientData data;
 	private final static Color FOG_OF_WAR = new Color(0, 0, 0, 200);
@@ -129,23 +130,20 @@ public class GameRenderer implements TooltipHandler {
 	}
 
 	/**
-	 * Calculates gui scale based on given ui dimensions.
+	 * Retrieves the game scaling factor.
 	 * 
-	 * @param currentWidth
-	 *            current ui width.
-	 * @param currentHeight
-	 *            current ui height.
-	 * @return new scale factor.
+	 * @return the game scaling factor.
 	 */
-	private float calculateScale(int currentWidth, int currentHeight) {
-		if (currentHeight == DEFAULT_HEIGHT && currentWidth == DEFAULT_WIDTH)
-			return 1;
+	public static float getRenderScale() {
+		float diffW = (float) Display.getWidth() / DEFAULT_WIDTH;
+		float diffH = (float) Display.getHeight() / DEFAULT_HEIGHT;
+		return Math.max(diffW, diffH);
+	}
 
-		float diffW = (float) currentWidth / DEFAULT_WIDTH;
-		float diffH = (float) currentHeight / DEFAULT_HEIGHT;
-
-		float newScale = BasicMath.avg(diffW, diffH);
-		return newScale;
+	public static float getRenderScale(ImageResolution res) {
+		float diffW = res.getWidth() / DEFAULT_WIDTH;
+		float diffH = res.getHeight() / DEFAULT_HEIGHT;
+		return Math.max(diffW, diffH);
 	}
 
 	/**
@@ -170,7 +168,7 @@ public class GameRenderer implements TooltipHandler {
 		}
 		int width = container.getWidth();
 		int height = container.getHeight();
-		float newScale = calculateScale(width, height);
+		float newScale = getRenderScale();
 
 		clear(g, width, height);
 
@@ -213,17 +211,24 @@ public class GameRenderer implements TooltipHandler {
 			PlayerMainFigure p = getClientPlayer().getPlayerMainFigure();
 			Vector2f c = p.getPositionVector();
 			Vector2f cameraPos = new Vector2f(camera.getX(), camera.getY());
-			Vector2f viewportPos = new Vector2f(viewPort.getX(), viewPort.getY());
+			Vector2f viewportPos = new Vector2f(viewPort.getX(),
+					viewPort.getY());
 			// get offset and increase offset by movement
 			Vector2f offset = camera.getCameraOffset().add(
 					camera.getCameraMovement());
 			c.add(offset);
+			Vector2f currentCameraPos = new Vector2f(camera.getX(),
+					camera.getY());
+			Vector2f currentViewportPos = new Vector2f(viewPort.getX(),
+					viewPort.getY());
 			camera.centerAt(c.x, c.y);
 			viewPort.centerAt(c.x * scale, c.y * scale);
-			if (!info.getMapBounds().intersects(camera)) {
+			if (!camera.intersects(info.getMapBounds())) {
+				// stop camera moving if camera is outside the map to prevent
+				// endless scrolling.
 				camera.getCameraMovement().set(0, 0);
-				camera.setLocation(cameraPos);
-				viewPort.setLocation(viewportPos);
+				camera.setLocation(currentCameraPos);
+				viewPort.setLocation(currentViewportPos);
 			}
 		} catch (ObjectNotFoundException | NullPointerException e) {
 			// EduLog.passException(e);
@@ -540,9 +545,9 @@ public class GameRenderer implements TooltipHandler {
 	@Override
 	public void showTooltip(Vector2f p, String text) {
 		if (tooltip == null || !(tooltip instanceof TextTooltip)) {
-			tooltip = new TextTooltip(text, font);
+			tooltip = new TextTooltip(text);
 		} else {
-			((TextTooltip) tooltip).setText(text, font);
+			((TextTooltip) tooltip).setText(text);
 		}
 		tooltip.moveTo(p);
 		tooltipShown = true;

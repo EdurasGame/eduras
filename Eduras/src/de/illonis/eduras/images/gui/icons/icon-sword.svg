@@ -14,12 +14,45 @@
    id="svg2"
    version="1.1"
    inkscape:version="0.48.3.1 r9886"
-   sodipodi:docname="icon-weapon1.svg"
-   inkscape:export-filename="icon-weapon1.png"
-   inkscape:export-xdpi="27.25"
-   inkscape:export-ydpi="27.25">
+   sodipodi:docname="icon-sword.svg"
+   inkscape:export-filename="icon-sword.png"
+   inkscape:export-xdpi="65.285332"
+   inkscape:export-ydpi="65.285332">
   <defs
-     id="defs4" />
+     id="defs4">
+    <filter
+       id="filter3119"
+       style="color-interpolation-filters:sRGB;"
+       inkscape:label="Drop Shadow">
+      <feFlood
+         id="feFlood3121"
+         flood-opacity="0.9"
+         flood-color="rgb(0,0,0)"
+         result="flood" />
+      <feComposite
+         id="feComposite3123"
+         in2="SourceGraphic"
+         in="flood"
+         operator="in"
+         result="composite1" />
+      <feGaussianBlur
+         id="feGaussianBlur3125"
+         in="composite"
+         stdDeviation="10"
+         result="blur" />
+      <feOffset
+         id="feOffset3127"
+         dx="0"
+         dy="0"
+         result="offset" />
+      <feComposite
+         id="feComposite3129"
+         in2="offset"
+         in="SourceGraphic"
+         operator="over"
+         result="composite2" />
+    </filter>
+  </defs>
   <sodipodi:namedview
      id="base"
      pagecolor="#ffffff"
@@ -37,9 +70,9 @@
      fit-margin-bottom="0"
      fit-margin-left="0"
      fit-margin-right="0"
-     inkscape:window-width="1280"
+     inkscape:window-width="1301"
      inkscape:window-height="744"
-     inkscape:window-x="0"
+     inkscape:window-x="65"
      inkscape:window-y="24"
      inkscape:window-maximized="1" />
   <metadata
@@ -81,7 +114,7 @@
        x="184.33797"
        y="322.26065" />
     <path
-       style="fill:#999999;stroke:#ffffff;stroke-width:5;stroke-linecap:butt;stroke-linejoin:bevel;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+       style="fill:#999999;stroke:#ffffff;stroke-width:5;stroke-linecap:butt;stroke-linejoin:bevel;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;filter:url(#filter3119)"
        d="m 227.30749,392.79385 56.95904,-56.60189 19.68618,-2.56128 0,20.53046 -58.03046,59.10189 13.57142,13.57143 -5.53571,6.29332 -22.63633,-14.15466 -14.71156,15.72174 c -3.97766,3.43924 -13.30433,-4.48918 -9.87219,-8.936 l 14.71156,-16.10052 -12.97861,-22.64903 5.97952,-6.35832 z"
        id="path3791"
        inkscape:connector-curvature="0"

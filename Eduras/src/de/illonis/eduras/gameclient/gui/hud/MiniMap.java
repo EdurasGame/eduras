@@ -6,12 +6,11 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.lwjgl.opengl.Display;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
-import org.newdawn.slick.ShapeFill;
 import org.newdawn.slick.geom.Polygon;
 import org.newdawn.slick.geom.Rectangle;
-import org.newdawn.slick.geom.Shape;
 import org.newdawn.slick.geom.Vector2f;
 
 import de.illonis.edulog.EduLog;
@@ -19,6 +18,7 @@ import de.illonis.eduras.ObjectFactory.ObjectType;
 import de.illonis.eduras.events.ObjectFactoryEvent;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
 import de.illonis.eduras.gameclient.gui.game.GameCamera;
+import de.illonis.eduras.gameclient.gui.game.GameRenderer;
 import de.illonis.eduras.gameclient.gui.hud.minimap.MiniMapBase;
 import de.illonis.eduras.gameclient.gui.hud.minimap.MiniMapNeutralObject;
 import de.illonis.eduras.gameclient.gui.hud.minimap.MiniMapPlayer;
@@ -47,8 +47,8 @@ public class MiniMap extends ClickableGuiElement {
 	private HashMap<Integer, MiniMapPlayer> players;
 	private GameCamera viewPort;
 	private float scale;
-	private int height;
 	private HashMap<Integer, NodeData> nodes;
+	float windowScale;
 
 	final static int SIZE = 150;
 	private static final Color NEUTRAL_OBJECTS_FILL_COLOR = Color.gray;
@@ -57,7 +57,8 @@ public class MiniMap extends ClickableGuiElement {
 
 	protected MiniMap(UserInterface gui) {
 		super(gui);
-		bounds = new Rectangle(0, 0, SIZE, SIZE);
+		windowScale = GameRenderer.getRenderScale();
+		bounds = new Rectangle(0, 0, SIZE * windowScale, SIZE * windowScale);
 		neutralObjects = new HashMap<Integer, MiniMapNeutralObject>();
 		bases = new HashMap<Integer, MiniMapBase>();
 		players = new HashMap<Integer, MiniMapPlayer>();
@@ -71,26 +72,17 @@ public class MiniMap extends ClickableGuiElement {
 				neutralObjects.values());
 		for (MiniMapNeutralObject object : objectsToRender) {
 			if (object.isDynamicShape()) {
-				g.draw(new Polygon(
-						Geometry.vectorsToFloat(object.getVertices())),
-						new ShapeFill() {
-
-							@Override
-							public Vector2f getOffsetAt(Shape shape, float x,
-									float y) {
-								return new Vector2f();
-							}
-
-							@Override
-							public Color colorAt(Shape shape, float x, float y) {
-								return NEUTRAL_OBJECTS_FILL_COLOR;
-							}
-						});
+				g.fill(new Polygon(
+						Geometry.vectorsToFloat(object.getVertices())));
 			} else {
 				g.fillRect(object.getX(), object.getY(), object.getWidth(),
 						object.getHeight());
 			}
 		}
+	}
+
+	float getSize() {
+		return SIZE * windowScale;
 	}
 
 	private void renderBases(Graphics g) {
@@ -105,7 +97,6 @@ public class MiniMap extends ClickableGuiElement {
 	private synchronized void renderNodeConnections(Graphics g) {
 		checkIfNodesInitialized();
 
-		// if it IS null, some game mode other than Edura is running
 		if (nodes != null && !nodes.isEmpty()) {
 			g.setLineWidth(1f);
 			g.setColor(Color.yellow);
@@ -115,15 +106,15 @@ public class MiniMap extends ClickableGuiElement {
 
 					// draw a line from some node to his adjacent
 					Vector2f someNodePositionOnMinimap = gameToMinimapPosition(new Vector2f(
-							someNode.getX(), someNode.getY()));
+							someNode.getCenterX(), someNode.getCenterY()));
 					Vector2f adjacentOfSomeNodePositionOnMinimap = gameToMinimapPosition(new Vector2f(
-							adjacentOfSomeNode.getX(),
-							adjacentOfSomeNode.getY()));
+							adjacentOfSomeNode.getCenterX(),
+							adjacentOfSomeNode.getCenterY()));
 
 					g.drawLine(someNodePositionOnMinimap.getX(),
-							someNodePositionOnMinimap.getY(),
-							adjacentOfSomeNodePositionOnMinimap.getX(),
-							adjacentOfSomeNodePositionOnMinimap.getY());
+							someNodePositionOnMinimap.y,
+							adjacentOfSomeNodePositionOnMinimap.x,
+							adjacentOfSomeNodePositionOnMinimap.y);
 				}
 			}
 		}
@@ -205,24 +196,19 @@ public class MiniMap extends ClickableGuiElement {
 	private void renderViewPort(Graphics g) {
 		g.setLineWidth(1f);
 		g.setColor(Color.white);
-		float minimapScale = SIZE / getInfo().getMapBounds().getHeight();
-		g.pushTransform();
+		float minimapScale = getSize() / getInfo().getMapBounds().getHeight();
 		float rectWidth = 800f;
-		float ratio = viewPort.getHeight() / viewPort.getWidth();
+		float ratio = (float) Display.getHeight() / Display.getWidth();
 		float rectHeight = rectWidth * ratio;
-		g.translate(0, (height - SIZE));
-		// g.scale(minimapScale, minimapScale);
-		// g.translate(-viewPort.getX() - 400, -viewPort.getY() - 300);
-		g.drawRect(viewPort.getX() * minimapScale, viewPort.getY()
-				* minimapScale, rectWidth * minimapScale, rectHeight
+		float yDiff = (600 - rectHeight) / 2;
+		g.drawRect(viewPort.getX() * minimapScale, (viewPort.getY() + yDiff)
+				* minimapScale + screenY, rectWidth * minimapScale, rectHeight
 				* minimapScale);
-		g.popTransform();
 	}
 
 	@Override
 	public void onGuiSizeChanged(int newWidth, int newHeight) {
-		screenY = newHeight - SIZE;
-		this.height = newHeight;
+		screenY = newHeight - getSize();
 		bounds.setLocation(screenX, screenY);
 		relocateObjects();
 	}
@@ -393,14 +379,15 @@ public class MiniMap extends ClickableGuiElement {
 	public void onGameReady() {
 		Rectangle r = getInfo().getMapBounds();
 		float size = Math.min(r.getWidth(), r.getHeight());
-		scale = SIZE / size;
 
+		scale = (SIZE * windowScale) / size;
+		bounds.setSize(SIZE * windowScale, SIZE * windowScale);
 		for (GameObject o : getInfo().getGameObjects().values()) {
 			maybeAddObject(o);
 		}
 	}
 
-	public void setCamera(GameCamera viewport) {
+	void setCamera(GameCamera viewport) {
 		this.viewPort = viewport;
 	}
 

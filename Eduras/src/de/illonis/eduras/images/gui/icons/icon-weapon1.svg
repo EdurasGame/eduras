@@ -18,8 +18,8 @@
    inkscape:version="0.48.3.1 r9886"
    sodipodi:docname="icon-weapon1.svg"
    inkscape:export-filename="icon-weapon1.png"
-   inkscape:export-xdpi="27.25"
-   inkscape:export-ydpi="27.25">
+   inkscape:export-xdpi="65.290001"
+   inkscape:export-ydpi="65.290001">
   <defs
      id="defs4">
     <linearGradient
@@ -206,9 +206,9 @@
      fit-margin-bottom="0"
      fit-margin-left="0"
      fit-margin-right="0"
-     inkscape:window-width="1280"
+     inkscape:window-width="1301"
      inkscape:window-height="744"
-     inkscape:window-x="0"
+     inkscape:window-x="65"
      inkscape:window-y="24"
      inkscape:window-maximized="1" />
   <metadata
@@ -280,7 +280,7 @@
          sodipodi:type="arc" />
       <path
          transform="matrix(1.088691,-0.91337325,0.82602951,1.2038084,139.05219,423.2971)"
-         d="m 138.80579,45.614494 a 14.443305,21.383595 0 1 1 -28.88661,0 14.443305,21.383595 0 1 1 28.88661,0 z"
+         d="m 138.80579,45.614494 c 0,11.809833 -6.46649,21.383595 -14.4433,21.383595 -7.97682,0 -14.44331,-9.573762 -14.44331,-21.383595 0,-11.809833 6.46649,-21.383594 14.44331,-21.383594 7.97681,0 14.4433,9.573761 14.4433,21.383594 z"
          sodipodi:ry="21.383595"
          sodipodi:rx="14.443305"
          sodipodi:cy="45.614494"
@@ -317,7 +317,7 @@
        sodipodi:cy="24.307421"
        sodipodi:rx="20.425919"
        sodipodi:ry="20.761904"
-       d="m 52.523788,24.307421 a 20.425919,20.761904 0 1 1 -40.851837,0 20.425919,20.761904 0 1 1 40.851837,0 z"
+       d="m 52.523788,24.307421 c 0,11.466483 -9.144995,20.761903 -20.425918,20.761903 -11.280923,0 -20.425919,-9.29542 -20.425919,-20.761903 0,-11.466483 9.144996,-20.761904 20.425919,-20.761904 11.280923,0 20.425918,9.295421 20.425918,20.761904 z"
        transform="matrix(0.61257195,0.64040118,-0.0850029,0.35581808,202.09028,331.45668)" />
     <path
        style="fill:none;stroke:#000000;stroke-width:1.977826;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
