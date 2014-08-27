@@ -787,6 +787,12 @@ public class GameInformation {
 			desiredBlinkTarget = centerOfObject;
 		}
 
+		// make sure target is inside of the map
+		if (!map.getBounds().contains(desiredBlinkTarget.x,
+				desiredBlinkTarget.y)) {
+			throw new NoSpawnAvailableException();
+		}
+
 		// check if the spot to blink to is okay
 		Vector2f oldShapePosition = blinkingMainFigure.getCenterPosition();
 		Shape mainFigureShapeCopy = new Circle(oldShapePosition.x,
