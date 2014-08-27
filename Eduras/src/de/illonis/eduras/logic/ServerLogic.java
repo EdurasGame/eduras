@@ -11,6 +11,7 @@ import de.illonis.edulog.EduLog;
 import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.ObjectFactory;
 import de.illonis.eduras.Player;
+import de.illonis.eduras.actions.BlinkSpellAction;
 import de.illonis.eduras.actions.CreateUnitAction;
 import de.illonis.eduras.actions.HealSpellAction;
 import de.illonis.eduras.actions.InvisibilitySpellAction;
@@ -317,6 +318,26 @@ public class ServerLogic implements GameLogicInterface {
 						(Unit) gameInfo.findObjectById(invisibilityEvent
 								.getIdOfUnitToCastSpellOn()));
 				invisibilitySpellAction.execute(gameInfo);
+			} catch (ObjectNotFoundException ex) {
+				L.log(Level.WARNING,
+						"Cannot find player when receiving heal action.", ex);
+				break;
+			}
+			break;
+		}
+		case BLINK_SPELL: {
+			UnitSpellActionEvent blinkSpellEvent = (UnitSpellActionEvent) event;
+
+			Player executingPlayer;
+			try {
+				executingPlayer = gameInfo.getPlayerByOwnerId(blinkSpellEvent
+						.getExecutingPlayer());
+				BlinkSpellAction blinkSpellAction = new BlinkSpellAction(
+						executingPlayer,
+						(PlayerMainFigure) gameInfo
+								.findObjectById(blinkSpellEvent
+										.getIdOfUnitToCastSpellOn()));
+				blinkSpellAction.execute(gameInfo);
 			} catch (ObjectNotFoundException ex) {
 				L.log(Level.WARNING,
 						"Cannot find player when receiving heal action.", ex);

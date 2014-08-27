@@ -329,6 +329,14 @@ public class GuiInternalEventListener implements GamePanelReactor {
 			requiredResources = S.Server.spell_invisibility_costs;
 			spellNotification = "Making unit invisible...";
 			break;
+		case BLINK_SPELL:
+			if (!(targetUnit instanceof PlayerMainFigure)) {
+				// TODO: give feedback to user
+				return;
+			}
+			requiredResources = S.Server.spell_blink_costs;
+			spellNotification = "Giving +1 blink charge...";
+			break;
 		default:
 			L.severe("Spell " + spellNumber + " is not supported!!");
 			return;

@@ -412,6 +412,7 @@ public class EventParser implements EventHandler {
 						new Vector2df((Float) event.getArgument(2),
 								(Float) event.getArgument(3))));
 				break;
+			case BLINK_SPELL:
 			case HEAL_ACTION:
 			case SPEED_SPELL:
 			case INVISIBILITY_SPELL:

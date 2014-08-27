@@ -741,6 +741,8 @@ public final class S {
 
 		public static long gm_deathmatch_blink_timer = 15000;
 
+		public static int spell_blink_costs = 10;
+
 	}
 
 	/**
