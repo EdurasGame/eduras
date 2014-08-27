@@ -64,7 +64,7 @@ public class ItemDisplay extends ClickableGuiElement implements
 		super(gui);
 		itemSlots = new GuiItem[Inventory.MAX_CAPACITY];
 		for (int i = 0; i < Inventory.MAX_CAPACITY; i++) {
-			itemSlots[i] = new GuiItem(i);
+			itemSlots[i] = new GuiItem(gui, i);
 		}
 		registerAsTooltipTriggerer(this);
 		setActiveInteractModes(InteractMode.MODE_EGO);
@@ -101,14 +101,8 @@ public class ItemDisplay extends ClickableGuiElement implements
 			if (item.hasImage())
 				g.drawImage(item.getItemImage(), itemRect.getX(),
 						itemRect.getY());
-			long cd = item.getCooldown();
-			if (cd > 0) {
-				g.setColor(COLOR_SEMITRANSPARENT);
-				float a = item.getCooldownPercent();
-				g.fillArc(itemRect.getX(), itemRect.getY(),
-						itemRect.getWidth(), itemRect.getHeight(), -90 - a
-								* 360, -90);
-			}
+			item.renderCooldown(g, itemRect.getX(), itemRect.getY(),
+					itemRect.getWidth(), itemRect.getHeight());
 		}
 	}
 
@@ -192,13 +186,14 @@ public class ItemDisplay extends ClickableGuiElement implements
 	 * @author illonis
 	 * 
 	 */
-	private class GuiItem {
+	private class GuiItem extends CooldownGuiObject {
 		private int x, y, slotId;
 		private String name;
 		private Item item;
 		private Image itemImage;
 
-		GuiItem(int slotId) {
+		GuiItem(UserInterface gui, int slotId) {
+			super(gui);
 
 			this.x = OUTER_GAP[3] + (BLOCKSIZE + ITEM_GAP)
 					* (slotId % (Inventory.MAX_CAPACITY / 2));
@@ -239,19 +234,11 @@ public class ItemDisplay extends ClickableGuiElement implements
 			return 0;
 		}
 
+		@Override
 		long getCooldown() {
 			if (item instanceof Usable)
 				return ((Usable) item).getCooldown();
 			return 0;
-		}
-
-		float getCooldownPercent() {
-			float e = 0;
-			if (item instanceof Usable) {
-				Usable u = (Usable) item;
-				e = (float) u.getCooldown() / u.getCooldownTime();
-			}
-			return e;
 		}
 
 		int getX() {
@@ -272,6 +259,21 @@ public class ItemDisplay extends ClickableGuiElement implements
 
 		protected Rectangle getClickableRect() {
 			return new Rectangle(x + screenX, y + screenY, BLOCKSIZE, BLOCKSIZE);
+		}
+
+		@Override
+		public void render(Graphics g) {
+		}
+
+		@Override
+		public void onGuiSizeChanged(int newWidth, int newHeight) {
+		}
+
+		@Override
+		long getCooldownTime() {
+			if (item instanceof Usable)
+				return ((Usable) item).getCooldownTime();
+			return 0;
 		}
 	}
 
