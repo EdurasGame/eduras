@@ -699,4 +699,13 @@ public interface EventTriggerer {
 	 */
 	void makeInvisibleForSomeTime(GameObject objectToMakeInvisible,
 			long timeInMiliseconds);
+
+	/**
+	 * Changes the number of blink charges of a player by the given number.
+	 * 
+	 * @param player
+	 * 
+	 * @param charges
+	 */
+	void changeBlinkChargesBy(Player player, int charges);
 }

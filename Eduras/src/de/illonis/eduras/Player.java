@@ -162,14 +162,10 @@ public class Player {
 	}
 
 	public int getBlinksAvailable() {
-		synchronized (this) {
-			return blinksAvailable;
-		}
+		return blinksAvailable;
 	}
 
 	public void setBlinksAvailable(int blinksAvailable) {
-		synchronized (this) {
-			this.blinksAvailable = blinksAvailable;
-		}
+		this.blinksAvailable = blinksAvailable;
 	}
 }

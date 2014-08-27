@@ -464,6 +464,10 @@ public class EdurasInitializer {
 					Vector2f newPosition) {
 			}
 
+			@Override
+			public void changeBlinkChargesBy(Player player, int charges) {
+			}
+
 		});
 
 		networkManager.getClient().setEventHandler(new EventParser(logic));

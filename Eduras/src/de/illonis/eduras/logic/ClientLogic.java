@@ -24,6 +24,7 @@ import de.illonis.eduras.events.ObjectFactoryEvent;
 import de.illonis.eduras.events.OwnerGameEvent;
 import de.illonis.eduras.events.RespawnEvent;
 import de.illonis.eduras.events.SetAmmunitionEvent;
+import de.illonis.eduras.events.SetAvailableBlinksEvent;
 import de.illonis.eduras.events.SetBooleanGameObjectAttributeEvent;
 import de.illonis.eduras.events.SetFloatGameObjectAttributeEvent;
 import de.illonis.eduras.events.SetGameModeEvent;
@@ -212,6 +213,19 @@ public class ClientLogic implements GameLogicInterface {
 				t.setResource(setTeamResEvent.getNewAmount());
 				getListener().onTeamResourceChanged(setTeamResEvent);
 				break;
+			case SET_AVAILABLE_BLINKS: {
+				SetAvailableBlinksEvent availableBlinksEvent = (SetAvailableBlinksEvent) event;
+				Player player;
+				try {
+					player = gameInfo.getPlayerByOwnerId(availableBlinksEvent
+							.getOwner());
+				} catch (ObjectNotFoundException e1) {
+					L.log(Level.WARNING, "Cant find player!", e1);
+					break;
+				}
+				player.setBlinksAvailable(availableBlinksEvent.getCharges());
+				break;
+			}
 			case SET_VISION_ANGLE:
 				if (!(event instanceof SetFloatGameObjectAttributeEvent)) {
 					break;

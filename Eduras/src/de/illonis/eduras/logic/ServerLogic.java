@@ -338,8 +338,8 @@ public class ServerLogic implements GameLogicInterface {
 				PlayerMainFigure blinkingMainFigure = blinkingPlayer
 						.getPlayerMainFigure();
 
-				blinkingPlayer.setBlinksAvailable(blinkingPlayer
-						.getBlinksAvailable() - 1);
+				gameInfo.getEventTriggerer().changeBlinkChargesBy(
+						blinkingPlayer, -1);
 
 				// check if the player tried to blink too far
 				try {

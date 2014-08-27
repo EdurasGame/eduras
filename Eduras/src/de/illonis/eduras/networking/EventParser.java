@@ -39,6 +39,7 @@ import de.illonis.eduras.events.ResurrectPlayerEvent;
 import de.illonis.eduras.events.ScoutSpellEvent;
 import de.illonis.eduras.events.SendUnitsEvent;
 import de.illonis.eduras.events.SetAmmunitionEvent;
+import de.illonis.eduras.events.SetAvailableBlinksEvent;
 import de.illonis.eduras.events.SetBooleanGameObjectAttributeEvent;
 import de.illonis.eduras.events.SetFloatGameObjectAttributeEvent;
 import de.illonis.eduras.events.SetGameModeEvent;
@@ -246,6 +247,10 @@ public class EventParser implements EventHandler {
 			case SET_TEAM_RESOURCE:
 				logic.onGameEventAppeared(new SetTeamResourceEvent((int) event
 						.getArgument(0), (int) event.getArgument(1)));
+				break;
+			case SET_AVAILABLE_BLINKS:
+				logic.onGameEventAppeared(new SetAvailableBlinksEvent(
+						(int) event.getArgument(0), (int) event.getArgument(1)));
 				break;
 			case SET_POLYGON_DATA:
 				int numberOfVertices = (numberOfArgs - 1) / 2;
