@@ -734,6 +734,13 @@ public final class S {
 
 		public static long sv_blink_cooldown = 3000;
 
+		/**
+		 * Determines if blink is available in deathmatch mode.
+		 */
+		public static boolean gm_deathmatch_blink_available = true;
+
+		public static long gm_deathmatch_blink_timer = 15000;
+
 	}
 
 	/**

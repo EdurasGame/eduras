@@ -8,6 +8,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.NoSuchElementException;
 import java.util.Random;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
@@ -47,6 +48,7 @@ import de.illonis.eduras.exceptions.PlayerHasNoTeamException;
 import de.illonis.eduras.gameobjects.Base;
 import de.illonis.eduras.gameobjects.DynamicPolygonObject;
 import de.illonis.eduras.gameobjects.GameObject;
+import de.illonis.eduras.gameobjects.TimingSource;
 import de.illonis.eduras.logic.EventTriggerer;
 import de.illonis.eduras.maps.FunMap;
 import de.illonis.eduras.maps.Map;
@@ -807,5 +809,22 @@ public class GameInformation {
 		}
 
 		return desiredBlinkTarget;
+	}
+
+	/**
+	 * Returns the {@link TimingSource}.
+	 * 
+	 * @return the timingsource
+	 * @throws NoSuchElementException
+	 *             thrown if we cannot find one.
+	 */
+	public TimingSource getTimingSource() throws NoSuchElementException {
+		LinkedList<GameObject> objs = new LinkedList<GameObject>(
+				objects.values());
+		if (objs.isEmpty()) {
+			throw new NoSuchElementException();
+		} else {
+			return objs.getFirst().getTimingSource();
+		}
 	}
 }
