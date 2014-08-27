@@ -19,6 +19,7 @@ import de.illonis.eduras.Statistic.StatsProperty;
 import de.illonis.eduras.Team;
 import de.illonis.eduras.events.AddPlayerToTeamEvent;
 import de.illonis.eduras.events.AreaConqueredEvent;
+import de.illonis.eduras.events.BlinkEvent;
 import de.illonis.eduras.events.ClientRenameEvent;
 import de.illonis.eduras.events.CreateUnitEvent;
 import de.illonis.eduras.events.DeathEvent;
@@ -38,6 +39,7 @@ import de.illonis.eduras.events.ResurrectPlayerEvent;
 import de.illonis.eduras.events.ScoutSpellEvent;
 import de.illonis.eduras.events.SendUnitsEvent;
 import de.illonis.eduras.events.SetAmmunitionEvent;
+import de.illonis.eduras.events.SetAvailableBlinksEvent;
 import de.illonis.eduras.events.SetBooleanGameObjectAttributeEvent;
 import de.illonis.eduras.events.SetFloatGameObjectAttributeEvent;
 import de.illonis.eduras.events.SetGameModeEvent;
@@ -246,6 +248,10 @@ public class EventParser implements EventHandler {
 				logic.onGameEventAppeared(new SetTeamResourceEvent((int) event
 						.getArgument(0), (int) event.getArgument(1)));
 				break;
+			case SET_AVAILABLE_BLINKS:
+				logic.onGameEventAppeared(new SetAvailableBlinksEvent(
+						(int) event.getArgument(0), (int) event.getArgument(1)));
+				break;
 			case SET_POLYGON_DATA:
 				int numberOfVertices = (numberOfArgs - 1) / 2;
 				Vector2f[] vertices = new Vector2f[numberOfVertices];
@@ -322,6 +328,11 @@ public class EventParser implements EventHandler {
 				logic.onGameEventAppeared(new SetTimeEvent(
 						GameEventNumber.SET_RESPAWNTIME, (Long) event
 								.getArgument(0)));
+				break;
+			case BLINK:
+				logic.onGameEventAppeared(new BlinkEvent((int) event
+						.getArgument(0), new Vector2f((float) event
+						.getArgument(1), (float) event.getArgument(2))));
 				break;
 			case ITEM_USE_FAILED:
 				logic.onGameEventAppeared(new ItemUseFailedEvent((int) event
@@ -401,6 +412,7 @@ public class EventParser implements EventHandler {
 						new Vector2df((Float) event.getArgument(2),
 								(Float) event.getArgument(3))));
 				break;
+			case BLINK_SPELL:
 			case HEAL_ACTION:
 			case SPEED_SPELL:
 			case INVISIBILITY_SPELL:

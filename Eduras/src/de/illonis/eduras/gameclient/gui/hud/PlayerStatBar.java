@@ -108,7 +108,7 @@ public class PlayerStatBar extends RenderedGuiObject {
 
 		@Override
 		public void onGuiSizeChanged(int newWidth, int newHeight) {
-			screenY = newHeight - statBarSize - ItemDisplay.HEIGHT;
+			screenY = newHeight - statBarSize;
 		}
 
 		@Override

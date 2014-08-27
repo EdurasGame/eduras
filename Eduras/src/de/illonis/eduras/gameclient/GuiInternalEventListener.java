@@ -13,6 +13,7 @@ import de.illonis.edulog.EduLog;
 import de.illonis.eduras.ObjectFactory.ObjectType;
 import de.illonis.eduras.Player;
 import de.illonis.eduras.Team;
+import de.illonis.eduras.events.BlinkEvent;
 import de.illonis.eduras.events.CreateUnitEvent;
 import de.illonis.eduras.events.GameEvent.GameEventNumber;
 import de.illonis.eduras.events.ItemEvent;
@@ -328,6 +329,14 @@ public class GuiInternalEventListener implements GamePanelReactor {
 			requiredResources = S.Server.spell_invisibility_costs;
 			spellNotification = "Making unit invisible...";
 			break;
+		case BLINK_SPELL:
+			if (!(targetUnit instanceof PlayerMainFigure)) {
+				// TODO: give feedback to user
+				return;
+			}
+			requiredResources = S.Server.spell_blink_costs;
+			spellNotification = "Giving +1 blink charge...";
+			break;
 		default:
 			L.severe("Spell " + spellNumber + " is not supported!!");
 			return;
@@ -456,6 +465,33 @@ public class GuiInternalEventListener implements GamePanelReactor {
 			client.getLogic().showNotification("Spawning " + type.toString());
 		} catch (WrongEventTypeException | MessageNotSupportedException e) {
 			L.log(Level.SEVERE, "Error spawning item", e);
+		}
+	}
+
+	@Override
+	public void onBlink(Vector2f blinkTarget)
+			throws InsufficientChargesException, CantSpawnHereException {
+		Player myPlayer;
+		try {
+			myPlayer = infoPro.getPlayer();
+		} catch (ObjectNotFoundException e) {
+			L.log(Level.WARNING, "Cannot find player!", e);
+			return;
+		}
+		if (!myPlayer.isDead() && myPlayer.getBlinksAvailable() > 0
+				&& myPlayer.getBlinkCooldown() <= 0) {
+			try {
+				if (!infoPro.canBlinkTo(myPlayer.getPlayerMainFigure(),
+						blinkTarget)) {
+					throw new CantSpawnHereException(ObjectType.PLAYER);
+				}
+				myPlayer.useBlink();
+				client.sendEvent(new BlinkEvent(myPlayer.getPlayerId(),
+						blinkTarget));
+			} catch (WrongEventTypeException | MessageNotSupportedException e) {
+				L.log(Level.WARNING, "Error sending the blink event.", e);
+				return;
+			}
 		}
 	}
 }

@@ -572,4 +572,20 @@ public class Geometry {
 
 		return movementPoints;
 	}
+
+	/**
+	 * Returns an inverted copy of the given vector.
+	 * 
+	 * @param vectorToInvert
+	 * @return inverted copy
+	 */
+	public static Vector2f invert(Vector2f vectorToInvert) {
+		return new Vector2f(vectorToInvert.x * -1, vectorToInvert.y * -1);
+	}
+
+	public static Vector2f calculateDistanceVector(Vector2f first,
+			Vector2f second) {
+		Vector2f copy = second.copy();
+		return copy.sub(first);
+	}
 }

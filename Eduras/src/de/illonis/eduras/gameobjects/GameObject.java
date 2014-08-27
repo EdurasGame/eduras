@@ -649,6 +649,23 @@ public abstract class GameObject extends ReferencedEntity implements
 	}
 
 	/**
+	 * Returns the center of this object's shape.
+	 * 
+	 * @return center
+	 */
+	public Vector2f getCenterPosition() {
+		return new Vector2f(shape.getCenterX(), shape.getCenterY());
+	}
+
+	public void setCenterPosition(Vector2f newCenterPosition) {
+		shape.setCenterX(newCenterPosition.x);
+		shape.setCenterY(newCenterPosition.y);
+
+		setXPosition(shape.getX() - shapeOffsetX);
+		setYPosition(shape.getY() - shapeOffsetY);
+	}
+
+	/**
 	 * Returns true if the given objects are collidable with each other.
 	 * 
 	 * @param first

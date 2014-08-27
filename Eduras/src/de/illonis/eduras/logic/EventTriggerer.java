@@ -219,6 +219,18 @@ public interface EventTriggerer {
 	void guaranteeSetPositionOfObject(int objectId, Vector2df newPosition);
 
 	/**
+	 * Moves a specific object to a new position instantly, where the position
+	 * is to be where the center of the object shall be. Does guarantee the
+	 * event reaches the clients.
+	 * 
+	 * @param objectId
+	 *            id of object to moved.
+	 * @param newPosition
+	 *            target position.
+	 */
+	void guaranteeSetPositionOfObjectAtCenter(int objectId, Vector2f newPosition);
+
+	/**
 	 * You can implement this method if you need to do some setup.
 	 */
 	void init();
@@ -687,4 +699,13 @@ public interface EventTriggerer {
 	 */
 	void makeInvisibleForSomeTime(GameObject objectToMakeInvisible,
 			long timeInMiliseconds);
+
+	/**
+	 * Changes the number of blink charges of a player by the given number.
+	 * 
+	 * @param player
+	 * 
+	 * @param charges
+	 */
+	void changeBlinkChargesBy(Player player, int charges);
 }

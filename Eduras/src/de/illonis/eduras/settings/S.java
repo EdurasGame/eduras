@@ -729,6 +729,22 @@ public final class S {
 		 */
 		public static boolean gm_edura_conquer_all_bases = true;
 
+		/**
+		 * Determines the maximum blink distance.
+		 */
+		public static float sv_blink_distance = 100;
+
+		public static long sv_blink_cooldown = 3000;
+
+		/**
+		 * Determines if blink is available in deathmatch mode.
+		 */
+		public static boolean gm_deathmatch_blink_available = true;
+
+		public static long gm_deathmatch_blink_timer = 15000;
+
+		public static int spell_blink_costs = 10;
+
 	}
 
 	/**

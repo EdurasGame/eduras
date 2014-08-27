@@ -459,6 +459,15 @@ public class EdurasInitializer {
 					float newHeight) throws ObjectNotFoundException {
 			}
 
+			@Override
+			public void guaranteeSetPositionOfObjectAtCenter(int objectId,
+					Vector2f newPosition) {
+			}
+
+			@Override
+			public void changeBlinkChargesBy(Player player, int charges) {
+			}
+
 		});
 
 		networkManager.getClient().setEventHandler(new EventParser(logic));

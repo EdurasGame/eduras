@@ -203,4 +203,15 @@ public class InformationProvider implements InfoInterface {
 		}
 
 	}
+
+	@Override
+	public boolean canBlinkTo(PlayerMainFigure player, Vector2f target) {
+		try {
+			edurasInitializer.getLogic().getGame()
+					.findActualTargetForDesiredBlinkTarget(player, target);
+		} catch (NoSpawnAvailableException e) {
+			return false;
+		}
+		return true;
+	}
 }

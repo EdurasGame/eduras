@@ -45,6 +45,7 @@ import de.illonis.eduras.events.ObjectFactoryEvent;
 import de.illonis.eduras.events.OwnerGameEvent;
 import de.illonis.eduras.events.RespawnEvent;
 import de.illonis.eduras.events.SetAmmunitionEvent;
+import de.illonis.eduras.events.SetAvailableBlinksEvent;
 import de.illonis.eduras.events.SetBooleanGameObjectAttributeEvent;
 import de.illonis.eduras.events.SetFloatGameObjectAttributeEvent;
 import de.illonis.eduras.events.SetGameModeEvent;
@@ -1268,5 +1269,34 @@ public class ServerEventTriggerer implements EventTriggerer {
 			sendEventToAll(sizeEvent);
 		} else
 			throw new ObjectNotFoundException(objectId);
+	}
+
+	@Override
+	public void guaranteeSetPositionOfObjectAtCenter(int objectId,
+			Vector2f newPosition) {
+		GameObject object;
+		try {
+			object = gameInfo.findObjectById(objectId);
+		} catch (ObjectNotFoundException e) {
+			L.log(Level.WARNING, "Cannot find object", e);
+			return;
+		}
+
+		object.getShape().setCenterX(newPosition.x);
+		object.getShape().setCenterY(newPosition.y);
+
+		guaranteeSetPositionOfObject(objectId, new Vector2df(object.getShape()
+				.getX(), object.getShape().getY()));
+	}
+
+	@Override
+	public void changeBlinkChargesBy(Player player, int charges) {
+		synchronized (player) {
+			player.setBlinksAvailable(Math.max(player.getBlinksAvailable()
+					+ charges, 0));
+		}
+
+		sendEvents(new SetAvailableBlinksEvent(player.getPlayerId(),
+				player.getBlinksAvailable()));
 	}
 }

@@ -1,6 +1,7 @@
 package de.illonis.eduras.gamemodes;
 
 import java.util.LinkedList;
+import java.util.NoSuchElementException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -16,8 +17,10 @@ import de.illonis.eduras.gameclient.userprefs.KeyBindings.KeyBinding;
 import de.illonis.eduras.gameobjects.Base;
 import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.gameobjects.GameObject.Relation;
+import de.illonis.eduras.gameobjects.TimedEventHandler;
 import de.illonis.eduras.logic.EventTriggerer;
 import de.illonis.eduras.maps.SpawnPosition.SpawnType;
+import de.illonis.eduras.settings.S;
 import de.illonis.eduras.units.InteractMode;
 import de.illonis.eduras.units.PlayerMainFigure;
 import de.illonis.eduras.units.Unit;
@@ -32,6 +35,7 @@ public class Deathmatch extends BasicGameMode {
 
 	private final static Logger L = EduLog.getLoggerFor(Deathmatch.class
 			.getName());
+	private BlinkTimer blinkTimer;
 
 	/**
 	 * Creates a new instance of deathmatch.
@@ -155,6 +159,43 @@ public class Deathmatch extends BasicGameMode {
 			eventTriggerer.respawnPlayerAtRandomSpawnpoint(player);
 		}
 
+		if (S.Server.gm_deathmatch_blink_available) {
+			setUpBlinkTimer();
+		}
+
+	}
+
+	private void setUpBlinkTimer() {
+		blinkTimer = new BlinkTimer();
+		gameInfo.getTimingSource().addTimedEventHandler(blinkTimer);
+	}
+
+	class BlinkTimer implements TimedEventHandler {
+
+		private long timeTillNewBlink = S.Server.gm_deathmatch_blink_timer;
+
+		@Override
+		public long getInterval() {
+			return 1000;
+		}
+
+		@Override
+		public void onIntervalElapsed(long delta) {
+			timeTillNewBlink = Math.max(0, timeTillNewBlink - delta);
+
+			if (timeTillNewBlink == 0) {
+				for (Player player : gameInfo.getPlayers()) {
+					gameInfo.getEventTriggerer()
+							.changeBlinkChargesBy(player, 1);
+				}
+
+				timeTillNewBlink = S.Server.gm_deathmatch_blink_timer;
+			}
+		}
+
+		public long getTimeTillRespawn() {
+			return timeTillNewBlink;
+		}
 	}
 
 	@Override
@@ -238,6 +279,15 @@ public class Deathmatch extends BasicGameMode {
 
 		// tell clients that all teams have been removed
 		gameInfo.getEventTriggerer().setTeams(new LinkedList<Team>());
+
+		if (S.Server.gm_deathmatch_blink_available) {
+			try {
+				gameInfo.getTimingSource().removeTimedEventHandler(blinkTimer);
+			} catch (NoSuchElementException e) {
+				// do nothing
+			}
+			blinkTimer = null;
+		}
 	}
 
 	@Override

@@ -8,11 +8,13 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.NoSuchElementException;
 import java.util.Random;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.newdawn.slick.geom.Circle;
 import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.Shape;
 import org.newdawn.slick.geom.Vector2f;
@@ -46,6 +48,7 @@ import de.illonis.eduras.exceptions.PlayerHasNoTeamException;
 import de.illonis.eduras.gameobjects.Base;
 import de.illonis.eduras.gameobjects.DynamicPolygonObject;
 import de.illonis.eduras.gameobjects.GameObject;
+import de.illonis.eduras.gameobjects.TimingSource;
 import de.illonis.eduras.logic.EventTriggerer;
 import de.illonis.eduras.maps.FunMap;
 import de.illonis.eduras.maps.Map;
@@ -551,10 +554,12 @@ public class GameInformation {
 
 	}
 
-	private static boolean isAnyOfObjectsWithinBounds(Rectangle bounds,
+	private static boolean isAnyOfObjectsWithinBounds(Shape bounds,
 			Collection<GameObject> gameObjects) {
 		for (GameObject o : gameObjects) {
-			if (o.getShape().intersects(bounds))
+			if (o.getShape().intersects(bounds)
+					|| o.getShape().contains(bounds)
+					|| bounds.contains(o.getShape()))
 				return true;
 		}
 		return false;
@@ -741,5 +746,85 @@ public class GameInformation {
 			}
 		}
 		return objs;
+	}
+
+	public Collection<GameObject> getAllCollidableObjects(GameObject someObject) {
+		LinkedList<GameObject> collidableObjects = new LinkedList<GameObject>();
+
+		for (GameObject otherObject : objects.values()) {
+			if (otherObject.equals(someObject)) {
+				continue;
+			}
+			if (GameObject.canCollideWithEachOther(otherObject, someObject)) {
+				collidableObjects.add(otherObject);
+			}
+		}
+
+		return collidableObjects;
+	}
+
+	/**
+	 * Finds an actual target for the desired spot to blink to. That involves
+	 * considering the maximum length of a blink and also checking for any
+	 * collidable objects in the desired area.
+	 * 
+	 * @param blinkingMainFigure
+	 * @param desiredBlinkTarget
+	 * @return returns the actual blink target
+	 * @throws NoSpawnAvailableException
+	 */
+	public Vector2f findActualTargetForDesiredBlinkTarget(
+			PlayerMainFigure blinkingMainFigure, Vector2f desiredBlinkTarget)
+			throws NoSpawnAvailableException {
+		Vector2f distanceVectorToBlinkTarget = Geometry
+				.calculateDistanceVector(
+						blinkingMainFigure.getCenterPosition(),
+						desiredBlinkTarget);
+		float scale = distanceVectorToBlinkTarget.length()
+				/ S.Server.sv_blink_distance;
+		if (scale > 1) {
+			distanceVectorToBlinkTarget.scale(1 / scale);
+			Vector2f centerOfObject = blinkingMainFigure.getCenterPosition();
+			centerOfObject.add(distanceVectorToBlinkTarget);
+			desiredBlinkTarget = centerOfObject;
+		}
+
+		// make sure target is inside of the map
+		if (!map.getBounds().contains(desiredBlinkTarget.x,
+				desiredBlinkTarget.y)) {
+			throw new NoSpawnAvailableException();
+		}
+
+		// check if the spot to blink to is okay
+		Vector2f oldShapePosition = blinkingMainFigure.getCenterPosition();
+		Shape mainFigureShapeCopy = new Circle(oldShapePosition.x,
+				oldShapePosition.y,
+				((Circle) blinkingMainFigure.getShape()).radius);
+
+		mainFigureShapeCopy.setCenterX(desiredBlinkTarget.x);
+		mainFigureShapeCopy.setCenterY(desiredBlinkTarget.y);
+		if (isAnyOfObjectsWithinBounds(mainFigureShapeCopy,
+				getAllCollidableObjects(blinkingMainFigure))) {
+			throw new NoSpawnAvailableException();
+		}
+
+		return desiredBlinkTarget;
+	}
+
+	/**
+	 * Returns the {@link TimingSource}.
+	 * 
+	 * @return the timingsource
+	 * @throws NoSuchElementException
+	 *             thrown if we cannot find one.
+	 */
+	public TimingSource getTimingSource() throws NoSuchElementException {
+		LinkedList<GameObject> objs = new LinkedList<GameObject>(
+				objects.values());
+		if (objs.isEmpty()) {
+			throw new NoSuchElementException();
+		} else {
+			return objs.getFirst().getTimingSource();
+		}
 	}
 }
