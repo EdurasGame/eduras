@@ -13,6 +13,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.newdawn.slick.geom.Circle;
 import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.Shape;
 import org.newdawn.slick.geom.Vector2f;
@@ -551,10 +552,12 @@ public class GameInformation {
 
 	}
 
-	private static boolean isAnyOfObjectsWithinBounds(Rectangle bounds,
+	private static boolean isAnyOfObjectsWithinBounds(Shape bounds,
 			Collection<GameObject> gameObjects) {
 		for (GameObject o : gameObjects) {
-			if (o.getShape().intersects(bounds))
+			if (o.getShape().intersects(bounds)
+					|| o.getShape().contains(bounds)
+					|| bounds.contains(o.getShape()))
 				return true;
 		}
 		return false;
@@ -747,6 +750,9 @@ public class GameInformation {
 		LinkedList<GameObject> collidableObjects = new LinkedList<GameObject>();
 
 		for (GameObject otherObject : objects.values()) {
+			if (otherObject.equals(someObject)) {
+				continue;
+			}
 			if (GameObject.canCollideWithEachOther(otherObject, someObject)) {
 				collidableObjects.add(otherObject);
 			}
@@ -781,18 +787,19 @@ public class GameInformation {
 			desiredBlinkTarget = centerOfObject;
 		}
 
-		// find the spot to blink to
-		float playerSize = blinkingMainFigure.getShape()
-				.getBoundingCircleRadius();
-		Rectangle blinkTargetArea = new Rectangle(0, 0, 2 * playerSize,
-				2 * playerSize);
-		blinkTargetArea.setCenterX(desiredBlinkTarget.x);
-		blinkTargetArea.setCenterY(desiredBlinkTarget.y);
-		desiredBlinkTarget = GameInformation
-				.findFreePointWithinSpawnPositionForShape(new SpawnPosition(
-						blinkTargetArea, SpawnType.ANY), blinkingMainFigure
-						.getShape(),
-						getAllCollidableObjects(blinkingMainFigure));
+		// check if the spot to blink to is okay
+		Vector2f oldShapePosition = blinkingMainFigure.getCenterPosition();
+		Shape mainFigureShapeCopy = new Circle(oldShapePosition.x,
+				oldShapePosition.y,
+				((Circle) blinkingMainFigure.getShape()).radius);
+
+		mainFigureShapeCopy.setCenterX(desiredBlinkTarget.x);
+		mainFigureShapeCopy.setCenterY(desiredBlinkTarget.y);
+		if (isAnyOfObjectsWithinBounds(mainFigureShapeCopy,
+				getAllCollidableObjects(blinkingMainFigure))) {
+			throw new NoSpawnAvailableException();
+		}
+
 		return desiredBlinkTarget;
 	}
 }
