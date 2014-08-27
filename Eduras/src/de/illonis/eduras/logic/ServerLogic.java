@@ -5,7 +5,6 @@ import java.util.LinkedList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.Vector2f;
 
 import de.illonis.edulog.EduLog;
@@ -51,10 +50,6 @@ import de.illonis.eduras.items.Item;
 import de.illonis.eduras.items.ItemUseInformation;
 import de.illonis.eduras.items.Usable;
 import de.illonis.eduras.locale.Localization;
-import de.illonis.eduras.maps.SpawnPosition;
-import de.illonis.eduras.maps.SpawnPosition.SpawnType;
-import de.illonis.eduras.math.Geometry;
-import de.illonis.eduras.settings.S;
 import de.illonis.eduras.units.PlayerMainFigure;
 import de.illonis.eduras.units.Unit;
 
@@ -347,45 +342,21 @@ public class ServerLogic implements GameLogicInterface {
 						.getBlinksAvailable() - 1);
 
 				// check if the player tried to blink too far
-				Vector2f blinkTarget = blinkEvent.getBlinkTarget();
-				Vector2f distanceVectorToBlinkTarget = Geometry
-						.calculateDistanceVector(
-								blinkingMainFigure.getCenterPosition(),
-								blinkTarget);
-				float scale = distanceVectorToBlinkTarget.length()
-						/ S.Server.sv_blink_distance;
-				if (scale > 1) {
-					distanceVectorToBlinkTarget.scale(1 / scale);
-					Vector2f centerOfObject = blinkingMainFigure
-							.getCenterPosition();
-					centerOfObject.add(distanceVectorToBlinkTarget);
-					blinkTarget = centerOfObject;
-				}
-
-				// find the spot to blink to
-				float playerSize = blinkingPlayer.getPlayerMainFigure()
-						.getShape().getBoundingCircleRadius();
-				Rectangle blinkTargetArea = new Rectangle(0, 0, 2 * playerSize,
-						2 * playerSize);
-				blinkTargetArea.setCenterX(blinkTarget.x);
-				blinkTargetArea.setCenterY(blinkTarget.y);
 				try {
-					blinkTarget = GameInformation
-							.findFreePointWithinSpawnPositionForShape(
-									new SpawnPosition(blinkTargetArea,
-											SpawnType.ANY),
-									blinkingPlayer.getPlayerMainFigure()
-											.getShape(),
-									gameInfo.getAllCollidableObjects(blinkingPlayer
-											.getPlayerMainFigure()));
+					Vector2f actualBlinkTarget = gameInfo
+							.findActualTargetForDesiredBlinkTarget(
+									blinkingMainFigure,
+									blinkEvent.getBlinkTarget());
 
 					// set player to the target
 					gameInfo.getEventTriggerer()
 							.guaranteeSetPositionOfObjectAtCenter(
 									blinkingPlayer.getPlayerMainFigure()
-											.getId(), blinkTarget);
+											.getId(), actualBlinkTarget);
 
 				} catch (NoSpawnAvailableException e1) {
+					// TODO: Send a notification to the client, since it didn't
+					// figure it out itself that there is no spawn available
 					System.out.println("Cannot spawn here.");
 				}
 

@@ -754,4 +754,45 @@ public class GameInformation {
 
 		return collidableObjects;
 	}
+
+	/**
+	 * Finds an actual target for the desired spot to blink to. That involves
+	 * considering the maximum length of a blink and also checking for any
+	 * collidable objects in the desired area.
+	 * 
+	 * @param blinkingMainFigure
+	 * @param desiredBlinkTarget
+	 * @return returns the actual blink target
+	 * @throws NoSpawnAvailableException
+	 */
+	public Vector2f findActualTargetForDesiredBlinkTarget(
+			PlayerMainFigure blinkingMainFigure, Vector2f desiredBlinkTarget)
+			throws NoSpawnAvailableException {
+		Vector2f distanceVectorToBlinkTarget = Geometry
+				.calculateDistanceVector(
+						blinkingMainFigure.getCenterPosition(),
+						desiredBlinkTarget);
+		float scale = distanceVectorToBlinkTarget.length()
+				/ S.Server.sv_blink_distance;
+		if (scale > 1) {
+			distanceVectorToBlinkTarget.scale(1 / scale);
+			Vector2f centerOfObject = blinkingMainFigure.getCenterPosition();
+			centerOfObject.add(distanceVectorToBlinkTarget);
+			desiredBlinkTarget = centerOfObject;
+		}
+
+		// find the spot to blink to
+		float playerSize = blinkingMainFigure.getShape()
+				.getBoundingCircleRadius();
+		Rectangle blinkTargetArea = new Rectangle(0, 0, 2 * playerSize,
+				2 * playerSize);
+		blinkTargetArea.setCenterX(desiredBlinkTarget.x);
+		blinkTargetArea.setCenterY(desiredBlinkTarget.y);
+		desiredBlinkTarget = GameInformation
+				.findFreePointWithinSpawnPositionForShape(new SpawnPosition(
+						blinkTargetArea, SpawnType.ANY), blinkingMainFigure
+						.getShape(),
+						getAllCollidableObjects(blinkingMainFigure));
+		return desiredBlinkTarget;
+	}
 }
