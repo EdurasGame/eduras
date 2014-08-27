@@ -1285,6 +1285,6 @@ public class ServerEventTriggerer implements EventTriggerer {
 		object.getShape().setCenterY(newPosition.y);
 
 		guaranteeSetPositionOfObject(objectId, new Vector2df(object.getShape()
-				.getCenterX(), object.getShape().getCenterY()));
+				.getX(), object.getShape().getY()));
 	}
 }
