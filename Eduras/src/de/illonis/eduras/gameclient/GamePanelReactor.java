@@ -170,6 +170,7 @@ public interface GamePanelReactor {
 	 */
 	void setClickState(ClickState newState);
 
-	void onBlink(Vector2f blinkTarget) throws InsufficientChargesException;
+	void onBlink(Vector2f blinkTarget) throws InsufficientChargesException,
+			CantSpawnHereException;
 
 }

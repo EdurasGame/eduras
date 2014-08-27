@@ -462,7 +462,7 @@ public class GuiInternalEventListener implements GamePanelReactor {
 
 	@Override
 	public void onBlink(Vector2f blinkTarget)
-			throws InsufficientChargesException {
+			throws InsufficientChargesException, CantSpawnHereException {
 		Player myPlayer;
 		try {
 			myPlayer = infoPro.getPlayer();
@@ -472,6 +472,10 @@ public class GuiInternalEventListener implements GamePanelReactor {
 		}
 		if (!myPlayer.isDead() && myPlayer.getBlinksAvailable() > 0) {
 			try {
+				if (!infoPro.canBlinkTo(myPlayer.getPlayerMainFigure(),
+						blinkTarget)) {
+					throw new CantSpawnHereException(ObjectType.PLAYER);
+				}
 				client.sendEvent(new BlinkEvent(myPlayer.getPlayerId(),
 						blinkTarget));
 			} catch (WrongEventTypeException | MessageNotSupportedException e) {
