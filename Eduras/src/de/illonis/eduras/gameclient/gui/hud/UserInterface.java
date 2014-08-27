@@ -116,6 +116,7 @@ public class UserInterface implements GuiResizeListener {
 		new RemainingTimeFrame(this);
 		new RespawnTimeFrame(this);
 		new ResourceDisplay(this);
+		new BlinkDisplay(this);
 		pingDisplay = new PingDisplay(this);
 		notificationPanel = new NotificationPanel(this);
 		tipPanel = new TipPanel(this);
