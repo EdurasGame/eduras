@@ -732,6 +732,8 @@ public final class S {
 		 */
 		public static float sv_blink_distance = 100;
 
+		public static long sv_blink_cooldown = 3000;
+
 	}
 
 	/**

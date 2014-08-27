@@ -330,9 +330,10 @@ public class ServerLogic implements GameLogicInterface {
 				Player blinkingPlayer = gameInfo.getPlayerByOwnerId(blinkEvent
 						.getOwner());
 				if (blinkingPlayer.getBlinksAvailable() < 1
-						|| blinkingPlayer.isDead()) {
+						|| blinkingPlayer.isDead()
+						|| blinkingPlayer.getBlinkCooldown() > 0) {
 					L.log(Level.WARNING,
-							"Received blink event although there is no blink available or the player is dead!");
+							"Received blink event although there is no blink available or the player is dead or there is still cooldown on blink.");
 					break;
 				}
 				PlayerMainFigure blinkingMainFigure = blinkingPlayer
@@ -340,6 +341,7 @@ public class ServerLogic implements GameLogicInterface {
 
 				gameInfo.getEventTriggerer().changeBlinkChargesBy(
 						blinkingPlayer, -1);
+				blinkingPlayer.useBlink();
 
 				// check if the player tried to blink too far
 				try {

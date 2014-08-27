@@ -470,12 +470,14 @@ public class GuiInternalEventListener implements GamePanelReactor {
 			L.log(Level.WARNING, "Cannot find player!", e);
 			return;
 		}
-		if (!myPlayer.isDead() && myPlayer.getBlinksAvailable() > 0) {
+		if (!myPlayer.isDead() && myPlayer.getBlinksAvailable() > 0
+				&& myPlayer.getBlinkCooldown() <= 0) {
 			try {
 				if (!infoPro.canBlinkTo(myPlayer.getPlayerMainFigure(),
 						blinkTarget)) {
 					throw new CantSpawnHereException(ObjectType.PLAYER);
 				}
+				myPlayer.useBlink();
 				client.sendEvent(new BlinkEvent(myPlayer.getPlayerId(),
 						blinkTarget));
 			} catch (WrongEventTypeException | MessageNotSupportedException e) {

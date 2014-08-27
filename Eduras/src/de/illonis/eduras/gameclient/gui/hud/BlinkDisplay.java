@@ -12,6 +12,7 @@ import de.illonis.eduras.exceptions.ObjectNotFoundException;
 import de.illonis.eduras.gameclient.datacache.CacheException;
 import de.illonis.eduras.gameclient.datacache.CacheInfo.ImageKey;
 import de.illonis.eduras.gameclient.datacache.ImageCache;
+import de.illonis.eduras.settings.S;
 import de.illonis.eduras.units.InteractMode;
 
 public class BlinkDisplay extends CooldownGuiObject {
@@ -42,6 +43,9 @@ public class BlinkDisplay extends CooldownGuiObject {
 			g.drawString(getInfo().getPlayer().getBlinksAvailable() + "",
 					screenX + (1f / 4f) * blinkIcon.getWidth(), screenY
 							+ (1f / 4f) * blinkIcon.getHeight());
+
+			renderCooldown(g, screenX, screenY, blinkIcon.getWidth(),
+					blinkIcon.getHeight());
 		} catch (ObjectNotFoundException e) {
 			L.log(Level.WARNING, "Cannot find player!", e);
 		}
@@ -55,13 +59,16 @@ public class BlinkDisplay extends CooldownGuiObject {
 
 	@Override
 	long getCooldown() {
-		// TODO Auto-generated method stub
-		return 0;
+		try {
+			return Math.max(0, getInfo().getPlayer().getBlinkCooldown());
+		} catch (ObjectNotFoundException e) {
+			L.log(Level.WARNING, "Cannot find player!", e);
+			return 0;
+		}
 	}
 
 	@Override
 	long getCooldownTime() {
-		// TODO Auto-generated method stub
-		return 0;
+		return S.Server.sv_blink_cooldown;
 	}
 }
