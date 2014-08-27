@@ -40,7 +40,7 @@ public class Player {
 		lastBlink = 0;
 		currentMode = InteractMode.MODE_EGO;
 
-		blinksAvailable = 100;
+		blinksAvailable = 0;
 	}
 
 	/**
