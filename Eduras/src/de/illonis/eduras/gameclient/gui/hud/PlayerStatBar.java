@@ -89,9 +89,14 @@ public class PlayerStatBar extends RenderedGuiObject {
 		public void render(Graphics g2d) {
 			float yPosition = screenY + offset;
 
+			Rectangle playerStatBox = new Rectangle(screenX, yPosition,
+					statBarSize, statBarSize);
+			// fill black
+			g2d.setColor(Color.black);
+			g2d.fill(playerStatBox);
 			// draw frame
 			g2d.setColor(Color.white);
-			g2d.draw(new Rectangle(screenX, yPosition, statBarSize, statBarSize));
+			g2d.draw(playerStatBox);
 
 			g2d.setColor(Color.white);
 			g2d.drawString(player.getName(), screenX, yPosition);
@@ -197,6 +202,7 @@ public class PlayerStatBar extends RenderedGuiObject {
 
 	@Override
 	public void onGuiSizeChanged(int newWidth, int newHeight) {
+		statBarSize = PLAYER_BAR_SIZE * GameRenderer.getRenderScale();
 	}
 
 	@Override
