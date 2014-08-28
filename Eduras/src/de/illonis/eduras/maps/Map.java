@@ -392,6 +392,9 @@ public abstract class Map {
 		case "eduramus":
 			map = new Eduramus();
 			break;
+		case "tryfield":
+			map = new Tryfield();
+			break;
 		default:
 			throw new NoSuchMapException(mapName);
 		}
