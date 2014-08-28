@@ -91,8 +91,7 @@ public class ItemDisplay extends ClickableGuiElement implements
 			if (item.isEmpty()) {
 				continue;
 			}
-			Rectangle itemRect = new Rectangle(item.getX() + screenX,
-					item.getY() + screenY, buttonSize, buttonSize);
+
 			String idString = "#" + (item.getSlotId() + 1);
 			font.drawString(item.getX() + screenX + 1, item.getY() + screenY
 					- font.getLineHeight(), idString);
@@ -106,6 +105,7 @@ public class ItemDisplay extends ClickableGuiElement implements
 								+ screenY - font.getLineHeight(), ammoString);
 			}
 			g.setColor(Color.white);
+			Rectangle itemRect = item.getClickableRect();
 			if (item.hasImage())
 				g.drawImage(item.getItemImage(), itemRect.getX(),
 						itemRect.getY());
@@ -118,19 +118,28 @@ public class ItemDisplay extends ClickableGuiElement implements
 			}
 			g.draw(itemRect);
 		}
-
 	}
 
 	@Override
 	public void onGuiSizeChanged(int newWidth, int newHeight) {
+	}
 
+	@Override
+	public boolean mousePressed(int button, int x, int y) {
+		for (int i = 0; i < Inventory.MAX_CAPACITY; i++) {
+			if (itemSlots[i].isEmpty()
+					&& itemSlots[i].getClickableRect().contains(x, y)) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	@Override
 	public boolean mouseReleased(int button, int x, int y) {
 		for (int i = 0; i < Inventory.MAX_CAPACITY; i++) {
-			if (itemSlots[i].getClickableRect().contains(x, y)) {
-				L.info("User clicked on item " + i);
+			if (!itemSlots[i].isEmpty()
+					&& itemSlots[i].getClickableRect().contains(x, y)) {
 				itemClicked(i);
 				return true;
 			}
@@ -221,8 +230,8 @@ public class ItemDisplay extends ClickableGuiElement implements
 			this.y = lineHeight + OUTER_GAP[0]
 					+ ((int) buttonSize + lineHeight + ITEM_GAP)
 					* (slotId / (Inventory.MAX_CAPACITY / 2));
-			clickRect = new Rectangle(x + screenX, y + screenY, buttonSize,
-					buttonSize);
+			clickRect = new Rectangle(x + getScreenX(), y + getScreenY(),
+					buttonSize, buttonSize);
 		}
 
 		public void setItem(Item newItem) {
@@ -299,11 +308,19 @@ public class ItemDisplay extends ClickableGuiElement implements
 		}
 	}
 
+	float getScreenX() {
+		return screenX;
+	}
+
+	float getScreenY() {
+		return screenY;
+	}
+
 	@Override
 	public void onMouseOver(Vector2f p) {
-
 		for (int i = 0; i < Inventory.MAX_CAPACITY; i++) {
-			if (itemSlots[i].getClickableRect().contains(p.x, p.y)) {
+			if (!itemSlots[i].isEmpty()
+					&& itemSlots[i].getClickableRect().contains(p.x, p.y)) {
 				try {
 					getTooltipHandler().showItemTooltip(
 							p,
@@ -346,6 +363,7 @@ public class ItemDisplay extends ClickableGuiElement implements
 				itemSlots[i].updateClickRect(lineHeight);
 			}
 		} catch (CacheException e) {
+			System.out.println("no font");
 		}
 		Inventory playerInventory;
 		try {
