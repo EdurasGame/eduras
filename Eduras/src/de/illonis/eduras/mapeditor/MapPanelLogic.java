@@ -461,7 +461,7 @@ public class MapPanelLogic implements MapInteractor {
 			newObject.setPosition(o.getXPosition() + o.getShape().getWidth(),
 					o.getYPosition() + o.getShape().getHeight());
 			newObject.setzLayer(o.getzLayer());
-			newObject.setRefName("CopyOf" + o.getRefName());
+			newObject.setRefName("");
 			if (o instanceof DynamicPolygonObject) {
 				((DynamicPolygonObject) newObject)
 						.setColor(((DynamicPolygonObject) o).getColor());
@@ -480,7 +480,7 @@ public class MapPanelLogic implements MapInteractor {
 				newNode.setHeight(node.getHeight());
 				newNode.setResourceMultiplicator(node
 						.getResourceMultiplicator());
-				newNode.setRefName("CopyOf" + node.getRefName());
+				newNode.setRefName("");
 				newNode.setIsMainNode(node.isMainNode());
 				data.addBase(newNode);
 			} else {
@@ -493,7 +493,7 @@ public class MapPanelLogic implements MapInteractor {
 									+ spawn.getArea().getHeight(), spawn
 									.getArea().getWidth(), spawn.getArea()
 									.getHeight()), spawn.getTeaming());
-					newSpawn.setRefName("CopyOf" + spawn.getRefName());
+					newSpawn.setRefName("");
 					data.addSpawnPoint(newSpawn);
 				}
 			}
