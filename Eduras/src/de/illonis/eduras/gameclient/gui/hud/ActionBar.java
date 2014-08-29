@@ -80,17 +80,6 @@ public class ActionBar extends ClickableGuiElement implements TooltipTriggerer {
 	}
 
 	@Override
-	public boolean mousePressed(int button, int x, int y) {
-		if (currentPage == null)
-			return false;
-		float mouseX = x - screenX;
-		if (mouseX < buttonSize * numButtons) {
-			return true;
-		}
-		return false;
-	}
-
-	@Override
 	public boolean mouseReleased(int button, int x, int y) {
 		if (currentPage == null)
 			return false;
@@ -229,8 +218,10 @@ public class ActionBar extends ClickableGuiElement implements TooltipTriggerer {
 
 	@Override
 	public void onInteractModeChanged(SetInteractModeEvent setModeEvent) {
-		data.setCurrentActionSelected(-1);
-		setPage(PageNumber.MAIN);
+		if (setModeEvent.getOwner() == getInfo().getOwnerID()) {
+			data.setCurrentActionSelected(-1);
+			setPage(PageNumber.MAIN);
+		}
 	}
 
 	@Override
