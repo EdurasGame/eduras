@@ -218,8 +218,10 @@ public class ActionBar extends ClickableGuiElement implements TooltipTriggerer {
 
 	@Override
 	public void onInteractModeChanged(SetInteractModeEvent setModeEvent) {
-		data.setCurrentActionSelected(-1);
-		setPage(PageNumber.MAIN);
+		if (setModeEvent.getOwner() == getInfo().getOwnerID()) {
+			data.setCurrentActionSelected(-1);
+			setPage(PageNumber.MAIN);
+		}
 	}
 
 	@Override

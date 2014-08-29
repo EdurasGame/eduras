@@ -145,6 +145,16 @@ public class MiniMap extends ClickableGuiElement {
 					object.getHeight());
 		}
 	}
+	
+	@Override
+	public boolean mouseMoved(int oldx, int oldy, int newx, int newy) {
+		return true;
+	}
+
+	@Override
+	public boolean mousePressed(int button, int x, int y) {
+		return true;
+	}
 
 	@Override
 	public boolean mouseReleased(int button, int x, int y) {
