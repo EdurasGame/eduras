@@ -193,10 +193,10 @@ public class MapInputHandler extends InputAdapter {
 			interactor.editSelectedShape();
 			break;
 		case Input.KEY_M:
-			interactor.mirrorSelectedShape(EditablePolygon.X_AXIS);
+			interactor.mirrorSelectedElements(EditablePolygon.X_AXIS);
 			break;
 		case Input.KEY_N:
-			interactor.mirrorSelectedShape(EditablePolygon.Y_AXIS);
+			interactor.mirrorSelectedElements(EditablePolygon.Y_AXIS);
 			break;
 		case Input.KEY_C:
 			interactor.copySelectedElements();

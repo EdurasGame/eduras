@@ -90,7 +90,7 @@ public interface MapInteractor {
 
 	void rotateSelectedShapes(float degree);
 
-	void mirrorSelectedShape(int axis);
+	void mirrorSelectedElements(int axis);
 
 	void copySelectedElements();
 

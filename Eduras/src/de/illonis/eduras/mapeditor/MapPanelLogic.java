@@ -414,8 +414,30 @@ public class MapPanelLogic implements MapInteractor {
 	}
 
 	@Override
-	public void mirrorSelectedShape(int axis) {
+	public void mirrorSelectedElements(int axis) {
+		float minX = data.getWidth();
+		float maxX = 0;
+		float minY = data.getHeight();
+		float maxY = 0;
 		for (EditorPlaceable element : selectedElements) {
+			minX = Math.min(element.getXPosition(), minX);
+			minY = Math.min(element.getYPosition(), minY);
+			maxX = Math.max(element.getXPosition() + element.getWidth(), maxX);
+			maxY = Math.max(element.getYPosition() + element.getHeight(), maxY);
+		}
+		float centerX = (maxX + minX) /2;
+		float centerY = (maxY + minY) / 2;
+		for (EditorPlaceable element : selectedElements) {
+			if (axis == EditablePolygon.Y_AXIS) {
+				float dx = centerX - element.getXPosition();
+				element.setXPosition(element.getXPosition() + 2*dx
+						- element.getWidth());
+			}
+			if (axis == EditablePolygon.X_AXIS) {
+				float dy = centerY - element.getYPosition();
+				element.setYPosition(element.getYPosition() + 2*dy
+						- element.getHeight());
+			}
 			if (element instanceof DynamicPolygonObject) {
 				DynamicPolygonObject object = (DynamicPolygonObject) element;
 				EditablePolygon poly = EditablePolygon.fromShape(object
@@ -424,6 +446,7 @@ public class MapPanelLogic implements MapInteractor {
 				object.setPolygonVertices(poly.getVector2dfs());
 			}
 		}
+
 	}
 
 	@Override
