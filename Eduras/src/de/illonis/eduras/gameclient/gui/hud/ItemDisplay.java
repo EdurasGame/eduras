@@ -125,17 +125,6 @@ public class ItemDisplay extends ClickableGuiElement implements
 	}
 
 	@Override
-	public boolean mousePressed(int button, int x, int y) {
-		for (int i = 0; i < Inventory.MAX_CAPACITY; i++) {
-			if (itemSlots[i].isEmpty()
-					&& itemSlots[i].getClickableRect().contains(x, y)) {
-				return true;
-			}
-		}
-		return false;
-	}
-
-	@Override
 	public boolean mouseReleased(int button, int x, int y) {
 		for (int i = 0; i < Inventory.MAX_CAPACITY; i++) {
 			if (!itemSlots[i].isEmpty()

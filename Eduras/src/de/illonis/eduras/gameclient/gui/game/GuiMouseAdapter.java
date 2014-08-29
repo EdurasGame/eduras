@@ -31,6 +31,12 @@ public abstract class GuiMouseAdapter implements GuiClickReactor, MouseListener 
 		return panelLogic;
 	}
 
+	/**
+	 * Called when mouse focus of the game is lost and given to any gui element. You should cancel all
+	 * mouse interactions like scrolling and automatic shooting here.
+	 */
+	public abstract void mouseLost();
+
 	@Override
 	public void addClickableGuiElement(ClickableGuiElementInterface elem) {
 	}

@@ -34,6 +34,7 @@ public final class GuiMouseHandler extends GuiMouseAdapter implements
 	private final BuildModeMouseAdapter buildModeHandler;
 	private final DeadModeMouseAdapter deadModeHandler;
 	private final LinkedList<ClickableGuiElementInterface> clickListeners;
+	private boolean gameHasMouse;
 
 	private final LinkedList<TooltipTriggerer> triggerers;
 
@@ -41,6 +42,7 @@ public final class GuiMouseHandler extends GuiMouseAdapter implements
 
 	GuiMouseHandler(GamePanelLogic logic, GuiInternalEventListener reactor) {
 		super(logic, reactor);
+		gameHasMouse = true;
 		infoPro = EdurasInitializer.getInstance().getInformationProvider();
 		triggerers = new LinkedList<TooltipTriggerer>();
 		buildModeHandler = new BuildModeMouseAdapter(logic, reactor);
@@ -61,50 +63,12 @@ public final class GuiMouseHandler extends GuiMouseAdapter implements
 
 	@Override
 	public void mapClicked(Vector2f gamePos) {
-		Player player;
-		try {
-			player = infoPro.getPlayer();
-		} catch (ObjectNotFoundException e) {
-			L.log(Level.SEVERE, "Something terribly bad happened.", e);
-			return;
-		}
-		switch (player.getCurrentMode()) {
-		case MODE_EGO:
-			egoModeHandler.mapClicked(gamePos);
-			break;
-		case MODE_STRATEGY:
-			buildModeHandler.mapClicked(gamePos);
-			break;
-		case MODE_DEAD:
-			deadModeHandler.mapClicked(gamePos);
-			break;
-		default:
-			break;
-		}
+		getCurrentHandler().mapClicked(gamePos);
 	}
 
 	@Override
 	public void itemClicked(int slot) {
-		Player player;
-		try {
-			player = infoPro.getPlayer();
-		} catch (ObjectNotFoundException e1) {
-			L.log(Level.SEVERE, "Something terribly bad happened.", e1);
-			return;
-		}
-		switch (player.getCurrentMode()) {
-		case MODE_EGO:
-			egoModeHandler.itemClicked(slot);
-			break;
-		case MODE_STRATEGY:
-			buildModeHandler.itemClicked(slot);
-			break;
-		case MODE_DEAD:
-			deadModeHandler.itemClicked(slot);
-			break;
-		default:
-			break;
-		}
+		getCurrentHandler().itemClicked(slot);
 	}
 
 	@Override
@@ -117,6 +81,13 @@ public final class GuiMouseHandler extends GuiMouseAdapter implements
 		clickListeners.remove(elem);
 	}
 
+	private void loseGameFocus() {
+		if (gameHasMouse) {
+			getCurrentHandler().mouseLost();
+			gameHasMouse = false;
+		}
+	}
+
 	@Override
 	public void mouseClicked(int button, int x, int y, int clickCount) {
 		for (Iterator<ClickableGuiElementInterface> iterator = clickListeners
@@ -124,31 +95,33 @@ public final class GuiMouseHandler extends GuiMouseAdapter implements
 			ClickableGuiElementInterface nextReactor = iterator.next();
 			if (nextReactor.isActive()
 					&& nextReactor.getBounds().contains(x, y)) {
-				if (nextReactor.mouseClicked(button, x, y, clickCount))
+				if (nextReactor.mouseClicked(button, x, y, clickCount)) {
+					loseGameFocus();
 					return;
+				}
 			}
 		}
+		getCurrentHandler().mouseClicked(button, x, y, clickCount);
+	}
 
+	private GuiMouseAdapter getCurrentHandler() {
 		Player player;
 		try {
 			player = infoPro.getPlayer();
 		} catch (ObjectNotFoundException e) {
 			L.log(Level.SEVERE, "Something terribly bad happened.", e);
-			return;
+			return null;
 		}
-
 		switch (player.getCurrentMode()) {
 		case MODE_EGO:
-			egoModeHandler.mouseClicked(button, x, y, clickCount);
-			break;
+			return egoModeHandler;
 		case MODE_STRATEGY:
-			buildModeHandler.mouseClicked(button, x, y, clickCount);
-			break;
+			return buildModeHandler;
 		case MODE_DEAD:
-			deadModeHandler.mouseClicked(button, x, y, clickCount);
-			break;
+			return deadModeHandler;
 		default:
-			break;
+			// hopefully never happens
+			return null;
 		}
 	}
 
@@ -168,31 +141,14 @@ public final class GuiMouseHandler extends GuiMouseAdapter implements
 			ClickableGuiElementInterface nextReactor = iterator.next();
 			if (nextReactor.isActive()
 					&& (nextReactor.getBounds().contains(newx, newy))) {
-				if (nextReactor.mouseMoved(oldx, oldy, newx, newy))
+				if (nextReactor.mouseMoved(oldx, oldy, newx, newy)) {
+					loseGameFocus();
 					return;
+				}
 			}
 		}
-
-		Player player;
-		try {
-			player = infoPro.getPlayer();
-		} catch (ObjectNotFoundException e) {
-			L.log(Level.SEVERE, "Something terribly bad happened.", e);
-			return;
-		}
-		switch (player.getCurrentMode()) {
-		case MODE_EGO:
-			egoModeHandler.mouseMoved(oldx, oldy, newx, newy);
-			break;
-		case MODE_STRATEGY:
-			buildModeHandler.mouseMoved(oldx, oldy, newx, newy);
-			break;
-		case MODE_DEAD:
-			deadModeHandler.mouseMoved(oldx, oldy, newx, newy);
-			break;
-		default:
-			break;
-		}
+		gameHasMouse = true;
+		getCurrentHandler().mouseMoved(oldx, oldy, newx, newy);
 	}
 
 	@Override
@@ -212,30 +168,13 @@ public final class GuiMouseHandler extends GuiMouseAdapter implements
 			if (nextReactor.isActive()
 					&& (nextReactor.getBounds().contains(newx, newy))) {
 				if (nextReactor.mouseDragged(oldx, oldy, newx, newy)) {
+					loseGameFocus();
 					return;
 				}
 			}
 		}
-		Player player;
-		try {
-			player = infoPro.getPlayer();
-		} catch (ObjectNotFoundException e1) {
-			L.log(Level.SEVERE, "Something terribly bad happened.", e1);
-			return;
-		}
-		switch (player.getCurrentMode()) {
-		case MODE_EGO:
-			egoModeHandler.mouseDragged(oldx, oldy, newx, newy);
-			break;
-		case MODE_STRATEGY:
-			buildModeHandler.mouseDragged(oldx, oldy, newx, newy);
-			break;
-		case MODE_DEAD:
-			deadModeHandler.mouseDragged(oldx, oldy, newx, newy);
-			break;
-		default:
-			break;
-		}
+		gameHasMouse = true;
+		getCurrentHandler().mouseDragged(oldx, oldy, newx, newy);
 	}
 
 	@Override
@@ -246,31 +185,13 @@ public final class GuiMouseHandler extends GuiMouseAdapter implements
 			if (nextReactor.isActive()
 					&& nextReactor.getBounds().contains(x, y)) {
 				if (nextReactor.mouseReleased(button, x, y)) {
-					// TODO: cancel shooting if releasing mouse anywhere :)
+					loseGameFocus();
 					return;
 				}
 			}
 		}
-		Player player;
-		try {
-			player = infoPro.getPlayer();
-		} catch (ObjectNotFoundException e) {
-			L.log(Level.SEVERE, "Something terribly bad happened.", e);
-			return;
-		}
-		switch (player.getCurrentMode()) {
-		case MODE_EGO:
-			egoModeHandler.mouseReleased(button, x, y);
-			break;
-		case MODE_STRATEGY:
-			buildModeHandler.mouseReleased(button, x, y);
-			break;
-		case MODE_DEAD:
-			deadModeHandler.mouseReleased(button, x, y);
-			break;
-		default:
-			break;
-		}
+		gameHasMouse = true;
+		getCurrentHandler().mouseReleased(button, x, y);
 	}
 
 	@Override
@@ -281,31 +202,14 @@ public final class GuiMouseHandler extends GuiMouseAdapter implements
 			ClickableGuiElementInterface nextReactor = iterator.next();
 			if (nextReactor.isActive()
 					&& nextReactor.getBounds().contains(mouse.x, mouse.y)) {
-				if (nextReactor.mouseWheelMoved(change))
+				if (nextReactor.mouseWheelMoved(change)) {
+					loseGameFocus();
 					return;
+				}
 			}
 		}
-		Player player;
-		try {
-			player = infoPro.getPlayer();
-		} catch (ObjectNotFoundException e) {
-			L.log(Level.SEVERE, "Something terribly bad happened.", e);
-			return;
-		}
-
-		switch (player.getCurrentMode()) {
-		case MODE_EGO:
-			egoModeHandler.mouseWheelMoved(change);
-			break;
-		case MODE_STRATEGY:
-			buildModeHandler.mouseWheelMoved(change);
-			break;
-		case MODE_DEAD:
-			deadModeHandler.mouseWheelMoved(change);
-			break;
-		default:
-			break;
-		}
+		gameHasMouse = true;
+		getCurrentHandler().mouseWheelMoved(change);
 	}
 
 	@Override
@@ -316,29 +220,17 @@ public final class GuiMouseHandler extends GuiMouseAdapter implements
 			if (nextReactor.isActive()
 					&& nextReactor.getBounds().contains(x, y)) {
 				if (nextReactor.mousePressed(button, x, y)) {
+					loseGameFocus();
 					return;
 				}
 			}
 		}
-		Player player;
-		try {
-			player = infoPro.getPlayer();
-		} catch (ObjectNotFoundException e) {
-			L.log(Level.SEVERE, "Something terribly bad happened.", e);
-			return;
-		}
-		switch (player.getCurrentMode()) {
-		case MODE_EGO:
-			egoModeHandler.mousePressed(button, x, y);
-			break;
-		case MODE_STRATEGY:
-			buildModeHandler.mousePressed(button, x, y);
-			break;
-		case MODE_DEAD:
-			deadModeHandler.mousePressed(button, x, y);
-			break;
-		default:
-			break;
-		}
+		gameHasMouse = true;
+		getCurrentHandler().mousePressed(button, x, y);
+	}
+
+	@Override
+	public void mouseLost() {
+		// never received here.
 	}
 }
