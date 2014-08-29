@@ -118,7 +118,6 @@ public class MapRenderer {
 					left.rotate(300, end);
 					g.drawLine(end.x, end.y, right.x, right.y);
 					g.drawLine(end.x, end.y, left.x, left.y);
-
 				}
 			}
 		}
