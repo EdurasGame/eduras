@@ -401,9 +401,7 @@ public class MapPanelLogic implements MapInteractor {
 	}
 
 	@Override
-	public boolean rotateSelectedShapes(float degree) {
-		if (selectedElements.isEmpty())
-			return false;
+	public void rotateSelectedShapes(float degree) {
 		for (EditorPlaceable element : selectedElements) {
 			if (element instanceof DynamicPolygonObject) {
 				DynamicPolygonObject object = (DynamicPolygonObject) element;
@@ -411,18 +409,12 @@ public class MapPanelLogic implements MapInteractor {
 						.getShape());
 				poly.rotate(degree);
 				object.setPolygonVertices(poly.getVector2dfs());
-
-			} else {
-				return false;
 			}
 		}
-		return true;
 	}
 
 	@Override
-	public boolean mirrorSelectedShape(int axis) {
-		if (selectedElements.isEmpty())
-			return false;
+	public void mirrorSelectedShape(int axis) {
 		for (EditorPlaceable element : selectedElements) {
 			if (element instanceof DynamicPolygonObject) {
 				DynamicPolygonObject object = (DynamicPolygonObject) element;
@@ -430,10 +422,8 @@ public class MapPanelLogic implements MapInteractor {
 						.getShape());
 				poly.mirror(axis);
 				object.setPolygonVertices(poly.getVector2dfs());
-			} else
-				return false;
+			}
 		}
-		return true;
 	}
 
 	@Override

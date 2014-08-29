@@ -82,20 +82,6 @@ public class MapRenderer {
 				portals.add((Portal) o);
 			}
 		}
-		if (interactor.getInteractType() == InteractType.PLACE_SHAPE) {
-			DynamicPolygonObject poly = data.getPlacingObject();
-			if (poly != null) {
-				Shape shape = poly.getShape();
-				g.setColor(SHAPE_PLACE_COLOR);
-				Point mouse = interactor.getMouseLocation();
-				Vector2f mapPoint = interactor
-						.computeGuiPointToGameCoordinate(new Vector2f(mouse
-								.getX(), mouse.getY()));
-				g.translate(mapPoint.getX() - shape.getWidth() / 2,
-						mapPoint.getY() - shape.getHeight() / 2);
-				g.fill(shape);
-			}
-		}
 		if (data.isShowNodeConnections()) {
 			g.setLineWidth(1f);
 			g.setColor(Color.yellow);
@@ -136,10 +122,23 @@ public class MapRenderer {
 				}
 			}
 		}
-		
 		for (EditorPlaceable element : selected) {
 			renderSelection(element.getXPosition(), element.getYPosition(),
 					element.getWidth(), element.getHeight(), g);
+		}
+		if (interactor.getInteractType() == InteractType.PLACE_SHAPE) {
+			DynamicPolygonObject poly = data.getPlacingObject();
+			if (poly != null) {
+				Shape shape = poly.getShape();
+				g.setColor(SHAPE_PLACE_COLOR);
+				Point mouse = interactor.getMouseLocation();
+				Vector2f mapPoint = interactor
+						.computeGuiPointToGameCoordinate(new Vector2f(mouse
+								.getX(), mouse.getY()));
+				g.translate(mapPoint.getX() - shape.getWidth() / 2,
+						mapPoint.getY() - shape.getHeight() / 2);
+				g.fill(shape);
+			}
 		}
 		g.resetTransform();
 		if (interactor.getDragRect().getWidth() > 0) {

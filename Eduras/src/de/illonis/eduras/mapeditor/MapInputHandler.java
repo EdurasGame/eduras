@@ -64,7 +64,6 @@ public class MapInputHandler extends InputAdapter {
 
 	@Override
 	public void mouseWheelMoved(int change) {
-		boolean rotated = false;
 		if (interactor.getInput().isKeyDown(Input.KEY_LCONTROL)) {
 			float amount;
 			if (change < 0) {
@@ -75,9 +74,8 @@ public class MapInputHandler extends InputAdapter {
 			if (interactor.getInput().isKeyDown(Input.KEY_LSHIFT)) {
 				amount *= 10;
 			}
-			rotated = interactor.rotateSelectedShapes(amount);
-		}
-		if (!rotated) {
+			interactor.rotateSelectedShapes(amount);
+		} else {
 			float amount;
 			if (change > 0) {
 				amount = 0.1f;

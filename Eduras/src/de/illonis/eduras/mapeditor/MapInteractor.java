@@ -88,9 +88,9 @@ public interface MapInteractor {
 
 	Input getInput();
 
-	boolean rotateSelectedShapes(float degree);
+	void rotateSelectedShapes(float degree);
 
-	boolean mirrorSelectedShape(int axis);
+	void mirrorSelectedShape(int axis);
 
 	void copySelectedElements();
 
