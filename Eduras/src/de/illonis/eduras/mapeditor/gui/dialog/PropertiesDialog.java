@@ -17,7 +17,6 @@ import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JColorChooser;
 import javax.swing.JComboBox;
-import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
@@ -59,7 +58,7 @@ import de.illonis.eduras.maps.persistence.MapParser;
  * @author illonis
  * 
  */
-public class PropertiesDialog extends JDialog implements ItemListener,
+public class PropertiesDialog extends ESCDialog implements ItemListener,
 		ActionListener, ChangeListener {
 
 	private static final long serialVersionUID = 1L;

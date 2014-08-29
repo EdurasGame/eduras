@@ -10,7 +10,6 @@ import java.util.List;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
-import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
@@ -33,7 +32,7 @@ import de.illonis.eduras.mapeditor.gui.EditorWindow;
  * @author illonis
  * 
  */
-public class MapPropertiesDialog extends JDialog implements ActionListener {
+public class MapPropertiesDialog extends ESCDialog implements ActionListener {
 
 	private static final long serialVersionUID = 1L;
 
