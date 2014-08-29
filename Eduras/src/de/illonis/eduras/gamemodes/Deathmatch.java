@@ -287,6 +287,12 @@ public class Deathmatch extends BasicGameMode {
 				// do nothing
 			}
 			blinkTimer = null;
+
+			// reset blink count for every player
+			for (Player player : gameInfo.getPlayers()) {
+				gameInfo.getEventTriggerer().changeBlinkChargesBy(player,
+						-player.getBlinksAvailable());
+			}
 		}
 	}
 
