@@ -96,10 +96,8 @@ public class PropertiesDialog extends ESCDialog implements ItemListener,
 	 *            the node.
 	 */
 	public PropertiesDialog(EditorWindow parent, NodeData node) {
-		this(parent);
+		this(parent, (ReferencedEntity) node);
 		this.node = node;
-		this.entity = node;
-		addPositionTab();
 		addNeutralBaseTab();
 	}
 
@@ -112,10 +110,8 @@ public class PropertiesDialog extends ESCDialog implements ItemListener,
 	 *            the spawnarea.
 	 */
 	public PropertiesDialog(EditorWindow window, SpawnPosition spawn) {
-		this(window);
+		this(window, (ReferencedEntity) spawn);
 		this.spawn = spawn;
-		this.entity = spawn;
-		addPositionTab();
 		addSpawnTab();
 	}
 
@@ -128,11 +124,10 @@ public class PropertiesDialog extends ESCDialog implements ItemListener,
 	 *            the object.
 	 */
 	public PropertiesDialog(EditorWindow parent, GameObject object) {
-		this(parent);
+		this(parent, (ReferencedEntity) object);
 		this.object = object;
-		this.entity = object;
 		addPropertiesTab();
-		addPositionTab();
+
 		if (object instanceof DynamicPolygonObject) {
 			addColorTab(((DynamicPolygonObject) object).getColor());
 		} else if (object instanceof Portal) {
@@ -140,8 +135,9 @@ public class PropertiesDialog extends ESCDialog implements ItemListener,
 		}
 	}
 
-	private PropertiesDialog(EditorWindow parent) {
+	private PropertiesDialog(EditorWindow parent, ReferencedEntity element) {
 		super(parent);
+		entity = element;
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		setModal(false);
 		tabbedPane = new JTabbedPane();
@@ -157,6 +153,7 @@ public class PropertiesDialog extends ESCDialog implements ItemListener,
 				getContentPane());
 		getContentPane().add(tabbedPane);
 		setMinimumSize(MIN_SIZE);
+		addGeneralTab();
 	}
 
 	private void updateTitle() {
@@ -345,7 +342,7 @@ public class PropertiesDialog extends ESCDialog implements ItemListener,
 		}
 	}
 
-	private void addPositionTab() {
+	private void addGeneralTab() {
 		int x = getItemX();
 		int y = getItemY();
 		MapData data = MapData.getInstance();
