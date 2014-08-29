@@ -6,7 +6,7 @@ package de.illonis.eduras.mapeditor;
  * @author illonis
  * 
  */
-public interface EditorPlaceable {
+public interface EditorPlaceable extends Referencable {
 
 	float getXPosition();
 

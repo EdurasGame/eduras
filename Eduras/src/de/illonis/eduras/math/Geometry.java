@@ -49,6 +49,32 @@ public class Geometry {
 	}
 
 	/**
+	 * Returns true if first rectangle completely contains second rectangle.<br>
+	 * This method is required as slicks inbuild method does not work for
+	 * rectangles.
+	 * 
+	 * @param a
+	 *            first rectangle.
+	 * @param b
+	 *            second rectangle.
+	 * @return true if a contains b.
+	 */
+	public static boolean rectangleContains(Rectangle a, Rectangle b) {
+		float ax = a.getX();
+		float ay = a.getY();
+		float aw = a.getWidth();
+		float ah = a.getHeight();
+
+		float bx = b.getX();
+		float by = b.getY();
+		float bw = b.getWidth();
+		float bh = b.getHeight();
+
+		return ax < bx && (bx + bw) < (ax + aw) && ay < by
+				&& (by + bh) < (ay + ah);
+	}
+
+	/**
 	 * Converts given degree value to radian.
 	 * 
 	 * @param degree
