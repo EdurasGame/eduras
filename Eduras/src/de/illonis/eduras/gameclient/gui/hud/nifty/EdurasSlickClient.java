@@ -60,6 +60,9 @@ public class EdurasSlickClient implements GameControllerBridge {
 			throw new IllegalStateException("Cannot start gui more than once!");
 		game = new Game();
 		gameContainer = new AppGameContainer(game);
+		String[] icons = { "res/images/icon16.png", "res/images/icon24.png",
+				"res/images/icon32.png", "res/images/icon64.png" };
+		gameContainer.setIcons(icons);
 		DisplayMode currentMode = Display.getDesktopDisplayMode();
 		if (S.Client.windowed) {
 			gameContainer.setDisplayMode(800, 600, false);
