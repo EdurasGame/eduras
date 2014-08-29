@@ -35,6 +35,7 @@ public final class GuiMouseHandler extends GuiMouseAdapter implements
 	private final DeadModeMouseAdapter deadModeHandler;
 	private final LinkedList<ClickableGuiElementInterface> clickListeners;
 	private boolean gameHasMouse;
+	private GuiMouseAdapter lastHandler;
 
 	private final LinkedList<TooltipTriggerer> triggerers;
 
@@ -43,6 +44,7 @@ public final class GuiMouseHandler extends GuiMouseAdapter implements
 	GuiMouseHandler(GamePanelLogic logic, GuiInternalEventListener reactor) {
 		super(logic, reactor);
 		gameHasMouse = true;
+		lastHandler = null;
 		infoPro = EdurasInitializer.getInstance().getInformationProvider();
 		triggerers = new LinkedList<TooltipTriggerer>();
 		buildModeHandler = new BuildModeMouseAdapter(logic, reactor);
@@ -112,17 +114,28 @@ public final class GuiMouseHandler extends GuiMouseAdapter implements
 			L.log(Level.SEVERE, "Something terribly bad happened.", e);
 			return null;
 		}
+		GuiMouseAdapter handler;
 		switch (player.getCurrentMode()) {
 		case MODE_EGO:
-			return egoModeHandler;
+			handler = egoModeHandler;
+			break;
 		case MODE_STRATEGY:
-			return buildModeHandler;
+			handler = buildModeHandler;
+			break;
 		case MODE_DEAD:
-			return deadModeHandler;
+			handler = deadModeHandler;
+			break;
 		default:
 			// hopefully never happens
+			lastHandler.mouseLost();
 			return null;
 		}
+		if (!handler.equals(lastHandler)) {
+			if (lastHandler != null)
+				lastHandler.mouseLost();
+			lastHandler = handler;
+		}
+		return handler;
 	}
 
 	@Override
