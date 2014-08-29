@@ -307,7 +307,7 @@ public class PropertiesDialog extends ESCDialog implements ItemListener,
 		if (object != null)
 			return (int) object.getXPosition();
 		if (node != null)
-			return (int) node.getX();
+			return (int) node.getXPosition();
 		if (spawn != null) {
 			return (int) spawn.getArea().getX();
 		}
@@ -318,7 +318,7 @@ public class PropertiesDialog extends ESCDialog implements ItemListener,
 		if (object != null)
 			return (int) object.getYPosition();
 		if (node != null)
-			return (int) node.getY();
+			return (int) node.getYPosition();
 		if (spawn != null) {
 			return (int) spawn.getArea().getY();
 		}
@@ -329,7 +329,7 @@ public class PropertiesDialog extends ESCDialog implements ItemListener,
 		if (object != null)
 			object.setXPosition(x);
 		if (node != null)
-			node.setX(x);
+			node.setXPosition(x);
 		if (spawn != null) {
 			spawn.getArea().setX(x);
 		}
@@ -339,7 +339,7 @@ public class PropertiesDialog extends ESCDialog implements ItemListener,
 		if (object != null)
 			object.setYPosition(y);
 		if (node != null)
-			node.setY(y);
+			node.setYPosition(y);
 		if (spawn != null) {
 			spawn.getArea().setY(y);
 		}

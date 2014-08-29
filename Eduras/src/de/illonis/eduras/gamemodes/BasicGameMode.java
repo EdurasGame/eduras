@@ -169,7 +169,7 @@ public abstract class BasicGameMode implements GameMode {
 			int nodeid = nodeData.getId();
 			int objectId = gameInfo.getEventTriggerer().createObjectAt(
 					ObjectType.NEUTRAL_BASE,
-					new Vector2df(nodeData.getX(), nodeData.getY()), -1);
+					new Vector2df(nodeData.getXPosition(), nodeData.getYPosition()), -1);
 
 			Base base;
 			try {

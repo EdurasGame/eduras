@@ -1,17 +1,16 @@
 package de.illonis.eduras.mapeditor;
 
 import java.io.File;
+import java.util.List;
 
 import org.newdawn.slick.Input;
 import org.newdawn.slick.geom.Point;
+import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.Vector2f;
 
 import de.illonis.eduras.ObjectFactory.ObjectType;
 import de.illonis.eduras.gameclient.gui.game.GameCamera;
-import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.gameobjects.MoveableGameObject.Direction;
-import de.illonis.eduras.maps.NodeData;
-import de.illonis.eduras.maps.SpawnPosition;
 
 /**
  * Provides interaction with the edited map.
@@ -27,9 +26,12 @@ public interface MapInteractor {
 	 */
 	@SuppressWarnings("javadoc")
 	public enum InteractType {
-		PLACE_BASE, PLACE_SPAWN, ROTATE_SHAPE, PLACE_OBJECT, DEFAULT,
-		PLACE_SHAPE, EDIT_SHAPE;
+		PLACE_BASE, PLACE_SPAWN, ROTATE_SHAPE, PLACE_OBJECT, DEFAULT, PLACE_SHAPE, EDIT_SHAPE;
 	}
+
+	void setDragRect(Rectangle rect);
+
+	Rectangle getDragRect();
 
 	void setInteractType(InteractType type);
 
@@ -56,17 +58,9 @@ public interface MapInteractor {
 
 	void setZoom(float factor);
 
-	void dragThingAt(int guiX, int guiY, int xDiff, int yDiff);
-
-	void showPropertiesOfThingAt(int guiX, int guiY);
+	void showPropertiesOfSelected();
 
 	boolean isObjectAt(int guiX, int guiY);
-
-	GameObject getObjectAt(int guiX, int guiY);
-
-	NodeData getBaseAt(int guiX, int guiY);
-
-	SpawnPosition getSpawnPointAt(int guiX, int guiY);
 
 	void setSpawnType(ObjectType selectedValue);
 
@@ -84,9 +78,9 @@ public interface MapInteractor {
 
 	boolean isSpawnPointAt(int guiX, int guiY);
 
-	void deleteAtMouse();
+	void deleteSelected();
 
-	void editShapeAtMouse();
+	void editSelectedShape();
 
 	void importShape(File file);
 
@@ -94,10 +88,24 @@ public interface MapInteractor {
 
 	Input getInput();
 
-	boolean rotateShapeAtMouse(float degree);
+	boolean rotateSelectedShapes(float degree);
 
-	boolean mirrorShapeAtMouse(int axis);
-	
-	void copyElementAtMouse();
+	boolean mirrorSelectedShape(int axis);
+
+	void copySelectedElements();
+
+	boolean selectAt(int x, int y);
+
+	boolean selectIn(Rectangle rect, boolean add);
+
+	void dragSelected(int xDiff, int yDiff);
+
+	List<EditorPlaceable> getSelectedElements();
+
+	void clearSelection();
+
+	void toggleSelectionAt(int x, int y);
+
+	boolean isSelected(int x, int y);
 
 }

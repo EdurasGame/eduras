@@ -10,6 +10,7 @@ import de.illonis.eduras.ReferencedEntity;
 import de.illonis.eduras.gameobjects.Base;
 import de.illonis.eduras.gameobjects.Base.BaseType;
 import de.illonis.eduras.gameobjects.NeutralArea;
+import de.illonis.eduras.mapeditor.EditorPlaceable;
 
 /**
  * Represents Edura! nodes on a map as they are read from a file.
@@ -17,7 +18,7 @@ import de.illonis.eduras.gameobjects.NeutralArea;
  * @author Florian 'Ren' Mai <florian.ren.mai@googlemail.com>
  * 
  */
-public class NodeData extends ReferencedEntity {
+public class NodeData extends ReferencedEntity implements EditorPlaceable {
 
 	private final Rectangle area;
 	private final int id;
@@ -103,15 +104,18 @@ public class NodeData extends ReferencedEntity {
 	 * 
 	 * @return x
 	 */
-	public float getX() {
+	@Override
+	public float getXPosition() {
 		return area.getX();
 	}
 
-	public void setX(float x) {
+	@Override
+	public void setXPosition(float x) {
 		area.setX(x);
 	}
 
-	public void setY(float y) {
+	@Override
+	public void setYPosition(float y) {
 		area.setY(y);
 	}
 
@@ -136,7 +140,8 @@ public class NodeData extends ReferencedEntity {
 	 * 
 	 * @return y
 	 */
-	public float getY() {
+	@Override
+	public float getYPosition() {
 		return area.getY();
 	}
 
@@ -211,5 +216,11 @@ public class NodeData extends ReferencedEntity {
 	@Override
 	public String toString() {
 		return getRefName();
+	}
+
+	@Override
+	public void setPosition(float x, float y) {
+		setXPosition(x);
+		setYPosition(y);
 	}
 }
