@@ -8,7 +8,6 @@ import javax.swing.BorderFactory;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
-import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
@@ -29,7 +28,7 @@ import de.illonis.eduras.maps.NodeData;
  * @author illonis
  * 
  */
-public class ManageNodesDialog extends JDialog implements ActionListener {
+public class ManageNodesDialog extends ESCDialog implements ActionListener {
 
 	private static final long serialVersionUID = 1L;
 	private final MapData data;

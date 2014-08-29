@@ -158,7 +158,7 @@ public class EditorMenu extends JMenuBar implements ActionListener {
 		} else if (item == shapeCreator) {
 			ShapeCreator.main(new String[] {});
 		} else if (item == controls) {
-			ControlsInfo info = new ControlsInfo();
+			ControlsInfo info = new ControlsInfo(window);
 			info.setVisible(true);
 		} else if (item == validate) {
 			ValidateDialog dialog = new ValidateDialog(window);

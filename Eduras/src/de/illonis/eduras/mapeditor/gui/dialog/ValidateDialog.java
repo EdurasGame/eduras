@@ -8,7 +8,6 @@ import java.awt.event.ComponentListener;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
-import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
@@ -24,7 +23,7 @@ import de.illonis.eduras.mapeditor.validate.ValidateTask;
  * @author illonis
  * 
  */
-public class ValidateDialog extends JDialog implements ComponentListener {
+public class ValidateDialog extends ESCDialog implements ComponentListener {
 
 	private static final long serialVersionUID = 1L;
 	private final TaskResultPanel[] panels;

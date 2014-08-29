@@ -25,6 +25,7 @@ public class ShapeEditInputHandler extends InputAdapter {
 	private final MapInteractor interactor;
 	private final MapData data;
 	private boolean dragging;
+	private boolean scrolling;
 
 	private boolean addBefore = false;
 	private Vector2f nearest;
@@ -34,6 +35,7 @@ public class ShapeEditInputHandler extends InputAdapter {
 	ShapeEditInputHandler(MapInteractor panelLogic) {
 		this.interactor = panelLogic;
 		dragging = false;
+		scrolling = false;
 		data = MapData.getInstance();
 	}
 
@@ -80,6 +82,10 @@ public class ShapeEditInputHandler extends InputAdapter {
 
 	@Override
 	public void mouseDragged(int oldx, int oldy, int newx, int newy) {
+		if (scrolling) {
+			interactor.scroll(oldx - newx, oldy - newy);
+			return;
+		}
 		if (dragging && hover != null) {
 			Vector2f coordPoint = interactor
 					.computeGuiPointToGameCoordinate(new Vector2f(newx, newy));
@@ -91,10 +97,16 @@ public class ShapeEditInputHandler extends InputAdapter {
 	public void mousePressed(int button, int x, int y) {
 		if (hover != null && button == Input.MOUSE_LEFT_BUTTON)
 			dragging = true;
+		else if (button == Input.MOUSE_RIGHT_BUTTON) {
+			scrolling = true;
+		}
 	}
 
 	@Override
 	public void mouseReleased(int button, int x, int y) {
+		if (scrolling) {
+			scrolling = false;
+		}
 		if (dragging) {
 			hover = null;
 			dragging = false;
@@ -113,6 +125,8 @@ public class ShapeEditInputHandler extends InputAdapter {
 				}
 				break;
 			case Input.MOUSE_RIGHT_BUTTON:
+				if (!trySelectHoverVert())
+					break;
 				if (hover != null) {
 					data.getEditShape().removeVector2df(hover);
 					hover = null;

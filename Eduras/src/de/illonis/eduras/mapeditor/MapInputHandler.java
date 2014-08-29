@@ -1,6 +1,7 @@
 package de.illonis.eduras.mapeditor;
 
 import org.newdawn.slick.Input;
+import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.Vector2f;
 import org.newdawn.slick.util.InputAdapter;
 
@@ -17,18 +18,22 @@ import de.illonis.eduras.shapecreator.EditablePolygon;
 public class MapInputHandler extends InputAdapter {
 
 	enum InteractMode {
-		SCROLL, DRAG, NONE;
+		SCROLL, DRAG, NONE, DRAG_SELECT;
 	}
 
 	private InteractMode mode;
 
 	private final StatusListener status;
 	private final MapInteractor interactor;
+	private Rectangle dragRect;
+	private Vector2f startPos;
 
 	MapInputHandler(MapInteractor interactor, StatusListener status) {
 		this.status = status;
 		this.interactor = interactor;
+		dragRect = new Rectangle(0, 0, 0, 0);
 		mode = InteractMode.NONE;
+		startPos = new Vector2f();
 	}
 
 	@Override
@@ -37,14 +42,28 @@ public class MapInputHandler extends InputAdapter {
 			mode = InteractMode.SCROLL;
 		} else if (button == Input.MOUSE_LEFT_BUTTON) {
 			if (interactor.isAnythingAt(x, y)) {
-				mode = InteractMode.DRAG;
+				if (interactor.getInput().isKeyDown(Input.KEY_LSHIFT)) {
+					interactor.toggleSelectionAt(x, y);
+				} else {
+					if (interactor.isSelected(x, y)) {
+						mode = InteractMode.DRAG;
+					} else {
+						interactor.selectAt(x, y);
+						mode = InteractMode.DRAG;
+					}
+				}
+			} else {
+				mode = InteractMode.DRAG_SELECT;
+				dragRect.setLocation(x, y);
+				dragRect.setSize(0, 0);
+				startPos.set(x, y);
+				interactor.setDragRect(dragRect);
 			}
 		}
 	}
 
 	@Override
 	public void mouseWheelMoved(int change) {
-		boolean rotated = false;
 		if (interactor.getInput().isKeyDown(Input.KEY_LCONTROL)) {
 			float amount;
 			if (change < 0) {
@@ -55,9 +74,8 @@ public class MapInputHandler extends InputAdapter {
 			if (interactor.getInput().isKeyDown(Input.KEY_LSHIFT)) {
 				amount *= 10;
 			}
-			rotated = interactor.rotateShapeAtMouse(amount);
-		}
-		if (!rotated) {
+			interactor.rotateSelectedShapes(amount);
+		} else {
 			float amount;
 			if (change > 0) {
 				amount = 0.1f;
@@ -71,44 +89,57 @@ public class MapInputHandler extends InputAdapter {
 	@Override
 	public void mouseClicked(int button, int x, int y, int clickCount) {
 		if (button == Input.MOUSE_RIGHT_BUTTON) {
-			if (interactor.getInteractType() == InteractType.PLACE_SHAPE) {
+			if (interactor.getInteractType() == InteractType.PLACE_SHAPE
+					|| interactor.getInteractType() == InteractType.PLACE_OBJECT
+					|| interactor.getInteractType() == InteractType.PLACE_BASE
+					|| interactor.getInteractType() == InteractType.PLACE_SPAWN) {
 				interactor.setInteractType(InteractType.DEFAULT);
 				MapData.getInstance().setPlacingObject(null);
 			} else {
-				interactor.showPropertiesOfThingAt(x, y);
-			}
-		} else if (button == Input.MOUSE_LEFT_BUTTON) {
-			if (mode == InteractMode.NONE) {
-				if (interactor.getInteractType() == InteractType.PLACE_SHAPE) {
-					interactor.placeShapeAt(x, y);
-				}
+				interactor.selectAt(x, y);
+				interactor.showPropertiesOfSelected();
 			}
 		}
 	}
 
 	@Override
 	public void mouseReleased(int button, int x, int y) {
-		if (mode == InteractMode.NONE) {
-			switch (interactor.getInteractType()) {
-			case PLACE_OBJECT:
-				interactor.spawnAt(x, y);
-				break;
-			case PLACE_BASE:
-				interactor.createBaseAt(x, y);
-				break;
-			case PLACE_SPAWN:
-				interactor.createSpawnPointAt(x, y);
-				break;
-			case PLACE_SHAPE:
-				if (button == Input.MOUSE_LEFT_BUTTON) {
-
-				} else if (button == Input.MOUSE_RIGHT_BUTTON) {
-
+		if (button == Input.MOUSE_LEFT_BUTTON) {
+			if (mode == InteractMode.DRAG_SELECT) {
+				if (!interactor.selectIn(dragRect, interactor.getInput()
+						.isKeyDown(Input.KEY_LSHIFT))) {
+					mode = InteractMode.NONE;
 				}
-				break;
-			default:
-				break;
+				dragRect.setSize(0, 0);
 			}
+			if (mode == InteractMode.NONE) {
+				switch (interactor.getInteractType()) {
+				case PLACE_OBJECT:
+					interactor.spawnAt(x, y);
+					break;
+				case PLACE_BASE:
+					interactor.createBaseAt(x, y);
+					break;
+				case PLACE_SPAWN:
+					interactor.createSpawnPointAt(x, y);
+					break;
+				case PLACE_SHAPE:
+					if (button == Input.MOUSE_LEFT_BUTTON) {
+						interactor.placeShapeAt(x, y);
+					} else if (button == Input.MOUSE_RIGHT_BUTTON) {
+
+					}
+					break;
+				case DEFAULT:
+					break;
+				default:
+					break;
+				}
+			} else if (mode == InteractMode.DRAG_SELECT) {
+				interactor.setInteractType(InteractType.DEFAULT);
+			}
+		} else {
+
 		}
 		mode = InteractMode.NONE;
 	}
@@ -129,7 +160,13 @@ public class MapInputHandler extends InputAdapter {
 		if (mode == InteractMode.SCROLL)
 			interactor.scroll(oldx - newx, oldy - newy);
 		else if (mode == InteractMode.DRAG) {
-			interactor.dragThingAt(oldx, oldy, newx - oldx, newy - oldy);
+			interactor.dragSelected(newx - oldx, newy - oldy);
+		} else if (mode == InteractMode.DRAG_SELECT) {
+			float minX = Math.min(startPos.x, newx);
+			float minY = Math.min(startPos.y, newy);
+			float maxX = Math.max(startPos.x, newx);
+			float maxY = Math.max(startPos.y, newy);
+			dragRect.setBounds(minX, minY, maxX - minX, maxY - minY);
 		}
 		updateCoordinateStatus(newx, newy);
 	}
@@ -150,19 +187,19 @@ public class MapInputHandler extends InputAdapter {
 			interactor.startScrolling(Direction.BOTTOM);
 			break;
 		case Input.KEY_X:
-			interactor.deleteAtMouse();
+			interactor.deleteSelected();
 			break;
 		case Input.KEY_V:
-			interactor.editShapeAtMouse();
+			interactor.editSelectedShape();
 			break;
 		case Input.KEY_M:
-			interactor.mirrorShapeAtMouse(EditablePolygon.X_AXIS);
+			interactor.mirrorSelectedElements(EditablePolygon.X_AXIS);
 			break;
 		case Input.KEY_N:
-			interactor.mirrorShapeAtMouse(EditablePolygon.Y_AXIS);
+			interactor.mirrorSelectedElements(EditablePolygon.Y_AXIS);
 			break;
 		case Input.KEY_C:
-			interactor.copyElementAtMouse();
+			interactor.copySelectedElements();
 			break;
 		default:
 			break;
