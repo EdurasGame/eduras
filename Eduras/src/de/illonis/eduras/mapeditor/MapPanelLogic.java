@@ -354,6 +354,7 @@ public class MapPanelLogic implements MapInteractor {
 			DynamicPolygonObject object = (DynamicPolygonObject) element;
 			EditablePolygon poly = EditablePolygon.fromShape(object.getShape());
 			data.setEditShape(poly);
+			data.clearTempLines();
 			data.setEditObject(object);
 			setInteractType(InteractType.EDIT_SHAPE);
 		}
