@@ -44,6 +44,19 @@ public class MiniMap extends ClickableGuiElement {
 	private final static Logger L = EduLog
 			.getLoggerFor(MiniMap.class.getName());
 
+	/**
+	 * Alpha value for map. 0 means invisible, 1 means opaque. This will affect
+	 * all rendered colors on minimap.
+	 */
+	private final static float MAP_ALPHA = 0.7f;
+
+	private final static Color COLOR_BACKGROUND = new Color(0, 0, 0, MAP_ALPHA);
+	private final static Color COLOR_MULTIPLIER = new Color(1f, 1f, 1f,
+			MAP_ALPHA);
+	private static final Color COLOR_NEUTRAL_OBJECTS_FILL = new Color(0.5f,
+			0.5f, 0.5f, MAP_ALPHA);
+	private static final Color COLOR_NODE_CONNECTIONS = new Color(.5f, .5f, 0f,
+			MAP_ALPHA);
 	private HashMap<Integer, MiniMapNeutralObject> neutralObjects;
 	private HashMap<Integer, MiniMapBase> bases;
 	private HashMap<Integer, MiniMapPlayer> players;
@@ -53,7 +66,6 @@ public class MiniMap extends ClickableGuiElement {
 	float windowScale;
 
 	final static int SIZE = 150;
-	private static final Color NEUTRAL_OBJECTS_FILL_COLOR = Color.gray;
 
 	private final Rectangle bounds;
 
@@ -64,7 +76,6 @@ public class MiniMap extends ClickableGuiElement {
 		neutralObjects = new HashMap<Integer, MiniMapNeutralObject>();
 		bases = new HashMap<Integer, MiniMapBase>();
 		players = new HashMap<Integer, MiniMapPlayer>();
-		scale = 1f;
 
 		if (S.Server.sv_minimap_egomode) {
 			setActiveInteractModes(InteractMode.MODE_STRATEGY,
@@ -76,7 +87,7 @@ public class MiniMap extends ClickableGuiElement {
 	}
 
 	private void renderNeutral(Graphics g) {
-		g.setColor(NEUTRAL_OBJECTS_FILL_COLOR);
+		g.setColor(COLOR_NEUTRAL_OBJECTS_FILL);
 		g.setLineWidth(1f);
 		LinkedList<MiniMapNeutralObject> objectsToRender = new LinkedList<MiniMapNeutralObject>(
 				neutralObjects.values());
@@ -98,7 +109,7 @@ public class MiniMap extends ClickableGuiElement {
 	private void renderBases(Graphics g) {
 		g.setLineWidth(1f);
 		for (MiniMapBase object : bases.values()) {
-			g.setColor(object.getColor());
+			g.setColor(object.getColor().multiply(COLOR_MULTIPLIER));
 			g.fillRect(object.getX(), object.getY(), object.getWidth(),
 					object.getHeight());
 		}
@@ -109,7 +120,7 @@ public class MiniMap extends ClickableGuiElement {
 
 		if (nodes != null && !nodes.isEmpty()) {
 			g.setLineWidth(1f);
-			g.setColor(Color.yellow);
+			g.setColor(COLOR_NODE_CONNECTIONS);
 			for (NodeData someNode : nodes.values()) {
 
 				for (NodeData adjacentOfSomeNode : someNode.getAdjacentNodes()) {
@@ -140,32 +151,58 @@ public class MiniMap extends ClickableGuiElement {
 		List<MiniMapPlayer> ps = new LinkedList<MiniMapPlayer>(players.values());
 		for (int i = 0; i < ps.size(); i++) {
 			MiniMapPlayer object = ps.get(i);
-			g.setColor(object.getColor());
+			g.setColor(object.getColor().multiply(COLOR_MULTIPLIER));
 			g.fillOval(object.getX(), object.getY(), object.getWidth(),
 					object.getHeight());
 		}
 	}
-	
+
 	@Override
 	public boolean mouseMoved(int oldx, int oldy, int newx, int newy) {
-		return true;
+		try {
+			return getInfo().getPlayer().getCurrentMode() == InteractMode.MODE_STRATEGY;
+		} catch (ObjectNotFoundException e) {
+			L.log(Level.WARNING, "TODO: message", e);
+		}
+		return false;
 	}
 
 	@Override
 	public boolean mousePressed(int button, int x, int y) {
-		return true;
+		try {
+			return getInfo().getPlayer().getCurrentMode() == InteractMode.MODE_STRATEGY;
+		} catch (ObjectNotFoundException e) {
+			L.log(Level.WARNING, "TODO: message", e);
+		}
+		return false;
 	}
 
 	@Override
 	public boolean mouseReleased(int button, int x, int y) {
-		centerAtMouse(x, y);
-		return true;
+		try {
+			InteractMode currentMode = getInfo().getPlayer().getCurrentMode();
+			if (currentMode == InteractMode.MODE_STRATEGY) {
+				centerAtMouse(x, y);
+				return true;
+			}
+		} catch (ObjectNotFoundException e) {
+			L.log(Level.WARNING, "TODO: message", e);
+		}
+		return false;
 	}
 
 	@Override
 	public boolean mouseDragged(int oldx, int oldy, int newx, int newy) {
-		centerAtMouse(newx, newy);
-		return true;
+		try {
+			InteractMode currentMode = getInfo().getPlayer().getCurrentMode();
+			if (currentMode == InteractMode.MODE_STRATEGY) {
+				centerAtMouse(newx, newy);
+				return true;
+			}
+		} catch (ObjectNotFoundException e) {
+			L.log(Level.WARNING, "TODO: message", e);
+		}
+		return false;
 	}
 
 	private void centerAtMouse(int x, int y) {
@@ -193,7 +230,7 @@ public class MiniMap extends ClickableGuiElement {
 
 	@Override
 	public void render(Graphics g) {
-		g.setColor(Color.black);
+		g.setColor(COLOR_BACKGROUND);
 		g.fill(bounds);
 
 		synchronized (neutralObjects) {
@@ -215,7 +252,7 @@ public class MiniMap extends ClickableGuiElement {
 
 	private void renderViewPort(Graphics g) {
 		g.setLineWidth(1f);
-		g.setColor(Color.white);
+		g.setColor(COLOR_MULTIPLIER);
 		float minimapScale = getSize() / getInfo().getMapBounds().getHeight();
 		float rectWidth = 800f;
 		float ratio = (float) Display.getHeight() / Display.getWidth();
