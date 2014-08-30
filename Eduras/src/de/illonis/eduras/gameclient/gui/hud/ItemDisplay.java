@@ -39,11 +39,17 @@ public class ItemDisplay extends ClickableGuiElement implements
 			.getName());
 
 	private static final String EMPTY_NAME = "EMPTY";
+	/**
+	 * Alpha value for inactive items. 0 means invisible, 1 means opaque. This
+	 * will affect all rendered colors on items.
+	 */
+	private final static float ITEM_ALPHA = 0.5f;
+	private final static Color COLOR_MULTIPLIER = new Color(1f, 1f, 1f,
+			ITEM_ALPHA);
 
 	private final static int ITEM_GAP = 10;
 	private final static int BLOCKSIZE = 48;
 	private int currentItem = -1;
-	private final static Color COLOR_SEMITRANSPARENT = new Color(0, 0, 0, 120);
 	private final float buttonSize;
 	private Rectangle bounds;
 
@@ -91,10 +97,11 @@ public class ItemDisplay extends ClickableGuiElement implements
 			if (item.isEmpty()) {
 				continue;
 			}
-
+			Color currentColor = (item.getSlotId() == currentItem) ? Color.white
+					: COLOR_MULTIPLIER;
 			String idString = "#" + (item.getSlotId() + 1);
 			font.drawString(item.getX() + screenX + 1, item.getY() + screenY
-					- font.getLineHeight(), idString);
+					- font.getLineHeight(), idString, currentColor);
 
 			if (item.isWeapon()) {
 				int ammo = item.getWeaponAmmu();
@@ -102,19 +109,21 @@ public class ItemDisplay extends ClickableGuiElement implements
 				font.drawString(
 						item.getX() + screenX + buttonSize
 								- font.getWidth(ammoString) - 3, item.getY()
-								+ screenY - font.getLineHeight(), ammoString);
+								+ screenY - font.getLineHeight(), ammoString,
+						currentColor);
 			}
-			g.setColor(Color.white);
+			g.setColor(currentColor);
 			Rectangle itemRect = item.getClickableRect();
-			if (item.hasImage())
+			if (item.hasImage()) {
 				g.drawImage(item.getItemImage(), itemRect.getX(),
-						itemRect.getY());
+						itemRect.getY(), currentColor);
+			}
 			item.renderCooldown(g, itemRect.getX(), itemRect.getY(),
 					itemRect.getWidth(), itemRect.getHeight());
 			if (item.getSlotId() == currentItem) {
-				g.setColor(Color.yellow);
+				g.setColor(Color.yellow.multiply(COLOR_MULTIPLIER));
 			} else {
-				g.setColor(Color.white);
+				g.setColor(COLOR_MULTIPLIER);
 			}
 			g.draw(itemRect);
 		}
