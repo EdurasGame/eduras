@@ -2,7 +2,7 @@
 
 @mapname = Tryfield
 @author = jmr
-@created = 2014-10-28
+@created = 2014-11-31
 @gamemodes = EDURA
 @width = 2700
 @height = 2700
@@ -363,13 +363,29 @@ BIGGERBLOCK, 695, 1021
 BIGGERBLOCK, 691, 1138
 
 :nodes
+&redMainBase
 210, 193, 40, 40, TEAM_A, 1
+&blueMainBase
 2410, 2420, 40, 40, TEAM_B, 1
+&leftRedBase
 579, 1074, 40, 40, NEUTRAL, 1
+&rightRedBase
 1226, 440, 40, 40, NEUTRAL, 1
+&leftBlueBase
 1455, 1996, 40, 40, NEUTRAL, 1
+&rightBlueBase
 2166, 1396, 40, 40, NEUTRAL, 1
+&bottomLeftBase
 403, 2263, 40, 40, NEUTRAL, 1
+&topRightBase
 2256, 293, 40, 40, NEUTRAL, 1
 
 :nodeconnections
+*redMainBase, *leftRedBase
+*redMainBase, *rightRedBase
+*blueMainBase, *leftBlueBase
+*blueMainBase, *rightBlueBase
+*bottomLeftBase, *leftRedBase
+*bottomLeftBase, *leftBlueBase
+*topRightBase, *rightBlueBase
+*topRightBase, *rightRedBase
