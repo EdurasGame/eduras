@@ -1,5 +1,6 @@
 package de.illonis.eduras.math;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 
 import org.newdawn.slick.geom.Circle;
@@ -567,8 +568,10 @@ public class Geometry {
 
 		if (shape instanceof Ellipse) {
 			Vector2f[] result = new Vector2f[0];
-			result = Geometry.getPointsOnCirlce((Ellipse) shape,
-					S.Server.sv_performance_collision_accuracy_ellipse)
+			int numberOfPoints = getNumberOfPointsOnCircleForDistance(
+					(Circle) shape, S.Server.sv_performance_collision_accuracy);
+			result = Geometry
+					.getPointsOnCirlce((Ellipse) shape, numberOfPoints)
 					.toArray(result);
 			return result;
 		}
@@ -576,27 +579,48 @@ public class Geometry {
 		throw new ShapeNotSupportedException(shape);
 	}
 
+	private int getNumberOfPointsOnCircleForDistance(Circle circle,
+			float distance) {
+		// calculates how many points fit onto a circle if the point have the
+		// given distance to each other
+		float circumference = calculateCircumference(circle);
+		return Math.round(circumference / distance);
+	}
+
+	/**
+	 * Calculates the circumference of a circle.
+	 * 
+	 * @param circle
+	 * @return circumference
+	 */
+	public static float calculateCircumference(Circle circle) {
+		return (float) (circle.radius * 2f * Math.PI);
+	}
+
 	private Vector2f[] getPolygonBorderPoints(Polygon shape) {
 		Vector2f[] vertices = Geometry.floatsToVectors(shape.getPoints());
 
 		LinkedList<Line> borderLines = Geometry.getBorderLines(vertices);
 
-		Vector2f[] movementPoints = new Vector2f[S.Server.sv_performance_collision_accuracy_polygon
-				* vertices.length];
+		ArrayList<Vector2f> movementPoints = new ArrayList<Vector2f>();
 
-		int j = 0;
 		for (Line singleBorderLine : borderLines) {
-			for (int i = 0; i < S.Server.sv_performance_collision_accuracy_polygon; i++) {
-				movementPoints[j] = Geometry
-						.getPointOnLineAt(
-								singleBorderLine,
-								(1f / S.Server.sv_performance_collision_accuracy_polygon)
-										* i);
-				j++;
+			int numberOfPoints = numberOfPointsOnLineForDistance(
+					singleBorderLine,
+					S.Server.sv_performance_collision_accuracy);
+
+			for (int i = 0; i < numberOfPoints; i++) {
+				movementPoints.add(Geometry.getPointOnLineAt(singleBorderLine,
+						(1f / numberOfPoints) * i));
 			}
 		}
 
-		return movementPoints;
+		return movementPoints.toArray(new Vector2f[1]);
+	}
+
+	private int numberOfPointsOnLineForDistance(Line singleBorderLine,
+			float distance) {
+		return Math.round(singleBorderLine.length() / distance);
 	}
 
 	/**
