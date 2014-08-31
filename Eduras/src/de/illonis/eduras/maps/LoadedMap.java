@@ -41,7 +41,7 @@ public class LoadedMap extends Map {
 			Collection<InitialObjectData> initialObjects,
 			Collection<GameModeNumber> supportedGameModes,
 			Collection<NodeData> nodes) {
-		super(name, author, width, height, created);
+		super(name, author, width, height, created, "");
 
 		for (GameModeNumber gameModeNumber : supportedGameModes)
 			addSupportedGameMode(gameModeNumber);
@@ -55,10 +55,5 @@ public class LoadedMap extends Map {
 		for (NodeData node : nodes) {
 			addNode(node);
 		}
-	}
-
-	@Override
-	protected void buildMap() {
-
 	}
 }

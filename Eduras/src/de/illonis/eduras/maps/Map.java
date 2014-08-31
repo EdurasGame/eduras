@@ -26,7 +26,7 @@ import de.illonis.eduras.math.Vector2df;
  * @author illonis
  * 
  */
-public abstract class Map {
+public class Map {
 
 	private final static Logger L = EduLog.getLoggerFor(Map.class.getName());
 
@@ -44,6 +44,7 @@ public abstract class Map {
 	protected final LinkedList<InitialObjectData> initialObjects;
 	protected final LinkedList<GameModeNumber> supportedGameModes;
 	protected final LinkedList<SpawnPosition> spawnPositions;
+	private final String fileName;
 
 	private Collection<NodeData> nodes;
 
@@ -58,13 +59,33 @@ public abstract class Map {
 	 *            width of the map.
 	 * @param height
 	 *            height of the map.
+	 * @param fileName
+	 *            the name of the respective .erm file
 	 */
-	public Map(String name, String author, int width, int height) {
+	public Map(String name, String author, int width, int height,
+			String fileName) {
 		this.name = name;
 		this.width = width;
 		this.height = height;
 		this.author = author;
+		this.fileName = fileName;
 		created = new Date();
+		initialObjects = new LinkedList<InitialObjectData>();
+		addBoundsObjects();
+		supportedGameModes = new LinkedList<GameModeNumber>();
+		spawnPositions = new LinkedList<SpawnPosition>();
+		nodes = new LinkedList<NodeData>();
+	}
+
+	/**
+	 * Creates a map only by its file name.
+	 * 
+	 * @param filename
+	 *            the name of the respective .erm file
+	 */
+	public Map(String filename) {
+		this.fileName = filename;
+
 		initialObjects = new LinkedList<InitialObjectData>();
 		addBoundsObjects();
 		supportedGameModes = new LinkedList<GameModeNumber>();
@@ -113,9 +134,12 @@ public abstract class Map {
 	 *            height of the map.
 	 * @param created
 	 *            the date of creation
+	 * @param fileName
+	 *            the name of the respective .erm file
 	 */
-	public Map(String name, String author, int width, int height, Date created) {
-		this(name, author, width, height);
+	public Map(String name, String author, int width, int height, Date created,
+			String fileName) {
+		this(name, author, width, height, fileName);
 		setCreated(created);
 	}
 
@@ -356,8 +380,15 @@ public abstract class Map {
 
 	/**
 	 * Initializes and loads all map data.
+	 * 
+	 * @throws InvalidDataException
+	 *             thrown if the specified map file is corrupted
+	 * @throws IOException
+	 *             thrown if the map file cannot be found / read
 	 */
-	protected abstract void buildMap() throws InvalidDataException;
+	public void buildMap() throws InvalidDataException, IOException {
+		loadFromFile(fileName);
+	}
 
 	/**
 	 * Get the map that has the given name if it exists.
@@ -372,33 +403,12 @@ public abstract class Map {
 	 */
 	public static Map getMapByName(String mapName) throws NoSuchMapException,
 			InvalidDataException {
-		Map map;
-		switch (mapName.toLowerCase()) {
-		case "funmap":
-			map = new FunMap();
-			break;
-		case "simple":
-			map = new SimpleMap();
-			break;
-		case "manyblocks":
-			map = new ManyBlocks();
-			break;
-		case "testmap":
-			map = new TestMap();
-			break;
-		case "eduratestmap":
-			map = new EduraTestMap();
-			break;
-		case "eduramus":
-			map = new Eduramus();
-			break;
-		case "tryfield":
-			map = new Tryfield();
-			break;
-		default:
+		Map map = new Map(mapName + ".erm");
+		try {
+			map.buildMap();
+		} catch (IOException e) {
 			throw new NoSuchMapException(mapName);
 		}
-		map.buildMap();
 		return map;
 	}
 }

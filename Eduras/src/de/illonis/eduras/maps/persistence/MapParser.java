@@ -65,6 +65,11 @@ public class MapParser {
 	 */
 	public static Map readMap(URL inputFile) throws InvalidDataException,
 			IOException {
+
+		if (inputFile == null) {
+			throw new IOException("URL is null");
+		}
+
 		String currentIdentifier = "";
 		int currentNodeId = 1;
 		HashMap<String, NodeData> nodeIds = new HashMap<String, NodeData>();
