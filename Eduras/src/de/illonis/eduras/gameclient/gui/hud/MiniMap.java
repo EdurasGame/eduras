@@ -16,6 +16,7 @@ import org.newdawn.slick.geom.Vector2f;
 import de.illonis.edulog.EduLog;
 import de.illonis.eduras.ObjectFactory.ObjectType;
 import de.illonis.eduras.events.ObjectFactoryEvent;
+import de.illonis.eduras.events.SetMapEvent;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
 import de.illonis.eduras.gameclient.gui.game.GameCamera;
 import de.illonis.eduras.gameclient.gui.game.GameRenderer;
@@ -434,14 +435,23 @@ public class MiniMap extends ClickableGuiElement {
 
 	@Override
 	public void onGameReady() {
+		recalculateScale();
+		for (GameObject o : getInfo().getGameObjects().values()) {
+			maybeAddObject(o);
+		}
+	}
+
+	@Override
+	public void onMapChanged(SetMapEvent setMapEvent) {
+		recalculateScale();
+	}
+
+	private void recalculateScale() {
 		Rectangle r = getInfo().getMapBounds();
 		float size = Math.min(r.getWidth(), r.getHeight());
 
 		scale = (SIZE * windowScale) / size;
 		bounds.setSize(SIZE * windowScale, SIZE * windowScale);
-		for (GameObject o : getInfo().getGameObjects().values()) {
-			maybeAddObject(o);
-		}
 	}
 
 	void setCamera(GameCamera viewport) {
