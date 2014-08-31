@@ -1172,7 +1172,8 @@ public class ServerEventTriggerer implements EventTriggerer {
 			Vector2df positionToSpawnAt = GameInformation
 					.findFreePointWithinSpawnPositionForShape(spawnPosition,
 							object.getShape(),
-							allObjectsExceptBaseAndThisObject);
+							allObjectsExceptBaseAndThisObject,
+							GameInformation.ATTEMPT_PER_SPAWNPOINT);
 			guaranteeSetPositionOfObject(objectId, positionToSpawnAt);
 		} catch (NoSpawnAvailableException e) {
 			L.log(Level.SEVERE, "Cannot find a place to spawn this object!", e);
