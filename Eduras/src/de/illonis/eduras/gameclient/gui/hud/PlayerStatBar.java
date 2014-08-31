@@ -224,6 +224,10 @@ public class PlayerStatBar extends RenderedGuiObject {
 	public void onInteractModeChanged(SetInteractModeEvent setModeEvent) {
 		super.onInteractModeChanged(setModeEvent);
 
+		if (setModeEvent.getOwner() != getInfo().getOwnerID()) {
+			return;
+		}
+
 		for (GUIPlayerBar guiPlayerBar : players) {
 			userInterface.removeGuiElement(guiPlayerBar);
 			guiPlayerBar.getMouseHandler().removeClickableGuiElement(
