@@ -149,12 +149,19 @@ public class MiniMap extends ClickableGuiElement {
 	}
 
 	private void renderPlayers(Graphics g) {
+		PlayerMainFigure player = null;
+		try {
+			player = getInfo().getPlayer().getPlayerMainFigure();
+		} catch (ObjectNotFoundException e) {
+		}
 		List<MiniMapPlayer> ps = new LinkedList<MiniMapPlayer>(players.values());
 		for (int i = 0; i < ps.size(); i++) {
 			MiniMapPlayer object = ps.get(i);
-			g.setColor(object.getColor().multiply(COLOR_MULTIPLIER));
-			g.fillOval(object.getX(), object.getY(), object.getWidth(),
-					object.getHeight());
+			if (player == null || object.getPlayer().isVisibleFor(player)) {
+				g.setColor(object.getColor().multiply(COLOR_MULTIPLIER));
+				g.fillOval(object.getX(), object.getY(), object.getWidth(),
+						object.getHeight());
+			}
 		}
 	}
 
