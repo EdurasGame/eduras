@@ -133,6 +133,7 @@ public final class MapData {
 		bases.addAll(map.getNodes());
 		List<InitialObjectData> objects = new LinkedList<InitialObjectData>(
 				map.getInitialObjects());
+		int id = 1;
 		for (InitialObjectData object : objects) {
 			try {
 				if (object.getType() == ObjectType.MAPBOUNDS)
@@ -140,6 +141,7 @@ public final class MapData {
 				GameObject o = ObjectCreator.createObject(object.getType(),
 						null, null);
 				o.setRefName(object.getRefName());
+				o.setId(id++);
 				o.setPosition(object.getX(), object.getY());
 				if (object.getType() == ObjectType.DYNAMIC_POLYGON_BLOCK) {
 					DynamicPolygonObject dyno = (DynamicPolygonObject) o;

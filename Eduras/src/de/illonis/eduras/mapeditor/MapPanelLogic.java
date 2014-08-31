@@ -426,17 +426,17 @@ public class MapPanelLogic implements MapInteractor {
 			maxX = Math.max(element.getXPosition() + element.getWidth(), maxX);
 			maxY = Math.max(element.getYPosition() + element.getHeight(), maxY);
 		}
-		float centerX = (maxX + minX) /2;
+		float centerX = (maxX + minX) / 2;
 		float centerY = (maxY + minY) / 2;
 		for (EditorPlaceable element : selectedElements) {
 			if (axis == EditablePolygon.Y_AXIS) {
 				float dx = centerX - element.getXPosition();
-				element.setXPosition(element.getXPosition() + 2*dx
+				element.setXPosition(element.getXPosition() + 2 * dx
 						- element.getWidth());
 			}
 			if (axis == EditablePolygon.X_AXIS) {
 				float dy = centerY - element.getYPosition();
-				element.setYPosition(element.getYPosition() + 2*dy
+				element.setYPosition(element.getYPosition() + 2 * dy
 						- element.getHeight());
 			}
 			if (element instanceof DynamicPolygonObject) {
@@ -623,5 +623,14 @@ public class MapPanelLogic implements MapInteractor {
 		return selectedElements.contains(getObjectAt(guiX, guiY))
 				|| selectedElements.contains(getSpawnPointAt(guiX, guiY))
 				|| selectedElements.contains(getBaseAt(guiX, guiY));
+	}
+
+	@Override
+	public void onMapLoaded() {
+		int id = 0;
+		for (GameObject o : data.getGameObjects()) {
+			id = Math.max(id, o.getId());
+		}
+		nextId = id + 1;
 	}
 }

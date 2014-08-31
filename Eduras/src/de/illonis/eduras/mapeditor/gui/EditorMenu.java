@@ -193,6 +193,7 @@ public class EditorMenu extends JMenuBar implements ActionListener {
 						map = MapParser.readMap(file.toURI().toURL());
 						interactor.setInteractType(InteractType.DEFAULT);
 						MapData.getInstance().importMap(map);
+						interactor.onMapLoaded();
 						window.refreshTitle();
 					} catch (InvalidDataException | IOException ex) {
 						JOptionPane.showMessageDialog(window,
