@@ -70,7 +70,7 @@ public class GameInformation {
 	private final static Logger L = EduLog.getLoggerFor(GameInformation.class
 			.getName());
 
-	private static final int ATTEMPT_PER_SPAWNPOINT = 10000;
+	public static final int ATTEMPT_PER_SPAWNPOINT = 10000;
 
 	private static final Random RANDOM = new Random();
 
@@ -636,7 +636,7 @@ public class GameInformation {
 		for (SpawnPosition spawnPos : availableSpawnings) {
 			try {
 				return findFreePointWithinSpawnPositionForShape(spawnPos,
-						playerShape, objects.values());
+						playerShape, objects.values(), 10);
 			} catch (NoSpawnAvailableException e) {
 				// try next spawn
 				continue;
@@ -656,13 +656,15 @@ public class GameInformation {
 	 * @param spawnPos
 	 * @param shape
 	 * @param possiblyOccupyingObjects
+	 * @param numberOfAttempts
+	 *            the number of attempts to find a spawn point
 	 * @return the 'free' spot
 	 * @throws NoSpawnAvailableException
 	 */
 	public static Vector2df findFreePointWithinSpawnPositionForShape(
 			SpawnPosition spawnPos, Shape shape,
-			Collection<GameObject> possiblyOccupyingObjects)
-			throws NoSpawnAvailableException {
+			Collection<GameObject> possiblyOccupyingObjects,
+			int numberOfAttempts) throws NoSpawnAvailableException {
 		Rectangle boundings = new Rectangle(0, 0, shape.getWidth(),
 				shape.getHeight());
 		boolean spawnPositionOkay = false;
@@ -675,7 +677,7 @@ public class GameInformation {
 			boundings.setX(newPos.x);
 			boundings.setY(newPos.y);
 
-			if (i > ATTEMPT_PER_SPAWNPOINT) {
+			if (i > numberOfAttempts) {
 				L.warning("There is no spawnpoint in the spawnposition at x : "
 						+ spawnPos.getArea().getX() + " y : "
 						+ spawnPos.getArea().getY() + " after "

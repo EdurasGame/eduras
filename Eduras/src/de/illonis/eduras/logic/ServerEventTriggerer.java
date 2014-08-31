@@ -83,6 +83,7 @@ import de.illonis.eduras.gameobjects.OneTimeTimedEventHandler;
 import de.illonis.eduras.gameobjects.Portal;
 import de.illonis.eduras.gameobjects.TriggerArea;
 import de.illonis.eduras.interfaces.GameLogicInterface;
+import de.illonis.eduras.inventory.Inventory;
 import de.illonis.eduras.inventory.InventoryIsFullException;
 import de.illonis.eduras.inventory.NoSuchItemException;
 import de.illonis.eduras.items.Item;
@@ -961,7 +962,7 @@ public class ServerEventTriggerer implements EventTriggerer {
 
 	@Override
 	public void clearInventoryOfPlayer(Player player) {
-		for (int i = 0; i < 6; i++) {
+		for (int i = 0; i < Inventory.MAX_CAPACITY; i++) {
 			changeItemSlot(i, player.getPlayerId(), null);
 		}
 	}
@@ -1171,7 +1172,8 @@ public class ServerEventTriggerer implements EventTriggerer {
 			Vector2df positionToSpawnAt = GameInformation
 					.findFreePointWithinSpawnPositionForShape(spawnPosition,
 							object.getShape(),
-							allObjectsExceptBaseAndThisObject);
+							allObjectsExceptBaseAndThisObject,
+							GameInformation.ATTEMPT_PER_SPAWNPOINT);
 			guaranteeSetPositionOfObject(objectId, positionToSpawnAt);
 		} catch (NoSpawnAvailableException e) {
 			L.log(Level.SEVERE, "Cannot find a place to spawn this object!", e);

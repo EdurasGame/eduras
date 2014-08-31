@@ -194,9 +194,10 @@ public class InformationProvider implements InfoInterface {
 				edurasInitializer.getLogic().getGame().getObjects().values());
 		allObjectsExceptBase.remove(base);
 		try {
-			GameInformation
-					.findFreePointWithinSpawnPositionForShape(spawnPosition,
-							unitToSpawn.getShape(), allObjectsExceptBase);
+			GameInformation.findFreePointWithinSpawnPositionForShape(
+					spawnPosition, unitToSpawn.getShape(),
+					allObjectsExceptBase,
+					GameInformation.ATTEMPT_PER_SPAWNPOINT);
 			return true;
 		} catch (NoSpawnAvailableException e) {
 			return false;

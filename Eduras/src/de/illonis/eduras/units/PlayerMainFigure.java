@@ -4,7 +4,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.newdawn.slick.geom.Circle;
-import org.newdawn.slick.geom.Vector2f;
 
 import de.illonis.edulog.EduLog;
 import de.illonis.eduras.GameInformation;
@@ -86,9 +85,6 @@ public class PlayerMainFigure extends Unit implements MovementControlable {
 		default:
 			break;
 		}
-		Vector2f normalized = getSpeedVector().normalise().scale(getSpeed());
-		currentSpeedX = normalized.x;
-		currentSpeedY = normalized.y;
 	}
 
 	@Override
