@@ -168,9 +168,11 @@ public class MiniMap extends ClickableGuiElement {
 	@Override
 	public boolean mouseMoved(int oldx, int oldy, int newx, int newy) {
 		try {
-			return getInfo().getPlayer().getCurrentMode() == InteractMode.MODE_STRATEGY;
+			InteractMode mode = getInfo().getPlayer().getCurrentMode();
+			return (mode == InteractMode.MODE_DEAD || mode == InteractMode.MODE_STRATEGY);
 		} catch (ObjectNotFoundException e) {
-			L.log(Level.WARNING, "TODO: message", e);
+			L.log(Level.WARNING,
+					"Could not find player while interacting with minimap.", e);
 		}
 		return false;
 	}
@@ -178,9 +180,11 @@ public class MiniMap extends ClickableGuiElement {
 	@Override
 	public boolean mousePressed(int button, int x, int y) {
 		try {
-			return getInfo().getPlayer().getCurrentMode() == InteractMode.MODE_STRATEGY;
+			InteractMode mode = getInfo().getPlayer().getCurrentMode();
+			return (mode == InteractMode.MODE_DEAD || mode == InteractMode.MODE_STRATEGY);
 		} catch (ObjectNotFoundException e) {
-			L.log(Level.WARNING, "TODO: message", e);
+			L.log(Level.WARNING,
+					"Could not find player while interacting with minimap.", e);
 		}
 		return false;
 	}
@@ -189,12 +193,14 @@ public class MiniMap extends ClickableGuiElement {
 	public boolean mouseReleased(int button, int x, int y) {
 		try {
 			InteractMode currentMode = getInfo().getPlayer().getCurrentMode();
-			if (currentMode == InteractMode.MODE_STRATEGY) {
+			if (currentMode == InteractMode.MODE_STRATEGY
+					|| currentMode == InteractMode.MODE_DEAD) {
 				centerAtMouse(x, y);
 				return true;
 			}
 		} catch (ObjectNotFoundException e) {
-			L.log(Level.WARNING, "TODO: message", e);
+			L.log(Level.WARNING,
+					"Could not find player while interacting with minimap.", e);
 		}
 		return false;
 	}
@@ -203,12 +209,14 @@ public class MiniMap extends ClickableGuiElement {
 	public boolean mouseDragged(int oldx, int oldy, int newx, int newy) {
 		try {
 			InteractMode currentMode = getInfo().getPlayer().getCurrentMode();
-			if (currentMode == InteractMode.MODE_STRATEGY) {
+			if (currentMode == InteractMode.MODE_STRATEGY
+					|| currentMode == InteractMode.MODE_DEAD) {
 				centerAtMouse(newx, newy);
 				return true;
 			}
 		} catch (ObjectNotFoundException e) {
-			L.log(Level.WARNING, "TODO: message", e);
+			L.log(Level.WARNING,
+					"Could not find player while interacting with minimap.", e);
 		}
 		return false;
 	}
