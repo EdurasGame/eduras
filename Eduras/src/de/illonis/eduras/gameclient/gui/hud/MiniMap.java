@@ -149,21 +149,30 @@ public class MiniMap extends ClickableGuiElement {
 	}
 
 	private void renderPlayers(Graphics g) {
+		PlayerMainFigure player = null;
+		try {
+			player = getInfo().getPlayer().getPlayerMainFigure();
+		} catch (ObjectNotFoundException e) {
+		}
 		List<MiniMapPlayer> ps = new LinkedList<MiniMapPlayer>(players.values());
 		for (int i = 0; i < ps.size(); i++) {
 			MiniMapPlayer object = ps.get(i);
-			g.setColor(object.getColor().multiply(COLOR_MULTIPLIER));
-			g.fillOval(object.getX(), object.getY(), object.getWidth(),
-					object.getHeight());
+			if (player == null || object.getPlayer().isVisibleFor(player)) {
+				g.setColor(object.getColor().multiply(COLOR_MULTIPLIER));
+				g.fillOval(object.getX(), object.getY(), object.getWidth(),
+						object.getHeight());
+			}
 		}
 	}
 
 	@Override
 	public boolean mouseMoved(int oldx, int oldy, int newx, int newy) {
 		try {
-			return getInfo().getPlayer().getCurrentMode() == InteractMode.MODE_STRATEGY;
+			InteractMode mode = getInfo().getPlayer().getCurrentMode();
+			return (mode == InteractMode.MODE_DEAD || mode == InteractMode.MODE_STRATEGY);
 		} catch (ObjectNotFoundException e) {
-			L.log(Level.WARNING, "TODO: message", e);
+			L.log(Level.WARNING,
+					"Could not find player while interacting with minimap.", e);
 		}
 		return false;
 	}
@@ -171,9 +180,11 @@ public class MiniMap extends ClickableGuiElement {
 	@Override
 	public boolean mousePressed(int button, int x, int y) {
 		try {
-			return getInfo().getPlayer().getCurrentMode() == InteractMode.MODE_STRATEGY;
+			InteractMode mode = getInfo().getPlayer().getCurrentMode();
+			return (mode == InteractMode.MODE_DEAD || mode == InteractMode.MODE_STRATEGY);
 		} catch (ObjectNotFoundException e) {
-			L.log(Level.WARNING, "TODO: message", e);
+			L.log(Level.WARNING,
+					"Could not find player while interacting with minimap.", e);
 		}
 		return false;
 	}
@@ -182,12 +193,14 @@ public class MiniMap extends ClickableGuiElement {
 	public boolean mouseReleased(int button, int x, int y) {
 		try {
 			InteractMode currentMode = getInfo().getPlayer().getCurrentMode();
-			if (currentMode == InteractMode.MODE_STRATEGY) {
+			if (currentMode == InteractMode.MODE_STRATEGY
+					|| currentMode == InteractMode.MODE_DEAD) {
 				centerAtMouse(x, y);
 				return true;
 			}
 		} catch (ObjectNotFoundException e) {
-			L.log(Level.WARNING, "TODO: message", e);
+			L.log(Level.WARNING,
+					"Could not find player while interacting with minimap.", e);
 		}
 		return false;
 	}
@@ -196,12 +209,14 @@ public class MiniMap extends ClickableGuiElement {
 	public boolean mouseDragged(int oldx, int oldy, int newx, int newy) {
 		try {
 			InteractMode currentMode = getInfo().getPlayer().getCurrentMode();
-			if (currentMode == InteractMode.MODE_STRATEGY) {
+			if (currentMode == InteractMode.MODE_STRATEGY
+					|| currentMode == InteractMode.MODE_DEAD) {
 				centerAtMouse(newx, newy);
 				return true;
 			}
 		} catch (ObjectNotFoundException e) {
-			L.log(Level.WARNING, "TODO: message", e);
+			L.log(Level.WARNING,
+					"Could not find player while interacting with minimap.", e);
 		}
 		return false;
 	}
