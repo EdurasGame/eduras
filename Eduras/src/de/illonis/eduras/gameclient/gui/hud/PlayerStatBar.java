@@ -94,7 +94,7 @@ public class PlayerStatBar extends RenderedGuiObject {
 		@Override
 		public void render(Graphics g2d) {
 			Font font = FontCache.getFont(FontKey.DEFAULT_FONT, g2d);
-
+			g2d.setLineWidth(1f);
 			yPosition = screenY
 					+ 50
 					+ index
