@@ -46,7 +46,7 @@ public class ItemDisplay extends RenderedGuiObject {
 			ITEM_ALPHA);
 	private final static Color FONT_BACKGROUND = new Color(0f, 0f, 0f, .7f);
 	private final static int ITEM_GAP = 5;
-	private final static int BLOCKSIZE = 36;
+	public final static int BLOCKSIZE = 36;
 	private final static int FONT_PADDING = 2;
 
 	private final float buttonSize;
@@ -71,10 +71,10 @@ public class ItemDisplay extends RenderedGuiObject {
 		borderSize = 2 * GameRenderer.getRenderScale();
 		screenX = 15;
 		itemSlots = new GuiItem[Inventory.MAX_CAPACITY];
+		setActiveInteractModes(InteractMode.MODE_EGO);
 		for (int i = 0; i < Inventory.MAX_CAPACITY; i++) {
 			itemSlots[i] = new GuiItem(gui, i);
 		}
-		setActiveInteractModes(InteractMode.MODE_EGO);
 	}
 
 	@Override
@@ -152,6 +152,8 @@ public class ItemDisplay extends RenderedGuiObject {
 			super(gui);
 			this.slotId = slotId;
 			setName(EMPTY_NAME);
+			setActiveInteractModes(ItemDisplay.this.getActiveInteractModes()
+					.toArray(new InteractMode[] {}));
 			updateClickRect();
 		}
 
@@ -225,12 +227,8 @@ public class ItemDisplay extends RenderedGuiObject {
 				int ammo = getWeaponAmmu();
 				if (ammo != -1) {
 					String ammoString = ammo + "";
-					int stringWidth = font.getWidth(ammoString) + FONT_PADDING;
-					float stringX = clickRect.getX() + borderSize
-							+ FONT_PADDING;
-					float stringY = clickRect.getY() + borderSize;
-					g.setColor(FONT_BACKGROUND);
-
+					float stringX = clickRect.getX() + borderSize;
+					float stringY = clickRect.getY();
 					font.drawString(stringX, stringY, ammoString, currentColor);
 				}
 			}
