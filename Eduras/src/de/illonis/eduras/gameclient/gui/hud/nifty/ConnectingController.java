@@ -3,6 +3,7 @@ package de.illonis.eduras.gameclient.gui.hud.nifty;
 import java.io.IOException;
 import java.net.SocketTimeoutException;
 import java.util.concurrent.Callable;
+import java.util.concurrent.CancellationException;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
@@ -56,8 +57,10 @@ public class ConnectingController extends EdurasScreenController {
 	 */
 	public void abort() {
 		connect = false;
-		if (connectFuture != null)
+		if (connectFuture != null) {
 			connectFuture.cancel(true);
+			connectFuture = null;
+		}
 		game.enterState(2);
 	}
 
@@ -93,8 +96,9 @@ public class ConnectingController extends EdurasScreenController {
 					} else {
 						note.setText(connectCallable.getErrorMessage());
 					}
-				} catch (InterruptedException | ExecutionException e) {
-					note.setText(e.getMessage());
+				} catch (InterruptedException | CancellationException
+						| ExecutionException e) {
+					note.setText("Error: " + e.getMessage());
 				}
 				connectFuture = null;
 			}
