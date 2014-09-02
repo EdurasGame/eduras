@@ -1,0 +1,66 @@
+#!/bin/bash
+
+#####################################################
+## This script exports all *.svg files in working
+## directory (i.e. where you call this script from)
+## to png files in different sizes.
+## Each file will be exported to every filesize
+## specified below.
+##
+## by illonis
+#####################################################
+
+# Specifies the sizes to export. Target size will
+# be square.
+sizes[0]=36
+sizes[1]=61
+sizes[2]=86
+
+# Extensions to append for each size.
+# You have to specify an extension for each size
+# specified above.
+# For example, if given sizes 36 and 48 and names
+# ".med" and ".png", the file test.svg will be
+# exported to test.med [36x36] and test.png [48x48].
+names[0]=".png.low"
+names[1]=".png.medium"
+names[2]=".png"
+
+#####################################################
+######## DO NOT EDIT ANYTHING BELOW #################
+#####################################################
+FILES=$(pwd)/*
+if [ "test" = "$1" ]
+then
+	testrun=true
+else
+	testrun=false
+fi
+
+echo -e "\e[1m\e[33mStarting SVG-Export to ${#names[@]} filesizes.\e[0m"
+if [ "$testrun" = true ]
+then
+	echo -e "\e[33mTestrun. Will not write any file.\e[0m"
+fi
+count=0
+for f in $FILES
+do
+	if [[ "$f" = *\.svg ]]
+	then
+		count=$[$count+1]
+		for (( i = 0 ; i < ${#sizes[@]} ; i++ )) do
+			filename="${f%.*}"
+			targetsize="${sizes[$i]}"
+			targetname="$filename${names[$i]}"
+			echo "`basename $f` => `basename $targetname` [${targetsize}x$targetsize]"
+			if [ "$testrun" = false ]
+			then
+				echo -ne "\e[32m"
+				inkscape --export-png=$targetname -C --export-width=$targetsize --export-height=$targetsize $f
+				echo -ne "\e[0m"
+			fi
+		done
+	fi
+done
+
+echo -e "\e[33mFinished exporting $count files.\e[0m"
