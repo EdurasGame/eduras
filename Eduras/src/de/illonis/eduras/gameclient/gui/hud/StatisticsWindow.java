@@ -178,7 +178,7 @@ public class StatisticsWindow extends RenderedGuiObject {
 				.getDeathsOfPlayer(p) + "", COLOR_TEXT);
 
 		// player's status, only show to own team
-		String status = "unknown";
+		String status = "";
 		try {
 			if (p.getTeam().equals(getInfo().getPlayer().getTeam())) {
 				status = p.getCurrentMode().getDisplayName();
