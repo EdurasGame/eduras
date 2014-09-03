@@ -94,8 +94,7 @@ public class MiniMap extends ClickableGuiElement {
 				neutralObjects.values());
 		for (MiniMapNeutralObject object : objectsToRender) {
 			if (object.isDynamicShape()) {
-				g.fill(new Polygon(
-						Geometry.vectorsToFloat(object.getVertices())));
+				g.fill(object.getShape());
 			} else {
 				g.fillRect(object.getX(), object.getY(), object.getWidth(),
 						object.getHeight());
@@ -398,7 +397,7 @@ public class MiniMap extends ClickableGuiElement {
 					verticesOnMinimap[i] = gameToMinimapPosition(originalVertices[i]);
 				}
 				newNeutralObject = new MiniMapNeutralObject(o, x, y, w, h,
-						verticesOnMinimap);
+						new Polygon(Geometry.vectorsToFloat(verticesOnMinimap)));
 			} else {
 				newNeutralObject = new MiniMapNeutralObject(o, x, y, w, h);
 			}
@@ -457,8 +456,16 @@ public class MiniMap extends ClickableGuiElement {
 	}
 
 	@Override
+	public void onStartRound() {
+		for (GameObject o : getInfo().getGameObjects().values()) {
+			maybeAddObject(o);
+		}
+	}
+
+	@Override
 	public void onMapChanged(SetMapEvent setMapEvent) {
 		recalculateScale();
+		resetNodeData();
 	}
 
 	private void recalculateScale() {

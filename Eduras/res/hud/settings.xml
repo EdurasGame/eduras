@@ -3,7 +3,6 @@
 	xsi:schemaLocation="nifty.xsd nifty.xsd">
 	<useStyles filename="nifty-default-styles.xml" />
 	<useControls filename="nifty-default-controls.xml" />
-
 	<controlDefinition name="keybindingsEntry">
 		<panel childLayout="horizontal" width="100%" align="center"
 			padding="5px,5px,5px,5px">
@@ -20,6 +19,28 @@
 				color="#fc0f" neverStopRendering="true" timeType="infinite" />
 		</effect>
 	</controlDefinition>
+	<popup id="resPopup" childLayout="center" backgroundColor="#000a">
+		<panel style="nifty-panel-red" childLayout="vertical" padding="18px,28px,40px,16px" width="30%" height="20%" align="center" valign="center">
+		    <control type="label" font="aurulent-sans-16.fnt" color="#000f"
+											text="Selected resolution is not supported in fullscreen" margin="5px" />
+		    <control type="button" id="popupOkButton" font="aurulent-sans-16.fnt"
+					color="#ffff" label="Ok" align="left">
+					<interact onClick="closeResPopup()" />
+				</control>
+		    
+		</panel>
+	</popup>
+	<popup id="applyPopup" childLayout="center" backgroundColor="#000a">
+		<panel style="nifty-panel-red" childLayout="vertical" padding="18px,28px,40px,16px" width="50%" height="20%" align="center" valign="center">
+		    <control type="label" font="aurulent-sans-16.fnt" color="#000f"
+											text="You have to restart the game to apply the new resolution." margin="5px" />
+		    <control type="button" id="popupOkButton" font="aurulent-sans-16.fnt"
+					color="#ffff" label="Ok" align="center">
+					<interact onClick="closeApplyPopup()" />
+				</control>
+		    
+		</panel>
+	</popup>
 	<screen id="settings"
 		controller="de.illonis.eduras.gameclient.gui.hud.nifty.SettingsController">
 		<layer childLayout="vertical">
@@ -96,6 +117,47 @@
 							</panel>
 							<control type="label" id="currentResolution" font="aurulent-sans-16.fnt"
 								color="#000f" width="50%" text="" />
+							<panel childLayout="horizontal" width="*" height="50px"
+								padding="15px,15px,15px,15px">
+								<control id="windowedModeBox" name="checkbox" margin="5px" />
+								<control type="label" font="aurulent-sans-16.fnt" color="#000f"
+									text="Fullscreen" margin="5px" />
+							</panel>
+							<panel childLayout="horizontal" width="*" height="50px"
+								padding="15px,15px,15px,15px">
+								<control type="button" id="applyDisplayButton" width=""
+									font="aurulent-sans-16.fnt" color="#ffff" label="Apply"
+									align="left">
+									<interact onClick="applyResolution()" />
+								</control>
+							</panel>
+						</panel>
+					</control>
+					<control id="tab_4" name="tab" caption="Sound"
+						childLayout="vertical">
+						<panel childLayout="vertical" width="*" height="*">
+							<panel childLayout="horizontal" width="*" height="50px"
+								padding="15px,15px,15px,15px">
+								<control type="label" font="aurulent-sans-16.fnt" color="#000f"
+									text="Sound volume:" padding="10px,10px,0px,10px" />
+								<control name="horizontalSlider" id="soundVolumeSlider"
+                                 buttonStepSize="1"
+                                 initial="1"
+                                 max="1"
+                                 min="0"
+                                 stepSize="0.01"/>
+							</panel>
+							<panel childLayout="horizontal" width="*" height="50px"
+								padding="15px,15px,15px,15px">
+								<control type="label" font="aurulent-sans-16.fnt" color="#000f"
+									text="Music volume:" padding="10px,10px,0px,10px" />
+								<control name="horizontalSlider" id="musicVolumeSlider"
+                                 buttonStepSize="1"
+                                 initial="1"
+                                 max="1"
+                                 min="0"
+                                 stepSize="0.01"/>
+							</panel>
 						</panel>
 					</control>
 				</control>
