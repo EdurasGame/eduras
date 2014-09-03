@@ -51,10 +51,13 @@ public interface GameControllerBridge extends GameManager {
 	 *            new width.
 	 * @param height
 	 *            new height.
+	 * @param windowed
+	 *            true if should be windowed, false otherwise.
 	 * @throws SlickException
 	 *             if there is a display error.
 	 */
-	void changeResolution(int width, int height) throws SlickException;
+	void changeResolution(int width, int height, boolean windowed)
+			throws SlickException;
 
 	/**
 	 * @return the username of the logged in user.

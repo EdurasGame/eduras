@@ -15,7 +15,6 @@ import org.newdawn.slick.state.transition.FadeOutTransition;
 
 import de.illonis.eduras.gameclient.audio.SoundMachine;
 import de.illonis.eduras.gameclient.audio.SoundMachine.SoundType;
-import de.illonis.eduras.gameclient.datacache.ImageCache;
 import de.illonis.eduras.gameclient.userprefs.KeyBindings;
 import de.illonis.eduras.gameclient.userprefs.KeyBindings.KeyBinding;
 import de.illonis.eduras.gameclient.userprefs.Settings;
@@ -46,8 +45,13 @@ public class SettingsController extends EdurasScreenController {
 	private CheckBox chooseOnPressBox;
 	private CheckBox continuousItemUsageBox;
 	private CheckBox mouseWheelSwitchBox;
+	private CheckBox fullscreenBox;
 	private Slider soundVolumeSlider;
 	private Slider musicVolumeSlider;
+	private DropDown<DisplayMode> resolutionSelect;
+
+	private final static String POPUP_NOTSUPPORTED = "resPopup";
+	private final static String POPUP_APPLY = "applyPopup";
 
 	SettingsController(GameControllerBridge game) {
 		super(game);
@@ -81,7 +85,9 @@ public class SettingsController extends EdurasScreenController {
 	public void onCheckboxChanged(final String checkboxId,
 			final CheckBoxStateChangedEvent event) {
 		String setting = checkboxId.substring(0, checkboxId.length() - 3);
-		settings.setBooleanOption(setting, event.getCheckBox().isChecked());
+		if (!checkboxId.contains("windowedMode")) {
+			settings.setBooleanOption(setting, event.getCheckBox().isChecked());
+		}
 	}
 
 	/**
@@ -125,12 +131,8 @@ public class SettingsController extends EdurasScreenController {
 	}
 
 	private void fillResolutionSelect(Screen screen) {
-		@SuppressWarnings("unchecked")
-		DropDown<DisplayMode> control = screen.findNiftyControl(
-				"resolutionSelect", DropDown.class);
 
-		resolutionLabel = screen.findNiftyControl("currentResolution",
-				Label.class);
+		resolutionSelect.clear();
 		try {
 			DisplayMode currentMode = Display.getDisplayMode();
 			resolutionLabel.setText("Current resolution: "
@@ -156,9 +158,9 @@ public class SettingsController extends EdurasScreenController {
 				}
 			});
 			for (DisplayMode displayMode : modes) {
-				control.addItem(displayMode);
+				resolutionSelect.addItem(displayMode);
 			}
-			control.selectItem(currentMode);
+			resolutionSelect.selectItem(currentMode);
 		} catch (LWJGLException e) {
 		}
 	}
@@ -166,7 +168,7 @@ public class SettingsController extends EdurasScreenController {
 	@SuppressWarnings("unchecked")
 	@Override
 	protected void initScreen(Screen screen) {
-		fillResolutionSelect(screen);
+
 		Label hintLabel = screen.findNiftyControl("hintLabel", Label.class);
 		hintLabel.setText("Select a keybinding and press a key to bind it.");
 		box = screen.findNiftyControl("#keyBindingsList", ListBox.class);
@@ -184,6 +186,14 @@ public class SettingsController extends EdurasScreenController {
 				Slider.class);
 		musicVolumeSlider = screen.findNiftyControl("musicVolumeSlider",
 				Slider.class);
+		fullscreenBox = screen.findNiftyControl("windowedModeBox",
+				CheckBox.class);
+		resolutionSelect = screen.findNiftyControl("resolutionSelect",
+				DropDown.class);
+		resolutionLabel = screen.findNiftyControl("currentResolution",
+				Label.class);
+
+		fillResolutionSelect(screen);
 	}
 
 	/**
@@ -197,14 +207,7 @@ public class SettingsController extends EdurasScreenController {
 	@NiftyEventSubscriber(id = "resolutionSelect")
 	public void onDropDownSelectionChanged(final String id,
 			final DropDownSelectionChangedEvent<DisplayMode> event) {
-		DisplayMode selected = event.getSelection();
-		try {
-			game.changeResolution(selected.getWidth(), selected.getHeight());
-			ImageCache.dispose();
-			resolutionLabel.setText("Current resolution: "
-					+ selected.toString());
-		} catch (SlickException e) {
-		}
+		// handled by "apply"-button
 	}
 
 	/**
@@ -221,19 +224,61 @@ public class SettingsController extends EdurasScreenController {
 		}
 	}
 
+	/**
+	 * applies selected resolution.
+	 */
+	public void applyResolution() {
+		DisplayMode selected = resolutionSelect.getSelection();
+		if (fullscreenBox.isChecked() && !selected.isFullscreenCapable()) {
+			// fullscreen resolution not supported
+			nifty.createPopupWithId(POPUP_NOTSUPPORTED, POPUP_NOTSUPPORTED);
+			nifty.showPopup(nifty.getCurrentScreen(), POPUP_NOTSUPPORTED, null);
+			return;
+		}
+		settings.setIntOption(Settings.WIDTH, selected.getWidth());
+		settings.setIntOption(Settings.HEIGHT, selected.getHeight());
+		settings.setBooleanOption(Settings.WINDOWED, !fullscreenBox.isChecked());
+		try {
+			settings.save();
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
+		if (!fullscreenBox.isChecked()) {
+			try {
+				game.changeResolution(selected.getWidth(),
+						selected.getHeight(), true);
+			} catch (SlickException e) {
+				e.printStackTrace();
+			}
+		} else {
+			nifty.createPopupWithId(POPUP_APPLY, POPUP_APPLY);
+			nifty.showPopup(nifty.getCurrentScreen(), POPUP_APPLY, null);
+		}
+	}
+
+	public void closeResPopup() {
+		nifty.closePopup(POPUP_NOTSUPPORTED);
+	}
+
+	public void closeApplyPopup() {
+		nifty.closePopup(POPUP_APPLY);
+	}
+
 	public void leaveState() {
 		nifty.setIgnoreKeyboardEvents(false);
 	}
 
 	public void enterState() {
 		nifty.setIgnoreKeyboardEvents(true);
-		chooseOnPressBox
-				.setChecked(settings.getBooleanSetting("chooseOnPress"));
+		chooseOnPressBox.setChecked(settings
+				.getBooleanSetting(Settings.CHOOSE_ON_PRESS));
 		continuousItemUsageBox.setChecked(settings
-				.getBooleanSetting("continuousItemUsage"));
+				.getBooleanSetting(Settings.CONTINUOUS_ITEM_USAGE));
 		mouseWheelSwitchBox.setChecked(settings
 				.getBooleanSetting(Settings.MOUSE_WHEEL_SWITCH));
 		soundVolumeSlider.setValue(game.getSoundVolume());
 		musicVolumeSlider.setValue(game.getMusicVolume());
+		fullscreenBox
+				.setChecked(!settings.getBooleanSetting(Settings.WINDOWED));
 	}
 }

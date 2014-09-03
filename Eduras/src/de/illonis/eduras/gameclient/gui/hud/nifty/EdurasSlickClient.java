@@ -1,7 +1,5 @@
 package de.illonis.eduras.gameclient.gui.hud.nifty;
 
-import org.lwjgl.opengl.Display;
-import org.lwjgl.opengl.DisplayMode;
 import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.SlickException;
@@ -10,6 +8,8 @@ import org.newdawn.slick.state.transition.Transition;
 import de.illonis.eduras.gameclient.EdurasGameClient;
 import de.illonis.eduras.gameclient.EdurasGameInterface;
 import de.illonis.eduras.gameclient.LoginData;
+import de.illonis.eduras.gameclient.userprefs.Settings;
+import de.illonis.eduras.logicabstraction.EdurasInitializer;
 import de.illonis.eduras.networking.discover.ServerInfo;
 import de.illonis.eduras.settings.S;
 import de.lessvoid.nifty.slick2d.NiftyStateBasedGame;
@@ -40,7 +40,7 @@ public class EdurasSlickClient implements GameControllerBridge {
 	 *            (NYI) the name of the user to login automatically.
 	 * @param betaPassword
 	 *            (NYI) the password of the user to login automatically.
-	 * @param serverPort
+	 * @param port
 	 *            the port of the server to connect to directly. Is ignored if
 	 *            it's zero.
 	 * @param serverIp
@@ -50,11 +50,11 @@ public class EdurasSlickClient implements GameControllerBridge {
 	 *             if there is a display problem.
 	 */
 	public void startGui(String betaUser, String betaPassword, String serverIp,
-			int serverPort) throws SlickException {
+			int port) throws SlickException {
 		betaAccountName = betaUser;
 		betaAccountPassword = betaPassword;
 		serverIpToConnectTo = serverIp;
-		this.serverPort = serverPort;
+		this.serverPort = port;
 
 		if (game != null)
 			throw new IllegalStateException("Cannot start gui more than once!");
@@ -63,13 +63,15 @@ public class EdurasSlickClient implements GameControllerBridge {
 		String[] icons = { "res/images/icon16.png", "res/images/icon24.png",
 				"res/images/icon32.png", "res/images/icon64.png" };
 		gameContainer.setIcons(icons);
-		DisplayMode currentMode = Display.getDesktopDisplayMode();
+		Settings s = EdurasInitializer.getInstance().getSettings();
 		if (S.Client.windowed) {
-			gameContainer.setDisplayMode(800, 600, false);
-		} else {
-			gameContainer.setDisplayMode(currentMode.getWidth(),
-					currentMode.getHeight(), true);
+			s.setBooleanOption(Settings.WINDOWED, true);
+			s.setIntOption(Settings.WIDTH, 800);
+			s.setIntOption(Settings.HEIGHT, 600);
 		}
+		gameContainer.setDisplayMode(s.getIntSetting(Settings.WIDTH),
+				s.getIntSetting(Settings.HEIGHT),
+				!s.getBooleanSetting(Settings.WINDOWED));
 		gameContainer.start();
 	}
 
@@ -79,8 +81,9 @@ public class EdurasSlickClient implements GameControllerBridge {
 	}
 
 	@Override
-	public void changeResolution(int width, int height) throws SlickException {
-		gameContainer.setDisplayMode(width, height, true);
+	public void changeResolution(int width, int height, boolean windowed)
+			throws SlickException {
+		gameContainer.setDisplayMode(width, height, !windowed);
 	}
 
 	class Game extends NiftyStateBasedGame {
