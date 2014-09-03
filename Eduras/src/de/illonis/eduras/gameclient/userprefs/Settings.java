@@ -8,6 +8,7 @@ import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Map.Entry;
 import java.util.Scanner;
 
 import de.illonis.eduras.gameclient.userprefs.KeyBindings.KeyBinding;
@@ -31,10 +32,14 @@ public class Settings implements ResettableSetting {
 	private final KeyBindings keyBindings;
 	private final File settingsFile;
 	private final HashMap<String, Boolean> booleanSettings;
+	private final HashMap<String, Float> floatSettings;
 
 	public static final String CONTINUOUS_ITEM_USAGE = "continuousItemUsage";
 	public static final String CHOOSE_ON_PRESS = "chooseOnPress";
 	public static final String MOUSE_WHEEL_SWITCH = "mouseWheelSwitch";
+
+	public static final String SOUND_VOLUME = "soundVolume";
+	public static final String MUSIC_VOLUME = "musicVolume";
 
 	/**
 	 * Creates new settings. This should be called only once each runtime and be
@@ -47,6 +52,7 @@ public class Settings implements ResettableSetting {
 		settingsFile = new File(PathFinder.findFile(PREF_FILE_NAME));
 		keyBindings = new KeyBindings();
 		booleanSettings = new HashMap<String, Boolean>();
+		floatSettings = new HashMap<String, Float>();
 		loadDefaults();
 	}
 
@@ -60,7 +66,7 @@ public class Settings implements ResettableSetting {
 	}
 
 	private enum SettingsType {
-		KEYBINDINGS, BOOLEANSETTINGS, NONE
+		KEYBINDINGS, BOOLEANSETTINGS, FLOATSETTINGS, NONE
 	}
 
 	/**
@@ -84,6 +90,10 @@ public class Settings implements ResettableSetting {
 				continue;
 			}
 
+			if (line.equals("#floatoptions")) {
+				type = SettingsType.FLOATSETTINGS;
+				continue;
+			}
 			switch (type) {
 			case BOOLEANSETTINGS: {
 				String bs[] = line.split("=");
@@ -98,6 +108,12 @@ public class Settings implements ResettableSetting {
 			}
 			case NONE:
 				continue;
+			case FLOATSETTINGS:
+				String fs[] = line.split("=");
+				floatSettings.put(fs[0], Float.parseFloat(fs[1]));
+				break;
+			default:
+				break;
 			}
 
 		}
@@ -125,6 +141,11 @@ public class Settings implements ResettableSetting {
 			writer.println(booleanSetting + "="
 					+ getBooleanSetting(booleanSetting));
 		}
+		writer.println("#floatoptions");
+		for (Entry<String, Float> floatSetting : floatSettings.entrySet()) {
+			writer.println(floatSetting.getKey() + "="
+					+ floatSetting.getValue());
+		}
 		writer.close();
 	}
 
@@ -132,11 +153,17 @@ public class Settings implements ResettableSetting {
 	public void loadDefaults() {
 		keyBindings.loadDefaults();
 		loadBooleanDefaults();
+		loadFloatDefaults();
+	}
+
+	private void loadFloatDefaults() {
+		floatSettings.put(SOUND_VOLUME, 1f);
+		floatSettings.put(MUSIC_VOLUME, 1f);
 	}
 
 	private void loadBooleanDefaults() {
-		booleanSettings.put("chooseOnPress", true);
-		booleanSettings.put("continuousItemUsage", true);
+		booleanSettings.put(CHOOSE_ON_PRESS, true);
+		booleanSettings.put(CONTINUOUS_ITEM_USAGE, true);
 		booleanSettings.put(MOUSE_WHEEL_SWITCH, true);
 	}
 
@@ -159,11 +186,38 @@ public class Settings implements ResettableSetting {
 	}
 
 	/**
+	 * Returns the float setting stored under the given name.
+	 * 
+	 * @param settingName
+	 *            The name of the setting.
+	 * @return The value of the setting stored under the given name.
+	 * @throws IllegalArgumentException
+	 *             Thrown if the setting name doesn't exist.
+	 */
+	public float getFloatSetting(String settingName)
+			throws IllegalArgumentException {
+		if (floatSettings.containsKey(settingName)) {
+			return floatSettings.get(settingName);
+		}
+		throw new IllegalArgumentException("There is no setting named "
+				+ settingName);
+	}
+
+	/**
 	 * Returns all booleansettings names.
 	 * 
 	 * @return A collection of names that are true/false settings.
 	 */
 	public Collection<String> getAllBooleanSettings() {
+		return booleanSettings.keySet();
+	}
+
+	/**
+	 * Returns all booleansettings names.
+	 * 
+	 * @return A collection of names that are true/false settings.
+	 */
+	public Collection<String> getAllFloatSettings() {
 		return booleanSettings.keySet();
 	}
 
@@ -177,5 +231,17 @@ public class Settings implements ResettableSetting {
 	 */
 	public void setBooleanOption(String booleanOption, boolean b) {
 		booleanSettings.put(booleanOption, b);
+	}
+
+	/**
+	 * Set the value for the given float setting.
+	 * 
+	 * @param floatOption
+	 *            name of the setting
+	 * @param b
+	 *            new value
+	 */
+	public void setFloatOption(String floatOption, float b) {
+		floatSettings.put(floatOption, b);
 	}
 }

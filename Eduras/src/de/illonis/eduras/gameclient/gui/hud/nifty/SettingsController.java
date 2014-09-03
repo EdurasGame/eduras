@@ -27,6 +27,8 @@ import de.lessvoid.nifty.controls.DropDown;
 import de.lessvoid.nifty.controls.DropDownSelectionChangedEvent;
 import de.lessvoid.nifty.controls.Label;
 import de.lessvoid.nifty.controls.ListBox;
+import de.lessvoid.nifty.controls.Slider;
+import de.lessvoid.nifty.controls.SliderChangedEvent;
 import de.lessvoid.nifty.screen.Screen;
 
 /**
@@ -44,6 +46,8 @@ public class SettingsController extends EdurasScreenController {
 	private CheckBox chooseOnPressBox;
 	private CheckBox continuousItemUsageBox;
 	private CheckBox mouseWheelSwitchBox;
+	private Slider soundVolumeSlider;
+	private Slider musicVolumeSlider;
 
 	SettingsController(GameControllerBridge game) {
 		super(game);
@@ -78,6 +82,25 @@ public class SettingsController extends EdurasScreenController {
 			final CheckBoxStateChangedEvent event) {
 		String setting = checkboxId.substring(0, checkboxId.length() - 3);
 		settings.setBooleanOption(setting, event.getCheckBox().isChecked());
+	}
+
+	/**
+	 * Saves slider changes
+	 * 
+	 * @param id
+	 * @param event
+	 */
+	@NiftyEventSubscriber(pattern = ".*VolumeSlider")
+	public void onSliderChange(final String id, final SliderChangedEvent event) {
+		if (id.contains("sound")) {
+			settings.setFloatOption(Settings.SOUND_VOLUME, event.getValue());
+			game.setSoundVolume(event.getValue());
+			SoundMachine.play(SoundType.AMMO_EMPTY);
+		} else if (id.contains("music")) {
+			settings.setFloatOption(Settings.MUSIC_VOLUME, event.getValue());
+			game.setMusicVolume(event.getValue());
+			// TODO: play music ;)
+		}
 	}
 
 	/**
@@ -157,13 +180,10 @@ public class SettingsController extends EdurasScreenController {
 		for (KeyBinding binding : KeyBinding.values()) {
 			box.addItem(binding);
 		}
-		chooseOnPressBox
-				.setChecked(settings.getBooleanSetting("chooseOnPress"));
-		continuousItemUsageBox.setChecked(settings
-				.getBooleanSetting("continuousItemUsage"));
-		mouseWheelSwitchBox.setChecked(settings
-				.getBooleanSetting(Settings.MOUSE_WHEEL_SWITCH));
-
+		soundVolumeSlider = screen.findNiftyControl("soundVolumeSlider",
+				Slider.class);
+		musicVolumeSlider = screen.findNiftyControl("musicVolumeSlider",
+				Slider.class);
 	}
 
 	/**
@@ -201,15 +221,19 @@ public class SettingsController extends EdurasScreenController {
 		}
 	}
 
-	@Override
-	public void onStartScreen() {
-		super.onStartScreen();
-		nifty.setIgnoreKeyboardEvents(true);
+	public void leaveState() {
+		nifty.setIgnoreKeyboardEvents(false);
 	}
 
-	@Override
-	public void onEndScreen() {
-		super.onEndScreen();
-		nifty.setIgnoreKeyboardEvents(false);
+	public void enterState() {
+		nifty.setIgnoreKeyboardEvents(true);
+		chooseOnPressBox
+				.setChecked(settings.getBooleanSetting("chooseOnPress"));
+		continuousItemUsageBox.setChecked(settings
+				.getBooleanSetting("continuousItemUsage"));
+		mouseWheelSwitchBox.setChecked(settings
+				.getBooleanSetting(Settings.MOUSE_WHEEL_SWITCH));
+		soundVolumeSlider.setValue(game.getSoundVolume());
+		musicVolumeSlider.setValue(game.getMusicVolume());
 	}
 }

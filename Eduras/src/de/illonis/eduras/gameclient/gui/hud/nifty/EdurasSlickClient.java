@@ -196,4 +196,24 @@ public class EdurasSlickClient implements GameControllerBridge {
 		enterState(4);
 	}
 
+	@Override
+	public void setSoundVolume(float volume) {
+		gameContainer.setSoundVolume(volume);
+	}
+
+	@Override
+	public float getSoundVolume() {
+		return gameContainer.getSoundVolume();
+	}
+
+	@Override
+	public void setMusicVolume(float volume) {
+		gameContainer.setMusicVolume(volume);
+	}
+
+	@Override
+	public float getMusicVolume() {
+		return gameContainer.getMusicVolume();
+	}
+
 }

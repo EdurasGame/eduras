@@ -105,4 +105,30 @@ public interface GameControllerBridge extends GameManager {
 	 */
 	LoginData getLoginData();
 
+	/**
+	 * Sets the volume for sound effects.
+	 * 
+	 * @param volume
+	 *            new value.
+	 */
+	void setSoundVolume(float volume);
+
+	/**
+	 * @return the volume of sound effects.
+	 */
+	float getSoundVolume();
+
+	/**
+	 * Sets the volume for music.
+	 * 
+	 * @param volume
+	 *            new value.
+	 */
+	void setMusicVolume(float volume);
+
+	/**
+	 * @return the volume of music.
+	 */
+	float getMusicVolume();
+
 }
