@@ -1,5 +1,6 @@
 package de.illonis.eduras.gameclient.gui.hud.minimap;
 
+import org.newdawn.slick.geom.Shape;
 import org.newdawn.slick.geom.Vector2f;
 
 import de.illonis.eduras.gameobjects.GameObject;
@@ -14,7 +15,7 @@ public class MiniMapNeutralObject extends MiniMapObject {
 
 	private final GameObject object;
 	private final boolean isDynamicShape;
-	private final Vector2f[] vertices;
+	private final Shape shape;
 
 	/**
 	 * Creates a static neutral object presented on the minimap.
@@ -34,8 +35,7 @@ public class MiniMapNeutralObject extends MiniMapObject {
 			float h) {
 		super(x, y, w, h);
 		this.object = object;
-		vertices = null;
-
+		shape = null;
 		isDynamicShape = false;
 	}
 
@@ -52,15 +52,14 @@ public class MiniMapNeutralObject extends MiniMapObject {
 	 *            width.
 	 * @param h
 	 *            height.
-	 * @param verticesOnMinimap
-	 *            vertices of the polygon in the gui
+	 * @param shape
+	 *            The shape on minimap.
 	 */
 	public MiniMapNeutralObject(GameObject o, float x, float y, float w,
-			float h, Vector2f[] verticesOnMinimap) {
+			float h, Shape shape) {
 		super(x, y, w, h);
 		this.object = o;
-
-		vertices = verticesOnMinimap;
+		this.shape = shape;
 		isDynamicShape = true;
 	}
 
@@ -86,12 +85,12 @@ public class MiniMapNeutralObject extends MiniMapObject {
 	}
 
 	/**
-	 * Returns the vertices if this object is a dynamic one or null if it's a
+	 * Returns the shape if this object is a dynamic one or null if it's a
 	 * static object.
 	 * 
-	 * @return vertices
+	 * @return the shape
 	 */
-	public Vector2f[] getVertices() {
-		return vertices;
+	public Shape getShape() {
+		return shape;
 	}
 }
