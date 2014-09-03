@@ -4,6 +4,7 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
+import java.util.TreeSet;
 
 import org.newdawn.slick.geom.Line;
 
@@ -16,6 +17,7 @@ import de.illonis.eduras.gamemodes.GameMode.GameModeNumber;
 import de.illonis.eduras.gameobjects.DynamicPolygonObject;
 import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.gameobjects.Portal;
+import de.illonis.eduras.gameobjects.TriggerArea;
 import de.illonis.eduras.maps.InitialObjectData;
 import de.illonis.eduras.maps.Map;
 import de.illonis.eduras.maps.NodeData;
@@ -147,6 +149,10 @@ public final class MapData {
 					DynamicPolygonObject dyno = (DynamicPolygonObject) o;
 					dyno.setPolygonVertices(object.getPolygonVector2dfs());
 					dyno.setColor(object.getColor());
+				}
+				if (o instanceof TriggerArea && object.getWidth() > 0) {
+					o.setWidth(object.getWidth());
+					o.setHeight(object.getHeight());
 				}
 				gameObjects.add(o);
 				if (object.getType() == ObjectType.PORTAL) {

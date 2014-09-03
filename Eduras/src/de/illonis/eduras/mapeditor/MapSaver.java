@@ -8,6 +8,9 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.TreeSet;
+
+import javax.swing.JOptionPane;
 
 import org.newdawn.slick.Color;
 import org.newdawn.slick.geom.Vector2f;
@@ -17,6 +20,7 @@ import de.illonis.eduras.gamemodes.GameMode.GameModeNumber;
 import de.illonis.eduras.gameobjects.DynamicPolygonObject;
 import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.gameobjects.Portal;
+import de.illonis.eduras.gameobjects.TriggerArea;
 import de.illonis.eduras.maps.NodeData;
 import de.illonis.eduras.maps.SpawnPosition;
 import de.illonis.eduras.maps.persistence.MapParser;
@@ -62,7 +66,11 @@ public final class MapSaver {
 		writer.println();
 		writeMetaData();
 		writeSpawnPoints();
-		writeObjects();
+		try {
+			writeObjects();
+		} catch (EditorException e) {
+			throw new IOException(e.getMessage());
+		}
 		writeNodes();
 		writeNodeConnections();
 		writer.close();
@@ -87,18 +95,22 @@ public final class MapSaver {
 		beginSection(MapFileSection.NODES);
 		for (NodeData node : data.getBases()) {
 			maybeAddReference(node);
-			writer.println(commaValues(node.getXPosition(), node.getYPosition(),
-					node.getWidth(), node.getHeight(), node.isMainNode(),
-					node.getResourceMultiplicator()));
+			writer.println(commaValues(node.getXPosition(),
+					node.getYPosition(), node.getWidth(), node.getHeight(),
+					node.isMainNode(), node.getResourceMultiplicator()));
 		}
 	}
 
-	private void writeObjects() {
+	private void writeObjects() throws EditorException {
 		beginSection(MapFileSection.OBJECTS);
 		for (GameObject object : data.getGameObjects()) {
 			maybeAddReference(object);
 			String line = commaValues(object.getType(), object.getXPosition(),
 					object.getYPosition());
+			if (object instanceof TriggerArea) {
+				line += ", " + (int) object.getWidth() + ", "
+						+ (int) object.getHeight();
+			}
 			switch (object.getType()) {
 			case DYNAMIC_POLYGON_BLOCK:
 				line += ", ";
@@ -113,6 +125,10 @@ public final class MapSaver {
 				break;
 			case PORTAL:
 				Portal portal = (Portal) object;
+				if (portal.getPartnerPortal() == null) {
+					throw new EditorException("Portal has no partner.");
+				}
+
 				line += ", *" + portal.getPartnerPortal().getRefName();
 				break;
 			default:

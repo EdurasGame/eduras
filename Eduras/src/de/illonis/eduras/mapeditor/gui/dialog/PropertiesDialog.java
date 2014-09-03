@@ -45,6 +45,8 @@ import de.illonis.eduras.gameobjects.DynamicPolygonObject;
 import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.gameobjects.GameObject.Visibility;
 import de.illonis.eduras.gameobjects.Portal;
+import de.illonis.eduras.gameobjects.TriggerArea;
+import de.illonis.eduras.mapeditor.EditorPlaceable;
 import de.illonis.eduras.mapeditor.MapData;
 import de.illonis.eduras.mapeditor.gui.EditorWindow;
 import de.illonis.eduras.maps.NodeData;
@@ -68,7 +70,7 @@ public class PropertiesDialog extends ESCDialog implements ItemListener,
 	protected GameObject object;
 	protected NodeData node;
 	protected SpawnPosition spawn;
-	private ReferencedEntity entity;
+	private EditorPlaceable entity;
 
 	private JRadioButton visibleNone;
 	private JRadioButton visibleAlways;
@@ -76,8 +78,8 @@ public class PropertiesDialog extends ESCDialog implements ItemListener,
 	private JRadioButton visibleOwner;
 	private final JTabbedPane tabbedPane;
 	private JColorChooser chooser;
-	private JSlider sliderX, sliderY, sliderZ;
-	private JLabel currentX, currentY;
+	private JSlider sliderX, sliderY, sliderZ, sliderWidth, sliderHeight;
+	private JLabel currentX, currentY, currentWidth, currentHeight;
 	private JRadioButton baseTeamA;
 	private JRadioButton baseTeamB;
 	private JRadioButton baseNone;
@@ -96,7 +98,7 @@ public class PropertiesDialog extends ESCDialog implements ItemListener,
 	 *            the node.
 	 */
 	public PropertiesDialog(EditorWindow parent, NodeData node) {
-		this(parent, (ReferencedEntity) node);
+		this(parent, (EditorPlaceable) node);
 		this.node = node;
 		addNeutralBaseTab();
 	}
@@ -110,7 +112,7 @@ public class PropertiesDialog extends ESCDialog implements ItemListener,
 	 *            the spawnarea.
 	 */
 	public PropertiesDialog(EditorWindow window, SpawnPosition spawn) {
-		this(window, (ReferencedEntity) spawn);
+		this(window, (EditorPlaceable) spawn);
 		this.spawn = spawn;
 		addSpawnTab();
 	}
@@ -124,7 +126,7 @@ public class PropertiesDialog extends ESCDialog implements ItemListener,
 	 *            the object.
 	 */
 	public PropertiesDialog(EditorWindow parent, GameObject object) {
-		this(parent, (ReferencedEntity) object);
+		this(parent, (EditorPlaceable) object);
 		this.object = object;
 		addPropertiesTab();
 
@@ -135,7 +137,7 @@ public class PropertiesDialog extends ESCDialog implements ItemListener,
 		}
 	}
 
-	private PropertiesDialog(EditorWindow parent, ReferencedEntity element) {
+	private PropertiesDialog(EditorWindow parent, EditorPlaceable element) {
 		super(parent);
 		entity = element;
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
@@ -154,6 +156,10 @@ public class PropertiesDialog extends ESCDialog implements ItemListener,
 		getContentPane().add(tabbedPane);
 		setMinimumSize(MIN_SIZE);
 		addGeneralTab();
+		if (entity instanceof TriggerArea || entity instanceof SpawnPosition
+				|| entity instanceof NodeData) {
+			addSizeTab();
+		}
 	}
 
 	private void updateTitle() {
@@ -169,6 +175,55 @@ public class PropertiesDialog extends ESCDialog implements ItemListener,
 		} else {
 			setTitle("Properties of " + entity.getRefName());
 		}
+	}
+
+	private void addSizeTab() {
+		float width = entity.getWidth();
+		float height = entity.getHeight();
+		JPanel sizePanel = new JPanel();
+		sizePanel.setLayout(new BoxLayout(sizePanel, BoxLayout.PAGE_AXIS));
+		Border border = BorderFactory.createEmptyBorder(8, 8, 8, 8);
+		JPanel widthPanel = new JPanel(new BorderLayout());
+		JPanel heightPanel = new JPanel(new BorderLayout());
+		sliderWidth = new JSlider(20, 250, (int) width);
+		sliderWidth.addChangeListener(this);
+		sliderHeight = new JSlider(20, 250, (int) height);
+		sliderHeight.addChangeListener(this);
+		sliderWidth.setBorder(border);
+		sliderHeight.setBorder(border);
+		widthPanel.setBorder(border);
+		heightPanel.setBorder(border);
+		JLabel labelWidth = new JLabel("Width");
+		labelWidth.setLabelFor(sliderX);
+		JLabel labelHeight = new JLabel("Height");
+		labelHeight.setLabelFor(sliderY);
+		currentWidth = new JLabel((int) width + "");
+		currentHeight = new JLabel((int) height + "");
+
+		Hashtable<Integer, JLabel> labelTable = new Hashtable<Integer, JLabel>();
+		labelTable.put(new Integer(20), new JLabel("Slim"));
+		labelTable.put(new Integer(sliderWidth.getMaximum()),
+				new JLabel("Wide"));
+		sliderWidth.setLabelTable(labelTable);
+		sliderWidth.setPaintLabels(true);
+		labelTable = new Hashtable<Integer, JLabel>();
+		labelTable.put(new Integer(20), new JLabel("Small"));
+		labelTable.put(new Integer(sliderHeight.getMaximum()), new JLabel(
+				"Large"));
+		sliderHeight.setLabelTable(labelTable);
+		sliderHeight.setPaintLabels(true);
+		sliderWidth.addChangeListener(this);
+		sliderHeight.addChangeListener(this);
+		widthPanel.add(labelWidth, BorderLayout.WEST);
+		widthPanel.add(sliderWidth, BorderLayout.CENTER);
+		widthPanel.add(currentWidth, BorderLayout.EAST);
+		heightPanel.add(labelHeight, BorderLayout.WEST);
+		heightPanel.add(sliderHeight, BorderLayout.CENTER);
+		heightPanel.add(currentHeight, BorderLayout.EAST);
+		sizePanel.add(widthPanel);
+		sizePanel.add(heightPanel);
+
+		addTab("Size", sizePanel);
 	}
 
 	private void addSpawnTab() {
@@ -300,51 +355,9 @@ public class PropertiesDialog extends ESCDialog implements ItemListener,
 		}
 	}
 
-	private int getItemX() {
-		if (object != null)
-			return (int) object.getXPosition();
-		if (node != null)
-			return (int) node.getXPosition();
-		if (spawn != null) {
-			return (int) spawn.getArea().getX();
-		}
-		return 0;
-	}
-
-	private int getItemY() {
-		if (object != null)
-			return (int) object.getYPosition();
-		if (node != null)
-			return (int) node.getYPosition();
-		if (spawn != null) {
-			return (int) spawn.getArea().getY();
-		}
-		return 0;
-	}
-
-	private void setItemX(float x) {
-		if (object != null)
-			object.setXPosition(x);
-		if (node != null)
-			node.setXPosition(x);
-		if (spawn != null) {
-			spawn.getArea().setX(x);
-		}
-	}
-
-	private void setItemY(float y) {
-		if (object != null)
-			object.setYPosition(y);
-		if (node != null)
-			node.setYPosition(y);
-		if (spawn != null) {
-			spawn.getArea().setY(y);
-		}
-	}
-
 	private void addGeneralTab() {
-		int x = getItemX();
-		int y = getItemY();
+		int x = (int) entity.getXPosition();
+		int y = (int) entity.getYPosition();
 		MapData data = MapData.getInstance();
 		JPanel positionTab = new JPanel();
 		positionTab.setLayout(new BoxLayout(positionTab, BoxLayout.PAGE_AXIS));
@@ -572,13 +585,19 @@ public class PropertiesDialog extends ESCDialog implements ItemListener,
 			JSlider source = (JSlider) event.getSource();
 
 			if (source == sliderX) {
-				setItemX(sliderX.getValue());
+				entity.setXPosition(sliderX.getValue());
 				currentX.setText(sliderX.getValue() + "");
 			} else if (source == sliderY) {
-				setItemY(sliderY.getValue());
+				entity.setYPosition(sliderY.getValue());
 				currentY.setText(sliderY.getValue() + "");
 			} else if (source == sliderZ) {
 				object.setzLayer(sliderZ.getValue());
+			} else if (source == sliderWidth) {
+				entity.setWidth(sliderWidth.getValue());
+				currentWidth.setText(sliderWidth.getValue() + "");
+			} else if (source == sliderHeight) {
+				entity.setHeight(sliderHeight.getValue());
+				currentHeight.setText(sliderHeight.getValue() + "");
 			}
 		} else if (event.getSource() instanceof JSpinner) {
 			JSpinner spinner = (JSpinner) event.getSource();
