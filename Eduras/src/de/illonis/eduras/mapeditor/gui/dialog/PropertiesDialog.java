@@ -142,20 +142,22 @@ public class PropertiesDialog extends ESCDialog implements ItemListener,
 			textureNone = new JRadioButton("use black background");
 		} else
 			textureNone = new JRadioButton("use color from color-tab");
+
 		textureSelected = new JRadioButton("use texture selected below");
 		textureNone.addActionListener(this);
 		textureSelected.addActionListener(this);
 		ButtonGroup group = new ButtonGroup();
 		group.add(textureNone);
 		group.add(textureSelected);
+		textureChooser = new TextureChooser(object);
 		if (currentTexture == TextureKey.NONE) {
 			textureNone.setSelected(true);
+			textureChooser.setEnabled(false);
 		} else {
 			textureSelected.setSelected(true);
 		}
 		sizePanel.add(textureNone);
 		sizePanel.add(textureSelected);
-		textureChooser = new TextureChooser(object);
 		sizePanel.add(textureChooser);
 		addTab("Texture", sizePanel);
 	}
@@ -558,15 +560,17 @@ public class PropertiesDialog extends ESCDialog implements ItemListener,
 		} else if (button == spawnTeamB) {
 			spawn.setTeaming(SpawnType.TEAM_B);
 		} else if (button == textureNone) {
-			if (object != null)
+			textureChooser.setEnabled(false);
+			if (object != null) {
 				object.setTexture(TextureKey.NONE);
-			else {
+			} else {
 				MapData.getInstance().setMapBackground(TextureKey.NONE);
 			}
 		} else if (button == textureSelected) {
-			if (object != null)
+			textureChooser.setEnabled(true);
+			if (object != null) {
 				object.setTexture(textureChooser.getSelectedTexture());
-			else {
+			} else {
 				MapData.getInstance().setMapBackground(
 						textureChooser.getSelectedTexture());
 			}
