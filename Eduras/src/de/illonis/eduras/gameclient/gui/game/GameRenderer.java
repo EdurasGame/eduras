@@ -40,6 +40,7 @@ import de.illonis.eduras.gameclient.gui.hud.TextTooltip;
 import de.illonis.eduras.gameclient.gui.hud.Tooltip;
 import de.illonis.eduras.gameclient.gui.hud.UserInterface;
 import de.illonis.eduras.gameobjects.Base;
+import de.illonis.eduras.gameobjects.DynamicPolygonObject;
 import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.images.ImageFiler.ImageResolution;
 import de.illonis.eduras.items.Item;
@@ -490,8 +491,9 @@ public class GameRenderer implements TooltipHandler {
 		case BIGGERBLOCK:
 		case BUILDING:
 		case SMALLCIRCLEDBLOCK:
+			return Color.gray;
 		case DYNAMIC_POLYGON_BLOCK:
-			return Color.pink;
+			return ((DynamicPolygonObject) d).getColor();
 		case PLAYER:
 			PlayerMainFigure p = (PlayerMainFigure) d;
 			if (p.getTeam() == null) {
@@ -530,7 +532,7 @@ public class GameRenderer implements TooltipHandler {
 		case INVISIBILITY_POWERUP:
 			return Color.darkGray;
 		case MAPBOUNDS:
-			return new Color(0, 0, 0, 0);
+			return Color.transparent;
 		case NEUTRAL_BASE:
 			Base base = (Base) d;
 			if (base.getCurrentOwnerTeam() == null) {

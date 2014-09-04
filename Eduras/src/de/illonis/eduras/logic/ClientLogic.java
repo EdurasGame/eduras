@@ -35,6 +35,7 @@ import de.illonis.eduras.events.SetMapEvent;
 import de.illonis.eduras.events.SetOwnerEvent;
 import de.illonis.eduras.events.SetPolygonDataEvent;
 import de.illonis.eduras.events.SetRemainingTimeEvent;
+import de.illonis.eduras.events.SetRenderInfoEvent;
 import de.illonis.eduras.events.SetSettingPropertyEvent;
 import de.illonis.eduras.events.SetSettingsEvent;
 import de.illonis.eduras.events.SetSizeEvent;
@@ -164,6 +165,24 @@ public class ClientLogic implements GameLogicInterface {
 				} else {
 					L.warning("Given object id in SET_POLYGON_DATA event does not match a DynamicPolygonBlock, instead object is a "
 							+ gameObj.getClass().getName());
+				}
+				break;
+			case SET_RENDER_INFO:
+				SetRenderInfoEvent renderEvent = (SetRenderInfoEvent) event;
+				GameObject renderObject;
+				try {
+					renderObject = gameInfo.findObjectById(renderEvent
+							.getObjectId());
+				} catch (ObjectNotFoundException e3) {
+					L.log(Level.WARNING, "Cannot find object.", e3);
+					break;
+				}
+				System.out.println("Setting render info for "
+						+ renderObject.getId());
+				renderObject.setTexture(renderEvent.getTexture());
+				if (renderObject instanceof DynamicPolygonObject) {
+					((DynamicPolygonObject) renderObject).setColor(renderEvent
+							.getColor());
 				}
 				break;
 			case SET_AMMU:

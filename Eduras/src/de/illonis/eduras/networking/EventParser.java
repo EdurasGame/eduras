@@ -50,6 +50,7 @@ import de.illonis.eduras.events.SetMapEvent;
 import de.illonis.eduras.events.SetOwnerEvent;
 import de.illonis.eduras.events.SetPolygonDataEvent;
 import de.illonis.eduras.events.SetRemainingTimeEvent;
+import de.illonis.eduras.events.SetRenderInfoEvent;
 import de.illonis.eduras.events.SetSettingPropertyEvent;
 import de.illonis.eduras.events.SetSettingsEvent;
 import de.illonis.eduras.events.SetSizeEvent;
@@ -64,10 +65,12 @@ import de.illonis.eduras.events.SwitchInteractModeEvent;
 import de.illonis.eduras.events.UnitSpellActionEvent;
 import de.illonis.eduras.events.UserMovementEvent;
 import de.illonis.eduras.exceptions.InvalidNameException;
+import de.illonis.eduras.gameclient.datacache.CacheInfo.TextureKey;
 import de.illonis.eduras.gameobjects.GameObject.Visibility;
 import de.illonis.eduras.interfaces.GameLogicInterface;
 import de.illonis.eduras.math.Vector2df;
 import de.illonis.eduras.units.InteractMode;
+import de.illonis.eduras.utils.ColorUtils;
 
 /**
  * This class serves as a bridge between the network and the logic. Events'
@@ -319,6 +322,13 @@ public class EventParser implements EventHandler {
 						.valueOf((String) event.getArgument(0)),
 						(Integer) event.getArgument(1), (Integer) event
 								.getArgument(2)));
+				break;
+			case SET_RENDER_INFO:
+				System.out.println("got render event");
+				logic.onGameEventAppeared(new SetRenderInfoEvent((int) event
+						.getArgument(0), ColorUtils.fromString((String) event
+						.getArgument(1)), TextureKey.valueOf((String) event
+						.getArgument(2))));
 				break;
 			case SET_REMAININGTIME:
 				logic.onGameEventAppeared(new SetRemainingTimeEvent(

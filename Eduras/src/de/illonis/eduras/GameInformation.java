@@ -36,6 +36,7 @@ import de.illonis.eduras.events.SetInteractModeEvent;
 import de.illonis.eduras.events.SetMapEvent;
 import de.illonis.eduras.events.SetPolygonDataEvent;
 import de.illonis.eduras.events.SetRemainingTimeEvent;
+import de.illonis.eduras.events.SetRenderInfoEvent;
 import de.illonis.eduras.events.SetSettingsEvent;
 import de.illonis.eduras.events.SetSizeEvent;
 import de.illonis.eduras.events.SetTeamsEvent;
@@ -490,6 +491,16 @@ public class GameInformation {
 						((DynamicPolygonObject) object).getPolygonVertices());
 				infos.add(polygonData);
 			}
+			SetRenderInfoEvent renderInfoEvent;
+			if (object instanceof DynamicPolygonObject) {
+				renderInfoEvent = new SetRenderInfoEvent(object.getId(),
+						((DynamicPolygonObject) object).getColor(),
+						object.getTexture());
+			} else {
+				renderInfoEvent = new SetRenderInfoEvent(object.getId(),
+						object.getTexture());
+			}
+			infos.add(renderInfoEvent);
 
 			if (object.getType() == ObjectType.NEUTRAL_BASE) {
 				neutralBases.add((Base) object);
