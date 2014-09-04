@@ -1,6 +1,7 @@
 package de.illonis.eduras.maps;
 
 import java.io.IOException;
+import java.net.URL;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Collection;
@@ -19,6 +20,7 @@ import de.illonis.eduras.maps.SpawnPosition.SpawnType;
 import de.illonis.eduras.maps.persistence.InvalidDataException;
 import de.illonis.eduras.maps.persistence.MapParser;
 import de.illonis.eduras.math.Vector2df;
+import de.illonis.eduras.utils.ResourceManager;
 
 /**
  * A playable map for gaming.
@@ -35,6 +37,9 @@ public class Map {
 	 */
 	public final static SimpleDateFormat DATE_FORMAT = new SimpleDateFormat(
 			"yyyy-MM-dd");
+
+	public final static String[] defaultMaps = new String[] { "eduramus.erm",
+			"eduramus2.erm", "funmap.erm", "Tryfield.erm" };
 
 	private String name;
 	private String author;
@@ -327,8 +332,10 @@ public class Map {
 	 */
 	protected final void loadFromFile(String mapFileName)
 			throws InvalidDataException, IOException {
-		Map map = MapParser.readMap(getClass().getResource(
-				"data/" + mapFileName));
+
+		URL mapURL = ResourceManager.getMapFileUrl(mapFileName);
+
+		Map map = MapParser.readMap(mapURL);
 		initialObjects.clear();
 		initialObjects.addAll(map.getInitialObjects());
 		spawnPositions.clear();

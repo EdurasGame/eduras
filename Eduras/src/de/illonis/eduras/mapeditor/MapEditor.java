@@ -12,10 +12,10 @@ import javax.swing.JOptionPane;
 import org.newdawn.slick.SlickException;
 
 import de.illonis.eduras.ObjectFactory.ObjectType;
-import de.illonis.eduras.gameclient.EdurasClient;
 import de.illonis.eduras.mapeditor.gui.EditorWindow;
 import de.illonis.eduras.mapeditor.validate.MapValidator;
 import de.illonis.eduras.utils.PathFinder;
+import de.illonis.eduras.utils.ResourceManager;
 
 /**
  * A map editor for Eduras?-maps that supports easy placing of objects on the
@@ -40,7 +40,7 @@ public class MapEditor {
 	 */
 	public static void main(String[] args) {
 		try {
-			EdurasClient.extractNatives();
+			ResourceManager.extractNatives();
 			if (args.length == 0) {
 				System.setProperty("org.lwjgl.librarypath", (new File(
 						PathFinder.findFile("native"))).getAbsolutePath());

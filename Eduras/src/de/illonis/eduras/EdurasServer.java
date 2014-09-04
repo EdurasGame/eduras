@@ -55,6 +55,7 @@ import de.illonis.eduras.serverconsole.NoConsoleException;
 import de.illonis.eduras.serverconsole.ServerConsole;
 import de.illonis.eduras.settings.S;
 import de.illonis.eduras.utils.ReflectionTools;
+import de.illonis.eduras.utils.ResourceManager;
 import de.illonis.eduras.utils.WebFetcher;
 
 /**
@@ -533,6 +534,13 @@ public class EdurasServer {
 		}
 
 		EdurasServer edurasServer = new EdurasServer();
+
+		try {
+			ResourceManager.extractResources();
+		} catch (IOException e1) {
+			L.log(Level.SEVERE, "Could not extract resources.", e1);
+			return;
+		}
 
 		// arguments are of form <parametername>=<parametervalue>
 		String[][] parametersWithValues = new String[args.length][2];
