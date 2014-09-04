@@ -159,19 +159,13 @@ public class NotificationPanel extends RenderedGuiObject {
 	public void onClientRename(ClientRenameEvent event) {
 		String name = event.getName();
 		String note;
-		try {
-			if (name.equals(getInfo().getPlayer().getName()))
-				note = Localization.getStringF(
-						"Client.gui.notifications.welcome", getInfo()
-								.getMapName());
-			else
-				note = Localization.getStringF("Client.gui.notifications.join",
-						name);
-			addNotification(note);
-		} catch (ObjectNotFoundException e) {
-			L.log(Level.SEVERE, "object not found", e);
-		}
-
+		if (event.getOwner() == getInfo().getOwnerID())
+			note = Localization.getStringF("Client.gui.notifications.welcome",
+					getInfo().getMapName());
+		else
+			note = Localization.getStringF("Client.gui.notifications.join",
+					name);
+		addNotification(note);
 	}
 
 	@Override

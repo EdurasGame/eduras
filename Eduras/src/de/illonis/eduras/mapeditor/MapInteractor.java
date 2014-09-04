@@ -107,5 +107,7 @@ public interface MapInteractor {
 	void toggleSelectionAt(int x, int y);
 
 	boolean isSelected(int x, int y);
+	
+	void onMapLoaded();
 
 }

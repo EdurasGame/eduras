@@ -29,10 +29,12 @@ public class SettingsState extends NiftyOverlayBasicGameState {
 
 	@Override
 	public void enterState(GameContainer container, StateBasedGame stateGame) {
+		controller.enterState();
 	}
 
 	@Override
 	public void leaveState(GameContainer container, StateBasedGame stateGame) {
+		controller.leaveState();
 	}
 
 	@Override

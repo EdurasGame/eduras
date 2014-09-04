@@ -540,7 +540,6 @@ public class PropertiesDialog extends ESCDialog implements ItemListener,
 		if (button == baseNone) {
 			node.setIsMainNode(BaseType.NEUTRAL);
 		} else if (button == baseTeamA) {
-			System.out.println("i");
 			node.setIsMainNode(BaseType.TEAM_A);
 		} else if (button == baseTeamB) {
 			node.setIsMainNode(BaseType.TEAM_B);

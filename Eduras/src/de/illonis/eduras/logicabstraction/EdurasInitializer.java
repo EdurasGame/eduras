@@ -74,7 +74,6 @@ public class EdurasInitializer {
 		networkManager = new NetworkManager(this);
 		settings = new Settings();
 		try {
-
 			settings.load();
 		} catch (FileNotFoundException e) {
 			L.log(Level.WARNING, "Could not load user preferences.", e);

@@ -20,6 +20,7 @@ import de.illonis.eduras.mapeditor.MapData;
 import de.illonis.eduras.mapeditor.MapInteractor;
 import de.illonis.eduras.mapeditor.MapInteractor.InteractType;
 import de.illonis.eduras.mapeditor.MapSaver;
+import de.illonis.eduras.mapeditor.gui.dialog.AboutDialog;
 import de.illonis.eduras.mapeditor.gui.dialog.ControlsInfo;
 import de.illonis.eduras.mapeditor.gui.dialog.ManageNodesDialog;
 import de.illonis.eduras.mapeditor.gui.dialog.MapPropertiesDialog;
@@ -44,7 +45,7 @@ public class EditorMenu extends JMenuBar implements ActionListener {
 
 	private JMenuItem mapProperties, newMap, saveMap, loadMap, shapeCreator,
 			validate, controls, showNodeConnections, showPortalLinks, exit,
-			manageNodeConnections, undo, redo, fit;
+			manageNodeConnections, undo, redo, fit, about;
 
 	EditorMenu(MapInteractor interactor, EditorWindow editorWindow) {
 		this.window = editorWindow;
@@ -129,12 +130,17 @@ public class EditorMenu extends JMenuBar implements ActionListener {
 		help.setMnemonic(KeyEvent.VK_H);
 		controls = addItem("Controls", KeyEvent.VK_C, KeyEvent.VK_F1, 0);
 		help.add(controls);
+		help.addSeparator();
+		about = addItem("About", KeyEvent.VK_A, 0, 0);
+		help.add(about);
 		add(help);
 	}
 
 	private JMenuItem addItem(String text, int key, int accKey, int accMask) {
 		JMenuItem menuItem = new JMenuItem(text, key);
-		menuItem.setAccelerator(KeyStroke.getKeyStroke(accKey, accMask));
+		if (accKey != KeyEvent.VK_UNDEFINED) {
+			menuItem.setAccelerator(KeyStroke.getKeyStroke(accKey, accMask));
+		}
 		menuItem.addActionListener(this);
 		return menuItem;
 	}
@@ -193,6 +199,7 @@ public class EditorMenu extends JMenuBar implements ActionListener {
 						map = MapParser.readMap(file.toURI().toURL());
 						interactor.setInteractType(InteractType.DEFAULT);
 						MapData.getInstance().importMap(map);
+						interactor.onMapLoaded();
 						window.refreshTitle();
 					} catch (InvalidDataException | IOException ex) {
 						JOptionPane.showMessageDialog(window,
@@ -234,8 +241,8 @@ public class EditorMenu extends JMenuBar implements ActionListener {
 				JOptionPane.showMessageDialog(window, ex.getMessage(),
 						"Node error", JOptionPane.ERROR_MESSAGE);
 			}
-		} else if (item == fit) {
-
+		} else if (item == about) {
+			new AboutDialog(window).setVisible(true);
 		} else if (item == exit) {
 			window.tryExit();
 		}

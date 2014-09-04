@@ -47,9 +47,6 @@ public class OutsideValidator extends ValidateTask {
 		if (!Geometry.rectangleContains(mapBounds, elementBounds)) {
 			addErrorMessage(element.getClass().getSimpleName() + " "
 					+ element.getRefName() + " is outside the map.");
-			System.out.println(elementBounds.getX() + ","
-					+ elementBounds.getY());
-			System.out.println(elementBounds);
 			return false;
 		}
 		return true;
