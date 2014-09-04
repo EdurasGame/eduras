@@ -1,6 +1,7 @@
 package de.illonis.eduras.utils;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
@@ -21,6 +22,11 @@ import de.illonis.eduras.maps.Map;
 public class ResourceManager {
 	private final static Logger L = EduLog.getLoggerFor(ResourceManager.class
 			.getName());
+
+	private static final String RES_FOLDER = "data/";
+	private static final String MAP_FOLDER = "maps/";
+
+	private static final String PATH_TO_MAPS = RES_FOLDER + MAP_FOLDER;
 
 	private final static String[] nativeFiles = new String[] {
 			"jinput-dx8_64.dll", "jinput-dx8.dll", "jinput-raw_64.dll",
@@ -49,20 +55,21 @@ public class ResourceManager {
 	}
 
 	public static void extractResources() throws IOException {
-		URI resourceFolder = createFolderIfDoesntExist("data/");
-		createFolderIfDoesntExist("data/maps/");
+		URI resourceFolder = createFolderIfDoesntExist(RES_FOLDER);
+		createFolderIfDoesntExist(PATH_TO_MAPS);
 
 		for (int i = 0; i < Map.defaultMaps.length; i++) {
-			URL urlToMap = Map.class.getResource("data/" + Map.defaultMaps[i]);
+			InputStream mapInputStream = Map.class
+					.getResourceAsStream(RES_FOLDER + Map.defaultMaps[i]);
 
-			if (urlToMap == null) {
+			if (mapInputStream == null) {
 				L.severe("Cannot find resource map " + Map.defaultMaps[i]);
 				continue;
 			}
 
-			File mapFileToExtract = new File(urlToMap.getPath());
-			File existingMapFile = new File(resourceFolder.getPath() + "maps/"
-					+ Map.defaultMaps[i]);
+			File mapFileToExtract = createTemporaryFileFromResource(
+					mapInputStream, Map.defaultMaps[i]);
+			File existingMapFile = new File(PATH_TO_MAPS + Map.defaultMaps[i]);
 
 			if (!existingMapFile.exists()
 					|| !HashCalculator.computeHash(mapFileToExtract.toPath())
@@ -97,6 +104,48 @@ public class ResourceManager {
 
 	public static URL getMapFileUrl(String mapFileName)
 			throws MalformedURLException {
-		return PathFinder.findFile("data/maps/" + mapFileName).toURL();
+		return PathFinder.findFile(PATH_TO_MAPS + mapFileName).toURL();
+	}
+
+	public static String getHashOfMap(String mapFileName)
+			throws MalformedURLException {
+		File file = new File(PathFinder.findFile(PATH_TO_MAPS + mapFileName));
+		return HashCalculator.computeHash(file.toPath());
+	}
+
+	public static File writeMapFile(String name, byte[] data)
+			throws IOException {
+
+		File file = new File(PathFinder.findFile(PATH_TO_MAPS + name));
+		if (file.exists() && file.isFile()) {
+			file.delete();
+		}
+
+		FileOutputStream outputStream;
+		outputStream = new FileOutputStream(file);
+		outputStream.write(data);
+		outputStream.close();
+
+		return file;
+
+	}
+
+	public static File createTemporaryFileFromResource(InputStream inputStream,
+			String name) throws IOException {
+		File file = File.createTempFile(name, "eduras");
+		System.out.println(file.getPath());
+
+		FileOutputStream outputStream = new FileOutputStream(file);
+
+		int byteData = 0;
+		do {
+			byteData = inputStream.read();
+			if (byteData != -1) {
+				outputStream.write(byteData);
+			}
+		} while (byteData != -1);
+
+		outputStream.close();
+		return file;
 	}
 }

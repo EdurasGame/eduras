@@ -2,6 +2,7 @@ package de.illonis.eduras;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -58,6 +59,7 @@ import de.illonis.eduras.math.Vector2df;
 import de.illonis.eduras.settings.S;
 import de.illonis.eduras.settings.S.SettingType;
 import de.illonis.eduras.units.PlayerMainFigure;
+import de.illonis.eduras.utils.ResourceManager;
 
 /**
  * Contains game information.
@@ -469,7 +471,14 @@ public class GameInformation {
 				gameSettings.getRemainingTime());
 		infos.add(remaining);
 
-		SetMapEvent setMapEvent = new SetMapEvent(map.getName());
+		SetMapEvent setMapEvent;
+		try {
+			setMapEvent = new SetMapEvent(map.getName(),
+					ResourceManager.getHashOfMap(map.getName() + ".erm"));
+		} catch (MalformedURLException e1) {
+			L.log(Level.SEVERE, "Cannot get hash of map!", e1);
+			return;
+		}
 		infos.add(setMapEvent);
 	}
 

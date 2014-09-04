@@ -14,6 +14,7 @@ import de.illonis.eduras.Statistic.StatsProperty;
 import de.illonis.eduras.Team;
 import de.illonis.eduras.ai.movement.UnitNotControllableException;
 import de.illonis.eduras.events.GameEvent;
+import de.illonis.eduras.events.GameEvent.GameEventNumber;
 import de.illonis.eduras.events.ItemEvent;
 import de.illonis.eduras.events.ObjectFactoryEvent;
 import de.illonis.eduras.events.SetGameObjectAttributeEvent;
@@ -708,4 +709,17 @@ public interface EventTriggerer {
 	 * @param charges
 	 */
 	void changeBlinkChargesBy(Player player, int charges);
+
+	/**
+	 * Sends a resource to a player
+	 * 
+	 * @param type
+	 *            type of resource
+	 * 
+	 * @param owner
+	 *            owner id of the player
+	 * @param file
+	 *            file to send
+	 */
+	void sendResource(GameEventNumber type, int owner, File file);
 }

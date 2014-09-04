@@ -1,5 +1,6 @@
 package de.illonis.eduras.logic;
 
+import java.net.MalformedURLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -23,6 +24,7 @@ import de.illonis.eduras.events.MovementEvent;
 import de.illonis.eduras.events.ObjectFactoryEvent;
 import de.illonis.eduras.events.OwnerGameEvent;
 import de.illonis.eduras.events.RespawnEvent;
+import de.illonis.eduras.events.SendResourceEvent;
 import de.illonis.eduras.events.SetAmmunitionEvent;
 import de.illonis.eduras.events.SetAvailableBlinksEvent;
 import de.illonis.eduras.events.SetBooleanGameObjectAttributeEvent;
@@ -67,6 +69,7 @@ import de.illonis.eduras.maps.persistence.InvalidDataException;
 import de.illonis.eduras.settings.S;
 import de.illonis.eduras.settings.S.SettingType;
 import de.illonis.eduras.units.Unit;
+import de.illonis.eduras.utils.ResourceManager;
 
 /**
  * Logic for client.
@@ -455,12 +458,31 @@ public class ClientLogic implements GameLogicInterface {
 				try {
 					gameInfo.setMap(Map.getMapByName(setMapEvent
 							.getNameOfNewMap()));
-					L.info("Set map to " + setMapEvent.getNameOfNewMap());
-					getListener().onMapChanged(setMapEvent);
+
+					try {
+						if (!(ResourceManager.getHashOfMap(setMapEvent
+								.getNameOfNewMap())).equals(setMapEvent
+								.getHashOfMap())) {
+							throw new NoSuchMapException(
+									setMapEvent.getNameOfNewMap());
+						}
+					} catch (MalformedURLException e1) {
+						L.log(Level.SEVERE,
+								"Cannot find map."
+										+ setMapEvent.getNameOfNewMap(), e1);
+					}
 				} catch (NoSuchMapException | InvalidDataException e1) {
-					L.log(Level.SEVERE, "Cannot find or load map "
-							+ setMapEvent.getNameOfNewMap(), e1);
+					L.log(Level.SEVERE,
+							"Cannot find or load map or have a different version of map "
+									+ setMapEvent.getNameOfNewMap(), e1);
+
+					getListener().onResourceRequired(
+							GameEventNumber.REQUEST_MAP,
+							setMapEvent.getNameOfNewMap());
 				}
+
+				L.info("Set map to " + setMapEvent.getNameOfNewMap());
+				getListener().onMapChanged(setMapEvent);
 				break;
 			}
 			case SET_OWNER:
@@ -513,6 +535,16 @@ public class ClientLogic implements GameLogicInterface {
 				break;
 			case GAME_READY:
 				getListener().onGameReady();
+				break;
+			case SEND_MAP:
+				try {
+					gameInfo.setMap(Map
+							.getMapByName(((SendResourceEvent) event)
+									.getResourceName()));
+				} catch (NoSuchMapException | InvalidDataException e3) {
+					L.log(Level.SEVERE,
+							"Cannot switch to the map we just received.", e3);
+				}
 				break;
 			case BASE_CONQUERED:
 				AreaConqueredEvent baseConqueredEvent = (AreaConqueredEvent) event;
