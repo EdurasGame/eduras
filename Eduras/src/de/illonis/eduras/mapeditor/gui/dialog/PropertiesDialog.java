@@ -39,6 +39,7 @@ import javax.swing.event.DocumentListener;
 import org.newdawn.slick.Color;
 
 import de.illonis.eduras.ReferencedEntity;
+import de.illonis.eduras.gameclient.datacache.CacheInfo.TextureKey;
 import de.illonis.eduras.gameobjects.Base;
 import de.illonis.eduras.gameobjects.Base.BaseType;
 import de.illonis.eduras.gameobjects.DynamicPolygonObject;
@@ -84,10 +85,12 @@ public class PropertiesDialog extends ESCDialog implements ItemListener,
 	private JRadioButton baseTeamB;
 	private JRadioButton baseNone;
 	private JRadioButton spawnTeamA, spawnTeamB, spawnSingle, spawnAny;
+	private JRadioButton textureNone, textureSelected;
 	private JSpinner baseMult;
 	private JTextField refName;
 	private JButton saveButton;
 	private JComboBox<Portal> otherPortals;
+	private TextureChooser textureChooser;
 
 	/**
 	 * Creates a properties dialog for a node.
@@ -132,6 +135,7 @@ public class PropertiesDialog extends ESCDialog implements ItemListener,
 
 		if (object instanceof DynamicPolygonObject) {
 			addColorTab(((DynamicPolygonObject) object).getColor());
+			addTextureTab(object.getTexture());
 		} else if (object instanceof Portal) {
 			addPortalTab();
 		}
@@ -175,6 +179,30 @@ public class PropertiesDialog extends ESCDialog implements ItemListener,
 		} else {
 			setTitle("Properties of " + entity.getRefName());
 		}
+	}
+
+	private void addTextureTab(TextureKey currentTexture) {
+		JPanel sizePanel = new JPanel();
+		sizePanel.setLayout(new BoxLayout(sizePanel, BoxLayout.PAGE_AXIS));
+		Border border = BorderFactory.createEmptyBorder(8, 8, 8, 8);
+		sizePanel.setBorder(border);
+		textureNone = new JRadioButton("use color from color-tab");
+		textureSelected = new JRadioButton("use texture selected below");
+		textureNone.addActionListener(this);
+		textureSelected.addActionListener(this);
+		ButtonGroup group = new ButtonGroup();
+		group.add(textureNone);
+		group.add(textureSelected);
+		if (currentTexture == TextureKey.NONE) {
+			textureNone.setSelected(true);
+		} else {
+			textureSelected.setSelected(true);
+		}
+		sizePanel.add(textureNone);
+		sizePanel.add(textureSelected);
+		textureChooser = new TextureChooser(object);
+		sizePanel.add(textureChooser);
+		addTab("Texture", sizePanel);
 	}
 
 	private void addSizeTab() {
@@ -572,6 +600,10 @@ public class PropertiesDialog extends ESCDialog implements ItemListener,
 			spawn.setTeaming(SpawnType.TEAM_A);
 		} else if (button == spawnTeamB) {
 			spawn.setTeaming(SpawnType.TEAM_B);
+		} else if (button == textureNone) {
+			object.setTexture(TextureKey.NONE);
+		} else if (button == textureSelected) {
+			object.setTexture(textureChooser.getSelectedTexture());
 		}
 	}
 

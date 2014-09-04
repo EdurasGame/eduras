@@ -24,6 +24,7 @@ import de.illonis.eduras.maps.NodeData;
 import de.illonis.eduras.maps.SpawnPosition;
 import de.illonis.eduras.math.Geometry;
 import de.illonis.eduras.math.Vector2df;
+import de.illonis.eduras.settings.S;
 import de.illonis.eduras.units.PlayerMainFigure;
 
 /**
@@ -207,9 +208,18 @@ public class MapRenderer {
 				return;
 			}
 		}
+
 		try {
 			Image image = ImageCache.getObjectImage(o);
-			g.drawImage(image, x, y);
+			if (ImageCache.isTextured(o)) {
+				g.setColor(Color.white);
+				g.texture(o.getShape(), image, ImageCache.shouldFit(o));
+			} else {
+				g.drawImage(image, x, y);
+			}
+			if (S.Client.debug_render_shapes) {
+				renderShape(o, g);
+			}
 		} catch (CacheException e) {
 			renderShape(o, g);
 		}

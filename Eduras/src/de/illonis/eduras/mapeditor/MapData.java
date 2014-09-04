@@ -152,6 +152,7 @@ public final class MapData {
 					dyno.setPolygonVertices(object.getPolygonVector2dfs());
 					dyno.setColor(object.getColor());
 				}
+				o.setTexture(object.getTexture());
 				if (o instanceof TriggerArea && object.getWidth() > 0) {
 					o.setWidth(object.getWidth());
 					o.setHeight(object.getHeight());
