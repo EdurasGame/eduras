@@ -8,9 +8,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.TreeSet;
-
-import javax.swing.JOptionPane;
 
 import org.newdawn.slick.Color;
 import org.newdawn.slick.geom.Vector2f;
@@ -162,7 +159,6 @@ public final class MapSaver {
 					.getY(), spawn.getArea().getWidth(), spawn.getArea()
 					.getHeight(), spawn.getTeaming()));
 		}
-
 	}
 
 	private String commaValues(Object... values) {
