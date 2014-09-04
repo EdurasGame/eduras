@@ -2,7 +2,7 @@
 
 @mapname = eduramus2
 @author = Florian Mai
-@created = 2014-2-4
+@created = 2014-6-4
 @gamemodes = EDURA
 @width = 2000
 @height = 2038
@@ -142,7 +142,7 @@ DYNAMIC_POLYGON_BLOCK, 173, 1990, [198 2036], [198 2011], [173 2011], [173 1990]
 &mainRed
 995, 251, 80, 40, TEAM_A, 1
 &middle
-1000, 1000, 40, 40, NEUTRAL, 1
+1000, 1000, 40, 40, NEUTRAL, 3
 &left
 77, 997, 40, 40, NEUTRAL, 1
 &right
