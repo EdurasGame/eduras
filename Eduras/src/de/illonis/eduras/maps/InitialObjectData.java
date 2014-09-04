@@ -5,7 +5,7 @@ import java.util.HashMap;
 import org.newdawn.slick.Color;
 
 import de.illonis.eduras.ObjectFactory.ObjectType;
-import de.illonis.eduras.gameobjects.DynamicPolygonObject;
+import de.illonis.eduras.gameclient.datacache.CacheInfo.TextureKey;
 import de.illonis.eduras.math.Vector2df;
 
 /**
@@ -21,6 +21,7 @@ public class InitialObjectData {
 	private final Vector2df[] polygonShapeVector2dfs;
 	private final java.util.Map<String, String> references;
 	private Color color;
+	private TextureKey texture;
 
 	/**
 	 * Creates a new dataset holding given information for a new object.
@@ -88,6 +89,7 @@ public class InitialObjectData {
 		this.refName = refName;
 		references = new HashMap<String, String>();
 		color = Color.gray;
+		texture = TextureKey.NONE;
 	}
 
 	public InitialObjectData(ObjectType objectType, float objX, float objY,
@@ -136,6 +138,14 @@ public class InitialObjectData {
 	 */
 	public float getY() {
 		return y;
+	}
+
+	public TextureKey getTexture() {
+		return texture;
+	}
+
+	public void setTexture(TextureKey texture) {
+		this.texture = texture;
 	}
 
 	public void addReference(String key, String reference) {

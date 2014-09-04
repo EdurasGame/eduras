@@ -72,6 +72,7 @@ import de.illonis.eduras.exceptions.NoSpawnAvailableException;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
 import de.illonis.eduras.exceptions.PlayerHasNoTeamException;
 import de.illonis.eduras.exceptions.WrongObjectTypeException;
+import de.illonis.eduras.gameclient.datacache.CacheInfo.TextureKey;
 import de.illonis.eduras.gamemodes.GameMode;
 import de.illonis.eduras.gameobjects.Base;
 import de.illonis.eduras.gameobjects.DynamicPolygonObject;
@@ -546,6 +547,9 @@ public class ServerEventTriggerer implements EventTriggerer {
 				if (initialObject.getType() == ObjectType.DYNAMIC_POLYGON_BLOCK) {
 					((DynamicPolygonObject) o).setColor(initialObject
 							.getColor());
+				}
+				if (initialObject.getTexture() != TextureKey.NONE) {
+					o.setTexture(initialObject.getTexture());
 				}
 			} catch (ObjectNotFoundException e) {
 				L.log(Level.SEVERE,

@@ -96,7 +96,7 @@ public final class GraphicsPreLoader {
 		while (it.hasNext()) {
 			Map.Entry<ObjectType, String> pair = it.next();
 			try {
-				Image image = ImageFiler.load(pair.getValue());
+				Image image = ImageFiler.loadScaled(pair.getValue());
 				ImageCache.addInventoryIcon(pair.getKey(), image);
 			} catch (SlickException e) {
 				L.log(Level.SEVERE,
@@ -112,7 +112,7 @@ public final class GraphicsPreLoader {
 		while (it.hasNext()) {
 			Map.Entry<ImageKey, String> pair = it.next();
 			try {
-				Image image = ImageFiler.load(pair.getValue());
+				Image image = ImageFiler.loadScaled(pair.getValue());
 				ImageCache.addGuiImage(pair.getKey(), image);
 			} catch (SlickException e) {
 				L.log(Level.SEVERE,
@@ -145,7 +145,7 @@ public final class GraphicsPreLoader {
 		while (it.hasNext()) {
 			Map.Entry<ObjectType, String> pair = it.next();
 			try {
-				Image image = ImageFiler.load(pair.getValue());
+				Image image = ImageFiler.loadScaled(pair.getValue());
 				ImageCache.addImage(pair.getKey(), image);
 			} catch (SlickException e) {
 				L.log(Level.SEVERE, "Imagefile not found: " + pair.getValue(),

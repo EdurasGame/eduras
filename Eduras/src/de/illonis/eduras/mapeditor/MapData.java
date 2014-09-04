@@ -12,6 +12,7 @@ import de.illonis.eduras.ObjectCreator;
 import de.illonis.eduras.ObjectFactory.ObjectType;
 import de.illonis.eduras.ReferencedEntity;
 import de.illonis.eduras.exceptions.ShapeVerticesNotApplicableException;
+import de.illonis.eduras.gameclient.datacache.CacheInfo.TextureKey;
 import de.illonis.eduras.gamemodes.GameMode.GameModeNumber;
 import de.illonis.eduras.gameobjects.DynamicPolygonObject;
 import de.illonis.eduras.gameobjects.GameObject;
@@ -64,6 +65,7 @@ public final class MapData {
 	private Line tempLineB;
 	private Line removedLine;
 	private DynamicPolygonObject editObject;
+	private TextureKey mapBackground;
 
 	/**
 	 * Resets data to provide an empty default map.
@@ -79,6 +81,7 @@ public final class MapData {
 		width = 500;
 		height = 500;
 		editShape = null;
+		mapBackground = TextureKey.NONE;
 	}
 
 	public EditablePolygon getEditShape() {
@@ -317,5 +320,13 @@ public final class MapData {
 
 	public DynamicPolygonObject getEditObject() {
 		return editObject;
+	}
+
+	public void setMapBackground(TextureKey mapBackground) {
+		this.mapBackground = mapBackground;
+	}
+
+	public TextureKey getMapBackground() {
+		return mapBackground;
 	}
 }

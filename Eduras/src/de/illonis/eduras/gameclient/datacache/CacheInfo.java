@@ -56,7 +56,20 @@ public final class CacheInfo {
 	 */
 	@SuppressWarnings("javadoc")
 	public enum TextureKey {
-		DUST_GRASS, GRASS, REDROCK, BASE, BASE_RED, BASE_BLUE, PORTAL, BRICK, ROCK, ROOF;
+		DUST_GRASS("grass2.png"), GRASS("grass.png"), REDROCK("testtexture.png"), BASE(
+				"base.png"), BASE_RED("base_red.png"), BASE_BLUE(
+				"base_blue.png"), PORTAL("portal.png"), BRICK("brick.png"), ROCK(
+				"rock.png"), ROOF("roof.png"), NONE("");
+
+		private final String file;
+
+		TextureKey(String file) {
+			this.file = file;
+		}
+
+		public String getFile() {
+			return file;
+		}
 	}
 
 	/**
@@ -74,16 +87,10 @@ public final class CacheInfo {
 
 	static {
 		textures = new HashMap<TextureKey, String>();
-		textures.put(TextureKey.DUST_GRASS, "textures/grass2.png");
-		textures.put(TextureKey.REDROCK, "textures/testtexture.png");
-		textures.put(TextureKey.BASE, "textures/base.png");
-		textures.put(TextureKey.BASE_RED, "textures/base_red.png");
-		textures.put(TextureKey.BASE_BLUE, "textures/base_blue.png");
-		textures.put(TextureKey.PORTAL, "textures/portal.png");
-		textures.put(TextureKey.BRICK, "textures/brick.png");
-		textures.put(TextureKey.ROCK, "textures/rock.png");
-		textures.put(TextureKey.GRASS, "textures/grass.png");
-		textures.put(TextureKey.ROOF, "textures/roof.png");
+		for (TextureKey texture : TextureKey.values()) {
+			if (texture != TextureKey.NONE)
+				textures.put(texture, "textures/" + texture.getFile());
+		}
 		fonts = new HashMap<FontKey, Pair<String, Integer>>();
 		fonts.put(FontKey.DEFAULT_FONT, new Pair<String, Integer>(
 				"LinLibertine_R.ttf", 16));

@@ -72,6 +72,8 @@ public final class ImageCache {
 	 *             if this texture is not cached.
 	 */
 	public static Image getTexture(TextureKey type) throws CacheException {
+		if (type == TextureKey.NONE)
+			throw new CacheException("No texture assigned.");
 		Image image = textures.get(type);
 		if (image == null)
 			throw new CacheException("No cached texture found for " + type);
@@ -120,7 +122,7 @@ public final class ImageCache {
 		case PORTAL:
 			return TextureKey.PORTAL;
 		case DYNAMIC_POLYGON_BLOCK:
-			return TextureKey.ROCK;
+			return o.getTexture();
 		case BIGBLOCK:
 		case BIGGERBLOCK:
 			return TextureKey.ROOF;

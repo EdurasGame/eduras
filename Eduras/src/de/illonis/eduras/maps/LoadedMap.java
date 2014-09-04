@@ -3,6 +3,7 @@ package de.illonis.eduras.maps;
 import java.util.Collection;
 import java.util.Date;
 
+import de.illonis.eduras.gameclient.datacache.CacheInfo.TextureKey;
 import de.illonis.eduras.gamemodes.GameMode.GameModeNumber;
 import de.illonis.eduras.maps.persistence.MapParser;
 
@@ -35,14 +36,16 @@ public class LoadedMap extends Map {
 	 *            the supported game modes of this map.
 	 * @param nodes
 	 *            the nodes on this map.
+	 * @param background
+	 *            the background texture.
 	 */
 	public LoadedMap(String name, String author, int width, int height,
 			Date created, Collection<SpawnPosition> spawnPositions,
 			Collection<InitialObjectData> initialObjects,
 			Collection<GameModeNumber> supportedGameModes,
-			Collection<NodeData> nodes) {
+			Collection<NodeData> nodes, TextureKey background) {
 		super(name, author, width, height, created);
-
+		this.background = background;
 		for (GameModeNumber gameModeNumber : supportedGameModes)
 			addSupportedGameMode(gameModeNumber);
 

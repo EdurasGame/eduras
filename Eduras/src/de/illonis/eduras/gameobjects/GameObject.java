@@ -15,6 +15,7 @@ import de.illonis.eduras.ReferencedEntity;
 import de.illonis.eduras.ai.AIControllable;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
 import de.illonis.eduras.exceptions.ShapeNotSupportedException;
+import de.illonis.eduras.gameclient.datacache.CacheInfo.TextureKey;
 import de.illonis.eduras.mapeditor.EditorPlaceable;
 import de.illonis.eduras.math.CollisionPoint;
 import de.illonis.eduras.math.Geometry;
@@ -61,6 +62,7 @@ public abstract class GameObject extends ReferencedEntity implements
 	private float visionAngle = 90;
 	private boolean isVisionBlocking = false;
 	private int zLayer = 1;
+	private TextureKey texture;
 
 	private int id;
 	private int owner = OWNER_WORLD;
@@ -118,7 +120,16 @@ public abstract class GameObject extends ReferencedEntity implements
 		this.id = id;
 		setRefName("");
 		this.timingSource = timingSource;
+		texture = TextureKey.NONE;
 		setObjectType(ObjectType.NO_OBJECT);
+	}
+
+	public TextureKey getTexture() {
+		return texture;
+	}
+
+	public void setTexture(TextureKey texture) {
+		this.texture = texture;
 	}
 
 	/**
@@ -233,11 +244,12 @@ public abstract class GameObject extends ReferencedEntity implements
 	public final void setPosition(Vector2f pos) {
 		setPosition(pos.x, pos.y);
 	}
-	
+
 	@Override
 	public float getWidth() {
 		return shape.getWidth();
 	}
+
 	@Override
 	public float getHeight() {
 		return shape.getHeight();
