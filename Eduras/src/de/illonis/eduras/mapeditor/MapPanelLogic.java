@@ -3,6 +3,7 @@ package de.illonis.eduras.mapeditor;
 import java.io.File;
 import java.io.IOException;
 import java.util.LinkedList;
+import java.util.List;
 
 import javax.swing.JOptionPane;
 
@@ -27,6 +28,7 @@ import de.illonis.eduras.mapeditor.gui.dialog.PropertiesDialog;
 import de.illonis.eduras.maps.NodeData;
 import de.illonis.eduras.maps.SpawnPosition;
 import de.illonis.eduras.maps.SpawnPosition.SpawnType;
+import de.illonis.eduras.math.Geometry;
 import de.illonis.eduras.shapecreator.EditablePolygon;
 import de.illonis.eduras.shapecreator.FileCorruptException;
 import de.illonis.eduras.shapes.data.ShapeParser;
@@ -50,13 +52,17 @@ public class MapPanelLogic implements MapInteractor {
 	private ObjectType currentSpawnType = ObjectType.NO_OBJECT;
 	private final EditorWindow window;
 	private Input input;
+	private List<EditorPlaceable> selectedElements;
+	private Rectangle dragRect;
 
 	MapPanelLogic(EditorWindow window) {
 		this.window = window;
+		selectedElements = new LinkedList<EditorPlaceable>();
 		interactType = InteractType.DEFAULT;
 		viewPort = new GameCamera();
 		viewPort.setSize(800, 600);
 		scrollVector = new Vector2f();
+		dragRect = new Rectangle(0, 0, 0, 0);
 	}
 
 	/**
@@ -138,45 +144,18 @@ public class MapPanelLogic implements MapInteractor {
 	}
 
 	@Override
-	public void dragThingAt(int guiX, int guiY, int xDiff, int yDiff) {
-		GameObject o = getObjectAt(guiX, guiY);
-		if (o != null) {
-			o.modifyXPosition(xDiff / zoom);
-			o.modifyYPosition(yDiff / zoom);
-		} else {
-			NodeData node = getBaseAt(guiX, guiY);
-			if (node != null) {
-				node.setX(node.getX() + xDiff / zoom);
-				node.setY(node.getY() + yDiff / zoom);
-			} else {
-				SpawnPosition spawn = getSpawnPointAt(guiX, guiY);
-				if (spawn != null) {
-					spawn.getArea().setLocation(
-							spawn.getArea().getX() + xDiff / zoom,
-							spawn.getArea().getY() + yDiff / zoom);
-				}
-			}
-		}
-	}
-
-	@Override
-	public void showPropertiesOfThingAt(int guiX, int guiY) {
-		GameObject o = getObjectAt(guiX, guiY);
+	public void showPropertiesOfSelected() {
+		if (selectedElements.isEmpty())
+			return;
 		PropertiesDialog dialog = null;
-		if (o != null) {
-			dialog = new PropertiesDialog(window, o);
-		} else {
-			NodeData node = getBaseAt(guiX, guiY);
-			if (node != null) {
-				dialog = new PropertiesDialog(window, node);
-			} else {
-				SpawnPosition spawn = getSpawnPointAt(guiX, guiY);
-				if (spawn != null) {
-					dialog = new PropertiesDialog(window, spawn);
-				}
-			}
+		EditorPlaceable obj = selectedElements.get(0);
+		if (obj instanceof GameObject) {
+			dialog = new PropertiesDialog(window, (GameObject) obj);
+		} else if (obj instanceof NodeData) {
+			dialog = new PropertiesDialog(window, (NodeData) obj);
+		} else if (obj instanceof SpawnPosition) {
+			dialog = new PropertiesDialog(window, (SpawnPosition) obj);
 		}
-
 		if (dialog != null)
 			dialog.setVisible(true);
 	}
@@ -196,8 +175,7 @@ public class MapPanelLogic implements MapInteractor {
 		return (getSpawnPointAt(guiX, guiY) != null);
 	}
 
-	@Override
-	public GameObject getObjectAt(int guiX, int guiY) {
+	private GameObject getObjectAt(int guiX, int guiY) {
 		Vector2f mapPos = computeGuiPointToGameCoordinate(new Vector2f(guiX,
 				guiY));
 		for (GameObject o : data.getGameObjects()) {
@@ -230,6 +208,7 @@ public class MapPanelLogic implements MapInteractor {
 				o.setPosition(mapPos.x, mapPos.y);
 				o.setId(nextId++);
 				data.addGameObject(o);
+				select(o);
 				if (o instanceof Portal) {
 					o.setRefName("Portal" + o.getId());
 				}
@@ -240,13 +219,17 @@ public class MapPanelLogic implements MapInteractor {
 		}
 	}
 
-	@Override
-	public NodeData getBaseAt(int guiX, int guiY) {
+	private void select(EditorPlaceable o) {
+		clearSelection();
+		selectedElements.add(o);
+	}
+
+	private NodeData getBaseAt(int guiX, int guiY) {
 		Vector2f mapPos = computeGuiPointToGameCoordinate(new Vector2f(guiX,
 				guiY));
 		for (NodeData o : data.getBases()) {
-			Rectangle r = new Rectangle(o.getX(), o.getY(), o.getWidth(),
-					o.getHeight());
+			Rectangle r = new Rectangle(o.getXPosition(), o.getYPosition(),
+					o.getWidth(), o.getHeight());
 			if (r.contains(mapPos.x, mapPos.y)) {
 				return o;
 			}
@@ -254,8 +237,7 @@ public class MapPanelLogic implements MapInteractor {
 		return null;
 	}
 
-	@Override
-	public SpawnPosition getSpawnPointAt(int guiX, int guiY) {
+	private SpawnPosition getSpawnPointAt(int guiX, int guiY) {
 		Vector2f mapPos = computeGuiPointToGameCoordinate(new Vector2f(guiX,
 				guiY));
 		for (SpawnPosition o : data.getSpawnPoints()) {
@@ -277,6 +259,7 @@ public class MapPanelLogic implements MapInteractor {
 		NodeData node = new NodeData(mapPos.x, mapPos.y, nextId++,
 				new LinkedList<NodeData>(), BaseType.NEUTRAL, "");
 		data.addBase(node);
+		select(node);
 	}
 
 	@Override
@@ -290,11 +273,16 @@ public class MapPanelLogic implements MapInteractor {
 		SpawnPosition spawn = new SpawnPosition(new Rectangle(mapPos.x,
 				mapPos.y, 40, 40), SpawnType.ANY);
 		data.addSpawnPoint(spawn);
+		select(spawn);
 	}
 
 	@Override
 	public void setInteractType(InteractType type) {
 		interactType = type;
+		if (interactType == InteractType.DEFAULT) {
+			currentSpawnType = ObjectType.NO_OBJECT;
+			data.setPlacingObject(null);
+		}
 	}
 
 	@Override
@@ -311,8 +299,11 @@ public class MapPanelLogic implements MapInteractor {
 				guiY));
 		shape.setPosition(mapPos.x - shape.getShape().getWidth() / 2, mapPos.y
 				- shape.getShape().getHeight() / 2);
-		data.setPlacingObject(null);
-		setInteractType(InteractType.DEFAULT);
+		select(shape);
+		DynamicPolygonObject copy = new DynamicPolygonObject(shape.getType(),
+				null, null, -1);
+		copy.setPolygonVertices(shape.getPolygonVertices());
+		data.setPlacingObject(copy);
 	}
 
 	@Override
@@ -322,51 +313,49 @@ public class MapPanelLogic implements MapInteractor {
 	}
 
 	@Override
-	public void deleteAtMouse() {
-		int x = input.getMouseX();
-		int y = input.getMouseY();
-		GameObject o = getObjectAt(x, y);
-		if (o != null) {
-			data.remove(o);
-			if (o instanceof Portal) {
-				Portal portal = (Portal) o;
-				for (GameObject obj : data.getGameObjects()) {
-					if (obj instanceof Portal) {
-						Portal parent = (Portal) obj;
-						if (parent.getPartnerPortal() != null
-								&& portal.equals(parent.getPartnerPortal())) {
-							parent.setPartnerPortal(null);
+	public void deleteSelected() {
+		for (EditorPlaceable element : selectedElements) {
+			if (element instanceof GameObject) {
+				GameObject o = (GameObject) element;
+				data.remove(o);
+				if (o instanceof Portal) {
+					Portal portal = (Portal) o;
+					for (GameObject obj : data.getGameObjects()) {
+						if (obj instanceof Portal) {
+							Portal parent = (Portal) obj;
+							if (parent.getPartnerPortal() != null
+									&& portal.equals(parent.getPartnerPortal())) {
+								parent.setPartnerPortal(null);
+							}
 						}
 					}
 				}
-			}
-		} else {
-			NodeData node = getBaseAt(x, y);
-			if (node != null) {
+			} else if (element instanceof NodeData) {
+				NodeData node = (NodeData) element;
 				for (NodeData subNode : data.getBases()) {
 					subNode.getAdjacentNodes().remove(node);
 				}
 				data.remove(node);
-			} else {
-				SpawnPosition spawn = getSpawnPointAt(x, y);
-				if (spawn != null) {
-					data.remove(spawn);
-				}
+			} else if (element instanceof SpawnPosition) {
+				SpawnPosition spawn = (SpawnPosition) element;
+
+				data.remove(spawn);
 			}
 		}
+		clearSelection();
 	}
 
 	@Override
-	public void editShapeAtMouse() {
-		int x = input.getMouseX();
-		int y = input.getMouseY();
-		GameObject o = getObjectAt(x, y);
-		if (o == null)
+	public void editSelectedShape() {
+		if (selectedElements.isEmpty())
 			return;
-		if (o.getType() == ObjectType.DYNAMIC_POLYGON_BLOCK) {
-			EditablePolygon poly = EditablePolygon.fromShape(o.getShape());
+		EditorPlaceable element = selectedElements.get(0);
+		if (element instanceof DynamicPolygonObject) {
+			DynamicPolygonObject object = (DynamicPolygonObject) element;
+			EditablePolygon poly = EditablePolygon.fromShape(object.getShape());
 			data.setEditShape(poly);
-			data.setEditObject((DynamicPolygonObject) o);
+			data.clearTempLines();
+			data.setEditObject(object);
 			setInteractType(InteractType.EDIT_SHAPE);
 		}
 	}
@@ -413,90 +402,235 @@ public class MapPanelLogic implements MapInteractor {
 	}
 
 	@Override
-	public boolean rotateShapeAtMouse(float degree) {
-		int x = input.getMouseX();
-		int y = input.getMouseY();
-		GameObject o = getObjectAt(x, y);
-		if (o == null)
-			return false;
-		if (o.getType() == ObjectType.DYNAMIC_POLYGON_BLOCK) {
-			EditablePolygon poly = EditablePolygon.fromShape(o.getShape());
-			poly.rotate(degree);
-			((DynamicPolygonObject) o).setPolygonVertices(poly.getVector2dfs());
-			return true;
+	public void rotateSelectedShapes(float degree) {
+		for (EditorPlaceable element : selectedElements) {
+			if (element instanceof DynamicPolygonObject) {
+				DynamicPolygonObject object = (DynamicPolygonObject) element;
+				EditablePolygon poly = EditablePolygon.fromShape(object
+						.getShape());
+				poly.rotate(degree);
+				object.setPolygonVertices(poly.getVector2dfs());
+			}
 		}
-		return false;
 	}
 
 	@Override
-	public boolean mirrorShapeAtMouse(int axis) {
-		int x = input.getMouseX();
-		int y = input.getMouseY();
-		GameObject o = getObjectAt(x, y);
-		if (o == null)
-			return false;
-		if (o.getType() == ObjectType.DYNAMIC_POLYGON_BLOCK) {
-			EditablePolygon poly = EditablePolygon.fromShape(o.getShape());
-			poly.mirror(axis);
-			((DynamicPolygonObject) o).setPolygonVertices(poly.getVector2dfs());
-			return true;
+	public void mirrorSelectedElements(int axis) {
+		float minX = data.getWidth();
+		float maxX = 0;
+		float minY = data.getHeight();
+		float maxY = 0;
+		for (EditorPlaceable element : selectedElements) {
+			minX = Math.min(element.getXPosition(), minX);
+			minY = Math.min(element.getYPosition(), minY);
+			maxX = Math.max(element.getXPosition() + element.getWidth(), maxX);
+			maxY = Math.max(element.getYPosition() + element.getHeight(), maxY);
 		}
-		return false;
+		float centerX = (maxX + minX) / 2;
+		float centerY = (maxY + minY) / 2;
+		for (EditorPlaceable element : selectedElements) {
+			if (axis == EditablePolygon.Y_AXIS) {
+				float dx = centerX - element.getXPosition();
+				element.setXPosition(element.getXPosition() + 2 * dx
+						- element.getWidth());
+			}
+			if (axis == EditablePolygon.X_AXIS) {
+				float dy = centerY - element.getYPosition();
+				element.setYPosition(element.getYPosition() + 2 * dy
+						- element.getHeight());
+			}
+			if (element instanceof DynamicPolygonObject) {
+				DynamicPolygonObject object = (DynamicPolygonObject) element;
+				EditablePolygon poly = EditablePolygon.fromShape(object
+						.getShape());
+				poly.mirror(axis);
+				object.setPolygonVertices(poly.getVector2dfs());
+			}
+		}
+
 	}
 
 	@Override
-	public void copyElementAtMouse() {
-		int guiX = input.getMouseX();
-		int guiY = input.getMouseY();
-		GameObject o = getObjectAt(guiX, guiY);
-		if (o != null) {
-			GameObject newObject;
-			try {
-				newObject = ObjectCreator.createObject(o.getType(), null, null);
-			} catch (FactoryException | ShapeVerticesNotApplicableException e) {
-				return;
-			}
-			newObject.setId(nextId++);
-			newObject.setVisible(o.getVisibility());
-			newObject.setPosition(o.getXPosition() + o.getShape().getWidth(),
-					o.getYPosition() + o.getShape().getHeight());
-			newObject.setzLayer(o.getzLayer());
-			newObject.setRefName("CopyOf" + o.getRefName());
-			if (o instanceof DynamicPolygonObject) {
-				((DynamicPolygonObject) newObject)
-						.setColor(((DynamicPolygonObject) o).getColor());
-				((DynamicPolygonObject) newObject)
-						.setPolygonVertices(((DynamicPolygonObject) o)
-								.getPolygonVertices());
-			}
-			data.addGameObject(newObject);
-		} else {
-			NodeData node = getBaseAt(guiX, guiY);
-			if (node != null) {
-				NodeData newNode = new NodeData(node.getX() + node.getWidth(),
-						node.getY() + node.getHeight(), nextId++,
+	public void copySelectedElements() {
+		List<EditorPlaceable> newObjects = new LinkedList<EditorPlaceable>();
+		int offset = 50;
+		for (EditorPlaceable element : selectedElements) {
+			if (element instanceof GameObject) {
+				GameObject o = (GameObject) element;
+				GameObject newObject;
+				try {
+					newObject = ObjectCreator.createObject(o.getType(), null,
+							null);
+				} catch (FactoryException | ShapeVerticesNotApplicableException e) {
+					return;
+				}
+				newObject.setId(nextId++);
+				newObject.setVisible(o.getVisibility());
+				newObject.setPosition(o.getXPosition() + offset,
+						o.getYPosition() + offset);
+				newObject.setzLayer(o.getzLayer());
+				newObject.setRefName("");
+				if (o instanceof DynamicPolygonObject) {
+					((DynamicPolygonObject) newObject)
+							.setColor(((DynamicPolygonObject) o).getColor());
+					((DynamicPolygonObject) newObject)
+							.setPolygonVertices(((DynamicPolygonObject) o)
+									.getPolygonVertices());
+				}
+				data.addGameObject(newObject);
+				newObjects.add(newObject);
+			} else if (element instanceof NodeData) {
+				NodeData node = (NodeData) element;
+				NodeData newNode = new NodeData(node.getXPosition() + offset,
+						node.getYPosition() + offset, nextId++,
 						new LinkedList<NodeData>(), BaseType.NEUTRAL, "");
 				newNode.setWidth(node.getWidth());
 				newNode.setHeight(node.getHeight());
 				newNode.setResourceMultiplicator(node
 						.getResourceMultiplicator());
-				newNode.setRefName("CopyOf" + node.getRefName());
+				newNode.setRefName("");
 				newNode.setIsMainNode(node.isMainNode());
 				data.addBase(newNode);
+				newObjects.add(newNode);
+			} else if (element instanceof SpawnPosition) {
+				SpawnPosition spawn = (SpawnPosition) element;
+				SpawnPosition newSpawn = new SpawnPosition(new Rectangle(spawn
+						.getArea().getX() + offset, spawn.getArea().getY()
+						+ offset, spawn.getArea().getWidth(), spawn.getArea()
+						.getHeight()), spawn.getTeaming());
+				newSpawn.setRefName("");
+				data.addSpawnPoint(newSpawn);
+				newObjects.add(newSpawn);
+			}
+		}
+		clearSelection();
+		selectedElements.addAll(newObjects);
+	}
+
+	@Override
+	public boolean selectAt(int guiX, int guiY) {
+		clearSelection();
+		GameObject o = getObjectAt(guiX, guiY);
+		if (o != null) {
+			selectedElements.add(o);
+			return true;
+		} else {
+			NodeData node = getBaseAt(guiX, guiY);
+			if (node != null) {
+				selectedElements.add(node);
+				return true;
 			} else {
 				SpawnPosition spawn = getSpawnPointAt(guiX, guiY);
 				if (spawn != null) {
-					SpawnPosition newSpawn = new SpawnPosition(
-							new Rectangle(spawn.getArea().getX()
-									+ spawn.getArea().getWidth(), spawn
-									.getArea().getY()
-									+ spawn.getArea().getHeight(), spawn
-									.getArea().getWidth(), spawn.getArea()
-									.getHeight()), spawn.getTeaming());
-					newSpawn.setRefName("CopyOf" + spawn.getRefName());
-					data.addSpawnPoint(newSpawn);
+					selectedElements.add(spawn);
+					return true;
 				}
 			}
 		}
+		return false;
+	}
+
+	@Override
+	public void dragSelected(int xDiff, int yDiff) {
+		for (EditorPlaceable obj : selectedElements) {
+			float oldX = obj.getXPosition();
+			float oldY = obj.getYPosition();
+			obj.setPosition(oldX + xDiff / zoom, oldY + yDiff / zoom);
+		}
+	}
+
+	@Override
+	public boolean selectIn(Rectangle rect, boolean add) {
+		if (!add)
+			clearSelection();
+		Vector2f topLeft = computeGuiPointToGameCoordinate(new Vector2f(
+				rect.getX(), rect.getY()));
+		Vector2f bottomRight = computeGuiPointToGameCoordinate(new Vector2f(
+				rect.getX() + rect.getWidth(), rect.getY() + rect.getHeight()));
+		Rectangle searchRect = new Rectangle(topLeft.x, topLeft.y,
+				bottomRight.x - topLeft.x, bottomRight.y - topLeft.y);
+		for (GameObject o : data.getGameObjects()) {
+			if (Geometry.shapeCollides(o.getShape(), searchRect)) {
+				if (!selectedElements.contains(o))
+					selectedElements.add(o);
+			}
+		}
+		for (NodeData node : data.getBases()) {
+			Rectangle nodeRect = new Rectangle(node.getXPosition(),
+					node.getYPosition(), node.getWidth(), node.getHeight());
+			if (Geometry.shapeCollides(nodeRect, searchRect)) {
+				if (!selectedElements.contains(node))
+					selectedElements.add(node);
+			}
+		}
+		for (SpawnPosition spawn : data.getSpawnPoints()) {
+			if (Geometry.shapeCollides(spawn.getArea(), searchRect)) {
+				if (!selectedElements.contains(spawn))
+					selectedElements.add(spawn);
+			}
+		}
+		return !selectedElements.isEmpty();
+	}
+
+	@Override
+	public void clearSelection() {
+		selectedElements.clear();
+	}
+
+	@Override
+	public List<EditorPlaceable> getSelectedElements() {
+		return new LinkedList<EditorPlaceable>(selectedElements);
+	}
+
+	@Override
+	public void setDragRect(Rectangle rect) {
+		dragRect = rect;
+	}
+
+	@Override
+	public Rectangle getDragRect() {
+		return dragRect;
+	}
+
+	@Override
+	public void toggleSelectionAt(int guiX, int guiY) {
+		EditorPlaceable element = null;
+		GameObject o = getObjectAt(guiX, guiY);
+		if (o != null) {
+			element = o;
+		} else {
+			NodeData node = getBaseAt(guiX, guiY);
+			if (node != null) {
+				element = node;
+			} else {
+				SpawnPosition spawn = getSpawnPointAt(guiX, guiY);
+				if (spawn != null) {
+					element = spawn;
+				}
+			}
+		}
+		if (element != null) {
+			if (selectedElements.contains(element)) {
+				selectedElements.remove(element);
+			} else {
+				selectedElements.add(element);
+			}
+		}
+	}
+
+	@Override
+	public boolean isSelected(int guiX, int guiY) {
+		return selectedElements.contains(getObjectAt(guiX, guiY))
+				|| selectedElements.contains(getSpawnPointAt(guiX, guiY))
+				|| selectedElements.contains(getBaseAt(guiX, guiY));
+	}
+
+	@Override
+	public void onMapLoaded() {
+		int id = 0;
+		for (GameObject o : data.getGameObjects()) {
+			id = Math.max(id, o.getId());
+		}
+		nextId = id + 1;
 	}
 }

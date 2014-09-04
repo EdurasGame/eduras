@@ -5,6 +5,7 @@ import java.util.logging.Logger;
 import de.illonis.edulog.EduLog;
 import de.illonis.eduras.exceptions.PlayerHasNoTeamException;
 import de.illonis.eduras.inventory.Inventory;
+import de.illonis.eduras.settings.S;
 import de.illonis.eduras.units.InteractMode;
 import de.illonis.eduras.units.PlayerMainFigure;
 
@@ -24,6 +25,8 @@ public class Player {
 	private final Inventory inventory = new Inventory();
 	private PlayerMainFigure playerMainFigure;
 	private Team team;
+	private int blinksAvailable;
+	private long lastBlink;
 
 	/**
 	 * 
@@ -34,7 +37,10 @@ public class Player {
 		this.name = name;
 		this.playerId = playerId;
 		lastModeSwitch = 0;
+		lastBlink = 0;
 		currentMode = InteractMode.MODE_EGO;
+
+		blinksAvailable = 0;
 	}
 
 	/**
@@ -156,5 +162,28 @@ public class Player {
 	 */
 	public boolean isDead() {
 		return (playerMainFigure == null || playerMainFigure.isDead());
+	}
+
+	public int getBlinksAvailable() {
+		return blinksAvailable;
+	}
+
+	public void setBlinksAvailable(int blinksAvailable) {
+		this.blinksAvailable = blinksAvailable;
+	}
+
+	/**
+	 * Calculates the cooldown remaining until player can blink again.
+	 * 
+	 * @return the remaining cooldown in ms. This may be negative is there is no
+	 *         cooldown anymore.
+	 */
+	public long getBlinkCooldown() {
+		return (lastBlink + S.Server.sv_blink_cooldown)
+				- System.currentTimeMillis();
+	}
+
+	public void useBlink() {
+		lastBlink = System.currentTimeMillis();
 	}
 }

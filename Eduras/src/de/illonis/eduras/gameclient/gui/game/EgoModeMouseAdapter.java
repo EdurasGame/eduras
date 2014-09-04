@@ -211,4 +211,9 @@ public class EgoModeMouseAdapter extends GuiMouseAdapter {
 	public void mapClicked(Vector2f gamePos) {
 	}
 
+	@Override
+	public void mouseLost() {
+		fireButtonHold = false;
+	}
+
 }

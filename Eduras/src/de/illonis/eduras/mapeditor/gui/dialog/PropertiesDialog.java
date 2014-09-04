@@ -17,7 +17,6 @@ import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JColorChooser;
 import javax.swing.JComboBox;
-import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
@@ -59,7 +58,7 @@ import de.illonis.eduras.maps.persistence.MapParser;
  * @author illonis
  * 
  */
-public class PropertiesDialog extends JDialog implements ItemListener,
+public class PropertiesDialog extends ESCDialog implements ItemListener,
 		ActionListener, ChangeListener {
 
 	private static final long serialVersionUID = 1L;
@@ -97,10 +96,8 @@ public class PropertiesDialog extends JDialog implements ItemListener,
 	 *            the node.
 	 */
 	public PropertiesDialog(EditorWindow parent, NodeData node) {
-		this(parent);
+		this(parent, (ReferencedEntity) node);
 		this.node = node;
-		this.entity = node;
-		addPositionTab();
 		addNeutralBaseTab();
 	}
 
@@ -113,10 +110,8 @@ public class PropertiesDialog extends JDialog implements ItemListener,
 	 *            the spawnarea.
 	 */
 	public PropertiesDialog(EditorWindow window, SpawnPosition spawn) {
-		this(window);
+		this(window, (ReferencedEntity) spawn);
 		this.spawn = spawn;
-		this.entity = spawn;
-		addPositionTab();
 		addSpawnTab();
 	}
 
@@ -129,11 +124,10 @@ public class PropertiesDialog extends JDialog implements ItemListener,
 	 *            the object.
 	 */
 	public PropertiesDialog(EditorWindow parent, GameObject object) {
-		this(parent);
+		this(parent, (ReferencedEntity) object);
 		this.object = object;
-		this.entity = object;
 		addPropertiesTab();
-		addPositionTab();
+
 		if (object instanceof DynamicPolygonObject) {
 			addColorTab(((DynamicPolygonObject) object).getColor());
 		} else if (object instanceof Portal) {
@@ -141,8 +135,9 @@ public class PropertiesDialog extends JDialog implements ItemListener,
 		}
 	}
 
-	private PropertiesDialog(EditorWindow parent) {
+	private PropertiesDialog(EditorWindow parent, ReferencedEntity element) {
 		super(parent);
+		entity = element;
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		setModal(false);
 		tabbedPane = new JTabbedPane();
@@ -158,6 +153,7 @@ public class PropertiesDialog extends JDialog implements ItemListener,
 				getContentPane());
 		getContentPane().add(tabbedPane);
 		setMinimumSize(MIN_SIZE);
+		addGeneralTab();
 	}
 
 	private void updateTitle() {
@@ -308,7 +304,7 @@ public class PropertiesDialog extends JDialog implements ItemListener,
 		if (object != null)
 			return (int) object.getXPosition();
 		if (node != null)
-			return (int) node.getX();
+			return (int) node.getXPosition();
 		if (spawn != null) {
 			return (int) spawn.getArea().getX();
 		}
@@ -319,7 +315,7 @@ public class PropertiesDialog extends JDialog implements ItemListener,
 		if (object != null)
 			return (int) object.getYPosition();
 		if (node != null)
-			return (int) node.getY();
+			return (int) node.getYPosition();
 		if (spawn != null) {
 			return (int) spawn.getArea().getY();
 		}
@@ -330,7 +326,7 @@ public class PropertiesDialog extends JDialog implements ItemListener,
 		if (object != null)
 			object.setXPosition(x);
 		if (node != null)
-			node.setX(x);
+			node.setXPosition(x);
 		if (spawn != null) {
 			spawn.getArea().setX(x);
 		}
@@ -340,13 +336,13 @@ public class PropertiesDialog extends JDialog implements ItemListener,
 		if (object != null)
 			object.setYPosition(y);
 		if (node != null)
-			node.setY(y);
+			node.setYPosition(y);
 		if (spawn != null) {
 			spawn.getArea().setY(y);
 		}
 	}
 
-	private void addPositionTab() {
+	private void addGeneralTab() {
 		int x = getItemX();
 		int y = getItemY();
 		MapData data = MapData.getInstance();
@@ -544,7 +540,6 @@ public class PropertiesDialog extends JDialog implements ItemListener,
 		if (button == baseNone) {
 			node.setIsMainNode(BaseType.NEUTRAL);
 		} else if (button == baseTeamA) {
-			System.out.println("i");
 			node.setIsMainNode(BaseType.TEAM_A);
 		} else if (button == baseTeamB) {
 			node.setIsMainNode(BaseType.TEAM_B);

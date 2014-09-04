@@ -16,6 +16,7 @@ import org.newdawn.slick.geom.Vector2f;
 import de.illonis.edulog.EduLog;
 import de.illonis.eduras.ObjectFactory.ObjectType;
 import de.illonis.eduras.events.ObjectFactoryEvent;
+import de.illonis.eduras.events.SetMapEvent;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
 import de.illonis.eduras.gameclient.gui.game.GameCamera;
 import de.illonis.eduras.gameclient.gui.game.GameRenderer;
@@ -29,6 +30,8 @@ import de.illonis.eduras.items.weapons.Missile;
 import de.illonis.eduras.items.weapons.Weapon;
 import de.illonis.eduras.maps.NodeData;
 import de.illonis.eduras.math.Geometry;
+import de.illonis.eduras.settings.S;
+import de.illonis.eduras.units.InteractMode;
 import de.illonis.eduras.units.PlayerMainFigure;
 
 /**
@@ -42,6 +45,19 @@ public class MiniMap extends ClickableGuiElement {
 	private final static Logger L = EduLog
 			.getLoggerFor(MiniMap.class.getName());
 
+	/**
+	 * Alpha value for map. 0 means invisible, 1 means opaque. This will affect
+	 * all rendered colors on minimap.
+	 */
+	private final static float MAP_ALPHA = 0.7f;
+
+	private final static Color COLOR_BACKGROUND = new Color(0, 0, 0, MAP_ALPHA);
+	private final static Color COLOR_MULTIPLIER = new Color(1f, 1f, 1f,
+			MAP_ALPHA);
+	private static final Color COLOR_NEUTRAL_OBJECTS_FILL = new Color(0.5f,
+			0.5f, 0.5f, MAP_ALPHA);
+	private static final Color COLOR_NODE_CONNECTIONS = new Color(.5f, .5f, 0f,
+			MAP_ALPHA);
 	private HashMap<Integer, MiniMapNeutralObject> neutralObjects;
 	private HashMap<Integer, MiniMapBase> bases;
 	private HashMap<Integer, MiniMapPlayer> players;
@@ -51,7 +67,6 @@ public class MiniMap extends ClickableGuiElement {
 	float windowScale;
 
 	final static int SIZE = 150;
-	private static final Color NEUTRAL_OBJECTS_FILL_COLOR = Color.gray;
 
 	private final Rectangle bounds;
 
@@ -62,18 +77,24 @@ public class MiniMap extends ClickableGuiElement {
 		neutralObjects = new HashMap<Integer, MiniMapNeutralObject>();
 		bases = new HashMap<Integer, MiniMapBase>();
 		players = new HashMap<Integer, MiniMapPlayer>();
-		scale = 1f;
+
+		if (S.Server.sv_minimap_egomode) {
+			setActiveInteractModes(InteractMode.MODE_STRATEGY,
+					InteractMode.MODE_DEAD, InteractMode.MODE_EGO);
+		} else {
+			setActiveInteractModes(InteractMode.MODE_STRATEGY,
+					InteractMode.MODE_DEAD);
+		}
 	}
 
 	private void renderNeutral(Graphics g) {
-		g.setColor(NEUTRAL_OBJECTS_FILL_COLOR);
+		g.setColor(COLOR_NEUTRAL_OBJECTS_FILL);
 		g.setLineWidth(1f);
 		LinkedList<MiniMapNeutralObject> objectsToRender = new LinkedList<MiniMapNeutralObject>(
 				neutralObjects.values());
 		for (MiniMapNeutralObject object : objectsToRender) {
 			if (object.isDynamicShape()) {
-				g.fill(new Polygon(
-						Geometry.vectorsToFloat(object.getVertices())));
+				g.fill(object.getShape());
 			} else {
 				g.fillRect(object.getX(), object.getY(), object.getWidth(),
 						object.getHeight());
@@ -88,7 +109,7 @@ public class MiniMap extends ClickableGuiElement {
 	private void renderBases(Graphics g) {
 		g.setLineWidth(1f);
 		for (MiniMapBase object : bases.values()) {
-			g.setColor(object.getColor());
+			g.setColor(object.getColor().multiply(COLOR_MULTIPLIER));
 			g.fillRect(object.getX(), object.getY(), object.getWidth(),
 					object.getHeight());
 		}
@@ -99,7 +120,7 @@ public class MiniMap extends ClickableGuiElement {
 
 		if (nodes != null && !nodes.isEmpty()) {
 			g.setLineWidth(1f);
-			g.setColor(Color.yellow);
+			g.setColor(COLOR_NODE_CONNECTIONS);
 			for (NodeData someNode : nodes.values()) {
 
 				for (NodeData adjacentOfSomeNode : someNode.getAdjacentNodes()) {
@@ -127,25 +148,76 @@ public class MiniMap extends ClickableGuiElement {
 	}
 
 	private void renderPlayers(Graphics g) {
+		PlayerMainFigure player = null;
+		try {
+			player = getInfo().getPlayer().getPlayerMainFigure();
+		} catch (ObjectNotFoundException e) {
+		}
 		List<MiniMapPlayer> ps = new LinkedList<MiniMapPlayer>(players.values());
 		for (int i = 0; i < ps.size(); i++) {
 			MiniMapPlayer object = ps.get(i);
-			g.setColor(object.getColor());
-			g.fillOval(object.getX(), object.getY(), object.getWidth(),
-					object.getHeight());
+			if (player == null || object.getPlayer().isVisibleFor(player)) {
+				g.setColor(object.getColor().multiply(COLOR_MULTIPLIER));
+				g.fillOval(object.getX(), object.getY(), object.getWidth(),
+						object.getHeight());
+			}
 		}
 	}
 
 	@Override
+	public boolean mouseMoved(int oldx, int oldy, int newx, int newy) {
+		try {
+			InteractMode mode = getInfo().getPlayer().getCurrentMode();
+			return (mode == InteractMode.MODE_DEAD || mode == InteractMode.MODE_STRATEGY);
+		} catch (ObjectNotFoundException e) {
+			L.log(Level.WARNING,
+					"Could not find player while interacting with minimap.", e);
+		}
+		return false;
+	}
+
+	@Override
+	public boolean mousePressed(int button, int x, int y) {
+		try {
+			InteractMode mode = getInfo().getPlayer().getCurrentMode();
+			return (mode == InteractMode.MODE_DEAD || mode == InteractMode.MODE_STRATEGY);
+		} catch (ObjectNotFoundException e) {
+			L.log(Level.WARNING,
+					"Could not find player while interacting with minimap.", e);
+		}
+		return false;
+	}
+
+	@Override
 	public boolean mouseReleased(int button, int x, int y) {
-		centerAtMouse(x, y);
-		return true;
+		try {
+			InteractMode currentMode = getInfo().getPlayer().getCurrentMode();
+			if (currentMode == InteractMode.MODE_STRATEGY
+					|| currentMode == InteractMode.MODE_DEAD) {
+				centerAtMouse(x, y);
+				return true;
+			}
+		} catch (ObjectNotFoundException e) {
+			L.log(Level.WARNING,
+					"Could not find player while interacting with minimap.", e);
+		}
+		return false;
 	}
 
 	@Override
 	public boolean mouseDragged(int oldx, int oldy, int newx, int newy) {
-		centerAtMouse(newx, newy);
-		return true;
+		try {
+			InteractMode currentMode = getInfo().getPlayer().getCurrentMode();
+			if (currentMode == InteractMode.MODE_STRATEGY
+					|| currentMode == InteractMode.MODE_DEAD) {
+				centerAtMouse(newx, newy);
+				return true;
+			}
+		} catch (ObjectNotFoundException e) {
+			L.log(Level.WARNING,
+					"Could not find player while interacting with minimap.", e);
+		}
+		return false;
 	}
 
 	private void centerAtMouse(int x, int y) {
@@ -173,7 +245,7 @@ public class MiniMap extends ClickableGuiElement {
 
 	@Override
 	public void render(Graphics g) {
-		g.setColor(Color.black);
+		g.setColor(COLOR_BACKGROUND);
 		g.fill(bounds);
 
 		synchronized (neutralObjects) {
@@ -195,7 +267,7 @@ public class MiniMap extends ClickableGuiElement {
 
 	private void renderViewPort(Graphics g) {
 		g.setLineWidth(1f);
-		g.setColor(Color.white);
+		g.setColor(COLOR_MULTIPLIER);
 		float minimapScale = getSize() / getInfo().getMapBounds().getHeight();
 		float rectWidth = 800f;
 		float ratio = (float) Display.getHeight() / Display.getWidth();
@@ -325,7 +397,7 @@ public class MiniMap extends ClickableGuiElement {
 					verticesOnMinimap[i] = gameToMinimapPosition(originalVertices[i]);
 				}
 				newNeutralObject = new MiniMapNeutralObject(o, x, y, w, h,
-						verticesOnMinimap);
+						new Polygon(Geometry.vectorsToFloat(verticesOnMinimap)));
 			} else {
 				newNeutralObject = new MiniMapNeutralObject(o, x, y, w, h);
 			}
@@ -377,14 +449,31 @@ public class MiniMap extends ClickableGuiElement {
 
 	@Override
 	public void onGameReady() {
+		recalculateScale();
+		for (GameObject o : getInfo().getGameObjects().values()) {
+			maybeAddObject(o);
+		}
+	}
+
+	@Override
+	public void onStartRound() {
+		for (GameObject o : getInfo().getGameObjects().values()) {
+			maybeAddObject(o);
+		}
+	}
+
+	@Override
+	public void onMapChanged(SetMapEvent setMapEvent) {
+		recalculateScale();
+		resetNodeData();
+	}
+
+	private void recalculateScale() {
 		Rectangle r = getInfo().getMapBounds();
 		float size = Math.min(r.getWidth(), r.getHeight());
 
 		scale = (SIZE * windowScale) / size;
 		bounds.setSize(SIZE * windowScale, SIZE * windowScale);
-		for (GameObject o : getInfo().getGameObjects().values()) {
-			maybeAddObject(o);
-		}
 	}
 
 	void setCamera(GameCamera viewport) {

@@ -18,6 +18,7 @@ import de.illonis.eduras.gameclient.datacache.CacheInfo.ImageKey;
 import de.illonis.eduras.gameclient.datacache.FontCache;
 import de.illonis.eduras.gameclient.datacache.FontCache.FontKey;
 import de.illonis.eduras.gameclient.datacache.ImageCache;
+import de.illonis.eduras.units.InteractMode;
 
 /**
  * Displays team resources.
@@ -36,6 +37,8 @@ public class ResourceDisplay extends RenderedGuiObject {
 	protected ResourceDisplay(UserInterface gui) {
 		super(gui);
 		resAmount = 0;
+
+		setActiveInteractModes(InteractMode.MODE_STRATEGY);
 	}
 
 	@Override

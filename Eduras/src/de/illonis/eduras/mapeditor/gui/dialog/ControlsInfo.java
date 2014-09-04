@@ -3,10 +3,11 @@ package de.illonis.eduras.mapeditor.gui.dialog;
 import java.awt.BorderLayout;
 
 import javax.swing.BorderFactory;
-import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
+
+import de.illonis.eduras.mapeditor.gui.EditorWindow;
 
 /**
  * A simple help dialog that shows some static help text.
@@ -14,14 +15,18 @@ import javax.swing.JTextArea;
  * @author illonis
  * 
  */
-public class ControlsInfo extends JDialog {
+public class ControlsInfo extends ESCDialog {
 
 	private static final long serialVersionUID = 1L;
 
 	/**
 	 * Creates the dialog.
+	 * 
+	 * @param window
+	 *            the parent window.
 	 */
-	public ControlsInfo() {
+	public ControlsInfo(EditorWindow window) {
+		super(window);
 		setTitle("Help: Controls");
 		JPanel content = (JPanel) getContentPane();
 		content.setLayout(new BorderLayout());
@@ -53,7 +58,7 @@ public class ControlsInfo extends JDialog {
 
 	@Override
 	public void setVisible(boolean b) {
-		setLocationRelativeTo(null);
+		setLocationRelativeTo(getParent());
 		super.setVisible(b);
 	}
 }

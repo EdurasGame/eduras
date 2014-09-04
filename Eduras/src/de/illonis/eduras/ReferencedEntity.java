@@ -1,14 +1,24 @@
 package de.illonis.eduras;
 
-public class ReferencedEntity {
+import de.illonis.eduras.mapeditor.Referencable;
+
+/**
+ * An concrete entity that can be referenced by name.
+ * 
+ * @author illonis
+ * 
+ */
+public abstract class ReferencedEntity implements Referencable {
 
 	private String refName;
 
-	public String getRefName() {
+	@Override
+	public final String getRefName() {
 		return refName;
 	}
 
-	public void setRefName(String refName) {
+	@Override
+	public final void setRefName(String refName) {
 		this.refName = refName;
 	}
 }

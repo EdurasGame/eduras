@@ -3,6 +3,7 @@ package de.illonis.eduras.gameclient.gui.hud.nifty;
 import java.io.IOException;
 import java.net.SocketTimeoutException;
 import java.util.concurrent.Callable;
+import java.util.concurrent.CancellationException;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
@@ -12,6 +13,8 @@ import java.util.logging.Logger;
 import de.illonis.edulog.EduLog;
 import de.illonis.eduras.gameclient.EdurasGameInterface;
 import de.illonis.eduras.gameclient.LoginData;
+import de.illonis.eduras.gameclient.userprefs.Settings;
+import de.illonis.eduras.logicabstraction.EdurasInitializer;
 import de.lessvoid.nifty.controls.Label;
 import de.lessvoid.nifty.screen.Screen;
 
@@ -49,6 +52,9 @@ public class ConnectingController extends EdurasScreenController {
 	@Override
 	protected void initScreen(Screen screen) {
 		note = screen.findNiftyControl("noteLabel", Label.class);
+		Settings s = EdurasInitializer.getInstance().getSettings();
+		game.setSoundVolume(s.getFloatSetting(Settings.SOUND_VOLUME));
+		game.setMusicVolume(s.getFloatSetting(Settings.MUSIC_VOLUME));
 	}
 
 	/**
@@ -56,8 +62,10 @@ public class ConnectingController extends EdurasScreenController {
 	 */
 	public void abort() {
 		connect = false;
-		if (connectFuture != null)
+		if (connectFuture != null) {
 			connectFuture.cancel(true);
+			connectFuture = null;
+		}
 		game.enterState(2);
 	}
 
@@ -93,8 +101,9 @@ public class ConnectingController extends EdurasScreenController {
 					} else {
 						note.setText(connectCallable.getErrorMessage());
 					}
-				} catch (InterruptedException | ExecutionException e) {
-					note.setText(e.getMessage());
+				} catch (InterruptedException | CancellationException
+						| ExecutionException e) {
+					note.setText("Error: " + e.getMessage());
 				}
 				connectFuture = null;
 			}

@@ -61,6 +61,14 @@ public abstract class ScrollModeMouseAdapter extends GuiMouseAdapter {
 	}
 
 	@Override
+	public void mouseLost() {
+		Vector2f cameraMovement = getPanelLogic().getCamera()
+				.getCameraMovement();
+		cameraMovement.x = 0;
+		cameraMovement.y = 0;
+	}
+
+	@Override
 	public void mapClicked(Vector2f gamePos) {
 		try {
 			Vector2f newPos = EdurasInitializer.getInstance()

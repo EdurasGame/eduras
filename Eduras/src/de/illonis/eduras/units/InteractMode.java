@@ -11,7 +11,13 @@ import de.illonis.eduras.settings.S;
 @SuppressWarnings("javadoc")
 public enum InteractMode {
 
-	MODE_EGO, MODE_STRATEGY, MODE_DEAD;
+	MODE_EGO("on the road"), MODE_STRATEGY("coordinating"), MODE_DEAD("dead");
+
+	private String displayName;
+
+	InteractMode(String displayName) {
+		this.displayName = displayName;
+	}
 
 	public InteractMode next() {
 		if (this == MODE_EGO)
@@ -30,5 +36,9 @@ public enum InteractMode {
 		default:
 			return 0;
 		}
+	}
+
+	public String getDisplayName() {
+		return displayName;
 	}
 }

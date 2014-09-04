@@ -62,6 +62,8 @@ public class MapRenderer {
 		g.translate(-camera.getX(), -camera.getY());
 		g.scale(interactor.getZoom(), interactor.getZoom());
 
+		List<EditorPlaceable> selected = interactor.getSelectedElements();
+
 		// map bounds
 		g.setColor(Color.black);
 		g.fillRect(0, 0, data.getWidth(), data.getHeight());
@@ -80,29 +82,17 @@ public class MapRenderer {
 				portals.add((Portal) o);
 			}
 		}
-		if (interactor.getInteractType() == InteractType.PLACE_SHAPE) {
-			DynamicPolygonObject poly = data.getPlacingObject();
-			if (poly != null) {
-				Shape shape = poly.getShape();
-				g.setColor(SHAPE_PLACE_COLOR);
-				Point mouse = interactor.getMouseLocation();
-				Vector2f mapPoint = interactor
-						.computeGuiPointToGameCoordinate(new Vector2f(mouse
-								.getX(), mouse.getY()));
-				g.translate(mapPoint.getX() - shape.getWidth() / 2,
-						mapPoint.getY() - shape.getHeight() / 2);
-				g.fill(shape);
-			}
-		}
 		if (data.isShowNodeConnections()) {
 			g.setLineWidth(1f);
 			g.setColor(Color.yellow);
 			for (NodeData node : data.getBases()) {
 				for (NodeData linkedNode : node.getAdjacentNodes()) {
-					g.drawLine(node.getX() + node.getWidth() / 2, node.getY()
-							+ node.getHeight() / 2, linkedNode.getX()
-							+ linkedNode.getWidth() / 2, linkedNode.getY()
-							+ linkedNode.getHeight() / 2);
+					g.drawLine(node.getXPosition() + node.getWidth() / 2,
+							node.getYPosition() + node.getHeight() / 2,
+							linkedNode.getXPosition() + linkedNode.getWidth()
+									/ 2,
+							linkedNode.getYPosition() + linkedNode.getHeight()
+									/ 2);
 				}
 			}
 		}
@@ -128,10 +118,61 @@ public class MapRenderer {
 					left.rotate(300, end);
 					g.drawLine(end.x, end.y, right.x, right.y);
 					g.drawLine(end.x, end.y, left.x, left.y);
-
 				}
 			}
 		}
+		for (EditorPlaceable element : selected) {
+			renderSelection(element.getXPosition(), element.getYPosition(),
+					element.getWidth(), element.getHeight(), g);
+		}
+		if (interactor.getInteractType() == InteractType.PLACE_SHAPE) {
+			DynamicPolygonObject poly = data.getPlacingObject();
+			if (poly != null) {
+				Shape shape = poly.getShape();
+				g.setColor(SHAPE_PLACE_COLOR);
+				Point mouse = interactor.getMouseLocation();
+				Vector2f mapPoint = interactor
+						.computeGuiPointToGameCoordinate(new Vector2f(mouse
+								.getX(), mouse.getY()));
+				g.translate(mapPoint.getX() - shape.getWidth() / 2,
+						mapPoint.getY() - shape.getHeight() / 2);
+				g.fill(shape);
+			}
+		}
+		g.resetTransform();
+		if (interactor.getDragRect().getWidth() > 0) {
+			g.setColor(Color.white);
+			g.draw(interactor.getDragRect());
+		}
+	}
+
+	private void renderSelection(float xPosition, float yPosition, float width,
+			float height, Graphics g) {
+		g.setColor(Color.yellow);
+		g.setLineWidth(2f);
+		// top left
+		g.drawLine(xPosition - 5, yPosition - 5, xPosition + 5, yPosition - 5);
+		g.drawLine(xPosition - 5, yPosition - 5, xPosition - 5, yPosition + 5);
+
+		// bottom left
+		g.drawLine(xPosition - 5, yPosition + height + 5, xPosition - 5,
+				yPosition + height - 5);
+		g.drawLine(xPosition - 5, yPosition + height + 5, xPosition + 5,
+				yPosition + height + 5);
+
+		// bottom right
+		g.drawLine(xPosition + width - 5, yPosition + height + 5, xPosition
+				+ width + 5, yPosition + height + 5);
+		g.drawLine(xPosition + width + 5, yPosition + height - 5, xPosition
+				+ width + 5, yPosition + height + 5);
+
+		// top right
+		g.drawLine(xPosition + width - 5, yPosition - 5, xPosition + width + 5,
+				yPosition - 5);
+		g.drawLine(xPosition + width + 5, yPosition - 5, xPosition + width + 5,
+				yPosition + 5);
+
+		g.setLineWidth(1f);
 	}
 
 	private void renderSpawn(SpawnPosition spawn, Graphics g) {
@@ -152,7 +193,8 @@ public class MapRenderer {
 			color = Color.white;
 		}
 		g.setColor(color);
-		g.fillRect(node.getX(), node.getY(), node.getWidth(), node.getHeight());
+		g.fillRect(node.getXPosition(), node.getYPosition(), node.getWidth(),
+				node.getHeight());
 	}
 
 	private void renderObject(GameObject o, Graphics g) {

@@ -14,8 +14,8 @@ public class BasicValidation extends ValidateTask {
 	@Override
 	protected boolean performValidation() {
 		boolean ok = true;
-		if (data.getWidth() < 50 || data.getHeight() < 50) {
-			addErrorMessage("Map is too small (minimum 50x50).");
+		if (data.getWidth() < 200 || data.getHeight() < 200) {
+			addErrorMessage("Map is too small (minimum 200x200).");
 			ok = false;
 		}
 		if (data.getAuthor().isEmpty()) {

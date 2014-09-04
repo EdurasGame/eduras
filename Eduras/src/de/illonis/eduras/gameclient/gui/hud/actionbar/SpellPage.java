@@ -21,5 +21,6 @@ public class SpellPage extends ActionBarSubPage {
 		addButton(new HealButton(reactor));
 		addButton(new SpeedSpellButton(reactor));
 		addButton(new InvisibilitySpellButton(reactor));
+		addButton(new BlinkSpellButton(reactor));
 	}
 }

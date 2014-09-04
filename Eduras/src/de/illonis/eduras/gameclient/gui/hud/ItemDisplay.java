@@ -3,6 +3,7 @@ package de.illonis.eduras.gameclient.gui.hud;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.lwjgl.opengl.Display;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Font;
 import org.newdawn.slick.Graphics;
@@ -38,18 +39,22 @@ public class ItemDisplay extends ClickableGuiElement implements
 			.getName());
 
 	private static final String EMPTY_NAME = "EMPTY";
+	/**
+	 * Alpha value for inactive items. 0 means invisible, 1 means opaque. This
+	 * will affect all rendered colors on items.
+	 */
+	private final static float ITEM_ALPHA = 0.5f;
+	private final static Color COLOR_MULTIPLIER = new Color(1f, 1f, 1f,
+			ITEM_ALPHA);
 
-	private final static int ITEM_GAP = 15;
+	private final static int ITEM_GAP = 10;
 	private final static int BLOCKSIZE = 48;
 	private int currentItem = -1;
-	private final static Color COLOR_SEMITRANSPARENT = new Color(0, 0, 0, 120);
 	private final float buttonSize;
+	private Rectangle bounds;
 
 	// top, right, bottom, left
-	private final static int OUTER_GAP[] = { 20, 5, 10, 15 };
-
-	final static int HEIGHT = OUTER_GAP[0] + 2 * BLOCKSIZE + OUTER_GAP[2]
-			+ ITEM_GAP;
+	private final static int OUTER_GAP[] = { 10, 5, 10, 10 };
 
 	/**
 	 * Width of the total inventory.
@@ -73,9 +78,12 @@ public class ItemDisplay extends ClickableGuiElement implements
 		screenX = map.getSize() + 5;
 		itemSlots = new GuiItem[Inventory.MAX_CAPACITY];
 		for (int i = 0; i < Inventory.MAX_CAPACITY; i++) {
-			itemSlots[i] = new GuiItem(i);
+			itemSlots[i] = new GuiItem(gui, i);
 		}
 		registerAsTooltipTriggerer(this);
+		bounds = new Rectangle(screenX, screenY, buttonSize
+				* Inventory.MAX_CAPACITY / 2 + OUTER_GAP[1] + OUTER_GAP[3]
+				+ ITEM_GAP * (Inventory.MAX_CAPACITY / 2 - 1), buttonSize * 2);
 		setActiveInteractModes(InteractMode.MODE_EGO);
 	}
 
@@ -83,42 +91,39 @@ public class ItemDisplay extends ClickableGuiElement implements
 	public void render(Graphics g) {
 		Font font = FontCache.getFont(FontKey.DEFAULT_FONT, g);
 		currentItem = getInfo().getClientData().getCurrentItemSelected();
+		g.setLineWidth(rectStroke);
 		for (GuiItem item : itemSlots) {
 
 			if (item.isEmpty()) {
 				continue;
 			}
-			g.setLineWidth(rectStroke);
-			Rectangle itemRect = new Rectangle(item.getX() + screenX,
-					item.getY() + screenY, buttonSize, buttonSize);
+			Color currentColor = (item.getSlotId() == currentItem) ? Color.white
+					: COLOR_MULTIPLIER;
 			String idString = "#" + (item.getSlotId() + 1);
-			font.drawString(item.getX() + screenX + 1, item.getY()
-					+ screenY - font.getLineHeight(), idString);
+			font.drawString(item.getX() + screenX + 1, item.getY() + screenY
+					- font.getLineHeight(), idString, currentColor);
 
 			if (item.isWeapon()) {
 				int ammo = item.getWeaponAmmu();
 				String ammoString = "*" + ammo;
-				font.drawString(item.getX() + screenX + buttonSize
-						- font.getWidth(ammoString) - 3, item.getY()
-						+ screenY - font.getLineHeight(), ammoString);
+				font.drawString(
+						item.getX() + screenX + buttonSize
+								- font.getWidth(ammoString) - 3, item.getY()
+								+ screenY - font.getLineHeight(), ammoString,
+						currentColor);
 			}
-			g.setColor(Color.white);
-			if (item.hasImage())
+			g.setColor(currentColor);
+			Rectangle itemRect = item.getClickableRect();
+			if (item.hasImage()) {
 				g.drawImage(item.getItemImage(), itemRect.getX(),
-						itemRect.getY());
-			long cd = item.getCooldown();
-			if (cd > 0) {
-				g.setColor(COLOR_SEMITRANSPARENT);
-				float a = item.getCooldownPercent();
-				g.fillArc(itemRect.getX(), itemRect.getY(),
-						itemRect.getWidth(), itemRect.getHeight(), -90 - a
-								* 360, -90);
+						itemRect.getY(), currentColor);
 			}
-			// TODO: make nicer
+			item.renderCooldown(g, itemRect.getX(), itemRect.getY(),
+					itemRect.getWidth(), itemRect.getHeight());
 			if (item.getSlotId() == currentItem) {
-				g.setColor(Color.yellow);
+				g.setColor(Color.yellow.multiply(COLOR_MULTIPLIER));
 			} else {
-				g.setColor(Color.white);
+				g.setColor(COLOR_MULTIPLIER);
 			}
 			g.draw(itemRect);
 		}
@@ -126,14 +131,13 @@ public class ItemDisplay extends ClickableGuiElement implements
 
 	@Override
 	public void onGuiSizeChanged(int newWidth, int newHeight) {
-		screenY = newHeight - buttonSize * 3;
 	}
 
 	@Override
 	public boolean mouseReleased(int button, int x, int y) {
 		for (int i = 0; i < Inventory.MAX_CAPACITY; i++) {
-			if (itemSlots[i].getClickableRect().contains(x, y)) {
-				L.info("User clicked on item " + i);
+			if (!itemSlots[i].isEmpty()
+					&& itemSlots[i].getClickableRect().contains(x, y)) {
 				itemClicked(i);
 				return true;
 			}
@@ -203,23 +207,29 @@ public class ItemDisplay extends ClickableGuiElement implements
 	 * @author illonis
 	 * 
 	 */
-	private class GuiItem {
+	private class GuiItem extends CooldownGuiObject {
 		private int x, y, slotId;
 		private String name;
 		private Item item;
 		private Image itemImage;
-		private final Rectangle clickRect;
+		private Rectangle clickRect;
 
-		GuiItem(int slotId) {
+		GuiItem(UserInterface gui, int slotId) {
+			super(gui);
 
-			this.x = OUTER_GAP[3] + ((int) buttonSize + ITEM_GAP)
-					* (slotId % (Inventory.MAX_CAPACITY / 2));
-			this.y = OUTER_GAP[0] + ((int) buttonSize + ITEM_GAP)
-					* (slotId / (Inventory.MAX_CAPACITY / 2));
 			this.slotId = slotId;
 			setName(EMPTY_NAME);
-			clickRect = new Rectangle(x + screenX, y + screenY, buttonSize,
-					buttonSize);
+			updateClickRect(0);
+		}
+
+		void updateClickRect(int lineHeight) {
+			this.x = OUTER_GAP[3] + ((int) buttonSize + ITEM_GAP)
+					* (slotId % (Inventory.MAX_CAPACITY / 2));
+			this.y = lineHeight + OUTER_GAP[0]
+					+ ((int) buttonSize + lineHeight + ITEM_GAP)
+					* (slotId / (Inventory.MAX_CAPACITY / 2));
+			clickRect = new Rectangle(x + getScreenX(), y + getScreenY(),
+					buttonSize, buttonSize);
 		}
 
 		public void setItem(Item newItem) {
@@ -253,19 +263,11 @@ public class ItemDisplay extends ClickableGuiElement implements
 			return 0;
 		}
 
+		@Override
 		long getCooldown() {
 			if (item instanceof Usable)
 				return ((Usable) item).getCooldown();
 			return 0;
-		}
-
-		float getCooldownPercent() {
-			float e = 0;
-			if (item instanceof Usable) {
-				Usable u = (Usable) item;
-				e = (float) u.getCooldown() / u.getCooldownTime();
-			}
-			return e;
 		}
 
 		int getX() {
@@ -287,13 +289,36 @@ public class ItemDisplay extends ClickableGuiElement implements
 		protected Rectangle getClickableRect() {
 			return clickRect;
 		}
+
+		@Override
+		public void render(Graphics g) {
+		}
+
+		@Override
+		public void onGuiSizeChanged(int newWidth, int newHeight) {
+		}
+
+		@Override
+		long getCooldownTime() {
+			if (item instanceof Usable)
+				return ((Usable) item).getCooldownTime();
+			return 0;
+		}
+	}
+
+	float getScreenX() {
+		return screenX;
+	}
+
+	float getScreenY() {
+		return screenY;
 	}
 
 	@Override
 	public void onMouseOver(Vector2f p) {
-
 		for (int i = 0; i < Inventory.MAX_CAPACITY; i++) {
-			if (itemSlots[i].getClickableRect().contains(p.x, p.y)) {
+			if (!itemSlots[i].isEmpty()
+					&& itemSlots[i].getClickableRect().contains(p.x, p.y)) {
 				try {
 					getTooltipHandler().showItemTooltip(
 							p,
@@ -317,11 +342,27 @@ public class ItemDisplay extends ClickableGuiElement implements
 
 	@Override
 	public Rectangle getTriggerArea() {
-		return new Rectangle(screenX, screenY, WIDTH, HEIGHT);
+		return bounds;
 	}
 
 	@Override
 	public void onGameReady() {
+		try {
+			int lineHeight = FontCache.getFont(FontKey.DEFAULT_FONT)
+					.getLineHeight();
+			bounds.setHeight(buttonSize * 2 + lineHeight * 2 + OUTER_GAP[0]
+					+ OUTER_GAP[2] + ITEM_GAP);
+			bounds.setWidth(buttonSize * Inventory.MAX_CAPACITY / 2
+					+ OUTER_GAP[1] + OUTER_GAP[3] + ITEM_GAP
+					* (Inventory.MAX_CAPACITY / 2 - 1));
+			screenY = Display.getHeight() - bounds.getHeight();
+			bounds.setY(screenY);
+			for (int i = 0; i < itemSlots.length; i++) {
+				itemSlots[i].updateClickRect(lineHeight);
+			}
+		} catch (CacheException e) {
+			System.out.println("no font");
+		}
 		Inventory playerInventory;
 		try {
 			playerInventory = getInfo().getPlayer().getInventory();

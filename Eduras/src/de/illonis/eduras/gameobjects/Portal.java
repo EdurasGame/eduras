@@ -61,7 +61,8 @@ public class Portal extends TriggerArea {
 						.findFreePointWithinSpawnPositionForShape(
 								new SpawnPosition((Rectangle) partnerPortal
 										.getShape(), SpawnType.ANY),
-								objectToBePorted.getShape(), objectsToConsider);
+								objectToBePorted.getShape(), objectsToConsider,
+								GameInformation.ATTEMPT_PER_SPAWNPOINT);
 				getGame().getEventTriggerer().guaranteeSetPositionOfObject(
 						objectToBePorted.getId(), positionToMoveTo);
 

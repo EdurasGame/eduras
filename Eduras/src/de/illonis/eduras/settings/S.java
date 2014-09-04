@@ -695,16 +695,11 @@ public final class S {
 		public static float go_portal_height = 25;
 
 		/**
-		 * Determines the accuracy during collision detection where the moving
-		 * object has an elliptical shape.
+		 * Determines the accuracy during collision detection. The lower the
+		 * number, the higher the accuracy. In fact, this denotes the distance
+		 * from one collision-detection-point to another.
 		 */
-		public static int sv_performance_collision_accuracy_ellipse = 10;
-
-		/**
-		 * Determines the accuracy during collision detection where the moving
-		 * object has a polygon shape.
-		 */
-		public static int sv_performance_collision_accuracy_polygon = 10;
+		public static float sv_performance_collision_accuracy = 5;
 
 		/**
 		 * Tells how many times per second the game shall be updated.
@@ -721,11 +716,29 @@ public final class S {
 
 		public static long sv_modeswitch_dead_cooldown = 0;
 
+		public static boolean sv_minimap_egomode = true;
+
 		/**
 		 * Determines whether the winning condition in edura mode is to conquer
 		 * all bases or to conquer only the opponent's main base.
 		 */
 		public static boolean gm_edura_conquer_all_bases = true;
+
+		/**
+		 * Determines the maximum blink distance.
+		 */
+		public static float sv_blink_distance = 100;
+
+		public static long sv_blink_cooldown = 3000;
+
+		/**
+		 * Determines if blink is available in deathmatch mode.
+		 */
+		public static boolean gm_deathmatch_blink_available = true;
+
+		public static long gm_deathmatch_blink_timer = 15000;
+
+		public static int spell_blink_costs = 10;
 
 	}
 

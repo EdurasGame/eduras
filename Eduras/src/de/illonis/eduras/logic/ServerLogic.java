@@ -11,6 +11,7 @@ import de.illonis.edulog.EduLog;
 import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.ObjectFactory;
 import de.illonis.eduras.Player;
+import de.illonis.eduras.actions.BlinkSpellAction;
 import de.illonis.eduras.actions.CreateUnitAction;
 import de.illonis.eduras.actions.HealSpellAction;
 import de.illonis.eduras.actions.InvisibilitySpellAction;
@@ -19,6 +20,7 @@ import de.illonis.eduras.actions.ScoutSpellAction;
 import de.illonis.eduras.actions.SpawnItemAction;
 import de.illonis.eduras.actions.SpeedSpellAction;
 import de.illonis.eduras.ai.movement.UnitNotControllableException;
+import de.illonis.eduras.events.BlinkEvent;
 import de.illonis.eduras.events.ClientRenameEvent;
 import de.illonis.eduras.events.CreateUnitEvent;
 import de.illonis.eduras.events.GameEvent;
@@ -36,6 +38,7 @@ import de.illonis.eduras.events.UnitSpellActionEvent;
 import de.illonis.eduras.events.UserMovementEvent;
 import de.illonis.eduras.exceptions.InsufficientResourceException;
 import de.illonis.eduras.exceptions.InvalidNameException;
+import de.illonis.eduras.exceptions.NoSpawnAvailableException;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
 import de.illonis.eduras.exceptions.WrongObjectTypeException;
 import de.illonis.eduras.gameobjects.Base;
@@ -232,7 +235,7 @@ public class ServerLogic implements GameLogicInterface {
 				return;
 			}
 			break;
-		case SPELL_SCOUT:
+		case SPELL_SCOUT: {
 			ScoutSpellEvent scoutEvent = (ScoutSpellEvent) event;
 			Player player;
 			try {
@@ -246,6 +249,7 @@ public class ServerLogic implements GameLogicInterface {
 				return;
 			}
 			break;
+		}
 		case SPAWN_ITEM: {
 			SpawnItemEvent spawnItemEvent = (SpawnItemEvent) event;
 
@@ -317,6 +321,71 @@ public class ServerLogic implements GameLogicInterface {
 			} catch (ObjectNotFoundException ex) {
 				L.log(Level.WARNING,
 						"Cannot find player when receiving heal action.", ex);
+				break;
+			}
+			break;
+		}
+		case BLINK_SPELL: {
+			UnitSpellActionEvent blinkSpellEvent = (UnitSpellActionEvent) event;
+
+			Player executingPlayer;
+			try {
+				executingPlayer = gameInfo.getPlayerByOwnerId(blinkSpellEvent
+						.getExecutingPlayer());
+				BlinkSpellAction blinkSpellAction = new BlinkSpellAction(
+						executingPlayer,
+						(PlayerMainFigure) gameInfo
+								.findObjectById(blinkSpellEvent
+										.getIdOfUnitToCastSpellOn()));
+				blinkSpellAction.execute(gameInfo);
+			} catch (ObjectNotFoundException ex) {
+				L.log(Level.WARNING,
+						"Cannot find player when receiving heal action.", ex);
+				break;
+			}
+			break;
+		}
+		case BLINK: {
+			BlinkEvent blinkEvent = (BlinkEvent) event;
+			try {
+				Player blinkingPlayer = gameInfo.getPlayerByOwnerId(blinkEvent
+						.getOwner());
+				if (blinkingPlayer.getBlinksAvailable() < 1
+						|| blinkingPlayer.isDead()
+						|| blinkingPlayer.getBlinkCooldown() > 0) {
+					L.log(Level.WARNING,
+							"Received blink event although there is no blink available or the player is dead or there is still cooldown on blink.");
+					break;
+				}
+				PlayerMainFigure blinkingMainFigure = blinkingPlayer
+						.getPlayerMainFigure();
+
+				gameInfo.getEventTriggerer().changeBlinkChargesBy(
+						blinkingPlayer, -1);
+				blinkingPlayer.useBlink();
+
+				// check if the player tried to blink too far
+				try {
+					Vector2f actualBlinkTarget = gameInfo
+							.findActualTargetForDesiredBlinkTarget(
+									blinkingMainFigure,
+									blinkEvent.getBlinkTarget());
+
+					// set player to the target
+					gameInfo.getEventTriggerer()
+							.guaranteeSetPositionOfObjectAtCenter(
+									blinkingPlayer.getPlayerMainFigure()
+											.getId(), actualBlinkTarget);
+
+				} catch (NoSpawnAvailableException e1) {
+					// TODO: Send a notification to the client, since it didn't
+					// figure it out itself that there is no spawn available
+					System.out.println("Cannot spawn here.");
+				}
+
+			} catch (ObjectNotFoundException e1) {
+				L.log(Level.SEVERE,
+						"Player not found when receiving blinking event!", e1);
 				break;
 			}
 			break;

@@ -45,6 +45,7 @@ import de.illonis.eduras.events.ObjectFactoryEvent;
 import de.illonis.eduras.events.OwnerGameEvent;
 import de.illonis.eduras.events.RespawnEvent;
 import de.illonis.eduras.events.SetAmmunitionEvent;
+import de.illonis.eduras.events.SetAvailableBlinksEvent;
 import de.illonis.eduras.events.SetBooleanGameObjectAttributeEvent;
 import de.illonis.eduras.events.SetFloatGameObjectAttributeEvent;
 import de.illonis.eduras.events.SetGameModeEvent;
@@ -82,6 +83,7 @@ import de.illonis.eduras.gameobjects.OneTimeTimedEventHandler;
 import de.illonis.eduras.gameobjects.Portal;
 import de.illonis.eduras.gameobjects.TriggerArea;
 import de.illonis.eduras.interfaces.GameLogicInterface;
+import de.illonis.eduras.inventory.Inventory;
 import de.illonis.eduras.inventory.InventoryIsFullException;
 import de.illonis.eduras.inventory.NoSuchItemException;
 import de.illonis.eduras.items.Item;
@@ -957,7 +959,7 @@ public class ServerEventTriggerer implements EventTriggerer {
 
 	@Override
 	public void clearInventoryOfPlayer(Player player) {
-		for (int i = 0; i < 6; i++) {
+		for (int i = 0; i < Inventory.MAX_CAPACITY; i++) {
 			changeItemSlot(i, player.getPlayerId(), null);
 		}
 	}
@@ -1167,7 +1169,8 @@ public class ServerEventTriggerer implements EventTriggerer {
 			Vector2df positionToSpawnAt = GameInformation
 					.findFreePointWithinSpawnPositionForShape(spawnPosition,
 							object.getShape(),
-							allObjectsExceptBaseAndThisObject);
+							allObjectsExceptBaseAndThisObject,
+							GameInformation.ATTEMPT_PER_SPAWNPOINT);
 			guaranteeSetPositionOfObject(objectId, positionToSpawnAt);
 		} catch (NoSpawnAvailableException e) {
 			L.log(Level.SEVERE, "Cannot find a place to spawn this object!", e);
@@ -1265,5 +1268,34 @@ public class ServerEventTriggerer implements EventTriggerer {
 			sendEventToAll(sizeEvent);
 		} else
 			throw new ObjectNotFoundException(objectId);
+	}
+
+	@Override
+	public void guaranteeSetPositionOfObjectAtCenter(int objectId,
+			Vector2f newPosition) {
+		GameObject object;
+		try {
+			object = gameInfo.findObjectById(objectId);
+		} catch (ObjectNotFoundException e) {
+			L.log(Level.WARNING, "Cannot find object", e);
+			return;
+		}
+
+		object.getShape().setCenterX(newPosition.x);
+		object.getShape().setCenterY(newPosition.y);
+
+		guaranteeSetPositionOfObject(objectId, new Vector2df(object.getShape()
+				.getX(), object.getShape().getY()));
+	}
+
+	@Override
+	public void changeBlinkChargesBy(Player player, int charges) {
+		synchronized (player) {
+			player.setBlinksAvailable(Math.max(player.getBlinksAvailable()
+					+ charges, 0));
+		}
+
+		sendEvents(new SetAvailableBlinksEvent(player.getPlayerId(),
+				player.getBlinksAvailable()));
 	}
 }

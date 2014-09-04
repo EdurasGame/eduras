@@ -34,8 +34,13 @@ public class ChatDisplay extends RenderedGuiObject {
 		Font font = FontCache.getFont(FontKey.CHAT_FONT, g);
 		if (data.isEnabled()) {
 			int height = (MAX_LINES + 1) * font.getLineHeight();
-			font.drawString(screenX + WIDTH - 130, screenY - height, "Room: "
-					+ data.getRoomName(), Color.white);
+
+			// show name of chat room only when writing
+			if (data.isWriting()) {
+				font.drawString(screenX + WIDTH - 130, screenY - height,
+						"Room: " + data.getRoomName(), Color.white);
+			}
+
 			ChatMessage msg;
 			int i = font.getLineHeight();
 			if (data.isWriting())

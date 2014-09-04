@@ -15,6 +15,7 @@ import de.illonis.eduras.ReferencedEntity;
 import de.illonis.eduras.ai.AIControllable;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
 import de.illonis.eduras.exceptions.ShapeNotSupportedException;
+import de.illonis.eduras.mapeditor.EditorPlaceable;
 import de.illonis.eduras.math.CollisionPoint;
 import de.illonis.eduras.math.Geometry;
 import de.illonis.eduras.math.Vector2df;
@@ -28,7 +29,7 @@ import de.illonis.eduras.units.Unit;
  * 
  */
 public abstract class GameObject extends ReferencedEntity implements
-		Comparable<GameObject> {
+		EditorPlaceable, Comparable<GameObject> {
 
 	private final static Logger L = EduLog.getLoggerFor(GameObject.class
 			.getName());
@@ -217,6 +218,7 @@ public abstract class GameObject extends ReferencedEntity implements
 	 * @param y
 	 *            The new value of the y-position.
 	 */
+	@Override
 	public final void setPosition(float x, float y) {
 		setXPosition(x);
 		setYPosition(y);
@@ -231,12 +233,22 @@ public abstract class GameObject extends ReferencedEntity implements
 	public final void setPosition(Vector2f pos) {
 		setPosition(pos.x, pos.y);
 	}
+	
+	@Override
+	public float getWidth() {
+		return shape.getWidth();
+	}
+	@Override
+	public float getHeight() {
+		return shape.getHeight();
+	}
 
 	/**
 	 * Returns the x-position of the object.
 	 * 
 	 * @return The x-position.
 	 */
+	@Override
 	public final float getXPosition() {
 		return xPosition;
 	}
@@ -247,6 +259,7 @@ public abstract class GameObject extends ReferencedEntity implements
 	 * @param xPosition
 	 *            The new value of the x-position.
 	 */
+	@Override
 	public final void setXPosition(float xPosition) {
 		this.xPosition = xPosition;
 		if (shape != null)
@@ -272,6 +285,7 @@ public abstract class GameObject extends ReferencedEntity implements
 	 * 
 	 * @return The y-position.
 	 */
+	@Override
 	public final float getYPosition() {
 		return yPosition;
 	}
@@ -282,6 +296,7 @@ public abstract class GameObject extends ReferencedEntity implements
 	 * @param yPosition
 	 *            The value of the new y-position.
 	 */
+	@Override
 	public final void setYPosition(float yPosition) {
 		this.yPosition = yPosition;
 		if (shape != null)
@@ -646,6 +661,23 @@ public abstract class GameObject extends ReferencedEntity implements
 		// } else {
 		rotation = newValue;
 		// }
+	}
+
+	/**
+	 * Returns the center of this object's shape.
+	 * 
+	 * @return center
+	 */
+	public Vector2f getCenterPosition() {
+		return new Vector2f(shape.getCenterX(), shape.getCenterY());
+	}
+
+	public void setCenterPosition(Vector2f newCenterPosition) {
+		shape.setCenterX(newCenterPosition.x);
+		shape.setCenterY(newCenterPosition.y);
+
+		setXPosition(shape.getX() - shapeOffsetX);
+		setYPosition(shape.getY() - shapeOffsetY);
 	}
 
 	/**

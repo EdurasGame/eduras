@@ -194,13 +194,25 @@ public class InformationProvider implements InfoInterface {
 				edurasInitializer.getLogic().getGame().getObjects().values());
 		allObjectsExceptBase.remove(base);
 		try {
-			GameInformation
-					.findFreePointWithinSpawnPositionForShape(spawnPosition,
-							unitToSpawn.getShape(), allObjectsExceptBase);
+			GameInformation.findFreePointWithinSpawnPositionForShape(
+					spawnPosition, unitToSpawn.getShape(),
+					allObjectsExceptBase,
+					GameInformation.ATTEMPT_PER_SPAWNPOINT);
 			return true;
 		} catch (NoSpawnAvailableException e) {
 			return false;
 		}
 
+	}
+
+	@Override
+	public boolean canBlinkTo(PlayerMainFigure player, Vector2f target) {
+		try {
+			edurasInitializer.getLogic().getGame()
+					.findActualTargetForDesiredBlinkTarget(player, target);
+		} catch (NoSpawnAvailableException e) {
+			return false;
+		}
+		return true;
 	}
 }

@@ -8,6 +8,7 @@ import org.newdawn.slick.geom.Shape;
 
 import de.illonis.edulog.EduLog;
 import de.illonis.eduras.ReferencedEntity;
+import de.illonis.eduras.mapeditor.EditorPlaceable;
 import de.illonis.eduras.math.Vector2df;
 
 /**
@@ -16,7 +17,7 @@ import de.illonis.eduras.math.Vector2df;
  * @author illonis
  * 
  */
-public class SpawnPosition extends ReferencedEntity {
+public class SpawnPosition extends ReferencedEntity implements EditorPlaceable {
 
 	private final static Logger L = EduLog.getLoggerFor(SpawnPosition.class
 			.getName());
@@ -127,5 +128,40 @@ public class SpawnPosition extends ReferencedEntity {
 	 */
 	public Rectangle getArea() {
 		return area;
+	}
+
+	@Override
+	public float getXPosition() {
+		return area.getX();
+	}
+
+	@Override
+	public float getYPosition() {
+		return area.getY();
+	}
+
+	@Override
+	public void setPosition(float x, float y) {
+		area.setLocation(x, y);
+	}
+
+	@Override
+	public void setXPosition(float newX) {
+		area.setX(newX);
+	}
+
+	@Override
+	public void setYPosition(float newY) {
+		area.setY(newY);
+	}
+
+	@Override
+	public float getHeight() {
+		return area.getHeight();
+	}
+
+	@Override
+	public float getWidth() {
+		return area.getWidth();
 	}
 }

@@ -15,6 +15,7 @@ import de.illonis.eduras.gamemodes.GameMode;
 import de.illonis.eduras.gameobjects.Base;
 import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.maps.Map;
+import de.illonis.eduras.units.PlayerMainFigure;
 
 /**
  * This interface determines what information must be provided to the GUI.
@@ -157,4 +158,13 @@ public interface InfoInterface {
 	 * @return true if it fits
 	 */
 	public boolean fitsObjectInBase(ObjectType type, Base base);
+
+	/**
+	 * Tells whether the given player can blink to the target.
+	 * 
+	 * @param player
+	 * @param target
+	 * @return true if yes
+	 */
+	public boolean canBlinkTo(PlayerMainFigure player, Vector2f target);
 }

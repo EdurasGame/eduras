@@ -74,7 +74,6 @@ public class EdurasInitializer {
 		networkManager = new NetworkManager(this);
 		settings = new Settings();
 		try {
-
 			settings.load();
 		} catch (FileNotFoundException e) {
 			L.log(Level.WARNING, "Could not load user preferences.", e);
@@ -457,6 +456,15 @@ public class EdurasInitializer {
 			@Override
 			public void setTriggerAreaSize(int objectId, float newWidth,
 					float newHeight) throws ObjectNotFoundException {
+			}
+
+			@Override
+			public void guaranteeSetPositionOfObjectAtCenter(int objectId,
+					Vector2f newPosition) {
+			}
+
+			@Override
+			public void changeBlinkChargesBy(Player player, int charges) {
 			}
 
 		});

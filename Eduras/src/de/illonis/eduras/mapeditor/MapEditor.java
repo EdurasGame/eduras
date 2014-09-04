@@ -1,7 +1,11 @@
 package de.illonis.eduras.mapeditor;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 
 import javax.swing.JOptionPane;
 
@@ -21,6 +25,11 @@ import de.illonis.eduras.utils.PathFinder;
  * 
  */
 public class MapEditor {
+
+	/**
+	 * Editor version.
+	 */
+	public final static int VERSION = 2;
 
 	private EditorGame game;
 	private EditorWindow window;
@@ -45,12 +54,56 @@ public class MapEditor {
 		MapValidator.init();
 		try {
 			MapEditor editor = new MapEditor();
+			editor.startUpdateCheck();
 			editor.showWindow();
 		} catch (SlickException e) {
 			JOptionPane.showMessageDialog(null, "Could not init slick.");
 			e.printStackTrace();
 			System.exit(-1);
 		}
+	}
+
+	private void startUpdateCheck() {
+		Thread t = new Thread(new Runnable() {
+
+			@Override
+			public void run() {
+				Thread.yield();
+				URL obj;
+				try {
+					obj = new URL(
+							"http://www.illonis.de/edurasmapeditorversion.txt");
+
+					HttpURLConnection con = (HttpURLConnection) obj
+							.openConnection();
+					// optional default is GET
+					con.setRequestMethod("GET");
+					BufferedReader in = new BufferedReader(
+							new InputStreamReader(con.getInputStream()));
+					String inputLine;
+					StringBuffer response = new StringBuffer();
+
+					while ((inputLine = in.readLine()) != null) {
+						response.append(inputLine);
+					}
+					in.close();
+					int foreignVersion = Integer.parseInt(response.toString());
+					if (foreignVersion > VERSION) {
+						JOptionPane
+								.showMessageDialog(
+										window,
+										"Your MapEditor is outdated.\n"
+												+ "Please download the latest version from project platform.",
+										"Update available",
+										JOptionPane.INFORMATION_MESSAGE);
+					}
+				} catch (IOException | NumberFormatException e) {
+					e.printStackTrace();
+					return;
+				}
+			}
+		});
+		t.start();
 	}
 
 	private MapEditor() throws SlickException {
