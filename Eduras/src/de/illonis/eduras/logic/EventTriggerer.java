@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import org.newdawn.slick.Color;
 import org.newdawn.slick.geom.Shape;
 import org.newdawn.slick.geom.Vector2f;
 
@@ -20,8 +21,10 @@ import de.illonis.eduras.events.SetGameObjectAttributeEvent;
 import de.illonis.eduras.events.SetVisibilityEvent;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
 import de.illonis.eduras.exceptions.WrongObjectTypeException;
+import de.illonis.eduras.gameclient.datacache.CacheInfo.TextureKey;
 import de.illonis.eduras.gamemodes.GameMode;
 import de.illonis.eduras.gameobjects.Base;
+import de.illonis.eduras.gameobjects.DynamicPolygonObject;
 import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.gameobjects.GameObject.Visibility;
 import de.illonis.eduras.gameobjects.MoveableGameObject;
@@ -229,6 +232,19 @@ public interface EventTriggerer {
 	 *            target position.
 	 */
 	void guaranteeSetPositionOfObjectAtCenter(int objectId, Vector2f newPosition);
+
+	/**
+	 * Sets color and texture of an object. Color is only set for
+	 * {@link DynamicPolygonObject}s.
+	 * 
+	 * @param o
+	 *            the object id.
+	 * @param color
+	 *            the new color.
+	 * @param texture
+	 *            the new texture.
+	 */
+	void setRenderInfoForObject(GameObject o, Color color, TextureKey texture);
 
 	/**
 	 * You can implement this method if you need to do some setup.

@@ -23,6 +23,7 @@ import de.illonis.eduras.gameclient.datacache.FontCache;
 import de.illonis.eduras.gameclient.datacache.FontCache.FontKey;
 import de.illonis.eduras.gameclient.datacache.ImageCache;
 import de.illonis.eduras.gameclient.gui.game.GameRenderer;
+import de.illonis.eduras.gamemodes.GameMode.GameModeNumber;
 import de.illonis.eduras.gamemodes.TeamDeathmatch;
 import de.illonis.eduras.units.InteractMode;
 
@@ -38,7 +39,6 @@ public class StatisticsWindow extends RenderedGuiObject {
 			.getName());
 
 	private final static Color COLOR_TEXT = Color.yellow;
-	private final static Color COLOR_TEAM = Color.white;
 	private final static Color COLOR_HEADER = Color.yellow;
 	private int[] xPositions = new int[4];
 	private int topInset;
@@ -121,13 +121,18 @@ public class StatisticsWindow extends RenderedGuiObject {
 		// players
 		float y = screenY + topInset + lineHeight;
 		for (Team team : getInfo().getTeams()) {
-			y += 10;
-			drawTeamRow(team, y);
+			if (getInfo().getGameMode().getNumber() != GameModeNumber.DEATHMATCH) {
+				y += 10;
+				drawTeamRow(team, y);
+			}
 			for (Player p : team.getPlayers()) {
 				y += lineHeight;
 				drawPlayerRow(p, y);
 			}
-			y += lineHeight;
+			if (getInfo().getGameMode().getNumber() != GameModeNumber.DEATHMATCH) {
+				// gap between teams
+				y += lineHeight;
+			}
 		}
 	}
 
@@ -145,6 +150,8 @@ public class StatisticsWindow extends RenderedGuiObject {
 								.getKillsByTeam(teams.get(1)) + "  "
 						+ teams.get(1).getName();
 			}
+		} else {
+			state = getInfo().getGameMode().getName();
 		}
 
 		largeFont.drawString(
@@ -171,13 +178,13 @@ public class StatisticsWindow extends RenderedGuiObject {
 				.getDeathsOfPlayer(p) + "", COLOR_TEXT);
 
 		// player's status, only show to own team
-		String status = "unknown";
+		String status = "";
 		try {
 			if (p.getTeam().equals(getInfo().getPlayer().getTeam())) {
-				status = p.getCurrentMode() + "";
+				status = p.getCurrentMode().getDisplayName();
 			}
 		} catch (PlayerHasNoTeamException | ObjectNotFoundException e) {
-			L.log(Level.WARNING, "Problem when rendering the stats window!", e);
+			L.log(Level.WARNING, "Could not determine current players team.", e);
 		}
 		font.drawString(screenX + xPositions[3], y, status, COLOR_TEXT);
 	}
@@ -185,7 +192,6 @@ public class StatisticsWindow extends RenderedGuiObject {
 	@Override
 	public void onGuiSizeChanged(int newWidth, int newHeight) {
 		// change position so window is centered again
-
 	}
 
 	@Override

@@ -208,7 +208,7 @@ public class MapRenderer {
 			}
 		}
 		try {
-			Image image = ImageCache.getObjectImage(o.getType());
+			Image image = ImageCache.getObjectImage(o);
 			g.drawImage(image, x, y);
 		} catch (CacheException e) {
 			renderShape(o, g);

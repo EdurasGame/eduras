@@ -10,6 +10,7 @@ import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.newdawn.slick.Color;
 import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.Shape;
 import org.newdawn.slick.geom.Vector2f;
@@ -57,6 +58,7 @@ import de.illonis.eduras.events.SetMapEvent;
 import de.illonis.eduras.events.SetOwnerEvent;
 import de.illonis.eduras.events.SetPolygonDataEvent;
 import de.illonis.eduras.events.SetRemainingTimeEvent;
+import de.illonis.eduras.events.SetRenderInfoEvent;
 import de.illonis.eduras.events.SetSettingPropertyEvent;
 import de.illonis.eduras.events.SetSettingsEvent;
 import de.illonis.eduras.events.SetSizeEvent;
@@ -72,6 +74,7 @@ import de.illonis.eduras.exceptions.NoSpawnAvailableException;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
 import de.illonis.eduras.exceptions.PlayerHasNoTeamException;
 import de.illonis.eduras.exceptions.WrongObjectTypeException;
+import de.illonis.eduras.gameclient.datacache.CacheInfo.TextureKey;
 import de.illonis.eduras.gamemodes.GameMode;
 import de.illonis.eduras.gameobjects.Base;
 import de.illonis.eduras.gameobjects.DynamicPolygonObject;
@@ -216,9 +219,6 @@ public class ServerEventTriggerer implements EventTriggerer {
 		try {
 			o = gameInfo.findObjectById(newObjectEvent.getId());
 			if (o instanceof TriggerArea) {
-				System.out.println("set size of " + o.getClass() + " to "
-						+ o.getShape().getWidth() + ", "
-						+ o.getShape().getHeight());
 				setTriggerAreaSize(newObjectEvent.getId(), o.getShape()
 						.getWidth(), o.getShape().getHeight());
 			}
@@ -547,8 +547,8 @@ public class ServerEventTriggerer implements EventTriggerer {
 				GameObject o = gameInfo.findObjectById(objectId);
 				o.setRefName(initialObject.getRefName());
 				if (initialObject.getType() == ObjectType.DYNAMIC_POLYGON_BLOCK) {
-					((DynamicPolygonObject) o).setColor(initialObject
-							.getColor());
+					setRenderInfoForObject(o, initialObject.getColor(),
+							initialObject.getTexture());
 				}
 				if (o instanceof TriggerArea && initialObject.getWidth() > 0) {
 					setTriggerAreaSize(o.getId(), initialObject.getWidth(),
@@ -589,6 +589,18 @@ public class ServerEventTriggerer implements EventTriggerer {
 			portalOne.setPartnerPortal(portalTwo);
 		}
 
+	}
+
+	@Override
+	public void setRenderInfoForObject(GameObject o, Color color,
+			TextureKey texture) {
+		o.setTexture(texture);
+		if (o instanceof DynamicPolygonObject) {
+			((DynamicPolygonObject) o).setColor(color);
+		}
+		SetRenderInfoEvent event = new SetRenderInfoEvent(o.getId(), color,
+				texture);
+		sendEventToAll(event);
 	}
 
 	private void removeAllObjects() {

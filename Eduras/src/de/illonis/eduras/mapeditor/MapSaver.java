@@ -9,10 +9,10 @@ import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.newdawn.slick.Color;
 import org.newdawn.slick.geom.Vector2f;
 
 import de.illonis.eduras.ReferencedEntity;
+import de.illonis.eduras.gameclient.datacache.CacheInfo.TextureKey;
 import de.illonis.eduras.gamemodes.GameMode.GameModeNumber;
 import de.illonis.eduras.gameobjects.DynamicPolygonObject;
 import de.illonis.eduras.gameobjects.GameObject;
@@ -22,6 +22,7 @@ import de.illonis.eduras.maps.NodeData;
 import de.illonis.eduras.maps.SpawnPosition;
 import de.illonis.eduras.maps.persistence.MapParser;
 import de.illonis.eduras.maps.persistence.MapParser.MapFileSection;
+import de.illonis.eduras.utils.ColorUtils;
 
 /**
  * Provides methods to save currently edited map to file.
@@ -117,7 +118,11 @@ public final class MapSaver {
 					builder.append(buildVert(vertice.getX(), vertice.getY()));
 					builder.append(", ");
 				}
-				builder.append(toColorString(dyno.getColor()));
+				if (dyno.getTexture() != TextureKey.NONE) {
+					builder.append(dyno.getTexture().name());
+				} else {
+					builder.append(ColorUtils.toString(dyno.getColor()));
+				}
 				line += builder.toString();
 				break;
 			case PORTAL:
@@ -138,11 +143,6 @@ public final class MapSaver {
 
 	private String buildVert(float x, float y) {
 		return String.format("[%d %d]", (int) x, (int) y);
-	}
-
-	private String toColorString(Color color) {
-		return String.format("0x%02x%02x%02x%02x", color.getAlpha(),
-				color.getRed(), color.getGreen(), color.getBlue());
 	}
 
 	private void maybeAddReference(ReferencedEntity entity) {
@@ -200,6 +200,7 @@ public final class MapSaver {
 				gameModeList.substring(0, gameModeList.length() - 2));
 		writeMetaDataElement("width", data.getWidth() + "");
 		writeMetaDataElement("height", data.getHeight() + "");
+		writeMetaDataElement("background", data.getMapBackground().name());
 	}
 
 	private void writeMetaDataElement(String key, String value) {

@@ -49,6 +49,30 @@ public final class CacheInfo {
 	}
 
 	/**
+	 * Key for identifying textures.
+	 * 
+	 * @author illonis
+	 * 
+	 */
+	@SuppressWarnings("javadoc")
+	public enum TextureKey {
+		DUST_GRASS("grass2.png"), GRASS("grass.png"), REDROCK("testtexture.png"), BASE(
+				"base.png"), BASE_RED("base_red.png"), BASE_BLUE(
+				"base_blue.png"), PORTAL("portal.png"), BRICK("brick.png"), ROCK(
+				"rock.png"), ROOF("roof.png"), NONE("");
+
+		private final String file;
+
+		TextureKey(String file) {
+			this.file = file;
+		}
+
+		public String getFile() {
+			return file;
+		}
+	}
+
+	/**
 	 * Absolute base url to resolve path for Slick.
 	 */
 	public final static String BASE_URL = "de/illonis/eduras/images/";
@@ -59,8 +83,14 @@ public final class CacheInfo {
 	private final static HashMap<ImageKey, String> imageIcons;
 	private final static HashMap<ObjectType, String> inventoryIcons;
 	private final static HashMap<FontKey, Pair<String, Integer>> fonts;
+	private final static HashMap<TextureKey, String> textures;
 
 	static {
+		textures = new HashMap<TextureKey, String>();
+		for (TextureKey texture : TextureKey.values()) {
+			if (texture != TextureKey.NONE)
+				textures.put(texture, "textures/" + texture.getFile());
+		}
 		fonts = new HashMap<FontKey, Pair<String, Integer>>();
 		fonts.put(FontKey.DEFAULT_FONT, new Pair<String, Integer>(
 				"LinLibertine_R.ttf", 16));
@@ -240,5 +270,9 @@ public final class CacheInfo {
 
 	static HashMap<ObjectType, String> getAllInventoryIcons() {
 		return new HashMap<ObjectType, String>(inventoryIcons);
+	}
+
+	static HashMap<TextureKey, String> getAllTextures() {
+		return new HashMap<TextureKey, String>(textures);
 	}
 }

@@ -14,6 +14,7 @@ import org.newdawn.slick.geom.Rectangle;
 import de.illonis.edulog.EduLog;
 import de.illonis.eduras.ObjectFactory.ObjectType;
 import de.illonis.eduras.exceptions.NoSuchMapException;
+import de.illonis.eduras.gameclient.datacache.CacheInfo.TextureKey;
 import de.illonis.eduras.gamemodes.GameMode.GameModeNumber;
 import de.illonis.eduras.maps.SpawnPosition.SpawnType;
 import de.illonis.eduras.maps.persistence.InvalidDataException;
@@ -41,6 +42,7 @@ public abstract class Map {
 	private Date created;
 	private int width;
 	private int height;
+	protected TextureKey background;
 	protected final LinkedList<InitialObjectData> initialObjects;
 	protected final LinkedList<GameModeNumber> supportedGameModes;
 	protected final LinkedList<SpawnPosition> spawnPositions;
@@ -70,6 +72,7 @@ public abstract class Map {
 		supportedGameModes = new LinkedList<GameModeNumber>();
 		spawnPositions = new LinkedList<SpawnPosition>();
 		nodes = new LinkedList<NodeData>();
+		background = TextureKey.NONE;
 	}
 
 	private void addBoundsObjects() {
@@ -316,6 +319,14 @@ public abstract class Map {
 		height = map.getHeight();
 		name = map.getName();
 		author = map.getAuthor();
+		background = map.getBackground();
+	}
+
+	/**
+	 * @return the background texture.
+	 */
+	public TextureKey getBackground() {
+		return background;
 	}
 
 	/**
@@ -386,14 +397,14 @@ public abstract class Map {
 		case "testmap":
 			map = new TestMap();
 			break;
-		case "eduratestmap":
-			map = new EduraTestMap();
-			break;
 		case "eduramus":
 			map = new Eduramus();
 			break;
 		case "tryfield":
 			map = new Tryfield();
+			break;
+		case "eduramus2":
+			map = new Eduramus2();
 			break;
 		default:
 			throw new NoSuchMapException(mapName);

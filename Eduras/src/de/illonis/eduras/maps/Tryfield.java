@@ -15,7 +15,7 @@ import de.illonis.eduras.maps.persistence.InvalidDataException;
  */
 public class Tryfield extends Map {
 
-	private final static Logger L = EduLog.getLoggerFor(EduraTestMap.class
+	private final static Logger L = EduLog.getLoggerFor(Tryfield.class
 			.getName());
 
 	/**

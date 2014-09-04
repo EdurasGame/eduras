@@ -7,6 +7,7 @@ import java.util.Collection;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.newdawn.slick.Color;
 import org.newdawn.slick.geom.Shape;
 import org.newdawn.slick.geom.Vector2f;
 
@@ -30,6 +31,7 @@ import de.illonis.eduras.exceptions.MessageNotSupportedException;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
 import de.illonis.eduras.exceptions.WrongEventTypeException;
 import de.illonis.eduras.exceptions.WrongObjectTypeException;
+import de.illonis.eduras.gameclient.datacache.CacheInfo.TextureKey;
 import de.illonis.eduras.gameclient.userprefs.Settings;
 import de.illonis.eduras.gamemodes.GameMode;
 import de.illonis.eduras.gameobjects.Base;
@@ -74,7 +76,6 @@ public class EdurasInitializer {
 		networkManager = new NetworkManager(this);
 		settings = new Settings();
 		try {
-
 			settings.load();
 		} catch (FileNotFoundException e) {
 			L.log(Level.WARNING, "Could not load user preferences.", e);
@@ -466,6 +467,11 @@ public class EdurasInitializer {
 
 			@Override
 			public void changeBlinkChargesBy(Player player, int charges) {
+			}
+
+			@Override
+			public void setRenderInfoForObject(GameObject o, Color color,
+					TextureKey texture) {
 			}
 
 		});
