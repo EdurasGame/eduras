@@ -29,7 +29,7 @@ import javax.swing.event.DocumentListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
-import de.illonis.eduras.gameclient.datacache.CacheInfo.TextureKey;
+import de.illonis.eduras.gameclient.datacache.TextureInfo.TextureKey;
 import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.images.ImageFiler;
 import de.illonis.eduras.mapeditor.MapData;

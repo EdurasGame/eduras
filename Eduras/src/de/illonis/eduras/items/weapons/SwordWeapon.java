@@ -1,7 +1,5 @@
 package de.illonis.eduras.items.weapons;
 
-import org.newdawn.slick.geom.Circle;
-
 import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.ObjectFactory.ObjectType;
 import de.illonis.eduras.gameobjects.TimingSource;

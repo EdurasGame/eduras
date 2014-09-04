@@ -12,7 +12,7 @@ import de.illonis.eduras.ObjectCreator;
 import de.illonis.eduras.ObjectFactory.ObjectType;
 import de.illonis.eduras.ReferencedEntity;
 import de.illonis.eduras.exceptions.ShapeVerticesNotApplicableException;
-import de.illonis.eduras.gameclient.datacache.CacheInfo.TextureKey;
+import de.illonis.eduras.gameclient.datacache.TextureInfo.TextureKey;
 import de.illonis.eduras.gamemodes.GameMode.GameModeNumber;
 import de.illonis.eduras.gameobjects.DynamicPolygonObject;
 import de.illonis.eduras.gameobjects.GameObject;

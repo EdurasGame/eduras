@@ -14,7 +14,7 @@ import org.newdawn.slick.geom.Rectangle;
 import de.illonis.edulog.EduLog;
 import de.illonis.eduras.ObjectFactory.ObjectType;
 import de.illonis.eduras.exceptions.NoSuchMapException;
-import de.illonis.eduras.gameclient.datacache.CacheInfo.TextureKey;
+import de.illonis.eduras.gameclient.datacache.TextureInfo.TextureKey;
 import de.illonis.eduras.gamemodes.GameMode.GameModeNumber;
 import de.illonis.eduras.maps.SpawnPosition.SpawnType;
 import de.illonis.eduras.maps.persistence.InvalidDataException;

@@ -3,7 +3,7 @@ package de.illonis.eduras.maps;
 import java.util.Collection;
 import java.util.Date;
 
-import de.illonis.eduras.gameclient.datacache.CacheInfo.TextureKey;
+import de.illonis.eduras.gameclient.datacache.TextureInfo.TextureKey;
 import de.illonis.eduras.gamemodes.GameMode.GameModeNumber;
 import de.illonis.eduras.maps.persistence.MapParser;
 

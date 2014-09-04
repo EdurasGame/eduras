@@ -2,7 +2,7 @@ package de.illonis.eduras.events;
 
 import org.newdawn.slick.Color;
 
-import de.illonis.eduras.gameclient.datacache.CacheInfo.TextureKey;
+import de.illonis.eduras.gameclient.datacache.TextureInfo.TextureKey;
 import de.illonis.eduras.utils.ColorUtils;
 
 /**

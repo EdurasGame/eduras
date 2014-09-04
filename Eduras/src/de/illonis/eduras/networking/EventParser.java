@@ -65,7 +65,7 @@ import de.illonis.eduras.events.SwitchInteractModeEvent;
 import de.illonis.eduras.events.UnitSpellActionEvent;
 import de.illonis.eduras.events.UserMovementEvent;
 import de.illonis.eduras.exceptions.InvalidNameException;
-import de.illonis.eduras.gameclient.datacache.CacheInfo.TextureKey;
+import de.illonis.eduras.gameclient.datacache.TextureInfo.TextureKey;
 import de.illonis.eduras.gameobjects.GameObject.Visibility;
 import de.illonis.eduras.interfaces.GameLogicInterface;
 import de.illonis.eduras.math.Vector2df;

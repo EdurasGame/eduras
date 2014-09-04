@@ -7,7 +7,7 @@ import org.newdawn.slick.geom.Vector2f;
 
 import de.illonis.eduras.ObjectFactory.ObjectType;
 import de.illonis.eduras.gameclient.datacache.CacheInfo.ImageKey;
-import de.illonis.eduras.gameclient.datacache.CacheInfo.TextureKey;
+import de.illonis.eduras.gameclient.datacache.TextureInfo.TextureKey;
 import de.illonis.eduras.gameobjects.Base;
 import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.shapes.ShapeFactory.ShapeType;

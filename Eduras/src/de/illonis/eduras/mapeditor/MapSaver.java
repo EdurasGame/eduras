@@ -12,7 +12,7 @@ import java.util.List;
 import org.newdawn.slick.geom.Vector2f;
 
 import de.illonis.eduras.ReferencedEntity;
-import de.illonis.eduras.gameclient.datacache.CacheInfo.TextureKey;
+import de.illonis.eduras.gameclient.datacache.TextureInfo.TextureKey;
 import de.illonis.eduras.gamemodes.GameMode.GameModeNumber;
 import de.illonis.eduras.gameobjects.DynamicPolygonObject;
 import de.illonis.eduras.gameobjects.GameObject;

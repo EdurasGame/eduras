@@ -5,7 +5,7 @@ import java.util.HashMap;
 import org.newdawn.slick.Color;
 
 import de.illonis.eduras.ObjectFactory.ObjectType;
-import de.illonis.eduras.gameclient.datacache.CacheInfo.TextureKey;
+import de.illonis.eduras.gameclient.datacache.TextureInfo.TextureKey;
 import de.illonis.eduras.math.Vector2df;
 
 /**

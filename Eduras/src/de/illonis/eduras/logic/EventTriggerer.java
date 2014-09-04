@@ -21,7 +21,7 @@ import de.illonis.eduras.events.SetGameObjectAttributeEvent;
 import de.illonis.eduras.events.SetVisibilityEvent;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
 import de.illonis.eduras.exceptions.WrongObjectTypeException;
-import de.illonis.eduras.gameclient.datacache.CacheInfo.TextureKey;
+import de.illonis.eduras.gameclient.datacache.TextureInfo.TextureKey;
 import de.illonis.eduras.gamemodes.GameMode;
 import de.illonis.eduras.gameobjects.Base;
 import de.illonis.eduras.gameobjects.DynamicPolygonObject;

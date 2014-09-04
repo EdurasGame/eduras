@@ -39,7 +39,7 @@ import javax.swing.event.DocumentListener;
 import org.newdawn.slick.Color;
 
 import de.illonis.eduras.ReferencedEntity;
-import de.illonis.eduras.gameclient.datacache.CacheInfo.TextureKey;
+import de.illonis.eduras.gameclient.datacache.TextureInfo.TextureKey;
 import de.illonis.eduras.gameobjects.Base;
 import de.illonis.eduras.gameobjects.Base.BaseType;
 import de.illonis.eduras.gameobjects.DynamicPolygonObject;

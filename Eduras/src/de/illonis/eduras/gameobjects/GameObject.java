@@ -16,7 +16,7 @@ import de.illonis.eduras.ReferencedEntity;
 import de.illonis.eduras.ai.AIControllable;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
 import de.illonis.eduras.exceptions.ShapeNotSupportedException;
-import de.illonis.eduras.gameclient.datacache.CacheInfo.TextureKey;
+import de.illonis.eduras.gameclient.datacache.TextureInfo.TextureKey;
 import de.illonis.eduras.mapeditor.EditorPlaceable;
 import de.illonis.eduras.math.CollisionPoint;
 import de.illonis.eduras.math.Geometry;

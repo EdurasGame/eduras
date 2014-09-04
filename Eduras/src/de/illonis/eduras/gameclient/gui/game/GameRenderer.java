@@ -30,7 +30,6 @@ import de.illonis.eduras.gameclient.ClientData;
 import de.illonis.eduras.gameclient.VisionInformation;
 import de.illonis.eduras.gameclient.datacache.CacheException;
 import de.illonis.eduras.gameclient.datacache.CacheInfo.ImageKey;
-import de.illonis.eduras.gameclient.datacache.CacheInfo.TextureKey;
 import de.illonis.eduras.gameclient.datacache.ImageCache;
 import de.illonis.eduras.gameclient.gui.animation.EffectFactory;
 import de.illonis.eduras.gameclient.gui.hud.HealthBar;

@@ -4,9 +4,9 @@ import java.util.Set;
 
 import de.illonis.eduras.gameclient.userprefs.KeyBindings.KeyBinding;
 import de.illonis.eduras.gamemodes.GameMode;
+import de.illonis.eduras.gameobjects.Base;
 import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.gameobjects.GameObject.Relation;
-import de.illonis.eduras.gameobjects.Base;
 import de.illonis.eduras.maps.SpawnPosition.SpawnType;
 import de.illonis.eduras.units.InteractMode;
 import de.illonis.eduras.units.Unit;
