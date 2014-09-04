@@ -9,6 +9,7 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.geom.Line;
 import org.newdawn.slick.geom.Point;
+import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.Shape;
 import org.newdawn.slick.geom.Vector2f;
 
@@ -66,8 +67,16 @@ public class MapRenderer {
 		List<EditorPlaceable> selected = interactor.getSelectedElements();
 
 		// map bounds
-		g.setColor(Color.black);
-		g.fillRect(0, 0, data.getWidth(), data.getHeight());
+
+		try {
+			Image image = ImageCache.getTexture(data.getMapBackground());
+			Rectangle r = new Rectangle(0, 0, data.getWidth(), data.getHeight());
+			g.setColor(Color.white);
+			g.texture(r, image);
+		} catch (CacheException e) {
+			g.setColor(Color.black);
+			g.fillRect(0, 0, data.getWidth(), data.getHeight());
+		}
 		g.setColor(Color.red);
 		g.drawRect(0, 0, data.getWidth(), data.getHeight());
 		for (SpawnPosition spawn : data.getSpawnPoints()) {

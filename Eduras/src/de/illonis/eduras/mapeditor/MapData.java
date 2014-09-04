@@ -131,7 +131,7 @@ public final class MapData {
 		author = map.getAuthor();
 		mapName = map.getName();
 		LinkedList<InitialObjectData> portalData = new LinkedList<InitialObjectData>();
-
+		mapBackground = map.getBackground();
 		spawnPoints.addAll(map.getSpawnAreas());
 		supportedGameModes.addAll(map.getSupportedGameModes());
 		bases.addAll(map.getNodes());

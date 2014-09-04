@@ -27,6 +27,7 @@ import javax.swing.event.ListSelectionListener;
 import de.illonis.eduras.gameclient.datacache.CacheInfo.TextureKey;
 import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.images.ImageFiler;
+import de.illonis.eduras.mapeditor.MapData;
 
 /**
  * A texture chooser.
@@ -78,7 +79,11 @@ public class TextureChooser extends JPanel implements ListSelectionListener {
 		if (!event.getValueIsAdjusting()) {
 			TextureKey texture = textureList.getSelectedValue();
 			if (texture != null) {
-				object.setTexture(texture);
+				if (object != null)
+					object.setTexture(texture);
+				else {
+					MapData.getInstance().setMapBackground(texture);
+				}
 			}
 		}
 	}
@@ -112,7 +117,12 @@ public class TextureChooser extends JPanel implements ListSelectionListener {
 			} catch (InterruptedException | ExecutionException e) {
 				e.printStackTrace();
 			}
-			textureList.setSelectedValue(object.getTexture(), true);
+			if (object != null)
+				textureList.setSelectedValue(object.getTexture(), true);
+			else {
+				textureList.setSelectedValue(MapData.getInstance()
+						.getMapBackground(), true);
+			}
 		}
 	}
 

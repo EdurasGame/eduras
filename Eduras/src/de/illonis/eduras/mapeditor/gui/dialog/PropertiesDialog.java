@@ -46,7 +46,6 @@ import de.illonis.eduras.gameobjects.DynamicPolygonObject;
 import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.gameobjects.GameObject.Visibility;
 import de.illonis.eduras.gameobjects.Portal;
-import de.illonis.eduras.gameobjects.TriggerArea;
 import de.illonis.eduras.mapeditor.EditorPlaceable;
 import de.illonis.eduras.mapeditor.MapData;
 import de.illonis.eduras.mapeditor.gui.EditorWindow;
@@ -71,14 +70,14 @@ public class PropertiesDialog extends ESCDialog implements ItemListener,
 	protected GameObject object;
 	protected NodeData node;
 	protected SpawnPosition spawn;
-	private EditorPlaceable entity;
+	protected EditorPlaceable entity;
 
 	private JRadioButton visibleNone;
 	private JRadioButton visibleAlways;
 	private JRadioButton visibleTeam;
 	private JRadioButton visibleOwner;
 	private final JTabbedPane tabbedPane;
-	private JColorChooser chooser;
+	protected JColorChooser colorChooser;
 	private JSlider sliderX, sliderY, sliderZ, sliderWidth, sliderHeight;
 	private JLabel currentX, currentY, currentWidth, currentHeight;
 	private JRadioButton baseTeamA;
@@ -90,60 +89,18 @@ public class PropertiesDialog extends ESCDialog implements ItemListener,
 	private JTextField refName;
 	private JButton saveButton;
 	private JComboBox<Portal> otherPortals;
-	private TextureChooser textureChooser;
+	protected TextureChooser textureChooser;
+	protected final EditorWindow window;
 
 	/**
-	 * Creates a properties dialog for a node.
-	 * 
-	 * @param parent
-	 *            the parent window.
-	 * @param node
-	 *            the node.
-	 */
-	public PropertiesDialog(EditorWindow parent, NodeData node) {
-		this(parent, (EditorPlaceable) node);
-		this.node = node;
-		addNeutralBaseTab();
-	}
-
-	/**
-	 * Create a properties dialog for a spawnarea.
-	 * 
-	 * @param window
-	 *            parent window.
-	 * @param spawn
-	 *            the spawnarea.
-	 */
-	public PropertiesDialog(EditorWindow window, SpawnPosition spawn) {
-		this(window, (EditorPlaceable) spawn);
-		this.spawn = spawn;
-		addSpawnTab();
-	}
-
-	/**
-	 * Creates a properties dialog for a gameobject.
+	 * Creates a new properties dialog.
 	 * 
 	 * @param parent
 	 *            parent window.
-	 * @param object
-	 *            the object.
 	 */
-	public PropertiesDialog(EditorWindow parent, GameObject object) {
-		this(parent, (EditorPlaceable) object);
-		this.object = object;
-		addPropertiesTab();
-
-		if (object instanceof DynamicPolygonObject) {
-			addColorTab(((DynamicPolygonObject) object).getColor());
-			addTextureTab(object.getTexture());
-		} else if (object instanceof Portal) {
-			addPortalTab();
-		}
-	}
-
-	private PropertiesDialog(EditorWindow parent, EditorPlaceable element) {
+	public PropertiesDialog(EditorWindow parent) {
 		super(parent);
-		entity = element;
+		this.window = parent;
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		setModal(false);
 		tabbedPane = new JTabbedPane();
@@ -159,11 +116,6 @@ public class PropertiesDialog extends ESCDialog implements ItemListener,
 				getContentPane());
 		getContentPane().add(tabbedPane);
 		setMinimumSize(MIN_SIZE);
-		addGeneralTab();
-		if (entity instanceof TriggerArea || entity instanceof SpawnPosition
-				|| entity instanceof NodeData) {
-			addSizeTab();
-		}
 	}
 
 	private void updateTitle() {
@@ -176,17 +128,20 @@ public class PropertiesDialog extends ESCDialog implements ItemListener,
 		} else if (node != null) {
 			setTitle("Properties of Base #" + node.getId() + " ["
 					+ entity.getRefName() + "]");
-		} else {
+		} else if (entity != null) {
 			setTitle("Properties of " + entity.getRefName());
 		}
 	}
 
-	private void addTextureTab(TextureKey currentTexture) {
+	protected void addTextureTab(TextureKey currentTexture) {
 		JPanel sizePanel = new JPanel();
 		sizePanel.setLayout(new BoxLayout(sizePanel, BoxLayout.PAGE_AXIS));
 		Border border = BorderFactory.createEmptyBorder(8, 8, 8, 8);
 		sizePanel.setBorder(border);
-		textureNone = new JRadioButton("use color from color-tab");
+		if (object == null) {
+			textureNone = new JRadioButton("use black background");
+		} else
+			textureNone = new JRadioButton("use color from color-tab");
 		textureSelected = new JRadioButton("use texture selected below");
 		textureNone.addActionListener(this);
 		textureSelected.addActionListener(this);
@@ -205,7 +160,7 @@ public class PropertiesDialog extends ESCDialog implements ItemListener,
 		addTab("Texture", sizePanel);
 	}
 
-	private void addSizeTab() {
+	protected void addSizeTab() {
 		float width = entity.getWidth();
 		float height = entity.getHeight();
 		JPanel sizePanel = new JPanel();
@@ -254,7 +209,7 @@ public class PropertiesDialog extends ESCDialog implements ItemListener,
 		addTab("Size", sizePanel);
 	}
 
-	private void addSpawnTab() {
+	protected void addSpawnTab() {
 		JPanel spawnPanel = new JPanel();
 		spawnPanel.setLayout(new BoxLayout(spawnPanel, BoxLayout.PAGE_AXIS));
 		Border border = BorderFactory.createEmptyBorder(8, 8, 8, 8);
@@ -284,7 +239,7 @@ public class PropertiesDialog extends ESCDialog implements ItemListener,
 		addTab("Spawnarea", spawnPanel);
 	}
 
-	private void addNeutralBaseTab() {
+	protected void addNeutralBaseTab() {
 		JPanel basePanel = new JPanel();
 		basePanel.setLayout(new BoxLayout(basePanel, BoxLayout.PAGE_AXIS));
 
@@ -317,7 +272,7 @@ public class PropertiesDialog extends ESCDialog implements ItemListener,
 		addTab("Base", basePanel);
 	}
 
-	private void addPortalTab() {
+	protected void addPortalTab() {
 		JPanel portalPanel = new JPanel();
 		Portal portal = (Portal) object;
 		portalPanel.setLayout(new BoxLayout(portalPanel, BoxLayout.PAGE_AXIS));
@@ -383,7 +338,7 @@ public class PropertiesDialog extends ESCDialog implements ItemListener,
 		}
 	}
 
-	private void addGeneralTab() {
+	protected void addGeneralTab() {
 		int x = (int) entity.getXPosition();
 		int y = (int) entity.getYPosition();
 		MapData data = MapData.getInstance();
@@ -469,7 +424,7 @@ public class PropertiesDialog extends ESCDialog implements ItemListener,
 		addTab("General", positionTab);
 	}
 
-	private void addPropertiesTab() {
+	protected void addPropertiesTab() {
 		Border border = BorderFactory.createEmptyBorder(8, 8, 8, 8);
 		JPanel propertiesPanel = new JPanel();
 		propertiesPanel.setLayout(new BoxLayout(propertiesPanel,
@@ -523,9 +478,9 @@ public class PropertiesDialog extends ESCDialog implements ItemListener,
 		java.awt.Color color = new java.awt.Color(initialColor.r,
 				initialColor.g, initialColor.b, initialColor.a);
 		JPanel colorTab = new JPanel(new BorderLayout());
-		chooser = new JColorChooser(color);
-		chooser.getSelectionModel().addChangeListener(this);
-		colorTab.add(chooser, BorderLayout.CENTER);
+		colorChooser = new JColorChooser(color);
+		colorChooser.getSelectionModel().addChangeListener(this);
+		colorTab.add(colorChooser, BorderLayout.CENTER);
 		addTab("Color", colorTab);
 	}
 
@@ -535,9 +490,11 @@ public class PropertiesDialog extends ESCDialog implements ItemListener,
 
 	@Override
 	public void setVisible(boolean b) {
-		pack();
-		setLocationRelativeTo(getParent());
-		updateTitle();
+		if (b) {
+			pack();
+			setLocationRelativeTo(getParent());
+			updateTitle();
+		}
 		super.setVisible(b);
 	}
 
@@ -577,7 +534,7 @@ public class PropertiesDialog extends ESCDialog implements ItemListener,
 			return;
 		}
 
-		JRadioButton button = (JRadioButton) e.getSource();
+		Object button = e.getSource();
 		if (button == baseNone) {
 			node.setIsMainNode(BaseType.NEUTRAL);
 		} else if (button == baseTeamA) {
@@ -601,9 +558,18 @@ public class PropertiesDialog extends ESCDialog implements ItemListener,
 		} else if (button == spawnTeamB) {
 			spawn.setTeaming(SpawnType.TEAM_B);
 		} else if (button == textureNone) {
-			object.setTexture(TextureKey.NONE);
+			if (object != null)
+				object.setTexture(TextureKey.NONE);
+			else {
+				MapData.getInstance().setMapBackground(TextureKey.NONE);
+			}
 		} else if (button == textureSelected) {
-			object.setTexture(textureChooser.getSelectedTexture());
+			if (object != null)
+				object.setTexture(textureChooser.getSelectedTexture());
+			else {
+				MapData.getInstance().setMapBackground(
+						textureChooser.getSelectedTexture());
+			}
 		}
 	}
 
@@ -636,11 +602,13 @@ public class PropertiesDialog extends ESCDialog implements ItemListener,
 			float val = (float) (double) spinner.getValue();
 			node.setResourceMultiplicator(val);
 		} else {
-			java.awt.Color newColor = chooser.getColor();
-			Color color = new Color(newColor.getRed(), newColor.getGreen(),
-					newColor.getBlue(), newColor.getAlpha());
-			DynamicPolygonObject o = (DynamicPolygonObject) object;
-			o.setColor(color);
+			java.awt.Color newColor = colorChooser.getColor();
+			if (object != null) {
+				Color color = new Color(newColor.getRed(), newColor.getGreen(),
+						newColor.getBlue(), newColor.getAlpha());
+				DynamicPolygonObject o = (DynamicPolygonObject) object;
+				o.setColor(color);
+			}
 		}
 	}
 }
