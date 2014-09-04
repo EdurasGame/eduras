@@ -276,7 +276,7 @@ public class GameRenderer implements TooltipHandler {
 		Rectangle r = info.getMapBounds();
 		g.setColor(Color.white);
 		try {
-			g.texture(r, ImageCache.getTexture(TextureKey.GRASS));
+			g.texture(r, ImageCache.getTexture(info.getMapBackground()));
 		} catch (CacheException e) {
 			g.setColor(Color.black);
 			g.fill(r);

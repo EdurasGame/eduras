@@ -15,6 +15,7 @@ import de.illonis.eduras.Team;
 import de.illonis.eduras.exceptions.NoSpawnAvailableException;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
 import de.illonis.eduras.gameclient.ClientData;
+import de.illonis.eduras.gameclient.datacache.CacheInfo.TextureKey;
 import de.illonis.eduras.gamemodes.GameMode;
 import de.illonis.eduras.gameobjects.Base;
 import de.illonis.eduras.gameobjects.GameObject;
@@ -214,5 +215,10 @@ public class InformationProvider implements InfoInterface {
 			return false;
 		}
 		return true;
+	}
+
+	@Override
+	public TextureKey getMapBackground() {
+		return edurasInitializer.logic.getGame().getMap().getBackground();
 	}
 }
