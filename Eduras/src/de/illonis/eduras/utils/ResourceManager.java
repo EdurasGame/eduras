@@ -89,7 +89,6 @@ public class ResourceManager {
 
 	private static void copyAndReplace(File fileToReplace,
 			InputStream streamToReplaceWith) throws IOException {
-		System.out.println(fileToReplace.getAbsolutePath());
 		if (!fileToReplace.exists()) {
 			fileToReplace.createNewFile();
 		}
@@ -150,7 +149,6 @@ public class ResourceManager {
 			file.delete();
 		}
 		file.createNewFile();
-		System.out.println(file.getAbsolutePath());
 
 		FileOutputStream outputStream;
 		outputStream = new FileOutputStream(file);
@@ -164,7 +162,6 @@ public class ResourceManager {
 	public static File createTemporaryFileFromResource(InputStream inputStream,
 			String name) throws IOException {
 		File file = File.createTempFile(name, "eduras");
-		System.out.println(file.getPath());
 
 		FileOutputStream outputStream = new FileOutputStream(file);
 
