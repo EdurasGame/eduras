@@ -410,7 +410,7 @@ public class Map {
 	 */
 	public static Map getMapByName(String mapName) throws NoSuchMapException,
 			InvalidDataException {
-		Map map = new Map(mapName + ".erm");
+		Map map = new Map(mapName);
 		try {
 			map.buildMap();
 		} catch (IOException e) {

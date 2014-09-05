@@ -467,7 +467,7 @@ public class EventParser implements EventHandler {
 					L.log(Level.SEVERE, "Cannot read received map file.", e);
 					break;
 				}
-
+				break;
 			default:
 				L.warning("Cannot handle event with event number "
 						+ eventNumber);

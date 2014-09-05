@@ -718,8 +718,10 @@ public interface EventTriggerer {
 	 * 
 	 * @param owner
 	 *            owner id of the player
+	 * @param r
+	 *            name of resource
 	 * @param file
 	 *            file to send
 	 */
-	void sendResource(GameEventNumber type, int owner, File file);
+	void sendResource(GameEventNumber type, int owner, String r, File file);
 }

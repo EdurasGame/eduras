@@ -474,7 +474,7 @@ public class GameInformation {
 		SetMapEvent setMapEvent;
 		try {
 			setMapEvent = new SetMapEvent(map.getName(),
-					ResourceManager.getHashOfMap(map.getName() + ".erm"));
+					ResourceManager.getHashOfMap(map.getName()));
 		} catch (MalformedURLException e1) {
 			L.log(Level.SEVERE, "Cannot get hash of map!", e1);
 			return;

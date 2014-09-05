@@ -2,8 +2,6 @@ package de.illonis.eduras.utils;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
@@ -11,13 +9,12 @@ public class HashCalculator {
 	/**
 	 * Computes SHA-256 hash for given file
 	 * 
-	 * @param file
-	 *            the file to compute hash from.
+	 * @param in
+	 *            input stream of file to compute hash from.
 	 * @return SHA-256 hash in hexadecimal format.
 	 */
-	public static String computeHash(Path file) {
+	public static String computeHash(InputStream in) {
 		try {
-			InputStream in = Files.newInputStream(file);
 			MessageDigest digest = MessageDigest.getInstance("SHA-256");
 			byte[] md = new byte[8192];
 

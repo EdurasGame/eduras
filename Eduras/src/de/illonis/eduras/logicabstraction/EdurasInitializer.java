@@ -468,7 +468,8 @@ public class EdurasInitializer {
 			}
 
 			@Override
-			public void sendResource(GameEventNumber type, int owner, File file) {
+			public void sendResource(GameEventNumber type, int owner, String r,
+					File file) {
 			}
 
 		});

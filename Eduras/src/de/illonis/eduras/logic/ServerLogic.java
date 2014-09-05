@@ -429,6 +429,7 @@ public class ServerLogic implements GameLogicInterface {
 				gameInfo.getEventTriggerer().sendResource(
 						GameEventNumber.SEND_MAP,
 						requestResourceEvent.getOwner(),
+						requestResourceEvent.getResourceName(),
 						new File(fileUrl.getPath()));
 			} catch (MalformedURLException e1) {
 				L.log(Level.SEVERE, "Cannot read path", e1);

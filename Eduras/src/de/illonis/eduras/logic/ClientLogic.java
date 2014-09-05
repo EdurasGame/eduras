@@ -460,9 +460,16 @@ public class ClientLogic implements GameLogicInterface {
 							.getNameOfNewMap()));
 
 					try {
-						if (!(ResourceManager.getHashOfMap(setMapEvent
-								.getNameOfNewMap())).equals(setMapEvent
-								.getHashOfMap())) {
+						String hashOfMap = ResourceManager
+								.getHashOfMap(setMapEvent.getNameOfNewMap());
+						if (!(hashOfMap.equals(setMapEvent.getHashOfMap()))) {
+
+							L.info("Hashs of map "
+									+ setMapEvent.getNameOfNewMap()
+									+ " differ. On server: "
+									+ setMapEvent.getHashOfMap()
+									+ ". On Client: " + hashOfMap);
+
 							throw new NoSuchMapException(
 									setMapEvent.getNameOfNewMap());
 						}
@@ -538,9 +545,10 @@ public class ClientLogic implements GameLogicInterface {
 				break;
 			case SEND_MAP:
 				try {
-					gameInfo.setMap(Map
-							.getMapByName(((SendResourceEvent) event)
-									.getResourceName()));
+					String nameOfReceivedMap = ((SendResourceEvent) event)
+							.getResourceName();
+					System.out.println(nameOfReceivedMap);
+					gameInfo.setMap(Map.getMapByName(nameOfReceivedMap));
 				} catch (NoSuchMapException | InvalidDataException e3) {
 					L.log(Level.SEVERE,
 							"Cannot switch to the map we just received.", e3);

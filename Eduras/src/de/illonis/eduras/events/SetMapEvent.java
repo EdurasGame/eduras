@@ -29,6 +29,7 @@ public class SetMapEvent extends GameEvent {
 	public SetMapEvent(String nameOfNewMap, String hashOfMap) {
 		super(GameEventNumber.SET_MAP);
 		this.nameOfNewMap = nameOfNewMap;
+		this.hashOfMap = hashOfMap;
 		putArgument(nameOfNewMap);
 		putArgument(hashOfMap);
 	}

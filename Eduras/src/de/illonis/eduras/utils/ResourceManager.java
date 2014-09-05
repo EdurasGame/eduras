@@ -1,6 +1,8 @@
 package de.illonis.eduras.utils;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -55,8 +57,8 @@ public class ResourceManager {
 	}
 
 	public static void extractResources() throws IOException {
-		URI resourceFolder = createFolderIfDoesntExist(RES_FOLDER);
-		createFolderIfDoesntExist(PATH_TO_MAPS);
+		createFolderIfDoesntExist(RES_FOLDER);
+		URI mapFolder = createFolderIfDoesntExist(PATH_TO_MAPS);
 
 		for (int i = 0; i < Map.defaultMaps.length; i++) {
 			InputStream mapInputStream = Map.class
@@ -67,18 +69,15 @@ public class ResourceManager {
 				continue;
 			}
 
-			File mapFileToExtract = createTemporaryFileFromResource(
-					mapInputStream, Map.defaultMaps[i]);
-			File existingMapFile = new File(PATH_TO_MAPS + Map.defaultMaps[i]);
+			File existingMapFile = new File(mapFolder.getPath()
+					+ Map.defaultMaps[i]);
 
 			if (!existingMapFile.exists()
-					|| !HashCalculator.computeHash(mapFileToExtract.toPath())
-							.equals(HashCalculator.computeHash(existingMapFile
-									.toPath()))) {
+					|| !HashCalculator.computeHash(mapInputStream).equals(
+							HashCalculator.computeHash(new FileInputStream(
+									existingMapFile)))) {
 				try {
-					Files.copy(mapFileToExtract.toPath(),
-							existingMapFile.toPath(),
-							StandardCopyOption.REPLACE_EXISTING);
+					copyAndReplace(existingMapFile, mapInputStream);
 				} catch (IOException e) {
 					L.log(Level.WARNING, "Error when copying map file.", e);
 					continue;
@@ -86,6 +85,23 @@ public class ResourceManager {
 			}
 
 		}
+	}
+
+	private static void copyAndReplace(File fileToReplace,
+			InputStream streamToReplaceWith) throws IOException {
+		System.out.println(fileToReplace.getAbsolutePath());
+		if (!fileToReplace.exists()) {
+			fileToReplace.createNewFile();
+		}
+		FileOutputStream out = new FileOutputStream(fileToReplace);
+
+		byte[] buffer = new byte[1024];
+		int len = streamToReplaceWith.read(buffer);
+		while (len != -1) {
+			out.write(buffer, 0, len);
+			len = streamToReplaceWith.read(buffer);
+		}
+		out.close();
 	}
 
 	private static URI createFolderIfDoesntExist(String folderName)
@@ -104,13 +120,21 @@ public class ResourceManager {
 
 	public static URL getMapFileUrl(String mapFileName)
 			throws MalformedURLException {
-		return PathFinder.findFile(PATH_TO_MAPS + mapFileName).toURL();
+		return PathFinder.findFile(PATH_TO_MAPS + mapFileName + ".erm").toURL();
 	}
 
 	public static String getHashOfMap(String mapFileName)
 			throws MalformedURLException {
-		File file = new File(PathFinder.findFile(PATH_TO_MAPS + mapFileName));
-		return HashCalculator.computeHash(file.toPath());
+		File file = new File(PathFinder.findFile(PATH_TO_MAPS + mapFileName
+				+ ".erm"));
+		try {
+			String hash = HashCalculator.computeHash(new FileInputStream(file));
+			L.info("Hash of map " + mapFileName + " is " + hash);
+			return HashCalculator.computeHash(new FileInputStream(file));
+		} catch (FileNotFoundException e) {
+			L.log(Level.INFO, "No such file to get hash of", e);
+			return "";
+		}
 	}
 
 	public static File writeMapFile(String name, byte[] data)
@@ -120,6 +144,8 @@ public class ResourceManager {
 		if (file.exists() && file.isFile()) {
 			file.delete();
 		}
+		file.createNewFile();
+		System.out.println(file.getAbsolutePath());
 
 		FileOutputStream outputStream;
 		outputStream = new FileOutputStream(file);
