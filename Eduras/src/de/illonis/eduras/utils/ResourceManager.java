@@ -62,10 +62,12 @@ public class ResourceManager {
 		URI mapFolder = createFolderIfDoesntExist(PATH_TO_MAPS);
 
 		for (int i = 0; i < Map.defaultMaps.length; i++) {
-			InputStream mapInputStream = Map.class
+			InputStream mapInputStreamForHash = Map.class
+					.getResourceAsStream(RES_FOLDER + Map.defaultMaps[i]);
+			InputStream mapInputStreamForCopy = Map.class
 					.getResourceAsStream(RES_FOLDER + Map.defaultMaps[i]);
 
-			if (mapInputStream == null) {
+			if (mapInputStreamForHash == null) {
 				L.severe("Cannot find resource map " + Map.defaultMaps[i]);
 				continue;
 			}
@@ -74,11 +76,12 @@ public class ResourceManager {
 					+ Map.defaultMaps[i]);
 
 			if (!existingMapFile.exists()
-					|| !HashCalculator.computeHash(mapInputStream).equals(
-							HashCalculator.computeHash(new FileInputStream(
-									existingMapFile)))) {
+					|| !HashCalculator.computeHash(mapInputStreamForHash)
+							.equals(HashCalculator
+									.computeHash(new FileInputStream(
+											existingMapFile)))) {
 				try {
-					copyAndReplace(existingMapFile, mapInputStream);
+					copyAndReplace(existingMapFile, mapInputStreamForCopy);
 				} catch (IOException e) {
 					L.log(Level.WARNING, "Error when copying map file.", e);
 					continue;
@@ -91,6 +94,9 @@ public class ResourceManager {
 	private static void copyAndReplace(File fileToReplace,
 			InputStream streamToReplaceWith) throws IOException {
 		if (!fileToReplace.exists()) {
+			fileToReplace.createNewFile();
+		} else {
+			fileToReplace.delete();
 			fileToReplace.createNewFile();
 		}
 		FileOutputStream out = new FileOutputStream(fileToReplace);
