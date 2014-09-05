@@ -3,6 +3,8 @@ package de.illonis.eduras.items.weapons;
 import java.util.LinkedList;
 import java.util.logging.Logger;
 
+import org.newdawn.slick.geom.Vector2f;
+
 import de.illonis.edulog.EduLog;
 import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.gameobjects.GameObject;
@@ -59,7 +61,8 @@ public class AoEMissile extends Missile {
 		super.onCollision(collidingObject);
 
 		LinkedList<GameObject> nearObjects = getGame().findObjectsInDistance(
-				getPositionVector(), getDamageRadius());
+				new Vector2f(getShape().getCenterX(), getShape().getCenterY()),
+				getDamageRadius());
 		for (GameObject nearObject : nearObjects) {
 			// do not handle collided object twice.
 			if (nearObject.equals(collidingObject) || nearObject.equals(this))
