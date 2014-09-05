@@ -20,6 +20,7 @@ import java.util.logging.Logger;
 import de.illonis.edulog.EduLog;
 import de.illonis.eduras.gameclient.EdurasClient;
 import de.illonis.eduras.maps.Map;
+import de.illonis.eduras.maps.persistence.MapParser;
 
 public class ResourceManager {
 	private final static Logger L = EduLog.getLoggerFor(ResourceManager.class
@@ -119,13 +120,14 @@ public class ResourceManager {
 
 	public static URL getMapFileUrl(String mapFileName)
 			throws MalformedURLException {
-		return PathFinder.findFile(PATH_TO_MAPS + mapFileName + ".erm").toURL();
+		return PathFinder.findFile(
+				PATH_TO_MAPS + mapFileName + MapParser.FILE_EXTENSION).toURL();
 	}
 
 	public static String getHashOfMap(String mapFileName)
 			throws MalformedURLException {
 		URI pathToFile = PathFinder.findFile(PATH_TO_MAPS + mapFileName
-				+ ".erm");
+				+ MapParser.FILE_EXTENSION);
 		if (pathToFile == null) {
 			throw new MalformedURLException("Invalid map name " + mapFileName);
 		}
@@ -144,7 +146,8 @@ public class ResourceManager {
 	public static File writeMapFile(String name, byte[] data)
 			throws IOException {
 
-		File file = new File(PathFinder.findFile(PATH_TO_MAPS + name + ".erm"));
+		File file = new File(PathFinder.findFile(PATH_TO_MAPS + name
+				+ MapParser.FILE_EXTENSION));
 		if (file.exists() && file.isFile()) {
 			file.delete();
 		}
