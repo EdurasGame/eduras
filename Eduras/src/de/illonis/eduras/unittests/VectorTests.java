@@ -39,16 +39,23 @@ public class VectorTests {
 		copy.rotate(360);
 		assertEquals(vector, copy);
 		copy.rotate(90);
-		assertEquals(new Vector2df(-100, 100), copy);
+		Vector2df expected = new Vector2df(-100, 100);
+		assertEquals(expected.x, copy.x, 0.0001f);
+		assertEquals(expected.y, copy.y, 0.0001f);
 		copy.rotate(90);
-		assertEquals(new Vector2df(-100, -100), copy);
+		Vector2df expected2 = new Vector2df(-100, -100);
+		assertEquals(expected2.x, copy.x, 0.0001f);
+		assertEquals(expected2.y, copy.y, 0.0001f);
 		copy.rotate(90);
 		Vector2df check = new Vector2df(100, -100);
-		assertEquals(check, copy);
+		assertEquals(check.x, copy.x, 0.0001f);
+		assertEquals(check.y, copy.y, 0.0001f);
 		copy.rotate(90);
-		assertEquals(vector, copy);
+		assertEquals(vector.x, copy.x, 0.0001f);
+		assertEquals(vector.y, copy.y, 0.0001f);
 		copy.rotate(-90);
-		assertEquals(check, copy);
+		assertEquals(check.x, copy.x, 0.0001f);
+		assertEquals(check.y, copy.y, 0.0001f);
 	}
 
 	/**
