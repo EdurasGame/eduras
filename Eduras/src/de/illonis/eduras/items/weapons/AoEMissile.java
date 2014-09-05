@@ -71,8 +71,14 @@ public class AoEMissile extends Missile {
 					.getRelation(this, nearObject);
 
 			if (nearRelation == Relation.HOSTILE && nearObject.isUnit()) {
-				((Unit) nearObject).damagedBy(getDamage(), getOwner());
+				int damage = computeDamageForDistance(nearObject
+						.getDistanceTo(getCenterPosition()));
+				((Unit) nearObject).damagedBy(damage, getOwner());
 			}
 		}
+	}
+
+	private int computeDamageForDistance(float distanceTo) {
+		return (int) (getDamage() * (1f - distanceTo / getDamageRadius()));
 	}
 }
