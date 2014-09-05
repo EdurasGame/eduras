@@ -125,8 +125,13 @@ public class ResourceManager {
 
 	public static String getHashOfMap(String mapFileName)
 			throws MalformedURLException {
-		File file = new File(PathFinder.findFile(PATH_TO_MAPS + mapFileName
-				+ ".erm"));
+		URI pathToFile = PathFinder.findFile(PATH_TO_MAPS + mapFileName
+				+ ".erm");
+		if (pathToFile == null) {
+			throw new MalformedURLException("Invalid map name " + mapFileName);
+		}
+
+		File file = new File(pathToFile);
 		try {
 			String hash = HashCalculator.computeHash(new FileInputStream(file));
 			L.info("Hash of map " + mapFileName + " is " + hash);
@@ -140,7 +145,7 @@ public class ResourceManager {
 	public static File writeMapFile(String name, byte[] data)
 			throws IOException {
 
-		File file = new File(PathFinder.findFile(PATH_TO_MAPS + name));
+		File file = new File(PathFinder.findFile(PATH_TO_MAPS + name + ".erm"));
 		if (file.exists() && file.isFile()) {
 			file.delete();
 		}
