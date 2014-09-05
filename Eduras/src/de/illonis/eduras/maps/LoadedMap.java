@@ -41,7 +41,7 @@ public class LoadedMap extends Map {
 			Collection<InitialObjectData> initialObjects,
 			Collection<GameModeNumber> supportedGameModes,
 			Collection<NodeData> nodes) {
-		super(name, author, width, height, created, "");
+		super(author, width, height, created, name);
 
 		for (GameModeNumber gameModeNumber : supportedGameModes)
 			addSupportedGameMode(gameModeNumber);

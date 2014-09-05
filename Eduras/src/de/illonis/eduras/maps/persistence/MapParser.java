@@ -1,6 +1,7 @@
 package de.illonis.eduras.maps.persistence;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
@@ -75,7 +76,13 @@ public class MapParser {
 		HashMap<String, NodeData> nodeIds = new HashMap<String, NodeData>();
 		HashMap<String, InitialObjectData> objectIds = new HashMap<String, InitialObjectData>();
 		HashSet<String> existingIdentifiers = new HashSet<String>();
-		String mapName = "";
+
+		// map name is file name without .erm ending
+		String mapName = inputFile.getFile().substring(0,
+				inputFile.getFile().length() - 4);
+		String[] mapPathParts = mapName.split(File.separator);
+		mapName = mapPathParts[mapPathParts.length - 1];
+
 		String author = "";
 		int width = 0;
 		int height = 0;
@@ -120,9 +127,6 @@ public class MapParser {
 				String key = data[0].trim();
 				String value = data[1].trim();
 				switch (key) {
-				case "mapname":
-					mapName = value;
-					break;
 				case "author":
 					author = value;
 					break;

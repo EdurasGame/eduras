@@ -149,8 +149,7 @@ public class MapEditor {
 	 * Updates window title with new map name.
 	 */
 	public void onMapChanged() {
-		window.setTitle(MapData.getInstance().getMapName()
-				+ EditorWindow.BASE_TITLE);
+		window.setTitle(EditorWindow.BASE_TITLE);
 	}
 
 	private void init() throws SlickException {

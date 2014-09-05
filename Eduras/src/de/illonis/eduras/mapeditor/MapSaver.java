@@ -87,9 +87,9 @@ public final class MapSaver {
 		beginSection(MapFileSection.NODES);
 		for (NodeData node : data.getBases()) {
 			maybeAddReference(node);
-			writer.println(commaValues(node.getXPosition(), node.getYPosition(),
-					node.getWidth(), node.getHeight(), node.isMainNode(),
-					node.getResourceMultiplicator()));
+			writer.println(commaValues(node.getXPosition(),
+					node.getYPosition(), node.getWidth(), node.getHeight(),
+					node.isMainNode(), node.getResourceMultiplicator()));
 		}
 	}
 
@@ -175,7 +175,6 @@ public final class MapSaver {
 	}
 
 	private void writeMetaData() {
-		writeMetaDataElement("mapname", data.getMapName());
 		writeMetaDataElement("author", data.getAuthor());
 		writeMetaDataElement("created", DATE_FORMAT.format(new Date()));
 		StringBuffer gameModeList = new StringBuffer();

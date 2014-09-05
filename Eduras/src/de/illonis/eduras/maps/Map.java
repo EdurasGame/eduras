@@ -41,7 +41,6 @@ public class Map {
 	public final static String[] defaultMaps = new String[] { "eduramus.erm",
 			"eduramus2.erm", "funmap.erm", "Tryfield.erm" };
 
-	private String name;
 	private String author;
 	private Date created;
 	private int width;
@@ -49,15 +48,13 @@ public class Map {
 	protected final LinkedList<InitialObjectData> initialObjects;
 	protected final LinkedList<GameModeNumber> supportedGameModes;
 	protected final LinkedList<SpawnPosition> spawnPositions;
-	private final String fileName;
+	private String fileName;
 
 	private Collection<NodeData> nodes;
 
 	/**
 	 * Creates a new map with the given name and size.
 	 * 
-	 * @param name
-	 *            name of the map.
 	 * @param author
 	 *            name of the author of the map.
 	 * @param width
@@ -67,9 +64,7 @@ public class Map {
 	 * @param fileName
 	 *            the name of the respective .erm file
 	 */
-	public Map(String name, String author, int width, int height,
-			String fileName) {
-		this.name = name;
+	public Map(String author, int width, int height, String fileName) {
 		this.width = width;
 		this.height = height;
 		this.author = author;
@@ -129,8 +124,6 @@ public class Map {
 	/**
 	 * Creates a new map with the given name and size.
 	 * 
-	 * @param name
-	 *            name of the map.
 	 * @param author
 	 *            name of the author of the map.
 	 * @param width
@@ -142,9 +135,9 @@ public class Map {
 	 * @param fileName
 	 *            the name of the respective .erm file
 	 */
-	public Map(String name, String author, int width, int height, Date created,
+	public Map(String author, int width, int height, Date created,
 			String fileName) {
-		this(name, author, width, height, fileName);
+		this(author, width, height, fileName);
 		setCreated(created);
 	}
 
@@ -213,7 +206,7 @@ public class Map {
 	 * @return the name
 	 */
 	public final String getName() {
-		return name;
+		return fileName;
 	}
 
 	/**
@@ -345,7 +338,7 @@ public class Map {
 		nodes.addAll(map.getNodes());
 		width = map.getWidth();
 		height = map.getHeight();
-		name = map.getName();
+		fileName = map.getName();
 		author = map.getAuthor();
 	}
 
