@@ -13,6 +13,7 @@ import org.newdawn.slick.geom.Vector2f;
 
 import de.illonis.edulog.EduLog;
 import de.illonis.eduras.Player;
+import de.illonis.eduras.events.RespawnEvent;
 import de.illonis.eduras.events.SetIntegerGameObjectAttributeEvent;
 import de.illonis.eduras.events.SetInteractModeEvent;
 import de.illonis.eduras.exceptions.InsufficientResourceException;
@@ -134,6 +135,14 @@ public class PlayerStatBar extends RenderedGuiObject {
 				health = newValue;
 				maxHealth = mainFigure.getMaxHealth();
 				recalculate();
+			}
+		}
+
+		@Override
+		public void onRespawn(RespawnEvent event) {
+			if (event.getOwner() == player.getPlayerId()) {
+				onHealthChanged(player.getPlayerMainFigure(), 0, player
+						.getPlayerMainFigure().getHealth());
 			}
 		}
 
