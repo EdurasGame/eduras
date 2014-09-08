@@ -252,7 +252,7 @@ public class GameInformation {
 		// dimensions)
 		LinkedList<GameObject> objs = new LinkedList<GameObject>();
 		for (GameObject object : objects.values()) {
-			if (point.distance(object.getPositionVector()) <= radius) {
+			if (object.getDistanceTo(point) <= radius) {
 				objs.add(object);
 			}
 		}
