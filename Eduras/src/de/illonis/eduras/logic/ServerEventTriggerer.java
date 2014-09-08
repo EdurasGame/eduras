@@ -1231,7 +1231,15 @@ public class ServerEventTriggerer implements EventTriggerer {
 			final MoveableGameObject objectToSpeedUp,
 			final long timeInMiliseconds, final float speedUpValue) {
 
-		changeSpeedBy(objectToSpeedUp, speedUpValue);
+		final float actualSpeedUp;
+		if (objectToSpeedUp.getMaxSpeed() == MoveableGameObject.INFINITE_SPEED) {
+			actualSpeedUp = speedUpValue;
+		} else {
+			actualSpeedUp = Math.min(speedUpValue,
+					objectToSpeedUp.getMaxSpeed() - objectToSpeedUp.getSpeed());
+		}
+
+		changeSpeedBy(objectToSpeedUp, actualSpeedUp);
 
 		new OneTimeTimedEventHandler(objectToSpeedUp.getTimingSource()) {
 
@@ -1242,7 +1250,7 @@ public class ServerEventTriggerer implements EventTriggerer {
 
 			@Override
 			public void intervalElapsed() {
-				changeSpeedBy(objectToSpeedUp, speedUpValue * -1);
+				changeSpeedBy(objectToSpeedUp, actualSpeedUp * -1);
 			}
 		};
 
