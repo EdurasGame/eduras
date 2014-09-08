@@ -5,6 +5,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.newdawn.slick.geom.Rectangle;
+import org.newdawn.slick.geom.Vector2f;
 
 import de.illonis.edulog.EduLog;
 import de.illonis.eduras.GameInformation;
@@ -55,6 +56,7 @@ import de.illonis.eduras.gamemodes.GameMode;
 import de.illonis.eduras.gameobjects.Base;
 import de.illonis.eduras.gameobjects.DynamicPolygonObject;
 import de.illonis.eduras.gameobjects.GameObject;
+import de.illonis.eduras.gameobjects.MoveableGameObject;
 import de.illonis.eduras.gameobjects.NeutralArea;
 import de.illonis.eduras.gameobjects.TriggerArea;
 import de.illonis.eduras.interfaces.GameEventListener;
@@ -606,7 +608,49 @@ public class ClientLogic implements GameLogicInterface {
 				}
 				break;
 			}
+			case SET_SPEEDVECTOR: {
+				MovementEvent setSpeedVectorEvent = (MovementEvent) event;
+				try {
+					GameObject object = gameInfo
+							.findObjectById(setSpeedVectorEvent.getObjectId());
+					if (!(object instanceof MoveableGameObject)) {
+						L.warning("Trying to set speed of an object that isn't a moveable one.");
+						break;
+					} else {
+						((MoveableGameObject) object)
+								.setSpeedVector(new Vector2f(
+										setSpeedVectorEvent.getNewXPos(),
+										setSpeedVectorEvent.getNewYPos()));
+					}
+				} catch (ObjectNotFoundException e1) {
+					L.log(Level.WARNING,
+							"Cannot find object to set the speed of!", e1);
+					break;
+				}
+				break;
+			}
+			case SET_SPEED: {
+				SetFloatGameObjectAttributeEvent setSpeedEvent = (SetFloatGameObjectAttributeEvent) event;
+				try {
+					GameObject object = gameInfo.findObjectById(setSpeedEvent
+							.getObjectId());
+					if (!(object instanceof MoveableGameObject)) {
+						L.warning("Trying to set speed of an object that isn't a moveable one.");
+						return;
+					} else {
+						((MoveableGameObject) object).setSpeed(setSpeedEvent
+								.getNewValue());
+					}
+				} catch (ObjectNotFoundException e1) {
+					L.log(Level.WARNING,
+							"Cannot find object to set the speed of!", e1);
+					break;
+				}
+				break;
+			}
 			default:
+				L.warning("Received an event that we cannot handle: "
+						+ event.getEventNumber());
 				break;
 			}
 		}
