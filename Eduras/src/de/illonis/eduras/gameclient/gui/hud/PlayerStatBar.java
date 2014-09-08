@@ -16,7 +16,7 @@ import de.illonis.eduras.Player;
 import de.illonis.eduras.events.RespawnEvent;
 import de.illonis.eduras.events.SetIntegerGameObjectAttributeEvent;
 import de.illonis.eduras.events.SetInteractModeEvent;
-import de.illonis.eduras.exceptions.InsufficientResourceException;
+import de.illonis.eduras.exceptions.ActionFailedException;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
 import de.illonis.eduras.exceptions.PlayerHasNoTeamException;
 import de.illonis.eduras.gameclient.datacache.FontCache;
@@ -166,7 +166,17 @@ public class PlayerStatBar extends RenderedGuiObject {
 		}
 
 		@Override
+		public boolean mousePressed(int button, int x, int y) {
+			return true;
+		}
+
+		@Override
 		public boolean mouseReleased(int button, int x, int y) {
+			return true;
+		}
+
+		@Override
+		public boolean mouseClicked(int button, int x, int y, int count) {
 			if (!player.isDead()) {
 				PlayerMainFigure mainFigure = player.getPlayerMainFigure();
 
@@ -179,7 +189,7 @@ public class PlayerStatBar extends RenderedGuiObject {
 							userInterface.getListener().onUnitSpell(mainFigure);
 							actionDone();
 							logic.setClickState(ClickState.DEFAULT);
-						} catch (InsufficientResourceException e) {
+						} catch (ActionFailedException e) {
 							logic.onActionFailed(e);
 						}
 					}
