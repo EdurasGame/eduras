@@ -81,7 +81,6 @@ public class MapParser {
 				inputFile.getFile().length() - 4);
 		mapName = mapName.substring(mapName.lastIndexOf("/") + 1,
 				mapName.length());
-		System.out.println(mapName);
 		String author = "";
 		int width = 0;
 		int height = 0;
