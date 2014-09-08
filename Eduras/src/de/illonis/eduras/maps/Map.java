@@ -1,6 +1,7 @@
 package de.illonis.eduras.maps;
 
 import java.io.IOException;
+import java.net.URL;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Collection;
@@ -19,6 +20,7 @@ import de.illonis.eduras.maps.SpawnPosition.SpawnType;
 import de.illonis.eduras.maps.persistence.InvalidDataException;
 import de.illonis.eduras.maps.persistence.MapParser;
 import de.illonis.eduras.math.Vector2df;
+import de.illonis.eduras.utils.ResourceManager;
 
 /**
  * A playable map for gaming.
@@ -26,7 +28,7 @@ import de.illonis.eduras.math.Vector2df;
  * @author illonis
  * 
  */
-public abstract class Map {
+public class Map {
 
 	private final static Logger L = EduLog.getLoggerFor(Map.class.getName());
 
@@ -36,7 +38,9 @@ public abstract class Map {
 	public final static SimpleDateFormat DATE_FORMAT = new SimpleDateFormat(
 			"yyyy-MM-dd");
 
-	private String name;
+	public final static String[] defaultMaps = new String[] { "eduramus.erm",
+			"eduramus2.erm", "funmap.erm", "Tryfield.erm" };
+
 	private String author;
 	private Date created;
 	private int width;
@@ -44,27 +48,44 @@ public abstract class Map {
 	protected final LinkedList<InitialObjectData> initialObjects;
 	protected final LinkedList<GameModeNumber> supportedGameModes;
 	protected final LinkedList<SpawnPosition> spawnPositions;
+	private String fileName;
 
 	private Collection<NodeData> nodes;
 
 	/**
 	 * Creates a new map with the given name and size.
 	 * 
-	 * @param name
-	 *            name of the map.
 	 * @param author
 	 *            name of the author of the map.
 	 * @param width
 	 *            width of the map.
 	 * @param height
 	 *            height of the map.
+	 * @param fileName
+	 *            the name of the respective .erm file
 	 */
-	public Map(String name, String author, int width, int height) {
-		this.name = name;
+	public Map(String author, int width, int height, String fileName) {
 		this.width = width;
 		this.height = height;
 		this.author = author;
+		this.fileName = fileName;
 		created = new Date();
+		initialObjects = new LinkedList<InitialObjectData>();
+		addBoundsObjects();
+		supportedGameModes = new LinkedList<GameModeNumber>();
+		spawnPositions = new LinkedList<SpawnPosition>();
+		nodes = new LinkedList<NodeData>();
+	}
+
+	/**
+	 * Creates a map only by its file name.
+	 * 
+	 * @param filename
+	 *            the name of the respective .erm file
+	 */
+	public Map(String filename) {
+		this.fileName = filename;
+
 		initialObjects = new LinkedList<InitialObjectData>();
 		addBoundsObjects();
 		supportedGameModes = new LinkedList<GameModeNumber>();
@@ -103,8 +124,6 @@ public abstract class Map {
 	/**
 	 * Creates a new map with the given name and size.
 	 * 
-	 * @param name
-	 *            name of the map.
 	 * @param author
 	 *            name of the author of the map.
 	 * @param width
@@ -113,9 +132,12 @@ public abstract class Map {
 	 *            height of the map.
 	 * @param created
 	 *            the date of creation
+	 * @param fileName
+	 *            the name of the respective .erm file
 	 */
-	public Map(String name, String author, int width, int height, Date created) {
-		this(name, author, width, height);
+	public Map(String author, int width, int height, Date created,
+			String fileName) {
+		this(author, width, height, fileName);
 		setCreated(created);
 	}
 
@@ -184,7 +206,7 @@ public abstract class Map {
 	 * @return the name
 	 */
 	public final String getName() {
-		return name;
+		return fileName;
 	}
 
 	/**
@@ -303,8 +325,10 @@ public abstract class Map {
 	 */
 	protected final void loadFromFile(String mapFileName)
 			throws InvalidDataException, IOException {
-		Map map = MapParser.readMap(getClass().getResource(
-				"data/" + mapFileName));
+
+		URL mapURL = ResourceManager.getMapFileUrl(mapFileName);
+
+		Map map = MapParser.readMap(mapURL);
 		initialObjects.clear();
 		initialObjects.addAll(map.getInitialObjects());
 		spawnPositions.clear();
@@ -314,7 +338,7 @@ public abstract class Map {
 		nodes.addAll(map.getNodes());
 		width = map.getWidth();
 		height = map.getHeight();
-		name = map.getName();
+		fileName = map.getName();
 		author = map.getAuthor();
 	}
 
@@ -356,8 +380,15 @@ public abstract class Map {
 
 	/**
 	 * Initializes and loads all map data.
+	 * 
+	 * @throws InvalidDataException
+	 *             thrown if the specified map file is corrupted
+	 * @throws IOException
+	 *             thrown if the map file cannot be found / read
 	 */
-	protected abstract void buildMap() throws InvalidDataException;
+	public void buildMap() throws InvalidDataException, IOException {
+		loadFromFile(fileName);
+	}
 
 	/**
 	 * Get the map that has the given name if it exists.
@@ -372,33 +403,12 @@ public abstract class Map {
 	 */
 	public static Map getMapByName(String mapName) throws NoSuchMapException,
 			InvalidDataException {
-		Map map;
-		switch (mapName.toLowerCase()) {
-		case "funmap":
-			map = new FunMap();
-			break;
-		case "simple":
-			map = new SimpleMap();
-			break;
-		case "manyblocks":
-			map = new ManyBlocks();
-			break;
-		case "testmap":
-			map = new TestMap();
-			break;
-		case "eduratestmap":
-			map = new EduraTestMap();
-			break;
-		case "eduramus":
-			map = new Eduramus();
-			break;
-		case "tryfield":
-			map = new Tryfield();
-			break;
-		default:
+		Map map = new Map(mapName);
+		try {
+			map.buildMap();
+		} catch (IOException e) {
 			throw new NoSuchMapException(mapName);
 		}
-		map.buildMap();
 		return map;
 	}
 }

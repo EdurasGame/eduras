@@ -6,6 +6,7 @@ import de.illonis.eduras.Team;
 import de.illonis.eduras.events.ClientRenameEvent;
 import de.illonis.eduras.events.DeathEvent;
 import de.illonis.eduras.events.GameEvent;
+import de.illonis.eduras.events.GameEvent.GameEventNumber;
 import de.illonis.eduras.events.ItemEvent;
 import de.illonis.eduras.events.ItemUseFailedEvent;
 import de.illonis.eduras.events.MatchEndEvent;
@@ -135,5 +136,9 @@ public class GameEventAdapter implements GameEventListener {
 
 	@Override
 	public void onStartRound() {
+	}
+
+	@Override
+	public void onResourceRequired(GameEventNumber type, String resource) {
 	}
 }

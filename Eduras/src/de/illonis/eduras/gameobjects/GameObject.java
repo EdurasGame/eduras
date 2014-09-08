@@ -233,11 +233,12 @@ public abstract class GameObject extends ReferencedEntity implements
 	public final void setPosition(Vector2f pos) {
 		setPosition(pos.x, pos.y);
 	}
-	
+
 	@Override
 	public float getWidth() {
 		return shape.getWidth();
 	}
+
 	@Override
 	public float getHeight() {
 		return shape.getHeight();
@@ -714,5 +715,15 @@ public abstract class GameObject extends ReferencedEntity implements
 				return -1;
 		}
 
+	}
+
+	/**
+	 * Calculates the distance of this object to some point
+	 * 
+	 * @param point
+	 * @return distance
+	 */
+	public float getDistanceTo(Vector2f point) {
+		return getCenterPosition().distance(point);
 	}
 }

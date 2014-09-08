@@ -14,7 +14,7 @@ import de.illonis.eduras.settings.S;
  * @author Florian 'Ren' Mai <florian.ren.mai@googlemail.com>
  * 
  */
-public class MineMissile extends Missile {
+public class MineMissile extends AoEMissile {
 
 	/**
 	 * Create a new MineMissile.

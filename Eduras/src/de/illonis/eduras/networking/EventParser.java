@@ -34,9 +34,11 @@ import de.illonis.eduras.events.MatchEndEvent;
 import de.illonis.eduras.events.MovementEvent;
 import de.illonis.eduras.events.ObjectFactoryEvent;
 import de.illonis.eduras.events.OwnerGameEvent;
+import de.illonis.eduras.events.RequestResourceEvent;
 import de.illonis.eduras.events.RespawnEvent;
 import de.illonis.eduras.events.ResurrectPlayerEvent;
 import de.illonis.eduras.events.ScoutSpellEvent;
+import de.illonis.eduras.events.SendResourceEvent;
 import de.illonis.eduras.events.SendUnitsEvent;
 import de.illonis.eduras.events.SetAmmunitionEvent;
 import de.illonis.eduras.events.SetAvailableBlinksEvent;
@@ -68,6 +70,7 @@ import de.illonis.eduras.gameobjects.GameObject.Visibility;
 import de.illonis.eduras.interfaces.GameLogicInterface;
 import de.illonis.eduras.math.Vector2df;
 import de.illonis.eduras.units.InteractMode;
+import de.illonis.eduras.utils.ResourceManager;
 
 /**
  * This class serves as a bridge between the network and the logic. Events'
@@ -398,7 +401,7 @@ public class EventParser implements EventHandler {
 				break;
 			case SET_MAP:
 				logic.onGameEventAppeared(new SetMapEvent((String) event
-						.getArgument(0)));
+						.getArgument(0), (String) event.getArgument(1)));
 				break;
 			case RESURRECT_PLAYER:
 				logic.onGameEventAppeared(new ResurrectPlayerEvent(
@@ -445,6 +448,25 @@ public class EventParser implements EventHandler {
 				logic.onGameEventAppeared(new SetSettingPropertyEvent(
 						(String) event.getArgument(0), (String) event
 								.getArgument(1)));
+				break;
+			case REQUEST_MAP:
+				logic.onGameEventAppeared(new RequestResourceEvent(
+						(Integer) event.getArgument(0), gameEventNumber,
+						(String) event.getArgument(1)));
+				break;
+			case SEND_MAP:
+				File mapFile;
+				try {
+					mapFile = ResourceManager.writeMapFile(
+							(String) event.getArgument(0),
+							(byte[]) event.getArgument(1));
+					logic.onGameEventAppeared(new SendResourceEvent(
+							gameEventNumber, (String) event.getArgument(0),
+							mapFile));
+				} catch (IOException e) {
+					L.log(Level.SEVERE, "Cannot read received map file.", e);
+					break;
+				}
 				break;
 			default:
 				L.warning("Cannot handle event with event number "

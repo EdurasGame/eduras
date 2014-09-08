@@ -19,6 +19,8 @@ import de.illonis.eduras.math.ShapeGeometry;
  */
 public abstract class MoveableGameObject extends GameObject implements Moveable {
 
+	public static final float INFINITE_SPEED = -1;
+
 	/**
 	 * Directions of movement.
 	 * 
@@ -33,6 +35,7 @@ public abstract class MoveableGameObject extends GameObject implements Moveable 
 	private Direction currentDirection;
 
 	private float speed = 0;
+	private float maxSpeed = INFINITE_SPEED;
 	protected float currentSpeedX;
 	protected float currentSpeedY;
 
@@ -188,5 +191,23 @@ public abstract class MoveableGameObject extends GameObject implements Moveable 
 		return targetRotationAngle;
 		// return this.getShape().checkCollisionOnRotation(getGame(), this,
 		// targetRotationAngle);
+	}
+
+	/**
+	 * Returns the maximum speed of this object.
+	 * 
+	 * @return max speed
+	 */
+	public float getMaxSpeed() {
+		return maxSpeed;
+	}
+
+	/**
+	 * Sets this object's maximum speed.
+	 * 
+	 * @param maxSpeed
+	 */
+	public void setMaxSpeed(float maxSpeed) {
+		this.maxSpeed = maxSpeed;
 	}
 }

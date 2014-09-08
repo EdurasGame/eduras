@@ -2,6 +2,7 @@ package de.illonis.eduras;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -50,7 +51,6 @@ import de.illonis.eduras.gameobjects.DynamicPolygonObject;
 import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.gameobjects.TimingSource;
 import de.illonis.eduras.logic.EventTriggerer;
-import de.illonis.eduras.maps.FunMap;
 import de.illonis.eduras.maps.Map;
 import de.illonis.eduras.maps.SpawnPosition;
 import de.illonis.eduras.maps.SpawnPosition.SpawnType;
@@ -59,6 +59,7 @@ import de.illonis.eduras.math.Vector2df;
 import de.illonis.eduras.settings.S;
 import de.illonis.eduras.settings.S.SettingType;
 import de.illonis.eduras.units.PlayerMainFigure;
+import de.illonis.eduras.utils.ResourceManager;
 
 /**
  * Contains game information.
@@ -88,7 +89,7 @@ public class GameInformation {
 	public GameInformation() {
 		objects = new ConcurrentHashMap<Integer, GameObject>();
 		players = new ConcurrentHashMap<Integer, Player>();
-		map = new FunMap();
+		map = new Map("funmap");
 		gameSettings = new GameSettings(this);
 		teams = new HashMap<Integer, Team>();
 		spawnGroups = new HashMap<Team, SpawnType>();
@@ -251,7 +252,7 @@ public class GameInformation {
 		// dimensions)
 		LinkedList<GameObject> objs = new LinkedList<GameObject>();
 		for (GameObject object : objects.values()) {
-			if (point.distance(object.getPositionVector()) <= radius) {
+			if (object.getDistanceTo(point) <= radius) {
 				objs.add(object);
 			}
 		}
@@ -470,7 +471,14 @@ public class GameInformation {
 				gameSettings.getRemainingTime());
 		infos.add(remaining);
 
-		SetMapEvent setMapEvent = new SetMapEvent(map.getName());
+		SetMapEvent setMapEvent;
+		try {
+			setMapEvent = new SetMapEvent(map.getName(),
+					ResourceManager.getHashOfMap(map.getName()));
+		} catch (MalformedURLException e1) {
+			L.log(Level.SEVERE, "Cannot get hash of map!", e1);
+			return;
+		}
 		infos.add(setMapEvent);
 	}
 

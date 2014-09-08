@@ -467,6 +467,11 @@ public class EdurasInitializer {
 			public void changeBlinkChargesBy(Player player, int charges) {
 			}
 
+			@Override
+			public void sendResource(GameEventNumber type, int owner, String r,
+					File file) {
+			}
+
 		});
 
 		networkManager.getClient().setEventHandler(new EventParser(logic));

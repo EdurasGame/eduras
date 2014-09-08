@@ -2,6 +2,7 @@ package de.illonis.eduras.logic;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedList;
@@ -44,6 +45,7 @@ import de.illonis.eduras.events.MovementEvent;
 import de.illonis.eduras.events.ObjectFactoryEvent;
 import de.illonis.eduras.events.OwnerGameEvent;
 import de.illonis.eduras.events.RespawnEvent;
+import de.illonis.eduras.events.SendResourceEvent;
 import de.illonis.eduras.events.SetAmmunitionEvent;
 import de.illonis.eduras.events.SetAvailableBlinksEvent;
 import de.illonis.eduras.events.SetBooleanGameObjectAttributeEvent;
@@ -99,6 +101,7 @@ import de.illonis.eduras.settings.S.SettingType;
 import de.illonis.eduras.units.InteractMode;
 import de.illonis.eduras.units.PlayerMainFigure;
 import de.illonis.eduras.units.Unit;
+import de.illonis.eduras.utils.ResourceManager;
 
 /**
  * Server Event Triggerer
@@ -216,9 +219,6 @@ public class ServerEventTriggerer implements EventTriggerer {
 		try {
 			o = gameInfo.findObjectById(newObjectEvent.getId());
 			if (o instanceof TriggerArea) {
-				System.out.println("set size of " + o.getClass() + " to "
-						+ o.getShape().getWidth() + ", "
-						+ o.getShape().getHeight());
 				setTriggerAreaSize(newObjectEvent.getId(), o.getShape()
 						.getWidth(), o.getShape().getHeight());
 			}
@@ -524,7 +524,14 @@ public class ServerEventTriggerer implements EventTriggerer {
 		removeAllObjects();
 
 		// notify client
-		SetMapEvent setMapEvent = new SetMapEvent(map.getName());
+		SetMapEvent setMapEvent;
+		try {
+			setMapEvent = new SetMapEvent(map.getName(),
+					ResourceManager.getHashOfMap(map.getName()));
+		} catch (MalformedURLException e1) {
+			L.log(Level.SEVERE, "Cannot calculate Hash of map!", e1);
+			setMapEvent = new SetMapEvent(map.getName(), "");
+		}
 		sendEvents(setMapEvent);
 
 		LinkedList<InitialObjectData> portalData = new LinkedList<InitialObjectData>();
@@ -1224,7 +1231,15 @@ public class ServerEventTriggerer implements EventTriggerer {
 			final MoveableGameObject objectToSpeedUp,
 			final long timeInMiliseconds, final float speedUpValue) {
 
-		changeSpeedBy(objectToSpeedUp, speedUpValue);
+		final float actualSpeedUp;
+		if (objectToSpeedUp.getMaxSpeed() == MoveableGameObject.INFINITE_SPEED) {
+			actualSpeedUp = speedUpValue;
+		} else {
+			actualSpeedUp = Math.min(speedUpValue,
+					objectToSpeedUp.getMaxSpeed() - objectToSpeedUp.getSpeed());
+		}
+
+		changeSpeedBy(objectToSpeedUp, actualSpeedUp);
 
 		new OneTimeTimedEventHandler(objectToSpeedUp.getTimingSource()) {
 
@@ -1235,7 +1250,7 @@ public class ServerEventTriggerer implements EventTriggerer {
 
 			@Override
 			public void intervalElapsed() {
-				changeSpeedBy(objectToSpeedUp, speedUpValue * -1);
+				changeSpeedBy(objectToSpeedUp, actualSpeedUp * -1);
 			}
 		};
 
@@ -1300,5 +1315,17 @@ public class ServerEventTriggerer implements EventTriggerer {
 
 		sendEvents(new SetAvailableBlinksEvent(player.getPlayerId(),
 				player.getBlinksAvailable()));
+	}
+
+	@Override
+	public void sendResource(GameEventNumber type, int owner, String resName,
+			File file) {
+
+		try {
+			sendEventToClient(new SendResourceEvent(type, resName, file), owner);
+		} catch (IOException e) {
+			L.log(Level.SEVERE, "Error sending resource: message", e);
+		}
+
 	}
 }

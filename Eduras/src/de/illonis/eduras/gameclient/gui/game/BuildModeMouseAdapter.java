@@ -14,6 +14,7 @@ import de.illonis.edulog.EduLog;
 import de.illonis.eduras.ObjectFactory.ObjectType;
 import de.illonis.eduras.Player;
 import de.illonis.eduras.Team;
+import de.illonis.eduras.exceptions.ActionFailedException;
 import de.illonis.eduras.exceptions.InsufficientResourceException;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
 import de.illonis.eduras.exceptions.PlayerHasNoTeamException;
@@ -147,7 +148,7 @@ public class BuildModeMouseAdapter extends ScrollModeMouseAdapter {
 							getListener().onUnitSpell((Unit) gameObject);
 							actionDone();
 							getPanelLogic().setClickState(ClickState.DEFAULT);
-						} catch (InsufficientResourceException e) {
+						} catch (ActionFailedException e) {
 							getPanelLogic().onActionFailed(e);
 							return;
 						}
