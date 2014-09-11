@@ -182,7 +182,7 @@ public class GamePanelLogic extends GameEventAdapter implements
 		System.out.println("[GUI] Size changed. New size: " + gui.getWidth()
 				+ ", " + gui.getHeight());
 		userInterface.onGuiSizeChanged(gui.getWidth(), gui.getHeight());
-		//camera.setSize(gui.getWidth(), gui.getHeight()); // maybe not?
+		// camera.setSize(gui.getWidth(), gui.getHeight()); // maybe not?
 	}
 
 	public GameContainer getGui() {
@@ -404,5 +404,10 @@ public class GamePanelLogic extends GameEventAdapter implements
 
 	public void enableChat(boolean enabled) {
 		cache.setEnabled(enabled);
+	}
+
+	@Override
+	public void showSelectTeam() {
+		userInterface.showTeamSelectDialogue();
 	}
 }

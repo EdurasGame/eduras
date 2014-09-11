@@ -24,7 +24,6 @@ public class ExitPopup extends DialoguePopup {
 				setVisible(false);
 			}
 		});
-		setVisible(false);
 	}
 
 }

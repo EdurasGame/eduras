@@ -1,6 +1,7 @@
 package de.illonis.eduras.interfaces;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 
 import de.illonis.eduras.Team;
 import de.illonis.eduras.events.ClientRenameEvent;
@@ -254,4 +255,12 @@ public interface GameEventListener {
 	 * Called when a new round starts.
 	 */
 	void onStartRound();
+
+	/**
+	 * Called when the teams are set.
+	 * 
+	 * @param teamList
+	 *            list of all teams
+	 */
+	void onTeamsSet(LinkedList<Team> teamList);
 }

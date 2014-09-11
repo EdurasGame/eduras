@@ -16,6 +16,7 @@ import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.gameobjects.GameObject.Relation;
 import de.illonis.eduras.logic.EventTriggerer;
 import de.illonis.eduras.maps.SpawnPosition.SpawnType;
+import de.illonis.eduras.settings.S;
 import de.illonis.eduras.units.InteractMode;
 import de.illonis.eduras.units.PlayerMainFigure;
 
@@ -143,6 +144,10 @@ public class TeamDeathmatch extends Deathmatch {
 
 	@Override
 	public boolean supportsKeyBinding(KeyBinding binding) {
+		if (binding == KeyBinding.SELECT_TEAM && !S.Server.sv_switchteams) {
+			return false;
+		}
+
 		return true;
 	}
 

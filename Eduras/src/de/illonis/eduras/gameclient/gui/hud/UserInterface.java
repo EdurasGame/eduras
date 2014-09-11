@@ -56,6 +56,7 @@ public class UserInterface implements GuiResizeListener {
 	private final GuiInternalEventListener guiReactor;
 	private MiniMap minimap;
 	private ExitPopup exitPopup;
+	private SelectTeamPopup selectTeamPopup;
 	private GamePanelLogic logic;
 
 	public ActionBar getActionBar() {
@@ -130,6 +131,7 @@ public class UserInterface implements GuiResizeListener {
 		bigPanel = new BigPanel(this);
 		dragRect = new DragSelectionRectangle(this);
 		exitPopup = new ExitPopup(this);
+		selectTeamPopup = new SelectTeamPopup(this);
 		new ChatDisplay(cache, this);
 		// new BugReportButton(this);
 		actionBar = new ActionBar(this, minimap);
@@ -403,5 +405,9 @@ public class UserInterface implements GuiResizeListener {
 
 	public GuiInternalEventListener getListener() {
 		return guiReactor;
+	}
+
+	public void showTeamSelectDialogue() {
+		selectTeamPopup.setVisible(true);
 	}
 }

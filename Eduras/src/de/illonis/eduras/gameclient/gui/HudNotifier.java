@@ -347,4 +347,14 @@ public class HudNotifier implements GameEventListener {
 	@Override
 	public void onResourceRequired(GameEventNumber type, String resource) {
 	}
+
+	@Override
+	public void onTeamsSet(LinkedList<Team> teamList) {
+		for (GameEventListener obj : uiObjects) {
+			obj.onTeamsSet(teamList);
+		}
+		for (GameEventListener obj : otherObjects) {
+			obj.onTeamsSet(teamList);
+		}
+	}
 }

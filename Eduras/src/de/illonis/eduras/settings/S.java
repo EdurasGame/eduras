@@ -745,6 +745,11 @@ public final class S {
 		 */
 		public static float player_speed_max = 200;
 
+		/**
+		 * Determines if players are allowed to switch teams at any time.
+		 */
+		public static boolean sv_switchteams = true;
+
 	}
 
 	/**

@@ -1,6 +1,7 @@
 package de.illonis.eduras.gameclient;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 
 import de.illonis.eduras.Team;
 import de.illonis.eduras.events.ClientRenameEvent;
@@ -140,5 +141,9 @@ public class GameEventAdapter implements GameEventListener {
 
 	@Override
 	public void onResourceRequired(GameEventNumber type, String resource) {
+	}
+
+	@Override
+	public void onTeamsSet(LinkedList<Team> teamList) {
 	}
 }

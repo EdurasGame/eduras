@@ -257,7 +257,8 @@ public class Deathmatch extends BasicGameMode {
 
 	@Override
 	public boolean supportsKeyBinding(KeyBinding binding) {
-		if (binding == KeyBinding.SWITCH_MODE)
+		if (binding == KeyBinding.SWITCH_MODE
+				|| binding == KeyBinding.SELECT_TEAM)
 			return false;
 		return true;
 	}

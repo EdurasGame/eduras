@@ -1,6 +1,7 @@
 package de.illonis.eduras.gameclient;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.logging.Logger;
 
 import de.illonis.edulog.EduLog;
@@ -223,5 +224,10 @@ public class ClientGameEventListener implements GameEventListener {
 	@Override
 	public void onResourceRequired(GameEventNumber type, String resource) {
 		client.requestResource(type, resource);
+	}
+
+	@Override
+	public void onTeamsSet(LinkedList<Team> teamList) {
+		ui.onTeamsSet(teamList);
 	}
 }

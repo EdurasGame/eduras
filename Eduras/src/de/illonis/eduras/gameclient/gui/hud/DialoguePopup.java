@@ -28,6 +28,7 @@ public abstract class DialoguePopup extends ClickableGuiElement {
 		this.text = text;
 		answerButtons = new LinkedList<AnswerButton>();
 		bounds = new Rectangle(0, 0, 300, 60);
+		setVisible(false);
 	}
 
 	@Override
@@ -95,6 +96,10 @@ public abstract class DialoguePopup extends ClickableGuiElement {
 			}
 		}
 		return false;
+	}
+
+	protected void clearAnswers() {
+		answerButtons.clear();
 	}
 
 	abstract class AnswerButton {

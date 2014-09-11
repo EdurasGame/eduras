@@ -12,7 +12,6 @@ import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.ObjectFactory;
 import de.illonis.eduras.Player;
 import de.illonis.eduras.Team;
-import de.illonis.eduras.events.PlayerAndTeamEvent;
 import de.illonis.eduras.events.AreaConqueredEvent;
 import de.illonis.eduras.events.ClientRenameEvent;
 import de.illonis.eduras.events.DeathEvent;
@@ -24,6 +23,7 @@ import de.illonis.eduras.events.MatchEndEvent;
 import de.illonis.eduras.events.MovementEvent;
 import de.illonis.eduras.events.ObjectFactoryEvent;
 import de.illonis.eduras.events.OwnerGameEvent;
+import de.illonis.eduras.events.PlayerAndTeamEvent;
 import de.illonis.eduras.events.RespawnEvent;
 import de.illonis.eduras.events.SendResourceEvent;
 import de.illonis.eduras.events.SetAmmunitionEvent;
@@ -323,6 +323,7 @@ public class ClientLogic implements GameLogicInterface {
 				for (Team team : teamEvent.getTeamList()) {
 					gameInfo.addTeam(team);
 				}
+				getListener().onTeamsSet(teamEvent.getTeamList());
 				break;
 			case ADD_PLAYER_TO_TEAM:
 				PlayerAndTeamEvent pteEvent = (PlayerAndTeamEvent) event;
