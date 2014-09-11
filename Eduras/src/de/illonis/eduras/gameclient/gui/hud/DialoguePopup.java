@@ -31,7 +31,9 @@ public abstract class DialoguePopup extends ClickableGuiElement {
 	}
 
 	@Override
-	public abstract Rectangle getBounds();
+	public Rectangle getBounds() {
+		return bounds;
+	}
 
 	@Override
 	public void render(Graphics g) {
@@ -50,14 +52,14 @@ public abstract class DialoguePopup extends ClickableGuiElement {
 				bounds.setHeight(height);
 				bounds.setLocation(screenX, screenY);
 
-				buttonWidthSum = 5;
+				buttonWidthSum = 10;
 				for (int i = 0; i < answerButtons.size(); i++) {
 					AnswerButton answerButton = answerButtons.get(i);
 
 					answerButton.setLocation(screenX + buttonWidthSum, screenY
 							+ height);
 
-					buttonWidthSum += 10;
+					buttonWidthSum += 10 + answerButton.getWidth();
 				}
 			}
 			g.setColor(Color.white);
@@ -77,7 +79,22 @@ public abstract class DialoguePopup extends ClickableGuiElement {
 	}
 
 	protected void addAnswer(AnswerButton answer) {
+		answerButtons.add(answer);
+	}
 
+	@Override
+	public boolean mouseReleased(int button, int x, int y) {
+
+		if (!isVisible())
+			return false;
+
+		for (AnswerButton answerButton : answerButtons) {
+			if (answerButton.contains(x, y)) {
+				answerButton.onClick();
+				return true;
+			}
+		}
+		return false;
 	}
 
 	abstract class AnswerButton {
@@ -86,6 +103,11 @@ public abstract class DialoguePopup extends ClickableGuiElement {
 
 		protected AnswerButton(String text) {
 			this.text = text;
+			this.answerRect = new Rectangle(0, 0, 30, 30);
+		}
+
+		public boolean contains(int x, int y) {
+			return answerRect.contains(x, y);
 		}
 
 		private void render(Graphics g, Font font) {
