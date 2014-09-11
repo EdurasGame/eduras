@@ -1,10 +1,13 @@
 package de.illonis.eduras.gameclient.gui.hud;
 
 import java.util.LinkedList;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import de.illonis.edulog.EduLog;
 import de.illonis.eduras.Team;
+import de.illonis.eduras.exceptions.ObjectNotFoundException;
+import de.illonis.eduras.exceptions.PlayerHasNoTeamException;
 
 public class SelectTeamPopup extends DialoguePopup {
 
@@ -25,7 +28,13 @@ public class SelectTeamPopup extends DialoguePopup {
 				@Override
 				protected void onClick() {
 					L.info("Team " + team.getName() + " selected.");
-					getMouseHandler().teamSelected(team);
+					try {
+						if (!(team.equals(getInfo().getPlayer().getTeam())))
+							getMouseHandler().teamSelected(team);
+					} catch (PlayerHasNoTeamException | ObjectNotFoundException e) {
+						L.log(Level.WARNING, "Cannot find team!", e);
+					}
+					setVisible(false);
 				}
 			});
 		}
