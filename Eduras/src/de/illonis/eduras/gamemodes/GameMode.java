@@ -5,9 +5,9 @@ import java.util.Set;
 import de.illonis.eduras.Player;
 import de.illonis.eduras.Team;
 import de.illonis.eduras.gameclient.userprefs.KeyBindings.KeyBinding;
+import de.illonis.eduras.gameobjects.Base;
 import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.gameobjects.GameObject.Relation;
-import de.illonis.eduras.gameobjects.Base;
 import de.illonis.eduras.maps.SpawnPosition.SpawnType;
 import de.illonis.eduras.units.InteractMode;
 import de.illonis.eduras.units.Unit;
@@ -91,16 +91,28 @@ public interface GameMode {
 	public void onDisconnect(int ownerId);
 
 	/**
-	 * Called when match begins to let gamemode initalize some things.
+	 * Called when the map or the game mode is changed to let gamemode initalize
+	 * some things. Calls {@link #onRoundStarts()} afterwards.
 	 * 
 	 * @author illonis
 	 */
 	public void onGameStart();
 
 	/**
-	 * Called when match ends to let gamemode deinitialize some things.
+	 * Called when map or game mode is changed to let gamemode deinitialize some
+	 * things. {@link #onRoundEnds()} is called before this.
 	 */
 	public void onGameEnd();
+
+	/**
+	 * Called when match starts to let gamemode initialize some things.
+	 */
+	public void onRoundStarts();
+
+	/**
+	 * Called when match ends to let gamemode deinitialize some things.
+	 */
+	public void onRoundEnds();
 
 	/**
 	 * Assignes a team to a spawntype. Used to map teams to the
@@ -115,8 +127,8 @@ public interface GameMode {
 	public SpawnType getSpawnTypeForTeam(Team team);
 
 	/**
-	 * When an object is entering a {@link Base}, this method is called
-	 * to determine which team becomes the base overtaking team.
+	 * When an object is entering a {@link Base}, this method is called to
+	 * determine which team becomes the base overtaking team.
 	 * 
 	 * @param base
 	 *            The base that is being taken over.

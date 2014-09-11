@@ -481,6 +481,7 @@ public class EdurasServer {
 			}
 		}
 		eventTriggerer.changeMap(startMap);
+		eventTriggerer.restartGame();
 	}
 
 	private void switchToStartGameMode() throws NoSuchGameModeException {

@@ -472,6 +472,10 @@ public class EdurasInitializer {
 					File file) {
 			}
 
+			@Override
+			public void restartGame() {
+			}
+
 		});
 
 		networkManager.getClient().setEventHandler(new EventParser(logic));

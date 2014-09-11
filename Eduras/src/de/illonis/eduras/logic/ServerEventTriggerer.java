@@ -486,15 +486,22 @@ public class ServerEventTriggerer implements EventTriggerer {
 	}
 
 	@Override
+	public void restartGame() {
+		gameInfo.getGameSettings().getGameMode().onGameEnd();
+		changeMap(gameInfo.getMap());
+		gameInfo.getGameSettings().getGameMode().onGameStart();
+	}
+
+	@Override
 	public void restartRound() {
 
-		gameInfo.getGameSettings().getGameMode().onGameEnd();
+		gameInfo.getGameSettings().getGameMode().onRoundEnds();
 		for (Player player : gameInfo.getPlayers()) {
 			resetStats(player);
 		}
-		changeMap(gameInfo.getMap());
+		reloadMap(gameInfo.getMap());
 		resetSettings();
-		gameInfo.getGameSettings().getGameMode().onGameStart();
+		gameInfo.getGameSettings().getGameMode().onRoundStarts();
 		sendEvents(new StartRoundEvent());
 	}
 
@@ -510,18 +517,21 @@ public class ServerEventTriggerer implements EventTriggerer {
 
 	@Override
 	public void changeGameMode(GameMode newMode) {
+		gameInfo.getGameSettings().getGameMode().onGameEnd();
+
 		gameInfo.getGameSettings().changeGameMode(newMode);
 		SetGameModeEvent event = new SetGameModeEvent(newMode.getName());
 
-		restartRound();
+		reloadMap(gameInfo.getMap());
+		gameInfo.getGameSettings().getGameMode().onGameStart();
 
 		sendEvents(event);
 	}
 
 	@Override
 	public void changeMap(Map map) {
+
 		gameInfo.setMap(map);
-		removeAllObjects();
 
 		// notify client
 		SetMapEvent setMapEvent;
@@ -533,6 +543,13 @@ public class ServerEventTriggerer implements EventTriggerer {
 			setMapEvent = new SetMapEvent(map.getName(), "");
 		}
 		sendEvents(setMapEvent);
+
+		reloadMap(map);
+
+	}
+
+	private void reloadMap(Map map) {
+		removeAllObjects();
 
 		LinkedList<InitialObjectData> portalData = new LinkedList<InitialObjectData>();
 		// send objects to client

@@ -49,6 +49,12 @@ public class TeamDeathmatch extends Deathmatch {
 
 	@Override
 	public void onGameStart() {
+
+		initTeams();
+		onRoundStarts();
+	}
+
+	protected void initTeams() {
 		EventTriggerer eventTriggerer = gameInfo.getEventTriggerer();
 
 		teamA = new Team("Red Team", Team.getNextTeamId(), Color.red);
@@ -61,11 +67,6 @@ public class TeamDeathmatch extends Deathmatch {
 			putPlayerInSmallestTeam(player);
 		}
 
-		for (Player player : gameInfo.getPlayers()) {
-			eventTriggerer
-					.createObject(ObjectType.PLAYER, player.getPlayerId());
-			eventTriggerer.respawnPlayerAtRandomSpawnpoint(player);
-		}
 	}
 
 	private void putPlayerInSmallestTeam(Player player) {

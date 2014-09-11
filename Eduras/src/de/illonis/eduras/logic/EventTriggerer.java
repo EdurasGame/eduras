@@ -724,4 +724,9 @@ public interface EventTriggerer {
 	 *            file to send
 	 */
 	void sendResource(GameEventNumber type, int owner, String r, File file);
+
+	/**
+	 * Restarts the game.
+	 */
+	void restartGame();
 }

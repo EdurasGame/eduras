@@ -153,16 +153,7 @@ public class Deathmatch extends BasicGameMode {
 		}
 		eventTriggerer.setTeams(teams);
 
-		for (Player player : gameInfo.getPlayers()) {
-			eventTriggerer
-					.createObject(ObjectType.PLAYER, player.getPlayerId());
-			eventTriggerer.respawnPlayerAtRandomSpawnpoint(player);
-		}
-
-		if (S.Server.gm_deathmatch_blink_available) {
-			setUpBlinkTimer();
-		}
-
+		onRoundStarts();
 	}
 
 	private void setUpBlinkTimer() {
@@ -270,9 +261,8 @@ public class Deathmatch extends BasicGameMode {
 
 	@Override
 	public void onGameEnd() {
-		for (Player player : gameInfo.getPlayers()) {
-			gameInfo.getEventTriggerer().clearInventoryOfPlayer(player);
-		}
+
+		onRoundEnds();
 
 		for (Team team : gameInfo.getTeams()) {
 			gameInfo.removeTeam(team);
@@ -280,6 +270,37 @@ public class Deathmatch extends BasicGameMode {
 
 		// tell clients that all teams have been removed
 		gameInfo.getEventTriggerer().setTeams(new LinkedList<Team>());
+	}
+
+	@Override
+	public boolean doItemsRespawn() {
+		return true;
+	}
+
+	@Override
+	public void onPlayerSpawn(Player player) {
+	}
+
+	@Override
+	public void onRoundStarts() {
+		EventTriggerer eventTriggerer = gameInfo.getEventTriggerer();
+
+		for (Player player : gameInfo.getPlayers()) {
+			eventTriggerer
+					.createObject(ObjectType.PLAYER, player.getPlayerId());
+			eventTriggerer.respawnPlayerAtRandomSpawnpoint(player);
+		}
+
+		if (S.Server.gm_deathmatch_blink_available) {
+			setUpBlinkTimer();
+		}
+	}
+
+	@Override
+	public void onRoundEnds() {
+		for (Player player : gameInfo.getPlayers()) {
+			gameInfo.getEventTriggerer().clearInventoryOfPlayer(player);
+		}
 
 		if (S.Server.gm_deathmatch_blink_available) {
 			try {
@@ -295,15 +316,5 @@ public class Deathmatch extends BasicGameMode {
 						-player.getBlinksAvailable());
 			}
 		}
-	}
-
-	@Override
-	public boolean doItemsRespawn() {
-		return true;
-	}
-
-	@Override
-	public void onPlayerSpawn(Player player) {
-		System.out.println("Player respawned.");
 	}
 }
