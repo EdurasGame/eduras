@@ -448,6 +448,17 @@ public class ServerLogic implements GameLogicInterface {
 
 			gameInfo.getEventTriggerer().addPlayerToTeam(
 					playerAndTeamEvent.getOwner(), team);
+
+			Player player;
+			try {
+				player = gameInfo.getPlayerByOwnerId(playerAndTeamEvent
+						.getOwner());
+			} catch (ObjectNotFoundException e1) {
+				L.log(Level.SEVERE, "Cant find player.", e1);
+				break;
+			}
+			gameInfo.getEventTriggerer()
+					.respawnPlayerAtRandomSpawnpoint(player);
 			break;
 		default:
 			L.severe(Localization.getStringF("Server.networking.illegalevent",
