@@ -17,6 +17,7 @@ import de.illonis.eduras.events.BlinkEvent;
 import de.illonis.eduras.events.CreateUnitEvent;
 import de.illonis.eduras.events.GameEvent.GameEventNumber;
 import de.illonis.eduras.events.ItemEvent;
+import de.illonis.eduras.events.PlayerAndTeamEvent;
 import de.illonis.eduras.events.ResurrectPlayerEvent;
 import de.illonis.eduras.events.ScoutSpellEvent;
 import de.illonis.eduras.events.SendUnitsEvent;
@@ -527,6 +528,17 @@ public class GuiInternalEventListener implements GamePanelReactor {
 				L.log(Level.WARNING, "Error sending the blink event.", e);
 				return;
 			}
+		}
+	}
+
+	@Override
+	public void teamSelected(Team team) {
+		try {
+			client.sendEvent(new PlayerAndTeamEvent(GameEventNumber.JOIN_TEAM,
+					infoPro.getOwnerID(), team.getTeamId()));
+		} catch (WrongEventTypeException | MessageNotSupportedException e) {
+			L.log(Level.SEVERE, "Cannot select team!", e);
+			return;
 		}
 	}
 }

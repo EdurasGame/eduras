@@ -24,7 +24,8 @@ public class SelectTeamPopup extends DialoguePopup {
 
 				@Override
 				protected void onClick() {
-					System.out.println("Team " + team.getName() + " selected.");
+					L.info("Team " + team.getName() + " selected.");
+					getMouseHandler().teamSelected(team);
 				}
 			});
 		}

@@ -6,6 +6,7 @@ import org.newdawn.slick.geom.Vector2f;
 
 import de.illonis.eduras.ObjectFactory.ObjectType;
 import de.illonis.eduras.Player;
+import de.illonis.eduras.Team;
 import de.illonis.eduras.exceptions.ActionFailedException;
 import de.illonis.eduras.exceptions.InsufficientResourceException;
 import de.illonis.eduras.exceptions.NotWithinBaseException;
@@ -178,4 +179,5 @@ public interface GamePanelReactor {
 	void onBlink(Vector2f blinkTarget) throws InsufficientChargesException,
 			CantSpawnHereException;
 
+	void teamSelected(Team team);
 }
