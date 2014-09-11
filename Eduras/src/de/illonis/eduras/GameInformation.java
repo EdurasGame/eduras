@@ -22,7 +22,6 @@ import org.newdawn.slick.geom.Vector2f;
 
 import de.illonis.edulog.EduLog;
 import de.illonis.eduras.ObjectFactory.ObjectType;
-import de.illonis.eduras.events.AddPlayerToTeamEvent;
 import de.illonis.eduras.events.AreaConqueredEvent;
 import de.illonis.eduras.events.ClientRenameEvent;
 import de.illonis.eduras.events.GameEvent;
@@ -30,6 +29,7 @@ import de.illonis.eduras.events.GameEvent.GameEventNumber;
 import de.illonis.eduras.events.MovementEvent;
 import de.illonis.eduras.events.ObjectFactoryEvent;
 import de.illonis.eduras.events.OwnerGameEvent;
+import de.illonis.eduras.events.PlayerAndTeamEvent;
 import de.illonis.eduras.events.SetBooleanGameObjectAttributeEvent;
 import de.illonis.eduras.events.SetGameModeEvent;
 import de.illonis.eduras.events.SetIntegerGameObjectAttributeEvent;
@@ -449,12 +449,13 @@ public class GameInformation {
 		}
 
 		SetTeamsEvent teamEvent = new SetTeamsEvent();
-		LinkedList<AddPlayerToTeamEvent> teamPlayerEvents = new LinkedList<AddPlayerToTeamEvent>();
+		LinkedList<PlayerAndTeamEvent> teamPlayerEvents = new LinkedList<PlayerAndTeamEvent>();
 		for (Team team : getTeams()) {
 			teamEvent.addTeam(team);
 			for (Player player : team.getPlayers()) {
-				teamPlayerEvents.add(new AddPlayerToTeamEvent(player
-						.getPlayerId(), team.getTeamId()));
+				teamPlayerEvents.add(new PlayerAndTeamEvent(
+						GameEventNumber.ADD_PLAYER_TO_TEAM, player
+								.getPlayerId(), team.getTeamId()));
 			}
 		}
 

@@ -1,25 +1,28 @@
 package de.illonis.eduras.events;
 
 /**
- * Adds a player to a given team.
+ * An event regarding a player and a team.
  * 
  * @author illonis
  * 
  */
-public class AddPlayerToTeamEvent extends OwnerGameEvent {
+public class PlayerAndTeamEvent extends OwnerGameEvent {
 
 	private final int team;
 
 	/**
 	 * Creates a new event with given data.
 	 * 
+	 * @param type
+	 *            the type of event
+	 * 
 	 * @param ownerId
 	 *            the owner id of the player.
 	 * @param targetTeam
 	 *            the id of the team.
 	 */
-	public AddPlayerToTeamEvent(int ownerId, int targetTeam) {
-		super(GameEventNumber.ADD_PLAYER_TO_TEAM, ownerId);
+	public PlayerAndTeamEvent(GameEventNumber type, int ownerId, int targetTeam) {
+		super(type, ownerId);
 		this.team = targetTeam;
 		putArgument(team);
 	}

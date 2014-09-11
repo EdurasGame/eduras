@@ -30,7 +30,6 @@ import de.illonis.eduras.Team;
 import de.illonis.eduras.ai.movement.MotionAIControllable;
 import de.illonis.eduras.ai.movement.MovingUnitAI;
 import de.illonis.eduras.ai.movement.UnitNotControllableException;
-import de.illonis.eduras.events.AddPlayerToTeamEvent;
 import de.illonis.eduras.events.AreaConqueredEvent;
 import de.illonis.eduras.events.ClientRenameEvent;
 import de.illonis.eduras.events.DeathEvent;
@@ -44,6 +43,7 @@ import de.illonis.eduras.events.MatchEndEvent;
 import de.illonis.eduras.events.MovementEvent;
 import de.illonis.eduras.events.ObjectFactoryEvent;
 import de.illonis.eduras.events.OwnerGameEvent;
+import de.illonis.eduras.events.PlayerAndTeamEvent;
 import de.illonis.eduras.events.RespawnEvent;
 import de.illonis.eduras.events.SendResourceEvent;
 import de.illonis.eduras.events.SetAmmunitionEvent;
@@ -717,8 +717,9 @@ public class ServerEventTriggerer implements EventTriggerer {
 
 		for (Team team : teams) {
 			for (Player player : team.getPlayers()) {
-				sendEvents(new AddPlayerToTeamEvent(player.getPlayerId(),
-						team.getTeamId()));
+				sendEvents(new PlayerAndTeamEvent(
+						GameEventNumber.ADD_PLAYER_TO_TEAM,
+						player.getPlayerId(), team.getTeamId()));
 			}
 		}
 	}
@@ -743,8 +744,8 @@ public class ServerEventTriggerer implements EventTriggerer {
 		}
 		team.addPlayer(newPlayer);
 
-		AddPlayerToTeamEvent event = new AddPlayerToTeamEvent(ownerId,
-				team.getTeamId());
+		PlayerAndTeamEvent event = new PlayerAndTeamEvent(
+				GameEventNumber.ADD_PLAYER_TO_TEAM, ownerId, team.getTeamId());
 		sendEvents(event);
 	}
 

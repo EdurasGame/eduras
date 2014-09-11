@@ -12,7 +12,7 @@ import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.ObjectFactory;
 import de.illonis.eduras.Player;
 import de.illonis.eduras.Team;
-import de.illonis.eduras.events.AddPlayerToTeamEvent;
+import de.illonis.eduras.events.PlayerAndTeamEvent;
 import de.illonis.eduras.events.AreaConqueredEvent;
 import de.illonis.eduras.events.ClientRenameEvent;
 import de.illonis.eduras.events.DeathEvent;
@@ -325,7 +325,7 @@ public class ClientLogic implements GameLogicInterface {
 				}
 				break;
 			case ADD_PLAYER_TO_TEAM:
-				AddPlayerToTeamEvent pteEvent = (AddPlayerToTeamEvent) event;
+				PlayerAndTeamEvent pteEvent = (PlayerAndTeamEvent) event;
 				Team teamToAddPlayerTo = gameInfo.findTeamById(pteEvent
 						.getTeam());
 				if (teamToAddPlayerTo == null) {

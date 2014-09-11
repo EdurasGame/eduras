@@ -17,7 +17,6 @@ import de.illonis.edulog.EduLog;
 import de.illonis.eduras.ObjectFactory.ObjectType;
 import de.illonis.eduras.Statistic.StatsProperty;
 import de.illonis.eduras.Team;
-import de.illonis.eduras.events.AddPlayerToTeamEvent;
 import de.illonis.eduras.events.AreaConqueredEvent;
 import de.illonis.eduras.events.BlinkEvent;
 import de.illonis.eduras.events.ClientRenameEvent;
@@ -34,6 +33,7 @@ import de.illonis.eduras.events.MatchEndEvent;
 import de.illonis.eduras.events.MovementEvent;
 import de.illonis.eduras.events.ObjectFactoryEvent;
 import de.illonis.eduras.events.OwnerGameEvent;
+import de.illonis.eduras.events.PlayerAndTeamEvent;
 import de.illonis.eduras.events.RequestResourceEvent;
 import de.illonis.eduras.events.RespawnEvent;
 import de.illonis.eduras.events.ResurrectPlayerEvent;
@@ -361,9 +361,9 @@ public class EventParser implements EventHandler {
 				logic.onGameEventAppeared(setTeamsEvent);
 				break;
 			case ADD_PLAYER_TO_TEAM:
-				logic.onGameEventAppeared(new AddPlayerToTeamEvent(
-						(Integer) event.getArgument(0), (int) event
-								.getArgument(1)));
+				logic.onGameEventAppeared(new PlayerAndTeamEvent(
+						gameEventNumber, (Integer) event.getArgument(0),
+						(int) event.getArgument(1)));
 				break;
 			case GAME_READY:
 				logic.onGameEventAppeared(new GameReadyEvent());
