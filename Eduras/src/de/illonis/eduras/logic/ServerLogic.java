@@ -14,6 +14,7 @@ import de.illonis.edulog.EduLog;
 import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.ObjectFactory;
 import de.illonis.eduras.Player;
+import de.illonis.eduras.Team;
 import de.illonis.eduras.actions.BlinkSpellAction;
 import de.illonis.eduras.actions.CreateUnitAction;
 import de.illonis.eduras.actions.HealSpellAction;
@@ -31,6 +32,7 @@ import de.illonis.eduras.events.GameEvent.GameEventNumber;
 import de.illonis.eduras.events.GameInfoRequest;
 import de.illonis.eduras.events.InitInformationEvent;
 import de.illonis.eduras.events.ItemEvent;
+import de.illonis.eduras.events.PlayerAndTeamEvent;
 import de.illonis.eduras.events.RequestResourceEvent;
 import de.illonis.eduras.events.ResurrectPlayerEvent;
 import de.illonis.eduras.events.ScoutSpellEvent;
@@ -434,6 +436,18 @@ public class ServerLogic implements GameLogicInterface {
 			} catch (MalformedURLException e1) {
 				L.log(Level.SEVERE, "Cannot read path", e1);
 			}
+			break;
+		case JOIN_TEAM:
+			PlayerAndTeamEvent playerAndTeamEvent = (PlayerAndTeamEvent) event;
+			Team team = gameInfo.findTeamById(playerAndTeamEvent.getTeam());
+
+			if (team == null) {
+				L.severe("Cannot find given team.");
+				return;
+			}
+
+			gameInfo.getEventTriggerer().addPlayerToTeam(
+					playerAndTeamEvent.getOwner(), team);
 			break;
 		default:
 			L.severe(Localization.getStringF("Server.networking.illegalevent",

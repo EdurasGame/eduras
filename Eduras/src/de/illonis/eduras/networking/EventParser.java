@@ -468,6 +468,11 @@ public class EventParser implements EventHandler {
 					break;
 				}
 				break;
+			case JOIN_TEAM:
+				logic.onGameEventAppeared(new PlayerAndTeamEvent(
+						GameEventNumber.JOIN_TEAM, (Integer) event
+								.getArgument(0), (Integer) event.getArgument(1)));
+				break;
 			default:
 				L.warning("Cannot handle event with event number "
 						+ eventNumber);
