@@ -740,6 +740,11 @@ public final class S {
 
 		public static int spell_blink_costs = 10;
 
+		/**
+		 * Determines a player's maximum speed.
+		 */
+		public static float player_speed_max = 200;
+
 	}
 
 	/**

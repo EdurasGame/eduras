@@ -13,6 +13,8 @@ import java.util.logging.Logger;
 import de.illonis.edulog.EduLog;
 import de.illonis.eduras.gameclient.EdurasGameInterface;
 import de.illonis.eduras.gameclient.LoginData;
+import de.illonis.eduras.gameclient.userprefs.Settings;
+import de.illonis.eduras.logicabstraction.EdurasInitializer;
 import de.lessvoid.nifty.controls.Label;
 import de.lessvoid.nifty.screen.Screen;
 
@@ -50,6 +52,9 @@ public class ConnectingController extends EdurasScreenController {
 	@Override
 	protected void initScreen(Screen screen) {
 		note = screen.findNiftyControl("noteLabel", Label.class);
+		Settings s = EdurasInitializer.getInstance().getSettings();
+		game.setSoundVolume(s.getFloatSetting(Settings.SOUND_VOLUME));
+		game.setMusicVolume(s.getFloatSetting(Settings.MUSIC_VOLUME));
 	}
 
 	/**

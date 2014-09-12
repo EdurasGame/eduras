@@ -1,6 +1,7 @@
 package de.illonis.eduras.gameclient.gui.hud;
 
 import java.util.LinkedList;
+import java.util.List;
 
 import org.newdawn.slick.Graphics;
 
@@ -111,6 +112,10 @@ public abstract class RenderedGuiObject extends GameEventAdapter {
 		for (int i = 0; i < interactModes.length; i++) {
 			enabledModes.add(interactModes[i]);
 		}
+	}
+
+	protected final List<InteractMode> getActiveInteractModes() {
+		return new LinkedList<InteractMode>(enabledModes);
 	}
 
 	/**

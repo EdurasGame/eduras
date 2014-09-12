@@ -731,4 +731,14 @@ public abstract class GameObject extends ReferencedEntity implements
 		}
 
 	}
+
+	/**
+	 * Calculates the distance of this object to some point
+	 * 
+	 * @param point
+	 * @return distance
+	 */
+	public float getDistanceTo(Vector2f point) {
+		return getCenterPosition().distance(point);
+	}
 }

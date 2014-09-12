@@ -187,7 +187,6 @@ public final class MapSaver {
 	}
 
 	private void writeMetaData() {
-		writeMetaDataElement("mapname", data.getMapName());
 		writeMetaDataElement("author", data.getAuthor());
 		writeMetaDataElement("created", DATE_FORMAT.format(new Date()));
 		StringBuffer gameModeList = new StringBuffer();

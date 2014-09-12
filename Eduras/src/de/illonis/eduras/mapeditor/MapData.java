@@ -47,7 +47,6 @@ public final class MapData {
 		supportedGameModes.add(GameModeNumber.DEATHMATCH);
 	}
 
-	private String mapName;
 	private String author;
 	private int width;
 	private int height;
@@ -74,7 +73,6 @@ public final class MapData {
 		bases = new LinkedList<NodeData>();
 		spawnPoints = new LinkedList<SpawnPosition>();
 		supportedGameModes = new HashSet<GameModeNumber>();
-		mapName = "unnamed Map";
 		placingObject = null;
 		author = "unknown";
 		width = 500;
@@ -126,7 +124,6 @@ public final class MapData {
 		width = map.getWidth();
 		height = map.getHeight();
 		author = map.getAuthor();
-		mapName = map.getName();
 		LinkedList<InitialObjectData> portalData = new LinkedList<InitialObjectData>();
 
 		spawnPoints.addAll(map.getSpawnAreas());
@@ -173,14 +170,6 @@ public final class MapData {
 			Portal portalTwo = (Portal) refTwo;
 			portalOne.setPartnerPortal(portalTwo);
 		}
-	}
-
-	public String getMapName() {
-		return mapName;
-	}
-
-	public void setMapName(String mapName) {
-		this.mapName = mapName;
 	}
 
 	public String getAuthor() {

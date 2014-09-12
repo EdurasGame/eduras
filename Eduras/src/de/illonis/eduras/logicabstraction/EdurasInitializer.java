@@ -74,7 +74,6 @@ public class EdurasInitializer {
 		networkManager = new NetworkManager(this);
 		settings = new Settings();
 		try {
-
 			settings.load();
 		} catch (FileNotFoundException e) {
 			L.log(Level.WARNING, "Could not load user preferences.", e);
@@ -466,6 +465,11 @@ public class EdurasInitializer {
 
 			@Override
 			public void changeBlinkChargesBy(Player player, int charges) {
+			}
+
+			@Override
+			public void sendResource(GameEventNumber type, int owner, String r,
+					File file) {
 			}
 
 		});

@@ -13,9 +13,10 @@ import org.newdawn.slick.geom.Vector2f;
 
 import de.illonis.edulog.EduLog;
 import de.illonis.eduras.Player;
+import de.illonis.eduras.events.RespawnEvent;
 import de.illonis.eduras.events.SetIntegerGameObjectAttributeEvent;
 import de.illonis.eduras.events.SetInteractModeEvent;
-import de.illonis.eduras.exceptions.InsufficientResourceException;
+import de.illonis.eduras.exceptions.ActionFailedException;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
 import de.illonis.eduras.exceptions.PlayerHasNoTeamException;
 import de.illonis.eduras.gameclient.datacache.FontCache;
@@ -94,7 +95,7 @@ public class PlayerStatBar extends RenderedGuiObject {
 		@Override
 		public void render(Graphics g2d) {
 			Font font = FontCache.getFont(FontKey.DEFAULT_FONT, g2d);
-
+			g2d.setLineWidth(1f);
 			yPosition = screenY
 					+ 50
 					+ index
@@ -138,6 +139,14 @@ public class PlayerStatBar extends RenderedGuiObject {
 		}
 
 		@Override
+		public void onRespawn(RespawnEvent event) {
+			if (event.getOwner() == player.getPlayerId()) {
+				onHealthChanged(player.getPlayerMainFigure(), 0, player
+						.getPlayerMainFigure().getHealth());
+			}
+		}
+
+		@Override
 		public void onMaxHealthChanged(SetIntegerGameObjectAttributeEvent event) {
 			PlayerMainFigure mainFigure = player.getPlayerMainFigure();
 			if (event.getObjectId() == mainFigure.getId()) {
@@ -157,7 +166,17 @@ public class PlayerStatBar extends RenderedGuiObject {
 		}
 
 		@Override
+		public boolean mousePressed(int button, int x, int y) {
+			return true;
+		}
+
+		@Override
 		public boolean mouseReleased(int button, int x, int y) {
+			return true;
+		}
+
+		@Override
+		public boolean mouseClicked(int button, int x, int y, int count) {
 			if (!player.isDead()) {
 				PlayerMainFigure mainFigure = player.getPlayerMainFigure();
 
@@ -170,7 +189,7 @@ public class PlayerStatBar extends RenderedGuiObject {
 							userInterface.getListener().onUnitSpell(mainFigure);
 							actionDone();
 							logic.setClickState(ClickState.DEFAULT);
-						} catch (InsufficientResourceException e) {
+						} catch (ActionFailedException e) {
 							logic.onActionFailed(e);
 						}
 					}

@@ -1,4 +1,3 @@
-@mapname	= funmap
 @author		= Jan Reese
 @gamemodes	= Deathmatch, Team_Deathmatch
 @created	= 2013-03-14

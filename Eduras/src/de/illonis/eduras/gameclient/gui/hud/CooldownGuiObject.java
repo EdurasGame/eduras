@@ -18,12 +18,6 @@ public abstract class CooldownGuiObject extends RenderedGuiObject {
 		super(gui);
 	}
 
-	@Override
-	public abstract void render(Graphics g);
-
-	@Override
-	public abstract void onGuiSizeChanged(int newWidth, int newHeight);
-
 	/**
 	 * Uses the Graphics object to render the cooldown at the given position
 	 * with the given height and width.
