@@ -139,6 +139,8 @@ public class MapEditor {
 		case HEALING_POTION:
 		case SPEED_POWERUP:
 		case INVISIBILITY_POWERUP:
+		case ROCKETLAUNCHER:
+		case MINELAUNCHER:
 			return true;
 		default:
 			return false;
