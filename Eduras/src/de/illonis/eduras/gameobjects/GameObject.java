@@ -5,6 +5,7 @@ import java.util.LinkedList;
 import java.util.logging.Logger;
 
 import org.newdawn.slick.geom.Line;
+import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.Shape;
 import org.newdawn.slick.geom.Vector2f;
 
@@ -242,6 +243,20 @@ public abstract class GameObject extends ReferencedEntity implements
 	@Override
 	public float getHeight() {
 		return shape.getHeight();
+	}
+
+	@Override
+	public void setWidth(float width) {
+		if (shape instanceof Rectangle) {
+			((Rectangle) shape).setWidth(width);
+		}
+	}
+
+	@Override
+	public void setHeight(float height) {
+		if (shape instanceof Rectangle) {
+			((Rectangle) shape).setHeight(height);
+		}
 	}
 
 	/**

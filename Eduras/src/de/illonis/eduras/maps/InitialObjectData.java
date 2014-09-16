@@ -18,6 +18,7 @@ public class InitialObjectData {
 	private final ObjectType type;
 	private final String refName;
 	private final float x, y;
+	private int width, height;
 	private final Vector2df[] polygonShapeVector2dfs;
 	private final java.util.Map<String, String> references;
 	private Color color;
@@ -97,6 +98,22 @@ public class InitialObjectData {
 
 	public String getRefName() {
 		return refName;
+	}
+
+	public void setWidth(int width) {
+		this.width = width;
+	}
+
+	public void setHeight(int height) {
+		this.height = height;
+	}
+
+	public int getWidth() {
+		return width;
+	}
+
+	public int getHeight() {
+		return height;
 	}
 
 	/**

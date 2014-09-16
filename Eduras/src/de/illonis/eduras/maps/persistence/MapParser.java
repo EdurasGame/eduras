@@ -226,7 +226,26 @@ public class MapParser {
 									objY, currentIdentifier);
 							if (objectType == ObjectType.PORTAL) {
 								if (objectData.length > 3) {
-									String refPortal = objectData[3].trim();
+									String refPortal;
+									if (objectData.length > 5) {
+										int w = 0, h = 0;
+										try {
+											w = Integer.parseInt(objectData[3]
+													.trim());
+											h = Integer.parseInt(objectData[4]
+													.trim());
+										} catch (NumberFormatException e) {
+											throw new InvalidDataException(
+													"Invalid width/height value: "
+															+ e.getMessage(),
+													lineNumber);
+										}
+										oData.setWidth(w);
+										oData.setHeight(h);
+										refPortal = objectData[5].trim();
+									} else {
+										refPortal = objectData[3].trim();
+									}
 									if (refPortal.startsWith("*")
 											&& refPortal.substring(1).matches(
 													IDENTIFIER_REGEX)) {

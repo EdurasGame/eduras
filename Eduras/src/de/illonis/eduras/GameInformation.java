@@ -50,6 +50,7 @@ import de.illonis.eduras.gameobjects.Base;
 import de.illonis.eduras.gameobjects.DynamicPolygonObject;
 import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.gameobjects.TimingSource;
+import de.illonis.eduras.gameobjects.TriggerArea;
 import de.illonis.eduras.logic.EventTriggerer;
 import de.illonis.eduras.maps.Map;
 import de.illonis.eduras.maps.SpawnPosition;
@@ -498,6 +499,10 @@ public class GameInformation {
 						object.getId(),
 						((DynamicPolygonObject) object).getPolygonVertices());
 				infos.add(polygonData);
+			}
+			if (object instanceof TriggerArea) {
+				infos.add(new SetSizeEvent(object.getId(), object.getWidth(),
+						object.getHeight()));
 			}
 
 			if (object.getType() == ObjectType.NEUTRAL_BASE) {

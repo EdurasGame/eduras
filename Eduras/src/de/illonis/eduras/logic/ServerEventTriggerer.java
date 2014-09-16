@@ -574,6 +574,10 @@ public class ServerEventTriggerer implements EventTriggerer {
 					((DynamicPolygonObject) o).setColor(initialObject
 							.getColor());
 				}
+				if (o instanceof TriggerArea && initialObject.getWidth() > 0) {
+					setTriggerAreaSize(o.getId(), initialObject.getWidth(),
+							initialObject.getHeight());
+				}
 			} catch (ObjectNotFoundException e) {
 				L.log(Level.SEVERE,
 						"Cannot find object that was just created from map file!",
