@@ -398,7 +398,7 @@ public class GamePanelLogic extends GameEventAdapter implements
 	}
 
 	@Override
-	public void askGameQuit() {
+	public void cancel() {
 		userInterface.showExitPopup();
 	}
 

@@ -107,7 +107,7 @@ public class InputKeyHandler {
 		boolean consumed = false;
 		if (key != settings.getKeyBindings().getKey(KeyBinding.CHAT)
 				&& key != settings.getKeyBindings().getKey(
-						KeyBinding.EXIT_CLIENT))
+						KeyBinding.CANCEL))
 			consumed = onChatType(key, c);
 
 		if (consumed) {
@@ -134,9 +134,9 @@ public class InputKeyHandler {
 				if (handler.isChatEnabled()) {
 					if (binding == KeyBinding.CHAT)
 						client.onChatEnter();
-					else if (binding == KeyBinding.EXIT_CLIENT
+					else if (binding == KeyBinding.CANCEL
 							&& !client.abortChat()) {
-						client.askGameQuit();
+						client.cancel();
 					} else {
 						handler.keyPressed(binding);
 					}

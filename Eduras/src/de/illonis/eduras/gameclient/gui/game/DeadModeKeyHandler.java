@@ -27,7 +27,7 @@ public class DeadModeKeyHandler extends AnyModeKeyHandler {
 		switch (key) {
 		case SHOW_STATS:
 		case CHAT:
-		case EXIT_CLIENT:
+		case CANCEL:
 		case SELECT_TEAM:
 			super.keyPressed(key);
 			break;
