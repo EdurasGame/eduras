@@ -7,6 +7,8 @@ import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.newdawn.slick.geom.Vector2f;
+
 import de.illonis.edulog.EduLog;
 import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.ObjectFactory.ObjectType;
@@ -21,7 +23,6 @@ import de.illonis.eduras.gameobjects.TimedEventHandler;
 import de.illonis.eduras.maps.Map;
 import de.illonis.eduras.maps.NodeData;
 import de.illonis.eduras.maps.SpawnPosition.SpawnType;
-import de.illonis.eduras.math.Vector2df;
 import de.illonis.eduras.math.graphs.Vertex;
 import de.illonis.eduras.units.Unit;
 
@@ -169,7 +170,8 @@ public abstract class BasicGameMode implements GameMode {
 			int nodeid = nodeData.getId();
 			int objectId = gameInfo.getEventTriggerer().createObjectAt(
 					ObjectType.NEUTRAL_BASE,
-					new Vector2df(nodeData.getXPosition(), nodeData.getYPosition()), -1);
+					new Vector2f(nodeData.getXPosition(), nodeData
+							.getYPosition()), -1);
 
 			Base base;
 			try {
@@ -235,7 +237,9 @@ public abstract class BasicGameMode implements GameMode {
 		if (team == null) {
 			return team;
 		}
-		if (baseToVertex.get(base).hasAdjacentNodeOfColor(team.getTeamId())) {
+		Vertex vertex = baseToVertex.get(base);
+		if (vertex.getAdjacentVertices().isEmpty()
+				|| vertex.hasAdjacentNodeOfColor(team.getTeamId())) {
 			return team;
 		} else {
 			return null;

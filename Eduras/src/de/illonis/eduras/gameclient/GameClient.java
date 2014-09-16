@@ -9,7 +9,9 @@ import de.eduras.eventingserver.Event;
 import de.illonis.edulog.EduLog;
 import de.illonis.eduras.chat.ChatClient;
 import de.illonis.eduras.chat.ChatClientImpl;
+import de.illonis.eduras.events.GameEvent.GameEventNumber;
 import de.illonis.eduras.events.InitInformationEvent;
+import de.illonis.eduras.events.RequestResourceEvent;
 import de.illonis.eduras.exceptions.MessageNotSupportedException;
 import de.illonis.eduras.exceptions.WrongEventTypeException;
 import de.illonis.eduras.gameclient.gui.GameManager;
@@ -263,6 +265,21 @@ public class GameClient {
 	 */
 	public void onGameReady() {
 		container.onGameReady();
+	}
+
+	/**
+	 * Requests a resource from the server.
+	 * 
+	 * @param type
+	 * @param resource
+	 */
+	public void requestResource(GameEventNumber type, String resource) {
+		try {
+			sendEvent(new RequestResourceEvent(infoPro.getOwnerID(), type,
+					resource));
+		} catch (WrongEventTypeException | MessageNotSupportedException e) {
+			L.log(Level.WARNING, "Error requesting map.", e);
+		}
 	}
 
 }

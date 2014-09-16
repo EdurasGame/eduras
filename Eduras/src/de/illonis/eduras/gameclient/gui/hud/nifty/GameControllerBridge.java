@@ -51,10 +51,13 @@ public interface GameControllerBridge extends GameManager {
 	 *            new width.
 	 * @param height
 	 *            new height.
+	 * @param windowed
+	 *            true if should be windowed, false otherwise.
 	 * @throws SlickException
 	 *             if there is a display error.
 	 */
-	void changeResolution(int width, int height) throws SlickException;
+	void changeResolution(int width, int height, boolean windowed)
+			throws SlickException;
 
 	/**
 	 * @return the username of the logged in user.
@@ -104,5 +107,31 @@ public interface GameControllerBridge extends GameManager {
 	 * @return the login data.
 	 */
 	LoginData getLoginData();
+
+	/**
+	 * Sets the volume for sound effects.
+	 * 
+	 * @param volume
+	 *            new value.
+	 */
+	void setSoundVolume(float volume);
+
+	/**
+	 * @return the volume of sound effects.
+	 */
+	float getSoundVolume();
+
+	/**
+	 * Sets the volume for music.
+	 * 
+	 * @param volume
+	 *            new value.
+	 */
+	void setMusicVolume(float volume);
+
+	/**
+	 * @return the volume of music.
+	 */
+	float getMusicVolume();
 
 }

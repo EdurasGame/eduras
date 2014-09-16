@@ -146,14 +146,16 @@ public class Edura extends TeamDeathmatch {
 	}
 
 	private void setUpRespawnTimer() {
-		// TODO: assuming that there is a main base at this point and that its
-		// timing source is valid is very bad design. change this some day :D
-		timingSource = getMainbaseOfTeam(getTeamA()).getTimingSource();
-
-		respawnTimer = new RespawnTimer();
-		timingSource.addTimedEventHandler(respawnTimer);
-		gameInfo.getEventTriggerer().notififyRespawnTime(
-				respawnTimer.getTimeTillRespawn());
+		Base node = getMainbaseOfTeam(getTeamA());
+		if (node == null)
+			return;
+		timingSource = node.getTimingSource();
+		if (timingSource != null) {
+			respawnTimer = new RespawnTimer();
+			timingSource.addTimedEventHandler(respawnTimer);
+			gameInfo.getEventTriggerer().notififyRespawnTime(
+					respawnTimer.getTimeTillRespawn());
+		}
 	}
 
 	class RespawnTimer implements TimedEventHandler {
@@ -325,7 +327,7 @@ public class Edura extends TeamDeathmatch {
 	public void onConnect(int ownerId) {
 		super.onConnect(ownerId);
 
-		if (S.Server.gm_edura_automatic_respawn) {
+		if (S.Server.gm_edura_automatic_respawn && respawnTimer != null) {
 			gameInfo.getEventTriggerer().notififyRespawnTime(
 					respawnTimer.getTimeTillRespawn());
 		}

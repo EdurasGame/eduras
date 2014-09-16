@@ -41,7 +41,7 @@ public class MapPropertiesDialog extends ESCDialog implements ActionListener {
 	private final static int MAP_SIZE_STEP = 100;
 
 	private final MapData data;
-	private JTextField mapNameField, authorField;
+	private JTextField authorField;
 	private JSpinner widthField, heightField;
 	private JButton okButton, abortButton;
 	private JList<GameModeNumber> gameModes;
@@ -98,11 +98,6 @@ public class MapPropertiesDialog extends ESCDialog implements ActionListener {
 				BoxLayout.PAGE_AXIS));
 		JPanel namePanel = new JPanel(new BorderLayout());
 		namePanel.setBorder(border);
-		JLabel nameLabel = new JLabel("Map name");
-		namePanel.add(nameLabel, BorderLayout.WEST);
-		mapNameField = new JTextField(data.getMapName());
-		nameLabel.setBorder(border);
-		namePanel.add(mapNameField, BorderLayout.CENTER);
 		attributesPanel.add(namePanel);
 		JPanel authorPanel = new JPanel(new BorderLayout());
 		JLabel authorLabel = new JLabel("Author");
@@ -149,7 +144,6 @@ public class MapPropertiesDialog extends ESCDialog implements ActionListener {
 			dispose();
 		} else {
 			data.setAuthor(authorField.getText());
-			data.setMapName(mapNameField.getText());
 			data.setWidth((int) widthField.getValue());
 			data.setHeight((int) heightField.getValue());
 			List<GameModeNumber> modes = gameModes.getSelectedValuesList();

@@ -65,12 +65,22 @@ public class MapParser {
 	 */
 	public static Map readMap(URL inputFile) throws InvalidDataException,
 			IOException {
+
+		if (inputFile == null) {
+			throw new IOException("URL is null");
+		}
+
 		String currentIdentifier = "";
 		int currentNodeId = 1;
 		HashMap<String, NodeData> nodeIds = new HashMap<String, NodeData>();
 		HashMap<String, InitialObjectData> objectIds = new HashMap<String, InitialObjectData>();
 		HashSet<String> existingIdentifiers = new HashSet<String>();
-		String mapName = "";
+
+		// map name is file name without .erm ending
+		String mapName = inputFile.getFile().substring(0,
+				inputFile.getFile().length() - 4);
+		mapName = mapName.substring(mapName.lastIndexOf("/") + 1,
+				mapName.length());
 		String author = "";
 		int width = 0;
 		int height = 0;
@@ -115,9 +125,6 @@ public class MapParser {
 				String key = data[0].trim();
 				String value = data[1].trim();
 				switch (key) {
-				case "mapname":
-					mapName = value;
-					break;
 				case "author":
 					author = value;
 					break;
@@ -219,7 +226,26 @@ public class MapParser {
 									objY, currentIdentifier);
 							if (objectType == ObjectType.PORTAL) {
 								if (objectData.length > 3) {
-									String refPortal = objectData[3].trim();
+									String refPortal;
+									if (objectData.length > 5) {
+										int w = 0, h = 0;
+										try {
+											w = Integer.parseInt(objectData[3]
+													.trim());
+											h = Integer.parseInt(objectData[4]
+													.trim());
+										} catch (NumberFormatException e) {
+											throw new InvalidDataException(
+													"Invalid width/height value: "
+															+ e.getMessage(),
+													lineNumber);
+										}
+										oData.setWidth(w);
+										oData.setHeight(h);
+										refPortal = objectData[5].trim();
+									} else {
+										refPortal = objectData[3].trim();
+									}
 									if (refPortal.startsWith("*")
 											&& refPortal.substring(1).matches(
 													IDENTIFIER_REGEX)) {

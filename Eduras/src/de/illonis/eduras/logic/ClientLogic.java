@@ -1,9 +1,11 @@
 package de.illonis.eduras.logic;
 
+import java.net.MalformedURLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.newdawn.slick.geom.Rectangle;
+import org.newdawn.slick.geom.Vector2f;
 
 import de.illonis.edulog.EduLog;
 import de.illonis.eduras.GameInformation;
@@ -23,6 +25,7 @@ import de.illonis.eduras.events.MovementEvent;
 import de.illonis.eduras.events.ObjectFactoryEvent;
 import de.illonis.eduras.events.OwnerGameEvent;
 import de.illonis.eduras.events.RespawnEvent;
+import de.illonis.eduras.events.SendResourceEvent;
 import de.illonis.eduras.events.SetAmmunitionEvent;
 import de.illonis.eduras.events.SetAvailableBlinksEvent;
 import de.illonis.eduras.events.SetBooleanGameObjectAttributeEvent;
@@ -53,6 +56,7 @@ import de.illonis.eduras.gamemodes.GameMode;
 import de.illonis.eduras.gameobjects.Base;
 import de.illonis.eduras.gameobjects.DynamicPolygonObject;
 import de.illonis.eduras.gameobjects.GameObject;
+import de.illonis.eduras.gameobjects.MoveableGameObject;
 import de.illonis.eduras.gameobjects.NeutralArea;
 import de.illonis.eduras.gameobjects.TriggerArea;
 import de.illonis.eduras.interfaces.GameEventListener;
@@ -67,6 +71,7 @@ import de.illonis.eduras.maps.persistence.InvalidDataException;
 import de.illonis.eduras.settings.S;
 import de.illonis.eduras.settings.S.SettingType;
 import de.illonis.eduras.units.Unit;
+import de.illonis.eduras.utils.ResourceManager;
 
 /**
  * Logic for client.
@@ -455,12 +460,38 @@ public class ClientLogic implements GameLogicInterface {
 				try {
 					gameInfo.setMap(Map.getMapByName(setMapEvent
 							.getNameOfNewMap()));
-					L.info("Set map to " + setMapEvent.getNameOfNewMap());
-					getListener().onMapChanged(setMapEvent);
+
+					try {
+						String hashOfMap = ResourceManager
+								.getHashOfMap(setMapEvent.getNameOfNewMap());
+						if (!(hashOfMap.equals(setMapEvent.getHashOfMap()))) {
+
+							L.info("Hashs of map "
+									+ setMapEvent.getNameOfNewMap()
+									+ " differ. On server: "
+									+ setMapEvent.getHashOfMap()
+									+ ". On Client: " + hashOfMap);
+
+							throw new NoSuchMapException(
+									setMapEvent.getNameOfNewMap());
+						}
+					} catch (MalformedURLException e1) {
+						L.log(Level.SEVERE,
+								"Cannot find map."
+										+ setMapEvent.getNameOfNewMap(), e1);
+					}
 				} catch (NoSuchMapException | InvalidDataException e1) {
-					L.log(Level.SEVERE, "Cannot find or load map "
-							+ setMapEvent.getNameOfNewMap(), e1);
+					L.log(Level.SEVERE,
+							"Cannot find or load map or have a different version of map "
+									+ setMapEvent.getNameOfNewMap(), e1);
+
+					getListener().onResourceRequired(
+							GameEventNumber.REQUEST_MAP,
+							setMapEvent.getNameOfNewMap());
 				}
+
+				L.info("Set map to " + setMapEvent.getNameOfNewMap());
+				getListener().onMapChanged(setMapEvent);
 				break;
 			}
 			case SET_OWNER:
@@ -514,6 +545,17 @@ public class ClientLogic implements GameLogicInterface {
 			case GAME_READY:
 				getListener().onGameReady();
 				break;
+			case SEND_MAP:
+				try {
+					String nameOfReceivedMap = ((SendResourceEvent) event)
+							.getResourceName();
+					System.out.println(nameOfReceivedMap);
+					gameInfo.setMap(Map.getMapByName(nameOfReceivedMap));
+				} catch (NoSuchMapException | InvalidDataException e3) {
+					L.log(Level.SEVERE,
+							"Cannot switch to the map we just received.", e3);
+				}
+				break;
 			case BASE_CONQUERED:
 				AreaConqueredEvent baseConqueredEvent = (AreaConqueredEvent) event;
 
@@ -566,7 +608,49 @@ public class ClientLogic implements GameLogicInterface {
 				}
 				break;
 			}
+			case SET_SPEEDVECTOR: {
+				MovementEvent setSpeedVectorEvent = (MovementEvent) event;
+				try {
+					GameObject object = gameInfo
+							.findObjectById(setSpeedVectorEvent.getObjectId());
+					if (!(object instanceof MoveableGameObject)) {
+						L.warning("Trying to set speed of an object that isn't a moveable one.");
+						break;
+					} else {
+						((MoveableGameObject) object)
+								.setSpeedVector(new Vector2f(
+										setSpeedVectorEvent.getNewXPos(),
+										setSpeedVectorEvent.getNewYPos()));
+					}
+				} catch (ObjectNotFoundException e1) {
+					L.log(Level.WARNING,
+							"Cannot find object to set the speed of!", e1);
+					break;
+				}
+				break;
+			}
+			case SET_SPEED: {
+				SetFloatGameObjectAttributeEvent setSpeedEvent = (SetFloatGameObjectAttributeEvent) event;
+				try {
+					GameObject object = gameInfo.findObjectById(setSpeedEvent
+							.getObjectId());
+					if (!(object instanceof MoveableGameObject)) {
+						L.warning("Trying to set speed of an object that isn't a moveable one.");
+						return;
+					} else {
+						((MoveableGameObject) object).setSpeed(setSpeedEvent
+								.getNewValue());
+					}
+				} catch (ObjectNotFoundException e1) {
+					L.log(Level.WARNING,
+							"Cannot find object to set the speed of!", e1);
+					break;
+				}
+				break;
+			}
 			default:
+				L.warning("Received an event that we cannot handle: "
+						+ event.getEventNumber());
 				break;
 			}
 		}

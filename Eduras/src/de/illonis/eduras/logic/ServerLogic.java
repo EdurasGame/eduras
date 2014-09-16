@@ -1,5 +1,8 @@
 package de.illonis.eduras.logic;
 
+import java.io.File;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.logging.Level;
@@ -28,6 +31,7 @@ import de.illonis.eduras.events.GameEvent.GameEventNumber;
 import de.illonis.eduras.events.GameInfoRequest;
 import de.illonis.eduras.events.InitInformationEvent;
 import de.illonis.eduras.events.ItemEvent;
+import de.illonis.eduras.events.RequestResourceEvent;
 import de.illonis.eduras.events.ResurrectPlayerEvent;
 import de.illonis.eduras.events.ScoutSpellEvent;
 import de.illonis.eduras.events.SendUnitsEvent;
@@ -53,6 +57,7 @@ import de.illonis.eduras.items.Usable;
 import de.illonis.eduras.locale.Localization;
 import de.illonis.eduras.units.PlayerMainFigure;
 import de.illonis.eduras.units.Unit;
+import de.illonis.eduras.utils.ResourceManager;
 
 /**
  * Server logic.
@@ -415,6 +420,21 @@ public class ServerLogic implements GameLogicInterface {
 			}
 			break;
 		}
+		case REQUEST_MAP:
+			RequestResourceEvent requestResourceEvent = (RequestResourceEvent) event;
+
+			try {
+				URL fileUrl = ResourceManager
+						.getMapFileUrl(requestResourceEvent.getResourceName());
+				gameInfo.getEventTriggerer().sendResource(
+						GameEventNumber.SEND_MAP,
+						requestResourceEvent.getOwner(),
+						requestResourceEvent.getResourceName(),
+						new File(fileUrl.getPath()));
+			} catch (MalformedURLException e1) {
+				L.log(Level.SEVERE, "Cannot read path", e1);
+			}
+			break;
 		default:
 			L.severe(Localization.getStringF("Server.networking.illegalevent",
 					event.getClass()));

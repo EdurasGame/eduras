@@ -6,6 +6,7 @@ import org.newdawn.slick.geom.Vector2f;
 
 import de.illonis.eduras.ObjectFactory.ObjectType;
 import de.illonis.eduras.Player;
+import de.illonis.eduras.exceptions.ActionFailedException;
 import de.illonis.eduras.exceptions.InsufficientResourceException;
 import de.illonis.eduras.exceptions.NotWithinBaseException;
 import de.illonis.eduras.exceptions.WrongObjectTypeException;
@@ -89,8 +90,12 @@ public interface GamePanelReactor {
 	 *            the unit to cast the spell on.
 	 * @throws InsufficientResourceException
 	 *             if not enough resources available
+	 * @throws ActionFailedException
+	 *             Thrown if the action cannot be performed for some other
+	 *             reason
 	 */
-	void onUnitSpell(Unit targetUnit) throws InsufficientResourceException;
+	void onUnitSpell(Unit targetUnit) throws InsufficientResourceException,
+			ActionFailedException;
 
 	/**
 	 * Triggers users wish of quitting the game.
