@@ -457,8 +457,11 @@ public class ServerLogic implements GameLogicInterface {
 				L.log(Level.SEVERE, "Cant find player.", e1);
 				break;
 			}
-			gameInfo.getEventTriggerer()
-					.respawnPlayerAtRandomSpawnpoint(player);
+
+			if (!player.isDead()) {
+				gameInfo.getEventTriggerer().respawnPlayerAtRandomSpawnpoint(
+						player);
+			}
 			break;
 		default:
 			L.severe(Localization.getStringF("Server.networking.illegalevent",
