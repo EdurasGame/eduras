@@ -38,8 +38,8 @@ public class Map {
 	public final static SimpleDateFormat DATE_FORMAT = new SimpleDateFormat(
 			"yyyy-MM-dd");
 
-	public final static String[] defaultMaps = new String[] { "eduramus.erm",
-			"eduramus2.erm", "funmap.erm", "Tryfield.erm" };
+	public final static String[] defaultMaps = new String[] { "blobnob.erm",
+			"eduramus.erm", "eduramus2.erm", "funmap.erm", "Tryfield.erm" };
 
 	private String author;
 	private Date created;
