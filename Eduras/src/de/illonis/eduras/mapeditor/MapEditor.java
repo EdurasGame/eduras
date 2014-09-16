@@ -29,7 +29,7 @@ public class MapEditor {
 	/**
 	 * Editor version.
 	 */
-	public final static int VERSION = 2;
+	public final static int VERSION = 3;
 
 	private EditorGame game;
 	private EditorWindow window;
