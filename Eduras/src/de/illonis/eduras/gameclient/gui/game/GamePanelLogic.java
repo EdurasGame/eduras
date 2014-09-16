@@ -399,7 +399,9 @@ public class GamePanelLogic extends GameEventAdapter implements
 
 	@Override
 	public void cancel() {
-		userInterface.showExitPopup();
+		if (!userInterface.onCancel()) {
+			userInterface.showExitPopup();
+		}
 	}
 
 	public void enableChat(boolean enabled) {

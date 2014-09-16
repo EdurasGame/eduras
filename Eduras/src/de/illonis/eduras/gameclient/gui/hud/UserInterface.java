@@ -58,6 +58,7 @@ public class UserInterface implements GuiResizeListener {
 	private ExitPopup exitPopup;
 	private SelectTeamPopup selectTeamPopup;
 	private GamePanelLogic logic;
+	private LinkedList<Cancelable> cancebleElements;
 
 	public ActionBar getActionBar() {
 		return actionBar;
@@ -94,6 +95,7 @@ public class UserInterface implements GuiResizeListener {
 		this.tooltipNotifier = tooltipNotifier;
 		this.cache = cache;
 		this.logic = logic;
+		this.cancebleElements = new LinkedList<Cancelable>();
 		createElements();
 		hudNotifier.setUiObjects(this.uiObjects);
 
@@ -132,6 +134,8 @@ public class UserInterface implements GuiResizeListener {
 		dragRect = new DragSelectionRectangle(this);
 		exitPopup = new ExitPopup(this);
 		selectTeamPopup = new SelectTeamPopup(this);
+		cancebleElements.add(exitPopup);
+		cancebleElements.add(selectTeamPopup);
 		new ChatDisplay(cache, this);
 		// new BugReportButton(this);
 		actionBar = new ActionBar(this, minimap);
@@ -409,5 +413,20 @@ public class UserInterface implements GuiResizeListener {
 
 	public void showTeamSelectDialogue() {
 		selectTeamPopup.setVisible(true);
+	}
+
+	/**
+	 * Called when the cancle button is pressed.
+	 * 
+	 * @return Returns true if one of the cancleable ui elements consumed the
+	 *         cancle.
+	 */
+	public boolean onCancel() {
+		for (Cancelable cancleableElement : cancebleElements) {
+			if (cancleableElement.cancel()) {
+				return true;
+			}
+		}
+		return false;
 	}
 }

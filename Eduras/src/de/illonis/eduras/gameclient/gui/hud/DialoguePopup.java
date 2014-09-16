@@ -12,7 +12,8 @@ import de.illonis.edulog.EduLog;
 import de.illonis.eduras.gameclient.datacache.FontCache;
 import de.illonis.eduras.gameclient.datacache.FontCache.FontKey;
 
-public abstract class DialoguePopup extends ClickableGuiElement {
+public abstract class DialoguePopup extends ClickableGuiElement implements
+		Cancelable {
 
 	private final static Logger L = EduLog.getLoggerFor(DialoguePopup.class
 			.getName());
@@ -156,5 +157,15 @@ public abstract class DialoguePopup extends ClickableGuiElement {
 		}
 
 		protected abstract void onClick();
+	}
+
+	@Override
+	public boolean cancel() {
+		if (!isVisible()) {
+			return false;
+		} else {
+			setVisible(false);
+			return true;
+		}
 	}
 }
