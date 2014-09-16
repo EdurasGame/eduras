@@ -84,6 +84,26 @@ public abstract class DialoguePopup extends ClickableGuiElement {
 	}
 
 	@Override
+	public boolean mousePressed(int button, int x, int y) {
+		return true;
+	}
+
+	@Override
+	public boolean mouseClicked(int button, int x, int y, int clickCount) {
+		return true;
+	}
+
+	@Override
+	public boolean mouseMoved(int oldx, int oldy, int newx, int newy) {
+		return true;
+	}
+
+	@Override
+	public boolean mouseDragged(int oldx, int oldy, int newx, int newy) {
+		return true;
+	}
+
+	@Override
 	public boolean mouseReleased(int button, int x, int y) {
 
 		if (!isVisible())
@@ -92,10 +112,9 @@ public abstract class DialoguePopup extends ClickableGuiElement {
 		for (AnswerButton answerButton : answerButtons) {
 			if (answerButton.contains(x, y)) {
 				answerButton.onClick();
-				return true;
 			}
 		}
-		return false;
+		return true;
 	}
 
 	protected void clearAnswers() {
