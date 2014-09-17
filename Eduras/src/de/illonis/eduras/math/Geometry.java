@@ -336,7 +336,7 @@ public class Geometry {
 
 					CollisionPoint collisionPoint = CollisionPoint
 							.createCollisionPointByInterceptPoint(
-									interceptionPoints[i], singleLine);
+									interceptionPoints[i], singleLine, 0);
 					result.add(collisionPoint);
 				}
 			}
@@ -450,7 +450,7 @@ public class Geometry {
 
 					CollisionPoint interception = CollisionPoint
 							.createCollisionPointByInterceptPoint(
-									interceptPoint, line);
+									interceptPoint, line, 0);
 					interceptPoints.add(interception);
 				}
 
