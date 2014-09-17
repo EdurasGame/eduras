@@ -93,7 +93,7 @@
 
 		<jar destfile="${jars}/eduras-remoteclient.jar" excludes="**/*.svg, **/unittests/**"
 			basedir="${base}${build}">
-			<zipgroupfileset dir="${base}${libs}" includes="**/*.jar" />
+			<zipgroupfileset dir="${base}${libs}" includes="edulog*.jar, eduras-remote.jar, eventingserver.jar" />
 			<manifest>
 				<attribute name="Main-Class"
 					value="de.illonis.eduras.serverconsole.remote.EdurasRemoteConsoleClient" />
