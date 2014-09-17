@@ -57,7 +57,9 @@ public class ServerLogicGameWorker extends LogicGameWorker {
 			}
 			if (o instanceof MoveableGameObject) {
 				MoveableGameObject mgo = (MoveableGameObject) o;
-				mgo.onMove(delta, geometry);
+				synchronized (o) {
+					mgo.onMove(delta, geometry);
+				}
 				if (o instanceof MotionAIControllable) {
 					MovingUnitAI ai = (MovingUnitAI) ((MotionAIControllable) o)
 							.getAI();

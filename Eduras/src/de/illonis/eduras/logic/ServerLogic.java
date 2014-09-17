@@ -379,11 +379,12 @@ public class ServerLogic implements GameLogicInterface {
 									blinkEvent.getBlinkTarget());
 
 					// set player to the target
-					gameInfo.getEventTriggerer()
-							.guaranteeSetPositionOfObjectAtCenter(
-									blinkingPlayer.getPlayerMainFigure()
-											.getId(), actualBlinkTarget);
-
+					synchronized (blinkingMainFigure) {
+						gameInfo.getEventTriggerer()
+								.guaranteeSetPositionOfObjectAtCenter(
+										blinkingPlayer.getPlayerMainFigure()
+												.getId(), actualBlinkTarget);
+					}
 				} catch (NoSpawnAvailableException e1) {
 					// TODO: Send a notification to the client, since it didn't
 					// figure it out itself that there is no spawn available
