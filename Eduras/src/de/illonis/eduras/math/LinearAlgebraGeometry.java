@@ -139,7 +139,6 @@ public class LinearAlgebraGeometry extends SimpleGeometry {
 		if (collisions.size() > 1) {
 			resultingCollisionPoint = CollisionPoint
 					.findNearestCollision(collisions);
-			System.out.println("Multiple collisions!");
 		} else {
 			if (collisions.size() > 0) {
 				resultingCollisionPoint = collisions.getFirst();
