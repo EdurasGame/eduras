@@ -108,7 +108,7 @@ public abstract class BasicGameMode implements GameMode {
 		}
 	}
 
-	protected void stopGeneratingResourcesInBaseForTeam(Base base, Team team) {
+	protected void stopGeneratingResourcesInBase(Base base) {
 		// stop generating resources for the team
 		base.getTimingSource().removeTimedEventHandler(
 				baseToResourceGenerator.get(base));
@@ -154,6 +154,10 @@ public abstract class BasicGameMode implements GameMode {
 			gameInfo.getEventTriggerer().removeObject(neutralBase.getId());
 		}
 		baseToVertex.clear();
+
+		for (Base base : baseToResourceGenerator.keySet()) {
+			stopGeneratingResourcesInBase(base);
+		}
 		baseToResourceGenerator.clear();
 	}
 

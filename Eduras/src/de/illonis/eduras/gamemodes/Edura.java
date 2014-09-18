@@ -262,7 +262,7 @@ public class Edura extends TeamDeathmatch {
 
 	@Override
 	public void onBaseLost(Base base, Team losingTeam) {
-		stopGeneratingResourcesInBaseForTeam(base, losingTeam);
+		stopGeneratingResourcesInBase(base);
 	}
 
 	@Override
@@ -358,6 +358,11 @@ public class Edura extends TeamDeathmatch {
 		for (Player player : gameInfo.getPlayers()) {
 			gameInfo.getEventTriggerer().changeInteractMode(
 					player.getPlayerId(), InteractMode.MODE_EGO);
+		}
+
+		for (Team team : teams) {
+			gameInfo.getEventTriggerer().changeResourcesOfTeamByAmount(team,
+					-team.getResource());
 		}
 
 		loadNodes();
