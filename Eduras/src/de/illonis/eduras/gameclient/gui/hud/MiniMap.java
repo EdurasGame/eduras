@@ -69,6 +69,8 @@ public class MiniMap extends ClickableGuiElement {
 
 	final static int SIZE = 150;
 
+	private static final float PLAYER_EXTRA_SCALE = 5;
+
 	private final Rectangle bounds;
 
 	protected MiniMap(UserInterface gui) {
@@ -161,7 +163,8 @@ public class MiniMap extends ClickableGuiElement {
 					|| getInfo().getGameMode().getRelation(object.getPlayer(),
 							player) == Relation.ALLIED) {
 				g.setColor(object.getColor().multiply(COLOR_MULTIPLIER));
-				g.fillOval(object.getX(), object.getY(), object.getWidth(),
+				g.fillOval(object.getX() - object.getWidth() / 2, object.getY()
+						- object.getHeight() / 2, object.getWidth(),
 						object.getHeight());
 			}
 		}
@@ -366,8 +369,8 @@ public class MiniMap extends ClickableGuiElement {
 		float y = miniPos.y;
 
 		if (o instanceof PlayerMainFigure) {
-			float w = o.getShape().getWidth() * scale;
-			float h = o.getShape().getHeight() * scale;
+			float w = o.getShape().getWidth() * scale * PLAYER_EXTRA_SCALE;
+			float h = o.getShape().getHeight() * scale * PLAYER_EXTRA_SCALE;
 
 			synchronized (players) {
 				players.put(o.getId(), new MiniMapPlayer((PlayerMainFigure) o,
@@ -436,8 +439,11 @@ public class MiniMap extends ClickableGuiElement {
 		switch (object.getType()) {
 		case PLAYER:
 			MiniMapPlayer p = players.get(object.getId());
+			Vector2f centerPositionOfPlayer = gameToMinimapPosition(p
+					.getPlayer().getCenterPosition());
 			if (p != null)
-				p.setLocation(x, y);
+				p.setLocation(centerPositionOfPlayer.getX(),
+						centerPositionOfPlayer.getY());
 			break;
 		case NEUTRAL_BASE:
 			bases.get(object.getId()).setLocation(x, y);
