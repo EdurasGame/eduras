@@ -406,8 +406,6 @@ public class GameRenderer implements TooltipHandler {
 
 	private void renderShape(GameObject d, Graphics g) {
 		if (d.getShape() != null) {
-			g.setColor(OUTLINE_COLOR);
-			g.draw(d.getShape());
 
 			Color colorOfObject = getColorForObject(d);
 			switch (d.getVisibility()) {
@@ -425,6 +423,9 @@ public class GameRenderer implements TooltipHandler {
 			}
 			g.setColor(colorOfObject);
 			g.fill(d.getShape());
+			g.setLineWidth(2f);
+			g.setColor(OUTLINE_COLOR);
+			g.draw(d.getShape());
 		}
 	}
 
