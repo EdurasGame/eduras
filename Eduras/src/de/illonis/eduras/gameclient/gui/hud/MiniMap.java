@@ -26,6 +26,7 @@ import de.illonis.eduras.gameclient.gui.hud.minimap.MiniMapPlayer;
 import de.illonis.eduras.gameobjects.Base;
 import de.illonis.eduras.gameobjects.DynamicPolygonObject;
 import de.illonis.eduras.gameobjects.GameObject;
+import de.illonis.eduras.gameobjects.GameObject.Relation;
 import de.illonis.eduras.items.weapons.Missile;
 import de.illonis.eduras.items.weapons.Weapon;
 import de.illonis.eduras.maps.NodeData;
@@ -156,7 +157,9 @@ public class MiniMap extends ClickableGuiElement {
 		List<MiniMapPlayer> ps = new LinkedList<MiniMapPlayer>(players.values());
 		for (int i = 0; i < ps.size(); i++) {
 			MiniMapPlayer object = ps.get(i);
-			if (player == null || object.getPlayer().isVisibleFor(player)) {
+			if (player == null
+					|| getInfo().getGameMode().getRelation(object.getPlayer(),
+							player) == Relation.ALLIED) {
 				g.setColor(object.getColor().multiply(COLOR_MULTIPLIER));
 				g.fillOval(object.getX(), object.getY(), object.getWidth(),
 						object.getHeight());
