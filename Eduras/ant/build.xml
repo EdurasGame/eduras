@@ -53,8 +53,6 @@
 			<fileset dir="${base}">
 				<include name="/licenses/**"></include>
 			</fileset>
-			<zipgroupfileset dir="${base}${libs}" includes="*.jar" />
-			<fileset dir="${base}${libs}" includes="native/**" />
 			<fileset file="gitversion" />
 			<manifest>
 				<attribute name="Main-Class"
@@ -80,7 +78,6 @@
 				<include name="/licenses/**"></include>
 			</fileset>
 			<zipgroupfileset dir="${base}${libs}" includes="*.jar" />
-			<fileset dir="${base}${libs}" includes="native/**" />
 			<fileset file="gitversion" />
 			<manifest>
 				<attribute name="Main-Class" value="de.illonis.eduras.mapeditor.MapEditor" />
