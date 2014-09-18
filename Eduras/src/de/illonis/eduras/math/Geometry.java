@@ -447,16 +447,34 @@ public class Geometry {
 				if (interceptPoint == null) {
 					continue;
 				} else {
+					float angle = getAngleBetweenLines(borderLine, line);
 
 					CollisionPoint interception = CollisionPoint
 							.createCollisionPointByInterceptPoint(
-									interceptPoint, line, 0);
+									interceptPoint, line, angle);
 					interceptPoints.add(interception);
 				}
 
 			}
 		}
 		return interceptPoints;
+	}
+
+	/**
+	 * Returns the angle between two lines, that is, the angle between their
+	 * directional vectors.
+	 * 
+	 * @param first
+	 * @param second
+	 * @return angle between lines
+	 */
+	public static float getAngleBetweenLines(Line first, Line second) {
+		Vector2df directionalVectorOfFirst = new Vector2df(
+				getDirectionalVectorOfLine(first));
+		Vector2df directionalVectorOfSecond = new Vector2df(
+				getDirectionalVectorOfLine(second));
+		return directionalVectorOfFirst
+				.getAngleBetween(directionalVectorOfSecond);
 	}
 
 	/**
@@ -544,10 +562,21 @@ public class Geometry {
 	 */
 	public static Vector2f getPointOnLineAt(Line line, float lambda) {
 		Vector2f startPoint = new Vector2f(line.getX1(), line.getY1());
-		Vector2f endPoint = new Vector2f(line.getX2(), line.getY2());
-
-		Vector2f directionalVector = endPoint.sub(startPoint);
+		Vector2f directionalVector = getDirectionalVectorOfLine(line);
 		return startPoint.add(directionalVector.scale(lambda));
+	}
+
+	/**
+	 * Returns the directional vector of a line.
+	 * 
+	 * @param line
+	 * @return the directional vector
+	 */
+	public static Vector2f getDirectionalVectorOfLine(Line line) {
+		Vector2f startPoint = new Vector2f(line.getX1(), line.getY1());
+		Vector2f endPoint = new Vector2f(line.getX2(), line.getY2());
+		endPoint.sub(startPoint);
+		return endPoint;
 	}
 
 	/**
