@@ -11,6 +11,7 @@ import org.newdawn.slick.geom.Vector2f;
 import de.illonis.eduras.ObjectFactory.ObjectType;
 import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.gameobjects.MoveableGameObject;
+import de.illonis.eduras.utils.Pair;
 
 /**
  * A very dump and slow implementation of geometry. (fma) I don't even think
@@ -51,14 +52,28 @@ public class SimpleGeometry implements ShapeGeometry {
 
 	@Override
 	public Vector2f moveTo(MoveableGameObject object, Vector2f target,
-			Collection<GameObject> touched, Collection<GameObject> collided) {
+			Collection<Pair<GameObject, Float>> touched,
+			Collection<Pair<GameObject, Float>> collided) {
 		Shape shape = object.getShape();
 		Vector2f diff = new Vector2f(object.getShapeOffsetX(),
 				object.getShapeOffsetY());
 		Vector2f shapeTarget = target.copy().add(diff);
 		Vector2f shapeLocation = new Vector2f(shape.getX(), shape.getY());
 		shape.setLocation(shapeTarget);
-		getObjectsIn(shape, touched, collided, object);
+
+		LinkedList<GameObject> touchedObjects = new LinkedList<GameObject>();
+		LinkedList<GameObject> collidedObjects = new LinkedList<GameObject>();
+		getObjectsIn(shape, touchedObjects, collidedObjects, object);
+
+		for (GameObject aTouchedObject : touchedObjects) {
+			touched.add(new Pair<GameObject, Float>(aTouchedObject,
+					ShapeGeometry.UNKNOWN_ANGLE));
+		}
+
+		for (GameObject aCollidedObject : collidedObjects) {
+			collided.add(new Pair<GameObject, Float>(aCollidedObject,
+					ShapeGeometry.UNKNOWN_ANGLE));
+		}
 
 		shape.setLocation(shapeLocation);
 		if (collided.isEmpty())

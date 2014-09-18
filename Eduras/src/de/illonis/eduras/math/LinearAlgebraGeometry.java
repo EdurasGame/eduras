@@ -1,6 +1,7 @@
 package de.illonis.eduras.math;
 
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.TreeSet;
@@ -14,6 +15,7 @@ import de.illonis.edulog.EduLog;
 import de.illonis.eduras.exceptions.ShapeNotSupportedException;
 import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.gameobjects.MoveableGameObject;
+import de.illonis.eduras.utils.Pair;
 
 /**
  * This geometry implementation identifies the cases where
@@ -44,7 +46,8 @@ public class LinearAlgebraGeometry extends SimpleGeometry {
 
 	@Override
 	public Vector2f moveTo(MoveableGameObject movingObject, Vector2f target,
-			Collection<GameObject> touched, Collection<GameObject> collided) {
+			Collection<Pair<GameObject, Float>> touched,
+			Collection<Pair<GameObject, Float>> collided) {
 
 		Vector2f result = new Vector2f(target);
 		Map<Integer, GameObject> gameObjects = movingObject.getGame()
@@ -71,6 +74,7 @@ public class LinearAlgebraGeometry extends SimpleGeometry {
 				movingObject.getShape(), target);
 		TreeSet<GameObject> touchedObjects = new TreeSet<GameObject>(
 				new GameObject.GameObjectIdComparator());
+		HashMap<GameObject, Float> angleOfTouchedObjects = new HashMap<GameObject, Float>();
 
 		LinkedList<CollisionPoint> collisions = new LinkedList<CollisionPoint>();
 
@@ -125,10 +129,15 @@ public class LinearAlgebraGeometry extends SimpleGeometry {
 				collisions.add(nearestCollision);
 			} else {
 				touchedObjects.add(singleObject);
+				angleOfTouchedObjects.put(singleObject,
+						nearestCollision.getAngle());
 			}
 		}
 
-		touched.addAll(touchedObjects);
+		for (GameObject aTouchedObject : touchedObjects) {
+			touched.add(new Pair<GameObject, Float>(aTouchedObject,
+					angleOfTouchedObjects.get(aTouchedObject)));
+		}
 
 		if (!movingObject.isCollidable(null)) {
 			return result;
@@ -148,7 +157,8 @@ public class LinearAlgebraGeometry extends SimpleGeometry {
 		// if there was a collision, notify the involved objects and calculate
 		// the new position
 		if (collisionObject != null) {
-			collided.add(collisionObject);
+			collided.add(new Pair<GameObject, Float>(collisionObject,
+					resultingCollisionPoint.getAngle()));
 
 			// Use the following code as an alternative. Gives more accurate
 			// results, but is visually ugly and can lead to stucking at edges

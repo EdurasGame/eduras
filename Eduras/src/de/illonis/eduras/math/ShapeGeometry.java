@@ -7,6 +7,7 @@ import org.newdawn.slick.geom.Vector2f;
 
 import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.gameobjects.MoveableGameObject;
+import de.illonis.eduras.utils.Pair;
 
 /**
  * Provides methods to compute collision between objects.
@@ -15,6 +16,8 @@ import de.illonis.eduras.gameobjects.MoveableGameObject;
  * 
  */
 public interface ShapeGeometry {
+
+	public Float UNKNOWN_ANGLE = new Float(-1);
 
 	/**
 	 * Checks for touching objects.
@@ -35,17 +38,20 @@ public interface ShapeGeometry {
 	 * @param target
 	 *            the target position.
 	 * @param touched
-	 *            returns a list of objects that are touched on movement.
+	 *            returns a list of objects that are touched on movement and the
+	 *            angle between the direction of moving and the touched object.
+	 *            If the angle is -1 it is unknown.
 	 * @param collided
-	 *            returns a list of objects that are collided on movement. This
-	 *            will likely contain only the first object colliding, as
-	 *            movement stops on first collision.
+	 *            returns a list of objects that are collided on movement and
+	 *            the respective angle. This will likely contain only the first
+	 *            object colliding, as movement stops on first collision.
 	 * @return the new position of this object.<br>
 	 *         A second call on this method with identical parameters will
 	 *         return the same result if environment did not change.
 	 */
 	Vector2f moveTo(MoveableGameObject object, Vector2f target,
-			Collection<GameObject> touched, Collection<GameObject> collided);
+			Collection<Pair<GameObject, Float>> touched,
+			Collection<Pair<GameObject, Float>> collided);
 
 	/**
 	 * Tries to rotate a gameobject by given angle and computes the maximum

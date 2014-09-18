@@ -9,6 +9,7 @@ import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.exceptions.MapBorderReachedException;
 import de.illonis.eduras.interfaces.Moveable;
 import de.illonis.eduras.math.ShapeGeometry;
+import de.illonis.eduras.utils.Pair;
 
 /**
  * A moveable gameobject. It differs from {@link GameObject} because it has a
@@ -128,19 +129,21 @@ public abstract class MoveableGameObject extends GameObject implements Moveable 
 				.add(getPositionVector());
 
 		Vector2f targetPos;
-		LinkedList<GameObject> touched = new LinkedList<GameObject>();
-		LinkedList<GameObject> collided = new LinkedList<GameObject>();
+		LinkedList<Pair<GameObject, Float>> touched = new LinkedList<Pair<GameObject, Float>>();
+		LinkedList<Pair<GameObject, Float>> collided = new LinkedList<Pair<GameObject, Float>>();
 		targetPos = geometry.moveTo(this, target, touched, collided);
 		setPosition(targetPos);
-		for (Iterator<GameObject> iterator = collided.iterator(); iterator
+		for (Iterator<Pair<GameObject, Float>> iterator = collided.iterator(); iterator
 				.hasNext();) {
-			GameObject gameObject = iterator.next();
+			Pair<GameObject, Float> gameObjectAndAngle = iterator.next();
+			GameObject gameObject = gameObjectAndAngle.getFirst();
 			gameObject.onCollision(this);
 			onCollision(gameObject);
 		}
-		for (Iterator<GameObject> iterator = touched.iterator(); iterator
+		for (Iterator<Pair<GameObject, Float>> iterator = touched.iterator(); iterator
 				.hasNext();) {
-			GameObject gameObject = iterator.next();
+			Pair<GameObject, Float> gameObjectAndAngle = iterator.next();
+			GameObject gameObject = gameObjectAndAngle.getFirst();
 			gameObject.onTouch(this);
 			onTouch(gameObject);
 		}
