@@ -179,7 +179,7 @@ public abstract class Weapon extends UsableItem implements Lootable,
 	}
 
 	@Override
-	public void onCollision(GameObject collidingObject) {
+	public void onCollision(GameObject collidingObject, float angle) {
 		if (collidingObject.getType() != ObjectType.PLAYER) {
 			return;
 		}

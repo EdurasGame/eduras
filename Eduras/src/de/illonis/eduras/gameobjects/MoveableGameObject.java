@@ -139,8 +139,8 @@ public abstract class MoveableGameObject extends GameObject implements Moveable 
 			GameObject gameObject = gameObjectAndAngle.getFirst();
 			System.out.println("Collided with angle "
 					+ gameObjectAndAngle.getSecond());
-			gameObject.onCollision(this);
-			onCollision(gameObject);
+			gameObject.onCollision(this, gameObjectAndAngle.getSecond());
+			onCollision(gameObject, gameObjectAndAngle.getSecond());
 		}
 		for (Iterator<Pair<GameObject, Float>> iterator = touched.iterator(); iterator
 				.hasNext();) {

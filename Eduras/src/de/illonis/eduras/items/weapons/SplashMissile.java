@@ -39,8 +39,8 @@ public class SplashMissile extends Missile {
 	}
 
 	@Override
-	public void onCollision(GameObject collidingObject) {
-		super.onCollision(collidingObject);
+	public void onCollision(GameObject collidingObject, float angle) {
+		super.onCollision(collidingObject, angle);
 
 		int numberOfSplinters = S.Server.go_splashmissile_splinters;
 

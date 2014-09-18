@@ -69,7 +69,7 @@ public abstract class Block extends GameObject {
 	}
 
 	@Override
-	public void onCollision(GameObject collidingObject) {
+	public void onCollision(GameObject collidingObject, float angle) {
 		// do nothing
 	}
 

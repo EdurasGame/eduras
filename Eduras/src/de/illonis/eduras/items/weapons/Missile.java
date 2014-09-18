@@ -99,7 +99,7 @@ public abstract class Missile extends MoveableGameObject {
 	}
 
 	@Override
-	public void onCollision(GameObject collidingObject) {
+	public void onCollision(GameObject collidingObject, float angle) {
 		Relation relation = getGame().getGameSettings().getGameMode()
 				.getRelation(this, collidingObject);
 

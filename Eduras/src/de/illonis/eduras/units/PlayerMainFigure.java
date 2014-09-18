@@ -104,7 +104,7 @@ public class PlayerMainFigure extends Unit implements MovementControlable {
 	}
 
 	@Override
-	public void onCollision(GameObject collidingObject) {
+	public void onCollision(GameObject collidingObject, float angle) {
 		// do nothing
 		L.fine("I JUST COLLIDED!");
 	}

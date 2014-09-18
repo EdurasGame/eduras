@@ -35,8 +35,8 @@ public abstract class RespawnablePowerUp extends PowerUpItem implements
 	}
 
 	@Override
-	public void onCollision(GameObject collidingObject) {
-		super.onCollision(collidingObject);
+	public void onCollision(GameObject collidingObject, float angle) {
+		super.onCollision(collidingObject, angle);
 
 		// set up respawntimer
 		new RespawnItemTimer(getTimingSource());

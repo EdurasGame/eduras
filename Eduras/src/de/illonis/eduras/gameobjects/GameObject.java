@@ -441,11 +441,14 @@ public abstract class GameObject extends ReferencedEntity implements
 	 * 
 	 * @param collidingObject
 	 *            The object colliding with this object.
+	 * @param angle
+	 *            the angle at which the colliding object collides with this
+	 *            object
 	 * 
 	 * @see #isCollidable(GameObject)
 	 * @see #onTouch(GameObject)
 	 */
-	public abstract void onCollision(GameObject collidingObject);
+	public abstract void onCollision(GameObject collidingObject, float angle);
 
 	/**
 	 * This method is called when an object touches this object.<br>
@@ -453,7 +456,7 @@ public abstract class GameObject extends ReferencedEntity implements
 	 * is non-collding.<br>
 	 * This means, whenever a non-collidable object would collide if it was
 	 * collidable, this method is called instead of
-	 * {@link #onCollision(GameObject)}.
+	 * {@link #onCollision(GameObject, float)}.
 	 * 
 	 * @param touchingObject
 	 *            the object touching this object.

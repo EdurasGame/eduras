@@ -29,7 +29,7 @@ public class Building extends GameObject {
 	}
 
 	@Override
-	public void onCollision(GameObject collidingObject) {
+	public void onCollision(GameObject collidingObject, float angle) {
 	}
 
 	@Override

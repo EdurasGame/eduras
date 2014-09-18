@@ -57,8 +57,8 @@ public class AoEMissile extends Missile {
 	}
 
 	@Override
-	public void onCollision(GameObject collidingObject) {
-		super.onCollision(collidingObject);
+	public void onCollision(GameObject collidingObject, float angle) {
+		super.onCollision(collidingObject, angle);
 
 		LinkedList<GameObject> nearObjects = getGame().findObjectsInDistance(
 				new Vector2f(getShape().getCenterX(), getShape().getCenterY()),
