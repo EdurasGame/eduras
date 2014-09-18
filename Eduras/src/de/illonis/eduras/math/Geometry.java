@@ -448,7 +448,7 @@ public class Geometry {
 					continue;
 				} else {
 					float angle = getAngleBetweenLines(borderLine, line);
-					angle = BasicMath.calcModulo(angle, 180);
+					angle = angle > 180 ? 360 - angle : angle;
 
 					CollisionPoint interception = CollisionPoint
 							.createCollisionPointByInterceptPoint(
