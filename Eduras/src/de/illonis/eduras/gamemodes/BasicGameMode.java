@@ -238,6 +238,9 @@ public abstract class BasicGameMode implements GameMode {
 			return team;
 		}
 		Vertex vertex = baseToVertex.get(base);
+		if (vertex == null) {
+			return null;
+		}
 		if (vertex.getAdjacentVertices().isEmpty()
 				|| vertex.hasAdjacentNodeOfColor(team.getTeamId())) {
 			return team;
