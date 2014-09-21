@@ -51,6 +51,8 @@ import de.illonis.eduras.gameobjects.DynamicPolygonObject;
 import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.gameobjects.TimingSource;
 import de.illonis.eduras.gameobjects.TriggerArea;
+import de.illonis.eduras.items.Item;
+import de.illonis.eduras.items.weapons.Missile;
 import de.illonis.eduras.logic.EventTriggerer;
 import de.illonis.eduras.maps.Map;
 import de.illonis.eduras.maps.SpawnPosition;
@@ -819,12 +821,25 @@ public class GameInformation {
 
 		mainFigureShapeCopy.setCenterX(desiredBlinkTarget.x);
 		mainFigureShapeCopy.setCenterY(desiredBlinkTarget.y);
-		if (isAnyOfObjectsWithinBounds(mainFigureShapeCopy,
-				getAllCollidableObjects(blinkingMainFigure))) {
+		Collection<GameObject> blockingObjects = getAllCollidableObjects(blinkingMainFigure);
+		Collection<GameObject> itemsAndMissiles = getAllItemsAndMissiles(blockingObjects);
+		blockingObjects.removeAll(itemsAndMissiles);
+		if (isAnyOfObjectsWithinBounds(mainFigureShapeCopy, blockingObjects)) {
 			throw new NoSpawnAvailableException();
 		}
 
 		return desiredBlinkTarget;
+	}
+
+	private Collection<GameObject> getAllItemsAndMissiles(
+			Collection<GameObject> blockingObjects) {
+		Collection<GameObject> items = new LinkedList<GameObject>();
+		for (GameObject gameObject : blockingObjects) {
+			if ((gameObject instanceof Item) || (gameObject instanceof Missile)) {
+				items.add(gameObject);
+			}
+		}
+		return items;
 	}
 
 	/**
