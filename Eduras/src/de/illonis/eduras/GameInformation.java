@@ -570,7 +570,14 @@ public class GameInformation {
 
 	}
 
-	private static boolean isAnyOfObjectsWithinBounds(Shape bounds,
+	/**
+	 * Checks whether any of the given objects is within the given bounds.
+	 * 
+	 * @param bounds
+	 * @param gameObjects
+	 * @return true if there is an object within the bounds (or intersects it)
+	 */
+	public static boolean isAnyOfObjectsWithinBounds(Shape bounds,
 			Collection<GameObject> gameObjects) {
 		for (GameObject o : gameObjects) {
 			if (o.getShape().intersects(bounds)
@@ -831,10 +838,16 @@ public class GameInformation {
 		return desiredBlinkTarget;
 	}
 
-	private Collection<GameObject> getAllItemsAndMissiles(
-			Collection<GameObject> blockingObjects) {
+	/**
+	 * Returns all items and missiles among the given collection of objects.
+	 * 
+	 * @param objectsToConsider
+	 * @return all items and missiles
+	 */
+	public static Collection<GameObject> getAllItemsAndMissiles(
+			Collection<GameObject> objectsToConsider) {
 		Collection<GameObject> items = new LinkedList<GameObject>();
-		for (GameObject gameObject : blockingObjects) {
+		for (GameObject gameObject : objectsToConsider) {
 			if ((gameObject instanceof Item) || (gameObject instanceof Missile)) {
 				items.add(gameObject);
 			}
