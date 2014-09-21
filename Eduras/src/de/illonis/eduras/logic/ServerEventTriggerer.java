@@ -502,6 +502,7 @@ public class ServerEventTriggerer implements EventTriggerer {
 		}
 		reloadMap(gameInfo.getMap());
 		resetSettings();
+		gameInfo.getTimingSource().clear();
 		gameInfo.getGameSettings().getGameMode().onRoundStarts();
 		sendEvents(new StartRoundEvent());
 	}

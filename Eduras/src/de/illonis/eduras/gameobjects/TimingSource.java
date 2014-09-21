@@ -32,4 +32,9 @@ public interface TimingSource {
 	 */
 	boolean isRunning();
 
+	/**
+	 * Removes all {@link TimedEventHandler}s.
+	 */
+	void clear();
+
 }

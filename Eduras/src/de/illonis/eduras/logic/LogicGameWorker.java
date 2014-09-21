@@ -185,4 +185,9 @@ public abstract class LogicGameWorker implements Runnable, TimingSource {
 			TimedEventHandler eventHandler) {
 		timingTargets.remove(eventHandler);
 	}
+
+	@Override
+	public void clear() {
+		timingTargets.clear();
+	}
 }
