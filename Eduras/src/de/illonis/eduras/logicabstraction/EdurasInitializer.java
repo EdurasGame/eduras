@@ -204,7 +204,7 @@ public class EdurasInitializer {
 
 			@Override
 			public void guaranteeSetPositionOfObject(int objectId,
-					Vector2df newPosition) {
+					Vector2f newPosition) {
 			}
 
 			@Override

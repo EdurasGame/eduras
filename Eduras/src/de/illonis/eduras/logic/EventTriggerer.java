@@ -218,7 +218,7 @@ public interface EventTriggerer {
 	 * @param newPosition
 	 *            target position.
 	 */
-	void guaranteeSetPositionOfObject(int objectId, Vector2df newPosition);
+	void guaranteeSetPositionOfObject(int objectId, Vector2f newPosition);
 
 	/**
 	 * Moves a specific object to a new position instantly, where the position

@@ -355,7 +355,7 @@ public class ServerEventTriggerer implements EventTriggerer {
 	}
 
 	@Override
-	public void guaranteeSetPositionOfObject(int objectId, Vector2df newPosition) {
+	public void guaranteeSetPositionOfObject(int objectId, Vector2f newPosition) {
 		setPositionOfObject(objectId, newPosition, PacketType.TCP);
 	}
 
