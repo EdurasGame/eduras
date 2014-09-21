@@ -54,8 +54,9 @@ public interface EventTriggerer {
 	 *            spawn position.
 	 * @param speedVector
 	 *            speed of missile.
+	 * @return the id of the created missile
 	 */
-	void createMissile(ObjectType missileType, int owner, Vector2f position,
+	int createMissile(ObjectType missileType, int owner, Vector2f position,
 			Vector2f speedVector);
 
 	/**

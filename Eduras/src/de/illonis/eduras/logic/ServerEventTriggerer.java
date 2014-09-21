@@ -146,7 +146,7 @@ public class ServerEventTriggerer implements EventTriggerer {
 	}
 
 	@Override
-	public void createMissile(ObjectType missileType, int owner,
+	public int createMissile(ObjectType missileType, int owner,
 			Vector2f position, Vector2f speedVector) {
 
 		int missileId = createObjectWithCenterAt(missileType, position, owner);
@@ -155,7 +155,7 @@ public class ServerEventTriggerer implements EventTriggerer {
 			o = (Missile) gameInfo.findObjectById(missileId);
 		} catch (ObjectNotFoundException e) {
 			L.log(Level.WARNING, "Cannot find missile object!", e);
-			return;
+			return -1;
 		}
 
 		o.setSpeedVector(speedVector);
@@ -166,6 +166,7 @@ public class ServerEventTriggerer implements EventTriggerer {
 
 		sendEventToAll(me);
 
+		return missileId;
 	}
 
 	private void sendEventToAll(Event event) {
