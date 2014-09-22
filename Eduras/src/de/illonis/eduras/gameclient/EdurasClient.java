@@ -153,11 +153,11 @@ public class EdurasClient {
 			SysOutCatcher.startCatching();
 		}
 
-		// try {
-		// ResourceManager.extractNatives();
-		// } catch (UnsatisfiedLinkError | IOException e) {
-		// L.log(Level.SEVERE, "Could not extract native libraries.", e);
-		// }
+		 try {
+		 ResourceManager.extractNatives();
+		 } catch (UnsatisfiedLinkError | IOException e) {
+		 L.log(Level.SEVERE, "Could not extract native libraries.", e);
+		 }
 
 		try {
 			ResourceManager.extractResources();
@@ -167,7 +167,7 @@ public class EdurasClient {
 
 		if (!debug)
 			System.setProperty("org.lwjgl.librarypath",
-					(new File(PathFinder.findFile("data/lib/native")))
+					(new File(PathFinder.findFile("native")))
 							.getAbsolutePath());
 		EdurasSlickClient client = new EdurasSlickClient();
 		try {
