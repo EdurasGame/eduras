@@ -3,7 +3,13 @@ package de.illonis.eduras.images;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -17,7 +23,10 @@ import de.illonis.edulog.EduLog;
 import de.illonis.eduras.gameclient.datacache.CacheInfo;
 import de.illonis.eduras.gameclient.gui.game.GameRenderer;
 import de.illonis.eduras.locale.Localization;
+import de.illonis.eduras.settings.S;
 import de.illonis.eduras.utils.Pair;
+import de.illonis.eduras.utils.PathFinder;
+import de.illonis.eduras.utils.ResourceManager;
 
 /**
  * Provides utility features to load or interact with images stored in game
@@ -64,7 +73,7 @@ public class ImageFiler {
 		if (Display.getWidth() == res.getWidth()
 				&& Display.getHeight() == res.getHeight())
 			return 1f;
-		return GameRenderer.getRenderScale()/ GameRenderer.getRenderScale(res);
+		return GameRenderer.getRenderScale() / GameRenderer.getRenderScale(res);
 	}
 
 	private static Pair<ImageResolution, Float> calculateResolution() {
@@ -93,23 +102,41 @@ public class ImageFiler {
 	 *            file name of image. Must be relative to images-package.
 	 * @return image.
 	 * @throws SlickException
-	 *             when image could not be loaded.
+	 *             if image could not be loaded.
+	 * @throws IOException
+	 *             if image file could not be found/read.
 	 */
-	public static Image load(String fileName) throws SlickException {
+	public static Image load(String fileName) throws SlickException,
+			IOException {
 		Pair<ImageResolution, Float> resolution = calculateResolution();
 
 		float factor = resolution.getSecond();
 		Image image;
-		try {
+		if (S.Client.localres) {
 			image = new Image(CacheInfo.BASE_URL + fileName
 					+ resolution.getFirst().getSuffix());
-		} catch (RuntimeException | SlickException e) {
-			factor = getScaleFactor(ImageResolution.FULLHD);
-			image = new Image(CacheInfo.BASE_URL + fileName
-					+ ImageResolution.FULLHD.getSuffix());
-			L.log(Level.WARNING, "Could not load image " + fileName + " for "
-					+ resolution.getFirst().name()
-					+ ", falling back to fullHD at " + factor, e);
+		} else {
+			try {
+				Path imagePath = Paths.get(PathFinder
+						.findFile(ResourceManager.PATH_TO_IMAGES + fileName
+								+ resolution.getFirst().getSuffix()));
+				try (InputStream input = Files.newInputStream(imagePath,
+						StandardOpenOption.READ)) {
+					image = new Image(input, fileName, false);
+				}
+			} catch (RuntimeException | SlickException | IOException e) {
+				factor = getScaleFactor(ImageResolution.FULLHD);
+				Path imagePath = Paths.get(PathFinder
+						.findFile(ResourceManager.PATH_TO_IMAGES + fileName
+								+ ImageResolution.FULLHD.getSuffix()));
+				L.log(Level.WARNING, "Could not load image " + fileName
+						+ " for " + resolution.getFirst().name()
+						+ ", falling back to fullHD at " + factor, e);
+				try (InputStream input = Files.newInputStream(imagePath,
+						StandardOpenOption.READ)) {
+					image = new Image(input, fileName, false);
+				}
+			}
 		}
 
 		if (factor == 1f) {

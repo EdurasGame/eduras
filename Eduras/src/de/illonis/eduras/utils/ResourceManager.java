@@ -27,9 +27,11 @@ public class ResourceManager {
 			.getName());
 
 	private static final String RES_FOLDER = "data/";
+	private static final String IMAGE_FOLDER = "images/";
 	private static final String MAP_FOLDER = "maps/";
 
 	private static final String PATH_TO_MAPS = RES_FOLDER + MAP_FOLDER;
+	public static final String PATH_TO_IMAGES = RES_FOLDER + IMAGE_FOLDER;
 
 	private final static String[] nativeFiles = new String[] {
 			"jinput-dx8_64.dll", "jinput-dx8.dll", "jinput-raw_64.dll",
