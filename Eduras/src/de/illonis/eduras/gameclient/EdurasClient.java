@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.lang.reflect.Field;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -14,6 +16,7 @@ import de.illonis.edulog.EduLog;
 import de.illonis.eduras.SysOutCatcher;
 import de.illonis.eduras.gameclient.gui.hud.nifty.EdurasSlickClient;
 import de.illonis.eduras.settings.S;
+import de.illonis.eduras.utils.Pair;
 import de.illonis.eduras.utils.PathFinder;
 import de.illonis.eduras.utils.ReflectionTools;
 import de.illonis.eduras.utils.ResourceManager;
@@ -58,10 +61,13 @@ public class EdurasClient {
 
 		boolean debug = false;
 		// arguments are of form <parametername>=<parametervalue>
-		String[][] parametersWithValues = new String[args.length][2];
-
+		List<Pair<String, String>> parameters = new LinkedList<Pair<String, String>>();
 		for (int i = 0; i < args.length; i++) {
-			parametersWithValues[i] = args[i].split("=");
+			if (args[i].contains("=")) {
+				String[] details = args[i].split("=");
+				parameters
+						.add(new Pair<String, String>(details[0], details[1]));
+			}
 		}
 
 		String betaUser = "";
@@ -74,10 +80,9 @@ public class EdurasClient {
 
 		// read arguments
 		Level logLimit = DEFAULT_LOGLIMIT;
-		for (int i = 0; i < args.length; i++) {
-
-			String parameterName = parametersWithValues[i][0];
-			String parameterValue = parametersWithValues[i][1];
+		for (Pair<String, String> pair : parameters) {
+			String parameterName = pair.getFirst();
+			String parameterValue = pair.getSecond();
 
 			if (parameterName.startsWith(sClassName + ".")) {
 				try {
@@ -148,11 +153,11 @@ public class EdurasClient {
 			SysOutCatcher.startCatching();
 		}
 
-		try {
-			ResourceManager.extractNatives();
-		} catch (UnsatisfiedLinkError | IOException e) {
-			L.log(Level.SEVERE, "Could not extract native libraries.", e);
-		}
+		// try {
+		// ResourceManager.extractNatives();
+		// } catch (UnsatisfiedLinkError | IOException e) {
+		// L.log(Level.SEVERE, "Could not extract native libraries.", e);
+		// }
 
 		try {
 			ResourceManager.extractResources();
@@ -162,7 +167,8 @@ public class EdurasClient {
 
 		if (!debug)
 			System.setProperty("org.lwjgl.librarypath",
-					(new File(PathFinder.findFile("native"))).getAbsolutePath());
+					(new File(PathFinder.findFile("data/lib/native")))
+							.getAbsolutePath());
 		EdurasSlickClient client = new EdurasSlickClient();
 		try {
 			client.startGui(betaUser, betaPassword, serverIp, serverPort);
