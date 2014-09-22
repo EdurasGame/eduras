@@ -69,6 +69,7 @@
 			</fileset>
 			<fileset dir="${base}${src}">
 				<include name="**/*.png"></include>
+				<include name="**/*.png.*"></include>
 				<include name="**/*.erm"></include>
 				<include name="**/*.esh"></include>
 			</fileset>
@@ -126,7 +127,7 @@
 				<include name="**/*.png"></include>
 				<include name="**/*.properties"></include>
 			</fileset>
-			<zipgroupfileset dir="${base}${libs}" includes="edulog*.jar" />
+			<zipgroupfileset dir="${base}${libs}" includes="edulog*.jar, slick*.jar" />
 			<manifest>
 				<attribute name="Main-Class"
 					value="de.illonis.eduras.shapecreator.ShapeCreator" />
