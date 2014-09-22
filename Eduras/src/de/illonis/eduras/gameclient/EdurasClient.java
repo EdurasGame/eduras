@@ -125,6 +125,7 @@ public class EdurasClient {
 				break;
 			case "debug":
 				debug = true;
+				S.Client.localres = true;
 				break;
 			case "serverip":
 				serverIp = parameterValue;
