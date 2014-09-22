@@ -3,7 +3,6 @@ package de.illonis.eduras.utils;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
@@ -14,6 +13,7 @@ import java.nio.file.LinkOption;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.nio.file.StandardOpenOption;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -80,8 +80,10 @@ public class ResourceManager {
 							.equals(HashCalculator
 									.computeHash(new FileInputStream(
 											existingMapFile)))) {
+
 				try {
-					copyAndReplace(existingMapFile, mapInputStreamForCopy);
+					Files.copy(mapInputStreamForCopy, existingMapFile.toPath(),
+							StandardCopyOption.REPLACE_EXISTING);
 				} catch (IOException e) {
 					L.log(Level.WARNING, "Error when copying map file.", e);
 					continue;
@@ -89,25 +91,6 @@ public class ResourceManager {
 			}
 
 		}
-	}
-
-	private static void copyAndReplace(File fileToReplace,
-			InputStream streamToReplaceWith) throws IOException {
-		if (!fileToReplace.exists()) {
-			fileToReplace.createNewFile();
-		} else {
-			fileToReplace.delete();
-			fileToReplace.createNewFile();
-		}
-		FileOutputStream out = new FileOutputStream(fileToReplace);
-
-		byte[] buffer = new byte[1024];
-		int len = streamToReplaceWith.read(buffer);
-		while (len != -1) {
-			out.write(buffer, 0, len);
-			len = streamToReplaceWith.read(buffer);
-		}
-		out.close();
 	}
 
 	private static URI createFolderIfDoesntExist(String folderName)
@@ -151,38 +134,17 @@ public class ResourceManager {
 
 	public static File writeMapFile(String name, byte[] data)
 			throws IOException {
-
 		File file = new File(PathFinder.findFile(PATH_TO_MAPS + name
 				+ MapParser.FILE_EXTENSION));
-		if (file.exists() && file.isFile()) {
-			file.delete();
-		}
-		file.createNewFile();
-
-		FileOutputStream outputStream;
-		outputStream = new FileOutputStream(file);
-		outputStream.write(data);
-		outputStream.close();
-
+		Files.write(file.toPath(), data, StandardOpenOption.TRUNCATE_EXISTING,
+				StandardOpenOption.CREATE);
 		return file;
-
 	}
 
-	public static File createTemporaryFileFromResource(InputStream inputStream,
+	public static Path createTemporaryFileFromResource(InputStream inputStream,
 			String name) throws IOException {
-		File file = File.createTempFile(name, "eduras");
-
-		FileOutputStream outputStream = new FileOutputStream(file);
-
-		int byteData = 0;
-		do {
-			byteData = inputStream.read();
-			if (byteData != -1) {
-				outputStream.write(byteData);
-			}
-		} while (byteData != -1);
-
-		outputStream.close();
+		Path file = Files.createTempFile(name, "eduras");
+		Files.copy(inputStream, file, StandardCopyOption.REPLACE_EXISTING);
 		return file;
 	}
 }
