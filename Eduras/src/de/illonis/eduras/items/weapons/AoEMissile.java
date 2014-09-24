@@ -60,25 +60,36 @@ public class AoEMissile extends Missile {
 	public void onCollision(GameObject collidingObject, float angle) {
 		super.onCollision(collidingObject, angle);
 
-		LinkedList<GameObject> nearObjects = getGame().findObjectsInDistance(
-				new Vector2f(getShape().getCenterX(), getShape().getCenterY()),
-				getDamageRadius());
+		calculateAoEDamage(getGame(), this, collidingObject, getDamageRadius());
+	}
+
+	static void calculateAoEDamage(GameInformation game,
+			Missile damagingMissile, GameObject collidingObject,
+			float damageRadius) {
+		LinkedList<GameObject> nearObjects = game.findObjectsInDistance(
+				new Vector2f(damagingMissile.getShape().getCenterX(),
+						damagingMissile.getShape().getCenterY()), damageRadius);
 		for (GameObject nearObject : nearObjects) {
 			// do not handle collided object twice.
-			if (nearObject.equals(collidingObject) || nearObject.equals(this))
+			if (nearObject.equals(collidingObject)
+					|| nearObject.equals(damagingMissile))
 				continue;
-			Relation nearRelation = getGame().getGameSettings().getGameMode()
-					.getRelation(this, nearObject);
+			Relation nearRelation = game.getGameSettings().getGameMode()
+					.getRelation(damagingMissile, nearObject);
 
 			if (nearRelation == Relation.HOSTILE && nearObject.isUnit()) {
-				int damage = computeDamageForDistance(nearObject
-						.getDistanceTo(getCenterPosition()));
-				((Unit) nearObject).damagedBy(damage, getOwner());
+				int damage = computeDamageForDistance(
+						nearObject.getDistanceTo(damagingMissile
+								.getCenterPosition()),
+						damagingMissile.getDamage(), damageRadius);
+				((Unit) nearObject).damagedBy(damage,
+						damagingMissile.getOwner());
 			}
 		}
 	}
 
-	private int computeDamageForDistance(float distanceTo) {
-		return (int) (getDamage() * (1f - distanceTo / getDamageRadius()));
+	private static int computeDamageForDistance(float distanceTo, int damage,
+			float damageRadius) {
+		return (int) (damage * (1f - distanceTo / damageRadius));
 	}
 }
