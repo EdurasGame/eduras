@@ -11,6 +11,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
+import de.illonis.eduras.settings.S;
 import de.illonis.eduras.shapecreator.gui.DrawPanel;
 import de.illonis.eduras.shapecreator.gui.MenuPanel;
 import de.illonis.eduras.shapecreator.gui.PreviewPanel;
@@ -122,6 +123,7 @@ public class ShapeCreator {
 	 *            <i>unused</i>
 	 */
 	public static void main(String[] args) {
+		S.Client.localres = true;
 		ShapeCreator creator = new ShapeCreator();
 		creator.showFrame();
 	}

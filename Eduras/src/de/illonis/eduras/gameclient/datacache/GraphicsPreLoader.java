@@ -80,7 +80,7 @@ public final class GraphicsPreLoader {
 			try {
 				Image image = ImageFiler.load(pair.getValue());
 				ImageCache.addInventoryIcon(pair.getKey(), image);
-			} catch (SlickException e) {
+			} catch (SlickException | IOException e) {
 				L.log(Level.SEVERE,
 						"Inventory icon not found: " + pair.getValue(), e);
 			}
@@ -96,7 +96,7 @@ public final class GraphicsPreLoader {
 			try {
 				Image image = ImageFiler.load(pair.getValue());
 				ImageCache.addGuiImage(pair.getKey(), image);
-			} catch (SlickException e) {
+			} catch (SlickException | IOException e) {
 				L.log(Level.SEVERE,
 						"Guiimagefile not found: " + pair.getValue(), e);
 			}
@@ -129,7 +129,7 @@ public final class GraphicsPreLoader {
 			try {
 				Image image = ImageFiler.load(pair.getValue());
 				ImageCache.addImage(pair.getKey(), image);
-			} catch (SlickException e) {
+			} catch (SlickException | IOException e) {
 				L.log(Level.SEVERE, "Imagefile not found: " + pair.getValue(),
 						e);
 			}
