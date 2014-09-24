@@ -730,4 +730,13 @@ public interface EventTriggerer {
 	 * Restarts the game.
 	 */
 	void restartGame();
+
+	/**
+	 * Notify client that AoE damage has been dealt by the given object type at
+	 * the given position.
+	 * 
+	 * @param type
+	 * @param centerPosition
+	 */
+	void notifyAoEDamage(ObjectType type, Vector2f centerPosition);
 }

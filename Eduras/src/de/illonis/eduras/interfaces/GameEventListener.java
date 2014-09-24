@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 
 import de.illonis.eduras.Team;
+import de.illonis.eduras.events.AoEDamageEvent;
 import de.illonis.eduras.events.ClientRenameEvent;
 import de.illonis.eduras.events.DeathEvent;
 import de.illonis.eduras.events.GameEvent;
@@ -263,4 +264,11 @@ public interface GameEventListener {
 	 *            list of all teams
 	 */
 	void onTeamsSet(LinkedList<Team> teamList);
+
+	/**
+	 * Called when AoE damage was done somewhere.
+	 * 
+	 * @param event
+	 */
+	void onAoEDamage(AoEDamageEvent event);
 }

@@ -176,12 +176,12 @@ public final class S {
 		/**
 		 * Damage caused by one {@link SplashedMissile} object.
 		 */
-		public static int go_splashedmissile_damage = 3;
+		public static int go_splashedmissile_damage = 30;
 
 		/**
 		 * Area of Effect of {@link SplashedMissile}.
 		 */
-		public static float go_splashedmissile_damageradius = 1;
+		public static float go_splashedmissile_damageradius = 100;
 
 		/**
 		 * Size (radius) of {@link SplashedMissile}.
@@ -611,12 +611,6 @@ public final class S {
 		 * Determines if damage can be caused to units of the same team.
 		 */
 		public static boolean mp_teamattack = false;
-
-		/**
-		 * Determines how far a {@link SplashedMissile} can go before it
-		 * disappears.
-		 */
-		public static float go_splashedmissile_maxrange = 150;
 
 		/**
 		 * Determines the round time of a match in milliseconds.

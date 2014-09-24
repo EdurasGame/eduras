@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 
 import de.illonis.eduras.Team;
+import de.illonis.eduras.events.AoEDamageEvent;
 import de.illonis.eduras.events.ClientRenameEvent;
 import de.illonis.eduras.events.DeathEvent;
 import de.illonis.eduras.events.GameEvent;
@@ -356,5 +357,9 @@ public class HudNotifier implements GameEventListener {
 		for (GameEventListener obj : otherObjects) {
 			obj.onTeamsSet(teamList);
 		}
+	}
+
+	@Override
+	public void onAoEDamage(AoEDamageEvent event) {
 	}
 }

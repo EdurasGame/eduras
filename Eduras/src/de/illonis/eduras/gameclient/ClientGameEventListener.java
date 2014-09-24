@@ -6,6 +6,7 @@ import java.util.logging.Logger;
 
 import de.illonis.edulog.EduLog;
 import de.illonis.eduras.Team;
+import de.illonis.eduras.events.AoEDamageEvent;
 import de.illonis.eduras.events.ClientRenameEvent;
 import de.illonis.eduras.events.DeathEvent;
 import de.illonis.eduras.events.GameEvent;
@@ -229,5 +230,10 @@ public class ClientGameEventListener implements GameEventListener {
 	@Override
 	public void onTeamsSet(LinkedList<Team> teamList) {
 		ui.onTeamsSet(teamList);
+	}
+
+	@Override
+	public void onAoEDamage(AoEDamageEvent event) {
+		effects.onAoEDamage(event);
 	}
 }
