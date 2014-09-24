@@ -1,5 +1,6 @@
 package de.illonis.eduras;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedList;
 
@@ -32,6 +33,7 @@ public class Statistic {
 
 	/**
 	 * Creates a new empty statistic.
+	 * 
 	 */
 	public Statistic() {
 		stats = new HashMap<StatsProperty, HashMap<Integer, Integer>>();
@@ -113,24 +115,33 @@ public class Statistic {
 	}
 
 	/**
-	 * Returns the owner id of the player with the most frags.
+	 * Returns the a collection of those players with the most frags.
 	 * 
-	 * @return the best player's owner id.
+	 * @param amongPlayers
+	 *            the players to consider
+	 * 
+	 * @return list of best players
 	 */
-	public int findPlayerWithMostFrags() {
-		int maxPlayerId = -1;
+	public Collection<Player> findPlayersWithMostFrags(
+			Collection<Player> amongPlayers) {
+		LinkedList<Player> playersWithMostFrags = new LinkedList<Player>();
 		int maxFrags = 0;
 		HashMap<Integer, Integer> killsOfPlayer = stats
 				.get(StatsProperty.KILLS);
 
-		for (Integer playerId : killsOfPlayer.keySet()) {
-			if (killsOfPlayer.get(playerId) > maxFrags) {
-				maxFrags = killsOfPlayer.get(playerId);
-				maxPlayerId = playerId;
+		for (Player player : amongPlayers) {
+
+			if (killsOfPlayer.get(player.getPlayerId()) == maxFrags) {
+				playersWithMostFrags.add(player);
+			}
+			if (killsOfPlayer.get(player.getPlayerId()) > maxFrags) {
+				playersWithMostFrags.clear();
+				playersWithMostFrags.add(player);
+				maxFrags = killsOfPlayer.get(player.getPlayerId());
 			}
 		}
 
-		return maxPlayerId;
+		return playersWithMostFrags;
 	}
 
 	/**
