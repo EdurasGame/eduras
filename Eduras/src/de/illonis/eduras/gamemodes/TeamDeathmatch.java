@@ -174,4 +174,21 @@ public class TeamDeathmatch extends Deathmatch {
 		return teamB;
 	}
 
+	@Override
+	public void onTimeUp() {
+		int killsOfTeamA = gameInfo.getGameSettings().getStats()
+				.getKillsByTeam(teamA);
+		int killsOfTeamB = gameInfo.getGameSettings().getStats()
+				.getKillsByTeam(teamB);
+
+		int winnerId = -1;
+		if (killsOfTeamA > killsOfTeamB) {
+			winnerId = teamA.getTeamId();
+		}
+		if (killsOfTeamB > killsOfTeamA) {
+			winnerId = teamB.getTeamId();
+		}
+
+		gameInfo.getEventTriggerer().onMatchEnd(winnerId);
+	}
 }
