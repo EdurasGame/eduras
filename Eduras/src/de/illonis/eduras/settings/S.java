@@ -750,6 +750,11 @@ public final class S {
 		 */
 		public static boolean sv_switchteams = true;
 
+		/**
+		 * Determines how often a simplemissile bounces back from a wall.
+		 */
+		public static int go_simplemissile_bounces = 3;
+
 	}
 
 	/**

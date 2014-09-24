@@ -33,7 +33,7 @@ public class SimpleMissile extends Missile {
 		setSpeed(S.Server.go_simplemissile_speed);
 		setMaxRange(S.Server.go_simplemissile_maxrange);
 
-		bouncesLeft = 3;
+		bouncesLeft = S.Server.go_simplemissile_bounces;
 	}
 
 	@Override
