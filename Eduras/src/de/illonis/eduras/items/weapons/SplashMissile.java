@@ -83,7 +83,7 @@ public class SplashMissile extends Missile {
 
 	@Override
 	public boolean isCollidableWith(GameObject otherObject) {
-		if (otherObject instanceof Missile
+		if (otherObject.getType().equals(ObjectType.ASSAULT_MISSILE)
 				&& otherObject.getOwner() == getOwner()) {
 			return true;
 		} else {

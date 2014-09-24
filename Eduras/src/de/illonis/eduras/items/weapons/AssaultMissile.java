@@ -35,8 +35,9 @@ public class AssaultMissile extends Missile {
 
 	@Override
 	protected boolean isCollidableWith(GameObject otherObject) {
-		if (otherObject.getType() == ObjectType.MISSILE_SPLASH
-				&& otherObject.getOwner() == getOwner()) {
+		if ((otherObject.getType() == ObjectType.MISSILE_SPLASH && otherObject
+				.getOwner() == getOwner())
+				|| otherObject.getType() == ObjectType.MINE_MISSILE) {
 			return true;
 		} else {
 			return super.isCollidableWith(otherObject);

@@ -4,6 +4,7 @@ import org.newdawn.slick.geom.Circle;
 
 import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.ObjectFactory.ObjectType;
+import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.gameobjects.TimingSource;
 import de.illonis.eduras.settings.S;
 
@@ -32,5 +33,14 @@ public class MineMissile extends AoEMissile {
 		setShape(new Circle(S.Server.go_minemissile_shape_size,
 				S.Server.go_minemissile_shape_size,
 				S.Server.go_minemissile_shape_size));
+	}
+
+	@Override
+	protected boolean isCollidableWith(GameObject otherObject) {
+		if (otherObject.getType() == ObjectType.ASSAULT_MISSILE) {
+			return true;
+		} else {
+			return super.isCollidableWith(otherObject);
+		}
 	}
 }
