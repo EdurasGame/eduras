@@ -439,6 +439,10 @@ public class Geometry {
 			LinkedList<Line> lines, Polygon polygon) {
 		LinkedList<CollisionPoint> interceptPoints = new LinkedList<CollisionPoint>();
 
+		if (polygon instanceof Polygon) {
+			polygon = Geometry.turnCounterClockwise(polygon);
+		}
+
 		for (Line line : lines) {
 			for (Line borderLine : getBorderLines(polygon)) {
 				Vector2f interceptPoint = Geometry
@@ -667,5 +671,48 @@ public class Geometry {
 			Vector2f second) {
 		Vector2f copy = second.copy();
 		return copy.sub(first);
+	}
+
+	/**
+	 * Determines if the polygon's points are given clockwise.
+	 * 
+	 * @param polygon
+	 * @return true if yes
+	 */
+	public static boolean isClockWise(Polygon polygon) {
+		float[] polygonPoints = polygon.getPoints();
+
+		float sumOfEdges = 0;
+		for (int i = 0; i < polygonPoints.length / 2; i++) {
+			float x1 = polygonPoints[i * 2];
+			float y1 = polygonPoints[i * 2 + 1];
+			float x2 = polygonPoints[(i * 2 + 2) % polygonPoints.length];
+			float y2 = polygonPoints[(i * 2 + 3) % polygonPoints.length];
+
+			sumOfEdges += (x2 - x1) * (y1 + y2);
+		}
+
+		return sumOfEdges >= 0 ? true : false;
+	}
+
+	/**
+	 * If the given polygon's points are given counterclockwise, it returns the
+	 * polygon. If they are given clockwise, it returns a new polygon which's
+	 * points are given counterclockwise.
+	 * 
+	 * @param polygon
+	 * @return either the polygon if it's clockwise or a new one.
+	 */
+	public static Polygon turnCounterClockwise(Polygon polygon) {
+		float[] polygonPoints = polygon.getPoints();
+		if (isClockWise(polygon)) {
+			Polygon counterClockwisedPolygon = new Polygon();
+			for (int i = polygon.getPointCount() - 1; i >= 0; i--) {
+				counterClockwisedPolygon.addPoint(polygonPoints[i * 2],
+						polygonPoints[i * 2 + 1]);
+			}
+			return counterClockwisedPolygon;
+		}
+		return polygon;
 	}
 }
