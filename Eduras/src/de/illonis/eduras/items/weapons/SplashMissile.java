@@ -45,6 +45,8 @@ public class SplashMissile extends Missile {
 			AoEMissile.calculateAoEDamage(getGame(), this, collidingObject,
 					S.Server.go_splashedmissile_damageradius,
 					S.Server.go_splashedmissile_damage);
+			getGame().getEventTriggerer().notifyAoEDamage(getType(),
+					getCenterPosition());
 		}
 	}
 

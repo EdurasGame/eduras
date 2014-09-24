@@ -62,6 +62,8 @@ public class AoEMissile extends Missile {
 
 		calculateAoEDamage(getGame(), this, collidingObject, getDamageRadius(),
 				getDamage());
+		getGame().getEventTriggerer().notifyAoEDamage(getType(),
+				getCenterPosition());
 	}
 
 	static void calculateAoEDamage(GameInformation game,

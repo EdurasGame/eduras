@@ -476,6 +476,10 @@ public class EdurasInitializer {
 			public void restartGame() {
 			}
 
+			@Override
+			public void notifyAoEDamage(ObjectType type, Vector2f centerPosition) {
+			}
+
 		});
 
 		networkManager.getClient().setEventHandler(new EventParser(logic));

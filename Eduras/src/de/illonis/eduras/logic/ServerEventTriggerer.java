@@ -31,6 +31,7 @@ import de.illonis.eduras.Team;
 import de.illonis.eduras.ai.movement.MotionAIControllable;
 import de.illonis.eduras.ai.movement.MovingUnitAI;
 import de.illonis.eduras.ai.movement.UnitNotControllableException;
+import de.illonis.eduras.events.AoEDamageEvent;
 import de.illonis.eduras.events.AreaConqueredEvent;
 import de.illonis.eduras.events.ClientRenameEvent;
 import de.illonis.eduras.events.DeathEvent;
@@ -1356,5 +1357,10 @@ public class ServerEventTriggerer implements EventTriggerer {
 			L.log(Level.SEVERE, "Error sending resource: message", e);
 		}
 
+	}
+
+	@Override
+	public void notifyAoEDamage(ObjectType type, Vector2f centerPosition) {
+		sendEventToAll(new AoEDamageEvent(type, centerPosition));
 	}
 }

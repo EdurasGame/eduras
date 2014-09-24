@@ -12,6 +12,7 @@ import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.ObjectFactory;
 import de.illonis.eduras.Player;
 import de.illonis.eduras.Team;
+import de.illonis.eduras.events.AoEDamageEvent;
 import de.illonis.eduras.events.AreaConqueredEvent;
 import de.illonis.eduras.events.ClientRenameEvent;
 import de.illonis.eduras.events.DeathEvent;
@@ -455,6 +456,9 @@ public class ClientLogic implements GameLogicInterface {
 
 				getListener().onGameModeChanged(newMode);
 
+				break;
+			case AOE_DAMAGE:
+				getListener().onAoEDamage((AoEDamageEvent) event);
 				break;
 			case SET_MAP: {
 				SetMapEvent setMapEvent = (SetMapEvent) event;

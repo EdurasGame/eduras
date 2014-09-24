@@ -14,9 +14,11 @@ import de.eduras.eventingserver.Event;
 import de.eduras.eventingserver.EventHandler;
 import de.eduras.eventingserver.exceptions.TooFewArgumentsExceptions;
 import de.illonis.edulog.EduLog;
+import de.illonis.eduras.ObjectFactory;
 import de.illonis.eduras.ObjectFactory.ObjectType;
 import de.illonis.eduras.Statistic.StatsProperty;
 import de.illonis.eduras.Team;
+import de.illonis.eduras.events.AoEDamageEvent;
 import de.illonis.eduras.events.AreaConqueredEvent;
 import de.illonis.eduras.events.BlinkEvent;
 import de.illonis.eduras.events.ClientRenameEvent;
@@ -422,6 +424,14 @@ public class EventParser implements EventHandler {
 				logic.onGameEventAppeared(new UnitSpellActionEvent(
 						gameEventNumber, (Integer) event.getArgument(0),
 						(Integer) event.getArgument(1)));
+				break;
+			case AOE_DAMAGE:
+				logic.onGameEventAppeared(new AoEDamageEvent(
+						ObjectFactory.ObjectType
+								.getObjectTypeByNumber((Integer) event
+										.getArgument(0)), new Vector2f(
+								(Float) event.getArgument(1), (Float) event
+										.getArgument(2))));
 				break;
 			case CREATE_UNIT:
 				logic.onGameEventAppeared(new CreateUnitEvent((Integer) event
