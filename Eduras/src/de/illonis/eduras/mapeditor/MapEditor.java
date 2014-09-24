@@ -14,6 +14,7 @@ import org.newdawn.slick.SlickException;
 import de.illonis.eduras.ObjectFactory.ObjectType;
 import de.illonis.eduras.mapeditor.gui.EditorWindow;
 import de.illonis.eduras.mapeditor.validate.MapValidator;
+import de.illonis.eduras.settings.S;
 import de.illonis.eduras.utils.PathFinder;
 import de.illonis.eduras.utils.ResourceManager;
 
@@ -41,17 +42,16 @@ public class MapEditor {
 	public static void main(String[] args) {
 		try {
 			ResourceManager.extractNatives();
-			if (args.length == 0) {
-				System.setProperty("org.lwjgl.librarypath", (new File(
-						PathFinder.findFile("native"))).getAbsolutePath());
-			}
 		} catch (UnsatisfiedLinkError | IOException e) {
 			JOptionPane.showMessageDialog(null, "Could not extract natives.",
 					"Error", JOptionPane.ERROR_MESSAGE);
 			System.exit(-1);
 		}
-
+		System.setProperty("org.lwjgl.librarypath",
+				(new File(PathFinder.findFile("native"))).getAbsolutePath());
+		S.Client.localres = true;
 		MapValidator.init();
+		
 		try {
 			MapEditor editor = new MapEditor();
 			editor.startUpdateCheck();

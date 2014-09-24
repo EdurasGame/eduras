@@ -778,6 +778,12 @@ public final class S {
 		public static boolean windowed = false;
 
 		public static boolean debug_render_shapes = false;
+
+		/**
+		 * Indicates that resources should be loaded from jar instead of data/
+		 * folder.
+		 */
+		public static boolean localres = false;
 	}
 
 	/**
