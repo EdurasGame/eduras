@@ -165,9 +165,9 @@ public class EdurasInitializer {
 		game.setEventTriggerer(new EventTriggerer() {
 
 			@Override
-			public void createMissile(ObjectType missileType, int owner,
+			public int createMissile(ObjectType missileType, int owner,
 					Vector2f position, Vector2f speedVector) {
-
+				return -1;
 			}
 
 			@Override
@@ -204,7 +204,7 @@ public class EdurasInitializer {
 
 			@Override
 			public void guaranteeSetPositionOfObject(int objectId,
-					Vector2df newPosition) {
+					Vector2f newPosition) {
 			}
 
 			@Override

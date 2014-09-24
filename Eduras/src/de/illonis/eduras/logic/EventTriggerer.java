@@ -54,8 +54,9 @@ public interface EventTriggerer {
 	 *            spawn position.
 	 * @param speedVector
 	 *            speed of missile.
+	 * @return the id of the created missile
 	 */
-	void createMissile(ObjectType missileType, int owner, Vector2f position,
+	int createMissile(ObjectType missileType, int owner, Vector2f position,
 			Vector2f speedVector);
 
 	/**
@@ -217,7 +218,7 @@ public interface EventTriggerer {
 	 * @param newPosition
 	 *            target position.
 	 */
-	void guaranteeSetPositionOfObject(int objectId, Vector2df newPosition);
+	void guaranteeSetPositionOfObject(int objectId, Vector2f newPosition);
 
 	/**
 	 * Moves a specific object to a new position instantly, where the position

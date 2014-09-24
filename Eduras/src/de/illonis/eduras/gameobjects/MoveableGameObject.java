@@ -121,7 +121,7 @@ public abstract class MoveableGameObject extends GameObject implements Moveable 
 
 	@Override
 	public void onMove(long delta, ShapeGeometry geometry) {
-		if (currentSpeedX == 0f && currentSpeedY == 0f)
+		if ((currentSpeedX == 0f && currentSpeedY == 0f) || speed == 0)
 			return;
 		float distance = speed * ((float) delta / 1000L);
 

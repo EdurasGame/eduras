@@ -4,7 +4,6 @@ import org.newdawn.slick.geom.Circle;
 
 import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.ObjectFactory.ObjectType;
-import de.illonis.eduras.events.SetVisibilityEvent;
 import de.illonis.eduras.gameobjects.TimingSource;
 import de.illonis.eduras.settings.S;
 
@@ -33,9 +32,5 @@ public class MineMissile extends AoEMissile {
 		setShape(new Circle(S.Server.go_minemissile_shape_size,
 				S.Server.go_minemissile_shape_size,
 				S.Server.go_minemissile_shape_size));
-		setVisible(Visibility.OWNER_TEAM);
-		SetVisibilityEvent visEvent = new SetVisibilityEvent(id,
-				Visibility.OWNER_TEAM);
-		game.getEventTriggerer().notifyGameObjectVisibilityChanged(visEvent);
 	}
 }

@@ -99,10 +99,24 @@ public class Deathmatch extends BasicGameMode {
 
 	@Override
 	public void onTimeUp() {
+
+		int winnerId = -1;
+
+		LinkedList<Player> playersWithMostFrags = new LinkedList<Player>(
+				gameInfo.getGameSettings().getStats()
+						.findPlayersWithMostFrags(gameInfo.getPlayers()));
+
+		if (!playersWithMostFrags.isEmpty()) {
+			if (playersWithMostFrags.size() > 1) {
+				// TODO: determine players with least deaths
+			} else {
+				winnerId = playersWithMostFrags.getFirst().getPlayerId();
+			}
+		}
+
 		try {
-			gameInfo.getEventTriggerer().onMatchEnd(
-					gameInfo.getGameSettings().getStats()
-							.findPlayerWithMostFrags());
+			gameInfo.getEventTriggerer().onMatchEnd(winnerId);
+
 		} catch (NullPointerException e) {
 			// FIXME: Client should never trigger this.
 		}

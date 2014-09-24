@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -146,7 +147,7 @@ public class ServerEventTriggerer implements EventTriggerer {
 	}
 
 	@Override
-	public void createMissile(ObjectType missileType, int owner,
+	public int createMissile(ObjectType missileType, int owner,
 			Vector2f position, Vector2f speedVector) {
 
 		int missileId = createObjectWithCenterAt(missileType, position, owner);
@@ -155,7 +156,7 @@ public class ServerEventTriggerer implements EventTriggerer {
 			o = (Missile) gameInfo.findObjectById(missileId);
 		} catch (ObjectNotFoundException e) {
 			L.log(Level.WARNING, "Cannot find missile object!", e);
-			return;
+			return -1;
 		}
 
 		o.setSpeedVector(speedVector);
@@ -166,6 +167,7 @@ public class ServerEventTriggerer implements EventTriggerer {
 
 		sendEventToAll(me);
 
+		return missileId;
 	}
 
 	private void sendEventToAll(Event event) {
@@ -354,7 +356,7 @@ public class ServerEventTriggerer implements EventTriggerer {
 	}
 
 	@Override
-	public void guaranteeSetPositionOfObject(int objectId, Vector2df newPosition) {
+	public void guaranteeSetPositionOfObject(int objectId, Vector2f newPosition) {
 		setPositionOfObject(objectId, newPosition, PacketType.TCP);
 	}
 
@@ -498,6 +500,11 @@ public class ServerEventTriggerer implements EventTriggerer {
 		gameInfo.getGameSettings().getGameMode().onRoundEnds();
 		for (Player player : gameInfo.getPlayers()) {
 			resetStats(player);
+		}
+		try {
+			gameInfo.getTimingSource().clear();
+		} catch (NoSuchElementException e) {
+			// first start, do nothing
 		}
 		reloadMap(gameInfo.getMap());
 		resetSettings();

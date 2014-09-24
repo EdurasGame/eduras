@@ -1,5 +1,6 @@
 package de.illonis.eduras.gameobjects;
 
+import java.util.Collection;
 import java.util.LinkedList;
 import java.util.logging.Logger;
 
@@ -8,10 +9,6 @@ import org.newdawn.slick.geom.Rectangle;
 import de.illonis.edulog.EduLog;
 import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.ObjectFactory.ObjectType;
-import de.illonis.eduras.exceptions.NoSpawnAvailableException;
-import de.illonis.eduras.maps.SpawnPosition;
-import de.illonis.eduras.maps.SpawnPosition.SpawnType;
-import de.illonis.eduras.math.Vector2df;
 import de.illonis.eduras.settings.S;
 
 public class Portal extends TriggerArea {
@@ -49,25 +46,20 @@ public class Portal extends TriggerArea {
 
 		if (partnerPortal != null) {
 
-			MoveableGameObject objectToBePorted = (MoveableGameObject) object;
-			partnerPortal.justPortedObjects.add(objectToBePorted);
-
-			LinkedList<GameObject> objectsToConsider = new LinkedList<GameObject>(
-					getGame().getObjects().values());
-			objectsToConsider.remove(partnerPortal);
-
-			try {
-				Vector2df positionToMoveTo = GameInformation
-						.findFreePointWithinSpawnPositionForShape(
-								new SpawnPosition((Rectangle) partnerPortal
-										.getShape(), SpawnType.ANY),
-								objectToBePorted.getShape(), objectsToConsider,
-								GameInformation.ATTEMPT_PER_SPAWNPOINT);
-				getGame().getEventTriggerer().guaranteeSetPositionOfObject(
-						objectToBePorted.getId(), positionToMoveTo);
-
-			} catch (NoSpawnAvailableException e) {
-				// do nothing, if all the room is occupied
+			Collection<GameObject> objectsToConsider = getGame()
+					.getAllCollidableObjects(object);
+			objectsToConsider.removeAll(GameInformation
+					.getAllItemsAndMissiles(objectsToConsider));
+			if (GameInformation.isAnyOfObjectsWithinBounds(
+					partnerPortal.getShape(), objectsToConsider)) {
+				// do nothing, the portal isn't free
+			} else {
+				MoveableGameObject objectToBePorted = (MoveableGameObject) object;
+				partnerPortal.justPortedObjects.add(objectToBePorted);
+				getGame().getEventTriggerer()
+						.guaranteeSetPositionOfObjectAtCenter(
+								objectToBePorted.getId(),
+								partnerPortal.getCenterPosition());
 			}
 		} else {
 			// nothing happens if there is no partner portal
