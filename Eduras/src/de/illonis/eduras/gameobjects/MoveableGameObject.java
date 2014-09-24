@@ -137,8 +137,6 @@ public abstract class MoveableGameObject extends GameObject implements Moveable 
 				.hasNext();) {
 			Pair<GameObject, Float> gameObjectAndAngle = iterator.next();
 			GameObject gameObject = gameObjectAndAngle.getFirst();
-			System.out.println("Collided with angle "
-					+ gameObjectAndAngle.getSecond());
 			gameObject.onCollision(this, gameObjectAndAngle.getSecond());
 			onCollision(gameObject, gameObjectAndAngle.getSecond());
 		}

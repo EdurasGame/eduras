@@ -40,7 +40,6 @@ public class SimpleMissile extends Missile {
 	public void onCollision(GameObject collidingObject, float angle) {
 		Relation relation = getGame().getGameSettings().getGameMode()
 				.getRelation(this, collidingObject);
-		System.out.println("angle between lines: " + angle);
 		if ((relation == Relation.HOSTILE || (relation == Relation.ALLIED && S.Server.mp_teamattack))
 				&& collidingObject.isUnit()) {
 			((Unit) collidingObject).damagedBy(getDamage(), getOwner());
@@ -60,8 +59,6 @@ public class SimpleMissile extends Missile {
 				}
 				currentSpeedVector.rotate(rotateAngle);
 				setSpeedVector(currentSpeedVector);
-				System.out.println("departure angle: "
-						+ currentSpeedVector.getAngleToXAxis());
 			} else {
 				removeSelf();
 			}
