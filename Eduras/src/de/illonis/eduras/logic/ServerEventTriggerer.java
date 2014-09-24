@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -500,9 +501,13 @@ public class ServerEventTriggerer implements EventTriggerer {
 		for (Player player : gameInfo.getPlayers()) {
 			resetStats(player);
 		}
+		try {
+			gameInfo.getTimingSource().clear();
+		} catch (NoSuchElementException e) {
+			// first start, do nothing
+		}
 		reloadMap(gameInfo.getMap());
 		resetSettings();
-		gameInfo.getTimingSource().clear();
 		gameInfo.getGameSettings().getGameMode().onRoundStarts();
 		sendEvents(new StartRoundEvent());
 	}
