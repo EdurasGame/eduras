@@ -60,12 +60,13 @@ public class AoEMissile extends Missile {
 	public void onCollision(GameObject collidingObject, float angle) {
 		super.onCollision(collidingObject, angle);
 
-		calculateAoEDamage(getGame(), this, collidingObject, getDamageRadius());
+		calculateAoEDamage(getGame(), this, collidingObject, getDamageRadius(),
+				getDamage());
 	}
 
 	static void calculateAoEDamage(GameInformation game,
 			Missile damagingMissile, GameObject collidingObject,
-			float damageRadius) {
+			float damageRadius, int maxDamage) {
 		LinkedList<GameObject> nearObjects = game.findObjectsInDistance(
 				new Vector2f(damagingMissile.getShape().getCenterX(),
 						damagingMissile.getShape().getCenterY()), damageRadius);
@@ -80,8 +81,7 @@ public class AoEMissile extends Missile {
 			if (nearRelation == Relation.HOSTILE && nearObject.isUnit()) {
 				int damage = computeDamageForDistance(
 						nearObject.getDistanceTo(damagingMissile
-								.getCenterPosition()),
-						damagingMissile.getDamage(), damageRadius);
+								.getCenterPosition()), maxDamage, damageRadius);
 				((Unit) nearObject).damagedBy(damage,
 						damagingMissile.getOwner());
 			}
