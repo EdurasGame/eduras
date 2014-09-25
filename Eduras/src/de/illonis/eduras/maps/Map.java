@@ -2,6 +2,7 @@ package de.illonis.eduras.maps;
 
 import java.io.IOException;
 import java.net.URL;
+import java.nio.file.Path;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Collection;
@@ -21,6 +22,7 @@ import de.illonis.eduras.maps.persistence.InvalidDataException;
 import de.illonis.eduras.maps.persistence.MapParser;
 import de.illonis.eduras.math.Vector2df;
 import de.illonis.eduras.utils.ResourceManager;
+import de.illonis.eduras.utils.ResourceManager.ResourceType;
 
 /**
  * A playable map for gaming.
@@ -325,8 +327,9 @@ public class Map {
 	 */
 	protected final void loadFromFile(String mapFileName)
 			throws InvalidDataException, IOException {
-
-		URL mapURL = ResourceManager.getMapFileUrl(mapFileName);
+		Path path = ResourceManager.resourceToPath(ResourceType.MAP,
+				mapFileName);
+		URL mapURL = path.toUri().toURL();
 
 		Map map = MapParser.readMap(mapURL);
 		initialObjects.clear();
