@@ -3,6 +3,7 @@ package de.illonis.eduras;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.Map.Entry;
 
 /**
  * Holds all statistics data.
@@ -221,5 +222,22 @@ public class Statistic {
 			kills += getKillsOfPlayer(player);
 		}
 		return kills;
+	}
+
+	/**
+	 * Creates a static deep copy that is not updated anymore.
+	 * 
+	 * @return a copy of current stat data.
+	 */
+	public Statistic copy() {
+		Statistic copy = new Statistic();
+		for (StatsProperty statType : StatsProperty.values()) {
+			for (Entry<Integer, Integer> entry : this.stats.get(statType)
+					.entrySet()) {
+				copy.stats.get(statType).put(entry.getKey().intValue(),
+						entry.getValue().intValue());
+			}
+		}
+		return copy;
 	}
 }
