@@ -59,7 +59,7 @@ public class ResourceManager {
 	}
 
 	public static void extractMaps() throws IOException {
-		Files.createDirectories(RES_FOLDER.resolve(ResourceType.MAP.getFolder()));
+		Files.createDirectories(resourceToPath(ResourceType.MAP, ""));
 
 		for (int i = 0; i < Map.defaultMaps.length; i++) {
 			String packedHash = "";
@@ -172,8 +172,20 @@ public class ResourceManager {
 		return path;
 	}
 
+	/**
+	 * Retrieves a path for a game resource.
+	 * 
+	 * @param type
+	 *            the type of resource.
+	 * @param fileName
+	 *            the filename.
+	 * @return the path.
+	 */
 	public static Path resourceToPath(ResourceType type, String fileName) {
-		return RES_FOLDER.resolve(type.getFolder()).resolve(fileName);
+		Path p = Paths.get(PathFinder.getBaseDir());
+
+		return p.resolve(RES_FOLDER).resolve(type.getFolder())
+				.resolve(fileName);
 	}
 
 	public static Path createTemporaryFileFromResource(InputStream inputStream,
