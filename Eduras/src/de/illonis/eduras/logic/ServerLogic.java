@@ -1,8 +1,6 @@
 package de.illonis.eduras.logic;
 
-import java.io.File;
-import java.net.MalformedURLException;
-import java.net.URL;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.logging.Level;
@@ -60,6 +58,7 @@ import de.illonis.eduras.locale.Localization;
 import de.illonis.eduras.units.PlayerMainFigure;
 import de.illonis.eduras.units.Unit;
 import de.illonis.eduras.utils.ResourceManager;
+import de.illonis.eduras.utils.ResourceManager.ResourceType;
 
 /**
  * Server logic.
@@ -425,18 +424,11 @@ public class ServerLogic implements GameLogicInterface {
 		}
 		case REQUEST_MAP:
 			RequestResourceEvent requestResourceEvent = (RequestResourceEvent) event;
-
-			try {
-				URL fileUrl = ResourceManager
-						.getMapFileUrl(requestResourceEvent.getResourceName());
-				gameInfo.getEventTriggerer().sendResource(
-						GameEventNumber.SEND_MAP,
-						requestResourceEvent.getOwner(),
-						requestResourceEvent.getResourceName(),
-						new File(fileUrl.getPath()));
-			} catch (MalformedURLException e1) {
-				L.log(Level.SEVERE, "Cannot read path", e1);
-			}
+			Path file = ResourceManager.resourceToPath(ResourceType.MAP,
+					requestResourceEvent.getResourceName());
+			gameInfo.getEventTriggerer().sendResource(GameEventNumber.SEND_MAP,
+					requestResourceEvent.getOwner(),
+					requestResourceEvent.getResourceName(), file);
 			break;
 		case JOIN_TEAM:
 			PlayerAndTeamEvent playerAndTeamEvent = (PlayerAndTeamEvent) event;

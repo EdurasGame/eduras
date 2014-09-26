@@ -2,7 +2,7 @@ package de.illonis.eduras.logic;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.MalformedURLException;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedList;
@@ -104,6 +104,7 @@ import de.illonis.eduras.units.InteractMode;
 import de.illonis.eduras.units.PlayerMainFigure;
 import de.illonis.eduras.units.Unit;
 import de.illonis.eduras.utils.ResourceManager;
+import de.illonis.eduras.utils.ResourceManager.ResourceType;
 
 /**
  * Server Event Triggerer
@@ -545,8 +546,9 @@ public class ServerEventTriggerer implements EventTriggerer {
 		SetMapEvent setMapEvent;
 		try {
 			setMapEvent = new SetMapEvent(map.getName(),
-					ResourceManager.getHashOfMap(map.getName()));
-		} catch (MalformedURLException e1) {
+					ResourceManager.getHashOfResource(ResourceType.MAP,
+							map.getName()));
+		} catch (IOException e1) {
 			L.log(Level.SEVERE, "Cannot calculate Hash of map!", e1);
 			setMapEvent = new SetMapEvent(map.getName(), "");
 		}
@@ -1348,11 +1350,11 @@ public class ServerEventTriggerer implements EventTriggerer {
 	}
 
 	@Override
-	public void sendResource(GameEventNumber type, int owner, String resName,
-			File file) {
+	public void sendResource(GameEventNumber type, int owner, String mapName,
+			Path file) {
 
 		try {
-			sendEventToClient(new SendResourceEvent(type, resName, file), owner);
+			sendEventToClient(new SendResourceEvent(type, mapName, file), owner);
 		} catch (IOException e) {
 			L.log(Level.SEVERE, "Error sending resource: message", e);
 		}
