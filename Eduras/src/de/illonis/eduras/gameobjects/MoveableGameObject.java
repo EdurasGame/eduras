@@ -139,17 +139,20 @@ public abstract class MoveableGameObject extends GameObject implements Moveable 
 			float angle = firstCollision.getSecond();
 			Vector2df distanceVector = new Vector2df(targetPos);
 			distanceVector.sub(getPositionVector());
-			float consumed = distanceVector.length() / distance;
+			// float consumed = distanceVector.length() / distance;
+			float consumed = 0;
 
 			Vector2df moveVector = new Vector2df(getSpeedVector());
 			moveVector.normalise();
 			if (angle < 90) {
-				consumed *= (180f - angle) / 90f;
+				consumed = (angle) / 90f;
 				moveVector.rotate(-(180f - angle));
 			} else {
-				consumed *= (angle) / 90f;
+				consumed = (180f - angle) / 90f;
 				moveVector.rotate(angle);
 			}
+			System.out.println("collision angle: " + angle + " move consumed: "
+					+ consumed);
 			moveVector.scale((1 - consumed) * distance);
 			targetPos.add(moveVector);
 		}
