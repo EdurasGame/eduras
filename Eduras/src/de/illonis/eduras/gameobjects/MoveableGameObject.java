@@ -9,6 +9,7 @@ import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.exceptions.MapBorderReachedException;
 import de.illonis.eduras.interfaces.Moveable;
 import de.illonis.eduras.math.ShapeGeometry;
+import de.illonis.eduras.math.Vector2df;
 import de.illonis.eduras.utils.Pair;
 
 /**
@@ -132,6 +133,27 @@ public abstract class MoveableGameObject extends GameObject implements Moveable 
 		LinkedList<Pair<GameObject, Float>> touched = new LinkedList<Pair<GameObject, Float>>();
 		LinkedList<Pair<GameObject, Float>> collided = new LinkedList<Pair<GameObject, Float>>();
 		targetPos = geometry.moveTo(this, target, touched, collided);
+
+		if (collided.size() > 0) {
+			Pair<GameObject, Float> firstCollision = collided.getFirst();
+			float angle = firstCollision.getSecond();
+			Vector2df distanceVector = new Vector2df(targetPos);
+			distanceVector.sub(getPositionVector());
+			float consumed = distanceVector.length() / distance;
+
+			Vector2df moveVector = new Vector2df(getSpeedVector());
+			moveVector.normalise();
+			if (angle < 90) {
+				consumed *= (180f - angle) / 90f;
+				moveVector.rotate(-(180f - angle));
+			} else {
+				consumed *= (angle) / 90f;
+				moveVector.rotate(angle);
+			}
+			moveVector.scale((1 - consumed) * distance);
+			targetPos.add(moveVector);
+		}
+
 		setPosition(targetPos);
 		for (Iterator<Pair<GameObject, Float>> iterator = collided.iterator(); iterator
 				.hasNext();) {
