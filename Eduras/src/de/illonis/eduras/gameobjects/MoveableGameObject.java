@@ -1,5 +1,6 @@
 package de.illonis.eduras.gameobjects;
 
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.LinkedList;
 
@@ -129,15 +130,16 @@ public abstract class MoveableGameObject extends GameObject implements Moveable 
 		Vector2f target = getSpeedVector().normalise().scale(distance)
 				.add(getPositionVector());
 
-		Vector2f targetPos;
+		Vector2f targetPosAfterMove;
 		LinkedList<Pair<GameObject, Float>> touched = new LinkedList<Pair<GameObject, Float>>();
 		LinkedList<Pair<GameObject, Float>> collided = new LinkedList<Pair<GameObject, Float>>();
-		targetPos = geometry.moveTo(this, target, touched, collided);
+		targetPosAfterMove = geometry.moveTo(this, target, touched, collided);
 
+		Vector2f targetPosAfterSlide = new Vector2f(targetPosAfterMove);
 		if (collided.size() > 0) {
 			Pair<GameObject, Float> firstCollision = collided.getFirst();
 			float angle = firstCollision.getSecond();
-			Vector2df distanceVector = new Vector2df(targetPos);
+			Vector2df distanceVector = new Vector2df(targetPosAfterSlide);
 			distanceVector.sub(getPositionVector());
 			// float consumed = distanceVector.length() / distance;
 			float consumed = 0;
@@ -151,13 +153,25 @@ public abstract class MoveableGameObject extends GameObject implements Moveable 
 				consumed = (180f - angle) / 90f;
 				moveVector.rotate(angle);
 			}
-			System.out.println("collision angle: " + angle + " move consumed: "
-					+ consumed);
+			// System.out.println("collision angle: " + angle +
+			// " move consumed: "
+			// + consumed);
 			moveVector.scale((1 - consumed) * distance);
-			targetPos.add(moveVector);
+			targetPosAfterSlide.add(moveVector);
+
+			setPosition(targetPosAfterSlide);
+			Collection<GameObject> objectsToConsider = getGame()
+					.getAllCollidableObjects(this);
+			if (!GameInformation.isAnyOfObjectsWithinBounds(getShape(),
+					objectsToConsider)) {
+				targetPosAfterMove = targetPosAfterSlide;
+			} else {
+				System.out
+						.println("Colliding with another object when sliding!");
+			}
 		}
 
-		setPosition(targetPos);
+		setPosition(targetPosAfterMove);
 		for (Iterator<Pair<GameObject, Float>> iterator = collided.iterator(); iterator
 				.hasNext();) {
 			Pair<GameObject, Float> gameObjectAndAngle = iterator.next();
