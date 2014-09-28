@@ -29,6 +29,11 @@ public class ServerLogicGameWorker extends LogicGameWorker {
 
 	@Override
 	public void gameUpdate(long delta) {
+
+		if (gameInformation.getGameSettings().getRemainingTime() <= 0) {
+			gameInformation.getGameSettings().getGameMode().onTimeUp();
+		}
+
 		for (DelayedLogicAction action : DelayedActionQueue.getActions()) {
 			if (action.timePassed(delta))
 				action.performAction(gameInformation);
