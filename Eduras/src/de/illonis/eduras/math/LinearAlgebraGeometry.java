@@ -26,6 +26,11 @@ import de.illonis.eduras.utils.Pair;
  */
 public class LinearAlgebraGeometry extends SimpleGeometry {
 
+	/**
+	 * Determines how far a away an object is set from a wall.
+	 */
+	private static final float DISTANCE_TO_BORDER = 0.001f;
+
 	private final static Logger L = EduLog
 			.getLoggerFor(LinearAlgebraGeometry.class.getName());
 
@@ -167,6 +172,7 @@ public class LinearAlgebraGeometry extends SimpleGeometry {
 					resultingCollisionPoint.getInterceptPoint());
 			Vector2f addOnVector = Geometry.invert(
 					resultingCollisionPoint.getDistanceVector()).getNormal();
+			addOnVector.scale(DISTANCE_TO_BORDER);
 			addOnVector.add(Geometry.calculateDistanceVector(
 					resultingCollisionPoint.getInterceptPointOnShape(),
 					positionVector));
