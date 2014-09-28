@@ -13,6 +13,7 @@ import de.illonis.edulog.EduLog;
 import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.ObjectFactory.ObjectType;
 import de.illonis.eduras.ReferencedEntity;
+import de.illonis.eduras.Team;
 import de.illonis.eduras.ai.AIControllable;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
 import de.illonis.eduras.exceptions.ShapeNotSupportedException;
@@ -530,16 +531,23 @@ public abstract class GameObject extends ReferencedEntity implements
 			} catch (ObjectNotFoundException e) {
 				return false;
 			}
-			return player.getTeam().equals(((Unit) other).getTeam());
+			Team playerTeam = player.getTeam();
+			Team otherTeam = ((Unit) other).getTeam();
+			if (playerTeam == null || otherTeam == null)
+				return false;
+			return playerTeam.equals(otherTeam);
 		case OWNER_ALLIED:
 			return (game.getGameSettings().getGameMode()
 					.getRelation(this, other) == Relation.ALLIED);
 		case TEAM:
 			if (!isUnit() || !other.isUnit())
 				return false;
-			Unit a = (Unit) this;
-			Unit b = (Unit) other;
-			return a.getTeam().equals(b.getTeam());
+			Team thisTeam = ((Unit) this).getTeam();
+			Team oTeam = ((Unit) other).getTeam();
+			if (thisTeam == null || oTeam == null) {
+				return false;
+			}
+			return thisTeam.equals(oTeam);
 		default:
 			return false;
 		}
