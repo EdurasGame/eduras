@@ -12,6 +12,7 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 
 import de.illonis.edulog.EduLog;
+import de.illonis.eduras.Player;
 import de.illonis.eduras.Statistic.PlayerStatEntry;
 import de.illonis.eduras.Statistic.StatsProperty;
 import de.illonis.eduras.Team;
@@ -63,6 +64,18 @@ public class StatisticsWindow extends RenderedGuiObject {
 		visible = false;
 		screenX = 0;
 		screenY = 0;
+	}
+
+	@Override
+	public void onPlayerJoined(int ownerId) {
+		Player p;
+		try {
+			p = getInfo().getPlayerByOwnerId(ownerId);
+			getInfo().getStatistics().addPlayerToStats(p);
+		} catch (ObjectNotFoundException e) {
+			L.log(Level.WARNING, "Could not add joined player to stats.", e);
+		}
+
 	}
 
 	/**
