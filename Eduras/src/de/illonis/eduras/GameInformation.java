@@ -56,6 +56,7 @@ import de.illonis.eduras.logic.EventTriggerer;
 import de.illonis.eduras.maps.Map;
 import de.illonis.eduras.maps.SpawnPosition;
 import de.illonis.eduras.maps.SpawnPosition.SpawnType;
+import de.illonis.eduras.maps.persistence.MapParser;
 import de.illonis.eduras.math.Geometry;
 import de.illonis.eduras.math.Vector2df;
 import de.illonis.eduras.settings.S;
@@ -479,7 +480,7 @@ public class GameInformation {
 		try {
 			setMapEvent = new SetMapEvent(map.getName(),
 					ResourceManager.getHashOfResource(ResourceType.MAP,
-							map.getName()));
+							map.getName() + MapParser.FILE_EXTENSION));
 		} catch (IOException e1) {
 			L.log(Level.SEVERE, "Cannot get hash of map!", e1);
 			return;
