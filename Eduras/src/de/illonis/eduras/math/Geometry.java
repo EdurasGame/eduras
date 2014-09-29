@@ -334,9 +334,14 @@ public class Geometry {
 
 				if (interceptionPoints[i] != null) {
 
+					Line tangent = getTangentOfCircleAtPoint(circle,
+							interceptionPoints[i]);
+					float angle = getAngleBetweenLines(tangent, singleLine);
+					angle = angle > 180 ? 360 - angle : angle;
+
 					CollisionPoint collisionPoint = CollisionPoint
 							.createCollisionPointByInterceptPoint(
-									interceptionPoints[i], singleLine, 0);
+									interceptionPoints[i], singleLine, angle);
 					result.add(collisionPoint);
 				}
 			}
@@ -344,6 +349,40 @@ public class Geometry {
 		}
 
 		return result;
+	}
+
+	/**
+	 * Returns the tangent of a circle at the given point
+	 * 
+	 * @param circle
+	 * @param pointOnCircle
+	 * @return tangent
+	 */
+	public static Line getTangentOfCircleAtPoint(Circle circle,
+			Vector2f pointOnCircle) {
+		Vector2f firstPointOfLine = pointOnCircle;
+		// Vector2f secondPointOfLine = ;
+		float mY = circle.getCenterY();
+		float mX = circle.getCenterX();
+		float bX = firstPointOfLine.x;
+		float bY = firstPointOfLine.y;
+
+		float x, y;
+		if (mX == bX) {
+			x = bX + 1;
+			y = bY;
+		} else {
+			if (mY == bY) {
+				x = bX;
+				y = bY + 1;
+			} else {
+				x = mX + 1;
+				y = (BasicMath.square(circle.getRadius()) - (bX - mX)
+						* (x - mX) + bY * mY - BasicMath.square(mY))
+						/ (bY - mY);
+			}
+		}
+		return new Line(firstPointOfLine, new Vector2f(x, y));
 	}
 
 	/**
