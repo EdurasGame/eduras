@@ -17,9 +17,9 @@ import de.illonis.eduras.SysOutCatcher;
 import de.illonis.eduras.gameclient.gui.hud.nifty.EdurasSlickClient;
 import de.illonis.eduras.settings.S;
 import de.illonis.eduras.utils.Pair;
-import de.illonis.eduras.utils.PathFinder;
 import de.illonis.eduras.utils.ReflectionTools;
 import de.illonis.eduras.utils.ResourceManager;
+import de.illonis.eduras.utils.ResourceManager.ResourceType;
 
 /**
  * Eduras? Game client for end user.
@@ -155,15 +155,14 @@ public class EdurasClient {
 		}
 
 		try {
-			ResourceManager.extractResources();
+			ResourceManager.extractMaps();
 		} catch (IOException e) {
 			L.log(Level.SEVERE, "Can not create data folder.");
 		}
 
 		if (!debug)
-			System.setProperty("org.lwjgl.librarypath",
-					(new File(PathFinder.findFile("data/lib/native")))
-							.getAbsolutePath());
+			System.setProperty("org.lwjgl.librarypath", ResourceManager
+					.resourceToPath(ResourceType.NATIVE_LIBRARY, "").toString());
 		EdurasSlickClient client = new EdurasSlickClient();
 		try {
 			client.startGui(betaUser, betaPassword, serverIp, serverPort);
@@ -171,5 +170,4 @@ public class EdurasClient {
 			L.log(Level.SEVERE, "Slick error at startup", e);
 		}
 	}
-
 }

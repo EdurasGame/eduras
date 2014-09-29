@@ -3,6 +3,7 @@ package de.illonis.eduras.networking;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.file.Path;
 import java.util.LinkedList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -73,6 +74,7 @@ import de.illonis.eduras.interfaces.GameLogicInterface;
 import de.illonis.eduras.math.Vector2df;
 import de.illonis.eduras.units.InteractMode;
 import de.illonis.eduras.utils.ResourceManager;
+import de.illonis.eduras.utils.ResourceManager.ResourceType;
 
 /**
  * This class serves as a bridge between the network and the logic. Events'
@@ -465,9 +467,9 @@ public class EventParser implements EventHandler {
 						(String) event.getArgument(1)));
 				break;
 			case SEND_MAP:
-				File mapFile;
+				Path mapFile;
 				try {
-					mapFile = ResourceManager.writeMapFile(
+					mapFile = ResourceManager.saveResource(ResourceType.MAP,
 							(String) event.getArgument(0),
 							(byte[]) event.getArgument(1));
 					logic.onGameEventAppeared(new SendResourceEvent(
