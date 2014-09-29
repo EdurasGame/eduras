@@ -12,16 +12,17 @@ import org.newdawn.slick.geom.Vector2f;
 import de.illonis.edulog.EduLog;
 import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.ObjectFactory.ObjectType;
+import de.illonis.eduras.Player;
 import de.illonis.eduras.ReferencedEntity;
 import de.illonis.eduras.Team;
 import de.illonis.eduras.ai.AIControllable;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
+import de.illonis.eduras.exceptions.PlayerHasNoTeamException;
 import de.illonis.eduras.exceptions.ShapeNotSupportedException;
 import de.illonis.eduras.mapeditor.EditorPlaceable;
 import de.illonis.eduras.math.CollisionPoint;
 import de.illonis.eduras.math.Geometry;
 import de.illonis.eduras.math.Vector2df;
-import de.illonis.eduras.units.PlayerMainFigure;
 import de.illonis.eduras.units.Unit;
 
 /**
@@ -524,14 +525,18 @@ public abstract class GameObject extends ReferencedEntity implements
 		case OWNER_TEAM:
 			if (!other.isUnit())
 				return false;
-			PlayerMainFigure player;
+			Player player;
 			try {
-				player = game.getPlayerByOwnerId(this.owner)
-						.getPlayerMainFigure();
+				player = game.getPlayerByOwnerId(this.owner);
 			} catch (ObjectNotFoundException e) {
 				return false;
 			}
-			Team playerTeam = player.getTeam();
+			Team playerTeam;
+			try {
+				playerTeam = player.getTeam();
+			} catch (PlayerHasNoTeamException e) {
+				return false;
+			}
 			Team otherTeam = ((Unit) other).getTeam();
 			if (playerTeam == null || otherTeam == null)
 				return false;
