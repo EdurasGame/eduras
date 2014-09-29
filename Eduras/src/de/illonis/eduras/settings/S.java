@@ -749,6 +749,11 @@ public final class S {
 		 */
 		public static int go_simplemissile_bounces = 3;
 
+		/**
+		 * Determines if objects slide at walls when they collide.
+		 */
+		public static boolean sv_collision_smooth = true;
+
 	}
 
 	/**
