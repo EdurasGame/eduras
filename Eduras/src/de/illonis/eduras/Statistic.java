@@ -285,4 +285,22 @@ public class Statistic {
 	public void resetStatsFor(Player player) {
 		findForPlayer(player).reset();
 	}
+
+	/**
+	 * Creates a static deep copy that is not updated anymore.
+	 * 
+	 * @return a copy of current stat data.
+	 */
+	public Statistic copy() {
+		Statistic copy = new Statistic();
+		for (int i = 0; i < stats.size(); i++) {
+			PlayerStatEntry entry = stats.get(i);
+			PlayerStatEntry copyEntry = new PlayerStatEntry(entry.getPlayer());
+			for (StatsProperty statType : StatsProperty.values()) {
+				copyEntry.setProperty(statType, entry.getProperty(statType));
+			}
+			copy.stats.add(copyEntry);
+		}
+		return copy;
+	}
 }

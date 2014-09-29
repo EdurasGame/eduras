@@ -80,6 +80,7 @@ public class UserInterface implements GuiResizeListener {
 	 *            the listener for guievents.
 	 * @param cache
 	 *            the chat cache object.
+	 * @param logic the logic
 	 */
 	public UserInterface(InformationProvider infos,
 			TooltipTriggererNotifier tooltipNotifier,

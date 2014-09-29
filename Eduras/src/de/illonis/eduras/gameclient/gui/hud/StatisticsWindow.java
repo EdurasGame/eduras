@@ -13,6 +13,7 @@ import org.newdawn.slick.Image;
 
 import de.illonis.edulog.EduLog;
 import de.illonis.eduras.Player;
+import de.illonis.eduras.Statistic;
 import de.illonis.eduras.Statistic.PlayerStatEntry;
 import de.illonis.eduras.Statistic.StatsProperty;
 import de.illonis.eduras.Team;
@@ -49,6 +50,9 @@ public class StatisticsWindow extends RenderedGuiObject {
 	private Font font, largeFont;
 	private int lineHeight;
 	private int sideInset;
+	private boolean useStored;
+	private Statistic storedStats;
+	private LinkedList<Team> storedTeams;
 
 	private int width, height;
 	private boolean visible;
@@ -64,6 +68,7 @@ public class StatisticsWindow extends RenderedGuiObject {
 		visible = false;
 		screenX = 0;
 		screenY = 0;
+		useStored = false;
 	}
 
 	@Override
@@ -89,6 +94,9 @@ public class StatisticsWindow extends RenderedGuiObject {
 	@Override
 	public void setVisible(boolean visible) {
 		this.visible = visible;
+		if (!visible) {
+			useStored = false;
+		}
 	}
 
 	@Override
@@ -134,8 +142,10 @@ public class StatisticsWindow extends RenderedGuiObject {
 				"Status", COLOR_HEADER);
 		// players
 		float y = screenY + topInset + lineHeight;
+
 		List<PlayerStatEntry> entries = new LinkedList<PlayerStatEntry>(
-				getInfo().getStatistics().getStatList());
+				getStats().getStatList());
+
 		if (getInfo().getGameMode().getNumber() == GameModeNumber.DEATHMATCH) {
 			for (PlayerStatEntry p : entries) {
 				y += lineHeight;
@@ -166,16 +176,11 @@ public class StatisticsWindow extends RenderedGuiObject {
 	private void drawHeader() {
 		String state = "";
 		if (getInfo().getGameMode() instanceof TeamDeathmatch) {
-			List<Team> teams = new LinkedList<Team>(getInfo().getTeams());
-			if (teams.size() == 2) {
-				state = teams.get(0).getName()
-						+ "  "
-						+ getInfo().getStatistics()
-								.getKillsByTeam(teams.get(0))
-						+ " : "
-						+ getInfo().getStatistics()
-								.getKillsByTeam(teams.get(1)) + "  "
-						+ teams.get(1).getName();
+			if (getTeams().size() == 2) {
+				state = getTeams().get(0).getName() + "  "
+						+ getStats().getKillsByTeam(getTeams().get(0)) + " : "
+						+ getStats().getKillsByTeam(getTeams().get(1)) + "  "
+						+ getTeams().get(1).getName();
 			}
 		} else {
 			state = getInfo().getGameMode().getName();
@@ -207,13 +212,16 @@ public class StatisticsWindow extends RenderedGuiObject {
 
 		// player's status, only show to own team
 		String status = "";
-		try {
-			if (data.getPlayer().getTeam()
-					.equals(getInfo().getPlayer().getTeam())) {
-				status = data.getPlayer().getCurrentMode().getDisplayName();
+		if (!useStored) {
+			try {
+				if (data.getPlayer().getTeam()
+						.equals(getInfo().getPlayer().getTeam())) {
+					status = data.getPlayer().getCurrentMode().getDisplayName();
+				}
+			} catch (PlayerHasNoTeamException | ObjectNotFoundException e) {
+				L.log(Level.WARNING,
+						"Could not determine current players team.", e);
 			}
-		} catch (PlayerHasNoTeamException | ObjectNotFoundException e) {
-			L.log(Level.WARNING, "Could not determine current players team.", e);
 		}
 		font.drawString(screenX + xPositions[3], y, status, COLOR_TEXT);
 	}
@@ -226,10 +234,12 @@ public class StatisticsWindow extends RenderedGuiObject {
 	@Override
 	public void onMatchEnd(MatchEndEvent event) {
 		Thread t = new Thread(delayedHider);
-		t.setName("DelayedHider");
+		t.setName("DelayedStatHider");
+		storedStats = getInfo().getStatistics().copy();
+		storedTeams = new LinkedList<Team>(getInfo().getTeams());
+		useStored = true;
 		setVisible(true);
 		t.start();
-		super.onMatchEnd(event);
 	}
 
 	private final Runnable delayedHider = new Runnable() {
@@ -241,7 +251,22 @@ public class StatisticsWindow extends RenderedGuiObject {
 				L.log(Level.SEVERE, "Interrupted when sleeping in delayHider.",
 						e);
 			}
+			useStored = false;
 			setVisible(false);
 		}
 	};
+
+	private LinkedList<Team> getTeams() {
+		if (useStored) {
+			return storedTeams;
+		} else
+			return new LinkedList<Team>(getInfo().getTeams());
+	}
+
+	private Statistic getStats() {
+		if (useStored) {
+			return storedStats;
+		} else
+			return getInfo().getStatistics();
+	}
 }

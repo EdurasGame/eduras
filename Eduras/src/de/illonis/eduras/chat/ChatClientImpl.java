@@ -68,10 +68,15 @@ public class ChatClientImpl implements ChatClient {
 			}
 
 			private void reset() {
-				for (ChatRoom room : allRooms) {
+				LinkedList<ChatRoom> allRoomsCopy = new LinkedList<ChatRoom>(
+						allRooms);
+				for (ChatRoom room : allRoomsCopy) {
 					removeRoom(room);
 				}
-				for (ChatUser aUser : allUsers) {
+
+				LinkedList<ChatUser> allUsersCopy = new LinkedList<ChatUser>(
+						allUsers);
+				for (ChatUser aUser : allUsersCopy) {
 					removeUser(aUser);
 				}
 			}
