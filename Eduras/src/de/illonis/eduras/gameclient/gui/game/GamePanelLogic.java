@@ -390,6 +390,7 @@ public class GamePanelLogic extends GameEventAdapter implements
 	@Override
 	public void pageUp() {
 		userInterface.getActionBar().setPage(PageNumber.MAIN);
+		currentClickState = ClickState.DEFAULT;
 	}
 
 	@Override
