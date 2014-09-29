@@ -537,7 +537,7 @@ public class EdurasServer {
 		EdurasServer edurasServer = new EdurasServer();
 
 		try {
-			ResourceManager.extractResources();
+			ResourceManager.extractMaps();
 		} catch (IOException e1) {
 			L.log(Level.SEVERE, "Could not extract resources.", e1);
 			return;

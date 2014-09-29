@@ -1,8 +1,8 @@
 package de.illonis.eduras.events;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.logging.Logger;
 
 import de.illonis.edulog.EduLog;
@@ -12,20 +12,20 @@ public class SendResourceEvent extends GameEvent {
 			.getName());
 
 	private final String resourceName;
-	private final File resource;
+	private final Path resource;
 
-	public SendResourceEvent(GameEventNumber type, String resourceName,
-			File resource) throws IOException {
+	public SendResourceEvent(GameEventNumber type, String mapName,
+			Path resource) throws IOException {
 		super(type);
 
-		this.resourceName = resourceName;
+		this.resourceName = mapName;
 		this.resource = resource;
 
-		putArgument(resourceName);
-		putArgument(Files.readAllBytes(resource.toPath()));
+		putArgument(mapName);
+		putArgument(Files.readAllBytes(resource));
 	}
 
-	public File getResource() {
+	public Path getResource() {
 		return resource;
 	}
 

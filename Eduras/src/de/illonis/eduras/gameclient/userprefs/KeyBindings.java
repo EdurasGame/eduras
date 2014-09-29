@@ -48,7 +48,7 @@ public final class KeyBindings implements ResettableSetting {
 		setDefaultKeyBinding(KeyBinding.ITEM_10, Input.KEY_0);
 		setDefaultKeyBinding(KeyBinding.PAGE_UP, Input.KEY_Q);
 		setDefaultKeyBinding(KeyBinding.CHAT, Input.KEY_ENTER);
-		setDefaultKeyBinding(KeyBinding.SWITCH_MODE, Input.KEY_M);
+		setDefaultKeyBinding(KeyBinding.SWITCH_MODE, Input.KEY_E);
 		setDefaultKeyBinding(KeyBinding.CANCEL, Input.KEY_ESCAPE);
 		setDefaultKeyBinding(KeyBinding.SHOW_STATS, Input.KEY_TAB);
 		setDefaultKeyBinding(KeyBinding.BLINK, Input.KEY_SPACE);

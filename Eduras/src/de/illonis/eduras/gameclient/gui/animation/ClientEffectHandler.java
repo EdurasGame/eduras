@@ -133,6 +133,7 @@ public class ClientEffectHandler extends GameEventAdapter {
 		switch (event.getObjectType()) {
 		case ROCKET_MISSILE:
 		case MISSILE_SPLASH:
+		case MINE_MISSILE:
 			EffectFactory.createEffectAt(EffectNumber.ROCKET,
 					event.getPosition());
 			break;
