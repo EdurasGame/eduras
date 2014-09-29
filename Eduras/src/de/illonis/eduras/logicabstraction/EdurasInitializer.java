@@ -2,6 +2,7 @@ package de.illonis.eduras.logicabstraction;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.logging.Level;
@@ -469,7 +470,7 @@ public class EdurasInitializer {
 
 			@Override
 			public void sendResource(GameEventNumber type, int owner, String r,
-					File file) {
+					Path file) {
 			}
 
 			@Override

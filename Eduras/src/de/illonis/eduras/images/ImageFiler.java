@@ -6,10 +6,6 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardOpenOption;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -25,8 +21,8 @@ import de.illonis.eduras.gameclient.gui.game.GameRenderer;
 import de.illonis.eduras.locale.Localization;
 import de.illonis.eduras.settings.S;
 import de.illonis.eduras.utils.Pair;
-import de.illonis.eduras.utils.PathFinder;
 import de.illonis.eduras.utils.ResourceManager;
+import de.illonis.eduras.utils.ResourceManager.ResourceType;
 
 /**
  * Provides utility features to load or interact with images stored in game
@@ -117,23 +113,19 @@ public class ImageFiler {
 					+ resolution.getFirst().getSuffix());
 		} else {
 			try {
-				Path imagePath = Paths.get(PathFinder
-						.findFile(ResourceManager.PATH_TO_IMAGES + fileName
-								+ resolution.getFirst().getSuffix()));
-				try (InputStream input = Files.newInputStream(imagePath,
-						StandardOpenOption.READ)) {
+				try (InputStream input = ResourceManager.openResource(
+						ResourceType.IMAGE, fileName
+								+ resolution.getFirst().getSuffix())) {
 					image = new Image(input, fileName, false);
 				}
 			} catch (RuntimeException | SlickException | IOException e) {
 				factor = getScaleFactor(ImageResolution.FULLHD);
-				Path imagePath = Paths.get(PathFinder
-						.findFile(ResourceManager.PATH_TO_IMAGES + fileName
-								+ ImageResolution.FULLHD.getSuffix()));
 				L.log(Level.WARNING, "Could not load image " + fileName
 						+ " for " + resolution.getFirst().name()
 						+ ", falling back to fullHD at " + factor, e);
-				try (InputStream input = Files.newInputStream(imagePath,
-						StandardOpenOption.READ)) {
+				try (InputStream input = ResourceManager.openResource(
+						ResourceType.IMAGE,
+						fileName + ImageResolution.FULLHD.getSuffix())) {
 					image = new Image(input, fileName, false);
 				}
 			}

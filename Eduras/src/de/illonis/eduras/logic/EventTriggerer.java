@@ -1,6 +1,7 @@
 package de.illonis.eduras.logic;
 
 import java.io.File;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -724,7 +725,7 @@ public interface EventTriggerer {
 	 * @param file
 	 *            file to send
 	 */
-	void sendResource(GameEventNumber type, int owner, String r, File file);
+	void sendResource(GameEventNumber type, int owner, String r, Path file);
 
 	/**
 	 * Restarts the game.
