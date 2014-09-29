@@ -501,6 +501,7 @@ public class ServerEventTriggerer implements EventTriggerer {
 	public void restartRound() {
 
 		gameInfo.getGameSettings().getGameMode().onRoundEnds();
+
 		for (Player player : gameInfo.getPlayers()) {
 			resetStats(player);
 		}
@@ -683,6 +684,9 @@ public class ServerEventTriggerer implements EventTriggerer {
 	 */
 	private void resetStats(Player player) {
 		getGameInfo().getGameSettings().getStats().resetStatsFor(player);
+		for (StatsProperty prop : StatsProperty.values()) {
+			setStats(prop, player, 0);
+		}
 	}
 
 	private void resetSettings() {
