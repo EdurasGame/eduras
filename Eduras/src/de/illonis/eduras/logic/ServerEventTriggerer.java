@@ -97,6 +97,7 @@ import de.illonis.eduras.items.weapons.Weapon;
 import de.illonis.eduras.maps.InitialObjectData;
 import de.illonis.eduras.maps.Map;
 import de.illonis.eduras.maps.SpawnPosition;
+import de.illonis.eduras.maps.persistence.MapParser;
 import de.illonis.eduras.math.Vector2df;
 import de.illonis.eduras.settings.S;
 import de.illonis.eduras.settings.S.SettingType;
@@ -547,7 +548,7 @@ public class ServerEventTriggerer implements EventTriggerer {
 		try {
 			setMapEvent = new SetMapEvent(map.getName(),
 					ResourceManager.getHashOfResource(ResourceType.MAP,
-							map.getName()));
+							map.getName() + MapParser.FILE_EXTENSION));
 		} catch (IOException e1) {
 			L.log(Level.SEVERE, "Cannot calculate Hash of map!", e1);
 			setMapEvent = new SetMapEvent(map.getName(), "");

@@ -328,7 +328,7 @@ public class Map {
 	protected final void loadFromFile(String mapFileName)
 			throws InvalidDataException, IOException {
 		Path path = ResourceManager.resourceToPath(ResourceType.MAP,
-				mapFileName);
+				mapFileName + MapParser.FILE_EXTENSION);
 		URL mapURL = path.toUri().toURL();
 
 		Map map = MapParser.readMap(mapURL);

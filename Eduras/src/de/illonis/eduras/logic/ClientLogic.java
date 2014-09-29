@@ -580,9 +580,18 @@ public class ClientLogic implements GameLogicInterface {
 				try {
 					String nameOfReceivedMap = ((SendResourceEvent) event)
 							.getResourceName();
-					System.out.println(nameOfReceivedMap);
 					gameInfo.setMap(Map.getMapByName(nameOfReceivedMap));
-				} catch (NoSuchMapException | InvalidDataException e3) {
+					getListener()
+							.onMapChanged(
+									new SetMapEvent(
+											nameOfReceivedMap,
+											ResourceManager
+													.getHashOfResource(
+															ResourceType.MAP,
+															nameOfReceivedMap
+																	+ MapParser.FILE_EXTENSION)));
+				} catch (NoSuchMapException | InvalidDataException
+						| IOException e3) {
 					L.log(Level.SEVERE,
 							"Cannot switch to the map we just received.", e3);
 				}
