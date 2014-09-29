@@ -520,23 +520,46 @@ public class ClientLogic implements GameLogicInterface {
 				SetIntegerGameObjectAttributeEvent setKillsEvent = (SetIntegerGameObjectAttributeEvent) event;
 				int ownerId = setKillsEvent.getObjectId();
 				int newCount = setKillsEvent.getNewValue();
-				gameInfo.getGameSettings().getStats()
-						.setKills(ownerId, newCount);
+				Player killerPlayer;
+				try {
+					killerPlayer = gameInfo.getPlayerByOwnerId(ownerId);
+					gameInfo.getGameSettings().getStats()
+							.setKills(killerPlayer, newCount);
+				} catch (ObjectNotFoundException ex) {
+					L.log(Level.SEVERE,
+							"Could not find player while setting kills.", ex);
+				}
 				break;
 			case SET_DEATHS:
 				SetIntegerGameObjectAttributeEvent setDeathsEvent = (SetIntegerGameObjectAttributeEvent) event;
 				ownerId = setDeathsEvent.getObjectId();
 				newCount = setDeathsEvent.getNewValue();
-				gameInfo.getGameSettings().getStats()
-						.setDeaths(ownerId, newCount);
+				Player deathPlayer;
+				try {
+					deathPlayer = gameInfo.getPlayerByOwnerId(ownerId);
+					gameInfo.getGameSettings().getStats()
+							.setDeaths(deathPlayer, newCount);
+				} catch (ObjectNotFoundException ex) {
+					L.log(Level.SEVERE,
+							"Could not find player while setting deaths.", ex);
+				}
 				break;
 			case SET_STATS:
 				SetStatsEvent setStatsEvent = (SetStatsEvent) event;
-				gameInfo.getGameSettings()
-						.getStats()
-						.setStatsProperty(setStatsEvent.getProperty(),
-								setStatsEvent.getPlayerId(),
-								setStatsEvent.getNewCount());
+				Player statPlayer;
+				try {
+					statPlayer = gameInfo.getPlayerByOwnerId(setStatsEvent
+							.getPlayerId());
+					gameInfo.getGameSettings()
+							.getStats()
+							.setStatsProperty(setStatsEvent.getProperty(),
+									statPlayer, setStatsEvent.getNewCount());
+				} catch (ObjectNotFoundException ex) {
+					L.log(Level.SEVERE,
+							"Could not find player while setting stat "
+									+ setStatsEvent.getProperty(), ex);
+				}
+
 				break;
 			case SET_REMAININGTIME:
 				SetRemainingTimeEvent remainingTimeEvent = (SetRemainingTimeEvent) event;

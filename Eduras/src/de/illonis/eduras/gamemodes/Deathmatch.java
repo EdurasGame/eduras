@@ -83,18 +83,15 @@ public class Deathmatch extends BasicGameMode {
 
 		EventTriggerer et = gameInfo.getEventTriggerer();
 		if (killedUnit instanceof PlayerMainFigure) {
-
-			et.changeStatOfPlayerByAmount(StatsProperty.DEATHS,
-					(PlayerMainFigure) killedUnit, 1);
+			Player killed = gameInfo.getPlayerByOwnerId(killedUnit.getOwner());
+			et.changeStatOfPlayerByAmount(StatsProperty.DEATHS, killed, 1);
 		}
 
-		PlayerMainFigure killer = gameInfo.getPlayerByOwnerId(killingPlayer)
-				.getPlayerMainFigure();
+		Player killer = gameInfo.getPlayerByOwnerId(killingPlayer);
 
-		if (!killer.equals(killedUnit)) {
+		if (!killer.getPlayerMainFigure().equals(killedUnit)) {
 			et.changeStatOfPlayerByAmount(StatsProperty.KILLS, killer, 1);
 		}
-
 	}
 
 	@Override
@@ -140,7 +137,13 @@ public class Deathmatch extends BasicGameMode {
 		gameInfo.getEventTriggerer().respawnPlayerAtRandomSpawnpoint(newPlayer);
 
 		// and add it to the statistic
-		gameInfo.getGameSettings().getStats().addPlayerToStats(ownerId);
+		Player p;
+		try {
+			p = gameInfo.getPlayerByOwnerId(ownerId);
+			gameInfo.getGameSettings().getStats().addPlayerToStats(p);
+		} catch (ObjectNotFoundException e) {
+			L.log(Level.SEVERE, "Could not find currently connected player.", e);
+		}
 	}
 
 	protected Player handleNewPlayer(int ownerId) {
@@ -231,7 +234,7 @@ public class Deathmatch extends BasicGameMode {
 		}
 
 		// remove it to the statistic
-		gameInfo.getGameSettings().getStats().removePlayerFromStats(ownerId);
+		gameInfo.getGameSettings().getStats().removePlayerFromStats(gonePlayer);
 
 		Team playersTeam = null;
 		try {

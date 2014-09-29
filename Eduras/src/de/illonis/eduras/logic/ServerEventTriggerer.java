@@ -681,8 +681,7 @@ public class ServerEventTriggerer implements EventTriggerer {
 	 * @param player
 	 */
 	private void resetStats(Player player) {
-		setStats(StatsProperty.KILLS, player.getPlayerId(), 0);
-		setStats(StatsProperty.DEATHS, player.getPlayerId(), 0);
+		getGameInfo().getGameSettings().getStats().resetStatsFor(player);
 	}
 
 	private void resetSettings() {
@@ -931,28 +930,28 @@ public class ServerEventTriggerer implements EventTriggerer {
 	}
 
 	@Override
-	public void setStats(StatsProperty property, int ownerId, int valueToSet) {
+	public void setStats(StatsProperty property, Player player, int valueToSet) {
 		Statistic stats = gameInfo.getGameSettings().getStats();
 
 		synchronized (stats) {
-			stats.setStatsProperty(property, ownerId, valueToSet);
+			stats.setStatsProperty(property, player, valueToSet);
 
-			SetStatsEvent setStatsEvent = new SetStatsEvent(property, ownerId,
-					valueToSet);
+			SetStatsEvent setStatsEvent = new SetStatsEvent(property,
+					player.getPlayerId(), valueToSet);
 			sendEvents(setStatsEvent);
 		}
 	}
 
 	@Override
-	public void changeStatOfPlayerByAmount(StatsProperty prop,
-			PlayerMainFigure player, int i) {
+	public void changeStatOfPlayerByAmount(StatsProperty prop, Player player,
+			int i) {
 		Statistic stats = gameInfo.getGameSettings().getStats();
 
 		synchronized (stats) {
-			int newVal = stats.getStatsProperty(prop, player.getOwner()) + i;
-			stats.setStatsProperty(prop, player.getOwner(), newVal);
+			int newVal = stats.getStatsProperty(prop, player) + i;
+			stats.setStatsProperty(prop, player, newVal);
 			SetStatsEvent setStatsEvent = new SetStatsEvent(prop,
-					player.getOwner(), newVal);
+					player.getPlayerId(), newVal);
 			sendEvents(setStatsEvent);
 		}
 	}

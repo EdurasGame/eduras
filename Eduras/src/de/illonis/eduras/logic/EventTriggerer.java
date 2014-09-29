@@ -518,14 +518,13 @@ public interface EventTriggerer {
 	public void setCollidability(int objectId, boolean newVal);
 
 	/**
-	 * Set a {@link StatsProperty} of the player identified by the given id to
-	 * the given value.
+	 * Set a {@link StatsProperty} of the player to the given value.
 	 * 
 	 * @param property
-	 * @param ownerId
+	 * @param player
 	 * @param valueToSet
 	 */
-	public void setStats(StatsProperty property, int ownerId, int valueToSet);
+	public void setStats(StatsProperty property, Player player, int valueToSet);
 
 	/**
 	 * Increases the count of a player's {@link StatsProperty} by the given
@@ -538,8 +537,7 @@ public interface EventTriggerer {
 	 * @param i
 	 *            amount
 	 */
-	void changeStatOfPlayerByAmount(StatsProperty prop,
-			PlayerMainFigure player, int i);
+	void changeStatOfPlayerByAmount(StatsProperty prop, Player player, int i);
 
 	/**
 	 * Notifies all clients that the {@link NeutralArea} was conquered by the

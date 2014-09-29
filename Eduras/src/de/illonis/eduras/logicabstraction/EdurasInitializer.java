@@ -47,7 +47,6 @@ import de.illonis.eduras.maps.Map;
 import de.illonis.eduras.math.Vector2df;
 import de.illonis.eduras.networking.EventParser;
 import de.illonis.eduras.units.InteractMode;
-import de.illonis.eduras.units.PlayerMainFigure;
 import de.illonis.eduras.units.Unit;
 
 /**
@@ -335,13 +334,13 @@ public class EdurasInitializer {
 			}
 
 			@Override
-			public void setStats(StatsProperty property, int ownerId,
+			public void setStats(StatsProperty property, Player player,
 					int valueToSet) {
 			}
 
 			@Override
 			public void changeStatOfPlayerByAmount(StatsProperty prop,
-					PlayerMainFigure player, int i) {
+					Player player, int i) {
 			}
 
 			@Override

@@ -14,7 +14,6 @@ import de.illonis.eduras.Team;
 import de.illonis.eduras.gameobjects.Base;
 import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.settings.S;
-import de.illonis.eduras.units.PlayerMainFigure;
 import de.illonis.eduras.units.Unit;
 
 /**
@@ -58,8 +57,7 @@ public class KingOfTheHill extends Deathmatch {
 		Player player = occupyingTeam.getPlayers().getFirst();
 		Timer timerForBase = new Timer();
 		neutralBasePointsAdderTimer.put(base, timerForBase);
-		timerForBase.schedule(
-				new NeutralBasePointsAdder(player.getPlayerMainFigure()),
+		timerForBase.schedule(new NeutralBasePointsAdder(player),
 				S.Server.gm_koth_gain_points_interval,
 				S.Server.gm_koth_gain_points_interval);
 		L.info("Team " + occupyingTeam.getName() + " occupied the base!");
@@ -77,9 +75,9 @@ public class KingOfTheHill extends Deathmatch {
 
 	class NeutralBasePointsAdder extends TimerTask {
 
-		private final PlayerMainFigure baseOwner;
+		private final Player baseOwner;
 
-		public NeutralBasePointsAdder(PlayerMainFigure baseOwner) {
+		public NeutralBasePointsAdder(Player baseOwner) {
 			this.baseOwner = baseOwner;
 		}
 
