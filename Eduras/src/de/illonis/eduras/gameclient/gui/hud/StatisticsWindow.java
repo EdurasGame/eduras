@@ -12,7 +12,8 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 
 import de.illonis.edulog.EduLog;
-import de.illonis.eduras.Player;
+import de.illonis.eduras.Statistic.PlayerStatEntry;
+import de.illonis.eduras.Statistic.StatsProperty;
 import de.illonis.eduras.Team;
 import de.illonis.eduras.events.MatchEndEvent;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
@@ -120,17 +121,30 @@ public class StatisticsWindow extends RenderedGuiObject {
 				"Status", COLOR_HEADER);
 		// players
 		float y = screenY + topInset + lineHeight;
-		for (Team team : getInfo().getTeams()) {
-			if (getInfo().getGameMode().getNumber() != GameModeNumber.DEATHMATCH) {
-				y += 10;
-				drawTeamRow(team, y);
-			}
-			for (Player p : team.getPlayers()) {
+		List<PlayerStatEntry> entries = new LinkedList<PlayerStatEntry>(
+				getInfo().getStatistics().getStatList());
+		if (getInfo().getGameMode().getNumber() == GameModeNumber.DEATHMATCH) {
+			for (PlayerStatEntry p : entries) {
 				y += lineHeight;
 				drawPlayerRow(p, y);
 			}
-			if (getInfo().getGameMode().getNumber() != GameModeNumber.DEATHMATCH) {
-				// gap between teams
+		} else {
+			for (Team team : getInfo().getTeams()) {
+				if (getInfo().getGameMode().getNumber() != GameModeNumber.DEATHMATCH) {
+					y += 10;
+					drawTeamRow(team, y);
+				}
+
+				for (PlayerStatEntry p : entries) {
+					try {
+						if (p.getPlayer().getTeam().equals(team)) {
+							y += lineHeight;
+							drawPlayerRow(p, y);
+						}
+					} catch (PlayerHasNoTeamException e) {
+						L.log(Level.SEVERE, "Found a player without team.", e);
+					}
+				}
 				y += lineHeight;
 			}
 		}
@@ -165,23 +179,25 @@ public class StatisticsWindow extends RenderedGuiObject {
 				team.getColor());
 	}
 
-	private void drawPlayerRow(Player p, float y) {
+	private void drawPlayerRow(PlayerStatEntry data, float y) {
 		// name
-		font.drawString(screenX + xPositions[0], y, p.getName(), COLOR_TEXT);
+		font.drawString(screenX + xPositions[0], y, data.getPlayer().getName(),
+				COLOR_TEXT);
 
 		// deaths
-		font.drawString(screenX + xPositions[1], y, getInfo().getStatistics()
-				.getKillsOfPlayer(p) + "", COLOR_TEXT);
+		font.drawString(screenX + xPositions[1], y,
+				data.getProperty(StatsProperty.KILLS) + "", COLOR_TEXT);
 
 		// kills
-		font.drawString(screenX + xPositions[2], y, getInfo().getStatistics()
-				.getDeathsOfPlayer(p) + "", COLOR_TEXT);
+		font.drawString(screenX + xPositions[2], y,
+				data.getProperty(StatsProperty.DEATHS) + "", COLOR_TEXT);
 
 		// player's status, only show to own team
 		String status = "";
 		try {
-			if (p.getTeam().equals(getInfo().getPlayer().getTeam())) {
-				status = p.getCurrentMode().getDisplayName();
+			if (data.getPlayer().getTeam()
+					.equals(getInfo().getPlayer().getTeam())) {
+				status = data.getPlayer().getCurrentMode().getDisplayName();
 			}
 		} catch (PlayerHasNoTeamException | ObjectNotFoundException e) {
 			L.log(Level.WARNING, "Could not determine current players team.", e);

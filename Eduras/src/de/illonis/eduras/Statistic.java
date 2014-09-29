@@ -50,13 +50,13 @@ public class Statistic {
 			int otherKills = o.stats.get(StatsProperty.KILLS);
 			int otherDeaths = o.stats.get(StatsProperty.DEATHS);
 			if (kills > otherKills)
-				return 1;
+				return -1;
 			if (kills < otherKills)
-				return -1;
-			if (deaths < otherDeaths)
 				return 1;
-			if (deaths > otherDeaths)
+			if (deaths < otherDeaths)
 				return -1;
+			if (deaths > otherDeaths)
+				return 1;
 			return 0;
 		}
 
@@ -90,6 +90,10 @@ public class Statistic {
 				setProperty(property, 0);
 			}
 		}
+	}
+
+	public ArrayList<PlayerStatEntry> getStatList() {
+		return stats;
 	}
 
 	private ArrayList<PlayerStatEntry> stats;
@@ -196,6 +200,8 @@ public class Statistic {
 			Collection<Player> amongPlayers) {
 		LinkedList<Player> playersWithMostFrags = new LinkedList<Player>();
 		Collections.sort(stats);
+		if (stats.size() == 0)
+			return playersWithMostFrags;
 		int maxKills = stats.get(0).getProperty(StatsProperty.KILLS);
 		int minDeaths = stats.get(0).getProperty(StatsProperty.DEATHS);
 		playersWithMostFrags.add(stats.get(0).player);
