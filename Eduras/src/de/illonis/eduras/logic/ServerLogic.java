@@ -55,6 +55,7 @@ import de.illonis.eduras.items.Item;
 import de.illonis.eduras.items.ItemUseInformation;
 import de.illonis.eduras.items.Usable;
 import de.illonis.eduras.locale.Localization;
+import de.illonis.eduras.maps.persistence.MapParser;
 import de.illonis.eduras.units.PlayerMainFigure;
 import de.illonis.eduras.units.Unit;
 import de.illonis.eduras.utils.ResourceManager;
@@ -425,7 +426,8 @@ public class ServerLogic implements GameLogicInterface {
 		case REQUEST_MAP:
 			RequestResourceEvent requestResourceEvent = (RequestResourceEvent) event;
 			Path file = ResourceManager.resourceToPath(ResourceType.MAP,
-					requestResourceEvent.getResourceName());
+					requestResourceEvent.getResourceName()
+							+ MapParser.FILE_EXTENSION);
 			gameInfo.getEventTriggerer().sendResource(GameEventNumber.SEND_MAP,
 					requestResourceEvent.getOwner(),
 					requestResourceEvent.getResourceName(), file);
