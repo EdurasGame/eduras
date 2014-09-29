@@ -2,7 +2,6 @@ package de.illonis.eduras;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -57,12 +56,14 @@ import de.illonis.eduras.logic.EventTriggerer;
 import de.illonis.eduras.maps.Map;
 import de.illonis.eduras.maps.SpawnPosition;
 import de.illonis.eduras.maps.SpawnPosition.SpawnType;
+import de.illonis.eduras.maps.persistence.MapParser;
 import de.illonis.eduras.math.Geometry;
 import de.illonis.eduras.math.Vector2df;
 import de.illonis.eduras.settings.S;
 import de.illonis.eduras.settings.S.SettingType;
 import de.illonis.eduras.units.PlayerMainFigure;
 import de.illonis.eduras.utils.ResourceManager;
+import de.illonis.eduras.utils.ResourceManager.ResourceType;
 
 /**
  * Contains game information.
@@ -478,8 +479,9 @@ public class GameInformation {
 		SetMapEvent setMapEvent;
 		try {
 			setMapEvent = new SetMapEvent(map.getName(),
-					ResourceManager.getHashOfMap(map.getName()));
-		} catch (MalformedURLException e1) {
+					ResourceManager.getHashOfResource(ResourceType.MAP,
+							map.getName() + MapParser.FILE_EXTENSION));
+		} catch (IOException e1) {
 			L.log(Level.SEVERE, "Cannot get hash of map!", e1);
 			return;
 		}

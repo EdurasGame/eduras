@@ -93,7 +93,7 @@ public class TeamDeathmatch extends Deathmatch {
 		gameInfo.getEventTriggerer().respawnPlayerAtRandomSpawnpoint(newPlayer);
 
 		// and add it to the statistic
-		gameInfo.getGameSettings().getStats().addPlayerToStats(ownerId);
+		gameInfo.getGameSettings().getStats().addPlayerToStats(newPlayer);
 	}
 
 	@Override
@@ -145,7 +145,13 @@ public class TeamDeathmatch extends Deathmatch {
 	public void onDisconnect(int ownerId) {
 
 		// and from the statistics and game
-		gameInfo.getGameSettings().getStats().removePlayerFromStats(ownerId);
+		Player player;
+		try {
+			player = gameInfo.getPlayerByOwnerId(ownerId);
+			gameInfo.getGameSettings().getStats().removePlayerFromStats(player);
+		} catch (ObjectNotFoundException e) {
+			L.log(Level.WARNING, "Player already vanished onDisconnect", e);
+		}
 		gameInfo.getEventTriggerer().removePlayer(ownerId);
 
 		// reset the teams such that they don't contain the player anymore

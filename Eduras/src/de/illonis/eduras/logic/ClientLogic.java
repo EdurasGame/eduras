@@ -1,6 +1,6 @@
 package de.illonis.eduras.logic;
 
-import java.net.MalformedURLException;
+import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -69,10 +69,12 @@ import de.illonis.eduras.items.weapons.Weapon;
 import de.illonis.eduras.logicabstraction.EdurasInitializer;
 import de.illonis.eduras.maps.Map;
 import de.illonis.eduras.maps.persistence.InvalidDataException;
+import de.illonis.eduras.maps.persistence.MapParser;
 import de.illonis.eduras.settings.S;
 import de.illonis.eduras.settings.S.SettingType;
 import de.illonis.eduras.units.Unit;
 import de.illonis.eduras.utils.ResourceManager;
+import de.illonis.eduras.utils.ResourceManager.ResourceType;
 
 /**
  * Logic for client.
@@ -467,8 +469,9 @@ public class ClientLogic implements GameLogicInterface {
 							.getNameOfNewMap()));
 
 					try {
-						String hashOfMap = ResourceManager
-								.getHashOfMap(setMapEvent.getNameOfNewMap());
+						String hashOfMap = ResourceManager.getHashOfResource(
+								ResourceType.MAP, setMapEvent.getNameOfNewMap()
+										+ MapParser.FILE_EXTENSION);
 						if (!(hashOfMap.equals(setMapEvent.getHashOfMap()))) {
 
 							L.info("Hashs of map "
@@ -480,7 +483,7 @@ public class ClientLogic implements GameLogicInterface {
 							throw new NoSuchMapException(
 									setMapEvent.getNameOfNewMap());
 						}
-					} catch (MalformedURLException e1) {
+					} catch (IOException e1) {
 						L.log(Level.SEVERE,
 								"Cannot find map."
 										+ setMapEvent.getNameOfNewMap(), e1);
@@ -517,23 +520,46 @@ public class ClientLogic implements GameLogicInterface {
 				SetIntegerGameObjectAttributeEvent setKillsEvent = (SetIntegerGameObjectAttributeEvent) event;
 				int ownerId = setKillsEvent.getObjectId();
 				int newCount = setKillsEvent.getNewValue();
-				gameInfo.getGameSettings().getStats()
-						.setKills(ownerId, newCount);
+				Player killerPlayer;
+				try {
+					killerPlayer = gameInfo.getPlayerByOwnerId(ownerId);
+					gameInfo.getGameSettings().getStats()
+							.setKills(killerPlayer, newCount);
+				} catch (ObjectNotFoundException ex) {
+					L.log(Level.SEVERE,
+							"Could not find player while setting kills.", ex);
+				}
 				break;
 			case SET_DEATHS:
 				SetIntegerGameObjectAttributeEvent setDeathsEvent = (SetIntegerGameObjectAttributeEvent) event;
 				ownerId = setDeathsEvent.getObjectId();
 				newCount = setDeathsEvent.getNewValue();
-				gameInfo.getGameSettings().getStats()
-						.setDeaths(ownerId, newCount);
+				Player deathPlayer;
+				try {
+					deathPlayer = gameInfo.getPlayerByOwnerId(ownerId);
+					gameInfo.getGameSettings().getStats()
+							.setDeaths(deathPlayer, newCount);
+				} catch (ObjectNotFoundException ex) {
+					L.log(Level.SEVERE,
+							"Could not find player while setting deaths.", ex);
+				}
 				break;
 			case SET_STATS:
 				SetStatsEvent setStatsEvent = (SetStatsEvent) event;
-				gameInfo.getGameSettings()
-						.getStats()
-						.setStatsProperty(setStatsEvent.getProperty(),
-								setStatsEvent.getPlayerId(),
-								setStatsEvent.getNewCount());
+				Player statPlayer;
+				try {
+					statPlayer = gameInfo.getPlayerByOwnerId(setStatsEvent
+							.getPlayerId());
+					gameInfo.getGameSettings()
+							.getStats()
+							.setStatsProperty(setStatsEvent.getProperty(),
+									statPlayer, setStatsEvent.getNewCount());
+				} catch (ObjectNotFoundException ex) {
+					L.log(Level.SEVERE,
+							"Could not find player while setting stat "
+									+ setStatsEvent.getProperty(), ex);
+				}
+
 				break;
 			case SET_REMAININGTIME:
 				SetRemainingTimeEvent remainingTimeEvent = (SetRemainingTimeEvent) event;
@@ -554,9 +580,18 @@ public class ClientLogic implements GameLogicInterface {
 				try {
 					String nameOfReceivedMap = ((SendResourceEvent) event)
 							.getResourceName();
-					System.out.println(nameOfReceivedMap);
 					gameInfo.setMap(Map.getMapByName(nameOfReceivedMap));
-				} catch (NoSuchMapException | InvalidDataException e3) {
+					getListener()
+							.onMapChanged(
+									new SetMapEvent(
+											nameOfReceivedMap,
+											ResourceManager
+													.getHashOfResource(
+															ResourceType.MAP,
+															nameOfReceivedMap
+																	+ MapParser.FILE_EXTENSION)));
+				} catch (NoSuchMapException | InvalidDataException
+						| IOException e3) {
 					L.log(Level.SEVERE,
 							"Cannot switch to the map we just received.", e3);
 				}

@@ -2,7 +2,7 @@ package de.illonis.eduras.logic;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.MalformedURLException;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedList;
@@ -97,6 +97,7 @@ import de.illonis.eduras.items.weapons.Weapon;
 import de.illonis.eduras.maps.InitialObjectData;
 import de.illonis.eduras.maps.Map;
 import de.illonis.eduras.maps.SpawnPosition;
+import de.illonis.eduras.maps.persistence.MapParser;
 import de.illonis.eduras.math.Vector2df;
 import de.illonis.eduras.settings.S;
 import de.illonis.eduras.settings.S.SettingType;
@@ -104,6 +105,7 @@ import de.illonis.eduras.units.InteractMode;
 import de.illonis.eduras.units.PlayerMainFigure;
 import de.illonis.eduras.units.Unit;
 import de.illonis.eduras.utils.ResourceManager;
+import de.illonis.eduras.utils.ResourceManager.ResourceType;
 
 /**
  * Server Event Triggerer
@@ -499,6 +501,7 @@ public class ServerEventTriggerer implements EventTriggerer {
 	public void restartRound() {
 
 		gameInfo.getGameSettings().getGameMode().onRoundEnds();
+
 		for (Player player : gameInfo.getPlayers()) {
 			resetStats(player);
 		}
@@ -545,8 +548,9 @@ public class ServerEventTriggerer implements EventTriggerer {
 		SetMapEvent setMapEvent;
 		try {
 			setMapEvent = new SetMapEvent(map.getName(),
-					ResourceManager.getHashOfMap(map.getName()));
-		} catch (MalformedURLException e1) {
+					ResourceManager.getHashOfResource(ResourceType.MAP,
+							map.getName() + MapParser.FILE_EXTENSION));
+		} catch (IOException e1) {
 			L.log(Level.SEVERE, "Cannot calculate Hash of map!", e1);
 			setMapEvent = new SetMapEvent(map.getName(), "");
 		}
@@ -679,8 +683,10 @@ public class ServerEventTriggerer implements EventTriggerer {
 	 * @param player
 	 */
 	private void resetStats(Player player) {
-		setStats(StatsProperty.KILLS, player.getPlayerId(), 0);
-		setStats(StatsProperty.DEATHS, player.getPlayerId(), 0);
+		getGameInfo().getGameSettings().getStats().resetStatsFor(player);
+		for (StatsProperty prop : StatsProperty.values()) {
+			setStats(prop, player, 0);
+		}
 	}
 
 	private void resetSettings() {
@@ -929,28 +935,28 @@ public class ServerEventTriggerer implements EventTriggerer {
 	}
 
 	@Override
-	public void setStats(StatsProperty property, int ownerId, int valueToSet) {
+	public void setStats(StatsProperty property, Player player, int valueToSet) {
 		Statistic stats = gameInfo.getGameSettings().getStats();
 
 		synchronized (stats) {
-			stats.setStatsProperty(property, ownerId, valueToSet);
+			stats.setStatsProperty(property, player, valueToSet);
 
-			SetStatsEvent setStatsEvent = new SetStatsEvent(property, ownerId,
-					valueToSet);
+			SetStatsEvent setStatsEvent = new SetStatsEvent(property,
+					player.getPlayerId(), valueToSet);
 			sendEvents(setStatsEvent);
 		}
 	}
 
 	@Override
-	public void changeStatOfPlayerByAmount(StatsProperty prop,
-			PlayerMainFigure player, int i) {
+	public void changeStatOfPlayerByAmount(StatsProperty prop, Player player,
+			int i) {
 		Statistic stats = gameInfo.getGameSettings().getStats();
 
 		synchronized (stats) {
-			int newVal = stats.getStatsProperty(prop, player.getOwner()) + i;
-			stats.setStatsProperty(prop, player.getOwner(), newVal);
+			int newVal = stats.getStatsProperty(prop, player) + i;
+			stats.setStatsProperty(prop, player, newVal);
 			SetStatsEvent setStatsEvent = new SetStatsEvent(prop,
-					player.getOwner(), newVal);
+					player.getPlayerId(), newVal);
 			sendEvents(setStatsEvent);
 		}
 	}
@@ -1348,11 +1354,11 @@ public class ServerEventTriggerer implements EventTriggerer {
 	}
 
 	@Override
-	public void sendResource(GameEventNumber type, int owner, String resName,
-			File file) {
+	public void sendResource(GameEventNumber type, int owner, String mapName,
+			Path file) {
 
 		try {
-			sendEventToClient(new SendResourceEvent(type, resName, file), owner);
+			sendEventToClient(new SendResourceEvent(type, mapName, file), owner);
 		} catch (IOException e) {
 			L.log(Level.SEVERE, "Error sending resource: message", e);
 		}

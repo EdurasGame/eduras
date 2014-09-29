@@ -42,6 +42,7 @@
 			basedir="${base}${build}">
 			<fileset dir="${base}">
 				<include name="res/**" />
+				<exclude name="**/audio/**" />				
 			</fileset>
 			<fileset dir="${base}${src}">
 				<include name="**/*.erm"></include>
@@ -90,7 +91,8 @@
 
 		<jar destfile="${jars}/eduras-remoteclient.jar" excludes="**/*.svg, **/unittests/**"
 			basedir="${base}${build}">
-			<zipgroupfileset dir="${base}${libs}" includes="edulog*.jar, eduras-remote.jar, eventingserver.jar" />
+			<zipgroupfileset dir="${base}${libs}"
+				includes="edulog*.jar, eduras-remote.jar, eventingserver.jar" />
 			<manifest>
 				<attribute name="Main-Class"
 					value="de.illonis.eduras.serverconsole.remote.EdurasRemoteConsoleClient" />
