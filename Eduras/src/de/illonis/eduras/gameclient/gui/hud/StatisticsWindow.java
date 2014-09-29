@@ -43,6 +43,7 @@ public class StatisticsWindow extends RenderedGuiObject {
 
 	private final static Color COLOR_TEXT = Color.yellow;
 	private final static Color COLOR_HEADER = Color.yellow;
+	private final static Color COLOR_HIGHLIGHT = new Color(1f, 1f, 1f, 0.3f);
 	private int[] xPositions = new int[4];
 	private int topInset;
 	private final static long DISPLAY_TIME = 3000;
@@ -149,7 +150,7 @@ public class StatisticsWindow extends RenderedGuiObject {
 		if (getInfo().getGameMode().getNumber() == GameModeNumber.DEATHMATCH) {
 			for (PlayerStatEntry p : entries) {
 				y += lineHeight;
-				drawPlayerRow(p, y);
+				drawPlayerRow(p, g2d, y);
 			}
 		} else {
 			for (Team team : getInfo().getTeams()) {
@@ -162,7 +163,7 @@ public class StatisticsWindow extends RenderedGuiObject {
 					try {
 						if (p.getPlayer().getTeam().equals(team)) {
 							y += lineHeight;
-							drawPlayerRow(p, y);
+							drawPlayerRow(p, g2d, y);
 						}
 					} catch (PlayerHasNoTeamException e) {
 						L.log(Level.SEVERE, "Found a player without team.", e);
@@ -197,7 +198,19 @@ public class StatisticsWindow extends RenderedGuiObject {
 				team.getColor());
 	}
 
-	private void drawPlayerRow(PlayerStatEntry data, float y) {
+	private void drawPlayerRow(PlayerStatEntry data, Graphics g2d, float y) {
+		Player me = null;
+		try {
+			me = getInfo().getPlayer();
+		} catch (ObjectNotFoundException e1) {
+			L.log(Level.WARNING, "Own player not found while rendering stats.",
+					e1);
+		}
+		if (data.getPlayer().equals(me)) {
+			g2d.setColor(COLOR_HIGHLIGHT);
+			g2d.fillRect(screenX + sideInset, y, width - 2 * sideInset,
+					font.getLineHeight());
+		}
 		// name
 		font.drawString(screenX + xPositions[0], y, data.getPlayer().getName(),
 				COLOR_TEXT);
