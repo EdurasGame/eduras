@@ -58,8 +58,6 @@ public class LinearAlgebraGeometry extends SimpleGeometry {
 		Map<Integer, GameObject> gameObjects = movingObject.getGame()
 				.getObjects();
 
-		GameObject collisionObject = null;
-
 		Vector2f positionVector = movingObject.getPositionVector();
 
 		// calculate border points to use for collision calculation
@@ -81,7 +79,7 @@ public class LinearAlgebraGeometry extends SimpleGeometry {
 				new GameObject.GameObjectIdComparator());
 		HashMap<GameObject, Float> angleOfTouchedObjects = new HashMap<GameObject, Float>();
 
-		LinkedList<CollisionPoint> collisions = new LinkedList<CollisionPoint>();
+		HashMap<CollisionPoint, GameObject> collisions = new HashMap<CollisionPoint, GameObject>();
 
 		float sizeOfThisObject = movingObject.getShape()
 				.getBoundingCircleRadius();
@@ -130,8 +128,7 @@ public class LinearAlgebraGeometry extends SimpleGeometry {
 
 			if (GameObject.canCollideWithEachOther(movingObject, singleObject)) {
 				// remember the gameObject that had a collision
-				collisionObject = singleObject;
-				collisions.add(nearestCollision);
+				collisions.put(nearestCollision, singleObject);
 			} else {
 				touchedObjects.add(singleObject);
 				angleOfTouchedObjects.put(singleObject,
@@ -150,15 +147,12 @@ public class LinearAlgebraGeometry extends SimpleGeometry {
 
 		// Figure out which collision is the nearest
 		CollisionPoint resultingCollisionPoint = null;
-		if (collisions.size() > 1) {
+		if (collisions.size() > 0) {
 			resultingCollisionPoint = CollisionPoint
-					.findNearestCollision(collisions);
-		} else {
-			if (collisions.size() > 0) {
-				resultingCollisionPoint = collisions.getFirst();
-			}
+					.findNearestCollision(collisions.keySet());
 		}
 
+		GameObject collisionObject = collisions.get(resultingCollisionPoint);
 		// if there was a collision, notify the involved objects and calculate
 		// the new position
 		if (collisionObject != null) {
