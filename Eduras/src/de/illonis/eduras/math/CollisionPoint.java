@@ -3,6 +3,7 @@
  */
 package de.illonis.eduras.math;
 
+import java.util.Collection;
 import java.util.LinkedList;
 import java.util.logging.Logger;
 
@@ -88,14 +89,16 @@ public class CollisionPoint {
 	/**
 	 * Returns the collision with the shortest distance.
 	 * 
-	 * @param collisionPoints
+	 * @param collisions
 	 *            The collisions to calculate the shortest distance of.
 	 * @return Returns the collision point with the shortest distance. If the
 	 *         given list is null or empty, null will be returned.
 	 */
 	public static CollisionPoint findNearestCollision(
-			LinkedList<CollisionPoint> collisionPoints) {
+			Collection<CollisionPoint> collisions) {
 
+		LinkedList<CollisionPoint> collisionPoints = new LinkedList<CollisionPoint>(
+				collisions);
 		if (collisionPoints == null || collisionPoints.size() == 0) {
 			return null;
 		}
