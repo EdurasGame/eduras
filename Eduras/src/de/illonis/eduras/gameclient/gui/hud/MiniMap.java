@@ -172,13 +172,6 @@ public class MiniMap extends ClickableGuiElement {
 
 	@Override
 	public boolean mouseMoved(int oldx, int oldy, int newx, int newy) {
-		try {
-			InteractMode mode = getInfo().getPlayer().getCurrentMode();
-			return (mode == InteractMode.MODE_DEAD || mode == InteractMode.MODE_STRATEGY);
-		} catch (ObjectNotFoundException e) {
-			L.log(Level.WARNING,
-					"Could not find player while interacting with minimap.", e);
-		}
 		return false;
 	}
 
