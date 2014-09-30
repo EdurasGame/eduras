@@ -27,6 +27,7 @@ public class SimpleWeapon extends Weapon {
 	public SimpleWeapon(GameInformation gi, TimingSource timingSource, int id) {
 		super(ObjectType.ITEM_WEAPON_SIMPLE, gi, timingSource, id);
 		setName("SimpleWeapon");
+		setSortOrder(2);
 		setShape(ShapeFactory.createShape(ShapeType.WEAPON_1));
 		defaultCooldown = S.Server.go_simpleweapon_cooldown;
 		setAmmunitionLimited(S.Server.go_simpleweapon_fillamount,

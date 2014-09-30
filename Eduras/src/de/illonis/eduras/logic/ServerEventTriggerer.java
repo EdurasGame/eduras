@@ -301,6 +301,7 @@ public class ServerEventTriggerer implements EventTriggerer {
 			if (i.isUnique()
 					&& gameInfo.getPlayerByObjectId(playerId).getPlayer()
 							.getInventory().hasItemOfType(i.getType())) {
+				System.out.println("has item");
 				Item item;
 				try {
 					item = gameInfo.getPlayerByObjectId(playerId).getPlayer()
@@ -344,13 +345,28 @@ public class ServerEventTriggerer implements EventTriggerer {
 					player.getOwner(), itemSlot);
 
 			sendEvents(visEvent, colEvent, soEvent, sis);
-
+			resendItems(player.getOwner());
 		} catch (ObjectNotFoundException e1) {
 			return;
 		} catch (InventoryIsFullException e1) {
 			return;
 		}
 
+	}
+
+	private void resendItems(int playerId) {
+		Player player;
+		try {
+			player = gameInfo.getPlayerByOwnerId(playerId);
+		} catch (ObjectNotFoundException e) {
+			L.log(Level.WARNING, "Could not find player to send items to.", e);
+			return;
+		}
+		Item[] items = player.getInventory().getAllItems();
+		for (int i = 0; i < items.length; i++) {
+			int id = (items[i] == null) ? -1 : items[i].getId();
+			sendEventToAll(new SetItemSlotEvent(id, playerId, i));
+		}
 	}
 
 	@Override
@@ -1057,25 +1073,9 @@ public class ServerEventTriggerer implements EventTriggerer {
 			return;
 		}
 
-		Player player;
-		try {
-			player = gameInfo.getPlayerByOwnerId(item.getOwner());
-		} catch (ObjectNotFoundException e) {
-			L.log(Level.WARNING, "Couldn't find player of item with id "
-					+ idOfItem, e);
-			return;
-		}
-
-		int itemSlot;
-		try {
-			itemSlot = player.getInventory().findItemSlotOfType(item.getType());
-		} catch (NoSuchItemException e) {
-			// the weapon was lost before the cooldown finished
-			return;
-		}
 		ItemEvent event = new ItemEvent(GameEventNumber.ITEM_CD_FINISHED,
 				item.getOwner());
-		event.setSlotNum(itemSlot);
+		event.setItemType(item.getType());
 
 		sendEventToClient(event, item.getOwner());
 	}
@@ -1113,8 +1113,8 @@ public class ServerEventTriggerer implements EventTriggerer {
 	}
 
 	@Override
-	public void notifyWeaponAmmoEmpty(int clientId, int slotNum) {
-		ItemUseFailedEvent event = new ItemUseFailedEvent(clientId, slotNum,
+	public void notifyWeaponAmmoEmpty(int clientId, ObjectType weaponType) {
+		ItemUseFailedEvent event = new ItemUseFailedEvent(clientId, weaponType,
 				Reason.AMMO_EMPTY);
 		sendEventToClient(event, clientId);
 	}

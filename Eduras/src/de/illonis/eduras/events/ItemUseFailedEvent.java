@@ -1,5 +1,7 @@
 package de.illonis.eduras.events;
 
+import de.illonis.eduras.ObjectFactory.ObjectType;
+
 /**
  * Indicates that the usage of an item failed.
  * 
@@ -7,7 +9,7 @@ package de.illonis.eduras.events;
  * 
  */
 public class ItemUseFailedEvent extends OwnerGameEvent {
-	private final int slot;
+	private final ObjectType itemType;
 	private final Reason reason;
 
 	/**
@@ -24,24 +26,24 @@ public class ItemUseFailedEvent extends OwnerGameEvent {
 	/**
 	 * @param owner
 	 *            the owner.
-	 * @param slot
-	 *            the item slot affected.
+	 * @param itemType
+	 *            the type of item used.
 	 * @param reason
 	 *            the reason for failing.
 	 */
-	public ItemUseFailedEvent(int owner, int slot, Reason reason) {
+	public ItemUseFailedEvent(int owner, ObjectType itemType, Reason reason) {
 		super(GameEventNumber.ITEM_USE_FAILED, owner);
-		this.slot = slot;
+		this.itemType = itemType;
 		this.reason = reason;
-		putArgument(slot);
+		putArgument(itemType);
 		putArgument(reason.name());
 	}
 
 	/**
-	 * @return the item slot affected.
+	 * @return the type of item affected.
 	 */
-	public int getSlot() {
-		return slot;
+	public ObjectType getItemType() {
+		return itemType;
 	}
 
 	/**

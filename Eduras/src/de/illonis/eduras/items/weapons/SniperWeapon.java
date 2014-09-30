@@ -27,6 +27,7 @@ public class SniperWeapon extends Weapon {
 	public SniperWeapon(GameInformation gi, TimingSource timingSource, int id) {
 		super(ObjectType.ITEM_WEAPON_SNIPER, gi, timingSource, id);
 		setName("Sniper");
+		setSortOrder(3);
 		setShape(ShapeFactory.createShape(ShapeType.WEAPON_SNIPER));
 		defaultCooldown = S.Server.go_sniperweapon_cooldown;
 		setAmmunitionLimited(S.Server.go_sniperweapon_fillamount,

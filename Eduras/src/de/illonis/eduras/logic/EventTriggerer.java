@@ -632,10 +632,10 @@ public interface EventTriggerer {
 	 * 
 	 * @param clientId
 	 *            the client id.
-	 * @param slotNum
-	 *            the item slot that he tried to use.
+	 * @param weaponType
+	 *            the type of item he tried to use.
 	 */
-	void notifyWeaponAmmoEmpty(int clientId, int slotNum);
+	void notifyWeaponAmmoEmpty(int clientId, ObjectType weaponType);
 
 	/**
 	 * Respawns the given player at the given base, if there's room.

@@ -31,6 +31,7 @@ public class SwordWeapon extends Weapon {
 	public SwordWeapon(GameInformation gi, TimingSource timingSource, int id) {
 		super(ObjectType.ITEM_WEAPON_SWORD, gi, timingSource, id);
 		setName("Sword");
+		setSortOrder(1);
 		setShape(ShapeFactory.createShape(ShapeType.SWORD));
 		defaultCooldown = S.Server.go_swordweapon_cooldown;
 	}

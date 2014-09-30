@@ -8,6 +8,7 @@ import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.geom.Vector2f;
 
 import de.illonis.edulog.EduLog;
+import de.illonis.eduras.ObjectFactory.ObjectType;
 import de.illonis.eduras.chat.ChatClient;
 import de.illonis.eduras.chat.NotConnectedException;
 import de.illonis.eduras.chat.UserNotInRoomException;
@@ -28,7 +29,10 @@ import de.illonis.eduras.gameclient.gui.hud.ActionBarPage.PageNumber;
 import de.illonis.eduras.gameclient.gui.hud.DragSelectionRectangle;
 import de.illonis.eduras.gameclient.gui.hud.UserInterface;
 import de.illonis.eduras.interfaces.GameEventListener;
+import de.illonis.eduras.inventory.Inventory;
 import de.illonis.eduras.inventory.ItemSlotIsEmptyException;
+import de.illonis.eduras.inventory.NoSuchItemException;
+import de.illonis.eduras.items.Item;
 import de.illonis.eduras.logicabstraction.EdurasInitializer;
 import de.illonis.eduras.logicabstraction.InformationProvider;
 
@@ -318,13 +322,14 @@ public class GamePanelLogic extends GameEventAdapter implements
 
 	@Override
 	public void selectItem(int i) throws ItemSlotIsEmptyException {
+		Item item;
 		try {
-			infoPro.getPlayer().getInventory().getItemBySlot(i);
+			item = infoPro.getPlayer().getInventory().getItemAt(i);
 		} catch (ObjectNotFoundException e) {
-			L.log(Level.SEVERE, "Can't find player when selecting item!", e);
+			L.log(Level.SEVERE, "Could not find player while selecting item", e);
 			return;
 		}
-		data.setCurrentItemSelected(i);
+		data.setCurrentItemSelected(item.getType());
 		currentClickState = ClickState.ITEM_SELECTED;
 	}
 
@@ -412,5 +417,59 @@ public class GamePanelLogic extends GameEventAdapter implements
 	@Override
 	public void showSelectTeam() {
 		userInterface.showTeamSelectDialogue();
+	}
+
+	@Override
+	public void selectItem(ObjectType type) {
+		Item item;
+		try {
+			item = infoPro.getPlayer().getInventory().getItemOfType(type);
+		} catch (ObjectNotFoundException e) {
+			L.log(Level.SEVERE, "Could not find player while selecting item", e);
+			return;
+		} catch (NoSuchItemException e) {
+			onActionFailed(new ActionFailedException("You have no " + type));
+			return;
+		}
+		data.setCurrentItemSelected(item.getType());
+		currentClickState = ClickState.ITEM_SELECTED;
+
+	}
+
+	@Override
+	public void selectPreviousItem() {
+		selectItemStep(-1);
+	}
+
+	private void selectItemStep(int step) {
+		ObjectType selected = data.getCurrentItemSelected();
+		Inventory inventory;
+		try {
+			inventory = infoPro.getPlayer().getInventory();
+		} catch (ObjectNotFoundException e) {
+			L.log(Level.SEVERE,
+					"Could not find player while selecting previous item.", e);
+			return;
+		}
+		if (inventory.getNumItems() == 0) {
+			return;
+		}
+		int slot = 0;
+		try {
+			slot = inventory.findItemSlotOfType(selected);
+		} catch (NoSuchItemException e) {
+			L.log(Level.WARNING, "Selected item is not in inventory", e);
+		}
+		try {
+			int prev = inventory.findNextFullSlot(slot, step);
+			selectItem(prev);
+		} catch (ItemSlotIsEmptyException e) {
+			L.log(Level.SEVERE, "Could not select previously found item", e);
+		}
+	}
+
+	@Override
+	public void selectNextItem() {
+		selectItemStep(1);
 	}
 }

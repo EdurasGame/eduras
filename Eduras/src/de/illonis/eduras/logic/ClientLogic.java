@@ -62,7 +62,7 @@ import de.illonis.eduras.gameobjects.NeutralArea;
 import de.illonis.eduras.gameobjects.TriggerArea;
 import de.illonis.eduras.interfaces.GameEventListener;
 import de.illonis.eduras.interfaces.GameLogicInterface;
-import de.illonis.eduras.inventory.ItemSlotIsEmptyException;
+import de.illonis.eduras.inventory.NoSuchItemException;
 import de.illonis.eduras.items.Item;
 import de.illonis.eduras.items.Usable;
 import de.illonis.eduras.items.weapons.Weapon;
@@ -715,13 +715,15 @@ public class ClientLogic implements GameLogicInterface {
 		Item item;
 
 		try {
-			item = player.getInventory().getItemBySlot(itemEvent.getSlotNum());
-		} catch (ItemSlotIsEmptyException e) {
-			L.info(e.getMessage());
+			item = player.getInventory().getItemOfType(itemEvent.getItemType());
+		} catch (NoSuchItemException e) {
+			L.log(Level.WARNING,
+					"Could not handle item event because item is not in inventory.",
+					e);
 			return;
 		}
 		ItemEvent cooldownEvent = new ItemEvent(GameEventNumber.ITEM_CD_START,
-				itemEvent.getOwner(), itemEvent.getSlotNum());
+				itemEvent.getOwner(), itemEvent.getItemType());
 
 		switch (itemEvent.getType()) {
 		case ITEM_CD_START:
@@ -743,7 +745,6 @@ public class ClientLogic implements GameLogicInterface {
 		default:
 			break;
 		}
-
 	}
 
 	/**

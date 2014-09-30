@@ -36,16 +36,13 @@ public final class KeyBindings implements ResettableSetting {
 		setDefaultKeyBinding(KeyBinding.MOVE_RIGHT, Input.KEY_D);
 		setDefaultKeyBinding(KeyBinding.MOVE_DOWN, Input.KEY_S);
 		setDefaultKeyBinding(KeyBinding.MOVE_UP, Input.KEY_W);
-		setDefaultKeyBinding(KeyBinding.ITEM_1, Input.KEY_1);
-		setDefaultKeyBinding(KeyBinding.ITEM_2, Input.KEY_2);
-		setDefaultKeyBinding(KeyBinding.ITEM_3, Input.KEY_3);
-		setDefaultKeyBinding(KeyBinding.ITEM_4, Input.KEY_4);
-		setDefaultKeyBinding(KeyBinding.ITEM_5, Input.KEY_5);
-		setDefaultKeyBinding(KeyBinding.ITEM_6, Input.KEY_6);
-		setDefaultKeyBinding(KeyBinding.ITEM_7, Input.KEY_7);
-		setDefaultKeyBinding(KeyBinding.ITEM_8, Input.KEY_8);
-		setDefaultKeyBinding(KeyBinding.ITEM_9, Input.KEY_9);
-		setDefaultKeyBinding(KeyBinding.ITEM_10, Input.KEY_0);
+		setDefaultKeyBinding(KeyBinding.ITEM_ASSAULT, Input.KEY_1);
+		setDefaultKeyBinding(KeyBinding.ITEM_SWORD, Input.KEY_2);
+		setDefaultKeyBinding(KeyBinding.ITEM_SIMPLE, Input.KEY_3);
+		setDefaultKeyBinding(KeyBinding.ITEM_SNIPER, Input.KEY_4);
+		setDefaultKeyBinding(KeyBinding.ITEM_ROCKET, Input.KEY_5);
+		setDefaultKeyBinding(KeyBinding.ITEM_SPLASH, Input.KEY_6);
+		setDefaultKeyBinding(KeyBinding.ITEM_MINE, Input.KEY_7);
 		setDefaultKeyBinding(KeyBinding.PAGE_UP, Input.KEY_Q);
 		setDefaultKeyBinding(KeyBinding.CHAT, Input.KEY_ENTER);
 		setDefaultKeyBinding(KeyBinding.SWITCH_MODE, Input.KEY_E);
@@ -53,6 +50,9 @@ public final class KeyBindings implements ResettableSetting {
 		setDefaultKeyBinding(KeyBinding.SHOW_STATS, Input.KEY_TAB);
 		setDefaultKeyBinding(KeyBinding.BLINK, Input.KEY_SPACE);
 		setDefaultKeyBinding(KeyBinding.SELECT_TEAM, Input.KEY_P);
+		setDefaultKeyBinding(KeyBinding.ITEM_8, Input.KEY_8);
+		setDefaultKeyBinding(KeyBinding.ITEM_9, Input.KEY_9);
+		setDefaultKeyBinding(KeyBinding.ITEM_10, Input.KEY_0);
 	}
 
 	/**
@@ -63,7 +63,7 @@ public final class KeyBindings implements ResettableSetting {
 	 */
 	@SuppressWarnings("javadoc")
 	public enum KeyBinding {
-		MOVE_LEFT, MOVE_UP, MOVE_DOWN, MOVE_RIGHT, ITEM_1, ITEM_2, ITEM_3, ITEM_4, ITEM_5, ITEM_6, ITEM_7, ITEM_8, ITEM_9, ITEM_10, CANCEL, SHOW_STATS, SWITCH_MODE, CHAT, PAGE_UP, BLINK, SELECT_TEAM;
+		MOVE_LEFT, MOVE_UP, MOVE_DOWN, MOVE_RIGHT, ITEM_ASSAULT, ITEM_SWORD, ITEM_SNIPER, ITEM_SPLASH, ITEM_SIMPLE, ITEM_MINE, ITEM_ROCKET, ITEM_8, ITEM_9, ITEM_10, CANCEL, SHOW_STATS, SWITCH_MODE, CHAT, PAGE_UP, BLINK, SELECT_TEAM;
 	}
 
 	/**

@@ -30,7 +30,7 @@ public class AssaultRifle extends Weapon {
 	public AssaultRifle(GameInformation gi, TimingSource timingSource, int id) {
 		super(ObjectType.ASSAULTRIFLE, gi, timingSource, id);
 		setName("Assault Rifle");
-
+		setSortOrder(0);
 		setShape(new Circle(S.Server.go_assaultrifle_shape_size,
 				S.Server.go_assaultrifle_shape_size,
 				S.Server.go_assaultrifle_shape_size));

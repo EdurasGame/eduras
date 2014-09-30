@@ -29,12 +29,12 @@ public interface GamePanelReactor {
 	/**
 	 * Triggers an item use.
 	 * 
-	 * @param slotId
-	 *            the slot that's item should be used.
+	 * @param itemType
+	 *            the type of item that should be used.
 	 * @param target
 	 *            the target location.
 	 */
-	void onItemUse(int slotId, Vector2f target);
+	void onItemUse(ObjectType itemType, Vector2f target);
 
 	/**
 	 * Triggers direction change.

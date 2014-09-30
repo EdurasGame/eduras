@@ -194,7 +194,7 @@ public class EventParser implements EventHandler {
 			case ITEM_USE:
 				ItemEvent itemEvent = new ItemEvent(GameEventNumber.ITEM_USE,
 						(Integer) event.getArgument(1),
-						(Integer) event.getArgument(0));
+						ObjectType.valueOf((String) event.getArgument(0)));
 				float x = (float) event.getArgument(2);
 				float y = (float) event.getArgument(3);
 				itemEvent.setTarget(new Vector2df(x, y));
@@ -295,12 +295,14 @@ public class EventParser implements EventHandler {
 			case ITEM_CD_START:
 				logic.onGameEventAppeared(new ItemEvent(
 						GameEventNumber.ITEM_CD_START, (Integer) event
-								.getArgument(0), (Integer) event.getArgument(1)));
+								.getArgument(0), ObjectType
+								.valueOf((String) event.getArgument(1))));
 				break;
 			case ITEM_CD_FINISHED:
 				logic.onGameEventAppeared(new ItemEvent(
 						GameEventNumber.ITEM_CD_FINISHED, (Integer) event
-								.getArgument(0), (Integer) event.getArgument(1)));
+								.getArgument(0), ObjectType
+								.valueOf((String) event.getArgument(1))));
 				break;
 			case DEATH:
 				logic.onGameEventAppeared(new DeathEvent((Integer) event
@@ -343,8 +345,9 @@ public class EventParser implements EventHandler {
 				break;
 			case ITEM_USE_FAILED:
 				logic.onGameEventAppeared(new ItemUseFailedEvent((int) event
-						.getArgument(0), (int) event.getArgument(1), Reason
-						.valueOf((String) event.getArgument(2))));
+						.getArgument(0), ObjectType.valueOf((String) event
+						.getArgument(1)), Reason.valueOf((String) event
+						.getArgument(2))));
 				break;
 			case MATCH_END:
 				logic.onGameEventAppeared(new MatchEndEvent((Integer) event
