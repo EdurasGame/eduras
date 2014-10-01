@@ -771,6 +771,12 @@ public final class S {
 		 */
 		public static float unit_observer_shaperadius = 9;
 
+		/**
+		 * Determines whether an observer is in stealth mode or not. If so, he's
+		 * not visible and cannot collide with units.
+		 */
+		public static boolean unit_observer_stealth = true;
+
 	}
 
 	/**

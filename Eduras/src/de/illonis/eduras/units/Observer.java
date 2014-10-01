@@ -42,6 +42,10 @@ public class Observer extends ControlledUnit {
 		setVisionRange(S.Server.unit_observer_visionrange);
 		setDetector(true);
 		setDetectionRange(S.Server.unit_observer_detectionrange);
+
+		if (S.Server.unit_observer_stealth) {
+			setVisible(Visibility.OWNER_TEAM);
+		}
 	}
 
 	@Override
@@ -55,7 +59,10 @@ public class Observer extends ControlledUnit {
 
 	@Override
 	protected boolean isCollidableWith(GameObject otherObject) {
-		return true;
+		if (S.Server.unit_observer_stealth) {
+			return !otherObject.isUnit();
+		} else {
+			return true;
+		}
 	}
-
 }
