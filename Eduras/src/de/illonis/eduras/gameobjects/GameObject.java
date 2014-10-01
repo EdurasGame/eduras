@@ -23,6 +23,7 @@ import de.illonis.eduras.mapeditor.EditorPlaceable;
 import de.illonis.eduras.math.CollisionPoint;
 import de.illonis.eduras.math.Geometry;
 import de.illonis.eduras.math.Vector2df;
+import de.illonis.eduras.units.Observer;
 import de.illonis.eduras.units.Unit;
 
 /**
@@ -514,7 +515,14 @@ public abstract class GameObject extends ReferencedEntity implements
 	 * 
 	 * @return Returns true if this object is visible and false otherwise.
 	 */
-	public final boolean isVisibleFor(GameObject other) {
+	public boolean isVisibleFor(GameObject other) {
+		if (other instanceof Observer) {
+			if (getDistanceTo(other) <= other.getVisionRange()) {
+				return true;
+			}
+			return false;
+		}
+
 		switch (visible) {
 		case ALL:
 			return true;
@@ -756,5 +764,16 @@ public abstract class GameObject extends ReferencedEntity implements
 	 */
 	public float getDistanceTo(Vector2f point) {
 		return getCenterPosition().distance(point);
+	}
+
+	/**
+	 * Returns the distance to the other object by considering the other
+	 * object's center point.
+	 * 
+	 * @param object
+	 * @return distance
+	 */
+	public float getDistanceTo(GameObject object) {
+		return getCenterPosition().distance(object.getCenterPosition());
 	}
 }

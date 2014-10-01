@@ -3,6 +3,7 @@ package de.illonis.eduras.gameclient.gui.game;
 import java.awt.Polygon;
 import java.awt.geom.Area;
 import java.awt.image.BufferedImage;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -309,7 +310,7 @@ public class GameRenderer implements TooltipHandler {
 		for (Iterator<GameObject> iterator = objectsInDrawOrder.iterator(); iterator
 				.hasNext();) {
 			GameObject d = iterator.next();
-			if (!d.isVisibleFor(myPlayer)) {
+			if (!isObjectVisible(d)) {
 				continue;
 			}
 			float[] points = d.getShape().getPoints();
@@ -337,6 +338,34 @@ public class GameRenderer implements TooltipHandler {
 		// g.fill(visionMask);
 		// }
 
+	}
+
+	private boolean isObjectVisible(GameObject object) {
+		boolean isVisible = false;
+
+		Player myPlayer;
+		try {
+			myPlayer = info.getPlayer();
+		} catch (ObjectNotFoundException e1) {
+			L.log(Level.WARNING, "No player found.", e1);
+			return false;
+		}
+
+		PlayerMainFigure myPlayersMainFigure = myPlayer.getPlayerMainFigure();
+		if (myPlayersMainFigure != null) {
+			isVisible |= object.isVisibleFor(myPlayersMainFigure);
+		}
+
+		try {
+			Collection<GameObject> myTeam = info.getObjectsOfTeam(myPlayer
+					.getTeam());
+			for (GameObject memberOfMyTeam : myTeam) {
+				isVisible |= object.isVisibleFor(memberOfMyTeam);
+			}
+		} catch (PlayerHasNoTeamException e) {
+			return isVisible;
+		}
+		return isVisible;
 	}
 
 	private void drawObject(GameObject d, Graphics g) {
