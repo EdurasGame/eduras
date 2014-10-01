@@ -47,6 +47,7 @@ import de.illonis.eduras.logicabstraction.InformationProvider;
 import de.illonis.eduras.math.Geometry;
 import de.illonis.eduras.math.Vector2df;
 import de.illonis.eduras.settings.S;
+import de.illonis.eduras.units.ControlledUnit;
 import de.illonis.eduras.units.InteractMode;
 import de.illonis.eduras.units.PlayerMainFigure;
 import de.illonis.eduras.units.Unit;
@@ -79,6 +80,8 @@ public class GameRenderer implements TooltipHandler {
 	private static final Color OUTLINE_COLOR = Color.black;
 	private static final Color DETECTION_AREA_COLOR = new Color(1f, 1f, 1f,
 			0.1f);
+
+	private static final Color SELECTION_CIRCLE_COLOR = Color.white;
 
 	private Font font;
 
@@ -405,6 +408,12 @@ public class GameRenderer implements TooltipHandler {
 			if (unit.isDetector()) {
 				drawDetectionAreaFor(unit, g);
 			}
+
+			if (unit instanceof ControlledUnit) {
+				if (data.getSelectedUnits().contains(unit.getId())) {
+					drawUnitSelectionCircle(unit, g);
+				}
+			}
 		}
 
 		if (d instanceof PlayerMainFigure) {
@@ -416,6 +425,13 @@ public class GameRenderer implements TooltipHandler {
 		 * dbg.drawString(d.getId() + "", d.getDrawX() - camera.x, d.getDrawY()
 		 * - camera.y - 15);
 		 */
+	}
+
+	private void drawUnitSelectionCircle(Unit unit, Graphics g) {
+		g.setColor(SELECTION_CIRCLE_COLOR);
+		g.draw(new Circle(unit.getCenterPosition().getX(), unit
+				.getCenterPosition().getY(), unit.getShape()
+				.getBoundingCircleRadius() * 1.5f));
 	}
 
 	private void drawDetectionAreaFor(Unit unit, Graphics g) {
