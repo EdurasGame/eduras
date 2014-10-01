@@ -15,6 +15,7 @@ import de.lessvoid.nifty.slick2d.NiftyOverlayBasicGameState;
  */
 public class LoadingState extends NiftyOverlayBasicGameState {
 
+	public static final int LOADING_STATE_ID = 3;
 	private final GameControllerBridge gameBridge;
 	private LoadingController controller;
 
@@ -24,7 +25,7 @@ public class LoadingState extends NiftyOverlayBasicGameState {
 
 	@Override
 	public int getID() {
-		return 3;
+		return LOADING_STATE_ID;
 	}
 
 	@Override

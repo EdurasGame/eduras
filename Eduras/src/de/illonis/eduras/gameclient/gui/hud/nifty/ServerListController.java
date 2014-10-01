@@ -37,7 +37,7 @@ public class ServerListController extends EdurasScreenController implements
 	private TextField customIpTextField;
 	private final String presetServerIp;
 	private final int presetServerPort;
-	
+
 	private boolean firstTime = true;
 
 	ServerListController(GameControllerBridge game) {
@@ -102,7 +102,7 @@ public class ServerListController extends EdurasScreenController implements
 
 	private void joinServer(ServerInfo server) {
 		game.setServer(server);
-		game.enterState(3);
+		game.enterState(LoadingState.LOADING_STATE_ID);
 		String userName = game.getUsername();
 		ClientRole role = ClientRole.PLAYER;
 		LoginData data = new LoginData(server.getUrl(), server.getPort(),

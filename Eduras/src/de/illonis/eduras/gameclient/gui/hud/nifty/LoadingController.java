@@ -72,6 +72,11 @@ public class LoadingController extends EdurasScreenController {
 		}
 	}
 
+	public void abort() {
+		game.getEduras().exit();
+		game.enterState(ServerListState.SERVER_LIST_STATE_ID);
+	}
+
 	@Override
 	public void onStartScreen() {
 		super.onStartScreen();

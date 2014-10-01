@@ -22,6 +22,7 @@ import de.lessvoid.nifty.slick2d.NiftyOverlayBasicGameState;
  */
 public class GameState extends NiftyOverlayBasicGameState {
 
+	public static final int GAME_STATE_ID = 4;
 	private final GameControllerBridge gameBridge;
 	private EdurasGameInterface edurasGame;
 	private static UnicodeFont defaultFont;
@@ -91,7 +92,7 @@ public class GameState extends NiftyOverlayBasicGameState {
 
 	@Override
 	public int getID() {
-		return 4;
+		return GAME_STATE_ID;
 	}
 
 	@Override
