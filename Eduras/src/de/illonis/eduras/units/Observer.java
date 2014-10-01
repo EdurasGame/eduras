@@ -1,6 +1,6 @@
 package de.illonis.eduras.units;
 
-import org.newdawn.slick.geom.Rectangle;
+import org.newdawn.slick.geom.Circle;
 
 import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.ObjectFactory.ObjectType;
@@ -37,7 +37,7 @@ public class Observer extends ControlledUnit {
 		ai = new MovingUnitAI(this);
 		setOwner(owner);
 		setSpeed(S.Server.unit_observer_speed);
-		setShape(new Rectangle(0, 0, 15, 15));
+		setShape(new Circle(0, 0, S.Server.unit_observer_shaperadius));
 		setVisionAngle(S.Server.unit_observer_visionangle);
 		setVisionRange(S.Server.unit_observer_visionrange);
 		setDetector(true);
@@ -46,8 +46,6 @@ public class Observer extends ControlledUnit {
 
 	@Override
 	public void onCollision(GameObject collidingObject, float angle) {
-		// stop all movement
-		ai.discard();
 	}
 
 	@Override

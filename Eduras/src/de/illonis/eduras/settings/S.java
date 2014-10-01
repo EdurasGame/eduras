@@ -766,6 +766,11 @@ public final class S {
 		 */
 		public static float spell_scout_detectionrange = 200;
 
+		/**
+		 * Determines how large an observer object is.
+		 */
+		public static float unit_observer_shaperadius = 9;
+
 	}
 
 	/**
