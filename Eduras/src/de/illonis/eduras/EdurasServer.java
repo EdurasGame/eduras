@@ -33,6 +33,7 @@ import de.illonis.eduras.chat.ChatUser;
 import de.illonis.eduras.chat.NoSuchRoomException;
 import de.illonis.eduras.chat.NoSuchUserException;
 import de.illonis.eduras.chat.NotConnectedException;
+import de.illonis.eduras.exceptions.EdurasUncaughtExceptionHandler;
 import de.illonis.eduras.exceptions.NoSuchGameModeException;
 import de.illonis.eduras.exceptions.NoSuchMapException;
 import de.illonis.eduras.gameclient.datacache.GraphicsPreLoader;
@@ -533,6 +534,9 @@ public class EdurasServer {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+
+		Thread.setDefaultUncaughtExceptionHandler(new EdurasUncaughtExceptionHandler(
+				L));
 
 		EdurasServer edurasServer = new EdurasServer();
 

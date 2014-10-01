@@ -14,6 +14,7 @@ import org.newdawn.slick.SlickException;
 
 import de.illonis.edulog.EduLog;
 import de.illonis.eduras.SysOutCatcher;
+import de.illonis.eduras.exceptions.EdurasUncaughtExceptionHandler;
 import de.illonis.eduras.gameclient.gui.hud.nifty.EdurasSlickClient;
 import de.illonis.eduras.settings.S;
 import de.illonis.eduras.utils.Pair;
@@ -59,6 +60,9 @@ public class EdurasClient {
 			e.printStackTrace();
 		}
 
+		Thread.setDefaultUncaughtExceptionHandler(new EdurasUncaughtExceptionHandler(
+				L));
+
 		boolean debug = false;
 		// arguments are of form <parametername>=<parametervalue>
 		List<Pair<String, String>> parameters = new LinkedList<Pair<String, String>>();
@@ -79,6 +83,7 @@ public class EdurasClient {
 		final String sClassName = S.class.getSimpleName();
 
 		// read arguments
+
 		Level logLimit = DEFAULT_LOGLIMIT;
 		for (Pair<String, String> pair : parameters) {
 			String parameterName = pair.getFirst();
