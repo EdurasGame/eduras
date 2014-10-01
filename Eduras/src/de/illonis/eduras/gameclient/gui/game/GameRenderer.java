@@ -77,6 +77,9 @@ public class GameRenderer implements TooltipHandler {
 	private static final float INTERACTMODE_OFFSET_Y = 25;
 
 	private static final Color OUTLINE_COLOR = Color.black;
+	private static final Color DETECTION_AREA_COLOR = new Color(1f, 1f, 1f,
+			0.1f);
+
 	private Font font;
 
 	/**
@@ -395,7 +398,13 @@ public class GameRenderer implements TooltipHandler {
 		}
 
 		if (d.isUnit()) {
-			drawHealthBarFor((Unit) d, g);
+			Unit unit = (Unit) d;
+
+			drawHealthBarFor(unit, g);
+
+			if (unit.isDetector()) {
+				drawDetectionAreaFor(unit, g);
+			}
 		}
 
 		if (d instanceof PlayerMainFigure) {
@@ -407,6 +416,13 @@ public class GameRenderer implements TooltipHandler {
 		 * dbg.drawString(d.getId() + "", d.getDrawX() - camera.x, d.getDrawY()
 		 * - camera.y - 15);
 		 */
+	}
+
+	private void drawDetectionAreaFor(Unit unit, Graphics g) {
+		g.setColor(DETECTION_AREA_COLOR);
+		Circle circle = new Circle(unit.getCenterPosition().getX(), unit
+				.getCenterPosition().getY(), unit.getDetectionRange());
+		g.fill(circle);
 	}
 
 	private void drawPlayerSpecifics(PlayerMainFigure d, Graphics g) {
