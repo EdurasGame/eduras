@@ -525,7 +525,9 @@ public class GameRenderer implements TooltipHandler {
 		case DYNAMIC_POLYGON_BLOCK:
 			return Color.pink;
 		case PLAYER:
-			PlayerMainFigure p = (PlayerMainFigure) d;
+		case OBSERVER:
+		case SPELL_SCOUT:
+			Unit p = (Unit) d;
 			if (p.getTeam() == null) {
 				return Color.blue;
 			} else {
