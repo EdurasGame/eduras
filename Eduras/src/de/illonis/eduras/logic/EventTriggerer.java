@@ -1,6 +1,7 @@
 package de.illonis.eduras.logic;
 
 import java.io.File;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -15,6 +16,7 @@ import de.illonis.eduras.Statistic.StatsProperty;
 import de.illonis.eduras.Team;
 import de.illonis.eduras.ai.movement.UnitNotControllableException;
 import de.illonis.eduras.events.GameEvent;
+import de.illonis.eduras.events.GameEvent.GameEventNumber;
 import de.illonis.eduras.events.ItemEvent;
 import de.illonis.eduras.events.ObjectFactoryEvent;
 import de.illonis.eduras.events.SetGameObjectAttributeEvent;
@@ -56,8 +58,9 @@ public interface EventTriggerer {
 	 *            spawn position.
 	 * @param speedVector
 	 *            speed of missile.
+	 * @return the id of the created missile
 	 */
-	void createMissile(ObjectType missileType, int owner, Vector2f position,
+	int createMissile(ObjectType missileType, int owner, Vector2f position,
 			Vector2f speedVector);
 
 	/**
@@ -219,7 +222,7 @@ public interface EventTriggerer {
 	 * @param newPosition
 	 *            target position.
 	 */
-	void guaranteeSetPositionOfObject(int objectId, Vector2df newPosition);
+	void guaranteeSetPositionOfObject(int objectId, Vector2f newPosition);
 
 	/**
 	 * Moves a specific object to a new position instantly, where the position
@@ -531,14 +534,13 @@ public interface EventTriggerer {
 	public void setCollidability(int objectId, boolean newVal);
 
 	/**
-	 * Set a {@link StatsProperty} of the player identified by the given id to
-	 * the given value.
+	 * Set a {@link StatsProperty} of the player to the given value.
 	 * 
 	 * @param property
-	 * @param ownerId
+	 * @param player
 	 * @param valueToSet
 	 */
-	public void setStats(StatsProperty property, int ownerId, int valueToSet);
+	public void setStats(StatsProperty property, Player player, int valueToSet);
 
 	/**
 	 * Increases the count of a player's {@link StatsProperty} by the given
@@ -551,8 +553,7 @@ public interface EventTriggerer {
 	 * @param i
 	 *            amount
 	 */
-	void changeStatOfPlayerByAmount(StatsProperty prop,
-			PlayerMainFigure player, int i);
+	void changeStatOfPlayerByAmount(StatsProperty prop, Player player, int i);
 
 	/**
 	 * Notifies all clients that the {@link NeutralArea} was conquered by the
@@ -724,4 +725,33 @@ public interface EventTriggerer {
 	 * @param charges
 	 */
 	void changeBlinkChargesBy(Player player, int charges);
+
+	/**
+	 * Sends a resource to a player
+	 * 
+	 * @param type
+	 *            type of resource
+	 * 
+	 * @param owner
+	 *            owner id of the player
+	 * @param r
+	 *            name of resource
+	 * @param file
+	 *            file to send
+	 */
+	void sendResource(GameEventNumber type, int owner, String r, Path file);
+
+	/**
+	 * Restarts the game.
+	 */
+	void restartGame();
+
+	/**
+	 * Notify client that AoE damage has been dealt by the given object type at
+	 * the given position.
+	 * 
+	 * @param type
+	 * @param centerPosition
+	 */
+	void notifyAoEDamage(ObjectType type, Vector2f centerPosition);
 }

@@ -78,6 +78,7 @@ public class EdurasSlickClient implements GameControllerBridge {
 	@Override
 	public void exit() {
 		gameContainer.exit();
+		System.exit(0);
 	}
 
 	@Override

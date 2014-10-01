@@ -45,7 +45,7 @@ public class EditorMenu extends JMenuBar implements ActionListener {
 
 	private JMenuItem mapProperties, newMap, saveMap, loadMap, shapeCreator,
 			validate, controls, showNodeConnections, showPortalLinks, exit,
-			manageNodeConnections, undo, redo, fit, about;
+			manageNodeConnections, undo, redo, about;
 
 	EditorMenu(MapInteractor interactor, EditorWindow editorWindow) {
 		this.window = editorWindow;
@@ -109,7 +109,6 @@ public class EditorMenu extends JMenuBar implements ActionListener {
 		showNodeConnections.setAccelerator(KeyStroke.getKeyStroke(
 				KeyEvent.VK_F8, 0));
 		showNodeConnections.addActionListener(this);
-		fit = addItem("Fit map in window", KeyEvent.VK_F, KeyEvent.VK_F7, 0);
 		view.add(showNodeConnections);
 		showPortalLinks = new JCheckBoxMenuItem("Show portal links");
 		showPortalLinks.setMnemonic(KeyEvent.VK_P);
@@ -117,7 +116,6 @@ public class EditorMenu extends JMenuBar implements ActionListener {
 				.getKeyStroke(KeyEvent.VK_F9, 0));
 		showPortalLinks.addActionListener(this);
 		view.add(showPortalLinks);
-		// view.add(fit);
 		add(view);
 
 		JMenu tools = new JMenu("Tools");

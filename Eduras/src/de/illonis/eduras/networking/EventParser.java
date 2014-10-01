@@ -3,6 +3,7 @@ package de.illonis.eduras.networking;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.file.Path;
 import java.util.LinkedList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -14,10 +15,11 @@ import de.eduras.eventingserver.Event;
 import de.eduras.eventingserver.EventHandler;
 import de.eduras.eventingserver.exceptions.TooFewArgumentsExceptions;
 import de.illonis.edulog.EduLog;
+import de.illonis.eduras.ObjectFactory;
 import de.illonis.eduras.ObjectFactory.ObjectType;
 import de.illonis.eduras.Statistic.StatsProperty;
 import de.illonis.eduras.Team;
-import de.illonis.eduras.events.AddPlayerToTeamEvent;
+import de.illonis.eduras.events.AoEDamageEvent;
 import de.illonis.eduras.events.AreaConqueredEvent;
 import de.illonis.eduras.events.BlinkEvent;
 import de.illonis.eduras.events.ClientRenameEvent;
@@ -34,9 +36,12 @@ import de.illonis.eduras.events.MatchEndEvent;
 import de.illonis.eduras.events.MovementEvent;
 import de.illonis.eduras.events.ObjectFactoryEvent;
 import de.illonis.eduras.events.OwnerGameEvent;
+import de.illonis.eduras.events.PlayerAndTeamEvent;
+import de.illonis.eduras.events.RequestResourceEvent;
 import de.illonis.eduras.events.RespawnEvent;
 import de.illonis.eduras.events.ResurrectPlayerEvent;
 import de.illonis.eduras.events.ScoutSpellEvent;
+import de.illonis.eduras.events.SendResourceEvent;
 import de.illonis.eduras.events.SendUnitsEvent;
 import de.illonis.eduras.events.SetAmmunitionEvent;
 import de.illonis.eduras.events.SetAvailableBlinksEvent;
@@ -71,6 +76,8 @@ import de.illonis.eduras.interfaces.GameLogicInterface;
 import de.illonis.eduras.math.Vector2df;
 import de.illonis.eduras.units.InteractMode;
 import de.illonis.eduras.utils.ColorUtils;
+import de.illonis.eduras.utils.ResourceManager;
+import de.illonis.eduras.utils.ResourceManager.ResourceType;
 
 /**
  * This class serves as a bridge between the network and the logic. Events'
@@ -368,9 +375,9 @@ public class EventParser implements EventHandler {
 				logic.onGameEventAppeared(setTeamsEvent);
 				break;
 			case ADD_PLAYER_TO_TEAM:
-				logic.onGameEventAppeared(new AddPlayerToTeamEvent(
-						(Integer) event.getArgument(0), (int) event
-								.getArgument(1)));
+				logic.onGameEventAppeared(new PlayerAndTeamEvent(
+						gameEventNumber, (Integer) event.getArgument(0),
+						(int) event.getArgument(1)));
 				break;
 			case GAME_READY:
 				logic.onGameEventAppeared(new GameReadyEvent());
@@ -408,7 +415,7 @@ public class EventParser implements EventHandler {
 				break;
 			case SET_MAP:
 				logic.onGameEventAppeared(new SetMapEvent((String) event
-						.getArgument(0)));
+						.getArgument(0), (String) event.getArgument(1)));
 				break;
 			case RESURRECT_PLAYER:
 				logic.onGameEventAppeared(new ResurrectPlayerEvent(
@@ -429,6 +436,14 @@ public class EventParser implements EventHandler {
 				logic.onGameEventAppeared(new UnitSpellActionEvent(
 						gameEventNumber, (Integer) event.getArgument(0),
 						(Integer) event.getArgument(1)));
+				break;
+			case AOE_DAMAGE:
+				logic.onGameEventAppeared(new AoEDamageEvent(
+						ObjectFactory.ObjectType
+								.getObjectTypeByNumber((Integer) event
+										.getArgument(0)), new Vector2f(
+								(Float) event.getArgument(1), (Float) event
+										.getArgument(2))));
 				break;
 			case CREATE_UNIT:
 				logic.onGameEventAppeared(new CreateUnitEvent((Integer) event
@@ -455,6 +470,30 @@ public class EventParser implements EventHandler {
 				logic.onGameEventAppeared(new SetSettingPropertyEvent(
 						(String) event.getArgument(0), (String) event
 								.getArgument(1)));
+				break;
+			case REQUEST_MAP:
+				logic.onGameEventAppeared(new RequestResourceEvent(
+						(Integer) event.getArgument(0), gameEventNumber,
+						(String) event.getArgument(1)));
+				break;
+			case SEND_MAP:
+				Path mapFile;
+				try {
+					mapFile = ResourceManager.saveResource(ResourceType.MAP,
+							(String) event.getArgument(0),
+							(byte[]) event.getArgument(1));
+					logic.onGameEventAppeared(new SendResourceEvent(
+							gameEventNumber, (String) event.getArgument(0),
+							mapFile));
+				} catch (IOException e) {
+					L.log(Level.SEVERE, "Cannot read received map file.", e);
+					break;
+				}
+				break;
+			case JOIN_TEAM:
+				logic.onGameEventAppeared(new PlayerAndTeamEvent(
+						GameEventNumber.JOIN_TEAM, (Integer) event
+								.getArgument(0), (Integer) event.getArgument(1)));
 				break;
 			default:
 				L.warning("Cannot handle event with event number "

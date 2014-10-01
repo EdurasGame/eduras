@@ -2,6 +2,7 @@ package de.illonis.eduras.gameclient.gui.game;
 
 import org.newdawn.slick.geom.Vector2f;
 
+import de.illonis.eduras.Team;
 import de.illonis.eduras.gameclient.gui.hud.ClickableGuiElementInterface;
 
 /**
@@ -46,4 +47,6 @@ public interface GuiClickReactor {
 	void mapClicked(Vector2f gamePos);
 
 	void exitRequested();
+
+	void teamSelected(Team team);
 }

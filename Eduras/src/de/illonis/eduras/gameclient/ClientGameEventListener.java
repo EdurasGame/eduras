@@ -1,13 +1,16 @@
 package de.illonis.eduras.gameclient;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.logging.Logger;
 
 import de.illonis.edulog.EduLog;
 import de.illonis.eduras.Team;
+import de.illonis.eduras.events.AoEDamageEvent;
 import de.illonis.eduras.events.ClientRenameEvent;
 import de.illonis.eduras.events.DeathEvent;
 import de.illonis.eduras.events.GameEvent;
+import de.illonis.eduras.events.GameEvent.GameEventNumber;
 import de.illonis.eduras.events.ItemEvent;
 import de.illonis.eduras.events.ItemUseFailedEvent;
 import de.illonis.eduras.events.MatchEndEvent;
@@ -217,5 +220,20 @@ public class ClientGameEventListener implements GameEventListener {
 	public void onStartRound() {
 		ui.onStartRound();
 		effects.onStartRound();
+	}
+
+	@Override
+	public void onResourceRequired(GameEventNumber type, String resource) {
+		client.requestResource(type, resource);
+	}
+
+	@Override
+	public void onTeamsSet(LinkedList<Team> teamList) {
+		ui.onTeamsSet(teamList);
+	}
+
+	@Override
+	public void onAoEDamage(AoEDamageEvent event) {
+		effects.onAoEDamage(event);
 	}
 }

@@ -13,7 +13,7 @@ import de.illonis.eduras.GameInformation;
 public abstract class CircledBlock extends GameObject {
 
 	@Override
-	public void onCollision(GameObject collidingObject) {
+	public void onCollision(GameObject collidingObject, float angle) {
 		// do nothing
 	}
 

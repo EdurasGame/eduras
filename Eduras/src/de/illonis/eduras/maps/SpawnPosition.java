@@ -164,4 +164,14 @@ public class SpawnPosition extends ReferencedEntity implements EditorPlaceable {
 	public float getWidth() {
 		return area.getWidth();
 	}
+
+	@Override
+	public void setWidth(float width) {
+		area.setWidth(width);
+	}
+
+	@Override
+	public void setHeight(float height) {
+		area.setHeight(height);
+	}
 }

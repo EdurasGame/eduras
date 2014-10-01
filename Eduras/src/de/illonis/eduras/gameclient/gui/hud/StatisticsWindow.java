@@ -13,6 +13,9 @@ import org.newdawn.slick.Image;
 
 import de.illonis.edulog.EduLog;
 import de.illonis.eduras.Player;
+import de.illonis.eduras.Statistic;
+import de.illonis.eduras.Statistic.PlayerStatEntry;
+import de.illonis.eduras.Statistic.StatsProperty;
 import de.illonis.eduras.Team;
 import de.illonis.eduras.events.MatchEndEvent;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
@@ -40,6 +43,7 @@ public class StatisticsWindow extends RenderedGuiObject {
 
 	private final static Color COLOR_TEXT = Color.yellow;
 	private final static Color COLOR_HEADER = Color.yellow;
+	private final static Color COLOR_HIGHLIGHT = new Color(1f, 1f, 1f, 0.3f);
 	private int[] xPositions = new int[4];
 	private int topInset;
 	private final static long DISPLAY_TIME = 3000;
@@ -47,6 +51,9 @@ public class StatisticsWindow extends RenderedGuiObject {
 	private Font font, largeFont;
 	private int lineHeight;
 	private int sideInset;
+	private boolean useStored;
+	private Statistic storedStats;
+	private LinkedList<Team> storedTeams;
 
 	private int width, height;
 	private boolean visible;
@@ -62,6 +69,19 @@ public class StatisticsWindow extends RenderedGuiObject {
 		visible = false;
 		screenX = 0;
 		screenY = 0;
+		useStored = false;
+	}
+
+	@Override
+	public void onPlayerJoined(int ownerId) {
+		Player p;
+		try {
+			p = getInfo().getPlayerByOwnerId(ownerId);
+			getInfo().getStatistics().addPlayerToStats(p);
+		} catch (ObjectNotFoundException e) {
+			L.log(Level.WARNING, "Could not add joined player to stats.", e);
+		}
+
 	}
 
 	/**
@@ -75,6 +95,9 @@ public class StatisticsWindow extends RenderedGuiObject {
 	@Override
 	public void setVisible(boolean visible) {
 		this.visible = visible;
+		if (!visible) {
+			useStored = false;
+		}
 	}
 
 	@Override
@@ -120,17 +143,32 @@ public class StatisticsWindow extends RenderedGuiObject {
 				"Status", COLOR_HEADER);
 		// players
 		float y = screenY + topInset + lineHeight;
-		for (Team team : getInfo().getTeams()) {
-			if (getInfo().getGameMode().getNumber() != GameModeNumber.DEATHMATCH) {
-				y += 10;
-				drawTeamRow(team, y);
-			}
-			for (Player p : team.getPlayers()) {
+
+		List<PlayerStatEntry> entries = new LinkedList<PlayerStatEntry>(
+				getStats().getStatList());
+
+		if (getInfo().getGameMode().getNumber() == GameModeNumber.DEATHMATCH) {
+			for (PlayerStatEntry p : entries) {
 				y += lineHeight;
-				drawPlayerRow(p, y);
+				drawPlayerRow(p, g2d, y);
 			}
-			if (getInfo().getGameMode().getNumber() != GameModeNumber.DEATHMATCH) {
-				// gap between teams
+		} else {
+			for (Team team : getInfo().getTeams()) {
+				if (getInfo().getGameMode().getNumber() != GameModeNumber.DEATHMATCH) {
+					y += 10;
+					drawTeamRow(team, y);
+				}
+
+				for (PlayerStatEntry p : entries) {
+					try {
+						if (p.getPlayer().getTeam().equals(team)) {
+							y += lineHeight;
+							drawPlayerRow(p, g2d, y);
+						}
+					} catch (PlayerHasNoTeamException e) {
+						L.log(Level.SEVERE, "Found a player without team.", e);
+					}
+				}
 				y += lineHeight;
 			}
 		}
@@ -139,16 +177,11 @@ public class StatisticsWindow extends RenderedGuiObject {
 	private void drawHeader() {
 		String state = "";
 		if (getInfo().getGameMode() instanceof TeamDeathmatch) {
-			List<Team> teams = new LinkedList<Team>(getInfo().getTeams());
-			if (teams.size() == 2) {
-				state = teams.get(0).getName()
-						+ "  "
-						+ getInfo().getStatistics()
-								.getKillsByTeam(teams.get(0))
-						+ " : "
-						+ getInfo().getStatistics()
-								.getKillsByTeam(teams.get(1)) + "  "
-						+ teams.get(1).getName();
+			if (getTeams().size() == 2) {
+				state = getTeams().get(0).getName() + "  "
+						+ getStats().getKillsByTeam(getTeams().get(0)) + " : "
+						+ getStats().getKillsByTeam(getTeams().get(1)) + "  "
+						+ getTeams().get(1).getName();
 			}
 		} else {
 			state = getInfo().getGameMode().getName();
@@ -165,26 +198,43 @@ public class StatisticsWindow extends RenderedGuiObject {
 				team.getColor());
 	}
 
-	private void drawPlayerRow(Player p, float y) {
+	private void drawPlayerRow(PlayerStatEntry data, Graphics g2d, float y) {
+		Player me = null;
+		try {
+			me = getInfo().getPlayer();
+		} catch (ObjectNotFoundException e1) {
+			L.log(Level.WARNING, "Own player not found while rendering stats.",
+					e1);
+		}
+		if (data.getPlayer().equals(me)) {
+			g2d.setColor(COLOR_HIGHLIGHT);
+			g2d.fillRect(screenX + sideInset, y, width - 2 * sideInset,
+					font.getLineHeight());
+		}
 		// name
-		font.drawString(screenX + xPositions[0], y, p.getName(), COLOR_TEXT);
+		font.drawString(screenX + xPositions[0], y, data.getPlayer().getName(),
+				COLOR_TEXT);
 
 		// deaths
-		font.drawString(screenX + xPositions[1], y, getInfo().getStatistics()
-				.getKillsOfPlayer(p) + "", COLOR_TEXT);
+		font.drawString(screenX + xPositions[1], y,
+				data.getProperty(StatsProperty.KILLS) + "", COLOR_TEXT);
 
 		// kills
-		font.drawString(screenX + xPositions[2], y, getInfo().getStatistics()
-				.getDeathsOfPlayer(p) + "", COLOR_TEXT);
+		font.drawString(screenX + xPositions[2], y,
+				data.getProperty(StatsProperty.DEATHS) + "", COLOR_TEXT);
 
 		// player's status, only show to own team
 		String status = "";
-		try {
-			if (p.getTeam().equals(getInfo().getPlayer().getTeam())) {
-				status = p.getCurrentMode().getDisplayName();
+		if (!useStored) {
+			try {
+				if (data.getPlayer().getTeam()
+						.equals(getInfo().getPlayer().getTeam())) {
+					status = data.getPlayer().getCurrentMode().getDisplayName();
+				}
+			} catch (PlayerHasNoTeamException | ObjectNotFoundException e) {
+				L.log(Level.WARNING,
+						"Could not determine current players team.", e);
 			}
-		} catch (PlayerHasNoTeamException | ObjectNotFoundException e) {
-			L.log(Level.WARNING, "Could not determine current players team.", e);
 		}
 		font.drawString(screenX + xPositions[3], y, status, COLOR_TEXT);
 	}
@@ -197,10 +247,12 @@ public class StatisticsWindow extends RenderedGuiObject {
 	@Override
 	public void onMatchEnd(MatchEndEvent event) {
 		Thread t = new Thread(delayedHider);
-		t.setName("DelayedHider");
+		t.setName("DelayedStatHider");
+		storedStats = getInfo().getStatistics().copy();
+		storedTeams = new LinkedList<Team>(getInfo().getTeams());
+		useStored = true;
 		setVisible(true);
 		t.start();
-		super.onMatchEnd(event);
 	}
 
 	private final Runnable delayedHider = new Runnable() {
@@ -212,7 +264,22 @@ public class StatisticsWindow extends RenderedGuiObject {
 				L.log(Level.SEVERE, "Interrupted when sleeping in delayHider.",
 						e);
 			}
+			useStored = false;
 			setVisible(false);
 		}
 	};
+
+	private LinkedList<Team> getTeams() {
+		if (useStored) {
+			return storedTeams;
+		} else
+			return new LinkedList<Team>(getInfo().getTeams());
+	}
+
+	private Statistic getStats() {
+		if (useStored) {
+			return storedStats;
+		} else
+			return getInfo().getStatistics();
+	}
 }

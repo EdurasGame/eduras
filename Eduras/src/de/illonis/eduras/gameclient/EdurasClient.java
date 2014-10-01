@@ -2,16 +2,11 @@ package de.illonis.eduras.gameclient;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.lang.reflect.Field;
-import java.net.URI;
-import java.nio.file.Files;
-import java.nio.file.LinkOption;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -21,8 +16,10 @@ import de.illonis.edulog.EduLog;
 import de.illonis.eduras.SysOutCatcher;
 import de.illonis.eduras.gameclient.gui.hud.nifty.EdurasSlickClient;
 import de.illonis.eduras.settings.S;
-import de.illonis.eduras.utils.PathFinder;
+import de.illonis.eduras.utils.Pair;
 import de.illonis.eduras.utils.ReflectionTools;
+import de.illonis.eduras.utils.ResourceManager;
+import de.illonis.eduras.utils.ResourceManager.ResourceType;
 
 /**
  * Eduras? Game client for end user.
@@ -34,13 +31,6 @@ public class EdurasClient {
 
 	private final static Logger L = EduLog.getLoggerFor(EdurasClient.class
 			.getName());
-
-	private final static String[] nativeFiles = new String[] {
-			"jinput-dx8_64.dll", "jinput-dx8.dll", "jinput-raw_64.dll",
-			"jinput-raw.dll", "libjinput-linux.so", "libjinput-linux64.so",
-			"libjinput-osx.jnilib", "liblwjgl.jnilib", "liblwjgl.so",
-			"liblwjgl64.so", "libopenal.so", "libopenal64.so", "lwjgl.dll",
-			"lwjgl64.dll", "openal.dylib", "OpenAL32.dll", "OpenAL64.dll" };
 
 	/**
 	 * Indicates how long an Eduras client tries to connect to a server.
@@ -71,10 +61,13 @@ public class EdurasClient {
 
 		boolean debug = false;
 		// arguments are of form <parametername>=<parametervalue>
-		String[][] parametersWithValues = new String[args.length][2];
-
+		List<Pair<String, String>> parameters = new LinkedList<Pair<String, String>>();
 		for (int i = 0; i < args.length; i++) {
-			parametersWithValues[i] = args[i].split("=");
+			if (args[i].contains("=")) {
+				String[] details = args[i].split("=");
+				parameters
+						.add(new Pair<String, String>(details[0], details[1]));
+			}
 		}
 
 		String betaUser = "";
@@ -87,10 +80,9 @@ public class EdurasClient {
 
 		// read arguments
 		Level logLimit = DEFAULT_LOGLIMIT;
-		for (int i = 0; i < args.length; i++) {
-
-			String parameterName = parametersWithValues[i][0];
-			String parameterValue = parametersWithValues[i][1];
+		for (Pair<String, String> pair : parameters) {
+			String parameterName = pair.getFirst();
+			String parameterValue = pair.getSecond();
 
 			if (parameterName.startsWith(sClassName + ".")) {
 				try {
@@ -133,6 +125,7 @@ public class EdurasClient {
 				break;
 			case "debug":
 				debug = true;
+				S.Client.localres = true;
 				break;
 			case "serverip":
 				serverIp = parameterValue;
@@ -162,14 +155,14 @@ public class EdurasClient {
 		}
 
 		try {
-			extractNatives();
-		} catch (UnsatisfiedLinkError | IOException e) {
-			L.log(Level.SEVERE, "Could not extract native libraries.", e);
+			ResourceManager.extractMaps();
+		} catch (IOException e) {
+			L.log(Level.SEVERE, "Can not create data folder.");
 		}
 
 		if (!debug)
-			System.setProperty("org.lwjgl.librarypath",
-					(new File(PathFinder.findFile("native"))).getAbsolutePath());
+			System.setProperty("org.lwjgl.librarypath", ResourceManager
+					.resourceToPath(ResourceType.NATIVE_LIBRARY, "").toString());
 		EdurasSlickClient client = new EdurasSlickClient();
 		try {
 			client.startGui(betaUser, betaPassword, serverIp, serverPort);
@@ -177,32 +170,4 @@ public class EdurasClient {
 			L.log(Level.SEVERE, "Slick error at startup", e);
 		}
 	}
-
-	public static void extractNatives() throws UnsatisfiedLinkError,
-			IOException {
-		URI nativeDir = PathFinder.findFile("native/");
-		Path nativePath = Paths.get(nativeDir);
-		if (Files.exists(nativePath, LinkOption.NOFOLLOW_LINKS)) {
-			L.info("Found native folder. Skipping extraction.");
-			return;
-		} else {
-			L.fine("Creating native directory at " + nativePath);
-			Files.createDirectory(nativePath);
-		}
-
-		L.info("Extracting native libraries...");
-		for (String file : nativeFiles) {
-			InputStream internalFile = EdurasClient.class
-					.getResourceAsStream("/native/" + file);
-			if (internalFile == null)
-				throw new UnsatisfiedLinkError("Could not load " + file);
-
-			Path target = Paths.get(nativeDir.resolve(file));
-			Files.copy(internalFile, target,
-					StandardCopyOption.REPLACE_EXISTING);
-		}
-
-		L.info("Done extracting native libraries.");
-	}
-
 }

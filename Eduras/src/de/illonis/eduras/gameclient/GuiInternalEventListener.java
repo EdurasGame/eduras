@@ -17,6 +17,7 @@ import de.illonis.eduras.events.BlinkEvent;
 import de.illonis.eduras.events.CreateUnitEvent;
 import de.illonis.eduras.events.GameEvent.GameEventNumber;
 import de.illonis.eduras.events.ItemEvent;
+import de.illonis.eduras.events.PlayerAndTeamEvent;
 import de.illonis.eduras.events.ResurrectPlayerEvent;
 import de.illonis.eduras.events.ScoutSpellEvent;
 import de.illonis.eduras.events.SendUnitsEvent;
@@ -24,6 +25,7 @@ import de.illonis.eduras.events.SpawnItemEvent;
 import de.illonis.eduras.events.SwitchInteractModeEvent;
 import de.illonis.eduras.events.UnitSpellActionEvent;
 import de.illonis.eduras.events.UserMovementEvent;
+import de.illonis.eduras.exceptions.ActionFailedException;
 import de.illonis.eduras.exceptions.InsufficientResourceException;
 import de.illonis.eduras.exceptions.MessageNotSupportedException;
 import de.illonis.eduras.exceptions.NotWithinBaseException;
@@ -35,6 +37,7 @@ import de.illonis.eduras.gameclient.gui.game.GamePanelLogic.ClickState;
 import de.illonis.eduras.gameobjects.Base;
 import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.gameobjects.GameObject.Relation;
+import de.illonis.eduras.gameobjects.GameObject.Visibility;
 import de.illonis.eduras.gameobjects.MoveableGameObject.Direction;
 import de.illonis.eduras.logicabstraction.EdurasInitializer;
 import de.illonis.eduras.logicabstraction.InformationProvider;
@@ -300,8 +303,7 @@ public class GuiInternalEventListener implements GamePanelReactor {
 	}
 
 	@Override
-	public void onUnitSpell(Unit targetUnit)
-			throws InsufficientResourceException {
+	public void onUnitSpell(Unit targetUnit) throws ActionFailedException {
 
 		GameEventNumber spellNumber = infoPro.getClientData()
 				.getCurrentSpellSelected();
@@ -330,10 +332,6 @@ public class GuiInternalEventListener implements GamePanelReactor {
 			spellNotification = "Making unit invisible...";
 			break;
 		case BLINK_SPELL:
-			if (!(targetUnit instanceof PlayerMainFigure)) {
-				// TODO: give feedback to user
-				return;
-			}
 			requiredResources = S.Server.spell_blink_costs;
 			spellNotification = "Giving +1 blink charge...";
 			break;
@@ -350,6 +348,12 @@ public class GuiInternalEventListener implements GamePanelReactor {
 			client.getLogic().showNotification("Player is not friendly");
 			return;
 		}
+
+		String errorMessage = checkAdditionalConditions(targetUnit, spellNumber);
+		if (!errorMessage.isEmpty()) {
+			throw new ActionFailedException(errorMessage);
+		}
+
 		try {
 			client.sendEvent(spellEvent);
 			client.getLogic().showNotification(spellNotification);
@@ -357,6 +361,38 @@ public class GuiInternalEventListener implements GamePanelReactor {
 			L.log(Level.SEVERE, "Error sending heal event", e);
 		}
 
+	}
+
+	private String checkAdditionalConditions(Unit targetUnit,
+			GameEventNumber spell) {
+		switch (spell) {
+		case HEAL_ACTION:
+			if (targetUnit.getHealth() == targetUnit.getMaxHealth()) {
+				return "Unit has full health!";
+			} else {
+				return "";
+			}
+		case SPEED_SPELL:
+			if (targetUnit.getSpeed() == targetUnit.getMaxSpeed()) {
+				return "Unit is at maximum speed!";
+			} else {
+				return "";
+			}
+		case INVISIBILITY_SPELL:
+			if (targetUnit.getVisibility().equals(Visibility.OWNER_TEAM)) {
+				return "Unit is invisibile already!";
+			} else {
+				return "";
+			}
+		case BLINK_SPELL:
+			if (!(targetUnit instanceof PlayerMainFigure)) {
+				return "Target is not a player!";
+			} else {
+				return "";
+			}
+		default:
+			return "";
+		}
 	}
 
 	@Override
@@ -492,6 +528,17 @@ public class GuiInternalEventListener implements GamePanelReactor {
 				L.log(Level.WARNING, "Error sending the blink event.", e);
 				return;
 			}
+		}
+	}
+
+	@Override
+	public void teamSelected(Team team) {
+		try {
+			client.sendEvent(new PlayerAndTeamEvent(GameEventNumber.JOIN_TEAM,
+					infoPro.getOwnerID(), team.getTeamId()));
+		} catch (WrongEventTypeException | MessageNotSupportedException e) {
+			L.log(Level.SEVERE, "Cannot select team!", e);
+			return;
 		}
 	}
 }

@@ -70,19 +70,8 @@ public class Edura extends TeamDeathmatch {
 
 	@Override
 	public void onGameStart() {
-		super.onGameStart();
-
-		// make sure all players are in EGO_MODE
-		for (Player player : gameInfo.getPlayers()) {
-			gameInfo.getEventTriggerer().changeInteractMode(
-					player.getPlayerId(), InteractMode.MODE_EGO);
-		}
-
-		loadNodes();
-		giveStartResources();
-		if (S.Server.gm_edura_automatic_respawn) {
-			setUpRespawnTimer();
-		}
+		initTeams();
+		onRoundStarts();
 	}
 
 	private void giveStartResources() {
@@ -273,7 +262,7 @@ public class Edura extends TeamDeathmatch {
 
 	@Override
 	public void onBaseLost(Base base, Team losingTeam) {
-		stopGeneratingResourcesInBaseForTeam(base, losingTeam);
+		stopGeneratingResourcesInBase(base);
 	}
 
 	@Override
@@ -359,6 +348,40 @@ public class Edura extends TeamDeathmatch {
 	@Override
 	public void onGameEnd() {
 		super.onGameEnd();
+	}
+
+	@Override
+	public void onRoundStarts() {
+		EventTriggerer eventTriggerer = gameInfo.getEventTriggerer();
+
+		// make sure all players are in EGO_MODE
+		for (Player player : gameInfo.getPlayers()) {
+			gameInfo.getEventTriggerer().changeInteractMode(
+					player.getPlayerId(), InteractMode.MODE_EGO);
+		}
+
+		for (Team team : teams) {
+			gameInfo.getEventTriggerer().changeResourcesOfTeamByAmount(team,
+					-team.getResource());
+		}
+
+		loadNodes();
+
+		for (Player player : gameInfo.getPlayers()) {
+			eventTriggerer
+					.createObject(ObjectType.PLAYER, player.getPlayerId());
+			eventTriggerer.respawnPlayerAtRandomSpawnpoint(player);
+		}
+
+		giveStartResources();
+		if (S.Server.gm_edura_automatic_respawn) {
+			setUpRespawnTimer();
+		}
+	}
+
+	@Override
+	public void onRoundEnds() {
+		super.onRoundEnds();
 
 		if (S.Server.gm_edura_automatic_respawn && timingSource != null) {
 			timingSource.removeTimedEventHandler(respawnTimer);

@@ -2,6 +2,7 @@ package de.illonis.eduras.logicabstraction;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.logging.Level;
@@ -48,7 +49,6 @@ import de.illonis.eduras.maps.Map;
 import de.illonis.eduras.math.Vector2df;
 import de.illonis.eduras.networking.EventParser;
 import de.illonis.eduras.units.InteractMode;
-import de.illonis.eduras.units.PlayerMainFigure;
 import de.illonis.eduras.units.Unit;
 
 /**
@@ -167,9 +167,9 @@ public class EdurasInitializer {
 		game.setEventTriggerer(new EventTriggerer() {
 
 			@Override
-			public void createMissile(ObjectType missileType, int owner,
+			public int createMissile(ObjectType missileType, int owner,
 					Vector2f position, Vector2f speedVector) {
-
+				return -1;
 			}
 
 			@Override
@@ -206,7 +206,7 @@ public class EdurasInitializer {
 
 			@Override
 			public void guaranteeSetPositionOfObject(int objectId,
-					Vector2df newPosition) {
+					Vector2f newPosition) {
 			}
 
 			@Override
@@ -336,13 +336,13 @@ public class EdurasInitializer {
 			}
 
 			@Override
-			public void setStats(StatsProperty property, int ownerId,
+			public void setStats(StatsProperty property, Player player,
 					int valueToSet) {
 			}
 
 			@Override
 			public void changeStatOfPlayerByAmount(StatsProperty prop,
-					PlayerMainFigure player, int i) {
+					Player player, int i) {
 			}
 
 			@Override
@@ -472,6 +472,20 @@ public class EdurasInitializer {
 			@Override
 			public void setRenderInfoForObject(GameObject o, Color color,
 					TextureKey texture) {
+			}
+
+			@Override
+			public void sendResource(GameEventNumber type, int owner, String r,
+					Path file) {
+			}
+
+			@Override
+			public void restartGame() {
+			}
+
+			@Override
+			public void notifyAoEDamage(ObjectType type, Vector2f centerPosition) {
+
 			}
 
 		});

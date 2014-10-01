@@ -43,7 +43,7 @@ public class Observer extends ControlledUnit {
 	}
 
 	@Override
-	public void onCollision(GameObject collidingObject) {
+	public void onCollision(GameObject collidingObject, float angle) {
 		// stop all movement
 		ai.discard();
 	}

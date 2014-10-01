@@ -113,12 +113,8 @@ public abstract class LogicGameWorker implements Runnable, TimingSource {
 		long gameRemainingTime = gameInformation.getGameSettings()
 				.getRemainingTime();
 
-		if (gameRemainingTime <= 0) {
-			gameInformation.getGameSettings().getGameMode().onTimeUp();
-		} else {
-			gameInformation.getGameSettings().changeTime(
-					gameRemainingTime - delta);
-		}
+		gameInformation.getGameSettings().changeTime(gameRemainingTime - delta);
+
 		notifyTimingTargets(delta);
 		gameUpdate(delta);
 	}
@@ -184,5 +180,10 @@ public abstract class LogicGameWorker implements Runnable, TimingSource {
 	public synchronized final void removeTimedEventHandler(
 			TimedEventHandler eventHandler) {
 		timingTargets.remove(eventHandler);
+	}
+
+	@Override
+	public void clear() {
+		timingTargets.clear();
 	}
 }

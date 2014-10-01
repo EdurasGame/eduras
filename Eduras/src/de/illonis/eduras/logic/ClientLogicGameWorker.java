@@ -16,7 +16,6 @@ import de.illonis.eduras.exceptions.ObjectNotFoundException;
 import de.illonis.eduras.exceptions.PlayerHasNoTeamException;
 import de.illonis.eduras.gameclient.VisionInformation;
 import de.illonis.eduras.gameobjects.GameObject;
-import de.illonis.eduras.gameobjects.MoveableGameObject;
 import de.illonis.eduras.interfaces.GameEventListener;
 import de.illonis.eduras.items.Usable;
 import de.illonis.eduras.logicabstraction.EdurasInitializer;
@@ -56,13 +55,6 @@ public class ClientLogicGameWorker extends LogicGameWorker {
 		for (GameObject o : gameInformation.getObjects().values()) {
 			if (o instanceof Usable) {
 				((Usable) o).reduceCooldown(delta);
-			}
-			if (o instanceof MoveableGameObject) {
-				MoveableGameObject mgo = (MoveableGameObject) o;
-				mgo.onMove(delta, geometry);
-				if (listenerHolder.hasListener())
-					listenerHolder.getListener().onNewObjectPosition(o);
-				gameInformation.getEventTriggerer().notifyNewObjectPosition(o);
 			}
 
 			if (hasRotated(o)) {

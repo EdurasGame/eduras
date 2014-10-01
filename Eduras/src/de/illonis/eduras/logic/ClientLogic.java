@@ -1,16 +1,18 @@
 package de.illonis.eduras.logic;
 
+import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.newdawn.slick.geom.Rectangle;
+import org.newdawn.slick.geom.Vector2f;
 
 import de.illonis.edulog.EduLog;
 import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.ObjectFactory;
 import de.illonis.eduras.Player;
 import de.illonis.eduras.Team;
-import de.illonis.eduras.events.AddPlayerToTeamEvent;
+import de.illonis.eduras.events.AoEDamageEvent;
 import de.illonis.eduras.events.AreaConqueredEvent;
 import de.illonis.eduras.events.ClientRenameEvent;
 import de.illonis.eduras.events.DeathEvent;
@@ -22,7 +24,9 @@ import de.illonis.eduras.events.MatchEndEvent;
 import de.illonis.eduras.events.MovementEvent;
 import de.illonis.eduras.events.ObjectFactoryEvent;
 import de.illonis.eduras.events.OwnerGameEvent;
+import de.illonis.eduras.events.PlayerAndTeamEvent;
 import de.illonis.eduras.events.RespawnEvent;
+import de.illonis.eduras.events.SendResourceEvent;
 import de.illonis.eduras.events.SetAmmunitionEvent;
 import de.illonis.eduras.events.SetAvailableBlinksEvent;
 import de.illonis.eduras.events.SetBooleanGameObjectAttributeEvent;
@@ -54,6 +58,7 @@ import de.illonis.eduras.gamemodes.GameMode;
 import de.illonis.eduras.gameobjects.Base;
 import de.illonis.eduras.gameobjects.DynamicPolygonObject;
 import de.illonis.eduras.gameobjects.GameObject;
+import de.illonis.eduras.gameobjects.MoveableGameObject;
 import de.illonis.eduras.gameobjects.NeutralArea;
 import de.illonis.eduras.gameobjects.TriggerArea;
 import de.illonis.eduras.interfaces.GameEventListener;
@@ -65,9 +70,12 @@ import de.illonis.eduras.items.weapons.Weapon;
 import de.illonis.eduras.logicabstraction.EdurasInitializer;
 import de.illonis.eduras.maps.Map;
 import de.illonis.eduras.maps.persistence.InvalidDataException;
+import de.illonis.eduras.maps.persistence.MapParser;
 import de.illonis.eduras.settings.S;
 import de.illonis.eduras.settings.S.SettingType;
 import de.illonis.eduras.units.Unit;
+import de.illonis.eduras.utils.ResourceManager;
+import de.illonis.eduras.utils.ResourceManager.ResourceType;
 
 /**
  * Logic for client.
@@ -337,9 +345,10 @@ public class ClientLogic implements GameLogicInterface {
 				for (Team team : teamEvent.getTeamList()) {
 					gameInfo.addTeam(team);
 				}
+				getListener().onTeamsSet(teamEvent.getTeamList());
 				break;
 			case ADD_PLAYER_TO_TEAM:
-				AddPlayerToTeamEvent pteEvent = (AddPlayerToTeamEvent) event;
+				PlayerAndTeamEvent pteEvent = (PlayerAndTeamEvent) event;
 				Team teamToAddPlayerTo = gameInfo.findTeamById(pteEvent
 						.getTeam());
 				if (teamToAddPlayerTo == null) {
@@ -469,17 +478,47 @@ public class ClientLogic implements GameLogicInterface {
 				getListener().onGameModeChanged(newMode);
 
 				break;
+			case AOE_DAMAGE:
+				getListener().onAoEDamage((AoEDamageEvent) event);
+				break;
 			case SET_MAP: {
 				SetMapEvent setMapEvent = (SetMapEvent) event;
 				try {
 					gameInfo.setMap(Map.getMapByName(setMapEvent
 							.getNameOfNewMap()));
-					L.info("Set map to " + setMapEvent.getNameOfNewMap());
-					getListener().onMapChanged(setMapEvent);
+
+					try {
+						String hashOfMap = ResourceManager.getHashOfResource(
+								ResourceType.MAP, setMapEvent.getNameOfNewMap()
+										+ MapParser.FILE_EXTENSION);
+						if (!(hashOfMap.equals(setMapEvent.getHashOfMap()))) {
+
+							L.info("Hashs of map "
+									+ setMapEvent.getNameOfNewMap()
+									+ " differ. On server: "
+									+ setMapEvent.getHashOfMap()
+									+ ". On Client: " + hashOfMap);
+
+							throw new NoSuchMapException(
+									setMapEvent.getNameOfNewMap());
+						}
+					} catch (IOException e1) {
+						L.log(Level.SEVERE,
+								"Cannot find map."
+										+ setMapEvent.getNameOfNewMap(), e1);
+					}
 				} catch (NoSuchMapException | InvalidDataException e1) {
-					L.log(Level.SEVERE, "Cannot find or load map "
-							+ setMapEvent.getNameOfNewMap(), e1);
+					L.log(Level.SEVERE,
+							"Cannot find or load map or have a different version of map "
+									+ setMapEvent.getNameOfNewMap(), e1);
+
+					getListener().onResourceRequired(
+							GameEventNumber.REQUEST_MAP,
+							setMapEvent.getNameOfNewMap());
 				}
+
+				L.info("Set map to " + setMapEvent.getNameOfNewMap());
+				getListener().onMapChanged(setMapEvent);
 				break;
 			}
 			case SET_OWNER:
@@ -500,23 +539,46 @@ public class ClientLogic implements GameLogicInterface {
 				SetIntegerGameObjectAttributeEvent setKillsEvent = (SetIntegerGameObjectAttributeEvent) event;
 				int ownerId = setKillsEvent.getObjectId();
 				int newCount = setKillsEvent.getNewValue();
-				gameInfo.getGameSettings().getStats()
-						.setKills(ownerId, newCount);
+				Player killerPlayer;
+				try {
+					killerPlayer = gameInfo.getPlayerByOwnerId(ownerId);
+					gameInfo.getGameSettings().getStats()
+							.setKills(killerPlayer, newCount);
+				} catch (ObjectNotFoundException ex) {
+					L.log(Level.SEVERE,
+							"Could not find player while setting kills.", ex);
+				}
 				break;
 			case SET_DEATHS:
 				SetIntegerGameObjectAttributeEvent setDeathsEvent = (SetIntegerGameObjectAttributeEvent) event;
 				ownerId = setDeathsEvent.getObjectId();
 				newCount = setDeathsEvent.getNewValue();
-				gameInfo.getGameSettings().getStats()
-						.setDeaths(ownerId, newCount);
+				Player deathPlayer;
+				try {
+					deathPlayer = gameInfo.getPlayerByOwnerId(ownerId);
+					gameInfo.getGameSettings().getStats()
+							.setDeaths(deathPlayer, newCount);
+				} catch (ObjectNotFoundException ex) {
+					L.log(Level.SEVERE,
+							"Could not find player while setting deaths.", ex);
+				}
 				break;
 			case SET_STATS:
 				SetStatsEvent setStatsEvent = (SetStatsEvent) event;
-				gameInfo.getGameSettings()
-						.getStats()
-						.setStatsProperty(setStatsEvent.getProperty(),
-								setStatsEvent.getPlayerId(),
-								setStatsEvent.getNewCount());
+				Player statPlayer;
+				try {
+					statPlayer = gameInfo.getPlayerByOwnerId(setStatsEvent
+							.getPlayerId());
+					gameInfo.getGameSettings()
+							.getStats()
+							.setStatsProperty(setStatsEvent.getProperty(),
+									statPlayer, setStatsEvent.getNewCount());
+				} catch (ObjectNotFoundException ex) {
+					L.log(Level.SEVERE,
+							"Could not find player while setting stat "
+									+ setStatsEvent.getProperty(), ex);
+				}
+
 				break;
 			case SET_REMAININGTIME:
 				SetRemainingTimeEvent remainingTimeEvent = (SetRemainingTimeEvent) event;
@@ -532,6 +594,26 @@ public class ClientLogic implements GameLogicInterface {
 				break;
 			case GAME_READY:
 				getListener().onGameReady();
+				break;
+			case SEND_MAP:
+				try {
+					String nameOfReceivedMap = ((SendResourceEvent) event)
+							.getResourceName();
+					gameInfo.setMap(Map.getMapByName(nameOfReceivedMap));
+					getListener()
+							.onMapChanged(
+									new SetMapEvent(
+											nameOfReceivedMap,
+											ResourceManager
+													.getHashOfResource(
+															ResourceType.MAP,
+															nameOfReceivedMap
+																	+ MapParser.FILE_EXTENSION)));
+				} catch (NoSuchMapException | InvalidDataException
+						| IOException e3) {
+					L.log(Level.SEVERE,
+							"Cannot switch to the map we just received.", e3);
+				}
 				break;
 			case BASE_CONQUERED:
 				AreaConqueredEvent baseConqueredEvent = (AreaConqueredEvent) event;
@@ -585,7 +667,49 @@ public class ClientLogic implements GameLogicInterface {
 				}
 				break;
 			}
+			case SET_SPEEDVECTOR: {
+				MovementEvent setSpeedVectorEvent = (MovementEvent) event;
+				try {
+					GameObject object = gameInfo
+							.findObjectById(setSpeedVectorEvent.getObjectId());
+					if (!(object instanceof MoveableGameObject)) {
+						L.warning("Trying to set speed of an object that isn't a moveable one.");
+						break;
+					} else {
+						((MoveableGameObject) object)
+								.setSpeedVector(new Vector2f(
+										setSpeedVectorEvent.getNewXPos(),
+										setSpeedVectorEvent.getNewYPos()));
+					}
+				} catch (ObjectNotFoundException e1) {
+					L.log(Level.WARNING,
+							"Cannot find object to set the speed of!", e1);
+					break;
+				}
+				break;
+			}
+			case SET_SPEED: {
+				SetFloatGameObjectAttributeEvent setSpeedEvent = (SetFloatGameObjectAttributeEvent) event;
+				try {
+					GameObject object = gameInfo.findObjectById(setSpeedEvent
+							.getObjectId());
+					if (!(object instanceof MoveableGameObject)) {
+						L.warning("Trying to set speed of an object that isn't a moveable one.");
+						return;
+					} else {
+						((MoveableGameObject) object).setSpeed(setSpeedEvent
+								.getNewValue());
+					}
+				} catch (ObjectNotFoundException e1) {
+					L.log(Level.WARNING,
+							"Cannot find object to set the speed of!", e1);
+					break;
+				}
+				break;
+			}
 			default:
+				L.warning("Received an event that we cannot handle: "
+						+ event.getEventNumber());
 				break;
 			}
 		}

@@ -26,7 +26,7 @@ public abstract class ActionButton extends GameEventAdapter {
 	/**
 	 * Size of a single button.
 	 */
-	public final static int BUTTON_SIZE = 48;
+	public final static int BUTTON_SIZE = 36;
 
 	private boolean enabled;
 	protected final GamePanelReactor reactor;
@@ -53,7 +53,7 @@ public abstract class ActionButton extends GameEventAdapter {
 	protected final void clearSelection() {
 		clearSelection = true;
 	}
-	
+
 	protected boolean isBackButton() {
 		return false;
 	}
@@ -85,7 +85,7 @@ public abstract class ActionButton extends GameEventAdapter {
 	 * @return the display text.
 	 */
 	public abstract String getLabel();
-	
+
 	/**
 	 * @return the costs.
 	 */

@@ -42,10 +42,9 @@
 			basedir="${base}${build}">
 			<fileset dir="${base}">
 				<include name="res/**" />
+				<exclude name="**/audio/**" />				
 			</fileset>
 			<fileset dir="${base}${src}">
-				<include name="**/*.png"></include>
-				<include name="**/*.gif"></include>
 				<include name="**/*.erm"></include>
 				<include name="**/*.esh"></include>
 				<include name="**/*.properties"></include>
@@ -53,8 +52,6 @@
 			<fileset dir="${base}">
 				<include name="/licenses/**"></include>
 			</fileset>
-			<zipgroupfileset dir="${base}${libs}" includes="*.jar" />
-			<fileset dir="${base}${libs}" includes="native/**" />
 			<fileset file="gitversion" />
 			<manifest>
 				<attribute name="Main-Class"
@@ -73,6 +70,7 @@
 			</fileset>
 			<fileset dir="${base}${src}">
 				<include name="**/*.png"></include>
+				<include name="**/*.png.*"></include>
 				<include name="**/*.erm"></include>
 				<include name="**/*.esh"></include>
 			</fileset>
@@ -93,7 +91,8 @@
 
 		<jar destfile="${jars}/eduras-remoteclient.jar" excludes="**/*.svg, **/unittests/**"
 			basedir="${base}${build}">
-			<zipgroupfileset dir="${base}${libs}" includes="**/*.jar" />
+			<zipgroupfileset dir="${base}${libs}"
+				includes="edulog*.jar, eduras-remote.jar, eventingserver.jar" />
 			<manifest>
 				<attribute name="Main-Class"
 					value="de.illonis.eduras.serverconsole.remote.EdurasRemoteConsoleClient" />
@@ -130,7 +129,7 @@
 				<include name="**/*.png"></include>
 				<include name="**/*.properties"></include>
 			</fileset>
-			<zipgroupfileset dir="${base}${libs}" includes="edulog*.jar" />
+			<zipgroupfileset dir="${base}${libs}" includes="edulog*.jar, slick*.jar" />
 			<manifest>
 				<attribute name="Main-Class"
 					value="de.illonis.eduras.shapecreator.ShapeCreator" />

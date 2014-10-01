@@ -1,11 +1,14 @@
 package de.illonis.eduras.interfaces;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 
 import de.illonis.eduras.Team;
+import de.illonis.eduras.events.AoEDamageEvent;
 import de.illonis.eduras.events.ClientRenameEvent;
 import de.illonis.eduras.events.DeathEvent;
 import de.illonis.eduras.events.GameEvent;
+import de.illonis.eduras.events.GameEvent.GameEventNumber;
 import de.illonis.eduras.events.ItemEvent;
 import de.illonis.eduras.events.ItemUseFailedEvent;
 import de.illonis.eduras.events.MatchEndEvent;
@@ -51,6 +54,14 @@ public interface GameEventListener {
 	 *            owner that requested information.
 	 */
 	void onInformationRequested(ArrayList<GameEvent> infos, int targetOwner);
+
+	/**
+	 * Called when a resource cannot be found.
+	 * 
+	 * @param type
+	 * @param resource
+	 */
+	void onResourceRequired(GameEventNumber type, String resource);
 
 	/**
 	 * Called when a gameobject has been created.
@@ -245,4 +256,19 @@ public interface GameEventListener {
 	 * Called when a new round starts.
 	 */
 	void onStartRound();
+
+	/**
+	 * Called when the teams are set.
+	 * 
+	 * @param teamList
+	 *            list of all teams
+	 */
+	void onTeamsSet(LinkedList<Team> teamList);
+
+	/**
+	 * Called when AoE damage was done somewhere.
+	 * 
+	 * @param event
+	 */
+	void onAoEDamage(AoEDamageEvent event);
 }

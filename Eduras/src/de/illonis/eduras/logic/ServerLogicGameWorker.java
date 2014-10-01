@@ -29,6 +29,11 @@ public class ServerLogicGameWorker extends LogicGameWorker {
 
 	@Override
 	public void gameUpdate(long delta) {
+
+		if (gameInformation.getGameSettings().getRemainingTime() <= 0) {
+			gameInformation.getGameSettings().getGameMode().onTimeUp();
+		}
+
 		for (DelayedLogicAction action : DelayedActionQueue.getActions()) {
 			if (action.timePassed(delta))
 				action.performAction(gameInformation);
@@ -57,7 +62,9 @@ public class ServerLogicGameWorker extends LogicGameWorker {
 			}
 			if (o instanceof MoveableGameObject) {
 				MoveableGameObject mgo = (MoveableGameObject) o;
-				mgo.onMove(delta, geometry);
+				synchronized (o) {
+					mgo.onMove(delta, geometry);
+				}
 				if (o instanceof MotionAIControllable) {
 					MovingUnitAI ai = (MovingUnitAI) ((MotionAIControllable) o)
 							.getAI();

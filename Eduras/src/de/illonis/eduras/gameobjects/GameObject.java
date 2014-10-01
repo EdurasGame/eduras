@@ -5,22 +5,25 @@ import java.util.LinkedList;
 import java.util.logging.Logger;
 
 import org.newdawn.slick.geom.Line;
+import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.Shape;
 import org.newdawn.slick.geom.Vector2f;
 
 import de.illonis.edulog.EduLog;
 import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.ObjectFactory.ObjectType;
+import de.illonis.eduras.Player;
 import de.illonis.eduras.ReferencedEntity;
+import de.illonis.eduras.Team;
 import de.illonis.eduras.ai.AIControllable;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
+import de.illonis.eduras.exceptions.PlayerHasNoTeamException;
 import de.illonis.eduras.exceptions.ShapeNotSupportedException;
 import de.illonis.eduras.gameclient.datacache.CacheInfo.TextureKey;
 import de.illonis.eduras.mapeditor.EditorPlaceable;
 import de.illonis.eduras.math.CollisionPoint;
 import de.illonis.eduras.math.Geometry;
 import de.illonis.eduras.math.Vector2df;
-import de.illonis.eduras.units.PlayerMainFigure;
 import de.illonis.eduras.units.Unit;
 
 /**
@@ -255,6 +258,20 @@ public abstract class GameObject extends ReferencedEntity implements
 		return shape.getHeight();
 	}
 
+	@Override
+	public void setWidth(float width) {
+		if (shape instanceof Rectangle) {
+			((Rectangle) shape).setWidth(width);
+		}
+	}
+
+	@Override
+	public void setHeight(float height) {
+		if (shape instanceof Rectangle) {
+			((Rectangle) shape).setHeight(height);
+		}
+	}
+
 	/**
 	 * Returns the x-position of the object.
 	 * 
@@ -437,11 +454,14 @@ public abstract class GameObject extends ReferencedEntity implements
 	 * 
 	 * @param collidingObject
 	 *            The object colliding with this object.
+	 * @param angle
+	 *            the angle at which the colliding object collides with this
+	 *            object
 	 * 
 	 * @see #isCollidable(GameObject)
 	 * @see #onTouch(GameObject)
 	 */
-	public abstract void onCollision(GameObject collidingObject);
+	public abstract void onCollision(GameObject collidingObject, float angle);
 
 	/**
 	 * This method is called when an object touches this object.<br>
@@ -449,7 +469,7 @@ public abstract class GameObject extends ReferencedEntity implements
 	 * is non-collding.<br>
 	 * This means, whenever a non-collidable object would collide if it was
 	 * collidable, this method is called instead of
-	 * {@link #onCollision(GameObject)}.
+	 * {@link #onCollision(GameObject, float)}.
 	 * 
 	 * @param touchingObject
 	 *            the object touching this object.
@@ -516,23 +536,34 @@ public abstract class GameObject extends ReferencedEntity implements
 		case OWNER_TEAM:
 			if (!other.isUnit())
 				return false;
-			PlayerMainFigure player;
+			Player player;
 			try {
-				player = game.getPlayerByOwnerId(this.owner)
-						.getPlayerMainFigure();
+				player = game.getPlayerByOwnerId(this.owner);
 			} catch (ObjectNotFoundException e) {
 				return false;
 			}
-			return player.getTeam().equals(((Unit) other).getTeam());
+			Team playerTeam;
+			try {
+				playerTeam = player.getTeam();
+			} catch (PlayerHasNoTeamException e) {
+				return false;
+			}
+			Team otherTeam = ((Unit) other).getTeam();
+			if (playerTeam == null || otherTeam == null)
+				return false;
+			return playerTeam.equals(otherTeam);
 		case OWNER_ALLIED:
 			return (game.getGameSettings().getGameMode()
 					.getRelation(this, other) == Relation.ALLIED);
 		case TEAM:
 			if (!isUnit() || !other.isUnit())
 				return false;
-			Unit a = (Unit) this;
-			Unit b = (Unit) other;
-			return a.getTeam().equals(b.getTeam());
+			Team thisTeam = ((Unit) this).getTeam();
+			Team oTeam = ((Unit) other).getTeam();
+			if (thisTeam == null || oTeam == null) {
+				return false;
+			}
+			return thisTeam.equals(oTeam);
 		default:
 			return false;
 		}
@@ -726,5 +757,15 @@ public abstract class GameObject extends ReferencedEntity implements
 				return -1;
 		}
 
+	}
+
+	/**
+	 * Calculates the distance of this object to some point
+	 * 
+	 * @param point
+	 * @return distance
+	 */
+	public float getDistanceTo(Vector2f point) {
+		return getCenterPosition().distance(point);
 	}
 }

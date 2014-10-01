@@ -1,5 +1,6 @@
 package de.illonis.eduras.logic;
 
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.logging.Level;
@@ -11,6 +12,7 @@ import de.illonis.edulog.EduLog;
 import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.ObjectFactory;
 import de.illonis.eduras.Player;
+import de.illonis.eduras.Team;
 import de.illonis.eduras.actions.BlinkSpellAction;
 import de.illonis.eduras.actions.CreateUnitAction;
 import de.illonis.eduras.actions.HealSpellAction;
@@ -28,6 +30,8 @@ import de.illonis.eduras.events.GameEvent.GameEventNumber;
 import de.illonis.eduras.events.GameInfoRequest;
 import de.illonis.eduras.events.InitInformationEvent;
 import de.illonis.eduras.events.ItemEvent;
+import de.illonis.eduras.events.PlayerAndTeamEvent;
+import de.illonis.eduras.events.RequestResourceEvent;
 import de.illonis.eduras.events.ResurrectPlayerEvent;
 import de.illonis.eduras.events.ScoutSpellEvent;
 import de.illonis.eduras.events.SendUnitsEvent;
@@ -51,8 +55,11 @@ import de.illonis.eduras.items.Item;
 import de.illonis.eduras.items.ItemUseInformation;
 import de.illonis.eduras.items.Usable;
 import de.illonis.eduras.locale.Localization;
+import de.illonis.eduras.maps.persistence.MapParser;
 import de.illonis.eduras.units.PlayerMainFigure;
 import de.illonis.eduras.units.Unit;
+import de.illonis.eduras.utils.ResourceManager;
+import de.illonis.eduras.utils.ResourceManager.ResourceType;
 
 /**
  * Server logic.
@@ -372,11 +379,12 @@ public class ServerLogic implements GameLogicInterface {
 									blinkEvent.getBlinkTarget());
 
 					// set player to the target
-					gameInfo.getEventTriggerer()
-							.guaranteeSetPositionOfObjectAtCenter(
-									blinkingPlayer.getPlayerMainFigure()
-											.getId(), actualBlinkTarget);
-
+					synchronized (blinkingMainFigure) {
+						gameInfo.getEventTriggerer()
+								.guaranteeSetPositionOfObjectAtCenter(
+										blinkingPlayer.getPlayerMainFigure()
+												.getId(), actualBlinkTarget);
+					}
 				} catch (NoSpawnAvailableException e1) {
 					// TODO: Send a notification to the client, since it didn't
 					// figure it out itself that there is no spawn available
@@ -415,6 +423,41 @@ public class ServerLogic implements GameLogicInterface {
 			}
 			break;
 		}
+		case REQUEST_MAP:
+			RequestResourceEvent requestResourceEvent = (RequestResourceEvent) event;
+			Path file = ResourceManager.resourceToPath(ResourceType.MAP,
+					requestResourceEvent.getResourceName()
+							+ MapParser.FILE_EXTENSION);
+			gameInfo.getEventTriggerer().sendResource(GameEventNumber.SEND_MAP,
+					requestResourceEvent.getOwner(),
+					requestResourceEvent.getResourceName(), file);
+			break;
+		case JOIN_TEAM:
+			PlayerAndTeamEvent playerAndTeamEvent = (PlayerAndTeamEvent) event;
+			Team team = gameInfo.findTeamById(playerAndTeamEvent.getTeam());
+
+			if (team == null) {
+				L.severe("Cannot find given team.");
+				return;
+			}
+
+			gameInfo.getEventTriggerer().addPlayerToTeam(
+					playerAndTeamEvent.getOwner(), team);
+
+			Player player;
+			try {
+				player = gameInfo.getPlayerByOwnerId(playerAndTeamEvent
+						.getOwner());
+			} catch (ObjectNotFoundException e1) {
+				L.log(Level.SEVERE, "Cant find player.", e1);
+				break;
+			}
+
+			if (!player.isDead()) {
+				gameInfo.getEventTriggerer().respawnPlayerAtRandomSpawnpoint(
+						player);
+			}
+			break;
 		default:
 			L.severe(Localization.getStringF("Server.networking.illegalevent",
 					event.getClass()));

@@ -2,10 +2,12 @@ package de.illonis.eduras.logic;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -30,7 +32,7 @@ import de.illonis.eduras.Team;
 import de.illonis.eduras.ai.movement.MotionAIControllable;
 import de.illonis.eduras.ai.movement.MovingUnitAI;
 import de.illonis.eduras.ai.movement.UnitNotControllableException;
-import de.illonis.eduras.events.AddPlayerToTeamEvent;
+import de.illonis.eduras.events.AoEDamageEvent;
 import de.illonis.eduras.events.AreaConqueredEvent;
 import de.illonis.eduras.events.ClientRenameEvent;
 import de.illonis.eduras.events.DeathEvent;
@@ -44,7 +46,9 @@ import de.illonis.eduras.events.MatchEndEvent;
 import de.illonis.eduras.events.MovementEvent;
 import de.illonis.eduras.events.ObjectFactoryEvent;
 import de.illonis.eduras.events.OwnerGameEvent;
+import de.illonis.eduras.events.PlayerAndTeamEvent;
 import de.illonis.eduras.events.RespawnEvent;
+import de.illonis.eduras.events.SendResourceEvent;
 import de.illonis.eduras.events.SetAmmunitionEvent;
 import de.illonis.eduras.events.SetAvailableBlinksEvent;
 import de.illonis.eduras.events.SetBooleanGameObjectAttributeEvent;
@@ -96,12 +100,15 @@ import de.illonis.eduras.items.weapons.Weapon;
 import de.illonis.eduras.maps.InitialObjectData;
 import de.illonis.eduras.maps.Map;
 import de.illonis.eduras.maps.SpawnPosition;
+import de.illonis.eduras.maps.persistence.MapParser;
 import de.illonis.eduras.math.Vector2df;
 import de.illonis.eduras.settings.S;
 import de.illonis.eduras.settings.S.SettingType;
 import de.illonis.eduras.units.InteractMode;
 import de.illonis.eduras.units.PlayerMainFigure;
 import de.illonis.eduras.units.Unit;
+import de.illonis.eduras.utils.ResourceManager;
+import de.illonis.eduras.utils.ResourceManager.ResourceType;
 
 /**
  * Server Event Triggerer
@@ -146,7 +153,7 @@ public class ServerEventTriggerer implements EventTriggerer {
 	}
 
 	@Override
-	public void createMissile(ObjectType missileType, int owner,
+	public int createMissile(ObjectType missileType, int owner,
 			Vector2f position, Vector2f speedVector) {
 
 		int missileId = createObjectWithCenterAt(missileType, position, owner);
@@ -155,7 +162,7 @@ public class ServerEventTriggerer implements EventTriggerer {
 			o = (Missile) gameInfo.findObjectById(missileId);
 		} catch (ObjectNotFoundException e) {
 			L.log(Level.WARNING, "Cannot find missile object!", e);
-			return;
+			return -1;
 		}
 
 		o.setSpeedVector(speedVector);
@@ -166,6 +173,7 @@ public class ServerEventTriggerer implements EventTriggerer {
 
 		sendEventToAll(me);
 
+		return missileId;
 	}
 
 	private void sendEventToAll(Event event) {
@@ -354,7 +362,7 @@ public class ServerEventTriggerer implements EventTriggerer {
 	}
 
 	@Override
-	public void guaranteeSetPositionOfObject(int objectId, Vector2df newPosition) {
+	public void guaranteeSetPositionOfObject(int objectId, Vector2f newPosition) {
 		setPositionOfObject(objectId, newPosition, PacketType.TCP);
 	}
 
@@ -486,15 +494,28 @@ public class ServerEventTriggerer implements EventTriggerer {
 	}
 
 	@Override
+	public void restartGame() {
+		gameInfo.getGameSettings().getGameMode().onGameEnd();
+		changeMap(gameInfo.getMap());
+		gameInfo.getGameSettings().getGameMode().onGameStart();
+	}
+
+	@Override
 	public void restartRound() {
 
-		gameInfo.getGameSettings().getGameMode().onGameEnd();
+		gameInfo.getGameSettings().getGameMode().onRoundEnds();
+
 		for (Player player : gameInfo.getPlayers()) {
 			resetStats(player);
 		}
-		changeMap(gameInfo.getMap());
+		try {
+			gameInfo.getTimingSource().clear();
+		} catch (NoSuchElementException e) {
+			// first start, do nothing
+		}
+		reloadMap(gameInfo.getMap());
 		resetSettings();
-		gameInfo.getGameSettings().getGameMode().onGameStart();
+		gameInfo.getGameSettings().getGameMode().onRoundStarts();
 		sendEvents(new StartRoundEvent());
 	}
 
@@ -510,22 +531,40 @@ public class ServerEventTriggerer implements EventTriggerer {
 
 	@Override
 	public void changeGameMode(GameMode newMode) {
+		gameInfo.getGameSettings().getGameMode().onGameEnd();
+
 		gameInfo.getGameSettings().changeGameMode(newMode);
 		SetGameModeEvent event = new SetGameModeEvent(newMode.getName());
 
-		restartRound();
+		reloadMap(gameInfo.getMap());
+		gameInfo.getGameSettings().getGameMode().onGameStart();
 
 		sendEvents(event);
 	}
 
 	@Override
 	public void changeMap(Map map) {
+
 		gameInfo.setMap(map);
-		removeAllObjects();
 
 		// notify client
-		SetMapEvent setMapEvent = new SetMapEvent(map.getName());
+		SetMapEvent setMapEvent;
+		try {
+			setMapEvent = new SetMapEvent(map.getName(),
+					ResourceManager.getHashOfResource(ResourceType.MAP,
+							map.getName() + MapParser.FILE_EXTENSION));
+		} catch (IOException e1) {
+			L.log(Level.SEVERE, "Cannot calculate Hash of map!", e1);
+			setMapEvent = new SetMapEvent(map.getName(), "");
+		}
 		sendEvents(setMapEvent);
+
+		reloadMap(map);
+
+	}
+
+	private void reloadMap(Map map) {
+		removeAllObjects();
 
 		LinkedList<InitialObjectData> portalData = new LinkedList<InitialObjectData>();
 		// send objects to client
@@ -549,6 +588,10 @@ public class ServerEventTriggerer implements EventTriggerer {
 				if (initialObject.getType() == ObjectType.DYNAMIC_POLYGON_BLOCK) {
 					setRenderInfoForObject(o, initialObject.getColor(),
 							initialObject.getTexture());
+				}
+				if (o instanceof TriggerArea && initialObject.getWidth() > 0) {
+					setTriggerAreaSize(o.getId(), initialObject.getWidth(),
+							initialObject.getHeight());
 				}
 			} catch (ObjectNotFoundException e) {
 				L.log(Level.SEVERE,
@@ -655,8 +698,10 @@ public class ServerEventTriggerer implements EventTriggerer {
 	 * @param player
 	 */
 	private void resetStats(Player player) {
-		setStats(StatsProperty.KILLS, player.getPlayerId(), 0);
-		setStats(StatsProperty.DEATHS, player.getPlayerId(), 0);
+		getGameInfo().getGameSettings().getStats().resetStatsFor(player);
+		for (StatsProperty prop : StatsProperty.values()) {
+			setStats(prop, player, 0);
+		}
 	}
 
 	private void resetSettings() {
@@ -722,8 +767,9 @@ public class ServerEventTriggerer implements EventTriggerer {
 
 		for (Team team : teams) {
 			for (Player player : team.getPlayers()) {
-				sendEvents(new AddPlayerToTeamEvent(player.getPlayerId(),
-						team.getTeamId()));
+				sendEvents(new PlayerAndTeamEvent(
+						GameEventNumber.ADD_PLAYER_TO_TEAM,
+						player.getPlayerId(), team.getTeamId()));
 			}
 		}
 	}
@@ -748,8 +794,8 @@ public class ServerEventTriggerer implements EventTriggerer {
 		}
 		team.addPlayer(newPlayer);
 
-		AddPlayerToTeamEvent event = new AddPlayerToTeamEvent(ownerId,
-				team.getTeamId());
+		PlayerAndTeamEvent event = new PlayerAndTeamEvent(
+				GameEventNumber.ADD_PLAYER_TO_TEAM, ownerId, team.getTeamId());
 		sendEvents(event);
 	}
 
@@ -904,28 +950,28 @@ public class ServerEventTriggerer implements EventTriggerer {
 	}
 
 	@Override
-	public void setStats(StatsProperty property, int ownerId, int valueToSet) {
+	public void setStats(StatsProperty property, Player player, int valueToSet) {
 		Statistic stats = gameInfo.getGameSettings().getStats();
 
 		synchronized (stats) {
-			stats.setStatsProperty(property, ownerId, valueToSet);
+			stats.setStatsProperty(property, player, valueToSet);
 
-			SetStatsEvent setStatsEvent = new SetStatsEvent(property, ownerId,
-					valueToSet);
+			SetStatsEvent setStatsEvent = new SetStatsEvent(property,
+					player.getPlayerId(), valueToSet);
 			sendEvents(setStatsEvent);
 		}
 	}
 
 	@Override
-	public void changeStatOfPlayerByAmount(StatsProperty prop,
-			PlayerMainFigure player, int i) {
+	public void changeStatOfPlayerByAmount(StatsProperty prop, Player player,
+			int i) {
 		Statistic stats = gameInfo.getGameSettings().getStats();
 
 		synchronized (stats) {
-			int newVal = stats.getStatsProperty(prop, player.getOwner()) + i;
-			stats.setStatsProperty(prop, player.getOwner(), newVal);
+			int newVal = stats.getStatsProperty(prop, player) + i;
+			stats.setStatsProperty(prop, player, newVal);
 			SetStatsEvent setStatsEvent = new SetStatsEvent(prop,
-					player.getOwner(), newVal);
+					player.getPlayerId(), newVal);
 			sendEvents(setStatsEvent);
 		}
 	}
@@ -1236,7 +1282,15 @@ public class ServerEventTriggerer implements EventTriggerer {
 			final MoveableGameObject objectToSpeedUp,
 			final long timeInMiliseconds, final float speedUpValue) {
 
-		changeSpeedBy(objectToSpeedUp, speedUpValue);
+		final float actualSpeedUp;
+		if (objectToSpeedUp.getMaxSpeed() == MoveableGameObject.INFINITE_SPEED) {
+			actualSpeedUp = speedUpValue;
+		} else {
+			actualSpeedUp = Math.min(speedUpValue,
+					objectToSpeedUp.getMaxSpeed() - objectToSpeedUp.getSpeed());
+		}
+
+		changeSpeedBy(objectToSpeedUp, actualSpeedUp);
 
 		new OneTimeTimedEventHandler(objectToSpeedUp.getTimingSource()) {
 
@@ -1247,7 +1301,7 @@ public class ServerEventTriggerer implements EventTriggerer {
 
 			@Override
 			public void intervalElapsed() {
-				changeSpeedBy(objectToSpeedUp, speedUpValue * -1);
+				changeSpeedBy(objectToSpeedUp, actualSpeedUp * -1);
 			}
 		};
 
@@ -1312,5 +1366,22 @@ public class ServerEventTriggerer implements EventTriggerer {
 
 		sendEvents(new SetAvailableBlinksEvent(player.getPlayerId(),
 				player.getBlinksAvailable()));
+	}
+
+	@Override
+	public void sendResource(GameEventNumber type, int owner, String mapName,
+			Path file) {
+
+		try {
+			sendEventToClient(new SendResourceEvent(type, mapName, file), owner);
+		} catch (IOException e) {
+			L.log(Level.SEVERE, "Error sending resource: message", e);
+		}
+
+	}
+
+	@Override
+	public void notifyAoEDamage(ObjectType type, Vector2f centerPosition) {
+		sendEventToAll(new AoEDamageEvent(type, centerPosition));
 	}
 }

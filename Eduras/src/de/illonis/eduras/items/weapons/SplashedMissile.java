@@ -30,11 +30,10 @@ public class SplashedMissile extends Missile {
 		super(game, timingSource, id);
 		setObjectType(ObjectType.MISSILE_SPLASHED);
 		setDamage(S.Server.go_splashedmissile_damage);
-		setDamageRadius(S.Server.go_splashedmissile_damageradius);
 		setShape(new Circle(S.Server.go_splashedmissile_shape_radius,
 				S.Server.go_splashedmissile_shape_radius,
 				S.Server.go_splashedmissile_shape_radius));
 		setSpeed(S.Server.go_splashedmissile_speed);
-		setMaxRange(S.Server.go_splashedmissile_maxrange);
+		setMaxRange(S.Server.go_splashedmissile_damageradius);
 	}
 }

@@ -37,5 +37,5 @@ public abstract class DisposableUnit extends Unit {
 	}
 
 	@Override
-	public abstract void onCollision(GameObject collidingObject);
+	public abstract void onCollision(GameObject collidingObject, float angle);
 }

@@ -114,6 +114,11 @@ public interface UserInputListener {
 	/**
 	 * Ask the user to quit the game.
 	 */
-	void askGameQuit();
+	void cancel();
+
+	/**
+	 * Displays a select team dialogue.
+	 */
+	void showSelectTeam();
 
 }

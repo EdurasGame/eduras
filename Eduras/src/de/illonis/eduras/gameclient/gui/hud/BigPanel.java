@@ -102,14 +102,21 @@ public class BigPanel extends RenderedGuiObject {
 
 	@Override
 	public void onMatchEnd(MatchEndEvent event) {
+		int winnerId = event.getWinnerId();
+
+		if (winnerId == -1) {
+			setMessage("Draw");
+			return;
+		}
+
 		if (getInfo().getGameMode() instanceof TeamDeathmatch) {
-			Team team = getInfo().findTeamById(event.getWinnerId());
+			Team team = getInfo().findTeamById(winnerId);
 			if (team != null) {
 				setMessage(team.getName() + " won");
 			}
 		} else if (getInfo().getGameMode() instanceof Deathmatch) {
 			try {
-				Player p = getInfo().getPlayerByOwnerId(event.getWinnerId());
+				Player p = getInfo().getPlayerByOwnerId(winnerId);
 				setMessage(p.getName() + " won");
 			} catch (ObjectNotFoundException e) {
 				L.log(Level.WARNING, "Could not find winning player", e);

@@ -15,6 +15,7 @@ import de.illonis.eduras.gameclient.datacache.CacheInfo.ImageKey;
 import de.illonis.eduras.gameclient.datacache.FontCache;
 import de.illonis.eduras.gameclient.datacache.FontCache.FontKey;
 import de.illonis.eduras.gameclient.datacache.ImageCache;
+import de.illonis.eduras.gameclient.gui.game.GameRenderer;
 import de.illonis.eduras.settings.S;
 import de.illonis.eduras.units.InteractMode;
 
@@ -22,16 +23,18 @@ public class BlinkDisplay extends CooldownGuiObject {
 
 	private final static Logger L = EduLog.getLoggerFor(BlinkDisplay.class
 			.getName());
+	private final MiniMap minimap;
 
-	public BlinkDisplay(UserInterface gui) {
+	public BlinkDisplay(UserInterface gui, MiniMap minimap) {
 		super(gui);
-
+		this.minimap = minimap;
+		screenX = (ItemDisplay.BLOCKSIZE + 30) * GameRenderer.getRenderScale();
 		setActiveInteractModes(InteractMode.MODE_EGO);
 	}
 
 	@Override
 	public void render(Graphics g) {
-		Font font = FontCache.getFont(FontKey.SMALL_FONT, g);
+		Font font = FontCache.getFont(FontKey.TOOLTIP_FONT, g);
 		try {
 			Image blinkIcon;
 			try {
@@ -41,15 +44,17 @@ public class BlinkDisplay extends CooldownGuiObject {
 				return;
 			}
 
-			g.drawImage(blinkIcon, screenX, screenY);
+			g.drawImage(blinkIcon, screenX, screenY - blinkIcon.getHeight());
+			String blinks = getInfo().getPlayer().getBlinksAvailable() + "";
+			int width = font.getWidth(blinks);
 
-			g.setColor(Color.white);
-			font.drawString(screenX + (3f / 7f) * blinkIcon.getWidth(), screenY
-					+ (2f / 7f) * blinkIcon.getHeight(), getInfo().getPlayer()
-					.getBlinksAvailable() + "");
+			font.drawString(screenX + (blinkIcon.getWidth() - width) / 2,
+					screenY - blinkIcon.getHeight()
+							+ (blinkIcon.getHeight() - font.getLineHeight())
+							/ 2, blinks, Color.white);
 
-			renderCooldown(g, screenX, screenY, blinkIcon.getWidth(),
-					blinkIcon.getHeight());
+			renderCooldown(g, screenX, screenY - blinkIcon.getHeight(),
+					blinkIcon.getWidth(), blinkIcon.getHeight());
 		} catch (ObjectNotFoundException e) {
 			L.log(Level.WARNING, "Cannot find player!", e);
 		}
@@ -57,8 +62,7 @@ public class BlinkDisplay extends CooldownGuiObject {
 
 	@Override
 	public void onGuiSizeChanged(int newWidth, int newHeight) {
-		screenX = 0;
-		screenY = newHeight / 2;
+		screenY = newHeight - minimap.getSize() - 10;
 	}
 
 	@Override

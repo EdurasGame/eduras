@@ -21,5 +21,9 @@ public interface EditorPlaceable extends Referencable {
 	float getHeight();
 
 	float getWidth();
+	
+	void setWidth(float width);
+	
+	void setHeight(float height);
 
 }

@@ -43,7 +43,7 @@ public class ServerSearcher extends Thread {
 	/**
 	 * The address of the meta server.
 	 */
-	public final static String METASERVER_ADDRESS = "ren-mai.net";
+	public final static String METASERVER_ADDRESS = "84.201.34.226";
 
 	/**
 	 * Creates a new server searcher.

@@ -1,6 +1,7 @@
 package de.illonis.eduras.math;
 
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.TreeSet;
@@ -14,6 +15,7 @@ import de.illonis.edulog.EduLog;
 import de.illonis.eduras.exceptions.ShapeNotSupportedException;
 import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.gameobjects.MoveableGameObject;
+import de.illonis.eduras.utils.Pair;
 
 /**
  * This geometry implementation identifies the cases where
@@ -23,6 +25,11 @@ import de.illonis.eduras.gameobjects.MoveableGameObject;
  * 
  */
 public class LinearAlgebraGeometry extends SimpleGeometry {
+
+	/**
+	 * Determines how far a away an object is set from a wall.
+	 */
+	private static final float DISTANCE_TO_BORDER = 0.001f;
 
 	private final static Logger L = EduLog
 			.getLoggerFor(LinearAlgebraGeometry.class.getName());
@@ -44,13 +51,12 @@ public class LinearAlgebraGeometry extends SimpleGeometry {
 
 	@Override
 	public Vector2f moveTo(MoveableGameObject movingObject, Vector2f target,
-			Collection<GameObject> touched, Collection<GameObject> collided) {
+			Collection<Pair<GameObject, Float>> touched,
+			Collection<Pair<GameObject, Float>> collided) {
 
 		Vector2f result = new Vector2f(target);
 		Map<Integer, GameObject> gameObjects = movingObject.getGame()
 				.getObjects();
-
-		GameObject collisionObject = null;
 
 		Vector2f positionVector = movingObject.getPositionVector();
 
@@ -71,8 +77,9 @@ public class LinearAlgebraGeometry extends SimpleGeometry {
 				movingObject.getShape(), target);
 		TreeSet<GameObject> touchedObjects = new TreeSet<GameObject>(
 				new GameObject.GameObjectIdComparator());
+		HashMap<GameObject, Float> angleOfTouchedObjects = new HashMap<GameObject, Float>();
 
-		LinkedList<CollisionPoint> collisions = new LinkedList<CollisionPoint>();
+		HashMap<CollisionPoint, GameObject> collisions = new HashMap<CollisionPoint, GameObject>();
 
 		float sizeOfThisObject = movingObject.getShape()
 				.getBoundingCircleRadius();
@@ -121,14 +128,18 @@ public class LinearAlgebraGeometry extends SimpleGeometry {
 
 			if (GameObject.canCollideWithEachOther(movingObject, singleObject)) {
 				// remember the gameObject that had a collision
-				collisionObject = singleObject;
-				collisions.add(nearestCollision);
+				collisions.put(nearestCollision, singleObject);
 			} else {
 				touchedObjects.add(singleObject);
+				angleOfTouchedObjects.put(singleObject,
+						nearestCollision.getAngle());
 			}
 		}
 
-		touched.addAll(touchedObjects);
+		for (GameObject aTouchedObject : touchedObjects) {
+			touched.add(new Pair<GameObject, Float>(aTouchedObject,
+					angleOfTouchedObjects.get(aTouchedObject)));
+		}
 
 		if (!movingObject.isCollidable(null)) {
 			return result;
@@ -136,20 +147,17 @@ public class LinearAlgebraGeometry extends SimpleGeometry {
 
 		// Figure out which collision is the nearest
 		CollisionPoint resultingCollisionPoint = null;
-		if (collisions.size() > 1) {
+		if (collisions.size() > 0) {
 			resultingCollisionPoint = CollisionPoint
-					.findNearestCollision(collisions);
-			System.out.println("Multiple collisions!");
-		} else {
-			if (collisions.size() > 0) {
-				resultingCollisionPoint = collisions.getFirst();
-			}
+					.findNearestCollision(collisions.keySet());
 		}
 
+		GameObject collisionObject = collisions.get(resultingCollisionPoint);
 		// if there was a collision, notify the involved objects and calculate
 		// the new position
 		if (collisionObject != null) {
-			collided.add(collisionObject);
+			collided.add(new Pair<GameObject, Float>(collisionObject,
+					resultingCollisionPoint.getAngle()));
 
 			// Use the following code as an alternative. Gives more accurate
 			// results, but is visually ugly and can lead to stucking at edges
@@ -158,6 +166,7 @@ public class LinearAlgebraGeometry extends SimpleGeometry {
 					resultingCollisionPoint.getInterceptPoint());
 			Vector2f addOnVector = Geometry.invert(
 					resultingCollisionPoint.getDistanceVector()).getNormal();
+			addOnVector.scale(DISTANCE_TO_BORDER);
 			addOnVector.add(Geometry.calculateDistanceVector(
 					resultingCollisionPoint.getInterceptPointOnShape(),
 					positionVector));

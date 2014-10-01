@@ -1,7 +1,5 @@
 package de.illonis.eduras.items.weapons;
 
-import java.util.LinkedList;
-
 import org.newdawn.slick.geom.Circle;
 
 import de.illonis.eduras.GameInformation;
@@ -22,7 +20,6 @@ import de.illonis.eduras.units.Unit;
 public abstract class Missile extends MoveableGameObject {
 
 	private int damage;
-	private float damageRadius;
 	private float maxRange = 0;
 	private float rangeMoved;
 
@@ -87,26 +84,6 @@ public abstract class Missile extends MoveableGameObject {
 		return damage;
 	}
 
-	/**
-	 * Returns the radius in which the missile causes damage to objects relative
-	 * to its position.
-	 * 
-	 * @return the radius
-	 */
-	public float getDamageRadius() {
-		return damageRadius;
-	}
-
-	/**
-	 * Sets the radius in which the missile causes damage to objects relative to
-	 * its position.
-	 * 
-	 * @param damageRadius
-	 */
-	public void setDamageRadius(float damageRadius) {
-		this.damageRadius = damageRadius;
-	}
-
 	@Override
 	public void onMove(long delta, ShapeGeometry geometry) {
 		if (maxRange == 0)
@@ -122,7 +99,7 @@ public abstract class Missile extends MoveableGameObject {
 	}
 
 	@Override
-	public void onCollision(GameObject collidingObject) {
+	public void onCollision(GameObject collidingObject, float angle) {
 		Relation relation = getGame().getGameSettings().getGameMode()
 				.getRelation(this, collidingObject);
 
@@ -131,23 +108,6 @@ public abstract class Missile extends MoveableGameObject {
 			((Unit) collidingObject).damagedBy(getDamage(), getOwner());
 		}
 
-		if (getDamageRadius() > 1.5) {
-			LinkedList<GameObject> nearObjects = getGame()
-					.findObjectsInDistance(getPositionVector(),
-							getDamageRadius());
-			for (GameObject nearObject : nearObjects) {
-				// do not handle collided object twice.
-				if (nearObject.equals(collidingObject)
-						|| nearObject.equals(this))
-					continue;
-				Relation nearRelation = getGame().getGameSettings()
-						.getGameMode().getRelation(this, nearObject);
-
-				if (nearRelation == Relation.HOSTILE && nearObject.isUnit()) {
-					((Unit) nearObject).damagedBy(getDamage(), getOwner());
-				}
-			}
-		}
 		// TODO: use damage radius
 		removeSelf();
 	}

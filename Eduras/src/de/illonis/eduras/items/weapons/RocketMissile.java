@@ -11,7 +11,7 @@ import de.illonis.eduras.shapes.ShapeFactory.ShapeType;
  * @author Florian Mai <florian.ren.mai@googlemail.com>
  * 
  */
-public class RocketMissile extends Missile {
+public class RocketMissile extends AoEMissile {
 
 	/**
 	 * Creates a new simplemissile

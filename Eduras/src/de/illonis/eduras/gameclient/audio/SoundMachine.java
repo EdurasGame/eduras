@@ -1,5 +1,7 @@
 package de.illonis.eduras.gameclient.audio;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -8,6 +10,9 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.Sound;
 
 import de.illonis.edulog.EduLog;
+import de.illonis.eduras.settings.S;
+import de.illonis.eduras.utils.ResourceManager;
+import de.illonis.eduras.utils.ResourceManager.ResourceType;
 
 /**
  * A storage and player for sound effects.
@@ -18,9 +23,9 @@ import de.illonis.edulog.EduLog;
 public class SoundMachine {
 
 	private static final HashMap<SoundType, Sound> sounds = new HashMap<SoundType, Sound>();
-	private final static String baseFolder = "res/audio/sound/";
 	private final static Logger L = EduLog.getLoggerFor(SoundMachine.class
 			.getName());
+	private final static String localBaseFolder = "res/audio/sound/";
 
 	/**
 	 * All available sound types.
@@ -30,8 +35,8 @@ public class SoundMachine {
 	 */
 	@SuppressWarnings("javadoc")
 	public enum SoundType {
-		CLICK("click.ogg"), ERROR("error.ogg"), AMMO_EMPTY("out_of_ammo.ogg"), SHOOT(
-				"shoot.ogg"), HURT("hurt.ogg"), LOOT("loot.ogg"), TADA(
+		CLICK("click.ogg"), ERROR("error.ogg"), AMMO_EMPTY("out_of_ammo.ogg"),
+		SHOOT("shoot.ogg"), HURT("hurt.ogg"), LOOT("loot.ogg"), TADA(
 				"tueduelue.ogg");
 
 		private final String file;
@@ -55,7 +60,18 @@ public class SoundMachine {
 		if (!sounds.isEmpty())
 			throw new IllegalStateException("Sounds were already initialized.");
 		for (SoundType sound : SoundType.values()) {
-			sounds.put(sound, new Sound(baseFolder + sound.getFile()));
+			if (S.Client.localres) {
+				sounds.put(sound, new Sound(localBaseFolder + sound.getFile()));
+			} else {
+				try (InputStream in = ResourceManager.openResource(
+						ResourceType.SOUND, sound.getFile())) {
+					sounds.put(sound, new Sound(in, sound.getFile()));
+					L.log(Level.INFO, "Loaded sound " + sound.getFile());
+				} catch (IOException e) {
+					L.log(Level.WARNING,
+							"Could not load sound " + sound.getFile(), e);
+				}
+			}
 		}
 	}
 
@@ -98,20 +114,6 @@ public class SoundMachine {
 		} else {
 			L.log(Level.WARNING, "Sound " + sound + " not found.");
 		}
-	}
-
-	/**
-	 * This method is deprecated.<br>
-	 * Use {@link #play(SoundType)}, {@link #play(SoundType, float)} or
-	 * {@link #play(SoundType, float, float)} instead.
-	 * 
-	 * @param sound
-	 *            the sound type.
-	 * @return the sound of given type.
-	 */
-	@Deprecated
-	public static Sound getSound(SoundType sound) {
-		return sounds.get(sound);
 	}
 
 }

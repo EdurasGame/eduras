@@ -21,7 +21,6 @@ import org.newdawn.slick.geom.Vector2f;
 
 import de.illonis.edulog.EduLog;
 import de.illonis.eduras.ObjectFactory.ObjectType;
-import de.illonis.eduras.events.AddPlayerToTeamEvent;
 import de.illonis.eduras.events.AreaConqueredEvent;
 import de.illonis.eduras.events.ClientRenameEvent;
 import de.illonis.eduras.events.GameEvent;
@@ -29,6 +28,7 @@ import de.illonis.eduras.events.GameEvent.GameEventNumber;
 import de.illonis.eduras.events.MovementEvent;
 import de.illonis.eduras.events.ObjectFactoryEvent;
 import de.illonis.eduras.events.OwnerGameEvent;
+import de.illonis.eduras.events.PlayerAndTeamEvent;
 import de.illonis.eduras.events.SetBooleanGameObjectAttributeEvent;
 import de.illonis.eduras.events.SetGameModeEvent;
 import de.illonis.eduras.events.SetIntegerGameObjectAttributeEvent;
@@ -50,16 +50,21 @@ import de.illonis.eduras.gameobjects.Base;
 import de.illonis.eduras.gameobjects.DynamicPolygonObject;
 import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.gameobjects.TimingSource;
+import de.illonis.eduras.gameobjects.TriggerArea;
+import de.illonis.eduras.items.Item;
+import de.illonis.eduras.items.weapons.Missile;
 import de.illonis.eduras.logic.EventTriggerer;
-import de.illonis.eduras.maps.FunMap;
 import de.illonis.eduras.maps.Map;
 import de.illonis.eduras.maps.SpawnPosition;
 import de.illonis.eduras.maps.SpawnPosition.SpawnType;
+import de.illonis.eduras.maps.persistence.MapParser;
 import de.illonis.eduras.math.Geometry;
 import de.illonis.eduras.math.Vector2df;
 import de.illonis.eduras.settings.S;
 import de.illonis.eduras.settings.S.SettingType;
 import de.illonis.eduras.units.PlayerMainFigure;
+import de.illonis.eduras.utils.ResourceManager;
+import de.illonis.eduras.utils.ResourceManager.ResourceType;
 
 /**
  * Contains game information.
@@ -89,7 +94,7 @@ public class GameInformation {
 	public GameInformation() {
 		objects = new ConcurrentHashMap<Integer, GameObject>();
 		players = new ConcurrentHashMap<Integer, Player>();
-		map = new FunMap();
+		map = new Map("funmap");
 		gameSettings = new GameSettings(this);
 		teams = new HashMap<Integer, Team>();
 		spawnGroups = new HashMap<Team, SpawnType>();
@@ -252,7 +257,7 @@ public class GameInformation {
 		// dimensions)
 		LinkedList<GameObject> objs = new LinkedList<GameObject>();
 		for (GameObject object : objects.values()) {
-			if (point.distance(object.getPositionVector()) <= radius) {
+			if (object.getDistanceTo(point) <= radius) {
 				objs.add(object);
 			}
 		}
@@ -449,12 +454,13 @@ public class GameInformation {
 		}
 
 		SetTeamsEvent teamEvent = new SetTeamsEvent();
-		LinkedList<AddPlayerToTeamEvent> teamPlayerEvents = new LinkedList<AddPlayerToTeamEvent>();
+		LinkedList<PlayerAndTeamEvent> teamPlayerEvents = new LinkedList<PlayerAndTeamEvent>();
 		for (Team team : getTeams()) {
 			teamEvent.addTeam(team);
 			for (Player player : team.getPlayers()) {
-				teamPlayerEvents.add(new AddPlayerToTeamEvent(player
-						.getPlayerId(), team.getTeamId()));
+				teamPlayerEvents.add(new PlayerAndTeamEvent(
+						GameEventNumber.ADD_PLAYER_TO_TEAM, player
+								.getPlayerId(), team.getTeamId()));
 			}
 		}
 
@@ -471,7 +477,15 @@ public class GameInformation {
 				gameSettings.getRemainingTime());
 		infos.add(remaining);
 
-		SetMapEvent setMapEvent = new SetMapEvent(map.getName());
+		SetMapEvent setMapEvent;
+		try {
+			setMapEvent = new SetMapEvent(map.getName(),
+					ResourceManager.getHashOfResource(ResourceType.MAP,
+							map.getName() + MapParser.FILE_EXTENSION));
+		} catch (IOException e1) {
+			L.log(Level.SEVERE, "Cannot get hash of map!", e1);
+			return;
+		}
 		infos.add(setMapEvent);
 	}
 
@@ -491,6 +505,7 @@ public class GameInformation {
 						((DynamicPolygonObject) object).getPolygonVertices());
 				infos.add(polygonData);
 			}
+
 			SetRenderInfoEvent renderInfoEvent;
 			if (object instanceof DynamicPolygonObject) {
 				renderInfoEvent = new SetRenderInfoEvent(object.getId(),
@@ -501,6 +516,11 @@ public class GameInformation {
 						object.getTexture());
 			}
 			infos.add(renderInfoEvent);
+
+			if (object instanceof TriggerArea) {
+				infos.add(new SetSizeEvent(object.getId(), object.getWidth(),
+						object.getHeight()));
+			}
 
 			if (object.getType() == ObjectType.NEUTRAL_BASE) {
 				neutralBases.add((Base) object);
@@ -565,7 +585,14 @@ public class GameInformation {
 
 	}
 
-	private static boolean isAnyOfObjectsWithinBounds(Shape bounds,
+	/**
+	 * Checks whether any of the given objects is within the given bounds.
+	 * 
+	 * @param bounds
+	 * @param gameObjects
+	 * @return true if there is an object within the bounds (or intersects it)
+	 */
+	public static boolean isAnyOfObjectsWithinBounds(Shape bounds,
 			Collection<GameObject> gameObjects) {
 		for (GameObject o : gameObjects) {
 			if (o.getShape().intersects(bounds)
@@ -816,12 +843,31 @@ public class GameInformation {
 
 		mainFigureShapeCopy.setCenterX(desiredBlinkTarget.x);
 		mainFigureShapeCopy.setCenterY(desiredBlinkTarget.y);
-		if (isAnyOfObjectsWithinBounds(mainFigureShapeCopy,
-				getAllCollidableObjects(blinkingMainFigure))) {
+		Collection<GameObject> blockingObjects = getAllCollidableObjects(blinkingMainFigure);
+		Collection<GameObject> itemsAndMissiles = getAllItemsAndMissiles(blockingObjects);
+		blockingObjects.removeAll(itemsAndMissiles);
+		if (isAnyOfObjectsWithinBounds(mainFigureShapeCopy, blockingObjects)) {
 			throw new NoSpawnAvailableException();
 		}
 
 		return desiredBlinkTarget;
+	}
+
+	/**
+	 * Returns all items and missiles among the given collection of objects.
+	 * 
+	 * @param objectsToConsider
+	 * @return all items and missiles
+	 */
+	public static Collection<GameObject> getAllItemsAndMissiles(
+			Collection<GameObject> objectsToConsider) {
+		Collection<GameObject> items = new LinkedList<GameObject>();
+		for (GameObject gameObject : objectsToConsider) {
+			if ((gameObject instanceof Item) || (gameObject instanceof Missile)) {
+				items.add(gameObject);
+			}
+		}
+		return items;
 	}
 
 	/**
