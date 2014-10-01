@@ -43,6 +43,7 @@ import de.illonis.eduras.events.ItemUseFailedEvent;
 import de.illonis.eduras.events.ItemUseFailedEvent.Reason;
 import de.illonis.eduras.events.MatchEndEvent;
 import de.illonis.eduras.events.MovementEvent;
+import de.illonis.eduras.events.ObjectAndTeamEvent;
 import de.illonis.eduras.events.ObjectFactoryEvent;
 import de.illonis.eduras.events.OwnerGameEvent;
 import de.illonis.eduras.events.PlayerAndTeamEvent;
@@ -1368,5 +1369,13 @@ public class ServerEventTriggerer implements EventTriggerer {
 	@Override
 	public void notifyAoEDamage(ObjectType type, Vector2f centerPosition) {
 		sendEventToAll(new AoEDamageEvent(type, centerPosition));
+	}
+
+	@Override
+	public void setTeamOfUnit(Unit createdUnit, Team team) {
+		createdUnit.setTeam(team);
+		sendEventToAll(new ObjectAndTeamEvent(
+				GameEventNumber.ADD_OBJECT_TO_TEAM, createdUnit.getId(),
+				team.getTeamId()));
 	}
 }
