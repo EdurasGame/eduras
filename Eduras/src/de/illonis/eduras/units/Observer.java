@@ -40,6 +40,8 @@ public class Observer extends ControlledUnit {
 		setShape(new Rectangle(0, 0, 15, 15));
 		setVisionAngle(S.Server.unit_observer_visionangle);
 		setVisionRange(S.Server.unit_observer_visionrange);
+		setDetector(true);
+		setDetectionRange(S.Server.unit_observer_detectionrange);
 	}
 
 	@Override

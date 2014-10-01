@@ -754,6 +754,18 @@ public final class S {
 		 */
 		public static boolean sv_collision_smooth = true;
 
+		/**
+		 * Determines how close an invis object has to be to an observer in
+		 * order to be seen.
+		 */
+		public static float unit_observer_detectionrange = 100;
+
+		/**
+		 * Determines how close an invis object has to be to the spell scout in
+		 * order to be seen.
+		 */
+		public static float spell_scout_detectionrange = 200;
+
 	}
 
 	/**

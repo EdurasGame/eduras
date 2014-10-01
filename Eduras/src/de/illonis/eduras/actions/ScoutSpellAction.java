@@ -10,9 +10,11 @@ import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.ObjectFactory.ObjectType;
 import de.illonis.eduras.Player;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
+import de.illonis.eduras.exceptions.PlayerHasNoTeamException;
 import de.illonis.eduras.logic.EventTriggerer;
 import de.illonis.eduras.logic.delayedactions.RemoveObjectLaterAction;
 import de.illonis.eduras.settings.S;
+import de.illonis.eduras.units.Unit;
 
 /**
  * A scout spell action gives the executing player's team vision at the
@@ -46,6 +48,14 @@ public class ScoutSpellAction extends RTSAction {
 		EventTriggerer triggerer = info.getEventTriggerer();
 		int objectId = triggerer.createObjectAt(ObjectType.SPELL_SCOUT, target,
 				executingPlayer.getPlayerId());
+		try {
+			triggerer.setTeamOfUnit((Unit) info.findObjectById(objectId),
+					executingPlayer.getTeam());
+		} catch (ObjectNotFoundException | PlayerHasNoTeamException e1) {
+			L.log(Level.WARNING,
+					"Exception when trying to set team of spell_scout", e1);
+			return;
+		}
 
 		RemoveObjectLaterAction action;
 		try {

@@ -23,7 +23,6 @@ import de.illonis.eduras.mapeditor.EditorPlaceable;
 import de.illonis.eduras.math.CollisionPoint;
 import de.illonis.eduras.math.Geometry;
 import de.illonis.eduras.math.Vector2df;
-import de.illonis.eduras.units.Observer;
 import de.illonis.eduras.units.Unit;
 
 /**
@@ -516,11 +515,12 @@ public abstract class GameObject extends ReferencedEntity implements
 	 * @return Returns true if this object is visible and false otherwise.
 	 */
 	public boolean isVisibleFor(GameObject other) {
-		if (other instanceof Observer) {
-			if (getDistanceTo(other) <= other.getVisionRange()) {
+		if (other instanceof Unit) {
+			Unit otherUnit = (Unit) other;
+			if (otherUnit.isDetector()
+					&& getDistanceTo(other) <= otherUnit.getDetectionRange()) {
 				return true;
 			}
-			return false;
 		}
 
 		switch (visible) {
