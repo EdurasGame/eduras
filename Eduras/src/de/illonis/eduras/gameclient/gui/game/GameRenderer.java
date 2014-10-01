@@ -358,6 +358,9 @@ public class GameRenderer implements TooltipHandler {
 			if (ImageCache.isTextured(d)) {
 				g.setColor(Color.white);
 				g.texture(d.getShape(), image, ImageCache.shouldFit(d));
+				g.setLineWidth(2f * GameRenderer.getRenderScale());
+				g.setColor(OUTLINE_COLOR);
+				g.draw(d.getShape());
 			} else {
 				g.drawImage(image, x, y);
 			}
@@ -438,7 +441,7 @@ public class GameRenderer implements TooltipHandler {
 			}
 			g.setColor(colorOfObject);
 			g.fill(d.getShape());
-			g.setLineWidth(2f);
+			g.setLineWidth(2f * GameRenderer.getRenderScale());
 			g.setColor(OUTLINE_COLOR);
 			g.draw(d.getShape());
 		}
