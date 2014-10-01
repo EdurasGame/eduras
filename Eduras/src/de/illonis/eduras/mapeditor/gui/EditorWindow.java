@@ -12,7 +12,6 @@ import org.newdawn.slick.CanvasGameContainer;
 import org.newdawn.slick.SlickException;
 
 import de.illonis.eduras.mapeditor.EditorGame;
-import de.illonis.eduras.mapeditor.MapData;
 import de.illonis.eduras.mapeditor.StatusListener;
 
 /**
@@ -113,6 +112,7 @@ public class EditorWindow extends JFrame implements StatusListener {
 	 * Refreshs window title to represent new map name.
 	 */
 	public void refreshTitle() {
-		setTitle(MapData.getInstance().getMapName() + BASE_TITLE);
+		// TODO: Put the file name of the loaded map here.
+		setTitle(BASE_TITLE);
 	}
 }

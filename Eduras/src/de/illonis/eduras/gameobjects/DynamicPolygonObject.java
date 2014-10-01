@@ -77,7 +77,7 @@ public class DynamicPolygonObject extends GameObject {
 		int i = 0;
 		for (Iterator<Vector2f> iterator = vertices.iterator(); iterator
 				.hasNext();) {
-			Vector2f v = (Vector2f) iterator.next();
+			Vector2f v = iterator.next();
 			points[2 * i] = v.x;
 			points[2 * i + 1] = v.y;
 			i++;
@@ -110,7 +110,7 @@ public class DynamicPolygonObject extends GameObject {
 	}
 
 	@Override
-	public void onCollision(GameObject collidingObject) {
+	public void onCollision(GameObject collidingObject, float angle) {
 		// just block
 	}
 

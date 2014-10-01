@@ -179,7 +179,7 @@ public abstract class Weapon extends UsableItem implements Lootable,
 	}
 
 	@Override
-	public void onCollision(GameObject collidingObject) {
+	public void onCollision(GameObject collidingObject, float angle) {
 		if (collidingObject.getType() != ObjectType.PLAYER) {
 			return;
 		}
@@ -196,8 +196,9 @@ public abstract class Weapon extends UsableItem implements Lootable,
 	 * @param info
 	 *            the use-information provided by
 	 *            {@link #doIfReady(ItemUseInformation)} method.
+	 * @return id of missile
 	 */
-	protected final void shootMissile(ObjectType missileType,
+	protected final int shootMissile(ObjectType missileType,
 			ItemUseInformation info) {
 		// (jme) Spawn position will be calculated in a simplified way. We use
 		// diagonal's length of shooting player to move missile away from him.
@@ -217,8 +218,8 @@ public abstract class Weapon extends UsableItem implements Lootable,
 		Vector2f copy = speedVector.copy().normalise().scale(diag.length());
 		center.add(copy);
 
-		getGame().getEventTriggerer().createMissile(missileType, getOwner(),
-				center, speedVector);
+		return getGame().getEventTriggerer().createMissile(missileType,
+				getOwner(), center, speedVector);
 	}
 
 	/**

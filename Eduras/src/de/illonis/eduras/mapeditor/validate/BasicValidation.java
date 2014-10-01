@@ -22,10 +22,6 @@ public class BasicValidation extends ValidateTask {
 			addErrorMessage("Author must not be empty.");
 			ok = false;
 		}
-		if (data.getMapName().isEmpty()) {
-			addErrorMessage("Map name must not be empty.");
-			ok = false;
-		}
 		if (data.getSupportedGameModes().isEmpty()) {
 			addErrorMessage("Must support at least one gamemode.");
 			ok = false;

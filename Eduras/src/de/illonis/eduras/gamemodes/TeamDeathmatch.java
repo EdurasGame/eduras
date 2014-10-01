@@ -11,13 +11,14 @@ import de.illonis.eduras.ObjectFactory.ObjectType;
 import de.illonis.eduras.Player;
 import de.illonis.eduras.Team;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
+import de.illonis.eduras.exceptions.PlayerHasNoTeamException;
 import de.illonis.eduras.gameclient.userprefs.KeyBindings.KeyBinding;
 import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.gameobjects.GameObject.Relation;
 import de.illonis.eduras.logic.EventTriggerer;
 import de.illonis.eduras.maps.SpawnPosition.SpawnType;
+import de.illonis.eduras.settings.S;
 import de.illonis.eduras.units.InteractMode;
-import de.illonis.eduras.units.PlayerMainFigure;
 
 /**
  * The team-deathmatch mode.
@@ -48,6 +49,12 @@ public class TeamDeathmatch extends Deathmatch {
 
 	@Override
 	public void onGameStart() {
+
+		initTeams();
+		onRoundStarts();
+	}
+
+	protected void initTeams() {
 		EventTriggerer eventTriggerer = gameInfo.getEventTriggerer();
 
 		teamA = new Team("Red Team", Team.getNextTeamId(), Color.red);
@@ -60,11 +67,6 @@ public class TeamDeathmatch extends Deathmatch {
 			putPlayerInSmallestTeam(player);
 		}
 
-		for (Player player : gameInfo.getPlayers()) {
-			eventTriggerer
-					.createObject(ObjectType.PLAYER, player.getPlayerId());
-			eventTriggerer.respawnPlayerAtRandomSpawnpoint(player);
-		}
 	}
 
 	private void putPlayerInSmallestTeam(Player player) {
@@ -91,7 +93,7 @@ public class TeamDeathmatch extends Deathmatch {
 		gameInfo.getEventTriggerer().respawnPlayerAtRandomSpawnpoint(newPlayer);
 
 		// and add it to the statistic
-		gameInfo.getGameSettings().getStats().addPlayerToStats(ownerId);
+		gameInfo.getGameSettings().getStats().addPlayerToStats(newPlayer);
 	}
 
 	@Override
@@ -110,21 +112,30 @@ public class TeamDeathmatch extends Deathmatch {
 
 	@Override
 	public Relation getRelation(GameObject a, GameObject b) {
-		PlayerMainFigure playerA, playerB;
+		Player playerA, playerB;
 		int ownerA = a.getOwner();
 		int ownerB = b.getOwner();
 		if (ownerA == -1 || ownerB == -1)
 			return Relation.ENVIRONMENT;
 		try {
-			playerA = gameInfo.getPlayerByOwnerId(a.getOwner())
-					.getPlayerMainFigure();
-			playerB = gameInfo.getPlayerByOwnerId(b.getOwner())
-					.getPlayerMainFigure();
+			playerA = gameInfo.getPlayerByOwnerId(a.getOwner());
+			playerB = gameInfo.getPlayerByOwnerId(b.getOwner());
 		} catch (ObjectNotFoundException e) {
 			L.log(Level.SEVERE, "player not found", e);
 			return Relation.UNKNOWN;
 		}
-		if (playerA.getTeam().equals(playerB.getTeam())) {
+
+		Team teamOfPlayerA;
+		Team teamOfPlayerB;
+		try {
+			teamOfPlayerA = playerA.getTeam();
+			teamOfPlayerB = playerB.getTeam();
+		} catch (PlayerHasNoTeamException e) {
+			L.log(Level.WARNING, "Cannot find team of player.", e);
+			return Relation.UNKNOWN;
+		}
+
+		if (teamOfPlayerA.equals(teamOfPlayerB)) {
 			return Relation.ALLIED;
 		} else
 			return Relation.HOSTILE;
@@ -134,7 +145,13 @@ public class TeamDeathmatch extends Deathmatch {
 	public void onDisconnect(int ownerId) {
 
 		// and from the statistics and game
-		gameInfo.getGameSettings().getStats().removePlayerFromStats(ownerId);
+		Player player;
+		try {
+			player = gameInfo.getPlayerByOwnerId(ownerId);
+			gameInfo.getGameSettings().getStats().removePlayerFromStats(player);
+		} catch (ObjectNotFoundException e) {
+			L.log(Level.WARNING, "Player already vanished onDisconnect", e);
+		}
 		gameInfo.getEventTriggerer().removePlayer(ownerId);
 
 		// reset the teams such that they don't contain the player anymore
@@ -143,6 +160,10 @@ public class TeamDeathmatch extends Deathmatch {
 
 	@Override
 	public boolean supportsKeyBinding(KeyBinding binding) {
+		if (binding == KeyBinding.SELECT_TEAM && !S.Server.sv_switchteams) {
+			return false;
+		}
+
 		return true;
 	}
 
@@ -159,4 +180,21 @@ public class TeamDeathmatch extends Deathmatch {
 		return teamB;
 	}
 
+	@Override
+	public void onTimeUp() {
+		int killsOfTeamA = gameInfo.getGameSettings().getStats()
+				.getKillsByTeam(teamA);
+		int killsOfTeamB = gameInfo.getGameSettings().getStats()
+				.getKillsByTeam(teamB);
+
+		int winnerId = -1;
+		if (killsOfTeamA > killsOfTeamB) {
+			winnerId = teamA.getTeamId();
+		}
+		if (killsOfTeamB > killsOfTeamA) {
+			winnerId = teamB.getTeamId();
+		}
+
+		gameInfo.getEventTriggerer().onMatchEnd(winnerId);
+	}
 }

@@ -101,7 +101,7 @@ public class ActionBar extends ClickableGuiElement implements TooltipTriggerer {
 	public void render(Graphics g) {
 		if (currentPage == null)
 			return;
-		Font font = FontCache.getFont(FontKey.DEFAULT_FONT, g);
+		Font font = FontCache.getFont(FontKey.SMALL_FONT, g);
 		int resources = 0;
 		try {
 			resources = getInfo().getPlayer().getTeam().getResource();

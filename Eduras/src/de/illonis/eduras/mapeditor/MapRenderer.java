@@ -223,6 +223,10 @@ public class MapRenderer {
 			if (ImageCache.isTextured(o)) {
 				g.setColor(Color.white);
 				g.texture(o.getShape(), image, ImageCache.shouldFit(o));
+
+				g.setLineWidth(3f);
+				g.setColor(OUTLINE_COLOR);
+				g.draw(o.getShape());
 			} else {
 				g.drawImage(image, x, y);
 			}
@@ -276,9 +280,7 @@ public class MapRenderer {
 
 	private void renderShape(GameObject o, Graphics g) {
 		if (o.getShape() != null) {
-			g.setColor(OUTLINE_COLOR);
-			g.draw(o.getShape());
-
+			
 			Color colorOfObject = getColorForObject(o);
 			switch (o.getVisibility()) {
 			case ALL:
@@ -295,6 +297,10 @@ public class MapRenderer {
 			}
 			g.setColor(colorOfObject);
 			g.fill(o.getShape());
+			g.setLineWidth(3f);
+			g.setColor(OUTLINE_COLOR);
+			g.draw(o.getShape());
+
 		}
 	}
 

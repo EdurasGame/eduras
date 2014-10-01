@@ -29,6 +29,9 @@ public abstract class AnyModeKeyHandler extends GuiKeyHandler {
 		case SHOW_STATS:
 			client.showStatWindow();
 			break;
+		case SELECT_TEAM:
+			client.showSelectTeam();
+			break;
 		default:
 			break;
 		}

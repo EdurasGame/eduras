@@ -128,5 +128,4 @@ public class EditorGame extends BasicGame {
 	public MapPanelLogic getPanelLogic() {
 		return panelLogic;
 	}
-
 }

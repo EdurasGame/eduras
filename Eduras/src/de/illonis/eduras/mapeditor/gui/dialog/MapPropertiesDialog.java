@@ -39,7 +39,7 @@ public class MapPropertiesDialog extends PropertiesDialog {
 	private final static int MAP_SIZE_STEP = 100;
 
 	private final MapData data;
-	private JTextField mapNameField, authorField;
+	private JTextField authorField;
 	private JSpinner widthField, heightField;
 	private JButton okButton, abortButton;
 	private JList<GameModeNumber> gameModes;
@@ -64,14 +64,6 @@ public class MapPropertiesDialog extends PropertiesDialog {
 		content.add(attributesPanel, BorderLayout.CENTER);
 		attributesPanel.setLayout(new BoxLayout(attributesPanel,
 				BoxLayout.PAGE_AXIS));
-		JPanel namePanel = new JPanel(new BorderLayout());
-		namePanel.setBorder(border);
-		JLabel nameLabel = new JLabel("Map name");
-		namePanel.add(nameLabel, BorderLayout.WEST);
-		mapNameField = new JTextField(data.getMapName());
-		nameLabel.setBorder(border);
-		namePanel.add(mapNameField, BorderLayout.CENTER);
-		attributesPanel.add(namePanel);
 		JPanel authorPanel = new JPanel(new BorderLayout());
 		JLabel authorLabel = new JLabel("Author");
 		authorPanel.add(authorLabel, BorderLayout.WEST);
@@ -112,8 +104,10 @@ public class MapPropertiesDialog extends PropertiesDialog {
 		addTab("General", content);
 
 		JPanel gameModesPanel = new JPanel(new BorderLayout());
-		gameModesPanel.add(new JLabel("<html>Hold CTRL to select multiple entries.<br>Press \"Save\" in general tab afterwards."),
-				BorderLayout.NORTH);
+		gameModesPanel
+				.add(new JLabel(
+						"<html>Hold CTRL to select multiple entries.<br>Press \"Save\" in general tab afterwards."),
+						BorderLayout.NORTH);
 		gameModesPanel.setBorder(border);
 		gameModes = new JList<GameMode.GameModeNumber>(GameModeNumber.values());
 		gameModes
@@ -145,7 +139,6 @@ public class MapPropertiesDialog extends PropertiesDialog {
 			dispose();
 		} else if (e.getSource() == okButton) {
 			data.setAuthor(authorField.getText());
-			data.setMapName(mapNameField.getText());
 			data.setWidth((int) widthField.getValue());
 			data.setHeight((int) heightField.getValue());
 			List<GameModeNumber> modes = gameModes.getSelectedValuesList();

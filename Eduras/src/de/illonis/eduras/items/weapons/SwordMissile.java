@@ -27,7 +27,6 @@ public class SwordMissile extends Missile {
 	public SwordMissile(GameInformation game, TimingSource timingSource, int id) {
 		super(game, timingSource, id);
 		setDamage(S.Server.go_swordmissile_damage);
-		setDamageRadius(S.Server.go_swordmissile_damageradius);
 		setObjectType(ObjectType.SWORDMISSILE);
 		setShape(new Sword());
 		setSpeed(S.Server.go_swordmissile_speed);

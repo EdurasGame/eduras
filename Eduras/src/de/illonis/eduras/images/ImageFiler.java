@@ -1,5 +1,7 @@
 package de.illonis.eduras.images;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -14,7 +16,10 @@ import de.illonis.edulog.EduLog;
 import de.illonis.eduras.gameclient.datacache.CacheInfo;
 import de.illonis.eduras.gameclient.gui.game.GameRenderer;
 import de.illonis.eduras.locale.Localization;
+import de.illonis.eduras.settings.S;
 import de.illonis.eduras.utils.Pair;
+import de.illonis.eduras.utils.ResourceManager;
+import de.illonis.eduras.utils.ResourceManager.ResourceType;
 
 /**
  * Provides utility features to load or interact with images stored in game
@@ -89,23 +94,37 @@ public class ImageFiler {
 	 *            file name of image. Must be relative to images-package.
 	 * @return image.
 	 * @throws SlickException
-	 *             when image could not be loaded.
+	 *             if image could not be loaded.
+	 * @throws IOException
+	 *             if opening file failed.
 	 */
-	public static Image loadScaled(String fileName) throws SlickException {
+	public static Image loadScaled(String fileName) throws SlickException,
+			IOException {
 		Pair<ImageResolution, Float> resolution = calculateResolution();
 
 		float factor = resolution.getSecond();
 		Image image;
-		try {
+		if (S.Client.localres) {
 			image = new Image(CacheInfo.BASE_URL + fileName
 					+ resolution.getFirst().getSuffix());
-		} catch (RuntimeException | SlickException e) {
-			factor = getScaleFactor(ImageResolution.FULLHD);
-			image = new Image(CacheInfo.BASE_URL + fileName
-					+ ImageResolution.FULLHD.getSuffix());
-			L.log(Level.WARNING, "Could not load image " + fileName + " for "
-					+ resolution.getFirst().name()
-					+ ", falling back to fullHD at " + factor, e);
+		} else {
+			try {
+				try (InputStream input = ResourceManager.openResource(
+						ResourceType.IMAGE, fileName
+								+ resolution.getFirst().getSuffix())) {
+					image = new Image(input, fileName, false);
+				}
+			} catch (RuntimeException | SlickException | IOException e) {
+				factor = getScaleFactor(ImageResolution.FULLHD);
+				L.log(Level.WARNING, "Could not load image " + fileName
+						+ " for " + resolution.getFirst().name()
+						+ ", falling back to fullHD at " + factor, e);
+				try (InputStream input = ResourceManager.openResource(
+						ResourceType.IMAGE,
+						fileName + ImageResolution.FULLHD.getSuffix())) {
+					image = new Image(input, fileName, false);
+				}
+			}
 		}
 
 		if (factor == 1f) {

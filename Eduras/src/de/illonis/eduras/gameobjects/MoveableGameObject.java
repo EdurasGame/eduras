@@ -1,5 +1,6 @@
 package de.illonis.eduras.gameobjects;
 
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.LinkedList;
 
@@ -9,6 +10,9 @@ import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.exceptions.MapBorderReachedException;
 import de.illonis.eduras.interfaces.Moveable;
 import de.illonis.eduras.math.ShapeGeometry;
+import de.illonis.eduras.math.Vector2df;
+import de.illonis.eduras.settings.S;
+import de.illonis.eduras.utils.Pair;
 
 /**
  * A moveable gameobject. It differs from {@link GameObject} because it has a
@@ -18,6 +22,8 @@ import de.illonis.eduras.math.ShapeGeometry;
  * 
  */
 public abstract class MoveableGameObject extends GameObject implements Moveable {
+
+	public static final float INFINITE_SPEED = -1;
 
 	/**
 	 * Directions of movement.
@@ -33,6 +39,7 @@ public abstract class MoveableGameObject extends GameObject implements Moveable 
 	private Direction currentDirection;
 
 	private float speed = 0;
+	private float maxSpeed = INFINITE_SPEED;
 	protected float currentSpeedX;
 	protected float currentSpeedY;
 
@@ -117,27 +124,62 @@ public abstract class MoveableGameObject extends GameObject implements Moveable 
 
 	@Override
 	public void onMove(long delta, ShapeGeometry geometry) {
-		if (currentSpeedX == 0f && currentSpeedY == 0f)
+		if ((currentSpeedX == 0f && currentSpeedY == 0f) || speed == 0)
 			return;
 		float distance = speed * ((float) delta / 1000L);
 
 		Vector2f target = getSpeedVector().normalise().scale(distance)
 				.add(getPositionVector());
 
-		Vector2f targetPos;
-		LinkedList<GameObject> touched = new LinkedList<GameObject>();
-		LinkedList<GameObject> collided = new LinkedList<GameObject>();
-		targetPos = geometry.moveTo(this, target, touched, collided);
-		setPosition(targetPos);
-		for (Iterator<GameObject> iterator = collided.iterator(); iterator
-				.hasNext();) {
-			GameObject gameObject = iterator.next();
-			gameObject.onCollision(this);
-			onCollision(gameObject);
+		Vector2f targetPosAfterMove;
+		LinkedList<Pair<GameObject, Float>> touched = new LinkedList<Pair<GameObject, Float>>();
+		LinkedList<Pair<GameObject, Float>> collided = new LinkedList<Pair<GameObject, Float>>();
+		targetPosAfterMove = geometry.moveTo(this, target, touched, collided);
+
+		if (S.Server.sv_collision_smooth) {
+			Vector2f targetPosAfterSlide = new Vector2f(targetPosAfterMove);
+			if (collided.size() > 0) {
+				Pair<GameObject, Float> firstCollision = collided.getFirst();
+				float angle = firstCollision.getSecond();
+				Vector2df distanceVector = new Vector2df(targetPosAfterSlide);
+				distanceVector.sub(getPositionVector());
+				// float consumed = distanceVector.length() / distance;
+				float consumed = 0;
+
+				Vector2df moveVector = new Vector2df(getSpeedVector());
+				moveVector.normalise();
+				if (angle < 90) {
+					consumed = (angle) / 90f;
+					moveVector.rotate(-(180f - angle));
+				} else {
+					consumed = (180f - angle) / 90f;
+					moveVector.rotate(angle);
+				}
+				moveVector.scale((1 - consumed) * distance);
+				targetPosAfterSlide.add(moveVector);
+
+				setPosition(targetPosAfterSlide);
+				Collection<GameObject> objectsToConsider = getGame()
+						.getAllCollidableObjects(this);
+				if (!GameInformation.isAnyOfObjectsWithinBounds(getShape(),
+						objectsToConsider)) {
+					targetPosAfterMove = targetPosAfterSlide;
+				}
+			}
 		}
-		for (Iterator<GameObject> iterator = touched.iterator(); iterator
+
+		setPosition(targetPosAfterMove);
+		for (Iterator<Pair<GameObject, Float>> iterator = collided.iterator(); iterator
 				.hasNext();) {
-			GameObject gameObject = iterator.next();
+			Pair<GameObject, Float> gameObjectAndAngle = iterator.next();
+			GameObject gameObject = gameObjectAndAngle.getFirst();
+			gameObject.onCollision(this, gameObjectAndAngle.getSecond());
+			onCollision(gameObject, gameObjectAndAngle.getSecond());
+		}
+		for (Iterator<Pair<GameObject, Float>> iterator = touched.iterator(); iterator
+				.hasNext();) {
+			Pair<GameObject, Float> gameObjectAndAngle = iterator.next();
+			GameObject gameObject = gameObjectAndAngle.getFirst();
 			gameObject.onTouch(this);
 			onTouch(gameObject);
 		}
@@ -188,5 +230,23 @@ public abstract class MoveableGameObject extends GameObject implements Moveable 
 		return targetRotationAngle;
 		// return this.getShape().checkCollisionOnRotation(getGame(), this,
 		// targetRotationAngle);
+	}
+
+	/**
+	 * Returns the maximum speed of this object.
+	 * 
+	 * @return max speed
+	 */
+	public float getMaxSpeed() {
+		return maxSpeed;
+	}
+
+	/**
+	 * Sets this object's maximum speed.
+	 * 
+	 * @param maxSpeed
+	 */
+	public void setMaxSpeed(float maxSpeed) {
+		this.maxSpeed = maxSpeed;
 	}
 }

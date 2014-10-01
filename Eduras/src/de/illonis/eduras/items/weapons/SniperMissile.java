@@ -24,7 +24,6 @@ public class SniperMissile extends Missile {
 	public SniperMissile(GameInformation game, TimingSource timingSource, int id) {
 		super(game, timingSource, id);
 		setDamage(S.Server.go_snipermissile_damage);
-		setDamageRadius(S.Server.go_snipermissile_damageradius);
 		setObjectType(ObjectType.SNIPERMISSILE);
 		// setShape(new Circle(S.go_snipermissile_shape_radius));
 		setSpeed(S.Server.go_snipermissile_speed);

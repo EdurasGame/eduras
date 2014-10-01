@@ -3,6 +3,7 @@ package de.illonis.eduras.gameclient.gui.game;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.MouseListener;
 
+import de.illonis.eduras.Team;
 import de.illonis.eduras.gameclient.GamePanelReactor;
 import de.illonis.eduras.gameclient.GuiInternalEventListener;
 import de.illonis.eduras.gameclient.gui.hud.ClickableGuiElementInterface;
@@ -32,8 +33,9 @@ public abstract class GuiMouseAdapter implements GuiClickReactor, MouseListener 
 	}
 
 	/**
-	 * Called when mouse focus of the game is lost and given to any gui element. You should cancel all
-	 * mouse interactions like scrolling and automatic shooting here.
+	 * Called when mouse focus of the game is lost and given to any gui element.
+	 * You should cancel all mouse interactions like scrolling and automatic
+	 * shooting here.
 	 */
 	public abstract void mouseLost();
 
@@ -48,6 +50,11 @@ public abstract class GuiMouseAdapter implements GuiClickReactor, MouseListener 
 	@Override
 	public void exitRequested() {
 		panelLogic.onGameQuit();
+	}
+
+	@Override
+	public void teamSelected(Team team) {
+		listener.teamSelected(team);
 	}
 
 	@Override

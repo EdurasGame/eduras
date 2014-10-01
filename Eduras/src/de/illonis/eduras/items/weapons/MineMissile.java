@@ -4,7 +4,7 @@ import org.newdawn.slick.geom.Circle;
 
 import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.ObjectFactory.ObjectType;
-import de.illonis.eduras.events.SetVisibilityEvent;
+import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.gameobjects.TimingSource;
 import de.illonis.eduras.settings.S;
 
@@ -14,7 +14,7 @@ import de.illonis.eduras.settings.S;
  * @author Florian 'Ren' Mai <florian.ren.mai@googlemail.com>
  * 
  */
-public class MineMissile extends Missile {
+public class MineMissile extends AoEMissile {
 
 	/**
 	 * Create a new MineMissile.
@@ -33,9 +33,14 @@ public class MineMissile extends Missile {
 		setShape(new Circle(S.Server.go_minemissile_shape_size,
 				S.Server.go_minemissile_shape_size,
 				S.Server.go_minemissile_shape_size));
-		setVisible(Visibility.OWNER_TEAM);
-		SetVisibilityEvent visEvent = new SetVisibilityEvent(id,
-				Visibility.OWNER_TEAM);
-		game.getEventTriggerer().notifyGameObjectVisibilityChanged(visEvent);
+	}
+
+	@Override
+	protected boolean isCollidableWith(GameObject otherObject) {
+		if (otherObject.getType() == ObjectType.ASSAULT_MISSILE) {
+			return true;
+		} else {
+			return super.isCollidableWith(otherObject);
+		}
 	}
 }

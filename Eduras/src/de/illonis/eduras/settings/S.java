@@ -176,12 +176,12 @@ public final class S {
 		/**
 		 * Damage caused by one {@link SplashedMissile} object.
 		 */
-		public static int go_splashedmissile_damage = 3;
+		public static int go_splashedmissile_damage = 30;
 
 		/**
 		 * Area of Effect of {@link SplashedMissile}.
 		 */
-		public static float go_splashedmissile_damageradius = 1;
+		public static float go_splashedmissile_damageradius = 100;
 
 		/**
 		 * Size (radius) of {@link SplashedMissile}.
@@ -613,12 +613,6 @@ public final class S {
 		public static boolean mp_teamattack = false;
 
 		/**
-		 * Determines how far a {@link SplashedMissile} can go before it
-		 * disappears.
-		 */
-		public static float go_splashedmissile_maxrange = 150;
-
-		/**
 		 * Determines the round time of a match in milliseconds.
 		 */
 		public static long sv_roundtime = 300000;
@@ -740,6 +734,26 @@ public final class S {
 
 		public static int spell_blink_costs = 10;
 
+		/**
+		 * Determines a player's maximum speed.
+		 */
+		public static float player_speed_max = 200;
+
+		/**
+		 * Determines if players are allowed to switch teams at any time.
+		 */
+		public static boolean sv_switchteams = true;
+
+		/**
+		 * Determines how often a simplemissile bounces back from a wall.
+		 */
+		public static int go_simplemissile_bounces = 3;
+
+		/**
+		 * Determines if objects slide at walls when they collide.
+		 */
+		public static boolean sv_collision_smooth = true;
+
 	}
 
 	/**
@@ -768,6 +782,12 @@ public final class S {
 		public static boolean windowed = false;
 
 		public static boolean debug_render_shapes = false;
+
+		/**
+		 * Indicates that resources should be loaded from jar instead of data/
+		 * folder.
+		 */
+		public static boolean localres = false;
 	}
 
 	/**

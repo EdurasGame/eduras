@@ -67,7 +67,7 @@ public class Bird extends MoveableGameObject implements MotionAIControllable {
 	}
 
 	@Override
-	public void onCollision(GameObject collidingObject) {
+	public void onCollision(GameObject collidingObject, float angle) {
 	}
 
 	@Override

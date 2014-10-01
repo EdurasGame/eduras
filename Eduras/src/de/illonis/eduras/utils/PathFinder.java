@@ -1,16 +1,11 @@
 package de.illonis.eduras.utils;
 
 import java.io.UnsupportedEncodingException;
-import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLDecoder;
 import java.security.CodeSource;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
-import de.illonis.edulog.EduLog;
 
 /**
  * Simplifies resource locating.
@@ -20,34 +15,34 @@ import de.illonis.edulog.EduLog;
  */
 public class PathFinder {
 
-	private final static Logger L = EduLog.getLoggerFor(PathFinder.class
-			.getName());
-
 	/**
 	 * Retrieves the path where the programm jar is located.
 	 * 
 	 * @return the jar's location.
 	 */
-	public static URL getBaseDir() {
+	public static URI getBaseDir() {
 		try {
 			// try another way
 			CodeSource source = PathFinder.class.getProtectionDomain()
 					.getCodeSource();
 			if (source != null) {
-				URL url2 = source.getLocation();
+				URI url2 = source.getLocation().toURI();
+				if (url2.toString().endsWith(".jar")) {
+					return url2.resolve(".");
+				}
 				return url2;
 			} else {
-				URL url = ClassLoader.getSystemClassLoader().getResource(".");
+				URI url = ClassLoader.getSystemClassLoader().getResource(".")
+						.toURI();
 				if (url != null) {
-					URL parent = new URL(url, "../");
+					URI parent = url.resolve("../");
 					return parent;
 				} else {
 					throw new RuntimeException(
 							"Base directory could not be resolved.");
 				}
 			}
-		} catch (MalformedURLException e) {
-			System.out.println("base dir not found.");
+		} catch (URISyntaxException e) {
 			return null;
 		}
 	}
@@ -58,18 +53,10 @@ public class PathFinder {
 	 * 
 	 * @param fileName
 	 *            the file name.
-	 * @return a URI pointing to that file.
+	 * @return an uri locating the file.
 	 */
 	public static URI findFile(String fileName) {
-		try {
-			URI uri = new URL(PathFinder.getBaseDir(), fileName).toURI();
-			return uri;
-		} catch (MalformedURLException e) {
-			L.log(Level.SEVERE, "Malformed URL!", e);
-		} catch (URISyntaxException e) {
-			L.log(Level.SEVERE, "URISyntaxException", e);
-		}
-		return null;
+		return PathFinder.getBaseDir().resolve(fileName);
 	}
 
 	/**

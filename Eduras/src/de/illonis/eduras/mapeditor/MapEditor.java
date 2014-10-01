@@ -12,10 +12,11 @@ import javax.swing.JOptionPane;
 import org.newdawn.slick.SlickException;
 
 import de.illonis.eduras.ObjectFactory.ObjectType;
-import de.illonis.eduras.gameclient.EdurasClient;
 import de.illonis.eduras.mapeditor.gui.EditorWindow;
 import de.illonis.eduras.mapeditor.validate.MapValidator;
+import de.illonis.eduras.settings.S;
 import de.illonis.eduras.utils.PathFinder;
+import de.illonis.eduras.utils.ResourceManager;
 
 /**
  * A map editor for Eduras?-maps that supports easy placing of objects on the
@@ -29,7 +30,7 @@ public class MapEditor {
 	/**
 	 * Editor version.
 	 */
-	public final static int VERSION = 2;
+	public final static int VERSION = 3;
 
 	private EditorGame game;
 	private EditorWindow window;
@@ -39,19 +40,18 @@ public class MapEditor {
 	 *            <i>run with arguments if starting from eclipse</i>
 	 */
 	public static void main(String[] args) {
-		try {
-			EdurasClient.extractNatives();
-			if (args.length == 0) {
-				System.setProperty("org.lwjgl.librarypath", (new File(
-						PathFinder.findFile("native"))).getAbsolutePath());
-			}
-		} catch (UnsatisfiedLinkError | IOException e) {
-			JOptionPane.showMessageDialog(null, "Could not extract natives.",
-					"Error", JOptionPane.ERROR_MESSAGE);
-			System.exit(-1);
-		}
-
+//		try {
+//			ResourceManager.extractNatives();
+//		} catch (UnsatisfiedLinkError | IOException e) {
+//			JOptionPane.showMessageDialog(null, "Could not extract natives.",
+//					"Error", JOptionPane.ERROR_MESSAGE);
+//			System.exit(-1);
+//		}
+		System.setProperty("org.lwjgl.librarypath",
+				(new File(PathFinder.findFile("native"))).getAbsolutePath());
+		S.Client.localres = true;
 		MapValidator.init();
+		
 		try {
 			MapEditor editor = new MapEditor();
 			editor.startUpdateCheck();
@@ -139,6 +139,8 @@ public class MapEditor {
 		case HEALING_POTION:
 		case SPEED_POWERUP:
 		case INVISIBILITY_POWERUP:
+		case ROCKETLAUNCHER:
+		case MINELAUNCHER:
 			return true;
 		default:
 			return false;
@@ -149,8 +151,7 @@ public class MapEditor {
 	 * Updates window title with new map name.
 	 */
 	public void onMapChanged() {
-		window.setTitle(MapData.getInstance().getMapName()
-				+ EditorWindow.BASE_TITLE);
+		window.setTitle(EditorWindow.BASE_TITLE);
 	}
 
 	private void init() throws SlickException {

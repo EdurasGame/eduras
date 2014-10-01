@@ -7,9 +7,9 @@ import java.util.logging.Logger;
 import org.newdawn.slick.particles.ConfigurableEmitter;
 
 import de.illonis.edulog.EduLog;
-import de.illonis.eduras.ObjectFactory.ObjectType;
 import de.illonis.eduras.Player;
 import de.illonis.eduras.Team;
+import de.illonis.eduras.events.AoEDamageEvent;
 import de.illonis.eduras.events.ItemUseFailedEvent;
 import de.illonis.eduras.events.ItemUseFailedEvent.Reason;
 import de.illonis.eduras.events.MatchEndEvent;
@@ -81,10 +81,6 @@ public class ClientEffectHandler extends GameEventAdapter {
 			L.log(Level.WARNING, "Cannot find object to remove!", e);
 			return;
 		}
-		if (o.getType().equals(ObjectType.ROCKET_MISSILE)) {
-			EffectFactory.createEffectAt(EffectNumber.ROCKET,
-					o.getPositionVector());
-		}
 	}
 
 	@Override
@@ -130,5 +126,20 @@ public class ClientEffectHandler extends GameEventAdapter {
 	@Override
 	public void onStartRound() {
 		playSounds = true;
+	}
+
+	@Override
+	public void onAoEDamage(AoEDamageEvent event) {
+		switch (event.getObjectType()) {
+		case ROCKET_MISSILE:
+		case MISSILE_SPLASH:
+		case MINE_MISSILE:
+			EffectFactory.createEffectAt(EffectNumber.ROCKET,
+					event.getPosition());
+			break;
+		default:
+			L.warning("Cannot handle aoe effect for type "
+					+ event.getObjectType());
+		}
 	}
 }

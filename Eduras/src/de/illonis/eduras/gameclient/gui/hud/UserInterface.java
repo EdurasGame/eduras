@@ -56,7 +56,9 @@ public class UserInterface implements GuiResizeListener {
 	private final GuiInternalEventListener guiReactor;
 	private MiniMap minimap;
 	private ExitPopup exitPopup;
+	private SelectTeamPopup selectTeamPopup;
 	private GamePanelLogic logic;
+	private LinkedList<Cancelable> cancebleElements;
 
 	public ActionBar getActionBar() {
 		return actionBar;
@@ -78,6 +80,7 @@ public class UserInterface implements GuiResizeListener {
 	 *            the listener for guievents.
 	 * @param cache
 	 *            the chat cache object.
+	 * @param logic the logic
 	 */
 	public UserInterface(InformationProvider infos,
 			TooltipTriggererNotifier tooltipNotifier,
@@ -93,6 +96,7 @@ public class UserInterface implements GuiResizeListener {
 		this.tooltipNotifier = tooltipNotifier;
 		this.cache = cache;
 		this.logic = logic;
+		this.cancebleElements = new LinkedList<Cancelable>();
 		createElements();
 		hudNotifier.setUiObjects(this.uiObjects);
 
@@ -122,7 +126,7 @@ public class UserInterface implements GuiResizeListener {
 		new ItemDisplay(this, minimap);
 		new RespawnTimeFrame(this);
 		new ResourceDisplay(this);
-		new BlinkDisplay(this);
+		new BlinkDisplay(this, minimap);
 		pingDisplay = new PingDisplay(this);
 		notificationPanel = new NotificationPanel(this);
 		tipPanel = new TipPanel(this, minimap);
@@ -130,6 +134,9 @@ public class UserInterface implements GuiResizeListener {
 		bigPanel = new BigPanel(this);
 		dragRect = new DragSelectionRectangle(this);
 		exitPopup = new ExitPopup(this);
+		selectTeamPopup = new SelectTeamPopup(this);
+		cancebleElements.add(exitPopup);
+		cancebleElements.add(selectTeamPopup);
 		new ChatDisplay(cache, this);
 		// new BugReportButton(this);
 		actionBar = new ActionBar(this, minimap);
@@ -403,5 +410,24 @@ public class UserInterface implements GuiResizeListener {
 
 	public GuiInternalEventListener getListener() {
 		return guiReactor;
+	}
+
+	public void showTeamSelectDialogue() {
+		selectTeamPopup.setVisible(true);
+	}
+
+	/**
+	 * Called when the cancle button is pressed.
+	 * 
+	 * @return Returns true if one of the cancleable ui elements consumed the
+	 *         cancle.
+	 */
+	public boolean onCancel() {
+		for (Cancelable cancleableElement : cancebleElements) {
+			if (cancleableElement.cancel()) {
+				return true;
+			}
+		}
+		return false;
 	}
 }

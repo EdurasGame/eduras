@@ -137,4 +137,12 @@ public class NoGameMode extends BasicGameMode {
 	@Override
 	public void onPlayerSpawn(Player player) {
 	}
+
+	@Override
+	public void onRoundStarts() {
+	}
+
+	@Override
+	public void onRoundEnds() {
+	}
 }

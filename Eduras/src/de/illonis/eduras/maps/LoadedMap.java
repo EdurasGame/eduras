@@ -44,8 +44,9 @@ public class LoadedMap extends Map {
 			Collection<InitialObjectData> initialObjects,
 			Collection<GameModeNumber> supportedGameModes,
 			Collection<NodeData> nodes, TextureKey background) {
-		super(name, author, width, height, created);
+		super(author, width, height, created, name);
 		this.background = background;
+
 		for (GameModeNumber gameModeNumber : supportedGameModes)
 			addSupportedGameMode(gameModeNumber);
 
@@ -58,10 +59,5 @@ public class LoadedMap extends Map {
 		for (NodeData node : nodes) {
 			addNode(node);
 		}
-	}
-
-	@Override
-	protected void buildMap() {
-
 	}
 }

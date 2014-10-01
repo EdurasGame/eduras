@@ -31,6 +31,7 @@ import de.illonis.eduras.gameclient.VisionInformation;
 import de.illonis.eduras.gameclient.datacache.CacheException;
 import de.illonis.eduras.gameclient.datacache.CacheInfo.ImageKey;
 import de.illonis.eduras.gameclient.datacache.ImageCache;
+import de.illonis.eduras.gameclient.datacache.TextureInfo.TextureKey;
 import de.illonis.eduras.gameclient.gui.animation.EffectFactory;
 import de.illonis.eduras.gameclient.gui.hud.HealthBar;
 import de.illonis.eduras.gameclient.gui.hud.ItemTooltip;
@@ -275,7 +276,7 @@ public class GameRenderer implements TooltipHandler {
 		Rectangle r = info.getMapBounds();
 		g.setColor(Color.white);
 		try {
-			g.texture(r, ImageCache.getTexture(info.getMapBackground()));
+			g.texture(r, ImageCache.getTexture(TextureKey.GRASS));
 		} catch (CacheException e) {
 			g.setColor(Color.black);
 			g.fill(r);
@@ -420,8 +421,6 @@ public class GameRenderer implements TooltipHandler {
 
 	private void renderShape(GameObject d, Graphics g) {
 		if (d.getShape() != null) {
-			g.setColor(OUTLINE_COLOR);
-			g.draw(d.getShape());
 
 			Color colorOfObject = getColorForObject(d);
 			switch (d.getVisibility()) {
@@ -439,6 +438,9 @@ public class GameRenderer implements TooltipHandler {
 			}
 			g.setColor(colorOfObject);
 			g.fill(d.getShape());
+			g.setLineWidth(2f);
+			g.setColor(OUTLINE_COLOR);
+			g.draw(d.getShape());
 		}
 	}
 

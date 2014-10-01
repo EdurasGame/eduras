@@ -97,4 +97,12 @@ public class ClientGameMode implements GameMode {
 	public void onPlayerSpawn(Player player) {
 	}
 
+	@Override
+	public void onRoundStarts() {
+	}
+
+	@Override
+	public void onRoundEnds() {
+	}
+
 }

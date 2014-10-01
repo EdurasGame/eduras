@@ -36,7 +36,7 @@ public abstract class PowerUpItem extends Item {
 	}
 
 	@Override
-	public void onCollision(GameObject collidingObject) {
+	public void onCollision(GameObject collidingObject, float angle) {
 		if (collidingObject instanceof PlayerMainFigure) {
 			onActivation((PlayerMainFigure) collidingObject);
 			getGame().getEventTriggerer().removeObject(getId());

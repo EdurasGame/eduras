@@ -186,4 +186,12 @@ public class Player {
 	public void useBlink() {
 		lastBlink = System.currentTimeMillis();
 	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (obj instanceof Player) {
+			return ((Player) obj).getPlayerId() == this.getPlayerId();
+		}
+		return super.equals(obj);
+	}
 }

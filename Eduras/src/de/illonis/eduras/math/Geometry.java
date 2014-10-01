@@ -334,9 +334,14 @@ public class Geometry {
 
 				if (interceptionPoints[i] != null) {
 
+					Line tangent = getTangentOfCircleAtPoint(circle,
+							interceptionPoints[i]);
+					float angle = getAngleBetweenLines(tangent, singleLine);
+					angle = angle > 180 ? 360 - angle : angle;
+
 					CollisionPoint collisionPoint = CollisionPoint
 							.createCollisionPointByInterceptPoint(
-									interceptionPoints[i], singleLine);
+									interceptionPoints[i], singleLine, angle);
 					result.add(collisionPoint);
 				}
 			}
@@ -344,6 +349,40 @@ public class Geometry {
 		}
 
 		return result;
+	}
+
+	/**
+	 * Returns the tangent of a circle at the given point
+	 * 
+	 * @param circle
+	 * @param pointOnCircle
+	 * @return tangent
+	 */
+	public static Line getTangentOfCircleAtPoint(Circle circle,
+			Vector2f pointOnCircle) {
+		Vector2f firstPointOfLine = pointOnCircle;
+		// Vector2f secondPointOfLine = ;
+		float mY = circle.getCenterY();
+		float mX = circle.getCenterX();
+		float bX = firstPointOfLine.x;
+		float bY = firstPointOfLine.y;
+
+		float x, y;
+		if (mX == bX) {
+			x = bX + 1;
+			y = bY;
+		} else {
+			if (mY == bY) {
+				x = bX;
+				y = bY + 1;
+			} else {
+				x = mX + 1;
+				y = (BasicMath.square(circle.getRadius()) - (bX - mX)
+						* (x - mX) + bY * mY - BasicMath.square(mY))
+						/ (bY - mY);
+			}
+		}
+		return new Line(firstPointOfLine, new Vector2f(x, y));
 	}
 
 	/**
@@ -439,6 +478,10 @@ public class Geometry {
 			LinkedList<Line> lines, Polygon polygon) {
 		LinkedList<CollisionPoint> interceptPoints = new LinkedList<CollisionPoint>();
 
+		if (polygon instanceof Polygon) {
+			polygon = Geometry.turnCounterClockwise(polygon);
+		}
+
 		for (Line line : lines) {
 			for (Line borderLine : getBorderLines(polygon)) {
 				Vector2f interceptPoint = Geometry
@@ -447,16 +490,35 @@ public class Geometry {
 				if (interceptPoint == null) {
 					continue;
 				} else {
+					float angle = getAngleBetweenLines(borderLine, line);
+					angle = angle > 180 ? 360 - angle : angle;
 
 					CollisionPoint interception = CollisionPoint
 							.createCollisionPointByInterceptPoint(
-									interceptPoint, line);
+									interceptPoint, line, angle);
 					interceptPoints.add(interception);
 				}
 
 			}
 		}
 		return interceptPoints;
+	}
+
+	/**
+	 * Returns the angle between two lines, that is, the angle between their
+	 * directional vectors.
+	 * 
+	 * @param first
+	 * @param second
+	 * @return angle between lines
+	 */
+	public static float getAngleBetweenLines(Line first, Line second) {
+		Vector2df directionalVectorOfFirst = new Vector2df(
+				getDirectionalVectorOfLine(first));
+		Vector2df directionalVectorOfSecond = new Vector2df(
+				getDirectionalVectorOfLine(second));
+		return directionalVectorOfFirst
+				.getAngleBetween(directionalVectorOfSecond);
 	}
 
 	/**
@@ -544,10 +606,21 @@ public class Geometry {
 	 */
 	public static Vector2f getPointOnLineAt(Line line, float lambda) {
 		Vector2f startPoint = new Vector2f(line.getX1(), line.getY1());
-		Vector2f endPoint = new Vector2f(line.getX2(), line.getY2());
-
-		Vector2f directionalVector = endPoint.sub(startPoint);
+		Vector2f directionalVector = getDirectionalVectorOfLine(line);
 		return startPoint.add(directionalVector.scale(lambda));
+	}
+
+	/**
+	 * Returns the directional vector of a line.
+	 * 
+	 * @param line
+	 * @return the directional vector
+	 */
+	public static Vector2f getDirectionalVectorOfLine(Line line) {
+		Vector2f startPoint = new Vector2f(line.getX1(), line.getY1());
+		Vector2f endPoint = new Vector2f(line.getX2(), line.getY2());
+		endPoint.sub(startPoint);
+		return endPoint;
 	}
 
 	/**
@@ -637,5 +710,48 @@ public class Geometry {
 			Vector2f second) {
 		Vector2f copy = second.copy();
 		return copy.sub(first);
+	}
+
+	/**
+	 * Determines if the polygon's points are given clockwise.
+	 * 
+	 * @param polygon
+	 * @return true if yes
+	 */
+	public static boolean isClockWise(Polygon polygon) {
+		float[] polygonPoints = polygon.getPoints();
+
+		float sumOfEdges = 0;
+		for (int i = 0; i < polygonPoints.length / 2; i++) {
+			float x1 = polygonPoints[i * 2];
+			float y1 = polygonPoints[i * 2 + 1];
+			float x2 = polygonPoints[(i * 2 + 2) % polygonPoints.length];
+			float y2 = polygonPoints[(i * 2 + 3) % polygonPoints.length];
+
+			sumOfEdges += (x2 - x1) * (y1 + y2);
+		}
+
+		return sumOfEdges >= 0 ? true : false;
+	}
+
+	/**
+	 * If the given polygon's points are given counterclockwise, it returns the
+	 * polygon. If they are given clockwise, it returns a new polygon which's
+	 * points are given counterclockwise.
+	 * 
+	 * @param polygon
+	 * @return either the polygon if it's clockwise or a new one.
+	 */
+	public static Polygon turnCounterClockwise(Polygon polygon) {
+		float[] polygonPoints = polygon.getPoints();
+		if (isClockWise(polygon)) {
+			Polygon counterClockwisedPolygon = new Polygon();
+			for (int i = polygon.getPointCount() - 1; i >= 0; i--) {
+				counterClockwisedPolygon.addPoint(polygonPoints[i * 2],
+						polygonPoints[i * 2 + 1]);
+			}
+			return counterClockwisedPolygon;
+		}
+		return polygon;
 	}
 }

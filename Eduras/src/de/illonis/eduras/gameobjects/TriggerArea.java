@@ -63,7 +63,7 @@ public abstract class TriggerArea extends GameObject implements
 	};
 
 	@Override
-	public void onCollision(GameObject collidingObject) {
+	public void onCollision(GameObject collidingObject, float angle) {
 		// never called
 	}
 

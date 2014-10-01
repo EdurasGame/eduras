@@ -168,7 +168,7 @@ public interface InfoInterface {
 	 * @return true if yes
 	 */
 	public boolean canBlinkTo(PlayerMainFigure player, Vector2f target);
-
+	
 	/**
 	 * @return the map background.
 	 */
