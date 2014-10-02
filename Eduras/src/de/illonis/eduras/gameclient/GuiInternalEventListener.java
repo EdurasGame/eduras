@@ -58,6 +58,7 @@ public class GuiInternalEventListener implements GamePanelReactor {
 
 	private final static Logger L = EduLog
 			.getLoggerFor(GuiInternalEventListener.class.getName());
+	private static final float RECTANGLE_SINGLE_SELECTION_SIZE = 3f;
 	private final GameClient client;
 	private final InformationProvider infoPro;
 
@@ -175,6 +176,11 @@ public class GuiInternalEventListener implements GamePanelReactor {
 		// FIXME: Use slicks rectangle here
 		Rectangle r = new Rectangle((float) area.getX(), (float) area.getY(),
 				(float) area.getWidth(), (float) area.getHeight());
+
+		if (r.getWidth() * r.getHeight() < RECTANGLE_SINGLE_SELECTION_SIZE) {
+			selectOrDeselectAt(new Vector2f(r.getCenterX(), r.getCenterY()));
+			return;
+		}
 
 		PlayerMainFigure p;
 		try {
