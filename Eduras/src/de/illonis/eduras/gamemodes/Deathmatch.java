@@ -244,7 +244,8 @@ public class Deathmatch extends BasicGameMode {
 		}
 
 		// remove it to the statistic
-		gameInfo.getGameSettings().getStats().removePlayerFromStats(gonePlayer);
+		gameInfo.getGameSettings().getStats()
+				.removePlayerFromStats(gonePlayer.getPlayerId());
 
 		Team playersTeam = null;
 		try {

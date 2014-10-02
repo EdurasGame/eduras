@@ -148,7 +148,8 @@ public class TeamDeathmatch extends Deathmatch {
 		Player player;
 		try {
 			player = gameInfo.getPlayerByOwnerId(ownerId);
-			gameInfo.getGameSettings().getStats().removePlayerFromStats(player);
+			gameInfo.getGameSettings().getStats()
+					.removePlayerFromStats(player.getPlayerId());
 		} catch (ObjectNotFoundException e) {
 			L.log(Level.WARNING, "Player already vanished onDisconnect", e);
 		}

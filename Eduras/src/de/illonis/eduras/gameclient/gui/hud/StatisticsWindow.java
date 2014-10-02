@@ -84,6 +84,11 @@ public class StatisticsWindow extends RenderedGuiObject {
 
 	}
 
+	@Override
+	public void onPlayerLeft(int ownerId) {
+		getInfo().getStatistics().removePlayerFromStats(ownerId);
+	}
+
 	/**
 	 * Changes visibility of this window.
 	 * 
