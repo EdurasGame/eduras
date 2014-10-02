@@ -189,7 +189,6 @@ public final class ImageCache {
 		case DYNAMIC_POLYGON_BLOCK:
 		case BIGBLOCK:
 		case BIGGERBLOCK:
-		case NEUTRAL_BASE:
 			return true;
 		default:
 			return false;
