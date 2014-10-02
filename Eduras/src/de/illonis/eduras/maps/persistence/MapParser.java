@@ -255,9 +255,8 @@ public class MapParser {
 													.valueOf(last);
 											oData.setTexture(key);
 										} catch (IllegalArgumentException e) {
-											throw new InvalidDataException(
-													"Texture key is invalid",
-													lineNumber);
+											oData.setTexture(TextureKey.NONE);
+											oData.setColor(Color.gray);
 										}
 									}
 								}

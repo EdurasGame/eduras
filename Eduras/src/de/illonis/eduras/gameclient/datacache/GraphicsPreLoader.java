@@ -60,6 +60,9 @@ public final class GraphicsPreLoader {
 			} catch (SlickException e) {
 				L.log(Level.SEVERE,
 						"Texture file not found: " + pair.getValue(), e);
+			} catch (IOException e) {
+				L.log(Level.SEVERE,
+						"Could not read texture file: " + pair.getValue(), e);
 			}
 		}
 

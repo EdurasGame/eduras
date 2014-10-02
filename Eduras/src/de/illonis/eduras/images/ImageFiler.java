@@ -37,8 +37,10 @@ public class ImageFiler {
 	 */
 	@SuppressWarnings("javadoc")
 	public enum ImageResolution {
-		WINDOWED(".low", 800, 600), LAPTOP(".medium", 1366, 768), FULLHD("",
-				1920, 1080);
+		WINDOWED(".low", 800, 600), LAPTOP(".medium", 1366, 768), FULLHD(
+				"",
+				1920,
+				1080);
 
 		private ImageResolution(String suffix, int width, int height) {
 			this.suffix = suffix;
@@ -144,9 +146,21 @@ public class ImageFiler {
 	 * @return the image.
 	 * @throws SlickException
 	 *             when image could not be loaded.
+	 * @throws IOException
+	 *             if an I/O error occurs.
 	 */
-	public static Image load(String fileName) throws SlickException {
-		return new Image(CacheInfo.BASE_URL + fileName);
+	public static Image load(String fileName) throws SlickException,
+			IOException {
+		Image image;
+		if (S.Client.localres) {
+			image = new Image(CacheInfo.BASE_URL + fileName);
+		} else {
+			try (InputStream input = ResourceManager.openResource(
+					ResourceType.IMAGE, fileName)) {
+				image = new Image(input, fileName, false);
+			}
+		}
+		return image;
 	}
 
 	/**
