@@ -69,8 +69,6 @@
 				<include name="res/**" />
 			</fileset>
 			<fileset dir="${base}${src}">
-				<include name="**/*.png"></include>
-				<include name="**/*.png.*"></include>
 				<include name="**/*.erm"></include>
 				<include name="**/*.esh"></include>
 			</fileset>

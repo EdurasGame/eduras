@@ -35,7 +35,7 @@ public class ResourceManager {
 			this.folder = folder;
 		}
 
-		String getFolder() {
+		public String getFolder() {
 			return folder;
 		}
 	}

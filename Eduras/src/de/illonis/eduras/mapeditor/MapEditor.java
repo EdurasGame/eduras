@@ -1,7 +1,6 @@
 package de.illonis.eduras.mapeditor;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
@@ -15,7 +14,8 @@ import de.illonis.eduras.ObjectFactory.ObjectType;
 import de.illonis.eduras.mapeditor.gui.EditorWindow;
 import de.illonis.eduras.mapeditor.validate.MapValidator;
 import de.illonis.eduras.settings.S;
-import de.illonis.eduras.utils.PathFinder;
+import de.illonis.eduras.utils.ResourceManager;
+import de.illonis.eduras.utils.ResourceManager.ResourceType;
 
 /**
  * A map editor for Eduras?-maps that supports easy placing of objects on the
@@ -29,7 +29,7 @@ public class MapEditor {
 	/**
 	 * Editor version.
 	 */
-	public final static int VERSION = 3;
+	public final static int VERSION = 5;
 
 	private EditorGame game;
 	private EditorWindow window;
@@ -39,22 +39,25 @@ public class MapEditor {
 	 *            <i>run with arguments if starting from eclipse</i>
 	 */
 	public static void main(String[] args) {
-		// try {
-		// ResourceManager.extractNatives();
-		// } catch (UnsatisfiedLinkError | IOException e) {
-		// JOptionPane.showMessageDialog(null, "Could not extract natives.",
-		// "Error", JOptionPane.ERROR_MESSAGE);
-		// System.exit(-1);
-		// }
-		System.setProperty("org.lwjgl.librarypath",
-				(new File(PathFinder.findFile("native"))).getAbsolutePath());
-		S.Client.localres = true;
+		boolean debug = args.length > 0;
+		if (!debug) {
+			System.setProperty("org.lwjgl.librarypath", ResourceManager
+					.resourceToPath(ResourceType.NATIVE_LIBRARY, "").toString());
+		} else {
+			S.Client.localres = true;
+		}
 		MapValidator.init();
 
 		try {
 			MapEditor editor = new MapEditor();
 			editor.startUpdateCheck();
 			editor.showWindow();
+		} catch (UnsatisfiedLinkError e) {
+			JOptionPane
+					.showMessageDialog(
+							null,
+							"<html>Please place mapeditor executable in<br>&lt;eduras&gt;/game folder and start it again!");
+			return;
 		} catch (SlickException e) {
 			JOptionPane.showMessageDialog(null, "Could not init slick.");
 			e.printStackTrace();
