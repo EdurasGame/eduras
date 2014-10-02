@@ -16,6 +16,8 @@ public abstract class Unit extends MoveableGameObject {
 
 	private int health, maxHealth;
 	private Team team;
+	private boolean isDetector;
+	private float detectionRange;
 
 	/**
 	 * Creates a new unit with given maximum health. It's health is equal to
@@ -144,4 +146,44 @@ public abstract class Unit extends MoveableGameObject {
 	 *            Specifies who killed this object. -1 if there is no killer.
 	 */
 	protected abstract void onDead(int killer);
+
+	/**
+	 * Returns whether this object can see invisible objects.
+	 * 
+	 * @return true if yes
+	 */
+	public boolean isDetector() {
+		return isDetector;
+	}
+
+	/**
+	 * Sets whether this unit can see invisible objects.
+	 * 
+	 * @param isDetector
+	 */
+	public void setDetector(boolean isDetector) {
+		this.isDetector = isDetector;
+	}
+
+	/**
+	 * Determines how close an invis object has to be in order to be detected.
+	 * 
+	 * @return detection
+	 */
+	public float getDetectionRange() {
+		if (!isDetector) {
+			return 0;
+		} else {
+			return detectionRange;
+		}
+	}
+
+	/**
+	 * Sets
+	 * 
+	 * @param detectionRange
+	 */
+	public void setDetectionRange(float detectionRange) {
+		this.detectionRange = detectionRange;
+	}
 }

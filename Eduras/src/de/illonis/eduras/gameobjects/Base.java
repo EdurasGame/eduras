@@ -9,6 +9,7 @@ import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.Team;
 import de.illonis.eduras.gamemodes.GameMode;
 import de.illonis.eduras.settings.S;
+import de.illonis.eduras.units.PlayerMainFigure;
 
 /**
  * A NeutralBase is a {@link NeutralArea} that triggers {@link GameMode}
@@ -68,13 +69,13 @@ public class Base extends NeutralArea {
 				.getGameSettings()
 				.getGameMode()
 				.determineProgressingTeam(this, object, objectEntered,
-						getPresentUnits());
+						getPresentPlayers());
 	}
 
-	private Set<GameObject> getPresentUnits() {
+	private Set<GameObject> getPresentPlayers() {
 		HashSet<GameObject> unitsOnly = new HashSet<GameObject>();
 		for (GameObject anyObject : getPresentObjects())
-			if (anyObject.isUnit()) {
+			if (anyObject instanceof PlayerMainFigure) {
 				unitsOnly.add(anyObject);
 			}
 		return unitsOnly;

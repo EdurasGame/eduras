@@ -34,6 +34,7 @@ import de.illonis.eduras.events.ItemUseFailedEvent;
 import de.illonis.eduras.events.ItemUseFailedEvent.Reason;
 import de.illonis.eduras.events.MatchEndEvent;
 import de.illonis.eduras.events.MovementEvent;
+import de.illonis.eduras.events.ObjectAndTeamEvent;
 import de.illonis.eduras.events.ObjectFactoryEvent;
 import de.illonis.eduras.events.OwnerGameEvent;
 import de.illonis.eduras.events.PlayerAndTeamEvent;
@@ -484,6 +485,11 @@ public class EventParser implements EventHandler {
 				logic.onGameEventAppeared(new PlayerAndTeamEvent(
 						GameEventNumber.JOIN_TEAM, (Integer) event
 								.getArgument(0), (Integer) event.getArgument(1)));
+				break;
+			case ADD_OBJECT_TO_TEAM:
+				logic.onGameEventAppeared(new ObjectAndTeamEvent(
+						gameEventNumber, (Integer) event.getArgument(0),
+						(Integer) event.getArgument(1)));
 				break;
 			default:
 				L.warning("Cannot handle event with event number "

@@ -480,6 +480,10 @@ public class EdurasInitializer {
 			public void notifyAoEDamage(ObjectType type, Vector2f centerPosition) {
 			}
 
+			@Override
+			public void setTeamOfUnit(Unit createdUnit, Team team) {
+			}
+
 		});
 
 		networkManager.getClient().setEventHandler(new EventParser(logic));

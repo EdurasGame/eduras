@@ -3,6 +3,7 @@ package de.illonis.eduras.gameclient.gui.game;
 import java.awt.Polygon;
 import java.awt.geom.Area;
 import java.awt.image.BufferedImage;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -46,6 +47,7 @@ import de.illonis.eduras.logicabstraction.InformationProvider;
 import de.illonis.eduras.math.Geometry;
 import de.illonis.eduras.math.Vector2df;
 import de.illonis.eduras.settings.S;
+import de.illonis.eduras.units.ControlledUnit;
 import de.illonis.eduras.units.InteractMode;
 import de.illonis.eduras.units.PlayerMainFigure;
 import de.illonis.eduras.units.Unit;
@@ -76,6 +78,11 @@ public class GameRenderer implements TooltipHandler {
 	private static final float INTERACTMODE_OFFSET_Y = 25;
 
 	private static final Color OUTLINE_COLOR = Color.black;
+	private static final Color DETECTION_AREA_COLOR = new Color(1f, 1f, 1f,
+			0.1f);
+
+	private static final Color SELECTION_CIRCLE_COLOR = Color.white;
+
 	private Font font;
 
 	/**
@@ -309,7 +316,7 @@ public class GameRenderer implements TooltipHandler {
 		for (Iterator<GameObject> iterator = objectsInDrawOrder.iterator(); iterator
 				.hasNext();) {
 			GameObject d = iterator.next();
-			if (!d.isVisibleFor(myPlayer)) {
+			if (!isObjectVisible(d)) {
 				continue;
 			}
 			float[] points = d.getShape().getPoints();
@@ -339,6 +346,34 @@ public class GameRenderer implements TooltipHandler {
 
 	}
 
+	private boolean isObjectVisible(GameObject object) {
+		boolean isVisible = false;
+
+		Player myPlayer;
+		try {
+			myPlayer = info.getPlayer();
+		} catch (ObjectNotFoundException e1) {
+			L.log(Level.WARNING, "No player found.", e1);
+			return false;
+		}
+
+		PlayerMainFigure myPlayersMainFigure = myPlayer.getPlayerMainFigure();
+		if (myPlayersMainFigure != null) {
+			isVisible |= object.isVisibleFor(myPlayersMainFigure);
+		}
+
+		try {
+			Collection<GameObject> myTeam = info.getObjectsOfTeam(myPlayer
+					.getTeam());
+			for (GameObject memberOfMyTeam : myTeam) {
+				isVisible |= object.isVisibleFor(memberOfMyTeam);
+			}
+		} catch (PlayerHasNoTeamException e) {
+			return isVisible;
+		}
+		return isVisible;
+	}
+
 	private void drawObject(GameObject d, Graphics g) {
 		final float x = d.getXPosition();
 		final float y = d.getYPosition();
@@ -366,7 +401,19 @@ public class GameRenderer implements TooltipHandler {
 		}
 
 		if (d.isUnit()) {
-			drawHealthBarFor((Unit) d, g);
+			Unit unit = (Unit) d;
+
+			drawHealthBarFor(unit, g);
+
+			if (unit.isDetector()) {
+				drawDetectionAreaFor(unit, g);
+			}
+
+			if (unit instanceof ControlledUnit) {
+				if (data.getSelectedUnits().contains(unit.getId())) {
+					drawUnitSelectionCircle(unit, g);
+				}
+			}
 		}
 
 		if (d instanceof PlayerMainFigure) {
@@ -378,6 +425,20 @@ public class GameRenderer implements TooltipHandler {
 		 * dbg.drawString(d.getId() + "", d.getDrawX() - camera.x, d.getDrawY()
 		 * - camera.y - 15);
 		 */
+	}
+
+	private void drawUnitSelectionCircle(Unit unit, Graphics g) {
+		g.setColor(SELECTION_CIRCLE_COLOR);
+		g.draw(new Circle(unit.getCenterPosition().getX(), unit
+				.getCenterPosition().getY(), unit.getShape()
+				.getBoundingCircleRadius() * 1.5f));
+	}
+
+	private void drawDetectionAreaFor(Unit unit, Graphics g) {
+		g.setColor(DETECTION_AREA_COLOR);
+		Circle circle = new Circle(unit.getCenterPosition().getX(), unit
+				.getCenterPosition().getY(), unit.getDetectionRange());
+		g.fill(circle);
 	}
 
 	private void drawPlayerSpecifics(PlayerMainFigure d, Graphics g) {
@@ -480,7 +541,9 @@ public class GameRenderer implements TooltipHandler {
 		case DYNAMIC_POLYGON_BLOCK:
 			return Color.pink;
 		case PLAYER:
-			PlayerMainFigure p = (PlayerMainFigure) d;
+		case OBSERVER:
+		case SPELL_SCOUT:
+			Unit p = (Unit) d;
 			if (p.getTeam() == null) {
 				return Color.blue;
 			} else {
