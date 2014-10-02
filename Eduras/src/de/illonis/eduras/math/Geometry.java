@@ -336,7 +336,26 @@ public class Geometry {
 
 					Line tangent = getTangentOfCircleAtPoint(circle,
 							interceptionPoints[i]);
-					float angle = getAngleBetweenLines(tangent, singleLine);
+					Vector2df distanceVectorOfTangent = new Vector2df(
+							calculateDistanceVectorOfLine(tangent));
+					Vector2df distanceVectorOfSingleLine = new Vector2df(
+							calculateDistanceVectorOfLine(singleLine));
+
+					float crossProduct = calculateCrossProduct(
+							distanceVectorOfTangent, distanceVectorOfSingleLine);
+					if (crossProduct > 0) {
+						// the line approaches the circle from "above"
+						// the distancevector of single line already has correct
+						// orientation
+					} else if (crossProduct < 0) {
+						// the line approaches the circle from "below"
+						// need to invert distancevector of single line
+						distanceVectorOfSingleLine = new Vector2df(
+								invert(distanceVectorOfSingleLine));
+					}
+
+					float angle = distanceVectorOfSingleLine
+							.getAngleBetween(distanceVectorOfTangent);
 					angle = angle > 180 ? 360 - angle : angle;
 
 					CollisionPoint collisionPoint = CollisionPoint
@@ -351,8 +370,13 @@ public class Geometry {
 		return result;
 	}
 
+	public static float calculateCrossProduct(Vector2f v1, Vector2f v2) {
+		return v1.x * v2.y - v1.y * v2.x;
+	}
+
 	/**
-	 * Returns the tangent of a circle at the given point
+	 * Returns the tangent of a circle at the given point. The tangent's points
+	 * are given horizontally, so line.getX2 - line.getX1 >= 0
 	 * 
 	 * @param circle
 	 * @param pointOnCircle
@@ -710,6 +734,12 @@ public class Geometry {
 			Vector2f second) {
 		Vector2f copy = second.copy();
 		return copy.sub(first);
+	}
+
+	public static Vector2f calculateDistanceVectorOfLine(Line line) {
+		Vector2f v2 = new Vector2f(line.getStart());
+		v2.sub(new Vector2f(line.getEnd()));
+		return v2;
 	}
 
 	/**
