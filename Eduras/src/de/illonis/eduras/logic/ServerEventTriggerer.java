@@ -199,8 +199,15 @@ public class ServerEventTriggerer implements EventTriggerer {
 			throw new ObjectNotFoundException(objectId);
 		} else if (gameObject instanceof MotionAIControllable) {
 			MotionAIControllable movingObject = (MotionAIControllable) gameObject;
+
+			// we want the unit's center to be at the target when it arrives
+			Vector2f oldCenterPosition = gameObject.getCenterPosition();
+			gameObject.setCenterPosition(target);
+			Vector2f targetPosition = gameObject.getPositionVector();
+			gameObject.setCenterPosition(oldCenterPosition);
+
 			MovingUnitAI ai = (MovingUnitAI) movingObject.getAI();
-			ai.moveTo(target);
+			ai.moveTo(targetPosition);
 		} else {
 			throw new UnitNotControllableException(objectId);
 		}
