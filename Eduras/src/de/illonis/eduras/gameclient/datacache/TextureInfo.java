@@ -27,6 +27,7 @@ public class TextureInfo {
 		ROCK("rock.png"),
 		ROOF("roof.png"),
 		WATER("water.png"),
+		SAND("sand.png"),
 		NONE("");
 
 		private final String file;

@@ -16,7 +16,6 @@ import de.illonis.eduras.mapeditor.gui.EditorWindow;
 import de.illonis.eduras.mapeditor.validate.MapValidator;
 import de.illonis.eduras.settings.S;
 import de.illonis.eduras.utils.PathFinder;
-import de.illonis.eduras.utils.ResourceManager;
 
 /**
  * A map editor for Eduras?-maps that supports easy placing of objects on the
@@ -40,18 +39,18 @@ public class MapEditor {
 	 *            <i>run with arguments if starting from eclipse</i>
 	 */
 	public static void main(String[] args) {
-//		try {
-//			ResourceManager.extractNatives();
-//		} catch (UnsatisfiedLinkError | IOException e) {
-//			JOptionPane.showMessageDialog(null, "Could not extract natives.",
-//					"Error", JOptionPane.ERROR_MESSAGE);
-//			System.exit(-1);
-//		}
+		// try {
+		// ResourceManager.extractNatives();
+		// } catch (UnsatisfiedLinkError | IOException e) {
+		// JOptionPane.showMessageDialog(null, "Could not extract natives.",
+		// "Error", JOptionPane.ERROR_MESSAGE);
+		// System.exit(-1);
+		// }
 		System.setProperty("org.lwjgl.librarypath",
 				(new File(PathFinder.findFile("native"))).getAbsolutePath());
 		S.Client.localres = true;
 		MapValidator.init();
-		
+
 		try {
 			MapEditor editor = new MapEditor();
 			editor.startUpdateCheck();
