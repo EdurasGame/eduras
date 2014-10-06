@@ -332,7 +332,6 @@ public class EventParser implements EventHandler {
 								.getArgument(2)));
 				break;
 			case SET_RENDER_INFO:
-				System.out.println("got render event");
 				logic.onGameEventAppeared(new SetRenderInfoEvent((int) event
 						.getArgument(0), ColorUtils.fromString((String) event
 						.getArgument(1)), TextureKey.valueOf((String) event
