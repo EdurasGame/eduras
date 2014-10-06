@@ -22,6 +22,7 @@ import de.illonis.eduras.events.ItemEvent;
 import de.illonis.eduras.events.ItemUseFailedEvent;
 import de.illonis.eduras.events.MatchEndEvent;
 import de.illonis.eduras.events.MovementEvent;
+import de.illonis.eduras.events.ObjectAndTeamEvent;
 import de.illonis.eduras.events.ObjectFactoryEvent;
 import de.illonis.eduras.events.OwnerGameEvent;
 import de.illonis.eduras.events.PlayerAndTeamEvent;
@@ -185,8 +186,6 @@ public class ClientLogic implements GameLogicInterface {
 					L.log(Level.WARNING, "Cannot find object.", e3);
 					break;
 				}
-				System.out.println("Setting render info for "
-						+ renderObject.getId());
 				renderObject.setTexture(renderEvent.getTexture());
 				if (renderObject instanceof DynamicPolygonObject) {
 					((DynamicPolygonObject) renderObject).setColor(renderEvent
@@ -703,6 +702,26 @@ public class ClientLogic implements GameLogicInterface {
 				} catch (ObjectNotFoundException e1) {
 					L.log(Level.WARNING,
 							"Cannot find object to set the speed of!", e1);
+					break;
+				}
+				break;
+			}
+			case ADD_OBJECT_TO_TEAM: {
+				ObjectAndTeamEvent addObjectToTeamEvent = (ObjectAndTeamEvent) event;
+				try {
+					GameObject object = gameInfo
+							.findObjectById(addObjectToTeamEvent.getObjectId());
+					Team team = gameInfo.findTeamById(addObjectToTeamEvent
+							.getTeamId());
+					if (!(object instanceof Unit)) {
+						L.warning("Trying to set team of an object that isn't a unit.");
+						return;
+					} else {
+						((Unit) object).setTeam(team);
+					}
+				} catch (ObjectNotFoundException e1) {
+					L.log(Level.WARNING,
+							"Cannot find object to set the team of!", e1);
 					break;
 				}
 				break;

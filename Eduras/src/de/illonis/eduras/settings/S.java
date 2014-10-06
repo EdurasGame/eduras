@@ -754,6 +754,29 @@ public final class S {
 		 */
 		public static boolean sv_collision_smooth = true;
 
+		/**
+		 * Determines how close an invis object has to be to an observer in
+		 * order to be seen.
+		 */
+		public static float unit_observer_detectionrange = 100;
+
+		/**
+		 * Determines how close an invis object has to be to the spell scout in
+		 * order to be seen.
+		 */
+		public static float spell_scout_detectionrange = 200;
+
+		/**
+		 * Determines how large an observer object is.
+		 */
+		public static float unit_observer_shaperadius = 9;
+
+		/**
+		 * Determines whether an observer is in stealth mode or not. If so, he's
+		 * not visible and cannot collide with units.
+		 */
+		public static boolean unit_observer_stealth = true;
+
 	}
 
 	/**

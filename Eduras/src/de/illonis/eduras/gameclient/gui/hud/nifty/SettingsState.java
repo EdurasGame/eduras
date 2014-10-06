@@ -15,6 +15,7 @@ import de.lessvoid.nifty.slick2d.NiftyOverlayBasicGameState;
  */
 public class SettingsState extends NiftyOverlayBasicGameState {
 
+	public static final int SETTINGS_STATE_ID = 1;
 	private final GameControllerBridge game;
 	private SettingsController controller;
 
@@ -24,7 +25,7 @@ public class SettingsState extends NiftyOverlayBasicGameState {
 
 	@Override
 	public int getID() {
-		return 1;
+		return SETTINGS_STATE_ID;
 	}
 
 	@Override

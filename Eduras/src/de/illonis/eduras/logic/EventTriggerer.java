@@ -754,4 +754,14 @@ public interface EventTriggerer {
 	 * @param centerPosition
 	 */
 	void notifyAoEDamage(ObjectType type, Vector2f centerPosition);
+
+	/**
+	 * Sets the team of a unit.
+	 * 
+	 * @param createdUnit
+	 *            unit to set team of
+	 * @param team
+	 *            the team to set this unit to
+	 */
+	void setTeamOfUnit(Unit createdUnit, Team team);
 }

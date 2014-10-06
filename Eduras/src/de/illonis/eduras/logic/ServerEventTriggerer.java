@@ -44,6 +44,7 @@ import de.illonis.eduras.events.ItemUseFailedEvent;
 import de.illonis.eduras.events.ItemUseFailedEvent.Reason;
 import de.illonis.eduras.events.MatchEndEvent;
 import de.illonis.eduras.events.MovementEvent;
+import de.illonis.eduras.events.ObjectAndTeamEvent;
 import de.illonis.eduras.events.ObjectFactoryEvent;
 import de.illonis.eduras.events.OwnerGameEvent;
 import de.illonis.eduras.events.PlayerAndTeamEvent;
@@ -201,8 +202,15 @@ public class ServerEventTriggerer implements EventTriggerer {
 			throw new ObjectNotFoundException(objectId);
 		} else if (gameObject instanceof MotionAIControllable) {
 			MotionAIControllable movingObject = (MotionAIControllable) gameObject;
+
+			// we want the unit's center to be at the target when it arrives
+			Vector2f oldCenterPosition = gameObject.getCenterPosition();
+			gameObject.setCenterPosition(target);
+			Vector2f targetPosition = gameObject.getPositionVector();
+			gameObject.setCenterPosition(oldCenterPosition);
+
 			MovingUnitAI ai = (MovingUnitAI) movingObject.getAI();
-			ai.moveTo(target);
+			ai.moveTo(targetPosition);
 		} else {
 			throw new UnitNotControllableException(objectId);
 		}
@@ -1383,5 +1391,13 @@ public class ServerEventTriggerer implements EventTriggerer {
 	@Override
 	public void notifyAoEDamage(ObjectType type, Vector2f centerPosition) {
 		sendEventToAll(new AoEDamageEvent(type, centerPosition));
+	}
+
+	@Override
+	public void setTeamOfUnit(Unit createdUnit, Team team) {
+		createdUnit.setTeam(team);
+		sendEventToAll(new ObjectAndTeamEvent(
+				GameEventNumber.ADD_OBJECT_TO_TEAM, createdUnit.getId(),
+				team.getTeamId()));
 	}
 }

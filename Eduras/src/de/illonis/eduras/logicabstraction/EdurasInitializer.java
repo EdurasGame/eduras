@@ -488,6 +488,10 @@ public class EdurasInitializer {
 
 			}
 
+			@Override
+			public void setTeamOfUnit(Unit createdUnit, Team team) {
+			}
+
 		});
 
 		networkManager.getClient().setEventHandler(new EventParser(logic));

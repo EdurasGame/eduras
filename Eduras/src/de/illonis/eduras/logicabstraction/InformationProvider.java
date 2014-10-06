@@ -25,6 +25,7 @@ import de.illonis.eduras.maps.NodeData;
 import de.illonis.eduras.maps.SpawnPosition;
 import de.illonis.eduras.units.Observer;
 import de.illonis.eduras.units.PlayerMainFigure;
+import de.illonis.eduras.units.Unit;
 
 /**
  * This class provides a connection between GUI and logic. GUI developers can
@@ -220,5 +221,32 @@ public class InformationProvider implements InfoInterface {
 	@Override
 	public TextureKey getMapBackground() {
 		return edurasInitializer.logic.getGame().getMap().getBackground();
+	}
+
+	/**
+	 * Returns all objects of a team.
+	 * 
+	 * @param team
+	 *            the team to return all objects of
+	 * @return empty list, if the given team is null.
+	 */
+	public Collection<GameObject> getObjectsOfTeam(Team team) {
+		Collection<GameObject> allObjects = edurasInitializer.getLogic()
+				.getGame().getObjects().values();
+		LinkedList<GameObject> teamsObjects = new LinkedList<GameObject>();
+		if (team == null) {
+			return teamsObjects;
+		}
+
+		for (GameObject anObject : allObjects) {
+			if (anObject instanceof Unit) {
+				Unit unitObject = (Unit) anObject;
+				if (unitObject.getTeam() != null
+						&& unitObject.getTeam().equals(team)) {
+					teamsObjects.add(anObject);
+				}
+			}
+		}
+		return teamsObjects;
 	}
 }

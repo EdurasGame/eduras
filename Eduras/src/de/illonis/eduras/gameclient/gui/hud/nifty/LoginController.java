@@ -148,7 +148,7 @@ public class LoginController extends EdurasScreenController {
 					result = loginFuture.get();
 					if (result.success) {
 						game.setUsername(nameField.getRealText());
-						game.enterState(2);
+						game.enterState(ServerListState.SERVER_LIST_STATE_ID);
 					} else {
 						nameNote.setText("Login failed.");
 						passwordField.setText("");
@@ -206,7 +206,7 @@ public class LoginController extends EdurasScreenController {
 
 				resultObject.success = obj.getBoolean("success");
 			} catch (IOException e) {
-				throw new ExecutionException("Login server not available.", e);				
+				throw new ExecutionException("Login server not available.", e);
 			}
 			return resultObject;
 
