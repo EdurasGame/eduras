@@ -69,7 +69,15 @@ public class GamePanelLogic extends GameEventAdapter implements
 	 */
 	@SuppressWarnings("javadoc")
 	public enum ClickState {
-		DEFAULT, ITEM_SELECTED, UNITSELECT_DRAGGING, SELECT_BASE_FOR_REZZ, SELECT_TARGET_FOR_HEAL, SELECT_POSITION_FOR_OBSERVERUNIT, SELECT_POSITION_FOR_SCOUT, SELECT_POSITION_FOR_ITEMSPAWN, SELECT_TARGET_FOR_SPELL;
+		DEFAULT,
+		ITEM_SELECTED,
+		UNITSELECT_DRAGGING,
+		SELECT_BASE_FOR_REZZ,
+		SELECT_TARGET_FOR_HEAL,
+		SELECT_POSITION_FOR_OBSERVERUNIT,
+		SELECT_POSITION_FOR_SCOUT,
+		SELECT_POSITION_FOR_ITEMSPAWN,
+		SELECT_TARGET_FOR_SPELL;
 	}
 
 	/**
@@ -374,6 +382,7 @@ public class GamePanelLogic extends GameEventAdapter implements
 	public void onInteractModeChanged(SetInteractModeEvent setModeEvent) {
 		if (setModeEvent.getOwner() == infoPro.getOwnerID()) {
 			resetCamera();
+			currentClickState = ClickState.DEFAULT;
 		}
 	}
 
