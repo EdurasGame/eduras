@@ -526,14 +526,6 @@ public abstract class GameObject extends ReferencedEntity implements
 	 * @return Returns true if this object is visible and false otherwise.
 	 */
 	public boolean isVisibleFor(GameObject other) {
-		if (other instanceof Unit) {
-			Unit otherUnit = (Unit) other;
-			if (otherUnit.isDetector()
-					&& getDistanceTo(other) <= otherUnit.getDetectionRange()) {
-				return true;
-			}
-		}
-
 		switch (visible) {
 		case ALL:
 			return true;
@@ -544,6 +536,13 @@ public abstract class GameObject extends ReferencedEntity implements
 		case OWNER_TEAM:
 			if (!other.isUnit())
 				return false;
+
+			Unit otherUnit = (Unit) other;
+			if (otherUnit.isDetector()
+					&& getDistanceTo(other) <= otherUnit.getDetectionRange()) {
+				return true;
+			}
+
 			Player player;
 			try {
 				player = game.getPlayerByOwnerId(this.owner);
