@@ -35,10 +35,16 @@ public class SoundMachine {
 	 */
 	@SuppressWarnings("javadoc")
 	public enum SoundType {
-		CLICK("click.ogg"), ERROR("error2.wav"), AMMO_EMPTY("error1.wav"), SHOOT(
-				"shoot.ogg"), HURT("hurt.wav"), LOOT("item_loot.wav"), BASE_CONQUERED(
-				"base_conquered.wav"), BASE_LOST("base_lost.wav"), SPELL_REZZ(
-				"rezz1.wav"), SPELL_HEAL("spell8.wav");
+		CLICK("click.ogg"),
+		ERROR("error2.ogg"),
+		AMMO_EMPTY("error1.ogg"),
+		SHOOT("shoot.ogg"),
+		HURT("hurt.ogg"),
+		LOOT("item_loot.ogg"),
+		BASE_CONQUERED("base_conquered.ogg"),
+		BASE_LOST("base_lost.ogg"),
+		SPELL_REZZ("rezz1.ogg"),
+		SPELL_HEAL("spell8.ogg");
 
 		private final String file;
 
