@@ -168,9 +168,16 @@ public interface InfoInterface {
 	 * @return true if yes
 	 */
 	public boolean canBlinkTo(PlayerMainFigure player, Vector2f target);
-	
+
 	/**
 	 * @return the map background.
 	 */
 	public TextureKey getMapBackground();
+
+	/**
+	 * Tells whether an item can be placed at the given location.
+	 * 
+	 * @return true if it can
+	 */
+	public boolean canSpawnItemAt(Vector2f location);
 }

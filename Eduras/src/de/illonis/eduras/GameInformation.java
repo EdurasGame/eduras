@@ -792,6 +792,13 @@ public class GameInformation {
 		LinkedList<GameObject> collidableObjects = new LinkedList<GameObject>();
 
 		for (GameObject otherObject : objects.values()) {
+			if (someObject == null) {
+				if (otherObject.isCollidable(null)) {
+					collidableObjects.add(otherObject);
+				}
+				continue;
+			}
+
 			if (otherObject.equals(someObject)) {
 				continue;
 			}
@@ -885,5 +892,16 @@ public class GameInformation {
 		} else {
 			return objs.getFirst().getTimingSource();
 		}
+	}
+
+	public static Collection<?> getAllUnits(Collection<GameObject> collidables) {
+		LinkedList<GameObject> units = new LinkedList<GameObject>();
+
+		for (GameObject anyObject : collidables) {
+			if (anyObject.isUnit()) {
+				units.add(anyObject);
+			}
+		}
+		return units;
 	}
 }

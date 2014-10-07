@@ -482,7 +482,8 @@ public class GuiInternalEventListener implements GamePanelReactor {
 
 	@Override
 	public void onSpawnItem(ObjectType type, Vector2f locationToSpawnAt)
-			throws WrongObjectTypeException, InsufficientResourceException {
+			throws WrongObjectTypeException, InsufficientResourceException,
+			CantSpawnHereException {
 		Player player;
 		try {
 			player = infoPro.getPlayer();
@@ -498,6 +499,9 @@ public class GuiInternalEventListener implements GamePanelReactor {
 		checkSufficientResources(player, type.getCosts());
 
 		// TODO: only allow to spawn where you have vision...
+		if (!infoPro.canSpawnItemAt(locationToSpawnAt)) {
+			throw new CantSpawnHereException(type);
+		}
 
 		SpawnItemEvent spawnItemEvent = new SpawnItemEvent(
 				player.getPlayerId(), type, locationToSpawnAt);

@@ -249,4 +249,26 @@ public class InformationProvider implements InfoInterface {
 		}
 		return teamsObjects;
 	}
+
+	@Override
+	public boolean canSpawnItemAt(Vector2f location) {
+		GameInformation gameInfo = edurasInitializer.getLogic().getGame();
+
+		if (!getMapBounds().contains(location.x, location.y)) {
+			return false;
+		}
+
+		Collection<GameObject> collidables = gameInfo
+				.getAllCollidableObjects(null);
+		collidables.removeAll(GameInformation
+				.getAllItemsAndMissiles(collidables));
+		collidables.removeAll(GameInformation.getAllUnits(collidables));
+
+		boolean result = true;
+		for (GameObject obj : collidables) {
+			result &= !(obj.getShape().contains(location.x, location.y));
+		}
+
+		return result;
+	}
 }
