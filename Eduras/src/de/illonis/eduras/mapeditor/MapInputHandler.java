@@ -27,6 +27,7 @@ public class MapInputHandler extends InputAdapter {
 	private final MapInteractor interactor;
 	private Rectangle dragRect;
 	private Vector2f startPos;
+	private Input input;
 
 	MapInputHandler(MapInteractor interactor, StatusListener status) {
 		this.status = status;
@@ -201,9 +202,23 @@ public class MapInputHandler extends InputAdapter {
 		case Input.KEY_C:
 			interactor.copySelectedElements();
 			break;
+		case Input.KEY_Z:
+			if (input.isKeyDown(Input.KEY_LCONTROL)) {
+				if (input.isKeyDown(Input.KEY_LSHIFT)) {
+					interactor.redo();
+				} else
+					interactor.undo();
+			}
+			break;
 		default:
 			break;
 		}
+	}
+
+	@Override
+	public void setInput(Input input) {
+		super.setInput(input);
+		this.input = input;
 	}
 
 	@Override

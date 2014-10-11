@@ -6,6 +6,9 @@ import java.util.LinkedList;
 import java.util.List;
 
 import javax.swing.JOptionPane;
+import javax.swing.undo.CannotRedoException;
+import javax.swing.undo.CannotUndoException;
+import javax.swing.undo.UndoManager;
 
 import org.newdawn.slick.Input;
 import org.newdawn.slick.geom.Point;
@@ -55,6 +58,7 @@ public class MapPanelLogic implements MapInteractor {
 	private Input input;
 	private List<EditorPlaceable> selectedElements;
 	private Rectangle dragRect;
+	private final UndoManager undos;
 
 	MapPanelLogic(EditorWindow window) {
 		this.window = window;
@@ -64,6 +68,7 @@ public class MapPanelLogic implements MapInteractor {
 		viewPort.setSize(800, 600);
 		scrollVector = new Vector2f();
 		dragRect = new Rectangle(0, 0, 0, 0);
+		undos = new UndoManager();
 	}
 
 	/**
@@ -257,10 +262,23 @@ public class MapPanelLogic implements MapInteractor {
 		guiY -= height * zoom / 2;
 		Vector2f mapPos = computeGuiPointToGameCoordinate(new Vector2f(guiX,
 				guiY));
-		NodeData node = new NodeData(mapPos.x, mapPos.y, nextId++,
+		final NodeData node = new NodeData(mapPos.x, mapPos.y, nextId++,
 				new LinkedList<NodeData>(), BaseType.NEUTRAL, "");
 		data.addBase(node);
 		select(node);
+		undos.addEdit(new UndoAction() {
+
+			@Override
+			public void undo() throws CannotUndoException {
+				data.remove(node);
+				selectedElements.remove(node);
+			}
+
+			@Override
+			public void redo() throws CannotRedoException {
+				data.addBase(node);
+			}
+		});
 	}
 
 	@Override
@@ -271,10 +289,23 @@ public class MapPanelLogic implements MapInteractor {
 		guiY -= height * zoom / 2;
 		Vector2f mapPos = computeGuiPointToGameCoordinate(new Vector2f(guiX,
 				guiY));
-		SpawnPosition spawn = new SpawnPosition(new Rectangle(mapPos.x,
+		final SpawnPosition spawn = new SpawnPosition(new Rectangle(mapPos.x,
 				mapPos.y, 40, 40), SpawnType.ANY);
 		data.addSpawnPoint(spawn);
 		select(spawn);
+		undos.addEdit(new UndoAction() {
+
+			@Override
+			public void undo() throws CannotUndoException {
+				data.remove(spawn);
+				selectedElements.remove(spawn);
+			}
+
+			@Override
+			public void redo() throws CannotRedoException {
+				data.addSpawnPoint(spawn);
+			}
+		});
 	}
 
 	@Override
@@ -403,7 +434,7 @@ public class MapPanelLogic implements MapInteractor {
 	}
 
 	@Override
-	public void rotateSelectedShapes(float degree) {
+	public void rotateSelectedShapes(final float degree) {
 		for (EditorPlaceable element : selectedElements) {
 			if (element instanceof DynamicPolygonObject) {
 				DynamicPolygonObject object = (DynamicPolygonObject) element;
@@ -413,15 +444,46 @@ public class MapPanelLogic implements MapInteractor {
 				object.setPolygonVertices(poly.getVector2dfs());
 			}
 		}
+		final List<EditorPlaceable> elements = new LinkedList<EditorPlaceable>(
+				selectedElements);
+		undos.addEdit(new UndoAction() {
+
+			final float invertedDegree = -degree;
+
+			@Override
+			public void undo() throws CannotUndoException {
+				for (EditorPlaceable element : elements) {
+					if (element instanceof DynamicPolygonObject) {
+						DynamicPolygonObject object = (DynamicPolygonObject) element;
+						EditablePolygon poly = EditablePolygon.fromShape(object
+								.getShape());
+						poly.rotate(invertedDegree);
+						object.setPolygonVertices(poly.getVector2dfs());
+					}
+				}
+			}
+
+			@Override
+			public void redo() throws CannotRedoException {
+				for (EditorPlaceable element : elements) {
+					if (element instanceof DynamicPolygonObject) {
+						DynamicPolygonObject object = (DynamicPolygonObject) element;
+						EditablePolygon poly = EditablePolygon.fromShape(object
+								.getShape());
+						poly.rotate(degree);
+						object.setPolygonVertices(poly.getVector2dfs());
+					}
+				}
+			}
+		});
 	}
 
-	@Override
-	public void mirrorSelectedElements(int axis) {
+	private void mirrorElements(int axis, List<EditorPlaceable> elements) {
 		float minX = data.getWidth();
 		float maxX = 0;
 		float minY = data.getHeight();
 		float maxY = 0;
-		for (EditorPlaceable element : selectedElements) {
+		for (EditorPlaceable element : elements) {
 			minX = Math.min(element.getXPosition(), minX);
 			minY = Math.min(element.getYPosition(), minY);
 			maxX = Math.max(element.getXPosition() + element.getWidth(), maxX);
@@ -429,7 +491,7 @@ public class MapPanelLogic implements MapInteractor {
 		}
 		float centerX = (maxX + minX) / 2;
 		float centerY = (maxY + minY) / 2;
-		for (EditorPlaceable element : selectedElements) {
+		for (EditorPlaceable element : elements) {
 			if (axis == EditablePolygon.Y_AXIS) {
 				float dx = centerX - element.getXPosition();
 				element.setXPosition(element.getXPosition() + 2 * dx
@@ -448,7 +510,26 @@ public class MapPanelLogic implements MapInteractor {
 				object.setPolygonVertices(poly.getVector2dfs());
 			}
 		}
+	}
 
+	@Override
+	public void mirrorSelectedElements(final int axis) {
+		mirrorElements(axis, selectedElements);
+		final List<EditorPlaceable> elements = new LinkedList<EditorPlaceable>(
+				selectedElements);
+
+		undos.addEdit(new UndoAction() {
+
+			@Override
+			public void undo() throws CannotUndoException {
+				mirrorElements(axis, elements);
+			}
+
+			@Override
+			public void redo() throws CannotRedoException {
+				mirrorElements(axis, elements);
+			}
+		});
 	}
 
 	@Override
@@ -633,5 +714,23 @@ public class MapPanelLogic implements MapInteractor {
 			id = Math.max(id, o.getId());
 		}
 		nextId = id + 1;
+	}
+
+	@Override
+	public boolean undo() {
+		if (undos.canUndo()) {
+			undos.undo();
+			return true;
+		}
+		return false;
+	}
+
+	@Override
+	public boolean redo() {
+		if (undos.canRedo()) {
+			undos.redo();
+			return true;
+		}
+		return false;
 	}
 }

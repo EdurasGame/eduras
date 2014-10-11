@@ -97,8 +97,6 @@ public class EditorMenu extends JMenuBar implements ActionListener {
 
 		edit.add(undo);
 		edit.add(redo);
-		undo.setEnabled(false);
-		redo.setEnabled(false);
 		edit.addSeparator();
 		edit.add(manageNodeConnections);
 		add(edit);
@@ -243,6 +241,12 @@ public class EditorMenu extends JMenuBar implements ActionListener {
 			new AboutDialog(window).setVisible(true);
 		} else if (item == exit) {
 			window.tryExit();
+		} else if (item == undo) {
+			System.out.println("undo");
+			interactor.undo();
+		} else if (item == redo) {
+			System.out.println("redo");
+			interactor.redo();
 		}
 	}
 }

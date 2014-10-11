@@ -55,6 +55,10 @@ public interface MapInteractor {
 	GameCamera getViewPort();
 
 	float getZoom();
+	
+	boolean undo();
+	
+	boolean redo();
 
 	void setZoom(float factor);
 
