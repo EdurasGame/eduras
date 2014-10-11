@@ -236,6 +236,16 @@ public final class MapData {
 		gameObjects.add(o);
 	}
 
+	public void add(EditorPlaceable placeable) {
+		if (placeable instanceof NodeData) {
+			addBase((NodeData) placeable);
+		} else if (placeable instanceof SpawnPosition) {
+			addSpawnPoint((SpawnPosition) placeable);
+		} else if (placeable instanceof GameObject) {
+			addGameObject((GameObject) placeable);
+		}
+	}
+
 	public void addBase(NodeData node) {
 		bases.add(node);
 	}

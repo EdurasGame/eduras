@@ -6,8 +6,6 @@ import java.util.LinkedList;
 import java.util.List;
 
 import javax.swing.JOptionPane;
-import javax.swing.undo.CannotRedoException;
-import javax.swing.undo.CannotUndoException;
 import javax.swing.undo.UndoManager;
 
 import org.newdawn.slick.Input;
@@ -26,6 +24,11 @@ import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.gameobjects.MoveableGameObject.Direction;
 import de.illonis.eduras.gameobjects.NeutralArea;
 import de.illonis.eduras.gameobjects.Portal;
+import de.illonis.eduras.mapeditor.actions.CreateAction;
+import de.illonis.eduras.mapeditor.actions.DeleteAction;
+import de.illonis.eduras.mapeditor.actions.MirrorAction;
+import de.illonis.eduras.mapeditor.actions.RotateAction;
+import de.illonis.eduras.mapeditor.actions.UndoAction;
 import de.illonis.eduras.mapeditor.gui.EditorWindow;
 import de.illonis.eduras.mapeditor.gui.dialog.ObjectPropertiesDialog;
 import de.illonis.eduras.mapeditor.gui.dialog.PropertiesDialog;
@@ -213,8 +216,9 @@ public class MapPanelLogic implements MapInteractor {
 						guiX, guiY));
 				o.setPosition(mapPos.x, mapPos.y);
 				o.setId(nextId++);
-				data.addGameObject(o);
-				select(o);
+				UndoAction action = new CreateAction(o, this);
+				action.performAction();
+				undos.addEdit(action);
 				if (o instanceof Portal) {
 					o.setRefName("Portal" + o.getId());
 				}
@@ -225,9 +229,14 @@ public class MapPanelLogic implements MapInteractor {
 		}
 	}
 
-	private void select(EditorPlaceable o) {
+	public void select(EditorPlaceable o) {
 		clearSelection();
 		selectedElements.add(o);
+	}
+
+	public void selectAll(List<EditorPlaceable> objects) {
+		clearSelection();
+		selectedElements.addAll(objects);
 	}
 
 	private NodeData getBaseAt(int guiX, int guiY) {
@@ -264,21 +273,9 @@ public class MapPanelLogic implements MapInteractor {
 				guiY));
 		final NodeData node = new NodeData(mapPos.x, mapPos.y, nextId++,
 				new LinkedList<NodeData>(), BaseType.NEUTRAL, "");
-		data.addBase(node);
-		select(node);
-		undos.addEdit(new UndoAction() {
-
-			@Override
-			public void undo() throws CannotUndoException {
-				data.remove(node);
-				selectedElements.remove(node);
-			}
-
-			@Override
-			public void redo() throws CannotRedoException {
-				data.addBase(node);
-			}
-		});
+		UndoAction action = new CreateAction(node, this);
+		action.performAction();
+		undos.addEdit(action);
 	}
 
 	@Override
@@ -291,21 +288,9 @@ public class MapPanelLogic implements MapInteractor {
 				guiY));
 		final SpawnPosition spawn = new SpawnPosition(new Rectangle(mapPos.x,
 				mapPos.y, 40, 40), SpawnType.ANY);
-		data.addSpawnPoint(spawn);
-		select(spawn);
-		undos.addEdit(new UndoAction() {
-
-			@Override
-			public void undo() throws CannotUndoException {
-				data.remove(spawn);
-				selectedElements.remove(spawn);
-			}
-
-			@Override
-			public void redo() throws CannotRedoException {
-				data.addSpawnPoint(spawn);
-			}
-		});
+		UndoAction action = new CreateAction(spawn, this);
+		action.performAction();
+		undos.addEdit(action);
 	}
 
 	@Override
@@ -326,12 +311,13 @@ public class MapPanelLogic implements MapInteractor {
 	public void placeShapeAt(int guiX, int guiY) {
 		DynamicPolygonObject shape = data.getPlacingObject();
 		shape.setId(nextId++);
-		data.addGameObject(shape);
 		Vector2f mapPos = computeGuiPointToGameCoordinate(new Vector2f(guiX,
 				guiY));
 		shape.setPosition(mapPos.x - shape.getShape().getWidth() / 2, mapPos.y
 				- shape.getShape().getHeight() / 2);
-		select(shape);
+		UndoAction action = new CreateAction(shape, this);
+		action.performAction();
+		undos.addEdit(action);
 		DynamicPolygonObject copy = new DynamicPolygonObject(shape.getType(),
 				null, null, -1);
 		copy.setPolygonVertices(shape.getPolygonVertices());
@@ -346,35 +332,9 @@ public class MapPanelLogic implements MapInteractor {
 
 	@Override
 	public void deleteSelected() {
-		for (EditorPlaceable element : selectedElements) {
-			if (element instanceof GameObject) {
-				GameObject o = (GameObject) element;
-				data.remove(o);
-				if (o instanceof Portal) {
-					Portal portal = (Portal) o;
-					for (GameObject obj : data.getGameObjects()) {
-						if (obj instanceof Portal) {
-							Portal parent = (Portal) obj;
-							if (parent.getPartnerPortal() != null
-									&& portal.equals(parent.getPartnerPortal())) {
-								parent.setPartnerPortal(null);
-							}
-						}
-					}
-				}
-			} else if (element instanceof NodeData) {
-				NodeData node = (NodeData) element;
-				for (NodeData subNode : data.getBases()) {
-					subNode.getAdjacentNodes().remove(node);
-				}
-				data.remove(node);
-			} else if (element instanceof SpawnPosition) {
-				SpawnPosition spawn = (SpawnPosition) element;
-
-				data.remove(spawn);
-			}
-		}
-		clearSelection();
+		UndoAction action = new DeleteAction(selectedElements, this);
+		action.performAction();
+		undos.addEdit(action);
 	}
 
 	@Override
@@ -435,101 +395,16 @@ public class MapPanelLogic implements MapInteractor {
 
 	@Override
 	public void rotateSelectedShapes(final float degree) {
-		for (EditorPlaceable element : selectedElements) {
-			if (element instanceof DynamicPolygonObject) {
-				DynamicPolygonObject object = (DynamicPolygonObject) element;
-				EditablePolygon poly = EditablePolygon.fromShape(object
-						.getShape());
-				poly.rotate(degree);
-				object.setPolygonVertices(poly.getVector2dfs());
-			}
-		}
-		final List<EditorPlaceable> elements = new LinkedList<EditorPlaceable>(
-				selectedElements);
-		undos.addEdit(new UndoAction() {
-
-			final float invertedDegree = -degree;
-
-			@Override
-			public void undo() throws CannotUndoException {
-				for (EditorPlaceable element : elements) {
-					if (element instanceof DynamicPolygonObject) {
-						DynamicPolygonObject object = (DynamicPolygonObject) element;
-						EditablePolygon poly = EditablePolygon.fromShape(object
-								.getShape());
-						poly.rotate(invertedDegree);
-						object.setPolygonVertices(poly.getVector2dfs());
-					}
-				}
-			}
-
-			@Override
-			public void redo() throws CannotRedoException {
-				for (EditorPlaceable element : elements) {
-					if (element instanceof DynamicPolygonObject) {
-						DynamicPolygonObject object = (DynamicPolygonObject) element;
-						EditablePolygon poly = EditablePolygon.fromShape(object
-								.getShape());
-						poly.rotate(degree);
-						object.setPolygonVertices(poly.getVector2dfs());
-					}
-				}
-			}
-		});
-	}
-
-	private void mirrorElements(int axis, List<EditorPlaceable> elements) {
-		float minX = data.getWidth();
-		float maxX = 0;
-		float minY = data.getHeight();
-		float maxY = 0;
-		for (EditorPlaceable element : elements) {
-			minX = Math.min(element.getXPosition(), minX);
-			minY = Math.min(element.getYPosition(), minY);
-			maxX = Math.max(element.getXPosition() + element.getWidth(), maxX);
-			maxY = Math.max(element.getYPosition() + element.getHeight(), maxY);
-		}
-		float centerX = (maxX + minX) / 2;
-		float centerY = (maxY + minY) / 2;
-		for (EditorPlaceable element : elements) {
-			if (axis == EditablePolygon.Y_AXIS) {
-				float dx = centerX - element.getXPosition();
-				element.setXPosition(element.getXPosition() + 2 * dx
-						- element.getWidth());
-			}
-			if (axis == EditablePolygon.X_AXIS) {
-				float dy = centerY - element.getYPosition();
-				element.setYPosition(element.getYPosition() + 2 * dy
-						- element.getHeight());
-			}
-			if (element instanceof DynamicPolygonObject) {
-				DynamicPolygonObject object = (DynamicPolygonObject) element;
-				EditablePolygon poly = EditablePolygon.fromShape(object
-						.getShape());
-				poly.mirror(axis);
-				object.setPolygonVertices(poly.getVector2dfs());
-			}
-		}
+		UndoAction action = new RotateAction(selectedElements, degree, this);
+		action.performAction();
+		undos.addEdit(action);
 	}
 
 	@Override
 	public void mirrorSelectedElements(final int axis) {
-		mirrorElements(axis, selectedElements);
-		final List<EditorPlaceable> elements = new LinkedList<EditorPlaceable>(
-				selectedElements);
-
-		undos.addEdit(new UndoAction() {
-
-			@Override
-			public void undo() throws CannotUndoException {
-				mirrorElements(axis, elements);
-			}
-
-			@Override
-			public void redo() throws CannotRedoException {
-				mirrorElements(axis, elements);
-			}
-		});
+		UndoAction action = new MirrorAction(selectedElements, axis, this);
+		action.performAction();
+		undos.addEdit(action);
 	}
 
 	@Override
