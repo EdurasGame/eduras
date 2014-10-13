@@ -29,6 +29,7 @@ import de.illonis.eduras.mapeditor.actions.DeleteAction;
 import de.illonis.eduras.mapeditor.actions.DragAction;
 import de.illonis.eduras.mapeditor.actions.MirrorAction;
 import de.illonis.eduras.mapeditor.actions.RotateAction;
+import de.illonis.eduras.mapeditor.actions.ShapeEditAction;
 import de.illonis.eduras.mapeditor.actions.UndoAction;
 import de.illonis.eduras.mapeditor.gui.EditorWindow;
 import de.illonis.eduras.mapeditor.gui.dialog.ObjectPropertiesDialog;
@@ -64,6 +65,7 @@ public class MapPanelLogic implements MapInteractor {
 	private Rectangle dragRect;
 	private final UndoManager undos;
 	private Vector2f dragStart;
+	private EditablePolygon oldVertices;
 
 	MapPanelLogic(EditorWindow window) {
 		this.window = window;
@@ -297,6 +299,11 @@ public class MapPanelLogic implements MapInteractor {
 
 	@Override
 	public void setInteractType(InteractType type) {
+		if (interactType == InteractType.EDIT_SHAPE) {
+			ShapeEditAction action = new ShapeEditAction(data.getEditObject(),
+					oldVertices, this);
+			undos.addEdit(action);
+		}
 		interactType = type;
 		if (interactType == InteractType.DEFAULT) {
 			currentSpawnType = ObjectType.NO_OBJECT;
@@ -347,6 +354,7 @@ public class MapPanelLogic implements MapInteractor {
 		if (element instanceof DynamicPolygonObject) {
 			DynamicPolygonObject object = (DynamicPolygonObject) element;
 			EditablePolygon poly = EditablePolygon.fromShape(object.getShape());
+			oldVertices = EditablePolygon.fromShape(object.getShape());
 			data.setEditShape(poly);
 			data.clearTempLines();
 			data.setEditObject(object);
