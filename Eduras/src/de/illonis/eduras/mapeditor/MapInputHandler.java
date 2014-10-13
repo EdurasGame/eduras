@@ -1,5 +1,7 @@
 package de.illonis.eduras.mapeditor;
 
+import javax.swing.JOptionPane;
+
 import org.newdawn.slick.Input;
 import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.Vector2f;
@@ -221,9 +223,13 @@ public class MapInputHandler extends InputAdapter {
 		case Input.KEY_Z:
 			if (input.isKeyDown(Input.KEY_LCONTROL)) {
 				if (input.isKeyDown(Input.KEY_LSHIFT)) {
-					interactor.redo();
+					if (!interactor.redo()) {
+						JOptionPane.showMessageDialog(null, "Nothing to redo");
+					}
 				} else
-					interactor.undo();
+					if (!interactor.undo()) {
+						JOptionPane.showMessageDialog(null, "Nothing to undo");
+					}
 			}
 			break;
 		default:

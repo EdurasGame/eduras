@@ -242,11 +242,13 @@ public class EditorMenu extends JMenuBar implements ActionListener {
 		} else if (item == exit) {
 			window.tryExit();
 		} else if (item == undo) {
-			System.out.println("undo");
-			interactor.undo();
+			if (!interactor.undo()) {
+				JOptionPane.showMessageDialog(window, "Nothing to undo");
+			}
 		} else if (item == redo) {
-			System.out.println("redo");
-			interactor.redo();
+			if (!interactor.redo()) {
+				JOptionPane.showMessageDialog(window, "Nothing to redo");
+			}
 		}
 	}
 }
