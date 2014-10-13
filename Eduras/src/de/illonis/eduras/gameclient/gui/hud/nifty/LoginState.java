@@ -21,6 +21,7 @@ import de.lessvoid.nifty.slick2d.NiftyOverlayBasicGameState;
  */
 public class LoginState extends NiftyOverlayBasicGameState {
 
+	public static final int LOGIN_STATE_ID = 0;
 	private final GameControllerBridge game;
 	private LoginController controller;
 	private final String betaAccountName;
@@ -43,7 +44,7 @@ public class LoginState extends NiftyOverlayBasicGameState {
 
 	@Override
 	public int getID() {
-		return 0;
+		return LOGIN_STATE_ID;
 	}
 
 	@Override

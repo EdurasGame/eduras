@@ -3,6 +3,7 @@ package de.illonis.eduras.gameclient.gui.game;
 import java.awt.Polygon;
 import java.awt.geom.Area;
 import java.awt.image.BufferedImage;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -31,6 +32,7 @@ import de.illonis.eduras.gameclient.VisionInformation;
 import de.illonis.eduras.gameclient.datacache.CacheException;
 import de.illonis.eduras.gameclient.datacache.CacheInfo.ImageKey;
 import de.illonis.eduras.gameclient.datacache.ImageCache;
+import de.illonis.eduras.gameclient.datacache.TextureInfo.TextureKey;
 import de.illonis.eduras.gameclient.gui.animation.EffectFactory;
 import de.illonis.eduras.gameclient.gui.hud.HealthBar;
 import de.illonis.eduras.gameclient.gui.hud.ItemTooltip;
@@ -39,6 +41,7 @@ import de.illonis.eduras.gameclient.gui.hud.TextTooltip;
 import de.illonis.eduras.gameclient.gui.hud.Tooltip;
 import de.illonis.eduras.gameclient.gui.hud.UserInterface;
 import de.illonis.eduras.gameobjects.Base;
+import de.illonis.eduras.gameobjects.DynamicPolygonObject;
 import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.images.ImageFiler.ImageResolution;
 import de.illonis.eduras.items.Item;
@@ -46,6 +49,7 @@ import de.illonis.eduras.logicabstraction.InformationProvider;
 import de.illonis.eduras.math.Geometry;
 import de.illonis.eduras.math.Vector2df;
 import de.illonis.eduras.settings.S;
+import de.illonis.eduras.units.ControlledUnit;
 import de.illonis.eduras.units.InteractMode;
 import de.illonis.eduras.units.PlayerMainFigure;
 import de.illonis.eduras.units.Unit;
@@ -76,6 +80,11 @@ public class GameRenderer implements TooltipHandler {
 	private static final float INTERACTMODE_OFFSET_Y = 25;
 
 	private static final Color OUTLINE_COLOR = Color.black;
+	private static final Color DETECTION_AREA_COLOR = new Color(1f, 1f, 1f,
+			0.1f);
+
+	private static final Color SELECTION_CIRCLE_COLOR = Color.white;
+
 	private Font font;
 
 	/**
@@ -155,6 +164,7 @@ public class GameRenderer implements TooltipHandler {
 	 *            the target graphics.
 	 */
 	public void render(GameContainer container, Graphics g) {
+
 		if (font == null)
 			font = g.getFont();
 		try {
@@ -169,6 +179,8 @@ public class GameRenderer implements TooltipHandler {
 		int width = container.getWidth();
 		int height = container.getHeight();
 		float newScale = getRenderScale();
+
+		g.setColor(Color.white);
 
 		clear(g, width, height);
 
@@ -190,8 +202,6 @@ public class GameRenderer implements TooltipHandler {
 		drawAnimations(g);
 		drawEffects(g);
 		g.resetTransform();
-		// g.translate(viewPort.getX() / scale, viewPort.getY() / scale);
-		// g.scale(1 / scale, 1 / scale);
 		drawGui(g);
 	}
 
@@ -210,9 +220,6 @@ public class GameRenderer implements TooltipHandler {
 		try {
 			PlayerMainFigure p = getClientPlayer().getPlayerMainFigure();
 			Vector2f c = p.getPositionVector();
-			Vector2f cameraPos = new Vector2f(camera.getX(), camera.getY());
-			Vector2f viewportPos = new Vector2f(viewPort.getX(),
-					viewPort.getY());
 			// get offset and increase offset by movement
 			Vector2f offset = camera.getCameraOffset().add(
 					camera.getCameraMovement());
@@ -274,8 +281,14 @@ public class GameRenderer implements TooltipHandler {
 	 */
 	private void drawMap(Graphics g) {
 		Rectangle r = info.getMapBounds();
-		g.setColor(Color.black);
-		g.fill(r);
+		g.setColor(Color.white);
+		try {
+			g.texture(r, ImageCache.getTexture(TextureKey.GRASS));
+		} catch (CacheException e) {
+			g.setColor(Color.black);
+			g.fill(r);
+			L.log(Level.SEVERE, "Could not find map backgrund texture", e);
+		}
 	}
 
 	/**
@@ -295,11 +308,13 @@ public class GameRenderer implements TooltipHandler {
 		}
 		Team playerTeam = myPlayer.getTeam();
 		VisionInformation vinfo = info.getClientData().getVisionInfo();
-		Area visionArea;
+		Area visionArea = null;
 		Area visionMask;
-		synchronized (vinfo) {
-			visionArea = vinfo.getVisionForTeam(playerTeam);
-			visionMask = vinfo.getVisionMask();
+		if (!S.Server.vision_disabled) {
+			synchronized (vinfo) {
+				visionArea = vinfo.getVisionForTeam(playerTeam);
+				visionMask = vinfo.getVisionMask();
+			}
 		}
 
 		LinkedList<GameObject> objectsInDrawOrder = new LinkedList<GameObject>(
@@ -309,17 +324,19 @@ public class GameRenderer implements TooltipHandler {
 		for (Iterator<GameObject> iterator = objectsInDrawOrder.iterator(); iterator
 				.hasNext();) {
 			GameObject d = iterator.next();
-			if (!d.isVisibleFor(myPlayer)) {
+			if (!isObjectVisible(d)) {
 				continue;
 			}
-			float[] points = d.getShape().getPoints();
-			Polygon p = new Polygon();
-			for (int i = 0; i < points.length / 2; i++) {
-				p.addPoint((int) points[2 * i], (int) points[2 * i + 1]);
+			Area a = null;
+			if (!S.Server.vision_disabled) {
+				float[] points = d.getShape().getPoints();
+				Polygon p = new Polygon();
+				for (int i = 0; i < points.length / 2; i++) {
+					p.addPoint((int) points[2 * i], (int) points[2 * i + 1]);
+				}
+				a = new Area(p);
+				a.intersect(visionArea);
 			}
-			Area a = new Area(p);
-			a.intersect(visionArea);
-
 			// draw only if in current view point
 			if (Geometry.shapeCollides(camera, d.getShape())) {
 				if (S.Server.vision_disabled
@@ -339,13 +356,49 @@ public class GameRenderer implements TooltipHandler {
 
 	}
 
+	private boolean isObjectVisible(GameObject object) {
+		boolean isVisible = false;
+
+		Player myPlayer;
+		try {
+			myPlayer = info.getPlayer();
+		} catch (ObjectNotFoundException e1) {
+			L.log(Level.WARNING, "No player found.", e1);
+			return false;
+		}
+
+		PlayerMainFigure myPlayersMainFigure = myPlayer.getPlayerMainFigure();
+		if (myPlayersMainFigure != null) {
+			isVisible |= object.isVisibleFor(myPlayersMainFigure);
+		}
+
+		try {
+			Collection<GameObject> myTeam = info.getObjectsOfTeam(myPlayer
+					.getTeam());
+			for (GameObject memberOfMyTeam : myTeam) {
+				isVisible |= object.isVisibleFor(memberOfMyTeam);
+			}
+		} catch (PlayerHasNoTeamException e) {
+			return isVisible;
+		}
+		return isVisible;
+	}
+
 	private void drawObject(GameObject d, Graphics g) {
 		final float x = d.getXPosition();
 		final float y = d.getYPosition();
 
 		try {
-			Image image = ImageCache.getObjectImage(d.getType());
-			g.drawImage(image, x, y);
+			Image image = ImageCache.getObjectImage(d);
+			if (ImageCache.isTextured(d)) {
+				g.setColor(Color.white);
+				g.texture(d.getShape(), image, ImageCache.shouldFit(d));
+				g.setLineWidth(2f * GameRenderer.getRenderScale());
+				g.setColor(OUTLINE_COLOR);
+				g.draw(d.getShape());
+			} else {
+				g.drawImage(image, x, y);
+			}
 			if (S.Client.debug_render_shapes) {
 				renderShape(d, g);
 			}
@@ -366,7 +419,19 @@ public class GameRenderer implements TooltipHandler {
 		}
 
 		if (d.isUnit()) {
-			drawHealthBarFor((Unit) d, g);
+			Unit unit = (Unit) d;
+
+			drawHealthBarFor(unit, g);
+
+			if (unit.isDetector()) {
+				drawDetectionAreaFor(unit, g);
+			}
+
+			if (unit instanceof ControlledUnit) {
+				if (data.getSelectedUnits().contains(unit.getId())) {
+					drawUnitSelectionCircle(unit, g);
+				}
+			}
 		}
 
 		if (d instanceof PlayerMainFigure) {
@@ -378,6 +443,20 @@ public class GameRenderer implements TooltipHandler {
 		 * dbg.drawString(d.getId() + "", d.getDrawX() - camera.x, d.getDrawY()
 		 * - camera.y - 15);
 		 */
+	}
+
+	private void drawUnitSelectionCircle(Unit unit, Graphics g) {
+		g.setColor(SELECTION_CIRCLE_COLOR);
+		g.draw(new Circle(unit.getCenterPosition().getX(), unit
+				.getCenterPosition().getY(), unit.getShape()
+				.getBoundingCircleRadius() * 1.5f));
+	}
+
+	private void drawDetectionAreaFor(Unit unit, Graphics g) {
+		g.setColor(DETECTION_AREA_COLOR);
+		Circle circle = new Circle(unit.getCenterPosition().getX(), unit
+				.getCenterPosition().getY(), unit.getDetectionRange());
+		g.fill(circle);
 	}
 
 	private void drawPlayerSpecifics(PlayerMainFigure d, Graphics g) {
@@ -423,7 +502,7 @@ public class GameRenderer implements TooltipHandler {
 			}
 			g.setColor(colorOfObject);
 			g.fill(d.getShape());
-			g.setLineWidth(2f);
+			g.setLineWidth(2f * GameRenderer.getRenderScale());
 			g.setColor(OUTLINE_COLOR);
 			g.draw(d.getShape());
 		}
@@ -477,10 +556,13 @@ public class GameRenderer implements TooltipHandler {
 		case BIGGERBLOCK:
 		case BUILDING:
 		case SMALLCIRCLEDBLOCK:
+			return Color.gray;
 		case DYNAMIC_POLYGON_BLOCK:
-			return Color.pink;
+			return ((DynamicPolygonObject) d).getColor();
 		case PLAYER:
-			PlayerMainFigure p = (PlayerMainFigure) d;
+		case OBSERVER:
+		case SPELL_SCOUT:
+			Unit p = (Unit) d;
 			if (p.getTeam() == null) {
 				return Color.blue;
 			} else {
@@ -517,7 +599,7 @@ public class GameRenderer implements TooltipHandler {
 		case INVISIBILITY_POWERUP:
 			return Color.darkGray;
 		case MAPBOUNDS:
-			return new Color(0, 0, 0, 0);
+			return Color.transparent;
 		case NEUTRAL_BASE:
 			Base base = (Base) d;
 			if (base.getCurrentOwnerTeam() == null) {
@@ -572,6 +654,9 @@ public class GameRenderer implements TooltipHandler {
 		return info.getPlayer();
 	}
 
+	/**
+	 * @return the camera.
+	 */
 	public GameCamera getCamera() {
 		return camera;
 	}

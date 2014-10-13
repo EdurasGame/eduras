@@ -88,9 +88,19 @@ public class Deathmatch extends BasicGameMode {
 		}
 
 		Player killer = gameInfo.getPlayerByOwnerId(killingPlayer);
+		Team killersTeam;
+		Team killedUnitsTeam = killedUnit.getTeam();
+		try {
+			killersTeam = killer.getTeam();
+		} catch (PlayerHasNoTeamException e) {
+			L.log(Level.WARNING, "Killer doesn't have a team", e);
+			return;
+		}
 
-		if (!killer.getPlayerMainFigure().equals(killedUnit)) {
+		if (killedUnitsTeam == null || !killedUnitsTeam.equals(killersTeam)) {
 			et.changeStatOfPlayerByAmount(StatsProperty.KILLS, killer, 1);
+		} else {
+			et.changeStatOfPlayerByAmount(StatsProperty.KILLS, killer, -1);
 		}
 	}
 
@@ -234,7 +244,8 @@ public class Deathmatch extends BasicGameMode {
 		}
 
 		// remove it to the statistic
-		gameInfo.getGameSettings().getStats().removePlayerFromStats(gonePlayer);
+		gameInfo.getGameSettings().getStats()
+				.removePlayerFromStats(gonePlayer.getPlayerId());
 
 		Team playersTeam = null;
 		try {

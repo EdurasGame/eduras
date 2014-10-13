@@ -58,6 +58,7 @@ public class GuiInternalEventListener implements GamePanelReactor {
 
 	private final static Logger L = EduLog
 			.getLoggerFor(GuiInternalEventListener.class.getName());
+	private static final float RECTANGLE_SINGLE_SELECTION_SIZE = 3f;
 	private final GameClient client;
 	private final InformationProvider infoPro;
 
@@ -175,6 +176,11 @@ public class GuiInternalEventListener implements GamePanelReactor {
 		// FIXME: Use slicks rectangle here
 		Rectangle r = new Rectangle((float) area.getX(), (float) area.getY(),
 				(float) area.getWidth(), (float) area.getHeight());
+
+		if (r.getWidth() * r.getHeight() < RECTANGLE_SINGLE_SELECTION_SIZE) {
+			selectOrDeselectAt(new Vector2f(r.getCenterX(), r.getCenterY()));
+			return;
+		}
 
 		PlayerMainFigure p;
 		try {
@@ -476,7 +482,8 @@ public class GuiInternalEventListener implements GamePanelReactor {
 
 	@Override
 	public void onSpawnItem(ObjectType type, Vector2f locationToSpawnAt)
-			throws WrongObjectTypeException, InsufficientResourceException {
+			throws WrongObjectTypeException, InsufficientResourceException,
+			CantSpawnHereException {
 		Player player;
 		try {
 			player = infoPro.getPlayer();
@@ -492,6 +499,9 @@ public class GuiInternalEventListener implements GamePanelReactor {
 		checkSufficientResources(player, type.getCosts());
 
 		// TODO: only allow to spawn where you have vision...
+		if (!infoPro.canSpawnItemAt(locationToSpawnAt)) {
+			throw new CantSpawnHereException(type);
+		}
 
 		SpawnItemEvent spawnItemEvent = new SpawnItemEvent(
 				player.getPlayerId(), type, locationToSpawnAt);

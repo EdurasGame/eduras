@@ -9,6 +9,7 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.geom.Line;
 import org.newdawn.slick.geom.Point;
+import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.Shape;
 import org.newdawn.slick.geom.Vector2f;
 
@@ -24,6 +25,7 @@ import de.illonis.eduras.maps.NodeData;
 import de.illonis.eduras.maps.SpawnPosition;
 import de.illonis.eduras.math.Geometry;
 import de.illonis.eduras.math.Vector2df;
+import de.illonis.eduras.settings.S;
 import de.illonis.eduras.units.PlayerMainFigure;
 
 /**
@@ -65,8 +67,16 @@ public class MapRenderer {
 		List<EditorPlaceable> selected = interactor.getSelectedElements();
 
 		// map bounds
-		g.setColor(Color.black);
-		g.fillRect(0, 0, data.getWidth(), data.getHeight());
+
+		try {
+			Image image = ImageCache.getTexture(data.getMapBackground());
+			Rectangle r = new Rectangle(0, 0, data.getWidth(), data.getHeight());
+			g.setColor(Color.white);
+			g.texture(r, image);
+		} catch (CacheException e) {
+			g.setColor(Color.black);
+			g.fillRect(0, 0, data.getWidth(), data.getHeight());
+		}
 		g.setColor(Color.red);
 		g.drawRect(0, 0, data.getWidth(), data.getHeight());
 		for (SpawnPosition spawn : data.getSpawnPoints()) {
@@ -207,9 +217,22 @@ public class MapRenderer {
 				return;
 			}
 		}
+
 		try {
-			Image image = ImageCache.getObjectImage(o.getType());
-			g.drawImage(image, x, y);
+			Image image = ImageCache.getObjectImage(o);
+			if (ImageCache.isTextured(o)) {
+				g.setColor(Color.white);
+				g.texture(o.getShape(), image, ImageCache.shouldFit(o));
+
+				g.setLineWidth(3f);
+				g.setColor(OUTLINE_COLOR);
+				g.draw(o.getShape());
+			} else {
+				g.drawImage(image, x, y);
+			}
+			if (S.Client.debug_render_shapes) {
+				renderShape(o, g);
+			}
 		} catch (CacheException e) {
 			renderShape(o, g);
 		}
@@ -257,9 +280,7 @@ public class MapRenderer {
 
 	private void renderShape(GameObject o, Graphics g) {
 		if (o.getShape() != null) {
-			g.setColor(OUTLINE_COLOR);
-			g.draw(o.getShape());
-
+			
 			Color colorOfObject = getColorForObject(o);
 			switch (o.getVisibility()) {
 			case ALL:
@@ -276,6 +297,10 @@ public class MapRenderer {
 			}
 			g.setColor(colorOfObject);
 			g.fill(o.getShape());
+			g.setLineWidth(3f);
+			g.setColor(OUTLINE_COLOR);
+			g.draw(o.getShape());
+
 		}
 	}
 

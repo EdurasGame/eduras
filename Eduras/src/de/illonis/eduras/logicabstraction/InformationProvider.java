@@ -15,6 +15,7 @@ import de.illonis.eduras.Team;
 import de.illonis.eduras.exceptions.NoSpawnAvailableException;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
 import de.illonis.eduras.gameclient.ClientData;
+import de.illonis.eduras.gameclient.datacache.TextureInfo.TextureKey;
 import de.illonis.eduras.gamemodes.GameMode;
 import de.illonis.eduras.gameobjects.Base;
 import de.illonis.eduras.gameobjects.GameObject;
@@ -24,6 +25,7 @@ import de.illonis.eduras.maps.NodeData;
 import de.illonis.eduras.maps.SpawnPosition;
 import de.illonis.eduras.units.Observer;
 import de.illonis.eduras.units.PlayerMainFigure;
+import de.illonis.eduras.units.Unit;
 
 /**
  * This class provides a connection between GUI and logic. GUI developers can
@@ -214,5 +216,59 @@ public class InformationProvider implements InfoInterface {
 			return false;
 		}
 		return true;
+	}
+
+	@Override
+	public TextureKey getMapBackground() {
+		return edurasInitializer.logic.getGame().getMap().getBackground();
+	}
+
+	/**
+	 * Returns all objects of a team.
+	 * 
+	 * @param team
+	 *            the team to return all objects of
+	 * @return empty list, if the given team is null.
+	 */
+	public Collection<GameObject> getObjectsOfTeam(Team team) {
+		Collection<GameObject> allObjects = edurasInitializer.getLogic()
+				.getGame().getObjects().values();
+		LinkedList<GameObject> teamsObjects = new LinkedList<GameObject>();
+		if (team == null) {
+			return teamsObjects;
+		}
+
+		for (GameObject anObject : allObjects) {
+			if (anObject instanceof Unit) {
+				Unit unitObject = (Unit) anObject;
+				if (unitObject.getTeam() != null
+						&& unitObject.getTeam().equals(team)) {
+					teamsObjects.add(anObject);
+				}
+			}
+		}
+		return teamsObjects;
+	}
+
+	@Override
+	public boolean canSpawnItemAt(Vector2f location) {
+		GameInformation gameInfo = edurasInitializer.getLogic().getGame();
+
+		if (!getMapBounds().contains(location.x, location.y)) {
+			return false;
+		}
+
+		Collection<GameObject> collidables = gameInfo
+				.getAllCollidableObjects(null);
+		collidables.removeAll(GameInformation
+				.getAllItemsAndMissiles(collidables));
+		collidables.removeAll(GameInformation.getAllUnits(collidables));
+
+		boolean result = true;
+		for (GameObject obj : collidables) {
+			result &= !(obj.getShape().contains(location.x, location.y));
+		}
+
+		return result;
 	}
 }

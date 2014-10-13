@@ -37,7 +37,9 @@ public class ScoutSpell extends DisposableUnit {
 		setVisionAngle(S.Server.spell_scout_visionangle);
 		setVisionRange(S.Server.spell_scout_visionrange);
 		setCollidable(false);
-		setVisible(Visibility.INVISIBLE);
+		setVisible(Visibility.OWNER_TEAM);
+		setDetector(true);
+		setDetectionRange(S.Server.spell_scout_detectionrange);
 	}
 
 	@Override

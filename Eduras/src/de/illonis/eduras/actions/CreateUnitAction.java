@@ -1,5 +1,6 @@
 package de.illonis.eduras.actions;
 
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import de.illonis.edulog.EduLog;
@@ -7,10 +8,12 @@ import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.ObjectFactory.ObjectType;
 import de.illonis.eduras.Player;
 import de.illonis.eduras.Team;
+import de.illonis.eduras.exceptions.ObjectNotFoundException;
 import de.illonis.eduras.exceptions.PlayerHasNoTeamException;
 import de.illonis.eduras.exceptions.WrongObjectTypeException;
 import de.illonis.eduras.gameobjects.Base;
 import de.illonis.eduras.settings.S;
+import de.illonis.eduras.units.Unit;
 
 /**
  * An {@link RTSAction} that can be used for creating a unit.
@@ -76,7 +79,18 @@ public class CreateUnitAction extends RTSAction {
 
 		// info.getEventTriggerer().createObjectIn(typeOfUnitToSpawn,
 		// baseToSpawnAt.getShape(), getExecutingPlayer().getPlayerId());
-		info.getEventTriggerer().createObjectAtBase(typeOfUnitToSpawn,
-				baseToSpawnAt, getExecutingPlayer().getPlayerId());
+		int unitId = info.getEventTriggerer().createObjectAtBase(
+				typeOfUnitToSpawn, baseToSpawnAt,
+				getExecutingPlayer().getPlayerId());
+		Unit createdUnit;
+		try {
+			createdUnit = (Unit) info.findObjectById(unitId);
+		} catch (ObjectNotFoundException e) {
+			L.log(Level.SEVERE, "Couldn't create object!!", e);
+			return;
+		}
+
+		info.getEventTriggerer().setTeamOfUnit(createdUnit,
+				teamOfExecutingPlayer);
 	}
 }

@@ -66,7 +66,7 @@ public class ConnectingController extends EdurasScreenController {
 			connectFuture.cancel(true);
 			connectFuture = null;
 		}
-		game.enterState(2);
+		game.enterState(ServerListState.SERVER_LIST_STATE_ID);
 	}
 
 	/**

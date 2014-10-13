@@ -1,9 +1,7 @@
 package de.illonis.eduras.mapeditor.gui.dialog;
 
 import java.awt.BorderLayout;
-import java.awt.Dimension;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -32,7 +30,7 @@ import de.illonis.eduras.mapeditor.gui.EditorWindow;
  * @author illonis
  * 
  */
-public class MapPropertiesDialog extends ESCDialog implements ActionListener {
+public class MapPropertiesDialog extends PropertiesDialog {
 
 	private static final long serialVersionUID = 1L;
 
@@ -45,7 +43,6 @@ public class MapPropertiesDialog extends ESCDialog implements ActionListener {
 	private JSpinner widthField, heightField;
 	private JButton okButton, abortButton;
 	private JList<GameModeNumber> gameModes;
-	private final EditorWindow window;
 
 	/**
 	 * @param parent
@@ -53,52 +50,20 @@ public class MapPropertiesDialog extends ESCDialog implements ActionListener {
 	 */
 	public MapPropertiesDialog(EditorWindow parent) {
 		super(parent);
-		this.window = parent;
-		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		data = MapData.getInstance();
 		setTitle("Map properties");
-		Dimension d = new Dimension(500, 250);
-		setPreferredSize(d);
-		setSize(d);
 		setModal(true);
 		buildGui();
 	}
 
 	private void buildGui() {
+		JPanel content = new JPanel(new BorderLayout());
 		Border border = BorderFactory.createEmptyBorder(5, 5, 5, 5);
-		JPanel content = (JPanel) getContentPane();
-		content.setLayout(new BorderLayout());
-		JPanel gameModesPanel = new JPanel(new BorderLayout());
-		gameModesPanel.add(new JLabel("supported gamemodes"),
-				BorderLayout.NORTH);
-		gameModesPanel.setBorder(border);
-		gameModes = new JList<GameMode.GameModeNumber>(GameModeNumber.values());
-		gameModes
-				.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 
-		List<Integer> selected = new LinkedList<Integer>();
-		for (GameModeNumber mode : data.getSupportedGameModes()) {
-			for (int j = 0; j < gameModes.getModel().getSize(); j++) {
-				if (gameModes.getModel().getElementAt(j) == mode) {
-					selected.add(j);
-				}
-			}
-		}
-		int[] indices = new int[selected.size()];
-		for (int i = 0; i < indices.length; i++) {
-			indices[i] = selected.get(i);
-		}
-		gameModes.setSelectedIndices(indices);
-		JScrollPane scroller = new JScrollPane(gameModes);
-		gameModesPanel.add(scroller, BorderLayout.CENTER);
 		JPanel attributesPanel = new JPanel();
 		content.add(attributesPanel, BorderLayout.CENTER);
-		content.add(gameModesPanel, BorderLayout.EAST);
 		attributesPanel.setLayout(new BoxLayout(attributesPanel,
 				BoxLayout.PAGE_AXIS));
-		JPanel namePanel = new JPanel(new BorderLayout());
-		namePanel.setBorder(border);
-		attributesPanel.add(namePanel);
 		JPanel authorPanel = new JPanel(new BorderLayout());
 		JLabel authorLabel = new JLabel("Author");
 		authorPanel.add(authorLabel, BorderLayout.WEST);
@@ -136,13 +101,43 @@ public class MapPropertiesDialog extends ESCDialog implements ActionListener {
 		abortButton.addActionListener(this);
 		buttonPanel.add(abortButton, BorderLayout.EAST);
 		content.add(buttonPanel, BorderLayout.SOUTH);
+		addTab("General", content);
+
+		JPanel gameModesPanel = new JPanel(new BorderLayout());
+		gameModesPanel
+				.add(new JLabel(
+						"<html>Hold CTRL to select multiple entries.<br>Press \"Save\" in general tab afterwards."),
+						BorderLayout.NORTH);
+		gameModesPanel.setBorder(border);
+		gameModes = new JList<GameMode.GameModeNumber>(GameModeNumber.values());
+		gameModes
+				.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+
+		List<Integer> selected = new LinkedList<Integer>();
+		for (GameModeNumber mode : data.getSupportedGameModes()) {
+			for (int j = 0; j < gameModes.getModel().getSize(); j++) {
+				if (gameModes.getModel().getElementAt(j) == mode) {
+					selected.add(j);
+				}
+			}
+		}
+		int[] indices = new int[selected.size()];
+		for (int i = 0; i < indices.length; i++) {
+			indices[i] = selected.get(i);
+		}
+		gameModes.setSelectedIndices(indices);
+		JScrollPane scroller = new JScrollPane(gameModes);
+		gameModesPanel.add(scroller, BorderLayout.CENTER);
+		addTab("Supported Gamemodes", gameModesPanel);
+		addTextureTab(data.getMapBackground());
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
+		super.actionPerformed(e);
 		if (e.getSource() == abortButton) {
 			dispose();
-		} else {
+		} else if (e.getSource() == okButton) {
 			data.setAuthor(authorField.getText());
 			data.setWidth((int) widthField.getValue());
 			data.setHeight((int) heightField.getValue());
@@ -150,11 +145,5 @@ public class MapPropertiesDialog extends ESCDialog implements ActionListener {
 			data.setSupportedGameModes(modes);
 			window.refreshTitle();
 		}
-	}
-
-	@Override
-	public void setVisible(boolean b) {
-		setLocationRelativeTo(null);
-		super.setVisible(b);
 	}
 }

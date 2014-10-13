@@ -22,6 +22,7 @@ import de.illonis.eduras.events.ItemEvent;
 import de.illonis.eduras.events.ItemUseFailedEvent;
 import de.illonis.eduras.events.MatchEndEvent;
 import de.illonis.eduras.events.MovementEvent;
+import de.illonis.eduras.events.ObjectAndTeamEvent;
 import de.illonis.eduras.events.ObjectFactoryEvent;
 import de.illonis.eduras.events.OwnerGameEvent;
 import de.illonis.eduras.events.PlayerAndTeamEvent;
@@ -39,6 +40,7 @@ import de.illonis.eduras.events.SetMapEvent;
 import de.illonis.eduras.events.SetOwnerEvent;
 import de.illonis.eduras.events.SetPolygonDataEvent;
 import de.illonis.eduras.events.SetRemainingTimeEvent;
+import de.illonis.eduras.events.SetRenderInfoEvent;
 import de.illonis.eduras.events.SetSettingPropertyEvent;
 import de.illonis.eduras.events.SetSettingsEvent;
 import de.illonis.eduras.events.SetSizeEvent;
@@ -172,6 +174,22 @@ public class ClientLogic implements GameLogicInterface {
 				} else {
 					L.warning("Given object id in SET_POLYGON_DATA event does not match a DynamicPolygonBlock, instead object is a "
 							+ gameObj.getClass().getName());
+				}
+				break;
+			case SET_RENDER_INFO:
+				SetRenderInfoEvent renderEvent = (SetRenderInfoEvent) event;
+				GameObject renderObject;
+				try {
+					renderObject = gameInfo.findObjectById(renderEvent
+							.getObjectId());
+				} catch (ObjectNotFoundException e3) {
+					L.log(Level.WARNING, "Cannot find object.", e3);
+					break;
+				}
+				renderObject.setTexture(renderEvent.getTexture());
+				if (renderObject instanceof DynamicPolygonObject) {
+					((DynamicPolygonObject) renderObject).setColor(renderEvent
+							.getColor());
 				}
 				break;
 			case SET_AMMU:
@@ -684,6 +702,26 @@ public class ClientLogic implements GameLogicInterface {
 				} catch (ObjectNotFoundException e1) {
 					L.log(Level.WARNING,
 							"Cannot find object to set the speed of!", e1);
+					break;
+				}
+				break;
+			}
+			case ADD_OBJECT_TO_TEAM: {
+				ObjectAndTeamEvent addObjectToTeamEvent = (ObjectAndTeamEvent) event;
+				try {
+					GameObject object = gameInfo
+							.findObjectById(addObjectToTeamEvent.getObjectId());
+					Team team = gameInfo.findTeamById(addObjectToTeamEvent
+							.getTeamId());
+					if (!(object instanceof Unit)) {
+						L.warning("Trying to set team of an object that isn't a unit.");
+						return;
+					} else {
+						((Unit) object).setTeam(team);
+					}
+				} catch (ObjectNotFoundException e1) {
+					L.log(Level.WARNING,
+							"Cannot find object to set the team of!", e1);
 					break;
 				}
 				break;

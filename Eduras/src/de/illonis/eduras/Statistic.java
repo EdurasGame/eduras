@@ -106,6 +106,15 @@ public class Statistic {
 		stats = new ArrayList<PlayerStatEntry>();
 	}
 
+	private PlayerStatEntry findForOwner(int ownerId) {
+		for (int i = 0; i < stats.size(); i++) {
+			PlayerStatEntry entry = stats.get(i);
+			if (entry.player.getPlayerId() == ownerId)
+				return entry;
+		}
+		return null;
+	}
+
 	private PlayerStatEntry findForPlayer(Player player) {
 		for (int i = 0; i < stats.size(); i++) {
 			PlayerStatEntry entry = stats.get(i);
@@ -260,11 +269,11 @@ public class Statistic {
 	/**
 	 * Removes a player from the frag and death count.
 	 * 
-	 * @param player
-	 *            The player to be removed from the stats.
+	 * @param ownerId
+	 *            The ownerId of the player to be removed from the stats.
 	 */
-	public void removePlayerFromStats(Player player) {
-		stats.remove(findForPlayer(player));
+	public void removePlayerFromStats(int ownerId) {
+		stats.remove(findForOwner(ownerId));
 	}
 
 	/**

@@ -24,6 +24,7 @@ import de.illonis.eduras.gameobjects.MoveableGameObject.Direction;
 import de.illonis.eduras.gameobjects.NeutralArea;
 import de.illonis.eduras.gameobjects.Portal;
 import de.illonis.eduras.mapeditor.gui.EditorWindow;
+import de.illonis.eduras.mapeditor.gui.dialog.ObjectPropertiesDialog;
 import de.illonis.eduras.mapeditor.gui.dialog.PropertiesDialog;
 import de.illonis.eduras.maps.NodeData;
 import de.illonis.eduras.maps.SpawnPosition;
@@ -150,11 +151,11 @@ public class MapPanelLogic implements MapInteractor {
 		PropertiesDialog dialog = null;
 		EditorPlaceable obj = selectedElements.get(0);
 		if (obj instanceof GameObject) {
-			dialog = new PropertiesDialog(window, (GameObject) obj);
+			dialog = new ObjectPropertiesDialog(window, (GameObject) obj);
 		} else if (obj instanceof NodeData) {
-			dialog = new PropertiesDialog(window, (NodeData) obj);
+			dialog = new ObjectPropertiesDialog(window, (NodeData) obj);
 		} else if (obj instanceof SpawnPosition) {
-			dialog = new PropertiesDialog(window, (SpawnPosition) obj);
+			dialog = new ObjectPropertiesDialog(window, (SpawnPosition) obj);
 		}
 		if (dialog != null)
 			dialog.setVisible(true);

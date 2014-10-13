@@ -48,6 +48,7 @@ public class EditorGame extends BasicGame {
 		container.setShowFPS(false);
 		GraphicsPreLoader.loadShapes();
 		GraphicsPreLoader.loadGraphics();
+		GraphicsPreLoader.loadTextures();
 		panelLogic.setInput(container.getInput());
 	}
 
@@ -127,5 +128,4 @@ public class EditorGame extends BasicGame {
 	public MapPanelLogic getPanelLogic() {
 		return panelLogic;
 	}
-
 }

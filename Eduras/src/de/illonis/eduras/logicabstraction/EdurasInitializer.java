@@ -8,6 +8,7 @@ import java.util.Collection;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.newdawn.slick.Color;
 import org.newdawn.slick.geom.Shape;
 import org.newdawn.slick.geom.Vector2f;
 
@@ -31,6 +32,7 @@ import de.illonis.eduras.exceptions.MessageNotSupportedException;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
 import de.illonis.eduras.exceptions.WrongEventTypeException;
 import de.illonis.eduras.exceptions.WrongObjectTypeException;
+import de.illonis.eduras.gameclient.datacache.TextureInfo.TextureKey;
 import de.illonis.eduras.gameclient.userprefs.Settings;
 import de.illonis.eduras.gamemodes.GameMode;
 import de.illonis.eduras.gameobjects.Base;
@@ -469,6 +471,11 @@ public class EdurasInitializer {
 			}
 
 			@Override
+			public void setRenderInfoForObject(GameObject o, Color color,
+					TextureKey texture) {
+			}
+
+			@Override
 			public void sendResource(GameEventNumber type, int owner, String r,
 					Path file) {
 			}
@@ -479,6 +486,11 @@ public class EdurasInitializer {
 
 			@Override
 			public void notifyAoEDamage(ObjectType type, Vector2f centerPosition) {
+
+			}
+
+			@Override
+			public void setTeamOfUnit(Unit createdUnit, Team team) {
 			}
 
 		});

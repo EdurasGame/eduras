@@ -208,7 +208,7 @@ public class BuildModeMouseAdapter extends ScrollModeMouseAdapter {
 				} catch (WrongObjectTypeException e) {
 					L.log(Level.WARNING, "Cannot spawn this object type!!", e);
 					return;
-				} catch (InsufficientResourceException e) {
+				} catch (InsufficientResourceException | CantSpawnHereException e) {
 					getPanelLogic().onActionFailed(e);
 					return;
 				}

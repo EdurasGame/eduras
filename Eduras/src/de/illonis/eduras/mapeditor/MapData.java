@@ -12,6 +12,7 @@ import de.illonis.eduras.ObjectCreator;
 import de.illonis.eduras.ObjectFactory.ObjectType;
 import de.illonis.eduras.ReferencedEntity;
 import de.illonis.eduras.exceptions.ShapeVerticesNotApplicableException;
+import de.illonis.eduras.gameclient.datacache.TextureInfo.TextureKey;
 import de.illonis.eduras.gamemodes.GameMode.GameModeNumber;
 import de.illonis.eduras.gameobjects.DynamicPolygonObject;
 import de.illonis.eduras.gameobjects.GameObject;
@@ -47,6 +48,7 @@ public final class MapData {
 		supportedGameModes.add(GameModeNumber.DEATHMATCH);
 	}
 
+	private String mapName;
 	private String author;
 	private int width;
 	private int height;
@@ -64,6 +66,7 @@ public final class MapData {
 	private Line tempLineB;
 	private Line removedLine;
 	private DynamicPolygonObject editObject;
+	private TextureKey mapBackground;
 
 	/**
 	 * Resets data to provide an empty default map.
@@ -73,11 +76,13 @@ public final class MapData {
 		bases = new LinkedList<NodeData>();
 		spawnPoints = new LinkedList<SpawnPosition>();
 		supportedGameModes = new HashSet<GameModeNumber>();
+		mapName = "unnamed Map";
 		placingObject = null;
 		author = "unknown";
 		width = 500;
 		height = 500;
 		editShape = null;
+		mapBackground = TextureKey.NONE;
 	}
 
 	public EditablePolygon getEditShape() {
@@ -124,8 +129,9 @@ public final class MapData {
 		width = map.getWidth();
 		height = map.getHeight();
 		author = map.getAuthor();
+		mapName = map.getName();
 		LinkedList<InitialObjectData> portalData = new LinkedList<InitialObjectData>();
-
+		mapBackground = map.getBackground();
 		spawnPoints.addAll(map.getSpawnAreas());
 		supportedGameModes.addAll(map.getSupportedGameModes());
 		bases.addAll(map.getNodes());
@@ -146,6 +152,7 @@ public final class MapData {
 					dyno.setPolygonVertices(object.getPolygonVector2dfs());
 					dyno.setColor(object.getColor());
 				}
+				o.setTexture(object.getTexture());
 				if (o instanceof TriggerArea && object.getWidth() > 0) {
 					o.setWidth(object.getWidth());
 					o.setHeight(object.getHeight());
@@ -170,6 +177,14 @@ public final class MapData {
 			Portal portalTwo = (Portal) refTwo;
 			portalOne.setPartnerPortal(portalTwo);
 		}
+	}
+
+	public String getMapName() {
+		return mapName;
+	}
+
+	public void setMapName(String mapName) {
+		this.mapName = mapName;
 	}
 
 	public String getAuthor() {
@@ -311,5 +326,13 @@ public final class MapData {
 
 	public DynamicPolygonObject getEditObject() {
 		return editObject;
+	}
+
+	public void setMapBackground(TextureKey mapBackground) {
+		this.mapBackground = mapBackground;
+	}
+
+	public TextureKey getMapBackground() {
+		return mapBackground;
 	}
 }

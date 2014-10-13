@@ -16,6 +16,7 @@ import org.newdawn.slick.geom.Rectangle;
 import de.illonis.edulog.EduLog;
 import de.illonis.eduras.ObjectFactory.ObjectType;
 import de.illonis.eduras.exceptions.NoSuchMapException;
+import de.illonis.eduras.gameclient.datacache.TextureInfo.TextureKey;
 import de.illonis.eduras.gamemodes.GameMode.GameModeNumber;
 import de.illonis.eduras.maps.SpawnPosition.SpawnType;
 import de.illonis.eduras.maps.persistence.InvalidDataException;
@@ -47,6 +48,7 @@ public class Map {
 	private Date created;
 	private int width;
 	private int height;
+	protected TextureKey background;
 	protected final LinkedList<InitialObjectData> initialObjects;
 	protected final LinkedList<GameModeNumber> supportedGameModes;
 	protected final LinkedList<SpawnPosition> spawnPositions;
@@ -77,6 +79,7 @@ public class Map {
 		supportedGameModes = new LinkedList<GameModeNumber>();
 		spawnPositions = new LinkedList<SpawnPosition>();
 		nodes = new LinkedList<NodeData>();
+		background = TextureKey.NONE;
 	}
 
 	/**
@@ -343,6 +346,14 @@ public class Map {
 		height = map.getHeight();
 		fileName = map.getName();
 		author = map.getAuthor();
+		background = map.getBackground();
+	}
+
+	/**
+	 * @return the background texture.
+	 */
+	public TextureKey getBackground() {
+		return background;
 	}
 
 	/**

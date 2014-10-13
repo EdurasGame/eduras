@@ -12,6 +12,7 @@ import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.newdawn.slick.Color;
 import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.Shape;
 import org.newdawn.slick.geom.Vector2f;
@@ -43,6 +44,7 @@ import de.illonis.eduras.events.ItemUseFailedEvent;
 import de.illonis.eduras.events.ItemUseFailedEvent.Reason;
 import de.illonis.eduras.events.MatchEndEvent;
 import de.illonis.eduras.events.MovementEvent;
+import de.illonis.eduras.events.ObjectAndTeamEvent;
 import de.illonis.eduras.events.ObjectFactoryEvent;
 import de.illonis.eduras.events.OwnerGameEvent;
 import de.illonis.eduras.events.PlayerAndTeamEvent;
@@ -61,6 +63,7 @@ import de.illonis.eduras.events.SetMapEvent;
 import de.illonis.eduras.events.SetOwnerEvent;
 import de.illonis.eduras.events.SetPolygonDataEvent;
 import de.illonis.eduras.events.SetRemainingTimeEvent;
+import de.illonis.eduras.events.SetRenderInfoEvent;
 import de.illonis.eduras.events.SetSettingPropertyEvent;
 import de.illonis.eduras.events.SetSettingsEvent;
 import de.illonis.eduras.events.SetSizeEvent;
@@ -76,6 +79,7 @@ import de.illonis.eduras.exceptions.NoSpawnAvailableException;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
 import de.illonis.eduras.exceptions.PlayerHasNoTeamException;
 import de.illonis.eduras.exceptions.WrongObjectTypeException;
+import de.illonis.eduras.gameclient.datacache.TextureInfo.TextureKey;
 import de.illonis.eduras.gamemodes.GameMode;
 import de.illonis.eduras.gameobjects.Base;
 import de.illonis.eduras.gameobjects.DynamicPolygonObject;
@@ -198,8 +202,15 @@ public class ServerEventTriggerer implements EventTriggerer {
 			throw new ObjectNotFoundException(objectId);
 		} else if (gameObject instanceof MotionAIControllable) {
 			MotionAIControllable movingObject = (MotionAIControllable) gameObject;
+
+			// we want the unit's center to be at the target when it arrives
+			Vector2f oldCenterPosition = gameObject.getCenterPosition();
+			gameObject.setCenterPosition(target);
+			Vector2f targetPosition = gameObject.getPositionVector();
+			gameObject.setCenterPosition(oldCenterPosition);
+
 			MovingUnitAI ai = (MovingUnitAI) movingObject.getAI();
-			ai.moveTo(target);
+			ai.moveTo(targetPosition);
 		} else {
 			throw new UnitNotControllableException(objectId);
 		}
@@ -599,8 +610,8 @@ public class ServerEventTriggerer implements EventTriggerer {
 				GameObject o = gameInfo.findObjectById(objectId);
 				o.setRefName(initialObject.getRefName());
 				if (initialObject.getType() == ObjectType.DYNAMIC_POLYGON_BLOCK) {
-					((DynamicPolygonObject) o).setColor(initialObject
-							.getColor());
+					setRenderInfoForObject(o, initialObject.getColor(),
+							initialObject.getTexture());
 				}
 				if (o instanceof TriggerArea && initialObject.getWidth() > 0) {
 					setTriggerAreaSize(o.getId(), initialObject.getWidth(),
@@ -641,6 +652,18 @@ public class ServerEventTriggerer implements EventTriggerer {
 			portalOne.setPartnerPortal(portalTwo);
 		}
 
+	}
+
+	@Override
+	public void setRenderInfoForObject(GameObject o, Color color,
+			TextureKey texture) {
+		o.setTexture(texture);
+		if (o instanceof DynamicPolygonObject) {
+			((DynamicPolygonObject) o).setColor(color);
+		}
+		SetRenderInfoEvent event = new SetRenderInfoEvent(o.getId(), color,
+				texture);
+		sendEventToAll(event);
 	}
 
 	private void removeAllObjects() {
@@ -1368,5 +1391,13 @@ public class ServerEventTriggerer implements EventTriggerer {
 	@Override
 	public void notifyAoEDamage(ObjectType type, Vector2f centerPosition) {
 		sendEventToAll(new AoEDamageEvent(type, centerPosition));
+	}
+
+	@Override
+	public void setTeamOfUnit(Unit createdUnit, Team team) {
+		createdUnit.setTeam(team);
+		sendEventToAll(new ObjectAndTeamEvent(
+				GameEventNumber.ADD_OBJECT_TO_TEAM, createdUnit.getId(),
+				team.getTeamId()));
 	}
 }

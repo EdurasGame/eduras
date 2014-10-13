@@ -22,8 +22,12 @@ public class ResourceManager {
 
 	@SuppressWarnings("javadoc")
 	public enum ResourceType {
-		MAP("maps/"), SOUND("sounds/"), IMAGE("images/"), MUSIC("music/"),
-		LIBRARY("lib"), NATIVE_LIBRARY("lib/native/");
+		MAP("maps/"),
+		SOUND("sounds/"),
+		IMAGE("images/"),
+		MUSIC("music/"),
+		LIBRARY("lib"),
+		NATIVE_LIBRARY("lib/native/");
 
 		private String folder;
 
@@ -31,7 +35,7 @@ public class ResourceManager {
 			this.folder = folder;
 		}
 
-		String getFolder() {
+		public String getFolder() {
 			return folder;
 		}
 	}
@@ -44,7 +48,8 @@ public class ResourceManager {
 			"lwjgl64.dll", "openal.dylib", "OpenAL32.dll", "OpenAL64.dll" };
 
 	public static void extractNatives() throws IOException {
-		Files.createDirectories(RES_FOLDER.resolve(ResourceType.MAP.getFolder()));
+		Files.createDirectories(RES_FOLDER.resolve(ResourceType.NATIVE_LIBRARY
+				.getFolder()));
 
 		L.info("Extracting native libraries...");
 		for (String file : nativeFiles) {

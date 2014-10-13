@@ -39,6 +39,7 @@ public class LoadingController extends EdurasScreenController {
 			switch (frameCount) {
 			case 1:
 				setProgress(0.1f, "Loading shapes");
+				GraphicsPreLoader.loadTextures();
 				GraphicsPreLoader.loadShapes();
 				break;
 			case 2:
@@ -70,6 +71,11 @@ public class LoadingController extends EdurasScreenController {
 			}
 			frameCount++;
 		}
+	}
+
+	public void abort() {
+		game.getEduras().exit();
+		game.enterState(ServerListState.SERVER_LIST_STATE_ID);
 	}
 
 	@Override

@@ -1,8 +1,5 @@
 package de.illonis.eduras.images;
 
-import java.awt.Graphics2D;
-import java.awt.RenderingHints;
-import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
@@ -40,8 +37,10 @@ public class ImageFiler {
 	 */
 	@SuppressWarnings("javadoc")
 	public enum ImageResolution {
-		WINDOWED(".low", 800, 600), LAPTOP(".medium", 1366, 768), FULLHD("",
-				1920, 1080);
+		WINDOWED(".low", 800, 600), LAPTOP(".medium", 1366, 768), FULLHD(
+				"",
+				1920,
+				1080);
 
 		private ImageResolution(String suffix, int width, int height) {
 			this.suffix = suffix;
@@ -91,8 +90,7 @@ public class ImageFiler {
 			.getName());
 
 	/**
-	 * Loads an image scaled for current resolution from internal filesystem and
-	 * returns its {@link BufferedImage}.
+	 * Loads an image scaled for current resolution from internal filesystem.
 	 * 
 	 * @param fileName
 	 *            file name of image. Must be relative to images-package.
@@ -100,9 +98,9 @@ public class ImageFiler {
 	 * @throws SlickException
 	 *             if image could not be loaded.
 	 * @throws IOException
-	 *             if image file could not be found/read.
+	 *             if opening file failed.
 	 */
-	public static Image load(String fileName) throws SlickException,
+	public static Image loadScaled(String fileName) throws SlickException,
 			IOException {
 		Pair<ImageResolution, Float> resolution = calculateResolution();
 
@@ -139,6 +137,33 @@ public class ImageFiler {
 	}
 
 	/**
+	 * Loads an image from internal filesystem.<br>
+	 * To retrieve a resolution-dependent image, use {@link #loadScaled(String)}
+	 * .
+	 * 
+	 * @param fileName
+	 *            file name of image. Must be relative to images-package.
+	 * @return the image.
+	 * @throws SlickException
+	 *             when image could not be loaded.
+	 * @throws IOException
+	 *             if an I/O error occurs.
+	 */
+	public static Image load(String fileName) throws SlickException,
+			IOException {
+		Image image;
+		if (S.Client.localres) {
+			image = new Image(CacheInfo.BASE_URL + fileName);
+		} else {
+			try (InputStream input = ResourceManager.openResource(
+					ResourceType.IMAGE, fileName)) {
+				image = new Image(input, fileName, false);
+			}
+		}
+		return image;
+	}
+
+	/**
 	 * Loads an icon for swing GUI from internal filesystem.
 	 * 
 	 * @param fileName
@@ -156,45 +181,5 @@ public class ImageFiler {
 			return null;
 		}
 		return icon;
-	}
-
-	/**
-	 * Calculates a scaled instance of an image.
-	 * 
-	 * @param srcImg
-	 *            the source.
-	 * @param w
-	 *            the target width.
-	 * @param h
-	 *            the target height.
-	 * @return the scaled image.
-	 */
-	public static Image getScaledImage(Image srcImg, int w, int h) {
-		return srcImg.getScaledCopy(w, h);
-	}
-
-	/**
-	 * Calculates a scaled instance of an image.
-	 * 
-	 * @param srcImg
-	 *            the source.
-	 * @param w
-	 *            the target width.
-	 * @param h
-	 *            the target height.
-	 * @return the scaled image.
-	 */
-	public static java.awt.Image getScaledImage(java.awt.Image srcImg, int w,
-			int h) {
-		BufferedImage resizedImg = new BufferedImage(w, h,
-				BufferedImage.TYPE_INT_ARGB);
-		Graphics2D g2 = resizedImg.createGraphics();
-		g2.setRenderingHint(RenderingHints.KEY_ALPHA_INTERPOLATION,
-				RenderingHints.VALUE_ALPHA_INTERPOLATION_QUALITY);
-		g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION,
-				RenderingHints.VALUE_INTERPOLATION_BICUBIC);
-		g2.drawImage(srcImg, 0, 0, w, h, null);
-		g2.dispose();
-		return resizedImg;
 	}
 }

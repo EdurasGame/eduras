@@ -15,6 +15,7 @@ import de.lessvoid.nifty.slick2d.NiftyBasicGameState;
  */
 public class ServerListState extends NiftyBasicGameState {
 
+	public static final int SERVER_LIST_STATE_ID = 2;
 	private final GameControllerBridge game;
 	private ServerListController controller;
 	private ServerSearcher searcher;
@@ -43,7 +44,7 @@ public class ServerListState extends NiftyBasicGameState {
 
 	@Override
 	public int getID() {
-		return 2;
+		return SERVER_LIST_STATE_ID;
 	}
 
 	@Override

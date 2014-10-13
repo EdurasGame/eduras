@@ -19,6 +19,7 @@ import de.illonis.eduras.ai.AIControllable;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
 import de.illonis.eduras.exceptions.PlayerHasNoTeamException;
 import de.illonis.eduras.exceptions.ShapeNotSupportedException;
+import de.illonis.eduras.gameclient.datacache.TextureInfo.TextureKey;
 import de.illonis.eduras.mapeditor.EditorPlaceable;
 import de.illonis.eduras.math.CollisionPoint;
 import de.illonis.eduras.math.Geometry;
@@ -64,6 +65,7 @@ public abstract class GameObject extends ReferencedEntity implements
 	private float visionAngle = 90;
 	private boolean isVisionBlocking = false;
 	private int zLayer = 1;
+	private TextureKey texture;
 
 	private int id;
 	private int owner = OWNER_WORLD;
@@ -121,7 +123,16 @@ public abstract class GameObject extends ReferencedEntity implements
 		this.id = id;
 		setRefName("");
 		this.timingSource = timingSource;
+		texture = TextureKey.NONE;
 		setObjectType(ObjectType.NO_OBJECT);
+	}
+
+	public TextureKey getTexture() {
+		return texture;
+	}
+
+	public void setTexture(TextureKey texture) {
+		this.texture = texture;
 	}
 
 	/**
@@ -514,7 +525,7 @@ public abstract class GameObject extends ReferencedEntity implements
 	 * 
 	 * @return Returns true if this object is visible and false otherwise.
 	 */
-	public final boolean isVisibleFor(GameObject other) {
+	public boolean isVisibleFor(GameObject other) {
 		switch (visible) {
 		case ALL:
 			return true;
@@ -525,6 +536,13 @@ public abstract class GameObject extends ReferencedEntity implements
 		case OWNER_TEAM:
 			if (!other.isUnit())
 				return false;
+
+			Unit otherUnit = (Unit) other;
+			if (otherUnit.isDetector()
+					&& getDistanceTo(other) <= otherUnit.getDetectionRange()) {
+				return true;
+			}
+
 			Player player;
 			try {
 				player = game.getPlayerByOwnerId(this.owner);
@@ -756,5 +774,16 @@ public abstract class GameObject extends ReferencedEntity implements
 	 */
 	public float getDistanceTo(Vector2f point) {
 		return getCenterPosition().distance(point);
+	}
+
+	/**
+	 * Returns the distance to the other object by considering the other
+	 * object's center point.
+	 * 
+	 * @param object
+	 * @return distance
+	 */
+	public float getDistanceTo(GameObject object) {
+		return getCenterPosition().distance(object.getCenterPosition());
 	}
 }

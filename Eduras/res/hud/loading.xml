@@ -20,6 +20,9 @@
 					width="100%" height="100%" />
 				<control id="loadingtext" name="label" align="center"
 					text="                                                  " />
+				<control id="abortButton" type="button" align="center" label="Abort">
+					<interact onClick="abort()" />
+				</control>
 			</panel>
 		</layer>
 	</screen>

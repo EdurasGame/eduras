@@ -10,6 +10,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
@@ -18,7 +20,9 @@ import javax.script.ScriptException;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.geom.Rectangle;
 
+import de.illonis.edulog.EduLog;
 import de.illonis.eduras.ObjectFactory.ObjectType;
+import de.illonis.eduras.gameclient.datacache.TextureInfo.TextureKey;
 import de.illonis.eduras.gamemodes.GameMode.GameModeNumber;
 import de.illonis.eduras.gameobjects.Base;
 import de.illonis.eduras.gameobjects.Portal;
@@ -29,6 +33,7 @@ import de.illonis.eduras.maps.NodeData;
 import de.illonis.eduras.maps.SpawnPosition;
 import de.illonis.eduras.maps.SpawnPosition.SpawnType;
 import de.illonis.eduras.math.Vector2df;
+import de.illonis.eduras.utils.ColorUtils;
 
 /**
  * Provides functionality to parse a human readable map into map data. More
@@ -44,8 +49,21 @@ public class MapParser {
 	 * erm stands for "eduras? readable mapfile".
 	 */
 	public final static String FILE_EXTENSION = ".erm";
+	/**
+	 * Regex that validates a reference key.
+	 */
 	public static final String IDENTIFIER_REGEX = "^[a-zA-Z]+[A-Za-z0-9]*$";
 
+	private final static Logger L = EduLog.getLoggerFor(MapParser.class
+			.getName());
+
+	/**
+	 * Sections in mapfile.
+	 * 
+	 * @author illonis
+	 * 
+	 */
+	@SuppressWarnings("javadoc")
 	public enum MapFileSection {
 		NONE, SPAWNPOINTS, OBJECTS, NODES, NODECONNECTIONS;
 	}
@@ -84,6 +102,7 @@ public class MapParser {
 		String author = "";
 		int width = 0;
 		int height = 0;
+		TextureKey background = TextureKey.NONE;
 		MapFileSection currentMode = MapFileSection.NONE;
 		Date created = new Date();
 		final LinkedList<GameModeNumber> gameModes = new LinkedList<GameModeNumber>();
@@ -143,6 +162,14 @@ public class MapParser {
 								lineNumber);
 					}
 					break;
+				case "background":
+					try {
+						background = TextureKey.valueOf(value);
+					} catch (IllegalArgumentException e) {
+						throw new InvalidDataException(
+								"Texture does not exist: " + value, lineNumber);
+					}
+					break;
 				case "gamemodes":
 					String[] modes = value.split(",");
 					for (int i = 0; i < modes.length; i++) {
@@ -157,8 +184,10 @@ public class MapParser {
 					}
 					break;
 				default:
-					throw new InvalidDataException(
-							"Unknown tag found: @" + key, lineNumber);
+					L.log(Level.WARNING,
+							"Unknown tag found while loading map: @" + key
+									+ " in line " + lineNumber);
+					break;
 				}
 			} else if (line.startsWith(":")) {
 				String mode = line.substring(1).trim();
@@ -201,7 +230,7 @@ public class MapParser {
 							String last = objectData[objectData.length - 1]
 									.trim();
 							boolean lastColor = false;
-							if (last.startsWith("0x")) {
+							if (!last.startsWith("[")) {
 								lastColor = true;
 								numOfVertexVectors--;
 								// last value is color.
@@ -217,7 +246,19 @@ public class MapParser {
 								oData = new InitialObjectData(objectType, objX,
 										objY, vertices, currentIdentifier);
 								if (lastColor) {
-									oData.setColor(readColor(last, lineNumber));
+									if (isColor(last)) {
+										oData.setColor(readColor(last,
+												lineNumber));
+									} else {
+										try {
+											TextureKey key = TextureKey
+													.valueOf(last);
+											oData.setTexture(key);
+										} catch (IllegalArgumentException e) {
+											oData.setTexture(TextureKey.NONE);
+											oData.setColor(Color.gray);
+										}
+									}
 								}
 							}
 						} else {
@@ -399,21 +440,17 @@ public class MapParser {
 		reader.close();
 
 		return new LoadedMap(mapName, author, width, height, created,
-				spawnPositions, gameObjects, gameModes, nodes);
+				spawnPositions, gameObjects, gameModes, nodes, background);
+	}
+
+	private static boolean isColor(String string) {
+		return string.startsWith("0x");
 	}
 
 	private static Color readColor(String last, final int lineNumber)
 			throws InvalidDataException {
-		if (!last.startsWith("0x")) {
-			throw new InvalidDataException("Invalid color: " + last, lineNumber);
-		}
-		String colorString = last.substring(2);
 		try {
-			int alpha = Integer.parseInt(colorString.substring(0, 2), 16);
-			int r = Integer.parseInt(colorString.substring(2, 4), 16);
-			int g = Integer.parseInt(colorString.substring(4, 6), 16);
-			int b = Integer.parseInt(colorString.substring(6, 8), 16);
-			return new Color(r, g, b, alpha);
+			return ColorUtils.fromString(last);
 		} catch (NumberFormatException e) {
 			throw new InvalidDataException("Invalid color: " + last, lineNumber);
 		}

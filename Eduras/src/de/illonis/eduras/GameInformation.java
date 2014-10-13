@@ -36,6 +36,7 @@ import de.illonis.eduras.events.SetInteractModeEvent;
 import de.illonis.eduras.events.SetMapEvent;
 import de.illonis.eduras.events.SetPolygonDataEvent;
 import de.illonis.eduras.events.SetRemainingTimeEvent;
+import de.illonis.eduras.events.SetRenderInfoEvent;
 import de.illonis.eduras.events.SetSettingsEvent;
 import de.illonis.eduras.events.SetSizeEvent;
 import de.illonis.eduras.events.SetTeamsEvent;
@@ -504,6 +505,18 @@ public class GameInformation {
 						((DynamicPolygonObject) object).getPolygonVertices());
 				infos.add(polygonData);
 			}
+
+			SetRenderInfoEvent renderInfoEvent;
+			if (object instanceof DynamicPolygonObject) {
+				renderInfoEvent = new SetRenderInfoEvent(object.getId(),
+						((DynamicPolygonObject) object).getColor(),
+						object.getTexture());
+			} else {
+				renderInfoEvent = new SetRenderInfoEvent(object.getId(),
+						object.getTexture());
+			}
+			infos.add(renderInfoEvent);
+
 			if (object instanceof TriggerArea) {
 				infos.add(new SetSizeEvent(object.getId(), object.getWidth(),
 						object.getHeight()));
@@ -779,6 +792,13 @@ public class GameInformation {
 		LinkedList<GameObject> collidableObjects = new LinkedList<GameObject>();
 
 		for (GameObject otherObject : objects.values()) {
+			if (someObject == null) {
+				if (otherObject.isCollidable(null)) {
+					collidableObjects.add(otherObject);
+				}
+				continue;
+			}
+
 			if (otherObject.equals(someObject)) {
 				continue;
 			}
@@ -872,5 +892,16 @@ public class GameInformation {
 		} else {
 			return objs.getFirst().getTimingSource();
 		}
+	}
+
+	public static Collection<?> getAllUnits(Collection<GameObject> collidables) {
+		LinkedList<GameObject> units = new LinkedList<GameObject>();
+
+		for (GameObject anyObject : collidables) {
+			if (anyObject.isUnit()) {
+				units.add(anyObject);
+			}
+		}
+		return units;
 	}
 }

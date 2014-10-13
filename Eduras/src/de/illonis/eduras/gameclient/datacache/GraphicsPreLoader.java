@@ -20,6 +20,7 @@ import de.illonis.edulog.EduLog;
 import de.illonis.eduras.ObjectFactory.ObjectType;
 import de.illonis.eduras.gameclient.datacache.CacheInfo.ImageKey;
 import de.illonis.eduras.gameclient.datacache.FontCache.FontKey;
+import de.illonis.eduras.gameclient.datacache.TextureInfo.TextureKey;
 import de.illonis.eduras.gameclient.gui.game.GameRenderer;
 import de.illonis.eduras.images.ImageFiler;
 import de.illonis.eduras.shapecreator.FileCorruptException;
@@ -45,6 +46,26 @@ public final class GraphicsPreLoader {
 	 */
 	public static void preLoadShapes() {
 		loadShapes();
+	}
+
+	public static void loadTextures() {
+		HashMap<TextureKey, String> textureInfo = CacheInfo.getAllTextures();
+		Iterator<Map.Entry<TextureKey, String>> it = textureInfo.entrySet()
+				.iterator();
+		while (it.hasNext()) {
+			Map.Entry<TextureKey, String> pair = it.next();
+			try {
+				Image image = ImageFiler.load(pair.getValue());
+				ImageCache.addTexture(pair.getKey(), image);
+			} catch (SlickException e) {
+				L.log(Level.SEVERE,
+						"Texture file not found: " + pair.getValue(), e);
+			} catch (IOException e) {
+				L.log(Level.SEVERE,
+						"Could not read texture file: " + pair.getValue(), e);
+			}
+		}
+
 	}
 
 	public static void loadFonts() {
@@ -78,7 +99,7 @@ public final class GraphicsPreLoader {
 		while (it.hasNext()) {
 			Map.Entry<ObjectType, String> pair = it.next();
 			try {
-				Image image = ImageFiler.load(pair.getValue());
+				Image image = ImageFiler.loadScaled(pair.getValue());
 				ImageCache.addInventoryIcon(pair.getKey(), image);
 			} catch (SlickException | IOException e) {
 				L.log(Level.SEVERE,
@@ -94,7 +115,7 @@ public final class GraphicsPreLoader {
 		while (it.hasNext()) {
 			Map.Entry<ImageKey, String> pair = it.next();
 			try {
-				Image image = ImageFiler.load(pair.getValue());
+				Image image = ImageFiler.loadScaled(pair.getValue());
 				ImageCache.addGuiImage(pair.getKey(), image);
 			} catch (SlickException | IOException e) {
 				L.log(Level.SEVERE,
@@ -127,7 +148,7 @@ public final class GraphicsPreLoader {
 		while (it.hasNext()) {
 			Map.Entry<ObjectType, String> pair = it.next();
 			try {
-				Image image = ImageFiler.load(pair.getValue());
+				Image image = ImageFiler.loadScaled(pair.getValue());
 				ImageCache.addImage(pair.getKey(), image);
 			} catch (SlickException | IOException e) {
 				L.log(Level.SEVERE, "Imagefile not found: " + pair.getValue(),

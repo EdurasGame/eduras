@@ -123,9 +123,12 @@ public interface GamePanelReactor {
 	 *             thrown if the given type isn't an item
 	 * @throws InsufficientResourceException
 	 *             if not enough resources available.
+	 * @throws CantSpawnHereException
+	 *             thrown if you cannot spawn at the location
 	 */
 	void onSpawnItem(ObjectType type, Vector2f locationToSpawnAt)
-			throws WrongObjectTypeException, InsufficientResourceException;
+			throws WrongObjectTypeException, InsufficientResourceException,
+			CantSpawnHereException;
 
 	/**
 	 * Indicates a mode switch.

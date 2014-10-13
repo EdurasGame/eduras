@@ -14,14 +14,15 @@ import de.illonis.eduras.events.ItemUseFailedEvent;
 import de.illonis.eduras.events.ItemUseFailedEvent.Reason;
 import de.illonis.eduras.events.MatchEndEvent;
 import de.illonis.eduras.events.ObjectFactoryEvent;
+import de.illonis.eduras.events.RespawnEvent;
 import de.illonis.eduras.events.SetItemSlotEvent;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
+import de.illonis.eduras.exceptions.PlayerHasNoTeamException;
 import de.illonis.eduras.gameclient.GameEventAdapter;
 import de.illonis.eduras.gameclient.audio.SoundMachine;
 import de.illonis.eduras.gameclient.audio.SoundMachine.SoundType;
 import de.illonis.eduras.gameclient.gui.animation.EffectFactory.EffectNumber;
 import de.illonis.eduras.gameobjects.Base;
-import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.inventory.ItemSlotIsEmptyException;
 import de.illonis.eduras.logicabstraction.EdurasInitializer;
 import de.illonis.eduras.logicabstraction.InformationProvider;
@@ -59,7 +60,7 @@ public class ClientEffectHandler extends GameEventAdapter {
 			try {
 				if (unit.equals(infos.getPlayer().getPlayerMainFigure())) {
 					if (newValue > oldValue) {
-						SoundMachine.play(SoundType.LOOT);
+						SoundMachine.play(SoundType.SPELL_HEAL);
 					} else {
 						if (newValue < oldValue) {
 							SoundMachine.play(SoundType.HURT);
@@ -73,27 +74,38 @@ public class ClientEffectHandler extends GameEventAdapter {
 	}
 
 	@Override
-	public void onObjectRemove(ObjectFactoryEvent event) {
-		GameObject o;
-		try {
-			o = infos.findObjectById(event.getId());
-		} catch (ObjectNotFoundException e) {
-			L.log(Level.WARNING, "Cannot find object to remove!", e);
-			return;
+	public void onRespawn(RespawnEvent event) {
+		if (playSounds && event.getOwner() == infos.getOwnerID()) {
+			SoundMachine.play(SoundType.SPELL_REZZ);
 		}
+	}
+
+	@Override
+	public void onObjectRemove(ObjectFactoryEvent event) {
 	}
 
 	@Override
 	public void onItemUseFailed(ItemUseFailedEvent itemFailedEvent) {
 		if (itemFailedEvent.getReason() == Reason.AMMO_EMPTY) {
-			SoundMachine.play(SoundType.AMMO_EMPTY, 1f, .7f);
+			SoundMachine.play(SoundType.AMMO_EMPTY);
 		}
 	}
 
 	@Override
 	public void onBaseConquered(Base base, Team conqueringTeam) {
 		if (playSounds) {
-			SoundMachine.play(SoundType.TADA);
+			try {
+				Team myTeam = infos.getPlayer().getTeam();
+				if (conqueringTeam.equals(myTeam)) {
+					SoundMachine.play(SoundType.BASE_CONQUERED);
+				} else {
+					SoundMachine.play(SoundType.BASE_LOST);
+				}
+			} catch (PlayerHasNoTeamException | ObjectNotFoundException e) {
+				L.log(Level.WARNING,
+						"No player found when playing base conquered sound.", e);
+			}
+
 		}
 	}
 
@@ -114,9 +126,8 @@ public class ClientEffectHandler extends GameEventAdapter {
 			try {
 				Player player = infos.getPlayer();
 				if (event.getOwner() == player.getPlayerId()) {
-
 					player.getInventory().getItemAt(event.getItemSlot());
-					SoundMachine.play(SoundType.LOOT, 1f, .8f);
+					SoundMachine.play(SoundType.LOOT);
 				}
 			} catch (ItemSlotIsEmptyException | ObjectNotFoundException e) {
 				// item lost or something like that

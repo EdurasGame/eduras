@@ -34,6 +34,7 @@ import de.illonis.eduras.events.ItemUseFailedEvent;
 import de.illonis.eduras.events.ItemUseFailedEvent.Reason;
 import de.illonis.eduras.events.MatchEndEvent;
 import de.illonis.eduras.events.MovementEvent;
+import de.illonis.eduras.events.ObjectAndTeamEvent;
 import de.illonis.eduras.events.ObjectFactoryEvent;
 import de.illonis.eduras.events.OwnerGameEvent;
 import de.illonis.eduras.events.PlayerAndTeamEvent;
@@ -55,6 +56,7 @@ import de.illonis.eduras.events.SetMapEvent;
 import de.illonis.eduras.events.SetOwnerEvent;
 import de.illonis.eduras.events.SetPolygonDataEvent;
 import de.illonis.eduras.events.SetRemainingTimeEvent;
+import de.illonis.eduras.events.SetRenderInfoEvent;
 import de.illonis.eduras.events.SetSettingPropertyEvent;
 import de.illonis.eduras.events.SetSettingsEvent;
 import de.illonis.eduras.events.SetSizeEvent;
@@ -69,10 +71,12 @@ import de.illonis.eduras.events.SwitchInteractModeEvent;
 import de.illonis.eduras.events.UnitSpellActionEvent;
 import de.illonis.eduras.events.UserMovementEvent;
 import de.illonis.eduras.exceptions.InvalidNameException;
+import de.illonis.eduras.gameclient.datacache.TextureInfo.TextureKey;
 import de.illonis.eduras.gameobjects.GameObject.Visibility;
 import de.illonis.eduras.interfaces.GameLogicInterface;
 import de.illonis.eduras.math.Vector2df;
 import de.illonis.eduras.units.InteractMode;
+import de.illonis.eduras.utils.ColorUtils;
 import de.illonis.eduras.utils.ResourceManager;
 import de.illonis.eduras.utils.ResourceManager.ResourceType;
 
@@ -329,6 +333,12 @@ public class EventParser implements EventHandler {
 						(Integer) event.getArgument(1), (Integer) event
 								.getArgument(2)));
 				break;
+			case SET_RENDER_INFO:
+				logic.onGameEventAppeared(new SetRenderInfoEvent((int) event
+						.getArgument(0), ColorUtils.fromString((String) event
+						.getArgument(1)), TextureKey.valueOf((String) event
+						.getArgument(2))));
+				break;
 			case SET_REMAININGTIME:
 				logic.onGameEventAppeared(new SetRemainingTimeEvent(
 						(Long) event.getArgument(0)));
@@ -487,6 +497,11 @@ public class EventParser implements EventHandler {
 				logic.onGameEventAppeared(new PlayerAndTeamEvent(
 						GameEventNumber.JOIN_TEAM, (Integer) event
 								.getArgument(0), (Integer) event.getArgument(1)));
+				break;
+			case ADD_OBJECT_TO_TEAM:
+				logic.onGameEventAppeared(new ObjectAndTeamEvent(
+						gameEventNumber, (Integer) event.getArgument(0),
+						(Integer) event.getArgument(1)));
 				break;
 			default:
 				L.warning("Cannot handle event with event number "
