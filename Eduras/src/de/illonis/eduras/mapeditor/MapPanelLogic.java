@@ -621,8 +621,8 @@ public class MapPanelLogic implements MapInteractor {
 	}
 
 	@Override
-	public void onStopDragging(int x, int y) {
-		Vector2f target = new Vector2f(x, y);
+	public void onStopDragging(Vector2f point) {
+		Vector2f target = point.copy();
 		target.sub(dragStart);
 		dragStart = null;
 		DragAction action = new DragAction(selectedElements, target, this);
@@ -630,7 +630,7 @@ public class MapPanelLogic implements MapInteractor {
 	}
 
 	@Override
-	public void startDragging(int x, int y) {
-		dragStart = new Vector2f(x, y);
+	public void startDragging(Vector2f point) {
+		dragStart = point;
 	}
 }

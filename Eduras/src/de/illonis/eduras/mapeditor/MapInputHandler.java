@@ -51,7 +51,10 @@ public class MapInputHandler extends InputAdapter {
 						interactor.selectAt(x, y);
 					}
 					mode = InteractMode.DRAG;
-					interactor.startDragging(x, y);
+					interactor
+							.startDragging(interactor
+									.computeGuiPointToGameCoordinate(new Vector2f(
+											x, y)));
 
 				}
 			} else {
@@ -144,7 +147,8 @@ public class MapInputHandler extends InputAdapter {
 
 		}
 		if (mode == InteractMode.DRAG) {
-			interactor.onStopDragging(x, y);
+			interactor.onStopDragging(interactor
+					.computeGuiPointToGameCoordinate(new Vector2f(x, y)));
 		}
 		mode = InteractMode.NONE;
 	}
