@@ -30,34 +30,34 @@ public class BuildModeKeyHandler extends AnyModeKeyHandler {
 				client.onActionFailed(e);
 			}
 			break;
-		case ITEM_ASSAULT:
+		case STRATEGY_1:
 			client.selectActionButton(0);
 			break;
-		case ITEM_SWORD:
+		case STRATEGY_2:
 			client.selectActionButton(1);
 			break;
-		case ITEM_SNIPER:
+		case STRATEGY_3:
 			client.selectActionButton(2);
 			break;
-		case ITEM_SPLASH:
+		case STRATEGY_4:
 			client.selectActionButton(3);
 			break;
-		case ITEM_SIMPLE:
+		case STRATEGY_5:
 			client.selectActionButton(4);
 			break;
-		case ITEM_MINE:
+		case STRATEGY_6:
 			client.selectActionButton(5);
 			break;
-		case ITEM_ROCKET:
+		case STRATEGY_7:
 			client.selectActionButton(6);
 			break;
-		case ITEM_8:
+		case STRATEGY_8:
 			client.selectActionButton(7);
 			break;
-		case ITEM_9:
+		case STRATEGY_9:
 			client.selectActionButton(8);
 			break;
-		case ITEM_10:
+		case STRATEGY_10:
 			client.selectActionButton(9);
 			break;
 		case PAGE_UP:
