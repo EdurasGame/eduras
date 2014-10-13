@@ -21,14 +21,12 @@ public class ShapeEditAction extends UndoAction {
 
 	@Override
 	public void undo() throws CannotUndoException {
-		// TODO Auto-generated method stub
-
+		
 	}
 
 	@Override
 	public void performAction() throws CannotRedoException {
-		// TODO Auto-generated method stub
-
+		
 	}
 
 	@Override

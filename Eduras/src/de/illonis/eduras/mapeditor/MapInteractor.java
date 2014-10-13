@@ -114,4 +114,8 @@ public interface MapInteractor {
 	
 	void onMapLoaded();
 
+	void onStopDragging(int x, int y);
+
+	void startDragging(int x, int y);
+
 }

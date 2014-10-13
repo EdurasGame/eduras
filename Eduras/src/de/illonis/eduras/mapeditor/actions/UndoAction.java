@@ -14,7 +14,7 @@ public abstract class UndoAction implements UndoableEdit {
 	private final LinkedList<EditorPlaceable> elements;
 	protected final MapPanelLogic logic;
 
-	public UndoAction(List<EditorPlaceable> elements, MapPanelLogic logic) {
+	protected UndoAction(List<EditorPlaceable> elements, MapPanelLogic logic) {
 		this.elements = new LinkedList<EditorPlaceable>(elements);
 		this.logic = logic;
 	}

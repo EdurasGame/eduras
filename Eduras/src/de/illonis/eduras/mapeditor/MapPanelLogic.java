@@ -26,6 +26,7 @@ import de.illonis.eduras.gameobjects.NeutralArea;
 import de.illonis.eduras.gameobjects.Portal;
 import de.illonis.eduras.mapeditor.actions.CreateAction;
 import de.illonis.eduras.mapeditor.actions.DeleteAction;
+import de.illonis.eduras.mapeditor.actions.DragAction;
 import de.illonis.eduras.mapeditor.actions.MirrorAction;
 import de.illonis.eduras.mapeditor.actions.RotateAction;
 import de.illonis.eduras.mapeditor.actions.UndoAction;
@@ -62,6 +63,7 @@ public class MapPanelLogic implements MapInteractor {
 	private List<EditorPlaceable> selectedElements;
 	private Rectangle dragRect;
 	private final UndoManager undos;
+	private Vector2f dragStart;
 
 	MapPanelLogic(EditorWindow window) {
 		this.window = window;
@@ -589,6 +591,7 @@ public class MapPanelLogic implements MapInteractor {
 			id = Math.max(id, o.getId());
 		}
 		nextId = id + 1;
+		undos.discardAllEdits();
 	}
 
 	@Override
@@ -607,5 +610,19 @@ public class MapPanelLogic implements MapInteractor {
 			return true;
 		}
 		return false;
+	}
+
+	@Override
+	public void onStopDragging(int x, int y) {
+		Vector2f target = new Vector2f(x, y);
+		target.sub(dragStart);
+		dragStart = null;
+		DragAction action = new DragAction(selectedElements, target, this);
+		undos.addEdit(action);
+	}
+
+	@Override
+	public void startDragging(int x, int y) {
+		dragStart = new Vector2f(x, y);
 	}
 }

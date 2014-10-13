@@ -1,6 +1,6 @@
 package de.illonis.eduras.mapeditor.actions;
 
-import java.util.LinkedList;
+import java.util.List;
 
 import javax.swing.undo.CannotRedoException;
 import javax.swing.undo.CannotUndoException;
@@ -13,7 +13,7 @@ import de.illonis.eduras.mapeditor.MapPanelLogic;
 public class DragAction extends UndoAction {
 	private final Vector2f diff;
 
-	public DragAction(LinkedList<EditorPlaceable> elements, Vector2f distance,
+	public DragAction(List<EditorPlaceable> elements, Vector2f distance,
 			MapPanelLogic logic) {
 		super(elements, logic);
 		this.diff = distance;
@@ -25,6 +25,7 @@ public class DragAction extends UndoAction {
 			element.setPosition(element.getXPosition() - diff.x,
 					element.getYPosition() - diff.y);
 		}
+		logic.selectAll(getElements());
 	}
 
 	@Override
@@ -33,6 +34,7 @@ public class DragAction extends UndoAction {
 			element.setPosition(element.getXPosition() + diff.x,
 					element.getYPosition() + diff.y);
 		}
+		logic.selectAll(getElements());
 	}
 
 	@Override
