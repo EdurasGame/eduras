@@ -126,7 +126,7 @@ public class ClientEffectHandler extends GameEventAdapter {
 			try {
 				Player player = infos.getPlayer();
 				if (event.getOwner() == player.getPlayerId()) {
-					player.getInventory().getItemBySlot(event.getItemSlot());
+					player.getInventory().getItemAt(event.getItemSlot());
 					SoundMachine.play(SoundType.LOOT);
 				}
 			} catch (ItemSlotIsEmptyException | ObjectNotFoundException e) {

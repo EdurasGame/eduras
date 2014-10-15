@@ -11,7 +11,8 @@ import de.illonis.eduras.settings.S;
 @SuppressWarnings("javadoc")
 public enum InteractMode {
 
-	MODE_EGO("on the road"), MODE_STRATEGY("coordinating"), MODE_DEAD("dead");
+	ANY_MODE(""), MODE_EGO("on the road"), MODE_STRATEGY("coordinating"),
+	MODE_DEAD("dead");
 
 	private String displayName;
 

@@ -408,7 +408,8 @@ public class EdurasInitializer {
 			}
 
 			@Override
-			public void notifyWeaponAmmoEmpty(int clientId, int slotNum) {
+			public void notifyWeaponAmmoEmpty(int clientId,
+					ObjectType weaponType) {
 			}
 
 			@Override

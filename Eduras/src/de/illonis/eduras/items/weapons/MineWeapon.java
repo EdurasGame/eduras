@@ -39,7 +39,7 @@ public class MineWeapon extends Weapon {
 			TimingSource timingSource, int id) {
 		super(ObjectType.MINELAUNCHER, gameInformation, timingSource, id);
 		setName("Mine Launcher");
-
+		setSortOrder(6);
 		setShape(ShapeFactory.createShape(ShapeType.STAR));
 		defaultCooldown = S.Server.go_mineweapon_cooldown;
 		setAmmunitionLimited(S.Server.go_mineweapon_fillamount,

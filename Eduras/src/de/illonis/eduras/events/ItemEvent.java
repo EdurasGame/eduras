@@ -3,6 +3,7 @@ package de.illonis.eduras.events;
 import org.newdawn.slick.geom.Vector2f;
 
 import de.eduras.eventingserver.exceptions.TooFewArgumentsExceptions;
+import de.illonis.eduras.ObjectFactory.ObjectType;
 
 /**
  * Used as a wrapper for item events like use_item_pressed and _released. An
@@ -16,7 +17,7 @@ import de.eduras.eventingserver.exceptions.TooFewArgumentsExceptions;
  */
 public class ItemEvent extends OwnerGameEvent {
 
-	private int slotNum = -1;
+	private ObjectType itemType = ObjectType.NO_OBJECT;
 	private Vector2f target;
 
 	/**
@@ -40,32 +41,27 @@ public class ItemEvent extends OwnerGameEvent {
 	 *            The type.
 	 * @param ownerId
 	 *            The id of the owner this item belongs to.
-	 * @param slot
-	 *            related item slot.
+	 * @param type
+	 *            related item type.
 	 */
-	public ItemEvent(GameEventNumber eventType, int ownerId, int slot) {
+	public ItemEvent(GameEventNumber eventType, int ownerId, ObjectType type) {
 		this(eventType, ownerId);
-		setSlotNum(slot);
+		setItemType(type);
 	}
 
 	/**
-	 * Set the itemslot of the player's inventory which is related to this
-	 * event.
-	 * 
-	 * @param slotNum
-	 *            The number of the slot.
+	 * @return type of item related.
 	 */
-	public void setSlotNum(int slotNum) {
-		this.slotNum = slotNum;
+	public ObjectType getItemType() {
+		return itemType;
 	}
 
 	/**
-	 * Returns the slotnumber of the item to use.
-	 * 
-	 * @return The slotnumber.
+	 * @param itemType
+	 *            type of item.
 	 */
-	public int getSlotNum() {
-		return this.slotNum;
+	public void setItemType(ObjectType itemType) {
+		this.itemType = itemType;
 	}
 
 	/**
@@ -95,13 +91,13 @@ public class ItemEvent extends OwnerGameEvent {
 			if (i == 0)
 				return getOwner();
 			if (i == 1)
-				return slotNum;
+				return itemType;
 			else
 				throw new TooFewArgumentsExceptions(i, 1);
 		case ITEM_USE:
 			switch (i) {
 			case 0:
-				return slotNum;
+				return itemType;
 			case 1:
 				return getOwner();
 			case 2:

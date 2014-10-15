@@ -22,7 +22,7 @@ public final class ClientData {
 	private final ChatCache chatCache;
 	private final TreeSet<Integer> selectedUnits;
 	private final VisionInformation visionInfo;
-	private int currentItemSelected;
+	private ObjectType currentItemSelected;
 	private Player currentResurrectTarget;
 	private ObjectType typeOfItemToSpawn;
 	private int currentActionSelected;
@@ -32,7 +32,7 @@ public final class ClientData {
 	 * Creates a new storage.
 	 */
 	public ClientData() {
-		currentItemSelected = -1;
+		currentItemSelected = ObjectType.NO_OBJECT;
 		currentActionSelected = -1;
 		chatCache = new ChatCache();
 		selectedUnits = new TreeSet<Integer>();
@@ -85,11 +85,11 @@ public final class ClientData {
 	}
 
 	/**
-	 * Returns the currently selected item's slot number.
+	 * Returns the currently selected item's type.
 	 * 
-	 * @return slotnumber
+	 * @return item type.
 	 */
-	public int getCurrentItemSelected() {
+	public ObjectType getCurrentItemSelected() {
 		return currentItemSelected;
 	}
 
@@ -103,11 +103,11 @@ public final class ClientData {
 	}
 
 	/**
-	 * Sets the currently selected item's slot number.
+	 * Sets the currently selected item's type.
 	 * 
 	 * @param currentItemSelected
 	 */
-	public void setCurrentItemSelected(int currentItemSelected) {
+	public void setCurrentItemSelected(ObjectType currentItemSelected) {
 		this.currentItemSelected = currentItemSelected;
 	}
 

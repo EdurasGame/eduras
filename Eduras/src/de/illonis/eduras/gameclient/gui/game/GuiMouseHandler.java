@@ -149,17 +149,20 @@ public final class GuiMouseHandler extends GuiMouseAdapter implements
 				break;
 			}
 		}
-		for (Iterator<ClickableGuiElementInterface> iterator = clickListeners
-				.iterator(); iterator.hasNext();) {
-			ClickableGuiElementInterface nextReactor = iterator.next();
-			if (nextReactor.isActive()
-					&& (nextReactor.getBounds().contains(newx, newy))) {
-				if (nextReactor.mouseMoved(oldx, oldy, newx, newy)) {
-					loseGameFocus();
-					return;
+		synchronized (clickListeners) {
+			for (Iterator<ClickableGuiElementInterface> iterator = clickListeners
+					.iterator(); iterator.hasNext();) {
+				ClickableGuiElementInterface nextReactor = iterator.next();
+				if (nextReactor.isActive()
+						&& (nextReactor.getBounds().contains(newx, newy))) {
+					if (nextReactor.mouseMoved(oldx, oldy, newx, newy)) {
+						loseGameFocus();
+						return;
+					}
 				}
 			}
 		}
+
 		gameHasMouse = true;
 		getCurrentHandler().mouseMoved(oldx, oldy, newx, newy);
 	}

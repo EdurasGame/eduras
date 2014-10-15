@@ -141,8 +141,9 @@ public class ActionBar extends ClickableGuiElement implements TooltipTriggerer {
 				if (button.isBackButton())
 					label = bindings.getBindingString(KeyBinding.PAGE_UP);
 				else {
+					label = "";
 					label = bindings.getBindingString(KeyBinding
-							.valueOf("ITEM_" + (1 + i)));
+							.valueOf("STRATEGY_" + (1 + i)));
 					if (button.getCosts() > 0) {
 						if (resIcon != null)
 							g.drawImage(

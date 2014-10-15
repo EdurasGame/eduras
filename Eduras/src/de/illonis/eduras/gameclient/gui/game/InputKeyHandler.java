@@ -106,29 +106,31 @@ public class InputKeyHandler {
 		int keyCode = key;
 		boolean consumed = false;
 		if (key != settings.getKeyBindings().getKey(KeyBinding.CHAT)
-				&& key != settings.getKeyBindings().getKey(
-						KeyBinding.CANCEL))
+				&& key != settings.getKeyBindings().getKey(KeyBinding.CANCEL))
 			consumed = onChatType(key, c);
 
 		if (consumed) {
 			return;
 		}
 
+		Player player;
+		try {
+			player = infoPro.getPlayer();
+		} catch (ObjectNotFoundException e1) {
+			L.log(Level.SEVERE, "Could not find player while pressing key.", e1);
+			return;
+		}
+		InteractMode currentMode = player.getCurrentMode();
+
 		KeyBinding binding;
 		try {
-			binding = settings.getKeyBindings().getBindingOf(keyCode);
+			binding = settings.getKeyBindings().getBindingOf(keyCode,
+					currentMode);
 		} catch (KeyNotBoundException ex) {
 			return;
 		}
 
 		if (infoPro.getGameMode().supportsKeyBinding(binding)) {
-			Player player;
-			try {
-				player = infoPro.getPlayer();
-			} catch (ObjectNotFoundException e1) {
-				L.log(Level.SEVERE, "Something terribly bad happened.", e1);
-				return;
-			}
 			GuiKeyHandler handler = keyHandlers.get(player.getCurrentMode());
 			if (handler != null) {
 				if (handler.isChatEnabled()) {
@@ -162,24 +164,24 @@ public class InputKeyHandler {
 		// don't handle other keys
 		if (!settings.getKeyBindings().isBound(key))
 			return;
-
+		Player player;
+		try {
+			player = infoPro.getPlayer();
+		} catch (ObjectNotFoundException e1) {
+			L.log(Level.SEVERE, "Could not find player while releasing key.",
+					e1);
+			return;
+		}
 		KeyBinding binding;
 		try {
-			binding = settings.getKeyBindings().getBindingOf(key);
+			binding = settings.getKeyBindings().getBindingOf(key,
+					player.getCurrentMode());
 		} catch (KeyNotBoundException ex) {
 			L.log(Level.SEVERE, "Key is bound but receiving binding failed: "
 					+ key, ex);
 			return;
 		}
 		if (infoPro.getGameMode().supportsKeyBinding(binding)) {
-
-			Player player;
-			try {
-				player = infoPro.getPlayer();
-			} catch (ObjectNotFoundException e1) {
-				L.log(Level.SEVERE, "Something terribly bad happened.", e1);
-				return;
-			}
 			GuiKeyHandler handler = keyHandlers.get(player.getCurrentMode());
 			if (handler != null) {
 				handler.keyReleased(binding);

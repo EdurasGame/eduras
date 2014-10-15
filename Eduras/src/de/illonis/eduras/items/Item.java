@@ -17,6 +17,7 @@ public abstract class Item extends GameObject {
 	private int buyValue;
 	private String name;
 	private boolean unique;
+	private int sortOrder;
 
 	/**
 	 * Creates a new item of given item type.
@@ -36,6 +37,25 @@ public abstract class Item extends GameObject {
 		setObjectType(type);
 		this.name = "unknown";
 		unique = true;
+		sortOrder = 0;
+	}
+
+	/**
+	 * Sets the ordering of this item in inventory. Items with lower sorting
+	 * order will appear further up on the display.
+	 * 
+	 * @param sortOrder
+	 *            new sort order.
+	 */
+	public void setSortOrder(int sortOrder) {
+		this.sortOrder = sortOrder;
+	}
+
+	/**
+	 * @return the sorting order.
+	 */
+	public int getSortOrder() {
+		return sortOrder;
 	}
 
 	/**

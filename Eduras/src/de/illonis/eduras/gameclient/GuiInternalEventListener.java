@@ -72,15 +72,15 @@ public class GuiInternalEventListener implements GamePanelReactor {
 	}
 
 	@Override
-	public void onItemUse(int slotId, Vector2f target) {
+	public void onItemUse(ObjectType type, Vector2f target) {
 		ItemEvent event = new ItemEvent(GameEventNumber.ITEM_USE,
-				client.getOwnerID(), slotId);
+				client.getOwnerID(), type);
 		event.setTarget(target);
 		try {
 			client.sendEvent(event);
 		} catch (WrongEventTypeException | MessageNotSupportedException e) {
-			L.log(Level.WARNING, "error sending item used event for slot "
-					+ slotId, e);
+			L.log(Level.WARNING, "error sending item used event for type "
+					+ type, e);
 		}
 	}
 

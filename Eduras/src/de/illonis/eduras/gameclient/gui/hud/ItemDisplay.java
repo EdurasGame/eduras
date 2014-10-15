@@ -11,6 +11,7 @@ import org.newdawn.slick.Image;
 import org.newdawn.slick.geom.Rectangle;
 
 import de.illonis.edulog.EduLog;
+import de.illonis.eduras.ObjectFactory.ObjectType;
 import de.illonis.eduras.events.SetItemSlotEvent;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
 import de.illonis.eduras.gameclient.datacache.CacheException;
@@ -53,8 +54,9 @@ public class ItemDisplay extends RenderedGuiObject {
 	private final MiniMap minimap;
 	private final GuiItem itemSlots[];
 	private final float borderSize;
+	private final UserInterface gui;
 
-	private int currentItem = -1;
+	private ObjectType currentItem = ObjectType.NO_OBJECT;
 
 	/**
 	 * Creates a new item toolbar.
@@ -66,6 +68,7 @@ public class ItemDisplay extends RenderedGuiObject {
 	 */
 	public ItemDisplay(UserInterface gui, MiniMap map) {
 		super(gui);
+		this.gui = gui;
 		this.minimap = map;
 		buttonSize = BLOCKSIZE * GameRenderer.getRenderScale();
 		borderSize = 2 * GameRenderer.getRenderScale();
@@ -80,6 +83,16 @@ public class ItemDisplay extends RenderedGuiObject {
 	@Override
 	public void render(Graphics g) {
 		currentItem = getInfo().getClientData().getCurrentItemSelected();
+		Item[] items;
+		try {
+			items = getInfo().getPlayer().getInventory().getAllItems();
+		} catch (ObjectNotFoundException e1) {
+			L.log(Level.SEVERE, "Cannot find player!", e1);
+			return;
+		}
+		for (int i = 0; i < items.length; i++) {
+			onItemChanged(i, items[i]);
+		}
 	}
 
 	@Override
@@ -89,9 +102,14 @@ public class ItemDisplay extends RenderedGuiObject {
 	@Override
 	public void onItemSlotChanged(SetItemSlotEvent event) {
 		if (event.getOwner() == getInfo().getOwnerID()) {
-			Item item = (Item) getInfo().getGameObjects().get(
-					event.getObjectId());
-			onItemChanged(event.getItemSlot(), item);
+			Item item;
+			try {
+				item = (Item) getInfo().findObjectById(event.getObjectId());
+				onItemChanged(event.getItemSlot(), item);
+			} catch (ObjectNotFoundException e) {
+				onItemChanged(event.getItemSlot(), null);
+			}
+
 		}
 		recalculatePosition();
 	}
@@ -208,7 +226,7 @@ public class ItemDisplay extends RenderedGuiObject {
 			}
 			g.setLineWidth(1f);
 			Font font = FontCache.getFont(FontKey.TOOLTIP_FONT, g);
-			Color currentColor = (slotId == currentItem) ? Color.white
+			Color currentColor = (item.getType() == currentItem) ? Color.white
 					: COLOR_MULTIPLIER;
 
 			g.setColor(currentColor);
@@ -218,7 +236,7 @@ public class ItemDisplay extends RenderedGuiObject {
 						currentColor);
 			}
 
-			if (slotId == currentItem) {
+			if (item.getType() == currentItem) {
 				g.setColor(Color.yellow.multiply(COLOR_MULTIPLIER));
 			} else {
 				g.setColor(COLOR_MULTIPLIER);
@@ -268,7 +286,7 @@ public class ItemDisplay extends RenderedGuiObject {
 		for (int i = 0; i < Inventory.MAX_CAPACITY; i++) {
 			Item itemInSlot;
 			try {
-				itemInSlot = playerInventory.getItemBySlot(i);
+				itemInSlot = playerInventory.getItemAt(i);
 				onItemChanged(i, itemInSlot);
 			} catch (ItemSlotIsEmptyException e) {
 				// that's okay

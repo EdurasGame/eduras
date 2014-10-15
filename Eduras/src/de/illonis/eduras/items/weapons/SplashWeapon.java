@@ -30,6 +30,7 @@ public class SplashWeapon extends Weapon {
 	public SplashWeapon(GameInformation infos, TimingSource timingSource, int id) {
 		super(ObjectType.ITEM_WEAPON_SPLASH, infos, timingSource, id);
 		setName("SplashWeapon");
+		setSortOrder(5);
 		setShape(new Circle(S.Server.go_splashweapon_shape_radius,
 				S.Server.go_splashweapon_shape_radius,
 				S.Server.go_splashweapon_shape_radius));

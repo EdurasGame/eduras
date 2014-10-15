@@ -174,8 +174,7 @@ public class NotificationPanel extends RenderedGuiObject {
 			return;
 		int slot = event.getItemSlot();
 		try {
-			Item item = getInfo().getPlayer().getInventory()
-					.getItemBySlot(slot);
+			Item item = getInfo().getPlayer().getInventory().getItemAt(slot);
 			String note = Localization.getStringF(
 					"Client.gui.notifications.loot", item.getName());
 			addNotification(note);

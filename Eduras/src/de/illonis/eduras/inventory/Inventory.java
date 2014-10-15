@@ -1,12 +1,14 @@
 package de.illonis.eduras.inventory;
 
-import java.util.logging.Level;
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.logging.Logger;
 
 import de.illonis.edulog.EduLog;
 import de.illonis.eduras.ObjectFactory.ObjectType;
 import de.illonis.eduras.items.Item;
 import de.illonis.eduras.items.StackableItem;
+import de.illonis.eduras.math.BasicMath;
 import de.illonis.eduras.settings.S;
 
 /**
@@ -24,19 +26,16 @@ public class Inventory {
 	 * Maximum number of items that can be stored.
 	 */
 	public final static int MAX_CAPACITY = S.Server.player_max_item_capacity;
+	private final static ItemComparator itemSorter = new ItemComparator();
 
 	private int gold;
-	private final ItemSlot[] itemSlots;
+	private final Item[] items;
 
 	/**
 	 * Creates an empty inventory.
 	 */
 	public Inventory() {
-		itemSlots = new ItemSlot[MAX_CAPACITY];
-		for (int i = 0; i < MAX_CAPACITY; i++) {
-			ItemSlot is = new ItemSlot(i);
-			itemSlots[i] = is;
-		}
+		items = new Item[MAX_CAPACITY];
 	}
 
 	/**
@@ -76,7 +75,7 @@ public class Inventory {
 	 *            new item in slot.
 	 */
 	public synchronized void setItemAt(int slot, Item item) {
-		itemSlots[slot].putItem(item);
+		items[slot] = item;
 	}
 
 	/**
@@ -102,8 +101,8 @@ public class Inventory {
 	 */
 	public int getNumItems() {
 		int n = 0;
-		for (int i = 0; i < MAX_CAPACITY; i++) {
-			if (itemSlots[i].hasItem())
+		for (int i = 0; i < items.length; i++) {
+			if (items[i] != null)
 				n++;
 		}
 		return n;
@@ -143,23 +142,45 @@ public class Inventory {
 	}
 
 	/**
-	 * Loots an item by putting it into next available inventory slot or
-	 * matching item stack.
+	 * Loots an item by putting it into inventory or increasing stack of already
+	 * contained stackable item.
 	 * 
 	 * @param item
 	 *            item to loot.
 	 * @return slot where inventory was put into.
 	 * @throws InventoryIsFullException
-	 *             when inventory is full.
+	 *             when inventory is full or inventory already contains an item
+	 *             of given type and that is unique.
 	 */
 	public synchronized int loot(Item item) throws InventoryIsFullException {
+		System.out.println("looting " + item.getType());
+		System.out.println(Arrays.toString(items));
+		int slot = -1;
+		try {
+			slot = findItemSlotOfType(item.getType());
+		} catch (NoSuchItemException e) {
+		}
+		if (!item.stacks() && item.isUnique() && slot >= 0) {
+			throw new InventoryIsFullException();
+		}
+		System.out.println("Target slot: " + slot);
+
 		// TODO: filter unique items and prevent double looting them.
 		int target = findNextFreeInventorySlotForItem(item);
 		if (target == -1)
 			throw new InventoryIsFullException();
 		L.info("putting item in " + target);
-		itemSlots[target].putItem(item);
-		return target;
+		items[target] = item;
+		sort();
+		System.out.println(Arrays.toString(items));
+		try {
+			int newSlot = findItemSlotOfType(item.getType());
+			System.out.println("slot after sort: " + newSlot);
+			return newSlot;
+		} catch (NoSuchItemException e) {
+			// should not appear
+			return -1;
+		}
 	}
 
 	/**
@@ -173,12 +194,13 @@ public class Inventory {
 	 *             type
 	 * @return index of item with given type or -1.
 	 */
-	public int findItemSlotOfType(ObjectType type) throws NoSuchItemException {
-		int slotNumber = getItemOfTypeBetween(type, 0, MAX_CAPACITY);
+	public synchronized int findItemSlotOfType(ObjectType type)
+			throws NoSuchItemException {
+		int slotNumber = getItemslotOfTypeBetween(type, 0, MAX_CAPACITY);
 		if (slotNumber == -1) {
 			throw new NoSuchItemException(type);
 		}
-		return getItemOfTypeBetween(type, 0, MAX_CAPACITY);
+		return slotNumber;
 	}
 
 	/**
@@ -214,43 +236,40 @@ public class Inventory {
 	}
 
 	/**
+	 * Returns the item of given item type from inventory.
+	 * 
 	 * @param itemType
-	 *            the item type.
+	 *            type of item to search.
 	 * @return item of given type in inventory.
 	 * @throws NoSuchItemException
-	 * @see #hasItemOfType(ObjectType)
+	 *             when no item of given type is in inventory.
 	 */
 	public Item getItemOfType(ObjectType itemType) throws NoSuchItemException {
 		int slot = findItemSlotOfType(itemType);
 		if (slot >= 0) {
-			try {
-				return getItemBySlot(slot);
-			} catch (ItemSlotIsEmptyException e) {
-				// should never occur here.
-			}
-		}
-		return null;
+			return items[slot];
+		} else
+			throw new NoSuchItemException(itemType);
 	}
 
 	/**
-	 * Returns first occurence of item of given {@link ObjectType} within given
-	 * range. If there is no item of given type, -1 is returned.
+	 * Returns the position in item index of item of given {@link ObjectType}
+	 * within given range. If there is no item of given type, -1 is returned.
 	 * 
 	 * @param type
 	 *            item type to search for.
 	 * @param from
-	 *            lower index.
+	 *            lower index (inclusive)
 	 * @param to
-	 *            upper index.
+	 *            upper index (exclusive)
 	 * @return index of item with given type within given range or -1.
 	 */
-	private int getItemOfTypeBetween(ObjectType type, int from, int to) {
+	private int getItemslotOfTypeBetween(ObjectType type, int from, int to) {
 		for (int i = from; i < to; i++) {
-			try {
-				if (itemSlots[i].getItem().getType().equals(type))
-					return i;
-			} catch (ItemSlotIsEmptyException e) {
-			}
+			if (items[i] == null)
+				continue;
+			if (items[i].getType().equals(type))
+				return i;
 		}
 		return -1;
 	}
@@ -265,26 +284,18 @@ public class Inventory {
 	 * @return index of free slot or -1.
 	 */
 	private synchronized int findNextFreeInventorySlotForItem(Item item) {
-
 		int targetPos = -1;
 
 		if (item.stacks()) {
 			int left = 0;
 			do {
-				targetPos = getItemOfTypeBetween(item.getType(), left,
+				targetPos = getItemslotOfTypeBetween(item.getType(), left,
 						MAX_CAPACITY);
 				if (targetPos >= 0) {
-					try {
-						if (((StackableItem) itemSlots[targetPos].getItem())
-								.isFull()) {
-							left++;
-						} else {
-							break;
-						}
-					} catch (ItemSlotIsEmptyException e) {
-						L.log(Level.WARNING,
-								"Accessed empty item slot finding a free slot.",
-								e);
+					if (((StackableItem) items[targetPos]).isFull()) {
+						left++;
+					} else {
+						break;
 					}
 				}
 
@@ -296,22 +307,6 @@ public class Inventory {
 	}
 
 	/**
-	 * Returns item of given item slot.
-	 * 
-	 * @param slot
-	 *            item's slot.
-	 * @return item in given slot.
-	 * @throws ItemSlotIsEmptyException
-	 *             when slot is empty.
-	 */
-	public Item getItemBySlot(int slot) throws ItemSlotIsEmptyException {
-		if (itemSlots[slot].hasItem()) {
-			return itemSlots[slot].getItem();
-		}
-		throw new ItemSlotIsEmptyException(slot);
-	}
-
-	/**
 	 * Returns first free inventory slot available. If no slot is free, it
 	 * returns -1.
 	 * 
@@ -319,79 +314,114 @@ public class Inventory {
 	 */
 	private int findNextFreeInventorySlot() {
 		for (int i = 0; i < MAX_CAPACITY; i++) {
-			if (!itemSlots[i].hasItem())
+			if (items[i] == null)
 				return i;
 		}
 		return -1;
 	}
 
 	/**
-	 * Sells the item in given inventory slot and adds gained money to player
-	 * gold. If selling item is stackable, only one item of stack is sold.
+	 * Sells the item of given type from inventory and adds gained money to
+	 * player gold. If selling item is stackable, only one item of stack is
+	 * sold.
 	 * 
-	 * @param itemSlot
-	 *            itemslot to sell.
-	 * @throws ItemSlotIsEmptyException
-	 *             if itemslot is empty.
+	 * @param type
+	 *            Object type of item to sell.
+	 * @throws NoSuchItemException
+	 *             if no item of given type is in inventory.
 	 */
-	public synchronized void sell(int itemSlot) throws ItemSlotIsEmptyException {
-		Item item = itemSlots[itemSlot].getItem();
+	public synchronized void sell(ObjectType type) throws NoSuchItemException {
+		Item item = getItemOfType(type);
 		int price = item.getSellValue();
 		addGold(price);
 		if (item.stacks()) {
 			StackableItem si = (StackableItem) item;
 			si.takeFromStack();
 			if (si.isEmpty())
-				itemSlots[itemSlot].removeItem();
+				trash(type);
 		} else {
-			itemSlots[itemSlot].removeItem();
+			trash(type);
 		}
+	}
+
+	public void sort() {
+		Arrays.sort(items, itemSorter);
 	}
 
 	/**
 	 * Throws the item at given slot away.
 	 * 
-	 * @param itemSlot
-	 *            the item slot that's item should be trashed.
-	 * @throws ItemSlotIsEmptyException
-	 *             if that slot was empty
+	 * @param type
+	 *            the type of the item that should be trashed.
 	 * 
 	 * @return the item that was in that slot.
-	 * 
-	 * @author illonis
+	 * @throws NoSuchItemException
+	 *             if no item of given type is in inventory.
 	 */
-	public synchronized Item trash(int itemSlot)
-			throws ItemSlotIsEmptyException {
-		Item item = itemSlots[itemSlot].getItem();
-		itemSlots[itemSlot].removeItem();
+	public synchronized Item trash(ObjectType type) throws NoSuchItemException {
+		int slot = getItemslotOfTypeBetween(type, 0, items.length);
+		Item item = items[slot];
+		items[slot] = null;
+		sort();
 		return item;
 	}
 
-	/**
-	 * Switch itemplace of two items. Item positions must be between 0
-	 * (inclusive) and {@value #MAX_CAPACITY} (exclusive) to be valid. Switching
-	 * empty itemplaces is allowed.
-	 * 
-	 * @param itemSlot1
-	 *            position of first item.
-	 * @param itemSlot2
-	 *            position of second item.
-	 */
-	public synchronized void switchItems(int itemSlot1, int itemSlot2) {
-		if (itemSlot1 < 0 || itemSlot1 >= MAX_CAPACITY || itemSlot2 < 0
-				|| itemSlot2 >= MAX_CAPACITY)
-			throw new IllegalArgumentException(
-					"Inventory slot position is out of range.");
+	private static class ItemComparator implements Comparator<Item> {
 
-		Item i = null, i2 = null;
-		try {
-			i = itemSlots[itemSlot1].getItem();
-			i2 = itemSlots[itemSlot2].getItem();
-		} catch (ItemSlotIsEmptyException e) {
-			// switching with empty slots is allowed.
+		@Override
+		public int compare(Item o1, Item o2) {
+			if (o1 == null && o2 == null)
+				return 0;
+			if (o1 == null)
+				return 1;
+			if (o2 == null)
+				return -1;
+			return o1.getSortOrder() - o2.getSortOrder();
 		}
-
-		itemSlots[itemSlot1].putItem(i2);
-		itemSlots[itemSlot2].putItem(i);
 	}
+
+	/**
+	 * Returns item in given slot.
+	 * 
+	 * @param slotNum
+	 *            the slot number.
+	 * @return item in that slot
+	 * @throws ItemSlotIsEmptyException
+	 *             if slot is empty.
+	 */
+	public synchronized Item getItemAt(int slotNum)
+			throws ItemSlotIsEmptyException {
+		if (items[slotNum] == null)
+			throw new ItemSlotIsEmptyException(slotNum);
+		return items[slotNum];
+	}
+
+	/**
+	 * Returns the next slot that contains an item. Search starts at index
+	 * <code>start + step</code> and is looping through items in steps of
+	 * <code>step</code>. If inventory only contains one item that slot is
+	 * returned. If inventory contains no item, -1 is returned.
+	 * 
+	 * @param start
+	 *            index to start searching at (exclusive)
+	 * @param step
+	 *            step to go in each search step.
+	 * @return slot number of nearest full item slot in direction of step.
+	 */
+	public synchronized int findNextFullSlot(int start, int step) {
+		int i = 0;
+		int index = BasicMath.calcModulo(start + step, items.length);
+		while (i < items.length) {
+			if (items[index] != null)
+				return index;
+			index = BasicMath.calcModulo(index + step, items.length);
+			i++;
+		}
+		return -1;
+	}
+
+	public Item[] getAllItems() {
+		return items;
+	}
+
 }

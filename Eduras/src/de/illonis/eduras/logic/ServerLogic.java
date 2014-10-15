@@ -50,7 +50,7 @@ import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.gameobjects.MoveableGameObject.Direction;
 import de.illonis.eduras.interfaces.GameEventListener;
 import de.illonis.eduras.interfaces.GameLogicInterface;
-import de.illonis.eduras.inventory.ItemSlotIsEmptyException;
+import de.illonis.eduras.inventory.NoSuchItemException;
 import de.illonis.eduras.items.Item;
 import de.illonis.eduras.items.ItemUseInformation;
 import de.illonis.eduras.items.Usable;
@@ -485,9 +485,14 @@ public class ServerLogic implements GameLogicInterface {
 		Item item;
 
 		try {
-			item = player.getInventory().getItemBySlot(itemEvent.getSlotNum());
-		} catch (ItemSlotIsEmptyException e) {
-			L.info(e.getMessage());
+			item = player.getInventory().getItemOfType(itemEvent.getItemType());
+		} catch (NoSuchItemException e) {
+			L.log(Level.WARNING,
+					"Could not handle item event " + itemEvent.getType()
+							+ " because no item of type "
+							+ itemEvent.getItemType()
+							+ " is in inventory of owner "
+							+ itemEvent.getOwner(), e);
 			return;
 		}
 		ItemUseInformation useInfo = new ItemUseInformation(
@@ -500,14 +505,14 @@ public class ServerLogic implements GameLogicInterface {
 					if (((Usable) item).use(useInfo)) {
 						ItemEvent cooldownEvent = new ItemEvent(
 								GameEventNumber.ITEM_CD_START,
-								itemEvent.getOwner(), itemEvent.getSlotNum());
+								itemEvent.getOwner(), itemEvent.getItemType());
 
 						gameInfo.getEventTriggerer().notifyCooldownStarted(
 								cooldownEvent);
 					}
 				} catch (InsufficientResourceException e) {
 					getGame().getEventTriggerer().notifyWeaponAmmoEmpty(
-							itemEvent.getOwner(), itemEvent.getSlotNum());
+							itemEvent.getOwner(), itemEvent.getItemType());
 				}
 			}
 			break;

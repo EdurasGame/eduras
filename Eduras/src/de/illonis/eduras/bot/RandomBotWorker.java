@@ -13,6 +13,9 @@ import de.illonis.eduras.events.MovementEvent;
 import de.illonis.eduras.exceptions.MessageNotSupportedException;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
 import de.illonis.eduras.exceptions.WrongEventTypeException;
+import de.illonis.eduras.inventory.Inventory;
+import de.illonis.eduras.inventory.ItemSlotIsEmptyException;
+import de.illonis.eduras.items.Item;
 import de.illonis.eduras.logicabstraction.EventSender;
 import de.illonis.eduras.logicabstraction.InformationProvider;
 
@@ -90,23 +93,32 @@ public class RandomBotWorker implements EdurasBotWorker {
 
 	private GameEvent useItem() {
 		int numberOfItems = 0;
+		Inventory inventory;
 		try {
-			numberOfItems = infoProvider.getPlayer().getInventory()
-					.getNumItems();
+			inventory = infoProvider.getPlayer().getInventory();
 		} catch (ObjectNotFoundException e) {
 			L.log(Level.SEVERE, "Cannot find the player!!", e);
 			return null;
 		}
+		numberOfItems = inventory.getNumItems();
 
 		if (numberOfItems == 0) {
 			// don't use items because we don't have any
 			return null;
 		}
-
-		int slotNumber = (int) (Math.random() * numberOfItems);
+		int slotNumber;
+		Item item;
+		do {
+			slotNumber = (int) Math.random() * Inventory.MAX_CAPACITY;
+			try {
+				item = inventory.getItemAt(slotNumber);
+			} catch (ItemSlotIsEmptyException e) {
+				item = null;
+			}
+		} while (item == null);
 
 		ItemEvent itemEvent = new ItemEvent(GameEventNumber.ITEM_USE,
-				infoProvider.getOwnerID(), slotNumber);
+				infoProvider.getOwnerID(), item.getType());
 
 		// also set the target randomly
 		itemEvent.setTarget(new Vector2f((float) Math.random()

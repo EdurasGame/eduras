@@ -1,14 +1,12 @@
 package de.illonis.eduras.gameclient.gui.game;
 
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.newdawn.slick.Input;
 import org.newdawn.slick.geom.Vector2f;
 
 import de.illonis.edulog.EduLog;
-import de.illonis.eduras.exceptions.InvalidValueEnteredException;
-import de.illonis.eduras.exceptions.ObjectNotFoundException;
+import de.illonis.eduras.ObjectFactory.ObjectType;
 import de.illonis.eduras.gameclient.GameEventAdapter;
 import de.illonis.eduras.gameclient.GuiInternalEventListener;
 import de.illonis.eduras.gameclient.audio.SoundMachine;
@@ -18,7 +16,6 @@ import de.illonis.eduras.gameclient.userprefs.Settings;
 import de.illonis.eduras.inventory.Inventory;
 import de.illonis.eduras.inventory.ItemSlotIsEmptyException;
 import de.illonis.eduras.logicabstraction.EdurasInitializer;
-import de.illonis.eduras.math.BasicMath;
 import de.illonis.eduras.math.Vector2df;
 import de.illonis.eduras.units.InteractMode;
 
@@ -44,9 +41,8 @@ public class EgoModeMouseAdapter extends GuiMouseAdapter {
 			public void onCooldownFinished(
 					de.illonis.eduras.events.ItemEvent event) {
 				if (fireButtonHold) {
-					int currentItemSelected = getPanelLogic().getClientData()
-							.getCurrentItemSelected();
-					if (currentItemSelected != -1
+					ObjectType currentItemSelected = getCurrentSelectedItemType();
+					if (currentItemSelected != ObjectType.NO_OBJECT
 							&& EdurasInitializer.getInstance().getSettings()
 									.getBooleanSetting("continuousItemUsage")) {
 						itemUsed(currentItemSelected, getPanelLogic()
@@ -59,7 +55,7 @@ public class EgoModeMouseAdapter extends GuiMouseAdapter {
 
 	private void egoModeClick(int button, int x, int y, int clickCount) {
 		ClickState currentClickState = getPanelLogic().getClickState();
-		int currentItemSelected = getCurrentSelectedItemIndex();
+		ObjectType currentItemSelected = getCurrentSelectedItemType();
 
 		// which mouse button?
 		switch (button) {
@@ -69,7 +65,7 @@ public class EgoModeMouseAdapter extends GuiMouseAdapter {
 			switch (currentClickState) {
 			case ITEM_SELECTED:
 				// if an item is selected...
-				if (currentItemSelected != -1) {
+				if (currentItemSelected != ObjectType.NO_OBJECT) {
 
 					// use it instantly
 					itemUsed(currentItemSelected, new Vector2df(x, y), false);
@@ -96,20 +92,20 @@ public class EgoModeMouseAdapter extends GuiMouseAdapter {
 	/**
 	 * Sends an item use event to server.
 	 * 
-	 * @param i
-	 *            item slot.
+	 * @param type
+	 *            item type.
 	 * @param target
 	 *            target position
 	 * @param isGameCoordinate
 	 *            tells if the given target is already a gamecoordinate
 	 */
 
-	void itemUsed(int i, Vector2f target, boolean isGameCoordinate) {
+	void itemUsed(ObjectType type, Vector2f target, boolean isGameCoordinate) {
 		if (!isGameCoordinate) {
-			getListener().onItemUse(i,
+			getListener().onItemUse(type,
 					getPanelLogic().computeGuiPointToGameCoordinate(target));
 		} else {
-			getListener().onItemUse(i, target);
+			getListener().onItemUse(type, target);
 		}
 	}
 
@@ -123,7 +119,8 @@ public class EgoModeMouseAdapter extends GuiMouseAdapter {
 			}
 		} else {
 			getPanelLogic().setClickState(ClickState.DEFAULT);
-			getPanelLogic().getClientData().setCurrentItemSelected(-1);
+			getPanelLogic().getClientData().setCurrentItemSelected(
+					ObjectType.NO_OBJECT);
 		}
 	}
 
@@ -171,39 +168,17 @@ public class EgoModeMouseAdapter extends GuiMouseAdapter {
 	public void mouseWheelMoved(int change) {
 		if (EdurasInitializer.getInstance().getSettings()
 				.getBooleanSetting(Settings.MOUSE_WHEEL_SWITCH)) {
-
-			int numItemsInInventory;
-			try {
-				numItemsInInventory = EdurasInitializer.getInstance()
-						.getInformationProvider().getPlayer().getInventory()
-						.getNumItems();
-			} catch (ObjectNotFoundException e) {
-				L.log(Level.SEVERE,
-						"Cannot find player when moving the mouse wheel!", e);
-				return;
-			}
-			int currentSelectedItem = getCurrentSelectedItemIndex();
-			int itemToSelect;
-
-			if (currentSelectedItem == -1) {
-				itemToSelect = 0;
+			if (change < 0) {
+				getPanelLogic().selectNextItem();
 			} else {
-				try {
-					itemToSelect = BasicMath.calcModulo(currentSelectedItem
-							+ change, numItemsInInventory);
-				} catch (InvalidValueEnteredException e) {
-					itemToSelect = 0;
-				}
+				getPanelLogic().selectPreviousItem();
 			}
-
-			itemClicked(itemToSelect);
-
 		} else {
 			// do nothing
 		}
 	}
 
-	private int getCurrentSelectedItemIndex() {
+	private ObjectType getCurrentSelectedItemType() {
 		return getPanelLogic().getClientData().getCurrentItemSelected();
 	}
 
