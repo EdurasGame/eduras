@@ -4,23 +4,32 @@ import java.util.logging.Logger;
 
 import de.illonis.edulog.EduLog;
 import de.illonis.eduras.gameclient.GamePanelReactor;
-import de.illonis.eduras.gameclient.gui.hud.ActionBar;
-import de.illonis.eduras.gameclient.gui.hud.ActionBarSubPage;
+import de.illonis.eduras.gameclient.gui.hud.ActionBarPage;
+import de.illonis.eduras.gameclient.gui.hud.UserInterface;
 
-public class SpellPage extends ActionBarSubPage {
+public class SpellPage extends ActionBarPage {
 	private final static Logger L = EduLog.getLoggerFor(SpellPage.class
 			.getName());
 
-	public SpellPage(GamePanelReactor reactor, ActionBar actionBar) {
-		super(PageNumber.SPELL, PageNumber.MAIN, reactor, actionBar);
-
-		generateButtonsForSpells(reactor);
+	/**
+	 * The spell bar
+	 * 
+	 * @param ui
+	 *            ui
+	 * @param reactor
+	 *            reactor.
+	 */
+	public SpellPage(int index, UserInterface ui, GamePanelReactor reactor) {
+		super(index, ui, reactor);
+		generateButtonsForSpells();
 	}
 
-	private void generateButtonsForSpells(GamePanelReactor reactor) {
+	private void generateButtonsForSpells() {
 		addButton(new HealButton(reactor));
 		addButton(new SpeedSpellButton(reactor));
 		addButton(new InvisibilitySpellButton(reactor));
 		addButton(new BlinkSpellButton(reactor));
+		addButton(new SpawnObserverButton(reactor));
+		addButton(new ScoutSpellButton(reactor));
 	}
 }

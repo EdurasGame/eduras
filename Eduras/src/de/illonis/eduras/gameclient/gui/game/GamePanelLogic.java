@@ -25,7 +25,6 @@ import de.illonis.eduras.gameclient.audio.SoundMachine.SoundType;
 import de.illonis.eduras.gameclient.gui.CameraMouseListener;
 import de.illonis.eduras.gameclient.gui.HudNotifier;
 import de.illonis.eduras.gameclient.gui.TimedTasksHolderGUI;
-import de.illonis.eduras.gameclient.gui.hud.ActionBarPage.PageNumber;
 import de.illonis.eduras.gameclient.gui.hud.DragSelectionRectangle;
 import de.illonis.eduras.gameclient.gui.hud.UserInterface;
 import de.illonis.eduras.interfaces.GameEventListener;
@@ -398,13 +397,7 @@ public class GamePanelLogic extends GameEventAdapter implements
 
 	@Override
 	public void selectActionButton(int i) {
-		userInterface.getActionBar().selectButton(i);
-	}
-
-	@Override
-	public void pageUp() {
-		userInterface.getActionBar().setPage(PageNumber.MAIN);
-		currentClickState = ClickState.DEFAULT;
+		userInterface.getActionBar().getCurrentPage().selectButton(i);
 	}
 
 	@Override
@@ -480,5 +473,17 @@ public class GamePanelLogic extends GameEventAdapter implements
 	@Override
 	public void selectNextItem() {
 		selectItemStep(1);
+	}
+
+	@Override
+	public void nextPage() {
+		userInterface.getActionBar().nextPage();
+		currentClickState = ClickState.DEFAULT;
+	}
+
+	@Override
+	public void prevPage() {
+		userInterface.getActionBar().prevPage();
+		currentClickState = ClickState.DEFAULT;
 	}
 }

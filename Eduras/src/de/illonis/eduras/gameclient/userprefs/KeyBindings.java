@@ -51,7 +51,6 @@ public final class KeyBindings implements ResettableSetting {
 		setDefaultKeyBinding(KeyBinding.BLINK, Input.KEY_SPACE);
 
 		// strategy mode
-		setDefaultKeyBinding(KeyBinding.PAGE_UP, Input.KEY_Q);
 		setDefaultKeyBinding(KeyBinding.SCROLL_LEFT, Input.KEY_A);
 		setDefaultKeyBinding(KeyBinding.SCROLL_RIGHT, Input.KEY_D);
 		setDefaultKeyBinding(KeyBinding.SCROLL_DOWN, Input.KEY_S);
@@ -83,12 +82,37 @@ public final class KeyBindings implements ResettableSetting {
 	 */
 	@SuppressWarnings("javadoc")
 	public enum KeyBinding {
-		MOVE_LEFT, MOVE_UP, MOVE_DOWN, MOVE_RIGHT, ITEM_ASSAULT, ITEM_SWORD,
-		ITEM_SNIPER, ITEM_SPLASH, ITEM_SIMPLE, ITEM_MINE, ITEM_ROCKET, CANCEL,
-		SHOW_STATS, SWITCH_MODE, CHAT, PAGE_UP, BLINK, SELECT_TEAM,
-		SCROLL_LEFT, SCROLL_RIGHT, SCROLL_DOWN, SCROLL_UP, STRATEGY_1,
-		STRATEGY_2, STRATEGY_3, STRATEGY_4, STRATEGY_5, STRATEGY_6, STRATEGY_7,
-		STRATEGY_8, STRATEGY_9, STRATEGY_10;
+		MOVE_LEFT,
+		MOVE_UP,
+		MOVE_DOWN,
+		MOVE_RIGHT,
+		ITEM_ASSAULT,
+		ITEM_SWORD,
+		ITEM_SNIPER,
+		ITEM_SPLASH,
+		ITEM_SIMPLE,
+		ITEM_MINE,
+		ITEM_ROCKET,
+		CANCEL,
+		SHOW_STATS,
+		SWITCH_MODE,
+		CHAT,
+		BLINK,
+		SELECT_TEAM,
+		SCROLL_LEFT,
+		SCROLL_RIGHT,
+		SCROLL_DOWN,
+		SCROLL_UP,
+		STRATEGY_1,
+		STRATEGY_2,
+		STRATEGY_3,
+		STRATEGY_4,
+		STRATEGY_5,
+		STRATEGY_6,
+		STRATEGY_7,
+		STRATEGY_8,
+		STRATEGY_9,
+		STRATEGY_10;
 	}
 
 	/**

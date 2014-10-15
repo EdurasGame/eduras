@@ -117,11 +117,6 @@ public interface UserInputListener {
 	void selectActionButton(int i);
 
 	/**
-	 * Returns to main action bar in buildmode.
-	 */
-	void pageUp();
-
-	/**
 	 * Ask the user to quit the game.
 	 */
 	void cancel();
@@ -130,6 +125,16 @@ public interface UserInputListener {
 	 * Displays a select team dialogue.
 	 */
 	void showSelectTeam();
+
+	/**
+	 * Switches to next page in strategy mode.
+	 */
+	void nextPage();
+
+	/**
+	 * Switches to previous page in strategy mode.
+	 */
+	void prevPage();
 
 	/**
 	 * Selects next item in inventory.

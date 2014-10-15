@@ -39,7 +39,6 @@ public class InteractModeKeys {
 		case CANCEL:
 		case SHOW_STATS:
 			return InteractMode.ANY_MODE;
-		case PAGE_UP:
 		case STRATEGY_1:
 		case STRATEGY_2:
 		case STRATEGY_3:

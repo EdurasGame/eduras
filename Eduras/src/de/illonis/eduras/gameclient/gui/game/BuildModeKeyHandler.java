@@ -60,8 +60,6 @@ public class BuildModeKeyHandler extends AnyModeKeyHandler {
 		case STRATEGY_10:
 			client.selectActionButton(9);
 			break;
-		case PAGE_UP:
-			client.pageUp();
 		default:
 			break;
 		}

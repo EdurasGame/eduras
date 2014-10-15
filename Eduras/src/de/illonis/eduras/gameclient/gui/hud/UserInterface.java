@@ -6,7 +6,6 @@ import java.util.TimerTask;
 
 import de.illonis.eduras.gameclient.ChatCache;
 import de.illonis.eduras.gameclient.GuiInternalEventListener;
-import de.illonis.eduras.gameclient.datacache.CacheInfo.ImageKey;
 import de.illonis.eduras.gameclient.gui.HudNotifier;
 import de.illonis.eduras.gameclient.gui.TimedTasksHolderGUI;
 import de.illonis.eduras.gameclient.gui.game.GameCamera;
@@ -16,12 +15,6 @@ import de.illonis.eduras.gameclient.gui.game.GuiClickReactor;
 import de.illonis.eduras.gameclient.gui.game.GuiResizeListener;
 import de.illonis.eduras.gameclient.gui.game.TooltipHandler;
 import de.illonis.eduras.gameclient.gui.game.TooltipTriggererNotifier;
-import de.illonis.eduras.gameclient.gui.hud.ActionBarPage.PageNumber;
-import de.illonis.eduras.gameclient.gui.hud.actionbar.ItemPage;
-import de.illonis.eduras.gameclient.gui.hud.actionbar.ResurrectPage;
-import de.illonis.eduras.gameclient.gui.hud.actionbar.ScoutSpellButton;
-import de.illonis.eduras.gameclient.gui.hud.actionbar.SpawnObserverButton;
-import de.illonis.eduras.gameclient.gui.hud.actionbar.SpellPage;
 import de.illonis.eduras.logicabstraction.EdurasInitializer;
 import de.illonis.eduras.logicabstraction.InformationProvider;
 import de.illonis.eduras.networking.ClientRole;
@@ -80,7 +73,8 @@ public class UserInterface implements GuiResizeListener {
 	 *            the listener for guievents.
 	 * @param cache
 	 *            the chat cache object.
-	 * @param logic the logic
+	 * @param logic
+	 *            the logic
 	 */
 	public UserInterface(InformationProvider infos,
 			TooltipTriggererNotifier tooltipNotifier,
@@ -118,9 +112,10 @@ public class UserInterface implements GuiResizeListener {
 	}
 
 	private void createElements() {
-
 		new GameModeBar(this);
 		new PlayerStatBar(this);
+		actionBar = new ActionBar(this, guiReactor);
+		new StrategyPanel(this);
 		minimap = new MiniMap(this);
 		new RemainingTimeFrame(this);
 		new ItemDisplay(this, minimap);
@@ -139,24 +134,8 @@ public class UserInterface implements GuiResizeListener {
 		cancebleElements.add(selectTeamPopup);
 		new ChatDisplay(cache, this);
 		// new BugReportButton(this);
-		actionBar = new ActionBar(this, minimap);
-		initActionBar();
 
-	}
-
-	private void initActionBar() {
-
-		ActionBarPage mainPage = new ActionBarPage(PageNumber.MAIN);
-
-		ActionBarPage resurrectPage = new ResurrectPage(actionBar, guiReactor);
-		hudNotifier.addListener(resurrectPage);
-
-		new ItemPage(guiReactor, actionBar);
-		new SpellPage(guiReactor, actionBar);
-
-		addButtonsForMainPage(mainPage);
-
-		actionBar.setPage(PageNumber.MAIN);
+		actionBar.initPages(this, guiReactor);
 	}
 
 	GameCamera getGameCamera() {
@@ -165,77 +144,6 @@ public class UserInterface implements GuiResizeListener {
 
 	public GamePanelLogic getLogic() {
 		return logic;
-	}
-
-	private void addButtonsForMainPage(ActionBarPage mainPage) {
-		// ITEMBUTTON
-		ActionButton spawnItemButton = new ActionButton(
-				ImageKey.ACTION_SPAWN_ITEMS, guiReactor) {
-			@Override
-			public void actionPerformed() {
-				actionBar.setPage(PageNumber.ITEMS);
-			}
-
-			@Override
-			public String getLabel() {
-				return "spawn item";
-			}
-
-			@Override
-			public int getCosts() {
-				return 0;
-			}
-		};
-
-		// RESURRECTBUTTON
-		ActionButton resurrectButton = new ActionButton(
-				ImageKey.ACTION_RESURRECT, guiReactor) {
-			@Override
-			public void actionPerformed() {
-				actionBar.setPage(PageNumber.RESURRECT);
-			}
-
-			@Override
-			public String getLabel() {
-				return "resurrect";
-			}
-
-			@Override
-			public int getCosts() {
-				return 0;
-			}
-		};
-
-		// SPELLBUTTON
-		ActionButton spellButton = new ActionButton(ImageKey.SPELLS_PAGE,
-				guiReactor) {
-			@Override
-			public void actionPerformed() {
-				actionBar.setPage(PageNumber.SPELL);
-			}
-
-			@Override
-			public String getLabel() {
-				return "spells";
-			}
-
-			@Override
-			public int getCosts() {
-				return 0;
-			}
-		};
-
-		SpawnObserverButton observerButton = new SpawnObserverButton(guiReactor);
-		ScoutSpellButton scoutButton = new ScoutSpellButton(guiReactor);
-
-		mainPage.addButton(spawnItemButton);
-		mainPage.addButton(resurrectButton);
-		mainPage.addButton(spellButton);
-		mainPage.addButton(observerButton);
-		mainPage.addButton(scoutButton);
-
-		hudNotifier.addListener(resurrectButton);
-
 	}
 
 	/**

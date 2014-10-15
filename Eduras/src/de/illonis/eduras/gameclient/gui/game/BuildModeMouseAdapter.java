@@ -339,6 +339,11 @@ public class BuildModeMouseAdapter extends ScrollModeMouseAdapter {
 
 	@Override
 	public void mouseWheelMoved(int change) {
+		if (change > 0) {
+			getPanelLogic().prevPage();
+		} else {
+			getPanelLogic().nextPage();
+		}
 	}
 
 }

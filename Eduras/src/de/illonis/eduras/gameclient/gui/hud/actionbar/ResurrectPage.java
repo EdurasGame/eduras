@@ -11,9 +11,9 @@ import de.illonis.eduras.events.RespawnEvent;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
 import de.illonis.eduras.exceptions.PlayerHasNoTeamException;
 import de.illonis.eduras.gameclient.GamePanelReactor;
-import de.illonis.eduras.gameclient.gui.hud.ActionBar;
-import de.illonis.eduras.gameclient.gui.hud.ActionBarSubPage;
+import de.illonis.eduras.gameclient.gui.hud.ActionBarPage;
 import de.illonis.eduras.gameclient.gui.hud.ActionButton;
+import de.illonis.eduras.gameclient.gui.hud.UserInterface;
 import de.illonis.eduras.logicabstraction.EdurasInitializer;
 import de.illonis.eduras.logicabstraction.InformationProvider;
 
@@ -25,36 +25,25 @@ import de.illonis.eduras.logicabstraction.InformationProvider;
  * @author illonis
  * 
  */
-public class ResurrectPage extends ActionBarSubPage {
+public class ResurrectPage extends ActionBarPage {
 	private final static Logger L = EduLog.getLoggerFor(ResurrectPage.class
 			.getName());
-
-	private final GamePanelReactor reactor;
-	private final ActionBar bar;
 
 	/**
 	 * Creates a page for resurrection.
 	 * 
-	 * @param bar
-	 *            the parent actionbar.
+	 * @param gui
+	 *            the gui.
 	 * @param reactor
 	 *            the reactor.
 	 */
-	public ResurrectPage(ActionBar bar, GamePanelReactor reactor) {
-		super(PageNumber.RESURRECT, PageNumber.MAIN, reactor, bar);
-		this.reactor = reactor;
-		this.bar = bar;
+	public ResurrectPage(int index, UserInterface gui, GamePanelReactor reactor) {
+		super(index, gui, reactor);
 	}
 
 	@Override
 	public void onGameReady() {
 		updateRezzButtons();
-	}
-
-	@Override
-	public void onShown() {
-		super.onShown();
-
 	}
 
 	@Override
@@ -99,9 +88,6 @@ public class ResurrectPage extends ActionBarSubPage {
 		if (teamOfPlayer.equals(teamOfClientsPlayer)) {
 			RezzButton rezzButton = new RezzButton(player, reactor);
 			addButton(rezzButton);
-			// refresh bar if it is currently visible
-			if (bar.getCurrentPage() == getId())
-				bar.setPage(getId());
 		}
 	}
 

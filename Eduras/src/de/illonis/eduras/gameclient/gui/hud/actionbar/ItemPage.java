@@ -5,21 +5,27 @@ import java.util.logging.Logger;
 import de.illonis.edulog.EduLog;
 import de.illonis.eduras.ObjectFactory.ObjectType;
 import de.illonis.eduras.gameclient.GamePanelReactor;
-import de.illonis.eduras.gameclient.gui.hud.ActionBar;
-import de.illonis.eduras.gameclient.gui.hud.ActionBarSubPage;
+import de.illonis.eduras.gameclient.gui.hud.ActionBarPage;
+import de.illonis.eduras.gameclient.gui.hud.UserInterface;
 
-public class ItemPage extends ActionBarSubPage {
+/**
+ * Actionbar page that holds buttons to spawn items.
+ * 
+ * @author illonis
+ * 
+ */
+public class ItemPage extends ActionBarPage {
 
 	private final static Logger L = EduLog.getLoggerFor(ItemPage.class
 			.getName());
 
-	public ItemPage(GamePanelReactor reactor, ActionBar bar) {
-		super(PageNumber.ITEMS, PageNumber.MAIN, reactor, bar);
-
-		generateButtons(reactor);
+	public ItemPage(int index, UserInterface ui, GamePanelReactor reactor) {
+		super(index, ui, reactor);
+		generateButtons();
+		updateBounds();
 	}
 
-	private void generateButtons(GamePanelReactor reactor) {
+	private void generateButtons() {
 		for (ObjectType type : ObjectType.getItemTypes()) {
 			SpawnItemButton button = new SpawnItemButton(type, reactor);
 			addButton(button);
