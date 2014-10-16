@@ -4,9 +4,13 @@ import java.util.logging.Logger;
 
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
+import org.newdawn.slick.Image;
 import org.newdawn.slick.geom.Rectangle;
 
 import de.illonis.edulog.EduLog;
+import de.illonis.eduras.gameclient.datacache.CacheException;
+import de.illonis.eduras.gameclient.datacache.CacheInfo.ImageKey;
+import de.illonis.eduras.gameclient.datacache.ImageCache;
 import de.illonis.eduras.gameclient.gui.game.GameRenderer;
 import de.illonis.eduras.units.InteractMode;
 
@@ -23,7 +27,7 @@ public class StrategyPanel extends ClickableGuiElement {
 	/**
 	 * Height of strategy panel at scale = 1.
 	 */
-	public final static int HEIGHT = 150;
+	public final static int HEIGHT = 130;
 	private float scaledWidth = 0;
 	private float scaledHeight = 0;
 	private final Rectangle bounds;
@@ -40,8 +44,13 @@ public class StrategyPanel extends ClickableGuiElement {
 
 	@Override
 	public void render(Graphics g) {
-		g.setColor(Color.green);
-		g.fillRect(screenX, screenY, scaledWidth, scaledHeight);
+		try {
+			Image image = ImageCache.getGuiImage(ImageKey.STRATEGY_BAR);
+			g.drawImage(image, screenX, screenY);
+		} catch (CacheException e) {
+			g.setColor(Color.green);
+			g.fillRect(screenX, screenY, scaledWidth, scaledHeight);
+		}
 	}
 
 	@Override

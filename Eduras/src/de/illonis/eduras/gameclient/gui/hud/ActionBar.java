@@ -46,7 +46,7 @@ public class ActionBar extends RenderedGuiObject {
 		pages = new LinkedList<ActionBarPage>();
 		data = EdurasInitializer.getInstance().getInformationProvider()
 				.getClientData();
-		screenX = MiniMap.SIZE * GameRenderer.getRenderScale() + 5;
+		screenX = MiniMap.SIZE * GameRenderer.getRenderScale() + 15;
 		setActiveInteractModes(InteractMode.MODE_STRATEGY);
 		currentPage = 0;
 	}

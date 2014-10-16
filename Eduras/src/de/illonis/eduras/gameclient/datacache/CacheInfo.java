@@ -48,7 +48,8 @@ public final class CacheInfo {
 		ACTION_SPELL_INVISIBILITY,
 		STRATEGY_MODE_ICON,
 		SKILL_BLINK,
-		ACTION_SPELL_BLINK, ;
+		ACTION_SPELL_BLINK,
+		STRATEGY_BAR, ;
 
 		public static ImageKey typeToImageKey(ObjectType type) {
 			switch (type) {
@@ -152,6 +153,7 @@ public final class CacheInfo {
 				"gui/icons/resource_small.png");
 		guiImages.put(ImageKey.STRATEGY_MODE_ICON,
 				"gui/artwork/strategymode.png");
+		guiImages.put(ImageKey.STRATEGY_BAR, "gui/artwork/strategybar.png");
 		guiImages.put(ImageKey.ACTION_HEAL, "gui/icons/icon-heal.png");
 		guiImages
 				.put(ImageKey.ACTION_RESURRECT, "gui/icons/icon-resurrect.png");

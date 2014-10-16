@@ -153,7 +153,7 @@ public class ActionBarPage extends ClickableGuiElement implements
 		} else {
 			g.setColor(DISABLED_COLOR);
 		}
-		g.fillRect(x, screenY, buttons.size() * buttonSize, buttonSize + 15);
+
 		for (int i = 0; i < buttons.size(); i++) {
 			ActionButton button = buttons.get(i);
 			if (button.getIcon() != null) {
@@ -162,42 +162,46 @@ public class ActionBarPage extends ClickableGuiElement implements
 					g.setColor(DISABLED_COLOR);
 					g.fillRect(x, screenY, buttonSize, buttonSize);
 				}
+
+				if (button.getCosts() > 0) {
+					g.setColor(DISABLED_COLOR);
+					g.fillRect(x, screenY + buttonSize - font.getLineHeight(),
+							buttonSize, resIcon.getHeight());
+					if (resIcon != null)
+						g.drawImage(resIcon, x,
+								screenY + buttonSize - resIcon.getHeight());
+					font.drawString(x + resIcon.getWidth() + 3, screenY
+							+ buttonSize - resIcon.getHeight(),
+							button.getCosts() + "",
+							(button.getCosts() > resources) ? Color.red
+									: Color.green);
+
+				}
 				if (activePage && data.getCurrentActionSelected() == i) {
 					if (button.isCleared()) {
 						data.setCurrentActionSelected(-1);
 					} else {
 						g.setColor(Color.yellow);
-						g.setLineWidth(3f);
+						g.setLineWidth(2f);
 						g.drawRect(x, screenY, buttonSize - 2, buttonSize - 2);
 					}
-				}
-
-				if (button.getCosts() > 0) {
-					if (resIcon != null)
-						g.drawImage(
-								resIcon,
-								x,
-								screenY
-										+ buttonSize
-										+ (font.getLineHeight() - resIcon
-												.getHeight()) / 2);
-					font.drawString(x + resIcon.getWidth() + 3, screenY
-							+ buttonSize, button.getCosts() + "", (button
-							.getCosts() > resources) ? Color.red : Color.green);
-
 				}
 				if (activePage) {
 					label = "";
 					label = bindings.getBindingString(KeyBinding
 							.valueOf("STRATEGY_" + (1 + i)));
+
 					g.setColor(DISABLED_COLOR);
+
 					int w = font.getWidth(label);
 					int h = font.getHeight(label);
 					int bgSize = Math.max(w, h) + 1;
 					g.fillRect(x + 2, screenY + 2, bgSize, bgSize);
 					font.drawString(x + 2 + (bgSize - w) / 2, screenY + 2,
-							label, Color.white);
+							label, (button.getCosts() > resources) ? Color.red
+									: Color.white);
 				}
+
 			}
 			x += buttonSize;
 		}
@@ -213,9 +217,8 @@ public class ActionBarPage extends ClickableGuiElement implements
 		}
 		float scale = GameRenderer.getRenderScale();
 		screenX = MiniMap.SIZE * scale + buttonSize;
-		int fontHeight = 15;
-		screenY = newHeight - StrategyPanel.HEIGHT * scale
-				+ (buttonSize + fontHeight) * index;
+		screenY = 18 + newHeight - StrategyPanel.HEIGHT * scale + buttonSize
+				* index;
 
 		updateBounds();
 	}
