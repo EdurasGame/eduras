@@ -1,6 +1,7 @@
 package de.illonis.eduras.gameclient.gui.hud;
 
 import java.awt.image.BufferedImage;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.TimerTask;
 
@@ -115,7 +116,7 @@ public class UserInterface implements GuiResizeListener {
 		new GameModeBar(this);
 		new PlayerStatBar(this);
 		actionBar = new ActionBar(this, guiReactor);
-		new StrategyPanel(this);
+
 		minimap = new MiniMap(this);
 		new RemainingTimeFrame(this);
 		new ItemDisplay(this, minimap);
@@ -136,6 +137,7 @@ public class UserInterface implements GuiResizeListener {
 		// new BugReportButton(this);
 
 		actionBar.initPages(this, guiReactor);
+		new StrategyPanel(this);
 	}
 
 	GameCamera getGameCamera() {
@@ -182,6 +184,7 @@ public class UserInterface implements GuiResizeListener {
 	 */
 	public void addElement(RenderedGuiObject renderedGuiObject) {
 		uiObjects.add(renderedGuiObject);
+		Collections.sort(uiObjects);
 	}
 
 	/**

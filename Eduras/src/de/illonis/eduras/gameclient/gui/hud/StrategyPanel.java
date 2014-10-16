@@ -34,6 +34,7 @@ public class StrategyPanel extends ClickableGuiElement {
 		scaledHeight = HEIGHT * GameRenderer.getRenderScale();
 		screenX = 0;
 		scaledWidth = 100;
+		zIndex = -1;
 		bounds = new Rectangle(screenX, screenY, scaledWidth, scaledHeight);
 	}
 

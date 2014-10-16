@@ -22,13 +22,15 @@ import de.illonis.eduras.units.InteractMode;
  * @author illonis
  * 
  */
-public abstract class RenderedGuiObject extends GameEventAdapter {
+public abstract class RenderedGuiObject extends GameEventAdapter implements
+		Comparable<RenderedGuiObject> {
 
 	private UserInterface gui;
 	protected float screenX, screenY;
 	protected boolean visibleForSpectator;
 	private final LinkedList<InteractMode> enabledModes;
 	private boolean visible;
+	protected int zIndex;
 
 	/**
 	 * Creates a new {@link RenderedGuiObject} that is attached to given
@@ -45,6 +47,7 @@ public abstract class RenderedGuiObject extends GameEventAdapter {
 		screenX = screenY = 0;
 		visible = true;
 		gui.addElement(this);
+		zIndex = 0;
 	}
 
 	/**
@@ -181,4 +184,8 @@ public abstract class RenderedGuiObject extends GameEventAdapter {
 		return visible;
 	}
 
+	@Override
+	public int compareTo(RenderedGuiObject o) {
+		return this.zIndex - o.zIndex;
+	}
 }
