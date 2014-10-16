@@ -34,6 +34,8 @@ public abstract class ActionButton extends GameEventAdapter {
 	private Image icon;
 	private boolean autoCancel;
 	private boolean clearSelection;
+	protected String label;
+	protected String description;
 
 	/**
 	 * Creates a new action button.
@@ -48,14 +50,12 @@ public abstract class ActionButton extends GameEventAdapter {
 		this.imageKey = image;
 		enabled = true;
 		autoCancel = false;
+		label = "";
+		description = "";
 	}
 
 	protected final void clearSelection() {
 		clearSelection = true;
-	}
-
-	protected boolean isBackButton() {
-		return false;
 	}
 
 	final boolean isAutoCancel() {
@@ -84,7 +84,16 @@ public abstract class ActionButton extends GameEventAdapter {
 	/**
 	 * @return the display text.
 	 */
-	public abstract String getLabel();
+	public final String getLabel() {
+		return label;
+	}
+
+	/**
+	 * @return the description.
+	 */
+	public final String getDescription() {
+		return description;
+	}
 
 	/**
 	 * @return the costs.

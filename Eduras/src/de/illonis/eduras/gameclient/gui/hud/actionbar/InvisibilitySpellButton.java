@@ -6,6 +6,7 @@ import de.illonis.edulog.EduLog;
 import de.illonis.eduras.events.GameEvent.GameEventNumber;
 import de.illonis.eduras.gameclient.GamePanelReactor;
 import de.illonis.eduras.gameclient.datacache.CacheInfo.ImageKey;
+import de.illonis.eduras.locale.Localization;
 import de.illonis.eduras.settings.S;
 
 public class InvisibilitySpellButton extends UnitSpellButton {
@@ -16,11 +17,9 @@ public class InvisibilitySpellButton extends UnitSpellButton {
 	public InvisibilitySpellButton(GamePanelReactor reactor) {
 		super(ImageKey.ACTION_SPELL_INVISIBILITY, reactor,
 				GameEventNumber.INVISIBILITY_SPELL);
-	}
-
-	@Override
-	public String getLabel() {
-		return "Make invisible [Costs: " + getCosts() + "]";
+		label = Localization.getString("Client.gui.actions.spell_invis_title");
+		description = Localization
+				.getString("Client.gui.actions.spell_invis_text");
 	}
 
 	@Override

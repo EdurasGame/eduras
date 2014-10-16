@@ -38,4 +38,15 @@ public class RendererTooltipHandler implements TooltipHandler {
 		renderer.hideTooltip();
 	}
 
+	@Override
+	public void showTooltip(Vector2f p, String title, String description) {
+		renderer.showTooltip(p, title, description);
+	}
+
+	@Override
+	public void showTooltip(Vector2f p, String title, String description,
+			int costs) {
+		renderer.showTooltip(p, title, description, costs);
+	}
+
 }

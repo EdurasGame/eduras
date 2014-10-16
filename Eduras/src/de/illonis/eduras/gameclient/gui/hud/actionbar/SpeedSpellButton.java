@@ -6,6 +6,7 @@ import de.illonis.edulog.EduLog;
 import de.illonis.eduras.events.GameEvent.GameEventNumber;
 import de.illonis.eduras.gameclient.GamePanelReactor;
 import de.illonis.eduras.gameclient.datacache.CacheInfo.ImageKey;
+import de.illonis.eduras.locale.Localization;
 import de.illonis.eduras.settings.S;
 
 public class SpeedSpellButton extends UnitSpellButton {
@@ -15,11 +16,9 @@ public class SpeedSpellButton extends UnitSpellButton {
 
 	public SpeedSpellButton(GamePanelReactor reactor) {
 		super(ImageKey.ACTION_SPELL_SPEED, reactor, GameEventNumber.SPEED_SPELL);
-	}
-
-	@Override
-	public String getLabel() {
-		return "Speed up a unit [Costs: " + getCosts() + "]";
+		label = Localization.getString("Client.gui.actions.spell_speed_title");
+		description = Localization
+				.getString("Client.gui.actions.spell_speed_text");
 	}
 
 	@Override

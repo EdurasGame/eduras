@@ -34,6 +34,7 @@ import de.illonis.eduras.gameclient.datacache.CacheInfo.ImageKey;
 import de.illonis.eduras.gameclient.datacache.ImageCache;
 import de.illonis.eduras.gameclient.datacache.TextureInfo.TextureKey;
 import de.illonis.eduras.gameclient.gui.animation.EffectFactory;
+import de.illonis.eduras.gameclient.gui.hud.DetailTooltip;
 import de.illonis.eduras.gameclient.gui.hud.HealthBar;
 import de.illonis.eduras.gameclient.gui.hud.ItemTooltip;
 import de.illonis.eduras.gameclient.gui.hud.RenderedGuiObject;
@@ -637,6 +638,25 @@ public class GameRenderer implements TooltipHandler {
 	}
 
 	@Override
+	public void showTooltip(Vector2f p, String title, String description) {
+		if (tooltip == null || !(tooltip instanceof TextTooltip)) {
+			tooltip = new DetailTooltip(title, description);
+		} else {
+			((DetailTooltip) tooltip).set(title, description);
+		}
+		((DetailTooltip) tooltip).setCosts(-1);
+		tooltip.moveTo(p);
+		tooltipShown = true;
+	}
+
+	@Override
+	public void showTooltip(Vector2f p, String title, String description,
+			int costs) {
+		showTooltip(p, title, description);
+		((DetailTooltip) tooltip).setCosts(costs);
+	}
+
+	@Override
 	public void hideTooltip() {
 		tooltipShown = false;
 	}
@@ -660,5 +680,4 @@ public class GameRenderer implements TooltipHandler {
 	public GameCamera getCamera() {
 		return camera;
 	}
-
 }

@@ -4,6 +4,7 @@ import de.illonis.eduras.gameclient.GamePanelReactor;
 import de.illonis.eduras.gameclient.datacache.CacheInfo.ImageKey;
 import de.illonis.eduras.gameclient.gui.game.GamePanelLogic.ClickState;
 import de.illonis.eduras.gameclient.gui.hud.ActionButton;
+import de.illonis.eduras.locale.Localization;
 import de.illonis.eduras.settings.S;
 
 /**
@@ -20,16 +21,15 @@ public class SpawnObserverButton extends ActionButton {
 	 */
 	public SpawnObserverButton(GamePanelReactor reactor) {
 		super(ImageKey.ACTION_SPAWN_OBSERVER, reactor);
+		label = Localization
+				.getString("Client.gui.actions.spell_spawnobserver_title");
+		description = Localization
+				.getString("Client.gui.actions.spell_spawnobserver_text");
 	}
 
 	@Override
 	protected void actionPerformed() {
 		reactor.setClickState(ClickState.SELECT_POSITION_FOR_OBSERVERUNIT);
-	}
-
-	@Override
-	public String getLabel() {
-		return "Spawn observer [Costs: " + getCosts() + "]";
 	}
 
 	@Override

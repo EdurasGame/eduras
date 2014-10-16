@@ -5,6 +5,7 @@ import de.illonis.eduras.gameclient.GamePanelReactor;
 import de.illonis.eduras.gameclient.datacache.CacheInfo.ImageKey;
 import de.illonis.eduras.gameclient.gui.game.GamePanelLogic.ClickState;
 import de.illonis.eduras.gameclient.gui.hud.ActionButton;
+import de.illonis.eduras.locale.Localization;
 import de.illonis.eduras.logicabstraction.EdurasInitializer;
 import de.illonis.eduras.settings.S;
 
@@ -31,6 +32,10 @@ public class RezzButton extends ActionButton {
 		if (!target.isDead()) {
 			setEnabled(false);
 		}
+		label = Localization.getStringF("Client.gui.actions.spell_rezz_title",
+				player.getName());
+		description = Localization.getStringF(
+				"Client.gui.actions.spell_rezz_text", player.getName());
 	}
 
 	@Override
@@ -47,12 +52,6 @@ public class RezzButton extends ActionButton {
 	 */
 	public Player getTarget() {
 		return target;
-	}
-
-	@Override
-	public String getLabel() {
-		String label = "Resurrect %s [Costs: %d]";
-		return String.format(label, target.getName(), getCosts());
 	}
 
 	@Override

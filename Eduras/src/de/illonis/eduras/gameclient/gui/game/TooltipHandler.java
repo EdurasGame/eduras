@@ -23,12 +23,39 @@ public interface TooltipHandler {
 	void showItemTooltip(Vector2f p, Item item);
 
 	/**
+	 * Shows a tooltip at given position with given title and description.
+	 * 
+	 * @param p
+	 *            position of tooltip.
+	 * @param title
+	 *            title.
+	 * @param description
+	 *            description
+	 */
+	void showTooltip(Vector2f p, String title, String description);
+
+	/**
+	 * Shows a tooltip at given position with given title, description and
+	 * costs.
+	 * 
+	 * @param p
+	 *            position of tooltip.
+	 * @param title
+	 *            title.
+	 * @param description
+	 *            description
+	 * @param costs
+	 *            costs
+	 */
+	void showTooltip(Vector2f p, String title, String description, int costs);
+
+	/**
 	 * Shows a tooltip at given position with given text.
 	 * 
 	 * @param p
 	 *            position of tooltip.
 	 * @param text
-	 *            text.
+	 *            the tooltip text.
 	 */
 	void showTooltip(Vector2f p, String text);
 

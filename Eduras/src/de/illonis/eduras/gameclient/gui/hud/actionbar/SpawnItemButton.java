@@ -5,6 +5,7 @@ import de.illonis.eduras.gameclient.GamePanelReactor;
 import de.illonis.eduras.gameclient.datacache.CacheInfo.ImageKey;
 import de.illonis.eduras.gameclient.gui.game.GamePanelLogic.ClickState;
 import de.illonis.eduras.gameclient.gui.hud.ActionButton;
+import de.illonis.eduras.locale.Localization;
 import de.illonis.eduras.logicabstraction.EdurasInitializer;
 
 /**
@@ -28,6 +29,12 @@ public class SpawnItemButton extends ActionButton {
 	public SpawnItemButton(ObjectType type, GamePanelReactor reactor) {
 		super(ImageKey.typeToImageKey(type), reactor);
 		this.typeOfItemToSpawn = type;
+		label = Localization.getStringF(
+				"Client.gui.actions.spell_spawnitem_title",
+				typeOfItemToSpawn.name());
+		description = Localization.getStringF(
+				"Client.gui.actions.spell_spawnitem_text",
+				typeOfItemToSpawn.name());
 	}
 
 	@Override
@@ -35,12 +42,6 @@ public class SpawnItemButton extends ActionButton {
 		reactor.setClickState(ClickState.SELECT_POSITION_FOR_ITEMSPAWN);
 		EdurasInitializer.getInstance().getInformationProvider()
 				.getClientData().setCurrentItemSpawnType(typeOfItemToSpawn);
-	}
-
-	@Override
-	public String getLabel() {
-		return "Spawn item " + typeOfItemToSpawn.name() + " [Costs: "
-				+ getCosts() + "]";
 	}
 
 	@Override
