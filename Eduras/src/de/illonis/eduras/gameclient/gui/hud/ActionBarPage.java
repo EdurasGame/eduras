@@ -39,6 +39,7 @@ public class ActionBarPage extends ClickableGuiElement implements
 	private final static Logger L = EduLog.getLoggerFor(ActionBarPage.class
 			.getName());
 	private final static Color DISABLED_COLOR = new Color(0, 0, 0, 0.5f);
+	private final static Color UNAVAILABLE_COLOR = new Color(1f, 0, 0, 0.4f);
 
 	private final LinkedList<ActionButton> buttons;
 	private final Rectangle bounds;
@@ -154,28 +155,15 @@ public class ActionBarPage extends ClickableGuiElement implements
 			g.setColor(DISABLED_COLOR);
 		}
 
+		Rectangle rect = new Rectangle(x, screenY, buttonSize, buttonSize);
 		for (int i = 0; i < buttons.size(); i++) {
+			rect.setX(x);
 			ActionButton button = buttons.get(i);
 			if (button.getIcon() != null) {
 				g.drawImage(button.getIcon(), x, screenY);
-				if (!button.isEnabled() || !activePage) {
+				if (!activePage) {
 					g.setColor(DISABLED_COLOR);
-					g.fillRect(x, screenY, buttonSize, buttonSize);
-				}
-
-				if (button.getCosts() > 0) {
-					g.setColor(DISABLED_COLOR);
-					g.fillRect(x, screenY + buttonSize - font.getLineHeight(),
-							buttonSize, resIcon.getHeight());
-					if (resIcon != null)
-						g.drawImage(resIcon, x,
-								screenY + buttonSize - resIcon.getHeight());
-					font.drawString(x + resIcon.getWidth() + 3, screenY
-							+ buttonSize - resIcon.getHeight(),
-							button.getCosts() + "",
-							(button.getCosts() > resources) ? Color.red
-									: Color.green);
-
+					g.fill(rect);
 				}
 				if (activePage && data.getCurrentActionSelected() == i) {
 					if (button.isCleared()) {
@@ -186,11 +174,15 @@ public class ActionBarPage extends ClickableGuiElement implements
 						g.drawRect(x, screenY, buttonSize - 2, buttonSize - 2);
 					}
 				}
+				if (!button.isEnabled() || button.getCosts() > resources) {
+					g.setColor(UNAVAILABLE_COLOR);
+					g.fill(rect);
+				}
+
 				if (activePage) {
 					label = "";
 					label = bindings.getBindingString(KeyBinding
 							.valueOf("STRATEGY_" + (1 + i)));
-
 					g.setColor(DISABLED_COLOR);
 
 					int w = font.getWidth(label);
@@ -198,8 +190,7 @@ public class ActionBarPage extends ClickableGuiElement implements
 					int bgSize = Math.max(w, h) + 1;
 					g.fillRect(x + 2, screenY + 2, bgSize, bgSize);
 					font.drawString(x + 2 + (bgSize - w) / 2, screenY + 2,
-							label, (button.getCosts() > resources) ? Color.red
-									: Color.white);
+							label, Color.white);
 				}
 
 			}
