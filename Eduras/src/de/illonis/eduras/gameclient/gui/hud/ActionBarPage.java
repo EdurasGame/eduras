@@ -172,9 +172,6 @@ public class ActionBarPage extends ClickableGuiElement implements
 					}
 				}
 
-				label = "";
-				label = bindings.getBindingString(KeyBinding
-						.valueOf("STRATEGY_" + (1 + i)));
 				if (button.getCosts() > 0) {
 					if (resIcon != null)
 						g.drawImage(
@@ -189,13 +186,18 @@ public class ActionBarPage extends ClickableGuiElement implements
 							.getCosts() > resources) ? Color.red : Color.green);
 
 				}
-				g.setColor(DISABLED_COLOR);
-				int w = font.getWidth(label);
-				int h = font.getHeight(label);
-				int bgSize = Math.max(w, h) + 1;
-				g.fillRect(x + 2, screenY + 2, bgSize, bgSize);
-				font.drawString(x + 2 + (bgSize - w) / 2, screenY + 2, label,
-						Color.white);
+				if (activePage) {
+					label = "";
+					label = bindings.getBindingString(KeyBinding
+							.valueOf("STRATEGY_" + (1 + i)));
+					g.setColor(DISABLED_COLOR);
+					int w = font.getWidth(label);
+					int h = font.getHeight(label);
+					int bgSize = Math.max(w, h) + 1;
+					g.fillRect(x + 2, screenY + 2, bgSize, bgSize);
+					font.drawString(x + 2 + (bgSize - w) / 2, screenY + 2,
+							label, Color.white);
+				}
 			}
 			x += buttonSize;
 		}
@@ -203,9 +205,18 @@ public class ActionBarPage extends ClickableGuiElement implements
 
 	@Override
 	public void onGuiSizeChanged(int newWidth, int newHeight) {
+		if (resIcon == null) {
+			try {
+				resIcon = ImageCache.getGuiImage(ImageKey.RESOURCE_ICON_SMALL);
+			} catch (CacheException e) {
+			}
+		}
 		float scale = GameRenderer.getRenderScale();
 		screenX = MiniMap.SIZE * scale + buttonSize;
-		screenY = newHeight - StrategyPanel.HEIGHT * scale + buttonSize * index;
+		int fontHeight = 15;
+		screenY = newHeight - StrategyPanel.HEIGHT * scale
+				+ (buttonSize + fontHeight) * index;
+
 		updateBounds();
 	}
 
