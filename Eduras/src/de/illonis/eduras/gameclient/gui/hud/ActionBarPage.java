@@ -219,9 +219,9 @@ public class ActionBarPage extends ClickableGuiElement implements
 		float x = p.x - screenX;
 		if (x < buttonSize * buttons.size()) {
 			int button = (int) (x / buttonSize);
-			System.out.println("over " + buttons.get(button).getClass());
 			getTooltipHandler().showTooltip(p, buttons.get(button).getLabel(),
-					buttons.get(button).getDescription(), buttons.get(button).getCosts());
+					buttons.get(button).getDescription(),
+					buttons.get(button).getCosts());
 		}
 	}
 
