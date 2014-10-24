@@ -73,8 +73,10 @@ public class GameRenderer implements TooltipHandler {
 	private float scale;
 	private boolean tooltipShown = false;
 	private final LinkedList<RenderedGuiObject> uiObjects;
-	private final static int DEFAULT_WIDTH = ImageResolution.WINDOWED.getWidth();
-	private final static int DEFAULT_HEIGHT = ImageResolution.WINDOWED.getHeight();
+	private final static int DEFAULT_WIDTH = ImageResolution.WINDOWED
+			.getWidth();
+	private final static int DEFAULT_HEIGHT = ImageResolution.WINDOWED
+			.getHeight();
 	private final InformationProvider info;
 	private final ClientData data;
 	private final static Color FOG_OF_WAR = new Color(0, 0, 0, 200);
@@ -197,7 +199,7 @@ public class GameRenderer implements TooltipHandler {
 
 		scale = newScale;
 		adjustCamera();
-		g.translate(-viewPort.getX() / scale, -viewPort.getY() / scale);
+		g.translate(-camera.getX(), -camera.getY());
 		drawMap(g);
 		drawObjects(g);
 		drawAnimations(g);
@@ -220,7 +222,7 @@ public class GameRenderer implements TooltipHandler {
 	private void adjustCamera() {
 		try {
 			PlayerMainFigure p = getClientPlayer().getPlayerMainFigure();
-			Vector2f c = p.getPositionVector();
+			Vector2f c = p.getCenterPosition();
 			// get offset and increase offset by movement
 			Vector2f offset = camera.getCameraOffset().add(
 					camera.getCameraMovement());
