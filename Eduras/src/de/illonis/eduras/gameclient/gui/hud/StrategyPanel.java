@@ -71,6 +71,11 @@ public class StrategyPanel extends ClickableGuiElement {
 	}
 
 	@Override
+	public boolean mouseDragged(int oldx, int oldy, int newx, int newy) {
+		return true;
+	}
+
+	@Override
 	public boolean mouseClicked(int button, int x, int y, int clickCount) {
 		return true;
 	}

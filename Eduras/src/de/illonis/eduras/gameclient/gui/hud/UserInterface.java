@@ -128,6 +128,7 @@ public class UserInterface implements GuiResizeListener {
 		tipPanel = new TipPanel(this, minimap);
 		statWindow = new StatisticsWindow(this);
 		bigPanel = new BigPanel(this);
+		new SelectedUnitsDisplay(this);
 		dragRect = new DragSelectionRectangle(this);
 		exitPopup = new ExitPopup(this);
 		selectTeamPopup = new SelectTeamPopup(this);
