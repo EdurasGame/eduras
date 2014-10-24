@@ -6,6 +6,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import javax.swing.JOptionPane;
+import javax.swing.undo.UndoManager;
 
 import org.newdawn.slick.Input;
 import org.newdawn.slick.geom.Point;
@@ -23,6 +24,13 @@ import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.gameobjects.MoveableGameObject.Direction;
 import de.illonis.eduras.gameobjects.NeutralArea;
 import de.illonis.eduras.gameobjects.Portal;
+import de.illonis.eduras.mapeditor.actions.CreateAction;
+import de.illonis.eduras.mapeditor.actions.DeleteAction;
+import de.illonis.eduras.mapeditor.actions.DragAction;
+import de.illonis.eduras.mapeditor.actions.MirrorAction;
+import de.illonis.eduras.mapeditor.actions.RotateAction;
+import de.illonis.eduras.mapeditor.actions.ShapeEditAction;
+import de.illonis.eduras.mapeditor.actions.UndoAction;
 import de.illonis.eduras.mapeditor.gui.EditorWindow;
 import de.illonis.eduras.mapeditor.gui.dialog.ObjectPropertiesDialog;
 import de.illonis.eduras.mapeditor.gui.dialog.PropertiesDialog;
@@ -55,6 +63,9 @@ public class MapPanelLogic implements MapInteractor {
 	private Input input;
 	private List<EditorPlaceable> selectedElements;
 	private Rectangle dragRect;
+	private final UndoManager undos;
+	private Vector2f dragStart;
+	private EditablePolygon oldVertices;
 
 	MapPanelLogic(EditorWindow window) {
 		this.window = window;
@@ -64,6 +75,7 @@ public class MapPanelLogic implements MapInteractor {
 		viewPort.setSize(800, 600);
 		scrollVector = new Vector2f();
 		dragRect = new Rectangle(0, 0, 0, 0);
+		undos = new UndoManager();
 	}
 
 	/**
@@ -208,8 +220,9 @@ public class MapPanelLogic implements MapInteractor {
 						guiX, guiY));
 				o.setPosition(mapPos.x, mapPos.y);
 				o.setId(nextId++);
-				data.addGameObject(o);
-				select(o);
+				UndoAction action = new CreateAction(o, this);
+				action.performAction();
+				undos.addEdit(action);
 				if (o instanceof Portal) {
 					o.setRefName("Portal" + o.getId());
 				}
@@ -220,9 +233,14 @@ public class MapPanelLogic implements MapInteractor {
 		}
 	}
 
-	private void select(EditorPlaceable o) {
+	public void select(EditorPlaceable o) {
 		clearSelection();
 		selectedElements.add(o);
+	}
+
+	public void selectAll(List<EditorPlaceable> objects) {
+		clearSelection();
+		selectedElements.addAll(objects);
 	}
 
 	private NodeData getBaseAt(int guiX, int guiY) {
@@ -257,10 +275,11 @@ public class MapPanelLogic implements MapInteractor {
 		guiY -= height * zoom / 2;
 		Vector2f mapPos = computeGuiPointToGameCoordinate(new Vector2f(guiX,
 				guiY));
-		NodeData node = new NodeData(mapPos.x, mapPos.y, nextId++,
+		final NodeData node = new NodeData(mapPos.x, mapPos.y, nextId++,
 				new LinkedList<NodeData>(), BaseType.NEUTRAL, "");
-		data.addBase(node);
-		select(node);
+		UndoAction action = new CreateAction(node, this);
+		action.performAction();
+		undos.addEdit(action);
 	}
 
 	@Override
@@ -271,14 +290,20 @@ public class MapPanelLogic implements MapInteractor {
 		guiY -= height * zoom / 2;
 		Vector2f mapPos = computeGuiPointToGameCoordinate(new Vector2f(guiX,
 				guiY));
-		SpawnPosition spawn = new SpawnPosition(new Rectangle(mapPos.x,
+		final SpawnPosition spawn = new SpawnPosition(new Rectangle(mapPos.x,
 				mapPos.y, 40, 40), SpawnType.ANY);
-		data.addSpawnPoint(spawn);
-		select(spawn);
+		UndoAction action = new CreateAction(spawn, this);
+		action.performAction();
+		undos.addEdit(action);
 	}
 
 	@Override
 	public void setInteractType(InteractType type) {
+		if (interactType == InteractType.EDIT_SHAPE) {
+			ShapeEditAction action = new ShapeEditAction(data.getEditObject(),
+					oldVertices, this);
+			undos.addEdit(action);
+		}
 		interactType = type;
 		if (interactType == InteractType.DEFAULT) {
 			currentSpawnType = ObjectType.NO_OBJECT;
@@ -295,12 +320,13 @@ public class MapPanelLogic implements MapInteractor {
 	public void placeShapeAt(int guiX, int guiY) {
 		DynamicPolygonObject shape = data.getPlacingObject();
 		shape.setId(nextId++);
-		data.addGameObject(shape);
 		Vector2f mapPos = computeGuiPointToGameCoordinate(new Vector2f(guiX,
 				guiY));
 		shape.setPosition(mapPos.x - shape.getShape().getWidth() / 2, mapPos.y
 				- shape.getShape().getHeight() / 2);
-		select(shape);
+		UndoAction action = new CreateAction(shape, this);
+		action.performAction();
+		undos.addEdit(action);
 		DynamicPolygonObject copy = new DynamicPolygonObject(shape.getType(),
 				null, null, -1);
 		copy.setPolygonVertices(shape.getPolygonVertices());
@@ -315,35 +341,9 @@ public class MapPanelLogic implements MapInteractor {
 
 	@Override
 	public void deleteSelected() {
-		for (EditorPlaceable element : selectedElements) {
-			if (element instanceof GameObject) {
-				GameObject o = (GameObject) element;
-				data.remove(o);
-				if (o instanceof Portal) {
-					Portal portal = (Portal) o;
-					for (GameObject obj : data.getGameObjects()) {
-						if (obj instanceof Portal) {
-							Portal parent = (Portal) obj;
-							if (parent.getPartnerPortal() != null
-									&& portal.equals(parent.getPartnerPortal())) {
-								parent.setPartnerPortal(null);
-							}
-						}
-					}
-				}
-			} else if (element instanceof NodeData) {
-				NodeData node = (NodeData) element;
-				for (NodeData subNode : data.getBases()) {
-					subNode.getAdjacentNodes().remove(node);
-				}
-				data.remove(node);
-			} else if (element instanceof SpawnPosition) {
-				SpawnPosition spawn = (SpawnPosition) element;
-
-				data.remove(spawn);
-			}
-		}
-		clearSelection();
+		UndoAction action = new DeleteAction(selectedElements, this);
+		action.performAction();
+		undos.addEdit(action);
 	}
 
 	@Override
@@ -354,6 +354,7 @@ public class MapPanelLogic implements MapInteractor {
 		if (element instanceof DynamicPolygonObject) {
 			DynamicPolygonObject object = (DynamicPolygonObject) element;
 			EditablePolygon poly = EditablePolygon.fromShape(object.getShape());
+			oldVertices = EditablePolygon.fromShape(object.getShape());
 			data.setEditShape(poly);
 			data.clearTempLines();
 			data.setEditObject(object);
@@ -403,52 +404,17 @@ public class MapPanelLogic implements MapInteractor {
 	}
 
 	@Override
-	public void rotateSelectedShapes(float degree) {
-		for (EditorPlaceable element : selectedElements) {
-			if (element instanceof DynamicPolygonObject) {
-				DynamicPolygonObject object = (DynamicPolygonObject) element;
-				EditablePolygon poly = EditablePolygon.fromShape(object
-						.getShape());
-				poly.rotate(degree);
-				object.setPolygonVertices(poly.getVector2dfs());
-			}
-		}
+	public void rotateSelectedShapes(final float degree) {
+		UndoAction action = new RotateAction(selectedElements, degree, this);
+		action.performAction();
+		undos.addEdit(action);
 	}
 
 	@Override
-	public void mirrorSelectedElements(int axis) {
-		float minX = data.getWidth();
-		float maxX = 0;
-		float minY = data.getHeight();
-		float maxY = 0;
-		for (EditorPlaceable element : selectedElements) {
-			minX = Math.min(element.getXPosition(), minX);
-			minY = Math.min(element.getYPosition(), minY);
-			maxX = Math.max(element.getXPosition() + element.getWidth(), maxX);
-			maxY = Math.max(element.getYPosition() + element.getHeight(), maxY);
-		}
-		float centerX = (maxX + minX) / 2;
-		float centerY = (maxY + minY) / 2;
-		for (EditorPlaceable element : selectedElements) {
-			if (axis == EditablePolygon.Y_AXIS) {
-				float dx = centerX - element.getXPosition();
-				element.setXPosition(element.getXPosition() + 2 * dx
-						- element.getWidth());
-			}
-			if (axis == EditablePolygon.X_AXIS) {
-				float dy = centerY - element.getYPosition();
-				element.setYPosition(element.getYPosition() + 2 * dy
-						- element.getHeight());
-			}
-			if (element instanceof DynamicPolygonObject) {
-				DynamicPolygonObject object = (DynamicPolygonObject) element;
-				EditablePolygon poly = EditablePolygon.fromShape(object
-						.getShape());
-				poly.mirror(axis);
-				object.setPolygonVertices(poly.getVector2dfs());
-			}
-		}
-
+	public void mirrorSelectedElements(final int axis) {
+		UndoAction action = new MirrorAction(selectedElements, axis, this);
+		action.performAction();
+		undos.addEdit(action);
 	}
 
 	@Override
@@ -633,5 +599,38 @@ public class MapPanelLogic implements MapInteractor {
 			id = Math.max(id, o.getId());
 		}
 		nextId = id + 1;
+		undos.discardAllEdits();
+	}
+
+	@Override
+	public boolean undo() {
+		if (undos.canUndo()) {
+			undos.undo();
+			return true;
+		}
+		return false;
+	}
+
+	@Override
+	public boolean redo() {
+		if (undos.canRedo()) {
+			undos.redo();
+			return true;
+		}
+		return false;
+	}
+
+	@Override
+	public void onStopDragging(Vector2f point) {
+		Vector2f target = point.copy();
+		target.sub(dragStart);
+		dragStart = null;
+		DragAction action = new DragAction(selectedElements, target, this);
+		undos.addEdit(action);
+	}
+
+	@Override
+	public void startDragging(Vector2f point) {
+		dragStart = point;
 	}
 }

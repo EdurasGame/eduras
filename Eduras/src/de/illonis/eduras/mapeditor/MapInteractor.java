@@ -55,6 +55,10 @@ public interface MapInteractor {
 	GameCamera getViewPort();
 
 	float getZoom();
+	
+	boolean undo();
+	
+	boolean redo();
 
 	void setZoom(float factor);
 
@@ -109,5 +113,9 @@ public interface MapInteractor {
 	boolean isSelected(int x, int y);
 	
 	void onMapLoaded();
+
+	void startDragging(Vector2f point);
+
+	void onStopDragging(Vector2f point);
 
 }

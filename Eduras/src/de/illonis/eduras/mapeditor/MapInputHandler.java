@@ -1,5 +1,7 @@
 package de.illonis.eduras.mapeditor;
 
+import javax.swing.JOptionPane;
+
 import org.newdawn.slick.Input;
 import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.Vector2f;
@@ -27,6 +29,7 @@ public class MapInputHandler extends InputAdapter {
 	private final MapInteractor interactor;
 	private Rectangle dragRect;
 	private Vector2f startPos;
+	private Input input;
 
 	MapInputHandler(MapInteractor interactor, StatusListener status) {
 		this.status = status;
@@ -46,11 +49,15 @@ public class MapInputHandler extends InputAdapter {
 					interactor.toggleSelectionAt(x, y);
 				} else {
 					if (interactor.isSelected(x, y)) {
-						mode = InteractMode.DRAG;
 					} else {
 						interactor.selectAt(x, y);
-						mode = InteractMode.DRAG;
 					}
+					mode = InteractMode.DRAG;
+					interactor
+							.startDragging(interactor
+									.computeGuiPointToGameCoordinate(new Vector2f(
+											x, y)));
+
 				}
 			} else {
 				mode = InteractMode.DRAG_SELECT;
@@ -141,6 +148,10 @@ public class MapInputHandler extends InputAdapter {
 		} else {
 
 		}
+		if (mode == InteractMode.DRAG) {
+			interactor.onStopDragging(interactor
+					.computeGuiPointToGameCoordinate(new Vector2f(x, y)));
+		}
 		mode = InteractMode.NONE;
 	}
 
@@ -201,9 +212,35 @@ public class MapInputHandler extends InputAdapter {
 		case Input.KEY_C:
 			interactor.copySelectedElements();
 			break;
+		case Input.KEY_F8:
+			MapData.getInstance().setShowNodeConnections(
+					!MapData.getInstance().isShowNodeConnections());
+			break;
+		case Input.KEY_F9:
+			MapData.getInstance().setShowPortalLinks(
+					!MapData.getInstance().isShowPortalLinks());
+			break;
+		case Input.KEY_Z:
+			if (input.isKeyDown(Input.KEY_LCONTROL)) {
+				if (input.isKeyDown(Input.KEY_LSHIFT)) {
+					if (!interactor.redo()) {
+						JOptionPane.showMessageDialog(null, "Nothing to redo");
+					}
+				} else
+					if (!interactor.undo()) {
+						JOptionPane.showMessageDialog(null, "Nothing to undo");
+					}
+			}
+			break;
 		default:
 			break;
 		}
+	}
+
+	@Override
+	public void setInput(Input input) {
+		super.setInput(input);
+		this.input = input;
 	}
 
 	@Override
