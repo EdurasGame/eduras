@@ -19,6 +19,7 @@ import org.newdawn.slick.particles.ParticleSystem;
 
 import de.illonis.edulog.EduLog;
 import de.illonis.eduras.gameclient.gui.animation.EffectFactory.EffectNumber;
+import de.illonis.eduras.images.ImageFiler.ImageResolution;
 
 /**
  * A tool to preview effects visually.
@@ -45,7 +46,8 @@ public class EffectTester extends BasicGame {
 	 */
 	public static void main(String[] args) throws SlickException {
 		AppGameContainer app = new AppGameContainer(new EffectTester());
-		app.setDisplayMode(800, 600, false);
+		app.setDisplayMode(ImageResolution.WINDOWED.getWidth(),
+				ImageResolution.WINDOWED.getHeight(), false);
 		app.setAlwaysRender(true);
 		app.start();
 	}

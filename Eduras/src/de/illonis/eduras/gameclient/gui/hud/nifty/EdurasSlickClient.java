@@ -9,6 +9,7 @@ import de.illonis.eduras.gameclient.EdurasGameClient;
 import de.illonis.eduras.gameclient.EdurasGameInterface;
 import de.illonis.eduras.gameclient.LoginData;
 import de.illonis.eduras.gameclient.userprefs.Settings;
+import de.illonis.eduras.images.ImageFiler.ImageResolution;
 import de.illonis.eduras.logicabstraction.EdurasInitializer;
 import de.illonis.eduras.networking.discover.ServerInfo;
 import de.illonis.eduras.settings.S;
@@ -66,8 +67,8 @@ public class EdurasSlickClient implements GameControllerBridge {
 		Settings s = EdurasInitializer.getInstance().getSettings();
 		if (S.Client.windowed) {
 			s.setBooleanOption(Settings.WINDOWED, true);
-			s.setIntOption(Settings.WIDTH, 800);
-			s.setIntOption(Settings.HEIGHT, 600);
+			s.setIntOption(Settings.WIDTH, ImageResolution.WINDOWED.getWidth());
+			s.setIntOption(Settings.HEIGHT, ImageResolution.WINDOWED.getHeight());
 		}
 		gameContainer.setDisplayMode(s.getIntSetting(Settings.WIDTH),
 				s.getIntSetting(Settings.HEIGHT),

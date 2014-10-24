@@ -11,6 +11,7 @@ import javax.swing.JPanel;
 import org.newdawn.slick.CanvasGameContainer;
 import org.newdawn.slick.SlickException;
 
+import de.illonis.eduras.images.ImageFiler.ImageResolution;
 import de.illonis.eduras.mapeditor.EditorGame;
 import de.illonis.eduras.mapeditor.StatusListener;
 
@@ -80,7 +81,8 @@ public class EditorWindow extends JFrame implements StatusListener {
 		quickMenu.setOther(objectListing);
 		content.add(objectListing, BorderLayout.WEST);
 		gameContainer = new CanvasGameContainer(game);
-		gameContainer.setSize(800, 600);
+		gameContainer.setSize(ImageResolution.WINDOWED.getWidth(),
+				ImageResolution.WINDOWED.getHeight());
 		content.add(gameContainer, BorderLayout.CENTER);
 		setJMenuBar(new EditorMenu(game.getPanelLogic(), this));
 		content.add(quickMenu, BorderLayout.NORTH);

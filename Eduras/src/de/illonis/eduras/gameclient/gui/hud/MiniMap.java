@@ -27,6 +27,7 @@ import de.illonis.eduras.gameobjects.Base;
 import de.illonis.eduras.gameobjects.DynamicPolygonObject;
 import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.gameobjects.GameObject.Relation;
+import de.illonis.eduras.images.ImageFiler.ImageResolution;
 import de.illonis.eduras.items.weapons.Missile;
 import de.illonis.eduras.items.weapons.Weapon;
 import de.illonis.eduras.maps.NodeData;
@@ -268,10 +269,10 @@ public class MiniMap extends ClickableGuiElement {
 		g.setLineWidth(1f);
 		g.setColor(COLOR_MULTIPLIER);
 		float minimapScale = getSize() / getInfo().getMapBounds().getHeight();
-		float rectWidth = 800f;
+		float rectWidth = ImageResolution.WINDOWED.getWidth();
 		float ratio = (float) Display.getHeight() / Display.getWidth();
 		float rectHeight = rectWidth * ratio;
-		float yDiff = (600 - rectHeight) / 2;
+		float yDiff = ((float) ImageResolution.WINDOWED.getHeight() - rectHeight) / 2;
 		g.drawRect(viewPort.getX() * minimapScale, (viewPort.getY() + yDiff)
 				* minimapScale + screenY, rectWidth * minimapScale, rectHeight
 				* minimapScale);

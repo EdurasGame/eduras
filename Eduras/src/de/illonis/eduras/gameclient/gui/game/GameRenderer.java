@@ -73,8 +73,8 @@ public class GameRenderer implements TooltipHandler {
 	private float scale;
 	private boolean tooltipShown = false;
 	private final LinkedList<RenderedGuiObject> uiObjects;
-	private final static int DEFAULT_WIDTH = 800;
-	private final static int DEFAULT_HEIGHT = 600;
+	private final static int DEFAULT_WIDTH = ImageResolution.WINDOWED.getWidth();
+	private final static int DEFAULT_HEIGHT = ImageResolution.WINDOWED.getHeight();
 	private final InformationProvider info;
 	private final ClientData data;
 	private final static Color FOG_OF_WAR = new Color(0, 0, 0, 200);

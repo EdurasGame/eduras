@@ -27,6 +27,7 @@ import de.illonis.eduras.gameclient.gui.HudNotifier;
 import de.illonis.eduras.gameclient.gui.TimedTasksHolderGUI;
 import de.illonis.eduras.gameclient.gui.hud.DragSelectionRectangle;
 import de.illonis.eduras.gameclient.gui.hud.UserInterface;
+import de.illonis.eduras.images.ImageFiler.ImageResolution;
 import de.illonis.eduras.interfaces.GameEventListener;
 import de.illonis.eduras.inventory.Inventory;
 import de.illonis.eduras.inventory.ItemSlotIsEmptyException;
@@ -102,7 +103,8 @@ public class GamePanelLogic extends GameEventAdapter implements
 
 		keyHandler = new InputKeyHandler(this, reactor);
 		camera = new GameCamera();
-		camera.setSize(800, 600);
+		camera.setSize(ImageResolution.WINDOWED.getWidth(),
+				ImageResolution.WINDOWED.getHeight());
 		gameEventListeners = new LinkedList<GameEventListener>();
 		mouseHandler = new GuiMouseHandler(this, reactor);
 		cml = new CameraMouseListener(camera);

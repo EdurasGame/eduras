@@ -24,6 +24,7 @@ import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.gameobjects.MoveableGameObject.Direction;
 import de.illonis.eduras.gameobjects.NeutralArea;
 import de.illonis.eduras.gameobjects.Portal;
+import de.illonis.eduras.images.ImageFiler.ImageResolution;
 import de.illonis.eduras.mapeditor.actions.CreateAction;
 import de.illonis.eduras.mapeditor.actions.DeleteAction;
 import de.illonis.eduras.mapeditor.actions.DragAction;
@@ -72,7 +73,8 @@ public class MapPanelLogic implements MapInteractor {
 		selectedElements = new LinkedList<EditorPlaceable>();
 		interactType = InteractType.DEFAULT;
 		viewPort = new GameCamera();
-		viewPort.setSize(800, 600);
+		viewPort.setSize(ImageResolution.WINDOWED.getWidth(),
+				ImageResolution.WINDOWED.getHeight());
 		scrollVector = new Vector2f();
 		dragRect = new Rectangle(0, 0, 0, 0);
 		undos = new UndoManager();

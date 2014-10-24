@@ -37,7 +37,7 @@ public class ImageFiler {
 	 */
 	@SuppressWarnings("javadoc")
 	public enum ImageResolution {
-		WINDOWED(".low", 800, 600), LAPTOP(".medium", 1366, 768), FULLHD(
+		WINDOWED(".low", 1066, 600), LAPTOP(".medium", 1366, 768), FULLHD(
 				"",
 				1920,
 				1080);
@@ -55,11 +55,11 @@ public class ImageFiler {
 			return suffix;
 		}
 
-		public float getWidth() {
+		public int getWidth() {
 			return width;
 		}
 
-		public float getHeight() {
+		public int getHeight() {
 			return height;
 		}
 	}
@@ -74,10 +74,12 @@ public class ImageFiler {
 	private static Pair<ImageResolution, Float> calculateResolution() {
 		int width = Display.getWidth();
 		int height = Display.getHeight();
-		if (width > 1366 && height > 768) {
+		if (width > ImageResolution.LAPTOP.getWidth()
+				&& height > ImageResolution.LAPTOP.getHeight()) {
 			return new Pair<ImageResolution, Float>(ImageResolution.FULLHD,
 					getScaleFactor(ImageResolution.FULLHD));
-		} else if (width > 800 && height > 600) {
+		} else if (width > ImageResolution.WINDOWED.getWidth()
+				&& height > ImageResolution.WINDOWED.getHeight()) {
 			return new Pair<ImageResolution, Float>(ImageResolution.LAPTOP,
 					getScaleFactor(ImageResolution.LAPTOP));
 		} else {
