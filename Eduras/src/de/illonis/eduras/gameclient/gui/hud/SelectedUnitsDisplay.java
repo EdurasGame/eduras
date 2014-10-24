@@ -51,7 +51,6 @@ public class SelectedUnitsDisplay extends ClickableGuiElement {
 		for (int id : selected) {
 			drawSelectionFrameFor(id, g, i++);
 		}
-
 	}
 
 	private void drawSelectionFrameFor(int id, Graphics g, int index) {
