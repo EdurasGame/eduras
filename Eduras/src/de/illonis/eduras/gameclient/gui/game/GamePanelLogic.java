@@ -27,6 +27,8 @@ import de.illonis.eduras.gameclient.gui.HudNotifier;
 import de.illonis.eduras.gameclient.gui.TimedTasksHolderGUI;
 import de.illonis.eduras.gameclient.gui.hud.DragSelectionRectangle;
 import de.illonis.eduras.gameclient.gui.hud.UserInterface;
+import de.illonis.eduras.gameobjects.MoveableGameObject;
+import de.illonis.eduras.gameobjects.MoveableGameObject.Direction;
 import de.illonis.eduras.images.ImageFiler.ImageResolution;
 import de.illonis.eduras.interfaces.GameEventListener;
 import de.illonis.eduras.inventory.Inventory;
@@ -48,6 +50,7 @@ public class GamePanelLogic extends GameEventAdapter implements
 		UserInputListener {
 	private final static Logger L = EduLog.getLoggerFor(GamePanelLogic.class
 			.getName());
+	private final static int CAMERA_SPEED = 5;
 
 	private GameRenderer renderer;
 	private final GameCamera camera;
@@ -110,17 +113,12 @@ public class GamePanelLogic extends GameEventAdapter implements
 		cml = new CameraMouseListener(camera);
 	}
 
-	/**
-	 * @return the current click state.
-	 */
+	@Override
 	public ClickState getClickState() {
 		return currentClickState;
 	}
 
-	/**
-	 * @param state
-	 *            the new click state.
-	 */
+	@Override
 	public void setClickState(ClickState state) {
 		currentClickState = state;
 	}
@@ -198,10 +196,6 @@ public class GamePanelLogic extends GameEventAdapter implements
 		// camera.setSize(gui.getWidth(), gui.getHeight()); // maybe not?
 	}
 
-	public GameContainer getGui() {
-		return gui;
-	}
-
 	/**
 	 * Returns tooltip handler that handles tooltips.
 	 * 
@@ -221,20 +215,12 @@ public class GamePanelLogic extends GameEventAdapter implements
 		userInterface.hideStatWindow();
 	}
 
-	/**
-	 * Computes a point that is relative to gui into game coordinates.
-	 * 
-	 * @param v
-	 *            point to convert.
-	 * @return game-coordinate point.
-	 */
+	@Override
 	public Vector2f computeGuiPointToGameCoordinate(Vector2f v) {
 		float scale = getCurrentScale();
 		Vector2f vec = new Vector2f(v);
-		vec.x += renderer.getViewport().getX();
-		vec.y += renderer.getViewport().getY();
-		// vec.x /= gui.getContainer().getWidth();
-		// vec.y /= gui.getContainer().getHeight();
+		vec.x += renderer.getCamera().getX() * scale;
+		vec.y += renderer.getCamera().getY() * scale;
 		vec.scale(1 / scale);
 		return vec;
 	}
@@ -263,7 +249,8 @@ public class GamePanelLogic extends GameEventAdapter implements
 		this.hudNotifier = hudNotifier;
 	}
 
-	DragSelectionRectangle getDragRect() {
+	@Override
+	public DragSelectionRectangle getDragRect() {
 		return userInterface.getDragRect();
 	}
 
@@ -320,11 +307,7 @@ public class GamePanelLogic extends GameEventAdapter implements
 			}
 	}
 
-	/**
-	 * Returns the {@link ClientData}.
-	 * 
-	 * @return clientdata
-	 */
+	@Override
 	public ClientData getClientData() {
 		return data;
 	}
@@ -394,7 +377,6 @@ public class GamePanelLogic extends GameEventAdapter implements
 
 	public ChatClient getChat() {
 		return chat;
-
 	}
 
 	@Override
@@ -492,5 +474,88 @@ public class GamePanelLogic extends GameEventAdapter implements
 	@Override
 	public void setPage(int page) {
 		userInterface.getActionBar().setPage(page);
+	}
+
+	@Override
+	public void startCameraMovement(Direction dir, int type) {
+		// TODO: Make camera movement speed a user setting.
+		if (type == 0) {
+			switch (dir) {
+			case RIGHT:
+				camera.getCameraMovementMouse().x = CAMERA_SPEED;
+				break;
+			case LEFT:
+				camera.getCameraMovementMouse().x = -CAMERA_SPEED;
+				break;
+			case TOP:
+				camera.getCameraMovementMouse().y = -CAMERA_SPEED;
+				break;
+			case BOTTOM:
+				camera.getCameraMovementMouse().y = CAMERA_SPEED;
+				break;
+			default:
+				break;
+			}
+		} else if (type == 1) {
+			switch (dir) {
+			case RIGHT:
+				camera.getCameraMovementKeys().x = CAMERA_SPEED;
+				break;
+			case LEFT:
+				camera.getCameraMovementKeys().x = -CAMERA_SPEED;
+				break;
+			case TOP:
+				camera.getCameraMovementKeys().y = -CAMERA_SPEED;
+				break;
+			case BOTTOM:
+				camera.getCameraMovementKeys().y = CAMERA_SPEED;
+				break;
+			default:
+				break;
+			}
+		}
+	}
+
+	@Override
+	public void stopCameraMovement(Direction dir, int type) {
+		if (type == 0) {
+			if (MoveableGameObject.isHorizontal(dir)) {
+				camera.getCameraMovementMouse().x = 0;
+			} else {
+				camera.getCameraMovementMouse().y = 0;
+			}
+		} else {
+			if (MoveableGameObject.isHorizontal(dir)) {
+				camera.getCameraMovementKeys().x = 0;
+			} else {
+				camera.getCameraMovementKeys().y = 0;
+			}
+		}
+	}
+
+	@Override
+	public void stopCameraMovement() {
+		camera.getCameraMovementMouse().set(0, 0);
+		camera.getCameraMovementKeys().set(0, 0);
+	}
+
+	@Override
+	public void setCameraPosition(Vector2f gamePos)
+			throws ObjectNotFoundException {
+		Vector2f newPos = EdurasInitializer.getInstance()
+				.getInformationProvider().getPlayer().getPlayerMainFigure()
+				.getPositionVector().copy();
+		gamePos.sub(newPos);
+		camera.getCameraOffset().set(gamePos.x, gamePos.y);
+	}
+
+	@Override
+	public int getContainerWidth() {
+		return gui.getWidth();
+	}
+
+	@Override
+	public int getContainerHeight() {
+		return gui.getHeight();
 	}
 }

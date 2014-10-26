@@ -22,7 +22,6 @@ import de.illonis.eduras.gameclient.datacache.FontCache;
 import de.illonis.eduras.gameclient.datacache.FontCache.FontKey;
 import de.illonis.eduras.gameclient.datacache.ImageCache;
 import de.illonis.eduras.gameclient.gui.game.GameRenderer;
-import de.illonis.eduras.gameclient.userprefs.KeyBindings;
 import de.illonis.eduras.logicabstraction.EdurasInitializer;
 import de.illonis.eduras.units.InteractMode;
 
@@ -45,7 +44,6 @@ public class ActionBarPage extends ClickableGuiElement implements
 	private final Rectangle bounds;
 	protected final GamePanelReactor reactor;
 	private final int index;
-	private final KeyBindings bindings;
 	private Image resIcon;
 	private final ClientData data;
 	private final float buttonSize;
@@ -72,9 +70,6 @@ public class ActionBarPage extends ClickableGuiElement implements
 		buttons = new LinkedList<ActionButton>();
 		buttonSize = (float) ActionButton.BUTTON_SIZE
 				* GameRenderer.getRenderScale();
-
-		bindings = EdurasInitializer.getInstance().getSettings()
-				.getKeyBindings();
 		data = EdurasInitializer.getInstance().getInformationProvider()
 				.getClientData();
 		bounds = new Rectangle(0, 0, 1, buttonSize);
@@ -88,6 +83,12 @@ public class ActionBarPage extends ClickableGuiElement implements
 				buttonSize);
 	}
 
+	/**
+	 * Sets this page as active.
+	 * 
+	 * @param active
+	 *            true if active, false otherwise.
+	 */
 	public void setActivePage(boolean active) {
 		this.activePage = active;
 	}
@@ -148,7 +149,6 @@ public class ActionBarPage extends ClickableGuiElement implements
 			}
 		}
 		float x = screenX;
-		String label;
 		if (activePage) {
 			g.setColor(Color.black);
 		} else {
@@ -250,14 +250,20 @@ public class ActionBarPage extends ClickableGuiElement implements
 		return false;
 	}
 
-	public void selectButton(int index) {
-		if (index >= buttons.size()) {
+	/**
+	 * Marks button at given index as selected.
+	 * 
+	 * @param buttonIndex
+	 *            button index.
+	 */
+	public void selectButton(int buttonIndex) {
+		if (buttonIndex >= buttons.size()) {
 			data.setCurrentActionSelected(-1);
 			return;
 		}
-		ActionButton theButton = buttons.get(index);
+		ActionButton theButton = buttons.get(buttonIndex);
 		if (!theButton.isAutoCancel()) {
-			data.setCurrentActionSelected(index);
+			data.setCurrentActionSelected(buttonIndex);
 		} else {
 			data.setCurrentActionSelected(-1);
 		}

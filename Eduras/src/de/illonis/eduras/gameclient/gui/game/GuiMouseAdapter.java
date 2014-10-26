@@ -16,10 +16,11 @@ import de.illonis.eduras.gameclient.gui.hud.ClickableGuiElementInterface;
  * 
  */
 public abstract class GuiMouseAdapter implements GuiClickReactor, MouseListener {
-	private final GamePanelLogic panelLogic;
+	private final UserInputListener panelLogic;
 	private final GuiInternalEventListener listener;
 
-	GuiMouseAdapter(GamePanelLogic panelLogic, GuiInternalEventListener listener) {
+	GuiMouseAdapter(UserInputListener panelLogic,
+			GuiInternalEventListener listener) {
 		this.panelLogic = panelLogic;
 		this.listener = listener;
 	}
@@ -28,7 +29,7 @@ public abstract class GuiMouseAdapter implements GuiClickReactor, MouseListener 
 		return listener;
 	}
 
-	GamePanelLogic getPanelLogic() {
+	UserInputListener getPanelLogic() {
 		return panelLogic;
 	}
 

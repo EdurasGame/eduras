@@ -4,6 +4,11 @@ import org.newdawn.slick.geom.Vector2f;
 
 import de.illonis.eduras.ObjectFactory.ObjectType;
 import de.illonis.eduras.exceptions.ActionFailedException;
+import de.illonis.eduras.exceptions.ObjectNotFoundException;
+import de.illonis.eduras.gameclient.ClientData;
+import de.illonis.eduras.gameclient.gui.game.GamePanelLogic.ClickState;
+import de.illonis.eduras.gameclient.gui.hud.DragSelectionRectangle;
+import de.illonis.eduras.gameobjects.MoveableGameObject.Direction;
 import de.illonis.eduras.inventory.ItemSlotIsEmptyException;
 
 /**
@@ -153,5 +158,60 @@ public interface UserInputListener {
 	 * Selects previous item in inventory.
 	 */
 	void selectNextItem();
+
+	void startCameraMovement(Direction dir, int type);
+
+	void stopCameraMovement(Direction dir, int type);
+
+	void stopCameraMovement();
+
+	void setCameraPosition(Vector2f gamePos) throws ObjectNotFoundException;
+
+	/**
+	 * @return width of game container.
+	 */
+	int getContainerWidth();
+
+	/**
+	 * @return height of game container.
+	 */
+	int getContainerHeight();
+
+	/**
+	 * @param state
+	 *            the new click state.
+	 */
+	void setClickState(ClickState state);
+
+	/**
+	 * Computes a point that is relative to gui into game coordinates.
+	 * 
+	 * @param v
+	 *            point to convert.
+	 * @return game-coordinate point.
+	 */
+	Vector2f computeGuiPointToGameCoordinate(Vector2f v);
+
+	/**
+	 * @return returns drag rectangle.
+	 */
+	DragSelectionRectangle getDragRect();
+
+	/**
+	 * @return the current click state.
+	 */
+	ClickState getClickState();
+
+	/**
+	 * Returns the {@link ClientData}.
+	 * 
+	 * @return clientdata
+	 */
+	ClientData getClientData();
+
+	/**
+	 * @return the tooltip handler.
+	 */
+	TooltipHandler getTooltipHandler();
 
 }

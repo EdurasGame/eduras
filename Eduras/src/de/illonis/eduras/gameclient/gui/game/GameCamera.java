@@ -12,7 +12,8 @@ import org.newdawn.slick.geom.Vector2f;
 public class GameCamera extends Rectangle {
 
 	private static final long serialVersionUID = 1L;
-	private Vector2f cameraMovement;
+	private Vector2f cameraMovementKeys;
+	private Vector2f cameraMovementMouse;
 	private Vector2f cameraOffset;
 
 	public GameCamera() {
@@ -27,15 +28,23 @@ public class GameCamera extends Rectangle {
 	 */
 	public void reset() {
 		setLocation(0, 0);
-		cameraMovement = new Vector2f();
+		cameraMovementMouse = new Vector2f();
+		cameraMovementKeys = new Vector2f();
 		cameraOffset = new Vector2f();
 	}
 
 	/**
 	 * @return the current camera movement per render-step.
 	 */
-	public Vector2f getCameraMovement() {
-		return cameraMovement;
+	public Vector2f getCameraMovementMouse() {
+		return cameraMovementMouse;
+	}
+
+	/**
+	 * @return the current camera movement per render-step.
+	 */
+	public Vector2f getCameraMovementKeys() {
+		return cameraMovementKeys;
 	}
 
 	/**

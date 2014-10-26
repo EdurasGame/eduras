@@ -159,7 +159,7 @@ public class GuiInternalEventListener implements GamePanelReactor {
 
 			if (infoPro.getGameMode().canSwitchMode(infoPro.getPlayer(),
 					nextMode)) {
-
+				client.getLogic().stopCameraMovement();
 				client.sendEvent(new SwitchInteractModeEvent(client
 						.getOwnerID(), nextMode));
 			} else {

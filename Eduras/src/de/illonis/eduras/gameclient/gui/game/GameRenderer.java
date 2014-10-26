@@ -66,7 +66,6 @@ public class GameRenderer implements TooltipHandler {
 	private final Logger L = EduLog.getLoggerFor(GameRenderer.class.getName());
 
 	private final GameCamera camera;
-	private final GameCamera viewPort;
 	private final UserInterface gui;
 	private final Map<Integer, GameObject> objs;
 	private Tooltip tooltip;
@@ -106,8 +105,6 @@ public class GameRenderer implements TooltipHandler {
 	public GameRenderer(GameCamera camera, UserInterface gui,
 			InformationProvider info, ClientData data) {
 		this.uiObjects = gui.getUiObjects();
-		viewPort = new GameCamera();
-		viewPort.setBounds(0, 0, DEFAULT_WIDTH, DEFAULT_HEIGHT);
 		this.data = data;
 		this.camera = camera;
 		scale = 1;
@@ -116,13 +113,6 @@ public class GameRenderer implements TooltipHandler {
 		this.gui = gui;
 		RendererTooltipHandler h = new RendererTooltipHandler(this);
 		gui.setTooltipHandler(h);
-	}
-
-	/**
-	 * @return the current viewport.
-	 */
-	public GameCamera getViewport() {
-		return viewPort;
 	}
 
 	/**
@@ -192,7 +182,6 @@ public class GameRenderer implements TooltipHandler {
 		}
 
 		if (scale != newScale) {
-			viewPort.setSize(width, height);
 			gui.onGuiSizeChanged(width, height);
 			// camera.setSize(width, height); // maybe not?
 		}
@@ -224,21 +213,19 @@ public class GameRenderer implements TooltipHandler {
 			PlayerMainFigure p = getClientPlayer().getPlayerMainFigure();
 			Vector2f c = p.getCenterPosition();
 			// get offset and increase offset by movement
-			Vector2f offset = camera.getCameraOffset().add(
-					camera.getCameraMovement());
+			Vector2f offset = camera.getCameraOffset()
+					.add(camera.getCameraMovementMouse())
+					.add(camera.getCameraMovementKeys());
 			c.add(offset);
 			Vector2f currentCameraPos = new Vector2f(camera.getX(),
 					camera.getY());
-			Vector2f currentViewportPos = new Vector2f(viewPort.getX(),
-					viewPort.getY());
 			camera.centerAt(c.x, c.y);
-			viewPort.centerAt(c.x * scale, c.y * scale);
 			if (!camera.intersects(info.getMapBounds())) {
 				// stop camera moving if camera is outside the map to prevent
 				// endless scrolling.
-				camera.getCameraMovement().set(0, 0);
+				camera.getCameraMovementKeys().set(0, 0);
+				camera.getCameraMovementMouse().set(0, 0);
 				camera.setLocation(currentCameraPos);
-				viewPort.setLocation(currentViewportPos);
 			}
 		} catch (ObjectNotFoundException | NullPointerException e) {
 			// EduLog.passException(e);
