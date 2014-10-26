@@ -19,7 +19,7 @@
 				<control name="loadingbar" align="center" valign="center"
 					width="100%" height="100%" />
 				<control id="loadingtext" name="label" align="center"
-					text="                                                  " />
+					text="Retrieving Server data. This may take some time or so..." />
 				<control id="abortButton" type="button" align="center" label="Abort">
 					<interact onClick="abort()" />
 				</control>

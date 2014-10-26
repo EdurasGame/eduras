@@ -64,7 +64,7 @@ public class LoadingController extends EdurasScreenController {
 				break;
 			case 7:
 				game.getEduras().init();
-				setProgress(0.7f, "Retrieving server data.");
+				setProgress(0.7f, "Retrieving server data. This may take a while.");
 				break;
 			default:
 				break;

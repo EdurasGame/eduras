@@ -49,6 +49,7 @@ public class ActionBar extends RenderedGuiObject {
 	private int maxButtons;
 	private float buttonSize;
 	private final KeyBinding[] bindingOrder;
+	private final KeyBinding[] pagesBindings;
 
 	protected ActionBar(UserInterface gui, GamePanelReactor guiReactor) {
 		super(gui);
@@ -66,6 +67,10 @@ public class ActionBar extends RenderedGuiObject {
 				KeyBinding.ITEM_SWORD, KeyBinding.ITEM_SIMPLE,
 				KeyBinding.ITEM_SNIPER, KeyBinding.ITEM_ROCKET,
 				KeyBinding.ITEM_SPLASH, KeyBinding.ITEM_MINE };
+		pagesBindings = new KeyBinding[] { KeyBinding.ACTIONBAR_PAGE_WEAPONS,
+				KeyBinding.ACTIONBAR_PAGE_PLAYERSPELLS,
+				KeyBinding.ACTIONBAR_PAGE_UNITS,
+				KeyBinding.ACTIONBAR_PAGE_SPELLS };
 	}
 
 	@Override
@@ -74,8 +79,14 @@ public class ActionBar extends RenderedGuiObject {
 		for (int i = 0; i < maxButtons; i++) {
 			String binding = EdurasInitializer.getInstance().getSettings()
 					.getKeyBindings().getBindingString(bindingOrder[i]);
-			font.drawString(screenX + buttonSize * i, screenY, binding,
-					Color.white);
+			font.drawString(screenX + buttonSize * i, 2 + screenY, binding,
+					Color.yellow);
+		}
+		for (int i = 0; i < 4; i++) {
+			String binding = EdurasInitializer.getInstance().getSettings()
+					.getKeyBindings().getBindingString(pagesBindings[i]);
+			font.drawString(screenX - buttonSize, 10 + buttonSize / 2 + screenY
+					+ i * buttonSize, binding, Color.yellow);
 		}
 	}
 

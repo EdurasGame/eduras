@@ -68,7 +68,7 @@ public class MiniMap extends ClickableGuiElement {
 	private HashMap<Integer, NodeData> nodes;
 	float windowScale;
 
-	final static int SIZE = 150;
+	final static int SIZE = 160;
 
 	private static final float PLAYER_EXTRA_SCALE = 0.7f;
 

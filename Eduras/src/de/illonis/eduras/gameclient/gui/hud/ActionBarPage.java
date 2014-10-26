@@ -23,7 +23,6 @@ import de.illonis.eduras.gameclient.datacache.FontCache.FontKey;
 import de.illonis.eduras.gameclient.datacache.ImageCache;
 import de.illonis.eduras.gameclient.gui.game.GameRenderer;
 import de.illonis.eduras.gameclient.userprefs.KeyBindings;
-import de.illonis.eduras.gameclient.userprefs.KeyBindings.KeyBinding;
 import de.illonis.eduras.logicabstraction.EdurasInitializer;
 import de.illonis.eduras.units.InteractMode;
 
@@ -39,6 +38,7 @@ public class ActionBarPage extends ClickableGuiElement implements
 	private final static Logger L = EduLog.getLoggerFor(ActionBarPage.class
 			.getName());
 	private final static Color DISABLED_COLOR = new Color(0, 0, 0, 0.5f);
+	private final static Color BG_COLOR = new Color(0, 0, 0, 0.7f);
 	private final static Color UNAVAILABLE_COLOR = new Color(1f, 0, 0, 0.4f);
 
 	private final LinkedList<ActionButton> buttons;
@@ -165,13 +165,25 @@ public class ActionBarPage extends ClickableGuiElement implements
 					g.setColor(DISABLED_COLOR);
 					g.fill(rect);
 				}
+				if (button.getCosts() > 0) {
+					g.setColor(BG_COLOR);
+					float fontX = x + buttonSize
+							- font.getWidth(button.getCosts() + "") - 3;
+					g.fillRect(fontX - 2,
+							screenY + buttonSize - font.getLineHeight() - 2,
+							buttonSize - (fontX - x), font.getLineHeight() + 2);
+					font.drawString(fontX,
+							screenY + buttonSize - font.getLineHeight() - 2,
+							button.getCosts() + "", Color.white);
+				}
 				if (activePage && data.getCurrentActionSelected() == i) {
 					if (button.isCleared()) {
 						data.setCurrentActionSelected(-1);
 					} else {
 						g.setColor(Color.yellow);
 						g.setLineWidth(2f);
-						g.drawRect(x, screenY, buttonSize - 2, buttonSize - 2);
+						g.drawRect(x + 1, screenY + 1, buttonSize - 2,
+								buttonSize - 2);
 					}
 				}
 				if (!button.isEnabled() || button.getCosts() > resources) {
@@ -179,19 +191,19 @@ public class ActionBarPage extends ClickableGuiElement implements
 					g.fill(rect);
 				}
 
-				if (activePage) {
-					label = "";
-					label = bindings.getBindingString(KeyBinding
-							.valueOf("STRATEGY_" + (1 + i)));
-					g.setColor(DISABLED_COLOR);
-
-					int w = font.getWidth(label);
-					int h = font.getHeight(label);
-					int bgSize = Math.max(w, h) + 1;
-					g.fillRect(x + 2, screenY + 2, bgSize, bgSize);
-					font.drawString(x + 2 + (bgSize - w) / 2, screenY + 2,
-							label, Color.white);
-				}
+				// if (activePage) {
+				// label = "";
+				// label = bindings.getBindingString(KeyBinding
+				// .valueOf("STRATEGY_" + (1 + i)));
+				// g.setColor(DISABLED_COLOR);
+				//
+				// int w = font.getWidth(label);
+				// int h = font.getHeight(label);
+				// int bgSize = Math.max(w, h) + 1;
+				// g.fillRect(x + 2, screenY + 2, bgSize, bgSize);
+				// font.drawString(x + 2 + (bgSize - w) / 2, screenY + 2,
+				// label, Color.white);
+				// }
 
 			}
 			x += buttonSize;
@@ -208,7 +220,7 @@ public class ActionBarPage extends ClickableGuiElement implements
 		}
 		float scale = GameRenderer.getRenderScale();
 		screenX = MiniMap.SIZE * scale + buttonSize;
-		screenY = 5 + newHeight - MiniMap.SIZE * scale + buttonSize * index;
+		screenY = 15 + newHeight - MiniMap.SIZE * scale + buttonSize * index;
 
 		updateBounds();
 	}

@@ -69,7 +69,7 @@ public class ChatDisplay extends RenderedGuiObject {
 
 	@Override
 	public void onGuiSizeChanged(int newWidth, int newHeight) {
-		screenY = newHeight;
+		screenY = newHeight - MiniMap.SIZE;
 		screenX = newWidth * 2 / 3;
 	}
 }

@@ -274,6 +274,8 @@ public class GameClient {
 	 * @param resource
 	 */
 	public void requestResource(GameEventNumber type, String resource) {
+		L.log(Level.INFO, "Requesting resource from server: [" + type.name()
+				+ "] " + resource);
 		try {
 			sendEvent(new RequestResourceEvent(infoPro.getOwnerID(), type,
 					resource));
