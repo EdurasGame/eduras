@@ -13,8 +13,8 @@
 # Specifies the sizes to export. Target size will
 # be square.
 sizes[0]=36
-sizes[1]=61
-sizes[2]=86
+sizes[1]=46
+sizes[2]=65
 
 # Extensions to append for each size.
 # You have to specify an extension for each size
