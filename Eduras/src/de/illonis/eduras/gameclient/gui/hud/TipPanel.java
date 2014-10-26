@@ -68,8 +68,7 @@ public class TipPanel extends RenderedGuiObject {
 
 	@Override
 	public void onGuiSizeChanged(int newWidth, int newHeight) {
-		screenY = newHeight - StrategyPanel.HEIGHT
-				* GameRenderer.getRenderScale() + 5;
+		screenY = newHeight - MiniMap.SIZE * GameRenderer.getRenderScale() - 20;
 	}
 
 	@Override

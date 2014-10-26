@@ -110,7 +110,9 @@ public class ResourceManager {
 			throws IOException {
 		String hash = "";
 		try (InputStream is = openResource(type, fileName)) {
+			L.fine("Start hash calculation of " + fileName);
 			hash = HashCalculator.computeHash(is);
+			L.fine("End hash calculation of " + fileName);
 			L.info("Hash of " + type.name() + " " + fileName + " is " + hash);
 		}
 		return hash;

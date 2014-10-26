@@ -4,13 +4,12 @@ import java.util.logging.Logger;
 
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
-import org.newdawn.slick.Image;
 import org.newdawn.slick.geom.Rectangle;
 
 import de.illonis.edulog.EduLog;
 import de.illonis.eduras.gameclient.datacache.CacheException;
-import de.illonis.eduras.gameclient.datacache.CacheInfo.ImageKey;
 import de.illonis.eduras.gameclient.datacache.ImageCache;
+import de.illonis.eduras.gameclient.datacache.TextureInfo.TextureKey;
 import de.illonis.eduras.gameclient.gui.game.GameRenderer;
 import de.illonis.eduras.units.InteractMode;
 
@@ -27,7 +26,6 @@ public class StrategyPanel extends ClickableGuiElement {
 	/**
 	 * Height of strategy panel at scale = 1.
 	 */
-	public final static int HEIGHT = 130;
 	private float scaledWidth = 0;
 	private float scaledHeight = 0;
 	private final Rectangle bounds;
@@ -35,7 +33,7 @@ public class StrategyPanel extends ClickableGuiElement {
 	protected StrategyPanel(UserInterface gui) {
 		super(gui);
 		setActiveInteractModes(InteractMode.MODE_STRATEGY);
-		scaledHeight = HEIGHT * GameRenderer.getRenderScale();
+		scaledHeight = MiniMap.SIZE * GameRenderer.getRenderScale();
 		screenX = 0;
 		scaledWidth = 100;
 		zIndex = -1;
@@ -45,17 +43,17 @@ public class StrategyPanel extends ClickableGuiElement {
 	@Override
 	public void render(Graphics g) {
 		try {
-			Image image = ImageCache.getGuiImage(ImageKey.STRATEGY_BAR);
-			g.drawImage(image, screenX, screenY);
+			g.setColor(Color.white);
+			g.texture(bounds, ImageCache.getTexture(TextureKey.STRATEGY_BAR));
 		} catch (CacheException e) {
 			g.setColor(Color.green);
-			g.fillRect(screenX, screenY, scaledWidth, scaledHeight);
+			g.fill(bounds);
 		}
 	}
 
 	@Override
 	public void onGuiSizeChanged(int newWidth, int newHeight) {
-		screenY = newHeight - GameRenderer.getRenderScale() * HEIGHT;
+		screenY = newHeight - GameRenderer.getRenderScale() * MiniMap.SIZE;
 		scaledWidth = newWidth;
 		bounds.setBounds(screenX, screenY, scaledWidth, scaledHeight);
 	}

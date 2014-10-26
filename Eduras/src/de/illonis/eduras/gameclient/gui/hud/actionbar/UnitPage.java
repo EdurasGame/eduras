@@ -8,13 +8,13 @@ import de.illonis.eduras.gameclient.gui.hud.ActionBarPage;
 import de.illonis.eduras.gameclient.gui.hud.UserInterface;
 
 /**
- * Action bar that contains spells that cannot target units.
+ * Action bar page that contains unit spawn actions.
  * 
  * @author illonis
  * 
  */
-public class SpellPage extends ActionBarPage {
-	private final static Logger L = EduLog.getLoggerFor(SpellPage.class
+public class UnitPage extends ActionBarPage {
+	private final static Logger L = EduLog.getLoggerFor(UnitPage.class
 			.getName());
 
 	/**
@@ -28,12 +28,12 @@ public class SpellPage extends ActionBarPage {
 	 * @param reactor
 	 *            reactor.
 	 */
-	public SpellPage(int index, UserInterface ui, GamePanelReactor reactor) {
+	public UnitPage(int index, UserInterface ui, GamePanelReactor reactor) {
 		super(index, ui, reactor);
 		generateButtonsForSpells();
 	}
 
 	private void generateButtonsForSpells() {
-		addButton(new ScoutSpellButton(reactor));
+		addButton(new SpawnObserverButton(reactor));
 	}
 }

@@ -208,8 +208,7 @@ public class ActionBarPage extends ClickableGuiElement implements
 		}
 		float scale = GameRenderer.getRenderScale();
 		screenX = MiniMap.SIZE * scale + buttonSize;
-		screenY = 18 + newHeight - StrategyPanel.HEIGHT * scale + buttonSize
-				* index;
+		screenY = 5 + newHeight - MiniMap.SIZE * scale + buttonSize * index;
 
 		updateBounds();
 	}

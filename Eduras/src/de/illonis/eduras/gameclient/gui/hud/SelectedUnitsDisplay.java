@@ -70,7 +70,7 @@ public class SelectedUnitsDisplay extends ClickableGuiElement {
 	@Override
 	public void onGuiSizeChanged(int newWidth, int newHeight) {
 		float scale = GameRenderer.getRenderScale();
-		float height = StrategyPanel.HEIGHT * scale;
+		float height = MiniMap.SIZE * scale;
 		float width = WIDTH * scale;
 		screenX = newWidth - width;
 		screenY = newHeight - height;

@@ -25,7 +25,8 @@ public class TextureInfo {
 		ROOF("roof.png"),
 		WATER("water.png"),
 		SAND("sand.png"),
-		NONE("");
+		NONE(""),
+		STRATEGY_BAR("statbar2.jpg");
 
 		private final String file;
 

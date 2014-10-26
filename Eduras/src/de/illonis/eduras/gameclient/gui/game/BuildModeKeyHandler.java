@@ -60,6 +60,18 @@ public class BuildModeKeyHandler extends AnyModeKeyHandler {
 		case STRATEGY_10:
 			client.selectActionButton(9);
 			break;
+		case ACTIONBAR_PAGE_PLAYERSPELLS:
+			client.setPage(1);
+			break;
+		case ACTIONBAR_PAGE_SPELLS:
+			client.setPage(3);
+			break;
+		case ACTIONBAR_PAGE_UNITS:
+			client.setPage(2);
+			break;
+		case ACTIONBAR_PAGE_WEAPONS:
+			client.setPage(0);
+			break;
 		default:
 			break;
 		}

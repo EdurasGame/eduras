@@ -65,6 +65,11 @@ public final class KeyBindings implements ResettableSetting {
 		setDefaultKeyBinding(KeyBinding.STRATEGY_8, Input.KEY_8);
 		setDefaultKeyBinding(KeyBinding.STRATEGY_9, Input.KEY_9);
 		setDefaultKeyBinding(KeyBinding.STRATEGY_10, Input.KEY_0);
+		setDefaultKeyBinding(KeyBinding.ACTIONBAR_PAGE_WEAPONS, Input.KEY_F1);
+		setDefaultKeyBinding(KeyBinding.ACTIONBAR_PAGE_PLAYERSPELLS,
+				Input.KEY_F2);
+		setDefaultKeyBinding(KeyBinding.ACTIONBAR_PAGE_UNITS, Input.KEY_F3);
+		setDefaultKeyBinding(KeyBinding.ACTIONBAR_PAGE_SPELLS, Input.KEY_F4);
 
 		// general bindings
 		setDefaultKeyBinding(KeyBinding.CHAT, Input.KEY_ENTER);
@@ -112,7 +117,11 @@ public final class KeyBindings implements ResettableSetting {
 		STRATEGY_7,
 		STRATEGY_8,
 		STRATEGY_9,
-		STRATEGY_10;
+		STRATEGY_10,
+		ACTIONBAR_PAGE_WEAPONS,
+		ACTIONBAR_PAGE_PLAYERSPELLS,
+		ACTIONBAR_PAGE_SPELLS,
+		ACTIONBAR_PAGE_UNITS;
 	}
 
 	/**

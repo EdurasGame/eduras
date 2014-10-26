@@ -137,6 +137,14 @@ public interface UserInputListener {
 	void prevPage();
 
 	/**
+	 * Switches to given page in strategy mode.
+	 * 
+	 * @param page
+	 *            page index.
+	 */
+	void setPage(int page);
+
+	/**
 	 * Selects next item in inventory.
 	 */
 	void selectPreviousItem();
