@@ -9,11 +9,11 @@
    xmlns="http://www.w3.org/2000/svg"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   width="158.53485"
-   height="158.53488"
+   width="145.14"
+   height="145.14"
    id="svg2"
    version="1.1"
-   inkscape:version="0.48.4 r9939"
+   inkscape:version="0.48.2 r9819"
    sodipodi:docname="icon-speedspell.svg"
    inkscape:export-filename="icon-speedspell.png"
    inkscape:export-xdpi="65.290001"
@@ -22,8 +22,8 @@
      id="defs4">
     <filter
        id="filter5279"
-       style="color-interpolation-filters:sRGB;"
-       inkscape:label="Drop Shadow">
+       inkscape:label="Drop Shadow"
+       color-interpolation-filters="sRGB">
       <feFlood
          id="feFlood5281"
          flood-opacity="0.7"
@@ -37,7 +37,6 @@
          result="composite1" />
       <feGaussianBlur
          id="feGaussianBlur5285"
-         in="composite"
          stdDeviation="2"
          result="blur" />
       <feOffset
@@ -120,10 +119,11 @@
          id="feComposite5479"
          in2="result2"
          operator="arithmetic"
-         in="result4"
          k3="1"
          k1="3"
-         result="result91" />
+         result="result91"
+         k2="0"
+         k4="0" />
       <feBlend
          id="feBlend5481"
          in2="result91"
@@ -148,9 +148,9 @@
       <feSpecularLighting
          id="feSpecularLighting5489"
          specularExponent="30"
-         specularConstant="1.1"
+         specularConstant="1.10000002"
          surfaceScale="2"
-         lighting-color="rgb(111,236,253)"
+         lighting-color="#6fecfd"
          result="result1"
          in="result0">
         <fePointLight
@@ -162,7 +162,6 @@
       <feComposite
          id="feComposite5493"
          in2="fbSourceGraphicAlpha"
-         k2="-1"
          operator="in"
          result="result2"
          in="result1" />
@@ -173,7 +172,9 @@
          k2="3"
          operator="arithmetic"
          result="result4"
-         in="fbSourceGraphic" />
+         in="fbSourceGraphic"
+         k1="0"
+         k4="0" />
       <feBlend
          id="feBlend5497"
          in2="result4"
@@ -218,7 +219,7 @@
          id="feDiffuseLighting6075"
          in="result8"
          surfaceScale="50"
-         lighting-color="rgb(255,255,255)"
+         lighting-color="#ffffff"
          diffuseConstant="1"
          result="result16">
         <feDistantLight
@@ -241,10 +242,11 @@
     <filter
        inkscape:collect="always"
        id="filter6563"
-       x="-0.091863034"
+       x="-0.091863036"
        width="1.1837261"
-       y="-0.34283767"
-       height="1.6856753">
+       y="-0.34283766"
+       height="1.6856753"
+       color-interpolation-filters="sRGB">
       <feGaussianBlur
          inkscape:collect="always"
          stdDeviation="0.8960891"
@@ -253,10 +255,11 @@
     <filter
        inkscape:collect="always"
        id="filter6567"
-       x="-0.09186303"
+       x="-0.091863029"
        width="1.1837261"
-       y="-0.34283767"
-       height="1.6856753">
+       y="-0.34283766"
+       height="1.6856753"
+       color-interpolation-filters="sRGB">
       <feGaussianBlur
          inkscape:collect="always"
          stdDeviation="0.8960891"
@@ -265,10 +268,11 @@
     <filter
        inkscape:collect="always"
        id="filter6571"
-       x="-0.091863032"
+       x="-0.091863029"
        width="1.1837261"
-       y="-0.34283767"
-       height="1.6856753">
+       y="-0.34283766"
+       height="1.6856753"
+       color-interpolation-filters="sRGB">
       <feGaussianBlur
          inkscape:collect="always"
          stdDeviation="0.8960891"
@@ -277,10 +281,11 @@
     <filter
        inkscape:collect="always"
        id="filter6575"
-       x="-0.091863033"
+       x="-0.091863036"
        width="1.1837261"
-       y="-0.34283767"
-       height="1.6856753">
+       y="-0.34283766"
+       height="1.6856753"
+       color-interpolation-filters="sRGB">
       <feGaussianBlur
          inkscape:collect="always"
          stdDeviation="0.8960891"
@@ -289,10 +294,11 @@
     <filter
        inkscape:collect="always"
        id="filter6579"
-       x="-0.091863032"
+       x="-0.091863029"
        width="1.1837261"
-       y="-0.34283756"
-       height="1.6856751">
+       y="-0.34283757"
+       height="1.6856751"
+       color-interpolation-filters="sRGB">
       <feGaussianBlur
          inkscape:collect="always"
          stdDeviation="0.8960891"
@@ -301,10 +307,11 @@
     <filter
        inkscape:collect="always"
        id="filter6583"
-       x="-0.091863032"
+       x="-0.091863029"
        width="1.1837261"
-       y="-0.3428375"
-       height="1.685675">
+       y="-0.34283751"
+       height="1.685675"
+       color-interpolation-filters="sRGB">
       <feGaussianBlur
          inkscape:collect="always"
          stdDeviation="0.8960891"
@@ -313,10 +320,11 @@
     <filter
        inkscape:collect="always"
        id="filter6587"
-       x="-0.091863031"
+       x="-0.091863029"
        width="1.1837261"
-       y="-0.3428375"
-       height="1.685675">
+       y="-0.34283751"
+       height="1.685675"
+       color-interpolation-filters="sRGB">
       <feGaussianBlur
          inkscape:collect="always"
          stdDeviation="0.8960891"
@@ -325,10 +333,11 @@
     <filter
        inkscape:collect="always"
        id="filter6591"
-       x="-0.091863032"
+       x="-0.091863029"
        width="1.1837261"
-       y="-0.3428375"
-       height="1.685675">
+       y="-0.34283751"
+       height="1.685675"
+       color-interpolation-filters="sRGB">
       <feGaussianBlur
          inkscape:collect="always"
          stdDeviation="0.8960891"
@@ -337,10 +346,11 @@
     <filter
        inkscape:collect="always"
        id="filter6595"
-       x="-0.091863034"
+       x="-0.091863036"
        width="1.1837261"
-       y="-0.3428375"
-       height="1.685675">
+       y="-0.34283751"
+       height="1.685675"
+       color-interpolation-filters="sRGB">
       <feGaussianBlur
          inkscape:collect="always"
          stdDeviation="0.8960891"
@@ -349,10 +359,11 @@
     <filter
        inkscape:collect="always"
        id="filter6599"
-       x="-0.091863032"
+       x="-0.091863029"
        width="1.1837261"
-       y="-0.3428375"
-       height="1.685675">
+       y="-0.34283751"
+       height="1.685675"
+       color-interpolation-filters="sRGB">
       <feGaussianBlur
          inkscape:collect="always"
          stdDeviation="0.8960891"
@@ -361,27 +372,15 @@
     <filter
        inkscape:collect="always"
        id="filter6603"
-       x="-0.078341731"
-       width="1.1566835"
-       y="-0.29528679"
-       height="1.5905736">
+       x="-0.07834173"
+       width="1.1566834"
+       y="-0.2952868"
+       height="1.5905735"
+       color-interpolation-filters="sRGB">
       <feGaussianBlur
          inkscape:collect="always"
          stdDeviation="0.8960891"
          id="feGaussianBlur6605" />
-    </filter>
-    <filter
-       color-interpolation-filters="sRGB"
-       inkscape:collect="always"
-       id="filter6579-6"
-       x="-0.091863029"
-       width="1.1837261"
-       y="-0.34283757"
-       height="1.6856751">
-      <feGaussianBlur
-         inkscape:collect="always"
-         stdDeviation="0.8960891"
-         id="feGaussianBlur6581-4" />
     </filter>
     <filter
        color-interpolation-filters="sRGB"
@@ -430,20 +429,20 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="1.979899"
-     inkscape:cx="115.32142"
-     inkscape:cy="11.72956"
+     inkscape:zoom="3.959798"
+     inkscape:cx="115.24269"
+     inkscape:cy="90.363556"
      inkscape:document-units="px"
-     inkscape:current-layer="g5262"
+     inkscape:current-layer="layer2"
      showgrid="false"
      fit-margin-top="0"
      fit-margin-bottom="0"
      fit-margin-left="0"
      fit-margin-right="0"
      inkscape:window-width="1920"
-     inkscape:window-height="1014"
-     inkscape:window-x="0"
-     inkscape:window-y="27"
+     inkscape:window-height="1028"
+     inkscape:window-x="-8"
+     inkscape:window-y="-8"
      inkscape:window-maximized="1" />
   <metadata
      id="metadata7">
@@ -453,7 +452,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -461,38 +460,25 @@
      inkscape:label="Border"
      inkscape:groupmode="layer"
      id="layer1"
-     transform="translate(-173.64197,-311.56462)"
+     transform="translate(-173.99474,-325.15794)"
      style="display:inline"
      sodipodi:insensitive="true">
-    <rect
-       style="fill:none;stroke:#e6e6e6;stroke-width:8.73751068;stroke-linecap:round;stroke-linejoin:bevel;stroke-miterlimit:4;stroke-dasharray:none"
-       id="rect2985-1-7"
-       width="149.79735"
-       height="149.79736"
-       x="178.01073"
-       y="315.93338" />
-    <rect
-       style="fill:none;stroke:#666666;stroke-width:8.54300022;stroke-linecap:round;stroke-linejoin:bevel;stroke-miterlimit:4;stroke-dasharray:none"
-       id="rect2985-1"
-       width="146.45668"
-       height="146.4567"
-       x="179.68106"
-       y="317.60373" />
     <rect
        style="fill:#333333;stroke:#000000;stroke-width:8;stroke-linecap:round;stroke-linejoin:bevel;stroke-miterlimit:4;stroke-dasharray:none"
        id="rect2985"
        width="137.14285"
        height="137.14285"
-       x="184.33797"
-       y="322.26065" />
+       x="178.08543"
+       y="329.01825" />
   </g>
   <g
      inkscape:groupmode="layer"
      id="layer2"
-     inkscape:label="Art">
+     inkscape:label="Art"
+     transform="translate(-0.35276882,-13.593323)">
     <g
        id="g5257"
-       transform="translate(22.98097,1.767767)">
+       transform="translate(16.98097,8.5253813)">
       <g
          id="g5262"
          style="filter:url(#filter5279)">

@@ -9,11 +9,11 @@
    xmlns="http://www.w3.org/2000/svg"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   width="158.53485"
-   height="158.53488"
+   width="145.14"
+   height="145.14"
    id="svg2"
    version="1.1"
-   inkscape:version="0.48.3.1 r9886"
+   inkscape:version="0.48.2 r9819"
    sodipodi:docname="icon-heal.svg"
    inkscape:export-filename="/home/illonis/git/eduras/Eduras/src/de/illonis/eduras/images/gui/icons/icon-heal.png.low.png"
    inkscape:export-xdpi="27.25"
@@ -26,7 +26,8 @@
        x="-0.12013425"
        width="1.2402685"
        y="-0.11986605"
-       height="1.2397321">
+       height="1.2397321"
+       color-interpolation-filters="sRGB">
       <feGaussianBlur
          inkscape:collect="always"
          stdDeviation="6.3828678"
@@ -34,8 +35,8 @@
     </filter>
     <filter
        id="filter3855"
-       style="color-interpolation-filters:sRGB;"
-       inkscape:label="Drop Shadow">
+       inkscape:label="Drop Shadow"
+       color-interpolation-filters="sRGB">
       <feFlood
          id="feFlood3857"
          flood-opacity="0.8"
@@ -49,7 +50,6 @@
          result="composite1" />
       <feGaussianBlur
          id="feGaussianBlur3861"
-         in="composite"
          stdDeviation="3"
          result="blur" />
       <feOffset
@@ -285,21 +285,21 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.98994949"
-     inkscape:cx="82.522335"
-     inkscape:cy="150.7472"
+     inkscape:zoom="3.959798"
+     inkscape:cx="81.276841"
+     inkscape:cy="47.536171"
      inkscape:document-units="px"
-     inkscape:current-layer="layer2"
+     inkscape:current-layer="layer1"
      showgrid="false"
      fit-margin-top="0"
      fit-margin-bottom="0"
      fit-margin-left="0"
      fit-margin-right="0"
-     inkscape:window-width="842"
-     inkscape:window-height="634"
-     inkscape:window-x="240"
-     inkscape:window-y="105"
-     inkscape:window-maximized="0" />
+     inkscape:window-width="1920"
+     inkscape:window-height="1028"
+     inkscape:window-x="-8"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1" />
   <metadata
      id="metadata7">
     <rdf:RDF>
@@ -308,7 +308,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -316,45 +316,24 @@
      inkscape:label="Border"
      inkscape:groupmode="layer"
      id="layer1"
-     transform="translate(-173.64197,-311.56462)"
-     style="display:inline"
-     sodipodi:insensitive="true">
+     transform="translate(-173.40884,-322.23684)"
+     style="display:inline">
     <rect
-       style="fill:none;stroke:#e6e6e6;stroke-width:8.73751068;stroke-linecap:round;stroke-linejoin:bevel;stroke-miterlimit:4;stroke-dasharray:none"
-       id="rect2985-1-7"
-       width="149.79735"
-       height="149.79736"
-       x="178.01073"
-       y="315.93338" />
-    <rect
-       style="fill:none;stroke:#666666;stroke-width:8.54300022;stroke-linecap:round;stroke-linejoin:bevel;stroke-miterlimit:4;stroke-dasharray:none"
-       id="rect2985-1"
-       width="146.45668"
-       height="146.4567"
-       x="179.68106"
-       y="317.60373" />
-    <rect
-       style="fill:#ffffff;stroke:#000000;stroke-width:8;stroke-linecap:round;stroke-linejoin:bevel;stroke-miterlimit:4;stroke-dasharray:none"
+       style="fill:#1a1a1a;stroke:#000000;stroke-width:8;stroke-linecap:round;stroke-linejoin:bevel;stroke-miterlimit:4;stroke-dasharray:none"
        id="rect2985"
        width="137.14285"
        height="137.14285"
-       x="184.33797"
-       y="322.26065" />
+       x="177.58037"
+       y="326.26065" />
   </g>
   <g
      inkscape:groupmode="layer"
      id="layer2"
-     inkscape:label="Art">
-    <rect
-       style="color:#000000;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:#1a1a1a;stroke-width:1;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
-       id="rect3076"
-       width="132.14285"
-       height="131.07143"
-       x="14.642858"
-       y="12.820596" />
+     inkscape:label="Art"
+     transform="translate(0.23313149,-10.672222)">
     <path
        sodipodi:type="star"
-       style="color:#000000;fill:#ffff00;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;filter:url(#filter3874)"
+       style="color:#000000;fill:#ffff00;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1;marker:none;visibility:visible;display:inline;overflow:visible;filter:url(#filter3874);enable-background:accumulate"
        id="path3864"
        sodipodi:sides="11"
        sodipodi:cx="37.5"
@@ -369,10 +348,10 @@
        d="M 82.5,86.749166 52.548374,68.933524 50.255228,103.70763 34.69018,72.527088 13.960762,100.54116 17.724085,65.895318 -14.860163,78.255085 7.036702,51.143754 -27.057106,43.925077 6.0212014,32.955913 -18.757624,8.4506721 14.999997,17.106307 7.4032564,-16.905258 31.122384,8.6270731 43.11964,-24.092384 49.26962,10.210308 77.051827,-10.828845 63.680084,21.353347 98.426589,18.674281 69.778557,38.518353 100.45759,55.049958 65.628816,56.255557 z"
        inkscape:transform-center-x="0.79975817"
        inkscape:transform-center-y="-0.51297134"
-       transform="translate(42.142857,36.785714)" />
+       transform="translate(35.385243,40.785714)" />
     <g
        id="g3019-5"
-       transform="matrix(0.71866944,0,0,0.71866944,71.286831,32.037343)"
+       transform="matrix(0.71866944,0,0,0.71866944,64.529217,36.037343)"
        style="filter:url(#filter3855-3)">
       <path
          style="color:#000000;fill:#aa0000;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:2.7829206;stroke-miterlimit:4;stroke-dasharray:none;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
@@ -382,7 +361,7 @@
     </g>
     <g
        id="g3019-5-6"
-       transform="matrix(0.49360499,0,0,0.49360499,57.557449,12.499029)"
+       transform="matrix(0.49360499,0,0,0.49360499,50.799835,16.499029)"
        style="filter:url(#filter3855-3-2)">
       <path
          style="color:#000000;fill:#aa0000;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:4.05182266;stroke-miterlimit:4;stroke-dasharray:none;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
@@ -392,7 +371,7 @@
     </g>
     <g
        id="g3019-5-5"
-       transform="translate(10.414273,54.692469)"
+       transform="translate(3.6566587,58.692469)"
        style="filter:url(#filter3855-3-0)">
       <path
          style="color:#000000;fill:#aa0000;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"

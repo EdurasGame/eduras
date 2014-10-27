@@ -9,11 +9,11 @@
    xmlns="http://www.w3.org/2000/svg"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   width="158.53485"
-   height="158.53488"
+   width="145.14"
+   height="145.14"
    id="svg2"
    version="1.1"
-   inkscape:version="0.48.4 r9939"
+   inkscape:version="0.48.2 r9819"
    sodipodi:docname="icon-mine.svg"
    inkscape:export-filename="icon-mine.png"
    inkscape:export-xdpi="65.290001"
@@ -22,7 +22,6 @@
      id="defs4">
     <filter
        id="filter3676"
-       style="color-interpolation-filters:sRGB;"
        inkscape:label="Inner Shadow"
        inkscape:menu="Shadows and Glows"
        inkscape:menu-tooltip="Adds a colorizable drop shadow inside"
@@ -40,7 +39,6 @@
          result="composite1" />
       <feGaussianBlur
          id="feGaussianBlur3682"
-         in="composite"
          stdDeviation="1.4249528301886791"
          result="blur" />
       <feOffset
@@ -101,20 +99,20 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.35"
-     inkscape:cx="1269.6404"
-     inkscape:cy="-433.74721"
+     inkscape:zoom="3.959798"
+     inkscape:cx="111.41107"
+     inkscape:cy="65.81271"
      inkscape:document-units="px"
-     inkscape:current-layer="g3007"
+     inkscape:current-layer="layer2"
      showgrid="false"
      fit-margin-top="0"
      fit-margin-bottom="0"
      fit-margin-left="0"
      fit-margin-right="0"
      inkscape:window-width="1920"
-     inkscape:window-height="1014"
-     inkscape:window-x="0"
-     inkscape:window-y="27"
+     inkscape:window-height="1028"
+     inkscape:window-x="-8"
+     inkscape:window-y="-8"
      inkscape:window-maximized="1" />
   <metadata
      id="metadata7">
@@ -124,7 +122,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -132,38 +130,26 @@
      inkscape:label="Border"
      inkscape:groupmode="layer"
      id="layer1"
-     transform="translate(-173.64197,-311.56462)"
-     style="display:inline">
+     transform="translate(-167.04699,-330.53018)"
+     style="display:inline"
+     sodipodi:insensitive="true">
     <rect
-       style="fill:none;stroke:#e6e6e6;stroke-width:8.73751068;stroke-linecap:round;stroke-linejoin:bevel;stroke-miterlimit:4;stroke-dasharray:none"
-       id="rect2985-1-7"
-       width="149.79735"
-       height="149.79736"
-       x="178.01073"
-       y="315.93338" />
-    <rect
-       style="fill:none;stroke:#666666;stroke-width:8.54300022;stroke-linecap:round;stroke-linejoin:bevel;stroke-miterlimit:4;stroke-dasharray:none"
-       id="rect2985-1"
-       width="146.45668"
-       height="146.4567"
-       x="179.68106"
-       y="317.60373" />
-    <rect
-       style="fill:#004455;stroke:#000000;stroke-width:8;stroke-linecap:round;stroke-linejoin:bevel;stroke-miterlimit:4;stroke-dasharray:none;"
+       style="fill:#004455;stroke:#000000;stroke-width:8;stroke-linecap:round;stroke-linejoin:bevel;stroke-miterlimit:4;stroke-dasharray:none"
        id="rect2985"
        width="137.14285"
        height="137.14285"
-       x="184.33797"
-       y="322.26065" />
+       x="171.03467"
+       y="334.40277" />
   </g>
   <g
      inkscape:groupmode="layer"
      id="layer2"
      inkscape:label="Art"
-     style="display:inline">
+     style="display:inline"
+     transform="translate(6.5949772,-18.965566)">
     <g
        id="g3007"
-       transform="translate(4,4)"
+       transform="translate(-9.3033009,16.142135)"
        style="fill:#ffff00">
       <path
          transform="matrix(1.0648854,0,0,1.2198552,-5.1328243,-7.371986)"
@@ -230,7 +216,7 @@
        id="rect2985-5"
        width="137.14285"
        height="137.14285"
-       x="10.695997"
-       y="10.696031" />
+       x="-2.6073036"
+       y="22.838165" />
   </g>
 </svg>
