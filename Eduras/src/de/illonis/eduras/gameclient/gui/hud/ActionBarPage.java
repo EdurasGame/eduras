@@ -154,13 +154,13 @@ public class ActionBarPage extends ClickableGuiElement implements
 		} else {
 			g.setColor(DISABLED_COLOR);
 		}
-
-		Rectangle rect = new Rectangle(x, screenY, buttonSize, buttonSize);
+		float y = screenY + font.getLineHeight();
+		Rectangle rect = new Rectangle(x, y, buttonSize, buttonSize);
 		for (int i = 0; i < buttons.size(); i++) {
 			rect.setX(x);
 			ActionButton button = buttons.get(i);
 			if (button.getIcon() != null) {
-				g.drawImage(button.getIcon(), x, screenY);
+				g.drawImage(button.getIcon(), x, y);
 				if (!activePage) {
 					g.setColor(DISABLED_COLOR);
 					g.fill(rect);
@@ -169,11 +169,11 @@ public class ActionBarPage extends ClickableGuiElement implements
 					g.setColor(BG_COLOR);
 					float fontX = x + buttonSize
 							- font.getWidth(button.getCosts() + "") - 3;
-					g.fillRect(fontX - 2,
-							screenY + buttonSize - font.getLineHeight() - 2,
-							buttonSize - (fontX - x), font.getLineHeight() + 2);
+					g.fillRect(fontX - 2, y + buttonSize - font.getLineHeight()
+							- 2, buttonSize - (fontX - x),
+							font.getLineHeight() + 2);
 					font.drawString(fontX,
-							screenY + buttonSize - font.getLineHeight() - 2,
+							y + buttonSize - font.getLineHeight() - 2,
 							button.getCosts() + "", Color.white);
 				}
 				if (activePage && data.getCurrentActionSelected() == i) {
@@ -182,8 +182,7 @@ public class ActionBarPage extends ClickableGuiElement implements
 					} else {
 						g.setColor(Color.yellow);
 						g.setLineWidth(2f);
-						g.drawRect(x + 1, screenY + 1, buttonSize - 2,
-								buttonSize - 2);
+						g.drawRect(x + 1, y + 1, buttonSize - 2, buttonSize - 2);
 					}
 				}
 				if (!button.isEnabled() || button.getCosts() > resources) {
@@ -221,14 +220,6 @@ public class ActionBarPage extends ClickableGuiElement implements
 		float scale = GameRenderer.getRenderScale();
 		screenX = MiniMap.SIZE * scale + buttonSize;
 		screenY = newHeight - MiniMap.SIZE * scale + buttonSize * index;
-		try {
-			float height = FontCache.getFont(FontKey.SMALL_FONT)
-					.getLineHeight();
-			screenY += height;
-		} catch (CacheException e) {
-			L.log(Level.WARNING, "TODO: message", e);
-		}
-
 		updateBounds();
 	}
 

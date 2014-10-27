@@ -5,6 +5,7 @@ import java.util.HashMap;
 
 import org.newdawn.slick.Input;
 
+import de.illonis.eduras.ObjectFactory.ObjectType;
 import de.illonis.eduras.exceptions.KeyNotBoundException;
 import de.illonis.eduras.interfaces.ResettableSetting;
 import de.illonis.eduras.locale.Localization;
@@ -33,6 +34,34 @@ public final class KeyBindings implements ResettableSetting {
 		}
 		descriptions = new HashMap<KeyBinding, String>();
 		init();
+	}
+
+	/**
+	 * Retrieves the keybinding used for given weapon.
+	 * 
+	 * @param type
+	 *            weapon type.
+	 * @return the keybinding for that weapon or null if no binding exists.
+	 */
+	public KeyBinding getBindingByWeapon(ObjectType type) {
+		switch (type) {
+		case ASSAULTRIFLE:
+			return KeyBinding.ITEM_ASSAULT;
+		case ITEM_WEAPON_SIMPLE:
+			return KeyBinding.ITEM_SIMPLE;
+		case ITEM_WEAPON_SNIPER:
+			return KeyBinding.ITEM_SNIPER;
+		case ITEM_WEAPON_SPLASH:
+			return KeyBinding.ITEM_SPLASH;
+		case ITEM_WEAPON_SWORD:
+			return KeyBinding.ITEM_SWORD;
+		case MINELAUNCHER:
+			return KeyBinding.ITEM_MINE;
+		case ROCKETLAUNCHER:
+			return KeyBinding.ITEM_ROCKET;
+		default:
+			return null;
+		}
 	}
 
 	private void init() {

@@ -19,11 +19,13 @@ import de.illonis.eduras.gameclient.datacache.FontCache;
 import de.illonis.eduras.gameclient.datacache.FontCache.FontKey;
 import de.illonis.eduras.gameclient.datacache.ImageCache;
 import de.illonis.eduras.gameclient.gui.game.GameRenderer;
+import de.illonis.eduras.gameclient.userprefs.KeyBindings;
 import de.illonis.eduras.inventory.Inventory;
 import de.illonis.eduras.inventory.ItemSlotIsEmptyException;
 import de.illonis.eduras.items.Item;
 import de.illonis.eduras.items.Usable;
 import de.illonis.eduras.items.weapons.Weapon;
+import de.illonis.eduras.logicabstraction.EdurasInitializer;
 import de.illonis.eduras.units.InteractMode;
 
 /**
@@ -54,7 +56,7 @@ public class ItemDisplay extends RenderedGuiObject {
 	private final MiniMap minimap;
 	private final GuiItem itemSlots[];
 	private final float borderSize;
-	private final UserInterface gui;
+	private final KeyBindings bindings;
 
 	private ObjectType currentItem = ObjectType.NO_OBJECT;
 
@@ -68,8 +70,9 @@ public class ItemDisplay extends RenderedGuiObject {
 	 */
 	public ItemDisplay(UserInterface gui, MiniMap map) {
 		super(gui);
-		this.gui = gui;
 		this.minimap = map;
+		bindings = EdurasInitializer.getInstance().getSettings()
+				.getKeyBindings();
 		buttonSize = BLOCKSIZE * GameRenderer.getRenderScale();
 		borderSize = 2 * GameRenderer.getRenderScale();
 		screenX = 15;
@@ -245,11 +248,21 @@ public class ItemDisplay extends RenderedGuiObject {
 				int ammo = getWeaponAmmu();
 				if (ammo != -1) {
 					String ammoString = ammo + "";
-					float stringX = clickRect.getX() + borderSize;
-					float stringY = clickRect.getY();
+					float stringX = clickRect.getX() + clickRect.getWidth()
+							- font.getWidth(ammoString) - borderSize;
+					float stringY = clickRect.getY() + clickRect.getHeight()
+							- font.getLineHeight();
 					font.drawString(stringX, stringY, ammoString, currentColor);
 				}
 			}
+
+			String binding = bindings.getBindingString(bindings
+					.getBindingByWeapon(item.getType()));
+			float bindingWidth = font.getWidth(binding);
+			font.drawString(clickRect.getX() - bindingWidth - 2,
+					clickRect.getY() + (buttonSize - font.getLineHeight()) / 2,
+					binding, COLOR_MULTIPLIER);
+
 			renderCooldown(g, clickRect.getX(), clickRect.getY(),
 					clickRect.getWidth(), clickRect.getHeight());
 		}
