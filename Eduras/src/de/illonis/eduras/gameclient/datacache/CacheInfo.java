@@ -28,7 +28,6 @@ public final class CacheInfo {
 		STATISTICS_BG,
 		RESOURCE_ICON,
 		RESOURCE_ICON_SMALL,
-		SPELLS_PAGE,
 		ACTION_HEAL,
 		ACTION_RESURRECT,
 		ACTION_RESURRECT_PLAYER,
@@ -164,7 +163,6 @@ public final class CacheInfo {
 				"gui/icons/icon-spawn-observer.png");
 		guiImages.put(ImageKey.ACTION_SPELL_SCOUT,
 				"gui/icons/icon-spell-scout.png");
-		guiImages.put(ImageKey.SPELLS_PAGE, "gui/icons/icon-spells.png");
 		guiImages.put(ImageKey.ACTION_SPELL_SPEED,
 				"gui/icons/icon-speedspell.png");
 		guiImages.put(ImageKey.ACTION_SPELL_INVISIBILITY,

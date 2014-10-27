@@ -36,7 +36,7 @@ public class ActionBarPage extends ClickableGuiElement implements
 		TooltipTriggerer {
 	private final static Logger L = EduLog.getLoggerFor(ActionBarPage.class
 			.getName());
-	private final static Color DISABLED_COLOR = new Color(0, 0, 0, 0.5f);
+	private final static Color DISABLED_COLOR = new Color(0, 0, 0, 0.4f);
 	private final static Color BG_COLOR = new Color(0, 0, 0, 0.7f);
 	private final static Color UNAVAILABLE_COLOR = new Color(1f, 0, 0, 0.4f);
 
