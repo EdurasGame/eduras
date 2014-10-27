@@ -172,14 +172,15 @@ public class GuiInternalEventListener implements GamePanelReactor {
 	}
 
 	@Override
-	public void onUnitsSelected(Rectangle2D.Double area, boolean add) {
+	public void onUnitsSelected(Rectangle2D.Double area, boolean add,
+			boolean remove) {
 		// FIXME: Use slicks rectangle here
 		Rectangle r = new Rectangle((float) area.getX(), (float) area.getY(),
 				(float) area.getWidth(), (float) area.getHeight());
 
 		if (r.getWidth() * r.getHeight() < RECTANGLE_SINGLE_SELECTION_SIZE) {
 			selectOrDeselectAt(new Vector2f(r.getCenterX(), r.getCenterY()),
-					add);
+					add, remove);
 			return;
 		}
 
@@ -203,19 +204,17 @@ public class GuiInternalEventListener implements GamePanelReactor {
 				ids.add(obj.getKey());
 			}
 		}
-		if (add) {
-			for (int id : ids) {
-				if (client.getData().getSelectedUnits().contains(id))
-					client.getData().getSelectedUnits().remove(id);
-				else
-					client.getData().getSelectedUnits().add(id);
-			}
-		} else
+		if (remove) {
+			client.getData().getSelectedUnits().removeAll(ids);
+		} else if (add) {
+			client.getData().getSelectedUnits().addAll(ids);
+		} else {
 			client.getData().setSelectedUnits(ids);
+		}
 	}
 
 	@Override
-	public void selectOrDeselectAt(Vector2f point, boolean add) {
+	public void selectOrDeselectAt(Vector2f point, boolean add, boolean remove) {
 		PlayerMainFigure p;
 		try {
 			p = infoPro.getPlayer().getPlayerMainFigure();
@@ -230,20 +229,15 @@ public class GuiInternalEventListener implements GamePanelReactor {
 			GameObject o = obj.getValue();
 			if (o.isUnit() && o.isVisibleFor(p)
 					&& o.getShape().contains(point.x, point.y)) {
-				if (add) {
-					if (client.getData().getSelectedUnits()
-							.contains(obj.getKey())) {
-						client.getData().getSelectedUnits()
-								.remove(obj.getKey());
-					} else
-						client.getData().getSelectedUnits().add(obj.getKey());
+				if (remove) {
+					client.getData().getSelectedUnits().remove(obj.getKey());
+				} else if (add) {
+					client.getData().getSelectedUnits().add(obj.getKey());
 				} else
 					client.getData().setSelectedUnit(obj.getKey());
 				return;
 			}
 		}
-		if (!add)
-			client.getData().clearSelectedUnits();
 	}
 
 	@Override

@@ -59,7 +59,8 @@ public class BuildModeMouseAdapter extends ScrollModeMouseAdapter {
 		case DEFAULT:
 			if (button == Input.MOUSE_LEFT_BUTTON) {
 				getListener().selectOrDeselectAt(clickGamePoint,
-						getPanelLogic().isKeyDown(Input.KEY_LSHIFT));
+						getPanelLogic().isKeyDown(Input.KEY_LSHIFT),
+						getPanelLogic().isKeyDown(Input.KEY_LCONTROL));
 			}
 			break;
 		default:
@@ -335,7 +336,8 @@ public class BuildModeMouseAdapter extends ScrollModeMouseAdapter {
 
 		Rectangle2D.Double r = calculateDragRect(start, end);
 		getListener().onUnitsSelected(r,
-				getPanelLogic().isKeyDown(Input.KEY_LSHIFT));
+				getPanelLogic().isKeyDown(Input.KEY_LSHIFT),
+				getPanelLogic().isKeyDown(Input.KEY_LCONTROL));
 		getPanelLogic().getDragRect().clear();
 	}
 

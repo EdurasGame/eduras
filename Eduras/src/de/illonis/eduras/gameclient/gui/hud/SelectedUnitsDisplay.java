@@ -41,9 +41,11 @@ public class SelectedUnitsDisplay extends ClickableGuiElement {
 	private final Rectangle bounds;
 	private final float buttonSize;
 	private int buttonsPerRow = 5;
+	private final UserInterface gui;
 
 	protected SelectedUnitsDisplay(UserInterface gui) {
 		super(gui);
+		this.gui = gui;
 		setActiveInteractModes(InteractMode.MODE_STRATEGY);
 		bounds = new Rectangle(0, 0, 5, 5);
 		buttonSize = ActionButton.BUTTON_SIZE * GameRenderer.getRenderScale();
@@ -152,10 +154,10 @@ public class SelectedUnitsDisplay extends ClickableGuiElement {
 		if (unit == -1)
 			return false;
 		if (button == Input.MOUSE_LEFT_BUTTON) {
-			getInfo().getClientData().setSelectedUnit(unit);
-			return true;
-		} else if (button == Input.MOUSE_RIGHT_BUTTON) {
-			getInfo().getClientData().getSelectedUnits().remove(unit);
+			if (gui.getLogic().isKeyDown(Input.KEY_LCONTROL)) {
+				getInfo().getClientData().getSelectedUnits().remove(unit);
+			} else
+				getInfo().getClientData().setSelectedUnit(unit);
 			return true;
 		}
 		return false;

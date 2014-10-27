@@ -67,8 +67,11 @@ public interface GamePanelReactor {
 	 *            the rectangle that has been drawn.
 	 * @param add
 	 *            true if selected units should be added to current selection.
+	 * @param remove
+	 *            true if selected units should be substracted from current
+	 *            selection. <i>add</i> is ignored if this is true.
 	 */
-	void onUnitsSelected(Rectangle2D.Double area, boolean add);
+	void onUnitsSelected(Rectangle2D.Double area, boolean add, boolean remove);
 
 	/**
 	 * Resurrects given player.
@@ -147,8 +150,11 @@ public interface GamePanelReactor {
 	 *            the point where user clicked.
 	 * @param add
 	 *            true if unit should be added to existing selection.
+	 * @param delete
+	 *            true if unit should be deleted from existing selection,
+	 *            overrides <i>add</i>
 	 */
-	void selectOrDeselectAt(Vector2f point, boolean add);
+	void selectOrDeselectAt(Vector2f point, boolean add, boolean delete);
 
 	/**
 	 * Indicates to trigger a send units event to server with currently selected
