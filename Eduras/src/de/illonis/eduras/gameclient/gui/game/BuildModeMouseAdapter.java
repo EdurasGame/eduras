@@ -164,7 +164,10 @@ public class BuildModeMouseAdapter extends ScrollModeMouseAdapter {
 	public void mouseReleased(int button, int x, int y) {
 		Vector2f clickGamePoint = getPanelLogic()
 				.computeGuiPointToGameCoordinate(new Vector2f(x, y));
-
+		if (button == Input.MOUSE_RIGHT_BUTTON) {
+			getPanelLogic().setClickState(ClickState.DEFAULT);
+			actionDone();
+		}
 		switch (getPanelLogic().getClickState()) {
 		case DEFAULT:
 			if (button == Input.MOUSE_RIGHT_BUTTON) {
