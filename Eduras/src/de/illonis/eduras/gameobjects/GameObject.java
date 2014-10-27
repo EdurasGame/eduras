@@ -543,18 +543,26 @@ public abstract class GameObject extends ReferencedEntity implements
 				return true;
 			}
 
-			Player player;
-			try {
-				player = game.getPlayerByOwnerId(this.owner);
-			} catch (ObjectNotFoundException e) {
-				return false;
-			}
 			Team playerTeam;
-			try {
-				playerTeam = player.getTeam();
-			} catch (PlayerHasNoTeamException e) {
-				return false;
+
+			if (isUnit()) {
+				// we can use the unit's team directly
+				playerTeam = ((Unit) this).getTeam();
+			} else {
+				// if it's not a unit, use the owners team
+				Player player;
+				try {
+					player = game.getPlayerByOwnerId(this.owner);
+				} catch (ObjectNotFoundException e) {
+					return false;
+				}
+				try {
+					playerTeam = player.getTeam();
+				} catch (PlayerHasNoTeamException e) {
+					return false;
+				}
 			}
+
 			Team otherTeam = ((Unit) other).getTeam();
 			if (playerTeam == null || otherTeam == null)
 				return false;
