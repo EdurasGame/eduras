@@ -70,6 +70,7 @@ public class StatisticsWindow extends RenderedGuiObject {
 		screenX = 0;
 		screenY = 0;
 		useStored = false;
+		zIndex = 5;
 	}
 
 	@Override
