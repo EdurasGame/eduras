@@ -629,7 +629,7 @@ public class GameRenderer implements TooltipHandler {
 
 	@Override
 	public void showTooltip(Vector2f p, String title, String description) {
-		if (tooltip == null || !(tooltip instanceof TextTooltip)) {
+		if (tooltip == null || !(tooltip instanceof DetailTooltip)) {
 			tooltip = new DetailTooltip(title, description);
 		} else {
 			((DetailTooltip) tooltip).set(title, description);

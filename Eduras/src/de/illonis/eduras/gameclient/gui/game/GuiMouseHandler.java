@@ -86,6 +86,7 @@ public final class GuiMouseHandler extends GuiMouseAdapter implements
 	}
 
 	private void loseGameFocus() {
+
 		if (gameHasMouse) {
 			getCurrentHandler().mouseLost();
 			gameHasMouse = false;

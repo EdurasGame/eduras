@@ -177,17 +177,8 @@ public class BuildModeMouseAdapter extends ScrollModeMouseAdapter {
 			break;
 		case UNITSELECT_DRAGGING:
 			if (button == Input.MOUSE_LEFT_BUTTON) {
-				getPanelLogic().setClickState(ClickState.DEFAULT);
-
-				Vector2f start = getPanelLogic()
-						.computeGuiPointToGameCoordinate(
-								new Vector2f(startPoint.x, startPoint.y));
-				Vector2f end = getPanelLogic().computeGuiPointToGameCoordinate(
-						new Vector2f(x, y));
-				Rectangle2D.Double r = calculateDragRect(start, end);
-				getListener().onUnitsSelected(r,
-						getPanelLogic().isKeyDown(Input.KEY_LSHIFT));
-				getPanelLogic().getDragRect().clear();
+				stopSelectDragging(getPanelLogic()
+						.computeGuiPointToGameCoordinate(new Vector2f(x, y)));
 			}
 			break;
 		case SELECT_POSITION_FOR_SCOUT:
@@ -335,6 +326,24 @@ public class BuildModeMouseAdapter extends ScrollModeMouseAdapter {
 		default:
 			break;
 		}
+	}
+
+	void stopSelectDragging(Vector2f end) {
+		getPanelLogic().setClickState(ClickState.DEFAULT);
+		Vector2f start = getPanelLogic().computeGuiPointToGameCoordinate(
+				new Vector2f(startPoint.x, startPoint.y));
+
+		Rectangle2D.Double r = calculateDragRect(start, end);
+		getListener().onUnitsSelected(r,
+				getPanelLogic().isKeyDown(Input.KEY_LSHIFT));
+		getPanelLogic().getDragRect().clear();
+	}
+
+	@Override
+	public void mouseLost() {
+		super.mouseLost();
+		if (getPanelLogic().getClickState() == ClickState.UNITSELECT_DRAGGING)
+			stopSelectDragging(getPanelLogic().getCurrentMousePos());
 	}
 
 	private void actionDone() {

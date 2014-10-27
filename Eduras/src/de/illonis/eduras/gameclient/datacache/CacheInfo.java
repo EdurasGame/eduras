@@ -66,6 +66,8 @@ public final class CacheInfo {
 				return ImageKey.ITEM_MINELAUNCHER;
 			case ASSAULTRIFLE:
 				return ImageKey.ITEM_ASSAULTRIFLE;
+			case OBSERVER:
+				return ImageKey.ACTION_SPAWN_OBSERVER;
 			default:
 				return ImageKey.ITEM_DUMMY;
 			}
