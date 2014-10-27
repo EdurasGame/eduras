@@ -203,9 +203,14 @@ public class GuiInternalEventListener implements GamePanelReactor {
 				ids.add(obj.getKey());
 			}
 		}
-		if (add)
-			client.getData().getSelectedUnits().addAll(ids);
-		else
+		if (add) {
+			for (int id : ids) {
+				if (client.getData().getSelectedUnits().contains(id))
+					client.getData().getSelectedUnits().remove(id);
+				else
+					client.getData().getSelectedUnits().add(id);
+			}
+		} else
 			client.getData().setSelectedUnits(ids);
 	}
 
