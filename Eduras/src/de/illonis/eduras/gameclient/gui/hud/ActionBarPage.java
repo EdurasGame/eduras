@@ -220,7 +220,14 @@ public class ActionBarPage extends ClickableGuiElement implements
 		}
 		float scale = GameRenderer.getRenderScale();
 		screenX = MiniMap.SIZE * scale + buttonSize;
-		screenY = 15 + newHeight - MiniMap.SIZE * scale + buttonSize * index;
+		screenY = newHeight - MiniMap.SIZE * scale + buttonSize * index;
+		try {
+			float height = FontCache.getFont(FontKey.SMALL_FONT)
+					.getLineHeight();
+			screenY += height;
+		} catch (CacheException e) {
+			L.log(Level.WARNING, "TODO: message", e);
+		}
 
 		updateBounds();
 	}
