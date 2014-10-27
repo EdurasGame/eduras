@@ -172,13 +172,14 @@ public class GuiInternalEventListener implements GamePanelReactor {
 	}
 
 	@Override
-	public void onUnitsSelected(Rectangle2D.Double area) {
+	public void onUnitsSelected(Rectangle2D.Double area, boolean add) {
 		// FIXME: Use slicks rectangle here
 		Rectangle r = new Rectangle((float) area.getX(), (float) area.getY(),
 				(float) area.getWidth(), (float) area.getHeight());
 
 		if (r.getWidth() * r.getHeight() < RECTANGLE_SINGLE_SELECTION_SIZE) {
-			selectOrDeselectAt(new Vector2f(r.getCenterX(), r.getCenterY()));
+			selectOrDeselectAt(new Vector2f(r.getCenterX(), r.getCenterY()),
+					add);
 			return;
 		}
 
@@ -202,11 +203,14 @@ public class GuiInternalEventListener implements GamePanelReactor {
 				ids.add(obj.getKey());
 			}
 		}
-		client.getData().setSelectedUnits(ids);
+		if (add)
+			client.getData().getSelectedUnits().addAll(ids);
+		else
+			client.getData().setSelectedUnits(ids);
 	}
 
 	@Override
-	public void selectOrDeselectAt(Vector2f point) {
+	public void selectOrDeselectAt(Vector2f point, boolean add) {
 		PlayerMainFigure p;
 		try {
 			p = infoPro.getPlayer().getPlayerMainFigure();
@@ -221,11 +225,20 @@ public class GuiInternalEventListener implements GamePanelReactor {
 			GameObject o = obj.getValue();
 			if (o.isUnit() && o.isVisibleFor(p)
 					&& o.getShape().contains(point.x, point.y)) {
-				client.getData().setSelectedUnit(obj.getKey());
+				if (add) {
+					if (client.getData().getSelectedUnits()
+							.contains(obj.getKey())) {
+						client.getData().getSelectedUnits()
+								.remove(obj.getKey());
+					} else
+						client.getData().getSelectedUnits().add(obj.getKey());
+				} else
+					client.getData().setSelectedUnit(obj.getKey());
 				return;
 			}
 		}
-		client.getData().clearSelectedUnits();
+		if (!add)
+			client.getData().clearSelectedUnits();
 	}
 
 	@Override

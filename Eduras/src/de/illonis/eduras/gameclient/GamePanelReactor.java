@@ -65,8 +65,10 @@ public interface GamePanelReactor {
 	 * 
 	 * @param area
 	 *            the rectangle that has been drawn.
+	 * @param add
+	 *            true if selected units should be added to current selection.
 	 */
-	void onUnitsSelected(Rectangle2D.Double area);
+	void onUnitsSelected(Rectangle2D.Double area, boolean add);
 
 	/**
 	 * Resurrects given player.
@@ -143,8 +145,10 @@ public interface GamePanelReactor {
 	 * 
 	 * @param point
 	 *            the point where user clicked.
+	 * @param add
+	 *            true if unit should be added to existing selection.
 	 */
-	void selectOrDeselectAt(Vector2f point);
+	void selectOrDeselectAt(Vector2f point, boolean add);
 
 	/**
 	 * Indicates to trigger a send units event to server with currently selected

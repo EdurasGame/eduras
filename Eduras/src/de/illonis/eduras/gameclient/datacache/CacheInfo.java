@@ -172,7 +172,7 @@ public final class CacheInfo {
 		guiImages.put(ImageKey.SKILL_BLINK, "gui/icons/icon-blink.png");
 
 		// items
-		guiImages.put(ImageKey.ITEM_DUMMY, "gui/icons/icon-resurrect.png");
+		guiImages.put(ImageKey.ITEM_DUMMY, "gui/icons/noicon.png");
 		guiImages.put(ImageKey.ACTION_SPAWN_ITEMS,
 				"gui/icons/icon_spawn_item.png");
 		guiImages.put(ImageKey.ITEM_ASSAULTRIFLE,

@@ -7,12 +7,17 @@ import java.util.logging.Logger;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Font;
 import org.newdawn.slick.Graphics;
+import org.newdawn.slick.Image;
+import org.newdawn.slick.Input;
 import org.newdawn.slick.geom.Rectangle;
 
 import de.illonis.edulog.EduLog;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
+import de.illonis.eduras.gameclient.datacache.CacheException;
+import de.illonis.eduras.gameclient.datacache.CacheInfo.ImageKey;
 import de.illonis.eduras.gameclient.datacache.FontCache;
 import de.illonis.eduras.gameclient.datacache.FontCache.FontKey;
+import de.illonis.eduras.gameclient.datacache.ImageCache;
 import de.illonis.eduras.gameclient.gui.game.GameRenderer;
 import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.units.InteractMode;
@@ -30,11 +35,14 @@ public class SelectedUnitsDisplay extends ClickableGuiElement {
 
 	private final static int WIDTH = 300;
 	private final Rectangle bounds;
+	private final float buttonSize;
+	private int buttonsPerRow = 5;
 
 	protected SelectedUnitsDisplay(UserInterface gui) {
 		super(gui);
 		setActiveInteractModes(InteractMode.MODE_STRATEGY);
 		bounds = new Rectangle(0, 0, 5, 5);
+		buttonSize = ActionButton.BUTTON_SIZE * GameRenderer.getRenderScale();
 	}
 
 	@Override
@@ -44,10 +52,12 @@ public class SelectedUnitsDisplay extends ClickableGuiElement {
 
 	@Override
 	public void render(Graphics g) {
+		g.setColor(Color.black);
+		g.setLineWidth(5f);
+		g.drawLine(screenX - 10, screenY + 2, screenX - 10,
+				screenY + bounds.getHeight());
 		Set<Integer> selected = getInfo().getClientData().getSelectedUnits();
-		FontCache.getFont(FontKey.TOOLTIP_FONT, g).drawString(screenX, screenY,
-				selected.size() + " object(s) selected.", Color.yellow);
-		int i = 1;
+		int i = 0;
 		for (int id : selected) {
 			drawSelectionFrameFor(id, g, i++);
 		}
@@ -63,8 +73,16 @@ public class SelectedUnitsDisplay extends ClickableGuiElement {
 					"Could not find selected object with id " + id, e);
 			return;
 		}
-		font.drawString(screenX, screenY + index * font.getLineHeight(), object
-				.getType().name() + " (" + id + ")", Color.white);
+		float x = screenX + buttonSize * (index % buttonsPerRow) + 2 * index;
+		float y = screenY + 10 + (index / buttonsPerRow) * buttonSize;
+		try {
+			Image icon = ImageCache.getGuiImage(ImageKey.typeToImageKey(object
+					.getType()));
+			icon.draw(x, y);
+		} catch (CacheException e) {
+			L.log(Level.SEVERE,
+					"Could not find icon for object " + object.getType(), e);
+		}
 	}
 
 	@Override
@@ -74,6 +92,26 @@ public class SelectedUnitsDisplay extends ClickableGuiElement {
 		float width = WIDTH * scale;
 		screenX = newWidth - width;
 		screenY = newHeight - height;
+		buttonsPerRow = (int) Math.floor((width - 10) / buttonSize);
 		bounds.setBounds(screenX, screenY, width, height);
+	}
+
+	private int pointToUnit(int x, int y) {
+		return -1;
+	}
+
+	@Override
+	public boolean mouseReleased(int button, int x, int y) {
+		int unit = pointToUnit(x, y);
+		if (unit == -1)
+			return false;
+		if (button == Input.MOUSE_LEFT_BUTTON) {
+			getInfo().getClientData().setSelectedUnit(unit);
+			return true;
+		} else if (button == Input.MOUSE_RIGHT_BUTTON) {
+			getInfo().getClientData().getSelectedUnits().remove(unit);
+			return true;
+		}
+		return false;
 	}
 }

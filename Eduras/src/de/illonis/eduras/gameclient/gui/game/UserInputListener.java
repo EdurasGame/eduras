@@ -214,4 +214,11 @@ public interface UserInputListener {
 	 */
 	TooltipHandler getTooltipHandler();
 
+	/**
+	 * @param key
+	 *            the key.
+	 * @return true if given key is pressed.
+	 */
+	boolean isKeyDown(int key);
+
 }

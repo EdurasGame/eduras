@@ -58,7 +58,8 @@ public class BuildModeMouseAdapter extends ScrollModeMouseAdapter {
 		switch (getPanelLogic().getClickState()) {
 		case DEFAULT:
 			if (button == Input.MOUSE_LEFT_BUTTON) {
-				getListener().selectOrDeselectAt(clickGamePoint);
+				getListener().selectOrDeselectAt(clickGamePoint,
+						getPanelLogic().isKeyDown(Input.KEY_LSHIFT));
 			}
 			break;
 		default:
@@ -184,7 +185,8 @@ public class BuildModeMouseAdapter extends ScrollModeMouseAdapter {
 				Vector2f end = getPanelLogic().computeGuiPointToGameCoordinate(
 						new Vector2f(x, y));
 				Rectangle2D.Double r = calculateDragRect(start, end);
-				getListener().onUnitsSelected(r);
+				getListener().onUnitsSelected(r,
+						getPanelLogic().isKeyDown(Input.KEY_LSHIFT));
 				getPanelLogic().getDragRect().clear();
 			}
 			break;

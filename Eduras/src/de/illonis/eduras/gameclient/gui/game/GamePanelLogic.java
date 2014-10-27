@@ -558,4 +558,9 @@ public class GamePanelLogic extends GameEventAdapter implements
 	public int getContainerHeight() {
 		return gui.getHeight();
 	}
+
+	@Override
+	public boolean isKeyDown(int key) {
+		return gui.getInput().isKeyDown(key);
+	}
 }

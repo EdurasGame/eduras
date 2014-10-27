@@ -333,7 +333,7 @@ public class GameRenderer implements TooltipHandler {
 						|| (S.Server.vision_neutral_always
 								&& d.getOwner() == -1 || d.equals(myPlayer) || !a
 									.isEmpty())) {
-					drawObject(d, g);
+					drawObject(d, g, myPlayer);
 				}
 			}
 
@@ -374,7 +374,7 @@ public class GameRenderer implements TooltipHandler {
 		return isVisible;
 	}
 
-	private void drawObject(GameObject d, Graphics g) {
+	private void drawObject(GameObject d, Graphics g, PlayerMainFigure myPlayer) {
 		final float x = d.getXPosition();
 		final float y = d.getYPosition();
 
@@ -417,7 +417,8 @@ public class GameRenderer implements TooltipHandler {
 				drawDetectionAreaFor(unit, g);
 			}
 
-			if (unit instanceof ControlledUnit) {
+			if (myPlayer.getPlayer().getCurrentMode() == InteractMode.MODE_STRATEGY
+					&& unit instanceof ControlledUnit) {
 				if (data.getSelectedUnits().contains(unit.getId())) {
 					drawUnitSelectionCircle(unit, g);
 				}
