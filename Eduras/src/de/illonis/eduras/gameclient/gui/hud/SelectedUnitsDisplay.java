@@ -132,7 +132,7 @@ public class SelectedUnitsDisplay extends ClickableGuiElement {
 		int unit = pointToUnit(newx, newy);
 		if (unit == -1) {
 			getTooltipHandler().hideTooltip();
-			return true;
+			return false;
 		}
 		GameObject o;
 		try {

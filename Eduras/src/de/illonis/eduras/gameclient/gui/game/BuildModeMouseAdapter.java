@@ -341,13 +341,6 @@ public class BuildModeMouseAdapter extends ScrollModeMouseAdapter {
 		getPanelLogic().getDragRect().clear();
 	}
 
-	@Override
-	public void mouseLost() {
-		super.mouseLost();
-		if (getPanelLogic().getClickState() == ClickState.UNITSELECT_DRAGGING)
-			stopSelectDragging(getPanelLogic().getCurrentMousePos());
-	}
-
 	private void actionDone() {
 		EdurasInitializer.getInstance().getInformationProvider()
 				.getClientData().setCurrentActionSelected(-1);
