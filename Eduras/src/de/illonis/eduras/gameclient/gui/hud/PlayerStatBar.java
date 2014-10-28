@@ -177,10 +177,9 @@ public class PlayerStatBar extends RenderedGuiObject {
 
 		@Override
 		public boolean mouseClicked(int button, int x, int y, int count) {
+			GamePanelLogic logic = userInterface.getLogic();
 			if (!player.isDead()) {
 				PlayerMainFigure mainFigure = player.getPlayerMainFigure();
-
-				GamePanelLogic logic = userInterface.getLogic();
 				switch (logic.getClickState()) {
 				case SELECT_TARGET_FOR_SPELL:
 					// select player for a spell
@@ -215,6 +214,15 @@ public class PlayerStatBar extends RenderedGuiObject {
 				}
 				return true;
 			} else {
+				if (logic.getClickState() == ClickState.SELECT_PLAYER_FOR_REZZ) {
+					if (button == Input.MOUSE_LEFT_BUTTON) {
+						EdurasInitializer.getInstance()
+								.getInformationProvider().getClientData()
+								.setCurrentResurrectTarget(player);
+						logic.setClickState(ClickState.SELECT_BASE_FOR_REZZ);
+						return true;
+					}
+				}
 				return false;
 			}
 		}

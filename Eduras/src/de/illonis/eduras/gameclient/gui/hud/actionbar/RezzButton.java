@@ -1,6 +1,5 @@
 package de.illonis.eduras.gameclient.gui.hud.actionbar;
 
-import de.illonis.eduras.Player;
 import de.illonis.eduras.gameclient.GamePanelReactor;
 import de.illonis.eduras.gameclient.datacache.CacheInfo.ImageKey;
 import de.illonis.eduras.gameclient.gui.game.GamePanelLogic.ClickState;
@@ -16,42 +15,24 @@ import de.illonis.eduras.settings.S;
  * 
  */
 public class RezzButton extends ActionButton {
-	private final Player target;
 
 	/**
 	 * Creates a rezz-button for given player.
 	 * 
-	 * @param player
-	 *            the player that is resurrected when this button is used.
 	 * @param reactor
 	 *            the reactor.
 	 */
-	public RezzButton(Player player, GamePanelReactor reactor) {
+	public RezzButton(GamePanelReactor reactor) {
 		super(ImageKey.ACTION_RESURRECT_PLAYER, reactor);
-		this.target = player;
-		if (!target.isDead()) {
-			setEnabled(false);
-		}
-		label = Localization.getStringF("Client.gui.actions.spell_rezz_title",
-				player.getName());
-		description = Localization.getStringF(
-				"Client.gui.actions.spell_rezz_text", player.getName());
+
+		label = Localization.getString("Client.gui.actions.spell_rezz_title");
+		description = Localization
+				.getString("Client.gui.actions.spell_rezz_text");
 	}
 
 	@Override
 	public void actionPerformed() {
-		reactor.setClickState(ClickState.SELECT_BASE_FOR_REZZ);
-		EdurasInitializer.getInstance().getInformationProvider()
-				.getClientData().setCurrentResurrectTarget(target);
-	}
-
-	/**
-	 * Returns the player that will be rezzed when this button is used.
-	 * 
-	 * @return player to be rezzed by clicking this button
-	 */
-	public Player getTarget() {
-		return target;
+		reactor.setClickState(ClickState.SELECT_PLAYER_FOR_REZZ);
 	}
 
 	@Override

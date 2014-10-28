@@ -287,7 +287,13 @@ public class BuildModeMouseAdapter extends ScrollModeMouseAdapter {
 									.equals(getPanelLogic().getClientData()
 											.getCurrentResurrectTarget()
 											.getTeam())) {
-
+								getPanelLogic()
+										.showNotification(
+												"Resurrecting "
+														+ getPanelLogic()
+																.getClientData()
+																.getCurrentResurrectTarget()
+																.getName());
 								getListener().onPlayerRezz(
 										getPanelLogic().getClientData()
 												.getCurrentResurrectTarget(),

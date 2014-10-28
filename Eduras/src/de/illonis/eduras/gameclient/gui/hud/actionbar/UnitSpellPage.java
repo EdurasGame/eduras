@@ -38,5 +38,6 @@ public class UnitSpellPage extends ActionBarPage {
 		addButton(new SpeedSpellButton(reactor));
 		addButton(new InvisibilitySpellButton(reactor));
 		addButton(new BlinkSpellButton(reactor));
+		addButton(new RezzButton(reactor));
 	}
 }
