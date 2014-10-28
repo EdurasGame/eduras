@@ -26,6 +26,7 @@ import de.illonis.eduras.events.ClientRenameEvent;
 import de.illonis.eduras.events.GameEvent;
 import de.illonis.eduras.events.GameEvent.GameEventNumber;
 import de.illonis.eduras.events.MovementEvent;
+import de.illonis.eduras.events.ObjectAndTeamEvent;
 import de.illonis.eduras.events.ObjectFactoryEvent;
 import de.illonis.eduras.events.OwnerGameEvent;
 import de.illonis.eduras.events.PlayerAndTeamEvent;
@@ -63,6 +64,7 @@ import de.illonis.eduras.math.Vector2df;
 import de.illonis.eduras.settings.S;
 import de.illonis.eduras.settings.S.SettingType;
 import de.illonis.eduras.units.PlayerMainFigure;
+import de.illonis.eduras.units.Unit;
 import de.illonis.eduras.utils.ResourceManager;
 import de.illonis.eduras.utils.ResourceManager.ResourceType;
 
@@ -466,6 +468,15 @@ public class GameInformation {
 
 		infos.add(teamEvent);
 		infos.addAll(teamPlayerEvents);
+
+		for (Unit aUnit : getAllUnits(objects.values())) {
+			if (aUnit.getTeam() != null) {
+				infos.add(new ObjectAndTeamEvent(
+						GameEventNumber.ADD_OBJECT_TO_TEAM, aUnit.getId(),
+						aUnit.getTeam().getTeamId()));
+			}
+		}
+
 	}
 
 	private void putCurrentSettings(ArrayList<GameEvent> infos) {
@@ -894,12 +905,13 @@ public class GameInformation {
 		}
 	}
 
-	public static Collection<?> getAllUnits(Collection<GameObject> collidables) {
-		LinkedList<GameObject> units = new LinkedList<GameObject>();
+	public static Collection<Unit> getAllUnits(
+			Collection<GameObject> collidables) {
+		LinkedList<Unit> units = new LinkedList<Unit>();
 
 		for (GameObject anyObject : collidables) {
 			if (anyObject.isUnit()) {
-				units.add(anyObject);
+				units.add((Unit) anyObject);
 			}
 		}
 		return units;

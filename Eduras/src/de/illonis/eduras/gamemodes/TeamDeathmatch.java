@@ -19,6 +19,7 @@ import de.illonis.eduras.logic.EventTriggerer;
 import de.illonis.eduras.maps.SpawnPosition.SpawnType;
 import de.illonis.eduras.settings.S;
 import de.illonis.eduras.units.InteractMode;
+import de.illonis.eduras.units.Unit;
 
 /**
  * The team-deathmatch mode.
@@ -117,6 +118,7 @@ public class TeamDeathmatch extends Deathmatch {
 		int ownerB = b.getOwner();
 		if (ownerA == -1 || ownerB == -1)
 			return Relation.ENVIRONMENT;
+
 		try {
 			playerA = gameInfo.getPlayerByOwnerId(a.getOwner());
 			playerB = gameInfo.getPlayerByOwnerId(b.getOwner());
@@ -125,17 +127,31 @@ public class TeamDeathmatch extends Deathmatch {
 			return Relation.UNKNOWN;
 		}
 
-		Team teamOfPlayerA;
-		Team teamOfPlayerB;
+		Team teamOfA;
+		Team teamOfB;
 		try {
-			teamOfPlayerA = playerA.getTeam();
-			teamOfPlayerB = playerB.getTeam();
+
+			if (a.isUnit()) {
+				teamOfA = ((Unit) a).getTeam();
+			} else {
+				teamOfA = playerA.getTeam();
+			}
+
+			if (b.isUnit()) {
+				teamOfB = ((Unit) b).getTeam();
+			} else {
+				teamOfB = playerB.getTeam();
+			}
 		} catch (PlayerHasNoTeamException e) {
 			L.log(Level.WARNING, "Cannot find team of player.", e);
 			return Relation.UNKNOWN;
 		}
 
-		if (teamOfPlayerA.equals(teamOfPlayerB)) {
+		if (teamOfA == null || teamOfB == null) {
+			return Relation.UNKNOWN;
+		}
+
+		if (teamOfA.equals(teamOfB)) {
 			return Relation.ALLIED;
 		} else
 			return Relation.HOSTILE;
