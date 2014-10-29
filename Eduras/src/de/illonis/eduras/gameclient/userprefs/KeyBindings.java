@@ -116,27 +116,27 @@ public final class KeyBindings implements ResettableSetting {
 	 */
 	@SuppressWarnings("javadoc")
 	public enum KeyBinding {
-		MOVE_LEFT,
 		MOVE_UP,
+		MOVE_LEFT,
 		MOVE_DOWN,
 		MOVE_RIGHT,
 		ITEM_ASSAULT,
 		ITEM_SWORD,
-		ITEM_SNIPER,
-		ITEM_SPLASH,
 		ITEM_SIMPLE,
-		ITEM_MINE,
+		ITEM_SNIPER,
 		ITEM_ROCKET,
+		ITEM_SPLASH,
+		ITEM_MINE,
 		CANCEL,
 		SHOW_STATS,
 		SWITCH_MODE,
 		CHAT,
 		BLINK,
 		SELECT_TEAM,
-		SCROLL_LEFT,
-		SCROLL_RIGHT,
-		SCROLL_DOWN,
 		SCROLL_UP,
+		SCROLL_LEFT,
+		SCROLL_DOWN,
+		SCROLL_RIGHT,
 		STRATEGY_1,
 		STRATEGY_2,
 		STRATEGY_3,
@@ -149,8 +149,8 @@ public final class KeyBindings implements ResettableSetting {
 		STRATEGY_10,
 		ACTIONBAR_PAGE_WEAPONS,
 		ACTIONBAR_PAGE_PLAYERSPELLS,
-		ACTIONBAR_PAGE_SPELLS,
-		ACTIONBAR_PAGE_UNITS;
+		ACTIONBAR_PAGE_UNITS,
+		ACTIONBAR_PAGE_SPELLS;
 	}
 
 	/**
