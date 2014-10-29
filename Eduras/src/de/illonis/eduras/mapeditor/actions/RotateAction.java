@@ -48,18 +48,18 @@ public class RotateAction extends UndoAction {
 	@Override
 	public String getPresentationName() {
 		return "Rotate " + getElements().size() + "Element(s) by " + degrees
-				+ "°";
+				+ "\u00b0";
 	}
 
 	@Override
 	public String getUndoPresentationName() {
 		return "Undo rotation of " + getElements().size() + "Element(s) by "
-				+ degrees + "°";
+				+ degrees + "\u00b0";
 	}
 
 	@Override
 	public String getRedoPresentationName() {
 		return "Redo rotation of " + getElements().size() + "Element(s) by "
-				+ degrees + "°";
+				+ degrees + "\u00b0";
 	}
 }
