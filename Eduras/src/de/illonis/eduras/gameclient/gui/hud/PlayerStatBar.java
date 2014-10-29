@@ -120,6 +120,13 @@ public class PlayerStatBar extends RenderedGuiObject {
 					font.getLineHeight());
 			font.drawString(screenX + 5, yPosition + font.getLineHeight(),
 					health + " / " + maxHealth, COLOR_TEXT);
+			if (player.isDead()
+					&& player.equals(getInfo().getClientData()
+							.getCurrentResurrectTarget())) {
+				g2d.setColor(Color.red);
+				g2d.setLineWidth(3f);
+				g2d.draw(bounds);
+			}
 		}
 
 		@Override

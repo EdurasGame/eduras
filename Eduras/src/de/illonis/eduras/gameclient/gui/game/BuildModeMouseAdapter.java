@@ -287,6 +287,11 @@ public class BuildModeMouseAdapter extends ScrollModeMouseAdapter {
 									.equals(getPanelLogic().getClientData()
 											.getCurrentResurrectTarget()
 											.getTeam())) {
+
+								getListener().onPlayerRezz(
+										getPanelLogic().getClientData()
+												.getCurrentResurrectTarget(),
+										(Base) gameObject);
 								getPanelLogic()
 										.showNotification(
 												"Resurrecting "
@@ -294,10 +299,6 @@ public class BuildModeMouseAdapter extends ScrollModeMouseAdapter {
 																.getClientData()
 																.getCurrentResurrectTarget()
 																.getName());
-								getListener().onPlayerRezz(
-										getPanelLogic().getClientData()
-												.getCurrentResurrectTarget(),
-										(Base) gameObject);
 								actionDone();
 								getPanelLogic().setClickState(
 										ClickState.DEFAULT);
@@ -348,6 +349,7 @@ public class BuildModeMouseAdapter extends ScrollModeMouseAdapter {
 	}
 
 	private void actionDone() {
+		getPanelLogic().getClientData().setCurrentResurrectTarget(null);
 		EdurasInitializer.getInstance().getInformationProvider()
 				.getClientData().setCurrentActionSelected(-1);
 	}
