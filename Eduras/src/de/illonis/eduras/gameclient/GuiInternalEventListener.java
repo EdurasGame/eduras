@@ -197,7 +197,7 @@ public class GuiInternalEventListener implements GamePanelReactor {
 		for (Entry<Integer, GameObject> obj : infoPro.getGameObjects()
 				.entrySet()) {
 			GameObject o = obj.getValue();
-			if (o.isUnit()
+			if (o.isControlledUnit()
 					&& o.isVisibleFor(p)
 					&& infoPro.getGameMode().getRelation(o, p) == Relation.ALLIED
 					&& Geometry.shapeCollides(o.getShape(), r)) {
@@ -227,7 +227,7 @@ public class GuiInternalEventListener implements GamePanelReactor {
 		for (Entry<Integer, GameObject> obj : infoPro.getGameObjects()
 				.entrySet()) {
 			GameObject o = obj.getValue();
-			if (o.isUnit() && o.isVisibleFor(p)
+			if (o.isControlledUnit() && o.isVisibleFor(p)
 					&& o.getShape().contains(point.x, point.y)) {
 				if (remove) {
 					client.getData().getSelectedUnits().remove(obj.getKey());
@@ -238,6 +238,9 @@ public class GuiInternalEventListener implements GamePanelReactor {
 				return;
 			}
 		}
+		// no unit found
+		if (!add && !remove)
+			client.getData().clearSelectedUnits();
 	}
 
 	@Override

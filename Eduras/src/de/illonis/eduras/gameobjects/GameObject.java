@@ -24,6 +24,7 @@ import de.illonis.eduras.mapeditor.EditorPlaceable;
 import de.illonis.eduras.math.CollisionPoint;
 import de.illonis.eduras.math.Geometry;
 import de.illonis.eduras.math.Vector2df;
+import de.illonis.eduras.units.ControlledUnit;
 import de.illonis.eduras.units.Unit;
 
 /**
@@ -678,6 +679,15 @@ public abstract class GameObject extends ReferencedEntity implements
 	 */
 	public final boolean isUnit() {
 		return (this instanceof Unit);
+	}
+
+	/**
+	 * Checks if this is a controllable unit.
+	 * 
+	 * @return true if this is a controllable unit.
+	 */
+	public final boolean isControlledUnit() {
+		return (this instanceof ControlledUnit);
 	}
 
 	/**
