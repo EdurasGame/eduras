@@ -139,13 +139,13 @@ public class GameRenderer implements TooltipHandler {
 	public static float getRenderScale() {
 		float diffW = (float) Display.getWidth() / DEFAULT_WIDTH;
 		float diffH = (float) Display.getHeight() / DEFAULT_HEIGHT;
-		return Math.max(diffW, diffH);
+		return diffW;
 	}
 
 	public static float getRenderScale(ImageResolution res) {
-		float diffW = res.getWidth() / DEFAULT_WIDTH;
-		float diffH = res.getHeight() / DEFAULT_HEIGHT;
-		return Math.max(diffW, diffH);
+		float diffW = (float) res.getWidth() / DEFAULT_WIDTH;
+		float diffH = (float) res.getHeight() / DEFAULT_HEIGHT;
+		return diffW;
 	}
 
 	/**

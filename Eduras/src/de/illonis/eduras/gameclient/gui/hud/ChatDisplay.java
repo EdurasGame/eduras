@@ -8,6 +8,7 @@ import de.illonis.eduras.chat.ChatMessage;
 import de.illonis.eduras.gameclient.ChatCache;
 import de.illonis.eduras.gameclient.datacache.FontCache;
 import de.illonis.eduras.gameclient.datacache.FontCache.FontKey;
+import de.illonis.eduras.gameclient.gui.game.GameRenderer;
 
 /**
  * Displays a chat.
@@ -69,7 +70,7 @@ public class ChatDisplay extends RenderedGuiObject {
 
 	@Override
 	public void onGuiSizeChanged(int newWidth, int newHeight) {
-		screenY = newHeight - MiniMap.SIZE;
+		screenY = newHeight - MiniMap.SIZE * GameRenderer.getRenderScale();
 		screenX = newWidth * 2 / 3;
 	}
 }

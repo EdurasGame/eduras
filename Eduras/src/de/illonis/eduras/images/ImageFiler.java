@@ -105,7 +105,6 @@ public class ImageFiler {
 	public static Image loadScaled(String fileName) throws SlickException,
 			IOException {
 		Pair<ImageResolution, Float> resolution = calculateResolution();
-
 		float factor = resolution.getSecond();
 		Image image;
 		if (S.Client.localres) {
