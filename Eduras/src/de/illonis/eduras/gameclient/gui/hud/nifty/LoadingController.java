@@ -93,7 +93,7 @@ public class LoadingController extends EdurasScreenController {
 				.getWidth() - MIN_WIDTH) * progress);
 		progressBarElement.setConstraintWidth(new SizeValue(pixelWidth + "px"));
 		progressBarElement.getParent().layoutElements();
-		loadingTextDisplay.setText("Hint: " + loadingText);
+		loadingTextDisplay.setText(loadingText);
 	}
 
 	/**
@@ -105,7 +105,7 @@ public class LoadingController extends EdurasScreenController {
 		load = true;
 		LoadingTip tip = LoadingTip.getRandomTip();
 		if (tip != null) {
-			loadingTipDisplay.setText(tip.getText());
+			loadingTipDisplay.setText("Hint: " + tip.getText());
 		}
 	}
 }
