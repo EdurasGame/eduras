@@ -3,6 +3,9 @@ package de.illonis.eduras.gameclient;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Field;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.LinkedList;
@@ -119,6 +122,18 @@ public class EdurasClient {
 					return;
 				}
 				break;
+			case "resfolder":
+				Path path = Paths.get(parameterValue);
+				if (!Files.exists(path) || !Files.isDirectory(path)) {
+					L.log(Level.SEVERE,
+							"Custom resource folder does not exist or is not a directory: "
+									+ path.toString() + ". Using default one");
+				} else {
+					S.resource_folder = parameterValue;
+					L.log(Level.WARNING, "Using custom folder for resources: "
+							+ path.toString());
+				}
+				break;
 			case "betauser":
 				betaUser = parameterValue;
 				break;
@@ -130,7 +145,6 @@ public class EdurasClient {
 				break;
 			case "debug":
 				debug = true;
-				S.Client.localres = true;
 				break;
 			case "serverip":
 				serverIp = parameterValue;

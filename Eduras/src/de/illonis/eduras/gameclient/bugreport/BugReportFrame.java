@@ -33,6 +33,7 @@ import de.illonis.eduras.images.ImageFiler;
  * @author illonis
  * 
  */
+@Deprecated
 public class BugReportFrame implements ActionListener {
 
 	private final static Logger L = EduLog.getLoggerFor(BugReportFrame.class
@@ -113,7 +114,9 @@ public class BugReportFrame implements ActionListener {
 		content.add(reportPanel, REPORTPANEL);
 
 		JPanel loadPanel = new JPanel(new BorderLayout());
-		ImageIcon loadIcon = ImageFiler.loadIcon("gui/login/ajax-loader.gif");
+		// ImageIcon loadIcon =
+		// ImageFiler.loadIcon("gui/login/ajax-loader.gif");
+		ImageIcon loadIcon = null;
 		JLabel loadLabel = new JLabel(loadIcon);
 		loadPanel.add(loadLabel);
 		content.add(loadPanel, LOADPANEL);

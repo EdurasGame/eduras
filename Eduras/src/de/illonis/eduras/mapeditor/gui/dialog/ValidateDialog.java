@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
+import java.io.IOException;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
@@ -29,12 +30,22 @@ public class ValidateDialog extends ESCDialog implements ComponentListener {
 	private final TaskResultPanel[] panels;
 	private final JLabel titleText;
 
-	private final static ImageIcon ICON_ACTIVE = ImageFiler
-			.loadIcon("mapeditor/test_active.png");
-	private final static ImageIcon ICON_SUCCESS = ImageFiler
-			.loadIcon("mapeditor/test_success.png");
-	private final static ImageIcon ICON_FAILED = ImageFiler
-			.loadIcon("mapeditor/test_failed.png");
+	private static ImageIcon ICON_ACTIVE;
+	private static ImageIcon ICON_SUCCESS;
+	private static ImageIcon ICON_FAILED;
+	static {
+		try {
+			ICON_ACTIVE = ImageFiler.loadIcon("mapeditor/test_active.png");
+			ICON_SUCCESS = ImageFiler.loadIcon("mapeditor/test_success.png");
+			ICON_FAILED = ImageFiler.loadIcon("mapeditor/test_failed.png");
+		} catch (IOException e) {
+			e.printStackTrace();
+			System.exit(-1);
+			ICON_ACTIVE = null;
+			ICON_SUCCESS = null;
+			ICON_FAILED = null;
+		}
+	}
 
 	/**
 	 * Create a new dialog.

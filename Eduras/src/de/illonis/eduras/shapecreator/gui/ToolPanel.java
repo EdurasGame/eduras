@@ -2,6 +2,7 @@ package de.illonis.eduras.shapecreator.gui;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 
 import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
@@ -53,9 +54,15 @@ public class ToolPanel extends JPanel implements ActionListener {
 	}
 
 	private JToggleButton createButton(String label, String imgUrl) {
-		ImageIcon icon = ImageFiler.loadIcon("shapecreator/icons/" + imgUrl);
-		JToggleButton b = new JToggleButton(icon);
-		b.setText(label);
+		ImageIcon icon;
+		JToggleButton b;
+		try {
+			icon = ImageFiler.loadIcon("shapecreator/icons/" + imgUrl);
+			b = new JToggleButton(icon);
+			b.setText(label);
+		} catch (IOException e) {
+			b = new JToggleButton(label);
+		}
 		b.setHorizontalTextPosition(SwingConstants.RIGHT);
 
 		b.setToolTipText(label);

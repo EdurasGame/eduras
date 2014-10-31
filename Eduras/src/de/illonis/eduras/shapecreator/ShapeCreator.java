@@ -3,6 +3,7 @@ package de.illonis.eduras.shapecreator;
 import java.awt.BorderLayout;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.IOException;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
@@ -45,7 +46,14 @@ public class ShapeCreator {
 		data = DataHolder.getInstance();
 		panel = new DrawPanel();
 		data.setDrawPanel(panel);
-		VerticeListPanel verticePanel = new VerticeListPanel();
+		VerticeListPanel verticePanel;
+		try {
+			verticePanel = new VerticeListPanel();
+		} catch (IOException e) {
+			e.printStackTrace();
+			System.exit(-1);
+			return;
+		}
 		JPanel framePanel = (JPanel) frame.getContentPane();
 		PanelInteractor pi = new PanelInteractor(panel);
 
@@ -123,7 +131,9 @@ public class ShapeCreator {
 	 *            <i>unused</i>
 	 */
 	public static void main(String[] args) {
-		S.Client.localres = true;
+		if (args.length > 0) {
+			args[0] = S.resource_folder;
+		}
 		ShapeCreator creator = new ShapeCreator();
 		creator.showFrame();
 	}

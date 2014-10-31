@@ -10,6 +10,7 @@ import javax.swing.JOptionPane;
 
 import org.newdawn.slick.SlickException;
 
+import de.illonis.eduras.SysOutCatcher;
 import de.illonis.eduras.ObjectFactory.ObjectType;
 import de.illonis.eduras.mapeditor.gui.EditorWindow;
 import de.illonis.eduras.mapeditor.validate.MapValidator;
@@ -44,7 +45,9 @@ public class MapEditor {
 			System.setProperty("org.lwjgl.librarypath", ResourceManager
 					.resourceToPath(ResourceType.NATIVE_LIBRARY, "").toString());
 		} else {
-			S.Client.localres = true;
+			S.resource_folder = args[0];
+			System.out.println("Setting resource folder to "
+					+ S.resource_folder);
 		}
 		MapValidator.init();
 

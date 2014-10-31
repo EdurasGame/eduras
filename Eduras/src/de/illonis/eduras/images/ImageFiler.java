@@ -2,10 +2,10 @@ package de.illonis.eduras.images;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URL;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 
 import org.lwjgl.opengl.Display;
@@ -13,10 +13,7 @@ import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 
 import de.illonis.edulog.EduLog;
-import de.illonis.eduras.gameclient.datacache.CacheInfo;
 import de.illonis.eduras.gameclient.gui.game.GameRenderer;
-import de.illonis.eduras.locale.Localization;
-import de.illonis.eduras.settings.S;
 import de.illonis.eduras.utils.Pair;
 import de.illonis.eduras.utils.ResourceManager;
 import de.illonis.eduras.utils.ResourceManager.ResourceType;
@@ -107,26 +104,21 @@ public class ImageFiler {
 		Pair<ImageResolution, Float> resolution = calculateResolution();
 		float factor = resolution.getSecond();
 		Image image;
-		if (S.Client.localres) {
-			image = new Image(CacheInfo.BASE_URL + fileName
-					+ resolution.getFirst().getSuffix());
-		} else {
-			try {
-				try (InputStream input = ResourceManager.openResource(
-						ResourceType.IMAGE, fileName
-								+ resolution.getFirst().getSuffix())) {
-					image = new Image(input, fileName, false);
-				}
-			} catch (RuntimeException | SlickException | IOException e) {
-				factor = getScaleFactor(ImageResolution.FULLHD);
-				L.log(Level.WARNING, "Could not load image " + fileName
-						+ " for " + resolution.getFirst().name()
-						+ ", falling back to fullHD at " + factor, e);
-				try (InputStream input = ResourceManager.openResource(
-						ResourceType.IMAGE,
-						fileName + ImageResolution.FULLHD.getSuffix())) {
-					image = new Image(input, fileName, false);
-				}
+		try {
+			try (InputStream input = ResourceManager.openResource(
+					ResourceType.IMAGE, fileName
+							+ resolution.getFirst().getSuffix())) {
+				image = new Image(input, fileName, false);
+			}
+		} catch (RuntimeException | SlickException | IOException e) {
+			factor = getScaleFactor(ImageResolution.FULLHD);
+			L.log(Level.WARNING, "Could not load image " + fileName + " for "
+					+ resolution.getFirst().name()
+					+ ", falling back to fullHD at " + factor, e);
+			try (InputStream input = ResourceManager.openResource(
+					ResourceType.IMAGE,
+					fileName + ImageResolution.FULLHD.getSuffix())) {
+				image = new Image(input, fileName, false);
 			}
 		}
 
@@ -153,13 +145,9 @@ public class ImageFiler {
 	public static Image load(String fileName) throws SlickException,
 			IOException {
 		Image image;
-		if (S.Client.localres) {
-			image = new Image(CacheInfo.BASE_URL + fileName);
-		} else {
-			try (InputStream input = ResourceManager.openResource(
-					ResourceType.IMAGE, fileName)) {
-				image = new Image(input, fileName, false);
-			}
+		try (InputStream input = ResourceManager.openResource(
+				ResourceType.IMAGE, fileName)) {
+			image = new Image(input, fileName, false);
 		}
 		return image;
 	}
@@ -170,17 +158,14 @@ public class ImageFiler {
 	 * @param fileName
 	 *            file name of icon. Must be relative to images-package.
 	 * @return an {@link ImageIcon} from given file.
+	 * @throws IOException
 	 */
-	public static ImageIcon loadIcon(String fileName) {
-		URL imgURL = ImageFiler.class.getResource(fileName);
-		ImageIcon icon;
-		if (imgURL != null) {
-			icon = new ImageIcon(imgURL);
-		} else {
-			L.severe(Localization.getStringF("Client.errors.io.imagenotfound",
-					fileName));
-			return null;
+	public static ImageIcon loadIcon(String fileName) throws IOException {
+		java.awt.Image image;
+		try (InputStream input = ResourceManager.openResource(
+				ResourceType.IMAGE, fileName)) {
+			image = ImageIO.read(input);
 		}
-		return icon;
+		return new ImageIcon(image);
 	}
 }

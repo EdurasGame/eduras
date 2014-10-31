@@ -1,5 +1,6 @@
 package de.illonis.eduras.shapecreator.gui;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,7 +26,7 @@ public class RecordTableModel extends AbstractTableModel {
 	private final Icon upIcon, downIcon, deleteIcon;
 	private final JTable table;
 
-	RecordTableModel(JTable table) {
+	RecordTableModel(JTable table) throws IOException {
 		this.table = table;
 		lstRecords = new ArrayList<TableRecord>();
 		upIcon = ImageFiler.loadIcon("shapecreator/icons/button_up.png");
