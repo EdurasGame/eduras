@@ -93,7 +93,7 @@ public class LoadingController extends EdurasScreenController {
 				.getWidth() - MIN_WIDTH) * progress);
 		progressBarElement.setConstraintWidth(new SizeValue(pixelWidth + "px"));
 		progressBarElement.getParent().layoutElements();
-		loadingTextDisplay.setText(loadingText);
+		loadingTextDisplay.setText("Hint: " + loadingText);
 	}
 
 	/**
