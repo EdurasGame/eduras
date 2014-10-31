@@ -1,6 +1,7 @@
 package de.illonis.eduras.gameclient.gui.hud.nifty;
 
 import de.illonis.eduras.gameclient.datacache.GraphicsPreLoader;
+import de.illonis.eduras.gameclient.gui.LoadingTip;
 import de.illonis.eduras.gameclient.gui.animation.EffectFactory;
 import de.lessvoid.nifty.controls.Label;
 import de.lessvoid.nifty.elements.Element;
@@ -17,6 +18,7 @@ public class LoadingController extends EdurasScreenController {
 
 	private Element progressBarElement;
 	private Label loadingTextDisplay;
+	private Label loadingTipDisplay;
 	private boolean load = false;
 	private int frameCount = 0;
 
@@ -29,6 +31,7 @@ public class LoadingController extends EdurasScreenController {
 		progressBarElement = screen.findElementById("progressbar");
 		loadingTextDisplay = screen
 				.findNiftyControl("loadingtext", Label.class);
+		loadingTipDisplay = screen.findNiftyControl("loadingtip", Label.class);
 	}
 
 	/**
@@ -64,7 +67,8 @@ public class LoadingController extends EdurasScreenController {
 				break;
 			case 7:
 				game.getEduras().init();
-				setProgress(0.7f, "Retrieving server data. This may take a while.");
+				setProgress(0.7f,
+						"Retrieving server data. This may take a while.");
 				break;
 			default:
 				break;
@@ -99,5 +103,9 @@ public class LoadingController extends EdurasScreenController {
 		setProgress(0, "Start loading...");
 		frameCount = 0;
 		load = true;
+		LoadingTip tip = LoadingTip.getRandomTip();
+		if (tip != null) {
+			loadingTipDisplay.setText(tip.getText());
+		}
 	}
 }

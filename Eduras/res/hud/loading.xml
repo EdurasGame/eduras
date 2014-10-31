@@ -16,6 +16,8 @@
 		<layer id="loadinglayer" childLayout="center" backgroundColor="#000000">
 			<panel id="loadingpanel" childLayout="vertical" align="center"
 				valign="center" height="32px" width="70%">
+				<control id="loadingtip" name="label" align="center" width="100%"
+					text="" padding="20px,0px"/>
 				<control name="loadingbar" align="center" valign="center"
 					width="100%" height="100%" />
 				<control id="loadingtext" name="label" align="center"
