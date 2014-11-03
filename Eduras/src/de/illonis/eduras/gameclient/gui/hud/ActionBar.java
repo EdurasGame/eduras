@@ -63,10 +63,12 @@ public class ActionBar extends RenderedGuiObject {
 		setActiveInteractModes(InteractMode.MODE_STRATEGY);
 		currentPage = 0;
 		maxButtons = 0;
-		bindingOrder = new KeyBinding[] { KeyBinding.ITEM_ASSAULT,
-				KeyBinding.ITEM_SWORD, KeyBinding.ITEM_SIMPLE,
-				KeyBinding.ITEM_SNIPER, KeyBinding.ITEM_ROCKET,
-				KeyBinding.ITEM_SPLASH, KeyBinding.ITEM_MINE };
+		bindingOrder = new KeyBinding[] { KeyBinding.STRATEGY_1,
+				KeyBinding.STRATEGY_2, KeyBinding.STRATEGY_3,
+				KeyBinding.STRATEGY_4, KeyBinding.STRATEGY_5,
+				KeyBinding.STRATEGY_6, KeyBinding.STRATEGY_7,
+				KeyBinding.STRATEGY_8, KeyBinding.STRATEGY_9,
+				KeyBinding.STRATEGY_10 };
 		pagesBindings = new KeyBinding[] { KeyBinding.ACTIONBAR_PAGE_WEAPONS,
 				KeyBinding.ACTIONBAR_PAGE_PLAYERSPELLS,
 				KeyBinding.ACTIONBAR_PAGE_UNITS,
