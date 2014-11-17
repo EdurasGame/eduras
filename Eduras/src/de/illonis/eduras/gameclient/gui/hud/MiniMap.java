@@ -74,6 +74,9 @@ public class MiniMap extends ClickableGuiElement {
 
 	private final Rectangle bounds;
 
+	private float heightOffset = 0;
+	private float widthOffset = 0;
+
 	protected MiniMap(UserInterface gui) {
 		super(gui);
 		windowScale = GameRenderer.getRenderScale();
@@ -231,6 +234,7 @@ public class MiniMap extends ClickableGuiElement {
 	}
 
 	private Vector2f gameToMinimapPosition(Vector2f pos) {
+		pos.add(new Vector2f(widthOffset, heightOffset));
 		Vector2f miniPos = new Vector2f(pos).scale(scale);
 		miniPos.add(new Vector2f(getBounds().getX(), getBounds().getY()));
 		return miniPos;
@@ -240,6 +244,7 @@ public class MiniMap extends ClickableGuiElement {
 		Vector2f gamePos = new Vector2f(pos).sub(new Vector2f(getBounds()
 				.getX(), getBounds().getY()));
 		gamePos.scale(1 / scale);
+		gamePos.sub(new Vector2f(widthOffset, heightOffset));
 		return gamePos;
 	}
 
@@ -275,9 +280,10 @@ public class MiniMap extends ClickableGuiElement {
 		float ratio = (float) Display.getHeight() / Display.getWidth();
 		float rectHeight = rectWidth * ratio;
 		float yDiff = (ImageResolution.WINDOWED.getHeight() - rectHeight) / 2;
-		g.drawRect(viewPort.getX() * minimapScale, (viewPort.getY() + yDiff)
-				* minimapScale + screenY, rectWidth * minimapScale, rectHeight
-				* minimapScale);
+		g.drawRect((viewPort.getX() + widthOffset) * minimapScale,
+				(viewPort.getY() + heightOffset + yDiff) * minimapScale
+						+ screenY, rectWidth * minimapScale, rectHeight
+						* minimapScale);
 	}
 
 	@Override
@@ -479,6 +485,12 @@ public class MiniMap extends ClickableGuiElement {
 		Rectangle r = getInfo().getMapBounds();
 		float size = Math.max(r.getWidth(), r.getHeight());
 
+		if (r.getWidth() > r.getHeight()) {
+			heightOffset = (r.getWidth() - r.getHeight()) / 2;
+		}
+		if (r.getHeight() > r.getWidth()) {
+			widthOffset = (r.getHeight() - r.getWidth()) / 2;
+		}
 		scale = (SIZE * windowScale) / size;
 		bounds.setSize(SIZE * windowScale, SIZE * windowScale);
 	}
