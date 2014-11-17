@@ -13,6 +13,7 @@ import de.illonis.eduras.Statistic.StatsProperty;
 import de.illonis.eduras.Team;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
 import de.illonis.eduras.exceptions.PlayerHasNoTeamException;
+import de.illonis.eduras.exceptions.WrongObjectTypeException;
 import de.illonis.eduras.gameclient.userprefs.KeyBindings.KeyBinding;
 import de.illonis.eduras.gameobjects.Base;
 import de.illonis.eduras.gameobjects.GameObject;
@@ -307,6 +308,15 @@ public class Deathmatch extends BasicGameMode {
 
 	@Override
 	public void onPlayerSpawn(Player player) {
+		for (String objTypeString : S.Server.gm_edura_startweapons) {
+			try {
+				ObjectType objType = ObjectType.valueOf(objTypeString);
+				gameInfo.getEventTriggerer().giveNewItem(player, objType);
+			} catch (WrongObjectTypeException | IllegalArgumentException e) {
+				L.log(Level.SEVERE, "Wrong item type!", e);
+				continue;
+			}
+		}
 	}
 
 	@Override
