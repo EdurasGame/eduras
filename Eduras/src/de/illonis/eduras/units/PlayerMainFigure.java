@@ -1,5 +1,6 @@
 package de.illonis.eduras.units;
 
+import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -28,6 +29,7 @@ public class PlayerMainFigure extends Unit implements MovementControlable {
 			.getName());
 
 	private Player player;
+	private HashMap<Direction, Boolean> movesTo;
 
 	/**
 	 * Create a new player that belongs to the given game and has the given
@@ -52,6 +54,10 @@ public class PlayerMainFigure extends Unit implements MovementControlable {
 		setMaxSpeed(S.Server.player_speed_max);
 		setOwner(ownerId);
 		this.player = player;
+		movesTo = new HashMap<Direction, Boolean>();
+		for (Direction direction : Direction.values()) {
+			movesTo.put(direction, false);
+		}
 
 		// get position
 		// Vector2df firstEdge = new Vector2df(25, 0);
@@ -70,37 +76,37 @@ public class PlayerMainFigure extends Unit implements MovementControlable {
 
 	@Override
 	public void startMoving(Direction direction) {
-		switch (direction) {
-		case TOP:
-			currentSpeedY = -getSpeed();
-			break;
-		case BOTTOM:
-			currentSpeedY = getSpeed();
-			break;
-		case LEFT:
-			currentSpeedX = -getSpeed();
-			break;
-		case RIGHT:
-			currentSpeedX = getSpeed();
-			break;
-		default:
-			break;
-		}
+		movesTo.put(direction, true);
+		applyMovement();
 	}
 
 	@Override
 	public void stopMoving(Direction direction) {
-		if (isHorizontal(direction)) {
-			currentSpeedX = 0;
-		} else {
-			currentSpeedY = 0;
-		}
+		movesTo.put(direction, false);
+		applyMovement();
 	}
 
 	@Override
 	public void stopMoving() {
 		currentSpeedX = 0;
 		currentSpeedY = 0;
+	}
+
+	private void applyMovement() {
+		currentSpeedX = 0;
+		currentSpeedY = 0;
+		if (movesTo.get(Direction.RIGHT)) {
+			currentSpeedX += getSpeed();
+		}
+		if (movesTo.get(Direction.LEFT)) {
+			currentSpeedX -= getSpeed();
+		}
+		if (movesTo.get(Direction.TOP)) {
+			currentSpeedY -= getSpeed();
+		}
+		if (movesTo.get(Direction.BOTTOM)) {
+			currentSpeedY += getSpeed();
+		}
 	}
 
 	@Override
