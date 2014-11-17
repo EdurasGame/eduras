@@ -1112,6 +1112,17 @@ public class ServerEventTriggerer implements EventTriggerer {
 
 		int itemId = createObject(itemType, GameObject.OWNER_WORLD);
 		lootItem(itemId, player.getPlayerMainFigure().getId());
+
+		Item item;
+		try {
+			item = (Item) gameInfo.findObjectById(itemId);
+		} catch (ObjectNotFoundException e) {
+			L.log(Level.WARNING, "Cannot find the item I just created.", e);
+			return;
+		}
+		if (item instanceof Weapon) {
+			((Weapon) item).setAbleToRespawn(false);
+		}
 	}
 
 	@Override

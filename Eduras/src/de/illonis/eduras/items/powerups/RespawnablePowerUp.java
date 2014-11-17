@@ -20,6 +20,8 @@ public abstract class RespawnablePowerUp extends PowerUpItem implements
 
 	private long respawnTime;
 
+	private boolean ableToRespawn;
+
 	/**
 	 * Create a new {@link RespawnablePowerUp}.
 	 * 
@@ -84,6 +86,16 @@ public abstract class RespawnablePowerUp extends PowerUpItem implements
 			return true;
 		}
 		return false;
+	}
+
+	@Override
+	public boolean isAbleToRespawn() {
+		return ableToRespawn;
+	}
+
+	@Override
+	public void setAbleToRespawn(boolean isAble) {
+		ableToRespawn = isAble;
 	}
 
 }

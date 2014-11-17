@@ -33,6 +33,7 @@ public abstract class Weapon extends UsableItem implements Lootable,
 	private int maxAmmunition = -1;
 	protected long respawnTime = S.Server.go_weapon_respawntime_default;
 	private long respawnTimeRemaining = 0;
+	private boolean isAbleToRespawn = true;
 
 	/**
 	 * Creates a new weapon being of the type given.
@@ -160,7 +161,8 @@ public abstract class Weapon extends UsableItem implements Lootable,
 
 	@Override
 	public boolean reduceRespawnRemaining(long value) {
-		if (!getGame().getGameSettings().getGameMode().doItemsRespawn()) {
+		if (!getGame().getGameSettings().getGameMode().doItemsRespawn()
+				|| !isAbleToRespawn()) {
 			return false;
 		}
 
@@ -220,6 +222,16 @@ public abstract class Weapon extends UsableItem implements Lootable,
 
 		return getGame().getEventTriggerer().createMissile(missileType,
 				getOwner(), center, speedVector);
+	}
+
+	@Override
+	public boolean isAbleToRespawn() {
+		return isAbleToRespawn;
+	}
+
+	@Override
+	public void setAbleToRespawn(boolean able) {
+		isAbleToRespawn = able;
 	}
 
 	/**

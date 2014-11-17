@@ -1,7 +1,9 @@
 package de.illonis.eduras.items;
 
 /**
- * Indicates that an item can respawn.
+ * Indicates that an item can respawn in general. However, if it can respawn
+ * under specific conditions is specified by the implementation of the
+ * {@link #isAbleToRespawn()} method.
  * 
  * @author Florian 'Ren' Mai
  * 
@@ -16,6 +18,20 @@ public interface Respawnable {
 	 * @author illonis
 	 */
 	public long getRespawnTime();
+
+	/**
+	 * Determines if the item is able to respawn right now.
+	 * 
+	 * @return true if it can respawn
+	 */
+	public boolean isAbleToRespawn();
+
+	/**
+	 * Sets if the item can respawn.
+	 * 
+	 * @param isAble
+	 */
+	public void setAbleToRespawn(boolean isAble);
 
 	/**
 	 * Returns the remaining respawn time of this object.
