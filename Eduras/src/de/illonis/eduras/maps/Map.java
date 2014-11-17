@@ -42,7 +42,8 @@ public class Map {
 			"yyyy-MM-dd");
 
 	public final static String[] defaultMaps = new String[] { "blobnob.erm",
-			"eduramus.erm", "eduramus2.erm", "funmap.erm", "Tryfield.erm" };
+			"eduramus.erm", "eduramus2.erm", "funmap.erm", "Tryfield.erm",
+			"playground.erm" };
 
 	private String author;
 	private Date created;
