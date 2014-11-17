@@ -268,11 +268,13 @@ public class MiniMap extends ClickableGuiElement {
 	private void renderViewPort(Graphics g) {
 		g.setLineWidth(1f);
 		g.setColor(COLOR_MULTIPLIER);
-		float minimapScale = getSize() / getInfo().getMapBounds().getHeight();
+		// float minimapScale = getSize() /
+		// getInfo().getMapBounds().getHeight();
+		float minimapScale = scale;
 		float rectWidth = ImageResolution.WINDOWED.getWidth();
 		float ratio = (float) Display.getHeight() / Display.getWidth();
 		float rectHeight = rectWidth * ratio;
-		float yDiff = ((float) ImageResolution.WINDOWED.getHeight() - rectHeight) / 2;
+		float yDiff = (ImageResolution.WINDOWED.getHeight() - rectHeight) / 2;
 		g.drawRect(viewPort.getX() * minimapScale, (viewPort.getY() + yDiff)
 				* minimapScale + screenY, rectWidth * minimapScale, rectHeight
 				* minimapScale);
@@ -475,7 +477,7 @@ public class MiniMap extends ClickableGuiElement {
 
 	private void recalculateScale() {
 		Rectangle r = getInfo().getMapBounds();
-		float size = Math.min(r.getWidth(), r.getHeight());
+		float size = Math.max(r.getWidth(), r.getHeight());
 
 		scale = (SIZE * windowScale) / size;
 		bounds.setSize(SIZE * windowScale, SIZE * windowScale);
