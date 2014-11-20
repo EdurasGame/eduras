@@ -242,6 +242,7 @@ public final class KeyBindings implements ResettableSetting {
 		InteractMode mode = InteractModeKeys.getModeOfBinding(binding);
 		int oldKey = getKey(binding);
 		keys.get(mode).remove(oldKey);
+		keys.get(InteractMode.ANY_MODE).remove(oldKey);
 		keys.get(mode).put(key, binding);
 	}
 
