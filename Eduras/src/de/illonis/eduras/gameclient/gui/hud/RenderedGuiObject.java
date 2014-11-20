@@ -10,6 +10,7 @@ import de.illonis.eduras.gameclient.gui.game.GuiClickReactor;
 import de.illonis.eduras.gameclient.gui.game.TooltipHandler;
 import de.illonis.eduras.gamemodes.GameMode;
 import de.illonis.eduras.logicabstraction.InformationProvider;
+import de.illonis.eduras.maps.SpawnPosition.SpawnType;
 import de.illonis.eduras.units.InteractMode;
 
 /**
@@ -132,6 +133,8 @@ public abstract class RenderedGuiObject extends GameEventAdapter implements
 	 *         false otherwise.
 	 */
 	public final boolean isEnabledInInteractMode(InteractMode interactMode) {
+		if (interactMode == InteractMode.MODE_SPECTATOR)
+			return true;
 		return enabledModes.isEmpty() || enabledModes.contains(interactMode);
 	}
 

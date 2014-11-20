@@ -50,7 +50,6 @@ import de.illonis.eduras.items.Item;
 import de.illonis.eduras.logicabstraction.InformationProvider;
 import de.illonis.eduras.math.Geometry;
 import de.illonis.eduras.math.Vector2df;
-import de.illonis.eduras.networking.ClientRole;
 import de.illonis.eduras.settings.S;
 import de.illonis.eduras.units.ControlledUnit;
 import de.illonis.eduras.units.InteractMode;
@@ -248,19 +247,24 @@ public class GameRenderer implements TooltipHandler {
 	 */
 	private void drawGui(Graphics g) {
 
-		InteractMode mode = null;
+		InteractMode mode;
 		if (!gui.isSpectator()) {
 			try {
 				mode = info.getPlayer().getCurrentMode();
 			} catch (ObjectNotFoundException e) {
+				L.log(Level.SEVERE,
+						"Could not find player while rendering gui.", e);
+				return;
 			}
+		} else {
+			mode = InteractMode.MODE_SPECTATOR;
 		}
 
 		for (int i = 0; i < uiObjects.size(); i++) {
 			RenderedGuiObject o = uiObjects.get(i);
-			if (o.isEnabledInInteractMode(mode)
-					&& o.isEnabledInGameMode(info.getGameMode())
-					&& (!gui.isSpectator() || o.isVisibleForSpectator())) {
+			if (o.isEnabledInGameMode(info.getGameMode())
+					&& ((gui.isSpectator() && o.isVisibleForSpectator()) || (!gui
+							.isSpectator() && o.isEnabledInInteractMode(mode)))) {
 				o.render(g);
 			}
 		}

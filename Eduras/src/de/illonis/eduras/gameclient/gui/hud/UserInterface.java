@@ -256,8 +256,10 @@ public class UserInterface implements GuiResizeListener {
 		if (spectator) {
 			for (int i = 0; i < uiObjects.size(); i++) {
 				RenderedGuiObject o = uiObjects.get(i);
-				if (!o.isVisibleForSpectator())
+				if (!o.isVisibleForSpectator()) {
+					System.out.println("removing " + o.getClass());
 					removeGuiElement(o);
+				}
 			}
 		}
 	}
