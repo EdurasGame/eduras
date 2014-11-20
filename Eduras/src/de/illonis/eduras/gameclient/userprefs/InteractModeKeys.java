@@ -53,8 +53,13 @@ public class InteractModeKeys {
 		case SCROLL_LEFT:
 		case SCROLL_DOWN:
 		case SCROLL_RIGHT:
+		case ACTIONBAR_PAGE_PLAYERSPELLS:
+		case ACTIONBAR_PAGE_SPELLS:
+		case ACTIONBAR_PAGE_UNITS:
+		case ACTIONBAR_PAGE_WEAPONS:
 			return InteractMode.MODE_STRATEGY;
+		default:
+			return InteractMode.ANY_MODE;
 		}
-		return InteractMode.ANY_MODE;
 	}
 }
