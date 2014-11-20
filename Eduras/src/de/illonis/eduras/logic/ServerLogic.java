@@ -12,6 +12,7 @@ import de.illonis.edulog.EduLog;
 import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.ObjectFactory;
 import de.illonis.eduras.Player;
+import de.illonis.eduras.Spectator;
 import de.illonis.eduras.Team;
 import de.illonis.eduras.actions.BlinkSpellAction;
 import de.illonis.eduras.actions.CreateUnitAction;
@@ -198,6 +199,10 @@ public class ServerLogic implements GameLogicInterface {
 				}
 				getGame().getEventTriggerer().notifyPlayerJoined(
 						initInfoEvent.getClientId());
+			} else {
+				Spectator spectator = new Spectator(
+						initInfoEvent.getClientId(), initInfoEvent.getName());
+				gameInfo.addSpectator(spectator);
 			}
 
 			getGame().getEventTriggerer().notifyGameReady(
