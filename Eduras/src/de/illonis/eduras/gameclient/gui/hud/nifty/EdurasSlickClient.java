@@ -176,7 +176,7 @@ public class EdurasSlickClient implements GameControllerBridge {
 
 	@Override
 	public void onDisconnect(boolean gracefully, String message) {
-		enterState(2);
+		enterState(ServerListState.SERVER_LIST_STATE_ID);
 	}
 
 	@Override

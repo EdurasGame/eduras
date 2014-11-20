@@ -97,7 +97,7 @@ public class ConnectingController extends EdurasScreenController {
 				try {
 					result = connectFuture.get();
 					if (result) {
-						game.enterState(3);
+						game.enterState(LoadingState.LOADING_STATE_ID);
 					} else {
 						note.setText(connectCallable.getErrorMessage());
 					}

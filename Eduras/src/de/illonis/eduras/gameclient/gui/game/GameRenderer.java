@@ -49,6 +49,7 @@ import de.illonis.eduras.items.Item;
 import de.illonis.eduras.logicabstraction.InformationProvider;
 import de.illonis.eduras.math.Geometry;
 import de.illonis.eduras.math.Vector2df;
+import de.illonis.eduras.networking.ClientRole;
 import de.illonis.eduras.settings.S;
 import de.illonis.eduras.units.ControlledUnit;
 import de.illonis.eduras.units.InteractMode;
@@ -157,18 +158,8 @@ public class GameRenderer implements TooltipHandler {
 	 *            the target graphics.
 	 */
 	public void render(GameContainer container, Graphics g) {
-
 		if (font == null)
 			font = g.getFont();
-		try {
-			if (info.getPlayer().getPlayerMainFigure() == null) {
-				// wait for player
-				return;
-			}
-		} catch (ObjectNotFoundException e) {
-			// Waiting for player
-			return;
-		}
 		int width = container.getWidth();
 		int height = container.getHeight();
 		float newScale = getRenderScale();
@@ -241,12 +232,13 @@ public class GameRenderer implements TooltipHandler {
 	 * Draw every gui element.
 	 */
 	private void drawGui(Graphics g) {
-		InteractMode mode;
-		try {
-			mode = info.getPlayer().getCurrentMode();
-		} catch (ObjectNotFoundException e) {
-			L.log(Level.WARNING, "Player not found", e);
-			mode = null;
+
+		InteractMode mode = null;
+		if (!gui.isSpectator()) {
+			try {
+				mode = info.getPlayer().getCurrentMode();
+			} catch (ObjectNotFoundException e) {
+			}
 		}
 
 		for (int i = 0; i < uiObjects.size(); i++) {
@@ -288,22 +280,26 @@ public class GameRenderer implements TooltipHandler {
 	 *            the graphics target.
 	 */
 	private void drawObjects(Graphics g) {
-		PlayerMainFigure myPlayer;
-		try {
-			myPlayer = getClientPlayer().getPlayerMainFigure();
-		} catch (ObjectNotFoundException e) {
-			L.log(Level.SEVERE,
-					"Could not find playerMainFigure while rendering.", e);
-			return;
-		}
-		Team playerTeam = myPlayer.getTeam();
-		VisionInformation vinfo = info.getClientData().getVisionInfo();
+		PlayerMainFigure myPlayer = null;
 		Area visionArea = null;
-		Area visionMask;
-		if (!S.Server.vision_disabled) {
-			synchronized (vinfo) {
-				visionArea = vinfo.getVisionForTeam(playerTeam);
-				visionMask = vinfo.getVisionMask();
+		if (!gui.isSpectator()) {
+			try {
+				myPlayer = getClientPlayer().getPlayerMainFigure();
+			} catch (ObjectNotFoundException e) {
+				L.log(Level.SEVERE,
+						"Could not find playermainfigure while rendering objects.",
+						e);
+				return;
+			}
+			Team playerTeam = myPlayer.getTeam();
+			VisionInformation vinfo = info.getClientData().getVisionInfo();
+
+			// Area visionMask;
+			if (!S.Server.vision_disabled) {
+				synchronized (vinfo) {
+					visionArea = vinfo.getVisionForTeam(playerTeam);
+					// visionMask = vinfo.getVisionMask();
+				}
 			}
 		}
 
@@ -336,7 +332,6 @@ public class GameRenderer implements TooltipHandler {
 					drawObject(d, g, myPlayer);
 				}
 			}
-
 		}
 
 		// if (!S.vision_disabled) {
@@ -347,6 +342,8 @@ public class GameRenderer implements TooltipHandler {
 	}
 
 	private boolean isObjectVisible(GameObject object) {
+		if (gui.isSpectator())
+			return true;
 		boolean isVisible = false;
 
 		Player myPlayer;
@@ -417,7 +414,8 @@ public class GameRenderer implements TooltipHandler {
 				drawDetectionAreaFor(unit, g);
 			}
 
-			if (myPlayer.getPlayer().getCurrentMode() == InteractMode.MODE_STRATEGY
+			if (!gui.isSpectator()
+					&& myPlayer.getPlayer().getCurrentMode() == InteractMode.MODE_STRATEGY
 					&& unit instanceof ControlledUnit) {
 				if (data.getSelectedUnits().contains(unit.getId())) {
 					drawUnitSelectionCircle(unit, g);

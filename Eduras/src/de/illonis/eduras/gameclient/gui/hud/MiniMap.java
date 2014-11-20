@@ -79,6 +79,7 @@ public class MiniMap extends ClickableGuiElement {
 
 	protected MiniMap(UserInterface gui) {
 		super(gui);
+		visibleForSpectator = true;
 		windowScale = GameRenderer.getRenderScale();
 		bounds = new Rectangle(0, 0, SIZE * windowScale, SIZE * windowScale);
 		neutralObjects = new HashMap<Integer, MiniMapNeutralObject>();

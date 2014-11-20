@@ -12,7 +12,7 @@ import de.lessvoid.nifty.Nifty;
  */
 public class SpectatorState extends GameState {
 
-	public static final int SPECTATOR_STATE_ID = 8;
+	public static final int SPECTATOR_STATE_ID = 6;
 
 	SpectatorState(GameControllerBridge game) {
 		super(game);

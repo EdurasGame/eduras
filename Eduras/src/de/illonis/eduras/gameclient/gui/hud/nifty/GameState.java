@@ -75,6 +75,7 @@ public class GameState extends NiftyOverlayBasicGameState {
 		try {
 			edurasGame.render(container, g);
 		} catch (SlickException e) {
+			e.printStackTrace();
 		}
 	}
 
