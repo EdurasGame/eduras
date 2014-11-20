@@ -90,12 +90,15 @@ public class GameInformation {
 	private final HashMap<Integer, Team> teams;
 	private final HashMap<Team, SpawnType> spawnGroups;
 
+	private ConcurrentHashMap<Integer, Spectator> spectators;
+
 	/**
 	 * Creates a new game information object with emtpy object lists.
 	 */
 	public GameInformation() {
 		objects = new ConcurrentHashMap<Integer, GameObject>();
 		players = new ConcurrentHashMap<Integer, Player>();
+		spectators = new ConcurrentHashMap<Integer, Spectator>();
 		map = new Map("funmap");
 		gameSettings = new GameSettings(this);
 		teams = new HashMap<Integer, Team>();
@@ -915,5 +918,45 @@ public class GameInformation {
 			}
 		}
 		return units;
+	}
+
+	/**
+	 * Adds a spectator to the game information.
+	 * 
+	 * @param spectator
+	 *            spectator to add
+	 */
+	public void addSpectator(Spectator spectator) {
+		spectators.put(spectator.getId(), spectator);
+	}
+
+	/**
+	 * Determines if the client who has the given clientId is a player.
+	 * 
+	 * @param clientId
+	 * @return true if it's a player
+	 */
+	public boolean isPlayer(int clientId) {
+		return players.containsKey(clientId);
+	}
+
+	/**
+	 * Removes a client who has the given client id from the list of spectators.
+	 * 
+	 * @param clientId
+	 */
+	public void removeSpectator(int clientId) {
+		if (spectators.containsKey(clientId)) {
+			spectators.remove(clientId);
+		}
+	}
+
+	/**
+	 * Returns a collection of all spectators
+	 * 
+	 * @return collection of spectators
+	 */
+	public Collection<Spectator> getSpectators() {
+		return spectators.values();
 	}
 }
