@@ -200,9 +200,23 @@ public class GameRenderer implements TooltipHandler {
 	}
 
 	private void adjustCamera() {
+		Vector2f c;
+		if (!gui.isSpectator()) {
+			PlayerMainFigure p;
+			try {
+				p = getClientPlayer().getPlayerMainFigure();
+				c = p.getCenterPosition();
+			} catch (ObjectNotFoundException e) {
+				L.log(Level.SEVERE,
+						"Could not find player while adjusting camera", e);
+				return;
+			}
+
+		} else {
+			c = new Vector2f();
+		}
+
 		try {
-			PlayerMainFigure p = getClientPlayer().getPlayerMainFigure();
-			Vector2f c = p.getCenterPosition();
 			// get offset and increase offset by movement
 			Vector2f offset = camera.getCameraOffset()
 					.add(camera.getCameraMovementMouse())
@@ -218,7 +232,7 @@ public class GameRenderer implements TooltipHandler {
 				camera.getCameraMovementMouse().set(0, 0);
 				camera.setLocation(currentCameraPos);
 			}
-		} catch (ObjectNotFoundException | NullPointerException e) {
+		} catch (NullPointerException e) {
 			// EduLog.passException(e);
 		}
 	}

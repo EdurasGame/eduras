@@ -110,7 +110,7 @@ public class ServerListController extends EdurasScreenController implements
 		game.enterState(LoadingState.LOADING_STATE_ID);
 		String userName = game.getUsername();
 		LoginData data = new LoginData(server.getUrl(), server.getPort(),
-				userName, role);
+				userName, ClientRole.SPECTATOR);
 		game.setLoginData(data);
 		game.enterState(5);
 	}

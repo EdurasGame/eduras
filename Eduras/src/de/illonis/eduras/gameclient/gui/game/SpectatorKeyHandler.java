@@ -21,16 +21,19 @@ public class SpectatorKeyHandler extends AnyModeKeyHandler {
 		super.keyPressed(key);
 
 		switch (key) {
-		case SCROLL_DOWN:
+		case CANCEL:
+			client.cancel();
+			break;
+		case SPECTATOR_SCROLL_DOWN:
 			client.startCameraMovement(Direction.BOTTOM, 1);
 			break;
-		case SCROLL_LEFT:
+		case SPECTATOR_SCROLL_LEFT:
 			client.startCameraMovement(Direction.LEFT, 1);
 			break;
-		case SCROLL_RIGHT:
+		case SPECTATOR_SCROLL_RIGHT:
 			client.startCameraMovement(Direction.RIGHT, 1);
 			break;
-		case SCROLL_UP:
+		case SPECTATOR_SCROLL_UP:
 			client.startCameraMovement(Direction.TOP, 1);
 			break;
 		default:
