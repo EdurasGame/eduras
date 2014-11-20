@@ -56,6 +56,7 @@ import de.illonis.eduras.items.ItemUseInformation;
 import de.illonis.eduras.items.Usable;
 import de.illonis.eduras.locale.Localization;
 import de.illonis.eduras.maps.persistence.MapParser;
+import de.illonis.eduras.networking.ClientRole;
 import de.illonis.eduras.units.PlayerMainFigure;
 import de.illonis.eduras.units.Unit;
 import de.illonis.eduras.utils.ResourceManager;
@@ -183,25 +184,24 @@ public class ServerLogic implements GameLogicInterface {
 					initInfoEvent.getClientId());
 			onGameEventAppeared(gameInfos);
 
-			// extract role and name if (initInfo.getRole() ==
-			// ClientRole.PLAYER)
-			getGame().getGameSettings().getGameMode()
-					.onConnect(initInfoEvent.getClientId());
+			// extract role and name
+			if (initInfoEvent.getRole() == ClientRole.PLAYER) {
+				getGame().getGameSettings().getGameMode()
+						.onConnect(initInfoEvent.getClientId());
 
-			String playerName = initInfoEvent.getName();
-			try {
-				onGameEventAppeared(new ClientRenameEvent(
-						initInfoEvent.getClientId(), playerName));
-			} catch (InvalidNameException e1) {
-				L.log(Level.SEVERE, "invalid client name", e1);
+				String playerName = initInfoEvent.getName();
+				try {
+					onGameEventAppeared(new ClientRenameEvent(
+							initInfoEvent.getClientId(), playerName));
+				} catch (InvalidNameException e1) {
+					L.log(Level.SEVERE, "invalid client name", e1);
+				}
+				getGame().getEventTriggerer().notifyPlayerJoined(
+						initInfoEvent.getClientId());
 			}
 
 			getGame().getEventTriggerer().notifyGameReady(
 					initInfoEvent.getClientId());
-
-			getGame().getEventTriggerer().notifyPlayerJoined(
-					initInfoEvent.getClientId());
-
 			break;
 		case SET_ROTATION:
 			if (!(event instanceof SetFloatGameObjectAttributeEvent)) {
