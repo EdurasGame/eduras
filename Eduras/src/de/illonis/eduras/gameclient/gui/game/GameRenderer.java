@@ -246,7 +246,7 @@ public class GameRenderer implements TooltipHandler {
 			mode = info.getPlayer().getCurrentMode();
 		} catch (ObjectNotFoundException e) {
 			L.log(Level.WARNING, "Player not found", e);
-			return;
+			mode = null;
 		}
 
 		for (int i = 0; i < uiObjects.size(); i++) {

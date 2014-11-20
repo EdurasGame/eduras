@@ -54,6 +54,9 @@
 						color="#ffff" label="Join" align="center">
 						<interact onClick="join()" />
 					</control>
+					<control name="checkbox" id="roleCheckBox" font="aurulent-sans-16.fnt"
+						color="#ffff" label="Spectator" align="right">
+					</control>
 					<control type="button" id="settingsButton" font="aurulent-sans-16.fnt"
 						color="#ffff" label="Settings" align="right">
 						<interact onClick="showSettings()" />

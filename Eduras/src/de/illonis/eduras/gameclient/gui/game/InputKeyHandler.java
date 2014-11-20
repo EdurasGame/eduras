@@ -16,6 +16,7 @@ import de.illonis.eduras.gameclient.userprefs.KeyBindings.KeyBinding;
 import de.illonis.eduras.gameclient.userprefs.Settings;
 import de.illonis.eduras.logicabstraction.EdurasInitializer;
 import de.illonis.eduras.logicabstraction.InformationProvider;
+import de.illonis.eduras.networking.ClientRole;
 import de.illonis.eduras.units.InteractMode;
 
 /**
@@ -33,6 +34,7 @@ public class InputKeyHandler {
 	private final InformationProvider infoPro;
 
 	private final HashMap<InteractMode, GuiKeyHandler> keyHandlers;
+	private final GuiKeyHandler spectatorKeyHandler;
 
 	private final HashMap<Integer, Boolean> pressedButtons;
 	private final ChatCache cache;
@@ -62,6 +64,7 @@ public class InputKeyHandler {
 				client, reactor));
 		keyHandlers.put(InteractMode.MODE_DEAD, new DeadModeKeyHandler(client,
 				reactor));
+		spectatorKeyHandler = new SpectatorKeyHandler(client, reactor);
 	}
 
 	/**
@@ -112,7 +115,15 @@ public class InputKeyHandler {
 		if (consumed) {
 			return;
 		}
-
+		if (infoPro.getClientData().getRole() == ClientRole.SPECTATOR) {
+			try {
+				KeyBinding binding = settings.getKeyBindings()
+						.getSpectatorBinding(key);
+				spectatorKeyHandler.keyPressed(binding);
+			} catch (KeyNotBoundException e) {
+			}
+			return;
+		}
 		Player player;
 		try {
 			player = infoPro.getPlayer();
@@ -161,9 +172,16 @@ public class InputKeyHandler {
 	public void keyReleased(int key, char c) {
 		// release button
 		pressedButtons.put(key, false);
-		// don't handle other keys
-		if (!settings.getKeyBindings().isBound(key))
+
+		if (infoPro.getClientData().getRole() == ClientRole.SPECTATOR) {
+			try {
+				KeyBinding binding = settings.getKeyBindings()
+						.getSpectatorBinding(key);
+				spectatorKeyHandler.keyReleased(binding);
+			} catch (KeyNotBoundException e) {
+			}
 			return;
+		}
 		Player player;
 		try {
 			player = infoPro.getPlayer();
@@ -177,8 +195,6 @@ public class InputKeyHandler {
 			binding = settings.getKeyBindings().getBindingOf(key,
 					player.getCurrentMode());
 		} catch (KeyNotBoundException ex) {
-			L.log(Level.SEVERE, "Key is bound but receiving binding failed: "
-					+ key, ex);
 			return;
 		}
 		if (infoPro.getGameMode().supportsKeyBinding(binding)) {

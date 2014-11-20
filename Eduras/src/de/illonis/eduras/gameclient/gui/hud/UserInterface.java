@@ -93,6 +93,7 @@ public class UserInterface implements GuiResizeListener {
 		this.logic = logic;
 		this.cancebleElements = new LinkedList<Cancelable>();
 		createElements();
+		setRole(infos.getClientData().getRole());
 		hudNotifier.setUiObjects(this.uiObjects);
 
 		TimerTask pingRequester = new TimerTask() {

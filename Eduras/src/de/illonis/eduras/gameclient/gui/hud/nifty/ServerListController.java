@@ -17,6 +17,7 @@ import de.illonis.eduras.gameclient.audio.SoundMachine.SoundType;
 import de.illonis.eduras.networking.ClientRole;
 import de.illonis.eduras.networking.discover.ServerFoundListener;
 import de.illonis.eduras.networking.discover.ServerInfo;
+import de.lessvoid.nifty.controls.CheckBox;
 import de.lessvoid.nifty.controls.ListBox;
 import de.lessvoid.nifty.controls.TextField;
 import de.lessvoid.nifty.screen.Screen;
@@ -35,6 +36,7 @@ public class ServerListController extends EdurasScreenController implements
 
 	private ListBox<ServerInfo> listBox;
 	private TextField customIpTextField;
+	private CheckBox roleCheckBox;
 	private final String presetServerIp;
 	private final int presetServerPort;
 
@@ -57,6 +59,7 @@ public class ServerListController extends EdurasScreenController implements
 		listBox = screen.findNiftyControl("serverList", ListBox.class);
 		customIpTextField = screen.findNiftyControl("customIpTextField",
 				TextField.class);
+		roleCheckBox = screen.findNiftyControl("roleCheckBox", CheckBox.class);
 	}
 
 	/**
@@ -66,8 +69,9 @@ public class ServerListController extends EdurasScreenController implements
 	public void connectIfPresetAndFirstTime() {
 		if (!presetServerIp.isEmpty() && presetServerPort != 0 && firstTime) {
 			try {
-				joinServer(new ServerInfo(
-						InetAddress.getByName(presetServerIp), presetServerPort));
+				joinServer(
+						new ServerInfo(InetAddress.getByName(presetServerIp),
+								presetServerPort), ClientRole.PLAYER);
 			} catch (UnknownHostException e) {
 				L.log(Level.WARNING, "Cannot find specified IP '"
 						+ presetServerIp + "'", e);
@@ -81,18 +85,19 @@ public class ServerListController extends EdurasScreenController implements
 	 * Joins the selected server.
 	 */
 	public void join() {
+		ClientRole role = (roleCheckBox.isChecked()) ? ClientRole.SPECTATOR
+				: ClientRole.PLAYER;
 		List<ServerInfo> selected = listBox.getSelection();
 		if (selected.size() == 1) {
 			ServerInfo current = selected.get(0);
-			joinServer(current);
+			joinServer(current, role);
 		} else {
 			try {
-				String serverAddressAndPort = customIpTextField
-						.getDisplayedText();
+				String serverAddressAndPort = customIpTextField.getRealText();
 				String hostAddress = serverAddressAndPort.split(":")[0];
 				int port = Integer.parseInt(serverAddressAndPort.split(":")[1]);
 				joinServer(new ServerInfo(InetAddress.getByName(hostAddress),
-						port));
+						port), role);
 			} catch (NumberFormatException | UnknownHostException e) {
 				// TODO: Show a notification or something
 				return;
@@ -100,11 +105,10 @@ public class ServerListController extends EdurasScreenController implements
 		}
 	}
 
-	private void joinServer(ServerInfo server) {
+	private void joinServer(ServerInfo server, ClientRole role) {
 		game.setServer(server);
 		game.enterState(LoadingState.LOADING_STATE_ID);
 		String userName = game.getUsername();
-		ClientRole role = ClientRole.PLAYER;
 		LoginData data = new LoginData(server.getUrl(), server.getPort(),
 				userName, role);
 		game.setLoginData(data);
