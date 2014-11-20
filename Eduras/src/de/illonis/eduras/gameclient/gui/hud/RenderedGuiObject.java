@@ -5,12 +5,14 @@ import java.util.List;
 
 import org.newdawn.slick.Graphics;
 
+import de.illonis.eduras.exceptions.ObjectNotFoundException;
 import de.illonis.eduras.gameclient.GameEventAdapter;
 import de.illonis.eduras.gameclient.gui.game.GuiClickReactor;
 import de.illonis.eduras.gameclient.gui.game.TooltipHandler;
 import de.illonis.eduras.gamemodes.GameMode;
 import de.illonis.eduras.logicabstraction.InformationProvider;
 import de.illonis.eduras.maps.SpawnPosition.SpawnType;
+import de.illonis.eduras.networking.ClientRole;
 import de.illonis.eduras.units.InteractMode;
 
 /**
@@ -58,6 +60,15 @@ public abstract class RenderedGuiObject extends GameEventAdapter implements
 	 */
 	public final boolean isVisibleForSpectator() {
 		return visibleForSpectator;
+	}
+
+	protected final InteractMode getCurrentMode()
+			throws ObjectNotFoundException {
+		if (getInfo().getClientData().getRole() == ClientRole.SPECTATOR) {
+			return InteractMode.MODE_SPECTATOR;
+		} else {
+			return getInfo().getPlayer().getCurrentMode();
+		}
 	}
 
 	/**
@@ -134,7 +145,7 @@ public abstract class RenderedGuiObject extends GameEventAdapter implements
 	 */
 	public final boolean isEnabledInInteractMode(InteractMode interactMode) {
 		if (interactMode == InteractMode.MODE_SPECTATOR)
-			return true;
+			return isVisibleForSpectator();
 		return enabledModes.isEmpty() || enabledModes.contains(interactMode);
 	}
 
