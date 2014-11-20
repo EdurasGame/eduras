@@ -68,8 +68,7 @@ public class ActionBarPage extends ClickableGuiElement implements
 		this.index = index;
 		this.reactor = reactor;
 		buttons = new LinkedList<ActionButton>();
-		buttonSize = (float) ActionButton.BUTTON_SIZE
-				* GameRenderer.getRenderScale();
+		buttonSize = ActionButton.BUTTON_SIZE * GameRenderer.getRenderScale();
 		data = EdurasInitializer.getInstance().getInformationProvider()
 				.getClientData();
 		bounds = new Rectangle(0, 0, 1, buttonSize);
@@ -147,6 +146,8 @@ public class ActionBarPage extends ClickableGuiElement implements
 				resIcon = ImageCache.getGuiImage(ImageKey.RESOURCE_ICON_SMALL);
 			} catch (CacheException e) {
 			}
+			screenY += font.getLineHeight();
+			updateBounds();
 		}
 		float x = screenX;
 		if (activePage) {
@@ -154,7 +155,7 @@ public class ActionBarPage extends ClickableGuiElement implements
 		} else {
 			g.setColor(DISABLED_COLOR);
 		}
-		float y = screenY + font.getLineHeight();
+		float y = screenY;
 		Rectangle rect = new Rectangle(x, y, buttonSize, buttonSize);
 		for (int i = 0; i < buttons.size(); i++) {
 			rect.setX(x);
