@@ -44,6 +44,7 @@ import de.illonis.eduras.gameclient.gui.hud.UserInterface;
 import de.illonis.eduras.gameobjects.Base;
 import de.illonis.eduras.gameobjects.DynamicPolygonObject;
 import de.illonis.eduras.gameobjects.GameObject;
+import de.illonis.eduras.gameobjects.GameObject.Visibility;
 import de.illonis.eduras.images.ImageFiler.ImageResolution;
 import de.illonis.eduras.items.Item;
 import de.illonis.eduras.logicabstraction.InformationProvider;
@@ -357,9 +358,8 @@ public class GameRenderer implements TooltipHandler {
 
 	private boolean isObjectVisible(GameObject object) {
 		if (gui.isSpectator())
-			return true;
+			return object.getVisibility() != Visibility.INVISIBLE;
 		boolean isVisible = false;
-
 		Player myPlayer;
 		try {
 			myPlayer = info.getPlayer();

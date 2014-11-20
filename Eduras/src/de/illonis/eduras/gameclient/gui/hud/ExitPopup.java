@@ -10,6 +10,7 @@ public class ExitPopup extends DialoguePopup {
 
 	protected ExitPopup(UserInterface gui) {
 		super(gui, "Do you really want to exit?");
+		visibleForSpectator = true;
 		addAnswer(new AnswerButton("Yes") {
 
 			@Override

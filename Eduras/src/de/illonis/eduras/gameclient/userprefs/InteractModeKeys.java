@@ -58,6 +58,11 @@ public class InteractModeKeys {
 		case ACTIONBAR_PAGE_UNITS:
 		case ACTIONBAR_PAGE_WEAPONS:
 			return InteractMode.MODE_STRATEGY;
+		case SPECTATOR_SCROLL_DOWN:
+		case SPECTATOR_SCROLL_LEFT:
+		case SPECTATOR_SCROLL_RIGHT:
+		case SPECTATOR_SCROLL_UP:
+			return InteractMode.MODE_SPECTATOR;
 		default:
 			return InteractMode.ANY_MODE;
 		}

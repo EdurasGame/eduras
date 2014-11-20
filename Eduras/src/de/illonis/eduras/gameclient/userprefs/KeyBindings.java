@@ -21,7 +21,6 @@ public final class KeyBindings implements ResettableSetting {
 
 	private final HashMap<KeyBinding, Integer> defaultKeys;
 	private final HashMap<InteractMode, HashMap<Integer, KeyBinding>> keys;
-	private final HashMap<Integer, KeyBinding> spectatorKeys;
 	private final HashMap<KeyBinding, String> descriptions;
 
 	/**
@@ -33,7 +32,6 @@ public final class KeyBindings implements ResettableSetting {
 		for (InteractMode mode : InteractMode.values()) {
 			keys.put(mode, new HashMap<Integer, KeyBinding>());
 		}
-		spectatorKeys = new HashMap<Integer, KeyBinding>();
 		descriptions = new HashMap<KeyBinding, String>();
 		init();
 	}
@@ -344,22 +342,6 @@ public final class KeyBindings implements ResettableSetting {
 				return true;
 		}
 		return false;
-	}
-
-	/**
-	 * Returns the binding of given key for spectator.
-	 * 
-	 * @param key
-	 *            the key pressed.
-	 * @return the binding assigned to given key for spectator.
-	 * @throws KeyNotBoundException
-	 *             if key is not bound in spectator mode.
-	 */
-	public KeyBinding getSpectatorBinding(int key) throws KeyNotBoundException {
-		KeyBinding binding = spectatorKeys.get(key);
-		if (binding == null)
-			throw new KeyNotBoundException(key);
-		return binding;
 	}
 
 }
