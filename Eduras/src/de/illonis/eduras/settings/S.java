@@ -788,6 +788,17 @@ public final class S {
 		 */
 		public static float gm_edura_timeup_increase_factor = 2;
 
+		/**
+		 * Determines whether the income aggregated from all bases shall be
+		 * constant over time.
+		 */
+		public static boolean gm_edura_constant_income = true;
+
+		/**
+		 * Total income per minute.
+		 */
+		public static int gm_edura_income_per_minute = 1000;
+
 	}
 
 	/**
