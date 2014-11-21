@@ -776,6 +776,18 @@ public final class S {
 		 */
 		public static boolean unit_observer_stealth = true;
 
+		/**
+		 * Determines whether income per base increases when the time is up. The
+		 * more income per base the greater is the advantage for the team that
+		 * is ahead in bases which is intended to speed up the round.
+		 */
+		public static boolean gm_edura_timeup_increase_income = true;
+
+		/**
+		 * The factor by which each base's income is multiplied when time is up.
+		 */
+		public static float gm_edura_timeup_increase_factor = 2;
+
 	}
 
 	/**
