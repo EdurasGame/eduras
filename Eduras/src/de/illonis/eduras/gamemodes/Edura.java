@@ -61,9 +61,12 @@ public class Edura extends TeamDeathmatch {
 		gameInfo.getEventTriggerer().setRemainingTime(
 				gameInfo.getGameSettings().getRoundTime());
 
-		for (Base aNeutralBase : getAllBases()) {
-			aNeutralBase.setResourceGenerateMultiplicator(aNeutralBase
-					.getResourceGenerateMultiplicator() + 1);
+		if (S.Server.gm_edura_timeup_increase_income) {
+			for (Base aNeutralBase : getAllBases()) {
+				aNeutralBase.setResourceGenerateMultiplicator(aNeutralBase
+						.getResourceGenerateMultiplicator()
+						* S.Server.gm_edura_timeup_increase_factor);
+			}
 		}
 	}
 
