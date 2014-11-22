@@ -39,30 +39,30 @@ public abstract class DialoguePopup extends ClickableGuiElement implements
 	@Override
 	public void render(Graphics g) {
 		if (isVisible()) {
-			if (font == null) {
-				font = FontCache.getFont(FontKey.DEFAULT_FONT, g);
 
-				int buttonWidthSum = 0;
-				for (AnswerButton answerButton : answerButtons) {
-					answerButton.setSize(font);
-					buttonWidthSum += answerButton.getWidth() + 10;
-				}
-				int width = Math.max(buttonWidthSum, font.getWidth(text)) + 30;
-				bounds.setWidth(width);
-				int height = font.getLineHeight() * 2 + 30;
-				bounds.setHeight(height);
-				bounds.setLocation(screenX, screenY);
+			font = FontCache.getFont(FontKey.DEFAULT_FONT, g);
 
-				buttonWidthSum = 10;
-				for (int i = 0; i < answerButtons.size(); i++) {
-					AnswerButton answerButton = answerButtons.get(i);
-
-					answerButton.setLocation(screenX + buttonWidthSum, screenY
-							+ height);
-
-					buttonWidthSum += 10 + answerButton.getWidth();
-				}
+			int buttonWidthSum = 0;
+			for (AnswerButton answerButton : answerButtons) {
+				answerButton.setSize(font);
+				buttonWidthSum += answerButton.getWidth() + 10;
 			}
+			int width = Math.max(buttonWidthSum, font.getWidth(text)) + 30;
+			bounds.setWidth(width);
+			int height = font.getLineHeight() * 2 + 30;
+			bounds.setHeight(height);
+			bounds.setLocation(screenX, screenY);
+
+			buttonWidthSum = 10;
+			for (int i = 0; i < answerButtons.size(); i++) {
+				AnswerButton answerButton = answerButtons.get(i);
+
+				answerButton.setLocation(screenX + buttonWidthSum, screenY
+						+ height);
+
+				buttonWidthSum += 10 + answerButton.getWidth();
+			}
+
 			g.setColor(Color.white);
 			g.fill(bounds);
 

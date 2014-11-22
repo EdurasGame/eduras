@@ -271,4 +271,12 @@ public interface GameEventListener {
 	 * @param event
 	 */
 	void onAoEDamage(AoEDamageEvent event);
+
+	/**
+	 * Called when team of a player changed.
+	 * 
+	 * @param ownerId
+	 *            owner of player.
+	 */
+	void onPlayerTeamChanged(int ownerId);
 }

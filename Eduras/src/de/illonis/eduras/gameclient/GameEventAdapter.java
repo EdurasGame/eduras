@@ -151,4 +151,8 @@ public class GameEventAdapter implements GameEventListener {
 	@Override
 	public void onAoEDamage(AoEDamageEvent event) {
 	}
+
+	@Override
+	public void onPlayerTeamChanged(int ownerId) {
+	}
 }

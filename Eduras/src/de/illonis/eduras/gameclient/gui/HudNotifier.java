@@ -287,7 +287,8 @@ public class HudNotifier implements GameEventListener {
 
 	@Override
 	public void onPlayerJoined(int ownerId) {
-		for (GameEventListener obj : uiObjects) {
+		for (GameEventListener obj : new LinkedList<RenderedGuiObject>(
+				uiObjects)) {
 			obj.onPlayerJoined(ownerId);
 		}
 		for (GameEventListener obj : otherObjects) {
@@ -361,5 +362,15 @@ public class HudNotifier implements GameEventListener {
 
 	@Override
 	public void onAoEDamage(AoEDamageEvent event) {
+	}
+
+	@Override
+	public void onPlayerTeamChanged(int ownerId) {
+		for (GameEventListener obj : uiObjects) {
+			obj.onPlayerTeamChanged(ownerId);
+		}
+		for (GameEventListener obj : otherObjects) {
+			obj.onPlayerTeamChanged(ownerId);
+		}
 	}
 }

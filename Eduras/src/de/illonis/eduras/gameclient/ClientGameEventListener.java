@@ -236,4 +236,10 @@ public class ClientGameEventListener implements GameEventListener {
 	public void onAoEDamage(AoEDamageEvent event) {
 		effects.onAoEDamage(event);
 	}
+
+	@Override
+	public void onPlayerTeamChanged(int ownerId) {
+		ui.onPlayerTeamChanged(ownerId);
+		effects.onPlayerTeamChanged(ownerId);
+	}
 }

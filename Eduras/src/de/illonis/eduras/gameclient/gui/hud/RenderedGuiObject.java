@@ -11,7 +11,6 @@ import de.illonis.eduras.gameclient.gui.game.GuiClickReactor;
 import de.illonis.eduras.gameclient.gui.game.TooltipHandler;
 import de.illonis.eduras.gamemodes.GameMode;
 import de.illonis.eduras.logicabstraction.InformationProvider;
-import de.illonis.eduras.maps.SpawnPosition.SpawnType;
 import de.illonis.eduras.networking.ClientRole;
 import de.illonis.eduras.units.InteractMode;
 
@@ -51,6 +50,11 @@ public abstract class RenderedGuiObject extends GameEventAdapter implements
 		visible = true;
 		gui.addElement(this);
 		zIndex = 0;
+	}
+
+	protected void setLocation(float x, float y) {
+		this.screenX = x;
+		this.screenY = y;
 	}
 
 	/**
