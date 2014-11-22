@@ -1,6 +1,7 @@
 package de.illonis.eduras.logic;
 
 import java.io.IOException;
+import java.util.LinkedList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -377,6 +378,8 @@ public class ClientLogic implements GameLogicInterface {
 				}
 
 				teamToAddPlayerTo.addPlayer(player);
+				getListener().onTeamsSet(
+						new LinkedList<Team>(gameInfo.getTeams()));
 				break;
 			case DEATH:
 				DeathEvent de = (DeathEvent) event;
