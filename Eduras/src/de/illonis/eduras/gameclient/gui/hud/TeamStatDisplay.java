@@ -1,0 +1,71 @@
+package de.illonis.eduras.gameclient.gui.hud;
+
+import java.util.LinkedList;
+import java.util.List;
+import java.util.logging.Logger;
+
+import org.newdawn.slick.Color;
+import org.newdawn.slick.Font;
+import org.newdawn.slick.Graphics;
+
+import de.illonis.edulog.EduLog;
+import de.illonis.eduras.Statistic;
+import de.illonis.eduras.Team;
+import de.illonis.eduras.gameclient.datacache.FontCache;
+import de.illonis.eduras.gameclient.datacache.FontCache.FontKey;
+import de.illonis.eduras.gamemodes.GameMode;
+import de.illonis.eduras.gamemodes.GameMode.GameModeNumber;
+import de.illonis.eduras.units.InteractMode;
+
+/**
+ * Displays each teams total kills in spectator mode.
+ * 
+ * @author illonis
+ * 
+ */
+public class TeamStatDisplay extends RenderedGuiObject {
+
+	private final static Logger L = EduLog.getLoggerFor(TeamStatDisplay.class
+			.getName());
+	private int windowWidth = 0;
+
+	protected TeamStatDisplay(UserInterface gui) {
+		super(gui);
+		visibleForSpectator = true;
+		// workaround for elements only visible in spectator mode.
+		setActiveInteractModes(InteractMode.MODE_SPECTATOR);
+	}
+
+	@Override
+	public void render(Graphics g) {
+		Font font = FontCache.getFont(FontKey.DEFAULT_FONT, g);
+		Statistic stats = getInfo().getStatistics();
+		List<Team> teams = new LinkedList<Team>(getInfo().getTeams());
+		if (teams.size() != 2)
+			return;
+		String left;
+		String right;
+		String middle = stats.getKillsByTeam(teams.get(0)) + ":"
+				+ stats.getKillsByTeam(teams.get(1));
+		left = teams.get(0).getName() + " ";
+		right = " " + teams.get(1).getName();
+		float y = screenY + font.getLineHeight();
+		screenX = (windowWidth - font.getWidth(left + middle + right)) / 2;
+		font.drawString(screenX, y, left, teams.get(0).getColor());
+		font.drawString(screenX + font.getWidth(left), y, middle, Color.white);
+		font.drawString(screenX + font.getWidth(left + middle), y, right, teams
+				.get(1).getColor());
+	}
+
+	@Override
+	public boolean isEnabledInGameMode(GameMode gameMode) {
+		return gameMode.getNumber() == GameModeNumber.EDURA
+				|| gameMode.getNumber() == GameModeNumber.TEAM_DEATHMATCH;
+	}
+
+	@Override
+	public void onGuiSizeChanged(int newWidth, int newHeight) {
+		screenY = 0;
+		windowWidth = newWidth;
+	}
+}

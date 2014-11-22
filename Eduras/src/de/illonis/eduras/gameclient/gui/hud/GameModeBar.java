@@ -3,6 +3,7 @@ package de.illonis.eduras.gameclient.gui.hud;
 import java.util.logging.Logger;
 
 import org.newdawn.slick.Color;
+import org.newdawn.slick.Font;
 import org.newdawn.slick.Graphics;
 
 import de.illonis.edulog.EduLog;
@@ -21,6 +22,7 @@ public class GameModeBar extends RenderedGuiObject {
 			.getName());
 
 	private String mode;
+	private int screenWidth;
 
 	/**
 	 * Creates the game stat bar.
@@ -40,19 +42,18 @@ public class GameModeBar extends RenderedGuiObject {
 	@Override
 	public void render(Graphics g) {
 		g.setColor(Color.white);
-		FontCache.getFont(FontKey.DEFAULT_FONT, g).drawString(screenX + 10,
-				screenY + 10, mode);
+		Font font = FontCache.getFont(FontKey.DEFAULT_FONT, g);
+		screenX = (screenWidth - font.getWidth(mode)) / 2;
+		font.drawString(screenX, screenY, mode, Color.white);
 	}
 
 	@Override
 	public void onGuiSizeChanged(int newWidth, int newHeight) {
-		screenX = newWidth / 2;
+		screenWidth = newWidth;
 	}
 
 	@Override
 	public void onGameModeChanged(GameMode newMode) {
-		L.info("gamemode bar to: " + newMode);
-
 		mode = newMode.getName();
 	}
 

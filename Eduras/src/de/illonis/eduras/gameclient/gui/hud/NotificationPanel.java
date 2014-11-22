@@ -21,6 +21,8 @@ import de.illonis.eduras.gameobjects.Base;
 import de.illonis.eduras.inventory.ItemSlotIsEmptyException;
 import de.illonis.eduras.items.Item;
 import de.illonis.eduras.locale.Localization;
+import de.illonis.eduras.maps.SpawnPosition.SpawnType;
+import de.illonis.eduras.networking.ClientRole;
 import de.illonis.eduras.units.PlayerMainFigure;
 
 /**
@@ -136,22 +138,28 @@ public class NotificationPanel extends RenderedGuiObject {
 				return;
 			}
 
-			Player killer = getInfo()
-					.getPlayerByOwnerId(event.getKillerOwner());
 			int killedOwner = getInfo().findObjectById(event.getKilled())
 					.getOwner();
 			Player killed = getInfo().getPlayerByOwnerId(killedOwner);
+
+			Player killer = getInfo()
+					.getPlayerByOwnerId(event.getKillerOwner());
+
 			String note;
-			if (getInfo().getPlayer().equals(killed)) {
-				note = Localization.getStringF(
-						"Client.gui.notifications.killedyou", killer.getName());
-			} else
+			if (getInfo().getClientData().getRole() == ClientRole.SPECTATOR
+					|| !getInfo().getPlayer().equals(killed)) {
 				note = Localization.getStringF("Client.gui.notifications.kill",
 						killer.getName(), killed.getName());
+			} else {
+				note = Localization.getStringF(
+						"Client.gui.notifications.killedyou", killer.getName());
+			}
 			addNotification(note);
 
 		} catch (ObjectNotFoundException e) {
-			L.log(Level.SEVERE, "object not found", e);
+			L.log(Level.SEVERE,
+					"Could not find objects while reporting a kill on notification panel.",
+					e);
 		}
 	}
 
