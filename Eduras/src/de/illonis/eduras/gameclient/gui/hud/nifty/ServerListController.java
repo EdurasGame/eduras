@@ -11,6 +11,7 @@ import org.newdawn.slick.state.transition.FadeInTransition;
 import org.newdawn.slick.state.transition.FadeOutTransition;
 
 import de.illonis.edulog.EduLog;
+import de.illonis.eduras.EdurasServer;
 import de.illonis.eduras.gameclient.LoginData;
 import de.illonis.eduras.gameclient.audio.SoundMachine;
 import de.illonis.eduras.gameclient.audio.SoundMachine.SoundType;
@@ -82,25 +83,51 @@ public class ServerListController extends EdurasScreenController implements
 	}
 
 	/**
-	 * Joins the selected server.
+	 * Joins the selected server as spectator.
+	 */
+	public void joinSpectator() {
+		joinEnteredOrSelected(ClientRole.SPECTATOR);
+	}
+
+	/**
+	 * Joins the selected server as player.
 	 */
 	public void join() {
-		ClientRole role = (roleCheckBox.isChecked()) ? ClientRole.SPECTATOR
-				: ClientRole.PLAYER;
+		joinEnteredOrSelected(ClientRole.PLAYER);
+	}
+
+	private void joinEnteredOrSelected(ClientRole role) {
 		List<ServerInfo> selected = listBox.getSelection();
 		if (selected.size() == 1) {
 			ServerInfo current = selected.get(0);
 			joinServer(current, role);
 		} else {
+
+			String serverAddressAndPort = customIpTextField.getRealText();
+			String hostAddress;
+			int port;
+			if (serverAddressAndPort.contains(":")) {
+				String[] parts = serverAddressAndPort.split(":");
+				hostAddress = parts[0];
+				try {
+					port = Integer.parseInt(parts[1]);
+				} catch (NumberFormatException e) {
+					L.log(Level.INFO, "player entered invalid port: "
+							+ parts[1], e);
+					return;
+				}
+			} else {
+				hostAddress = serverAddressAndPort;
+				port = EdurasServer.DEFAULT_PORT;
+			}
+
+			InetAddress address;
 			try {
-				String serverAddressAndPort = customIpTextField.getRealText();
-				String hostAddress = serverAddressAndPort.split(":")[0];
-				int port = Integer.parseInt(serverAddressAndPort.split(":")[1]);
-				joinServer(new ServerInfo(InetAddress.getByName(hostAddress),
-						port), role);
-			} catch (NumberFormatException | UnknownHostException e) {
-				// TODO: Show a notification or something
-				return;
+				address = InetAddress.getByName(hostAddress);
+				joinServer(new ServerInfo(address, port), role);
+			} catch (UnknownHostException e) {
+				L.log(Level.INFO, "player entered unknown server address: "
+						+ hostAddress, e);
 			}
 		}
 	}
@@ -110,7 +137,7 @@ public class ServerListController extends EdurasScreenController implements
 		game.enterState(LoadingState.LOADING_STATE_ID);
 		String userName = game.getUsername();
 		LoginData data = new LoginData(server.getUrl(), server.getPort(),
-				userName, ClientRole.SPECTATOR);
+				userName, role);
 		game.setLoginData(data);
 		game.enterState(5);
 	}

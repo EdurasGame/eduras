@@ -52,7 +52,7 @@
 					 text="custom address" maxLenght="30" align="left" width="25%"/>
 					<control type="button" id="joinButton" font="aurulent-sans-16.fnt"
 						color="#ffff" label="Join" align="center">
-						<interact onClick="join()" />
+						<interact onClick="join()" onSecondaryClick="joinSpectator()" />
 					</control>
 					<control name="checkbox" id="roleCheckBox" font="aurulent-sans-16.fnt"
 						color="#ffff" label="Spectator" align="right">
