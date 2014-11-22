@@ -1,7 +1,6 @@
 package de.illonis.eduras.gameclient.gui.hud;
 
 import java.util.LinkedList;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.newdawn.slick.Font;
@@ -10,8 +9,6 @@ import org.newdawn.slick.Graphics;
 import de.illonis.edulog.EduLog;
 import de.illonis.eduras.Player;
 import de.illonis.eduras.Team;
-import de.illonis.eduras.exceptions.ObjectNotFoundException;
-import de.illonis.eduras.exceptions.PlayerHasNoTeamException;
 import de.illonis.eduras.gameclient.datacache.FontCache;
 import de.illonis.eduras.gameclient.datacache.FontCache.FontKey;
 import de.illonis.eduras.gameclient.gui.game.GameRenderer;
@@ -69,7 +66,6 @@ public class TeamInfoDisplay extends RenderedGuiObject {
 		float height = (2 * team.getPlayers().size() - 1)
 				+ team.getPlayers().size() * font.getLineHeight() * 2 + 4;
 		if (scheduled) {
-			System.out.println("scheduled");
 			scheduled = false;
 			for (TeamPlayerDisplay d : playerBars) {
 				gui.removeGuiElement(d);
@@ -78,8 +74,6 @@ public class TeamInfoDisplay extends RenderedGuiObject {
 			playerBars.clear();
 			int i = 0;
 			for (Player p : team.getPlayers()) {
-				System.out.println("team " + team.getName() + " : "
-						+ p.getPlayerId());
 				TeamPlayerDisplay display = new TeamPlayerDisplay(gui, p);
 				display.setLocation(screenX + 1,
 						screenY + 2 + i * (font.getLineHeight() * 2 + 2));
@@ -95,7 +89,6 @@ public class TeamInfoDisplay extends RenderedGuiObject {
 
 	@Override
 	public void onPlayerJoined(int ownerId) {
-		System.out.println("join");
 		recalculate();
 	}
 
@@ -105,9 +98,6 @@ public class TeamInfoDisplay extends RenderedGuiObject {
 
 	@Override
 	public void onPlayerTeamChanged(int ownerId) {
-		System.out.println("change" + ownerId);
-		System.out.println(team.getName());
-		System.out.println(team.getPlayers());
 		recalculate();
 	}
 
@@ -123,7 +113,6 @@ public class TeamInfoDisplay extends RenderedGuiObject {
 
 	@Override
 	public void onPlayerLeft(int ownerId) {
-		System.out.println("left" + ownerId);
 		recalculate();
 	}
 
