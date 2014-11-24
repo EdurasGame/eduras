@@ -520,18 +520,38 @@ public class ServerEventTriggerer implements EventTriggerer {
 
 	@Override
 	public void restartGame() {
-		gameInfo.getGameSettings().getGameMode().onGameEnd();
+		deinitMatch();
 		changeMap(gameInfo.getMap());
+		initMatch();
+	}
+
+	private void deinitMatch() {
+		gameInfo.getGameSettings().getGameMode().onRoundEnds();
+		gameInfo.getGameSettings().getGameMode().onGameEnd();
+	}
+
+	private void initMatch() {
 		gameInfo.getGameSettings().getGameMode().onGameStart();
+		doRoundRestartStuff();
+		gameInfo.getGameSettings().getGameMode().onRoundStarts();
+		sendEvents(new StartRoundEvent());
 	}
 
 	@Override
 	public void restartRound() {
 
 		if (gameInfo.getGameSettings().getGameMode().onRoundEnds()) {
+			restartGame();
 			return;
 		}
 
+		doRoundRestartStuff();
+
+		gameInfo.getGameSettings().getGameMode().onRoundStarts();
+		sendEvents(new StartRoundEvent());
+	}
+
+	private void doRoundRestartStuff() {
 		for (Player player : gameInfo.getPlayers()) {
 			resetStats(player);
 		}
@@ -542,8 +562,6 @@ public class ServerEventTriggerer implements EventTriggerer {
 		}
 		reloadMap(gameInfo.getMap());
 		resetSettings();
-		gameInfo.getGameSettings().getGameMode().onRoundStarts();
-		sendEvents(new StartRoundEvent());
 	}
 
 	@Override
@@ -558,13 +576,13 @@ public class ServerEventTriggerer implements EventTriggerer {
 
 	@Override
 	public void changeGameMode(GameMode newMode) {
-		gameInfo.getGameSettings().getGameMode().onGameEnd();
+		deinitMatch();
 
 		gameInfo.getGameSettings().changeGameMode(newMode);
 		SetGameModeEvent event = new SetGameModeEvent(newMode.getName());
 
 		reloadMap(gameInfo.getMap());
-		gameInfo.getGameSettings().getGameMode().onGameStart();
+		initMatch();
 
 		sendEvents(event);
 	}

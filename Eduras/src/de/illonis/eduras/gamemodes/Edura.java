@@ -75,7 +75,6 @@ public class Edura extends TeamDeathmatch {
 	@Override
 	public void onGameStart() {
 		initTeams();
-		onRoundStarts();
 	}
 
 	private void giveStartResources() {
@@ -345,8 +344,6 @@ public class Edura extends TeamDeathmatch {
 
 	@Override
 	public void onGameEnd() {
-		roundsWonTeamA = 0;
-		roundsWonTeamB = 0;
 		super.onGameEnd();
 	}
 
@@ -389,9 +386,11 @@ public class Edura extends TeamDeathmatch {
 		}
 
 		if (roundsWonTeamA + roundsWonTeamB >= S.Server.gm_edura_maxrounds) {
-			gameInfo.getEventTriggerer().onMatchEnd(
-					roundsWonTeamA > roundsWonTeamB ? getTeamA().getTeamId()
-							: getTeamB().getTeamId());
+			int winnerId = roundsWonTeamA > roundsWonTeamB ? getTeamA()
+					.getTeamId() : getTeamB().getTeamId();
+			roundsWonTeamA = 0;
+			roundsWonTeamB = 0;
+			gameInfo.getEventTriggerer().onMatchEnd(winnerId);
 			return true;
 		}
 

@@ -181,7 +181,6 @@ public class Deathmatch extends BasicGameMode {
 		}
 		eventTriggerer.setTeams(teams);
 
-		onRoundStarts();
 	}
 
 	private void setUpBlinkTimer() {
@@ -290,8 +289,6 @@ public class Deathmatch extends BasicGameMode {
 
 	@Override
 	public void onGameEnd() {
-
-		onRoundEnds();
 
 		for (Team team : gameInfo.getTeams()) {
 			gameInfo.removeTeam(team);

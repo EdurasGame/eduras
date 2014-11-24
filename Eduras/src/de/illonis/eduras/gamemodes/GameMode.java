@@ -118,9 +118,7 @@ public interface GameMode {
 	/**
 	 * Called when match ends to let gamemode deinitialize some things.
 	 * 
-	 * @return tells whether the match has restarted too, which means that the
-	 *         round has been restarted as well so the current restarting
-	 *         process can be aborted
+	 * @return tells whether the match ends after this round
 	 */
 	public boolean onRoundEnds();
 

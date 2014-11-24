@@ -52,7 +52,6 @@ public class TeamDeathmatch extends Deathmatch {
 	public void onGameStart() {
 
 		initTeams();
-		onRoundStarts();
 	}
 
 	protected void initTeams() {
