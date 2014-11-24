@@ -31,6 +31,8 @@ public class Statistic {
 		DEATHS
 	}
 
+	private final HashMap<Integer, Integer> teamScore;
+
 	public static class PlayerStatEntry implements Comparable<PlayerStatEntry> {
 		private final Player player;
 		private final HashMap<StatsProperty, Integer> stats;
@@ -92,6 +94,30 @@ public class Statistic {
 		}
 	}
 
+	/**
+	 * Returns a teams score.
+	 * 
+	 * @param team
+	 *            team to get score of
+	 * @return score as integer
+	 */
+	public int getScoreOfTeam(Team team) {
+		if (!teamScore.containsKey(team.getTeamId())) {
+			teamScore.put(team.getTeamId(), 0);
+		}
+		return teamScore.get(team.getTeamId());
+	}
+
+	/**
+	 * Sets a team's score.
+	 * 
+	 * @param team
+	 * @param newScore
+	 */
+	public void setScoreOfTeam(Team team, int newScore) {
+		teamScore.put(team.getTeamId(), newScore);
+	}
+
 	public ArrayList<PlayerStatEntry> getStatList() {
 		return stats;
 	}
@@ -104,6 +130,7 @@ public class Statistic {
 	 */
 	public Statistic() {
 		stats = new ArrayList<PlayerStatEntry>();
+		teamScore = new HashMap<Integer, Integer>();
 	}
 
 	private PlayerStatEntry findForOwner(int ownerId) {

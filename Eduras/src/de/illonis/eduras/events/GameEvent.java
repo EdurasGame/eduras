@@ -74,6 +74,7 @@ public abstract class GameEvent extends Event {
 		SET_KILLS(150),
 		SET_DEATHS(151),
 		SET_STATS(152),
+		SET_SCORE(153),
 		SET_REMAININGTIME(180),
 		SET_RESPAWNTIME(181),
 		SET_TEAMS(191),

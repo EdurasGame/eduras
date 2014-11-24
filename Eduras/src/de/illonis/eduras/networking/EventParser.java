@@ -58,6 +58,7 @@ import de.illonis.eduras.events.SetOwnerEvent;
 import de.illonis.eduras.events.SetPolygonDataEvent;
 import de.illonis.eduras.events.SetRemainingTimeEvent;
 import de.illonis.eduras.events.SetRenderInfoEvent;
+import de.illonis.eduras.events.SetScoreEvent;
 import de.illonis.eduras.events.SetSettingPropertyEvent;
 import de.illonis.eduras.events.SetSettingsEvent;
 import de.illonis.eduras.events.SetSizeEvent;
@@ -333,6 +334,11 @@ public class EventParser implements EventHandler {
 						.valueOf((String) event.getArgument(0)),
 						(Integer) event.getArgument(1), (Integer) event
 								.getArgument(2)));
+				break;
+			case SET_SCORE:
+				logic.onGameEventAppeared(new SetScoreEvent(logic.getGame()
+						.findTeamById((Integer) event.getArgument(0)),
+						(Integer) event.getArgument(1)));
 				break;
 			case SET_RENDER_INFO:
 				logic.onGameEventAppeared(new SetRenderInfoEvent((int) event

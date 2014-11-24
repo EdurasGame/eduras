@@ -497,6 +497,10 @@ public class EdurasInitializer {
 			public void onRoundEnd(int teamId) {
 			}
 
+			@Override
+			public void setTeamScore(Team team, int newScore) {
+			}
+
 		});
 
 		networkManager.getClient().setEventHandler(new EventParser(logic));

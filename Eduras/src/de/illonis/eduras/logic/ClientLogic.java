@@ -42,6 +42,7 @@ import de.illonis.eduras.events.SetOwnerEvent;
 import de.illonis.eduras.events.SetPolygonDataEvent;
 import de.illonis.eduras.events.SetRemainingTimeEvent;
 import de.illonis.eduras.events.SetRenderInfoEvent;
+import de.illonis.eduras.events.SetScoreEvent;
 import de.illonis.eduras.events.SetSettingPropertyEvent;
 import de.illonis.eduras.events.SetSettingsEvent;
 import de.illonis.eduras.events.SetSizeEvent;
@@ -582,6 +583,13 @@ public class ClientLogic implements GameLogicInterface {
 									+ setStatsEvent.getProperty(), ex);
 				}
 
+				break;
+			case SET_SCORE:
+				SetScoreEvent setScoreEvent = (SetScoreEvent) event;
+				gameInfo.getGameSettings()
+						.getStats()
+						.setScoreOfTeam(setScoreEvent.getTeam(),
+								setScoreEvent.getScore());
 				break;
 			case SET_REMAININGTIME:
 				SetRemainingTimeEvent remainingTimeEvent = (SetRemainingTimeEvent) event;

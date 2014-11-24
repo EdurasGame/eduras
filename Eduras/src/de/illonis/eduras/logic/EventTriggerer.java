@@ -772,4 +772,12 @@ public interface EventTriggerer {
 	 *            id of winner of the round
 	 */
 	void onRoundEnd(int teamId);
+
+	/**
+	 * Set the score of a team.
+	 * 
+	 * @param team
+	 * @param newScore
+	 */
+	void setTeamScore(Team team, int newScore);
 }

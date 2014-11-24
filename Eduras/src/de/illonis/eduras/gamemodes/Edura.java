@@ -224,6 +224,10 @@ public class Edura extends TeamDeathmatch {
 		} else {
 			roundsWonTeamB++;
 		}
+		gameInfo.getEventTriggerer().setTeamScore(
+				winnerTeam,
+				gameInfo.getGameSettings().getStats()
+						.getScoreOfTeam(winnerTeam) + 1);
 		gameInfo.getEventTriggerer().onRoundEnd(winnerTeam.getTeamId());
 	}
 
