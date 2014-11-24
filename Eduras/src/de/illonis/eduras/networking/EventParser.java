@@ -41,6 +41,7 @@ import de.illonis.eduras.events.PlayerAndTeamEvent;
 import de.illonis.eduras.events.RequestResourceEvent;
 import de.illonis.eduras.events.RespawnEvent;
 import de.illonis.eduras.events.ResurrectPlayerEvent;
+import de.illonis.eduras.events.RoundEndEvent;
 import de.illonis.eduras.events.ScoutSpellEvent;
 import de.illonis.eduras.events.SendResourceEvent;
 import de.illonis.eduras.events.SendUnitsEvent;
@@ -361,6 +362,10 @@ public class EventParser implements EventHandler {
 				break;
 			case MATCH_END:
 				logic.onGameEventAppeared(new MatchEndEvent((Integer) event
+						.getArgument(0)));
+				break;
+			case ROUND_END:
+				logic.onGameEventAppeared(new RoundEndEvent((Integer) event
 						.getArgument(0)));
 				break;
 			case START_ROUND:

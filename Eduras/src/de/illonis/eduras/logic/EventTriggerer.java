@@ -764,4 +764,12 @@ public interface EventTriggerer {
 	 *            the team to set this unit to
 	 */
 	void setTeamOfUnit(Unit createdUnit, Team team);
+
+	/**
+	 * Called when a round ends.
+	 * 
+	 * @param teamId
+	 *            id of winner of the round
+	 */
+	void onRoundEnd(int teamId);
 }

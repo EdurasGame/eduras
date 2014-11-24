@@ -626,7 +626,7 @@ public final class S {
 		/**
 		 * Determines what items each player is given when spawning.
 		 */
-		public static String[] gm_edura_startweapons = { "ITEM_WEAPON_SWORD" };
+		public static String[] sv_startweapons = { "ITEM_WEAPON_SWORD" };
 
 		/**
 		 * Determines whether a player automatically respawns after some time.
@@ -798,6 +798,11 @@ public final class S {
 		 * Total income per minute.
 		 */
 		public static int gm_edura_income_per_minute = 1000;
+
+		/**
+		 * Determines how many rounds are played per round (maximum).
+		 */
+		public static int gm_edura_maxrounds = 1;
 
 	}
 

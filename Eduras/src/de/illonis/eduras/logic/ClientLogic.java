@@ -27,6 +27,7 @@ import de.illonis.eduras.events.ObjectFactoryEvent;
 import de.illonis.eduras.events.OwnerGameEvent;
 import de.illonis.eduras.events.PlayerAndTeamEvent;
 import de.illonis.eduras.events.RespawnEvent;
+import de.illonis.eduras.events.RoundEndEvent;
 import de.illonis.eduras.events.SendResourceEvent;
 import de.illonis.eduras.events.SetAmmunitionEvent;
 import de.illonis.eduras.events.SetAvailableBlinksEvent;
@@ -455,6 +456,9 @@ public class ClientLogic implements GameLogicInterface {
 				break;
 			case MATCH_END:
 				getListener().onMatchEnd((MatchEndEvent) event);
+				break;
+			case ROUND_END:
+				getListener().onRoundEnd((RoundEndEvent) event);
 				break;
 			case START_ROUND:
 				getListener().onStartRound();

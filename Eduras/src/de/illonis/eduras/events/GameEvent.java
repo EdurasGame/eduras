@@ -79,6 +79,7 @@ public abstract class GameEvent extends Event {
 		SET_TEAMS(191),
 		ADD_PLAYER_TO_TEAM(192),
 		ADD_OBJECT_TO_TEAM(193),
+		ROUND_END(194),
 		SET_POS_TCP(106),
 		INIT_INFORMATION(203),
 		GAME_READY(204),

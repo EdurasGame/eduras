@@ -14,6 +14,7 @@ import de.illonis.eduras.events.ItemUseFailedEvent;
 import de.illonis.eduras.events.MatchEndEvent;
 import de.illonis.eduras.events.ObjectFactoryEvent;
 import de.illonis.eduras.events.RespawnEvent;
+import de.illonis.eduras.events.RoundEndEvent;
 import de.illonis.eduras.events.SetGameObjectAttributeEvent;
 import de.illonis.eduras.events.SetIntegerGameObjectAttributeEvent;
 import de.illonis.eduras.events.SetInteractModeEvent;
@@ -271,4 +272,11 @@ public interface GameEventListener {
 	 * @param event
 	 */
 	void onAoEDamage(AoEDamageEvent event);
+
+	/**
+	 * Called when a round ended.
+	 * 
+	 * @param event
+	 */
+	void onRoundEnd(RoundEndEvent event);
 }

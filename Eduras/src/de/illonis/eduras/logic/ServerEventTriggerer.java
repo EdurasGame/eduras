@@ -49,6 +49,7 @@ import de.illonis.eduras.events.ObjectFactoryEvent;
 import de.illonis.eduras.events.OwnerGameEvent;
 import de.illonis.eduras.events.PlayerAndTeamEvent;
 import de.illonis.eduras.events.RespawnEvent;
+import de.illonis.eduras.events.RoundEndEvent;
 import de.illonis.eduras.events.SendResourceEvent;
 import de.illonis.eduras.events.SetAmmunitionEvent;
 import de.illonis.eduras.events.SetAvailableBlinksEvent;
@@ -514,7 +515,7 @@ public class ServerEventTriggerer implements EventTriggerer {
 	public void onMatchEnd(int winner) {
 		MatchEndEvent matchEndEvent = new MatchEndEvent(winner);
 		sendEvents(matchEndEvent);
-		restartRound();
+		restartGame();
 	}
 
 	@Override
@@ -527,7 +528,9 @@ public class ServerEventTriggerer implements EventTriggerer {
 	@Override
 	public void restartRound() {
 
-		gameInfo.getGameSettings().getGameMode().onRoundEnds();
+		if (gameInfo.getGameSettings().getGameMode().onRoundEnds()) {
+			return;
+		}
 
 		for (Player player : gameInfo.getPlayers()) {
 			resetStats(player);
@@ -1410,5 +1413,12 @@ public class ServerEventTriggerer implements EventTriggerer {
 		sendEventToAll(new ObjectAndTeamEvent(
 				GameEventNumber.ADD_OBJECT_TO_TEAM, createdUnit.getId(),
 				team.getTeamId()));
+	}
+
+	@Override
+	public void onRoundEnd(int teamId) {
+		RoundEndEvent roundEndEvent = new RoundEndEvent(teamId);
+		sendEvents(roundEndEvent);
+		restartRound();
 	}
 }

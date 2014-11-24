@@ -32,8 +32,10 @@ import de.illonis.eduras.units.Unit;
 public class Edura extends TeamDeathmatch {
 
 	private TimingSource timingSource;
-
 	private RespawnTimer respawnTimer;
+
+	private int roundsWonTeamA;
+	private int roundsWonTeamB;
 
 	private final static Logger L = EduLog.getLoggerFor(Edura.class.getName());
 
@@ -218,7 +220,12 @@ public class Edura extends TeamDeathmatch {
 	}
 
 	private void endRound(Team winnerTeam) {
-		gameInfo.getEventTriggerer().onMatchEnd(winnerTeam.getTeamId());
+		if (winnerTeam.equals(getTeamA())) {
+			roundsWonTeamA++;
+		} else {
+			roundsWonTeamB++;
+		}
+		gameInfo.getEventTriggerer().onRoundEnd(winnerTeam.getTeamId());
 	}
 
 	@Override
@@ -338,6 +345,8 @@ public class Edura extends TeamDeathmatch {
 
 	@Override
 	public void onGameEnd() {
+		roundsWonTeamA = 0;
+		roundsWonTeamB = 0;
 		super.onGameEnd();
 	}
 
@@ -371,12 +380,21 @@ public class Edura extends TeamDeathmatch {
 	}
 
 	@Override
-	public void onRoundEnds() {
+	public boolean onRoundEnds() {
 		super.onRoundEnds();
 
 		if (S.Server.gm_edura_automatic_respawn && timingSource != null) {
 			timingSource.removeTimedEventHandler(respawnTimer);
 			respawnTimer = null;
 		}
+
+		if (roundsWonTeamA + roundsWonTeamB >= S.Server.gm_edura_maxrounds) {
+			gameInfo.getEventTriggerer().onMatchEnd(
+					roundsWonTeamA > roundsWonTeamB ? getTeamA().getTeamId()
+							: getTeamB().getTeamId());
+			return true;
+		}
+
+		return false;
 	}
 }

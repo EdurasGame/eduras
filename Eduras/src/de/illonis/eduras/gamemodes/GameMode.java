@@ -30,7 +30,13 @@ public interface GameMode {
 	 */
 	@SuppressWarnings("javadoc")
 	public enum GameModeNumber {
-		NO_GAMEMODE, DEATHMATCH, TEAM_DEATHMATCH, CAPTURE_THE_FLAG, NINJA_VS_SAMURAI, KING_OF_THE_HILL, EDURA;
+		NO_GAMEMODE,
+		DEATHMATCH,
+		TEAM_DEATHMATCH,
+		CAPTURE_THE_FLAG,
+		NINJA_VS_SAMURAI,
+		KING_OF_THE_HILL,
+		EDURA;
 	}
 
 	/**
@@ -111,8 +117,12 @@ public interface GameMode {
 
 	/**
 	 * Called when match ends to let gamemode deinitialize some things.
+	 * 
+	 * @return tells whether the match has restarted too, which means that the
+	 *         round has been restarted as well so the current restarting
+	 *         process can be aborted
 	 */
-	public void onRoundEnds();
+	public boolean onRoundEnds();
 
 	/**
 	 * Assignes a team to a spawntype. Used to map teams to the

@@ -12,6 +12,7 @@ import de.illonis.eduras.Player;
 import de.illonis.eduras.Team;
 import de.illonis.eduras.events.DeathEvent;
 import de.illonis.eduras.events.MatchEndEvent;
+import de.illonis.eduras.events.RoundEndEvent;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
 import de.illonis.eduras.gameclient.datacache.FontCache;
 import de.illonis.eduras.gameclient.datacache.FontCache.FontKey;
@@ -104,20 +105,32 @@ public class BigPanel extends RenderedGuiObject {
 	public void onMatchEnd(MatchEndEvent event) {
 		int winnerId = event.getWinnerId();
 
+		announceWinner("Match", winnerId);
+	}
+
+	@Override
+	public void onRoundEnd(RoundEndEvent event) {
+		int winnerId = event.getWinnerId();
+
+		announceWinner("Round", winnerId);
+	}
+
+	private void announceWinner(String winnerOfWhat, int winnerId) {
+
 		if (winnerId == -1) {
-			setMessage("Draw");
+			setMessage(winnerOfWhat + " Draw");
 			return;
 		}
 
 		if (getInfo().getGameMode() instanceof TeamDeathmatch) {
 			Team team = getInfo().findTeamById(winnerId);
 			if (team != null) {
-				setMessage(team.getName() + " won");
+				setMessage(team.getName() + " won " + winnerOfWhat);
 			}
 		} else if (getInfo().getGameMode() instanceof Deathmatch) {
 			try {
 				Player p = getInfo().getPlayerByOwnerId(winnerId);
-				setMessage(p.getName() + " won");
+				setMessage(p.getName() + " won " + winnerOfWhat);
 			} catch (ObjectNotFoundException e) {
 				L.log(Level.WARNING, "Could not find winning player", e);
 			}
