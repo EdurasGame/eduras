@@ -1,6 +1,7 @@
 package de.illonis.eduras.networking.discover;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.net.ServerSocket;
@@ -177,6 +178,7 @@ public class MetaServer {
 					break;
 				}
 				try {
+					InputStream sis = sock.getInputStream();
 					JSONArray list = new JSONArray();
 					for (ServerInfo info : serverInfos.values()) {
 						list.put(info.toJson());
@@ -187,15 +189,16 @@ public class MetaServer {
 							+ dateFormat.format(new Date()) + "\n"
 							+ "Server: Eduras Meta Server\n"
 							+ "Access-Control-Allow-Origin: *\n"
-							+ "Content-Type: application/json\n");
+							+ "Content-Type: text/json\n");
 					out.println(list.toString());
-
-					sock.close();
+					sis.close();
+					out.close();
 				} catch (IOException e) {
 					L.log(Level.WARNING, "Error handling http connection.", e);
 					continue;
 				}
 			}
+			// done
 			try {
 				serverSock.close();
 			} catch (IOException e) {

@@ -128,7 +128,7 @@ public class ServerInfo {
 		JSONObject o = new JSONObject();
 		o.put("name", name);
 		o.put("gameMode", gameMode);
-		o.put("host", url.toString());
+		o.put("host", url.getHostName());
 		o.put("port", port);
 		o.put("playerCount", numberOfPlayers);
 		o.put("map", map);
