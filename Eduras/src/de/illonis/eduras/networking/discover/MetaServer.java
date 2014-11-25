@@ -1,13 +1,21 @@
 package de.illonis.eduras.networking.discover;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.net.InetAddress;
+import java.net.ServerSocket;
+import java.net.Socket;
 import java.net.UnknownHostException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.LinkedList;
+import java.util.Locale;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import org.json.JSONArray;
 
 import de.eduras.eventingserver.Event;
 import de.eduras.eventingserver.EventHandler;
@@ -28,10 +36,16 @@ import de.illonis.edulog.EduLog;
  */
 public class MetaServer {
 
+	/**
+	 * Port the http server listens on for GET-request.
+	 */
+	public final static int HTTP_PORT = 51514;
+
 	private final static Logger L = EduLog.getLoggerFor(MetaServer.class
 			.getName());
 
 	private int port = ServerDiscoveryListener.META_SERVER_PORT;
+	private int httpPort = HTTP_PORT;
 	private ServerInterface server;
 
 	private ConcurrentLinkedQueue<Integer> registeredServers;
@@ -92,7 +106,7 @@ public class MetaServer {
 		server.setEventHandler(requestHandler);
 		server.setNetworkEventHandler(requestHandler);
 		server.start("Eduras-Metaserver", port);
-
+		new MetaServerHTTPService(httpPort).start();
 		new ServerRegistryLeaseChecker().start();
 	}
 
@@ -123,6 +137,70 @@ public class MetaServer {
 		registeredServers.remove(id);
 		serverInfos.remove(id);
 		serverLeases.remove(id);
+	}
+
+	/**
+	 * A simple http-server that reacts on GET-requests and returns a list of
+	 * servers in JSON-format.
+	 * 
+	 * @author illonis
+	 * 
+	 */
+	class MetaServerHTTPService extends Thread {
+		private final int httpServicePort;
+
+		private final SimpleDateFormat dateFormat = new SimpleDateFormat(
+				"EEE, dd MMM yyyy HH:mm:ss z", Locale.US);
+
+		public MetaServerHTTPService(int port) {
+			this.httpServicePort = port;
+			setName(getClass().getSimpleName());
+		}
+
+		@Override
+		public void run() {
+			ServerSocket serverSock;
+			try {
+				serverSock = new ServerSocket(httpServicePort);
+			} catch (IOException ex) {
+				L.log(Level.SEVERE, "Could not start http-service on port "
+						+ httpServicePort, ex);
+				return;
+			}
+			while (!interrupted()) {
+				Socket sock;
+				try {
+					sock = serverSock.accept();
+				} catch (IOException ex) {
+					L.log(Level.WARNING,
+							"Socket closed while waiting for connection.", ex);
+					break;
+				}
+				try {
+					JSONArray list = new JSONArray();
+					for (ServerInfo info : serverInfos.values()) {
+						list.put(info.toJson());
+					}
+					PrintWriter out = new PrintWriter(sock.getOutputStream(),
+							true);
+					out.println("HTTP/1.1 200 OK\n" + "Date: "
+							+ dateFormat.format(new Date()) + "\n"
+							+ "Server: Eduras Meta Server\n"
+							+ "Access-Control-Allow-Origin: *\n"
+							+ "Content-Type: application/json\n");
+					out.println(list.toString());
+
+					sock.close();
+				} catch (IOException e) {
+					L.log(Level.WARNING, "Error handling http connection.", e);
+					continue;
+				}
+			}
+			try {
+				serverSock.close();
+			} catch (IOException e) {
+			}
+		}
 	}
 
 	class MetaServerRequestHandler implements ServerNetworkEventHandler,
@@ -266,6 +344,10 @@ public class MetaServer {
 	}
 
 	class ServerRegistryLeaseChecker extends Thread {
+
+		public ServerRegistryLeaseChecker() {
+			setName(getClass().getSimpleName());
+		}
 
 		@Override
 		public void run() {
