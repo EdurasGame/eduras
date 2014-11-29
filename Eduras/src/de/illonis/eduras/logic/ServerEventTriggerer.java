@@ -516,7 +516,6 @@ public class ServerEventTriggerer implements EventTriggerer {
 	public void onMatchEnd(int winner) {
 		MatchEndEvent matchEndEvent = new MatchEndEvent(winner);
 		sendEvents(matchEndEvent);
-		restartGame();
 	}
 
 	@Override
@@ -542,7 +541,17 @@ public class ServerEventTriggerer implements EventTriggerer {
 	public void restartRound() {
 
 		if (gameInfo.getGameSettings().getGameMode().onRoundEnds()) {
-			restartGame();
+			DelayedLogicAction restartGame = new DelayedLogicAction(
+					S.Server.sv_game_restart_delay) {
+
+				@Override
+				protected void execute(GameInformation info) {
+					restartGame();
+				}
+			};
+
+			DelayedActionQueue.addAction(restartGame);
+
 			return;
 		}
 
