@@ -26,9 +26,12 @@ import de.illonis.eduras.gameclient.datacache.FontCache;
 import de.illonis.eduras.gameclient.datacache.FontCache.FontKey;
 import de.illonis.eduras.gameclient.datacache.ImageCache;
 import de.illonis.eduras.gameclient.gui.game.GameRenderer;
+import de.illonis.eduras.gamemodes.Edura;
+import de.illonis.eduras.gamemodes.GameMode;
 import de.illonis.eduras.gamemodes.GameMode.GameModeNumber;
 import de.illonis.eduras.gamemodes.TeamDeathmatch;
 import de.illonis.eduras.networking.ClientRole;
+import de.illonis.eduras.settings.S;
 import de.illonis.eduras.units.InteractMode;
 
 /**
@@ -47,7 +50,6 @@ public class StatisticsWindow extends RenderedGuiObject {
 	private final static Color COLOR_HIGHLIGHT = new Color(1f, 1f, 1f, 0.3f);
 	private int[] xPositions = new int[4];
 	private int topInset;
-	private final static long DISPLAY_TIME = 3000;
 	private Image artwork;
 	private Font font, largeFont;
 	private int lineHeight;
@@ -184,21 +186,32 @@ public class StatisticsWindow extends RenderedGuiObject {
 
 	private void drawHeader() {
 		String state = "";
-		if (getInfo().getGameMode() instanceof TeamDeathmatch) {
+		GameMode gameMode = getInfo().getGameMode();
+		if (gameMode instanceof TeamDeathmatch && !(gameMode instanceof Edura)) {
 			if (getTeams().size() == 2) {
-				state = getTeams().get(0).getName() + "  "
-						+ getStats().getKillsByTeam(getTeams().get(0)) + " : "
-						+ getStats().getKillsByTeam(getTeams().get(1)) + "  "
-						+ getTeams().get(1).getName();
+				state = putTeamScores(
+						getStats().getKillsByTeam(getTeams().get(0)),
+						getStats().getKillsByTeam(getTeams().get(1)));
 			}
 		} else {
-			state = getInfo().getGameMode().getName();
+			if (gameMode instanceof Edura && getTeams().size() == 2) {
+				int score1 = getStats().getScoreOfTeam(getTeams().get(0));
+				int score2 = getStats().getScoreOfTeam(getTeams().get(1));
+				state = putTeamScores(score1, score2);
+			} else {
+				state = getInfo().getGameMode().getName();
+			}
 		}
 
 		largeFont.drawString(
 				screenX + sideInset + (width - largeFont.getWidth(state)) / 2,
 				screenY + (topInset - largeFont.getLineHeight()) / 2, state,
 				COLOR_HEADER);
+	}
+
+	private String putTeamScores(int scoreOfTeam, int scoreOfTeam2) {
+		return getTeams().get(0).getName() + "  " + scoreOfTeam + " : "
+				+ scoreOfTeam2 + "  " + getTeams().get(1).getName();
 	}
 
 	private void drawTeamRow(Team team, float y) {
@@ -270,7 +283,7 @@ public class StatisticsWindow extends RenderedGuiObject {
 		@Override
 		public void run() {
 			try {
-				Thread.sleep(DISPLAY_TIME);
+				Thread.sleep(S.Server.sv_game_restart_delay);
 			} catch (InterruptedException e) {
 				L.log(Level.SEVERE, "Interrupted when sleeping in delayHider.",
 						e);

@@ -102,7 +102,8 @@ public class ClientGameMode implements GameMode {
 	}
 
 	@Override
-	public void onRoundEnds() {
+	public boolean onRoundEnds() {
+		return false;
 	}
 
 }

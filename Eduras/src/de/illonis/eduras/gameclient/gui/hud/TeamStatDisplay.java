@@ -39,22 +39,18 @@ public class TeamStatDisplay extends RenderedGuiObject {
 	@Override
 	public void render(Graphics g) {
 		Font font = FontCache.getFont(FontKey.DEFAULT_FONT, g);
+		Font bigFont = FontCache.getFont(FontKey.HUGE_FONT, g);
 		Statistic stats = getInfo().getStatistics();
 		List<Team> teams = new LinkedList<Team>(getInfo().getTeams());
 		if (teams.size() != 2)
 			return;
-		String left;
-		String right;
-		String middle = stats.getKillsByTeam(teams.get(0)) + ":"
-				+ stats.getKillsByTeam(teams.get(1));
-		left = teams.get(0).getName() + " ";
-		right = " " + teams.get(1).getName();
-		float y = screenY + font.getLineHeight();
-		screenX = (windowWidth - font.getWidth(left + middle + right)) / 2;
-		font.drawString(screenX, y, left, teams.get(0).getColor());
-		font.drawString(screenX + font.getWidth(left), y, middle, Color.white);
-		font.drawString(screenX + font.getWidth(left + middle), y, right, teams
-				.get(1).getColor());
+		String left = stats.getKillsByTeam(teams.get(0)) + "";
+		String right = stats.getKillsByTeam(teams.get(1)) + "";
+		String middle = ":";
+		float y = screenY + 2 * font.getLineHeight();
+		screenX = (windowWidth - bigFont.getWidth(middle)) / 2
+				- bigFont.getWidth(left);
+		bigFont.drawString(screenX, y, left + middle + right, Color.white);
 	}
 
 	@Override

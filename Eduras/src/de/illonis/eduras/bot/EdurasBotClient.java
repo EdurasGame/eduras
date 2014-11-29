@@ -31,6 +31,7 @@ import de.illonis.eduras.networking.ClientRole;
 public class EdurasBotClient {
 	private final static Logger L = EduLog.getLoggerFor(EdurasBotClient.class
 			.getName());
+	protected static final String BOT_DEFAULT_NAME = "SimonBot %d";
 	private static int PORT = 4386;
 
 	private EventSender eventSender;
@@ -101,7 +102,9 @@ public class EdurasBotClient {
 				clientId = id;
 				try {
 					eventSender.sendEvent(new InitInformationEvent(
-							ClientRole.PLAYER, name, clientId));
+							ClientRole.PLAYER, name == null ? String.format(
+									BOT_DEFAULT_NAME, clientId) : name,
+							clientId));
 				} catch (WrongEventTypeException | MessageNotSupportedException e) {
 					L.log(Level.SEVERE, "Cannot send event!", e);
 					return;
@@ -156,7 +159,7 @@ public class EdurasBotClient {
 		Level logLimit = Level.INFO;
 		String serverAddress = "";
 		int remotePort = 0;
-		String botName = "ferde";
+		String botName = null;
 
 		// arguments are of form <parametername>=<parametervalue>
 		String[][] parametersWithValues = new String[args.length][2];

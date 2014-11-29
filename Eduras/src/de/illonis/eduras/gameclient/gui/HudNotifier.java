@@ -14,6 +14,7 @@ import de.illonis.eduras.events.ItemUseFailedEvent;
 import de.illonis.eduras.events.MatchEndEvent;
 import de.illonis.eduras.events.ObjectFactoryEvent;
 import de.illonis.eduras.events.RespawnEvent;
+import de.illonis.eduras.events.RoundEndEvent;
 import de.illonis.eduras.events.SetGameObjectAttributeEvent;
 import de.illonis.eduras.events.SetIntegerGameObjectAttributeEvent;
 import de.illonis.eduras.events.SetInteractModeEvent;
@@ -115,7 +116,8 @@ public class HudNotifier implements GameEventListener {
 
 	@Override
 	public void onObjectCreation(ObjectFactoryEvent event) {
-		for (GameEventListener obj : uiObjects) {
+		for (int i = 0; i < uiObjects.size(); i++) {
+			GameEventListener obj = uiObjects.get(i);
 			obj.onObjectCreation(event);
 		}
 		for (GameEventListener obj : otherObjects) {
@@ -185,7 +187,8 @@ public class HudNotifier implements GameEventListener {
 
 	@Override
 	public void onObjectRemove(ObjectFactoryEvent event) {
-		for (GameEventListener obj : uiObjects) {
+		for (int i = 0; i < uiObjects.size(); i++) {
+			GameEventListener obj = uiObjects.get(i);
 			obj.onObjectRemove(event);
 		}
 		for (GameEventListener obj : otherObjects) {
@@ -371,6 +374,16 @@ public class HudNotifier implements GameEventListener {
 		}
 		for (GameEventListener obj : otherObjects) {
 			obj.onPlayerTeamChanged(ownerId);
+		}
+	}
+
+	@Override
+	public void onRoundEnd(RoundEndEvent event) {
+		for (GameEventListener obj : uiObjects) {
+			obj.onRoundEnd(event);
+		}
+		for (GameEventListener obj : otherObjects) {
+			obj.onRoundEnd(event);
 		}
 	}
 }

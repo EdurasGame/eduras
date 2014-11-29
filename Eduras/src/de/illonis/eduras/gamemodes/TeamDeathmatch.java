@@ -52,7 +52,6 @@ public class TeamDeathmatch extends Deathmatch {
 	public void onGameStart() {
 
 		initTeams();
-		onRoundStarts();
 	}
 
 	protected void initTeams() {
@@ -64,6 +63,8 @@ public class TeamDeathmatch extends Deathmatch {
 		teams.add(teamA);
 		teams.add(teamB);
 		eventTriggerer.setTeams(teams);
+		eventTriggerer.setTeamScore(teamA, 0);
+		eventTriggerer.setTeamScore(teamB, 0);
 		for (Player player : gameInfo.getPlayers()) {
 			putPlayerInSmallestTeam(player);
 		}

@@ -143,6 +143,7 @@ public class NoGameMode extends BasicGameMode {
 	}
 
 	@Override
-	public void onRoundEnds() {
+	public boolean onRoundEnds() {
+		return false;
 	}
 }

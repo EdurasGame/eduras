@@ -133,6 +133,7 @@ public class UserInterface implements GuiResizeListener {
 		bigPanel = new BigPanel(this);
 		new SelectedUnitsDisplay(this);
 		new TeamStatDisplay(this);
+		new TeamScoreDisplay(this);
 		dragRect = new DragSelectionRectangle(this);
 		exitPopup = new ExitPopup(this);
 		selectTeamPopup = new SelectTeamPopup(this);

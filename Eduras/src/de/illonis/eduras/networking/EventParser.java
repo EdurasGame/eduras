@@ -41,6 +41,7 @@ import de.illonis.eduras.events.PlayerAndTeamEvent;
 import de.illonis.eduras.events.RequestResourceEvent;
 import de.illonis.eduras.events.RespawnEvent;
 import de.illonis.eduras.events.ResurrectPlayerEvent;
+import de.illonis.eduras.events.RoundEndEvent;
 import de.illonis.eduras.events.ScoutSpellEvent;
 import de.illonis.eduras.events.SendResourceEvent;
 import de.illonis.eduras.events.SendUnitsEvent;
@@ -57,6 +58,7 @@ import de.illonis.eduras.events.SetOwnerEvent;
 import de.illonis.eduras.events.SetPolygonDataEvent;
 import de.illonis.eduras.events.SetRemainingTimeEvent;
 import de.illonis.eduras.events.SetRenderInfoEvent;
+import de.illonis.eduras.events.SetScoreEvent;
 import de.illonis.eduras.events.SetSettingPropertyEvent;
 import de.illonis.eduras.events.SetSettingsEvent;
 import de.illonis.eduras.events.SetSizeEvent;
@@ -333,6 +335,11 @@ public class EventParser implements EventHandler {
 						(Integer) event.getArgument(1), (Integer) event
 								.getArgument(2)));
 				break;
+			case SET_SCORE:
+				logic.onGameEventAppeared(new SetScoreEvent(logic.getGame()
+						.findTeamById((Integer) event.getArgument(0)),
+						(Integer) event.getArgument(1)));
+				break;
 			case SET_RENDER_INFO:
 				logic.onGameEventAppeared(new SetRenderInfoEvent((int) event
 						.getArgument(0), ColorUtils.fromString((String) event
@@ -361,6 +368,10 @@ public class EventParser implements EventHandler {
 				break;
 			case MATCH_END:
 				logic.onGameEventAppeared(new MatchEndEvent((Integer) event
+						.getArgument(0)));
+				break;
+			case ROUND_END:
+				logic.onGameEventAppeared(new RoundEndEvent((Integer) event
 						.getArgument(0)));
 				break;
 			case START_ROUND:

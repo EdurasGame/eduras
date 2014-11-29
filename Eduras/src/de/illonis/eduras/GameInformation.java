@@ -38,6 +38,7 @@ import de.illonis.eduras.events.SetMapEvent;
 import de.illonis.eduras.events.SetPolygonDataEvent;
 import de.illonis.eduras.events.SetRemainingTimeEvent;
 import de.illonis.eduras.events.SetRenderInfoEvent;
+import de.illonis.eduras.events.SetScoreEvent;
 import de.illonis.eduras.events.SetSettingsEvent;
 import de.illonis.eduras.events.SetSizeEvent;
 import de.illonis.eduras.events.SetTeamsEvent;
@@ -471,6 +472,10 @@ public class GameInformation {
 
 		infos.add(teamEvent);
 		infos.addAll(teamPlayerEvents);
+		for (Team team : getTeams()) {
+			infos.add(new SetScoreEvent(team, gameSettings.getStats()
+					.getScoreOfTeam(team)));
+		}
 
 		for (Unit aUnit : getAllUnits(objects.values())) {
 			if (aUnit.getTeam() != null) {

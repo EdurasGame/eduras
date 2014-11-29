@@ -181,7 +181,6 @@ public class Deathmatch extends BasicGameMode {
 		}
 		eventTriggerer.setTeams(teams);
 
-		onRoundStarts();
 	}
 
 	private void setUpBlinkTimer() {
@@ -291,8 +290,6 @@ public class Deathmatch extends BasicGameMode {
 	@Override
 	public void onGameEnd() {
 
-		onRoundEnds();
-
 		for (Team team : gameInfo.getTeams()) {
 			gameInfo.removeTeam(team);
 		}
@@ -308,7 +305,7 @@ public class Deathmatch extends BasicGameMode {
 
 	@Override
 	public void onPlayerSpawn(Player player) {
-		for (String objTypeString : S.Server.gm_edura_startweapons) {
+		for (String objTypeString : S.Server.sv_startweapons) {
 			try {
 				ObjectType objType = ObjectType.valueOf(objTypeString);
 				gameInfo.getEventTriggerer().giveNewItem(player, objType);
@@ -335,7 +332,7 @@ public class Deathmatch extends BasicGameMode {
 	}
 
 	@Override
-	public void onRoundEnds() {
+	public boolean onRoundEnds() {
 		for (Player player : gameInfo.getPlayers()) {
 			gameInfo.getEventTriggerer().clearInventoryOfPlayer(player);
 		}
@@ -354,5 +351,7 @@ public class Deathmatch extends BasicGameMode {
 						-player.getBlinksAvailable());
 			}
 		}
+
+		return false;
 	}
 }

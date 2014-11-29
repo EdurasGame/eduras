@@ -14,6 +14,7 @@ import de.illonis.eduras.events.ItemUseFailedEvent;
 import de.illonis.eduras.events.MatchEndEvent;
 import de.illonis.eduras.events.ObjectFactoryEvent;
 import de.illonis.eduras.events.RespawnEvent;
+import de.illonis.eduras.events.RoundEndEvent;
 import de.illonis.eduras.events.SetGameObjectAttributeEvent;
 import de.illonis.eduras.events.SetIntegerGameObjectAttributeEvent;
 import de.illonis.eduras.events.SetInteractModeEvent;
@@ -154,5 +155,9 @@ public class GameEventAdapter implements GameEventListener {
 
 	@Override
 	public void onPlayerTeamChanged(int ownerId) {
+	}
+
+	@Override
+	public void onRoundEnd(RoundEndEvent event) {
 	}
 }

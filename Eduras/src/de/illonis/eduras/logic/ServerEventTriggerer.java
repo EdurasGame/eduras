@@ -50,6 +50,7 @@ import de.illonis.eduras.events.ObjectFactoryEvent;
 import de.illonis.eduras.events.OwnerGameEvent;
 import de.illonis.eduras.events.PlayerAndTeamEvent;
 import de.illonis.eduras.events.RespawnEvent;
+import de.illonis.eduras.events.RoundEndEvent;
 import de.illonis.eduras.events.SendResourceEvent;
 import de.illonis.eduras.events.SetAmmunitionEvent;
 import de.illonis.eduras.events.SetAvailableBlinksEvent;
@@ -65,6 +66,7 @@ import de.illonis.eduras.events.SetOwnerEvent;
 import de.illonis.eduras.events.SetPolygonDataEvent;
 import de.illonis.eduras.events.SetRemainingTimeEvent;
 import de.illonis.eduras.events.SetRenderInfoEvent;
+import de.illonis.eduras.events.SetScoreEvent;
 import de.illonis.eduras.events.SetSettingPropertyEvent;
 import de.illonis.eduras.events.SetSettingsEvent;
 import de.illonis.eduras.events.SetSizeEvent;
@@ -548,21 +550,52 @@ public class ServerEventTriggerer implements EventTriggerer {
 	public void onMatchEnd(int winner) {
 		MatchEndEvent matchEndEvent = new MatchEndEvent(winner);
 		sendEvents(matchEndEvent);
-		restartRound();
 	}
 
 	@Override
 	public void restartGame() {
-		gameInfo.getGameSettings().getGameMode().onGameEnd();
+		deinitMatch();
 		changeMap(gameInfo.getMap());
+		initMatch();
+	}
+
+	private void deinitMatch() {
+		gameInfo.getGameSettings().getGameMode().onRoundEnds();
+		gameInfo.getGameSettings().getGameMode().onGameEnd();
+	}
+
+	private void initMatch() {
 		gameInfo.getGameSettings().getGameMode().onGameStart();
+		doRoundRestartStuff();
+		gameInfo.getGameSettings().getGameMode().onRoundStarts();
+		sendEvents(new StartRoundEvent());
 	}
 
 	@Override
 	public void restartRound() {
 
-		gameInfo.getGameSettings().getGameMode().onRoundEnds();
+		if (gameInfo.getGameSettings().getGameMode().onRoundEnds()) {
+			DelayedLogicAction restartGame = new DelayedLogicAction(
+					S.Server.sv_game_restart_delay) {
 
+				@Override
+				protected void execute(GameInformation info) {
+					restartGame();
+				}
+			};
+
+			DelayedActionQueue.addAction(restartGame);
+
+			return;
+		}
+
+		doRoundRestartStuff();
+
+		gameInfo.getGameSettings().getGameMode().onRoundStarts();
+		sendEvents(new StartRoundEvent());
+	}
+
+	private void doRoundRestartStuff() {
 		for (Player player : gameInfo.getPlayers()) {
 			resetStats(player);
 		}
@@ -573,8 +606,6 @@ public class ServerEventTriggerer implements EventTriggerer {
 		}
 		reloadMap(gameInfo.getMap());
 		resetSettings();
-		gameInfo.getGameSettings().getGameMode().onRoundStarts();
-		sendEvents(new StartRoundEvent());
 	}
 
 	@Override
@@ -589,13 +620,13 @@ public class ServerEventTriggerer implements EventTriggerer {
 
 	@Override
 	public void changeGameMode(GameMode newMode) {
-		gameInfo.getGameSettings().getGameMode().onGameEnd();
+		deinitMatch();
 
 		gameInfo.getGameSettings().changeGameMode(newMode);
 		SetGameModeEvent event = new SetGameModeEvent(newMode.getName());
 
 		reloadMap(gameInfo.getMap());
-		gameInfo.getGameSettings().getGameMode().onGameStart();
+		initMatch();
 
 		sendEvents(event);
 	}
@@ -1444,5 +1475,18 @@ public class ServerEventTriggerer implements EventTriggerer {
 		sendEventToAll(new ObjectAndTeamEvent(
 				GameEventNumber.ADD_OBJECT_TO_TEAM, createdUnit.getId(),
 				team.getTeamId()));
+	}
+
+	@Override
+	public void onRoundEnd(int teamId) {
+		RoundEndEvent roundEndEvent = new RoundEndEvent(teamId);
+		sendEvents(roundEndEvent);
+		restartRound();
+	}
+
+	@Override
+	public void setTeamScore(Team team, int newScore) {
+		gameInfo.getGameSettings().getStats().setScoreOfTeam(team, newScore);
+		sendEvents(new SetScoreEvent(team, newScore));
 	}
 }
