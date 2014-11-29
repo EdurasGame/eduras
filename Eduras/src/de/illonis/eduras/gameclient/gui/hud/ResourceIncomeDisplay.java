@@ -42,7 +42,7 @@ public class ResourceIncomeDisplay extends RenderedGuiObject {
 
 	@Override
 	public void onGuiSizeChanged(int newWidth, int newHeight) {
-		screenY = 30;
+		screenY = 40;
 		screenX = newWidth / 4 + (index * (newWidth / 2));
 	}
 
@@ -94,7 +94,7 @@ public class ResourceIncomeDisplay extends RenderedGuiObject {
 	public void render(Graphics g) {
 		Font font = FontCache.getFont(FontKey.SMALL_FONT, g);
 
-		font.drawString(screenX, screenY, String.format("%.1f", income),
+		font.drawString(screenX, screenY, String.format("+ %.1f", income),
 				Color.white);
 	}
 }
