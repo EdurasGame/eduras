@@ -1,5 +1,6 @@
 package de.illonis.eduras.gameobjects;
 
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.logging.Logger;
@@ -100,11 +101,42 @@ public class Base extends NeutralArea {
 	 * Returns the amount of resources this base generates in one period of the
 	 * interval.
 	 * 
+	 * @param bases
+	 *            if the income is constant, these bases are used to calculate
+	 *            the total income
+	 * 
 	 * @return amount of resources
 	 */
-	public int getResourceGenerateAmountPerTimeInterval() {
-		return Math.round(resourceGenerateAmount
-				* resourceGenerateMultiplicator);
+	public int getResourceGenerateAmountPerTimeInterval(Collection<Base> bases) {
+		if (bases == null || S.Server.gm_edura_constant_income) {
+			float totalIncomePerSecond = calculateTotalIncomeGenerated(bases);
+			float ratioOfTotalIncome = incomeOfBasePerSecond(this)
+					/ totalIncomePerSecond;
+
+			return Math
+					.round((ratioOfTotalIncome * (S.Server.gm_edura_income_per_minute / 60f))
+							* (getResourceGenerateTimeInterval() / 1000));
+		} else {
+			return Math.round(resourceGenerateAmount
+					* resourceGenerateMultiplicator);
+		}
+	}
+
+	private float incomeOfBasePerSecond(Base base) {
+		return (((float) Math.round(resourceGenerateAmount
+				* resourceGenerateMultiplicator) / base
+				.getResourceGenerateTimeInterval()) * 1000f);
+	}
+
+	// calculates how much is generated per second
+	private float calculateTotalIncomeGenerated(Collection<Base> bases) {
+		int totalIncome = 0;
+		for (Base base : bases) {
+
+			// calculate how much the base generates per second here
+			totalIncome += incomeOfBasePerSecond(base);
+		}
+		return totalIncome;
 	}
 
 	/**

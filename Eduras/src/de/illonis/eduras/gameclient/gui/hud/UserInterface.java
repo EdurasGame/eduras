@@ -125,6 +125,8 @@ public class UserInterface implements GuiResizeListener {
 		new PlayerResourceDisplay(this);
 		new SpectatorResourceDisplay(this, 0);
 		new SpectatorResourceDisplay(this, 1);
+		new ResourceIncomeDisplay(this, 0);
+		new ResourceIncomeDisplay(this, 1);
 		new BlinkDisplay(this, minimap);
 		new TeamInfoDisplay(this, 0);
 		new TeamInfoDisplay(this, 1);
