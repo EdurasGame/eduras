@@ -30,6 +30,7 @@ import de.illonis.eduras.gamemodes.Edura;
 import de.illonis.eduras.gamemodes.GameMode;
 import de.illonis.eduras.gamemodes.GameMode.GameModeNumber;
 import de.illonis.eduras.gamemodes.TeamDeathmatch;
+import de.illonis.eduras.settings.S;
 import de.illonis.eduras.units.InteractMode;
 
 /**
@@ -48,7 +49,6 @@ public class StatisticsWindow extends RenderedGuiObject {
 	private final static Color COLOR_HIGHLIGHT = new Color(1f, 1f, 1f, 0.3f);
 	private int[] xPositions = new int[4];
 	private int topInset;
-	private final static long DISPLAY_TIME = 3000;
 	private Image artwork;
 	private Font font, largeFont;
 	private int lineHeight;
@@ -192,7 +192,7 @@ public class StatisticsWindow extends RenderedGuiObject {
 						getStats().getKillsByTeam(getTeams().get(1)));
 			}
 		} else {
-			if (gameMode instanceof Edura) {
+			if (gameMode instanceof Edura && getTeams().size() == 2) {
 				int score1 = getStats().getScoreOfTeam(getTeams().get(0));
 				int score2 = getStats().getScoreOfTeam(getTeams().get(1));
 				state = putTeamScores(score1, score2);
@@ -278,7 +278,7 @@ public class StatisticsWindow extends RenderedGuiObject {
 		@Override
 		public void run() {
 			try {
-				Thread.sleep(DISPLAY_TIME);
+				Thread.sleep(S.Server.sv_game_restart_delay);
 			} catch (InterruptedException e) {
 				L.log(Level.SEVERE, "Interrupted when sleeping in delayHider.",
 						e);

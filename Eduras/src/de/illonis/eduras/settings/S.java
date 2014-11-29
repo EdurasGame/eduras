@@ -804,6 +804,11 @@ public final class S {
 		 */
 		public static int gm_edura_maxrounds = 1;
 
+		/**
+		 * Determines the delay before a game starts in milliseconds.
+		 */
+		public static long sv_game_restart_delay = 5000;
+
 	}
 
 	/**
