@@ -2,6 +2,8 @@ package de.illonis.eduras.networking.discover;
 
 import java.net.InetAddress;
 
+import org.json.JSONObject;
+
 /**
  * Holds information about a discovered server that allow a client to connect to
  * that server.
@@ -120,6 +122,18 @@ public class ServerInfo {
 					&& getPort() == other.getPort();
 		}
 		return false;
+	}
+
+	JSONObject toJson() {
+		JSONObject o = new JSONObject();
+		o.put("name", name);
+		o.put("gameMode", gameMode);
+		o.put("host", url.getHostName());
+		o.put("port", port);
+		o.put("playerCount", numberOfPlayers);
+		o.put("map", map);
+		o.put("version", version);
+		return o;
 	}
 
 	/**
