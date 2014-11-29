@@ -122,7 +122,9 @@ public class UserInterface implements GuiResizeListener {
 		new RemainingTimeFrame(this);
 		new ItemDisplay(this, minimap);
 		new RespawnTimeFrame(this);
-		new ResourceDisplay(this);
+		new PlayerResourceDisplay(this);
+		new SpectatorResourceDisplay(this, 0);
+		new SpectatorResourceDisplay(this, 1);
 		new BlinkDisplay(this, minimap);
 		new TeamInfoDisplay(this, 0);
 		new TeamInfoDisplay(this, 1);
