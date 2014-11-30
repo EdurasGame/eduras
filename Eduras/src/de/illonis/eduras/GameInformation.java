@@ -51,6 +51,8 @@ import de.illonis.eduras.exceptions.PlayerHasNoTeamException;
 import de.illonis.eduras.gameobjects.Base;
 import de.illonis.eduras.gameobjects.DynamicPolygonObject;
 import de.illonis.eduras.gameobjects.GameObject;
+import de.illonis.eduras.gameobjects.GameObject.Visibility;
+import de.illonis.eduras.gameobjects.Portal;
 import de.illonis.eduras.gameobjects.TimingSource;
 import de.illonis.eduras.gameobjects.TriggerArea;
 import de.illonis.eduras.items.Item;
@@ -540,6 +542,12 @@ public class GameInformation {
 
 			if (object.getType() == ObjectType.NEUTRAL_BASE) {
 				neutralBases.add((Base) object);
+			}
+
+			if (object.getType() == ObjectType.PORTAL) {
+				if (((Portal) object).getPartnerPortal() == null) {
+					object.setVisible(Visibility.INVISIBLE);
+				}
 			}
 
 			// send position immediately
