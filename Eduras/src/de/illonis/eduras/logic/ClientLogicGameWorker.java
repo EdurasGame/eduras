@@ -22,6 +22,7 @@ import de.illonis.eduras.logicabstraction.EdurasInitializer;
 import de.illonis.eduras.logicabstraction.InformationProvider;
 import de.illonis.eduras.math.Geometry;
 import de.illonis.eduras.math.Vector2df;
+import de.illonis.eduras.networking.ClientRole;
 import de.illonis.eduras.settings.S;
 
 /**
@@ -65,7 +66,9 @@ public class ClientLogicGameWorker extends LogicGameWorker {
 	}
 
 	private void updateVision() {
-		if (S.Server.vision_disabled)
+		if (S.Server.vision_disabled
+				|| EdurasInitializer.getInstance().getInformationProvider()
+						.getClientData().getRole() == ClientRole.SPECTATOR)
 			return;
 
 		// TODO: improve the following by storing objects for teams directly.

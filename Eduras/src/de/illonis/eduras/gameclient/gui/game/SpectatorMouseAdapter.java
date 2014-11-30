@@ -2,6 +2,9 @@ package de.illonis.eduras.gameclient.gui.game;
 
 import java.util.logging.Logger;
 
+import org.newdawn.slick.Input;
+import org.newdawn.slick.geom.Vector2f;
+
 import de.illonis.edulog.EduLog;
 import de.illonis.eduras.gameclient.GuiInternalEventListener;
 import de.illonis.eduras.units.InteractMode;
@@ -44,7 +47,13 @@ public class SpectatorMouseAdapter extends ScrollModeMouseAdapter {
 
 	@Override
 	public void mouseReleased(int button, int x, int y) {
-		// do nothing
+		if (button == Input.MOUSE_LEFT_BUTTON) {
+			Vector2f clickGamePoint = getPanelLogic()
+					.computeGuiPointToGameCoordinate(new Vector2f(x, y));
+			getListener().selectOrDeselectAt(clickGamePoint,
+					getPanelLogic().isKeyDown(Input.KEY_LSHIFT),
+					getPanelLogic().isKeyDown(Input.KEY_LCONTROL));
+		}
 	}
 
 	@Override

@@ -768,9 +768,9 @@ public class ClientLogic implements GameLogicInterface {
 		try {
 			item = player.getInventory().getItemOfType(itemEvent.getItemType());
 		} catch (NoSuchItemException e) {
-			L.log(Level.WARNING,
-					"Could not handle item event because item is not in inventory.",
-					e);
+			L.log(Level.WARNING, "Could not handle item event of player "
+					+ player.getPlayerId()
+					+ " because item is not in inventory.", e);
 			return;
 		}
 		ItemEvent cooldownEvent = new ItemEvent(GameEventNumber.ITEM_CD_START,

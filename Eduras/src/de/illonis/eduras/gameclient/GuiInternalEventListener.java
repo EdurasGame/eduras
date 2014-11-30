@@ -43,6 +43,7 @@ import de.illonis.eduras.logicabstraction.EdurasInitializer;
 import de.illonis.eduras.logicabstraction.InformationProvider;
 import de.illonis.eduras.math.Geometry;
 import de.illonis.eduras.math.Vector2df;
+import de.illonis.eduras.networking.ClientRole;
 import de.illonis.eduras.settings.S;
 import de.illonis.eduras.units.InteractMode;
 import de.illonis.eduras.units.PlayerMainFigure;
@@ -215,19 +216,23 @@ public class GuiInternalEventListener implements GamePanelReactor {
 
 	@Override
 	public void selectOrDeselectAt(Vector2f point, boolean add, boolean remove) {
-		PlayerMainFigure p;
-		try {
-			p = infoPro.getPlayer().getPlayerMainFigure();
-		} catch (ObjectNotFoundException e) {
-			L.log(Level.SEVERE,
-					"No playermainfigure found after a unit was (de)selected.",
-					e);
-			return;
+		PlayerMainFigure p = null;
+		if (infoPro.getClientData().getRole() != ClientRole.SPECTATOR) {
+
+			try {
+				p = infoPro.getPlayer().getPlayerMainFigure();
+			} catch (ObjectNotFoundException e) {
+				L.log(Level.SEVERE,
+						"No playermainfigure found after a unit was (de)selected.",
+						e);
+				return;
+			}
 		}
 		for (Entry<Integer, GameObject> obj : infoPro.getGameObjects()
 				.entrySet()) {
 			GameObject o = obj.getValue();
-			if (o.isControlledUnit() && o.isVisibleFor(p)
+			if ((infoPro.getClientData().getRole() == ClientRole.SPECTATOR || (o
+					.isControlledUnit() && o.isVisibleFor(p)))
 					&& o.getShape().contains(point.x, point.y)) {
 				if (remove) {
 					client.getData().getSelectedUnits().remove(obj.getKey());

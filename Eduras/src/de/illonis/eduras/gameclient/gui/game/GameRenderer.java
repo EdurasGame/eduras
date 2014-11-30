@@ -344,10 +344,11 @@ public class GameRenderer implements TooltipHandler {
 			}
 			// draw only if in current view point
 			if (Geometry.shapeCollides(camera, d.getShape())) {
-				if (S.Server.vision_disabled
+				if (gui.isSpectator()
+						|| S.Server.vision_disabled
 						|| (S.Server.vision_neutral_always
-								&& d.getOwner() == -1 || d.equals(myPlayer) || (gui
-								.isSpectator() || !a.isEmpty()))) {
+								&& d.getOwner() == -1 || d.equals(myPlayer) || !a
+									.isEmpty())) {
 					drawObject(d, g, myPlayer);
 				}
 			}
@@ -432,9 +433,9 @@ public class GameRenderer implements TooltipHandler {
 				drawDetectionAreaFor(unit, g);
 			}
 
-			if (!gui.isSpectator()
-					&& myPlayer.getPlayer().getCurrentMode() == InteractMode.MODE_STRATEGY
-					&& unit instanceof ControlledUnit) {
+			if (gui.isSpectator()
+					|| (unit instanceof ControlledUnit && myPlayer.getPlayer()
+							.getCurrentMode() == InteractMode.MODE_STRATEGY)) {
 				if (data.getSelectedUnits().contains(unit.getId())) {
 					drawUnitSelectionCircle(unit, g);
 				}
