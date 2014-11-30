@@ -52,6 +52,12 @@ public final class S {
 			.getName());
 
 	/**
+	 * Indicates that application was started from eclipse. Usually set using
+	 * "debug" command line flag.
+	 */
+	public static boolean fromEclipse = false;
+
+	/**
 	 * Holds the settings that are relevant to the server and must be kept
 	 * synchronized on server and client.
 	 * 
