@@ -333,7 +333,7 @@ public class GameRenderer implements TooltipHandler {
 				continue;
 			}
 			Area a = null;
-			if (!S.Server.vision_disabled) {
+			if (!S.Server.vision_disabled && !gui.isSpectator()) {
 				float[] points = d.getShape().getPoints();
 				Polygon p = new Polygon();
 				for (int i = 0; i < points.length / 2; i++) {
@@ -346,8 +346,8 @@ public class GameRenderer implements TooltipHandler {
 			if (Geometry.shapeCollides(camera, d.getShape())) {
 				if (S.Server.vision_disabled
 						|| (S.Server.vision_neutral_always
-								&& d.getOwner() == -1 || d.equals(myPlayer) || !a
-									.isEmpty())) {
+								&& d.getOwner() == -1 || d.equals(myPlayer) || (gui
+								.isSpectator() || !a.isEmpty()))) {
 					drawObject(d, g, myPlayer);
 				}
 			}
