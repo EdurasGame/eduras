@@ -15,8 +15,6 @@ import de.illonis.eduras.gameclient.datacache.FontCache.FontKey;
  * 
  */
 public abstract class TimeFrame extends RenderedGuiObject {
-	private final static int WIDTH = 40;
-
 	private final float yOffset;
 	private final Color stringColor;
 
@@ -42,9 +40,8 @@ public abstract class TimeFrame extends RenderedGuiObject {
 		Font font = FontCache.getFont(FontKey.DEFAULT_FONT, g2d);
 		String timeString = getRemainingTimeString();
 		int textWidth = font.getWidth(timeString);
-		g2d.setColor(stringColor);
-		font.drawString(screenX + WIDTH - textWidth - 5, screenY + yOffset,
-				getRemainingTimeString());
+		font.drawString(screenX - textWidth - 5, screenY + yOffset,
+				getRemainingTimeString(), stringColor);
 	}
 
 	private String getRemainingTimeString() {
@@ -57,7 +54,8 @@ public abstract class TimeFrame extends RenderedGuiObject {
 	protected abstract long getTimeToDisplay();
 
 	@Override
-	public void onGuiSizeChanged(int newWidth, int newHeight) {
-		screenX = newWidth - WIDTH;
+	public boolean init(Graphics g, int windowWidth, int windowHeight) {
+		screenX = windowWidth;
+		return true;
 	}
 }

@@ -19,16 +19,22 @@ import de.illonis.eduras.gameclient.gui.game.GameRenderer;
 import de.illonis.eduras.settings.S;
 import de.illonis.eduras.units.InteractMode;
 
+/**
+ * Displays number of blink charges.
+ * 
+ * @author illonis
+ * 
+ */
 public class BlinkDisplay extends CooldownGuiObject {
 
 	private final static Logger L = EduLog.getLoggerFor(BlinkDisplay.class
 			.getName());
 	private final MiniMap minimap;
+	private Image blinkIcon;
 
-	public BlinkDisplay(UserInterface gui, MiniMap minimap) {
+	BlinkDisplay(UserInterface gui, MiniMap minimap) {
 		super(gui);
 		this.minimap = minimap;
-		screenX = (ItemDisplay.BLOCKSIZE + 30) * GameRenderer.getRenderScale();
 		setActiveInteractModes(InteractMode.MODE_EGO);
 	}
 
@@ -36,13 +42,6 @@ public class BlinkDisplay extends CooldownGuiObject {
 	public void render(Graphics g) {
 		Font font = FontCache.getFont(FontKey.TOOLTIP_FONT, g);
 		try {
-			Image blinkIcon;
-			try {
-				blinkIcon = ImageCache.getGuiImage(ImageKey.SKILL_BLINK);
-			} catch (CacheException e) {
-				L.log(Level.SEVERE, "Cannot find blink image!", e);
-				return;
-			}
 
 			g.drawImage(blinkIcon, screenX, screenY - blinkIcon.getHeight());
 			String blinks = getInfo().getPlayer().getBlinksAvailable() + "";
@@ -61,8 +60,16 @@ public class BlinkDisplay extends CooldownGuiObject {
 	}
 
 	@Override
-	public void onGuiSizeChanged(int newWidth, int newHeight) {
-		screenY = newHeight - minimap.getSize() - 10;
+	public boolean init(Graphics g, int windowWidth, int windowHeight) {
+		screenX = (ItemDisplay.BLOCKSIZE + 30) * GameRenderer.getRenderScale();
+		screenY = windowHeight - minimap.getSize() - 10;
+		try {
+			blinkIcon = ImageCache.getGuiImage(ImageKey.SKILL_BLINK);
+		} catch (CacheException e) {
+			L.log(Level.SEVERE, "Cannot find blink image!", e);
+			return false;
+		}
+		return true;
 	}
 
 	@Override

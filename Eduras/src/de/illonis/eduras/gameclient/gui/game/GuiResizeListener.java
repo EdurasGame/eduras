@@ -6,6 +6,7 @@ package de.illonis.eduras.gameclient.gui.game;
  * @author illonis
  * 
  */
+@Deprecated
 public interface GuiResizeListener {
 
 	/**

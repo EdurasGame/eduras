@@ -16,6 +16,7 @@ import de.illonis.eduras.units.InteractMode;
  * @author illonis
  * 
  */
+@Deprecated
 public class BugReportButton extends ClickableGuiElement {
 
 	private final static Logger L = EduLog.getLoggerFor("BugReportButton");
@@ -61,10 +62,10 @@ public class BugReportButton extends ClickableGuiElement {
 	}
 
 	@Override
-	public void onGuiSizeChanged(int newWidth, int newHeight) {
+	public boolean init(Graphics g, int windowWidth, int windowHeight) {
 		screenX = 100;
 		screenY = 0;
 		bounds.setLocation(screenX, screenY);
+		return true;
 	}
-
 }

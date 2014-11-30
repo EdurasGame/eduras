@@ -93,8 +93,9 @@ public class ActionBar extends RenderedGuiObject {
 	}
 
 	@Override
-	public void onGuiSizeChanged(int newWidth, int newHeight) {
-		screenY = newHeight - MiniMap.SIZE * GameRenderer.getRenderScale();
+	public boolean init(Graphics g, int windowWidth, int windowHeight) {
+		screenY = windowHeight - MiniMap.SIZE * GameRenderer.getRenderScale();
+		return true;
 	}
 
 	/**

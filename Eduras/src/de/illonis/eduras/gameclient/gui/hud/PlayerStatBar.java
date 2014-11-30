@@ -130,8 +130,9 @@ public class PlayerStatBar extends RenderedGuiObject {
 		}
 
 		@Override
-		public void onGuiSizeChanged(int newWidth, int newHeight) {
-			screenY = newHeight - statBarSize;
+		public boolean init(Graphics g, int windowWidth, int windowHeight) {
+			screenY = windowHeight - statBarSize;
+			return true;
 		}
 
 		@Override
@@ -250,8 +251,9 @@ public class PlayerStatBar extends RenderedGuiObject {
 	}
 
 	@Override
-	public void onGuiSizeChanged(int newWidth, int newHeight) {
+	public boolean init(Graphics g, int windowWidth, int windowHeight) {
 		statBarSize = PLAYER_BAR_WIDTH * GameRenderer.getRenderScale();
+		return true;
 	}
 
 	@Override

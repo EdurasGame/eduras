@@ -161,7 +161,6 @@ public class GamePanelLogic extends GameEventAdapter implements
 		camera.reset();
 		initUserInterface();
 		doTimedTasks();
-		notifyGuiSizeChanged();
 	}
 
 	private void doTimedTasks() {
@@ -182,19 +181,6 @@ public class GamePanelLogic extends GameEventAdapter implements
 	 */
 	public GameCamera getCamera() {
 		return camera;
-	}
-
-	/**
-	 * Notifies all ui objects that gui size has changed.
-	 * 
-	 */
-	private void notifyGuiSizeChanged() {
-		L.fine("[GUI] Size changed. New size: " + gui.getWidth() + ", "
-				+ gui.getHeight());
-		System.out.println("[GUI] Size changed. New size: " + gui.getWidth()
-				+ ", " + gui.getHeight());
-		userInterface.onGuiSizeChanged(gui.getWidth(), gui.getHeight());
-		// camera.setSize(gui.getWidth(), gui.getHeight()); // maybe not?
 	}
 
 	/**

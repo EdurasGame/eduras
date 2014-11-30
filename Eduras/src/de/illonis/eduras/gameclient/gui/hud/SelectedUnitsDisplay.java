@@ -5,7 +5,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.newdawn.slick.Color;
-import org.newdawn.slick.Font;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
@@ -16,8 +15,6 @@ import de.illonis.edulog.EduLog;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
 import de.illonis.eduras.gameclient.datacache.CacheException;
 import de.illonis.eduras.gameclient.datacache.CacheInfo.ImageKey;
-import de.illonis.eduras.gameclient.datacache.FontCache;
-import de.illonis.eduras.gameclient.datacache.FontCache.FontKey;
 import de.illonis.eduras.gameclient.datacache.ImageCache;
 import de.illonis.eduras.gameclient.gui.game.GameRenderer;
 import de.illonis.eduras.gameobjects.GameObject;
@@ -71,7 +68,6 @@ public class SelectedUnitsDisplay extends ClickableGuiElement {
 	}
 
 	private void drawSelectionFrameFor(int id, Graphics g, int index) {
-		Font font = FontCache.getFont(FontKey.TOOLTIP_FONT, g);
 		GameObject object;
 		try {
 			object = getInfo().findObjectById(id);
@@ -104,14 +100,14 @@ public class SelectedUnitsDisplay extends ClickableGuiElement {
 	}
 
 	@Override
-	public void onGuiSizeChanged(int newWidth, int newHeight) {
-		float scale = GameRenderer.getRenderScale();
-		float height = MiniMap.SIZE * scale;
-		float width = WIDTH * scale;
-		screenX = newWidth - width;
-		screenY = newHeight - height;
+	public boolean init(Graphics g, int windowWidth, int windowHeight) {
+		float height = MiniMap.SIZE * GameRenderer.getRenderScale();
+		float width = WIDTH * GameRenderer.getRenderScale();
+		screenX = windowWidth - width;
+		screenY = windowHeight - height;
 		buttonsPerRow = (int) Math.floor((width - 10) / (buttonSize + 2));
 		bounds.setBounds(screenX, screenY, width, height);
+		return true;
 	}
 
 	private int pointToUnit(int x, int y) {
