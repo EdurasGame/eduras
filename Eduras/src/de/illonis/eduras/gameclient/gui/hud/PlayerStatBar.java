@@ -94,6 +94,10 @@ public class PlayerStatBar extends RenderedGuiObject {
 
 		@Override
 		public void render(Graphics g2d) {
+			if (player == null) {
+				L.severe("Dont have a player when printing its statbar");
+				return;
+			}
 			Font font = FontCache.getFont(FontKey.DEFAULT_FONT, g2d);
 			g2d.setLineWidth(1f);
 			yPosition = screenY
