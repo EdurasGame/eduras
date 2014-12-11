@@ -66,7 +66,6 @@ public class EdurasClient {
 		Thread.setDefaultUncaughtExceptionHandler(new EdurasUncaughtExceptionHandler(
 				L));
 
-		boolean debug = false;
 		// arguments are of form <parametername>=<parametervalue>
 		List<Pair<String, String>> parameters = new LinkedList<Pair<String, String>>();
 		for (int i = 0; i < args.length; i++) {
@@ -144,7 +143,7 @@ public class EdurasClient {
 				logLimit = Level.parse(parameterValue);
 				break;
 			case "debug":
-				debug = true;
+				S.fromEclipse = true;
 				break;
 			case "serverip":
 				serverIp = parameterValue;
@@ -179,7 +178,7 @@ public class EdurasClient {
 			L.log(Level.SEVERE, "Can not create data folder.");
 		}
 
-		if (!debug)
+		if (!S.fromEclipse)
 			System.setProperty("org.lwjgl.librarypath", ResourceManager
 					.resourceToPath(ResourceType.NATIVE_LIBRARY, "").toString());
 		EdurasSlickClient client = new EdurasSlickClient();

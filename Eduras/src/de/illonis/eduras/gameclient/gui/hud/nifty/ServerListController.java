@@ -11,14 +11,17 @@ import org.newdawn.slick.state.transition.FadeInTransition;
 import org.newdawn.slick.state.transition.FadeOutTransition;
 
 import de.illonis.edulog.EduLog;
+import de.illonis.eduras.EdurasVersion;
 import de.illonis.eduras.gameclient.LoginData;
 import de.illonis.eduras.gameclient.audio.SoundMachine;
 import de.illonis.eduras.gameclient.audio.SoundMachine.SoundType;
 import de.illonis.eduras.networking.ClientRole;
 import de.illonis.eduras.networking.discover.ServerFoundListener;
 import de.illonis.eduras.networking.discover.ServerInfo;
+import de.lessvoid.nifty.controls.Label;
 import de.lessvoid.nifty.controls.ListBox;
 import de.lessvoid.nifty.controls.TextField;
+import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.screen.Screen;
 
 /**
@@ -33,7 +36,12 @@ public class ServerListController extends EdurasScreenController implements
 	private final static Logger L = EduLog
 			.getLoggerFor(ServerListController.class.getName());
 
+	private final static String VERSION_POPUP_TEXT = "Your client version does not match version on selected server.\n\nClient version: %s\nServer version: %s";
+
+	private final static String VERSION_POPUP = "incompatibleVersionPopup";
+
 	private ListBox<ServerInfo> listBox;
+	private Label versionPopupLabel;
 	private TextField customIpTextField;
 	private final String presetServerIp;
 	private final int presetServerPort;
@@ -54,9 +62,19 @@ public class ServerListController extends EdurasScreenController implements
 	@SuppressWarnings("unchecked")
 	@Override
 	protected void initScreen(Screen screen) {
-		listBox = screen.findNiftyControl("serverList", ListBox.class);
 		customIpTextField = screen.findNiftyControl("customIpTextField",
 				TextField.class);
+		listBox = screen.findNiftyControl("serverList", ListBox.class);
+	}
+
+	private void showVersionPopup(String clientVersion, String serverVersion) {
+		Element popup = nifty.createPopupWithId(VERSION_POPUP, VERSION_POPUP);
+		versionPopupLabel = popup.findNiftyControl("versionPopupLabel",
+				Label.class);
+		System.out.println(versionPopupLabel);
+		versionPopupLabel.setText(String.format(VERSION_POPUP_TEXT,
+				clientVersion, serverVersion));
+		nifty.showPopup(nifty.getCurrentScreen(), VERSION_POPUP, null);
 	}
 
 	/**
@@ -101,14 +119,20 @@ public class ServerListController extends EdurasScreenController implements
 	}
 
 	private void joinServer(ServerInfo server) {
-		game.setServer(server);
-		game.enterState(LoadingState.LOADING_STATE_ID);
-		String userName = game.getUsername();
-		ClientRole role = ClientRole.PLAYER;
-		LoginData data = new LoginData(server.getUrl(), server.getPort(),
-				userName, role);
-		game.setLoginData(data);
-		game.enterState(5);
+		String clientVersion = EdurasVersion.getVersion();
+		if (server.getMap().isEmpty()
+				|| server.getVersion().equals(clientVersion)) {
+			game.setServer(server);
+			game.enterState(LoadingState.LOADING_STATE_ID);
+			String userName = game.getUsername();
+			ClientRole role = ClientRole.PLAYER;
+			LoginData data = new LoginData(server.getUrl(), server.getPort(),
+					userName, role);
+			game.setLoginData(data);
+			game.enterState(5);
+		} else {
+			showVersionPopup(clientVersion, server.getVersion());
+		}
 	}
 
 	/**
@@ -118,6 +142,13 @@ public class ServerListController extends EdurasScreenController implements
 		SoundMachine.play(SoundType.CLICK, 2f);
 		game.enterState(1, new FadeOutTransition(Color.black, 100),
 				new FadeInTransition(Color.black, 300));
+	}
+
+	/**
+	 * Close error popup.
+	 */
+	public void closeVersionPopup() {
+		nifty.closePopup(VERSION_POPUP);
 	}
 
 	@Override

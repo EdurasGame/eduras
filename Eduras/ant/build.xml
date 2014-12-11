@@ -110,7 +110,7 @@
 			<fileset dir="${base}">
 				<include name="/licenses/**"></include>
 			</fileset>
-			<fileset file="version" />
+			<fileset file="gitversion" />
 			<zipgroupfileset dir="${base}${libs}" includes="**/*.jar"
 				excludes="nifty-*,lwjgl.jar, jorbis-*, jogg-*,eventbus-*,xpp*" />
 			<manifest>

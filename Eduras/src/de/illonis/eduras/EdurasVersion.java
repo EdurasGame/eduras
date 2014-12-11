@@ -1,6 +1,7 @@
 package de.illonis.eduras;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
@@ -9,6 +10,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import de.illonis.edulog.EduLog;
+import de.illonis.edulog.PathFinder;
+import de.illonis.eduras.settings.S;
 
 /**
  * Retrieves and compares the version of the Eduras? distribution.
@@ -30,10 +33,23 @@ public class EdurasVersion {
 	 */
 	public static String getVersion() {
 		String version = "unknown";
-		URL res = EdurasVersion.class.getResource("/" + VERSION_FILENAME);
-		if (res == null) {
-			L.log(Level.SEVERE, "Could not locate version file in resources.");
-			return version;
+		URL res;
+		if (S.fromEclipse) {
+			try {
+				res = new URL(PathFinder.getBaseDir(), "ant/gitversion");
+				L.log(Level.INFO, "Using local version file due to debugging.");
+			} catch (MalformedURLException e) {
+				L.log(Level.SEVERE,
+						"Error building url to debug version file.", e);
+				return version;
+			}
+		} else {
+			res = EdurasVersion.class.getResource("/" + VERSION_FILENAME);
+			if (res == null) {
+				L.log(Level.SEVERE,
+						"Could not locate version file in resources.");
+				return version;
+			}
 		}
 		// using a try-with-resource automatically closes this resource and
 		// limits code chaos.

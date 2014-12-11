@@ -359,10 +359,15 @@ public class EdurasServer {
 	 *             Thrown if the game mode set on the server is unknown.
 	 */
 	public void runServer() throws NoSuchGameModeException {
-		L.info("Caching shapes.");
-		GraphicsPreLoader.preLoadShapes();
 
 		L.info(Localization.getString("Server.startstart"));
+
+		String version = EdurasVersion.getVersion();
+		if (version.equals("unknown") && !S.fromEclipse) {
+			System.exit(1);
+		}
+		L.info("Caching shapes.");
+		GraphicsPreLoader.preLoadShapes();
 
 		setupEdurasServer();
 		setupChatServer();
@@ -384,11 +389,11 @@ public class EdurasServer {
 		sdl.start();
 
 		if (registerAtMetaserver) {
-			registerAtMetaserver();
+			registerAtMetaserver(version);
 		}
 	}
 
-	private void registerAtMetaserver() {
+	private void registerAtMetaserver(String versionHash) {
 		if (serverHostAddress.equals("")) {
 			L.info("No IP was specified under which the Eduras server is supposed to register itself at the meta server.");
 			try {
@@ -403,7 +408,7 @@ public class EdurasServer {
 
 		}
 		new MetaServerRegisterer(name, serverHostAddress, edurasPort,
-				eventTriggerer.getGameInfo()).start();
+				eventTriggerer.getGameInfo(), versionHash).start();
 
 	}
 
@@ -543,7 +548,6 @@ public class EdurasServer {
 				L));
 
 		EdurasServer edurasServer = new EdurasServer();
-
 		try {
 			ResourceManager.extractMaps();
 		} catch (IOException e1) {
@@ -653,7 +657,9 @@ public class EdurasServer {
 				edurasServer.setStartGameMode(parameterValue);
 				break;
 			}
-
+			case "debug":
+				S.fromEclipse = Boolean.parseBoolean(parameterValue);
+				break;
 			case "startconfig": {
 				File settingsFile = new File(parameterValue);
 				if (!settingsFile.exists()) {
@@ -763,11 +769,11 @@ class MetaServerRegisterer extends Thread {
 	private final GameInformation gameInfo;
 
 	public MetaServerRegisterer(String name, String ip, int port,
-			GameInformation gameInfo) {
+			GameInformation gameInfo, String version) {
 		this.name = name;
 		this.ip = ip;
 		this.port = port;
-		this.version = EdurasVersion.getVersion();
+		this.version = version;
 		this.gameInfo = gameInfo;
 
 		metaServerClient = new Client();
