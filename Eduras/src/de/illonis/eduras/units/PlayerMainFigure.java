@@ -29,7 +29,7 @@ public class PlayerMainFigure extends Unit implements MovementControlable {
 			.getName());
 
 	private Player player;
-	private HashMap<Direction, Boolean> movesTo;
+	private final HashMap<Direction, Boolean> movesTo;
 
 	/**
 	 * Create a new player that belongs to the given game and has the given
@@ -88,8 +88,10 @@ public class PlayerMainFigure extends Unit implements MovementControlable {
 
 	@Override
 	public void stopMoving() {
-		currentSpeedX = 0;
-		currentSpeedY = 0;
+		for (Direction direction : Direction.values()) {
+			movesTo.put(direction, false);
+		}
+		applyMovement();
 	}
 
 	private void applyMovement() {
@@ -117,7 +119,6 @@ public class PlayerMainFigure extends Unit implements MovementControlable {
 
 	@Override
 	protected void onDead(int killer) {
-		//
 	}
 
 	/**
