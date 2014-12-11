@@ -65,12 +65,12 @@ public class MiniMap extends ClickableGuiElement {
 	private GameCamera viewPort;
 	private float scale;
 	private HashMap<Integer, NodeData> nodes;
-	float windowScale;
+	private final float windowScale;
 	private float rectWidth, rectHeight, yDiff;
 
 	final static int SIZE = 160;
 
-	private static final float PLAYER_EXTRA_SCALE = 0.7f;
+	private static final float PLAYER_EXTRA_SCALE = 6f;
 
 	private final Rectangle bounds;
 
@@ -285,11 +285,11 @@ public class MiniMap extends ClickableGuiElement {
 	public boolean init(Graphics g, int windowWidth, int windowHeight) {
 		screenY = windowHeight - getSize();
 		bounds.setLocation(screenX, screenY);
-		relocateObjects();
 		rectWidth = ImageResolution.WINDOWED.getWidth();
 		float ratio = (float) windowHeight / windowWidth;
 		rectHeight = rectWidth * ratio;
 		yDiff = (ImageResolution.WINDOWED.getHeight() - rectHeight) / 2;
+		relocateObjects();
 		return true;
 	}
 
@@ -371,10 +371,8 @@ public class MiniMap extends ClickableGuiElement {
 		float y = miniPos.y;
 
 		if (o instanceof PlayerMainFigure) {
-			float w = o.getShape().getWidth() * windowScale
-					* PLAYER_EXTRA_SCALE;
-			float h = o.getShape().getHeight() * windowScale
-					* PLAYER_EXTRA_SCALE;
+			float w = o.getShape().getWidth() * scale * PLAYER_EXTRA_SCALE;
+			float h = o.getShape().getHeight() * scale * PLAYER_EXTRA_SCALE;
 
 			synchronized (players) {
 				players.put(o.getId(), new MiniMapPlayer((PlayerMainFigure) o,
