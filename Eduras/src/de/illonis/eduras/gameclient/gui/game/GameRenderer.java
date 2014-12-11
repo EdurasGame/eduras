@@ -7,6 +7,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -84,6 +85,7 @@ public class GameRenderer implements TooltipHandler {
 	private static final Color OUTLINE_COLOR = Color.black;
 	private static final Color DETECTION_AREA_COLOR = new Color(1f, 1f, 1f,
 			0.1f);
+	private final List<Unit> healthBarUnits;
 
 	private static final Color SELECTION_CIRCLE_COLOR = Color.white;
 
@@ -104,6 +106,7 @@ public class GameRenderer implements TooltipHandler {
 			InformationProvider info, ClientData data) {
 		this.uiObjects = gui.getUiObjects();
 		this.data = data;
+		healthBarUnits = new LinkedList<Unit>();
 		this.camera = camera;
 		scale = 1;
 		objs = info.getGameObjects();
@@ -177,6 +180,7 @@ public class GameRenderer implements TooltipHandler {
 		g.setColor(Color.white);
 
 		clear(g, width, height);
+		healthBarUnits.clear();
 
 		if (scale != 1.0f) {
 			g.scale(scale, scale);
@@ -334,6 +338,9 @@ public class GameRenderer implements TooltipHandler {
 
 		}
 
+		for (Unit unit : healthBarUnits) {
+			drawHealthBarFor(unit, g);
+		}
 		// if (!S.vision_disabled) {
 		// g.setColor(FOG_OF_WAR);
 		// g.fill(visionMask);
@@ -405,7 +412,7 @@ public class GameRenderer implements TooltipHandler {
 		if (d.isUnit()) {
 			Unit unit = (Unit) d;
 
-			drawHealthBarFor(unit, g);
+			healthBarUnits.add(unit);
 
 			if (unit.isDetector()) {
 				drawDetectionAreaFor(unit, g);
