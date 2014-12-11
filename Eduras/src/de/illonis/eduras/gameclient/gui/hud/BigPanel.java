@@ -68,7 +68,12 @@ public class BigPanel extends RenderedGuiObject {
 		this.message = text;
 		remaining = DEFAULT_DISPLAY_TIME;
 		last = System.currentTimeMillis();
-		int w = font.getWidth(message);
+		int w;
+		if (font == null) {
+			w = width / 2;
+		} else {
+			w = font.getWidth(message);
+		}
 		screenX = (width - w) / 2;
 		alpha = 1f;
 	}
