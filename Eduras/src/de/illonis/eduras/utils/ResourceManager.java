@@ -13,6 +13,7 @@ import java.util.logging.Logger;
 import de.illonis.edulog.EduLog;
 import de.illonis.eduras.gameclient.EdurasClient;
 import de.illonis.eduras.maps.Map;
+import de.illonis.eduras.settings.S;
 
 public class ResourceManager {
 	private final static Logger L = EduLog.getLoggerFor(ResourceManager.class
@@ -189,7 +190,12 @@ public class ResourceManager {
 	 * @return the path.
 	 */
 	public static Path resourceToPath(ResourceType type, String fileName) {
-		Path p = Paths.get(PathFinder.getBaseDir());
+		Path p;
+		if (S.resource_folder.isEmpty()) {
+			p = Paths.get(PathFinder.getBaseDir());
+		} else {
+			p = Paths.get(S.resource_folder);
+		}
 
 		return p.resolve(RES_FOLDER).resolve(type.getFolder())
 				.resolve(fileName);

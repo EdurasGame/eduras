@@ -282,16 +282,16 @@ public class BuildModeMouseAdapter extends ScrollModeMouseAdapter {
 
 				for (GameObject gameObject : obs) {
 					if (gameObject instanceof Base) {
+						Base base = (Base) gameObject;
 						try {
-							if (((Base) gameObject).getCurrentOwnerTeam()
-									.equals(getPanelLogic().getClientData()
-											.getCurrentResurrectTarget()
-											.getTeam())) {
+							if (getPanelLogic().getClientData()
+									.getCurrentResurrectTarget().getTeam()
+									.equals(base.getCurrentOwnerTeam())) {
 
 								getListener().onPlayerRezz(
 										getPanelLogic().getClientData()
 												.getCurrentResurrectTarget(),
-										(Base) gameObject);
+										base);
 								getPanelLogic()
 										.showNotification(
 												"Resurrecting "

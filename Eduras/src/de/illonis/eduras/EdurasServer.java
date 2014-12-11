@@ -8,6 +8,9 @@ import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.SocketException;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -57,6 +60,7 @@ import de.illonis.eduras.serverconsole.ServerConsole;
 import de.illonis.eduras.settings.S;
 import de.illonis.eduras.utils.ReflectionTools;
 import de.illonis.eduras.utils.ResourceManager;
+import de.illonis.eduras.utils.ResourceManager.ResourceType;
 import de.illonis.eduras.utils.WebFetcher;
 
 /**
@@ -355,10 +359,15 @@ public class EdurasServer {
 	 *             Thrown if the game mode set on the server is unknown.
 	 */
 	public void runServer() throws NoSuchGameModeException {
-		L.info("Caching shapes.");
-		GraphicsPreLoader.preLoadShapes();
 
 		L.info(Localization.getString("Server.startstart"));
+
+		String version = EdurasVersion.getVersion();
+		if (version.equals("unknown") && !S.fromEclipse) {
+			System.exit(1);
+		}
+		L.info("Caching shapes.");
+		GraphicsPreLoader.preLoadShapes();
 
 		setupEdurasServer();
 		setupChatServer();
@@ -380,11 +389,11 @@ public class EdurasServer {
 		sdl.start();
 
 		if (registerAtMetaserver) {
-			registerAtMetaserver();
+			registerAtMetaserver(version);
 		}
 	}
 
-	private void registerAtMetaserver() {
+	private void registerAtMetaserver(String versionHash) {
 		if (serverHostAddress.equals("")) {
 			L.info("No IP was specified under which the Eduras server is supposed to register itself at the meta server.");
 			try {
@@ -399,7 +408,7 @@ public class EdurasServer {
 
 		}
 		new MetaServerRegisterer(name, serverHostAddress, edurasPort,
-				eventTriggerer.getGameInfo()).start();
+				eventTriggerer.getGameInfo(), versionHash).start();
 
 	}
 
@@ -539,7 +548,6 @@ public class EdurasServer {
 				L));
 
 		EdurasServer edurasServer = new EdurasServer();
-
 		try {
 			ResourceManager.extractMaps();
 		} catch (IOException e1) {
@@ -589,7 +597,19 @@ public class EdurasServer {
 						.parseBoolean(parameterValue));
 				break;
 			}
-
+			case "resfolder":
+				Path path = Paths.get(parameterValue);
+				if (!Files.exists(path) || !Files.isDirectory(path)) {
+					L.log(Level.SEVERE,
+							"Custom resource folder does not exist or is not a directory: "
+									+ path.toString()
+									+ ". Using default instead.");
+				} else {
+					S.resource_folder = parameterValue;
+					L.log(Level.WARNING, "Using custom folder for resources: "
+							+ path.toString());
+				}
+				break;
 			case "loglimit": {
 				logLimit = Level.parse(parameterValue);
 				break;
@@ -637,7 +657,9 @@ public class EdurasServer {
 				edurasServer.setStartGameMode(parameterValue);
 				break;
 			}
-
+			case "debug":
+				S.fromEclipse = Boolean.parseBoolean(parameterValue);
+				break;
 			case "startconfig": {
 				File settingsFile = new File(parameterValue);
 				if (!settingsFile.exists()) {
@@ -670,14 +692,21 @@ public class EdurasServer {
 								e);
 					}
 				} else {
-					System.out.println("Unknown argument " + parameterName);
-					System.exit(-1);
+					L.log(Level.WARNING, "Ignoring unknown argument: "
+							+ parameterName + "=" + parameterValue);
 				}
 			}
 		}
 
 		EduLog.setBasicLogLimit(logLimit);
 		EduLog.setConsoleLogLimit(logLimit);
+
+		Path folder = ResourceManager.resourceToPath(ResourceType.LIBRARY, "");
+		if (Files.exists(folder)) {
+			System.err.println("Resource folder does not exist: "
+					+ folder.toAbsolutePath());
+			System.exit(-1);
+		}
 
 		if (S.Server.exit_on_sysout) {
 			SysOutCatcher.startCatching();
@@ -740,11 +769,11 @@ class MetaServerRegisterer extends Thread {
 	private final GameInformation gameInfo;
 
 	public MetaServerRegisterer(String name, String ip, int port,
-			GameInformation gameInfo) {
+			GameInformation gameInfo, String version) {
 		this.name = name;
 		this.ip = ip;
 		this.port = port;
-		this.version = EdurasVersion.getVersion();
+		this.version = version;
 		this.gameInfo = gameInfo;
 
 		metaServerClient = new Client();

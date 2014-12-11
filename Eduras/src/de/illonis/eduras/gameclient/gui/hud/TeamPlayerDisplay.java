@@ -2,6 +2,7 @@ package de.illonis.eduras.gameclient.gui.hud;
 
 import java.util.logging.Logger;
 
+import org.newdawn.slick.Graphics;
 import org.newdawn.slick.geom.Vector2f;
 
 import de.illonis.edulog.EduLog;
@@ -24,7 +25,8 @@ class TeamPlayerDisplay extends PlayerDisplay {
 	}
 
 	@Override
-	public void onGuiSizeChanged(int newWidth, int newHeight) {
+	public boolean init(Graphics g, int windowWidth, int windowHeight) {
+		return true;
 	}
 
 	@Override

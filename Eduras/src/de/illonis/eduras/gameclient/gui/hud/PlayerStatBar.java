@@ -63,6 +63,10 @@ public class PlayerStatBar extends RenderedGuiObject {
 
 		@Override
 		public void render(Graphics g2d) {
+			if (player == null) {
+				L.severe("Dont have a player when printing its statbar");
+				return;
+			}
 			Font font = FontCache.getFont(FontKey.DEFAULT_FONT, g2d);
 			screenY = 50
 					+ index
@@ -72,8 +76,9 @@ public class PlayerStatBar extends RenderedGuiObject {
 		}
 
 		@Override
-		public void onGuiSizeChanged(int newWidth, int newHeight) {
-			screenY = newHeight - statBarSize;
+		public boolean init(Graphics g, int windowWidth, int windowHeight) {
+			screenY = windowHeight - statBarSize;
+			return true;
 		}
 
 		@Override
@@ -154,7 +159,8 @@ public class PlayerStatBar extends RenderedGuiObject {
 	}
 
 	@Override
-	public void onGuiSizeChanged(int newWidth, int newHeight) {
+	public boolean init(Graphics g, int windowWidth, int windowHeight) {
+		return true;
 	}
 
 	@Override

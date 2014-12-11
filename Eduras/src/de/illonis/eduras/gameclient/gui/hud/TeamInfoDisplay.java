@@ -117,12 +117,13 @@ public class TeamInfoDisplay extends RenderedGuiObject {
 	}
 
 	@Override
-	public void onGuiSizeChanged(int newWidth, int newHeight) {
+	public boolean init(Graphics g, int windowWidth, int windowHeight) {
 		screenX = 0;
 		screenY = 150;
 		if (index > 0) {
-			screenX = newWidth - width;
+			screenX = windowWidth - width;
 		}
+		return true;
 	}
 
 }

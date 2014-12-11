@@ -7,13 +7,13 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.lwjgl.opengl.Display;
 import org.newdawn.slick.Color;
-import org.newdawn.slick.Font;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
@@ -68,6 +68,7 @@ public class GameRenderer implements TooltipHandler {
 
 	private final GameCamera camera;
 	private final UserInterface gui;
+	private boolean ready;
 	private final Map<Integer, GameObject> objs;
 	private Tooltip tooltip;
 	private float scale;
@@ -85,10 +86,9 @@ public class GameRenderer implements TooltipHandler {
 	private static final Color OUTLINE_COLOR = Color.black;
 	private static final Color DETECTION_AREA_COLOR = new Color(1f, 1f, 1f,
 			0.1f);
+	private final List<Unit> healthBarUnits;
 
 	private static final Color SELECTION_CIRCLE_COLOR = Color.white;
-
-	private Font font;
 
 	/**
 	 * Creates a new renderer.
@@ -107,9 +107,11 @@ public class GameRenderer implements TooltipHandler {
 			InformationProvider info, ClientData data) {
 		this.uiObjects = gui.getUiObjects();
 		this.data = data;
+		healthBarUnits = new LinkedList<Unit>();
 		this.camera = camera;
 		scale = 1;
 		objs = info.getGameObjects();
+		ready = false;
 		this.info = info;
 		this.gui = gui;
 		RendererTooltipHandler h = new RendererTooltipHandler(this);
@@ -158,26 +160,23 @@ public class GameRenderer implements TooltipHandler {
 	 *            the target graphics.
 	 */
 	public void render(GameContainer container, Graphics g) {
-		if (font == null)
-			font = g.getFont();
 		int width = container.getWidth();
 		int height = container.getHeight();
-		float newScale = getRenderScale();
+		if (!ready) {
+			scale = getRenderScale();
+			gui.init(g, width, height);
+			ready = true;
+		}
 
 		g.setColor(Color.white);
 
 		clear(g, width, height);
+		healthBarUnits.clear();
 
-		if (newScale != 1.0f) {
-			g.scale(newScale, newScale);
+		if (scale != 1.0f) {
+			g.scale(scale, scale);
 		}
 
-		if (scale != newScale) {
-			gui.onGuiSizeChanged(width, height);
-			// camera.setSize(width, height); // maybe not?
-		}
-
-		scale = newScale;
 		adjustCamera();
 		g.translate(-camera.getX(), -camera.getY());
 		drawMap(g);
@@ -354,6 +353,9 @@ public class GameRenderer implements TooltipHandler {
 			}
 		}
 
+		for (Unit unit : healthBarUnits) {
+			drawHealthBarFor(unit, g);
+		}
 		// if (!S.vision_disabled) {
 		// g.setColor(FOG_OF_WAR);
 		// g.fill(visionMask);
@@ -427,7 +429,7 @@ public class GameRenderer implements TooltipHandler {
 		if (d.isUnit()) {
 			Unit unit = (Unit) d;
 
-			drawHealthBarFor(unit, g);
+			healthBarUnits.add(unit);
 
 			if (unit.isDetector()) {
 				drawDetectionAreaFor(unit, g);

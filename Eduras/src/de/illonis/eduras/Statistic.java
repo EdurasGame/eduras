@@ -329,6 +329,7 @@ public class Statistic {
 	 */
 	public Statistic copy() {
 		Statistic copy = new Statistic();
+		copy.teamScore.putAll(teamScore);
 		for (int i = 0; i < stats.size(); i++) {
 			PlayerStatEntry entry = stats.get(i);
 			PlayerStatEntry copyEntry = new PlayerStatEntry(entry.getPlayer());

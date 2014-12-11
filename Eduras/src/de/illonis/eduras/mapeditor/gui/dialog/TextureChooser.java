@@ -30,14 +30,11 @@ import javax.swing.event.DocumentListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
-import de.illonis.eduras.gameclient.datacache.ImageCache;
 import de.illonis.eduras.gameclient.datacache.TextureInfo.TextureKey;
 import de.illonis.eduras.gameobjects.GameObject;
-import de.illonis.eduras.images.ImageFiler;
 import de.illonis.eduras.mapeditor.MapData;
 import de.illonis.eduras.mapeditor.gui.FilteredListModel;
 import de.illonis.eduras.mapeditor.gui.FilteredListModel.Filter;
-import de.illonis.eduras.settings.S;
 import de.illonis.eduras.utils.ResourceManager;
 import de.illonis.eduras.utils.ResourceManager.ResourceType;
 
@@ -122,24 +119,14 @@ public class TextureChooser extends JPanel implements ListSelectionListener,
 			for (TextureKey texture : TextureKey.values()) {
 
 				if (texture != TextureKey.NONE) {
-					if (S.Client.localres) {
-						BufferedImage img = ImageIO.read(ImageFiler.class
-								.getResourceAsStream("textures/"
-										+ texture.getFile()));
-						Image dimg = img.getScaledInstance(PREVIEW_SIZE,
+					try (InputStream in = ResourceManager
+							.openResource(ResourceType.IMAGE, "textures/"
+									+ texture.getFile())) {
+						BufferedImage image = ImageIO.read(in);
+						Image dimg = image.getScaledInstance(PREVIEW_SIZE,
 								PREVIEW_SIZE, Image.SCALE_SMOOTH);
 						ImageIcon imageIcon = new ImageIcon(dimg);
 						result.put(texture, imageIcon);
-					} else {
-						try (InputStream in = ResourceManager.openResource(
-								ResourceType.IMAGE,
-								"textures/" + texture.getFile())) {
-							BufferedImage image = ImageIO.read(in);
-							Image dimg = image.getScaledInstance(PREVIEW_SIZE,
-									PREVIEW_SIZE, Image.SCALE_SMOOTH);
-							ImageIcon imageIcon = new ImageIcon(dimg);
-							result.put(texture, imageIcon);
-						}
 					}
 				}
 			}
@@ -171,6 +158,7 @@ public class TextureChooser extends JPanel implements ListSelectionListener,
 			super("");
 			Dimension dim = new Dimension(PREVIEW_SIZE, PREVIEW_SIZE);
 			setMaximumSize(dim);
+			setPreferredSize(dim);
 			setSize(dim);
 		}
 
@@ -178,6 +166,7 @@ public class TextureChooser extends JPanel implements ListSelectionListener,
 		public Component getListCellRendererComponent(
 				JList<? extends TextureKey> list, TextureKey value, int index,
 				boolean isSelected, boolean cellHasFocus) {
+			
 			setIcon(texturePreviewIcons.get(value));
 			if (isSelected) {
 				setBorder(SELECTED_BORDER);

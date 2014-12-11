@@ -52,6 +52,17 @@ public final class S {
 			.getName());
 
 	/**
+	 * custom resource folder (empty = default)
+	 */
+	public static String resource_folder = "";
+
+	/**
+	 * Indicates that application was started from eclipse. Usually set using
+	 * "debug" command line flag.
+	 */
+	public static boolean fromEclipse = false;
+
+	/**
 	 * Holds the settings that are relevant to the server and must be kept
 	 * synchronized on server and client.
 	 * 
@@ -809,6 +820,12 @@ public final class S {
 		 */
 		public static long sv_game_restart_delay = 5000;
 
+		/**
+		 * Determines if all rounds are played although the winner is already
+		 * fix.
+		 */
+		public static boolean gm_edura_play_all_rounds = false;
+
 	}
 
 	/**
@@ -837,12 +854,6 @@ public final class S {
 		public static boolean windowed = false;
 
 		public static boolean debug_render_shapes = false;
-
-		/**
-		 * Indicates that resources should be loaded from jar instead of data/
-		 * folder.
-		 */
-		public static boolean localres = false;
 	}
 
 	/**

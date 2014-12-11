@@ -77,9 +77,8 @@ public class NotificationPanel extends RenderedGuiObject {
 				int stringWidth = font.getWidth(messageBuffer[i].message);
 				x = (screenWidth - stringWidth) / 2;
 				Color color = new Color(1f, 1f, 1f, messageBuffer[i].alpha);
-				g2d.setColor(color);
 				font.drawString(x, y + i * font.getLineHeight(),
-						messageBuffer[i].message);
+						messageBuffer[i].message, color);
 			}
 		}
 
@@ -124,9 +123,10 @@ public class NotificationPanel extends RenderedGuiObject {
 	}
 
 	@Override
-	public void onGuiSizeChanged(int newWidth, int newHeight) {
+	public boolean init(Graphics g, int windowWidth, int windowHeight) {
 		y = Y_INSET;
-		screenWidth = newWidth;
+		screenWidth = windowWidth;
+		return true;
 	}
 
 	@Override
@@ -178,7 +178,7 @@ public class NotificationPanel extends RenderedGuiObject {
 
 	@Override
 	public void onItemSlotChanged(SetItemSlotEvent event) {
-		if (event.getOwner() != getInfo().getOwnerID())
+		if (event.getOwner() != getInfo().getOwnerID() || !event.isNew())
 			return;
 		int slot = event.getItemSlot();
 		try {

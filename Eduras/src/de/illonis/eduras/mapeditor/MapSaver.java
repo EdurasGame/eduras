@@ -127,11 +127,9 @@ public final class MapSaver {
 				break;
 			case PORTAL:
 				Portal portal = (Portal) object;
-				if (portal.getPartnerPortal() == null) {
-					throw new EditorException("Portal has no partner.");
+				if (portal.getPartnerPortal() != null) {
+					line += ", *" + portal.getPartnerPortal().getRefName();
 				}
-
-				line += ", *" + portal.getPartnerPortal().getRefName();
 				break;
 			default:
 				break;

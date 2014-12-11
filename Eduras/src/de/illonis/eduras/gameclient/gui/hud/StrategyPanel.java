@@ -52,10 +52,11 @@ public class StrategyPanel extends ClickableGuiElement {
 	}
 
 	@Override
-	public void onGuiSizeChanged(int newWidth, int newHeight) {
-		screenY = newHeight - GameRenderer.getRenderScale() * MiniMap.SIZE;
-		scaledWidth = newWidth;
+	public boolean init(Graphics g, int windowWidth, int windowHeight) {
+		screenY = windowHeight - GameRenderer.getRenderScale() * MiniMap.SIZE;
+		scaledWidth = windowWidth;
 		bounds.setBounds(screenX, screenY, scaledWidth, scaledHeight);
+		return true;
 	}
 
 	@Override

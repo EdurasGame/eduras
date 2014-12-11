@@ -17,7 +17,6 @@ import de.illonis.eduras.gameclient.gui.game.GameRenderer;
  */
 public class TipPanel extends RenderedGuiObject {
 
-	private final static int Y_INSET = 50;
 	private final static long DEFAULT_DISPLAY_TIME = 3000;
 	private String message;
 	private long step, last, remaining;
@@ -41,9 +40,8 @@ public class TipPanel extends RenderedGuiObject {
 		if (!message.isEmpty()) {
 			step = System.currentTimeMillis() - last;
 			remaining -= step;
-			g2d.setColor(Color.white);
 			FontCache.getFont(FontKey.SMALL_FONT, g2d).drawString(screenX,
-					screenY, message);
+					screenY, message, Color.white);
 			if (remaining <= 0) {
 				message = "";
 			} else {
@@ -67,8 +65,10 @@ public class TipPanel extends RenderedGuiObject {
 	}
 
 	@Override
-	public void onGuiSizeChanged(int newWidth, int newHeight) {
-		screenY = newHeight - MiniMap.SIZE * GameRenderer.getRenderScale() - 20;
+	public boolean init(Graphics g, int windowWidth, int windowHeight) {
+		screenY = windowHeight - MiniMap.SIZE * GameRenderer.getRenderScale()
+				- 20;
+		return true;
 	}
 
 	@Override

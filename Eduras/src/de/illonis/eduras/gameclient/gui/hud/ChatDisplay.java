@@ -69,8 +69,9 @@ public class ChatDisplay extends RenderedGuiObject {
 	}
 
 	@Override
-	public void onGuiSizeChanged(int newWidth, int newHeight) {
-		screenY = newHeight - MiniMap.SIZE * GameRenderer.getRenderScale();
-		screenX = newWidth * 2 / 3;
+	public boolean init(Graphics g, int windowWidth, int windowHeight) {
+		screenY = windowHeight - MiniMap.SIZE * GameRenderer.getRenderScale();
+		screenX = ((float) windowWidth * 2) / 3;
+		return true;
 	}
 }

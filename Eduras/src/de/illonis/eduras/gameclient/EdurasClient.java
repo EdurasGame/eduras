@@ -3,6 +3,9 @@ package de.illonis.eduras.gameclient;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Field;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.LinkedList;
@@ -63,7 +66,6 @@ public class EdurasClient {
 		Thread.setDefaultUncaughtExceptionHandler(new EdurasUncaughtExceptionHandler(
 				L));
 
-		boolean debug = false;
 		// arguments are of form <parametername>=<parametervalue>
 		List<Pair<String, String>> parameters = new LinkedList<Pair<String, String>>();
 		for (int i = 0; i < args.length; i++) {
@@ -119,6 +121,18 @@ public class EdurasClient {
 					return;
 				}
 				break;
+			case "resfolder":
+				Path path = Paths.get(parameterValue);
+				if (!Files.exists(path) || !Files.isDirectory(path)) {
+					L.log(Level.SEVERE,
+							"Custom resource folder does not exist or is not a directory: "
+									+ path.toString() + ". Using default one");
+				} else {
+					S.resource_folder = parameterValue;
+					L.log(Level.WARNING, "Using custom folder for resources: "
+							+ path.toString());
+				}
+				break;
 			case "betauser":
 				betaUser = parameterValue;
 				break;
@@ -129,8 +143,7 @@ public class EdurasClient {
 				logLimit = Level.parse(parameterValue);
 				break;
 			case "debug":
-				debug = true;
-				S.Client.localres = true;
+				S.fromEclipse = true;
 				break;
 			case "serverip":
 				serverIp = parameterValue;
@@ -165,7 +178,7 @@ public class EdurasClient {
 			L.log(Level.SEVERE, "Can not create data folder.");
 		}
 
-		if (!debug)
+		if (!S.fromEclipse)
 			System.setProperty("org.lwjgl.librarypath", ResourceManager
 					.resourceToPath(ResourceType.NATIVE_LIBRARY, "").toString());
 		EdurasSlickClient client = new EdurasSlickClient();

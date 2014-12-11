@@ -27,7 +27,9 @@ public class TeamScoreDisplay extends RenderedGuiObject {
 
 	private final static Logger L = EduLog.getLoggerFor(TeamScoreDisplay.class
 			.getName());
-	private int windowWidth = 0;
+	private final String middle = " : ";
+	private float centerX, y;
+	private Font font;
 
 	protected TeamScoreDisplay(UserInterface gui) {
 		super(gui);
@@ -38,21 +40,19 @@ public class TeamScoreDisplay extends RenderedGuiObject {
 
 	@Override
 	public void render(Graphics g) {
-		Font font = FontCache.getFont(FontKey.DEFAULT_FONT, g);
+
 		Statistic stats = getInfo().getStatistics();
 		List<Team> teams = new LinkedList<Team>(getInfo().getTeams());
 		if (teams.size() != 2)
 			return;
 		String left;
 		String right;
-		String middle = " : ";
+
 		left = teams.get(0).getName() + " "
 				+ stats.getScoreOfTeam(teams.get(0));
 		right = stats.getScoreOfTeam(teams.get(1)) + " "
 				+ teams.get(1).getName();
-		float y = screenY + font.getLineHeight();
-		screenX = (windowWidth - font.getWidth(middle)) / 2
-				- font.getWidth(left);
+		screenX = centerX - font.getWidth(left);
 		font.drawString(screenX, y, left, teams.get(0).getColor());
 		font.drawString(screenX + font.getWidth(left), y, middle, Color.white);
 		font.drawString(screenX + font.getWidth(left + middle), y, right, teams
@@ -65,8 +65,11 @@ public class TeamScoreDisplay extends RenderedGuiObject {
 	}
 
 	@Override
-	public void onGuiSizeChanged(int newWidth, int newHeight) {
+	public boolean init(Graphics g, int windowWidth, int windowHeight) {
+		font = FontCache.getFont(FontKey.DEFAULT_FONT, g);
 		screenY = 0;
-		windowWidth = newWidth;
+		centerX = (windowWidth - font.getWidth(middle)) / 2;
+		y = screenY + font.getLineHeight();
+		return true;
 	}
 }

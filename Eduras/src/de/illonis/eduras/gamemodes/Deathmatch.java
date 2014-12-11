@@ -123,8 +123,8 @@ public class Deathmatch extends BasicGameMode {
 		}
 
 		try {
+			gameInfo.getEventTriggerer().onRoundEnd(winnerId);
 			gameInfo.getEventTriggerer().onMatchEnd(winnerId);
-
 		} catch (NullPointerException e) {
 			// FIXME: Client should never trigger this.
 		}
@@ -351,7 +351,6 @@ public class Deathmatch extends BasicGameMode {
 						-player.getBlinksAvailable());
 			}
 		}
-
-		return false;
+		return true;
 	}
 }

@@ -57,6 +57,7 @@ public class DragSelectionRectangle extends RenderedGuiObject {
 	}
 
 	@Override
-	public void onGuiSizeChanged(int newWidth, int newHeight) {
+	public boolean init(Graphics g, int windowWidth, int windowHeight) {
+		return true;
 	}
 }

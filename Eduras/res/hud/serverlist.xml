@@ -12,14 +12,14 @@
 				textHAlign="left" height="23px" width="20%" />
 			<control id="#serverAddress" name="label" align="left"
 				textHAlign="left" height="23px" width="20%" />
-			<control id="#serverStatus" name="label" align="left"
-				textHAlign="left" height="23px" width="10%" />
 			<control id="#serverPlayers" name="label" align="left"
 				textHAlign="left" height="23px" width="5%" />
 			<control id="#serverMap" name="label" align="left"
 				textHAlign="left" height="23px" width="20%" />
 			<control id="#serverGamemode" name="label" align="left"
 				textHAlign="left" height="23px" width="20%" />
+			<control id="#serverStatus" name="label" align="left"
+				textHAlign="left" height="23px" width="10%" />
 		</panel>
 		<interact onClick="listBoxItemClicked()" />
 		<effect>
@@ -29,6 +29,17 @@
 				color="#fc0f" neverStopRendering="true" timeType="infinite" />
 		</effect>
 	</controlDefinition>
+	<popup id="incompatibleVersionPopup" childLayout="center" backgroundColor="#000a">
+		<panel style="nifty-panel-simple" childLayout="vertical" padding="18px,28px,40px,16px" width="50%" height="30%" align="center" valign="center">
+		    <control id="versionPopupLabel" wrap="true" width="*" type="label" font="aurulent-sans-16.fnt" color="#000f"
+											text="Your client version does not match version on selected server.&#10;hi" margin="5px" />
+		    <control type="button" id="popupOkButton" font="aurulent-sans-16.fnt"
+					color="#ffff" label="Ok" align="center">
+					<interact onClick="closeVersionPopup()" />
+				</control>
+		    
+		</panel>
+	</popup>
 	<screen id="serverlist"
 		controller="de.illonis.eduras.gameclient.gui.hud.nifty.ServerListController">
 		<layer id="progressLayer" childLayout="vertical">

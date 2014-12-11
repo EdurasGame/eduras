@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.lwjgl.opengl.Display;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Font;
 import org.newdawn.slick.Graphics;
@@ -17,7 +16,7 @@ import de.illonis.eduras.Statistic;
 import de.illonis.eduras.Statistic.PlayerStatEntry;
 import de.illonis.eduras.Statistic.StatsProperty;
 import de.illonis.eduras.Team;
-import de.illonis.eduras.events.MatchEndEvent;
+import de.illonis.eduras.events.RoundEndEvent;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
 import de.illonis.eduras.exceptions.PlayerHasNoTeamException;
 import de.illonis.eduras.gameclient.datacache.CacheException;
@@ -114,31 +113,6 @@ public class StatisticsWindow extends RenderedGuiObject {
 	public void render(Graphics g2d) {
 		if (!visible)
 			return;
-		if (artwork == null) {
-			try {
-				largeFont = FontCache.getFont(FontKey.BIG_FONT, g2d);
-				font = FontCache.getFont(FontKey.DEFAULT_FONT, g2d);
-				lineHeight = font.getLineHeight() + 5;
-				artwork = ImageCache.getGuiImage(ImageKey.STATISTICS_BG);
-				width = artwork.getWidth();
-				height = artwork.getHeight();
-				sideInset = Math.round(10 * GameRenderer.getRenderScale());
-				screenX = (Display.getWidth() - width) / 2;
-				screenY = (Display.getHeight() - height) / 2;
-				topInset = Math.round(60 * GameRenderer.getRenderScale());
-				int statusColumn = width - sideInset
-						- font.getWidth(InteractMode.MODE_STRATEGY.name());
-				int killsdeathColumnWidth = largeFont.getWidth("Deaths");
-				xPositions = new int[] { sideInset,
-						statusColumn - killsdeathColumnWidth * 2 - sideInset,
-						statusColumn - killsdeathColumnWidth - sideInset,
-						statusColumn };
-
-			} catch (CacheException e) {
-				L.log(Level.SEVERE, "error loading statwindow background", e);
-				return;
-			}
-		}
 		g2d.drawImage(artwork, screenX, screenY);
 		drawHeader();
 
@@ -264,12 +238,35 @@ public class StatisticsWindow extends RenderedGuiObject {
 	}
 
 	@Override
-	public void onGuiSizeChanged(int newWidth, int newHeight) {
-		// change position so window is centered again
+	public boolean init(Graphics g, int windowWidth, int windowHeight) {
+		try {
+			largeFont = FontCache.getFont(FontKey.BIG_FONT, g);
+			font = FontCache.getFont(FontKey.DEFAULT_FONT, g);
+			lineHeight = font.getLineHeight() + 5;
+			artwork = ImageCache.getGuiImage(ImageKey.STATISTICS_BG);
+			width = artwork.getWidth();
+			height = artwork.getHeight();
+			sideInset = Math.round(10 * GameRenderer.getRenderScale());
+			screenX = (windowWidth - width) / 2;
+			screenY = (windowHeight - height) / 2;
+			topInset = Math.round(60 * GameRenderer.getRenderScale());
+			int statusColumn = width - sideInset
+					- font.getWidth(InteractMode.MODE_STRATEGY.name());
+			int killsdeathColumnWidth = largeFont.getWidth("Deaths");
+			xPositions = new int[] { sideInset,
+					statusColumn - killsdeathColumnWidth * 2 - sideInset,
+					statusColumn - killsdeathColumnWidth - sideInset,
+					statusColumn };
+
+		} catch (CacheException e) {
+			L.log(Level.SEVERE, "error loading statwindow background", e);
+			return false;
+		}
+		return true;
 	}
 
 	@Override
-	public void onMatchEnd(MatchEndEvent event) {
+	public void onRoundEnd(RoundEndEvent event) {
 		Thread t = new Thread(delayedHider);
 		t.setName("DelayedStatHider");
 		storedStats = getInfo().getStatistics().copy();

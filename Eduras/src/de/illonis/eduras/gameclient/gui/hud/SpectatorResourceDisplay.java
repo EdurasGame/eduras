@@ -3,6 +3,8 @@ package de.illonis.eduras.gameclient.gui.hud;
 import java.util.LinkedList;
 import java.util.logging.Logger;
 
+import org.newdawn.slick.Graphics;
+
 import de.illonis.edulog.EduLog;
 import de.illonis.eduras.Team;
 import de.illonis.eduras.events.SetTeamResourceEvent;
@@ -31,9 +33,10 @@ public class SpectatorResourceDisplay extends ResourceDisplay {
 	}
 
 	@Override
-	public void onGuiSizeChanged(int newWidth, int newHeight) {
+	public boolean init(Graphics g, int windowWidth, int windowHeight) {
 		screenY = 10;
-		screenX = newWidth / 4 + (index * (newWidth / 2));
+		screenX = windowWidth / 4 + (index * (windowWidth / 2));
+		return super.init(g, windowWidth, windowHeight);
 	}
 
 	@Override

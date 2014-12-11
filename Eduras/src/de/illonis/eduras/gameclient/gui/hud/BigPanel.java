@@ -16,7 +16,6 @@ import de.illonis.eduras.events.RoundEndEvent;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
 import de.illonis.eduras.gameclient.datacache.FontCache;
 import de.illonis.eduras.gameclient.datacache.FontCache.FontKey;
-import de.illonis.eduras.gameclient.gui.hud.nifty.GameState;
 import de.illonis.eduras.gamemodes.Deathmatch;
 import de.illonis.eduras.gamemodes.TeamDeathmatch;
 
@@ -36,7 +35,6 @@ public class BigPanel extends RenderedGuiObject {
 	private int width;
 	private float alpha;
 	private Font font;
-	private boolean fontLoaded = false;
 
 	/**
 	 * @param gui
@@ -45,21 +43,16 @@ public class BigPanel extends RenderedGuiObject {
 	public BigPanel(UserInterface gui) {
 		super(gui);
 		message = "";
-		setVisibleForSpectator(true);
+		visibleForSpectator = true;
 		last = System.currentTimeMillis();
-		font = GameState.getBigNoteFont();
 	}
 
 	@Override
 	public void render(Graphics g2d) {
-		if (!fontLoaded) {
-			fontLoaded = true;
-			font = FontCache.getFont(FontKey.HUGE_FONT, g2d);
-		}
 		checkRemaining();
 		if (!message.isEmpty()) {
-			g2d.setColor(new Color(1f, 1f, 1f, alpha));
-			font.drawString(screenX, screenY, message);
+			font.drawString(screenX, screenY, message, new Color(1f, 1f, 1f,
+					alpha));
 		}
 	}
 
@@ -75,7 +68,12 @@ public class BigPanel extends RenderedGuiObject {
 		this.message = text;
 		remaining = DEFAULT_DISPLAY_TIME;
 		last = System.currentTimeMillis();
-		int w = font.getWidth(message);
+		int w;
+		if (font == null) {
+			w = width / 2;
+		} else {
+			w = font.getWidth(message);
+		}
 		screenX = (width - w) / 2;
 		alpha = 1f;
 	}
@@ -104,19 +102,16 @@ public class BigPanel extends RenderedGuiObject {
 	@Override
 	public void onMatchEnd(MatchEndEvent event) {
 		int winnerId = event.getWinnerId();
-
 		announceWinner("Match", winnerId);
 	}
 
 	@Override
 	public void onRoundEnd(RoundEndEvent event) {
 		int winnerId = event.getWinnerId();
-
 		announceWinner("Round", winnerId);
 	}
 
 	private void announceWinner(String winnerOfWhat, int winnerId) {
-
 		if (winnerId == -1) {
 			setMessage(winnerOfWhat + " Draw");
 			return;
@@ -141,9 +136,10 @@ public class BigPanel extends RenderedGuiObject {
 	}
 
 	@Override
-	public void onGuiSizeChanged(int newWidth, int newHeight) {
-		this.width = newWidth;
-		screenY = newHeight / 3;
+	public boolean init(Graphics g, int windowWidth, int windowHeight) {
+		this.width = windowWidth;
+		screenY = windowHeight / 3;
+		font = FontCache.getFont(FontKey.HUGE_FONT, g);
+		return true;
 	}
-
 }

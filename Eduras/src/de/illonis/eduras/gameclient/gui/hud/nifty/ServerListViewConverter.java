@@ -64,6 +64,8 @@ public class ServerListViewConverter implements
 			serverAddressRenderer.setText("");
 			serverStatusRenderer.setText("");
 			serverPlayersRenderer.setText("");
+			mapNameRenderer.setText("");
+			gameModeNameRenderer.setText("");
 		}
 	}
 

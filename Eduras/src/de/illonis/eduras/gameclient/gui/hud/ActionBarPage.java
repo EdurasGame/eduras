@@ -211,17 +211,19 @@ public class ActionBarPage extends ClickableGuiElement implements
 	}
 
 	@Override
-	public void onGuiSizeChanged(int newWidth, int newHeight) {
-		if (resIcon == null) {
-			try {
-				resIcon = ImageCache.getGuiImage(ImageKey.RESOURCE_ICON_SMALL);
-			} catch (CacheException e) {
-			}
+	public boolean init(Graphics g, int windowWidth, int windowHeight) {
+		try {
+			resIcon = ImageCache.getGuiImage(ImageKey.RESOURCE_ICON_SMALL);
+		} catch (CacheException e) {
+			L.log(Level.SEVERE, "Could not find small resource icon", e);
+			return false;
 		}
+
 		float scale = GameRenderer.getRenderScale();
 		screenX = MiniMap.SIZE * scale + buttonSize;
-		screenY = newHeight - MiniMap.SIZE * scale + buttonSize * index;
+		screenY = windowHeight - MiniMap.SIZE * scale + buttonSize * index;
 		updateBounds();
+		return true;
 	}
 
 	@Override

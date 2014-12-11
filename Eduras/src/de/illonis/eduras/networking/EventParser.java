@@ -296,7 +296,8 @@ public class EventParser implements EventHandler {
 			case SET_ITEM_SLOT:
 				logic.onGameEventAppeared(new SetItemSlotEvent((Integer) event
 						.getArgument(0), (Integer) event.getArgument(1),
-						(Integer) event.getArgument(2)));
+						(Integer) event.getArgument(2), (boolean) (event
+								.getArgument(3))));
 				break;
 			case ITEM_CD_START:
 				logic.onGameEventAppeared(new ItemEvent(

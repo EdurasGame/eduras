@@ -27,6 +27,10 @@ public abstract class ResourceDisplay extends RenderedGuiObject {
 			.getName());
 
 	protected int resAmount;
+	private Image icon;
+	private Font font;
+	private float textX;
+	private float iconY;
 
 	protected ResourceDisplay(UserInterface gui) {
 		super(gui);
@@ -35,18 +39,21 @@ public abstract class ResourceDisplay extends RenderedGuiObject {
 
 	@Override
 	public void render(Graphics g) {
-		Image i = null;
+		g.drawImage(icon, screenX, iconY);
+		font.drawString(textX, screenY, resAmount + "", Color.white);
+	}
+
+	@Override
+	public boolean init(Graphics g, int windowWidth, int windowHeight) {
+		font = FontCache.getFont(FontKey.DEFAULT_FONT, g);
 		try {
-			i = ImageCache.getGuiImage(ImageKey.RESOURCE_ICON);
+			icon = ImageCache.getGuiImage(ImageKey.RESOURCE_ICON);
 		} catch (CacheException e) {
-			L.log(Level.WARNING, "Resource icon not found.", e);
+			L.log(Level.SEVERE, "Resource icon not found.", e);
+			return false;
 		}
-		if (i == null)
-			return;
-		Font font = FontCache.getFont(FontKey.DEFAULT_FONT, g);
-		g.drawImage(i, screenX, screenY
-				+ (font.getLineHeight() - i.getHeight()) / 2);
-		g.setColor(Color.white);
-		font.drawString(screenX + i.getWidth() + 3, screenY, resAmount + "");
+		iconY = screenY + (font.getLineHeight() - icon.getHeight()) / 2;
+		textX = screenX + icon.getWidth() + 3;
+		return true;
 	}
 }

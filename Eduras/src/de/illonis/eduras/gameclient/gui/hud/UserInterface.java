@@ -2,9 +2,15 @@ package de.illonis.eduras.gameclient.gui.hud;
 
 import java.awt.image.BufferedImage;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.TimerTask;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
+import org.newdawn.slick.Graphics;
+
+import de.illonis.edulog.EduLog;
 import de.illonis.eduras.gameclient.ChatCache;
 import de.illonis.eduras.gameclient.GuiInternalEventListener;
 import de.illonis.eduras.gameclient.gui.HudNotifier;
@@ -13,7 +19,6 @@ import de.illonis.eduras.gameclient.gui.game.GameCamera;
 import de.illonis.eduras.gameclient.gui.game.GamePanelLogic;
 import de.illonis.eduras.gameclient.gui.game.GameRenderer;
 import de.illonis.eduras.gameclient.gui.game.GuiClickReactor;
-import de.illonis.eduras.gameclient.gui.game.GuiResizeListener;
 import de.illonis.eduras.gameclient.gui.game.TooltipHandler;
 import de.illonis.eduras.gameclient.gui.game.TooltipTriggererNotifier;
 import de.illonis.eduras.logicabstraction.EdurasInitializer;
@@ -27,7 +32,9 @@ import de.illonis.eduras.networking.ClientRole;
  * @author illonis
  * 
  */
-public class UserInterface implements GuiResizeListener {
+public class UserInterface {
+
+	private final Logger L = EduLog.getLoggerFor(UserInterface.class.getName());
 
 	private static final long PING_TIME = 2000;
 
@@ -235,10 +242,15 @@ public class UserInterface implements GuiResizeListener {
 		this.tooltipHandler = h;
 	}
 
-	@Override
-	public void onGuiSizeChanged(int width, int height) {
-		for (RenderedGuiObject obj : uiObjects) {
-			obj.onGuiSizeChanged(width, height);
+	public void init(Graphics g, int width, int height) {
+		for (Iterator<RenderedGuiObject> iterator = uiObjects.iterator(); iterator
+				.hasNext();) {
+			RenderedGuiObject obj = iterator.next();
+			if (!obj.init(g, width, height)) {
+				L.log(Level.INFO, "Removing object that could not be loaded: "
+						+ obj.getClass().getName());
+				iterator.remove();
+			}
 		}
 	}
 

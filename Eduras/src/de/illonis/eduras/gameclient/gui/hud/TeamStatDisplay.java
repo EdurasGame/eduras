@@ -27,7 +27,9 @@ public class TeamStatDisplay extends RenderedGuiObject {
 
 	private final static Logger L = EduLog.getLoggerFor(TeamStatDisplay.class
 			.getName());
-	private int windowWidth = 0;
+	private Font font, bigFont;
+	private final String middle = ":";
+	private float centerX;
 
 	protected TeamStatDisplay(UserInterface gui) {
 		super(gui);
@@ -38,19 +40,16 @@ public class TeamStatDisplay extends RenderedGuiObject {
 
 	@Override
 	public void render(Graphics g) {
-		Font font = FontCache.getFont(FontKey.DEFAULT_FONT, g);
-		Font bigFont = FontCache.getFont(FontKey.HUGE_FONT, g);
+
 		Statistic stats = getInfo().getStatistics();
 		List<Team> teams = new LinkedList<Team>(getInfo().getTeams());
 		if (teams.size() != 2)
 			return;
 		String left = stats.getKillsByTeam(teams.get(0)) + "";
 		String right = stats.getKillsByTeam(teams.get(1)) + "";
-		String middle = ":";
-		float y = screenY + 2 * font.getLineHeight();
-		screenX = (windowWidth - bigFont.getWidth(middle)) / 2
-				- bigFont.getWidth(left);
-		bigFont.drawString(screenX, y, left + middle + right, Color.white);
+
+		screenX = centerX - bigFont.getWidth(left);
+		bigFont.drawString(screenX, screenY, left + middle + right, Color.white);
 	}
 
 	@Override
@@ -60,8 +59,11 @@ public class TeamStatDisplay extends RenderedGuiObject {
 	}
 
 	@Override
-	public void onGuiSizeChanged(int newWidth, int newHeight) {
-		screenY = 0;
-		windowWidth = newWidth;
+	public boolean init(Graphics g, int windowWidth, int windowHeight) {
+		font = FontCache.getFont(FontKey.DEFAULT_FONT, g);
+		bigFont = FontCache.getFont(FontKey.HUGE_FONT, g);
+		centerX = (windowWidth - bigFont.getWidth(middle)) / 2;
+		screenY = 2 * font.getLineHeight();
+		return true;
 	}
 }

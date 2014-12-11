@@ -242,8 +242,8 @@ public class HudNotifier implements GameEventListener {
 			GameEventListener obj = uiObjects.get(i);
 			obj.onInteractModeChanged(setModeEvent);
 		}
-		for (int i = 0; i < uiObjects.size(); i++) {
-			GameEventListener obj = uiObjects.get(i);
+		for (int i = 0; i < otherObjects.size(); i++) {
+			GameEventListener obj = otherObjects.get(i);
 			obj.onInteractModeChanged(setModeEvent);
 		}
 	}

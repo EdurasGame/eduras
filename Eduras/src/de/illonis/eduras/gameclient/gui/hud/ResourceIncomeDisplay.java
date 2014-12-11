@@ -41,9 +41,10 @@ public class ResourceIncomeDisplay extends RenderedGuiObject {
 	}
 
 	@Override
-	public void onGuiSizeChanged(int newWidth, int newHeight) {
+	public boolean init(Graphics g, int windowWidth, int windowHeight) {
 		screenY = 40;
-		screenX = newWidth / 4 + (index * (newWidth / 2));
+		screenX = windowWidth / 4 + (index * (windowWidth / 2));
+		return true;
 	}
 
 	@Override

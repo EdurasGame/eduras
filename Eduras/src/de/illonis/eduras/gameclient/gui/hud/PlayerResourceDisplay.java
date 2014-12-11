@@ -3,6 +3,8 @@ package de.illonis.eduras.gameclient.gui.hud;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.newdawn.slick.Graphics;
+
 import de.illonis.edulog.EduLog;
 import de.illonis.eduras.Player;
 import de.illonis.eduras.events.SetTeamResourceEvent;
@@ -39,9 +41,10 @@ public class PlayerResourceDisplay extends ResourceDisplay {
 	}
 
 	@Override
-	public void onGuiSizeChanged(int newWidth, int newHeight) {
-		screenX = newWidth * 3 / 4;
+	public boolean init(Graphics g, int windowWidth, int windowHeight) {
+		screenX = windowWidth * 3 / 4;
 		screenY = 10;
+		return super.init(g, windowWidth, windowHeight);
 	}
 
 	@Override
