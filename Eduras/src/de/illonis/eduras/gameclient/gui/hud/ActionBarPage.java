@@ -49,6 +49,7 @@ public class ActionBarPage extends ClickableGuiElement implements
 	private final float buttonSize;
 	private boolean activePage;
 	private final ActionBar bar;
+	private int resources;
 
 	/**
 	 * Creates a new actionbar.
@@ -65,6 +66,7 @@ public class ActionBarPage extends ClickableGuiElement implements
 	public ActionBarPage(int index, UserInterface gui, GamePanelReactor reactor) {
 		super(gui);
 		bar = gui.getActionBar();
+		resources = 0;
 		this.index = index;
 		this.reactor = reactor;
 		buttons = new LinkedList<ActionButton>();
@@ -133,13 +135,12 @@ public class ActionBarPage extends ClickableGuiElement implements
 	@Override
 	public void render(Graphics g) {
 		Font font = FontCache.getFont(FontKey.SMALL_FONT, g);
-		int resources = 0;
 		try {
 			resources = getInfo().getPlayer().getTeam().getResource();
 		} catch (ObjectNotFoundException e) {
 			return;
 		} catch (PlayerHasNoTeamException e) {
-			L.log(Level.SEVERE, "Cannot find team!!", e);
+			L.log(Level.SEVERE, "Cannot find team while drawing actionbarPage", e);
 		}
 		if (resIcon == null) {
 			try {

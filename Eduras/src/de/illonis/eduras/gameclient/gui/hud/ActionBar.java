@@ -11,6 +11,7 @@ import org.newdawn.slick.Graphics;
 import de.illonis.edulog.EduLog;
 import de.illonis.eduras.events.DeathEvent;
 import de.illonis.eduras.events.MatchEndEvent;
+import de.illonis.eduras.events.RoundEndEvent;
 import de.illonis.eduras.events.SetInteractModeEvent;
 import de.illonis.eduras.gameclient.ClientData;
 import de.illonis.eduras.gameclient.GamePanelReactor;
@@ -126,6 +127,11 @@ public class ActionBar extends RenderedGuiObject {
 
 	@Override
 	public void onMatchEnd(MatchEndEvent event) {
+		data.setCurrentActionSelected(-1);
+	}
+	
+	@Override
+	public void onRoundEnd(RoundEndEvent event) {
 		data.setCurrentActionSelected(-1);
 	}
 
