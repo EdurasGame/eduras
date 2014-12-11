@@ -16,7 +16,7 @@ import de.illonis.eduras.Statistic;
 import de.illonis.eduras.Statistic.PlayerStatEntry;
 import de.illonis.eduras.Statistic.StatsProperty;
 import de.illonis.eduras.Team;
-import de.illonis.eduras.events.MatchEndEvent;
+import de.illonis.eduras.events.RoundEndEvent;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
 import de.illonis.eduras.exceptions.PlayerHasNoTeamException;
 import de.illonis.eduras.gameclient.datacache.CacheException;
@@ -261,7 +261,7 @@ public class StatisticsWindow extends RenderedGuiObject {
 	}
 
 	@Override
-	public void onMatchEnd(MatchEndEvent event) {
+	public void onRoundEnd(RoundEndEvent event) {
 		Thread t = new Thread(delayedHider);
 		t.setName("DelayedStatHider");
 		storedStats = getInfo().getStatistics().copy();

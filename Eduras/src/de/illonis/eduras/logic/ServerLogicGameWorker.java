@@ -32,6 +32,7 @@ public class ServerLogicGameWorker extends LogicGameWorker {
 
 		if (gameInformation.getGameSettings().getRemainingTime() <= 0) {
 			gameInformation.getGameSettings().getGameMode().onTimeUp();
+			gameInformation.getGameSettings().resetRemainingTime();
 		}
 
 		for (DelayedLogicAction action : DelayedActionQueue.getActions()) {
