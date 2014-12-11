@@ -820,6 +820,12 @@ public final class S {
 		 */
 		public static long sv_game_restart_delay = 5000;
 
+		/**
+		 * Determines if all rounds are played although the winner is already
+		 * fix.
+		 */
+		public static boolean gm_edura_play_all_rounds = false;
+
 	}
 
 	/**

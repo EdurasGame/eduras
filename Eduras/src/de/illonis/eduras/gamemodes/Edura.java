@@ -389,9 +389,16 @@ public class Edura extends TeamDeathmatch {
 			respawnTimer = null;
 		}
 
-		if (roundsWonTeamA + roundsWonTeamB >= S.Server.gm_edura_maxrounds) {
-			int winnerId = roundsWonTeamA > roundsWonTeamB ? getTeamA()
-					.getTeamId() : getTeamB().getTeamId();
+		if (roundsWonTeamA + roundsWonTeamB >= S.Server.gm_edura_maxrounds
+				|| (!S.Server.gm_edura_play_all_rounds && (roundsWonTeamA > S.Server.gm_edura_maxrounds / 2 || roundsWonTeamB > S.Server.gm_edura_maxrounds / 2))) {
+			int winnerId = -1;
+			if (roundsWonTeamA > roundsWonTeamB) {
+				winnerId = getTeamA().getTeamId();
+			}
+			if (roundsWonTeamB > roundsWonTeamA) {
+				winnerId = getTeamB().getTeamId();
+			}
+
 			roundsWonTeamA = 0;
 			roundsWonTeamB = 0;
 			gameInfo.getEventTriggerer().onMatchEnd(winnerId);
