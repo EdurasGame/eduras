@@ -37,23 +37,7 @@ public abstract class DialoguePopup extends ClickableGuiElement implements
 		return bounds;
 	}
 
-	@Override
-	public void render(Graphics g) {
-		if (isVisible()) {
-			g.setColor(Color.white);
-			g.fill(bounds);
-			for (AnswerButton answerButton : answerButtons) {
-				answerButton.render(g);
-			}
-			font.drawString(screenX + 10, screenY + 5, text, Color.black);
-		}
-	}
-
-	@Override
-	public boolean init(Graphics g, int windowWidth, int windowHeight) {
-		screenX = (windowWidth - bounds.getWidth()) / 2;
-		screenY = (windowHeight - bounds.getHeight()) / 2;
-		font = FontCache.getFont(FontKey.DEFAULT_FONT, g);
+	protected void realign() {
 		int buttonWidthSum = 0;
 		for (AnswerButton answerButton : answerButtons) {
 			answerButton.setSize(font);
@@ -72,6 +56,27 @@ public abstract class DialoguePopup extends ClickableGuiElement implements
 					.setLocation(screenX + buttonWidthSum, screenY + height);
 			buttonWidthSum += 10 + answerButton.getWidth();
 		}
+	}
+
+	@Override
+	public void render(Graphics g) {
+		if (isVisible()) {
+			realign();
+			g.setColor(Color.white);
+			g.fill(bounds);
+			for (AnswerButton answerButton : answerButtons) {
+				answerButton.render(g);
+			}
+			font.drawString(screenX + 10, screenY + 5, text, Color.black);
+		}
+	}
+
+	@Override
+	public boolean init(Graphics g, int windowWidth, int windowHeight) {
+		screenX = (windowWidth - bounds.getWidth()) / 2;
+		screenY = (windowHeight - bounds.getHeight()) / 2;
+		font = FontCache.getFont(FontKey.DEFAULT_FONT, g);
+		realign();
 		return true;
 	}
 
