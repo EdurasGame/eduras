@@ -12,6 +12,7 @@ import de.illonis.eduras.Team;
 import de.illonis.eduras.gameclient.datacache.FontCache;
 import de.illonis.eduras.gameclient.datacache.FontCache.FontKey;
 import de.illonis.eduras.gameclient.gui.game.GameRenderer;
+import de.illonis.eduras.gamemodes.GameMode.GameModeNumber;
 import de.illonis.eduras.units.InteractMode;
 
 /**
@@ -60,7 +61,8 @@ public class TeamInfoDisplay extends RenderedGuiObject {
 
 	@Override
 	public void render(Graphics g) {
-		if (team == null)
+		if (team == null
+				|| getInfo().getGameMode().getNumber() == GameModeNumber.DEATHMATCH)
 			return;
 		Font font = FontCache.getFont(FontKey.DEFAULT_FONT, g);
 		float height = (2 * team.getPlayers().size() - 1)
@@ -103,6 +105,8 @@ public class TeamInfoDisplay extends RenderedGuiObject {
 
 	@Override
 	public void onTeamsSet(LinkedList<Team> teamList) {
+		if (getInfo().getGameMode().getNumber() == GameModeNumber.DEATHMATCH)
+			return;
 		LinkedList<Team> teams = new LinkedList<Team>(getInfo().getTeams());
 		if (teams.size() > index) {
 			setTeam(teams.get(index));
