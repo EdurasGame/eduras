@@ -3,6 +3,7 @@ package de.illonis.eduras.shapecreator.gui;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
+import java.io.IOException;
 import java.util.LinkedList;
 
 import javax.swing.AbstractAction;
@@ -33,14 +34,15 @@ public class VerticeListPanel extends ScrollablePanel implements
 
 	/**
 	 * Creates a new vertice list panel.
+	 * @throws IOException 
 	 */
-	public VerticeListPanel() {
+	public VerticeListPanel() throws IOException {
 		data = DataHolder.getInstance();
 		setLayout(new BorderLayout());
 		buildGui();
 	}
 
-	private void buildGui() {
+	private void buildGui() throws IOException {
 
 		verticeList = new JTable();
 

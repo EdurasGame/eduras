@@ -8,6 +8,9 @@ import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.SocketException;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -57,6 +60,7 @@ import de.illonis.eduras.serverconsole.ServerConsole;
 import de.illonis.eduras.settings.S;
 import de.illonis.eduras.utils.ReflectionTools;
 import de.illonis.eduras.utils.ResourceManager;
+import de.illonis.eduras.utils.ResourceManager.ResourceType;
 import de.illonis.eduras.utils.WebFetcher;
 
 /**
@@ -589,7 +593,19 @@ public class EdurasServer {
 						.parseBoolean(parameterValue));
 				break;
 			}
-
+			case "resfolder":
+				Path path = Paths.get(parameterValue);
+				if (!Files.exists(path) || !Files.isDirectory(path)) {
+					L.log(Level.SEVERE,
+							"Custom resource folder does not exist or is not a directory: "
+									+ path.toString()
+									+ ". Using default instead.");
+				} else {
+					S.resource_folder = parameterValue;
+					L.log(Level.WARNING, "Using custom folder for resources: "
+							+ path.toString());
+				}
+				break;
 			case "loglimit": {
 				logLimit = Level.parse(parameterValue);
 				break;
@@ -678,6 +694,13 @@ public class EdurasServer {
 
 		EduLog.setBasicLogLimit(logLimit);
 		EduLog.setConsoleLogLimit(logLimit);
+
+		Path folder = ResourceManager.resourceToPath(ResourceType.LIBRARY, "");
+		if (Files.exists(folder)) {
+			System.err.println("Resource folder does not exist: "
+					+ folder.toAbsolutePath());
+			System.exit(-1);
+		}
 
 		if (S.Server.exit_on_sysout) {
 			SysOutCatcher.startCatching();

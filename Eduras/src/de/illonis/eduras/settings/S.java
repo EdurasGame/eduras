@@ -52,6 +52,11 @@ public final class S {
 			.getName());
 
 	/**
+	 * custom resource folder (empty = default)
+	 */
+	public static String resource_folder = "";
+
+	/**
 	 * Holds the settings that are relevant to the server and must be kept
 	 * synchronized on server and client.
 	 * 
@@ -837,12 +842,6 @@ public final class S {
 		public static boolean windowed = false;
 
 		public static boolean debug_render_shapes = false;
-
-		/**
-		 * Indicates that resources should be loaded from jar instead of data/
-		 * folder.
-		 */
-		public static boolean localres = false;
 	}
 
 	/**

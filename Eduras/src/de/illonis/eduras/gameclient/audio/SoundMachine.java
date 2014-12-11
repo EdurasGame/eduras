@@ -10,7 +10,6 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.Sound;
 
 import de.illonis.edulog.EduLog;
-import de.illonis.eduras.settings.S;
 import de.illonis.eduras.utils.ResourceManager;
 import de.illonis.eduras.utils.ResourceManager.ResourceType;
 
@@ -67,17 +66,13 @@ public class SoundMachine {
 		if (!sounds.isEmpty())
 			throw new IllegalStateException("Sounds were already initialized.");
 		for (SoundType sound : SoundType.values()) {
-			if (S.Client.localres) {
-				sounds.put(sound, new Sound(localBaseFolder + sound.getFile()));
-			} else {
-				try (InputStream in = ResourceManager.openResource(
-						ResourceType.SOUND, sound.getFile())) {
-					sounds.put(sound, new Sound(in, sound.getFile()));
-					L.log(Level.INFO, "Loaded sound " + sound.getFile());
-				} catch (IOException e) {
-					L.log(Level.WARNING,
-							"Could not load sound " + sound.getFile(), e);
-				}
+			try (InputStream in = ResourceManager.openResource(
+					ResourceType.SOUND, sound.getFile())) {
+				sounds.put(sound, new Sound(in, sound.getFile()));
+				L.log(Level.INFO, "Loaded sound " + sound.getFile());
+			} catch (IOException e) {
+				L.log(Level.WARNING, "Could not load sound " + sound.getFile(),
+						e);
 			}
 		}
 	}
