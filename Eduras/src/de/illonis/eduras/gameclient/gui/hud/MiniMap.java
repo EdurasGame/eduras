@@ -70,7 +70,7 @@ public class MiniMap extends ClickableGuiElement {
 
 	final static int SIZE = 160;
 
-	private static final float PLAYER_EXTRA_SCALE = 6f;
+	private static final float PLAYER_EXTRA_SCALE = 0.7f;
 
 	private final Rectangle bounds;
 
@@ -376,8 +376,10 @@ public class MiniMap extends ClickableGuiElement {
 		float y = miniPos.y;
 
 		if (o instanceof PlayerMainFigure) {
-			float w = o.getShape().getWidth() * scale * PLAYER_EXTRA_SCALE;
-			float h = o.getShape().getHeight() * scale * PLAYER_EXTRA_SCALE;
+			float w = o.getShape().getWidth() * windowScale
+					* PLAYER_EXTRA_SCALE;
+			float h = o.getShape().getHeight() * windowScale
+					* PLAYER_EXTRA_SCALE;
 
 			synchronized (players) {
 				players.put(o.getId(), new MiniMapPlayer((PlayerMainFigure) o,
