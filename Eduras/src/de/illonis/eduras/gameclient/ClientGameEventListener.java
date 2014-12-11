@@ -107,6 +107,7 @@ public class ClientGameEventListener implements GameEventListener {
 
 	@Override
 	public void onItemSlotChanged(SetItemSlotEvent event) {
+		client.getLogic().onItemSlotChanged(event);
 		ui.onItemSlotChanged(event);
 		effects.onItemSlotChanged(event);
 	}

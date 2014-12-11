@@ -14,6 +14,7 @@ import de.illonis.eduras.chat.NotConnectedException;
 import de.illonis.eduras.chat.UserNotInRoomException;
 import de.illonis.eduras.events.ItemEvent;
 import de.illonis.eduras.events.SetInteractModeEvent;
+import de.illonis.eduras.events.SetItemSlotEvent;
 import de.illonis.eduras.exceptions.ActionFailedException;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
 import de.illonis.eduras.gameclient.ChatCache;
@@ -77,7 +78,6 @@ public class GamePanelLogic extends GameEventAdapter implements
 	@SuppressWarnings("javadoc")
 	public enum ClickState {
 		DEFAULT,
-		ITEM_SELECTED,
 		UNITSELECT_DRAGGING,
 		SELECT_BASE_FOR_REZZ,
 		SELECT_TARGET_FOR_HEAL,
@@ -188,6 +188,7 @@ public class GamePanelLogic extends GameEventAdapter implements
 	 * 
 	 * @return tooltip handler.
 	 */
+	@Override
 	public TooltipHandler getTooltipHandler() {
 		return userInterface.getTooltipHandler();
 	}
@@ -309,7 +310,6 @@ public class GamePanelLogic extends GameEventAdapter implements
 			return;
 		}
 		data.setCurrentItemSelected(item.getType());
-		currentClickState = ClickState.ITEM_SELECTED;
 	}
 
 	@Override
@@ -345,6 +345,21 @@ public class GamePanelLogic extends GameEventAdapter implements
 	@Override
 	public void onGameQuit() {
 		reactor.onGameQuit();
+	}
+
+	@Override
+	public void onItemSlotChanged(SetItemSlotEvent event) {
+		if (!event.isNew())
+			return;
+		try {
+			Item item = infoPro.getPlayer().getInventory()
+					.getItemAt(event.getItemSlot());
+			if (data.getCurrentItemSelected() == ObjectType.NO_OBJECT) {
+				data.setCurrentItemSelected(item.getType());
+			}
+		} catch (ItemSlotIsEmptyException | ObjectNotFoundException e) {
+			L.log(Level.SEVERE, "Could not find looted item.", e);
+		}
 	}
 
 	@Override
@@ -405,7 +420,6 @@ public class GamePanelLogic extends GameEventAdapter implements
 			return;
 		}
 		data.setCurrentItemSelected(item.getType());
-		currentClickState = ClickState.ITEM_SELECTED;
 
 	}
 

@@ -54,33 +54,18 @@ public class EgoModeMouseAdapter extends GuiMouseAdapter {
 	}
 
 	private void egoModeClick(int button, int x, int y, int clickCount) {
-		ClickState currentClickState = getPanelLogic().getClickState();
 		ObjectType currentItemSelected = getCurrentSelectedItemType();
 
 		// which mouse button?
 		switch (button) {
 		case Input.MOUSE_LEFT_BUTTON:
+			// if an item is selected...
+			if (currentItemSelected != ObjectType.NO_OBJECT) {
 
-			// which state are we in?
-			switch (currentClickState) {
-			case ITEM_SELECTED:
-				// if an item is selected...
-				if (currentItemSelected != ObjectType.NO_OBJECT) {
-
-					// use it instantly
-					itemUsed(currentItemSelected, new Vector2df(x, y), false);
-				}
-				fireButtonHold = true;
-				break;
-			case DEFAULT:
-				// TODO: Notify only elements that are really clicked.
-
-				// inGameClick(e.getPoint());
-				break;
-			default:
-				break;
-
+				// use it instantly
+				itemUsed(currentItemSelected, new Vector2df(x, y), false);
 			}
+			fireButtonHold = true;
 			break;
 
 		default:
