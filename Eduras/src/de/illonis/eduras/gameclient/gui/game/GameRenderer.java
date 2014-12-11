@@ -13,7 +13,6 @@ import java.util.logging.Logger;
 
 import org.lwjgl.opengl.Display;
 import org.newdawn.slick.Color;
-import org.newdawn.slick.Font;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
@@ -67,6 +66,7 @@ public class GameRenderer implements TooltipHandler {
 
 	private final GameCamera camera;
 	private final UserInterface gui;
+	private boolean ready;
 	private final Map<Integer, GameObject> objs;
 	private Tooltip tooltip;
 	private float scale;
@@ -86,8 +86,6 @@ public class GameRenderer implements TooltipHandler {
 			0.1f);
 
 	private static final Color SELECTION_CIRCLE_COLOR = Color.white;
-
-	private Font font;
 
 	/**
 	 * Creates a new renderer.
@@ -109,6 +107,7 @@ public class GameRenderer implements TooltipHandler {
 		this.camera = camera;
 		scale = 1;
 		objs = info.getGameObjects();
+		ready = false;
 		this.info = info;
 		this.gui = gui;
 		RendererTooltipHandler h = new RendererTooltipHandler(this);
@@ -158,8 +157,13 @@ public class GameRenderer implements TooltipHandler {
 	 */
 	public void render(GameContainer container, Graphics g) {
 
-		if (font == null)
-			font = g.getFont();
+		int width = container.getWidth();
+		int height = container.getHeight();
+		if (!ready) {
+			scale = getRenderScale();
+			gui.init(g, width, height);
+			ready = true;
+		}
 		try {
 			if (info.getPlayer().getPlayerMainFigure() == null) {
 				// wait for player
@@ -169,24 +173,15 @@ public class GameRenderer implements TooltipHandler {
 			// Waiting for player
 			return;
 		}
-		int width = container.getWidth();
-		int height = container.getHeight();
-		float newScale = getRenderScale();
 
 		g.setColor(Color.white);
 
 		clear(g, width, height);
 
-		if (newScale != 1.0f) {
-			g.scale(newScale, newScale);
+		if (scale != 1.0f) {
+			g.scale(scale, scale);
 		}
 
-		if (scale != newScale) {
-			gui.onGuiSizeChanged(width, height);
-			// camera.setSize(width, height); // maybe not?
-		}
-
-		scale = newScale;
 		adjustCamera();
 		g.translate(-camera.getX(), -camera.getY());
 		drawMap(g);

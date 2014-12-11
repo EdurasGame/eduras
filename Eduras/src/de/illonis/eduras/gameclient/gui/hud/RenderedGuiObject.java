@@ -16,8 +16,13 @@ import de.illonis.eduras.units.InteractMode;
  * An element that is part of the gui and is shown to end user (that means it is
  * rendered). Gui objects can receive events and handle them if they override
  * event listeners.<br>
+ * The element can be active in one or more {@link InteractMode}s. Use
+ * {@link #setActiveInteractModes(InteractMode...)} to specify them. By default,
+ * element is visible in all modes.<br>
+ * To hide the element in specific {@link GameMode}s, override
+ * {@link #isEnabledInGameMode(GameMode)}.<br>
  * Guielements can be selected to be invisible for spectators using
- * {@link #setVisibleForSpectator(boolean)}.
+ * {@link #setVisibleForSpectator(boolean)} .
  * 
  * @author illonis
  * 
@@ -46,8 +51,8 @@ public abstract class RenderedGuiObject extends GameEventAdapter implements
 		enabledModes = new LinkedList<InteractMode>();
 		screenX = screenY = 0;
 		visible = true;
-		gui.addElement(this);
 		zIndex = 0;
+		gui.addElement(this);
 	}
 
 	/**
@@ -144,15 +149,21 @@ public abstract class RenderedGuiObject extends GameEventAdapter implements
 	public abstract void render(Graphics g);
 
 	/**
-	 * Indicates that gui has changed and interface positions have to be
-	 * recalculated.
+	 * Called once when HUD is set up. The container size will not change while
+	 * in game.<br>
+	 * It is guaranteed that this will be called before the first call of
+	 * {@link #render(Graphics)} method and all fonts and images are cached.
 	 * 
-	 * @param newWidth
-	 *            new gui width.
-	 * @param newHeight
-	 *            new gui height.
+	 * @param g
+	 *            the graphics object, use to init fonts.
+	 * @param windowWidth
+	 *            the width of the game window.
+	 * @param windowHeight
+	 *            the height of the game window.
+	 * @return true if setup was successful, false when some error occured (e.g.
+	 *         an image was not found).
 	 */
-	public abstract void onGuiSizeChanged(int newWidth, int newHeight);
+	public abstract boolean init(Graphics g, int windowWidth, int windowHeight);
 
 	/**
 	 * Tells whether this GUI object shall be rendered in the given mode. The
@@ -185,7 +196,7 @@ public abstract class RenderedGuiObject extends GameEventAdapter implements
 	}
 
 	@Override
-	public int compareTo(RenderedGuiObject o) {
+	public final int compareTo(RenderedGuiObject o) {
 		return this.zIndex - o.zIndex;
 	}
 }

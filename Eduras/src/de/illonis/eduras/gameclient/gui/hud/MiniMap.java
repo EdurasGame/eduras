@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.lwjgl.opengl.Display;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.geom.Polygon;
@@ -67,6 +66,7 @@ public class MiniMap extends ClickableGuiElement {
 	private float scale;
 	private HashMap<Integer, NodeData> nodes;
 	float windowScale;
+	private float rectWidth, rectHeight, yDiff;
 
 	final static int SIZE = 160;
 
@@ -159,6 +159,7 @@ public class MiniMap extends ClickableGuiElement {
 		try {
 			player = getInfo().getPlayer().getPlayerMainFigure();
 		} catch (ObjectNotFoundException e) {
+			// ignore for spectator
 		}
 		List<MiniMapPlayer> ps = new LinkedList<MiniMapPlayer>(players.values());
 		for (int i = 0; i < ps.size(); i++) {
@@ -275,22 +276,21 @@ public class MiniMap extends ClickableGuiElement {
 		g.setColor(COLOR_MULTIPLIER);
 		// float minimapScale = getSize() /
 		// getInfo().getMapBounds().getHeight();
-		float minimapScale = scale;
-		float rectWidth = ImageResolution.WINDOWED.getWidth();
-		float ratio = (float) Display.getHeight() / Display.getWidth();
-		float rectHeight = rectWidth * ratio;
-		float yDiff = (ImageResolution.WINDOWED.getHeight() - rectHeight) / 2;
-		g.drawRect((viewPort.getX() + widthOffset) * minimapScale,
-				(viewPort.getY() + heightOffset + yDiff) * minimapScale
-						+ screenY, rectWidth * minimapScale, rectHeight
-						* minimapScale);
+		g.drawRect((viewPort.getX() + widthOffset) * scale, (viewPort.getY()
+				+ heightOffset + yDiff)
+				* scale + screenY, rectWidth * scale, rectHeight * scale);
 	}
 
 	@Override
-	public void onGuiSizeChanged(int newWidth, int newHeight) {
-		screenY = newHeight - getSize();
+	public boolean init(Graphics g, int windowWidth, int windowHeight) {
+		screenY = windowHeight - getSize();
 		bounds.setLocation(screenX, screenY);
 		relocateObjects();
+		rectWidth = ImageResolution.WINDOWED.getWidth();
+		float ratio = (float) windowHeight / windowWidth;
+		rectHeight = rectWidth * ratio;
+		yDiff = (ImageResolution.WINDOWED.getHeight() - rectHeight) / 2;
+		return true;
 	}
 
 	private void relocateObjects() {

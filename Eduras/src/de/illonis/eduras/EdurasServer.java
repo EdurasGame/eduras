@@ -670,8 +670,8 @@ public class EdurasServer {
 								e);
 					}
 				} else {
-					System.out.println("Unknown argument " + parameterName);
-					System.exit(-1);
+					L.log(Level.WARNING, "Ignoring unknown argument: "
+							+ parameterName + "=" + parameterValue);
 				}
 			}
 		}

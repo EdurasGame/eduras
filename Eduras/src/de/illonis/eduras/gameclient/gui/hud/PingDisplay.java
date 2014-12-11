@@ -25,15 +25,15 @@ public class PingDisplay extends RenderedGuiObject implements PingListener {
 
 	@Override
 	public void render(Graphics g2d) {
-		g2d.setColor(Color.white);
 		Font font = FontCache.getFont(FontKey.SMALL_FONT, g2d);
-		float x = screenX - font.getWidth(latency) - 5;
-		font.drawString(x, screenY + font.getLineHeight(), latency);
+		float x = screenX - font.getWidth(latency);
+		font.drawString(x, screenY + font.getLineHeight(), latency, Color.white);
 	}
 
 	@Override
-	public void onGuiSizeChanged(int newWidth, int newHeight) {
-		screenX = newWidth;
+	public boolean init(Graphics g, int windowWidth, int windowHeight) {
+		screenX = windowWidth - 5;
+		return true;
 	}
 
 	@Override

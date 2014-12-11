@@ -39,20 +39,18 @@ public class GameModeBar extends RenderedGuiObject {
 
 	@Override
 	public void render(Graphics g) {
-		g.setColor(Color.white);
 		FontCache.getFont(FontKey.DEFAULT_FONT, g).drawString(screenX + 10,
-				screenY + 10, mode);
+				screenY + 10, mode, Color.white);
 	}
 
 	@Override
-	public void onGuiSizeChanged(int newWidth, int newHeight) {
-		screenX = newWidth / 2;
+	public boolean init(Graphics g, int windowWidth, int windowHeight) {
+		screenX = windowWidth / 2;
+		return true;
 	}
 
 	@Override
 	public void onGameModeChanged(GameMode newMode) {
-		L.info("gamemode bar to: " + newMode);
-
 		mode = newMode.getName();
 	}
 

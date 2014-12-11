@@ -47,10 +47,8 @@ public class ItemDisplay extends RenderedGuiObject {
 	private final static float ITEM_ALPHA = 0.5f;
 	private final static Color COLOR_MULTIPLIER = new Color(1f, 1f, 1f,
 			ITEM_ALPHA);
-	private final static Color FONT_BACKGROUND = new Color(0f, 0f, 0f, .7f);
 	private final static int ITEM_GAP = 5;
 	public final static int BLOCKSIZE = 36;
-	private final static int FONT_PADDING = 2;
 
 	private final float buttonSize;
 	private final MiniMap minimap;
@@ -99,7 +97,8 @@ public class ItemDisplay extends RenderedGuiObject {
 	}
 
 	@Override
-	public void onGuiSizeChanged(int newWidth, int newHeight) {
+	public boolean init(Graphics g, int windowWidth, int windowHeight) {
+		return true;
 	}
 
 	@Override
@@ -268,7 +267,8 @@ public class ItemDisplay extends RenderedGuiObject {
 		}
 
 		@Override
-		public void onGuiSizeChanged(int newWidth, int newHeight) {
+		public boolean init(Graphics g, int windowWidth, int windowHeight) {
+			return true;
 		}
 
 		@Override
