@@ -350,7 +350,7 @@ public class GamePanelLogic extends GameEventAdapter implements
 
 	@Override
 	public void onItemSlotChanged(SetItemSlotEvent event) {
-		if (!event.isNew())
+		if (!event.isNew() || infoPro.getOwnerID() != event.getOwner())
 			return;
 		try {
 			Item item = infoPro.getPlayer().getInventory()
