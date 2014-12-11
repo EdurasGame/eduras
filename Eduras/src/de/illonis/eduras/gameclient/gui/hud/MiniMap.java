@@ -290,7 +290,12 @@ public class MiniMap extends ClickableGuiElement {
 		rectHeight = rectWidth * ratio;
 		yDiff = (ImageResolution.WINDOWED.getHeight() - rectHeight) / 2;
 		relocateObjects();
+		maybeAddAllObjects();
 		return true;
+	}
+
+	private void maybeAddAllObjects() {
+		onGameReady();
 	}
 
 	private void relocateObjects() {
@@ -475,13 +480,16 @@ public class MiniMap extends ClickableGuiElement {
 
 	@Override
 	public void onMapChanged(SetMapEvent setMapEvent) {
-		recalculateScale();
+		onGameReady();
 		resetNodeData();
 	}
 
 	private void recalculateScale() {
 		Rectangle r = getInfo().getMapBounds();
 		float size = Math.max(r.getWidth(), r.getHeight());
+
+		heightOffset = 0;
+		widthOffset = 0;
 
 		if (r.getWidth() > r.getHeight()) {
 			heightOffset = (r.getWidth() - r.getHeight()) / 2;
