@@ -343,7 +343,6 @@ public class GameRenderer implements TooltipHandler {
 
 	private boolean isObjectVisible(GameObject object) {
 		boolean isVisible = false;
-
 		Player myPlayer;
 		try {
 			myPlayer = info.getPlayer();
