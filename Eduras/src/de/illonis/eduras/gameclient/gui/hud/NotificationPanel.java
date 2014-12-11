@@ -170,7 +170,7 @@ public class NotificationPanel extends RenderedGuiObject {
 
 	@Override
 	public void onItemSlotChanged(SetItemSlotEvent event) {
-		if (event.getOwner() != getInfo().getOwnerID())
+		if (event.getOwner() != getInfo().getOwnerID() || !event.isNew())
 			return;
 		int slot = event.getItemSlot();
 		try {

@@ -153,8 +153,6 @@ public class Inventory {
 	 *             of given type and that is unique.
 	 */
 	public synchronized int loot(Item item) throws InventoryIsFullException {
-		System.out.println("looting " + item.getType());
-		System.out.println(Arrays.toString(items));
 		int slot = -1;
 		try {
 			slot = findItemSlotOfType(item.getType());
@@ -163,8 +161,6 @@ public class Inventory {
 		if (!item.stacks() && item.isUnique() && slot >= 0) {
 			throw new InventoryIsFullException();
 		}
-		System.out.println("Target slot: " + slot);
-
 		// TODO: filter unique items and prevent double looting them.
 		int target = findNextFreeInventorySlotForItem(item);
 		if (target == -1)
@@ -172,10 +168,8 @@ public class Inventory {
 		L.info("putting item in " + target);
 		items[target] = item;
 		sort();
-		System.out.println(Arrays.toString(items));
 		try {
 			int newSlot = findItemSlotOfType(item.getType());
-			System.out.println("slot after sort: " + newSlot);
 			return newSlot;
 		} catch (NoSuchItemException e) {
 			// should not appear

@@ -355,7 +355,7 @@ public class ServerEventTriggerer implements EventTriggerer {
 					item.getId());
 
 			SetItemSlotEvent sis = new SetItemSlotEvent(newObjId,
-					player.getOwner(), itemSlot);
+					player.getOwner(), itemSlot, true);
 
 			sendEvents(visEvent, colEvent, soEvent, sis);
 			resendItems(player.getOwner());
