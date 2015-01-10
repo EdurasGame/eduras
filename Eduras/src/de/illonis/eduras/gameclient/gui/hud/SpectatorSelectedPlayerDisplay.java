@@ -31,7 +31,6 @@ import de.illonis.eduras.units.PlayerMainFigure;
  */
 public class SpectatorSelectedPlayerDisplay extends RenderedGuiObject {
 	private final static Color COLOR_SEMITRANSPARENT = new Color(0, 0, 0, 120);
-
 	private final static Logger L = EduLog
 			.getLoggerFor(SpectatorSelectedPlayerDisplay.class.getName());
 	private final static int ITEMS_PER_ROW = 6;
@@ -53,9 +52,10 @@ public class SpectatorSelectedPlayerDisplay extends RenderedGuiObject {
 		return GameMode.GameModeNumber.EDURA == gameMode.getNumber();
 	}
 
-	private void renderCooldown(Graphics g, float xPos, float yPos,
-			float cooldownPercent) {
-		if (cooldownPercent < 1f) {
+	private void renderCooldown(Graphics g, float xPos, float yPos, long value,
+			long total) {
+		if (value > 0) {
+			float cooldownPercent = total == 0 ? 0 : (float) value / total;
 			g.setColor(COLOR_SEMITRANSPARENT);
 			g.fillArc(xPos, yPos, size, size, -90 - cooldownPercent * 360, -90);
 		}
@@ -85,20 +85,27 @@ public class SpectatorSelectedPlayerDisplay extends RenderedGuiObject {
 				g.fillRect(screenX, screenY, width, HEALTHBAR_HEIGHT);
 				g.setColor(Color.yellow);
 				g.fillRect(screenX, screenY, healthPartWidth, HEALTHBAR_HEIGHT);
-				g.setColor(Color.white);
+				font.drawString(screenX + 5, screenY, player.getPlayer()
+						.getName(), Color.black);
 				try {
 					g.drawImage(
 							ImageCache.getGuiImage(ImageKey.ACTION_SPELL_BLINK),
 							screenX, screenY + HEALTHBAR_HEIGHT + 5);
-					font.drawString(screenX, screenY, player.getPlayer()
-							.getBlinksAvailable() + "", Color.yellow);
-					renderCooldown(g, screenX, screenY + HEALTHBAR_HEIGHT + 5,
-							(float) player.getPlayer().getBlinkCooldown()
-									/ S.Server.sv_blink_cooldown);
-				} catch (CacheException e1) {
-					L.log(Level.WARNING, "Could not find blink image.", e1);
-				}
 
+				} catch (CacheException e) {
+
+				}
+				renderCooldown(g, screenX, screenY + HEALTHBAR_HEIGHT + 5,
+						player.getPlayer().getBlinkCooldown(),
+						S.Server.sv_blink_cooldown);
+				font.drawString(
+						screenX
+								+ (size - font.getWidth(player.getPlayer()
+										.getBlinksAvailable() + "")) / 2,
+						screenY + HEALTHBAR_HEIGHT + 5
+								+ (size - font.getLineHeight()) / 2, player
+								.getPlayer().getBlinksAvailable() + "",
+						Color.white);
 				for (Item item : player.getPlayer().getInventory()
 						.getAllItems()) {
 
@@ -113,8 +120,8 @@ public class SpectatorSelectedPlayerDisplay extends RenderedGuiObject {
 									x, y);
 							if (item.isUsable()) {
 								Usable u = (Usable) item;
-								renderCooldown(g, x, y, (float) u.getCooldown()
-										/ u.getCooldownTime());
+								renderCooldown(g, x, y, u.getCooldown(),
+										u.getCooldownTime());
 							}
 						} catch (CacheException e) {
 							L.log(Level.WARNING,

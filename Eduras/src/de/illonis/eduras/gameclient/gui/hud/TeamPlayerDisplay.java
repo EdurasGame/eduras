@@ -3,7 +3,6 @@ package de.illonis.eduras.gameclient.gui.hud;
 import java.util.logging.Logger;
 
 import org.newdawn.slick.Graphics;
-import org.newdawn.slick.Input;
 import org.newdawn.slick.geom.Vector2f;
 
 import de.illonis.edulog.EduLog;
@@ -33,13 +32,11 @@ class TeamPlayerDisplay extends PlayerDisplay {
 
 	@Override
 	public boolean mouseReleased(int button, int x, int y) {
-		if (button == Input.MOUSE_LEFT_BUTTON
-				|| getInfo().getClientData().getRole() != ClientRole.SPECTATOR) {
-			PlayerMainFigure mainFigure = player.getPlayerMainFigure();
-			Vector2f gamePos = new Vector2f(mainFigure.getShape().getX(),
-					mainFigure.getShape().getY());
-			ui.getGameCamera().getCameraOffset().set(gamePos.x, gamePos.y);
-		} else if (button == Input.MOUSE_RIGHT_BUTTON) {
+		PlayerMainFigure mainFigure = player.getPlayerMainFigure();
+		Vector2f gamePos = new Vector2f(mainFigure.getShape().getX(),
+				mainFigure.getShape().getY());
+		ui.getGameCamera().getCameraOffset().set(gamePos.x, gamePos.y);
+		if (getInfo().getClientData().getRole() == ClientRole.SPECTATOR) {
 			getInfo().getClientData().setSelectedUnit(
 					player.getPlayerMainFigure().getId());
 		}
