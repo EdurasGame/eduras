@@ -29,6 +29,7 @@ import de.illonis.eduras.gamemodes.Edura;
 import de.illonis.eduras.gamemodes.GameMode;
 import de.illonis.eduras.gamemodes.GameMode.GameModeNumber;
 import de.illonis.eduras.gamemodes.TeamDeathmatch;
+import de.illonis.eduras.locale.Localization;
 import de.illonis.eduras.settings.S;
 import de.illonis.eduras.units.InteractMode;
 
@@ -113,7 +114,6 @@ public class StatisticsWindow extends RenderedGuiObject {
 			return;
 		g2d.drawImage(artwork, screenX, screenY);
 		drawHeader();
-
 		// header
 		largeFont.drawString(screenX + xPositions[0], screenY + topInset,
 				"Player", COLOR_HEADER);
@@ -170,6 +170,18 @@ public class StatisticsWindow extends RenderedGuiObject {
 				int score1 = getStats().getScoreOfTeam(getTeams().get(0));
 				int score2 = getStats().getScoreOfTeam(getTeams().get(1));
 				state = putTeamScores(score1, score2);
+				int currentRound = 1
+						+ getStats().getScoreOfTeam(getTeams().get(0))
+						+ getStats().getScoreOfTeam(getTeams().get(1));
+				String roundText = Localization.getStringF(
+						"client.gui.stats.roundprogress", currentRound,
+						S.Server.gm_edura_maxrounds);
+				font.drawString(
+						screenX + sideInset
+								+ (width - font.getWidth(roundText)) / 2,
+						screenY + (topInset - largeFont.getLineHeight()) / 2
+								+ largeFont.getLineHeight(), roundText,
+						Color.white);
 			} else {
 				state = getInfo().getGameMode().getName();
 			}
@@ -179,6 +191,7 @@ public class StatisticsWindow extends RenderedGuiObject {
 				screenX + sideInset + (width - largeFont.getWidth(state)) / 2,
 				screenY + (topInset - largeFont.getLineHeight()) / 2, state,
 				COLOR_HEADER);
+
 	}
 
 	private String putTeamScores(int scoreOfTeam, int scoreOfTeam2) {
