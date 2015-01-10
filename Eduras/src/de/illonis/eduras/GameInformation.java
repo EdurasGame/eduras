@@ -34,6 +34,7 @@ import de.illonis.eduras.events.SetBooleanGameObjectAttributeEvent;
 import de.illonis.eduras.events.SetGameModeEvent;
 import de.illonis.eduras.events.SetIntegerGameObjectAttributeEvent;
 import de.illonis.eduras.events.SetInteractModeEvent;
+import de.illonis.eduras.events.SetItemSlotEvent;
 import de.illonis.eduras.events.SetMapEvent;
 import de.illonis.eduras.events.SetPolygonDataEvent;
 import de.illonis.eduras.events.SetRemainingTimeEvent;
@@ -396,11 +397,25 @@ public class GameInformation {
 
 		putCurrentStatsAndTeams(infos);
 
+		putInventoryInfos(infos);
+
 		putNeutralBaseOwnerInfos(infos, neutralBases);
 
 		putGuiNotifications(infos);
 
 		return infos;
+	}
+
+	private void putInventoryInfos(ArrayList<GameEvent> infos) {
+		for (Player player : players.values()) {
+			Item[] items = player.getInventory().getAllItems();
+			for (int i = 0; i < items.length; i++) {
+				int id = (items[i] == null) ? -1 : items[i].getId();
+				// TODO: send only to related player (and spectator)
+				infos.add(new SetItemSlotEvent(id, player.getPlayerMainFigure()
+						.getOwner(), i));
+			}
+		}
 	}
 
 	private void giveSettings(ArrayList<GameEvent> infos) {
@@ -486,7 +501,6 @@ public class GameInformation {
 						aUnit.getTeam().getTeamId()));
 			}
 		}
-
 	}
 
 	private void putCurrentSettings(ArrayList<GameEvent> infos) {

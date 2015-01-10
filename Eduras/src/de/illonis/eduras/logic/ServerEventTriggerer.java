@@ -412,6 +412,7 @@ public class ServerEventTriggerer implements EventTriggerer {
 		Item[] items = player.getInventory().getAllItems();
 		for (int i = 0; i < items.length; i++) {
 			int id = (items[i] == null) ? -1 : items[i].getId();
+			// TODO: send only to related player (and spectator)
 			sendEventToAll(new SetItemSlotEvent(id, playerId, i));
 		}
 	}
