@@ -10,6 +10,7 @@ import org.newdawn.slick.Graphics;
 import de.illonis.edulog.EduLog;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
 import de.illonis.eduras.gameclient.datacache.CacheException;
+import de.illonis.eduras.gameclient.datacache.CacheInfo.ImageKey;
 import de.illonis.eduras.gameclient.datacache.FontCache;
 import de.illonis.eduras.gameclient.datacache.FontCache.FontKey;
 import de.illonis.eduras.gameclient.datacache.ImageCache;
@@ -17,6 +18,8 @@ import de.illonis.eduras.gameclient.gui.game.GameRenderer;
 import de.illonis.eduras.gamemodes.GameMode;
 import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.items.Item;
+import de.illonis.eduras.items.Usable;
+import de.illonis.eduras.settings.S;
 import de.illonis.eduras.units.InteractMode;
 import de.illonis.eduras.units.PlayerMainFigure;
 
@@ -27,6 +30,7 @@ import de.illonis.eduras.units.PlayerMainFigure;
  * 
  */
 public class SpectatorSelectedPlayerDisplay extends RenderedGuiObject {
+	private final static Color COLOR_SEMITRANSPARENT = new Color(0, 0, 0, 120);
 
 	private final static Logger L = EduLog
 			.getLoggerFor(SpectatorSelectedPlayerDisplay.class.getName());
@@ -49,6 +53,14 @@ public class SpectatorSelectedPlayerDisplay extends RenderedGuiObject {
 		return GameMode.GameModeNumber.EDURA == gameMode.getNumber();
 	}
 
+	private void renderCooldown(Graphics g, float xPos, float yPos,
+			float cooldownPercent) {
+		if (cooldownPercent < 1f) {
+			g.setColor(COLOR_SEMITRANSPARENT);
+			g.fillArc(xPos, yPos, size, size, -90 - cooldownPercent * 360, -90);
+		}
+	}
+
 	@Override
 	public void render(Graphics g) {
 		if (getInfo().getClientData().getSelectedUnits().size() > 0) {
@@ -66,13 +78,26 @@ public class SpectatorSelectedPlayerDisplay extends RenderedGuiObject {
 				PlayerMainFigure player = (PlayerMainFigure) o;
 				font.drawString(screenX, screenY, player.getPlayer().getName(),
 						Color.white);
-				int i = 0;
+				int i = 1;
 				float healthPartWidth = ((float) player.getHealth() / player
 						.getMaxHealth()) * width;
 				g.setColor(Color.black);
 				g.fillRect(screenX, screenY, width, HEALTHBAR_HEIGHT);
 				g.setColor(Color.yellow);
 				g.fillRect(screenX, screenY, healthPartWidth, HEALTHBAR_HEIGHT);
+				g.setColor(Color.white);
+				try {
+					g.drawImage(
+							ImageCache.getGuiImage(ImageKey.ACTION_SPELL_BLINK),
+							screenX, screenY + HEALTHBAR_HEIGHT + 5);
+					font.drawString(screenX, screenY, player.getPlayer()
+							.getBlinksAvailable() + "", Color.yellow);
+					renderCooldown(g, screenX, screenY + HEALTHBAR_HEIGHT + 5,
+							(float) player.getPlayer().getBlinkCooldown()
+									/ S.Server.sv_blink_cooldown);
+				} catch (CacheException e1) {
+					L.log(Level.WARNING, "Could not find blink image.", e1);
+				}
 
 				for (Item item : player.getPlayer().getInventory()
 						.getAllItems()) {
@@ -80,14 +105,20 @@ public class SpectatorSelectedPlayerDisplay extends RenderedGuiObject {
 					if (item != null) {
 						int col = i % ITEMS_PER_ROW;
 						int row = i / ITEMS_PER_ROW;
+						float x = screenX + col * size;
+						float y = screenY + row * size + HEALTHBAR_HEIGHT + 5;
 						try {
 							g.drawImage(
 									ImageCache.getInventoryIcon(item.getType()),
-									screenX + col * size, screenY + row * size
-											+ HEALTHBAR_HEIGHT + 5);
+									x, y);
+							if (item.isUsable()) {
+								Usable u = (Usable) item;
+								renderCooldown(g, x, y, (float) u.getCooldown()
+										/ u.getCooldownTime());
+							}
 						} catch (CacheException e) {
 							L.log(Level.WARNING,
-									"Inventory icon for " + item.getType()
+									"Item icon for " + item.getType()
 											+ " not cached", e);
 						}
 						i++;
@@ -99,7 +130,6 @@ public class SpectatorSelectedPlayerDisplay extends RenderedGuiObject {
 						e);
 			}
 		}
-
 	}
 
 	@Override
