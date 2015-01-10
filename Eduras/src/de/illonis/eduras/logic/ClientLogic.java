@@ -159,6 +159,10 @@ public class ClientLogic implements GameLogicInterface {
 						healthEvent.getNewValue());
 
 				break;
+			case PLAYER_BLINKED:
+				OwnerGameEvent blinkedEvent = (OwnerGameEvent) event;
+				getListener().onPlayerBlinked(blinkedEvent.getOwner());
+				break;
 			case SET_POLYGON_DATA:
 				SetPolygonDataEvent polyEvent = (SetPolygonDataEvent) event;
 				GameObject gameObj;

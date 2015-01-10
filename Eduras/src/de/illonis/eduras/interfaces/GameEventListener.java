@@ -287,4 +287,12 @@ public interface GameEventListener {
 	 * @param event
 	 */
 	void onRoundEnd(RoundEndEvent event);
+
+	/**
+	 * Called when a player used blink successfully.
+	 * 
+	 * @param owner
+	 *            owner-id of blinked player.
+	 */
+	void onPlayerBlinked(int owner);
 }

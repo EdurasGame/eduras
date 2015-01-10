@@ -386,4 +386,14 @@ public class HudNotifier implements GameEventListener {
 			obj.onRoundEnd(event);
 		}
 	}
+
+	@Override
+	public void onPlayerBlinked(int owner) {
+		for (GameEventListener obj : uiObjects) {
+			obj.onPlayerBlinked(owner);
+		}
+		for (GameEventListener obj : otherObjects) {
+			obj.onPlayerBlinked(owner);
+		}
+	}
 }

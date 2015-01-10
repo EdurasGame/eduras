@@ -501,6 +501,10 @@ public class EdurasInitializer {
 			public void setTeamScore(Team team, int newScore) {
 			}
 
+			@Override
+			public void notifyBlinkUsed(int playerId) {
+			}
+
 		});
 
 		networkManager.getClient().setEventHandler(new EventParser(logic));

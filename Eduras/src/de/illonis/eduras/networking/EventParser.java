@@ -452,6 +452,11 @@ public class EventParser implements EventHandler {
 						gameEventNumber, (Integer) event.getArgument(0),
 						(Integer) event.getArgument(1)));
 				break;
+			case PLAYER_BLINKED:
+				logic.onGameEventAppeared(new OwnerGameEvent(
+						GameEventNumber.PLAYER_BLINKED, (int) event
+								.getArgument(0)));
+				break;
 			case AOE_DAMAGE:
 				logic.onGameEventAppeared(new AoEDamageEvent(
 						ObjectFactory.ObjectType

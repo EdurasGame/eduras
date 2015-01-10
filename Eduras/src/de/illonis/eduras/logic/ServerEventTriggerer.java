@@ -1490,4 +1490,10 @@ public class ServerEventTriggerer implements EventTriggerer {
 		gameInfo.getGameSettings().getStats().setScoreOfTeam(team, newScore);
 		sendEvents(new SetScoreEvent(team, newScore));
 	}
+
+	@Override
+	public void notifyBlinkUsed(int playerId) {
+		sendEventToAll(new OwnerGameEvent(GameEventNumber.PLAYER_BLINKED,
+				playerId));
+	}
 }

@@ -8,6 +8,7 @@ import org.newdawn.slick.Font;
 import org.newdawn.slick.Graphics;
 
 import de.illonis.edulog.EduLog;
+import de.illonis.eduras.Player;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
 import de.illonis.eduras.gameclient.datacache.CacheException;
 import de.illonis.eduras.gameclient.datacache.CacheInfo.ImageKey;
@@ -136,6 +137,18 @@ public class SpectatorSelectedPlayerDisplay extends RenderedGuiObject {
 						"Could not find selected object while showing selected player.",
 						e);
 			}
+		}
+	}
+
+	@Override
+	public void onPlayerBlinked(int owner) {
+		System.out.println("blink");
+		try {
+			Player p = getInfo().getPlayerByOwnerId(owner);
+			// trigger blink cooldown to track it
+			p.useBlink();
+		} catch (ObjectNotFoundException e) {
+			L.log(Level.WARNING, "Blinked player not found.", e);
 		}
 	}
 

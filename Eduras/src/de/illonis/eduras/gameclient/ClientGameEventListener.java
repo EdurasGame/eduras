@@ -250,4 +250,10 @@ public class ClientGameEventListener implements GameEventListener {
 		ui.onRoundEnd(event);
 		effects.onRoundEnd(event);
 	}
+
+	@Override
+	public void onPlayerBlinked(int owner) {
+		ui.onPlayerBlinked(owner);
+		effects.onPlayerBlinked(owner);
+	}
 }
