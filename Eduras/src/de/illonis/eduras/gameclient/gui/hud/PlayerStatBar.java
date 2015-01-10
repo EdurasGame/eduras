@@ -115,6 +115,7 @@ public class PlayerStatBar extends RenderedGuiObject {
 					}
 					break;
 				default:
+
 					// center the camera on the clicked player
 					Vector2f gamePos = new Vector2f(mainFigure.getShape()
 							.getX(), mainFigure.getShape().getY());

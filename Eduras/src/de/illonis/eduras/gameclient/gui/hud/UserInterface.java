@@ -152,7 +152,7 @@ public class UserInterface {
 		cancebleElements.add(selectTeamPopup);
 		new ChatDisplay(cache, this);
 		// new BugReportButton(this);
-
+		new SpectatorSelectedPlayerDisplay(this);
 		actionBar.initPages(this, guiReactor);
 		new StrategyPanel(this);
 	}
