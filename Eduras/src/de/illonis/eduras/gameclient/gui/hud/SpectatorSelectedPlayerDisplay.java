@@ -20,6 +20,7 @@ import de.illonis.eduras.gamemodes.GameMode;
 import de.illonis.eduras.gameobjects.GameObject;
 import de.illonis.eduras.items.Item;
 import de.illonis.eduras.items.Usable;
+import de.illonis.eduras.items.weapons.Weapon;
 import de.illonis.eduras.settings.S;
 import de.illonis.eduras.units.InteractMode;
 import de.illonis.eduras.units.PlayerMainFigure;
@@ -41,6 +42,8 @@ public class SpectatorSelectedPlayerDisplay extends RenderedGuiObject {
 	private Font font;
 	private float size;
 	private float width;
+	private float height;
+	private float healthBarHeight;
 
 	protected SpectatorSelectedPlayerDisplay(UserInterface gui) {
 		super(gui);
@@ -73,9 +76,9 @@ public class SpectatorSelectedPlayerDisplay extends RenderedGuiObject {
 					System.out.println(o.getClass().getSimpleName());
 					return;
 				}
-				g.setColor(Color.blue);
+				g.setColor(Color.darkGray);
 
-				g.fillRect(screenX, screenY, 250, 100);
+				g.fillRect(screenX, screenY, width, height);
 				PlayerMainFigure player = (PlayerMainFigure) o;
 				font.drawString(screenX, screenY, player.getPlayer().getName(),
 						Color.white);
@@ -83,27 +86,27 @@ public class SpectatorSelectedPlayerDisplay extends RenderedGuiObject {
 				float healthPartWidth = ((float) player.getHealth() / player
 						.getMaxHealth()) * width;
 				g.setColor(Color.black);
-				g.fillRect(screenX, screenY, width, HEALTHBAR_HEIGHT);
+				g.fillRect(screenX, screenY, width, healthBarHeight);
 				g.setColor(Color.yellow);
-				g.fillRect(screenX, screenY, healthPartWidth, HEALTHBAR_HEIGHT);
+				g.fillRect(screenX, screenY, healthPartWidth, healthBarHeight);
 				font.drawString(screenX + 5, screenY, player.getPlayer()
 						.getName(), Color.black);
 				try {
 					g.drawImage(
 							ImageCache.getGuiImage(ImageKey.ACTION_SPELL_BLINK),
-							screenX, screenY + HEALTHBAR_HEIGHT + 5);
+							screenX + 1, screenY + healthBarHeight + 5);
 
 				} catch (CacheException e) {
 
 				}
-				renderCooldown(g, screenX, screenY + HEALTHBAR_HEIGHT + 5,
+				renderCooldown(g, screenX + 1, screenY + healthBarHeight + 5,
 						player.getPlayer().getBlinkCooldown(),
 						S.Server.sv_blink_cooldown);
 				font.drawString(
 						screenX
 								+ (size - font.getWidth(player.getPlayer()
 										.getBlinksAvailable() + "")) / 2,
-						screenY + HEALTHBAR_HEIGHT + 5
+						screenY + healthBarHeight + 5
 								+ (size - font.getLineHeight()) / 2, player
 								.getPlayer().getBlinksAvailable() + "",
 						Color.white);
@@ -113,8 +116,9 @@ public class SpectatorSelectedPlayerDisplay extends RenderedGuiObject {
 					if (item != null) {
 						int col = i % ITEMS_PER_ROW;
 						int row = i / ITEMS_PER_ROW;
-						float x = screenX + col * size;
-						float y = screenY + row * size + HEALTHBAR_HEIGHT + 5;
+						float x = screenX + col * (size + 1) + 1;
+						float y = screenY + row * (size + 1) + healthBarHeight
+								+ 5;
 						try {
 							g.drawImage(
 									ImageCache.getInventoryIcon(item.getType()),
@@ -123,6 +127,12 @@ public class SpectatorSelectedPlayerDisplay extends RenderedGuiObject {
 								Usable u = (Usable) item;
 								renderCooldown(g, x, y, u.getCooldown(),
 										u.getCooldownTime());
+								if (item instanceof Weapon) {
+									Weapon w = (Weapon) item;
+									if (w.getMaxAmmunition() > 0)
+										font.drawString(x + 3, y + 1,
+												w.getCurrentAmmunition() + "");
+								}
 							}
 						} catch (CacheException e) {
 							L.log(Level.WARNING,
@@ -142,7 +152,6 @@ public class SpectatorSelectedPlayerDisplay extends RenderedGuiObject {
 
 	@Override
 	public void onPlayerBlinked(int owner) {
-		System.out.println("blink");
 		try {
 			Player p = getInfo().getPlayerByOwnerId(owner);
 			// trigger blink cooldown to track it
@@ -158,7 +167,9 @@ public class SpectatorSelectedPlayerDisplay extends RenderedGuiObject {
 		size = ItemDisplay.BLOCKSIZE * GameRenderer.getRenderScale();
 		width = ITEMS_PER_ROW * size + 5;
 		screenX = windowWidth - width;
-		screenY = windowHeight - (MAX_ROWS * size + HEALTHBAR_HEIGHT + 10);
+		healthBarHeight = HEALTHBAR_HEIGHT * GameRenderer.getRenderScale();
+		height = MAX_ROWS * size + healthBarHeight + 10;
+		screenY = windowHeight - height;
 		return true;
 	}
 }
