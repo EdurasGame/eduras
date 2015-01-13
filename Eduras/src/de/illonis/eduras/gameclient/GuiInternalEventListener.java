@@ -227,7 +227,9 @@ public class GuiInternalEventListener implements GamePanelReactor {
 		for (Entry<Integer, GameObject> obj : infoPro.getGameObjects()
 				.entrySet()) {
 			GameObject o = obj.getValue();
-			if (o.isControlledUnit() && o.isVisibleFor(p)
+			if (o.isControlledUnit()
+					&& o.isVisibleFor(p)
+					&& infoPro.getGameMode().getRelation(o, p) == Relation.ALLIED
 					&& o.getShape().contains(point.x, point.y)) {
 				if (remove) {
 					client.getData().getSelectedUnits().remove(obj.getKey());

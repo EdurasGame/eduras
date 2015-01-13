@@ -120,14 +120,6 @@ public class TeamDeathmatch extends Deathmatch {
 		if (ownerA == -1 || ownerB == -1)
 			return Relation.ENVIRONMENT;
 
-		try {
-			playerA = gameInfo.getPlayerByOwnerId(a.getOwner());
-			playerB = gameInfo.getPlayerByOwnerId(b.getOwner());
-		} catch (ObjectNotFoundException e) {
-			L.log(Level.SEVERE, "player not found", e);
-			return Relation.UNKNOWN;
-		}
-
 		Team teamOfA;
 		Team teamOfB;
 		try {
@@ -135,16 +127,18 @@ public class TeamDeathmatch extends Deathmatch {
 			if (a.isUnit()) {
 				teamOfA = ((Unit) a).getTeam();
 			} else {
+				playerA = gameInfo.getPlayerByOwnerId(a.getOwner());
 				teamOfA = playerA.getTeam();
 			}
 
 			if (b.isUnit()) {
 				teamOfB = ((Unit) b).getTeam();
 			} else {
+				playerB = gameInfo.getPlayerByOwnerId(b.getOwner());
 				teamOfB = playerB.getTeam();
 			}
-		} catch (PlayerHasNoTeamException e) {
-			L.log(Level.WARNING, "Cannot find team of player.", e);
+		} catch (PlayerHasNoTeamException | ObjectNotFoundException e) {
+			L.log(Level.WARNING, "Cannot find player or team of player.", e);
 			return Relation.UNKNOWN;
 		}
 
