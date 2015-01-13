@@ -43,7 +43,7 @@ public class Map {
 
 	public final static String[] defaultMaps = new String[] { "blobnob.erm",
 			"eduramus.erm", "eduramus2.erm", "funmap.erm", "Tryfield.erm",
-			"playground.erm" };
+			"playground.erm", "dingdong.erm" };
 
 	private String author;
 	private Date created;
