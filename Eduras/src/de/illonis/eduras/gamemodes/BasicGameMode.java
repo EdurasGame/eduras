@@ -86,26 +86,32 @@ public abstract class BasicGameMode implements GameMode {
 	public abstract SpawnType getSpawnTypeForTeam(Team team);
 
 	/**
+	 * Gets a game mode by its {@link GameMode.GameModeNumber}.
 	 * 
-	 * @param gameModeName
+	 * @param gameModeNumber
 	 * @param gameInfo
 	 * @return The gamemode, if existing.
 	 * @throws NoSuchGameModeException
 	 *             Thrown if there is no such GameMode of the given name.
 	 */
-	public static GameMode getGameModeByName(String gameModeName,
+	public static GameMode getGameModeByNumber(GameModeNumber gameModeNumber,
 			GameInformation gameInfo) throws NoSuchGameModeException {
-		switch (gameModeName.toLowerCase()) {
-		case "deathmatch":
+
+		if (gameModeNumber == null) {
+			throw new NoSuchGameModeException();
+		}
+
+		switch (gameModeNumber) {
+		case DEATHMATCH:
 			return new Deathmatch(gameInfo);
-		case "teamdeathmatch":
+		case TEAM_DEATHMATCH:
 			return new TeamDeathmatch(gameInfo);
-		case "kingofthehill":
+		case KING_OF_THE_HILL:
 			return new KingOfTheHill(gameInfo);
-		case "edura":
+		case EDURA:
 			return new Edura(gameInfo);
 		default:
-			throw new NoSuchGameModeException(gameModeName);
+			throw new NoSuchGameModeException(gameModeNumber);
 		}
 	}
 

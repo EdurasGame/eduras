@@ -74,6 +74,7 @@ import de.illonis.eduras.events.UnitSpellActionEvent;
 import de.illonis.eduras.events.UserMovementEvent;
 import de.illonis.eduras.exceptions.InvalidNameException;
 import de.illonis.eduras.gameclient.datacache.TextureInfo.TextureKey;
+import de.illonis.eduras.gamemodes.GameMode.GameModeNumber;
 import de.illonis.eduras.gameobjects.GameObject.Visibility;
 import de.illonis.eduras.interfaces.GameLogicInterface;
 import de.illonis.eduras.math.Vector2df;
@@ -407,8 +408,8 @@ public class EventParser implements EventHandler {
 						.getArgument(0), (int) event.getArgument(1)));
 				break;
 			case SET_GAMEMODE:
-				logic.onGameEventAppeared(new SetGameModeEvent((String) event
-						.getArgument(0)));
+				logic.onGameEventAppeared(new SetGameModeEvent(GameModeNumber
+						.valueOf((String) event.getArgument(0))));
 				break;
 			case SET_SPEEDVECTOR:
 				MovementEvent movementEvent = new MovementEvent(

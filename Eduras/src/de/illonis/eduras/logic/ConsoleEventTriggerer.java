@@ -13,6 +13,7 @@ import de.illonis.eduras.exceptions.NoSuchMapException;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
 import de.illonis.eduras.gamemodes.BasicGameMode;
 import de.illonis.eduras.gamemodes.GameMode;
+import de.illonis.eduras.gamemodes.GameMode.GameModeNumber;
 import de.illonis.eduras.maps.Map;
 import de.illonis.eduras.maps.persistence.InvalidDataException;
 
@@ -102,9 +103,18 @@ public class ConsoleEventTriggerer {
 	 */
 	public boolean changeGameMode(String gameModeName) {
 
+		GameModeNumber gameModeNumber;
+		try {
+			gameModeNumber = GameModeNumber.valueOf(gameModeName);
+		} catch (IllegalArgumentException e) {
+			L.log(Level.WARNING, "Tried to change gamemode to " + gameModeName
+					+ " which doesn't exist.");
+			return false;
+		}
+
 		GameMode gameMode;
 		try {
-			gameMode = BasicGameMode.getGameModeByName(gameModeName,
+			gameMode = BasicGameMode.getGameModeByNumber(gameModeNumber,
 					triggerer.getGameInfo());
 		} catch (NoSuchGameModeException e) {
 			L.log(Level.WARNING, "Tried to change gamemode to " + gameModeName

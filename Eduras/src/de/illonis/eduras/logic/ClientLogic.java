@@ -58,6 +58,7 @@ import de.illonis.eduras.exceptions.PlayerHasNoTeamException;
 import de.illonis.eduras.gameclient.GameEventAdapter;
 import de.illonis.eduras.gamemodes.BasicGameMode;
 import de.illonis.eduras.gamemodes.GameMode;
+import de.illonis.eduras.gamemodes.GameMode.GameModeNumber;
 import de.illonis.eduras.gameobjects.Base;
 import de.illonis.eduras.gameobjects.DynamicPolygonObject;
 import de.illonis.eduras.gameobjects.GameObject;
@@ -466,11 +467,11 @@ public class ClientLogic implements GameLogicInterface {
 				break;
 			case SET_GAMEMODE:
 				SetGameModeEvent modeChangeEvent = (SetGameModeEvent) event;
-				String newModeString = modeChangeEvent.getNewMode();
+				GameModeNumber newModeNumber = modeChangeEvent.getNewMode();
 
 				GameMode newMode = null;
 				try {
-					newMode = BasicGameMode.getGameModeByName(newModeString,
+					newMode = BasicGameMode.getGameModeByNumber(newModeNumber,
 							getGame());
 				} catch (NoSuchGameModeException e1) {
 					L.log(Level.SEVERE, "Got unknown game mode", e1);

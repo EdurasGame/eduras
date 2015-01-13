@@ -488,7 +488,7 @@ public class GameInformation {
 
 	private void putCurrentSettings(ArrayList<GameEvent> infos) {
 		SetGameModeEvent e = new SetGameModeEvent(gameSettings.getGameMode()
-				.getName());
+				.getNumber());
 		infos.add(e);
 
 		SetRemainingTimeEvent remaining = new SetRemainingTimeEvent(

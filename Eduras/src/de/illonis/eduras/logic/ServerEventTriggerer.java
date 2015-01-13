@@ -589,7 +589,7 @@ public class ServerEventTriggerer implements EventTriggerer {
 		deinitMatch();
 
 		gameInfo.getGameSettings().changeGameMode(newMode);
-		SetGameModeEvent event = new SetGameModeEvent(newMode.getName());
+		SetGameModeEvent event = new SetGameModeEvent(newMode.getNumber());
 
 		reloadMap(gameInfo.getMap());
 		initMatch();
