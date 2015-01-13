@@ -32,9 +32,10 @@ import de.illonis.eduras.units.PlayerMainFigure;
  * 
  */
 public class SpectatorSelectedPlayerDisplay extends RenderedGuiObject {
-	private final static Color COLOR_SEMITRANSPARENT = new Color(0, 0, 0, 120);
 	private final static Logger L = EduLog
 			.getLoggerFor(SpectatorSelectedPlayerDisplay.class.getName());
+
+	private final static Color COLOR_SEMITRANSPARENT = new Color(0, 0, 0, 120);
 	private final static int ITEMS_PER_ROW = 6;
 	private final static int MAX_ROWS = 2;
 	private final static int HEALTHBAR_HEIGHT = 20;
@@ -56,6 +57,8 @@ public class SpectatorSelectedPlayerDisplay extends RenderedGuiObject {
 		return GameMode.GameModeNumber.EDURA == gameMode.getNumber();
 	}
 
+	// TODO: maybe create a global abstract way for rendering cooldowns without
+	// a CooldownGuiObject.
 	private void renderCooldown(Graphics g, float xPos, float yPos, long value,
 			long total) {
 		if (value > 0) {
@@ -68,21 +71,20 @@ public class SpectatorSelectedPlayerDisplay extends RenderedGuiObject {
 	@Override
 	public void render(Graphics g) {
 		if (getInfo().getClientData().getSelectedUnits().size() > 0) {
+			// assume always only one object selected (that is a
+			// PlayerMainFigure)
 			int unitId = getInfo().getClientData().getSelectedUnits()
 					.iterator().next();
 			try {
 				GameObject o = getInfo().findObjectById(unitId);
 				if (!(o instanceof PlayerMainFigure)) {
-					System.out.println(o.getClass().getSimpleName());
 					return;
 				}
 				g.setColor(Color.darkGray);
-
 				g.fillRect(screenX, screenY, width, height);
 				PlayerMainFigure player = (PlayerMainFigure) o;
 				font.drawString(screenX, screenY, player.getPlayer().getName(),
 						Color.white);
-				int i = 1;
 				float healthPartWidth = ((float) player.getHealth() / player
 						.getMaxHealth()) * width;
 				g.setColor(Color.black);
@@ -95,21 +97,20 @@ public class SpectatorSelectedPlayerDisplay extends RenderedGuiObject {
 					g.drawImage(
 							ImageCache.getGuiImage(ImageKey.ACTION_SPELL_BLINK),
 							screenX + 1, screenY + healthBarHeight + 5);
-
 				} catch (CacheException e) {
-
+					L.log(Level.WARNING, "Blink icon not cached", e);
 				}
 				renderCooldown(g, screenX + 1, screenY + healthBarHeight + 5,
 						player.getPlayer().getBlinkCooldown(),
 						S.Server.sv_blink_cooldown);
+				String blinkString = player.getPlayer().getBlinksAvailable()
+						+ "";
 				font.drawString(
-						screenX
-								+ (size - font.getWidth(player.getPlayer()
-										.getBlinksAvailable() + "")) / 2,
+						screenX + (size - font.getWidth(blinkString)) / 2,
 						screenY + healthBarHeight + 5
-								+ (size - font.getLineHeight()) / 2, player
-								.getPlayer().getBlinksAvailable() + "",
-						Color.white);
+								+ (size - font.getLineHeight()) / 2,
+						blinkString, Color.white);
+				int i = 1; // 0 reserved for blink
 				for (Item item : player.getPlayer().getInventory()
 						.getAllItems()) {
 
@@ -154,7 +155,7 @@ public class SpectatorSelectedPlayerDisplay extends RenderedGuiObject {
 	public void onPlayerBlinked(int owner) {
 		try {
 			Player p = getInfo().getPlayerByOwnerId(owner);
-			// trigger blink cooldown to track it
+			// trigger local blink cooldown to track it
 			p.useBlink();
 		} catch (ObjectNotFoundException e) {
 			L.log(Level.WARNING, "Blinked player not found.", e);
