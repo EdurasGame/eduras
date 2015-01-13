@@ -26,6 +26,7 @@ public class CommandInitializer {
 		console.registerCommand(new GameModeChangeCommand());
 		console.registerCommand(new MapChangeCommand());
 		console.registerCommand(new RestartRoundCommand());
+		console.registerCommand(new RestartGameCommand());
 		console.registerCommand(new LoadSettingsCommand());
 		console.registerCommand(new SetSettingPropertyCommand());
 	}

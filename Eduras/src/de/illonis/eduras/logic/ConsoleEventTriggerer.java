@@ -167,6 +167,16 @@ public class ConsoleEventTriggerer {
 	}
 
 	/**
+	 * Restarts the game.
+	 * 
+	 * @return true if successful
+	 */
+	public boolean restartGame() {
+		triggerer.restartGame();
+		return true;
+	}
+
+	/**
 	 * Shuts the server, so it won't send, receive or listen to any incoming
 	 * messages or clients anymore.
 	 */

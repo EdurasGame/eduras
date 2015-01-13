@@ -75,6 +75,8 @@ public class Edura extends TeamDeathmatch {
 	@Override
 	public void onGameStart() {
 		initTeams();
+		roundsWonTeamA = 0;
+		roundsWonTeamB = 0;
 	}
 
 	private void giveStartResources() {
