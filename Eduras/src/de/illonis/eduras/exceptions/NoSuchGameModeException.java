@@ -4,6 +4,7 @@ import java.util.logging.Logger;
 
 import de.illonis.edulog.EduLog;
 import de.illonis.eduras.gamemodes.GameMode;
+import de.illonis.eduras.gamemodes.GameMode.GameModeNumber;
 
 /**
  * Thrown when there is no such {@link GameMode} for a given name.
@@ -21,25 +22,30 @@ public class NoSuchGameModeException extends Exception {
 	private final static Logger L = EduLog
 			.getLoggerFor(NoSuchGameModeException.class.getName());
 
-	private final String gameModeName;
+	private final GameModeNumber gameModeNumber;
 
 	/**
 	 * Create a new NoSuchGameModeException.
 	 * 
 	 * @param gameModeThatWasntFound
-	 *            The name of the {@link GameMode} that wasn't found.
+	 *            The {@link GameModeNumber} of the {@link GameMode} that wasn't
+	 *            found.
 	 */
-	public NoSuchGameModeException(String gameModeThatWasntFound) {
-		gameModeName = gameModeThatWasntFound;
+	public NoSuchGameModeException(GameModeNumber gameModeThatWasntFound) {
+		gameModeNumber = gameModeThatWasntFound;
+	}
+
+	public NoSuchGameModeException() {
+		gameModeNumber = GameModeNumber.NO_GAMEMODE;
 	}
 
 	/**
-	 * Returns the string for which the corresponding {@link GameMode} couldn't
-	 * be found.
+	 * Returns the {@link GameModeNumber} for which the corresponding
+	 * {@link GameMode} couldn't be found.
 	 * 
 	 * @return the name of the game mode
 	 */
-	public String getGameModeName() {
-		return gameModeName;
+	public GameModeNumber getGameModeName() {
+		return gameModeNumber;
 	}
 }

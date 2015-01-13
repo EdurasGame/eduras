@@ -42,6 +42,7 @@ import de.illonis.eduras.exceptions.NoSuchMapException;
 import de.illonis.eduras.gameclient.datacache.GraphicsPreLoader;
 import de.illonis.eduras.gamemodes.BasicGameMode;
 import de.illonis.eduras.gamemodes.Deathmatch;
+import de.illonis.eduras.gamemodes.GameMode.GameModeNumber;
 import de.illonis.eduras.locale.Localization;
 import de.illonis.eduras.logic.ConsoleEventTriggerer;
 import de.illonis.eduras.logic.ServerEventTriggerer;
@@ -499,8 +500,9 @@ public class EdurasServer {
 			eventTriggerer.changeGameMode(new Deathmatch(eventTriggerer
 					.getGameInfo()));
 		} else {
-			eventTriggerer.changeGameMode(BasicGameMode.getGameModeByName(
-					startGameMode, eventTriggerer.getGameInfo()));
+			eventTriggerer.changeGameMode(BasicGameMode.getGameModeByNumber(
+					GameModeNumber.valueOf(startGameMode),
+					eventTriggerer.getGameInfo()));
 		}
 	}
 

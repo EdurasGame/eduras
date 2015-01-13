@@ -1,5 +1,7 @@
 package de.illonis.eduras.events;
 
+import de.illonis.eduras.gamemodes.GameMode.GameModeNumber;
+
 /**
  * Indicates that the game mode has changed.
  * 
@@ -7,7 +9,7 @@ package de.illonis.eduras.events;
  * 
  */
 public class SetGameModeEvent extends GameEvent {
-	private final String newMode;
+	private final GameModeNumber newMode;
 
 	/**
 	 * Creates a new {@link SetGameModeEvent} event.
@@ -15,7 +17,7 @@ public class SetGameModeEvent extends GameEvent {
 	 * @param newMode
 	 *            name of the new mode.
 	 */
-	public SetGameModeEvent(String newMode) {
+	public SetGameModeEvent(GameModeNumber newMode) {
 		super(GameEventNumber.SET_GAMEMODE);
 		this.newMode = newMode;
 
@@ -29,7 +31,7 @@ public class SetGameModeEvent extends GameEvent {
 	 * 
 	 * @author illonis
 	 */
-	public String getNewMode() {
+	public GameModeNumber getNewMode() {
 		return newMode;
 	}
 }
