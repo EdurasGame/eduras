@@ -217,7 +217,8 @@ public class GuiInternalEventListener implements GamePanelReactor {
 	@Override
 	public void selectOrDeselectAt(Vector2f point, boolean add, boolean remove) {
 		PlayerMainFigure p = null;
-		if (infoPro.getClientData().getRole() != ClientRole.SPECTATOR) {
+		boolean isSpectator = infoPro.getClientData().getRole() == ClientRole.SPECTATOR;
+		if (!isSpectator) {
 
 			try {
 				p = infoPro.getPlayer().getPlayerMainFigure();
@@ -231,9 +232,15 @@ public class GuiInternalEventListener implements GamePanelReactor {
 		for (Entry<Integer, GameObject> obj : infoPro.getGameObjects()
 				.entrySet()) {
 			GameObject o = obj.getValue();
-			if ((infoPro.getClientData().getRole() == ClientRole.SPECTATOR || (o
-					.isControlledUnit() && o.isVisibleFor(p)))
-					&& o.getShape().contains(point.x, point.y)) {
+
+			if (!o.getShape().contains(point.x, point.y))
+				continue;
+			boolean playerSelected = o instanceof PlayerMainFigure;
+			boolean controllableSelected = o.isControlledUnit();
+			// spectator can only select players
+			if ((isSpectator && playerSelected)
+					|| (!isSpectator && controllableSelected && o
+							.isVisibleFor(p))) {
 				if (remove) {
 					client.getData().getSelectedUnits().remove(obj.getKey());
 				} else if (add) {

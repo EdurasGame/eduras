@@ -250,10 +250,12 @@ public class HudNotifier implements GameEventListener {
 
 	@Override
 	public void onGameReady() {
-		for (GameEventListener obj : uiObjects) {
+		for (int i = 0; i < uiObjects.size(); i++) {
+			GameEventListener obj = uiObjects.get(i);
 			obj.onGameReady();
 		}
-		for (GameEventListener obj : otherObjects) {
+		for (int i = 0; i < otherObjects.size(); i++) {
+			GameEventListener obj = otherObjects.get(i);
 			obj.onGameReady();
 		}
 	}
