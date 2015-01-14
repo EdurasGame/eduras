@@ -6,6 +6,9 @@ import java.util.logging.Logger;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Font;
 import org.newdawn.slick.Graphics;
+import org.newdawn.slick.Image;
+import org.newdawn.slick.geom.Rectangle;
+import org.newdawn.slick.geom.Shape;
 
 import de.illonis.edulog.EduLog;
 import de.illonis.eduras.Player;
@@ -15,6 +18,7 @@ import de.illonis.eduras.gameclient.datacache.CacheInfo.ImageKey;
 import de.illonis.eduras.gameclient.datacache.FontCache;
 import de.illonis.eduras.gameclient.datacache.FontCache.FontKey;
 import de.illonis.eduras.gameclient.datacache.ImageCache;
+import de.illonis.eduras.gameclient.datacache.TextureInfo.TextureKey;
 import de.illonis.eduras.gameclient.gui.game.GameRenderer;
 import de.illonis.eduras.gamemodes.GameMode;
 import de.illonis.eduras.gameobjects.GameObject;
@@ -45,6 +49,9 @@ public class SpectatorSelectedPlayerDisplay extends RenderedGuiObject {
 	private float width;
 	private float height;
 	private float healthBarHeight;
+	private Shape bounds;
+	private Image backgroundTexture;
+	private Image blinkIcon;
 
 	protected SpectatorSelectedPlayerDisplay(UserInterface gui) {
 		super(gui);
@@ -80,8 +87,8 @@ public class SpectatorSelectedPlayerDisplay extends RenderedGuiObject {
 				if (!(o instanceof PlayerMainFigure)) {
 					return;
 				}
-				g.setColor(Color.darkGray);
-				g.fillRect(screenX, screenY, width, height);
+				g.setColor(Color.white);
+				g.texture(bounds, backgroundTexture);
 				PlayerMainFigure player = (PlayerMainFigure) o;
 				font.drawString(screenX, screenY, player.getPlayer().getName(),
 						Color.white);
@@ -93,13 +100,8 @@ public class SpectatorSelectedPlayerDisplay extends RenderedGuiObject {
 				g.fillRect(screenX, screenY, healthPartWidth, healthBarHeight);
 				font.drawString(screenX + 5, screenY, player.getPlayer()
 						.getName(), Color.black);
-				try {
-					g.drawImage(
-							ImageCache.getGuiImage(ImageKey.ACTION_SPELL_BLINK),
-							screenX + 1, screenY + healthBarHeight + 5);
-				} catch (CacheException e) {
-					L.log(Level.WARNING, "Blink icon not cached", e);
-				}
+				g.drawImage(blinkIcon, screenX + 1, screenY + healthBarHeight
+						+ 5);
 				renderCooldown(g, screenX + 1, screenY + healthBarHeight + 5,
 						player.getPlayer().getBlinkCooldown(),
 						S.Server.sv_blink_cooldown);
@@ -171,6 +173,21 @@ public class SpectatorSelectedPlayerDisplay extends RenderedGuiObject {
 		healthBarHeight = HEALTHBAR_HEIGHT * GameRenderer.getRenderScale();
 		height = MAX_ROWS * size + healthBarHeight + 10;
 		screenY = windowHeight - height;
+		bounds = new Rectangle(screenX, screenY, width, height);
+		try {
+			backgroundTexture = ImageCache.getTexture(TextureKey.STRATEGY_BAR);
+		} catch (CacheException e) {
+			L.log(Level.SEVERE, "Could not load background texture for "
+					+ getClass().getSimpleName(), e);
+			return false;
+		}
+		try {
+			blinkIcon = ImageCache.getGuiImage(ImageKey.ACTION_SPELL_BLINK);
+		} catch (CacheException e) {
+			L.log(Level.SEVERE, "Could not load blink icon for "
+					+ getClass().getSimpleName(), e);
+			return false;
+		}
 		return true;
 	}
 }
