@@ -30,7 +30,7 @@ public abstract class ResourceDisplay extends RenderedGuiObject {
 	protected Image icon;
 	private Font font;
 	private float textX;
-	private float iconY;
+	protected float iconY;
 
 	protected ResourceDisplay(UserInterface gui) {
 		super(gui);

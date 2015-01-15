@@ -53,11 +53,11 @@ public class SpectatorResourceDisplay extends ResourceDisplay {
 
 	@Override
 	public boolean init(Graphics g, int windowWidth, int windowHeight) {
-		boolean ok = super.init(g, windowWidth, windowHeight);
-		screenY = 10;
 		screenX = windowWidth / 4 + (index * (windowWidth / 2));
+		screenY = 10;
+		boolean ok = super.init(g, windowWidth, windowHeight);
 		smallFont = FontCache.getFont(FontKey.SMALL_FONT, g);
-		incomeY = screenY + icon.getHeight();
+		incomeY = iconY + icon.getHeight();
 		return ok;
 	}
 
