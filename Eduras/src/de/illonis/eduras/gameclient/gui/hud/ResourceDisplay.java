@@ -27,7 +27,7 @@ public abstract class ResourceDisplay extends RenderedGuiObject {
 			.getName());
 
 	protected int resAmount;
-	private Image icon;
+	protected Image icon;
 	private Font font;
 	private float textX;
 	private float iconY;
