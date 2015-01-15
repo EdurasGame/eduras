@@ -38,6 +38,7 @@ import de.illonis.eduras.inventory.NoSuchItemException;
 import de.illonis.eduras.items.Item;
 import de.illonis.eduras.logicabstraction.EdurasInitializer;
 import de.illonis.eduras.logicabstraction.InformationProvider;
+import de.illonis.eduras.networking.ClientRole;
 
 /**
  * A panel that represents the gameworld. All world objects and user interface
@@ -349,7 +350,7 @@ public class GamePanelLogic extends GameEventAdapter implements
 
 	@Override
 	public void onItemSlotChanged(SetItemSlotEvent event) {
-		if (!event.isNew())
+		if (!event.isNew() || infoPro.getOwnerID() != event.getOwner())
 			return;
 		try {
 			Item item = infoPro.getPlayer().getInventory()
@@ -544,10 +545,12 @@ public class GamePanelLogic extends GameEventAdapter implements
 	@Override
 	public void setCameraPosition(Vector2f gamePos)
 			throws ObjectNotFoundException {
-		Vector2f newPos = EdurasInitializer.getInstance()
-				.getInformationProvider().getPlayer().getPlayerMainFigure()
-				.getPositionVector().copy();
-		gamePos.sub(newPos);
+		if (infoPro.getClientData().getRole() != ClientRole.SPECTATOR) {
+			Vector2f newPos = EdurasInitializer.getInstance()
+					.getInformationProvider().getPlayer().getPlayerMainFigure()
+					.getPositionVector().copy();
+			gamePos.sub(newPos);
+		}
 		camera.getCameraOffset().set(gamePos.x, gamePos.y);
 	}
 

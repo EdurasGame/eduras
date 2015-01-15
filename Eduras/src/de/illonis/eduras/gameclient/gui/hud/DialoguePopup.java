@@ -25,7 +25,6 @@ public abstract class DialoguePopup extends ClickableGuiElement implements
 
 	protected DialoguePopup(UserInterface gui, String text) {
 		super(gui);
-
 		this.text = text;
 		answerButtons = new LinkedList<AnswerButton>();
 		bounds = new Rectangle(0, 0, 300, 60);

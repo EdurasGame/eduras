@@ -240,7 +240,20 @@ public class ClientGameEventListener implements GameEventListener {
 	}
 
 	@Override
+	public void onPlayerTeamChanged(int ownerId) {
+		ui.onPlayerTeamChanged(ownerId);
+		effects.onPlayerTeamChanged(ownerId);
+	}
+
+	@Override
 	public void onRoundEnd(RoundEndEvent event) {
 		ui.onRoundEnd(event);
+		effects.onRoundEnd(event);
+	}
+
+	@Override
+	public void onPlayerBlinked(int owner) {
+		ui.onPlayerBlinked(owner);
+		effects.onPlayerBlinked(owner);
 	}
 }

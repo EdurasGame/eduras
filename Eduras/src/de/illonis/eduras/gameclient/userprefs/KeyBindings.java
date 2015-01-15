@@ -100,6 +100,13 @@ public final class KeyBindings implements ResettableSetting {
 		setDefaultKeyBinding(KeyBinding.ACTIONBAR_PAGE_UNITS, Input.KEY_F3);
 		setDefaultKeyBinding(KeyBinding.ACTIONBAR_PAGE_SPELLS, Input.KEY_F4);
 
+		// specator
+
+		setDefaultKeyBinding(KeyBinding.SPECTATOR_SCROLL_LEFT, Input.KEY_A);
+		setDefaultKeyBinding(KeyBinding.SPECTATOR_SCROLL_RIGHT, Input.KEY_D);
+		setDefaultKeyBinding(KeyBinding.SPECTATOR_SCROLL_DOWN, Input.KEY_S);
+		setDefaultKeyBinding(KeyBinding.SPECTATOR_SCROLL_UP, Input.KEY_W);
+
 		// general bindings
 		setDefaultKeyBinding(KeyBinding.CHAT, Input.KEY_ENTER);
 		setDefaultKeyBinding(KeyBinding.SWITCH_MODE, Input.KEY_E);
@@ -150,7 +157,11 @@ public final class KeyBindings implements ResettableSetting {
 		ACTIONBAR_PAGE_WEAPONS,
 		ACTIONBAR_PAGE_PLAYERSPELLS,
 		ACTIONBAR_PAGE_UNITS,
-		ACTIONBAR_PAGE_SPELLS;
+		ACTIONBAR_PAGE_SPELLS,
+		SPECTATOR_SCROLL_UP,
+		SPECTATOR_SCROLL_LEFT,
+		SPECTATOR_SCROLL_DOWN,
+		SPECTATOR_SCROLL_RIGHT;
 	}
 
 	/**

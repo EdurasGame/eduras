@@ -213,13 +213,11 @@ public class GameClient {
 	 * Sets the role of the client.
 	 * 
 	 * @param role
-	 *            new role.
-	 * 
-	 * @author illonis
+	 *            new role
 	 */
 	public void setRole(ClientRole role) {
 		this.role = role;
-		// TODO set role for gui.
+		getData().setRole(role);
 	}
 
 	/**

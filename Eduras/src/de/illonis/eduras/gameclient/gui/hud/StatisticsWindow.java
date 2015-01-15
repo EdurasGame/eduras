@@ -30,6 +30,7 @@ import de.illonis.eduras.gamemodes.GameMode;
 import de.illonis.eduras.gamemodes.GameMode.GameModeNumber;
 import de.illonis.eduras.gamemodes.TeamDeathmatch;
 import de.illonis.eduras.locale.Localization;
+import de.illonis.eduras.networking.ClientRole;
 import de.illonis.eduras.settings.S;
 import de.illonis.eduras.units.InteractMode;
 
@@ -73,6 +74,7 @@ public class StatisticsWindow extends RenderedGuiObject {
 		screenY = 0;
 		useStored = false;
 		zIndex = 5;
+		visibleForSpectator = true;
 	}
 
 	@Override
@@ -206,11 +208,13 @@ public class StatisticsWindow extends RenderedGuiObject {
 
 	private void drawPlayerRow(PlayerStatEntry data, Graphics g2d, float y) {
 		Player me = null;
-		try {
-			me = getInfo().getPlayer();
-		} catch (ObjectNotFoundException e1) {
-			L.log(Level.WARNING, "Own player not found while rendering stats.",
-					e1);
+		if (getInfo().getClientData().getRole() != ClientRole.SPECTATOR) {
+			try {
+				me = getInfo().getPlayer();
+			} catch (ObjectNotFoundException e1) {
+				L.log(Level.WARNING,
+						"Own player not found while rendering stats.", e1);
+			}
 		}
 		if (data.getPlayer().equals(me)) {
 			g2d.setColor(COLOR_HIGHLIGHT);
@@ -233,13 +237,14 @@ public class StatisticsWindow extends RenderedGuiObject {
 		String status = "";
 		if (!useStored) {
 			try {
-				if (data.getPlayer().getTeam()
-						.equals(getInfo().getPlayer().getTeam())) {
+				if (getInfo().getClientData().getRole() == ClientRole.SPECTATOR
+						|| data.getPlayer().getTeam().equals(me.getTeam())) {
 					status = data.getPlayer().getCurrentMode().getDisplayName();
 				}
-			} catch (PlayerHasNoTeamException | ObjectNotFoundException e) {
+			} catch (PlayerHasNoTeamException e) {
 				L.log(Level.WARNING,
-						"Could not determine current players team.", e);
+						"Could not determine current players team while showing stats",
+						e);
 			}
 		}
 		font.drawString(screenX + xPositions[3], y, status, COLOR_TEXT);

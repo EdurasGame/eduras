@@ -16,6 +16,7 @@ import de.illonis.eduras.gameclient.userprefs.KeyBindings.KeyBinding;
 import de.illonis.eduras.gameclient.userprefs.Settings;
 import de.illonis.eduras.logicabstraction.EdurasInitializer;
 import de.illonis.eduras.logicabstraction.InformationProvider;
+import de.illonis.eduras.networking.ClientRole;
 import de.illonis.eduras.units.InteractMode;
 
 /**
@@ -62,6 +63,8 @@ public class InputKeyHandler {
 				client, reactor));
 		keyHandlers.put(InteractMode.MODE_DEAD, new DeadModeKeyHandler(client,
 				reactor));
+		keyHandlers.put(InteractMode.MODE_SPECTATOR, new SpectatorKeyHandler(
+				client, reactor));
 	}
 
 	/**
@@ -112,15 +115,20 @@ public class InputKeyHandler {
 		if (consumed) {
 			return;
 		}
-
-		Player player;
-		try {
-			player = infoPro.getPlayer();
-		} catch (ObjectNotFoundException e1) {
-			L.log(Level.SEVERE, "Could not find player while pressing key.", e1);
-			return;
+		InteractMode currentMode;
+		if (infoPro.getClientData().getRole() == ClientRole.SPECTATOR) {
+			currentMode = InteractMode.MODE_SPECTATOR;
+		} else {
+			Player player;
+			try {
+				player = infoPro.getPlayer();
+			} catch (ObjectNotFoundException e1) {
+				L.log(Level.SEVERE,
+						"Could not find player while pressing key.", e1);
+				return;
+			}
+			currentMode = player.getCurrentMode();
 		}
-		InteractMode currentMode = player.getCurrentMode();
 
 		KeyBinding binding;
 		try {
@@ -131,7 +139,7 @@ public class InputKeyHandler {
 		}
 
 		if (infoPro.getGameMode().supportsKeyBinding(binding)) {
-			GuiKeyHandler handler = keyHandlers.get(player.getCurrentMode());
+			GuiKeyHandler handler = keyHandlers.get(currentMode);
 			if (handler != null) {
 				if (handler.isChatEnabled()) {
 					if (binding == KeyBinding.CHAT)
@@ -143,7 +151,10 @@ public class InputKeyHandler {
 						handler.keyPressed(binding);
 					}
 				} else {
-					handler.keyPressed(binding);
+					if (binding == KeyBinding.CANCEL) {
+						client.cancel();
+					} else
+						handler.keyPressed(binding);
 				}
 			}
 		}
@@ -161,33 +172,32 @@ public class InputKeyHandler {
 	public void keyReleased(int key, char c) {
 		// release button
 		pressedButtons.put(key, false);
-		// don't handle other keys
-		if (!settings.getKeyBindings().isBound(key))
-			return;
-		Player player;
-		try {
-			player = infoPro.getPlayer();
-		} catch (ObjectNotFoundException e1) {
-			L.log(Level.SEVERE, "Could not find player while releasing key.",
-					e1);
-			return;
+
+		InteractMode currentMode;
+		if (infoPro.getClientData().getRole() == ClientRole.SPECTATOR) {
+			currentMode = InteractMode.MODE_SPECTATOR;
+		} else {
+			try {
+				Player player = infoPro.getPlayer();
+				currentMode = player.getCurrentMode();
+			} catch (ObjectNotFoundException e1) {
+				L.log(Level.SEVERE,
+						"Could not find player while releasing key.", e1);
+				return;
+			}
 		}
 		KeyBinding binding;
 		try {
-			binding = settings.getKeyBindings().getBindingOf(key,
-					player.getCurrentMode());
+			binding = settings.getKeyBindings().getBindingOf(key, currentMode);
 		} catch (KeyNotBoundException ex) {
-			L.log(Level.SEVERE, "Key is bound but receiving binding failed: "
-					+ key, ex);
 			return;
 		}
 		if (infoPro.getGameMode().supportsKeyBinding(binding)) {
-			GuiKeyHandler handler = keyHandlers.get(player.getCurrentMode());
+			GuiKeyHandler handler = keyHandlers.get(currentMode);
 			if (handler != null) {
 				handler.keyReleased(binding);
 			}
 		}
 
 	}
-
 }

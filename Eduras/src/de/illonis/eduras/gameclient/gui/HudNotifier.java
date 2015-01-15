@@ -116,7 +116,8 @@ public class HudNotifier implements GameEventListener {
 
 	@Override
 	public void onObjectCreation(ObjectFactoryEvent event) {
-		for (GameEventListener obj : uiObjects) {
+		for (int i = 0; i < uiObjects.size(); i++) {
+			GameEventListener obj = uiObjects.get(i);
 			obj.onObjectCreation(event);
 		}
 		for (GameEventListener obj : otherObjects) {
@@ -186,7 +187,8 @@ public class HudNotifier implements GameEventListener {
 
 	@Override
 	public void onObjectRemove(ObjectFactoryEvent event) {
-		for (GameEventListener obj : uiObjects) {
+		for (int i = 0; i < uiObjects.size(); i++) {
+			GameEventListener obj = uiObjects.get(i);
 			obj.onObjectRemove(event);
 		}
 		for (GameEventListener obj : otherObjects) {
@@ -248,10 +250,12 @@ public class HudNotifier implements GameEventListener {
 
 	@Override
 	public void onGameReady() {
-		for (GameEventListener obj : uiObjects) {
+		for (int i = 0; i < uiObjects.size(); i++) {
+			GameEventListener obj = uiObjects.get(i);
 			obj.onGameReady();
 		}
-		for (GameEventListener obj : otherObjects) {
+		for (int i = 0; i < otherObjects.size(); i++) {
+			GameEventListener obj = otherObjects.get(i);
 			obj.onGameReady();
 		}
 	}
@@ -288,7 +292,8 @@ public class HudNotifier implements GameEventListener {
 
 	@Override
 	public void onPlayerJoined(int ownerId) {
-		for (GameEventListener obj : uiObjects) {
+		for (GameEventListener obj : new LinkedList<RenderedGuiObject>(
+				uiObjects)) {
 			obj.onPlayerJoined(ownerId);
 		}
 		for (GameEventListener obj : otherObjects) {
@@ -365,12 +370,32 @@ public class HudNotifier implements GameEventListener {
 	}
 
 	@Override
+	public void onPlayerTeamChanged(int ownerId) {
+		for (GameEventListener obj : uiObjects) {
+			obj.onPlayerTeamChanged(ownerId);
+		}
+		for (GameEventListener obj : otherObjects) {
+			obj.onPlayerTeamChanged(ownerId);
+		}
+	}
+
+	@Override
 	public void onRoundEnd(RoundEndEvent event) {
 		for (GameEventListener obj : uiObjects) {
 			obj.onRoundEnd(event);
 		}
 		for (GameEventListener obj : otherObjects) {
 			obj.onRoundEnd(event);
+		}
+	}
+
+	@Override
+	public void onPlayerBlinked(int owner) {
+		for (GameEventListener obj : uiObjects) {
+			obj.onPlayerBlinked(owner);
+		}
+		for (GameEventListener obj : otherObjects) {
+			obj.onPlayerBlinked(owner);
 		}
 	}
 }

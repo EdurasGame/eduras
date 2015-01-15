@@ -780,4 +780,12 @@ public interface EventTriggerer {
 	 * @param newScore
 	 */
 	void setTeamScore(Team team, int newScore);
+
+	/**
+	 * Notify clients that a player used blink.
+	 * 
+	 * @param playerId
+	 *            owner id of player.
+	 */
+	void notifyBlinkUsed(int playerId);
 }

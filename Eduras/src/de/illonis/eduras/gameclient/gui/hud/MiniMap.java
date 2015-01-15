@@ -79,6 +79,7 @@ public class MiniMap extends ClickableGuiElement {
 
 	protected MiniMap(UserInterface gui) {
 		super(gui);
+		visibleForSpectator = true;
 		windowScale = GameRenderer.getRenderScale();
 		bounds = new Rectangle(0, 0, SIZE * windowScale, SIZE * windowScale);
 		neutralObjects = new HashMap<Integer, MiniMapNeutralObject>();
@@ -182,22 +183,16 @@ public class MiniMap extends ClickableGuiElement {
 
 	@Override
 	public boolean mousePressed(int button, int x, int y) {
-		try {
-			InteractMode mode = getInfo().getPlayer().getCurrentMode();
-			return (mode == InteractMode.MODE_DEAD || mode == InteractMode.MODE_STRATEGY);
-		} catch (ObjectNotFoundException e) {
-			L.log(Level.WARNING,
-					"Could not find player while interacting with minimap.", e);
-		}
 		return false;
 	}
 
 	@Override
 	public boolean mouseReleased(int button, int x, int y) {
 		try {
-			InteractMode currentMode = getInfo().getPlayer().getCurrentMode();
+			InteractMode currentMode = getCurrentMode();
 			if (currentMode == InteractMode.MODE_STRATEGY
-					|| currentMode == InteractMode.MODE_DEAD) {
+					|| currentMode == InteractMode.MODE_DEAD
+					|| currentMode == InteractMode.MODE_SPECTATOR) {
 				centerAtMouse(x, y);
 				return true;
 			}
@@ -211,9 +206,10 @@ public class MiniMap extends ClickableGuiElement {
 	@Override
 	public boolean mouseDragged(int oldx, int oldy, int newx, int newy) {
 		try {
-			InteractMode currentMode = getInfo().getPlayer().getCurrentMode();
+			InteractMode currentMode = getCurrentMode();
 			if (currentMode == InteractMode.MODE_STRATEGY
-					|| currentMode == InteractMode.MODE_DEAD) {
+					|| currentMode == InteractMode.MODE_DEAD
+					|| currentMode == InteractMode.MODE_SPECTATOR) {
 				centerAtMouse(newx, newy);
 				return true;
 			}

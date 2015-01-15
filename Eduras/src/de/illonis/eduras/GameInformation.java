@@ -34,6 +34,7 @@ import de.illonis.eduras.events.SetBooleanGameObjectAttributeEvent;
 import de.illonis.eduras.events.SetGameModeEvent;
 import de.illonis.eduras.events.SetIntegerGameObjectAttributeEvent;
 import de.illonis.eduras.events.SetInteractModeEvent;
+import de.illonis.eduras.events.SetItemSlotEvent;
 import de.illonis.eduras.events.SetMapEvent;
 import de.illonis.eduras.events.SetPolygonDataEvent;
 import de.illonis.eduras.events.SetRemainingTimeEvent;
@@ -93,12 +94,15 @@ public class GameInformation {
 	private final HashMap<Integer, Team> teams;
 	private final HashMap<Team, SpawnType> spawnGroups;
 
+	private ConcurrentHashMap<Integer, Spectator> spectators;
+
 	/**
 	 * Creates a new game information object with emtpy object lists.
 	 */
 	public GameInformation() {
 		objects = new ConcurrentHashMap<Integer, GameObject>();
 		players = new ConcurrentHashMap<Integer, Player>();
+		spectators = new ConcurrentHashMap<Integer, Spectator>();
 		map = new Map("funmap");
 		gameSettings = new GameSettings(this);
 		teams = new HashMap<Integer, Team>();
@@ -393,11 +397,25 @@ public class GameInformation {
 
 		putCurrentStatsAndTeams(infos);
 
+		putInventoryInfos(infos);
+
 		putNeutralBaseOwnerInfos(infos, neutralBases);
 
 		putGuiNotifications(infos);
 
 		return infos;
+	}
+
+	private void putInventoryInfos(ArrayList<GameEvent> infos) {
+		for (Player player : players.values()) {
+			Item[] items = player.getInventory().getAllItems();
+			for (int i = 0; i < items.length; i++) {
+				int id = (items[i] == null) ? -1 : items[i].getId();
+				// TODO: send only to related player (and spectator)
+				infos.add(new SetItemSlotEvent(id, player.getPlayerMainFigure()
+						.getOwner(), i));
+			}
+		}
 	}
 
 	private void giveSettings(ArrayList<GameEvent> infos) {
@@ -483,7 +501,6 @@ public class GameInformation {
 						aUnit.getTeam().getTeamId()));
 			}
 		}
-
 	}
 
 	private void putCurrentSettings(ArrayList<GameEvent> infos) {
@@ -928,5 +945,45 @@ public class GameInformation {
 			}
 		}
 		return units;
+	}
+
+	/**
+	 * Adds a spectator to the game information.
+	 * 
+	 * @param spectator
+	 *            spectator to add
+	 */
+	public void addSpectator(Spectator spectator) {
+		spectators.put(spectator.getId(), spectator);
+	}
+
+	/**
+	 * Determines if the client who has the given clientId is a player.
+	 * 
+	 * @param clientId
+	 * @return true if it's a player
+	 */
+	public boolean isPlayer(int clientId) {
+		return players.containsKey(clientId);
+	}
+
+	/**
+	 * Removes a client who has the given client id from the list of spectators.
+	 * 
+	 * @param clientId
+	 */
+	public void removeSpectator(int clientId) {
+		if (spectators.containsKey(clientId)) {
+			spectators.remove(clientId);
+		}
+	}
+
+	/**
+	 * Returns a collection of all spectators
+	 * 
+	 * @return collection of spectators
+	 */
+	public Collection<Spectator> getSpectators() {
+		return spectators.values();
 	}
 }

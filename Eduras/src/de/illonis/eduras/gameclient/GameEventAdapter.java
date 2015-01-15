@@ -154,6 +154,14 @@ public class GameEventAdapter implements GameEventListener {
 	}
 
 	@Override
+	public void onPlayerTeamChanged(int ownerId) {
+	}
+
+	@Override
 	public void onRoundEnd(RoundEndEvent event) {
+	}
+
+	@Override
+	public void onPlayerBlinked(int owner) {
 	}
 }

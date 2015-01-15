@@ -11,6 +11,7 @@ import de.illonis.eduras.gameclient.LoginData;
 import de.illonis.eduras.gameclient.userprefs.Settings;
 import de.illonis.eduras.images.ImageFiler.ImageResolution;
 import de.illonis.eduras.logicabstraction.EdurasInitializer;
+import de.illonis.eduras.networking.ClientRole;
 import de.illonis.eduras.networking.discover.ServerInfo;
 import de.illonis.eduras.settings.S;
 import de.lessvoid.nifty.slick2d.NiftyStateBasedGame;
@@ -68,7 +69,8 @@ public class EdurasSlickClient implements GameControllerBridge {
 		if (S.Client.windowed) {
 			s.setBooleanOption(Settings.WINDOWED, true);
 			s.setIntOption(Settings.WIDTH, ImageResolution.WINDOWED.getWidth());
-			s.setIntOption(Settings.HEIGHT, ImageResolution.WINDOWED.getHeight());
+			s.setIntOption(Settings.HEIGHT,
+					ImageResolution.WINDOWED.getHeight());
 		}
 		gameContainer.setDisplayMode(s.getIntSetting(Settings.WIDTH),
 				s.getIntSetting(Settings.HEIGHT),
@@ -138,6 +140,7 @@ public class EdurasSlickClient implements GameControllerBridge {
 			addState(new LoadingState(EdurasSlickClient.this));
 			addState(new GameState(EdurasSlickClient.this));
 			addState(new ConnectingState(EdurasSlickClient.this));
+			addState(new SpectatorState(EdurasSlickClient.this));
 		}
 	}
 
@@ -173,7 +176,7 @@ public class EdurasSlickClient implements GameControllerBridge {
 
 	@Override
 	public void onDisconnect(boolean gracefully, String message) {
-		enterState(2);
+		enterState(ServerListState.SERVER_LIST_STATE_ID);
 	}
 
 	@Override
@@ -198,7 +201,11 @@ public class EdurasSlickClient implements GameControllerBridge {
 
 	@Override
 	public void onGameReady() {
-		enterState(4);
+		if (loginData.getRole() == ClientRole.PLAYER)
+			enterState(GameState.GAME_STATE_ID);
+		else if (loginData.getRole() == ClientRole.SPECTATOR) {
+			enterState(SpectatorState.SPECTATOR_STATE_ID);
+		}
 	}
 
 	@Override

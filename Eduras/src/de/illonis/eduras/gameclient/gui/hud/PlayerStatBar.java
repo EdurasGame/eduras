@@ -4,17 +4,13 @@ import java.util.LinkedList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.newdawn.slick.Color;
 import org.newdawn.slick.Font;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
-import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.Vector2f;
 
 import de.illonis.edulog.EduLog;
 import de.illonis.eduras.Player;
-import de.illonis.eduras.events.RespawnEvent;
-import de.illonis.eduras.events.SetIntegerGameObjectAttributeEvent;
 import de.illonis.eduras.events.SetInteractModeEvent;
 import de.illonis.eduras.exceptions.ActionFailedException;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
@@ -27,7 +23,6 @@ import de.illonis.eduras.gameclient.gui.game.GameRenderer;
 import de.illonis.eduras.logicabstraction.EdurasInitializer;
 import de.illonis.eduras.units.InteractMode;
 import de.illonis.eduras.units.PlayerMainFigure;
-import de.illonis.eduras.units.Unit;
 
 /**
  * Displays player details like stats, health, etc.
@@ -41,12 +36,6 @@ public class PlayerStatBar extends RenderedGuiObject {
 
 	private UserInterface userInterface;
 	private LinkedList<GUIPlayerBar> players;
-	private float statBarSize;
-
-	private final static int PLAYER_BAR_WIDTH = 60;
-	private final static Color COLOR_BAR = Color.yellow;
-	private final static Color COLOR_BG = Color.black;
-	private static final Color COLOR_TEXT = Color.black;
 
 	private static final int GAP_BETWEEN_PLAYERS = 10;
 
@@ -60,36 +49,16 @@ public class PlayerStatBar extends RenderedGuiObject {
 		super(gui);
 		userInterface = gui;
 		players = new LinkedList<GUIPlayerBar>();
-		statBarSize = PLAYER_BAR_WIDTH * GameRenderer.getRenderScale();
+
 	}
 
-	class GUIPlayerBar extends ClickableGuiElement {
+	class GUIPlayerBar extends PlayerDisplay {
 
-		private int health;
-		private int maxHealth;
-		private int barWidth;
-		private int index;
-		private Player player;
-		private float yPosition;
-		private Rectangle bounds;
+		private final int index;
 
 		public GUIPlayerBar(Player player, int index) {
-			super(userInterface);
-			this.player = player;
-			health = maxHealth = 10;
-			screenX = 5;
+			super(userInterface, player);
 			this.index = index;
-			bounds = new Rectangle(0, 0, 10, 10);
-			setActiveInteractModes(InteractMode.MODE_STRATEGY);
-
-			PlayerMainFigure mainFigure = player.getPlayerMainFigure();
-			if (mainFigure != null) {
-				maxHealth = mainFigure.getMaxHealth();
-				health = mainFigure.getHealth();
-			} else {
-				health = 0;
-			}
-			recalculate();
 		}
 
 		@Override
@@ -99,77 +68,17 @@ public class PlayerStatBar extends RenderedGuiObject {
 				return;
 			}
 			Font font = FontCache.getFont(FontKey.DEFAULT_FONT, g2d);
-			g2d.setLineWidth(1f);
-			yPosition = screenY
-					+ 50
+			screenY = 50
 					+ index
 					* (font.getLineHeight() * 2 + GAP_BETWEEN_PLAYERS
 							* GameRenderer.getRenderScale());
-			bounds = new Rectangle(screenX, yPosition, statBarSize,
-					font.getLineHeight() * 2);
-			// fill black
-			g2d.setColor(COLOR_BG);
-			g2d.fill(bounds);
-			// draw frame
-			g2d.setColor(Color.white);
-			g2d.draw(bounds);
-
-			font.drawString(screenX + 5, yPosition, player.getName(),
-					Color.white);
-			// g2d.setColor(COLOR_BG);
-			// g2d.fillRect(screenX, yPosition + statBarSize / 3, statBarSize,
-			// statBarSize - statBarSize / 3);
-			g2d.setColor(COLOR_BAR);
-			g2d.fillRect(screenX, yPosition + font.getLineHeight(), barWidth,
-					font.getLineHeight());
-			font.drawString(screenX + 5, yPosition + font.getLineHeight(),
-					health + " / " + maxHealth, COLOR_TEXT);
-			if (player.isDead()
-					&& player.equals(getInfo().getClientData()
-							.getCurrentResurrectTarget())) {
-				g2d.setColor(Color.red);
-				g2d.setLineWidth(3f);
-				g2d.draw(bounds);
-			}
+			super.render(g2d);
 		}
 
 		@Override
 		public boolean init(Graphics g, int windowWidth, int windowHeight) {
 			screenY = windowHeight - statBarSize;
 			return true;
-		}
-
-		@Override
-		public void onHealthChanged(Unit unit, int oldValue, int newValue) {
-			PlayerMainFigure mainFigure = player.getPlayerMainFigure();
-			if (mainFigure != null && unit.equals(mainFigure)) {
-
-				health = newValue;
-				maxHealth = mainFigure.getMaxHealth();
-				recalculate();
-			}
-		}
-
-		@Override
-		public void onRespawn(RespawnEvent event) {
-			if (event.getOwner() == player.getPlayerId()) {
-				onHealthChanged(player.getPlayerMainFigure(), 0, player
-						.getPlayerMainFigure().getHealth());
-			}
-		}
-
-		@Override
-		public void onMaxHealthChanged(SetIntegerGameObjectAttributeEvent event) {
-			PlayerMainFigure mainFigure = player.getPlayerMainFigure();
-			if (event.getObjectId() == mainFigure.getId()) {
-				maxHealth = event.getNewValue();
-				recalculate();
-			}
-		}
-
-		private void recalculate() {
-			float percent = (float) health / maxHealth;
-			barWidth = Math.round(percent * statBarSize);
 		}
 
 		@Override
@@ -206,6 +115,7 @@ public class PlayerStatBar extends RenderedGuiObject {
 					}
 					break;
 				default:
+
 					// center the camera on the clicked player
 					Vector2f gamePos = new Vector2f(mainFigure.getShape()
 							.getX(), mainFigure.getShape().getY());
@@ -238,11 +148,6 @@ public class PlayerStatBar extends RenderedGuiObject {
 				return false;
 			}
 		}
-
-		@Override
-		public Rectangle getBounds() {
-			return bounds;
-		}
 	}
 
 	private void actionDone() {
@@ -256,7 +161,6 @@ public class PlayerStatBar extends RenderedGuiObject {
 
 	@Override
 	public boolean init(Graphics g, int windowWidth, int windowHeight) {
-		statBarSize = PLAYER_BAR_WIDTH * GameRenderer.getRenderScale();
 		return true;
 	}
 
@@ -281,6 +185,7 @@ public class PlayerStatBar extends RenderedGuiObject {
 						.getPlayers()) {
 
 					players.add(new GUIPlayerBar(teamMate, index));
+
 					index++;
 				}
 			} catch (PlayerHasNoTeamException | ObjectNotFoundException e) {

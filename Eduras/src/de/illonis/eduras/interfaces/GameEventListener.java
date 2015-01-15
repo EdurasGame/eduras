@@ -274,9 +274,25 @@ public interface GameEventListener {
 	void onAoEDamage(AoEDamageEvent event);
 
 	/**
+	 * Called when team of a player changed.
+	 * 
+	 * @param ownerId
+	 *            owner of player.
+	 */
+	void onPlayerTeamChanged(int ownerId);
+
+	/**
 	 * Called when a round ended.
 	 * 
 	 * @param event
 	 */
 	void onRoundEnd(RoundEndEvent event);
+
+	/**
+	 * Called when a player used blink successfully.
+	 * 
+	 * @param owner
+	 *            owner-id of blinked player.
+	 */
+	void onPlayerBlinked(int owner);
 }

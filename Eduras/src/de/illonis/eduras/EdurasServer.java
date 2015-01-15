@@ -72,7 +72,7 @@ import de.illonis.eduras.utils.WebFetcher;
  */
 public class EdurasServer {
 
-	private final static int DEFAULT_PORT = 4387;
+	public final static int DEFAULT_PORT = 4387;
 	private final static String DEFAULT_NAME = "Eduras Server";
 	private final static Logger L = EduLog.getLoggerFor(EdurasServer.class
 			.getName());

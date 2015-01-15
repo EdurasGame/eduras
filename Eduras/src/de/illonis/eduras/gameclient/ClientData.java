@@ -8,6 +8,7 @@ import de.illonis.eduras.ObjectFactory.ObjectType;
 import de.illonis.eduras.Player;
 import de.illonis.eduras.events.GameEvent.GameEventNumber;
 import de.illonis.eduras.logicabstraction.InformationProvider;
+import de.illonis.eduras.networking.ClientRole;
 
 /**
  * Holds data that are stored only on client side and do not have to be
@@ -27,6 +28,7 @@ public final class ClientData {
 	private ObjectType typeOfItemToSpawn;
 	private int currentActionSelected;
 	private GameEventNumber currentSpellSelected;
+	private ClientRole role;
 
 	/**
 	 * Creates a new storage.
@@ -176,6 +178,14 @@ public final class ClientData {
 
 	public void setCurrentSpellSelected(GameEventNumber spell) {
 		currentSpellSelected = spell;
+	}
+	
+	public void setRole(ClientRole role) {
+		this.role = role;
+	}
+
+	public ClientRole getRole() {
+		return role;
 	}
 
 }

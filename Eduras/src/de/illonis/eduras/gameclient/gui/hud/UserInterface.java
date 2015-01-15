@@ -100,6 +100,7 @@ public class UserInterface {
 		this.logic = logic;
 		this.cancebleElements = new LinkedList<Cancelable>();
 		createElements();
+		setRole(infos.getClientData().getRole());
 		hudNotifier.setUiObjects(this.uiObjects);
 
 		TimerTask pingRequester = new TimerTask() {
@@ -128,14 +129,22 @@ public class UserInterface {
 		new RemainingTimeFrame(this);
 		new ItemDisplay(this, minimap);
 		new RespawnTimeFrame(this);
-		new ResourceDisplay(this);
+		new PlayerResourceDisplay(this);
+		new SpectatorResourceDisplay(this, 0);
+		new SpectatorResourceDisplay(this, 1);
+		new ResourceIncomeDisplay(this, 0);
+		new ResourceIncomeDisplay(this, 1);
 		new BlinkDisplay(this, minimap);
+		new TeamInfoDisplay(this, 0);
+		new TeamInfoDisplay(this, 1);
 		pingDisplay = new PingDisplay(this);
 		notificationPanel = new NotificationPanel(this);
 		tipPanel = new TipPanel(this, minimap);
 		statWindow = new StatisticsWindow(this);
 		bigPanel = new BigPanel(this);
 		new SelectedUnitsDisplay(this);
+		new TeamStatDisplay(this);
+		new TeamScoreDisplay(this);
 		dragRect = new DragSelectionRectangle(this);
 		exitPopup = new ExitPopup(this);
 		selectTeamPopup = new SelectTeamPopup(this);
@@ -143,7 +152,7 @@ public class UserInterface {
 		cancebleElements.add(selectTeamPopup);
 		new ChatDisplay(cache, this);
 		// new BugReportButton(this);
-
+		new SpectatorSelectedPlayerDisplay(this);
 		actionBar.initPages(this, guiReactor);
 		new StrategyPanel(this);
 	}
@@ -267,8 +276,10 @@ public class UserInterface {
 		if (spectator) {
 			for (int i = 0; i < uiObjects.size(); i++) {
 				RenderedGuiObject o = uiObjects.get(i);
-				if (!o.isVisibleForSpectator())
+				if (!o.isVisibleForSpectator()) {
+					System.out.println("removing " + o.getClass());
 					removeGuiElement(o);
+				}
 			}
 		}
 	}

@@ -32,7 +32,11 @@ public class ServerNetworker implements ServerNetworkEventHandler {
 	public void onClientDisconnected(int clientId) {
 		L.info("User with id #" + clientId
 				+ " disconnected from Eduras Server.");
-		gameInfo.getGameSettings().getGameMode().onDisconnect(clientId);
+		if (gameInfo.isPlayer(clientId)) {
+			gameInfo.getGameSettings().getGameMode().onDisconnect(clientId);
+		} else {
+			gameInfo.removeSpectator(clientId);
+		}
 	}
 
 	@Override

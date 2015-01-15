@@ -11,6 +11,7 @@ import org.newdawn.slick.state.transition.FadeInTransition;
 import org.newdawn.slick.state.transition.FadeOutTransition;
 
 import de.illonis.edulog.EduLog;
+import de.illonis.eduras.EdurasServer;
 import de.illonis.eduras.EdurasVersion;
 import de.illonis.eduras.gameclient.LoginData;
 import de.illonis.eduras.gameclient.audio.SoundMachine;
@@ -84,8 +85,9 @@ public class ServerListController extends EdurasScreenController implements
 	public void connectIfPresetAndFirstTime() {
 		if (!presetServerIp.isEmpty() && presetServerPort != 0 && firstTime) {
 			try {
-				joinServer(new ServerInfo(
-						InetAddress.getByName(presetServerIp), presetServerPort));
+				joinServer(
+						new ServerInfo(InetAddress.getByName(presetServerIp),
+								presetServerPort), ClientRole.PLAYER);
 			} catch (UnknownHostException e) {
 				L.log(Level.WARNING, "Cannot find specified IP '"
 						+ presetServerIp + "'", e);
@@ -96,36 +98,62 @@ public class ServerListController extends EdurasScreenController implements
 	}
 
 	/**
-	 * Joins the selected server.
+	 * Joins the selected server as spectator.
+	 */
+	public void joinSpectator() {
+		joinEnteredOrSelected(ClientRole.SPECTATOR);
+	}
+
+	/**
+	 * Joins the selected server as player.
 	 */
 	public void join() {
+		joinEnteredOrSelected(ClientRole.PLAYER);
+	}
+
+	private void joinEnteredOrSelected(ClientRole role) {
 		List<ServerInfo> selected = listBox.getSelection();
 		if (selected.size() == 1) {
 			ServerInfo current = selected.get(0);
-			joinServer(current);
+			joinServer(current, role);
 		} else {
+
+			String serverAddressAndPort = customIpTextField.getRealText();
+			String hostAddress;
+			int port;
+			if (serverAddressAndPort.contains(":")) {
+				String[] parts = serverAddressAndPort.split(":");
+				hostAddress = parts[0];
+				try {
+					port = Integer.parseInt(parts[1]);
+				} catch (NumberFormatException e) {
+					L.log(Level.INFO, "player entered invalid port: "
+							+ parts[1], e);
+					return;
+				}
+			} else {
+				hostAddress = serverAddressAndPort;
+				port = EdurasServer.DEFAULT_PORT;
+			}
+
+			InetAddress address;
 			try {
-				String serverAddressAndPort = customIpTextField
-						.getDisplayedText();
-				String hostAddress = serverAddressAndPort.split(":")[0];
-				int port = Integer.parseInt(serverAddressAndPort.split(":")[1]);
-				joinServer(new ServerInfo(InetAddress.getByName(hostAddress),
-						port));
-			} catch (NumberFormatException | UnknownHostException e) {
-				// TODO: Show a notification or something
-				return;
+				address = InetAddress.getByName(hostAddress);
+				joinServer(new ServerInfo(address, port), role);
+			} catch (UnknownHostException e) {
+				L.log(Level.INFO, "player entered unknown server address: "
+						+ hostAddress, e);
 			}
 		}
 	}
 
-	private void joinServer(ServerInfo server) {
+	private void joinServer(ServerInfo server, ClientRole role) {
 		String clientVersion = EdurasVersion.getVersion();
 		if (server.getMap().isEmpty()
 				|| server.getVersion().equals(clientVersion)) {
 			game.setServer(server);
 			game.enterState(LoadingState.LOADING_STATE_ID);
 			String userName = game.getUsername();
-			ClientRole role = ClientRole.PLAYER;
 			LoginData data = new LoginData(server.getUrl(), server.getPort(),
 					userName, role);
 			game.setLoginData(data);

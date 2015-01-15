@@ -24,7 +24,6 @@ import de.illonis.eduras.maps.Map;
 import de.illonis.eduras.maps.NodeData;
 import de.illonis.eduras.maps.SpawnPosition.SpawnType;
 import de.illonis.eduras.math.graphs.Vertex;
-import de.illonis.eduras.settings.S;
 import de.illonis.eduras.units.Unit;
 
 /**
@@ -152,37 +151,13 @@ public abstract class BasicGameMode implements GameMode {
 		@Override
 		public void onIntervalElapsed(long delta) {
 			int income = 0;
-			if (S.Server.gm_edura_constant_income) {
-				float totalIncomePerSecond = calculateTotalIncomeGenerated();
-				float ratioOfTotalIncome = incomeOfBasePerSecond(base)
-						/ totalIncomePerSecond;
 
-				income = Math
-						.round((ratioOfTotalIncome * (S.Server.gm_edura_income_per_minute / 60f))
-								* (base.getResourceGenerateTimeInterval() / 1000));
-			} else {
-				income = base.getResourceGenerateAmountPerTimeInterval();
-			}
+			income = base.getResourceGenerateAmountPerTimeInterval(baseToVertex
+					.keySet());
 
 			gameInfo.getEventTriggerer().changeResourcesOfTeamByAmount(team,
 					income);
 		}
-	}
-
-	// calculates how much is generated per second
-	private float calculateTotalIncomeGenerated() {
-		int totalIncome = 0;
-		for (Base base : baseToVertex.keySet()) {
-
-			// calculate how much the base generates per second here
-			totalIncome += incomeOfBasePerSecond(base);
-		}
-		return totalIncome;
-	}
-
-	private float incomeOfBasePerSecond(Base base) {
-		return (((float) base.getResourceGenerateAmountPerTimeInterval() / (float) base
-				.getResourceGenerateTimeInterval()) * 1000f);
 	}
 
 	private void clearNodes() {

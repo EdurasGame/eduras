@@ -17,6 +17,7 @@ import de.illonis.eduras.gameclient.gui.hud.RenderedGuiObject;
 import de.illonis.eduras.gameclient.gui.hud.TooltipTriggerer;
 import de.illonis.eduras.logicabstraction.EdurasInitializer;
 import de.illonis.eduras.logicabstraction.InformationProvider;
+import de.illonis.eduras.networking.ClientRole;
 
 /**
  * Handles mouse clicks and mouse movement in the gui.<br>
@@ -32,9 +33,10 @@ public final class GuiMouseHandler extends GuiMouseAdapter implements
 	private final static Logger L = EduLog.getLoggerFor(GuiMouseHandler.class
 			.getName());
 
-	private final EgoModeMouseAdapter egoModeHandler;
-	private final BuildModeMouseAdapter buildModeHandler;
-	private final DeadModeMouseAdapter deadModeHandler;
+	private final GuiMouseAdapter egoModeHandler;
+	private final GuiMouseAdapter buildModeHandler;
+	private final GuiMouseAdapter deadModeHandler;
+	private final GuiMouseAdapter spectatorModeHandler;
 	private final LinkedList<ClickableGuiElementInterface> clickListeners;
 	private boolean gameHasMouse;
 	private GuiMouseAdapter lastHandler;
@@ -52,6 +54,7 @@ public final class GuiMouseHandler extends GuiMouseAdapter implements
 		buildModeHandler = new BuildModeMouseAdapter(logic, reactor);
 		egoModeHandler = new EgoModeMouseAdapter(logic, reactor);
 		deadModeHandler = new DeadModeMouseAdapter(logic, reactor);
+		spectatorModeHandler = new SpectatorMouseAdapter(logic, reactor);
 		clickListeners = new LinkedList<ClickableGuiElementInterface>();
 	}
 
@@ -110,28 +113,33 @@ public final class GuiMouseHandler extends GuiMouseAdapter implements
 	}
 
 	private GuiMouseAdapter getCurrentHandler() {
-		Player player;
-		try {
-			player = infoPro.getPlayer();
-		} catch (ObjectNotFoundException e) {
-			L.log(Level.SEVERE, "Something terribly bad happened.", e);
-			return null;
-		}
 		GuiMouseAdapter handler;
-		switch (player.getCurrentMode()) {
-		case MODE_EGO:
-			handler = egoModeHandler;
-			break;
-		case MODE_STRATEGY:
-			handler = buildModeHandler;
-			break;
-		case MODE_DEAD:
-			handler = deadModeHandler;
-			break;
-		default:
-			// hopefully never happens
-			lastHandler.mouseLost();
-			return null;
+		if (infoPro.getClientData().getRole() == ClientRole.SPECTATOR) {
+			handler = spectatorModeHandler;
+		} else {
+			Player player;
+			try {
+				player = infoPro.getPlayer();
+			} catch (ObjectNotFoundException e) {
+				L.log(Level.SEVERE, "Something terribly bad happened.", e);
+				return null;
+			}
+
+			switch (player.getCurrentMode()) {
+			case MODE_EGO:
+				handler = egoModeHandler;
+				break;
+			case MODE_STRATEGY:
+				handler = buildModeHandler;
+				break;
+			case MODE_DEAD:
+				handler = deadModeHandler;
+				break;
+			default:
+				// hopefully never happens
+				lastHandler.mouseLost();
+				return null;
+			}
 		}
 		if (!handler.equals(lastHandler)) {
 			if (lastHandler != null)

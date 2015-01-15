@@ -6,6 +6,7 @@ import java.util.logging.Logger;
 import de.illonis.edulog.EduLog;
 import de.illonis.eduras.exceptions.ObjectNotFoundException;
 import de.illonis.eduras.gameclient.gui.game.GuiClickReactor;
+import de.illonis.eduras.networking.ClientRole;
 
 /**
  * A gui element that is clickable. All clickable elements can trigger events on
@@ -63,6 +64,9 @@ public abstract class ClickableGuiElement extends RenderedGuiObject implements
 
 	@Override
 	public final boolean isActive() {
+		if (getInfo().getClientData().getRole() == ClientRole.SPECTATOR) {
+			return isVisibleForSpectator() && isVisible();
+		}
 		try {
 			return isEnabledInInteractMode(getInfo().getPlayer()
 					.getCurrentMode()) && isVisible();

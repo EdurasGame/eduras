@@ -26,6 +26,7 @@ import de.illonis.edulog.EduLog;
 import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.ObjectFactory.ObjectType;
 import de.illonis.eduras.Player;
+import de.illonis.eduras.Spectator;
 import de.illonis.eduras.Statistic;
 import de.illonis.eduras.Statistic.StatsProperty;
 import de.illonis.eduras.Team;
@@ -187,9 +188,42 @@ public class ServerEventTriggerer implements EventTriggerer {
 		}
 	}
 
+	/**
+	 * This method should be called when the event addresses only a single
+	 * client. (E.g. when resources are sent...)
+	 * 
+	 * @param event
+	 *            the event to send
+	 * @param client
+	 *            the client to send the event to
+	 */
 	private void sendEventToClient(Event event, int client) {
 		try {
 			server.sendEventToClient(event, client);
+		} catch (IllegalArgumentException | NoSuchClientException
+				| TooFewArgumentsExceptions e) {
+			L.warning("ServerEventTriggerer: " + e.getMessage());
+		}
+	}
+
+	/**
+	 * This method should be called when an event only addresses a single
+	 * player, so the other players shall not know about it (e.g. when cooldown
+	 * of an item finishes). Those events shall still be received by the
+	 * spectators, which
+	 * 
+	 * @param event
+	 *            the event to send
+	 * @param client
+	 *            the only client to send the event to besides the spectators
+	 */
+	private void sendPrivateEvent(Event event, int client) {
+		try {
+			server.sendEventToClient(event, client);
+
+			for (Spectator spectator : gameInfo.getSpectators()) {
+				server.sendEventToClient(event, spectator.getId());
+			}
 		} catch (IllegalArgumentException | NoSuchClientException
 				| TooFewArgumentsExceptions e) {
 			L.warning("ServerEventTriggerer: " + e.getMessage());
@@ -378,6 +412,7 @@ public class ServerEventTriggerer implements EventTriggerer {
 		Item[] items = player.getInventory().getAllItems();
 		for (int i = 0; i < items.length; i++) {
 			int id = (items[i] == null) ? -1 : items[i].getId();
+			// TODO: send only to related player (and spectator)
 			sendEventToAll(new SetItemSlotEvent(id, playerId, i));
 		}
 	}
@@ -1100,7 +1135,7 @@ public class ServerEventTriggerer implements EventTriggerer {
 
 	@Override
 	public void notifyGameReady(int clientId) {
-		sendEventToClient(new GameReadyEvent(), clientId);
+		sendPrivateEvent(new GameReadyEvent(), clientId);
 	}
 
 	@Override
@@ -1131,7 +1166,7 @@ public class ServerEventTriggerer implements EventTriggerer {
 				item.getOwner());
 		event.setItemType(item.getType());
 
-		sendEventToClient(event, item.getOwner());
+		sendPrivateEvent(event, item.getOwner());
 	}
 
 	@Override
@@ -1181,7 +1216,7 @@ public class ServerEventTriggerer implements EventTriggerer {
 	public void notifyWeaponAmmoEmpty(int clientId, ObjectType weaponType) {
 		ItemUseFailedEvent event = new ItemUseFailedEvent(clientId, weaponType,
 				Reason.AMMO_EMPTY);
-		sendEventToClient(event, clientId);
+		sendPrivateEvent(event, clientId);
 	}
 
 	@Override
@@ -1454,5 +1489,11 @@ public class ServerEventTriggerer implements EventTriggerer {
 	public void setTeamScore(Team team, int newScore) {
 		gameInfo.getGameSettings().getStats().setScoreOfTeam(team, newScore);
 		sendEvents(new SetScoreEvent(team, newScore));
+	}
+
+	@Override
+	public void notifyBlinkUsed(int playerId) {
+		sendEventToAll(new OwnerGameEvent(GameEventNumber.PLAYER_BLINKED,
+				playerId));
 	}
 }

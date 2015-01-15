@@ -160,6 +160,10 @@ public class ClientLogic implements GameLogicInterface {
 						healthEvent.getNewValue());
 
 				break;
+			case PLAYER_BLINKED:
+				OwnerGameEvent blinkedEvent = (OwnerGameEvent) event;
+				getListener().onPlayerBlinked(blinkedEvent.getOwner());
+				break;
 			case SET_POLYGON_DATA:
 				SetPolygonDataEvent polyEvent = (SetPolygonDataEvent) event;
 				GameObject gameObj;
@@ -380,6 +384,7 @@ public class ClientLogic implements GameLogicInterface {
 				}
 
 				teamToAddPlayerTo.addPlayer(player);
+				getListener().onPlayerTeamChanged(player.getPlayerId());
 				break;
 			case DEATH:
 				DeathEvent de = (DeathEvent) event;
@@ -768,9 +773,9 @@ public class ClientLogic implements GameLogicInterface {
 		try {
 			item = player.getInventory().getItemOfType(itemEvent.getItemType());
 		} catch (NoSuchItemException e) {
-			L.log(Level.WARNING,
-					"Could not handle item event because item is not in inventory.",
-					e);
+			L.log(Level.WARNING, "Could not handle item event of player "
+					+ player.getPlayerId()
+					+ " because item is not in inventory.", e);
 			return;
 		}
 		ItemEvent cooldownEvent = new ItemEvent(GameEventNumber.ITEM_CD_START,
