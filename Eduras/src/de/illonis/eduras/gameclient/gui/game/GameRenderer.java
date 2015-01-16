@@ -478,7 +478,8 @@ public class GameRenderer implements TooltipHandler {
 		try {
 			if (d.getPlayer().getCurrentMode()
 					.equals(InteractMode.MODE_STRATEGY)
-					&& d.getTeam().equals(info.getPlayer().getTeam())) {
+					&& (gui.isSpectator() || d.getTeam().equals(
+							info.getPlayer().getTeam()))) {
 
 				g.drawImage(
 						ImageCache.getGuiImage(ImageKey.STRATEGY_MODE_ICON), d
