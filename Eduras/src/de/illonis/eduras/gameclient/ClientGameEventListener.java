@@ -114,6 +114,7 @@ public class ClientGameEventListener implements GameEventListener {
 
 	@Override
 	public void onObjectRemove(ObjectFactoryEvent event) {
+		client.getData().getSelectedUnits().remove(event.getId());
 		ui.onObjectRemove(event);
 		effects.onObjectRemove(event);
 	}
@@ -139,7 +140,6 @@ public class ClientGameEventListener implements GameEventListener {
 
 	@Override
 	public void onDeath(DeathEvent event) {
-		client.getData().getSelectedUnits().remove(event.getKilled());
 		ui.onDeath(event);
 		effects.onDeath(event);
 	}
