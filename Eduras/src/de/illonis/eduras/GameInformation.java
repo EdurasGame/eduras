@@ -717,12 +717,13 @@ public class GameInformation {
 				return findFreePointWithinSpawnPositionForShape(spawnPos,
 						playerShape, objects.values(), 10);
 			} catch (NoSpawnAvailableException e) {
+				L.log(Level.INFO, "Testing spawnposition failed.", e);
 				// try next spawn
 				continue;
 			}
 		}
 
-		throw new NoSpawnAvailableException();
+		throw new NoSpawnAvailableException(map.getBounds(), playerShape);
 
 	}
 
@@ -761,7 +762,8 @@ public class GameInformation {
 						+ spawnPos.getArea().getX() + " y : "
 						+ spawnPos.getArea().getY() + " after "
 						+ ATTEMPT_PER_SPAWNPOINT + " attempts.");
-				throw new NoSpawnAvailableException();
+				throw new NoSpawnAvailableException(spawnPos.getArea(),
+						boundings);
 			}
 
 			spawnPositionOkay = !isAnyOfObjectsWithinBounds(boundings,
@@ -880,7 +882,8 @@ public class GameInformation {
 		// make sure target is inside of the map
 		if (!map.getBounds().contains(desiredBlinkTarget.x,
 				desiredBlinkTarget.y)) {
-			throw new NoSpawnAvailableException();
+			throw new NoSpawnAvailableException(desiredBlinkTarget,
+					blinkingMainFigure.getShape());
 		}
 
 		// check if the spot to blink to is okay
@@ -895,7 +898,8 @@ public class GameInformation {
 		Collection<GameObject> itemsAndMissiles = getAllItemsAndMissiles(blockingObjects);
 		blockingObjects.removeAll(itemsAndMissiles);
 		if (isAnyOfObjectsWithinBounds(mainFigureShapeCopy, blockingObjects)) {
-			throw new NoSpawnAvailableException();
+			throw new NoSpawnAvailableException(desiredBlinkTarget,
+					blinkingMainFigure.getShape());
 		}
 
 		return desiredBlinkTarget;

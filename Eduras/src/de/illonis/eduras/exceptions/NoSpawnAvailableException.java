@@ -1,14 +1,17 @@
 package de.illonis.eduras.exceptions;
 
-import java.util.logging.Logger;
-
-import de.illonis.edulog.EduLog;
+import org.newdawn.slick.geom.Shape;
+import org.newdawn.slick.geom.Vector2f;
 
 public class NoSpawnAvailableException extends Exception {
-	private final static Logger L = EduLog
-			.getLoggerFor(NoSpawnAvailableException.class.getName());
 
-	public NoSpawnAvailableException() {
-		super("Couldn't find a suitable spawnpoint.");
+	public NoSpawnAvailableException(Vector2f point, Shape objectShape) {
+		super("Could not spawn at " + point.toString() + " with shape "
+				+ objectShape);
+	}
+
+	public NoSpawnAvailableException(Shape spawnArea, Shape objectShape) {
+		super("Couldn't spawn in spawnarea " + spawnArea + " with shape "
+				+ objectShape);
 	}
 }

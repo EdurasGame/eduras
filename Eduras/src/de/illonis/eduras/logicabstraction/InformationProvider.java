@@ -3,10 +3,13 @@ package de.illonis.eduras.logicabstraction;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.Vector2f;
 
+import de.illonis.edulog.EduLog;
 import de.illonis.eduras.GameInformation;
 import de.illonis.eduras.ObjectFactory.ObjectType;
 import de.illonis.eduras.Player;
@@ -36,6 +39,8 @@ import de.illonis.eduras.units.Unit;
  * 
  */
 public class InformationProvider implements InfoInterface {
+	private final static Logger L = EduLog
+			.getLoggerFor(InformationProvider.class.getName());
 	private ClientData clientData;
 	private EdurasInitializer edurasInitializer;
 	private long timeTillRespawn;
@@ -187,6 +192,8 @@ public class InformationProvider implements InfoInterface {
 			unitToSpawn = new PlayerMainFigure(null, null, -1, -1, null);
 			break;
 		default:
+			L.severe("Tried to fit an object in base that is not supported: "
+					+ type);
 			return false;
 		}
 
@@ -202,6 +209,8 @@ public class InformationProvider implements InfoInterface {
 					GameInformation.ATTEMPT_PER_SPAWNPOINT);
 			return true;
 		} catch (NoSpawnAvailableException e) {
+			L.log(Level.SEVERE, "Object of type " + type
+					+ " does not fit in base " + base.getRefName(), e);
 			return false;
 		}
 
