@@ -7,7 +7,6 @@ import java.util.logging.Logger;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Font;
 import org.newdawn.slick.Graphics;
-import org.newdawn.slick.Image;
 import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.Vector2f;
 
@@ -16,11 +15,8 @@ import de.illonis.eduras.exceptions.ObjectNotFoundException;
 import de.illonis.eduras.exceptions.PlayerHasNoTeamException;
 import de.illonis.eduras.gameclient.ClientData;
 import de.illonis.eduras.gameclient.GamePanelReactor;
-import de.illonis.eduras.gameclient.datacache.CacheException;
-import de.illonis.eduras.gameclient.datacache.CacheInfo.ImageKey;
 import de.illonis.eduras.gameclient.datacache.FontCache;
 import de.illonis.eduras.gameclient.datacache.FontCache.FontKey;
-import de.illonis.eduras.gameclient.datacache.ImageCache;
 import de.illonis.eduras.gameclient.gui.game.GameRenderer;
 import de.illonis.eduras.logicabstraction.EdurasInitializer;
 import de.illonis.eduras.units.InteractMode;
@@ -44,12 +40,12 @@ public class ActionBarPage extends ClickableGuiElement implements
 	private final Rectangle bounds;
 	protected final GamePanelReactor reactor;
 	private final int index;
-	private Image resIcon;
 	private final ClientData data;
 	private final float buttonSize;
 	private boolean activePage;
 	private final ActionBar bar;
 	private int resources;
+	private Font font;
 
 	/**
 	 * Creates a new actionbar.
@@ -134,22 +130,15 @@ public class ActionBarPage extends ClickableGuiElement implements
 
 	@Override
 	public void render(Graphics g) {
-		Font font = FontCache.getFont(FontKey.SMALL_FONT, g);
 		try {
 			resources = getInfo().getPlayer().getTeam().getResource();
 		} catch (ObjectNotFoundException e) {
 			return;
 		} catch (PlayerHasNoTeamException e) {
-			L.log(Level.SEVERE, "Cannot find team while drawing actionbarPage", e);
+			L.log(Level.SEVERE, "Cannot find team while drawing actionbarPage",
+					e);
 		}
-		if (resIcon == null) {
-			try {
-				resIcon = ImageCache.getGuiImage(ImageKey.RESOURCE_ICON_SMALL);
-			} catch (CacheException e) {
-			}
-			screenY += font.getLineHeight();
-			updateBounds();
-		}
+
 		float x = screenX;
 		if (activePage) {
 			g.setColor(Color.black);
@@ -213,16 +202,11 @@ public class ActionBarPage extends ClickableGuiElement implements
 
 	@Override
 	public boolean init(Graphics g, int windowWidth, int windowHeight) {
-		try {
-			resIcon = ImageCache.getGuiImage(ImageKey.RESOURCE_ICON_SMALL);
-		} catch (CacheException e) {
-			L.log(Level.SEVERE, "Could not find small resource icon", e);
-			return false;
-		}
-
+		font = FontCache.getFont(FontKey.SMALL_FONT, g);
 		float scale = GameRenderer.getRenderScale();
 		screenX = MiniMap.SIZE * scale + buttonSize;
-		screenY = windowHeight - MiniMap.SIZE * scale + buttonSize * index;
+		screenY = windowHeight - MiniMap.SIZE * scale + buttonSize * index
+				+ font.getLineHeight();
 		updateBounds();
 		return true;
 	}
