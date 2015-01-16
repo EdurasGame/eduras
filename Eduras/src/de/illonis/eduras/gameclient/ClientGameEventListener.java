@@ -139,6 +139,7 @@ public class ClientGameEventListener implements GameEventListener {
 
 	@Override
 	public void onDeath(DeathEvent event) {
+		client.getData().getSelectedUnits().remove(event.getKilled());
 		ui.onDeath(event);
 		effects.onDeath(event);
 	}
