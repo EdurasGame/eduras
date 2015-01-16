@@ -501,7 +501,7 @@ public class EdurasServer {
 					.getGameInfo()));
 		} else {
 			eventTriggerer.changeGameMode(BasicGameMode.getGameModeByNumber(
-					GameModeNumber.valueOf(startGameMode),
+					GameModeNumber.valueOf(startGameMode.toUpperCase()),
 					eventTriggerer.getGameInfo()));
 		}
 	}

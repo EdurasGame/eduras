@@ -164,6 +164,48 @@ public class PlayerStatBar extends RenderedGuiObject {
 		return true;
 	}
 
+	private void refreshPlayers() {
+
+		for (GUIPlayerBar guiPlayerBar : players) {
+			userInterface.removeGuiElement(guiPlayerBar);
+			guiPlayerBar.getMouseHandler().removeClickableGuiElement(
+					guiPlayerBar);
+		}
+		try {
+			if (getInfo().getPlayer().getCurrentMode() == InteractMode.MODE_STRATEGY) {
+				try {
+					int index = 0;
+					for (Player teamMate : getInfo().getPlayer().getTeam()
+							.getPlayers()) {
+						players.add(new GUIPlayerBar(teamMate, index));
+						index++;
+					}
+				} catch (PlayerHasNoTeamException | ObjectNotFoundException e) {
+					L.log(Level.WARNING, "Cannot find player or his team!", e);
+					return;
+				}
+			}
+		} catch (ObjectNotFoundException e) {
+			L.log(Level.SEVERE, "Player not found while refreshing teambars.",
+					e);
+		}
+	}
+
+	@Override
+	public void onPlayerJoined(int ownerId) {
+		refreshPlayers();
+	}
+
+	@Override
+	public void onPlayerLeft(int ownerId) {
+		refreshPlayers();
+	}
+
+	@Override
+	public void onPlayerTeamChanged(int ownerId) {
+		refreshPlayers();
+	}
+
 	@Override
 	public void onInteractModeChanged(SetInteractModeEvent setModeEvent) {
 		super.onInteractModeChanged(setModeEvent);
@@ -171,27 +213,6 @@ public class PlayerStatBar extends RenderedGuiObject {
 		if (setModeEvent.getOwner() != getInfo().getOwnerID()) {
 			return;
 		}
-
-		for (GUIPlayerBar guiPlayerBar : players) {
-			userInterface.removeGuiElement(guiPlayerBar);
-			guiPlayerBar.getMouseHandler().removeClickableGuiElement(
-					guiPlayerBar);
-		}
-
-		if (setModeEvent.getNewMode().equals(InteractMode.MODE_STRATEGY)) {
-			try {
-				int index = 0;
-				for (Player teamMate : getInfo().getPlayer().getTeam()
-						.getPlayers()) {
-
-					players.add(new GUIPlayerBar(teamMate, index));
-
-					index++;
-				}
-			} catch (PlayerHasNoTeamException | ObjectNotFoundException e) {
-				L.log(Level.WARNING, "Cannot find player or his team!", e);
-				return;
-			}
-		}
+		refreshPlayers();
 	}
 }

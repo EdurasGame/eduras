@@ -371,10 +371,12 @@ public class HudNotifier implements GameEventListener {
 
 	@Override
 	public void onPlayerTeamChanged(int ownerId) {
-		for (GameEventListener obj : uiObjects) {
+		for (int i = 0; i < uiObjects.size(); i++) {
+			GameEventListener obj = uiObjects.get(i);
 			obj.onPlayerTeamChanged(ownerId);
 		}
-		for (GameEventListener obj : otherObjects) {
+		for (int i = 0; i < otherObjects.size(); i++) {
+			GameEventListener obj = otherObjects.get(i);
 			obj.onPlayerTeamChanged(ownerId);
 		}
 	}
