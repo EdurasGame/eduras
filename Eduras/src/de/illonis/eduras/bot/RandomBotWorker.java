@@ -1,5 +1,6 @@
 package de.illonis.eduras.bot;
 
+import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -28,6 +29,7 @@ import de.illonis.eduras.logicabstraction.InformationProvider;
 public class RandomBotWorker implements EdurasBotWorker {
 	private final static Logger L = EduLog.getLoggerFor(RandomBotWorker.class
 			.getName());
+	private final Random random = new Random(System.currentTimeMillis());
 
 	private static final long INPUT_INTERVAL = 250;
 
@@ -39,25 +41,32 @@ public class RandomBotWorker implements EdurasBotWorker {
 	@Override
 	public void run() {
 		while (true) {
-			GameEvent input = createRandomInput();
-			if (input != null) {
-				try {
-					eventSender.sendEvent(input);
-					L.info("Event sent: " + input);
-				} catch (WrongEventTypeException | MessageNotSupportedException e) {
-					L.log(Level.SEVERE, "Couldn't send event!", e);
+			try {
+				if (!infoProvider.getPlayer().isDead()) {
+					GameEvent input = createRandomInput();
+					if (input != null) {
+						try {
+							eventSender.sendEvent(input);
+							L.info("Event sent: " + input);
+						} catch (WrongEventTypeException
+								| MessageNotSupportedException e) {
+							L.log(Level.SEVERE, "Couldn't send event!", e);
+						}
+					}
 				}
+			} catch (ObjectNotFoundException e1) {
+				L.log(Level.SEVERE, "Could not find player", e1);
 			}
 			try {
 				Thread.sleep(INPUT_INTERVAL);
 			} catch (InterruptedException e) {
-				L.log(Level.WARNING, "TODO: message", e);
+				L.log(Level.WARNING, "Bot got interrupted", e);
 			}
 		}
 	}
 
 	private GameEvent createRandomInput() {
-		int inputChooser = (int) (Math.random() * 4);
+		int inputChooser = random.nextInt(4);
 		switch (inputChooser) {
 		case 0: {
 			return startMoving();
@@ -81,7 +90,7 @@ public class RandomBotWorker implements EdurasBotWorker {
 
 	private GameEvent setRotation() {
 		try {
-			float newRotation = (float) (Math.random() * 360);
+			float newRotation = random.nextFloat() * 360;
 			infoProvider.getPlayer().getPlayerMainFigure()
 					.setRotation(newRotation);
 			L.info("Set rotation to " + newRotation);
@@ -109,7 +118,7 @@ public class RandomBotWorker implements EdurasBotWorker {
 		int slotNumber;
 		Item item;
 		do {
-			slotNumber = (int) Math.random() * Inventory.MAX_CAPACITY;
+			slotNumber = random.nextInt(Inventory.MAX_CAPACITY);
 			try {
 				item = inventory.getItemAt(slotNumber);
 			} catch (ItemSlotIsEmptyException e) {
@@ -121,8 +130,8 @@ public class RandomBotWorker implements EdurasBotWorker {
 				infoProvider.getOwnerID(), item.getType());
 
 		// also set the target randomly
-		itemEvent.setTarget(new Vector2f((float) Math.random()
-				* infoProvider.getMapBounds().getWidth(), (float) Math.random()
+		itemEvent.setTarget(new Vector2f(random.nextFloat()
+				* infoProvider.getMapBounds().getWidth(), random.nextFloat()
 				* infoProvider.getMapBounds().getHeight()));
 		return itemEvent;
 	}
@@ -155,7 +164,7 @@ public class RandomBotWorker implements EdurasBotWorker {
 
 	private GameEvent startMoving() {
 		if (moveGameNumber == null) {
-			int directionChooser = (int) (Math.random() * 4);
+			int directionChooser = random.nextInt(4);
 			switch (directionChooser) {
 			case 0:
 				moveGameNumber = GameEventNumber.MOVE_UP_PRESSED;
