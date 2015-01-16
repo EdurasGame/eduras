@@ -35,6 +35,7 @@ public class EdurasClient {
 
 	private final static Logger L = EduLog.getLoggerFor(EdurasClient.class
 			.getName());
+	private final static int MAX_LOG_FILESIZE = 5;
 
 	/**
 	 * Indicates how long an Eduras client tries to connect to a server.
@@ -58,7 +59,8 @@ public class EdurasClient {
 
 		try {
 			EduLog.init(new File("logs").getAbsolutePath(),
-					simpleDate.format(new Date()) + "-client.log", 2097152);
+					simpleDate.format(new Date()) + "-client.log",
+					MAX_LOG_FILESIZE * 1024 * 1024);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
