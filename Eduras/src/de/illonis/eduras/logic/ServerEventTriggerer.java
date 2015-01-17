@@ -704,10 +704,6 @@ public class ServerEventTriggerer implements EventTriggerer {
 						e);
 				continue;
 			}
-			System.out.println("portal " + portalOne.getRefName());
-			System.out.println("portal ref "
-					+ portal.getReference(Portal.OTHER_PORTAL_REFERENCE));
-
 			Portal portalTwo;
 			try {
 				portalTwo = (Portal) gameInfo.findObjectByReference(portal
