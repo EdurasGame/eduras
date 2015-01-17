@@ -16,6 +16,7 @@ public class ObjectNotFoundException extends Exception {
 	 */
 	private static final long serialVersionUID = 1L;
 	private final int id;
+	private final String refName;
 
 	/**
 	 * Creates a new ObjectNotFoundException with the given number telling the
@@ -27,6 +28,19 @@ public class ObjectNotFoundException extends Exception {
 	public ObjectNotFoundException(int id) {
 		super("Object id was: " + id);
 		this.id = id;
+		this.refName = "";
+	}
+
+	/**
+	 * Creates a new ObjectNotFoundException with the given reference name.
+	 * 
+	 * @param refName
+	 *            The reference name of the searched object.
+	 */
+	public ObjectNotFoundException(String refName) {
+		super("Object reference name was: " + refName);
+		this.refName = refName;
+		this.id = -2;
 	}
 
 	/**
@@ -36,6 +50,13 @@ public class ObjectNotFoundException extends Exception {
 	 */
 	public int getObjectId() {
 		return id;
+	}
+
+	/**
+	 * @return the objects reference name.
+	 */
+	public String getRefName() {
+		return refName;
 	}
 
 }

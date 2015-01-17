@@ -230,6 +230,8 @@ public class GameInformation {
 	 */
 	public GameObject findObjectByReference(String ref)
 			throws ObjectNotFoundException {
+		if (ref == null)
+			throw new ObjectNotFoundException("null");
 		for (Iterator<GameObject> iterator = objects.values().iterator(); iterator
 				.hasNext();) {
 			GameObject obj = iterator.next();
@@ -237,7 +239,7 @@ public class GameInformation {
 				return obj;
 			}
 		}
-		return null;
+		throw new ObjectNotFoundException(ref);
 	}
 
 	/**

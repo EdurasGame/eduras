@@ -704,15 +704,17 @@ public class ServerEventTriggerer implements EventTriggerer {
 						e);
 				continue;
 			}
+			System.out.println("portal " + portalOne.getRefName());
+			System.out.println("portal ref "
+					+ portal.getReference(Portal.OTHER_PORTAL_REFERENCE));
 
 			Portal portalTwo;
 			try {
 				portalTwo = (Portal) gameInfo.findObjectByReference(portal
 						.getReference(Portal.OTHER_PORTAL_REFERENCE));
 			} catch (ObjectNotFoundException e) {
-				L.log(Level.SEVERE,
-						"Could not find referenced portal of created portal.",
-						e);
+				// portal has no target, so hide it.
+				setVisibility(portalOne.getId(), Visibility.INVISIBLE);
 				continue;
 			}
 			portalOne.setPartnerPortal(portalTwo);
