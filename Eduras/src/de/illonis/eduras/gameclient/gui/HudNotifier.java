@@ -292,21 +292,24 @@ public class HudNotifier implements GameEventListener {
 
 	@Override
 	public void onPlayerJoined(int ownerId) {
-		for (GameEventListener obj : new LinkedList<RenderedGuiObject>(
-				uiObjects)) {
+		for (int i = 0; i < uiObjects.size(); i++) {
+			GameEventListener obj = uiObjects.get(i);
 			obj.onPlayerJoined(ownerId);
 		}
-		for (GameEventListener obj : otherObjects) {
+		for (int i = 0; i < otherObjects.size(); i++) {
+			GameEventListener obj = otherObjects.get(i);
 			obj.onPlayerJoined(ownerId);
 		}
 	}
 
 	@Override
 	public void onPlayerLeft(int ownerId) {
-		for (GameEventListener obj : uiObjects) {
+		for (int i = 0; i < uiObjects.size(); i++) {
+			GameEventListener obj = uiObjects.get(i);
 			obj.onPlayerLeft(ownerId);
 		}
-		for (GameEventListener obj : otherObjects) {
+		for (int i = 0; i < otherObjects.size(); i++) {
+			GameEventListener obj = otherObjects.get(i);
 			obj.onPlayerLeft(ownerId);
 		}
 	}
