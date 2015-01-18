@@ -32,7 +32,12 @@ public class RezzButton extends ActionButton {
 
 	@Override
 	public void actionPerformed() {
-		reactor.setClickState(ClickState.SELECT_PLAYER_FOR_REZZ);
+		if (EdurasInitializer.getInstance().getInformationProvider()
+				.getClientData().getCurrentResurrectTarget() == null) {
+			reactor.setClickState(ClickState.SELECT_PLAYER_FOR_REZZ);
+		} else {
+			reactor.setClickState(ClickState.SELECT_BASE_FOR_REZZ);
+		}
 	}
 
 	@Override
