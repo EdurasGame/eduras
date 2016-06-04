@@ -1,6 +1,5 @@
 package de.illonis.eduras.gameclient.gui.hud.nifty;
 
-import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashMap;
@@ -9,17 +8,13 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 
-import org.json.JSONObject;
-
 import de.illonis.eduras.gameclient.audio.SoundMachine;
 import de.illonis.eduras.gameclient.audio.SoundMachine.SoundType;
-import de.illonis.eduras.utils.WebFetcher;
 import de.lessvoid.nifty.NiftyEventSubscriber;
 import de.lessvoid.nifty.controls.Button;
 import de.lessvoid.nifty.controls.Label;
 import de.lessvoid.nifty.controls.TextField;
 import de.lessvoid.nifty.controls.TextFieldChangedEvent;
-import de.lessvoid.nifty.controls.textfield.format.FormatPassword;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.screen.Screen;
 
@@ -39,7 +34,7 @@ public class LoginController extends EdurasScreenController {
 
 	private Button loginButton;
 	private TextField nameField;
-	private TextField passwordField;
+	// private TextField passwordField;
 	private Label nameNote;
 	Element popupElement;
 
@@ -77,10 +72,11 @@ public class LoginController extends EdurasScreenController {
 
 	@Override
 	protected void initScreen(Screen screen) {
-		passwordField = screen.findNiftyControl("passwordField",
-				TextField.class);
-		passwordField.setFormat(new FormatPassword());
-		passwordField.setText(presetAccountPassword);
+		/*
+		 * passwordField = screen.findNiftyControl("passwordField",
+		 * TextField.class); passwordField.setFormat(new FormatPassword());
+		 * passwordField.setText(presetAccountPassword);
+		 */
 		popupElement = nifty.createPopup("niftyPopupMenu");
 
 		nameField = screen.findNiftyControl("userNameField", TextField.class);
@@ -101,27 +97,25 @@ public class LoginController extends EdurasScreenController {
 		setControlsEnabled(false);
 		SoundMachine.play(SoundType.CLICK, 2f);
 		String username = nameField.getRealText();
-		String password = passwordField.getRealText();
+		// String password = passwordField.getRealText();
 		if (username.length() < 3) {
 			nameNote.setText("Username too short.");
 			setControlsEnabled(true);
 			nameField.setFocus();
 			return;
 		}
-		if (password.length() < 5) {
-			nameNote.setText("Password too short.");
-			setControlsEnabled(true);
-			passwordField.setFocus();
-			return;
-		}
+		/*
+		 * if (password.length() < 5) { nameNote.setText("Password too short.");
+		 * setControlsEnabled(true); passwordField.setFocus(); return; }
+		 */
 		nameNote.setText("Connecting...");
-		loginCallable = new LoginTask(username, password);
+		loginCallable = new LoginTask(username, "");
 		login = true;
 	}
 
 	private void setControlsEnabled(boolean enabled) {
 		nameField.setEnabled(enabled);
-		passwordField.setEnabled(enabled);
+		// passwordField.setEnabled(enabled);
 		loginButton.setEnabled(enabled);
 	}
 
@@ -151,8 +145,8 @@ public class LoginController extends EdurasScreenController {
 						game.enterState(ServerListState.SERVER_LIST_STATE_ID);
 					} else {
 						nameNote.setText("Login failed.");
-						passwordField.setText("");
-						passwordField.setFocus();
+						// passwordField.setText("");
+						// passwordField.setFocus();
 						// login failed
 					}
 				} catch (InterruptedException | ExecutionException e) {
@@ -170,7 +164,8 @@ public class LoginController extends EdurasScreenController {
 
 	static class LoginTask implements Callable<LoginResult> {
 
-		private final static URL AUTH_URL = createAuthURL("http://illonis.de/eduras/beta/auth");
+		private final static URL AUTH_URL = createAuthURL(
+				"http://illonis.de/eduras/beta/auth");
 
 		private static URL createAuthURL(final String name) {
 			try {
@@ -200,15 +195,16 @@ public class LoginController extends EdurasScreenController {
 			data.put(PASSWORD_FIELD, password);
 			data.put(CHANNEL_FIELD, CHANNEL_VALUE);
 			LoginResult resultObject = new LoginResult();
-			try {
-				String result = WebFetcher.post(AUTH_URL, data);
-				JSONObject obj = new JSONObject(result);
-
-				resultObject.success = obj.getBoolean("success");
-			} catch (IOException e) {
-				throw new ExecutionException("Login server not available.", e);
-			}
+			resultObject.success = true;
 			return resultObject;
+			/*
+			 * try { String result = WebFetcher.post(AUTH_URL, data); JSONObject
+			 * obj = new JSONObject(result);
+			 * 
+			 * resultObject.success = obj.getBoolean("success"); } catch
+			 * (IOException e) { throw new ExecutionException(
+			 * "Login server not available.", e); } return resultObject;
+			 */
 
 		}
 	}

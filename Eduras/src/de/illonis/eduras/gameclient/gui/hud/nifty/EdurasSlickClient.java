@@ -61,7 +61,9 @@ public class EdurasSlickClient implements GameControllerBridge {
 		if (game != null)
 			throw new IllegalStateException("Cannot start gui more than once!");
 		game = new Game();
+
 		gameContainer = new AppGameContainer(game);
+
 		String[] icons = { "res/images/icon16.png", "res/images/icon24.png",
 				"res/images/icon32.png", "res/images/icon64.png" };
 		gameContainer.setIcons(icons);
@@ -76,6 +78,7 @@ public class EdurasSlickClient implements GameControllerBridge {
 				s.getIntSetting(Settings.HEIGHT),
 				!s.getBooleanSetting(Settings.WINDOWED));
 		gameContainer.start();
+
 	}
 
 	@Override

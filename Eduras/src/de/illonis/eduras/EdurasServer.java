@@ -704,7 +704,7 @@ public class EdurasServer {
 		EduLog.setConsoleLogLimit(logLimit);
 
 		Path folder = ResourceManager.resourceToPath(ResourceType.LIBRARY, "");
-		if (Files.exists(folder)) {
+		if (!Files.exists(folder)) {
 			System.err.println("Resource folder does not exist: "
 					+ folder.toAbsolutePath());
 			System.exit(-1);
